@@ -66,7 +66,6 @@ import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MassSpectrometer;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MassSpectrumType;
@@ -87,7 +86,7 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			if(isValidFileFormat(zipFile)) {
-				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+				// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
 		} finally {
@@ -224,7 +223,7 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 		 */
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; scan++) {
-			monitor.subTask(IConstants.IMPORT_SCAN + scan);
+			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			IVendorScan massSpectrum = readMassSpectrum(dataInputStream);
 			chromatogram.addScan(massSpectrum);
 		}
@@ -239,7 +238,7 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
 		for(int i = 1; i <= numberOfPeaks; i++) {
-			monitor.subTask(IConstants.IMPORT_PEAK + i);
+			// monitor.subTask(IConstants.IMPORT_PEAK + i);
 			try {
 				IChromatogramPeakMSD peak = readPeak(dataInputStream, chromatogram, monitor);
 				chromatogram.addPeak(peak);

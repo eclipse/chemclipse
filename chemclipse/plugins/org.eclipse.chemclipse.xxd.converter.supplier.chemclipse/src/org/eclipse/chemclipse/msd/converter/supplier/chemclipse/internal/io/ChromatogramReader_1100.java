@@ -112,7 +112,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			if(isValidFileFormat(zipFile)) {
-				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+				// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
 		} finally {

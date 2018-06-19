@@ -88,7 +88,6 @@ import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IBaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -109,7 +108,7 @@ public class ChromatogramReader_1004 extends AbstractChromatogramReader implemen
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			if(isValidFileFormat(zipFile)) {
-				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+				// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
 		} finally {
@@ -258,7 +257,7 @@ public class ChromatogramReader_1004 extends AbstractChromatogramReader implemen
 		 */
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; scan++) {
-			monitor.subTask(IConstants.IMPORT_SCAN + scan);
+			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			//
 			int offset = dataInputStream.readInt(); // Offset
 			int retentionTime = dataInputStream.readInt(); // Retention Time
@@ -290,7 +289,7 @@ public class ChromatogramReader_1004 extends AbstractChromatogramReader implemen
 		IReaderProxy readerProxy = new ReaderProxy_1004();
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; scan++) {
-			monitor.subTask(IConstants.IMPORT_SCAN + scan);
+			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			IVendorScan massSpectrum = new VendorScan();
 			readerProxy.readMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings, monitor);
 			chromatogram.addScan(massSpectrum);
@@ -310,7 +309,7 @@ public class ChromatogramReader_1004 extends AbstractChromatogramReader implemen
 		int scans = dataInputStream.readInt(); // Number of Scans
 		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
 		for(int scan = 1; scan <= scans; scan++) {
-			monitor.subTask(IConstants.IMPORT_BASELINE + scan);
+			// monitor.subTask(IConstants.IMPORT_BASELINE + scan);
 			int retentionTime = dataInputStream.readInt(); // Retention Time
 			float backgroundAbundance = dataInputStream.readFloat(); // Background Abundance
 			IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);
@@ -325,7 +324,7 @@ public class ChromatogramReader_1004 extends AbstractChromatogramReader implemen
 			 * Retention times and background abundances.
 			 * Set the baseline.
 			 */
-			monitor.subTask(IConstants.IMPORT_BASELINE + index);
+			// monitor.subTask(IConstants.IMPORT_BASELINE + index);
 			IBaselineElement baselineElement = baselineElements.get(index);
 			IBaselineElement baselineElementNext = baselineElements.get(index + 1);
 			int startRetentionTime = baselineElement.getRetentionTime();
@@ -349,7 +348,7 @@ public class ChromatogramReader_1004 extends AbstractChromatogramReader implemen
 
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
 		for(int i = 1; i <= numberOfPeaks; i++) {
-			monitor.subTask(IConstants.IMPORT_PEAK + i);
+			// monitor.subTask(IConstants.IMPORT_PEAK + i);
 			try {
 				IChromatogramPeakMSD peak = readPeak(dataInputStream, chromatogram, monitor);
 				chromatogram.addPeak(peak);

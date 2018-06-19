@@ -50,7 +50,6 @@ import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MassSpectrometer;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MassSpectrumType;
@@ -85,7 +84,7 @@ public class PeakReader_0701 extends AbstractZipReader implements IPeakReader {
 		//
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
 		for(int i = 1; i <= numberOfPeaks; i++) {
-			monitor.subTask(IConstants.IMPORT_PEAK + i);
+			// monitor.subTask(IConstants.IMPORT_PEAK + i);
 			try {
 				IPeakMSD peak = readPeak(dataInputStream, monitor);
 				peaks.addPeak(peak);

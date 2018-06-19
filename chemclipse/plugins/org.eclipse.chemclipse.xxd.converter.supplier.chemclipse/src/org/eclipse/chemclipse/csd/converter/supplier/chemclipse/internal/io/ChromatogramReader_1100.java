@@ -48,9 +48,9 @@ import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IBaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 /**
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
@@ -67,7 +67,6 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			if(isValidFileFormat(zipFile)) {
-				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
 		} finally {
@@ -118,33 +117,43 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 	 */
 	private IChromatogramCSD readZipData(Object object, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
-		boolean closeStream;
-		if(object instanceof ZipFile) {
-			/*
-			 * ZipFile
-			 */
-			closeStream = true;
-		} else if(object instanceof ZipInputStream) {
-			/*
-			 * ZipInputStream
-			 */
-			closeStream = false;
-		} else {
-			return null;
-		}
-		//
 		IVendorChromatogram chromatogram = null;
-		/*
-		 * Read the chromatographic information.
-		 */
-		monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
-		chromatogram = new VendorChromatogram();
-		readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_FID), closeStream, chromatogram, monitor);
-		readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_FID), closeStream, chromatogram, monitor);
-		readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_FID), closeStream, chromatogram, monitor);
-		readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_FID), closeStream, chromatogram, monitor);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Chromatogram", 100);
 		//
-		setAdditionalInformation(file, chromatogram, monitor);
+		try {
+			boolean closeStream;
+			if(object instanceof ZipFile) {
+				/*
+				 * ZipFile
+				 */
+				closeStream = true;
+			} else if(object instanceof ZipInputStream) {
+				/*
+				 * ZipInputStream
+				 */
+				closeStream = false;
+			} else {
+				return null;
+			}
+			/*
+			 * Read the chromatographic information.
+			 */
+			// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+			chromatogram = new VendorChromatogram();
+			subMonitor.worked(20);
+			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_FID), closeStream, chromatogram, monitor);
+			subMonitor.worked(20);
+			readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_FID), closeStream, chromatogram, monitor);
+			subMonitor.worked(20);
+			readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_FID), closeStream, chromatogram, monitor);
+			subMonitor.worked(20);
+			readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_FID), closeStream, chromatogram, monitor);
+			subMonitor.worked(20);
+			//
+			setAdditionalInformation(file, chromatogram, monitor);
+		} finally {
+			SubMonitor.done(monitor);
+		}
 		//
 		return chromatogram;
 	}
@@ -174,7 +183,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		 */
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; scan++) {
-			monitor.subTask(IConstants.IMPORT_SCAN + scan);
+			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			//
 			int retentionTime = dataInputStream.readInt();
 			float totalSignal = dataInputStream.readFloat();
@@ -215,7 +224,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		int scans = dataInputStream.readInt(); // Number of Scans
 		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
 		for(int scan = 1; scan <= scans; scan++) {
-			monitor.subTask(IConstants.IMPORT_BASELINE + scan);
+			// monitor.subTask(IConstants.IMPORT_BASELINE + scan);
 			int retentionTime = dataInputStream.readInt(); // Retention Time
 			float backgroundAbundance = dataInputStream.readFloat(); // Background Abundance
 			IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);
@@ -250,7 +259,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
 		for(int i = 1; i <= numberOfPeaks; i++) {
-			monitor.subTask(IConstants.IMPORT_PEAK + i);
+			// monitor.subTask(IConstants.IMPORT_PEAK + i);
 			try {
 				IChromatogramPeakCSD peak = readPeak(dataInputStream, chromatogram, monitor);
 				chromatogram.addPeak(peak);

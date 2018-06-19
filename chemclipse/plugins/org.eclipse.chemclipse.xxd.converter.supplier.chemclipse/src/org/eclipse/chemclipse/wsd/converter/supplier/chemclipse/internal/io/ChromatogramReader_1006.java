@@ -40,7 +40,6 @@ import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IBaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -57,7 +56,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			if(isValidFileFormat(zipFile)) {
-				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+				// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
 		} finally {
@@ -139,7 +138,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 		/*
 		 * Read the chromatographic information.
 		 */
-		monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+		// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 		chromatogram = new VendorChromatogram();
 		readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_WSD), closeStream, chromatogram, monitor);
 		readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_WSD), closeStream, chromatogram, monitor);
@@ -156,7 +155,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; ++scan) {
-			monitor.subTask(IConstants.IMPORT_SCAN + scan);
+			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			IScanWSD scanObject = new VendorScan();
 			int scanSignals = dataInputStream.readInt();
 			//
@@ -208,7 +207,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; ++scan) {
-			monitor.subTask(IConstants.IMPORT_SCAN + scan);
+			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			IScanWSD scanWSD = new VendorScan();
 			int scanSignals = dataInputStream.readInt();
 			//
@@ -259,7 +258,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 		int scans = dataInputStream.readInt();
 		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
 		for(int scan = 1; scan <= scans; ++scan) {
-			monitor.subTask(IConstants.IMPORT_SCAN + scan);
+			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			int retentionTime = dataInputStream.readInt();
 			float backgroundAbundance = dataInputStream.readFloat();
 			IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);
@@ -272,7 +271,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			 * Retention times and background abundances.
 			 * Set the baseline.
 			 */
-			monitor.subTask(IConstants.IMPORT_BASELINE + index);
+			// monitor.subTask(IConstants.IMPORT_BASELINE + index);
 			IBaselineElement baselineElement = baselineElements.get(index);
 			IBaselineElement baselineElementNext = baselineElements.get(index + 1);
 			int startRetentionTime = baselineElement.getRetentionTime();

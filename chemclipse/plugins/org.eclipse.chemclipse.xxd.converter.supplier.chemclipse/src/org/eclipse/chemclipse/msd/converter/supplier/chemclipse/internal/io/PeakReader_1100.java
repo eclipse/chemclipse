@@ -69,9 +69,9 @@ import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 /**
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
@@ -99,18 +99,22 @@ public class PeakReader_1100 extends AbstractZipReader implements IPeakReader {
 
 		IPeaks peaks = new Peaks();
 		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_PEAKS_MSD);
-		//
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
-		for(int i = 1; i <= numberOfPeaks; i++) {
-			monitor.subTask(IConstants.IMPORT_PEAK + i);
-			try {
-				IPeakMSD peak = readPeak(dataInputStream, monitor);
-				peaks.addPeak(peak);
-			} catch(IllegalArgumentException e) {
-				logger.warn(e);
-			} catch(PeakException e) {
-				logger.warn(e);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Import Peaks", numberOfPeaks);
+		try {
+			for(int i = 1; i <= numberOfPeaks; i++) {
+				try {
+					IPeakMSD peak = readPeak(dataInputStream, monitor);
+					peaks.addPeak(peak);
+					subMonitor.worked(1);
+				} catch(IllegalArgumentException e) {
+					logger.warn(e);
+				} catch(PeakException e) {
+					logger.warn(e);
+				}
 			}
+		} finally {
+			SubMonitor.done(monitor);
 		}
 		dataInputStream.close();
 		/*

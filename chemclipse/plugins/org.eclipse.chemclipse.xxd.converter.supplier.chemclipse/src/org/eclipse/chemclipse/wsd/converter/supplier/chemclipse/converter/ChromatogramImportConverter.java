@@ -49,7 +49,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramWSDImportCo
 			 */
 			file = SpecificationValidator.validateSpecification(file);
 			IChromatogramWSDReader reader = new ChromatogramReaderWSD();
-			monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+			// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 			try {
 				IChromatogramWSD chromatogram = reader.read(file, monitor);
 				processingInfo.setChromatogram(chromatogram);
@@ -77,7 +77,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramWSDImportCo
 			 */
 			file = SpecificationValidator.validateSpecification(file);
 			IChromatogramWSDReader reader = new ChromatogramReaderWSD();
-			monitor.subTask(IConstants.IMPORT_CHROMATOGRAM_OVERVIEW);
+			// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM_OVERVIEW);
 			try {
 				IChromatogramOverview chromatogramOverview = reader.readOverview(file, monitor);
 				processingInfo.setChromatogramOverview(chromatogramOverview);

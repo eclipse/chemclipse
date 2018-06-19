@@ -15,6 +15,8 @@ import org.eclipse.chemclipse.wsd.model.core.AbstractChromatogramWSD;
 
 public class VendorChromatogram extends AbstractChromatogramWSD implements IVendorChromatogram {
 
+	private static final long serialVersionUID = -1918459516874863928L;
+
 	public VendorChromatogram() {
 		super();
 	}

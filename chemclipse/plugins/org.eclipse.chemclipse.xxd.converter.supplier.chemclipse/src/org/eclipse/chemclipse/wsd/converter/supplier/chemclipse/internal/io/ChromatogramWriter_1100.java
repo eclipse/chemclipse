@@ -32,17 +32,17 @@ import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.IChromatogram
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implements IChromatogramWSDZipWriter {
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
+		// monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
 		/*
 		 * ZIP
 		 */
@@ -107,7 +107,7 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeInt(scans); // Number of Scans
 		// Retention Times - Total Signals
 		for(int scan = 1; scan <= scans; scan++) {
-			monitor.subTask(IConstants.EXPORT_SCANS + scan);
+			// monitor.subTask(IConstants.EXPORT_SCANS + scan);
 			IScanWSD scanWSD = chromatogram.getSupplierScan(scan);
 			int scanSignalTotal = scanWSD.getScanSignals().size();
 			dataOutputStream.writeInt(scanSignalTotal);
@@ -132,24 +132,30 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 
 	private void writeChromatogramFolder(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		// the things we want in chromatogram folder rn ==> SCANS, MISC, HISTORY, BASELINE.
-		// others might be added later
-		//
-		ZipEntry zipEntry;
-		/*
-		 * Create the chromatogram folder
-		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.DIR_CHROMATOGRAM_WSD);
-		zipOutputStream.putNextEntry(zipEntry);
-		zipOutputStream.closeEntry();
-		/*
-		 * WRITE THE FILES
-		 */
-		writeChromatogramMethod(zipOutputStream, directoryPrefix, chromatogram, monitor);
-		writeChromatogramScans(zipOutputStream, directoryPrefix, chromatogram, monitor);
-		writeChromatogramBaseline(zipOutputStream, directoryPrefix, chromatogram, monitor);
-		writeChromatogramHistory(zipOutputStream, directoryPrefix, chromatogram, monitor);
-		writeChromatogramMiscellaneous(zipOutputStream, directoryPrefix, chromatogram, monitor);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Chromatogram", 100);
+		try {
+			/*
+			 * Create the chromatogram folder
+			 */
+			ZipEntry zipEntry = new ZipEntry(directoryPrefix + IFormat.DIR_CHROMATOGRAM_WSD);
+			zipOutputStream.putNextEntry(zipEntry);
+			zipOutputStream.closeEntry();
+			/*
+			 * WRITE THE FILES
+			 */
+			writeChromatogramMethod(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			subMonitor.worked(20);
+			writeChromatogramScans(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			subMonitor.worked(20);
+			writeChromatogramBaseline(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			subMonitor.worked(20);
+			writeChromatogramHistory(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			subMonitor.worked(20);
+			writeChromatogramMiscellaneous(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			subMonitor.worked(20);
+		} finally {
+			SubMonitor.done(monitor);
+		}
 	}
 
 	private void writeChromatogramMethod(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
@@ -187,7 +193,7 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 		int scans = chromatogram.getNumberOfScans();
 		dataOutputStream.writeInt(scans);
 		for(int scan = 1; scan <= scans; scan++) {
-			monitor.subTask(IConstants.EXPORT_SCANS + scan);
+			// monitor.subTask(IConstants.EXPORT_SCANS + scan);
 			IScanWSD scanWSD = chromatogram.getSupplierScan(scan);
 			int scanSignalTotal = scanWSD.getScanSignals().size();
 			dataOutputStream.writeInt(scanSignalTotal);
@@ -236,7 +242,7 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 		IBaselineModel baselineModel = chromatogram.getBaselineModel();
 		// Scans
 		for(int scan = 1; scan <= scans; scan++) {
-			monitor.subTask(IConstants.EXPORT_BASELINE + scan);
+			// monitor.subTask(IConstants.EXPORT_BASELINE + scan);
 			int retentionTime = chromatogram.getSupplierScan(scan).getRetentionTime();
 			float backgroundAbundance = baselineModel.getBackgroundAbundance(retentionTime);
 			dataOutputStream.writeInt(retentionTime); // Retention Time

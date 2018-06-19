@@ -45,7 +45,7 @@ public class ChromatogramExportConverter extends AbstractChromatogramMSDExportCo
 		if(processingInfoValidate.hasErrorMessages()) {
 			processingInfo.addMessages(processingInfoValidate);
 		} else {
-			monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
+			// monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
 			IChromatogramMSDWriter writer = new ChromatogramWriterMSD();
 			try {
 				writer.writeChromatogram(file, chromatogram, monitor);
