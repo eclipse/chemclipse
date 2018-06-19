@@ -29,6 +29,9 @@ import org.osgi.service.prefs.BackingStoreException;
 
 public class InputWizardSettings {
 
+	public static final int DEFAULT_WIDTH = 500;
+	public static final int DEFAULT_HEIGHT = 400;
+	//
 	private static final Logger logger = Logger.getLogger(InputEntriesWizard.class);
 	private static final String DEFAULT_TREE_SELECTION = "DEFAULT_TREE_SELECTION";
 
