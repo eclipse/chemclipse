@@ -130,7 +130,6 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 
 		for(IScan scan : getScans()) {
 			if(scan instanceof IVendorMassSpectrum && isUnloaded() == false) {
-				monitor.subTask("Load Scan Proxy " + scan.getScanNumber());
 				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
 				ms.enforceLoadScanProxy();
 			}
