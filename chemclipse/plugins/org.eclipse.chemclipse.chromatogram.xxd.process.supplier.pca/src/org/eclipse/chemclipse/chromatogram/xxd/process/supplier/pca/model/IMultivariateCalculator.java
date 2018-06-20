@@ -23,6 +23,8 @@ public interface IMultivariateCalculator {
 
 	boolean getComputeStatus();
 
+	void setComputeSuccess();
+
 	double getErrorMetric(double[] obs);
 
 	double[] getLoadingVector(int var);

@@ -105,7 +105,8 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 	public <V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaSettingsVisualization pcaSettingsVisualization, IProgressMonitor monitor, boolean setSelected) {
 
 		monitor.setTaskName("Evaluation");
-		PcaResults results = evaluatePca(samples, settings, monitor);
+		PcaEvaluation pcaEvaluation = new PcaEvaluation();
+		PcaResults results = pcaEvaluation.process(samples, settings, monitor);
 		IPcaResultsVisualization pcaResultsVisualization = new PcaResultsVisualization<>(results, pcaSettingsVisualization);
 		pcaResultsVisualization.getPcaResultList().forEach(r -> {
 			Optional<S> sample = samples.getSampleList().stream().filter(s -> r.getSample() == s).findAny();
@@ -127,12 +128,6 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 			}
 		}
 		return pcaResultsVisualization;
-	}
-
-	private <V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> PcaResults evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
-
-		PcaEvaluation pcaEvaluation = new PcaEvaluation();
-		return pcaEvaluation.process(samples, settings, monitor);
 	}
 
 	public ReadOnlyObjectProperty<IPcaResultsVisualization> getActualSelectedPcaResults() {
