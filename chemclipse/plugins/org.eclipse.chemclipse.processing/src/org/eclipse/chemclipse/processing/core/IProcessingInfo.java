@@ -99,6 +99,15 @@ public interface IProcessingInfo {
 	Object getProcessingResult();
 
 	/**
+	 * The expected return type an be defined.
+	 * 
+	 * @param type
+	 * @return T
+	 * @throws TypeCastException
+	 */
+	<T> T getProcessingResult(Class<T> type) throws TypeCastException;
+
+	/**
 	 * Returns whether the process info stores error message or not.
 	 * 
 	 * @return boolean

@@ -101,6 +101,17 @@ public abstract class AbstractProcessingInfo implements IProcessingInfo {
 		return processingResult;
 	}
 
+	@SuppressWarnings("unchecked")
+	public <T> T getProcessingResult(Class<T> type) throws TypeCastException {
+
+		if(type.isInstance(processingResult)) {
+			return (T)processingResult;
+		} else {
+			Class<?> actualClass = (processingResult == null) ? new Exception("NULL").getClass() : processingResult.getClass();
+			throw createTypeCastException("Processing Info", actualClass, type);
+		}
+	}
+
 	@Override
 	public boolean hasErrorMessages() {
 
