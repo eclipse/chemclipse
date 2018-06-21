@@ -14,18 +14,18 @@ package org.eclipse.chemclipse.csd.converter.supplier.arw.core;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
-import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramExportConverterProcessingInfo;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.chromatogram.AbstractChromatogramCSDExportConverter;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramExportConverter extends AbstractChromatogramCSDExportConverter implements IChromatogramExportConverter {
 
 	@Override
-	public IChromatogramExportConverterProcessingInfo convert(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) {
 
-		IChromatogramExportConverterProcessingInfo processingInfo = new ChromatogramExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		return processingInfo;
 	}
 }
