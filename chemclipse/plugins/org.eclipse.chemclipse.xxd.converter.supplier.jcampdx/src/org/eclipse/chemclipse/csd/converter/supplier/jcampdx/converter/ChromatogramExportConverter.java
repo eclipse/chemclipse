@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.csd.converter.supplier.jcampdx.converter;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
-import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramExportConverterProcessingInfo;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.support.IConstants;
 import org.eclipse.chemclipse.csd.converter.chromatogram.AbstractChromatogramCSDExportConverter;
 import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDWriter;
@@ -32,25 +30,19 @@ public class ChromatogramExportConverter extends AbstractChromatogramCSDExportCo
 	private static final String DESCRIPTION = "JCAMP-DX Export Converter";
 
 	@Override
-	public IChromatogramExportConverterProcessingInfo convert(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) {
 
-		IChromatogramExportConverterProcessingInfo processingInfo = new ChromatogramExportConverterProcessingInfo();
 		/*
 		 * Validate the file.
 		 */
 		file = SpecificationValidator.validateSpecification(file, "JDX");
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		/*
-		 * Don't process if errors have occurred.
-		 */
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			IChromatogramCSDWriter writer = new ChromatogramWriter();
 			monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
 			try {
 				writer.writeChromatogram(file, chromatogram, monitor);
-				processingInfo.setFile(file);
+				processingInfo.setProcessingResult(file);
 			} catch(Exception e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
