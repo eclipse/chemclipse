@@ -13,13 +13,11 @@ package org.eclipse.chemclipse.msd.converter.supplier.openchromx.converter;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.supplier.openchromx.TestPathHelper;
-import org.eclipse.chemclipse.msd.converter.supplier.openchromx.converter.ChromatogramImportConverter;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -45,9 +43,9 @@ public class ChromatogramImportConverter_1_ITest extends TestCase {
 
 		ChromatogramImportConverter converter = new ChromatogramImportConverter();
 		IChromatogramOverview chromatogram;
-		IChromatogramOverviewImportConverterProcessingInfo processingInfo = converter.convertOverview(importFile, new NullProgressMonitor());
+		IProcessingInfo processingInfo = converter.convertOverview(importFile, new NullProgressMonitor());
 		try {
-			chromatogram = processingInfo.getChromatogramOverview();
+			chromatogram = processingInfo.getProcessingResult(IChromatogramOverview.class);
 			assertEquals("NumberOfScans", 5726, chromatogram.getNumberOfScans());
 			assertEquals("TotalSignal", 1.0242423E9f, chromatogram.getTotalSignal());
 		} catch(TypeCastException e) {
