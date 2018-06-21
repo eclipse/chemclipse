@@ -19,10 +19,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBas
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.settings.ITicBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.settings.TicBaselineDetectorSettings;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
@@ -43,8 +44,8 @@ public class TICBaselineDetector_1_ITest extends TestCase {
 		super.setUp();
 		pathImport = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1);
 		fileImport = new File(this.pathImport);
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, CHROMATOGRAM_CONVERTER_ID, new NullProgressMonitor());
-		chromatogram = processingInfo.getChromatogram();
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, CHROMATOGRAM_CONVERTER_ID, new NullProgressMonitor());
+		chromatogram = processingInfo.getProcessingResult(ChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		settings = new TicBaselineDetectorSettings();
 	}
