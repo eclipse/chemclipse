@@ -20,8 +20,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDImportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.ChromatogramMSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.excel.internal.support.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.excel.io.ChromatogramReader;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -34,25 +32,15 @@ public class ChromatogramImportConverter extends AbstractChromatogramMSDImportCo
 	private static final String DESCRIPTION = "Excel Import Converter";
 
 	@Override
-	public IChromatogramMSDImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = new ChromatogramMSDImportConverterProcessingInfo();
-		/*
-		 * Validate the file.
-		 */
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
-			/*
-			 * Read the chromatogram.
-			 */
-			// file = SpecificationValidator.validateSpecification(file);
+		IProcessingInfo processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			IChromatogramMSDReader reader = new ChromatogramReader();
 			monitor.subTask(IConstants.IMPORT_EXCEL_CHROMATOGRAM);
 			try {
 				IChromatogramMSD chromatogram = reader.read(file, monitor);
-				processingInfo.setChromatogram(chromatogram);
+				processingInfo.setProcessingResult(chromatogram);
 			} catch(Exception e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
