@@ -14,24 +14,19 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.cor
 import java.io.File;
 import java.util.Date;
 
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.IPeakDetectorMSDProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.TestPathHelper;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.AmdisSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IAmdisSettings;
+import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
-import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.IPeakDetectorMSDProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.TestPathHelper;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core.PeakDetector;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.AmdisSettings;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IAmdisSettings;
-
-/**
- * @author eselmeister
- */
 public class AmdisPeakDetector_1 extends TestCase {
 
 	private File file;
@@ -45,8 +40,8 @@ public class AmdisPeakDetector_1 extends TestCase {
 
 		super.setUp();
 		file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_OP17760));
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, new NullProgressMonitor());
-		chromatogram = processingInfo.getChromatogram();
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, new NullProgressMonitor());
+		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		peakDetectorSettings = new AmdisSettings();
 		detector = new PeakDetector();

@@ -21,11 +21,11 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runt
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IAmdisSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IOnsiteSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.support.PeakProcessorSupport;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -50,7 +50,7 @@ public class AmdisIdentifier {
 		 */
 		String amdisTmpPath = PreferenceSupplier.getAmdisTmpPath();
 		File file = new File(amdisTmpPath + File.separator + chromatogram.getName());
-		IChromatogramExportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, chromatogram, CONVERTER_ID, monitor);
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, chromatogram, CONVERTER_ID, monitor);
 		/*
 		 * There are no messages if the chromatogram has been converted correctly.
 		 */
@@ -61,7 +61,7 @@ public class AmdisIdentifier {
 				 * amdisApplication, e.g.:
 				 * /home/openchrom/.wine/drive_c/Programme/NIST/AMDIS32-271/AMDIS32$.exe
 				 */
-				File fileChromatogram = processingInfo.getFile();
+				File fileChromatogram = processingInfo.getProcessingResult(File.class);
 				/*
 				 * If an elu file already exists, delete it.
 				 */
