@@ -14,18 +14,18 @@ package org.eclipse.chemclipse.msd.converter.supplier.mzml.converter;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
-import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramExportConverterProcessingInfo;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDExportConverter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramExportConverter extends AbstractChromatogramMSDExportConverter implements IChromatogramExportConverter {
 
 	@Override
-	public IChromatogramExportConverterProcessingInfo convert(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) {
 
-		IChromatogramExportConverterProcessingInfo processingInfo = new ChromatogramExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("mzML Export Converter", "The mzML chromatogram export converter has no export capabilities.");
 		return processingInfo;
 	}

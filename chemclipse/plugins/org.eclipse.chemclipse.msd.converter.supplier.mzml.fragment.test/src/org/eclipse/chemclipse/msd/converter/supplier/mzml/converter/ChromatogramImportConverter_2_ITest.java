@@ -13,12 +13,11 @@ package org.eclipse.chemclipse.msd.converter.supplier.mzml.converter;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.TestPathHelper;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -33,8 +32,8 @@ public class ChromatogramImportConverter_2_ITest extends TestCase {
 		super.setUp();
 		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_2));
 		ChromatogramImportConverter converter = new ChromatogramImportConverter();
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = converter.convert(importFile, new NullProgressMonitor());
-		chromatogram = processingInfo.getChromatogram();
+		IProcessingInfo processingInfo = converter.convert(importFile, new NullProgressMonitor());
+		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 	}
 
 	@Override
