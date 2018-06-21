@@ -20,8 +20,6 @@ import org.eclipse.chemclipse.converter.chromatogram.ChromatogramSupplier;
 import org.eclipse.chemclipse.converter.core.Converter;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramOverviewImportConverterProcessingInfo;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -259,11 +257,11 @@ public final class ChromatogramConverterMSD {
 	 * @param chromatogram
 	 * @param converterId
 	 * @param monitor
-	 * @return {@link IChromatogramOverviewImportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramOverviewImportConverterProcessingInfo convertOverview(final File file, final String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo convertOverview(final File file, final String converterId, IProgressMonitor monitor) {
 
-		IChromatogramOverviewImportConverterProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		/*
 		 * Do not use a safe runnable here, because a IChromatogram object must
 		 * be returned or null.
@@ -286,12 +284,12 @@ public final class ChromatogramConverterMSD {
 	 * 
 	 * @param chromatogram
 	 * @param monitor
-	 * @return {@link IChromatogramOverviewImportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramOverviewImportConverterProcessingInfo convertOverview(final File file, final IProgressMonitor monitor) {
+	public static IProcessingInfo convertOverview(final File file, final IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = getChromatogram(file, true, monitor);
-		IChromatogramOverviewImportConverterProcessingInfo processingInfoImport = new ChromatogramOverviewImportConverterProcessingInfo();
+		IProcessingInfo processingInfoImport = new ProcessingInfo();
 		processingInfoImport.addMessages(processingInfo);
 		processingInfoImport.setProcessingResult(processingInfo.getProcessingResult());
 		return processingInfoImport;
@@ -463,9 +461,9 @@ public final class ChromatogramConverterMSD {
 		return processingInfo;
 	}
 
-	private static IChromatogramOverviewImportConverterProcessingInfo getNoOverviewImportConverterAvailableProcessingInfo(File file) {
+	private static IProcessingInfo getNoOverviewImportConverterAvailableProcessingInfo(File file) {
 
-		IChromatogramOverviewImportConverterProcessingInfo processingInfo = new ChromatogramOverviewImportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("ChromatogramOverview Import Converter", "There is no suitable converter available to load the chromatogram overview from the file: " + file.getAbsolutePath());
 		return processingInfo;
 	}

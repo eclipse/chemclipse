@@ -156,6 +156,7 @@ import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.IPlotArea;
 import org.swtchart.LineStyle;
 
+@SuppressWarnings("rawtypes")
 public class ExtendedChromatogramUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
@@ -1753,6 +1754,7 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<IChromatogramSelection> getChromatogramReferences(IChromatogramSelection chromatogramSelection) {
 
 		/*
@@ -1762,7 +1764,6 @@ public class ExtendedChromatogramUI {
 		chromatogramSelections.add(chromatogramSelection);
 		//
 		List<IChromatogram> referencedChromatograms = chromatogramSelection.getChromatogram().getReferencedChromatograms();
-		int i = 1;
 		for(IChromatogram referencedChromatogram : referencedChromatograms) {
 			if(referencedChromatogram != chromatogramSelection.getChromatogram()) {
 				IChromatogramSelection referencedChromatogramSelection = null;

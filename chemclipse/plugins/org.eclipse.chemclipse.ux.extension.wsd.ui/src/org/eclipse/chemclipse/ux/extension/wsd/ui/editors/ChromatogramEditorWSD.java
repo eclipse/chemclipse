@@ -292,7 +292,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 					 * If no failures have occurred, set the dirty status to
 					 * false.
 					 */
-					File file = processingInfo.getProcessingResult(File.class);
+					processingInfo.getProcessingResult(File.class);
 					dirtyable.setDirty(false);
 				} catch(TypeCastException e) {
 					throw new NoChromatogramConverterAvailableException();
@@ -431,6 +431,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	 * @throws FileNotFoundException
 	 * @throws ChromatogramIsNullException
 	 */
+	@SuppressWarnings("rawtypes")
 	private void importChromatogram(File file, boolean batch) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
 		/*
@@ -911,6 +912,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		tabItem.setControl(composite);
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void createReferencedChromatogramPageSection(Composite parent) {
 
 		Section section;

@@ -64,6 +64,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
+@SuppressWarnings("rawtypes")
 public class ExtendedScanListUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedScanListUI.class);
@@ -112,6 +113,7 @@ public class ExtendedScanListUI {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<? extends IScan> getScans() {
 
 		List<? extends IScan> scans = new ArrayList<IScan>();
@@ -259,7 +261,6 @@ public class ExtendedScanListUI {
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void deleteScanIdentifications() {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);

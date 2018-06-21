@@ -22,11 +22,11 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -165,9 +165,9 @@ public class ChromatogramHeaderView {
 			/*
 			 * Load the chromatogram overview.
 			 */
-			IChromatogramOverviewImportConverterProcessingInfo processingInfo = ChromatogramConverterCSD.convertOverview(file, new NullProgressMonitor());
+			IProcessingInfo processingInfo = ChromatogramConverterCSD.convertOverview(file, new NullProgressMonitor());
 			try {
-				IChromatogramOverview chromatogramOverview = processingInfo.getChromatogramOverview();
+				IChromatogramOverview chromatogramOverview = processingInfo.getProcessingResult(IChromatogramOverview.class);
 				if(chromatogramOverview != null) {
 					updateChromatogram(chromatogramOverview);
 				}

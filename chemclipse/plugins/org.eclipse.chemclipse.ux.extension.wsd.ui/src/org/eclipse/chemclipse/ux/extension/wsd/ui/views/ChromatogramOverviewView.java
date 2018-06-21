@@ -19,14 +19,13 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.swt.ui.components.chromatogram.ChromatogramOverviewUI;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.swt.ui.components.chromatogram.ChromatogramOverviewUI;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -126,9 +125,9 @@ public class ChromatogramOverviewView {
 			/*
 			 * Load the chromatogram overview.
 			 */
-			IChromatogramOverviewImportConverterProcessingInfo processingInfo = ChromatogramConverterWSD.convertOverview(file, new NullProgressMonitor());
+			IProcessingInfo processingInfo = ChromatogramConverterWSD.convertOverview(file, new NullProgressMonitor());
 			try {
-				IChromatogramOverview chromatogramOverview = processingInfo.getChromatogramOverview();
+				IChromatogramOverview chromatogramOverview = processingInfo.getProcessingResult(IChromatogramOverview.class);
 				if(chromatogramOverview != null) {
 					updateChromatogram(chromatogramOverview);
 				}

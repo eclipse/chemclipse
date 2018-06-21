@@ -21,11 +21,11 @@ import javax.annotation.PreDestroy;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
@@ -158,7 +158,7 @@ public abstract class AbstractChromatogramOverviewView implements IChromatogramO
 			/*
 			 * Load the chromatogram overview.
 			 */
-			IChromatogramOverviewImportConverterProcessingInfo processingInfo = null;
+			IProcessingInfo processingInfo = null;
 			switch(topic) {
 				case IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE:
 					processingInfo = ChromatogramConverterMSD.convertOverview(file, new NullProgressMonitor());
@@ -173,7 +173,7 @@ public abstract class AbstractChromatogramOverviewView implements IChromatogramO
 			//
 			try {
 				if(processingInfo != null) {
-					IChromatogramOverview chromatogramOverview = processingInfo.getChromatogramOverview();
+					IChromatogramOverview chromatogramOverview = processingInfo.getProcessingResult(IChromatogramOverview.class);
 					if(chromatogramOverview != null) {
 						updateChromatogram(chromatogramOverview);
 					}

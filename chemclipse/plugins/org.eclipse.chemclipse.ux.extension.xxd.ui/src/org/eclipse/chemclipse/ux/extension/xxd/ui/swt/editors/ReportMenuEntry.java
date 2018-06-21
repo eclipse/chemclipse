@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
+@SuppressWarnings("rawtypes")
 public class ReportMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
 
 	private ExtendedChromatogramUI extendedChromatogramUI;
@@ -55,7 +56,6 @@ public class ReportMenuEntry extends AbstractChartMenuEntry implements IChartMen
 		return chromatogramReportSupplier.getReportName();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void execute(Shell shell, ScrollableChart scrollableChart) {
 
@@ -70,6 +70,7 @@ public class ReportMenuEntry extends AbstractChartMenuEntry implements IChartMen
 			if(file != null) {
 				IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
+					@SuppressWarnings("unchecked")
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 

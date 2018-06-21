@@ -65,6 +65,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+@SuppressWarnings("rawtypes")
 public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSupport implements IChromatogramEditor, IDataUpdateSupport {
 
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif";
@@ -327,7 +328,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 				//
 				if(processingInfo != null) {
 					try {
-						File file = processingInfo.getProcessingResult(File.class);
+						processingInfo.getProcessingResult(File.class);
 						dirtyable.setDirty(false);
 					} catch(TypeCastException e) {
 						throw new NoChromatogramConverterAvailableException();

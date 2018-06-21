@@ -83,6 +83,7 @@ import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.IPlotArea;
 import org.swtchart.Range;
 
+@SuppressWarnings("rawtypes")
 public class ExtendedPeakDetectorUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakDetectorUI.class);

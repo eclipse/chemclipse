@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.ui.dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
@@ -28,8 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-import org.eclipse.chemclipse.model.core.IChromatogram;
-
+@SuppressWarnings("rawtypes")
 public class ReferencedChromatogramDialog extends TitleAreaDialog {
 
 	private IChromatogram chromatogram;
@@ -48,6 +48,7 @@ public class ReferencedChromatogramDialog extends TitleAreaDialog {
 		return selectedChromatograms;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Control createDialogArea(Composite parent) {
 

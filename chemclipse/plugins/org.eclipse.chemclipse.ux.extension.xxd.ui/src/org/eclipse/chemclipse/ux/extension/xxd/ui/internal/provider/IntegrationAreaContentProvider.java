@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+@SuppressWarnings("rawtypes")
 public class IntegrationAreaContentProvider implements IStructuredContentProvider {
 
 	@Override

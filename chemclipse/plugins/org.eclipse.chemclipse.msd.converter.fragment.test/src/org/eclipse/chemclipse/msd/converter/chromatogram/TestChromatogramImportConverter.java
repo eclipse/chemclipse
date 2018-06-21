@@ -13,8 +13,6 @@ package org.eclipse.chemclipse.msd.converter.chromatogram;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramOverviewImportConverterProcessingInfo;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -37,10 +35,10 @@ public class TestChromatogramImportConverter extends AbstractChromatogramMSDImpo
 	}
 
 	@Override
-	public IChromatogramOverviewImportConverterProcessingInfo convertOverview(File chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo convertOverview(File chromatogram, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = super.validate(chromatogram);
-		IChromatogramOverviewImportConverterProcessingInfo processingInfoImport = new ChromatogramOverviewImportConverterProcessingInfo();
+		IProcessingInfo processingInfoImport = new ProcessingInfo();
 		processingInfoImport.addMessages(processingInfo);
 		return processingInfoImport;
 	}

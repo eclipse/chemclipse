@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 import java.io.File;
 import java.util.List;
 
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
@@ -117,7 +116,7 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 	private IChromatogramOverview getChromatogramOverview(File file, String topic) {
 
 		IChromatogramOverview chromatogramOverview = null;
-		IChromatogramOverviewImportConverterProcessingInfo processingInfo = null;
+		IProcessingInfo processingInfo = null;
 		switch(topic) {
 			case IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE:
 				processingInfo = ChromatogramConverterMSD.convertOverview(file, new NullProgressMonitor());
@@ -132,7 +131,7 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 		//
 		try {
 			if(processingInfo != null) {
-				chromatogramOverview = processingInfo.getChromatogramOverview();
+				chromatogramOverview = processingInfo.getProcessingResult(IChromatogramOverview.class);
 			}
 		} catch(TypeCastException e) {
 			logger.warn(e);

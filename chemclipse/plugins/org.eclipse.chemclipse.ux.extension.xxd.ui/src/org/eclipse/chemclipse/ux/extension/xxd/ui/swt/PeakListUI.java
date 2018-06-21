@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
+@SuppressWarnings("rawtypes")
 public class PeakListUI extends ExtendedTableViewer {
 
 	private PeakListLabelProvider peakListLabelProvider;

@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
+@SuppressWarnings("rawtypes")
 public class ChromatogramExportRunnable implements IRunnableWithProgress {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramExportRunnable.class);

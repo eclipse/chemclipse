@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 
+@SuppressWarnings("rawtypes")
 public class ChromatogramDataSupport {
 
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
@@ -163,6 +164,7 @@ public class ChromatogramDataSupport {
 		return peaks;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<IScan> getIdentifiedScans(IChromatogram chromatogram) {
 
 		return getIdentifiedScans(chromatogram, null);

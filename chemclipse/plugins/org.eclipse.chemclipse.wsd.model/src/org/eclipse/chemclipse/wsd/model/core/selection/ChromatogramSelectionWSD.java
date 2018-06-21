@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelength;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateNotifier;
 
+@SuppressWarnings("rawtypes")
 public class ChromatogramSelectionWSD extends AbstractChromatogramSelection implements IChromatogramSelectionWSD {
 
 	private static final long serialVersionUID = 6548761643931077446L;

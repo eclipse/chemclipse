@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
+@SuppressWarnings("rawtypes")
 public class ExtendedCombinedScanUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedCombinedScanUI.class);

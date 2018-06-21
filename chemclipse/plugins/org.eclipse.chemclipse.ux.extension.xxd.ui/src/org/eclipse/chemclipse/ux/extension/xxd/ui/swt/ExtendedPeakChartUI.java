@@ -58,6 +58,7 @@ import org.swtchart.IAxis;
 import org.swtchart.IPlotArea;
 import org.swtchart.Range;
 
+@SuppressWarnings("rawtypes")
 public class ExtendedPeakChartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakChartUI.class);

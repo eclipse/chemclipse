@@ -14,13 +14,11 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.internal.support;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.logging.core.Logger;
-
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ChromatogramOverviewImportRunnable implements IRunnableWithProgress {
@@ -48,8 +46,8 @@ public class ChromatogramOverviewImportRunnable implements IRunnableWithProgress
 
 		try {
 			monitor.beginTask("Import Chromatogram Overview", IProgressMonitor.UNKNOWN);
-			IChromatogramOverviewImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convertOverview(chromatogram, new SubProgressMonitor(monitor, IProgressMonitor.UNKNOWN));
-			chromatogramOverview = processingInfo.getChromatogramOverview();
+			IProcessingInfo processingInfo = ChromatogramConverterMSD.convertOverview(chromatogram, monitor);
+			chromatogramOverview = processingInfo.getProcessingResult(IChromatogramOverview.class);
 		} catch(Exception e) {
 			/*
 			 * Exceptions: FileNotFoundException

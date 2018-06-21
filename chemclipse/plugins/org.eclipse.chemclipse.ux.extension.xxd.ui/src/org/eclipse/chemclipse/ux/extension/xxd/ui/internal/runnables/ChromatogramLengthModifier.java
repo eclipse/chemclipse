@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
+@SuppressWarnings("rawtypes")
 public class ChromatogramLengthModifier implements IRunnableWithProgress {
 
 	private IChromatogramSelection chromatogramSelection;

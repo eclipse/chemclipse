@@ -77,6 +77,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+@SuppressWarnings("rawtypes")
 public class ExtendedScanChartUI {
 
 	private static final Logger logger = Logger.getLogger(ScanChartPart.class);

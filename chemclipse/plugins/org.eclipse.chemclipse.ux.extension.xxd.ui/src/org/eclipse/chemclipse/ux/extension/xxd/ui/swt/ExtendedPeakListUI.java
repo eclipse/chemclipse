@@ -65,6 +65,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
+@SuppressWarnings("rawtypes")
 public class ExtendedPeakListUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakListUI.class);
@@ -307,7 +308,6 @@ public class ExtendedPeakListUI {
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void deletePeaks() {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -328,7 +328,6 @@ public class ExtendedPeakListUI {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void setPeaksActiveForAnalysis(boolean activeForAnalysis) {
 
 		Iterator iterator = peakListUI.getStructuredSelection().iterator();
