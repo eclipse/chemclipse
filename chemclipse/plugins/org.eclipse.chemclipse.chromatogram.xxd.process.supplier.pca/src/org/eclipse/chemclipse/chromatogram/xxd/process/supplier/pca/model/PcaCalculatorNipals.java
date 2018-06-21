@@ -18,13 +18,12 @@ import org.ejml.ops.NormOps;
 public class PcaCalculatorNipals extends AbstractMultivariateCalculator {
 
 	@Override
-	public void compute(int numComps) {
+	public void compute() {
 
 		// Prepare data, E, p, t, threshold, scores, loadings
 		int numberOfSamples = getSampleData().getNumRows();
 		int numberOfVariables = getSampleData().getNumCols();
 		final double threshold = 0.00001;
-		setNumComps(numComps);
 		DenseMatrix64F E = getSampleData().copy();
 		double scoreDotOld = 0;
 		double scoreDotNew = 0;
@@ -32,10 +31,10 @@ public class PcaCalculatorNipals extends AbstractMultivariateCalculator {
 		DenseMatrix64F t = CommonOps.extract(E, 0, numberOfSamples, 0, 1);
 		DenseMatrix64F pMatrix = new DenseMatrix64F(1, numberOfVariables);
 		DenseMatrix64F tMatrix = new DenseMatrix64F(1, numberOfSamples);
-		setLoadings(new DenseMatrix64F(numComps, numberOfVariables));
-		setScores(new DenseMatrix64F(numberOfSamples, numComps));
+		setLoadings(new DenseMatrix64F(getNumComps(), numberOfVariables));
+		setScores(new DenseMatrix64F(numberOfSamples, getNumComps()));
 		// Iterate over number of components
-		for(int i = 0; i < numComps; i++) {
+		for(int i = 0; i < getNumComps(); i++) {
 			// do.. iterate until threshold reached
 			int bailOut = 10000;
 			do {

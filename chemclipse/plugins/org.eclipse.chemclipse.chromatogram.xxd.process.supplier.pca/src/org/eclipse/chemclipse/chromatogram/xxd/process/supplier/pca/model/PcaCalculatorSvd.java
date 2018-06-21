@@ -20,9 +20,8 @@ import org.ejml.ops.SingularOps;
 public class PcaCalculatorSvd extends AbstractMultivariateCalculator {
 
 	@Override
-	public void compute(int numComps) {
+	public void compute() {
 
-		setNumComps(numComps);
 		computeLoadings();
 		computeScores();
 		setComputeSuccess();

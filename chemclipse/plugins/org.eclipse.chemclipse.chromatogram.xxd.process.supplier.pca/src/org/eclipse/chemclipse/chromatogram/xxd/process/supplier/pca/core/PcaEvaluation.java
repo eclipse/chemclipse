@@ -191,8 +191,7 @@ public class PcaEvaluation {
 		for(Map.Entry<ISample<?>, double[]> entry : pcaPeakMap.entrySet()) {
 			principalComponentAnalysis.addObservation(entry.getValue(), entry.getKey(), entry.getKey().getGroupName());
 		}
-		if(numberOfPrincipalComponents > numSamples) {
-		}
+		principalComponentAnalysis.setNumComps(numberOfPrincipalComponents);
 		return principalComponentAnalysis;
 	}
 
@@ -213,7 +212,7 @@ public class PcaEvaluation {
 		/*
 		 * Compute PCA
 		 */
-		principalComponentAnalysis.compute(numberOfPrincipalComponents);
+		principalComponentAnalysis.compute();
 		/*
 		 * Collect PCA results
 		 */

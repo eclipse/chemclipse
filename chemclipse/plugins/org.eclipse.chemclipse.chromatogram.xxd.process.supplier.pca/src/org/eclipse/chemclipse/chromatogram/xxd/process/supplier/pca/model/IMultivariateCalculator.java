@@ -19,7 +19,7 @@ public interface IMultivariateCalculator {
 
 	double[] applyLoadings(double[] obs);
 
-	void compute(int numComps);
+	void compute();
 
 	boolean getComputeStatus();
 
@@ -38,4 +38,8 @@ public interface IMultivariateCalculator {
 	double getSummedVariance();
 
 	double getExplainedVariance(int var);
+
+	void setNumComps(int numComps);
+
+	int getNumComps();
 }

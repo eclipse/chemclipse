@@ -78,14 +78,13 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 	}
 
 	@Override
-	public void compute(int numComps) {
+	public void compute() {
 
-		setNumComps(numComps);
 		int numberOfSamples = getSampleData().getNumRows();
 		int numberOfVariables = getSampleData().getNumCols();
-		DenseMatrix64F T_ortho = new DenseMatrix64F(numberOfSamples, numComps - 1);
-		DenseMatrix64F P_ortho = new DenseMatrix64F(numComps - 1, numberOfVariables);
-		DenseMatrix64F W_ortho = new DenseMatrix64F(numComps - 1, numberOfVariables);
+		DenseMatrix64F T_ortho = new DenseMatrix64F(numberOfSamples, getNumComps() - 1);
+		DenseMatrix64F P_ortho = new DenseMatrix64F(getNumComps() - 1, numberOfVariables);
+		DenseMatrix64F W_ortho = new DenseMatrix64F(getNumComps() - 1, numberOfVariables);
 		DenseMatrix64F t_ortho = new DenseMatrix64F(numberOfSamples, 1);
 		DenseMatrix64F p_ortho = new DenseMatrix64F(1, numberOfVariables);
 		DenseMatrix64F w_ortho = new DenseMatrix64F(1, numberOfVariables);
@@ -114,7 +113,7 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		double absW = Math.sqrt(ww.get(0));
 		CommonOps.divide(w, absW);
 		// #3
-		for(int i = 0; i < numComps; i++) {
+		for(int i = 0; i < getNumComps(); i++) {
 			DenseMatrix64F wTemp = new DenseMatrix64F(1, 1);
 			CommonOps.multInner(w, wTemp);
 			CommonOps.mult(X, w, te);
@@ -132,7 +131,7 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 			// #6
 			CommonOps.multTransA(te, X, p);
 			CommonOps.divide(p, tTemp.get(0));
-			if(i < numComps - 1) {
+			if(i < getNumComps() - 1) {
 				// #7
 				DenseMatrix64F wTemp2 = new DenseMatrix64F(1, 1);
 				DenseMatrix64F w_ortho_temp = new DenseMatrix64F(numberOfVariables, 1);
@@ -174,15 +173,15 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 			}
 		}
 		CommonOps.mult(w, ce, b);
-		double combinedScores[] = new double[numberOfSamples * numComps];
+		double combinedScores[] = new double[numberOfSamples * getNumComps()];
 		System.arraycopy(te.getData(), 0, combinedScores, 0, numberOfSamples);
-		System.arraycopy(T_ortho.getData(), 0, combinedScores, numberOfSamples, numberOfSamples * (numComps - 1));
-		DenseMatrix64F scores = new DenseMatrix64F(numberOfSamples, numComps, false, combinedScores);
+		System.arraycopy(T_ortho.getData(), 0, combinedScores, numberOfSamples, numberOfSamples * (getNumComps() - 1));
+		DenseMatrix64F scores = new DenseMatrix64F(numberOfSamples, getNumComps(), false, combinedScores);
 		setScores(scores);
-		double combinedLoadings[] = new double[numComps * numberOfVariables];
+		double combinedLoadings[] = new double[getNumComps() * numberOfVariables];
 		System.arraycopy(p.getData(), 0, combinedLoadings, 0, numberOfVariables);
-		System.arraycopy(P_ortho.getData(), 0, combinedLoadings, numberOfVariables, (numComps - 1) * numberOfVariables);
-		DenseMatrix64F loadings = new DenseMatrix64F(numComps, numberOfVariables, true, combinedLoadings);
+		System.arraycopy(P_ortho.getData(), 0, combinedLoadings, numberOfVariables, (getNumComps() - 1) * numberOfVariables);
+		DenseMatrix64F loadings = new DenseMatrix64F(getNumComps(), numberOfVariables, true, combinedLoadings);
 		setLoadings(loadings);
 		this.setComputeSuccess();
 	}
