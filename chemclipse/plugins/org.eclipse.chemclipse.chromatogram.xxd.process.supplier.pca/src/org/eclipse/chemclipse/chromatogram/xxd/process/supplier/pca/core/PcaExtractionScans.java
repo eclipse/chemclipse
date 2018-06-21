@@ -26,14 +26,14 @@ import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.interpolation.UnivariateInterpolator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.RetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaExtractionScans implements IDataExtraction {
@@ -64,8 +64,8 @@ public class PcaExtractionScans implements IDataExtraction {
 		Map<String, TreeMap<Integer, Float>> scanMap = new HashMap<>();
 		boolean firstChromatogram = true;
 		for(IDataInputEntry input : inputFiles) {
-			IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(new File(input.getInputFile()), monitor);
-			IChromatogramMSD chromatogram = processingInfo.getChromatogram();
+			IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(new File(input.getInputFile()), monitor);
+			IChromatogramMSD chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 			String name = input.getName();
 			TreeMap<Integer, Float> extractScans = new TreeMap<>();
 			List<IScan> scans = chromatogram.getScans();
