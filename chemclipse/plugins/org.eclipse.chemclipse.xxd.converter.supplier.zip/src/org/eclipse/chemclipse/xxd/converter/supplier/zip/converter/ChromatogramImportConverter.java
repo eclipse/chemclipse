@@ -20,8 +20,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDImportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.ChromatogramMSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.zip.internal.converter.IConstants;
@@ -35,16 +33,10 @@ public class ChromatogramImportConverter extends AbstractChromatogramMSDImportCo
 	private static final Logger logger = Logger.getLogger(ChromatogramImportConverter.class);
 
 	@Override
-	public IChromatogramMSDImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = new ChromatogramMSDImportConverterProcessingInfo();
-		/*
-		 * Validate the file.
-		 */
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			/*
 			 * Read the chromatogram.
 			 */
@@ -53,7 +45,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramMSDImportCo
 			monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 			try {
 				IChromatogramMSD chromatogram = reader.read(file, monitor);
-				processingInfo.setChromatogram(chromatogram);
+				processingInfo.setProcessingResult(chromatogram);
 			} catch(Exception e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());

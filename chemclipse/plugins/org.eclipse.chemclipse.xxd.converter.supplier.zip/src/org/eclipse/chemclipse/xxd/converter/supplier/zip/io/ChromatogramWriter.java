@@ -20,16 +20,15 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.xxd.converter.supplier.zip.internal.converter.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.zip.internal.converter.PathHelper;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 
@@ -41,9 +40,9 @@ public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 
 		File destinationDirectory = PathHelper.getStoragePathExport();
 		File destinationFile = new File(destinationDirectory.getAbsolutePath() + File.separator + chromatogram.getName());
-		IChromatogramExportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(destinationFile, chromatogram, IConstants.CONVERTER_ID, monitor);
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(destinationFile, chromatogram, IConstants.CONVERTER_ID, monitor);
 		try {
-			File export = processingInfo.getFile();
+			File export = processingInfo.getProcessingResult(File.class);
 			monitor.subTask("Compress the chromatogram");
 			FileOutputStream fileOutputStream = new FileOutputStream(file);
 			ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(fileOutputStream));
