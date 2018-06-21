@@ -13,32 +13,26 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.co
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
-import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
-import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.support.ProcessTypeSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
+import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
+import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
+import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
-import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
 public class BatchProcess implements IBatchProcess {
 
 	private Logger logger = Logger.getLogger(BatchProcess.class);
@@ -82,9 +76,9 @@ public class BatchProcess implements IBatchProcess {
 
 	private IChromatogramMSD loadChromatogram(File chromatogramInputFile, IProcessingInfo batchProcessingInfo, IProgressMonitor monitor) throws TypeCastException {
 
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramInputFile, monitor);
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramInputFile, monitor);
 		batchProcessingInfo.addMessages(processingInfo);
-		IChromatogramMSD chromatogram = processingInfo.getChromatogram();
+		IChromatogramMSD chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		return chromatogram;
 	}
 
