@@ -22,7 +22,6 @@ import javax.annotation.PreDestroy;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
@@ -35,6 +34,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
@@ -313,7 +313,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 			if(converterId != null && !converterId.equals("") && chromatogramFile != null) {
 				monitor.subTask("Save Chromatogram");
 				//
-				IChromatogramExportConverterProcessingInfo processingInfo = null;
+				IProcessingInfo processingInfo = null;
 				if(chromatogram instanceof IChromatogramMSD) {
 					IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
 					processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, chromatogramMSD, converterId, monitor);
@@ -327,7 +327,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 				//
 				if(processingInfo != null) {
 					try {
-						processingInfo.getFile();
+						File file = processingInfo.getProcessingResult(File.class);
 						dirtyable.setDirty(false);
 					} catch(TypeCastException e) {
 						throw new NoChromatogramConverterAvailableException();

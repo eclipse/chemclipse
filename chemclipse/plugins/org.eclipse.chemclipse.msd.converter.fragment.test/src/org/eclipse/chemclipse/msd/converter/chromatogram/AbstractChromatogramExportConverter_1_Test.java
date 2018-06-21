@@ -14,10 +14,9 @@ package org.eclipse.chemclipse.msd.converter.chromatogram;
 import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.TestPathHelper;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -51,7 +50,7 @@ public class AbstractChromatogramExportConverter_1_Test extends TestCase {
 	public void testFileNotFoundException_1() {
 
 		File file = null;
-		IChromatogramExportConverterProcessingInfo processingInfo = ec.convert(file, null, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ec.convert(file, null, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
@@ -61,7 +60,7 @@ public class AbstractChromatogramExportConverter_1_Test extends TestCase {
 		try {
 			file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_CHROMATOGRAM_NOT_WRITEABLE));
 			file.setWritable(false);
-			IChromatogramExportConverterProcessingInfo processingInfo = ec.convert(file, null, new NullProgressMonitor());
+			IProcessingInfo processingInfo = ec.convert(file, null, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(IOException e) {
 			assertTrue("IOException", false);

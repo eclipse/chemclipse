@@ -16,9 +16,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -42,8 +42,8 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Import Chromatogram", IProgressMonitor.UNKNOWN);
-			IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, monitor);
-			IChromatogramMSD chromatogram = processingInfo.getChromatogram();
+			IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, monitor);
+			IChromatogramMSD chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 			chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		} catch(Exception e) {
 			/*

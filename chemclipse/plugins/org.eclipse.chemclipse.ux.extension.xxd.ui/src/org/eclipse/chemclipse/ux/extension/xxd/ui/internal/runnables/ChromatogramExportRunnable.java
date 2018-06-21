@@ -15,13 +15,13 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
@@ -55,7 +55,7 @@ public class ChromatogramExportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Export Chromatogram", IProgressMonitor.UNKNOWN);
-			IChromatogramExportConverterProcessingInfo processingInfo = null;
+			IProcessingInfo processingInfo = null;
 			switch(dataType) {
 				case MSD_NOMINAL:
 				case MSD_TANDEM:
@@ -84,7 +84,7 @@ public class ChromatogramExportRunnable implements IRunnableWithProgress {
 			//
 			if(processingInfo != null) {
 				try {
-					data = processingInfo.getFile();
+					data = processingInfo.getProcessingResult(File.class);
 				} catch(TypeCastException e) {
 					logger.warn(e);
 				}

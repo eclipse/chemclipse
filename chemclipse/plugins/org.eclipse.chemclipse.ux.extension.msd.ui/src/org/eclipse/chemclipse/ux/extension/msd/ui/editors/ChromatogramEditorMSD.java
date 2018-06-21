@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -40,6 +39,7 @@ import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateN
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.EditorChromatogramUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.ions.MarkedIonsChooser;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -312,13 +312,13 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 				 * Try to save the chromatogram.
 				 */
 				monitor.subTask("Save Chromatogram");
-				IChromatogramExportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, chromatogram, converterId, monitor);
+				IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, chromatogram, converterId, monitor);
 				try {
 					/*
 					 * If no failures have occurred, set the dirty status to
 					 * false.
 					 */
-					processingInfo.getFile();
+					File file = processingInfo.getProcessingResult(File.class);
 					dirtyable.setDirty(false);
 				} catch(TypeCastException e) {
 					throw new NoChromatogramConverterAvailableException();

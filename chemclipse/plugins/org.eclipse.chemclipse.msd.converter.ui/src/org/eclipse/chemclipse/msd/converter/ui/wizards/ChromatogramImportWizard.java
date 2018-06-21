@@ -16,6 +16,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -24,12 +29,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
-
-import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
 public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 
@@ -96,8 +95,8 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 						/*
 						 * Import
 						 */
-						IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(inputFile, monitor);
-						IChromatogramMSD chromatogram = processingInfo.getChromatogram();
+						IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(inputFile, monitor);
+						IChromatogramMSD chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 						//
 						String directory = importDirectory;
 						if(!importDirectory.endsWith(File.separator)) {

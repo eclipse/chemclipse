@@ -14,10 +14,9 @@ package org.eclipse.chemclipse.msd.converter.chromatogram;
 import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.msd.converter.TestPathHelper;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -51,7 +50,7 @@ public class AbstractChromatogramImportConverter_1_Test extends TestCase {
 	public void testFileNotFoundException_1() {
 
 		File file = new File("");
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = ic.convert(file, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ic.convert(file, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
@@ -61,7 +60,7 @@ public class AbstractChromatogramImportConverter_1_Test extends TestCase {
 		try {
 			file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_NOT_READABLE));
 			file.setReadable(false);
-			IChromatogramMSDImportConverterProcessingInfo processingInfo = ic.convert(file, new NullProgressMonitor());
+			IProcessingInfo processingInfo = ic.convert(file, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(IOException e) {
 			assertTrue("IOException", false);
@@ -77,7 +76,7 @@ public class AbstractChromatogramImportConverter_1_Test extends TestCase {
 		File file = null;
 		try {
 			file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_EMPTY));
-			IChromatogramMSDImportConverterProcessingInfo processingInfo = ic.convert(file, new NullProgressMonitor());
+			IProcessingInfo processingInfo = ic.convert(file, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(IOException e) {
 			assertTrue("IOException", false);

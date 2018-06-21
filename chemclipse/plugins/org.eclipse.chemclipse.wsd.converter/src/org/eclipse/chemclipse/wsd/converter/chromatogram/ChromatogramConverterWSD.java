@@ -19,13 +19,12 @@ import org.eclipse.chemclipse.converter.chromatogram.ChromatogramSupplier;
 import org.eclipse.chemclipse.converter.core.Converter;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramOverviewImportConverterProcessingInfo;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.ChromatogramWSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -222,11 +221,11 @@ public class ChromatogramConverterWSD {
 	 * @param chromatogram
 	 * @param converterId
 	 * @param monitor
-	 * @return {@link IChromatogramExportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramExportConverterProcessingInfo convert(final File file, final IChromatogramWSD chromatogram, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo convert(final File file, final IChromatogramWSD chromatogram, final String converterId, final IProgressMonitor monitor) {
 
-		IChromatogramExportConverterProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		/*
 		 * Do not use a safe runnable here, because a IChromatogram object must
 		 * be returned or null.
@@ -366,9 +365,9 @@ public class ChromatogramConverterWSD {
 	}
 
 	// ---------------------------------------------ConverterMethods
-	private static IChromatogramExportConverterProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
+	private static IProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
 
-		IChromatogramExportConverterProcessingInfo processingInfo = new ChromatogramExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("Chromatogram Export Converter", "There is no suitable converter available to save the chromatogram to the file: " + file.getAbsolutePath());
 		return processingInfo;
 	}

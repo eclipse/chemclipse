@@ -19,6 +19,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramSelectionWizardPage;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -28,14 +35,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
-
-import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
-import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramSelectionWizardPage;
 
 public class ChromatogramReportExportWizard extends Wizard implements IExportWizard {
 
@@ -88,10 +87,9 @@ public class ChromatogramReportExportWizard extends Wizard implements IExportWiz
 							 * Load each chromatogram
 							 */
 							File chromatogramFile = new File(inputFile);
-							IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, CONVERTER_ID, monitor);
-							IChromatogramMSD chromatogram;
+							IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, CONVERTER_ID, monitor);
 							try {
-								chromatogram = processingInfo.getChromatogram();
+								IChromatogramMSD chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 								if(chromatogram != null) {
 									/*
 									 * Report: Append the reports or use distinct files?

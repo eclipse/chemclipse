@@ -21,9 +21,9 @@ import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
@@ -66,8 +66,8 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 					case MSD_TANDEM:
 					case MSD_HIGHRES:
 					case MSD:
-						IChromatogramMSDImportConverterProcessingInfo processingInfoMSD = ChromatogramConverterMSD.convert(file, monitor);
-						IChromatogramMSD chromatogramMSD = processingInfoMSD.getChromatogram();
+						IProcessingInfo processingInfoMSD = ChromatogramConverterMSD.convert(file, monitor);
+						IChromatogramMSD chromatogramMSD = processingInfoMSD.getProcessingResult(IChromatogramMSD.class);
 						chromatogramSelection = new ChromatogramSelectionMSD(chromatogramMSD, fireUpdate);
 						break;
 					case CSD:

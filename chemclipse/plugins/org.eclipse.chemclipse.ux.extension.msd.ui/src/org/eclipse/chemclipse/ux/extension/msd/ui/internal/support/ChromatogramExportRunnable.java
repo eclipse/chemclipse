@@ -15,14 +15,12 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
-
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ChromatogramExportRunnable implements IRunnableWithProgress {
@@ -51,10 +49,9 @@ public class ChromatogramExportRunnable implements IRunnableWithProgress {
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Export Chromatogram", IProgressMonitor.UNKNOWN);
-			IChromatogramExportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, chromatogram, supplier.getId(), new SubProgressMonitor(monitor, IProgressMonitor.UNKNOWN));
+			IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, chromatogram, supplier.getId(), monitor);
 			try {
-				data = processingInfo.getFile();
+				data = processingInfo.getProcessingResult(File.class);
 			} catch(TypeCastException e) {
 				logger.warn(e);
 			}

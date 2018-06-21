@@ -13,28 +13,19 @@ package org.eclipse.chemclipse.msd.converter.chromatogram;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramExportConverterProcessingInfo;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDExportConverter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>
  * IT IS AN TESTCLASS!
- * 
- * @author eselmeister
  */
 public class TestChromatogramExportConverter extends AbstractChromatogramMSDExportConverter {
 
 	@Override
-	public IChromatogramExportConverterProcessingInfo convert(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(file);
-		IChromatogramExportConverterProcessingInfo processingInfoExport = new ChromatogramExportConverterProcessingInfo();
-		processingInfoExport.addMessages(processingInfo);
-		return processingInfoExport;
+		return super.validate(file);
 	}
 }

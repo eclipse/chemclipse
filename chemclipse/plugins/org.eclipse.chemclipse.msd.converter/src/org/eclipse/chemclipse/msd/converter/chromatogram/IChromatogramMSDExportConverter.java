@@ -13,11 +13,10 @@ package org.eclipse.chemclipse.msd.converter.chromatogram;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramMSDExportConverter extends IChromatogramExportConverter {
 
@@ -38,7 +37,7 @@ public interface IChromatogramMSDExportConverter extends IChromatogramExportConv
 	 * @param file
 	 * @param chromatogram
 	 * @param monitor
-	 * @return {@link IChromatogramExportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IChromatogramExportConverterProcessingInfo convert(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor);
+	IProcessingInfo convert(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor);
 }
