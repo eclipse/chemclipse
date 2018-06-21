@@ -13,15 +13,13 @@ package org.eclipse.chemclipse.msd.converter.supplier.openchromx.converter;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.openchromx.TestPathHelper;
-import org.eclipse.chemclipse.msd.converter.supplier.openchromx.converter.ChromatogramExportConverter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.history.EditInformation;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -36,8 +34,8 @@ public class ChromatogramExportConverter_1_ITest extends TestCase {
 
 		super.setUp();
 		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1_AGILENT));
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(importFile, new NullProgressMonitor());
-		chromatogram = processingInfo.getChromatogram();
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(importFile, new NullProgressMonitor());
+		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogram.setMiscInfo("Hello Test Misc Info");
 		chromatogram.getEditHistory().add(new EditInformation("I have done </Chromatogram> something"));
 		chromatogram.getEditHistory().add(new EditInformation("me too"));
@@ -54,9 +52,9 @@ public class ChromatogramExportConverter_1_ITest extends TestCase {
 	public void testExport_1() {
 
 		ChromatogramExportConverter converter = new ChromatogramExportConverter();
-		IChromatogramExportConverterProcessingInfo processingInfo = converter.convert(exportFile, chromatogram, new NullProgressMonitor());
+		IProcessingInfo processingInfo = converter.convert(exportFile, chromatogram, new NullProgressMonitor());
 		try {
-			File file = processingInfo.getFile();
+			File file = processingInfo.getProcessingResult(File.class);
 			assertNotNull(file);
 		} catch(TypeCastException e) {
 			assertTrue("TypeCastException", false);
