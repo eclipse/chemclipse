@@ -16,13 +16,12 @@ import java.io.File;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.SupplierFilterSettings;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class Show_BackfoldingFilter extends ChromatogramImporterTestCase {
@@ -45,8 +44,8 @@ public class Show_BackfoldingFilter extends ChromatogramImporterTestCase {
 		// fileImport = new
 		// File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_OP21705));
 		fileImport = new File("E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705.D\\DATA.MS");
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
-		chromatogram = processingInfo.getChromatogram();
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		chromatogramFilter = new ChromatogramFilter();
 		chromatogramFilterSettings = new SupplierFilterSettings();
@@ -70,6 +69,6 @@ public class Show_BackfoldingFilter extends ChromatogramImporterTestCase {
 		// fileExport = new File("/home/eselmeister/tmp/OPTest.D/DATA.MS");
 		fileExport = new File("E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705-BACK.D\\DATA.MS");
 		@SuppressWarnings("unused")
-		IChromatogramExportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileExport, chromatogram, EXTENSION_POINT_ID, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileExport, chromatogram, EXTENSION_POINT_ID, new NullProgressMonitor());
 	}
 }
