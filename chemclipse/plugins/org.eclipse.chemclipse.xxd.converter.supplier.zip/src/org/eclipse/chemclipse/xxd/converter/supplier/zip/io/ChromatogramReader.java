@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -83,9 +82,9 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		File fileChromatogram = extractChromatogramFile(file, monitor);
-		IChromatogramOverviewImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convertOverview(fileChromatogram, monitor);
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convertOverview(fileChromatogram, monitor);
 		try {
-			return processingInfo.getChromatogramOverview();
+			return processingInfo.getProcessingResult(IChromatogramOverview.class);
 		} catch(TypeCastException e) {
 			throw new IOException(e);
 		}

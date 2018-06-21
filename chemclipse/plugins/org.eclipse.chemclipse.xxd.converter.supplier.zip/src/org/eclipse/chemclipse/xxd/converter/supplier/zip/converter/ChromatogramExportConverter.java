@@ -18,8 +18,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDExportConverter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.xxd.converter.supplier.zip.internal.converter.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.zip.internal.converter.SpecificationValidator;
 import org.eclipse.chemclipse.xxd.converter.supplier.zip.io.ChromatogramWriter;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -32,20 +30,10 @@ public class ChromatogramExportConverter extends AbstractChromatogramMSDExportCo
 	@Override
 	public IProcessingInfo convert(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		/*
-		 * Validate the file.
-		 */
 		file = SpecificationValidator.validateSpecification(file);
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		/*
-		 * Don't process if errors have occurred.
-		 */
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			ChromatogramWriter writer = new ChromatogramWriter();
-			monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
 			try {
 				writer.writeChromatogram(file, chromatogram, monitor);
 				processingInfo.setProcessingResult(file);
