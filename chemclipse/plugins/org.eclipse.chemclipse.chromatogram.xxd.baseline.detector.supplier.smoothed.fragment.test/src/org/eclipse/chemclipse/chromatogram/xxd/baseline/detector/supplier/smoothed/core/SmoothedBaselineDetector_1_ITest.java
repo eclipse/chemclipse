@@ -13,17 +13,18 @@ package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoot
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetector;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBaselineDetectorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.settings.ISmoothedBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.settings.SmoothedBaselineDetectorSettings;
+import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -43,8 +44,8 @@ public class SmoothedBaselineDetector_1_ITest extends TestCase {
 		super.setUp();
 		pathImport = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_OP17760);
 		fileImport = new File(this.pathImport);
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, CHROMATOGRAM_CONVERTER_ID, new NullProgressMonitor());
-		chromatogram = processingInfo.getChromatogram();
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, CHROMATOGRAM_CONVERTER_ID, new NullProgressMonitor());
+		chromatogram = processingInfo.getProcessingResult(ChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		settings = new SmoothedBaselineDetectorSettings();
 	}
