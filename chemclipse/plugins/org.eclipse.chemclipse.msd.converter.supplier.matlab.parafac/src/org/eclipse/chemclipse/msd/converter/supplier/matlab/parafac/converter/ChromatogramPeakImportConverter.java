@@ -17,8 +17,8 @@ import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverte
 import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDImportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.ChromatogramMSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramPeakImportConverter extends AbstractChromatogramMSDImportConverter implements IChromatogramImportConverter {
@@ -27,9 +27,9 @@ public class ChromatogramPeakImportConverter extends AbstractChromatogramMSDImpo
 	private static final String MESSAGE = "It's only possible to import peaks using the chromatogram peak import converter.";
 
 	@Override
-	public IChromatogramMSDImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = new ChromatogramMSDImportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage(DESCRIPTION, MESSAGE);
 		return processingInfo;
 	}
