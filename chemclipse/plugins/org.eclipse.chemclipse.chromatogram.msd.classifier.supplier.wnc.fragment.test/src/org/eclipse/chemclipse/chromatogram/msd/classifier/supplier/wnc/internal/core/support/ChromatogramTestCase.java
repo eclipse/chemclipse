@@ -17,14 +17,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -59,8 +58,8 @@ public class ChromatogramTestCase extends TestCase {
 		/*
 		 * Read the chromatogram
 		 */
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, new NullProgressMonitor());
-		chromatogram = processingInfo.getChromatogram();
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, new NullProgressMonitor());
+		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 	}
 
