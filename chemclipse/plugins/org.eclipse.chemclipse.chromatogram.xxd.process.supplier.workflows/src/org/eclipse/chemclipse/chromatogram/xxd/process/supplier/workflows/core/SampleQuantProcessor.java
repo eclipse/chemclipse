@@ -27,16 +27,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.SampleQuantSubstance;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.converter.model.IReportRowModel;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.report.IReportImportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.report.ReportConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -64,8 +63,8 @@ public class SampleQuantProcessor {
 			 */
 			sampleQuantReport.setPathChromatogramOriginal(pathChromatogramOriginal);
 			File chromatogramImportFile = new File(pathChromatogramOriginal);
-			IChromatogramMSDImportConverterProcessingInfo processingInfoImport = ChromatogramConverterMSD.convert(chromatogramImportFile, monitor);
-			IChromatogramMSD chromatogramMSD = processingInfoImport.getChromatogram();
+			IProcessingInfo processingInfoImport = ChromatogramConverterMSD.convert(chromatogramImportFile, monitor);
+			IChromatogramMSD chromatogramMSD = processingInfoImport.getProcessingResult(IChromatogramMSD.class);
 			//
 			sampleQuantReport.setName(chromatogramMSD.getName());
 			sampleQuantReport.setDataName(chromatogramMSD.getDataName());
@@ -91,8 +90,8 @@ public class SampleQuantProcessor {
 			 * Export the chromatogram
 			 */
 			File chromatogramExportFile = new File(sampleQuantReportFile.getAbsolutePath().replace(REPORT_FILE_EXTENSION, CHROMATOGRAM_FILE_EXTENSION));
-			IChromatogramExportConverterProcessingInfo processingInfoExport = ChromatogramConverterMSD.convert(chromatogramExportFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
-			sampleQuantReport.setPathChromatogramEdited(processingInfoExport.getFile().getAbsolutePath());
+			IProcessingInfo processingInfoExport = ChromatogramConverterMSD.convert(chromatogramExportFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+			sampleQuantReport.setPathChromatogramEdited(processingInfoExport.getProcessingResult(File.class).getAbsolutePath());
 			/*
 			 * Write sample quant report
 			 */
