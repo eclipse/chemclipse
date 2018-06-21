@@ -13,11 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -36,8 +34,8 @@ public class ChromatogramReaderTestCase extends TestCase {
 
 		super.setUp();
 		fileImport = new File(this.pathImport);
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
-		chromatogram = processingInfo.getChromatogram();
+		org.eclipse.chemclipse.processing.core.IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 	}
 
 	@Override
