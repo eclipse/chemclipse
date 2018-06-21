@@ -13,7 +13,8 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.io;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.IVendorChromatogram;
@@ -65,11 +66,11 @@ public class DemoWriterWSD_1_ITest extends TestCase {
 		ChromatogramConverterWSD.convert(file, chromatogram, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
 		//
 		IChromatogramWSDImportConverterProcessingInfo processingInfo = ChromatogramConverterWSD.convert(file, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
-		IChromatogramOverviewImportConverterProcessingInfo processingInfo_overview = ChromatogramConverterWSD.convertOverview(file, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
+		IProcessingInfo processingInfo_overview = ChromatogramConverterWSD.convertOverview(file, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
 		//
 		IVendorChromatogram read_chromatogram = (VendorChromatogram)processingInfo.getChromatogram();
 		//
-		IVendorChromatogram read_overview = (VendorChromatogram)processingInfo_overview.getChromatogramOverview();
+		IVendorChromatogram read_overview = (VendorChromatogram)processingInfo_overview.getProcessingResult(IChromatogramOverview.class);
 		//
 		int _retentionTime;
 		double wavelength;

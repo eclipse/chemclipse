@@ -17,11 +17,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.MagicNumberMatcherCSD;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.MagicNumberMatcherMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -223,8 +223,8 @@ public class PageChromatogram extends AbstractExtendedEditorPage implements IExt
 		}
 		//
 		if(importConverter != null) {
-			IChromatogramOverviewImportConverterProcessingInfo processingInfo = importConverter.convertOverview(file, new NullProgressMonitor());
-			return processingInfo.getChromatogramOverview();
+			IProcessingInfo processingInfo = importConverter.convertOverview(file, new NullProgressMonitor());
+			return processingInfo.getProcessingResult(IChromatogramOverview.class);
 		} else {
 			return null;
 		}
