@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
-import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramExportConverterProcessingInfo;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDExportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
@@ -31,25 +29,15 @@ public class ChromatogramPeakExportConverter extends AbstractChromatogramMSDExpo
 	private static final String DESCRIPTION = "NIST MSP Chromatogram Peak Export Converter";
 
 	@Override
-	public IChromatogramExportConverterProcessingInfo convert(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) {
 
-		IChromatogramExportConverterProcessingInfo processingInfo = new ChromatogramExportConverterProcessingInfo();
-		/*
-		 * Validate the file.
-		 */
 		file = SpecificationValidatorMSP.validateSpecification(file);
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		/*
-		 * Don't process if errors have occurred.
-		 */
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			IChromatogramMSDWriter writer = new ChromatogramWriterMSP();
-			monitor.subTask("Export Chromatogram Peaks");
 			try {
 				writer.writeChromatogram(file, chromatogram, monitor);
-				processingInfo.setFile(file);
+				processingInfo.setProcessingResult(file);
 			} catch(Exception e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
