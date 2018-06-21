@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
-import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramOverviewImportConverterProcessingInfo;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDImportConverter;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -35,9 +33,9 @@ public class ChromatogramPeakImportConverter extends AbstractChromatogramMSDImpo
 	}
 
 	@Override
-	public IChromatogramOverviewImportConverterProcessingInfo convertOverview(File file, IProgressMonitor monitor) {
+	public IProcessingInfo convertOverview(File file, IProgressMonitor monitor) {
 
-		IChromatogramOverviewImportConverterProcessingInfo processingInfo = new ChromatogramOverviewImportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage(DESCRIPTION, MESSAGE);
 		return processingInfo;
 	}
