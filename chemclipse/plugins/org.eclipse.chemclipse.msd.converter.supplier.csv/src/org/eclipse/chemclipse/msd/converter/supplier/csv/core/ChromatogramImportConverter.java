@@ -20,8 +20,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDImportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.ChromatogramMSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.internal.converter.SpecificationValidator;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.internal.support.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.ChromatogramReader;
@@ -35,25 +33,15 @@ public class ChromatogramImportConverter extends AbstractChromatogramMSDImportCo
 	private static final String DESCRIPTION = "CSV Import Converter";
 
 	@Override
-	public IChromatogramMSDImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = new ChromatogramMSDImportConverterProcessingInfo();
-		/*
-		 * Validate the file.
-		 */
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
-			/*
-			 * Read the chromatogram.
-			 */
+		IProcessingInfo processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			file = SpecificationValidator.validateSpecification(file, "csv");
 			IChromatogramMSDReader reader = new ChromatogramReader();
-			monitor.subTask(IConstants.IMPORT_CSV_CHROMATOGRAM);
 			try {
 				IChromatogramMSD chromatogram = reader.read(file, monitor);
-				processingInfo.setChromatogram(chromatogram);
+				processingInfo.setProcessingResult(chromatogram);
 			} catch(Exception e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());

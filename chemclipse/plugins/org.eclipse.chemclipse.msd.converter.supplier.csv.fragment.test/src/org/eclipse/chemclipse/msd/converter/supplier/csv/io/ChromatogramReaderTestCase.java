@@ -13,11 +13,10 @@ package org.eclipse.chemclipse.msd.converter.supplier.csv.io;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -38,8 +37,8 @@ public class ChromatogramReaderTestCase extends TestCase {
 
 		super.setUp();
 		fileImport = new File(this.pathImport);
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
-		chromatogram = processingInfo.getChromatogram();
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 	}
 
 	@Override
