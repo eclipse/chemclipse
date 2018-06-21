@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io.ChromatogramWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter.SpecificationValidator;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -33,18 +32,9 @@ public class ChromatogramExportConverter extends AbstractChromatogramMSDExportCo
 	@Override
 	public IProcessingInfo convert(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		/*
-		 * Validate the file.
-		 */
 		file = SpecificationValidator.validateSpecification(file, "JDX");
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		/*
-		 * Don't process if errors have occurred.
-		 */
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			IChromatogramMSDWriter writer = new ChromatogramWriter();
 			monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
 			try {
