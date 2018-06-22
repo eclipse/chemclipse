@@ -116,6 +116,7 @@ public class PenaltyCalculationSupport {
 	 * @param reference
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unused")
 	private static void runRetentionIndexCheck(final IScanMSD unknown, final IScanMSD reference) {
 
 		if(unknown.getRetentionIndex() == 0.0f || reference.getRetentionIndex() == 0.0f) {

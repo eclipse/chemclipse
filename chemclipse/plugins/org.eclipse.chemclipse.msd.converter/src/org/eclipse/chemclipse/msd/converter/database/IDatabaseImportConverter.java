@@ -14,10 +14,10 @@ package org.eclipse.chemclipse.msd.converter.database;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IImportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IDatabaseImportConverter extends IImportConverter {
 
-	IDatabaseImportConverterProcessingInfo convert(File file, IProgressMonitor monitor);
+	IProcessingInfo convert(File file, IProgressMonitor monitor);
 }

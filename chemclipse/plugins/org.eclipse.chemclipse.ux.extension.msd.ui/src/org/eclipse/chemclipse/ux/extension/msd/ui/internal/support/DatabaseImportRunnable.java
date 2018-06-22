@@ -16,8 +16,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -41,8 +41,8 @@ public class DatabaseImportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Import Database", IProgressMonitor.UNKNOWN);
-			IDatabaseImportConverterProcessingInfo processingInfo = DatabaseConverter.convert(file, monitor);
-			massSpectra = processingInfo.getMassSpectra();
+			IProcessingInfo processingInfo = DatabaseConverter.convert(file, monitor);
+			massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 		} catch(Exception e) {
 			/*
 			 * Exceptions: FileNotFoundException

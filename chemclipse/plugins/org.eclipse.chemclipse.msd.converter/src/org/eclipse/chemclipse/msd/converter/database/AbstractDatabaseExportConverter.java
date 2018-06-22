@@ -12,20 +12,20 @@
 package org.eclipse.chemclipse.msd.converter.database;
 
 import org.eclipse.chemclipse.converter.core.AbstractExportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.database.DatabaseExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
 public abstract class AbstractDatabaseExportConverter extends AbstractExportConverter implements IDatabaseExportConverter {
 
 	@Override
-	public IDatabaseExportConverterProcessingInfo validate(IScanMSD massSpectrum) {
+	public IProcessingInfo validate(IScanMSD massSpectrum) {
 
-		IDatabaseExportConverterProcessingInfo processingInfo = new DatabaseExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(massSpectrum == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Database Export", "The is no mass spectrum to export.");
 			processingInfo.addMessage(processingMessage);
@@ -34,9 +34,9 @@ public abstract class AbstractDatabaseExportConverter extends AbstractExportConv
 	}
 
 	@Override
-	public IDatabaseExportConverterProcessingInfo validate(IMassSpectra massSpectra) {
+	public IProcessingInfo validate(IMassSpectra massSpectra) {
 
-		IDatabaseExportConverterProcessingInfo processingInfo = new DatabaseExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(massSpectra == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Database Export", "The are no mass spectra to export.");
 			processingInfo.addMessage(processingMessage);

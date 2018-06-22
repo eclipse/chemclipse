@@ -24,11 +24,11 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -191,8 +191,8 @@ public class DatabasesCache {
 
 	private void loadMassSpectraFromFile(File file, IProgressMonitor monitor) throws TypeCastException {
 
-		IDatabaseImportConverterProcessingInfo infoConvert = DatabaseConverter.convert(file, monitor);
-		IMassSpectra massSpectraDatabase = infoConvert.getMassSpectra();
+		IProcessingInfo processingInfo = DatabaseConverter.convert(file, monitor);
+		IMassSpectra massSpectraDatabase = processingInfo.getProcessingResult(IMassSpectra.class);
 		/*
 		 * Add the database to databases.
 		 */

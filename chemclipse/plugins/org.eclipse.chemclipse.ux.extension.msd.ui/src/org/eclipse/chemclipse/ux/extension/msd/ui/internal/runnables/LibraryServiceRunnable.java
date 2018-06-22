@@ -42,7 +42,7 @@ public class LibraryServiceRunnable implements IRunnableWithProgress {
 			monitor.beginTask("Library Service", IProgressMonitor.UNKNOWN);
 			try {
 				ILibraryServiceProcessingInfo processingInfo = LibraryService.identify(identificationTarget, monitor);
-				IMassSpectra massSpectra = processingInfo.getMassSpectra();
+				IMassSpectra massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 				if(massSpectra.size() > 0) {
 					IScanMSD libraryMassSpectrum = massSpectra.getMassSpectrum(1);
 					updateSelection(unknownMassSpectrum, libraryMassSpectrum, true);

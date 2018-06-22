@@ -76,7 +76,7 @@ public class LibraryService {
 						 * It's a match if at least one mass spectrum is returned.
 						 */
 						processingInfo = libraryService.identify(identificationTarget, monitor);
-						massSpectra = processingInfo.getMassSpectra();
+						massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 						if(massSpectra.size() > 0) {
 							break exitloop;
 						}

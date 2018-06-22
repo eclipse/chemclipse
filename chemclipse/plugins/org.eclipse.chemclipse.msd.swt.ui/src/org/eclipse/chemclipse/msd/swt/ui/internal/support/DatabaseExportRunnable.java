@@ -17,8 +17,8 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -50,9 +50,9 @@ public class DatabaseExportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Export Mass Spectra", IProgressMonitor.UNKNOWN);
-			IDatabaseExportConverterProcessingInfo processingInfo = DatabaseConverter.convert(file, massSpectra, false, supplier.getId(), monitor);
+			IProcessingInfo processingInfo = DatabaseConverter.convert(file, massSpectra, false, supplier.getId(), monitor);
 			try {
-				data = processingInfo.getFile();
+				data = processingInfo.getProcessingResult(File.class);
 			} catch(TypeCastException e) {
 				logger.warn(e);
 			}

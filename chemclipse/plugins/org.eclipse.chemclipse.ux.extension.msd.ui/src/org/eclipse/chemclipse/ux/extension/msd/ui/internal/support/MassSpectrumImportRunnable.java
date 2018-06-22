@@ -42,7 +42,7 @@ public class MassSpectrumImportRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Import Mass Spectrum", IProgressMonitor.UNKNOWN);
 			IMassSpectrumImportConverterProcessingInfo processingInfo = MassSpectrumConverter.convert(file, monitor);
-			massSpectra = processingInfo.getMassSpectra();
+			massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 		} catch(Exception e) {
 			/*
 			 * Exceptions: FileNotFoundException
