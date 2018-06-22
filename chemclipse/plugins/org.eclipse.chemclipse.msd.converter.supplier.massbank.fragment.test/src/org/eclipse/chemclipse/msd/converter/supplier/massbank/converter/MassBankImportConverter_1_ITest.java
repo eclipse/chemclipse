@@ -34,7 +34,7 @@ public class MassBankImportConverter_1_ITest extends TestCase {
 		file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CE000001));
 		converter = new MassBankImportConverter();
 		IMassSpectrumImportConverterProcessingInfo processingInfo = converter.convert(file, new NullProgressMonitor());
-		massSpectra = processingInfo.getMassSpectra();
+		massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 	}
 
 	@Override
