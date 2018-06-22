@@ -92,7 +92,12 @@ public class Chart3DScatter {
 
 	private void update() {
 
-		double s = settings.getScale();
+		double sX = settings.getScaleX();
+		double sY = settings.getScaleY();
+		double sZ = settings.getScaleZ();
+		double shiftX = settings.getShiftX();
+		double shiftY = settings.getShiftY();
+		double shiftZ = settings.getShiftZ();
 		for(IPcaResultVisualization d : data) {
 			String name = d.getName();
 			/*
@@ -102,9 +107,9 @@ public class Chart3DScatter {
 			double pcX = d.getScoreVector()[settings.getPcX()];
 			double pcY = d.getScoreVector()[settings.getPcY()];
 			double pcZ = d.getScoreVector()[settings.getPcZ()];
-			sphere.setTranslateX(pcX * s);
-			sphere.setTranslateY(pcY * s);
-			sphere.setTranslateZ(pcZ * s);
+			sphere.setTranslateX(pcX * sX + shiftX);
+			sphere.setTranslateY(pcY * sY + shiftY);
+			sphere.setTranslateZ(pcZ * sZ + shiftZ);
 			sphere.setRadius(radius);
 			/*
 			 * set material

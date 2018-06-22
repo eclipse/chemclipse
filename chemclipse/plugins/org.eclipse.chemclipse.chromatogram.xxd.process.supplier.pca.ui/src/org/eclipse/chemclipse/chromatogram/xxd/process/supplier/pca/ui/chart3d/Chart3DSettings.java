@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
@@ -23,26 +21,97 @@ import javafx.scene.paint.Color;
 
 public class Chart3DSettings {
 
-	public static void setAxes(Chart3DSettings settings) {
+	public static void setAxes2(Chart3DSettings settings, int scale) {
 
-		double absMaximum = Arrays.stream(new double[]{settings.getMinX(), settings.getMaxX(), settings.getMinY(), settings.getMaxY(), settings.getMinZ(), settings.getMaxZ()}).map(d -> Math.abs(d)).max().getAsDouble();
-		double numberDigits = Math.floor(Math.log10(absMaximum));
-		double round = Math.pow(10, numberDigits);
-		double lineSpacing = (((Math.round(absMaximum / round) * round) / settings.getMaxNumberLine()));
-		BiFunction<Double, Double, Double> getAbsMax = (min, max) -> {
-			double absMax = (Math.abs(min) > Math.abs(max) ? Math.abs(min) : Math.abs(max));
-			return Math.ceil(absMax / lineSpacing) * lineSpacing;
-		};
-		settings.axisMaxX = getAbsMax.apply(settings.getMinX(), settings.getMaxX()) + lineSpacing;
-		settings.axisMaxY = getAbsMax.apply(settings.getMinY(), settings.getMaxY()) + lineSpacing;
-		settings.axisMaxZ = getAbsMax.apply(settings.getMinZ(), settings.getMaxZ()) + lineSpacing;
-		settings.axisMinX = -settings.axisMaxX;
-		settings.axisMinY = -settings.axisMaxY;
-		settings.axisMinZ = -settings.axisMaxZ;
-		settings.lineSpacing = lineSpacing;
+		int numberLines = settings.getMaxNumberLine();
+		double[] X = setAxes(settings.minX, settings.maxX, numberLines);
+		double[] Y = setAxes(settings.minY, settings.maxY, numberLines);
+		double[] Z = setAxes(settings.minZ, settings.maxZ, numberLines);
+		settings.axisMaxX = X[0];
+		settings.axisMaxY = Y[0];
+		settings.axisMaxZ = Z[0];
+		settings.axisMinX = X[1];
+		settings.axisMinY = Y[1];
+		settings.axisMinZ = Z[1];
+		settings.lineSpacingX = X[2];
+		settings.lineSpacingY = Y[2];
+		settings.lineSpacingZ = Z[2];
+		setScale(settings, scale);
 	}
 
-	public static void setSettings(Chart3DSettings settings, IPcaResultsVisualization pcaResults, int scale) {
+	public static void setAxes(Chart3DSettings settings, int scale) {
+
+		int numberLines = settings.getMaxNumberLine();
+		double[] X = setAxesSquered(settings.minX, settings.maxX, numberLines);
+		double[] Y = setAxesSquered(settings.minY, settings.maxY, numberLines);
+		double[] Z = setAxesSquered(settings.minZ, settings.maxZ, numberLines);
+		settings.axisMaxX = X[0];
+		settings.axisMaxY = Y[0];
+		settings.axisMaxZ = Z[0];
+		settings.axisMinX = X[1];
+		settings.axisMinY = Y[1];
+		settings.axisMinZ = Z[1];
+		settings.lineSpacingX = X[2];
+		settings.lineSpacingY = Y[2];
+		settings.lineSpacingZ = Z[2];
+		setScale(settings, scale);
+	}
+
+	private static void setScale(Chart3DSettings settings, int point) {
+
+		double maxDisX = Math.abs(settings.axisMaxX - settings.axisMinX);
+		double maxDisY = Math.abs(settings.axisMaxY - settings.axisMinY);
+		double maxDisZ = Math.abs(settings.axisMaxZ - settings.axisMinZ);
+		settings.scaleX = point / maxDisX;
+		settings.scaleY = point / maxDisY;
+		settings.scaleZ = point / maxDisZ;
+		settings.shiftX = settings.scaleX * getShift(settings.axisMinX, settings.axisMaxX);
+		settings.shiftY = settings.scaleY * getShift(settings.axisMinY, settings.axisMaxY);
+		settings.shiftZ = settings.scaleZ * getShift(settings.axisMinZ, settings.axisMaxZ);
+	}
+
+	private static double getShift(double x, double y) {
+
+		double min = Math.min(x, y);
+		double max = Math.max(x, y);
+		if(min > 0) {
+			return -(min + (max - min) / 2);
+		} else if(max < 0) {
+			return (-max + (-min + max) / 2);
+		} else {
+			if(-min < max) {
+				return -(max + min) / 2;
+			} else {
+				return -(max + min) / 2;
+			}
+		}
+	}
+
+	private static double[] setAxes(double x, double y, int numberLines) {
+
+		double absMax = Math.max(Math.abs(x), Math.abs(y));
+		double numberDigits = Math.floor(Math.log10(absMax));
+		double round = Math.pow(10, numberDigits);
+		double lineSpacing = (((Math.round(absMax / round) * round) / numberLines));
+		double maxAxis = Math.ceil(absMax / lineSpacing) * lineSpacing;
+		double minAxis = Math.floor(-absMax / lineSpacing) * lineSpacing;
+		return new double[]{maxAxis, minAxis, lineSpacing};
+	}
+
+	private static double[] setAxesSquered(double x, double y, int numberLines) {
+
+		double max = Math.max(x, y);
+		double min = Math.min(x, y);
+		double absMax = Math.max(Math.abs(x), Math.abs(y));
+		double numberDigits = Math.floor(Math.log10(absMax));
+		double round = Math.pow(10, numberDigits);
+		double lineSpacing = (((Math.round(absMax / round) * round) / numberLines));
+		double maxAxis = Math.ceil(max / lineSpacing) * lineSpacing;
+		double minAxis = Math.floor(min / lineSpacing) * lineSpacing;
+		return new double[]{maxAxis, minAxis, lineSpacing};
+	}
+
+	public static void setSettings(Chart3DSettings settings, IPcaResultsVisualization pcaResults) {
 
 		IPcaSettingsVisualization pcaSettings = pcaResults.getPcaSettingsVisualization();
 		int pcX = pcaSettings.getPcX() - 1;
@@ -60,7 +129,6 @@ public class Chart3DSettings {
 		settings.maxX = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
 		settings.maxY = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
 		settings.maxZ = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
-		settings.setScale(scale);
 	}
 
 	private double axisMaxX;
@@ -70,8 +138,10 @@ public class Chart3DSettings {
 	private double axisMinY;
 	private double axisMinZ;
 	private Map<String, Color> groups = new LinkedHashMap<>();
-	private double lineSpacing;
-	private int maxNumberLine = 10;
+	private double lineSpacingX;
+	private double lineSpacingY;
+	private double lineSpacingZ;
+	private int maxNumberLine = 2;
 	private double maxX;
 	private double maxY;
 	private double maxZ;
@@ -81,20 +151,24 @@ public class Chart3DSettings {
 	private int pcX;
 	private int pcY;
 	private int pcZ;
-	private double scale;
+	private double scaleX;
+	private double scaleY;
+	private double scaleZ;
+	private double shiftX;
+	private double shiftY;
+	private double shiftZ;
 
 	public Chart3DSettings(int scale) {
 		maxX = 100;
 		maxY = 100;
-		maxZ = 100;
+		maxZ = 400;
 		minX = -100;
 		minY = -100;
-		minZ = -100;
+		minZ = 200;
 		pcX = 1;
 		pcY = 2;
 		pcZ = 3;
-		setScale(scale);
-		setAxes(this);
+		setAxes(this, scale);
 	}
 
 	private String createAxisLabel(int componentNumber) {
@@ -168,9 +242,19 @@ public class Chart3DSettings {
 		return createAxisLabel(pcZ);
 	}
 
-	public double getLineSpacing() {
+	public double getLineSpacingX() {
 
-		return lineSpacing;
+		return lineSpacingX;
+	}
+
+	public double getLineSpacingY() {
+
+		return lineSpacingY;
+	}
+
+	public double getLineSpacingZ() {
+
+		return lineSpacingZ;
 	}
 
 	public int getMaxNumberLine() {
@@ -223,44 +307,34 @@ public class Chart3DSettings {
 		return pcZ;
 	}
 
-	public double getScale() {
+	public double getScaleX() {
 
-		return scale;
+		return scaleX;
 	}
 
-	public void setAxiMinY(double axisMinY) {
+	public double getScaleY() {
 
-		this.axisMinY = axisMinY;
+		return scaleY;
 	}
 
-	public void setAxisMaxX(double axisMaxX) {
+	public double getScaleZ() {
 
-		this.axisMaxX = axisMaxX;
+		return scaleZ;
 	}
 
-	public void setAxisMaxY(double axisMaxY) {
+	public double getShiftX() {
 
-		this.axisMaxY = axisMaxY;
+		return shiftX;
 	}
 
-	public void setAxisMaxZ(double axisMaxZ) {
+	public double getShiftY() {
 
-		this.axisMaxZ = axisMaxZ;
+		return shiftY;
 	}
 
-	public void setAxisMinX(double axisMinX) {
+	public double getShiftZ() {
 
-		this.axisMinX = axisMinX;
-	}
-
-	public void setAxisMinZ(double axisMinZ) {
-
-		this.axisMinZ = axisMinZ;
-	}
-
-	public void setLineSpacing(double lineSpacing) {
-
-		this.lineSpacing = lineSpacing;
+		return shiftZ;
 	}
 
 	public void setMaxNumberLine(int maxNumberLine) {
@@ -281,16 +355,5 @@ public class Chart3DSettings {
 	public void setPcZ(int pcZ) {
 
 		this.pcZ = pcZ;
-	}
-
-	public void setScale(double scale) {
-
-		this.scale = scale;
-	}
-
-	public void setScale(int point) {
-
-		double maxDis = Math.max(Math.abs(maxX - minX), Math.max(Math.abs(maxY - minY), Math.abs(maxZ - minZ)));
-		setScale(point / maxDis);
 	}
 }

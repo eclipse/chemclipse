@@ -14,8 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility;
 import java.awt.Color;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IColor;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVisualization;
-import org.eclipse.swt.SWT;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.widgets.Display;
 
 public class PcaColorGroup {
@@ -32,7 +31,7 @@ public class PcaColorGroup {
 
 	public static org.eclipse.swt.graphics.Color getActualSelectedColor(org.eclipse.swt.graphics.Color color) {
 
-		return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
+		return Colors.DARK_GRAY;
 	}
 
 	public static java.awt.Color getSampleColorAWT(IColor color) {
@@ -43,7 +42,7 @@ public class PcaColorGroup {
 
 	public static java.awt.Color getSampleColorAWT(int color) {
 
-		int[] rgba = IVisualization.getColorRgba(color);
+		int[] rgba = Colors.getColorRgba(color);
 		return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
 	}
 
@@ -55,7 +54,7 @@ public class PcaColorGroup {
 
 	public static javafx.scene.paint.Color getSampleColorFX(int color) {
 
-		int[] rgba = IVisualization.getColorRgba(color);
+		int[] rgba = Colors.getColorRgba(color);
 		return javafx.scene.paint.Color.color(rgba[0] / 255.0, rgba[1] / 255.0, rgba[2] / 255.0, rgba[3] / 255.0);
 	}
 
@@ -67,8 +66,7 @@ public class PcaColorGroup {
 
 	public static org.eclipse.swt.graphics.Color getSampleColorSWT(int color) {
 
-		int[] rgba = IVisualization.getColorRgba(color);
-		return new org.eclipse.swt.graphics.Color(Display.getDefault(), rgba[0], rgba[1], rgba[2], rgba[3]);
+		return Colors.getColor(color);
 	}
 
 	public static java.awt.Color getUnselectedColor(java.awt.Color color) {
@@ -83,6 +81,6 @@ public class PcaColorGroup {
 
 	public static org.eclipse.swt.graphics.Color getUnselectedColor(org.eclipse.swt.graphics.Color color) {
 
-		return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+		return Colors.GRAY;
 	}
 }

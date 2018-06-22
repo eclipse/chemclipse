@@ -49,6 +49,7 @@ public class ScorePlot3d {
 		fxCanvas.setLayoutData(dataLayout);
 		settings = new Chart3DSettings(800);
 		axes = new Axes(settings);
+		axes.buildAxes();
 		scatter = new Chart3DScatter(settings);
 		/*
 		 * update scene after resize
@@ -74,7 +75,7 @@ public class ScorePlot3d {
 		camera.setFarClip(10000.0);
 		root.getChildren().addAll(mainGroup, ambientlight, camera);
 		Group objects = new Group();
-		objects.getChildren().addAll(scatter.getScarter(), axes.getAxes());
+		objects.getChildren().addAll(scatter.getScarter(), axes);
 		Rotate rotate = new Rotate(180, 0, 0, 0, Rotate.X_AXIS);
 		objects.getTransforms().add(rotate);
 		mainGroup.getChildren().add(objects);
@@ -179,8 +180,8 @@ public class ScorePlot3d {
 
 	public void update(IPcaResultsVisualization pcaResults) {
 
-		Chart3DSettings.setSettings(settings, pcaResults, 800);
-		Chart3DSettings.setAxes(settings);
+		Chart3DSettings.setSettings(settings, pcaResults);
+		Chart3DSettings.setAxes(settings, 800);
 		axes = new Axes(settings);
 		scatter = new Chart3DScatter(settings, pcaResults);
 		createScene();

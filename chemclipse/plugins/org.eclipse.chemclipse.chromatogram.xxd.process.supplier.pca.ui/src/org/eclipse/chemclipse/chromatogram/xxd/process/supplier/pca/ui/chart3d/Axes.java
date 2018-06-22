@@ -19,6 +19,8 @@ import java.util.Locale;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -31,19 +33,28 @@ import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
-public class Axes {
+public class Axes extends Group {
 
-	private boolean addPlane = false;
 	final private PhongMaterial cornMaterial = new PhongMaterial();
 	private NumberFormat format;
 	final private PhongMaterial gridaxisMaterial = new PhongMaterial();
 	private double lableDistance;
 	private double lableDistanceNameAxis;
-	final private Group mainGroup = new Group();
 	final private PhongMaterial planeMaterial = new PhongMaterial();
 	private Chart3DSettings settings;
 	private double tickLenght;
 	private double widthCorn;
+	double sX = 1;
+	double sY = 1;
+	double sZ = 1;
+	double lenghtX = 0;
+	double lenghtY = 0;
+	double lenghtZ = 0;
+	final private DoubleProperty labelMaxWidth = new SimpleDoubleProperty();
+	//
+	private Font labelFont = new Font("Arial", 35);
+	private Font labelAxisFont = new Font("Arial", 50);
+	//
 
 	public Axes(Chart3DSettings settings) {
 		this.settings = settings;
@@ -53,6 +64,7 @@ public class Axes {
 			format = new DecimalFormat("#.##E0", new DecimalFormatSymbols(Locale.US));
 		} else {
 			format = ValueFormat.getNumberFormatEnglish();
+			format.setMaximumFractionDigits(2);
 		}
 		/*
 		 *
@@ -71,50 +83,54 @@ public class Axes {
 		 */
 		tickLenght = 40;
 		lableDistance = 70;
-		lableDistanceNameAxis = 200;
+		lableDistanceNameAxis = 270;
 		widthCorn = 4;
-		mainGroup.getChildren().setAll(createXYPlane(), createYZPlane(), createXZPlane(), createCorns(), createXLabels(), createYLabels(), createZLanels());
+		sX = settings.getScaleX();
+		sY = settings.getScaleY();
+		sZ = settings.getScaleZ();
+		lenghtX = settings.getAxisXlenght();
+		lenghtY = settings.getAxisYlenght();
+		lenghtZ = settings.getAxisZlenght();
 	}
 
 	private Node createCorn(double height, Point3D rotation, double rotate, double translationX, double translationY, double translationZ, double lengthening) {
 
 		Box corn = new Box(height + lengthening, widthCorn, widthCorn);
-		corn.setMaterial(cornMaterial);
 		corn.setRotationAxis(rotation);
 		corn.setRotate(rotate);
 		corn.setTranslateX(translationX);
 		corn.setTranslateY(translationY);
 		corn.setTranslateZ(translationZ);
+		corn.setMaterial(cornMaterial);
 		return corn;
 	}
 
 	private Group createCorns() {
 
-		double s = settings.getScale();
 		Group group = new Group();
-		Node corn = createCorn((settings.getAxisXlenght()) * s, Rotate.X_AXIS, 0, 0, settings.getAxisMinY() * s, settings.getAxisMinZ() * s, 500);
+		Node corn = createCorn((lenghtX) * sX, Rotate.X_AXIS, 0, 0, -lenghtY * sY / 2, -lenghtZ * sZ / 2, 500);
 		group.getChildren().add(corn);
-		corn = createCorn((settings.getAxisXlenght()) * s, Rotate.X_AXIS, 0, 0, settings.getAxisMaxY() * s, settings.getAxisMinZ() * s, 0);
+		corn = createCorn((lenghtX) * sX, Rotate.X_AXIS, 0, 0, lenghtY * sY / 2, -lenghtZ * sZ / 2, 0);
 		group.getChildren().add(corn);
-		corn = createCorn((settings.getAxisXlenght()) * s, Rotate.X_AXIS, 0, 0, settings.getAxisMinY() * s, settings.getAxisMaxZ() * s, 0);
+		corn = createCorn((lenghtX) * sX, Rotate.X_AXIS, 0, 0, -lenghtY * sY / 2, lenghtZ * sZ / 2, 0);
 		group.getChildren().add(corn);
-		corn = createCorn((settings.getAxisXlenght()) * s, Rotate.X_AXIS, 0, 0, settings.getAxisMaxY() * s, settings.getAxisMaxZ() * s, 0);
+		corn = createCorn((lenghtX) * sX, Rotate.X_AXIS, 0, 0, lenghtY * sY / 2, lenghtZ * sZ / 2, 0);
 		group.getChildren().add(corn);
-		corn = createCorn((settings.getAxisYlenght()) * s, Rotate.Z_AXIS, 90, settings.getAxisMinX() * s, 0, settings.getAxisMinZ() * s, 500);
+		corn = createCorn((lenghtY) * sY, Rotate.Z_AXIS, 90, -lenghtX * sX / 2, 0, -lenghtZ * sZ / 2, 500);
 		group.getChildren().add(corn);
-		corn = createCorn((settings.getAxisYlenght()) * s, Rotate.Z_AXIS, 90, settings.getAxisMaxX() * s, 0, settings.getAxisMinZ() * s, 0);
+		corn = createCorn((lenghtY) * sY, Rotate.Z_AXIS, 90, lenghtX * sX / 2, 0, -lenghtZ * sZ / 2, 0);
 		group.getChildren().add(corn);
-		corn = createCorn((settings.getAxisYlenght()) * s, Rotate.Z_AXIS, 90, settings.getAxisMinX() * s, 0, settings.getAxisMaxZ() * s, 0);
+		corn = createCorn((lenghtY) * sY, Rotate.Z_AXIS, 90, -lenghtX * sX / 2, 0, lenghtZ * sZ / 2, 0);
 		group.getChildren().add(corn);
-		corn = createCorn((settings.getAxisYlenght()) * s, Rotate.Z_AXIS, 90, settings.getAxisMaxX() * s, 0, settings.getAxisMaxZ() * s, 0);
+		corn = createCorn((lenghtY) * sY, Rotate.Z_AXIS, 90, lenghtX * sX / 2, 0, lenghtZ * sZ / 2, 0);
 		group.getChildren().add(corn);
-		corn = createCorn((settings.getAxisZlenght()) * s, Rotate.Y_AXIS, 90, settings.getAxisMinX() * s, settings.getAxisMinY() * s, 0, 500);
+		corn = createCorn((lenghtZ) * sZ, Rotate.Y_AXIS, 90, -lenghtX * sX / 2, -lenghtY * sY / 2, 0, 500);
 		group.getChildren().add(corn);
-		corn = createCorn((settings.getAxisZlenght()) * s, Rotate.Y_AXIS, 90, settings.getAxisMaxX() * s, settings.getAxisMinY() * s, 0, 0);
+		corn = createCorn((lenghtZ) * sZ, Rotate.Y_AXIS, 90, lenghtX * sX / 2, -lenghtY * sY / 2, 0, 0);
 		group.getChildren().add(corn);
-		corn = createCorn((settings.getAxisZlenght()) * s, Rotate.Y_AXIS, 90, settings.getAxisMinX() * s, settings.getAxisMaxY() * s, 0, 0);
+		corn = createCorn((lenghtZ) * sZ, Rotate.Y_AXIS, 90, -lenghtX * sX / 2, lenghtY * sY / 2, 0, 0);
 		group.getChildren().add(corn);
-		corn = createCorn((settings.getAxisZlenght()) * s, Rotate.Y_AXIS, 90, settings.getAxisMaxX() * s, settings.getAxisMaxY() * s, 0, 0);
+		corn = createCorn((lenghtZ) * sZ, Rotate.Y_AXIS, 90, lenghtX * sX / 2, lenghtY * sY / 2, 0, 0);
 		group.getChildren().add(corn);
 		return group;
 	}
@@ -135,45 +151,77 @@ public class Axes {
 		return line;
 	}
 
-	private Group createPlane(double sizeH, double sizeV) {
+	private Group createPlane(double lenghtX, double lenghtY, double lineSpacingH, double lineSpacingV) {
 
 		Group group = new Group();
-		if(addPlane) {
-			Box plane = new Box(sizeH, sizeV, 2);
-			plane.setMaterial(planeMaterial);
-			group.getChildren().add(plane);
+		double lineSpacingScaled = lineSpacingH;
+		for(double x = -lenghtX / 2; x <= lenghtX / 2; x += lineSpacingScaled) {
+			group.getChildren().add(createGridLine(new Point3D(x, -lenghtY / 2, 0), new Point3D(x, lenghtY / 2, 0)));
 		}
-		double startX = -sizeH / 2;
-		double finishX = sizeH / 2;
-		double startY = -sizeV / 2;
-		double finishY = sizeV / 2;
-		double lineSpacingScaled = settings.getLineSpacing() * settings.getScale();
-		for(double x = startX; x <= finishX; x += lineSpacingScaled) {
-			group.getChildren().add(createGridLine(new Point3D(x, startY, 0), new Point3D(x, finishY, 0)));
+		lineSpacingScaled = lineSpacingV;
+		for(double y = -lenghtY / 2; y <= lenghtY / 2; y += lineSpacingScaled) {
+			group.getChildren().add(createGridLine(new Point3D(-lenghtX / 2, y, 0), new Point3D(lenghtX / 2, y, 0)));
 		}
-		for(double y = startY; y <= finishY; y += lineSpacingScaled) {
-			group.getChildren().add(createGridLine(new Point3D(startX, y, 0), new Point3D(finishX, y, 0)));
-		}
+		return group;
+	}
+
+	private Group createXYPlane() {
+
+		Group group = createPlane(lenghtX * sX, lenghtY * sY, settings.getLineSpacingX() * sX, settings.getLineSpacingY() * sY);
+		group.setTranslateZ(-lenghtZ * sZ / 2);
+		return group;
+	}
+
+	private Group createXZPlane() {
+
+		Group group = createPlane(lenghtX * sX, lenghtZ * sZ, settings.getLineSpacingX() * sX, settings.getLineSpacingZ() * sZ);
+		group.setTranslateY(-(lenghtY) * sY / 2);
+		group.setRotationAxis(Rotate.X_AXIS);
+		group.setRotate(90);
+		return group;
+	}
+
+	private Group createYZPlane() {
+
+		Group group = createPlane(lenghtZ * sZ, lenghtY * sY, settings.getLineSpacingZ() * sZ, settings.getLineSpacingY() * sY);
+		group.setTranslateX(-(lenghtX) * sX / 2);
+		group.setRotationAxis(Rotate.Y_AXIS);
+		group.setRotate(90);
 		return group;
 	}
 
 	private Group createXLabels() {
 
-		Group group = new Group();
+		Group groupTick = new Group();
+		Group groupLabel = new Group();
 		String nameAxis = settings.getLabelAxisX();
 		Label name = new Label(nameAxis);
 		name.setTranslateZ(lableDistanceNameAxis);
 		name.setRotationAxis(Rotate.X_AXIS);
 		name.setRotate(90);
 		setLabelStyleAxis(name);
-		group.getChildren().add(name);
-		double lineSpacingScaled = settings.getLineSpacing() * settings.getScale();
-		double minX = settings.getAxisMinX() * settings.getScale();
-		double maxX = settings.getAxisMaxX() * settings.getScale();
-		double minY = settings.getAxisMinY() * settings.getScale();
-		double maxZ = settings.getAxisMaxZ() * settings.getScale();
+		groupTick.getChildren().add(name);
+		double lineSpacingScaled = settings.getLineSpacingX() * sX;
+		double minX = -lenghtX * sX / 2;
+		double maxX = lenghtX * sX / 2;
+		double minY = -lenghtY * sY / 2;
+		double maxZ = lenghtZ * sZ / 2;
+		boolean firstLabel = true;
 		for(int i = (int)(minX / lineSpacingScaled) + 1; i < (int)(maxX / lineSpacingScaled); i++) {
-			Label label = new Label(format.format(i * settings.getLineSpacing()));
+			Label label = new Label(format.format(i * settings.getLineSpacingX()));
+			if(firstLabel) {
+				label.heightProperty().addListener((obs, oldVal, newVal) -> {
+					double labelHight = newVal.doubleValue();
+					groupLabel.setTranslateX((maxX - minX) / 2 + minX - labelHight / 2);
+				});
+				firstLabel = false;
+			}
+			label.widthProperty().addListener((obs, oldVal, newVal) -> {
+				double value = newVal.doubleValue();
+				if(value > labelMaxWidth.doubleValue()) {
+					labelMaxWidth.set(value);
+				}
+			});
 			setLabelStyle(label);
 			Rotate xRotate = new Rotate(90, 0, 0, 0, Rotate.X_AXIS);
 			Rotate yRotate = new Rotate(90, 0, 0, 0, Rotate.Y_AXIS);
@@ -181,34 +229,23 @@ public class Axes {
 			label.setTranslateX(i * lineSpacingScaled);
 			label.setTranslateZ(2 * lableDistance);
 			Node tick = createGridLine(new Point3D(i * lineSpacingScaled, 0, -tickLenght / 2), new Point3D(i * lineSpacingScaled, 0, tickLenght / 2));
-			group.getChildren().add(tick);
-			group.getChildren().add(label);
+			groupTick.getChildren().add(tick);
+			groupLabel.getChildren().add(label);
 		}
-		group.setTranslateX((maxX - minX) / 2 + minX);
-		group.setTranslateY(minY);
-		group.setTranslateZ(maxZ);
-		return group;
-	}
-
-	private Group createXYPlane() {
-
-		Group group = createPlane(settings.getAxisXlenght() * settings.getScale(), settings.getAxisYlenght() * settings.getScale());
-		group.setTranslateZ(settings.getAxisMinZ() * settings.getScale());
-		return group;
-	}
-
-	private Group createXZPlane() {
-
-		Group group = createPlane(settings.getAxisXlenght() * settings.getScale(), settings.getAxisZlenght() * settings.getScale());
-		group.setTranslateY(settings.getAxisMinY() * settings.getScale());
-		group.setRotationAxis(Rotate.X_AXIS);
-		group.setRotate(90);
+		groupTick.setTranslateY(minY);
+		groupTick.setTranslateZ(maxZ);
+		groupTick.setTranslateX((maxX - minX) / 2 + minX);
+		groupLabel.setTranslateY(minY);
+		groupLabel.setTranslateZ(maxZ);
+		Group group = new Group();
+		group.getChildren().addAll(groupLabel, groupTick);
 		return group;
 	}
 
 	private Group createYLabels() {
 
-		Group group = new Group();
+		Group groupLabel = new Group();
+		Group groupTick = new Group();
 		String axisName = settings.getLabelAxisY();
 		Label name = new Label(axisName);
 		Rotate zRotateAxis = new Rotate(-90, 0, 0, 0, Rotate.Z_AXIS);
@@ -216,14 +253,28 @@ public class Axes {
 		name.getTransforms().addAll(yRotateAxis, zRotateAxis);
 		name.setTranslateZ(lableDistanceNameAxis);
 		setLabelStyleAxis(name);
-		group.getChildren().add(name);
-		double minY = settings.getAxisMinY() * settings.getScale();
-		double maxY = settings.getAxisMaxY() * settings.getScale();
-		double maxZ = settings.getAxisMaxZ() * settings.getScale();
-		double minX = settings.getAxisMinX() * settings.getScale();
-		double lineSpacingScaled = settings.getLineSpacing() * settings.getScale();
+		groupTick.getChildren().add(name);
+		double minY = -lenghtY * sY / 2;
+		double maxY = lenghtY * sY / 2;
+		double maxZ = lenghtZ * sZ / 2;
+		double minX = -lenghtX * sX / 2;
+		double lineSpacingScaled = settings.getLineSpacingY() * sY;
+		boolean firstLabel = true;
 		for(int i = (int)(minY / lineSpacingScaled) + 1; i < (int)(maxY / lineSpacingScaled); i++) {
-			Label label = new Label(format.format(i * settings.getLineSpacing()));
+			Label label = new Label(format.format(i * settings.getLineSpacingY()));
+			if(firstLabel) {
+				label.heightProperty().addListener((obs, oldVal, newVal) -> {
+					double labelHight = newVal.doubleValue();
+					groupLabel.setTranslateY((maxY - minY) / 2 + minY + labelHight / 2);
+				});
+				firstLabel = false;
+			}
+			label.widthProperty().addListener((obs, oldVal, newVal) -> {
+				double value = newVal.doubleValue();
+				if(value > labelMaxWidth.doubleValue()) {
+					labelMaxWidth.set(value);
+				}
+			});
 			setLabelStyle(label);
 			Rotate xRotate = new Rotate(180, 0, 0, 0, Rotate.X_AXIS);
 			Rotate yRotate = new Rotate(90, 0, 0, 0, Rotate.Y_AXIS);
@@ -231,27 +282,23 @@ public class Axes {
 			label.setTranslateY(i * lineSpacingScaled);
 			label.setTranslateZ(2 * lableDistance);
 			Node tick = createGridLine(new Point3D(0, i * lineSpacingScaled, -tickLenght / 2), new Point3D(0, i * lineSpacingScaled, tickLenght / 2));
-			group.getChildren().add(tick);
-			group.getChildren().add(label);
+			groupTick.getChildren().add(tick);
+			groupLabel.getChildren().add(label);
 		}
-		group.setTranslateY((maxY - minY) / 2 + minY);
-		group.setTranslateX(minX);
-		group.setTranslateZ(maxZ);
-		return group;
-	}
-
-	private Group createYZPlane() {
-
-		Group group = createPlane(settings.getAxisZlenght() * settings.getScale(), settings.getAxisYlenght() * settings.getScale());
-		group.setTranslateX(settings.getAxisMinX() * settings.getScale());
-		group.setRotationAxis(Rotate.Y_AXIS);
-		group.setRotate(90);
+		groupLabel.setTranslateX(minX);
+		groupLabel.setTranslateZ(maxZ);
+		groupTick.setTranslateX(minX);
+		groupTick.setTranslateZ(maxZ);
+		groupTick.setTranslateY((maxY - minY) / 2 + minY);
+		Group group = new Group();
+		group.getChildren().addAll(groupLabel, groupTick);
 		return group;
 	}
 
 	private Group createZLanels() {
 
-		Group group = new Group();
+		Group groupTick = new Group();
+		Group groupLabel = new Group();
 		String nameAxis = settings.getLabelAxisZ();
 		Label name = new Label(nameAxis);
 		Rotate yRotateAxis = new Rotate(90, 0, 0, 0, Rotate.Y_AXIS);
@@ -259,42 +306,53 @@ public class Axes {
 		name.getTransforms().addAll(zRotateAxis, yRotateAxis);
 		name.setTranslateX(lableDistanceNameAxis);
 		setLabelStyleAxis(name);
-		group.getChildren().add(name);
-		double minZ = settings.getAxisMinZ() * settings.getScale();
-		double maxZ = settings.getAxisMaxZ() * settings.getScale();
-		double maxX = settings.getAxisMaxX() * settings.getScale();
-		double minY = settings.getAxisMinY() * settings.getScale();
-		double lineSpacingScaled = settings.getLineSpacing() * settings.getScale();
+		groupTick.getChildren().add(name);
+		double minZ = -lenghtZ * sZ / 2;
+		double maxZ = lenghtZ * sZ / 2;
+		double maxX = lenghtX * sX / 2;
+		double minY = -lenghtY * sY / 2;
+		double lineSpacingScaled = settings.getLineSpacingZ() * sZ;
 		for(int i = (int)(minZ / lineSpacingScaled) + 1; i < (int)(maxZ / lineSpacingScaled); i++) {
-			Label label = new Label(format.format(i * settings.getLineSpacing()));
+			Label label = new Label(format.format(i * settings.getLineSpacingZ()));
+			label.widthProperty().addListener((obs, oldVal, newVal) -> {
+				double value = newVal.doubleValue();
+				if(value > labelMaxWidth.doubleValue()) {
+					labelMaxWidth.set(value);
+				}
+			});
 			setLabelStyle(label);
 			label.setRotationAxis(Rotate.X_AXIS);
 			label.setRotate(90);
 			label.setTranslateZ(i * lineSpacingScaled);
-			label.setTranslateX(lableDistance);
+			label.setTranslateX(2 * lableDistance);
 			Node tick = createGridLine(new Point3D(-tickLenght / 2, 0, i * lineSpacingScaled), new Point3D(tickLenght / 2, 0, i * lineSpacingScaled));
-			group.getChildren().add(tick);
-			group.getChildren().add(label);
+			groupLabel.getChildren().add(tick);
+			groupLabel.getChildren().add(label);
 		}
-		group.setTranslateZ((maxZ - minZ) / 2 + minZ);
-		group.setTranslateX(maxX);
-		group.setTranslateY(minY);
+		groupTick.setTranslateZ((maxZ - minZ) / 2 + minZ);
+		groupTick.setTranslateX(maxX);
+		groupTick.setTranslateY(minY);
+		groupLabel.setTranslateZ((maxZ - minZ) / 2 + minZ);
+		groupLabel.setTranslateX(maxX);
+		groupLabel.setTranslateY(minY);
+		Group group = new Group();
+		group.getChildren().addAll(groupLabel, groupTick);
 		return group;
 	}
 
-	public Group getAxes() {
+	public void buildAxes() {
 
-		return mainGroup;
+		getChildren().setAll(createXYPlane(), createYZPlane(), createXZPlane(), createCorns(), createXLabels(), createYLabels(), createZLanels());
 	}
 
 	private void setLabelStyle(Label label) {
 
 		label.setAlignment(Pos.CENTER);
-		label.setFont(new Font("Arial", 35));
+		label.setFont(labelFont);
 	}
 
 	private void setLabelStyleAxis(Label label) {
 
-		label.setFont(new Font("Arial", 50));
+		label.setFont(labelAxisFont);
 	}
 }

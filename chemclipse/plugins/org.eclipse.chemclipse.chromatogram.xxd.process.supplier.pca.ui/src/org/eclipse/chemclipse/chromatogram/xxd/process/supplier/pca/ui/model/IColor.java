@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
+import org.eclipse.chemclipse.swt.ui.support.Colors;
+
 import javafx.beans.property.IntegerProperty;
 
 public interface IColor extends IVisualization {
@@ -31,26 +33,26 @@ public interface IColor extends IVisualization {
 	default int[] getColorRgba() {
 
 		int value = getColor();
-		return IVisualization.getColorRgba(value);
+		return Colors.getColorRgba(value);
 	}
 
 	default String getColorRgbaHtml() {
 
 		int value = getColor();
-		return IVisualization.getColorRgbaHtml(value);
+		return Colors.getColorRgbaHtml(value);
 	}
 
 	default String getColorRgbHtml() {
 
 		int value = getColor();
-		return IVisualization.getColorRgbHtml(value);
+		return Colors.getColorRgbHtml(value);
 	}
 
 	void setColor(int color);
 
 	default void setColorRgba(int r, int g, int b, double alpha) {
 
-		int value = IVisualization.getColorRgba(r, g, b, alpha);
+		int value = Colors.getColorRgba(r, g, b, alpha);
 		setColor(value);
 	}
 }

@@ -33,21 +33,65 @@ public class Coloring {
 		Iterator<String> it = sortName.iterator();
 		float angle = 120.0f;
 		float actualAngle = offsetAngle;
+		float saturOffset = 0f;
+		float brightOffset = 0f;
+		int numCycle = 0;
 		while(it.hasNext() && actualAngle < 360.0f) {
 			String name = it.next();
 			int c = HSBtoRGB(actualAngle / 360.0f, saturation, brightness);
 			colors.put(name, c);
 			actualAngle = actualAngle + angle;
 		}
+		numCycle++;
 		while(it.hasNext()) {
 			actualAngle = angle / 2 + offsetAngle;
-			while(it.hasNext() && actualAngle < 360.0f) {
-				String name = it.next();
-				int c = HSBtoRGB(actualAngle / 360.0f, saturation, brightness);
-				colors.put(name, c);
-				actualAngle = actualAngle + angle;
+			for(int k = 0; k < (120f / angle) && it.hasNext(); k++) {
+				actualAngle = k * angle + angle / 2 + offsetAngle;
+				for(int j = 0; j < 3 && it.hasNext(); j++) {
+					if(numCycle == 1) {
+						if(k % 2 == 0) {
+							saturOffset = 0f;
+							brightOffset = 0f;
+						} else {
+							saturOffset = 0;
+							brightOffset = 0f;
+						}
+					} else if(numCycle == 2) {
+						if(k % 2 == 0) {
+							saturOffset = -0.2f;
+							brightOffset = 0f;
+						} else {
+							saturOffset = 0f;
+							brightOffset = 0f;
+						}
+					} else if(numCycle == 3) {
+						if(k % 2 == 0) {
+							saturOffset = -0.4f;
+							brightOffset = 0f;
+						} else {
+							saturOffset = 0;
+							brightOffset = -0.4f;
+						}
+					} else if(numCycle > 3) {
+						if(k % 3 == 0) {
+							saturOffset = -0.6f;
+							brightOffset = 0f;
+						} else if(k % 3 == 1) {
+							saturOffset = 0;
+							brightOffset = -0.6f;
+						} else if(k % 3 == 2) {
+							saturOffset = -0.4f;
+							brightOffset = -0.4f;
+						}
+					}
+					String name = it.next();
+					int c = HSBtoRGB(actualAngle / 360.0f, saturation + saturOffset, brightness + brightOffset);
+					colors.put(name, c);
+					actualAngle = actualAngle + 120f;
+				}
 			}
 			angle = angle / 2;
+			numCycle++;
 		}
 		return colors;
 	}
