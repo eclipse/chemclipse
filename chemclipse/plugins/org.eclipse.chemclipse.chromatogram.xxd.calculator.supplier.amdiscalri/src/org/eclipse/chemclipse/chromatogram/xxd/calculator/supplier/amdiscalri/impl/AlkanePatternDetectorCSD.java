@@ -28,12 +28,12 @@ import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderiv
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorCSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.Threshold;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
-import org.eclipse.chemclipse.csd.converter.processing.chromatogram.IChromatogramCSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AlkanePatternDetectorCSD {
@@ -48,8 +48,8 @@ public class AlkanePatternDetectorCSD {
 			 * Import the chromatogram.
 			 */
 			File file = new File(chromatogramPath);
-			IChromatogramCSDImportConverterProcessingInfo processingInfo = ChromatogramConverterCSD.convert(file, monitor);
-			chromatogramCSD = processingInfo.getChromatogram();
+			IProcessingInfo processingInfo = ChromatogramConverterCSD.convert(file, monitor);
+			chromatogramCSD = processingInfo.getProcessingResult(IChromatogramCSD.class);
 			/*
 			 * Create a selection
 			 */
