@@ -49,7 +49,7 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 		Identifier identifier = new Identifier();
 		try {
 			IMassSpectra massSpectra = identifier.runMassSpectrumIdentification(massSpectrumList, (IVendorMassSpectrumIdentifierSettings)massSpectrumIdentifierSettings, monitor);
-			processingInfo.setMassSpectra(massSpectra);
+			processingInfo.setProcessingResult(massSpectra);
 		} catch(FileNotFoundException e) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "NIST-DB Identifier", "Something has gone wrong.");
 			processingInfo.addMessage(processingMessage);
