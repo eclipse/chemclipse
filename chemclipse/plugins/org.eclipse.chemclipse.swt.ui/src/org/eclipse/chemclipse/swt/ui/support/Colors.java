@@ -77,6 +77,10 @@ public class Colors {
 	private static final RGB[] colorIdsGradientPublication = new RGB[]{new RGB(255, 0, 0), new RGB(0, 255, 0), new RGB(0, 0, 255), new RGB(150, 0, 0), new RGB(0, 150, 0), new RGB(0, 0, 150)};
 	private static List<Color> colorsGradientPublication;
 	/*
+	 * 
+	 */
+	public static final String COLOR_SCHEME_UNLIMITED = "Unlimited";
+	/*
 	 * Variable Colors
 	 */
 	public static final int ALPHA_OPAQUE = 255;
@@ -91,7 +95,7 @@ public class Colors {
 
 	public static String[][] getAvailableColorSchemes() {
 
-		String[][] elements = new String[5][2];
+		String[][] elements = new String[6][2];
 		//
 		elements[0][0] = COLOR_SCHEME_RED;
 		elements[0][1] = COLOR_SCHEME_RED;
@@ -108,6 +112,8 @@ public class Colors {
 		elements[4][0] = COLOR_SCHEME_PUBLICATION;
 		elements[4][1] = COLOR_SCHEME_PUBLICATION;
 		//
+		elements[5][0] = COLOR_SCHEME_UNLIMITED;
+		elements[5][1] = COLOR_SCHEME_UNLIMITED;
 		return elements;
 	}
 
@@ -131,6 +137,8 @@ public class Colors {
 			return new ColorScheme(colorsGradientHighContrast);
 		} else if(COLOR_SCHEME_PUBLICATION.equals(colorScheme)) {
 			return new ColorScheme(colorsGradientPublication);
+		} else if(COLOR_SCHEME_UNLIMITED.equals(colorScheme)) {
+			return new UnlimitedColorSchema();
 		} else {
 			// DEFAULT SCHEME_RED
 			return new ColorScheme(colorsGradientRed);
@@ -179,6 +187,11 @@ public class Colors {
 	public static Color getColor(String rgb) {
 
 		return getColor(rgb, ALPHA_OPAQUE);
+	}
+
+	public static Color getColor(int color) {
+
+		return getColor(getColorRGB(color), ALPHA_OPAQUE);
 	}
 
 	/*
@@ -261,5 +274,52 @@ public class Colors {
 			Color color = getColor(rgb);
 			colorsGradientPublication.add(color);
 		}
+	}
+
+	public static int[] getColorRgba(int color) {
+
+		int[] rgba = new int[4];
+		int value = color;
+		int r = (value >> 16) & 0xFF;
+		int g = (value >> 8) & 0xFF;
+		int b = (value >> 0) & 0xFF;
+		int alpha = ((value >> 24) & 0xff);
+		rgba[0] = r;
+		rgba[1] = g;
+		rgba[2] = b;
+		rgba[3] = alpha;
+		return rgba;
+	}
+
+	public static RGB getColorRGB(int color) {
+
+		int[] rgba = getColorRgba(color);
+		return new RGB(rgba[0], rgba[1], rgba[2]);
+	}
+
+	public static int getColorRgba(int r, int g, int b, double alpha) {
+
+		int a = (int)(alpha * 255);
+		int value = ((a & 0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0);
+		return value;
+	}
+
+	public static String getColorRgbaHtml(int color) {
+
+		int value = color;
+		int r = (value >> 16) & 0xFF;
+		int g = (value >> 8) & 0xFF;
+		int b = (value >> 0) & 0xFF;
+		double alpha = ((value >> 24) & 0xff) / 255;
+		return "rgba(" + r + " ," + g + ", " + b + ", " + alpha + ")";
+	}
+
+	public static String getColorRgbHtml(int color) {
+
+		int value = color;
+		int r = (value >> 16) & 0xFF;
+		int g = (value >> 8) & 0xFF;
+		int b = (value >> 0) & 0xFF;
+		return "rgb(" + r + " ," + g + ", " + b + ")";
 	}
 }

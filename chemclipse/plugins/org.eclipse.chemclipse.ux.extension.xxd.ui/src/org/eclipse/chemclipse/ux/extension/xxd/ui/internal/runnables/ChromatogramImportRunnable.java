@@ -15,7 +15,6 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
-import org.eclipse.chemclipse.csd.converter.processing.chromatogram.IChromatogramCSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -71,8 +70,8 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 						chromatogramSelection = new ChromatogramSelectionMSD(chromatogramMSD, fireUpdate);
 						break;
 					case CSD:
-						IChromatogramCSDImportConverterProcessingInfo processingInfoCSD = ChromatogramConverterCSD.convert(file, monitor);
-						IChromatogramCSD chromatogramCSD = processingInfoCSD.getChromatogram();
+						IProcessingInfo processingInfoCSD = ChromatogramConverterCSD.convert(file, monitor);
+						IChromatogramCSD chromatogramCSD = processingInfoCSD.getProcessingResult(IChromatogramCSD.class);
 						chromatogramSelection = new ChromatogramSelectionCSD(chromatogramCSD, fireUpdate);
 						break;
 					case WSD:

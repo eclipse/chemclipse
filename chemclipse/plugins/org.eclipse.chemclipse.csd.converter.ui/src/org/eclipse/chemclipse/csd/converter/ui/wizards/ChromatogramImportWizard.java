@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
-import org.eclipse.chemclipse.csd.converter.processing.chromatogram.IChromatogramCSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -102,8 +102,8 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 						/*
 						 * Import
 						 */
-						IChromatogramCSDImportConverterProcessingInfo processingInfo = ChromatogramConverterCSD.convert(inputFile, monitor);
-						IChromatogramCSD chromatogram = processingInfo.getChromatogram();
+						IProcessingInfo processingInfo = ChromatogramConverterCSD.convert(inputFile, monitor);
+						IChromatogramCSD chromatogram = processingInfo.getProcessingResult(IChromatogramCSD.class);
 						//
 						String directory = importDirectory;
 						if(!importDirectory.endsWith(File.separator)) {
