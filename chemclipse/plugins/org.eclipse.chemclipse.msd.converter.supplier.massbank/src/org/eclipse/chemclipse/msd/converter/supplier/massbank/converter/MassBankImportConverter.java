@@ -20,8 +20,6 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.massspectrum.AbstractMassSpectrumImportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.MassSpectrumImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.massbank.internal.converter.SpecificationValidator;
 import org.eclipse.chemclipse.msd.converter.supplier.massbank.io.MassBankReader;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -34,16 +32,10 @@ public class MassBankImportConverter extends AbstractMassSpectrumImportConverter
 	private static final String DESCRIPTION = "MassBank MassSpectrum Import";
 
 	@Override
-	public IMassSpectrumImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IMassSpectrumImportConverterProcessingInfo processingInfo = new MassSpectrumImportConverterProcessingInfo();
-		/*
-		 * Checks if the file is null or empty ...
-		 */
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			try {
 				file = SpecificationValidator.validateSpecification(file);
 				IMassSpectraReader massSpectraReader = new MassBankReader();

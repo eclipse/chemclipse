@@ -13,11 +13,10 @@ package org.eclipse.chemclipse.msd.converter.supplier.massbank.converter;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.massbank.TestPathHelper;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -33,7 +32,7 @@ public class MassBankImportConverter_1_ITest extends TestCase {
 		super.setUp();
 		file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CE000001));
 		converter = new MassBankImportConverter();
-		IMassSpectrumImportConverterProcessingInfo processingInfo = converter.convert(file, new NullProgressMonitor());
+		IProcessingInfo processingInfo = converter.convert(file, new NullProgressMonitor());
 		massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 	}
 
