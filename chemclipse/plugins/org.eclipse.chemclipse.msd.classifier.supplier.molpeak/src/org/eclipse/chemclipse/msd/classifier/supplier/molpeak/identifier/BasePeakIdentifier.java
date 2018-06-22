@@ -33,7 +33,6 @@ import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.PathResolver;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -45,6 +44,7 @@ import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -267,8 +267,8 @@ public class BasePeakIdentifier {
 	private static IMassSpectra getStandardsMassSpectra() {
 
 		File file = new File(PathResolver.getAbsolutePath(PathResolver.REFERENCES));
-		IDatabaseImportConverterProcessingInfo processingInfo = DatabaseConverter.convert(file, new NullProgressMonitor());
-		IMassSpectra massSpectra = processingInfo.getMassSpectra();
+		IProcessingInfo processingInfo = DatabaseConverter.convert(file, new NullProgressMonitor());
+		IMassSpectra massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 		return massSpectra;
 	}
 
