@@ -37,7 +37,7 @@ public class LibraryService extends AbstractLibraryService implements ILibrarySe
 			monitor.subTask("Retention Index Identifier - get reference mass spectrum");
 			validateIdentificationTarget(identificationTarget);
 			IMassSpectra massSpectra = retentionIndexIdentifier.getMassSpectra(identificationTarget, monitor);
-			processingInfo.setMassSpectra(massSpectra);
+			processingInfo.setProcessingResult(massSpectra);
 		} catch(ValueMustNotBeNullException e) {
 			processingInfo.addErrorMessage("Retention Index Identifier", "The identification target is not available.");
 		}

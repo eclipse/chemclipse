@@ -23,10 +23,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.Pa
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class StandardsReader {
@@ -34,8 +34,8 @@ public class StandardsReader {
 	public IMassSpectra getStandardsMassSpectra() {
 
 		File file = new File(PathResolver.getAbsolutePath(PathResolver.ALKANES));
-		IDatabaseImportConverterProcessingInfo processingInfo = DatabaseConverter.convert(file, new NullProgressMonitor());
-		IMassSpectra massSpectra = processingInfo.getMassSpectra();
+		IProcessingInfo processingInfo = DatabaseConverter.convert(file, new NullProgressMonitor());
+		IMassSpectra massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 		return massSpectra;
 	}
 
