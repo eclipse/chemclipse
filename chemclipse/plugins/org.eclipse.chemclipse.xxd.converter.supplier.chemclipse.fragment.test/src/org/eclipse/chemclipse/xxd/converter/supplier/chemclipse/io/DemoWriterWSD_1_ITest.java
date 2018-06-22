@@ -16,13 +16,13 @@ import java.io.File;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.IVendorChromatogram;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.IVendorScanSignal;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorChromatogram;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorScan;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorScanSignal;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
@@ -65,10 +65,10 @@ public class DemoWriterWSD_1_ITest extends TestCase {
 		//
 		ChromatogramConverterWSD.convert(file, chromatogram, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
 		//
-		IChromatogramWSDImportConverterProcessingInfo processingInfo = ChromatogramConverterWSD.convert(file, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterWSD.convert(file, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
 		IProcessingInfo processingInfo_overview = ChromatogramConverterWSD.convertOverview(file, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
 		//
-		IVendorChromatogram read_chromatogram = (VendorChromatogram)processingInfo.getChromatogram();
+		IVendorChromatogram read_chromatogram = (VendorChromatogram)processingInfo.getProcessingResult(IChromatogramWSD.class);
 		//
 		IVendorChromatogram read_overview = (VendorChromatogram)processingInfo_overview.getProcessingResult(IChromatogramOverview.class);
 		//

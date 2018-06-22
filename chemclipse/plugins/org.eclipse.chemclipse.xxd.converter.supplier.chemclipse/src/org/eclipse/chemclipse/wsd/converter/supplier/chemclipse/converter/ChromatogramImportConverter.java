@@ -19,8 +19,6 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.AbstractChromatogramWSDImportConverter;
 import org.eclipse.chemclipse.wsd.converter.io.IChromatogramWSDReader;
-import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.ChromatogramWSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.ChromatogramReaderWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
@@ -32,25 +30,15 @@ public class ChromatogramImportConverter extends AbstractChromatogramWSDImportCo
 	private static final Logger logger = Logger.getLogger(ChromatogramImportConverter.class);
 
 	@Override
-	public IChromatogramWSDImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IChromatogramWSDImportConverterProcessingInfo processingInfo = new ChromatogramWSDImportConverterProcessingInfo();
-		/*
-		 * Validate the file.
-		 */
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
-			/*
-			 * Read the chromatogram.
-			 */
+		IProcessingInfo processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			file = SpecificationValidator.validateSpecification(file);
 			IChromatogramWSDReader reader = new ChromatogramReaderWSD();
-			// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 			try {
 				IChromatogramWSD chromatogram = reader.read(file, monitor);
-				processingInfo.setChromatogram(chromatogram);
+				processingInfo.setProcessingResult(chromatogram);
 			} catch(Exception e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(IConstants.DESCRIPTION_IMPORT, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());

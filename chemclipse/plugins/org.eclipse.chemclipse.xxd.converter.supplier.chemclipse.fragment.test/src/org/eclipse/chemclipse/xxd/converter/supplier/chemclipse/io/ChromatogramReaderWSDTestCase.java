@@ -13,13 +13,13 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.io;
 
 import java.io.File;
 
-import junit.framework.TestCase;
-
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.core.runtime.NullProgressMonitor;
+
+import junit.framework.TestCase;
 
 public class ChromatogramReaderWSDTestCase extends TestCase {
 
@@ -33,9 +33,9 @@ public class ChromatogramReaderWSDTestCase extends TestCase {
 
 		super.setUp();
 		fileImport = new File(this.pathImport);
-		IChromatogramWSDImportConverterProcessingInfo processingInfo = ChromatogramConverterWSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterWSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		try {
-			chromatogram = processingInfo.getChromatogram();
+			chromatogram = processingInfo.getProcessingResult(IChromatogramWSD.class);
 		} catch(TypeCastException e) {
 			chromatogram = null;
 		}
