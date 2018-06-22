@@ -14,9 +14,9 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 import java.io.File;
 
 import org.eclipse.chemclipse.msd.converter.database.IDatabaseImportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLDatabaseImportConverter;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
@@ -32,8 +32,8 @@ public class ImportConverterMslTestCase extends TestCase {
 
 		super.setUp();
 		importConverter = new MSLDatabaseImportConverter();
-		IDatabaseImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
-		massSpectra = processingInfo.getMassSpectra();
+		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 	}
 
 	@Override

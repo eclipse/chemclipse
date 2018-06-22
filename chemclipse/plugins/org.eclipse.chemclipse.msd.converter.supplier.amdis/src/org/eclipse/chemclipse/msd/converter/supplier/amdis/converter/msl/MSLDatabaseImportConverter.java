@@ -20,8 +20,6 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseImportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
-import org.eclipse.chemclipse.msd.converter.processing.database.DatabaseImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSL;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.MSLReader;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -34,22 +32,16 @@ public class MSLDatabaseImportConverter extends AbstractDatabaseImportConverter 
 	private static final String DESCRIPTION = "AMDIS MSL MassSpectrum Import";
 
 	@Override
-	public IDatabaseImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IDatabaseImportConverterProcessingInfo processingInfo = new DatabaseImportConverterProcessingInfo();
-		/*
-		 * Checks if the file is null or empty ...
-		 */
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			try {
 				file = SpecificationValidatorMSL.validateSpecification(file);
 				IMassSpectraReader massSpectraReader = new MSLReader();
 				IMassSpectra massSpectra = massSpectraReader.read(file, monitor);
 				if(massSpectra != null && massSpectra.size() > 0) {
-					processingInfo.setMassSpectra(massSpectra);
+					processingInfo.setProcessingResult(massSpectra);
 				} else {
 					processingInfo.addErrorMessage(DESCRIPTION, "No mass spectra are stored." + file.getAbsolutePath());
 				}

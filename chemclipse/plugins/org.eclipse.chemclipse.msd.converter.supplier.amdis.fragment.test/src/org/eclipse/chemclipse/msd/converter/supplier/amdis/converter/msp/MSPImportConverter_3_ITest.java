@@ -15,12 +15,12 @@ import java.io.File;
 
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.database.IDatabaseImportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
@@ -35,8 +35,8 @@ public class MSPImportConverter_3_ITest extends TestCase {
 		super.setUp();
 		File importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_LIB_3_MSP));
 		IDatabaseImportConverter importConverter = new MSPDatabaseImportConverter();
-		IDatabaseImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
-		massSpectra = processingInfo.getMassSpectra();
+		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 	}
 
 	@Override

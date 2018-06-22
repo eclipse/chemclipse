@@ -19,8 +19,6 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseExportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
-import org.eclipse.chemclipse.msd.converter.processing.database.DatabaseExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSP;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.MSPWriter;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -34,8 +32,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * If the mass spectrum is a type of IRegularLibraryMassSpectrum, than getLibraryInformation().getName() will be used,
  * otherwise massSpectrum.getIdentifier().
  * 
- * @author chemclipse
- * 
  */
 public class MSPDatabaseExportConverter extends AbstractDatabaseExportConverter {
 
@@ -43,16 +39,10 @@ public class MSPDatabaseExportConverter extends AbstractDatabaseExportConverter 
 	private static final String DESCRIPTION = "AMDIS MSP MassSpectrum Export";
 
 	@Override
-	public IDatabaseExportConverterProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
 
-		IDatabaseExportConverterProcessingInfo processingInfo = new DatabaseExportConverterProcessingInfo();
-		/*
-		 * Checks that file and mass spectrum are not null.
-		 */
-		IProcessingInfo processingInfoValidate = validate(file, massSpectrum);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo processingInfo = validate(file, massSpectrum);
+		if(!processingInfo.hasErrorMessages()) {
 			try {
 				file = SpecificationValidatorMSP.validateSpecification(file);
 				/*
@@ -60,7 +50,7 @@ public class MSPDatabaseExportConverter extends AbstractDatabaseExportConverter 
 				 */
 				IMassSpectraWriter massSpectraWriter = new MSPWriter();
 				massSpectraWriter.write(file, massSpectrum, append, monitor);
-				processingInfo.setFile(file);
+				processingInfo.setProcessingResult(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "The file couldn't be found: " + file.getAbsolutePath());
@@ -76,16 +66,10 @@ public class MSPDatabaseExportConverter extends AbstractDatabaseExportConverter 
 	}
 
 	@Override
-	public IDatabaseExportConverterProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
 
-		IDatabaseExportConverterProcessingInfo processingInfo = new DatabaseExportConverterProcessingInfo();
-		/*
-		 * Checks that file and mass spectra are not null.
-		 */
-		IProcessingInfo processingInfoValidate = validate(file, massSpectra);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo processingInfo = validate(file, massSpectra);
+		if(!processingInfo.hasErrorMessages()) {
 			try {
 				file = SpecificationValidatorMSP.validateSpecification(file);
 				/*
@@ -93,7 +77,7 @@ public class MSPDatabaseExportConverter extends AbstractDatabaseExportConverter 
 				 */
 				IMassSpectraWriter massSpectraWriter = new MSPWriter();
 				massSpectraWriter.write(file, massSpectra, append, monitor);
-				processingInfo.setFile(file);
+				processingInfo.setProcessingResult(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "The file couldn't be found: " + file.getAbsolutePath());
