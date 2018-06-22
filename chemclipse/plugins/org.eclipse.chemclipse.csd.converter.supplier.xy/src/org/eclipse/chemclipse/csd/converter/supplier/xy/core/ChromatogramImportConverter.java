@@ -16,9 +16,6 @@ import java.io.File;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.AbstractChromatogramCSDImportConverter;
 import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDReader;
-import org.eclipse.chemclipse.csd.converter.processing.chromatogram.ChromatogramCSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.csd.converter.processing.chromatogram.IChromatogramCSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.csd.converter.supplier.xy.internal.support.IConstants;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.internal.support.SpecificationValidator;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.io.ChromatogramReader;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -33,25 +30,15 @@ public class ChromatogramImportConverter extends AbstractChromatogramCSDImportCo
 	private static final String DESCRIPTION = "XY Import Converter";
 
 	@Override
-	public IChromatogramCSDImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IChromatogramCSDImportConverterProcessingInfo processingInfo = new ChromatogramCSDImportConverterProcessingInfo();
-		/*
-		 * Validate the file.
-		 */
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
-			/*
-			 * Read the chromatogram.
-			 */
+		IProcessingInfo processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			file = SpecificationValidator.validateSpecification(file);
 			IChromatogramCSDReader reader = new ChromatogramReader();
-			monitor.subTask(IConstants.IMPORT_XY_CHROMATOGRAM);
 			try {
 				IChromatogramCSD chromatogram = reader.read(file, monitor);
-				processingInfo.setChromatogram(chromatogram);
+				processingInfo.setProcessingResult(chromatogram);
 			} catch(Exception e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
