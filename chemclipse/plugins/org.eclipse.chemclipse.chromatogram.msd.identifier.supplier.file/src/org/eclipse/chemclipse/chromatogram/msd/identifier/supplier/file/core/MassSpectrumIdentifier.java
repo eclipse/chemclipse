@@ -44,7 +44,7 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 			}
 			//
 			IMassSpectra massSpectra = fileIdentifier.runIdentification(massSpectraList, fileIdentifierSettings, monitor);
-			processingInfo.setMassSpectra(massSpectra);
+			processingInfo.setProcessingResult(massSpectra);
 			processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Mass spectra have been identified.");
 		} catch(Exception e) {
 			processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "Something has gone wrong.");

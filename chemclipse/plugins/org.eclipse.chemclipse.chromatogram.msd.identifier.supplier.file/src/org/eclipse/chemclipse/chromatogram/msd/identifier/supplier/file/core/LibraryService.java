@@ -37,7 +37,7 @@ public class LibraryService extends AbstractLibraryService implements ILibrarySe
 			monitor.subTask("File Identifier - get reference mass spectrum");
 			validateIdentificationTarget(identificationTarget);
 			IMassSpectra massSpectra = fileIdentifier.getMassSpectra(identificationTarget, monitor);
-			processingInfo.setMassSpectra(massSpectra);
+			processingInfo.setProcessingResult(massSpectra);
 		} catch(ValueMustNotBeNullException e) {
 			processingInfo.addErrorMessage("File Identifier", "The identification target is not available.");
 		}
