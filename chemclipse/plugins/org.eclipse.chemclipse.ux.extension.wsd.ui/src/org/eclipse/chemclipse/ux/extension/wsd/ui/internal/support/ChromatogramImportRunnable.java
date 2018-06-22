@@ -15,11 +15,10 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -44,8 +43,8 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Import Chromatogram", IProgressMonitor.UNKNOWN);
-			IChromatogramWSDImportConverterProcessingInfo processingInfo = ChromatogramConverterWSD.convert(file, monitor);
-			IChromatogramWSD chromatogram = processingInfo.getChromatogram();
+			IProcessingInfo processingInfo = ChromatogramConverterWSD.convert(file, monitor);
+			IChromatogramWSD chromatogram = processingInfo.getProcessingResult(IChromatogramWSD.class);
 			chromatogramSelection = new ChromatogramSelectionWSD(chromatogram);
 		} catch(Exception e) {
 			/*

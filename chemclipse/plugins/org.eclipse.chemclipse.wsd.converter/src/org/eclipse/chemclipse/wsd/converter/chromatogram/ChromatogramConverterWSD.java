@@ -23,8 +23,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.ChromatogramWSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -54,11 +52,11 @@ public class ChromatogramConverterWSD {
 	 * @param chromatogram
 	 * @param converterId
 	 * @param monitor
-	 * @return {@link IChromatogramWSDImportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramWSDImportConverterProcessingInfo convert(final File file, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo convert(final File file, final String converterId, final IProgressMonitor monitor) {
 
-		IChromatogramWSDImportConverterProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		/*
 		 * Do not use a safe runnable here, because a IChromatogram object must
 		 * be returned or null.
@@ -82,12 +80,12 @@ public class ChromatogramConverterWSD {
 	 * 
 	 * @param chromatogram
 	 * @param monitor
-	 * @return {@link IChromatogramWSDImportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramWSDImportConverterProcessingInfo convert(final File file, final IProgressMonitor monitor) {
+	public static IProcessingInfo convert(final File file, final IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = getChromatogram(file, false, monitor);
-		IChromatogramWSDImportConverterProcessingInfo processingInfoImport = new ChromatogramWSDImportConverterProcessingInfo();
+		IProcessingInfo processingInfoImport = new ProcessingInfo();
 		processingInfoImport.addMessages(processingInfo);
 		processingInfoImport.setProcessingResult(processingInfo.getProcessingResult());
 		return processingInfoImport;
@@ -369,9 +367,9 @@ public class ChromatogramConverterWSD {
 		return processingInfo;
 	}
 
-	private static IChromatogramWSDImportConverterProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
+	private static IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IChromatogramWSDImportConverterProcessingInfo processingInfo = new ChromatogramWSDImportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("Chromatogram Import Converter", "There is no suitable converter available to load the chromatogram from the file: " + file.getAbsolutePath());
 		return processingInfo;
 	}

@@ -13,10 +13,9 @@ package org.eclipse.chemclipse.wsd.converter.chromatogram;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
-import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramWSDImportConverter extends IChromatogramImportConverter {
 
@@ -31,7 +30,7 @@ public interface IChromatogramWSDImportConverter extends IChromatogramImportConv
 	 * 
 	 * @param chromatogram
 	 * @param monitor
-	 * @return {@link IChromatogramWSDImportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IChromatogramWSDImportConverterProcessingInfo convert(File file, IProgressMonitor monitor);
+	IProcessingInfo convert(File file, IProgressMonitor monitor);
 }

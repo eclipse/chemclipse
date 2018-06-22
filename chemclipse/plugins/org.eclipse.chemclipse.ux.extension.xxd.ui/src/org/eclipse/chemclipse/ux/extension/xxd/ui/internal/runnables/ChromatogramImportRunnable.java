@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -75,8 +74,8 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 						chromatogramSelection = new ChromatogramSelectionCSD(chromatogramCSD, fireUpdate);
 						break;
 					case WSD:
-						IChromatogramWSDImportConverterProcessingInfo processingInfoWSD = ChromatogramConverterWSD.convert(file, monitor);
-						IChromatogramWSD chromatogramWSD = processingInfoWSD.getChromatogram();
+						IProcessingInfo processingInfoWSD = ChromatogramConverterWSD.convert(file, monitor);
+						IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult(IChromatogramWSD.class);
 						chromatogramSelection = new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate);
 						break;
 					default:
