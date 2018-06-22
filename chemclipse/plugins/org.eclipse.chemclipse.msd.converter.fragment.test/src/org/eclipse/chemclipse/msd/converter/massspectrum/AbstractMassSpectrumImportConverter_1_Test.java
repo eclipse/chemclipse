@@ -15,10 +15,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.msd.converter.TestPathHelper;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -28,8 +27,6 @@ import junit.framework.TestCase;
  * AbstractMassSpectrumImportConverter is an abstract class,
  * TestMassSpectrumImportConverter is instantiated which extends
  * AbstractMassSpectrumImportConverter.
- * 
- * @author eselmeister
  */
 public class AbstractMassSpectrumImportConverter_1_Test extends TestCase {
 
@@ -52,7 +49,7 @@ public class AbstractMassSpectrumImportConverter_1_Test extends TestCase {
 	public void testFileNotFoundException_1() {
 
 		File file = new File("");
-		IMassSpectrumImportConverterProcessingInfo processingInfo = ic.convert(file, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ic.convert(file, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 

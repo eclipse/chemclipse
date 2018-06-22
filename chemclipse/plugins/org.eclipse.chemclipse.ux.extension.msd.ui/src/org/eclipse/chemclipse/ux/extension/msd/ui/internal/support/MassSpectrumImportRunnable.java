@@ -16,8 +16,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -41,7 +41,7 @@ public class MassSpectrumImportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Import Mass Spectrum", IProgressMonitor.UNKNOWN);
-			IMassSpectrumImportConverterProcessingInfo processingInfo = MassSpectrumConverter.convert(file, monitor);
+			IProcessingInfo processingInfo = MassSpectrumConverter.convert(file, monitor);
 			massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 		} catch(Exception e) {
 			/*

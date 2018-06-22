@@ -13,12 +13,11 @@ package org.eclipse.chemclipse.msd.converter.massspectrum;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.core.IExportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * @author eselmeister
@@ -32,9 +31,9 @@ public interface IMassSpectrumExportConverter extends IExportConverter {
 	 * @param massSpectrum
 	 * @param append
 	 * @param monitor
-	 * @return {@link IMassSpectrumExportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectrumExportConverterProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor);
+	IProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor);
 
 	/**
 	 * Exports the mass spectra to the given file.
@@ -43,25 +42,25 @@ public interface IMassSpectrumExportConverter extends IExportConverter {
 	 * @param massSpectra
 	 * @param append
 	 * @param monitor
-	 * @return {@link IMassSpectrumExportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectrumExportConverterProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor);
+	IProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor);
 
 	/**
 	 * Checks the mass spectrum instance and throws an exception if the mass
 	 * spectrum is null.
 	 * 
 	 * @param massSpectrum
-	 * @return {@link IMassSpectrumExportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectrumExportConverterProcessingInfo validate(IScanMSD massSpectrum);
+	IProcessingInfo validate(IScanMSD massSpectrum);
 
 	/**
 	 * Checks the mass spectra instance and throws an exception if the mass
 	 * spectrum is null.
 	 * 
 	 * @param massSpectrum
-	 * @return {@link IMassSpectrumExportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectrumExportConverterProcessingInfo validate(IMassSpectra massSpectra);
+	IProcessingInfo validate(IMassSpectra massSpectra);
 }

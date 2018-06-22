@@ -13,28 +13,25 @@ package org.eclipse.chemclipse.msd.converter.massspectrum;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.MassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>
  * IT IS AN TESTCLASS!
- * 
- * @author eselmeister
  */
 public class TestMassSpectrumExportConverter extends AbstractMassSpectrumExportConverter {
 
 	@Override
-	public IMassSpectrumExportConverterProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
 
-		IMassSpectrumExportConverterProcessingInfo processingInfo = new MassSpectrumExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		try {
 			processingInfo.addMessages(super.validate(file));
 			processingInfo.addMessages(super.validate(massSpectrum));
@@ -46,9 +43,9 @@ public class TestMassSpectrumExportConverter extends AbstractMassSpectrumExportC
 	}
 
 	@Override
-	public IMassSpectrumExportConverterProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
 
-		IMassSpectrumExportConverterProcessingInfo processingInfo = new MassSpectrumExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		try {
 			processingInfo.addMessages(super.validate(file));
 			processingInfo.addMessages(super.validate(massSpectra));

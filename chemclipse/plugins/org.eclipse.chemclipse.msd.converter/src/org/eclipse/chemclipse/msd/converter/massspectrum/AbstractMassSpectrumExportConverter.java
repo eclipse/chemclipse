@@ -12,23 +12,20 @@
 package org.eclipse.chemclipse.msd.converter.massspectrum;
 
 import org.eclipse.chemclipse.converter.core.AbstractExportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.MassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
-/**
- * @author eselmeister
- */
 public abstract class AbstractMassSpectrumExportConverter extends AbstractExportConverter implements IMassSpectrumExportConverter {
 
 	@Override
-	public IMassSpectrumExportConverterProcessingInfo validate(IScanMSD massSpectrum) {
+	public IProcessingInfo validate(IScanMSD massSpectrum) {
 
-		IMassSpectrumExportConverterProcessingInfo processingInfo = new MassSpectrumExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(massSpectrum == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Mass Spectra Export", "The is no mass spectrum to export.");
 			processingInfo.addMessage(processingMessage);
@@ -37,9 +34,9 @@ public abstract class AbstractMassSpectrumExportConverter extends AbstractExport
 	}
 
 	@Override
-	public IMassSpectrumExportConverterProcessingInfo validate(IMassSpectra massSpectra) {
+	public IProcessingInfo validate(IMassSpectra massSpectra) {
 
-		IMassSpectrumExportConverterProcessingInfo processingInfo = new MassSpectrumExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(massSpectra == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Mass Spectra Export", "The are no mass spectra to export.");
 			processingInfo.addMessage(processingMessage);

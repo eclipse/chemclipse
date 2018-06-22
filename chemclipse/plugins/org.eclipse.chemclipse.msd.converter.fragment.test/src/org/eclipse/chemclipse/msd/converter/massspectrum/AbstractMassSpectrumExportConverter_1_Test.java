@@ -14,12 +14,11 @@ package org.eclipse.chemclipse.msd.converter.massspectrum;
 import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.msd.converter.TestPathHelper;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -29,8 +28,6 @@ import junit.framework.TestCase;
  * Because AbstractMassSpectrumExportConverter is an abstract class,
  * TestMassSpectrumExportConverter is instantiated which extends
  * AbstractMassSpectrumExportConverter.
- * 
- * @author eselmeister
  */
 public class AbstractMassSpectrumExportConverter_1_Test extends TestCase {
 
@@ -57,7 +54,7 @@ public class AbstractMassSpectrumExportConverter_1_Test extends TestCase {
 
 		File file = null;
 		massSpectrum = null;
-		IMassSpectrumExportConverterProcessingInfo processingInfo = ec.convert(file, massSpectrum, false, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ec.convert(file, massSpectrum, false, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
@@ -67,7 +64,7 @@ public class AbstractMassSpectrumExportConverter_1_Test extends TestCase {
 		try {
 			file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_MASSSPECTRUM_NOT_WRITEABLE));
 			file.setWritable(false);
-			IMassSpectrumExportConverterProcessingInfo processingInfo = ec.convert(file, massSpectrum, false, new NullProgressMonitor());
+			IProcessingInfo processingInfo = ec.convert(file, massSpectrum, false, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(IOException e) {
 			assertTrue("IOException", false);

@@ -13,14 +13,10 @@ package org.eclipse.chemclipse.msd.converter.massspectrum;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.converter.core.IImportConverter;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import org.eclipse.chemclipse.converter.core.IImportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
-
-/**
- * @author eselmeister
- */
 public interface IMassSpectrumImportConverter extends IImportConverter {
 
 	/**
@@ -28,7 +24,7 @@ public interface IMassSpectrumImportConverter extends IImportConverter {
 	 * 
 	 * @param file
 	 * @param monitor
-	 * @return {@link IMassSpectrumImportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectrumImportConverterProcessingInfo convert(File file, IProgressMonitor monitor);
+	IProcessingInfo convert(File file, IProgressMonitor monitor);
 }
