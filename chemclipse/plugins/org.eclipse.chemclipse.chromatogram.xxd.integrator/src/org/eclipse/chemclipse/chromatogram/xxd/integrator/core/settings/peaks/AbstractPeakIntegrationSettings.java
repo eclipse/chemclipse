@@ -14,16 +14,22 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.AbstractIntegrationSettings;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.AbstractIntegrationSettings;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public abstract class AbstractPeakIntegrationSettings extends AbstractIntegrationSettings implements IPeakIntegrationSettings, IReportDecider {
 
+	@JsonIgnore
 	private IMarkedIons selectedIons;
+	@JsonIgnore
 	private IAreaSupport areaSupport;
+	@JsonIgnore
 	private IIntegrationSupport integratorSupport;
+	@JsonIgnore
 	private List<IReportDecider> reportDeciders;
 
 	public AbstractPeakIntegrationSettings() {
