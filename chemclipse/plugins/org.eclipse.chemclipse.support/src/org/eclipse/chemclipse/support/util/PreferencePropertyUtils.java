@@ -17,26 +17,47 @@ import org.eclipse.core.runtime.preferences.IPreferencesService;
 
 public class PreferencePropertyUtils {
 
-	public static String getStringPreference(PreferenceProperty preferenceProperty, String def) {
+	public static String getPreference(PreferenceProperty preferenceProperty, String def) {
 
+		if(preferenceProperty == null) {
+			return def;
+		}
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 		return preferencesService.getString(preferenceProperty.qualifier(), preferenceProperty.key(), def, null);
 	}
 
-	public static int getIntPreference(PreferenceProperty preferenceProperty, int def) {
+	public static int getPreference(PreferenceProperty preferenceProperty, int def) {
 
+		if(preferenceProperty == null) {
+			return def;
+		}
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 		return preferencesService.getInt(preferenceProperty.qualifier(), preferenceProperty.key(), def, null);
 	}
 
-	public static double getDoublePreference(PreferenceProperty preferenceProperty, double def) {
+	public static double getPreference(PreferenceProperty preferenceProperty, double def) {
 
+		if(preferenceProperty == null) {
+			return def;
+		}
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 		return preferencesService.getDouble(preferenceProperty.qualifier(), preferenceProperty.key(), def, null);
 	}
 
-	public static float getFloatPreference(PreferenceProperty preferenceProperty, float def) {
+	public static boolean getPreference(PreferenceProperty preferenceProperty, boolean def) {
 
+		if(preferenceProperty == null) {
+			return def;
+		}
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+		return preferencesService.getBoolean(preferenceProperty.qualifier(), preferenceProperty.key(), def, null);
+	}
+
+	public static float getPreference(PreferenceProperty preferenceProperty, float def) {
+
+		if(preferenceProperty == null) {
+			return def;
+		}
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 		return preferencesService.getFloat(preferenceProperty.qualifier(), preferenceProperty.key(), def, null);
 	}

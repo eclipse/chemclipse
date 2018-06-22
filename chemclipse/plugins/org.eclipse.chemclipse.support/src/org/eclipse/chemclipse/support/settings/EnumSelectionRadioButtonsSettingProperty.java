@@ -22,6 +22,4 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 @Retention(RetentionPolicy.RUNTIME)
 @JacksonAnnotation
 public @interface EnumSelectionRadioButtonsSettingProperty {
-
-	Class<? extends Enum> enumClass() default Enum.class;
 }

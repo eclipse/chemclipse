@@ -18,12 +18,10 @@ import java.lang.annotation.Target;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotation;
 
-@Target({ElementType.FIELD})
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @JacksonAnnotation
-public @interface StringSelectionSettingProperty {
+public @interface DynamicSettingsProperty {
 
-	String[] ids();
-
-	String[] labels() default {};
+	Class<? extends IDynamicSettingProperty> getAnnotations();
 }

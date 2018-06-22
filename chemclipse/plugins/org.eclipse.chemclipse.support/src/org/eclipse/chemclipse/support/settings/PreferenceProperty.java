@@ -23,9 +23,7 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 @JacksonAnnotation
 public @interface PreferenceProperty {
 
-	String key() default "";
+	String key();
 
-	String value() default "";
-
-	String qualifier() default "";
+	String qualifier();
 }

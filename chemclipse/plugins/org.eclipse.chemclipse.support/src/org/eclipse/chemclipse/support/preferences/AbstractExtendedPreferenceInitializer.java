@@ -13,11 +13,10 @@ package org.eclipse.chemclipse.support.preferences;
 
 import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.osgi.service.prefs.BackingStoreException;
-
-import org.eclipse.chemclipse.logging.core.Logger;
 
 public abstract class AbstractExtendedPreferenceInitializer extends AbstractPreferenceInitializer {
 
@@ -38,6 +37,7 @@ public abstract class AbstractExtendedPreferenceInitializer extends AbstractPref
 	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
 	 * initializeDefaultPreferences()
 	 */
+	@Override
 	public void initializeDefaultPreferences() {
 
 		IEclipsePreferences preferences = preferenceSupplier.getPreferences();

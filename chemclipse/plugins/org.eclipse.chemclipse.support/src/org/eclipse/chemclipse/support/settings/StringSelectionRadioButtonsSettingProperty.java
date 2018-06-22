@@ -23,9 +23,9 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 @JacksonAnnotation
 public @interface StringSelectionRadioButtonsSettingProperty {
 
-	String[] ids() default {};
+	String[] ids();
 
-	String[] labels() default {};
+	String[] labels();
 
 	String[] tooltips() default {};
 }

@@ -23,6 +23,10 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 @JacksonAnnotation
 public @interface FileSettingProperty {
 
+	public enum DialogType {
+		OPEN_DIALOG, SAVE_DIALOG
+	}
+
 	String[] validExtensions() default {};
 
 	DialogType dialogType() default DialogType.OPEN_DIALOG;

@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings;
 
-public enum DialogType {
+import java.lang.annotation.Annotation;
 
-	OPEN_DIALOG,SAVE_DIALOG
+public interface IDynamicSettingProperty {
+
+	<A extends Annotation> A getAnnotation(Class<A> acls);
 }

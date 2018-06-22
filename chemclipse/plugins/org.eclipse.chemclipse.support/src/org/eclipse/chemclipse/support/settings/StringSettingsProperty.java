@@ -7,13 +7,21 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Jan Holy - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings;
 
-public @interface StringConditionSettingProperty {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-	String idSource() default "";
+import com.fasterxml.jackson.annotation.JacksonAnnotation;
 
-	boolean condition() default true;
+@Target({ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+@JacksonAnnotation
+public @interface StringSettingsProperty {
+
+	String regExp() default "^.*$";
 }

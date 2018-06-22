@@ -11,19 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public @interface LabelSettingsProperty {
 
-import com.fasterxml.jackson.annotation.JacksonAnnotation;
-
-@Target({ElementType.FIELD})
-@Retention(RetentionPolicy.RUNTIME)
-@JacksonAnnotation
-public @interface StringSelectionSettingProperty {
-
-	String[] ids();
-
-	String[] labels() default {};
+	String label() default "";
 }
