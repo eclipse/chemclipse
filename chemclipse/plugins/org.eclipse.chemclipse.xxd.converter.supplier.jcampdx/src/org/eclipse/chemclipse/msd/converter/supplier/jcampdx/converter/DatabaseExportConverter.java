@@ -14,29 +14,29 @@ package org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter;
 import java.io.File;
 
 import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseExportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.database.DatabaseExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class DatabaseExportConverter extends AbstractDatabaseExportConverter {
 
 	@Override
-	public IDatabaseExportConverterProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
 
 		return getProcessingInfo();
 	}
 
 	@Override
-	public IDatabaseExportConverterProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
 
 		return getProcessingInfo();
 	}
 
-	private IDatabaseExportConverterProcessingInfo getProcessingInfo() {
+	private IProcessingInfo getProcessingInfo() {
 
-		IDatabaseExportConverterProcessingInfo processingInfo = new DatabaseExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("JCAMP-DX Library", "The JCAMP-DX converter has no capabilities to export a library.");
 		return processingInfo;
 	}
