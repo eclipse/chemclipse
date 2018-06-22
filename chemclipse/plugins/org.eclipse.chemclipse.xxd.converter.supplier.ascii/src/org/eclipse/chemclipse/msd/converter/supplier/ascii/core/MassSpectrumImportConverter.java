@@ -49,7 +49,7 @@ public class MassSpectrumImportConverter extends AbstractMassSpectrumImportConve
 				IMassSpectraReader massSpectraReader = new MassSpectraReader();
 				IMassSpectra massSpectra = massSpectraReader.read(file, monitor);
 				if(massSpectra != null && massSpectra.size() > 0) {
-					processingInfo.setMassSpectra(massSpectra);
+					processingInfo.setProcessingResult(massSpectra);
 				} else {
 					processingInfo.addErrorMessage(DESCRIPTION, "No mass spectra are stored." + file.getAbsolutePath());
 				}
