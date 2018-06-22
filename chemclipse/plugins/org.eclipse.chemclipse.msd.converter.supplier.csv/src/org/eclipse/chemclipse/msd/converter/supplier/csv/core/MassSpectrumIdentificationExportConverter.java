@@ -19,8 +19,6 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseExportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
-import org.eclipse.chemclipse.msd.converter.processing.database.DatabaseExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.internal.converter.SpecificationValidator;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.MassSpectrumExtendedWriter;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -36,7 +34,7 @@ public class MassSpectrumIdentificationExportConverter extends AbstractDatabaseE
 	private static final String DESCRIPTION = "CSV Mass Spectrum List Export";
 
 	@Override
-	public IDatabaseExportConverterProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
 
 		MassSpectra massSpectra = new MassSpectra();
 		massSpectra.addMassSpectrum(massSpectrum);
@@ -44,9 +42,9 @@ public class MassSpectrumIdentificationExportConverter extends AbstractDatabaseE
 	}
 
 	@Override
-	public IDatabaseExportConverterProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
 
-		IDatabaseExportConverterProcessingInfo processingInfo = new DatabaseExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		/*
 		 * Checks that file and mass spectra are not null.
 		 */
@@ -61,7 +59,7 @@ public class MassSpectrumIdentificationExportConverter extends AbstractDatabaseE
 				 */
 				IMassSpectraWriter massSpectraWriter = new MassSpectrumExtendedWriter();
 				massSpectraWriter.write(file, massSpectra, append, monitor);
-				processingInfo.setFile(file);
+				processingInfo.setProcessingResult(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "The file couldn't be found: " + file.getAbsolutePath());
