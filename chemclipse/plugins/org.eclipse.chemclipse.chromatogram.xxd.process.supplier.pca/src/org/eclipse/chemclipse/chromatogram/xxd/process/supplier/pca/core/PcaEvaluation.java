@@ -184,14 +184,13 @@ public class PcaEvaluation {
 		} else if(pcaAlgorithm.equals(IPcaSettings.OPLS_ALGO_NIPALS)) {
 			principalComponentAnalysis = new OplsCalculatorNipals();
 		}
-		principalComponentAnalysis.initialize(numSamples, sampleSize);
+		principalComponentAnalysis.initialize(numSamples, sampleSize, numberOfPrincipalComponents);
 		/*
 		 * Add the samples.
 		 */
 		for(Map.Entry<ISample<?>, double[]> entry : pcaPeakMap.entrySet()) {
 			principalComponentAnalysis.addObservation(entry.getValue(), entry.getKey(), entry.getKey().getGroupName());
 		}
-		principalComponentAnalysis.setNumComps(numberOfPrincipalComponents);
 		return principalComponentAnalysis;
 	}
 
@@ -216,7 +215,7 @@ public class PcaEvaluation {
 		/*
 		 * Collect PCA results
 		 */
-		if(!principalComponentAnalysis.getComputeStatus()) {
+		if(!principalComponentAnalysis.getComputeStatus() || !principalComponentAnalysis.isPcaValid()) {
 			return null;
 		}
 		List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
@@ -251,11 +250,11 @@ public class PcaEvaluation {
 		pcaResults.getPcaResultList().setAll(resultsList);
 	}
 
-	private void setRetentionTime(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples, boolean[] isSeletedVariables) {
+	private void setRetentionTime(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples, boolean[] isSelectedVariables) {
 
 		List<IVaribleExtracted> variables = new ArrayList<>();
 		for(int i = 0; i < samples.getVariables().size(); i++) {
-			if(isSeletedVariables[i]) {
+			if(isSelectedVariables[i]) {
 				IVariable variable = samples.getVariables().get(i);
 				variables.add(new Variable(variable));
 			}

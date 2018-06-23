@@ -34,8 +34,10 @@ public class PcaResultsVisualization<R extends IPcaResult, V extends IVaribleExt
 		this.pcaSettingsVisualization = pcaSettingsVisualization;
 		pcaResultsVisualization = FXCollections.observableArrayList(IPcaResultVisualization.extractor());
 		variablesExtractedVisalization = FXCollections.observableArrayList(IVariableExtractedVisalization.extractor());
-		modelData.getPcaResultList().forEach(r -> pcaResultsVisualization.add(new PcaResultVisualization(r)));
-		modelData.getExtractedVariables().forEach(v -> variablesExtractedVisalization.add(new VariableExtractedVisualization(v)));
+		if(!(modelData == null)) {
+			modelData.getPcaResultList().forEach(r -> pcaResultsVisualization.add(new PcaResultVisualization(r)));
+			modelData.getExtractedVariables().forEach(v -> variablesExtractedVisalization.add(new VariableExtractedVisualization(v)));
+		}
 	}
 
 	@Override

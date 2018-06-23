@@ -27,19 +27,20 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	private ArrayList<String> groupNames = new ArrayList<>();
 	private int sampleIndex;
 	private boolean computeSuccess;
-	private boolean sampleDataComplete;
-	private boolean sampleDataSane;
+	private boolean pcaValid;
 
 	@Override
-	public void initialize(int numObs, int numVars) {
+	public void initialize(int numObs, int numVars, int numComps) {
 
-		sampleData.reshape(numObs, numVars, false);
-		mean = new double[numVars];
+		this.sampleData.reshape(numObs, numVars, false);
+		this.mean = new double[numVars];
 		sampleIndex = 0;
-		numComps = -1;
+		this.numComps = numComps;
 		computeSuccess = false;
-		sampleDataComplete = false;
-		sampleDataSane = true;
+		pcaValid = true;
+		if(this.numComps > numObs) {
+			invalidatePca();
+		}
 	}
 
 	public void setComputeSuccess() {
@@ -55,16 +56,15 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	@Override
 	public void addObservation(double[] obsData, ISample<?> sampleKey, String groupName) {
 
-		sampleDataSane = obsData.length < sampleData.getNumCols() ? false : true;
+		if(obsData.length < sampleData.getNumCols()) {
+			this.invalidatePca();
+		}
 		for(int i = 0; i < obsData.length; i++) {
 			sampleData.set(sampleIndex, i, obsData[i]);
 		}
 		sampleKeys.add(sampleKey);
 		groupNames.add(groupName);
 		sampleIndex++;
-		if(sampleIndex == sampleData.numRows) {
-			sampleDataComplete = true;
-		}
 	}
 
 	@Override
@@ -108,6 +108,9 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	@Override
 	public double getErrorMetric(double[] obs) {
 
+		if(!isPcaValid() || !getComputeStatus()) {
+			return 0.0;
+		}
 		double[] eig = applyLoadings(obs);
 		double[] reproj = reproject(eig);
 		double total = 0;
@@ -230,5 +233,15 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	public void setNumComps(int numComps) {
 
 		this.numComps = numComps;
+	}
+
+	public void invalidatePca() {
+
+		this.pcaValid = false;
+	}
+
+	public boolean isPcaValid() {
+
+		return this.pcaValid;
 	}
 }

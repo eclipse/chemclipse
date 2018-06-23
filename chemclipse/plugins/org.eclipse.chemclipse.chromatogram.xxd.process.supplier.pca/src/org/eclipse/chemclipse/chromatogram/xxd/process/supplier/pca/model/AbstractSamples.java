@@ -17,11 +17,11 @@ import javafx.collections.ObservableList;
 public abstract class AbstractSamples<V extends IVariable, S extends ISample<? extends ISampleData>> implements ISamples<V, S> {
 
 	private ObservableList<S> samples;
-	private ObservableList<V> vareables;
+	private ObservableList<V> variables;
 
 	public AbstractSamples() {
 		samples = FXCollections.observableArrayList(ISample.extractor());
-		vareables = FXCollections.observableArrayList(IVariable.extractor());
+		variables = FXCollections.observableArrayList(IVariable.extractor());
 	}
 
 	@Override
@@ -33,6 +33,6 @@ public abstract class AbstractSamples<V extends IVariable, S extends ISample<? e
 	@Override
 	public ObservableList<V> getVariables() {
 
-		return vareables;
+		return variables;
 	}
 }

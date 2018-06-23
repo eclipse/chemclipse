@@ -25,6 +25,10 @@ public interface IMultivariateCalculator {
 
 	void setComputeSuccess();
 
+	boolean isPcaValid();
+
+	void invalidatePca();
+
 	double getErrorMetric(double[] obs);
 
 	double[] getLoadingVector(int var);
@@ -33,7 +37,7 @@ public interface IMultivariateCalculator {
 
 	ArrayList<String> getGroupNames();
 
-	void initialize(int numObs, int numVars);
+	void initialize(int numObs, int numVars, int numComps);
 
 	double getSummedVariance();
 

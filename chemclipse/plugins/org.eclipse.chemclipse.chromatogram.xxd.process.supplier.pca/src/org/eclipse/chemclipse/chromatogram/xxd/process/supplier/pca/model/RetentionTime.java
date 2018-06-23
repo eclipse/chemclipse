@@ -30,17 +30,17 @@ public class RetentionTime extends AbstractVariable implements IRetentionTime {
 	}
 
 	private NumberFormat nf = NumberFormat.getInstance(Locale.US);
-	private int retentioTime;
+	private int retentionTime;
 
 	public RetentionTime(int retentioTime) {
 		super();
-		this.retentioTime = retentioTime;
+		this.retentionTime = retentioTime;
 		setValue(convertValue());
 		setType(IRetentionTime.TYPE);
 	}
 
-	public RetentionTime(int retentioTime, String description) {
-		this(retentioTime);
+	public RetentionTime(int retentionTime, String description) {
+		this(retentionTime);
 		setDescription(description);
 	}
 
@@ -62,19 +62,19 @@ public class RetentionTime extends AbstractVariable implements IRetentionTime {
 	@Override
 	public int getRetentionTime() {
 
-		return retentioTime;
+		return retentionTime;
 	}
 
 	@Override
 	public double getRetentionTimeMinutes() {
 
-		return retentioTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
+		return retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 	}
 
 	@Override
 	public void setRetentioTime(int retentionTime) {
 
-		this.retentioTime = retentionTime;
+		this.retentionTime = retentionTime;
 		setValue(convertValue());
 	}
 }
