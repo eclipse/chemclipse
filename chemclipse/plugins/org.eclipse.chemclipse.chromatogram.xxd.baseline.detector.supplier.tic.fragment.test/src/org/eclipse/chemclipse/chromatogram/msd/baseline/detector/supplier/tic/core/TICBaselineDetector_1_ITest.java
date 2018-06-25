@@ -15,7 +15,6 @@ import java.io.File;
 
 import org.eclipse.chemclipse.chromatogram.msd.baseline.detector.supplier.tic.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetector;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBaselineDetectorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.settings.ITicBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.settings.TicBaselineDetectorSettings;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -67,7 +66,7 @@ public class TICBaselineDetector_1_ITest extends TestCase {
 	public void testBaseline_1() {
 
 		assertEquals("numberOfScans", 5726, chromatogram.getNumberOfScans());
-		IBaselineDetectorProcessingInfo processingInfo = BaselineDetector.setBaseline(chromatogramSelection, settings, DETECTOR_ID, new NullProgressMonitor());
+		IProcessingInfo processingInfo = BaselineDetector.setBaseline(chromatogramSelection, settings, DETECTOR_ID, new NullProgressMonitor());
 		assertFalse(processingInfo.hasErrorMessages());
 	}
 }

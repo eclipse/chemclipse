@@ -12,21 +12,21 @@
 package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.core;
 
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.AbstractBaselineDetector;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBaselineDetectorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class BaselineDetector extends AbstractBaselineDetector {
 
 	@Override
-	public IBaselineDetectorProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
-		IBaselineDetectorProcessingInfo processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
+		IProcessingInfo processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
 			calculateBaseline(chromatogramSelection);
 		}
@@ -34,7 +34,7 @@ public class BaselineDetector extends AbstractBaselineDetector {
 	}
 
 	@Override
-	public IBaselineDetectorProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		IBaselineDetectorSettings baselineDetectorSettings = PreferenceSupplier.getBaselineDetectorSettings();
 		return setBaseline(chromatogramSelection, baselineDetectorSettings, monitor);
