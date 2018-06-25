@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson
 import org.eclipse.chemclipse.chromatogram.msd.classifier.core.AbstractChromatogramClassifier;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.ChromatogramSelectionException;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.ClassifierSettingsException;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.processing.ChromatogramClassifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.processing.IChromatogramClassifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.preferences.PreferenceSupplier;
@@ -28,8 +26,10 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -38,9 +38,9 @@ public class Classifier extends AbstractChromatogramClassifier {
 	private static final Logger logger = Logger.getLogger(Classifier.class);
 
 	@Override
-	public IChromatogramClassifierProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
 
-		IChromatogramClassifierProcessingInfo processingInfo = new ChromatogramClassifierProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		try {
 			validate(chromatogramSelection, chromatogramClassifierSettings);
 			IDurbinWatsonClassifierSettings classifierSettings;
@@ -57,7 +57,7 @@ public class Classifier extends AbstractChromatogramClassifier {
 			IMeasurementResult measurementResult = new MeasurementResult(IChromatogramResultDurbinWatson.NAME, IChromatogramResultDurbinWatson.IDENTIFIER, "This is the Durbin-Watson classifier result.", durbinWatsonClassifierResult);
 			chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
 			//
-			processingInfo.setChromatogramClassifierResult(durbinWatsonClassifierResult);
+			processingInfo.setProcessingResult(durbinWatsonClassifierResult);
 		} catch(ChromatogramSelectionException e1) {
 			logger.warn(e1);
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, IChromatogramResultDurbinWatson.NAME, "The chromatogram selection is invalid.");
@@ -71,7 +71,7 @@ public class Classifier extends AbstractChromatogramClassifier {
 	}
 
 	@Override
-	public IChromatogramClassifierProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		IDurbinWatsonClassifierSettings chromatogramClassifierSettings = PreferenceSupplier.getSettings();
 		return applyClassifier(chromatogramSelection, chromatogramClassifierSettings, monitor);
