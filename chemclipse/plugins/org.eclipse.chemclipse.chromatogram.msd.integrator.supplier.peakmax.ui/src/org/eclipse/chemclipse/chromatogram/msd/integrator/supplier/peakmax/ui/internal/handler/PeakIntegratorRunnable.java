@@ -15,12 +15,12 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.IPeakIntegratorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.notifier.IntegrationResultUpdateNotifier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -50,13 +50,13 @@ public class PeakIntegratorRunnable implements IRunnableWithProgress {
 			/*
 			 * Show the processing view if error messages occurred.
 			 */
-			IPeakIntegratorProcessingInfo processingInfo = PeakIntegrator.integrate(chromatogramSelection, peakIntegrationSettings, PEAK_INTEGRATOR_ID, monitor);
+			IProcessingInfo processingInfo = PeakIntegrator.integrate(chromatogramSelection, peakIntegrationSettings, PEAK_INTEGRATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			/*
 			 * Try to set the results.
 			 */
 			try {
-				IPeakIntegrationResults peakIntegrationResults = processingInfo.getPeakIntegrationResults();
+				IPeakIntegrationResults peakIntegrationResults = processingInfo.getProcessingResult(IPeakIntegrationResults.class);
 				IntegrationResultUpdateNotifier.fireUpdateChange(peakIntegrationResults);
 				updateSelection();
 			} catch(TypeCastException e) {
