@@ -16,26 +16,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.chromatogram.AbstractChromatogramReportGenerator;
-import org.eclipse.chemclipse.chromatogram.xxd.report.processing.ChromatogramReportProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.report.processing.IChromatogramReportProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractReport extends AbstractChromatogramReportGenerator {
 
-	public IChromatogramReportProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
+	public IProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
 
-		IChromatogramReportProcessingInfo processingInfo = new ChromatogramReportProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("ChemClipse Chromatogram Report", "Please override this method");
 		return processingInfo;
 	}
 
 	@Override
-	public IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
+	public IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
 
 		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
 		IReportSettings settings = getSettings(chromatogramReportSettings);
@@ -43,7 +43,7 @@ public abstract class AbstractReport extends AbstractChromatogramReportGenerator
 	}
 
 	@Override
-	public IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
 		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
 		IReportSettings settings = getSettings(null);
@@ -51,14 +51,14 @@ public abstract class AbstractReport extends AbstractChromatogramReportGenerator
 	}
 
 	@Override
-	public IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
+	public IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
 
 		IReportSettings settings = getSettings(chromatogramReportSettings);
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
 	@Override
-	public IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IProgressMonitor monitor) {
+	public IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IProgressMonitor monitor) {
 
 		IReportSettings settings = getSettings(null);
 		return report(file, append, chromatograms, settings, monitor);

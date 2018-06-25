@@ -15,8 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.report.processing.ChromatogramReportProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.report.processing.IChromatogramReportProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.internal.support.SpecificationValidator;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.io.ReportWriter2;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
@@ -24,6 +22,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class Report2 extends AbstractReport {
@@ -31,9 +30,9 @@ public class Report2 extends AbstractReport {
 	private static final Logger logger = Logger.getLogger(Report2.class);
 
 	@Override
-	public IChromatogramReportProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
+	public IProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
 
-		IChromatogramReportProcessingInfo processingInfo = new ChromatogramReportProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		/*
 		 * Validate the file.
 		 */
@@ -48,7 +47,7 @@ public class Report2 extends AbstractReport {
 			ReportWriter2 chromatogramReport = new ReportWriter2();
 			try {
 				chromatogramReport.generate(file, append, chromatograms, chromatogramReportSettings, monitor);
-				processingInfo.setFile(file);
+				processingInfo.setProcessingResult(file);
 			} catch(IOException e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage("ChemClipse Chromatogram Report", "The report couldn't be created. An error occured.");
