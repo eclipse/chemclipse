@@ -15,10 +15,10 @@ package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.runnables;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.core.ChromatogramClassifier;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.processing.IChromatogramClassifierProcessingInfo;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -40,7 +40,7 @@ public class ClassifierEvaluator extends AbstractChromatogramProcessor implement
 			/*
 			 * Apply the classifier.
 			 */
-			final IChromatogramClassifierProcessingInfo processingInfo = ChromatogramClassifier.applyClassifier((IChromatogramSelectionMSD)chromatogramSelection, CLASSIFIER_ID, monitor);
+			final IProcessingInfo processingInfo = ChromatogramClassifier.applyClassifier((IChromatogramSelectionMSD)chromatogramSelection, CLASSIFIER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			chromatogramSelection.update(true);
 		}
