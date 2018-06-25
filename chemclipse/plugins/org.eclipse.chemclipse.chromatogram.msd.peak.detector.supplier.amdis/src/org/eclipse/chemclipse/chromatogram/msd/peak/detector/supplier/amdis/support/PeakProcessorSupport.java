@@ -23,13 +23,13 @@ import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -57,8 +57,8 @@ public class PeakProcessorSupport {
 	private void extractEluFileAndSetPeaks(IChromatogramMSD chromatogram, int startRetentionTime, int stopRetentionTime, File file, IAmdisSettings amdisSettings, IProgressMonitor monitor) {
 
 		try {
-			IPeakImportConverterProcessingInfo processingInfo = PeakConverterMSD.convert(file, PEAK_CONVERTER_ID, monitor);
-			IPeaks peaks = processingInfo.getPeaks();
+			IProcessingInfo processingInfo = PeakConverterMSD.convert(file, PEAK_CONVERTER_ID, monitor);
+			IPeaks peaks = processingInfo.getProcessingResult(IPeaks.class);
 			//
 			for(IPeak peak : peaks.getPeaks()) {
 				if(peak instanceof IPeakMSD) {
