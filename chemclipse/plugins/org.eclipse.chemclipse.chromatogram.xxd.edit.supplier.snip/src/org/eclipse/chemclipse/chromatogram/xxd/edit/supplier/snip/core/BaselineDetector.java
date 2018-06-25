@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core;
 
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.AbstractBaselineDetector;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBaselineDetectorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.calculator.SnipCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
@@ -27,14 +26,15 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class BaselineDetector extends AbstractBaselineDetector {
 
 	@Override
-	public IBaselineDetectorProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
-		IBaselineDetectorProcessingInfo processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
+		IProcessingInfo processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
 			calculateBaseline(chromatogramSelection, baselineDetectorSettings, monitor);
 		}
@@ -42,7 +42,7 @@ public class BaselineDetector extends AbstractBaselineDetector {
 	}
 
 	@Override
-	public IBaselineDetectorProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		IBaselineDetectorSettings baselineDetectorSettings = PreferenceSupplier.getBaselineDetectorSettings();
 		return setBaseline(chromatogramSelection, baselineDetectorSettings, monitor);
