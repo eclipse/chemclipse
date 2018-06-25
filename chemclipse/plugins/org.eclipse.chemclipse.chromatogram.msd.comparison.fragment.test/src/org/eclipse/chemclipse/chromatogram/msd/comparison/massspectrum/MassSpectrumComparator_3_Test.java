@@ -11,11 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum;
 
-import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.purity.IMassSpectrumPurityResult;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumPurityProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
 import junit.framework.TestCase;
@@ -48,28 +47,28 @@ public class MassSpectrumComparator_3_Test extends TestCase {
 
 	public void testMassSpectrumComparatorCompare_1() {
 
-		IMassSpectrumPurityProcessingInfo processingInfo = MassSpectrumComparator.getPurityResult(null, null);
+		IProcessingInfo processingInfo = MassSpectrumComparator.getPurityResult(null, null);
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
 	public void testMassSpectrumComparatorCompare_2() {
 
-		IMassSpectrumPurityProcessingInfo processingInfo = MassSpectrumComparator.getPurityResult(massSpectrum1, null);
+		IProcessingInfo processingInfo = MassSpectrumComparator.getPurityResult(massSpectrum1, null);
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
 	public void testMassSpectrumComparatorCompare_3() {
 
-		IMassSpectrumPurityProcessingInfo processingInfo = MassSpectrumComparator.getPurityResult(null, massSpectrum2);
+		IProcessingInfo processingInfo = MassSpectrumComparator.getPurityResult(null, massSpectrum2);
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
 	public void testMassSpectrumComparatorCompare_4() {
 
 		try {
-			IMassSpectrumPurityProcessingInfo processingInfo = MassSpectrumComparator.getPurityResult(massSpectrum1, massSpectrum2);
+			IProcessingInfo processingInfo = MassSpectrumComparator.getPurityResult(massSpectrum1, massSpectrum2);
 			assertFalse(processingInfo.hasErrorMessages());
-			IMassSpectrumPurityResult result = processingInfo.getMassSpectrumPurityResult();
+			IMassSpectrumPurityResult result = processingInfo.getProcessingResult(IMassSpectrumPurityResult.class);
 			assertEquals(0.0f, result.getFitValue());
 			assertEquals(0.0f, result.getReverseFitValue());
 		} catch(TypeCastException e) {

@@ -13,11 +13,10 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.core;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.IPeakQuantifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakQuantifier {
 
@@ -27,18 +26,18 @@ public interface IPeakQuantifier {
 	 * @param peak
 	 * @param peakQuantifierSettings
 	 * @param monitor
-	 * @return IPeakQuantifierProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	IPeakQuantifierProcessingInfo quantify(IPeakMSD peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor);
+	IProcessingInfo quantify(IPeakMSD peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * Quantifies the peak.
 	 * 
 	 * @param peak
 	 * @param monitor
-	 * @return {@link IPeakQuantifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakQuantifierProcessingInfo quantify(IPeakMSD peak, IProgressMonitor monitor);
+	IProcessingInfo quantify(IPeakMSD peak, IProgressMonitor monitor);
 
 	/**
 	 * Quantifies the list of peaks.
@@ -46,16 +45,16 @@ public interface IPeakQuantifier {
 	 * @param peaks
 	 * @param peakQuantifierSettings
 	 * @param monitor
-	 * @return IPeakQuantifierProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	IPeakQuantifierProcessingInfo quantify(List<IPeakMSD> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor);
+	IProcessingInfo quantify(List<IPeakMSD> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * Quantifies the list of peaks.
 	 * 
 	 * @param peaks
 	 * @param monitor
-	 * @return {@link IPeakQuantifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakQuantifierProcessingInfo quantify(List<IPeakMSD> peaks, IProgressMonitor monitor);
+	IProcessingInfo quantify(List<IPeakMSD> peaks, IProgressMonitor monitor);
 }

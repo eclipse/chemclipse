@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.processing.IMassSpectrumFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -28,18 +27,18 @@ public interface IMassSpectrumFilter {
 	 * @param massSpectrum
 	 * @param massSpectrumFilterSettings
 	 * @param monitor
-	 * @return {@link IMassSpectrumFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectrumFilterProcessingInfo applyFilter(IScanMSD massSpectrum, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(IScanMSD massSpectrum, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected mass spectrum.
 	 * 
 	 * @param massSpectrum
 	 * @param monitor
-	 * @return {@link IMassSpectrumFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectrumFilterProcessingInfo applyFilter(IScanMSD massSpectrum, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(IScanMSD massSpectrum, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected mass spectra using the settings.
@@ -47,18 +46,18 @@ public interface IMassSpectrumFilter {
 	 * @param massSpectra
 	 * @param massSpectrumFilterSettings
 	 * @param monitor
-	 * @return {@link IMassSpectrumFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectrumFilterProcessingInfo applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected mass spectra.
 	 * 
 	 * @param massSpectra
 	 * @param monitor
-	 * @return {@link IMassSpectrumFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectrumFilterProcessingInfo applyFilter(List<IScanMSD> massSpectra, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IProgressMonitor monitor);
 
 	/**
 	 * Validates the mass spectrum and the settings.

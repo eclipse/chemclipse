@@ -14,5 +14,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.quantitation.core,
  org.eclipse.chemclipse.chromatogram.msd.quantitation.exceptions,
- org.eclipse.chemclipse.chromatogram.msd.quantitation.processing,
  org.eclipse.chemclipse.chromatogram.msd.quantitation.settings

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum;
 
-import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
@@ -24,15 +23,15 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 public interface IMassSpectrumComparator {
 
 	/**
-	 * This methods compares two mass spectra and returns an instance of a {@link IMassSpectrumComparatorProcessingInfo} object.<br/>
+	 * This methods compares two mass spectra and returns an instance of a {@link IProcessingInfo} object.<br/>
 	 * If something has gone wrong, null will be returned.<br/>
 	 * The mass spectra will be left as they are.
 	 * 
 	 * @param unknown
 	 * @param reference
-	 * @return {@link IMassSpectrumComparatorProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectrumComparatorProcessingInfo compare(IScanMSD unknown, IScanMSD reference);
+	IProcessingInfo compare(IScanMSD unknown, IScanMSD reference);
 
 	/**
 	 * Validates the unknown, reference mass spectrum and the ion range.

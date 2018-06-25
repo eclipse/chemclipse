@@ -13,20 +13,19 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.core;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.IPeakQuantifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.PeakQuantifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
 public class PeakQuantifier {
 
@@ -57,11 +56,11 @@ public class PeakQuantifier {
 	 * @param peakQuantifierSettings
 	 * @param peakQuantifierId
 	 * @param monitor
-	 * @return IPeakQuantifierProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	public static IPeakQuantifierProcessingInfo quantify(IPeakMSD peak, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo quantify(IPeakMSD peak, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
 
-		IPeakQuantifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peak, peakQuantifierSettings, monitor);
@@ -77,11 +76,11 @@ public class PeakQuantifier {
 	 * @param peak
 	 * @param peakQuantifierId
 	 * @param monitor
-	 * @return {@link IPeakQuantifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IPeakQuantifierProcessingInfo quantify(IPeakMSD peak, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo quantify(IPeakMSD peak, final String peakQuantifierId, IProgressMonitor monitor) {
 
-		IPeakQuantifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peak, monitor);
@@ -98,11 +97,11 @@ public class PeakQuantifier {
 	 * @param peakQuantifierSettings
 	 * @param peakQuantifierId
 	 * @param monitor
-	 * @return IPeakQuantifierProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	public static IPeakQuantifierProcessingInfo quantify(List<IPeakMSD> peaks, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo quantify(List<IPeakMSD> peaks, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
 
-		IPeakQuantifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peaks, peakQuantifierSettings, monitor);
@@ -118,11 +117,11 @@ public class PeakQuantifier {
 	 * @param peaks
 	 * @param peakQuantifierId
 	 * @param monitor
-	 * @return {@link IPeakQuantifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IPeakQuantifierProcessingInfo quantify(List<IPeakMSD> peaks, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo quantify(List<IPeakMSD> peaks, final String peakQuantifierId, IProgressMonitor monitor) {
 
-		IPeakQuantifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peaks, monitor);
@@ -190,9 +189,9 @@ public class PeakQuantifier {
 	}
 
 	// --------------------------------------------private methods
-	private static IPeakQuantifierProcessingInfo getNoPeakQuantifierProcessingInfo() {
+	private static IProcessingInfo getNoPeakQuantifierProcessingInfo() {
 
-		IPeakQuantifierProcessingInfo processingInfo = new PeakQuantifierProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Peak Quantifier", NO_PEAK_QUANTIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
