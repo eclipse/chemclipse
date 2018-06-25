@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.AbstractMassSpectrumIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.MassSpectraIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkaneIdentifier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
@@ -28,23 +28,23 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 	private static final Logger logger = Logger.getLogger(MassSpectrumIdentifier.class);
 
 	@Override
-	public IMassSpectraIdentifierProcessingInfo identify(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo identify(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) {
 
-		IMassSpectraIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		AlkaneIdentifier alkaneIdentifier = new AlkaneIdentifier();
 		try {
 			//
 			processingInfo = alkaneIdentifier.runIdentification(massSpectraList, null, monitor);
 		} catch(Exception e) {
 			logger.warn(e);
-			processingInfo = new MassSpectraIdentifierProcessingInfo();
+			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage("Alkane Identifier", "Some has gone wrong.");
 		}
 		return processingInfo;
 	}
 
 	@Override
-	public IMassSpectraIdentifierProcessingInfo identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) {
 
 		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
 		massSpectra.add(massSpectrum);
@@ -52,7 +52,7 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 	}
 
 	@Override
-	public IMassSpectraIdentifierProcessingInfo identify(IScanMSD massSpectrum, IProgressMonitor monitor) {
+	public IProcessingInfo identify(IScanMSD massSpectrum, IProgressMonitor monitor) {
 
 		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
 		massSpectra.add(massSpectrum);
@@ -60,7 +60,7 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 	}
 
 	@Override
-	public IMassSpectraIdentifierProcessingInfo identify(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
+	public IProcessingInfo identify(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
 
 		return identify(massSpectra, null, monitor);
 	}

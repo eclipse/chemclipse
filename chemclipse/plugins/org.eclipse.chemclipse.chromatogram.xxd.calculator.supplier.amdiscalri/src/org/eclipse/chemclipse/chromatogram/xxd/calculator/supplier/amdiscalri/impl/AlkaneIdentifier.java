@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifier;
@@ -32,6 +30,7 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -65,7 +64,7 @@ public class AlkaneIdentifier {
 	 * @return {@link IPeakIdentificationResults}
 	 * @throws FileNotFoundException
 	 */
-	public IPeakIdentifierProcessingInfo runPeakIdentification(List<IPeakMSD> peaks, IProgressMonitor monitor) throws FileNotFoundException {
+	public IProcessingInfo runPeakIdentification(List<IPeakMSD> peaks, IProgressMonitor monitor) throws FileNotFoundException {
 
 		/*
 		 * Create the file identifier settings.
@@ -80,7 +79,7 @@ public class AlkaneIdentifier {
 		return peakIdentifier.identify(peaks, peakIdentifierSettings, monitor);
 	}
 
-	public IMassSpectraIdentifierProcessingInfo runIdentification(List<IScanMSD> massSpectraList, IVendorMassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
+	public IProcessingInfo runIdentification(List<IScanMSD> massSpectraList, IVendorMassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
 		/*
 		 * Create the file identifier settings.
