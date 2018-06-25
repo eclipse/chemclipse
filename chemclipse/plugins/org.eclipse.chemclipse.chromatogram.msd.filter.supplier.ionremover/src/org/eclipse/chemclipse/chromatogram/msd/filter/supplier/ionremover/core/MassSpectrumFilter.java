@@ -14,12 +14,8 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.AbstractMassSpectrumFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.processing.IMassSpectrumFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.filter.processing.MassSpectrumFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.filter.result.IMassSpectrumFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.result.MassSpectrumFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
@@ -27,17 +23,20 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.prefer
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IIonRemoverMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 
 	private static final String DESCRIPTION = "Ion Remover Mass Spectrum Filter";
 
 	@Override
-	public IMassSpectrumFilterProcessingInfo applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor) {
 
-		IMassSpectrumFilterProcessingInfo processingInfo = new MassSpectrumFilterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validate(massSpectra, massSpectrumFilterSettings));
 		if(processingInfo.hasErrorMessages()) {
 			return processingInfo;
@@ -60,12 +59,12 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 		}
 		//
 		IMassSpectrumFilterResult massSpectrumFilterResult = new MassSpectrumFilterResult(ResultStatus.OK, "The ion remover filter has been applied successfully.");
-		processingInfo.setMassSpectrumFilterResult(massSpectrumFilterResult);
+		processingInfo.setProcessingResult(massSpectrumFilterResult);
 		return processingInfo;
 	}
 
 	@Override
-	public IMassSpectrumFilterProcessingInfo applyFilter(IScanMSD massSpectrum, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IScanMSD massSpectrum, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor) {
 
 		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
 		massSpectra.add(massSpectrum);
@@ -73,7 +72,7 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 	}
 
 	@Override
-	public IMassSpectrumFilterProcessingInfo applyFilter(IScanMSD massSpectrum, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IScanMSD massSpectrum, IProgressMonitor monitor) {
 
 		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
 		massSpectra.add(massSpectrum);
@@ -82,7 +81,7 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 	}
 
 	@Override
-	public IMassSpectrumFilterProcessingInfo applyFilter(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
 
 		IMassSpectrumFilterSettings massSpectrumFilterSettings = PreferenceSupplier.getMassSpectrumFilterSettings();
 		return applyFilter(massSpectra, massSpectrumFilterSettings, monitor);
