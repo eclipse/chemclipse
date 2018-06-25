@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.core.AbstractPeakDetectorCSD;
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.IPeakDetectorCSDProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.PeakDetectorCSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorCSDSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
@@ -47,7 +45,9 @@ import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -64,12 +64,12 @@ public class PeakDetectorCSD extends AbstractPeakDetectorCSD {
 	private WindowSize movingAverageWindow = WindowSize.SCANS_3;
 
 	@Override
-	public IPeakDetectorCSDProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorCSDSettings peakDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorCSDSettings peakDetectorSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Check whether the chromatogram selection is null or not.
 		 */
-		IPeakDetectorCSDProcessingInfo processingInfo = new PeakDetectorCSDProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validate(chromatogramSelection, peakDetectorSettings, monitor));
 		//
 		if(!processingInfo.hasErrorMessages()) {
@@ -85,7 +85,7 @@ public class PeakDetectorCSD extends AbstractPeakDetectorCSD {
 	}
 
 	@Override
-	public IPeakDetectorCSDProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IProgressMonitor monitor) {
 
 		IFirstDerivativePeakDetectorCSDSettings peakDetectorSettings = PreferenceSupplier.getPeakDetectorCSDSettings();
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);

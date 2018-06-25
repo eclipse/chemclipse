@@ -20,8 +20,6 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.support.IDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core.AbstractPeakDetectorWSD;
-import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.processing.IPeakDetectorWSDProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.processing.PeakDetectorWSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetectorWSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorWSDSettings;
@@ -42,7 +40,9 @@ import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -64,12 +64,12 @@ public class PeakDetectorWSD extends AbstractPeakDetectorWSD {
 	private WindowSize movingAverageWindow = WindowSize.SCANS_3;
 
 	@Override
-	public IPeakDetectorWSDProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorWSDSettings peakDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorWSDSettings peakDetectorSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Check whether the chromatogram selection is null or not.
 		 */
-		IPeakDetectorWSDProcessingInfo processingInfo = new PeakDetectorWSDProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validate(chromatogramSelection, peakDetectorSettings, monitor));
 		//
 		if(!processingInfo.hasErrorMessages()) {
@@ -85,7 +85,7 @@ public class PeakDetectorWSD extends AbstractPeakDetectorWSD {
 	}
 
 	@Override
-	public IPeakDetectorWSDProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor) {
 
 		IFirstDerivativePeakDetectorWSDSettings peakDetectorSettings = PreferenceSupplier.getPeakDetectorWSDSettings();
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);
