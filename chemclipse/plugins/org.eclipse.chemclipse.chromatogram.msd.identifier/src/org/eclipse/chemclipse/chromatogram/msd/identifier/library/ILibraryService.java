@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.library;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.ILibraryServiceProcessingInfo;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface ILibraryService {
 
-	ILibraryServiceProcessingInfo identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor);
+	IProcessingInfo identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor);
 }

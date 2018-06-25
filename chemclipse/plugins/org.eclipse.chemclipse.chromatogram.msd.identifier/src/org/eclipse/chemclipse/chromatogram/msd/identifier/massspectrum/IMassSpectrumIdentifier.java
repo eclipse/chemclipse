@@ -13,10 +13,9 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMassSpectrumIdentifier {
@@ -32,9 +31,9 @@ public interface IMassSpectrumIdentifier {
 	 * @param monitor
 	 *            a {@link IProgressMonitor monitor} to monitor progress and
 	 *            provide cancellation functionality
-	 * @return {@link IMassSpectraIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectraIdentifierProcessingInfo identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor);
+	IProcessingInfo identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * Identifies a mass spectrum.
@@ -44,9 +43,9 @@ public interface IMassSpectrumIdentifier {
 	 * @param monitor
 	 *            a {@link IProgressMonitor monitor} to monitor progress and
 	 *            provide cancellation functionality
-	 * @return {@link IMassSpectraIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectraIdentifierProcessingInfo identify(IScanMSD massSpectrum, IProgressMonitor monitor);
+	IProcessingInfo identify(IScanMSD massSpectrum, IProgressMonitor monitor);
 
 	/**
 	 * Identifies a list of mass spectra.
@@ -57,9 +56,9 @@ public interface IMassSpectrumIdentifier {
 	 * @param monitor
 	 *            a {@link IProgressMonitor monitor} to monitor progress and
 	 *            provide cancellation functionality
-	 * @return {@link IMassSpectraIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectraIdentifierProcessingInfo identify(List<IScanMSD> massSpectra, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor);
+	IProcessingInfo identify(List<IScanMSD> massSpectra, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * Identifies a list of mass spectra.
@@ -69,7 +68,7 @@ public interface IMassSpectrumIdentifier {
 	 * @param monitor
 	 *            a {@link IProgressMonitor monitor} to monitor progress and
 	 *            provide cancellation functionality
-	 * @return {@link IMassSpectraIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IMassSpectraIdentifierProcessingInfo identify(List<IScanMSD> massSpectra, IProgressMonitor monitor);
+	IProcessingInfo identify(List<IScanMSD> massSpectra, IProgressMonitor monitor);
 }

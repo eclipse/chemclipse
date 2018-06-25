@@ -16,14 +16,14 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.core.Identifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.PeakIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -65,9 +65,9 @@ public class PeakIdentifier {
 	}
 
 	// --------------------------------------------private methods
-	private static IPeakIdentifierProcessingInfo getNoIdentifierAvailableProcessingInfo() {
+	private static IProcessingInfo getNoIdentifierAvailableProcessingInfo() {
 
-		IPeakIdentifierProcessingInfo processingInfo = new PeakIdentifierProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Peak Identifier", NO_IDENTIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
@@ -135,12 +135,12 @@ public class PeakIdentifier {
 	 * @param identifierSettings
 	 * @param identifierId
 	 * @param monitor
-	 * @return {@link IPeakIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IPeakIdentifierProcessingInfo identify(IPeakMSD peak, IPeakIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(IPeakMSD peak, IPeakIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		IPeakIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakIdentifier peakIdentifier = getPeakIdentifier(identifierId);
 		if(peakIdentifier != null) {
 			processingInfo = peakIdentifier.identify(peak, identifierSettings, monitor);
@@ -156,12 +156,12 @@ public class PeakIdentifier {
 	 * @param peak
 	 * @param identifierId
 	 * @param monitor
-	 * @return {@link IPeakIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IPeakIdentifierProcessingInfo identify(IPeakMSD peak, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(IPeakMSD peak, String identifierId, IProgressMonitor monitor) {
 
-		IPeakIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakIdentifier peakIdentifier = getPeakIdentifier(identifierId);
 		if(peakIdentifier != null) {
 			processingInfo = peakIdentifier.identify(peak, monitor);
@@ -178,12 +178,12 @@ public class PeakIdentifier {
 	 * @param identifierSettings
 	 * @param identifierId
 	 * @param monitor
-	 * @return {@link IPeakIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IPeakIdentifierProcessingInfo identify(List<IPeakMSD> peaks, IPeakIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(List<IPeakMSD> peaks, IPeakIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		IPeakIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakIdentifier peakIdentifier = getPeakIdentifier(identifierId);
 		if(peakIdentifier != null) {
 			processingInfo = peakIdentifier.identify(peaks, identifierSettings, monitor);
@@ -199,12 +199,12 @@ public class PeakIdentifier {
 	 * @param peaks
 	 * @param identifierId
 	 * @param monitor
-	 * @return {@link IPeakIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IPeakIdentifierProcessingInfo identify(List<IPeakMSD> peaks, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(List<IPeakMSD> peaks, String identifierId, IProgressMonitor monitor) {
 
-		IPeakIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakIdentifier peakIdentifier = getPeakIdentifier(identifierId);
 		if(peakIdentifier != null) {
 			processingInfo = peakIdentifier.identify(peaks, monitor);
@@ -214,9 +214,9 @@ public class PeakIdentifier {
 		return processingInfo;
 	}
 
-	public static IPeakIdentifierProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, String identifierId, IProgressMonitor monitor) {
 
-		IPeakIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakIdentifier peakIdentifier = getPeakIdentifier(identifierId);
 		if(peakIdentifier != null) {
 			processingInfo = peakIdentifier.identify(chromatogramSelectionMSD, monitor);

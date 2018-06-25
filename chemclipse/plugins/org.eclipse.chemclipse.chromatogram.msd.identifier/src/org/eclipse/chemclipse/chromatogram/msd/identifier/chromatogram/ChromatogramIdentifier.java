@@ -11,21 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.msd.identifier.core.Identifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IChromatogramIdentifierSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.Identifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.ChromatogramIdentifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IChromatogramIdentifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IChromatogramIdentifierSettings;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
 /**
  * Use the methods of this class to identify a chromatogram.
@@ -52,11 +51,11 @@ public class ChromatogramIdentifier {
 	 * @param identifierSettings
 	 * @param identifierId
 	 * @param monitor
-	 * @return {@link IChromatogramIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramIdentifierProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelection, IChromatogramIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelection, IChromatogramIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		IChromatogramIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramIdentifier chromatogramIdentifier = getChromatogramIdentifier(identifierId);
 		if(chromatogramIdentifier != null) {
 			processingInfo = chromatogramIdentifier.identify(chromatogramSelection, identifierSettings, monitor);
@@ -72,11 +71,11 @@ public class ChromatogramIdentifier {
 	 * @param chromatogramSelection
 	 * @param identifierId
 	 * @param monitor
-	 * @return {@link IChromatogramIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramIdentifierProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelection, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelection, String identifierId, IProgressMonitor monitor) {
 
-		IChromatogramIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramIdentifier chromatogramIdentifier = getChromatogramIdentifier(identifierId);
 		if(chromatogramIdentifier != null) {
 			processingInfo = chromatogramIdentifier.identify(chromatogramSelection, monitor);
@@ -154,9 +153,9 @@ public class ChromatogramIdentifier {
 	}
 
 	// --------------------------------------------private methods
-	private static IChromatogramIdentifierProcessingInfo getNoIdentifierAvailableProcessingInfo() {
+	private static IProcessingInfo getNoIdentifierAvailableProcessingInfo() {
 
-		IChromatogramIdentifierProcessingInfo processingInfo = new ChromatogramIdentifierProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Chromatogram Identifier", NO_IDENTIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

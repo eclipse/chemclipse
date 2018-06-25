@@ -11,11 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IChromatogramIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IChromatogramIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramIdentifier {
 
@@ -27,16 +26,16 @@ public interface IChromatogramIdentifier {
 	 * @param chromatogramSelection
 	 * @param identifierSettings
 	 * @param monitor
-	 * @return {@link IChromatogramIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IChromatogramIdentifierProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelection, IChromatogramIdentifierSettings identifierSettings, IProgressMonitor monitor);
+	IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelection, IChromatogramIdentifierSettings identifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * The same as the other method but without settings.
 	 * 
 	 * @param chromatogramSelection
 	 * @param monitor
-	 * @return {@link IChromatogramIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IChromatogramIdentifierProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor);
 }

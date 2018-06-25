@@ -15,13 +15,13 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.core.Identifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.ILibraryServiceProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.LibraryServiceProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.CoreException;
@@ -42,9 +42,9 @@ public class LibraryService {
 	private LibraryService() {
 	}
 
-	public static ILibraryServiceProcessingInfo identify(IIdentificationTarget identificationTarget, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(IIdentificationTarget identificationTarget, String identifierId, IProgressMonitor monitor) {
 
-		ILibraryServiceProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		ILibraryService libraryService = getLibraryService(identifierId);
 		if(libraryService != null) {
 			processingInfo = libraryService.identify(identificationTarget, monitor);
@@ -54,9 +54,9 @@ public class LibraryService {
 		return processingInfo;
 	}
 
-	public static ILibraryServiceProcessingInfo identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
 
-		ILibraryServiceProcessingInfo processingInfo = new LibraryServiceProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		ILibraryServiceSupport libraryServiceSupport = getLibraryServiceSupport();
 		try {
 			/*
@@ -166,9 +166,9 @@ public class LibraryService {
 	}
 
 	// --------------------------------------------private methods
-	private static ILibraryServiceProcessingInfo getNoIdentifierAvailableProcessingInfo() {
+	private static IProcessingInfo getNoIdentifierAvailableProcessingInfo() {
 
-		ILibraryServiceProcessingInfo processingInfo = new LibraryServiceProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Library Service", NO_IDENTIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

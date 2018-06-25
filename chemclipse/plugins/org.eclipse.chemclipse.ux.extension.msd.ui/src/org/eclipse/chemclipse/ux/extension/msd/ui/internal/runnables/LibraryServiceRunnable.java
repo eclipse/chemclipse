@@ -14,10 +14,10 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.internal.runnables;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.library.LibraryService;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.ILibraryServiceProcessingInfo;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.ux.extension.msd.ui.views.AbstractMassSpectrumLibraryView;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -41,7 +41,7 @@ public class LibraryServiceRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Library Service", IProgressMonitor.UNKNOWN);
 			try {
-				ILibraryServiceProcessingInfo processingInfo = LibraryService.identify(identificationTarget, monitor);
+				IProcessingInfo processingInfo = LibraryService.identify(identificationTarget, monitor);
 				IMassSpectra massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 				if(massSpectra.size() > 0) {
 					IScanMSD libraryMassSpectrum = massSpectra.getMassSpectrum(1);

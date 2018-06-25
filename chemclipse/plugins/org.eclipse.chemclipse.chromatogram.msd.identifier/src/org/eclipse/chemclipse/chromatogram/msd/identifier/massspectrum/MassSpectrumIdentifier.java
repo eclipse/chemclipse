@@ -13,24 +13,24 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.identifier.core.Identifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResult;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumIdentificationResult;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumIdentificationResults;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.Identifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.MassSpectraIdentifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumIdentificationResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumIdentificationResults;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
 /**
  * Use the methods of this class to identify a mass spectrum.<br/>
@@ -59,9 +59,9 @@ public class MassSpectrumIdentifier {
 	 * @return {@link IPeakIdentificationResult}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IMassSpectraIdentifierProcessingInfo identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		IMassSpectraIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IMassSpectrumIdentifier massSpectrumIdentifier = getMassSpectrumIdentifier(identifierId);
 		if(massSpectrumIdentifier != null) {
 			processingInfo = massSpectrumIdentifier.identify(massSpectrum, identifierSettings, monitor);
@@ -80,9 +80,9 @@ public class MassSpectrumIdentifier {
 	 * @return {@link IPeakIdentificationResult}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IMassSpectraIdentifierProcessingInfo identify(IScanMSD massSpectrum, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(IScanMSD massSpectrum, String identifierId, IProgressMonitor monitor) {
 
-		IMassSpectraIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IMassSpectrumIdentifier massSpectrumIdentifier = getMassSpectrumIdentifier(identifierId);
 		if(massSpectrumIdentifier != null) {
 			processingInfo = massSpectrumIdentifier.identify(massSpectrum, monitor);
@@ -102,9 +102,9 @@ public class MassSpectrumIdentifier {
 	 * @return {@link IMassSpectrumIdentificationResults}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IMassSpectraIdentifierProcessingInfo identify(List<IScanMSD> massSpectra, IMassSpectrumIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(List<IScanMSD> massSpectra, IMassSpectrumIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		IMassSpectraIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IMassSpectrumIdentifier massSpectrumIdentifier = getMassSpectrumIdentifier(identifierId);
 		if(massSpectrumIdentifier != null) {
 			processingInfo = massSpectrumIdentifier.identify(massSpectra, identifierSettings, monitor);
@@ -123,9 +123,9 @@ public class MassSpectrumIdentifier {
 	 * @return {@link IMassSpectrumIdentificationResults}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IMassSpectraIdentifierProcessingInfo identify(List<IScanMSD> massSpectra, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo identify(List<IScanMSD> massSpectra, String identifierId, IProgressMonitor monitor) {
 
-		IMassSpectraIdentifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IMassSpectrumIdentifier massSpectrumIdentifier = getMassSpectrumIdentifier(identifierId);
 		if(massSpectrumIdentifier != null) {
 			processingInfo = massSpectrumIdentifier.identify(massSpectra, monitor);
@@ -203,9 +203,9 @@ public class MassSpectrumIdentifier {
 	}
 
 	// --------------------------------------------private methods
-	private static IMassSpectraIdentifierProcessingInfo getNoIdentifierAvailableProcessingInfo() {
+	private static IProcessingInfo getNoIdentifierAvailableProcessingInfo() {
 
-		IMassSpectraIdentifierProcessingInfo processingInfo = new MassSpectraIdentifierProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "MassSpectrum Identifier", NO_IDENTIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.peak;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakIdentifier {
@@ -27,18 +27,18 @@ public interface IPeakIdentifier {
 	 * @param peak
 	 * @param peakIdentifierSettings
 	 * @param monitor
-	 * @return {@link IPeakIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakIdentifierProcessingInfo identify(IPeakMSD peak, IPeakIdentifierSettings peakIdentifierSettings, IProgressMonitor monitor);
+	IProcessingInfo identify(IPeakMSD peak, IPeakIdentifierSettings peakIdentifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * Identifies the peak.
 	 * 
 	 * @param peak
 	 * @param monitor
-	 * @return {@link IPeakIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakIdentifierProcessingInfo identify(IPeakMSD peak, IProgressMonitor monitor);
+	IProcessingInfo identify(IPeakMSD peak, IProgressMonitor monitor);
 
 	/**
 	 * Identifies a list of peaks.
@@ -46,18 +46,18 @@ public interface IPeakIdentifier {
 	 * @param peaks
 	 * @param peakIdentifierSettings
 	 * @param monitor
-	 * @return {@link IPeakIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakIdentifierProcessingInfo identify(List<IPeakMSD> peaks, IPeakIdentifierSettings peakIdentifierSettings, IProgressMonitor monitor);
+	IProcessingInfo identify(List<IPeakMSD> peaks, IPeakIdentifierSettings peakIdentifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * The same as the other method but without settings.
 	 * 
 	 * @param peaks
 	 * @param monitor
-	 * @return {@link IPeakIdentifierProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakIdentifierProcessingInfo identify(List<IPeakMSD> peaks, IProgressMonitor monitor);
+	IProcessingInfo identify(List<IPeakMSD> peaks, IProgressMonitor monitor);
 
-	IPeakIdentifierProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IProgressMonitor monitor);
+	IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IProgressMonitor monitor);
 }
