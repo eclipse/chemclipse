@@ -24,8 +24,6 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificati
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakInputEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakOutputEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.processing.IPeakIdentificationProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.processing.PeakIdentificationProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.report.IPeakIdentificationBatchProcessReport;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.report.PeakIdentificationBatchProcessReport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
@@ -38,6 +36,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -46,10 +45,10 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 	private static final Logger logger = Logger.getLogger(PeakIdentificationBatchProcess.class);
 
 	@Override
-	public IPeakIdentificationProcessingInfo execute(IPeakIdentificationBatchJob peakIdentificationBatchJob, IProgressMonitor monitor) {
+	public IProcessingInfo execute(IPeakIdentificationBatchJob peakIdentificationBatchJob, IProgressMonitor monitor) {
 
-		IPeakIdentificationProcessingInfo processingInfo = new PeakIdentificationProcessingInfo();
-		IPeakIdentificationProcessingInfo peakIdentificationProcessingInfo;
+		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo peakIdentificationProcessingInfo;
 		IProcessingMessage processingMessage;
 		File peakInputFile;
 		IPeaks peakImports;
@@ -99,7 +98,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		 * Report the results.
 		 */
 		reportTheResults(peakIdentificationBatchJob, batchProcessReport, monitor);
-		processingInfo.setPeakIdentificationBatchProcessReport(batchProcessReport);
+		processingInfo.setProcessingResult(batchProcessReport);
 		return processingInfo;
 	}
 
@@ -108,9 +107,9 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		return PeakConverterMSD.convert(peakInputFile, monitor);
 	}
 
-	private IPeakIdentificationProcessingInfo processPeaks(List<IPeakMSD> peaks, IPeakIdentificationBatchJob peakIdentificationBatchJob, IPeakIdentificationBatchProcessReport batchProcessReport, IProgressMonitor monitor) {
+	private IProcessingInfo processPeaks(List<IPeakMSD> peaks, IPeakIdentificationBatchJob peakIdentificationBatchJob, IPeakIdentificationBatchProcessReport batchProcessReport, IProgressMonitor monitor) {
 
-		IPeakIdentificationProcessingInfo peakIdentificationProcessingInfo = new PeakIdentificationProcessingInfo();
+		IProcessingInfo peakIdentificationProcessingInfo = new ProcessingInfo();
 		/*
 		 * Integrator
 		 */
@@ -133,9 +132,9 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		return peakIdentificationProcessingInfo;
 	}
 
-	private IPeakIdentificationProcessingInfo exportPeaks(List<IPeakMSD> peakList, IPeakIdentificationBatchJob peakIdentificationBatchJob, IProgressMonitor monitor) {
+	private IProcessingInfo exportPeaks(List<IPeakMSD> peakList, IPeakIdentificationBatchJob peakIdentificationBatchJob, IProgressMonitor monitor) {
 
-		IPeakIdentificationProcessingInfo peakIdentificationProcessingInfo = new PeakIdentificationProcessingInfo();
+		IProcessingInfo peakIdentificationProcessingInfo = new ProcessingInfo();
 		List<IPeakOutputEntry> outputEntries = peakIdentificationBatchJob.getPeakOutputEntries();
 		for(IPeakOutputEntry outputEntry : outputEntries) {
 			String converterId = outputEntry.getConverterId();

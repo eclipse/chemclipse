@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.processing.IPeakIdentificationProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakIdentificationBatchProcess {
 
@@ -25,5 +25,5 @@ public interface IPeakIdentificationBatchProcess {
 	 * @param monitor
 	 * @return {@link IProcessingMessage}
 	 */
-	IPeakIdentificationProcessingInfo execute(IPeakIdentificationBatchJob peakIdentificationBatchJob, IProgressMonitor monitor);
+	IProcessingInfo execute(IPeakIdentificationBatchJob peakIdentificationBatchJob, IProgressMonitor monitor);
 }

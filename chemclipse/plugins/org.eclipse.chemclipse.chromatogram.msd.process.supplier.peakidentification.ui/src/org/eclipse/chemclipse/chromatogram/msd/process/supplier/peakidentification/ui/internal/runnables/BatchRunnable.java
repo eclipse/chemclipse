@@ -19,13 +19,13 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.core.PeakIdentificationBatchProcess;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.io.PeakIdentificationBatchJobReader;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.processing.IPeakIdentificationProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.report.IPeakIdentificationBatchProcessReport;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.ResultsPage;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.ResultsPage.SelectionUpdateListener;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -51,9 +51,9 @@ public class BatchRunnable implements IRunnableWithProgress {
 			monitor.beginTask("Peak Identification Batch Process", IProgressMonitor.UNKNOWN);
 			IPeakIdentificationBatchJob peakIdentificationBatchJob = reader.read(file, monitor);
 			PeakIdentificationBatchProcess batchProcess = new PeakIdentificationBatchProcess();
-			final IPeakIdentificationProcessingInfo processingInfo = batchProcess.execute(peakIdentificationBatchJob, monitor);
+			final IProcessingInfo processingInfo = batchProcess.execute(peakIdentificationBatchJob, monitor);
 			try {
-				final IPeakIdentificationBatchProcessReport report = processingInfo.getPeakIdentificationBatchProcessReport();
+				final IPeakIdentificationBatchProcessReport report = processingInfo.getProcessingResult(IPeakIdentificationBatchProcessReport.class);
 				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 				/*
 				 * Update the peak results page
