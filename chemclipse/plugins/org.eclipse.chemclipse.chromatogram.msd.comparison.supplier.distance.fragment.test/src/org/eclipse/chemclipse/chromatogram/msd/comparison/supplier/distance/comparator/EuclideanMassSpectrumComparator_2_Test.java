@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator;
 
-import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
 public class EuclideanMassSpectrumComparator_2_Test extends MassSpectrumSetTestCase {
 
 	private EuclideanMassSpectrumComparator comparator;
-	private IMassSpectrumComparatorProcessingInfo processingInfo;
+	private IProcessingInfo processingInfo;
 	private IMassSpectrumComparisonResult result;
 
 	@Override
@@ -31,7 +31,7 @@ public class EuclideanMassSpectrumComparator_2_Test extends MassSpectrumSetTestC
 		//
 		comparator = new EuclideanMassSpectrumComparator();
 		processingInfo = comparator.compare(unknown, reference);
-		result = processingInfo.getMassSpectrumComparisonResult();
+		result = processingInfo.getProcessingResult(IMassSpectrumComparisonResult.class);
 	}
 
 	@Override

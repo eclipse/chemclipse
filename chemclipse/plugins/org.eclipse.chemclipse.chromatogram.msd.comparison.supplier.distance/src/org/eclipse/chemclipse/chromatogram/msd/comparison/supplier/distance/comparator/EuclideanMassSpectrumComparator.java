@@ -20,8 +20,6 @@ import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.AbstractMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.MassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.results.MassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
@@ -31,13 +29,10 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 public class EuclideanMassSpectrumComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
 
 	@Override
-	public IMassSpectrumComparatorProcessingInfo compare(IScanMSD unknown, IScanMSD reference) {
+	public IProcessingInfo compare(IScanMSD unknown, IScanMSD reference) {
 
-		IMassSpectrumComparatorProcessingInfo processingInfo = new MassSpectrumComparatorProcessingInfo();
-		IProcessingInfo processingInfoValidate = super.validate(unknown, reference);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo processingInfo = super.validate(unknown, reference);
+		if(!processingInfo.hasErrorMessages()) {
 			/*
 			 * Get the match and reverse match factor.
 			 * Internally it's normalized to 1, but a percentage value is used by the MS methods.
@@ -49,7 +44,7 @@ public class EuclideanMassSpectrumComparator extends AbstractMassSpectrumCompara
 			float reverseMatchFactorDirect = (1 - calculateMatchDirect(reference.getExtractedIonSignal(), unknown.getExtractedIonSignal(), distanceMeasure)) * 100;
 			//
 			IMassSpectrumComparisonResult massSpectrumComparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
-			processingInfo.setMassSpectrumComparisonResult(massSpectrumComparisonResult);
+			processingInfo.setProcessingResult(massSpectrumComparisonResult);
 		}
 		return processingInfo;
 	}
