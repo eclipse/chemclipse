@@ -19,8 +19,6 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakExportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.peak.PeakExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSP;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.PeakWriterMSP;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -42,9 +40,9 @@ public class MSPPeakExportConverter extends AbstractPeakExportConverter {
 	private static final String DESCRIPTION = "AMDIS MSP Peak Export";
 
 	@Override
-	public IPeakExportConverterProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) {
 
-		IPeakExportConverterProcessingInfo processingInfo = new PeakExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		/*
 		 * Checks that file and mass spectrum are not null.
 		 */
@@ -59,7 +57,7 @@ public class MSPPeakExportConverter extends AbstractPeakExportConverter {
 				 */
 				PeakWriterMSP peakWriter = new PeakWriterMSP();
 				peakWriter.write(file, peak, append, monitor);
-				processingInfo.setFile(file);
+				processingInfo.setProcessingResult(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "The file couldn't be found: " + file.getAbsolutePath());
@@ -75,9 +73,9 @@ public class MSPPeakExportConverter extends AbstractPeakExportConverter {
 	}
 
 	@Override
-	public IPeakExportConverterProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {
 
-		IPeakExportConverterProcessingInfo processingInfo = new PeakExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		/*
 		 * Checks that file and mass spectra are not null.
 		 */
@@ -92,7 +90,7 @@ public class MSPPeakExportConverter extends AbstractPeakExportConverter {
 				 */
 				PeakWriterMSP peakWriter = new PeakWriterMSP();
 				peakWriter.write(file, peaks, append, monitor);
-				processingInfo.setFile(file);
+				processingInfo.setProcessingResult(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "The file couldn't be found: " + file.getAbsolutePath());

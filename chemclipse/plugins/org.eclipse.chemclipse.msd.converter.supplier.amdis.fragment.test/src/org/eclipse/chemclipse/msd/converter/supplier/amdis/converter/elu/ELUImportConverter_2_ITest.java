@@ -16,21 +16,22 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
+import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.ELUReader;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+
+import junit.framework.TestCase;
 
 public class ELUImportConverter_2_ITest extends TestCase {
 
@@ -58,8 +59,8 @@ public class ELUImportConverter_2_ITest extends TestCase {
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		preferences.putBoolean(PreferenceSupplier.P_EXCLUDE_UNCERTAIN_IONS, true);
 		try {
-			IPeakImportConverterProcessingInfo processingInfo = reader.read(file, new NullProgressMonitor());
-			List<IPeak> peaks = processingInfo.getPeaks().getPeaks();
+			IProcessingInfo processingInfo = reader.read(file, new NullProgressMonitor());
+			List<IPeak> peaks = processingInfo.getProcessingResult(IPeaks.class).getPeaks();
 			IPeakMSD peak1 = (IPeakMSD)peaks.get(0);
 			IPeakMassSpectrum peakMassSpectrum1 = peak1.getPeakModel().getPeakMassSpectrum();
 			List<IIon> ions1 = peakMassSpectrum1.getIons();

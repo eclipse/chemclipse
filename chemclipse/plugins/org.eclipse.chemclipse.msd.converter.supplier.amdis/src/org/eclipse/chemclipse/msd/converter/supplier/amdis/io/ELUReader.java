@@ -35,8 +35,6 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.peak.PeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -48,6 +46,8 @@ import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ELUReader implements IPeakReader {
@@ -68,9 +68,9 @@ public class ELUReader implements IPeakReader {
 	private static final String CARRIAGE_RETURN = "\r";
 
 	@Override
-	public IPeakImportConverterProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
-		IPeakImportConverterProcessingInfo processingInfo = new PeakImportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		String content = FileUtils.readFileToString(file);
 		int numberOfHits = getNumberOfHits(content);
 		if(numberOfHits <= 0) {
@@ -209,9 +209,9 @@ public class ELUReader implements IPeakReader {
 	 * 
 	 * @param content
 	 * @param scanInterval
-	 * @return {@link IPeakImportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	private void extractAmdisPeaks(String content, int scanInterval, IPeakImportConverterProcessingInfo processingInfo) {
+	private void extractAmdisPeaks(String content, int scanInterval, IProcessingInfo processingInfo) {
 
 		if(scanInterval <= 0) {
 			processingInfo.addErrorMessage("AMDIS ELU Parser", "There seems to be no peak in the file. The scan interval is <= 0.");
@@ -228,7 +228,7 @@ public class ELUReader implements IPeakReader {
 					peaks.addPeak(peak);
 				}
 			}
-			processingInfo.setPeaks(peaks);
+			processingInfo.setProcessingResult(peaks);
 		}
 	}
 

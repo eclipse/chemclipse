@@ -13,31 +13,30 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.elu;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakExportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.peak.PeakExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ELUPeakExportConverter extends AbstractPeakExportConverter {
 
 	@Override
-	public IPeakExportConverterProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) {
 
 		return getNoSupportMessage();
 	}
 
 	@Override
-	public IPeakExportConverterProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {
 
 		return getNoSupportMessage();
 	}
 
-	private IPeakExportConverterProcessingInfo getNoSupportMessage() {
+	private IProcessingInfo getNoSupportMessage() {
 
-		IPeakExportConverterProcessingInfo processingInfo = new PeakExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("ELU Peak Export", "There are no capabilities to export peaks in ELU format.");
 		return processingInfo;
 	}

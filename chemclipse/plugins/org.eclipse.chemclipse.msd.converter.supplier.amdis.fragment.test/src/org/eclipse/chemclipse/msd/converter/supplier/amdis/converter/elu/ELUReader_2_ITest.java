@@ -13,12 +13,12 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.elu;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.ELUReader;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -26,7 +26,7 @@ public class ELUReader_2_ITest extends TestCase {
 
 	private ELUReader reader;
 	private File file;
-	private IPeakImportConverterProcessingInfo processingInfo;
+	private IProcessingInfo processingInfo;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -48,7 +48,7 @@ public class ELUReader_2_ITest extends TestCase {
 	public void testRead_1() {
 
 		try {
-			IPeaks peaks = processingInfo.getPeaks();
+			IPeaks peaks = processingInfo.getProcessingResult(IPeaks.class);
 			assertEquals(1132, peaks.size());
 		} catch(TypeCastException e) {
 			assertTrue(false);
