@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.CalculatorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.ICalculatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileReader;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
@@ -28,13 +26,15 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RetentionIndexCalculator {
 
-	public ICalculatorProcessingInfo apply(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo apply(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings, IProgressMonitor monitor) {
 
-		ICalculatorProcessingInfo processingInfo = new CalculatorProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		List<String> retentionIndexFiles = supplierCalculatorSettings.getRetentionIndexFiles();
 		/*
 		 * Create a calibration map for different column polarities.

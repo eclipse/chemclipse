@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.ChromatogramCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.ICalculatorProcessingInfo;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -35,7 +35,7 @@ public class CalculatorRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Retention Index Calculator", IProgressMonitor.UNKNOWN);
-			ICalculatorProcessingInfo processingInfo = ChromatogramCalculator.applyCalculator(chromatogramSelection, CALCULATOR_ID, monitor);
+			IProcessingInfo processingInfo = ChromatogramCalculator.applyCalculator(chromatogramSelection, CALCULATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			updateSelection();
 		} finally {
