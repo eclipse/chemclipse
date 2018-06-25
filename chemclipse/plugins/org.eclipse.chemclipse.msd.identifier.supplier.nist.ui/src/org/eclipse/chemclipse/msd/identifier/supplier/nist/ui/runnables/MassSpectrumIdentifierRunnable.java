@@ -14,13 +14,13 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.runnables;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpectrumIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.VendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -49,7 +49,7 @@ public class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 			identifierSettings.setStoreTargets(PreferenceSupplier.getStoreTargets());
 			identifierSettings.setTimeoutInMinutes(PreferenceSupplier.getTimeoutInMinutes());
 			IScanMSD massSpectrum = chromatogramSelection.getSelectedScan();
-			IMassSpectraIdentifierProcessingInfo processingInfo = MassSpectrumIdentifier.identify(massSpectrum, identifierSettings, IDENTIFIER_ID, monitor);
+			IProcessingInfo processingInfo = MassSpectrumIdentifier.identify(massSpectrum, identifierSettings, IDENTIFIER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
 		} finally {

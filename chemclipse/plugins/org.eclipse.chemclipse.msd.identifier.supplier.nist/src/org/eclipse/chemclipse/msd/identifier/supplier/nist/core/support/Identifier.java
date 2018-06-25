@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -66,6 +65,7 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectru
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.model.implementation.PeakIdentificationResult;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
@@ -171,7 +171,7 @@ public class Identifier {
 	 * @return IPeakIdentificationResults
 	 * @throws FileNotFoundException
 	 */
-	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, IVendorPeakIdentifierSettings peakIdentifierSettings, IPeakIdentifierProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
+	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, IVendorPeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		/*
@@ -587,7 +587,7 @@ public class Identifier {
 	/**
 	 * Assign the compounds to the peaks.
 	 */
-	private IPeakIdentificationResults assignPeakCompounds(ICompounds compounds, List<IPeakMSD> peaks, IPeakIdentificationResults identificationResults, IVendorPeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IPeakIdentifierProcessingInfo processingInfo, IProgressMonitor monitor) {
+	private IPeakIdentificationResults assignPeakCompounds(ICompounds compounds, List<IPeakMSD> peaks, IPeakIdentificationResults identificationResults, IVendorPeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo, IProgressMonitor monitor) {
 
 		monitor.subTask("Assign the identified peaks.");
 		/*
@@ -606,7 +606,7 @@ public class Identifier {
 	 * @param peakIdentifierSettings
 	 * @return {@link INistPeakIdentificationResults}
 	 */
-	public IPeakIdentificationResults getPeakIdentificationResults(ICompounds compounds, List<IPeakMSD> peaks, IVendorPeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IPeakIdentifierProcessingInfo processingInfo) {
+	public IPeakIdentificationResults getPeakIdentificationResults(ICompounds compounds, List<IPeakMSD> peaks, IVendorPeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo) {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		IPeakIdentificationResult identificationResult;
