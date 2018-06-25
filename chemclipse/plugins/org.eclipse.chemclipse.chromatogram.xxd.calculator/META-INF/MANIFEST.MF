@@ -17,5 +17,4 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromato
  org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise,
  org.eclipse.chemclipse.chromatogram.xxd.calculator.exceptions,
  org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences,
- org.eclipse.chemclipse.chromatogram.xxd.calculator.processing,
  org.eclipse.chemclipse.chromatogram.xxd.calculator.settings

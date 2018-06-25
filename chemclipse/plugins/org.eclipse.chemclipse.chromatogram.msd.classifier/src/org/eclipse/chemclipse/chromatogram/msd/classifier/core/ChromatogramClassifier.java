@@ -11,20 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 
+import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.chemclipse.chromatogram.msd.classifier.processing.ChromatogramClassifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.processing.IChromatogramClassifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
 public class ChromatogramClassifier {
 
@@ -48,9 +47,9 @@ public class ChromatogramClassifier {
 	private ChromatogramClassifier() {
 	}
 
-	public static IChromatogramClassifierProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, String classifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, String classifierId, IProgressMonitor monitor) {
 
-		IChromatogramClassifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramClassifier chromatogramClassifier = getChromatogramClassifier(classifierId);
 		if(chromatogramClassifier != null) {
 			processingInfo = chromatogramClassifier.applyClassifier(chromatogramSelection, chromatogramClassifierSettings, monitor);
@@ -60,9 +59,9 @@ public class ChromatogramClassifier {
 		return processingInfo;
 	}
 
-	public static IChromatogramClassifierProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, String classifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, String classifierId, IProgressMonitor monitor) {
 
-		IChromatogramClassifierProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramClassifier chromatogramClassifier = getChromatogramClassifier(classifierId);
 		if(chromatogramClassifier != null) {
 			processingInfo = chromatogramClassifier.applyClassifier(chromatogramSelection, monitor);
@@ -135,9 +134,9 @@ public class ChromatogramClassifier {
 	}
 
 	// --------------------------------------------private methods
-	private static IChromatogramClassifierProcessingInfo getNoClassifierAvailableProcessingInfo() {
+	private static IProcessingInfo getNoClassifierAvailableProcessingInfo() {
 
-		IChromatogramClassifierProcessingInfo processingInfo = new ChromatogramClassifierProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Chromatogram Classifier", NO_CHROMATOGRAM_CLASSIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

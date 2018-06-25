@@ -11,15 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core;
 
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.BaselineDetectorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBaselineDetectorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -67,11 +67,11 @@ public class BaselineDetector {
 	 * @param baselineDetectorSettings
 	 * @param detectorId
 	 * @param monitor
-	 * @return IBaselineDetectorProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	public static IBaselineDetectorProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, final String detectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, final String detectorId, IProgressMonitor monitor) {
 
-		IBaselineDetectorProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IBaselineDetector detector = getBaselineDetector(detectorId);
 		if(detector != null) {
 			processingInfo = detector.setBaseline(chromatogramSelection, baselineDetectorSettings, monitor);
@@ -87,11 +87,11 @@ public class BaselineDetector {
 	 * @param chromatogramSelection
 	 * @param detectorId
 	 * @param monitor
-	 * @return IBaselineDetectorProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	public static IBaselineDetectorProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, final String detectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, final String detectorId, IProgressMonitor monitor) {
 
-		IBaselineDetectorProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IBaselineDetector detector = getBaselineDetector(detectorId);
 		if(detector != null) {
 			processingInfo = detector.setBaseline(chromatogramSelection, monitor);
@@ -159,9 +159,9 @@ public class BaselineDetector {
 	}
 
 	// --------------------------------------------private methods
-	private static IBaselineDetectorProcessingInfo getNoDetectorAvailableProcessingInfo() {
+	private static IProcessingInfo getNoDetectorAvailableProcessingInfo() {
 
-		IBaselineDetectorProcessingInfo processingInfo = new BaselineDetectorProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Baseline Detector", NO_DETECTOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

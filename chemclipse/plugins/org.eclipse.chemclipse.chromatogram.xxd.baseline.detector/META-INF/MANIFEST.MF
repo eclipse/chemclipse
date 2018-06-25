@@ -13,6 +13,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core,
  org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.exceptions,
- org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing,
  org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings
 Bundle-Vendor: ChemClipse

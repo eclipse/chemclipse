@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.CalculatorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.ICalculatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.IChromatogramCalculatorSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -55,14 +55,14 @@ public class ChromatogramCalculator {
 	 * @param filterId
 	 * @return {@link IChromatogramCalculatorProcessingInfo}
 	 */
-	public static ICalculatorProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, String filterId, IProgressMonitor monitor) {
 
-		ICalculatorProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramCalculator chromatogramCalculator = getChromatogramCalculator(filterId);
 		if(chromatogramCalculator != null) {
 			processingInfo = chromatogramCalculator.applyCalculator(chromatogramSelection, chromatogramCalculatorSettings, monitor);
 		} else {
-			processingInfo = new CalculatorProcessingInfo();
+			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_CALCULATOR_AVAILABLE);
 		}
 		return processingInfo;
@@ -78,14 +78,14 @@ public class ChromatogramCalculator {
 	 * @param monitor
 	 * @return {@link IChromatogramFilterProcessingInfo}
 	 */
-	public static ICalculatorProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, String calculatorId, IProgressMonitor monitor) {
+	public static IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, String calculatorId, IProgressMonitor monitor) {
 
-		ICalculatorProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramCalculator chromatogramCalculator = getChromatogramCalculator(calculatorId);
 		if(chromatogramCalculator != null) {
 			processingInfo = chromatogramCalculator.applyCalculator(chromatogramSelection, monitor);
 		} else {
-			processingInfo = new CalculatorProcessingInfo();
+			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_CALCULATOR_AVAILABLE);
 		}
 		return processingInfo;

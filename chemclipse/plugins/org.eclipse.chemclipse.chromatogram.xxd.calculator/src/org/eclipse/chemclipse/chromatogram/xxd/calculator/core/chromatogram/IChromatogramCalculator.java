@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.ICalculatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.IChromatogramCalculatorSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -29,9 +28,9 @@ public interface IChromatogramCalculator {
 	 * @param chromatogramSelection
 	 * @param chromatogramCalculatorSettings
 	 * @param monitor
-	 * @return {@link ICalculatorProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	ICalculatorProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, IProgressMonitor monitor);
+	IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, IProgressMonitor monitor);
 
 	/**
 	 * Apply the filter in the given chromatogram selection.
@@ -40,9 +39,9 @@ public interface IChromatogramCalculator {
 	 * 
 	 * @param chromatogramSelection
 	 * @param monitor
-	 * @return {@link ICalculatorProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	ICalculatorProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
 
 	/**
 	 * Validates the selection and settings and returns a process info instance.

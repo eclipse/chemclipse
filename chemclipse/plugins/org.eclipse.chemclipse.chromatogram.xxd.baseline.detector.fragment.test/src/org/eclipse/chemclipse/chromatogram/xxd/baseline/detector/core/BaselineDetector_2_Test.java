@@ -11,16 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.exceptions.BaselineDetectorSettingsException;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.exceptions.NoBaselineDetectorAvailableException;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetector;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineDetectorSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.exceptions.BaselineDetectorSettingsException;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.exceptions.NoBaselineDetectorAvailableException;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBaselineDetectorProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -51,7 +48,7 @@ public class BaselineDetector_2_Test extends TestCase {
 
 		try {
 			String detectorId = BaselineDetector.getBaselineDetectorSupport().getDetectorId(0);
-			IBaselineDetectorProcessingInfo processingInfo = BaselineDetector.setBaseline(null, null, detectorId, new NullProgressMonitor());
+			IProcessingInfo processingInfo = BaselineDetector.setBaseline(null, null, detectorId, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(NoBaselineDetectorAvailableException e) {
 			assertTrue("NoBaselineDetectorAvailableException", false);
@@ -62,7 +59,7 @@ public class BaselineDetector_2_Test extends TestCase {
 
 		String detectorId = "";
 		IChromatogramSelectionMSD chromatogramSelection = new ChromatogramSelectionMSD(new ChromatogramMSD());
-		IBaselineDetectorProcessingInfo processingInfo = BaselineDetector.setBaseline(chromatogramSelection, null, detectorId, new NullProgressMonitor());
+		IProcessingInfo processingInfo = BaselineDetector.setBaseline(chromatogramSelection, null, detectorId, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 }

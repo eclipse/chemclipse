@@ -11,30 +11,28 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.BaselineDetectorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBaselineDetectorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractBaselineDetector implements IBaselineDetector {
 
 	private static final String ERROR_DESCRIPTION = "Baseline Detector";
 
-	public IBaselineDetectorProcessingInfo validate(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
-		IProcessingMessage processingMessage;
-		IBaselineDetectorProcessingInfo processingInfo = new BaselineDetectorProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramSelection == null) {
-			processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The chromatogram selection is invalid.");
+			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The chromatogram selection is invalid.");
 			processingInfo.addMessage(processingMessage);
 		} else {
 			if(chromatogramSelection.getChromatogram() == null) {
-				processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The chromatogram is invalid.");
+				IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The chromatogram is invalid.");
 				processingInfo.addMessage(processingMessage);
 			}
 		}
@@ -42,7 +40,7 @@ public abstract class AbstractBaselineDetector implements IBaselineDetector {
 		 * Settings
 		 */
 		if(baselineDetectorSettings == null) {
-			processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The baseline detector settings are invalid.");
+			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The baseline detector settings are invalid.");
 			processingInfo.addMessage(processingMessage);
 		}
 		return processingInfo;

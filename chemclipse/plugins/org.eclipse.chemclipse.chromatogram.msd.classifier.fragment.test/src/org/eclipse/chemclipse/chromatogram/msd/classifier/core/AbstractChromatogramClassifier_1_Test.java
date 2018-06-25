@@ -11,21 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.processing.IChromatogramClassifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
+import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
-/**
- * @author eselmeister
- */
 public class AbstractChromatogramClassifier_1_Test extends TestCase {
 
 	private IChromatogramClassifier classifier;
@@ -50,7 +46,7 @@ public class AbstractChromatogramClassifier_1_Test extends TestCase {
 		chromatogramSelection = null;
 		chromatogramClassifierSettings = null;
 		classifier = new TestChromatogramClassifier();
-		IChromatogramClassifierProcessingInfo processingInfo = classifier.applyClassifier(chromatogramSelection, chromatogramClassifierSettings, new NullProgressMonitor());
+		IProcessingInfo processingInfo = classifier.applyClassifier(chromatogramSelection, chromatogramClassifierSettings, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
@@ -64,7 +60,7 @@ public class AbstractChromatogramClassifier_1_Test extends TestCase {
 		}
 		chromatogramClassifierSettings = null;
 		classifier = new TestChromatogramClassifier();
-		IChromatogramClassifierProcessingInfo processingInfo = classifier.applyClassifier(chromatogramSelection, chromatogramClassifierSettings, new NullProgressMonitor());
+		IProcessingInfo processingInfo = classifier.applyClassifier(chromatogramSelection, chromatogramClassifierSettings, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 }

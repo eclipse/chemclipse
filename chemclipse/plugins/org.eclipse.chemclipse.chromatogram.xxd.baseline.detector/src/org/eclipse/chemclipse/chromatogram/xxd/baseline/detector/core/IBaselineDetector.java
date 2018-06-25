@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBaselineDetectorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IBaselineDetector {
 
@@ -31,18 +31,18 @@ public interface IBaselineDetector {
 	 * @param chromatogram
 	 * @param baselineDetectorSettings
 	 * @param monitor
-	 * @return {@link IBaselineDetectorProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IBaselineDetectorProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
+	IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
 
 	/**
 	 * This class does the same as the other setBaseline method but does not require settings.<br/>
 	 * 
 	 * @param chromatogramSelection
 	 * @param monitor
-	 * @return {@link IBaselineDetectorProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IBaselineDetectorProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
 
 	/**
 	 * Validates the parameters.
@@ -50,7 +50,7 @@ public interface IBaselineDetector {
 	 * @param chromatogramSelection
 	 * @param baselineDetectorSettings
 	 * @param monitor
-	 * @return {@link IBaselineDetectorProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IBaselineDetectorProcessingInfo validate(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
+	IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
 }
