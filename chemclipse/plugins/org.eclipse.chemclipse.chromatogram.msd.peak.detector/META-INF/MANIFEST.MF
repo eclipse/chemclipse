@@ -13,7 +13,6 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.peak.detector.core,
- org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing,
  org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings,
  org.eclipse.chemclipse.chromatogram.msd.peak.support
 Bundle-Vendor: ChemClipse

@@ -11,19 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.chromatogram.peak.detector.processing.IPeakDetectorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.peak.detector.processing.PeakDetectorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractPeakDetector implements IPeakDetector {
 
 	@Override
-	public IPeakDetectorProcessingInfo validate(IChromatogramSelection chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
-		IPeakDetectorProcessingInfo processingInfo = new PeakDetectorProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramSelection == null) {
 			processingInfo.addErrorMessage("Peak Detector", "The chromatogram selection must not be null.");
 		}

@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core;
 
-import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.processing.IPeakDetectorWSDProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.processing.PeakDetectorWSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetectorWSDSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.CoreException;
@@ -54,11 +54,11 @@ public class PeakDetectorWSD {
 	 * @param peakDetectorSettings
 	 * @param peakDetectorId
 	 * @param monitor
-	 * @return IPeakDetectorProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	public static IPeakDetectorWSDProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorWSDSettings peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorWSDSettings peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
 
-		IPeakDetectorWSDProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakDetectorWSD peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, peakDetectorSettings, monitor);
@@ -75,11 +75,11 @@ public class PeakDetectorWSD {
 	 * @param chromatogramSelection
 	 * @param peakDetectorId
 	 * @param monitor
-	 * @return IPeakDetectorProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	public static IPeakDetectorWSDProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
 
-		IPeakDetectorWSDProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakDetectorWSD peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, monitor);
@@ -146,9 +146,9 @@ public class PeakDetectorWSD {
 		return null;
 	}
 
-	private static IPeakDetectorWSDProcessingInfo getNoPeakDetectorAvailableProcessingInfo() {
+	private static IProcessingInfo getNoPeakDetectorAvailableProcessingInfo() {
 
-		IPeakDetectorWSDProcessingInfo processingInfo = new PeakDetectorWSDProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Peak Detector WSD", NO_PEAK_DETECTOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

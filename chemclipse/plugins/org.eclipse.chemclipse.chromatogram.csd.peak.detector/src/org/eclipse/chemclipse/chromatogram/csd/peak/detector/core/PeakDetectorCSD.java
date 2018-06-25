@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.peak.detector.core;
 
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.IPeakDetectorCSDProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.PeakDetectorCSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorCSDSettings;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -54,11 +54,11 @@ public class PeakDetectorCSD {
 	 * @param peakDetectorSettings
 	 * @param peakDetectorId
 	 * @param monitor
-	 * @return IPeakDetectorProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	public static IPeakDetectorCSDProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorCSDSettings peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorCSDSettings peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
 
-		IPeakDetectorCSDProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakDetectorCSD peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, peakDetectorSettings, monitor);
@@ -75,11 +75,11 @@ public class PeakDetectorCSD {
 	 * @param chromatogramSelection
 	 * @param peakDetectorId
 	 * @param monitor
-	 * @return IPeakDetectorProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	public static IPeakDetectorCSDProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
 
-		IPeakDetectorCSDProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IPeakDetectorCSD peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, monitor);
@@ -146,9 +146,9 @@ public class PeakDetectorCSD {
 		return null;
 	}
 
-	private static IPeakDetectorCSDProcessingInfo getNoPeakDetectorAvailableProcessingInfo() {
+	private static IProcessingInfo getNoPeakDetectorAvailableProcessingInfo() {
 
-		IPeakDetectorCSDProcessingInfo processingInfo = new PeakDetectorCSDProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Peak Detector FID", NO_PEAK_DETECTOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
