@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.converter.report;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.converter.processing.report.IReportImportConverterProcessingInfo;
-import org.eclipse.chemclipse.converter.processing.report.ReportImportConverterProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -42,9 +42,9 @@ public class ReportConverter {
 	private ReportConverter() {
 	}
 
-	public static IReportImportConverterProcessingInfo convert(final File file, final String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo convert(final File file, final String converterId, IProgressMonitor monitor) {
 
-		IReportImportConverterProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IReportImportConverter importConverter = getReportImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
@@ -103,9 +103,9 @@ public class ReportConverter {
 		return reportConverterSupport;
 	}
 
-	private static IReportImportConverterProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
+	private static IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IReportImportConverterProcessingInfo processingInfo = new ReportImportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("Report Import Converter", "There is no suitable converter available to load the report from the file: " + file.getAbsolutePath());
 		return processingInfo;
 	}

@@ -17,7 +17,7 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakReader {
@@ -31,11 +31,11 @@ public interface IPeakReader {
 	 * 
 	 * @param file
 	 * @param monitor
-	 * @return {@link IPeakImportConverterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 * @throws FileNotFoundException
 	 * @throws FileIsNotReadableException
 	 * @throws FileIsEmptyException
 	 * @throws IOException
 	 */
-	IPeakImportConverterProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException;
+	IProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException;
 }

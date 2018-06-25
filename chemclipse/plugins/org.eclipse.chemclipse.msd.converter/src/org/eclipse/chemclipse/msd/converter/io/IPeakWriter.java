@@ -17,12 +17,12 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
 public interface IPeakWriter {
 
-	IPeakExportConverterProcessingInfo write(File file, IPeakMSD peak, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException;
+	IProcessingInfo write(File file, IPeakMSD peak, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException;
 
-	IPeakExportConverterProcessingInfo write(File file, IPeaks peaks, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException;
+	IProcessingInfo write(File file, IPeaks peaks, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException;
 }

@@ -14,24 +14,21 @@ package org.eclipse.chemclipse.msd.converter.peak;
 import java.io.File;
 import java.util.List;
 
+import org.eclipse.chemclipse.converter.core.Converter;
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.chemclipse.converter.core.Converter;
-import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.peak.PeakExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.peak.PeakImportConverterProcessingInfo;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
 /**
  * This class offers several methods to import and export peaks.<br/>
@@ -57,9 +54,9 @@ public class PeakConverterMSD {
 	private PeakConverterMSD() {
 	}
 
-	public static IPeakImportConverterProcessingInfo convert(File file, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo convert(File file, String converterId, IProgressMonitor monitor) {
 
-		IPeakImportConverterProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
@@ -72,14 +69,14 @@ public class PeakConverterMSD {
 		return processingInfo;
 	}
 
-	public static IPeakImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public static IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
 		return getPeaks(file, monitor);
 	}
 
-	public static IPeakExportConverterProcessingInfo convert(File file, IPeaks peaks, boolean append, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo convert(File file, IPeaks peaks, boolean append, String converterId, IProgressMonitor monitor) {
 
-		IPeakExportConverterProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
@@ -92,9 +89,9 @@ public class PeakConverterMSD {
 		return processingInfo;
 	}
 
-	private static IPeakImportConverterProcessingInfo getPeaks(final File file, IProgressMonitor monitor) {
+	private static IProcessingInfo getPeaks(final File file, IProgressMonitor monitor) {
 
-		IPeakImportConverterProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		PeakConverterSupport converterSupport = getPeakConverterSupport();
 		/*
 		 * Try to convert.
@@ -133,7 +130,7 @@ public class PeakConverterMSD {
 					processingInfo = importConverter.convert(file, monitor);
 					if(!processingInfo.hasErrorMessages()) {
 						try {
-							processingInfo.getPeaks();
+							processingInfo.getProcessingResult(IPeaks.class);
 							return processingInfo;
 						} catch(TypeCastException e) {
 							logger.warn(e);
@@ -229,17 +226,17 @@ public class PeakConverterMSD {
 		return peakConverterSupport;
 	}
 
-	private static IPeakExportConverterProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
+	private static IProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
 
-		IPeakExportConverterProcessingInfo processingInfo = new PeakExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "Peak Export Converter", "There is no suitable converter available to export the peaks to the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
 	}
 
-	private static IPeakImportConverterProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
+	private static IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IPeakImportConverterProcessingInfo processingInfo = new PeakImportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "Peak Import Converter", "There is no suitable converter available to load the peaks from the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

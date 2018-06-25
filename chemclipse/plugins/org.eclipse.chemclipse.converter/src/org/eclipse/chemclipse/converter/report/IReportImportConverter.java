@@ -14,10 +14,10 @@ package org.eclipse.chemclipse.converter.report;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IImportConverter;
-import org.eclipse.chemclipse.converter.processing.report.IReportImportConverterProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IReportImportConverter extends IImportConverter {
 
-	IReportImportConverterProcessingInfo convert(File file, IProgressMonitor monitor);
+	IProcessingInfo convert(File file, IProgressMonitor monitor);
 }

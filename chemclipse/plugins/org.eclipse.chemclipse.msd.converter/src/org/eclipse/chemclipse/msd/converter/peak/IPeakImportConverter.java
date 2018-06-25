@@ -13,10 +13,9 @@ package org.eclipse.chemclipse.msd.converter.peak;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.core.IImportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakImportConverter extends IImportConverter {
 
@@ -25,7 +24,7 @@ public interface IPeakImportConverter extends IImportConverter {
 	 * 
 	 * @param file
 	 * @param monitor
-	 * @return IPeakImportConverterProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	IPeakImportConverterProcessingInfo convert(File file, IProgressMonitor monitor);
+	IProcessingInfo convert(File file, IProgressMonitor monitor);
 }

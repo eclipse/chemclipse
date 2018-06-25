@@ -17,7 +17,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import org.eclipse.chemclipse.converter.core.IExportConverter;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
@@ -30,9 +29,9 @@ public interface IPeakExportConverter extends IExportConverter {
 	 * @param peak
 	 * @param append
 	 * @param monitor
-	 * @return IPeakExportConverterProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	IPeakExportConverterProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor);
+	IProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor);
 
 	/**
 	 * Writes a the peak list to a file.
@@ -41,9 +40,9 @@ public interface IPeakExportConverter extends IExportConverter {
 	 * @param peaks
 	 * @param append
 	 * @param monitor
-	 * @return IPeakExportConverterProcessingInfo
+	 * @return IProcessingInfo
 	 */
-	IPeakExportConverterProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor);
+	IProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor);
 
 	/**
 	 * Checks the peak instance.
