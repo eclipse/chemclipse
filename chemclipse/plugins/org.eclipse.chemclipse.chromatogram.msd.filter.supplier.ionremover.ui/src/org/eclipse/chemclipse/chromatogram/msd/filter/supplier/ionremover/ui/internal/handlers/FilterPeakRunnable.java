@@ -13,11 +13,11 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.in
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.filter.processing.IPeakFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.PeakFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -49,7 +49,7 @@ public class FilterPeakRunnable implements IRunnableWithProgress {
 			 * Apply the filter.
 			 */
 			IPeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
-			final IPeakFilterProcessingInfo processingInfo;
+			final IProcessingInfo processingInfo;
 			if(useSelectedPeak) {
 				processingInfo = PeakFilter.applyFilter(chromatogramSelectionMSD.getSelectedPeak(), peakFilterSettings, FILTER_ID_PEAK, monitor);
 			} else {
