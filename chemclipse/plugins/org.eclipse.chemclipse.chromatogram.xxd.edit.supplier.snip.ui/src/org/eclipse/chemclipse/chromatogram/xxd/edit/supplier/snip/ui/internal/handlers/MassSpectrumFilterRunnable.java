@@ -15,11 +15,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.internal.h
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.MassSpectrumFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.processing.IMassSpectrumFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -44,7 +44,7 @@ public class MassSpectrumFilterRunnable implements IRunnableWithProgress {
 			 * Apply the filter.
 			 */
 			IMassSpectrumFilterSettings massSpectrumFilterSettings = PreferenceSupplier.getMassSpectrumFilterSettings();
-			final IMassSpectrumFilterProcessingInfo processingInfo;
+			final IProcessingInfo processingInfo;
 			processingInfo = MassSpectrumFilter.applyFilter(massSpectrum, massSpectrumFilterSettings, FILTER_ID_SNIP_MS, monitor);
 			//
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
