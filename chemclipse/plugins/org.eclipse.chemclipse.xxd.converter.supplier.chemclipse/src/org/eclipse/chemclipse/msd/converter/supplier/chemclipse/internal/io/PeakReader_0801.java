@@ -39,8 +39,6 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.peak.PeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.VendorIon;
 import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
@@ -53,6 +51,8 @@ import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -65,13 +65,13 @@ public class PeakReader_0801 extends AbstractZipReader implements IPeakReader {
 	private static final Logger logger = Logger.getLogger(PeakReader_0801.class);
 
 	@Override
-	public IPeakImportConverterProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		ZipFile zipFile = new ZipFile(file);
-		IPeakImportConverterProcessingInfo processingInfo = new PeakImportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		try {
 			IPeaks peaks = readPeaksFromZipFile(zipFile, monitor);
-			processingInfo.setPeaks(peaks);
+			processingInfo.setProcessingResult(peaks);
 		} finally {
 			zipFile.close();
 		}
