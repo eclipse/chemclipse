@@ -25,14 +25,14 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.RetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaExtractionPeaks implements IDataExtraction {
@@ -138,8 +138,8 @@ public class PcaExtractionPeaks implements IDataExtraction {
 				/*
 				 * Try to catch exceptions if wrong files have been selected.
 				 */
-				IPeakImportConverterProcessingInfo processingInfo = PeakConverterMSD.convert(new File(peakFile.getInputFile()), monitor);
-				IPeaks peaks = processingInfo.getPeaks();
+				IProcessingInfo processingInfo = PeakConverterMSD.convert(new File(peakFile.getInputFile()), monitor);
+				IPeaks peaks = processingInfo.getProcessingResult(IPeaks.class);
 				String name = peakFile.getName();
 				peakMap.put(name, peaks);
 			} catch(Exception e) {
