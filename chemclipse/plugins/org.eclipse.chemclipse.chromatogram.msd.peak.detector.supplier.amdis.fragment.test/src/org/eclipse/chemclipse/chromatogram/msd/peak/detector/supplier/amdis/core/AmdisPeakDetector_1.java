@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.cor
 import java.io.File;
 import java.util.Date;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.IPeakDetectorMSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.AmdisSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IAmdisSettings;
@@ -61,7 +60,7 @@ public class AmdisPeakDetector_1 extends TestCase {
 	public void testIntegrate() {
 
 		Date start = new Date();
-		IPeakDetectorMSDProcessingInfo processingInfo = detector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
+		IProcessingInfo processingInfo = detector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
 		assertFalse(processingInfo.hasErrorMessages());
 		Date stop = new Date();
 		System.out.println("Zeit ms:" + (stop.getTime() - start.getTime()));
