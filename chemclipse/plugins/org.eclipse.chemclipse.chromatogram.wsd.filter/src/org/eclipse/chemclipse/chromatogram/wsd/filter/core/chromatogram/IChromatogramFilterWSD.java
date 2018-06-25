@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.wsd.filter.core.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
@@ -23,26 +22,26 @@ public interface IChromatogramFilterWSD {
 	/**
 	 * Apply the filter in the given chromatogram selection and take care of the
 	 * filter settings.<br/>
-	 * Return an {@link IChromatogramFilterProcessingInfo} instance.<br/>
+	 * Return an {@link IProcessingInfo} instance.<br/>
 	 * If there is no monitor instance, use a {@link NullProgressMonitor}.
 	 * 
 	 * @param chromatogramSelection
 	 * @param chromatogramFilterSettings
 	 * @param monitor
-	 * @return {@link IChromatogramFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor);
 
 	/**
 	 * Apply the filter in the given chromatogram selection.
-	 * Return an {@link IChromatogramFilterProcessingInfo} instance.<br/>
+	 * Return an {@link IProcessingInfo} instance.<br/>
 	 * If there is no monitor instance, use a {@link NullProgressMonitor}.
 	 * 
 	 * @param chromatogramSelection
 	 * @param monitor
-	 * @return {@link IChromatogramFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor);
 
 	/**
 	 * Validates the selection and settings and returns a process info instance.

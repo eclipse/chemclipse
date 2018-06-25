@@ -15,22 +15,22 @@ import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChro
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.impl.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilter implements IChromatogramFilter {
 
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IChromatogramFilterProcessingInfo processingInfo = new ChromatogramFilterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
 		if(processingInfo.hasErrorMessages()) {
 			return processingInfo;
@@ -46,12 +46,12 @@ public class ChromatogramFilter extends AbstractChromatogramFilter implements IC
 		chromatogramSelection.setStartRetentionTime((int)(supplierFilterSettings.getStartRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 		chromatogramSelection.setStopRetentionTime((int)(supplierFilterSettings.getStopRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 		IChromatogramFilterResult chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "Chromatogram Selection applied");
-		processingInfo.setChromatogramFilterResult(chromatogramFilterResult);
+		processingInfo.setProcessingResult(chromatogramFilterResult);
 		return processingInfo;
 	}
 
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getSupplierFilterSettings();
 		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);

@@ -34,7 +34,7 @@ public interface IChromatogramCalculator {
 
 	/**
 	 * Apply the filter in the given chromatogram selection.
-	 * Return an {@link IChromatogramFilterProcessingInfo} instance.<br/>
+	 * Return an {@link IProcessingInfo} instance.<br/>
 	 * If there is no monitor instance, use a {@link NullProgressMonitor}.
 	 * 
 	 * @param chromatogramSelection

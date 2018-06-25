@@ -76,7 +76,7 @@ public class ChromatogramCalculator {
 	 * @param chromatogramSelection
 	 * @param calculatorId
 	 * @param monitor
-	 * @return {@link IChromatogramFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
 	public static IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, String calculatorId, IProgressMonitor monitor) {
 

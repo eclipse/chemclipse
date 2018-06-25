@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import org.eclipse.chemclipse.chromatogram.filter.processing.IPeakFilterProcessingInfo;
+
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
@@ -29,18 +29,18 @@ public interface IPeakFilter {
 	 * @param peak
 	 * @param peakFilterSettings
 	 * @param monitor
-	 * @return {@link IPeakFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakFilterProcessingInfo applyFilter(IPeakCSD peak, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(IPeakCSD peak, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected peak.
 	 * 
 	 * @param peak
 	 * @param monitor
-	 * @return {@link IPeakFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakFilterProcessingInfo applyFilter(IPeakCSD peak, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(IPeakCSD peak, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected peaks using the settings.
@@ -48,18 +48,18 @@ public interface IPeakFilter {
 	 * @param peaks
 	 * @param peakFilterSettings
 	 * @param monitor
-	 * @return {@link IPeakFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakFilterProcessingInfo applyFilter(List<IPeakCSD> peaks, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(List<IPeakCSD> peaks, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected peaks.
 	 * 
 	 * @param peaks
 	 * @param monitor
-	 * @return {@link IPeakFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakFilterProcessingInfo applyFilter(List<IPeakCSD> peaks, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(List<IPeakCSD> peaks, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected peaks in the chromatogram selection using the settings.
@@ -67,18 +67,18 @@ public interface IPeakFilter {
 	 * @param chromatogramSelection
 	 * @param peakFilterSettings
 	 * @param monitor
-	 * @return {@link IPeakFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakFilterProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected peaks in the chromatogram selection.
 	 * 
 	 * @param chromatogramSelection
 	 * @param monitor
-	 * @return {@link IPeakFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	IPeakFilterProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, IProgressMonitor monitor);
 
 	/**
 	 * Validates the peak and the settings.

@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -25,14 +25,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class TestChromatogramFilter extends AbstractChromatogramFilterMSD {
 
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		return new ChromatogramFilterProcessingInfo();
+		return new ProcessingInfo();
 	}
 
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		return new ChromatogramFilterProcessingInfo();
+		return new ProcessingInfo();
 	}
 }

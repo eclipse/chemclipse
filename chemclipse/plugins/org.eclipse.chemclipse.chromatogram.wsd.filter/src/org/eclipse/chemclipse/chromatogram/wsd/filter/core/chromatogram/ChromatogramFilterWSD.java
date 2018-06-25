@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.wsd.filter.core.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -54,16 +54,16 @@ public class ChromatogramFilterWSD {
 	 * @param chromatogramSelection
 	 * @param chromatogramFilterSettings
 	 * @param filterId
-	 * @return {@link IChromatogramFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IChromatogramFilterProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramFilterWSD chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 		} else {
-			processingInfo = new ChromatogramFilterProcessingInfo();
+			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
 		}
 		return processingInfo;
@@ -77,16 +77,16 @@ public class ChromatogramFilterWSD {
 	 * @param chromatogramSelection
 	 * @param filterId
 	 * @param monitor
-	 * @return {@link IChromatogramFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
 
-		IChromatogramFilterProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramFilterWSD chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
 		} else {
-			processingInfo = new ChromatogramFilterProcessingInfo();
+			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
 		}
 		return processingInfo;

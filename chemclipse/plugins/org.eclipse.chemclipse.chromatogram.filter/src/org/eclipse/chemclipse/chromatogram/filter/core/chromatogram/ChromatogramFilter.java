@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.core.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -54,16 +54,16 @@ public class ChromatogramFilter {
 	 * @param chromatogramSelection
 	 * @param chromatogramFilterSettings
 	 * @param filterId
-	 * @return {@link IChromatogramFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IChromatogramFilterProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 		} else {
-			processingInfo = new ChromatogramFilterProcessingInfo();
+			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
 		}
 		return processingInfo;
@@ -77,16 +77,16 @@ public class ChromatogramFilter {
 	 * @param chromatogramSelection
 	 * @param filterId
 	 * @param monitor
-	 * @return {@link IChromatogramFilterProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, String filterId, IProgressMonitor monitor) {
 
-		IChromatogramFilterProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
 		} else {
-			processingInfo = new ChromatogramFilterProcessingInfo();
+			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
 		}
 		return processingInfo;
