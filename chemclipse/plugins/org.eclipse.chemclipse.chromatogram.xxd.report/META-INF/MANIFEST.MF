@@ -17,6 +17,5 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.report.chromatogram,
  org.eclipse.chemclipse.chromatogram.xxd.report.core,
  org.eclipse.chemclipse.chromatogram.xxd.report.exceptions,
  org.eclipse.chemclipse.chromatogram.xxd.report.model,
- org.eclipse.chemclipse.chromatogram.xxd.report.processing,
  org.eclipse.chemclipse.chromatogram.xxd.report.settings,
  org.eclipse.chemclipse.chromatogram.xxd.report.support

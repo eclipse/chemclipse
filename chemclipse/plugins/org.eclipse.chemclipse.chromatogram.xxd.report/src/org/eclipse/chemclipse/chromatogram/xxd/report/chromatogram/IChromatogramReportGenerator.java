@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.report.chromatogram;
 import java.io.File;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.report.processing.IChromatogramReportProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -23,13 +22,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramReportGenerator {
 
-	IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor);
+	IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor);
 
-	IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor);
+	IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor);
 
-	IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor);
+	IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor);
 
-	IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IProgressMonitor monitor);
+	IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IProgressMonitor monitor);
 
 	/**
 	 * This method validates whether the file is writable or not.<br/>

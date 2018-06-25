@@ -17,12 +17,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.chromatogram.IChromatogramReportGenerator;
-import org.eclipse.chemclipse.chromatogram.xxd.report.processing.ChromatogramReportProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.report.processing.IChromatogramReportProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -50,9 +50,9 @@ public class ChromatogramReports {
 	private ChromatogramReports() {
 	}
 
-	public static IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
+	public static IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
 
-		IChromatogramReportProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);
 		if(reportGenerator != null) {
 			processingInfo = reportGenerator.generate(file, append, chromatogram, chromatogramReportSettings, monitor);
@@ -62,9 +62,9 @@ public class ChromatogramReports {
 		return processingInfo;
 	}
 
-	public static IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, String reportSupplierId, IProgressMonitor monitor) {
+	public static IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, String reportSupplierId, IProgressMonitor monitor) {
 
-		IChromatogramReportProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);
 		if(reportGenerator != null) {
 			processingInfo = reportGenerator.generate(file, append, chromatogram, monitor);
@@ -74,9 +74,9 @@ public class ChromatogramReports {
 		return processingInfo;
 	}
 
-	public static IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
+	public static IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
 
-		IChromatogramReportProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);
 		if(reportGenerator != null) {
 			processingInfo = reportGenerator.generate(file, append, chromatograms, chromatogramReportSettings, monitor);
@@ -86,9 +86,9 @@ public class ChromatogramReports {
 		return processingInfo;
 	}
 
-	public static IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, String reportSupplierId, IProgressMonitor monitor) {
+	public static IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, String reportSupplierId, IProgressMonitor monitor) {
 
-		IChromatogramReportProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);
 		if(reportGenerator != null) {
 			processingInfo = reportGenerator.generate(file, append, chromatograms, monitor);
@@ -192,9 +192,9 @@ public class ChromatogramReports {
 		return null;
 	}
 
-	private static IChromatogramReportProcessingInfo getNoChromatogramReportAvailableProcessingInfo(File file) {
+	private static IProcessingInfo getNoChromatogramReportAvailableProcessingInfo(File file) {
 
-		IChromatogramReportProcessingInfo processingInfo = new ChromatogramReportProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("Chromatogram Report Generator", "There is no suitable chromatogram report generator available for: " + file.getAbsolutePath());
 		return processingInfo;
 	}
