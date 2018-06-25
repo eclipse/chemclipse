@@ -15,8 +15,6 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.AbstractM
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.math.GeometricDistanceCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.math.IMatchCalculator;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.MassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.results.MassSpectrumComparisonResult;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -40,13 +38,10 @@ public class MassSpectrumComparator extends AbstractMassSpectrumComparator imple
 	private static final Logger logger = Logger.getLogger(MassSpectrumComparator.class);
 
 	@Override
-	public IMassSpectrumComparatorProcessingInfo compare(IScanMSD unknown, IScanMSD reference) {
+	public IProcessingInfo compare(IScanMSD unknown, IScanMSD reference) {
 
-		IMassSpectrumComparatorProcessingInfo processingInfo = new MassSpectrumComparatorProcessingInfo();
-		IProcessingInfo processingInfoValidate = super.validate(unknown, reference);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo processingInfo = super.validate(unknown, reference);
+		if(!processingInfo.hasErrorMessages()) {
 			try {
 				IMatchCalculator geometricDistanceCalculator = new GeometricDistanceCalculator();
 				IScanMSD unknownAdjusted = adjustMassSpectrum(unknown);
@@ -66,7 +61,7 @@ public class MassSpectrumComparator extends AbstractMassSpectrumComparator imple
 				 * Result
 				 */
 				IMassSpectrumComparisonResult massSpectrumComparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
-				processingInfo.setMassSpectrumComparisonResult(massSpectrumComparisonResult);
+				processingInfo.setProcessingResult(massSpectrumComparisonResult);
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage("Alfassi MassSpectrum Comparator", "The mass spectrum couldn't be cloned.");
