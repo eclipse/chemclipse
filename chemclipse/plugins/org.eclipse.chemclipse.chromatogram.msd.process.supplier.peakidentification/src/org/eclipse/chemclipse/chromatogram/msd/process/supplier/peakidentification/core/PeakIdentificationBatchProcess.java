@@ -37,7 +37,6 @@ import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverter
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.IPeakIntegratorProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -118,7 +117,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		 * Integrator
 		 */
 		String integratorId = peakIdentificationBatchJob.getPeakIntegrationEntry().getProcessorId();
-		IPeakIntegratorProcessingInfo processingInfoIntegrator = PeakIntegrator.integrate(peaks, integratorId, monitor);
+		IProcessingInfo processingInfoIntegrator = PeakIntegrator.integrate(peaks, integratorId, monitor);
 		peakIdentificationProcessingInfo.addMessages(processingInfoIntegrator);
 		/*
 		 * Identifier
