@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.EvaluationException;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.IPeakQuantifierProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
 public interface IQuantitationCalculatorMSD {
 
@@ -38,5 +38,5 @@ public interface IQuantitationCalculatorMSD {
 	 * @param quantitationCompounds
 	 * @return List<IQuantitationEntryMSD>
 	 */
-	List<IQuantitationEntryMSD> calculateQuantitationResults(IPeakMSD peak, List<IQuantitationCompoundMSD> quantitationCompounds, IPeakQuantifierProcessingInfo processingInfo);
+	List<IQuantitationEntryMSD> calculateQuantitationResults(IPeakMSD peak, List<IQuantitationCompoundMSD> quantitationCompounds, IProcessingInfo processingInfo);
 }

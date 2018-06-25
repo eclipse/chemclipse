@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.core;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.IPeakQuantifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.core.PeakQuantitationCalculatorISTD;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChemClipsePeakQuantifierISTD {
@@ -24,12 +24,12 @@ public class ChemClipsePeakQuantifierISTD {
 		calculatorISTD = new PeakQuantitationCalculatorISTD();
 	}
 
-	public IPeakQuantifierProcessingInfo quantifySelectedPeak(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo quantifySelectedPeak(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		return calculatorISTD.quantifySelectedPeak(chromatogramSelection, monitor);
 	}
 
-	public IPeakQuantifierProcessingInfo quantifyAllPeaks(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo quantifyAllPeaks(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		return calculatorISTD.quantifyAllPeaks(chromatogramSelection, monitor);
 	}

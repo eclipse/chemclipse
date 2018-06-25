@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.PeakQuantifier;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.IPeakQuantifierProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -44,7 +44,7 @@ public class QuantifyAllPeaksESTDRunnable implements IRunnableWithProgress {
 			for(IChromatogramPeakMSD peak : chromatogramSelection.getChromatogramMSD().getPeaks()) {
 				peaks.add(peak);
 			}
-			IPeakQuantifierProcessingInfo processingInfo = PeakQuantifier.quantify(peaks, PEAK_QUANTIFIER_ID, monitor);
+			IProcessingInfo processingInfo = PeakQuantifier.quantify(peaks, PEAK_QUANTIFIER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 			if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
 				/*

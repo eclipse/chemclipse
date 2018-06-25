@@ -14,10 +14,11 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
@@ -25,10 +26,9 @@ import org.eclipse.chemclipse.msd.model.core.quantitation.IntegrationQuantitatio
 import org.eclipse.chemclipse.msd.model.exceptions.EvaluationException;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.IPeakQuantifierProcessingInfo;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.equations.QuadraticEquation;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
@@ -37,7 +37,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	private static final Logger logger = Logger.getLogger(QuantitationCalculatorMSD.class);
 
 	@Override
-	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeakMSD peak, List<IQuantitationCompoundMSD> quantitationCompounds, IPeakQuantifierProcessingInfo processingInfo) {
+	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeakMSD peak, List<IQuantitationCompoundMSD> quantitationCompounds, IProcessingInfo processingInfo) {
 
 		List<IQuantitationEntryMSD> quantitationEntries = new ArrayList<IQuantitationEntryMSD>();
 		for(IQuantitationCompoundMSD quantitationCompound : quantitationCompounds) {
