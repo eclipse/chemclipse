@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromato
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.CombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.ICombinedIntegratorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ICombinedIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
@@ -27,6 +26,7 @@ import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -60,13 +60,13 @@ public class CombinedIntegratorRunnable implements IRunnableWithProgress {
 			/*
 			 * Show the processing view if error messages occurred.
 			 */
-			ICombinedIntegratorProcessingInfo processingInfo = CombinedIntegrator.integrate(chromatogramSelection, combinedIntegrationSettings, COMBINED_INTEGRATOR_ID, monitor);
+			IProcessingInfo processingInfo = CombinedIntegrator.integrate(chromatogramSelection, combinedIntegrationSettings, COMBINED_INTEGRATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			/*
 			 * Try to set the results.
 			 */
 			try {
-				ICombinedIntegrationResult combinedIntegrationResult = processingInfo.getCombinedIntegrationResult();
+				ICombinedIntegrationResult combinedIntegrationResult = processingInfo.getProcessingResult(ICombinedIntegrationResult.class);
 				IntegrationResultUpdateNotifier.fireUpdateChange(combinedIntegrationResult);
 				updateSelection();
 			} catch(TypeCastException e) {

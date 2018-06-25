@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.co
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined.AbstractCombinedIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.CombinedIntegratorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.ICombinedIntegratorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.CombinedIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
@@ -27,6 +25,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.pre
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class CombinedIntegrator extends AbstractCombinedIntegrator {
@@ -34,9 +33,9 @@ public class CombinedIntegrator extends AbstractCombinedIntegrator {
 	private static final Logger logger = Logger.getLogger(CombinedIntegrator.class);
 
 	@Override
-	public ICombinedIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings, IProgressMonitor monitor) {
+	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings, IProgressMonitor monitor) {
 
-		ICombinedIntegratorProcessingInfo processingInfo = new CombinedIntegratorProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		try {
 			validate(chromatogramSelection, combinedIntegrationSettings);
 			/*
@@ -53,7 +52,7 @@ public class CombinedIntegrator extends AbstractCombinedIntegrator {
 			 * Build the result and return it.
 			 */
 			CombinedIntegrationResult combinedIntegrationResult = new CombinedIntegrationResult(chromatogramIntegrationResults, peakIntegrationResults);
-			processingInfo.setCombinedIntegrationResult(combinedIntegrationResult);
+			processingInfo.setProcessingResult(combinedIntegrationResult);
 		} catch(ValueMustNotBeNullException e) {
 			logger.warn(e);
 			addIntegratorExceptionInfo(processingInfo);
@@ -75,7 +74,7 @@ public class CombinedIntegrator extends AbstractCombinedIntegrator {
 	}
 
 	@Override
-	public ICombinedIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		if(combinedIntegrationSettings == null)
 			combinedIntegrationSettings = PreferenceSupplier.getCombinedIntegrationSettings();

@@ -16,11 +16,11 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram.ChromatogramIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.IChromatogramIntegratorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.notifier.IntegrationResultUpdateNotifier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,13 +48,13 @@ public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 			/*
 			 * Show the processing view if error messages occurred.
 			 */
-			IChromatogramIntegratorProcessingInfo processingInfo = ChromatogramIntegrator.integrate(chromatogramSelection, chromatogramIntegrationSettings, CHROMATOGRAM_INTEGRATOR_ID, monitor);
+			IProcessingInfo processingInfo = ChromatogramIntegrator.integrate(chromatogramSelection, chromatogramIntegrationSettings, CHROMATOGRAM_INTEGRATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			/*
 			 * Try to set the results.
 			 */
 			try {
-				IChromatogramIntegrationResults chromatogramIntegrationResults = processingInfo.getChromatogramIntegrationResults();
+				IChromatogramIntegrationResults chromatogramIntegrationResults = processingInfo.getProcessingResult(IChromatogramIntegrationResults.class);
 				IntegrationResultUpdateNotifier.fireUpdateChange(chromatogramIntegrationResults);
 			} catch(TypeCastException e) {
 				logger.warn(e);

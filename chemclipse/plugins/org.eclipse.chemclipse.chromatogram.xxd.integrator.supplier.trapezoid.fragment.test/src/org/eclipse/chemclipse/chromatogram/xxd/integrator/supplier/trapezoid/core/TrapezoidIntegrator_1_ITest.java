@@ -11,23 +11,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.CombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.ICombinedIntegratorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ICombinedIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.TestPathHelper;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core.CombinedIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.ChromatogramImportTestCase;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.TrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class TrapezoidIntegrator_1_ITest extends ChromatogramImportTestCase {
 
@@ -55,14 +53,14 @@ public class TrapezoidIntegrator_1_ITest extends ChromatogramImportTestCase {
 
 	public void testIntegrate_1() {
 
-		ICombinedIntegratorProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		ICombinedIntegrationResult result;
 		IChromatogramIntegrationResults results;
 		IChromatogramIntegrationResult integrationResult;
 		//
 		processingInfo = integrator.integrate(chromatogramSelection, combinedIntegrationSettings, new NullProgressMonitor());
 		try {
-			result = processingInfo.getCombinedIntegrationResult();
+			result = processingInfo.getProcessingResult(ICombinedIntegrationResult.class);
 			results = result.getChromatogramIntegrationResults();
 			integrationResult = results.getChromatogramIntegrationResult(0);
 			assertEquals("Ion", AbstractIon.TIC_ION, integrationResult.getIon());
