@@ -35,7 +35,6 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificati
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.IPeakIntegratorProcessingInfo;
@@ -125,7 +124,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		 * Identifier
 		 */
 		String identifierId = peakIdentificationBatchJob.getPeakIdentificationEntry().getProcessorId();
-		IPeakIdentifierProcessingInfo processingInfoIdentifier = PeakIdentifier.identify(peaks, identifierId, monitor);
+		IProcessingInfo processingInfoIdentifier = PeakIdentifier.identify(peaks, identifierId, monitor);
 		peakIdentificationProcessingInfo.addMessages(processingInfoIdentifier);
 		/*
 		 * Add the peaks to the report.
