@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.core;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.core.AbstractChromatogramClassifier;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.ChromatogramSelectionException;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.ClassifierSettingsException;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.processing.ChromatogramClassifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.processing.IChromatogramClassifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.exceptions.ClassifierException;
@@ -31,8 +29,10 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -42,9 +42,9 @@ public class Classifier extends AbstractChromatogramClassifier {
 	private IWncIons wncIons;
 
 	@Override
-	public IChromatogramClassifierProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
 
-		IChromatogramClassifierProcessingInfo processingInfo = new ChromatogramClassifierProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		try {
 			validate(chromatogramSelection, chromatogramClassifierSettings);
 			setClassifierSettings(chromatogramClassifierSettings);
@@ -59,7 +59,7 @@ public class Classifier extends AbstractChromatogramClassifier {
 				IMeasurementResult measurementResult = new MeasurementResult(IChromatogramResultWNC.NAME, IChromatogramResultWNC.IDENTIFIER, "This is percentage area list of selected ions.", wncIons);
 				chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
 				//
-				processingInfo.setChromatogramClassifierResult(chromatogramClassifierResult);
+				processingInfo.setProcessingResult(chromatogramClassifierResult);
 			} catch(ClassifierException e) {
 				IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, IChromatogramResultWNC.NAME, "The chromatogram couldn't be classified.");
 				processingInfo.addMessage(processingMessage);
@@ -77,7 +77,7 @@ public class Classifier extends AbstractChromatogramClassifier {
 	}
 
 	@Override
-	public IChromatogramClassifierProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		IChromatogramClassifierSettings chromatogramClassifierSettings = PreferenceSupplier.getChromatogramClassifierSettings();
 		return applyClassifier(chromatogramSelection, chromatogramClassifierSettings, monitor);
