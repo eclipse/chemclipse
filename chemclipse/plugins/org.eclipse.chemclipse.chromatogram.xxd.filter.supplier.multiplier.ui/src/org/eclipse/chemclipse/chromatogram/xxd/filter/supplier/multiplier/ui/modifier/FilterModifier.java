@@ -14,9 +14,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.ui.mo
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -36,7 +36,7 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 
 		if(getChromatogramSelection() != null) {
 			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
-			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_ID, monitor);
+			final IProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			Display.getDefault().asyncExec(new Runnable() {
 

@@ -12,8 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
@@ -31,15 +29,17 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
 	// TODO IProgressMonitor
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IChromatogramFilterProcessingInfo processingInfo = new ChromatogramFilterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
 		if(processingInfo.hasErrorMessages()) {
 			return processingInfo;
@@ -55,13 +55,13 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 		} catch(FilterException e) {
 			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage());
 		}
-		processingInfo.setChromatogramFilterResult(chromatogramFilterResult);
+		processingInfo.setProcessingResult(chromatogramFilterResult);
 		return processingInfo;
 	}
 
 	// TODO Junit
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
 		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
