@@ -14,9 +14,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoot
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetector;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBaselineDetectorProcessingInfo;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -36,7 +36,7 @@ public class BaselineDetectorRunnable extends AbstractChromatogramProcessor impl
 
 		if(getChromatogramSelection() != null) {
 			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
-			IBaselineDetectorProcessingInfo processingInfo = BaselineDetector.setBaseline(chromatogramSelection, BASELINE_DETECTOR_ID, monitor);
+			IProcessingInfo processingInfo = BaselineDetector.setBaseline(chromatogramSelection, BASELINE_DETECTOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			Display.getDefault().asyncExec(new Runnable() {
 
