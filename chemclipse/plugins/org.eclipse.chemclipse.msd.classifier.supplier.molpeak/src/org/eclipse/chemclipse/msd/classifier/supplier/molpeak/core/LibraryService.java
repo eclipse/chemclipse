@@ -15,11 +15,11 @@ package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.library.AbstractLibraryService;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.library.ILibraryService;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.ILibraryServiceProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.LibraryServiceProcessingInfo;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.identifier.BasePeakIdentifier;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class LibraryService extends AbstractLibraryService implements ILibraryService {
@@ -31,9 +31,9 @@ public class LibraryService extends AbstractLibraryService implements ILibrarySe
 	}
 
 	@Override
-	public ILibraryServiceProcessingInfo identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
+	public IProcessingInfo identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
 
-		ILibraryServiceProcessingInfo processingInfo = new LibraryServiceProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		try {
 			monitor.subTask("Base Peak Identifier - get reference mass spectrum");
 			validateIdentificationTarget(identificationTarget);
