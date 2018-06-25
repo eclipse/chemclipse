@@ -12,12 +12,12 @@
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.CombinedIntegratorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.ICombinedIntegratorProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -44,9 +44,9 @@ public class CombinedIntegrator {
 	private CombinedIntegrator() {
 	}
 
-	public static ICombinedIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings, String integratorId, IProgressMonitor monitor) {
+	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings, String integratorId, IProgressMonitor monitor) {
 
-		ICombinedIntegratorProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		ICombinedIntegrator integrator = getCombinedIntegrator(integratorId);
 		if(integrator != null) {
 			processingInfo = integrator.integrate(chromatogramSelection, combinedIntegrationSettings, monitor);
@@ -56,14 +56,14 @@ public class CombinedIntegrator {
 		return processingInfo;
 	}
 
-	public static ICombinedIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, String integratorId, IProgressMonitor monitor) {
+	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, String integratorId, IProgressMonitor monitor) {
 
 		return integrate(chromatogramSelection, getCombinedIntegrator(integratorId), monitor);
 	}
 
-	public static ICombinedIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrator integrator, IProgressMonitor monitor) {
+	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrator integrator, IProgressMonitor monitor) {
 
-		ICombinedIntegratorProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		if(integrator != null) {
 			processingInfo = integrator.integrate(chromatogramSelection, monitor);
 		} else {
@@ -131,9 +131,9 @@ public class CombinedIntegrator {
 	}
 
 	// --------------------------------------------private methods
-	private static ICombinedIntegratorProcessingInfo getNoIntegratorAvailableProcessingInfo() {
+	private static IProcessingInfo getNoIntegratorAvailableProcessingInfo() {
 
-		ICombinedIntegratorProcessingInfo processingInfo = new CombinedIntegratorProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Combined Integrator", NO_INTEGRATOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

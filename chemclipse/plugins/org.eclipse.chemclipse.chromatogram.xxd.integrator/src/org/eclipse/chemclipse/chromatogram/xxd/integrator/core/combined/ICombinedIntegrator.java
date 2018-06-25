@@ -11,15 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.ICombinedIntegratorProcessingInfo;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface ICombinedIntegrator {
 
-	ICombinedIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings, IProgressMonitor monitor);
+	IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings, IProgressMonitor monitor);
 
-	ICombinedIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
 }

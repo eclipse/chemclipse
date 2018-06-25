@@ -11,20 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.ChromatogramIntegratorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.IChromatogramIntegratorProcessingInfo;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
 /**
  * This plugin offers an extension point to add several peak integrators.<br/>
@@ -68,11 +67,11 @@ public class ChromatogramIntegrator {
 	 * @param chromatogramIntegrationSettings
 	 * @param integratorId
 	 * @param monitor
-	 * @return {@link IChromatogramIntegratorProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings, String integratorId, IProgressMonitor monitor) {
+	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings, String integratorId, IProgressMonitor monitor) {
 
-		IChromatogramIntegratorProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramIntegrator integrator = getIntegrator(integratorId);
 		if(integrator != null) {
 			processingInfo = integrator.integrate(chromatogramSelection, chromatogramIntegrationSettings, monitor);
@@ -88,11 +87,11 @@ public class ChromatogramIntegrator {
 	 * @param chromatogramSelection
 	 * @param integratorId
 	 * @param monitor
-	 * @return {@link IChromatogramIntegratorProcessingInfo}
+	 * @return {@link IProcessingInfo}
 	 */
-	public static IChromatogramIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, String integratorId, IProgressMonitor monitor) {
+	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, String integratorId, IProgressMonitor monitor) {
 
-		IChromatogramIntegratorProcessingInfo processingInfo;
+		IProcessingInfo processingInfo;
 		IChromatogramIntegrator integrator = getIntegrator(integratorId);
 		if(integrator != null) {
 			processingInfo = integrator.integrate(chromatogramSelection, monitor);
@@ -161,9 +160,9 @@ public class ChromatogramIntegrator {
 	}
 
 	// --------------------------------------------private methods
-	private static IChromatogramIntegratorProcessingInfo getNoIntegratorAvailableProcessingInfo() {
+	private static IProcessingInfo getNoIntegratorAvailableProcessingInfo() {
 
-		IChromatogramIntegratorProcessingInfo processingInfo = new ChromatogramIntegratorProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Chromatogram Integrator", NO_INTEGRATOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

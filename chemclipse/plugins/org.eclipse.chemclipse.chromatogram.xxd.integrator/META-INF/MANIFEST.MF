@@ -22,7 +22,6 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromato
  org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined,
  org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks,
  org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions,
- org.eclipse.chemclipse.chromatogram.xxd.integrator.processing,
  org.eclipse.chemclipse.chromatogram.xxd.integrator.result,
  org.eclipse.chemclipse.chromatogram.xxd.integrator.support
 Bundle-Vendor: ChemClipse

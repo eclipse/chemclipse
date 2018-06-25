@@ -13,24 +13,23 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.IPeakIntegratorProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakIntegrator {
 
-	IPeakIntegratorProcessingInfo integrate(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor);
+	IProcessingInfo integrate(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor);
 
-	IPeakIntegratorProcessingInfo integrate(IPeak peak, IProgressMonitor monitor);
+	IProcessingInfo integrate(IPeak peak, IProgressMonitor monitor);
 
-	IPeakIntegratorProcessingInfo integrate(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor);
+	IProcessingInfo integrate(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor);
 
-	IPeakIntegratorProcessingInfo integrate(List<? extends IPeak> peaks, IProgressMonitor monitor);
+	IProcessingInfo integrate(List<? extends IPeak> peaks, IProgressMonitor monitor);
 
-	IPeakIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor);
+	IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor);
 
-	IPeakIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
 }
