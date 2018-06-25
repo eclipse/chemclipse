@@ -14,9 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.chemclipse.chromatogram.filter.processing.IPeakFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.filter.processing.PeakFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.IPeakFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.PeakFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
@@ -27,20 +24,23 @@ import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.Pr
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.ISnipPeakFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakFilter extends AbstractPeakFilter {
 
 	private static final String DESCRIPTION = "SNIP Filter Peak(s) Mass Spectra";
 
 	@Override
-	public IPeakFilterProcessingInfo applyFilter(List<IPeakMSD> peaks, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(List<IPeakMSD> peaks, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
 
-		IPeakFilterProcessingInfo processingInfo = new PeakFilterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validate(peaks, peakFilterSettings));
 		if(processingInfo.hasErrorMessages()) {
 			return processingInfo;
@@ -68,13 +68,13 @@ public class PeakFilter extends AbstractPeakFilter {
 		}
 		//
 		IPeakFilterResult peakFilterResult = new PeakFilterResult(ResultStatus.OK, "The SNIP filter has been applied successfully.");
-		processingInfo.setPeakFilterResult(peakFilterResult);
+		processingInfo.setProcessingResult(peakFilterResult);
 		return processingInfo;
 	}
 
 	// ----------------------------------------------------CONVENIENT METHODS
 	@Override
-	public IPeakFilterProcessingInfo applyFilter(IPeakMSD peak, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IPeakMSD peak, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
 
 		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
 		peaks.add(peak);
@@ -82,7 +82,7 @@ public class PeakFilter extends AbstractPeakFilter {
 	}
 
 	@Override
-	public IPeakFilterProcessingInfo applyFilter(IPeakMSD peak, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IPeakMSD peak, IProgressMonitor monitor) {
 
 		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
 		peaks.add(peak);
@@ -91,16 +91,16 @@ public class PeakFilter extends AbstractPeakFilter {
 	}
 
 	@Override
-	public IPeakFilterProcessingInfo applyFilter(List<IPeakMSD> peaks, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(List<IPeakMSD> peaks, IProgressMonitor monitor) {
 
 		IPeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
 		return applyFilter(peaks, peakFilterSettings, monitor);
 	}
 
 	@Override
-	public IPeakFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
 
-		IPeakFilterProcessingInfo processingInfo = new PeakFilterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validate(chromatogramSelection, peakFilterSettings));
 		if(processingInfo.hasErrorMessages()) {
 			return processingInfo;
@@ -124,7 +124,7 @@ public class PeakFilter extends AbstractPeakFilter {
 	}
 
 	@Override
-	public IPeakFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		IPeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
 		return applyFilter(chromatogramSelection, peakFilterSettings, monitor);
