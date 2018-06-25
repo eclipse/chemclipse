@@ -13,18 +13,17 @@ package org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.TestPathHelper;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
 public class MatlabParafacPeakImportConverter_7_ITest extends TestCase {
 
 	private IPeaks peaks;
-	private IPeakImportConverterProcessingInfo processingInfo;
+	private IProcessingInfo processingInfo;
 	private MatlabParafacPeakImportConverter converter;
 
 	@Override
@@ -34,7 +33,7 @@ public class MatlabParafacPeakImportConverter_7_ITest extends TestCase {
 		converter = new MatlabParafacPeakImportConverter();
 		File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PARAFAC_TEST_3));
 		processingInfo = converter.convert(file, new NullProgressMonitor());
-		peaks = processingInfo.getPeaks();
+		peaks = processingInfo.getProcessingResult(IPeaks.class);
 	}
 
 	@Override

@@ -22,8 +22,6 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakWriter;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.peak.PeakExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.IConstants;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
@@ -32,6 +30,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -48,30 +47,30 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 	}
 
 	@Override
-	public IPeakExportConverterProcessingInfo write(File file, IPeakMSD peak, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public IProcessingInfo write(File file, IPeakMSD peak, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		IPeakExportConverterProcessingInfo processingInfo = new PeakExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		FileWriter fileWriter = new FileWriter(file, append);
 		writePeak(fileWriter, peak, processingInfo);
 		fileWriter.close();
 		/*
 		 * Add the file as the result object.
 		 */
-		processingInfo.setFile(file);
+		processingInfo.setProcessingResult(file);
 		return processingInfo;
 	}
 
 	@Override
-	public IPeakExportConverterProcessingInfo write(File file, IPeaks peaks, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public IProcessingInfo write(File file, IPeaks peaks, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		IPeakExportConverterProcessingInfo processingInfo = new PeakExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		FileWriter fileWriter = new FileWriter(file, append);
 		writePeaks(fileWriter, peaks, processingInfo);
 		fileWriter.close();
 		/*
 		 * Add the file as the result object.
 		 */
-		processingInfo.setFile(file);
+		processingInfo.setProcessingResult(file);
 		return processingInfo;
 	}
 

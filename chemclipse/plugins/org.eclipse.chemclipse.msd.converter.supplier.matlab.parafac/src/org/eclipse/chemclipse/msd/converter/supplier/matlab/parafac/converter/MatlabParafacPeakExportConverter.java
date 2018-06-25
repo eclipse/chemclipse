@@ -21,8 +21,6 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakWriter;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakExportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakExportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.peak.PeakExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.SpecificationValidator;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.io.MatlabParafacPeakWriter;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -38,10 +36,10 @@ public class MatlabParafacPeakExportConverter extends AbstractPeakExportConverte
 	private static final Logger logger = Logger.getLogger(MatlabParafacPeakExportConverter.class);
 
 	@Override
-	public IPeakExportConverterProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) {
 
 		IProcessingMessage processingMessage;
-		IPeakExportConverterProcessingInfo processingInfo = new PeakExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		/*
 		 * Checks that file and mass spectrum are not null.
 		 */
@@ -55,7 +53,7 @@ public class MatlabParafacPeakExportConverter extends AbstractPeakExportConverte
 				 * Convert the peak.
 				 */
 				IPeakWriter peakWriter = new MatlabParafacPeakWriter();
-				IPeakExportConverterProcessingInfo processingInfoWriter = peakWriter.write(file, peak, append);
+				IProcessingInfo processingInfoWriter = peakWriter.write(file, peak, append);
 				processingInfo.addMessages(processingInfoWriter);
 				processingInfo.setProcessingResult(processingInfoWriter.getProcessingResult());
 				//
@@ -77,10 +75,10 @@ public class MatlabParafacPeakExportConverter extends AbstractPeakExportConverte
 	}
 
 	@Override
-	public IPeakExportConverterProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {
 
 		IProcessingMessage processingMessage;
-		IPeakExportConverterProcessingInfo processingInfo = new PeakExportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		/*
 		 * Checks that file and mass spectra are not null.
 		 */
@@ -94,7 +92,7 @@ public class MatlabParafacPeakExportConverter extends AbstractPeakExportConverte
 				 * Convert the peaks.
 				 */
 				IPeakWriter peakWriter = new MatlabParafacPeakWriter();
-				IPeakExportConverterProcessingInfo processingInfoWriter = peakWriter.write(file, peaks, append);
+				IProcessingInfo processingInfoWriter = peakWriter.write(file, peaks, append);
 				processingInfo.addMessages(processingInfoWriter);
 				processingInfo.setProcessingResult(processingInfoWriter.getProcessingResult());
 				//

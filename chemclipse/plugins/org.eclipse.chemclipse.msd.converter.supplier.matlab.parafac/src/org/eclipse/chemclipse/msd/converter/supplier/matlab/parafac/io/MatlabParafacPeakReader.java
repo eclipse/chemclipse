@@ -17,28 +17,26 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.peak.PeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.ParseStatus;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.PeakSupport;
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.PeakIon;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MatlabParafacPeakReader implements IPeakReader {
 
@@ -46,15 +44,15 @@ public class MatlabParafacPeakReader implements IPeakReader {
 	private ParseStatus parseStatus;
 
 	@Override
-	public IPeakImportConverterProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
-		IPeakImportConverterProcessingInfo processingInfo = new PeakImportConverterProcessingInfo();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		validateContent(file, processingInfo);
 		readPeaks(file, processingInfo);
 		return processingInfo;
 	}
 
-	private void validateContent(File file, IPeakImportConverterProcessingInfo processingInfo) throws FileIsNotReadableException, IOException {
+	private void validateContent(File file, IProcessingInfo processingInfo) throws FileIsNotReadableException, IOException {
 
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -67,7 +65,7 @@ public class MatlabParafacPeakReader implements IPeakReader {
 		}
 	}
 
-	private void readPeaks(File file, IPeakImportConverterProcessingInfo processingInfo) throws FileIsNotReadableException, IOException, IllegalArgumentException {
+	private void readPeaks(File file, IProcessingInfo processingInfo) throws FileIsNotReadableException, IOException, IllegalArgumentException {
 
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -103,7 +101,7 @@ public class MatlabParafacPeakReader implements IPeakReader {
 		 * Don't forget to add the last peak.
 		 */
 		addPeak(peaks, peakSupport, processingInfo, file);
-		processingInfo.setPeaks(peaks);
+		processingInfo.setProcessingResult(peaks);
 		/*
 		 * Close the streams
 		 */
