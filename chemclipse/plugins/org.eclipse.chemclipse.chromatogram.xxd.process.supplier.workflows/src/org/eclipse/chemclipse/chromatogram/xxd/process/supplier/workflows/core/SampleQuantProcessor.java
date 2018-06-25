@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.SampleQuantSubstance;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.converter.model.IReportRowModel;
-import org.eclipse.chemclipse.converter.processing.report.IReportImportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.report.ReportConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
@@ -223,9 +222,9 @@ public class SampleQuantProcessor {
 	private IReportRowModel extractReportRowModel(File fileImport, String extensionPointId) {
 
 		IReportRowModel reportRowModel;
-		IReportImportConverterProcessingInfo processingInfo = ReportConverter.convert(fileImport, extensionPointId, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ReportConverter.convert(fileImport, extensionPointId, new NullProgressMonitor());
 		try {
-			reportRowModel = processingInfo.getReportRowModel();
+			reportRowModel = processingInfo.getProcessingResult(IReportRowModel.class);
 		} catch(TypeCastException e) {
 			reportRowModel = null;
 		}
