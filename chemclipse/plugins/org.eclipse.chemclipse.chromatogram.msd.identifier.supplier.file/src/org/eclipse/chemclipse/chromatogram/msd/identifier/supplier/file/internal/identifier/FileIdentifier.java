@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
@@ -40,6 +39,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.util.FileListUtil;
@@ -108,7 +108,7 @@ public class FileIdentifier {
 	 * @return {@link IPeakIdentificationResults}
 	 * @throws FileNotFoundException
 	 */
-	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, IVendorPeakIdentifierSettings peakIdentifierSettings, IPeakIdentifierProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
+	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, IVendorPeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
 		/*
 		 * The alternate identifier is used, when another plugin tries to use this file identification process.

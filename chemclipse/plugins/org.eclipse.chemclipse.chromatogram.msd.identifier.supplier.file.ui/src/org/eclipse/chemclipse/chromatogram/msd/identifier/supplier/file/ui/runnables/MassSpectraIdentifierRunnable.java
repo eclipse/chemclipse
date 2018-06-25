@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpectrumIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -55,7 +55,7 @@ public class MassSpectraIdentifierRunnable implements IRunnableWithProgress {
 				}
 			}
 			//
-			IMassSpectraIdentifierProcessingInfo processingInfo = MassSpectrumIdentifier.identify(massSpectra, IDENTIFIER_ID, monitor);
+			IProcessingInfo processingInfo = MassSpectrumIdentifier.identify(massSpectra, IDENTIFIER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		} finally {
 			monitor.done();
