@@ -19,11 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.implementation.Peaks;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.internal.report.PeakReport;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakInputEntry;
@@ -32,16 +28,18 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificati
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.processing.PeakIdentificationProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.report.IPeakIdentificationBatchProcessReport;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.report.PeakIdentificationBatchProcessReport;
-import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.model.implementation.Peaks;
+import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchProcess {
 
@@ -69,10 +67,10 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		for(IPeakInputEntry inputEntry : peakIdentificationBatchJob.getPeakInputEntries()) {
 			try {
 				peakInputFile = new File(inputEntry.getInputFile());
-				IPeakImportConverterProcessingInfo processingPeakImportConverterInfo = loadPeaksFromFile(peakInputFile, monitor);
+				IProcessingInfo processingPeakImportConverterInfo = loadPeaksFromFile(peakInputFile, monitor);
 				processingInfo.addMessages(processingPeakImportConverterInfo);
 				try {
-					peakImports = processingPeakImportConverterInfo.getPeaks();
+					peakImports = processingPeakImportConverterInfo.getProcessingResult(IPeaks.class);
 					for(IPeak peak : peakImports.getPeaks()) {
 						if(peak instanceof IPeakMSD) {
 							peaks.add((IPeakMSD)peak);
@@ -105,7 +103,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		return processingInfo;
 	}
 
-	private IPeakImportConverterProcessingInfo loadPeaksFromFile(File peakInputFile, IProgressMonitor monitor) {
+	private IProcessingInfo loadPeaksFromFile(File peakInputFile, IProgressMonitor monitor) {
 
 		return PeakConverterMSD.convert(peakInputFile, monitor);
 	}
