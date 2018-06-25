@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
@@ -198,8 +197,8 @@ public class FileIdentifier {
 					monitor.subTask("Compare " + countUnknown);
 					//
 					IScanMSD reference = references.get(index);
-					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
-					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
+					IProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
+					IMassSpectrumComparisonResult comparisonResult = infoCompare.getProcessingResult(IMassSpectrumComparisonResult.class);
 					applyPenaltyOnDemand(unknown, reference, comparisonResult, fileIdentifierSettings);
 					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
 						/*
@@ -258,8 +257,8 @@ public class FileIdentifier {
 				try {
 					monitor.subTask("Compare " + countUnknown);
 					IScanMSD reference = references.get(index);
-					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
-					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
+					IProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
+					IMassSpectrumComparisonResult comparisonResult = infoCompare.getProcessingResult(IMassSpectrumComparisonResult.class);
 					applyPenaltyOnDemand(unknown, reference, comparisonResult, fileIdentifierSettings);
 					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
 						/*
