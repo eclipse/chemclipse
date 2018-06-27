@@ -36,4 +36,8 @@ public interface ISequenceRecord {
 	String getDataFile();
 
 	void setDataFile(String dataFile);
+
+	String getDescription();
+
+	void setDescription(String description);
 }

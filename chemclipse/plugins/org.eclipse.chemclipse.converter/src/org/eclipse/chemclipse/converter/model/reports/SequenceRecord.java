@@ -19,6 +19,7 @@ public class SequenceRecord implements ISequenceRecord {
 	private String sampleName = ""; // Sample Name/Keyword Text
 	private double multiplier = 1;
 	private String dataFile = "";
+	private String description = "";
 
 	@Override
 	public String getSubstance() {
@@ -90,6 +91,18 @@ public class SequenceRecord implements ISequenceRecord {
 	public void setDataFile(String dataFile) {
 
 		this.dataFile = dataFile;
+	}
+
+	@Override
+	public String getDescription() {
+
+		return description;
+	}
+
+	@Override
+	public void setDescription(String description) {
+
+		this.description = description;
 	}
 
 	@Override
