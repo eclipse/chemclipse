@@ -15,6 +15,10 @@ import java.util.List;
 
 public interface ISequence<T> extends IFileAttributes {
 
+	String getSequenceId();
+
+	void setSequenceId(String sequenceId);
+
 	String getInfo();
 
 	void setInfo(String info);

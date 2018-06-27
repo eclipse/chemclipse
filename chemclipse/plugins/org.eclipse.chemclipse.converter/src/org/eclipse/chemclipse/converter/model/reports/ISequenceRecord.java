@@ -20,4 +20,20 @@ public interface ISequenceRecord {
 	String getMethod();
 
 	void setMethod(String method);
+
+	int getVial();
+
+	void setVial(int vial);
+
+	String getSampleName();
+
+	void setSampleName(String sampleName);
+
+	double getMultiplier();
+
+	void setMultiplier(double multiplier);
+
+	String getDataFile();
+
+	void setDataFile(String dataFile);
 }

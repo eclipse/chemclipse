@@ -16,6 +16,7 @@ import java.util.List;
 
 public class Sequence<T> extends AbstractFileAttributes implements ISequence<T> {
 
+	private String sequenceId = "";
 	private String info = "";
 	private String method = "";
 	private String data = "";
@@ -23,6 +24,18 @@ public class Sequence<T> extends AbstractFileAttributes implements ISequence<T> 
 
 	public Sequence() {
 		sequenceRecords = new ArrayList<T>();
+	}
+
+	@Override
+	public String getSequenceId() {
+
+		return sequenceId;
+	}
+
+	@Override
+	public void setSequenceId(String sequenceId) {
+
+		this.sequenceId = sequenceId;
 	}
 
 	@Override
