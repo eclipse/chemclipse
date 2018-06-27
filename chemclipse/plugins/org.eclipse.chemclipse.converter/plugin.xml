@@ -2,5 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.eclipse.chemclipse.converter.reportImportSupplier" name="Report Import Supplier" schema="schema/org.eclipse.chemclipse.converter.reportImportSupplier.exsd"/>
+   <extension-point id="org.eclipse.chemclipse.converter.sequenceImportSupplier" name="Sequence Import Supplier" schema="schema/org.eclipse.chemclipse.converter.sequenceImportSupplier.exsd"/>
 
 </plugin>

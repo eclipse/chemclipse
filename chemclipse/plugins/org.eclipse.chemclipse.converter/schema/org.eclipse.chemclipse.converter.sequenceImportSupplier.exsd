@@ -3,10 +3,10 @@
 <schema targetNamespace="org.eclipse.chemclipse.converter" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.chemclipse.converter" id="org.eclipse.chemclipse.converter.reportImportSupplier" name="Report Import Supplier"/>
+         <meta.schema plugin="org.eclipse.chemclipse.converter" id="org.eclipse.chemclipse.converter.sequenceImportSupplier" name="Sequence Import Supplier"/>
       </appinfo>
       <documentation>
-         This extension point enables other plugins to register a report import converter.
+         This extension point enables other plugins to register a sequence import converter.
       </documentation>
    </annotation>
 
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="ReportSupplier"/>
+            <element ref="SequenceSupplier"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="ReportSupplier">
+   <element name="SequenceSupplier">
       <complexType>
          <attribute name="id" type="string" use="required">
             <annotation>
@@ -97,7 +97,17 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.converter.report.AbstractReportImportConverter:org.eclipse.chemclipse.converter.report.IReportImportConverter"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.converter.sequence.AbstractSequenceImportConverter:org.eclipse.chemclipse.converter.sequence.ISequenceImportConverter"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="importMagicNumberMatcher" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher:org.eclipse.chemclipse.converter.core.IMagicNumberMatcher"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -109,7 +119,7 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         0.7.0
+         0.8.0
       </documentation>
    </annotation>
 
@@ -146,7 +156,7 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
       </appinfo>
       <documentation>
          /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
