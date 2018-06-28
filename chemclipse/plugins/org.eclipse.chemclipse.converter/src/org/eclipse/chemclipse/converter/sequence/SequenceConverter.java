@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.converter.sequence;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.converter.core.Converter;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -121,7 +120,7 @@ public class SequenceConverter {
 
 		IMagicNumberMatcher magicNumberMatcher;
 		try {
-			magicNumberMatcher = (IMagicNumberMatcher)element.createExecutableExtension(Converter.IMPORT_MAGIC_NUMBER_MATCHER);
+			magicNumberMatcher = (IMagicNumberMatcher)element.createExecutableExtension(IMPORT_MAGIC_NUMBER_MATCHER);
 		} catch(Exception e) {
 			magicNumberMatcher = null;
 		}
