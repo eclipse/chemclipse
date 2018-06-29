@@ -22,15 +22,15 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.navigator.IDescriptionProvider;
 
-public class SupplierFileExplorerLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
+public class DataExplorerLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
 
 	private List<? extends ISupplierFileIdentifier> supplierFileIdentifierList;
 
-	public SupplierFileExplorerLabelProvider(ISupplierFileIdentifier supplierFileIdentifier) {
+	public DataExplorerLabelProvider(ISupplierFileIdentifier supplierFileIdentifier) {
 		this(ExplorerListSupport.getSupplierFileIdentifierList(supplierFileIdentifier));
 	}
 
-	public SupplierFileExplorerLabelProvider(List<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
+	public DataExplorerLabelProvider(List<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
 		this.supplierFileIdentifierList = supplierFileIdentifierList;
 	}
 
@@ -147,6 +147,12 @@ public class SupplierFileExplorerLabelProvider extends LabelProvider implements 
 					break;
 				case ISupplierFileIdentifier.TYPE_XIR:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SCAN_XIR, IApplicationImage.SIZE_16x16);
+					break;
+				case ISupplierFileIdentifier.TYPE_PCR:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_PLATE_PCR, IApplicationImage.SIZE_16x16);
+					break;
+				case ISupplierFileIdentifier.TYPE_SEQ:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SEQUENCE_LIST, IApplicationImage.SIZE_16x16);
 					break;
 				default:
 					/*

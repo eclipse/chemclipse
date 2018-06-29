@@ -75,6 +75,7 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE = "chromatogram/xxd/update/none";
 	String TOPIC_SCAN_XXD_UPDATE_NONE = "scan/xxd/update/none";
 	String TOPIC_PLATE_PCR_UPDATE_RAWFILE = "plate/pcr/update/rawfile";
+	String TOPIC_SEQUENCE_UPDATE_RAWFILE = "sequence/update/rawfile";
 	/*
 	 * UNLOAD
 	 * Close the chromatogram editor.
@@ -143,6 +144,7 @@ public interface IChemClipseEvents {
 	String TOPIC_SCAN_XIR_UNLOAD_SELECTION = "scan/xir/unload/selection";
 	String TOPIC_SCAN_NMR_UNLOAD_SELECTION = "scan/nmr/unload/selection";
 	String TOPIC_PLATE_PCR_UPDATE_OVERVIEW = "plate/pcr/update/overview";
+	String TOPIC_SEQUENCE_UPDATE_OVERVIEW = "sequence/update/overview";
 	/*
 	 * Converter
 	 */

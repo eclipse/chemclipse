@@ -27,8 +27,8 @@ import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerLabelProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -274,8 +274,8 @@ public abstract class AbstractSupplierFileExplorer {
 
 	void setTreeViewerProvider(TreeViewer treeViewer) {
 
-		treeViewer.setContentProvider(new SupplierFileExplorerContentProvider(supplierFileEditorSupportList));
-		treeViewer.setLabelProvider(new SupplierFileExplorerLabelProvider(supplierFileEditorSupportList));
+		treeViewer.setContentProvider(new DataExplorerContentProvider(supplierFileEditorSupportList));
+		treeViewer.setLabelProvider(new DataExplorerLabelProvider(supplierFileEditorSupportList));
 	}
 
 	private void addUserLocationButton(Composite parent, TreeViewer treeViewer) {

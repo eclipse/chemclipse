@@ -112,6 +112,24 @@ public class SequenceSupplier implements ISequenceSupplierSetter {
 
 		this.magicNumberMatcher = magicNumberMatcher;
 	}
+	
+	@Override
+	public String getDirectoryExtension() {
+
+		return "";
+	}
+
+	@Override
+	public boolean isExportable() {
+
+		return false;
+	}
+
+	@Override
+	public boolean isImportable() {
+
+		return true;
+	}
 
 	@Override
 	public boolean equals(final Object otherObject) {

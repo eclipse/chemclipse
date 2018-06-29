@@ -28,6 +28,7 @@ public interface ISupplierFileIdentifier {
 	String TYPE_SCAN_MSD = "SCAN_MSD"; // MALDI-TOF
 	String TYPE_CAL = "CAL";
 	String TYPE_PCR = "PCR";
+	String TYPE_SEQ = "SEQ";
 
 	/**
 	 * Returns the identifier type.

@@ -38,6 +38,11 @@ public class SearchSupportUI extends Composite {
 		createControl();
 	}
 
+	public void reset() {
+
+		setSearchText("");
+	}
+
 	public void setSearchListener(ISearchListener searchListener) {
 
 		this.searchListener = searchListener;

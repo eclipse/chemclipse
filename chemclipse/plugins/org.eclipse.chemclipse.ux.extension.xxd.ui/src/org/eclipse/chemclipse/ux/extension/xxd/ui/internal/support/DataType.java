@@ -22,5 +22,6 @@ public enum DataType {
 	XIR, // Infrared detectors, FTIR, NIR, MIR
 	NMR, // Nuclear magnetic resonance
 	CAL, // Retention Index Calibration
-	PCR // Polymerase Chain Reaction
+	PCR, // Polymerase Chain Reaction
+	SEQ // Sequences
 }

@@ -161,5 +161,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_NMR, PreferenceConstants.DEF_SHOW_DATA_NMR);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_CAL, PreferenceConstants.DEF_SHOW_DATA_CAL);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_PCR, PreferenceConstants.DEF_SHOW_DATA_PCR);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_SEQUENCE, PreferenceConstants.DEF_SHOW_DATA_SEQUENCE);
 	}
 }

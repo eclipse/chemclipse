@@ -14,11 +14,12 @@ package org.eclipse.chemclipse.converter.sequence;
 import java.io.File;
 import java.util.List;
 
+import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 
 public interface ISequenceConverterSupport {
 
-	void add(final ISequenceSupplier supplier);
+	void add(final ISupplier supplier);
 
 	String[] getFilterExtensions() throws NoConverterAvailableException;
 
@@ -30,7 +31,7 @@ public interface ISequenceConverterSupport {
 
 	List<String> getAvailableConverterIds(File file) throws NoConverterAvailableException;
 
-	List<ISequenceSupplier> getSupplier();
+	List<ISupplier> getSupplier();
 
-	ISequenceSupplier getSupplier(String id) throws NoConverterAvailableException;
+	ISupplier getSupplier(String id) throws NoConverterAvailableException;
 }

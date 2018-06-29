@@ -15,19 +15,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.support.util.FileUtil;
 
 public class SequenceConverterSupport implements ISequenceConverterSupport {
 
-	private List<ISequenceSupplier> suppliers;
+	private List<ISupplier> suppliers;
 
 	public SequenceConverterSupport() {
-		suppliers = new ArrayList<ISequenceSupplier>();
+		suppliers = new ArrayList<ISupplier>();
 	}
 
 	@Override
-	public void add(final ISequenceSupplier supplier) {
+	public void add(final ISupplier supplier) {
 
 		suppliers.add(supplier);
 	}
@@ -45,7 +46,7 @@ public class SequenceConverterSupport implements ISequenceConverterSupport {
 		if(index < 0 || index > suppliers.size() - 1) {
 			throw new NoConverterAvailableException("There is no converter available.");
 		}
-		ISequenceSupplier supplier = suppliers.get(index);
+		ISupplier supplier = suppliers.get(index);
 		return supplier.getId();
 	}
 
@@ -61,7 +62,7 @@ public class SequenceConverterSupport implements ISequenceConverterSupport {
 		 */
 		String id = "";
 		breakloop:
-		for(ISequenceSupplier supplier : suppliers) {
+		for(ISupplier supplier : suppliers) {
 			if(supplier.getFilterName().equals(name)) {
 				id = supplier.getId();
 				break breakloop;
@@ -84,7 +85,7 @@ public class SequenceConverterSupport implements ISequenceConverterSupport {
 		 */
 		areConvertersStored();
 		ArrayList<String> extensions = new ArrayList<String>();
-		for(ISequenceSupplier supplier : suppliers) {
+		for(ISupplier supplier : suppliers) {
 			extensions.add(supplier.getFileExtension());
 		}
 		return extensions.toArray(new String[extensions.size()]);
@@ -102,7 +103,7 @@ public class SequenceConverterSupport implements ISequenceConverterSupport {
 		 * converter filter names.<br/>
 		 */
 		ArrayList<String> filterNames = new ArrayList<String>();
-		for(ISequenceSupplier supplier : suppliers) {
+		for(ISupplier supplier : suppliers) {
 			filterNames.add(supplier.getFilterName());
 		}
 		return filterNames.toArray(new String[filterNames.size()]);
@@ -117,7 +118,7 @@ public class SequenceConverterSupport implements ISequenceConverterSupport {
 		areConvertersStored();
 		List<String> availableConverters = new ArrayList<String>();
 		String fileName = file.getName();
-		for(ISequenceSupplier supplier : suppliers) {
+		for(ISupplier supplier : suppliers) {
 			/*
 			 * Check if the file has an extension or
 			 * if the bare file name shall be used.
@@ -151,17 +152,17 @@ public class SequenceConverterSupport implements ISequenceConverterSupport {
 	}
 
 	@Override
-	public List<ISequenceSupplier> getSupplier() {
+	public List<ISupplier> getSupplier() {
 
 		return suppliers;
 	}
 
 	@Override
-	public ISequenceSupplier getSupplier(String id) throws NoConverterAvailableException {
+	public ISupplier getSupplier(String id) throws NoConverterAvailableException {
 
-		ISequenceSupplier instance = null;
+		ISupplier instance = null;
 		exitloop:
-		for(ISequenceSupplier supplier : suppliers) {
+		for(ISupplier supplier : suppliers) {
 			if(supplier.getId().equals(id)) {
 				instance = supplier;
 				break exitloop;

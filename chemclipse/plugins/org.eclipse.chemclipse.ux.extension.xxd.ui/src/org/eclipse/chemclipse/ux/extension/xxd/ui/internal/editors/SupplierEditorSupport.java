@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
@@ -32,6 +33,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PlateEditorPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
@@ -77,6 +79,9 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case PCR:
 				supplier = PlateConverterPCR.getScanConverterSupport().getSupplier();
+				break;
+			case SEQ:
+				supplier = SequenceConverter.getSequenceConverterSupport().getSupplier();
 				break;
 			default:
 				// No action
@@ -144,6 +149,15 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				tooltip = PlateEditorPCR.TOOLTIP;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_OVERVIEW;
+				break;
+			case SEQ:
+				type = TYPE_SEQ;
+				elementId = SequenceEditor.ID;
+				contributionURI = SequenceEditor.CONTRIBUTION_URI;
+				iconURI = SequenceEditor.ICON_URI;
+				tooltip = SequenceEditor.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_SEQUENCE_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_SEQUENCE_UPDATE_OVERVIEW;
 				break;
 			default:
 				type = "";

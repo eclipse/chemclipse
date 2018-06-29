@@ -16,15 +16,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SupplierFileExplorerContentProvider extends FileExplorerContentProvider {
+public class DataExplorerContentProvider extends FileExplorerContentProvider {
 
 	private List<? extends ISupplierFileIdentifier> supplierFileIdentifierList;
 
-	public SupplierFileExplorerContentProvider(ISupplierFileIdentifier supplierFileIdentifier) {
+	public DataExplorerContentProvider(ISupplierFileIdentifier supplierFileIdentifier) {
 		this(ExplorerListSupport.getSupplierFileIdentifierList(supplierFileIdentifier));
 	}
 
-	public SupplierFileExplorerContentProvider(List<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
+	public DataExplorerContentProvider(List<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
 		this.supplierFileIdentifierList = supplierFileIdentifierList;
 	}
 

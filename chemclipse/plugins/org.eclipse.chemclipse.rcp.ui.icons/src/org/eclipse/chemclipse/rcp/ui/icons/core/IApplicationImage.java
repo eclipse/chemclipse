@@ -271,6 +271,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SCAN_RETENTION_TIME = "scanRetentionTime.gif";
 	String IMAGE_CHART_LEGEND_MARKER = "chartLegendMarker.gif";
 	String IMAGE_CHART_RANGE_SELECTOR = "chartRangeSelector.gif";
+	String IMAGE_SEQUENCE_LIST = "sequenceListDefault.gif";
 	/*
 	 * PICTOGRAM and Data Analysis Perspective
 	 */
@@ -295,6 +296,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SCAN_PEAK_LIST_ACTIVE = "scanPeakListActive.gif";
 	String IMAGE_HEATMAP_ACTIVE = "heatmapActive.gif";
 	String IMAGE_HEATMAP_DEFAULT = "heatmapDefault.gif";
+	String IMAGE_SEQUENCE_LIST_DEFAULT = "sequenceListDefault.gif";
+	String IMAGE_SEQUENCE_LIST_ACTIVE = "sequenceListActive.gif";
 	//
 	String IMAGE_PROCESS_CONTROL = "processControl.gif";
 	String IMAGE_START_PROCESSING = "startProcessing.gif";

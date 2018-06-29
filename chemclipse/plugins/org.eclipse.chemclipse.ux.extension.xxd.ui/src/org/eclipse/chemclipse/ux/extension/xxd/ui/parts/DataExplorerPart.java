@@ -196,6 +196,12 @@ public class DataExplorerPart {
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_PCR)) {
 			editorSupportList.add(new EditorSupportFactory(DataType.PCR).getInstanceEditorSupport());
 		}
+		/*
+		 * SEQ
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_SEQUENCE)) {
+			editorSupportList.add(new EditorSupportFactory(DataType.SEQ).getInstanceEditorSupport());
+		}
 		//
 		dataExplorerUI.setSupplierFileEditorSupportList(editorSupportList);
 	}

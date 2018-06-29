@@ -11,15 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.sequence;
 
-public interface ISequenceSupplier {
+import org.eclipse.chemclipse.converter.core.ISupplier;
 
-	String getId();
-
-	String getDescription();
-
-	String getFilterName();
-
-	String getFileExtension();
-
-	String getFileName();
+public interface ISequenceSupplier extends ISupplier {
 }

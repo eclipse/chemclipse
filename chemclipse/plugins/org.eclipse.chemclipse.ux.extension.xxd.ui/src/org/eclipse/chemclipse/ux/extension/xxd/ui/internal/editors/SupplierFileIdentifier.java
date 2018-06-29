@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
@@ -59,6 +60,9 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 			case PCR:
 				supplier = PlateConverterPCR.getScanConverterSupport().getSupplier();
 				break;
+			case SEQ:
+				supplier = SequenceConverter.getSequenceConverterSupport().getSupplier();
+				break;
 			default:
 				// No action
 		}
@@ -89,6 +93,9 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case PCR:
 				type = TYPE_PCR;
+				break;
+			case SEQ:
+				type = TYPE_SEQ;
 				break;
 			default:
 				type = "";

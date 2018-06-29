@@ -14,9 +14,12 @@ package org.eclipse.chemclipse.converter.sequence;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.converter.model.reports.ISequence;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -42,6 +45,26 @@ public class SequenceConverter {
 	 * This class has only static methods.
 	 */
 	private SequenceConverter() {
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static IProcessingInfo convert(final File file, IProgressMonitor monitor) {
+
+		SequenceConverterSupport sequenceConverterSupport = getSequenceConverterSupport();
+		for(ISupplier supplier : sequenceConverterSupport.getSupplier()) {
+			//
+			try {
+				IProcessingInfo processinInfo = convert(file, supplier.getId(), monitor);
+				ISequence sequence = processinInfo.getProcessingResult(ISequence.class);
+				if(sequence != null) {
+					return processinInfo;
+				}
+			} catch(TypeCastException e) {
+				logger.warn(e);
+			}
+		}
+		//
+		return getNoImportConverterAvailableProcessingInfo(file);
 	}
 
 	public static IProcessingInfo convert(final File file, final String converterId, IProgressMonitor monitor) {

@@ -19,8 +19,8 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
-import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerLabelProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard.TreeSelection;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -86,8 +86,8 @@ public class InputWizardSettings {
 		/*
 		 * Assign the label and content provider.
 		 */
-		this.labelProvider = new SupplierFileExplorerLabelProvider(supplierFileIdentifierList);
-		this.contentProvider = new SupplierFileExplorerContentProvider(supplierFileIdentifierList);
+		this.labelProvider = new DataExplorerLabelProvider(supplierFileIdentifierList);
+		this.contentProvider = new DataExplorerContentProvider(supplierFileIdentifierList);
 	}
 
 	public void saveSelectedPath(TreeSelection treeSelection) {
