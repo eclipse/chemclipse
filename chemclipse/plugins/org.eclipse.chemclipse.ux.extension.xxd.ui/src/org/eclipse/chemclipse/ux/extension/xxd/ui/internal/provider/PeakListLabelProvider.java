@@ -39,6 +39,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String ACTIVE_FOR_ANALYSIS = "Active for Analysis";
 	public static final String RT = "RT";
+	public static final String CLASSIFIER = "Classifier";
 	//
 	private double chromatogramPeakArea = 0.0d;
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
@@ -58,12 +59,15 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 			"Model Description", //
 			"Suggested Components", //
 			"Name", //
-			"Area Percent"};
+			"Area Percent", //
+			CLASSIFIER //
+	};
 	//
 	public static final int[] BOUNDS = { //
 			30, //
 			100, //
 			60, //
+			100, //
 			100, //
 			100, //
 			100, //
@@ -212,6 +216,9 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 					} else {
 						text = decimalFormat.format(0.0d);
 					}
+					break;
+				case 15:
+					text = peak.getClassifier();
 					break;
 			}
 		}

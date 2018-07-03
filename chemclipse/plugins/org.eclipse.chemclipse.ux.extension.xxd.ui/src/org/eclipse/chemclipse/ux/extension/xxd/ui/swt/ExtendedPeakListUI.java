@@ -78,6 +78,7 @@ public class ExtendedPeakListUI {
 	private Button buttonSavePeaks;
 	private Label labelChromatogramName;
 	private Label labelChromatogramInfo;
+	private SearchSupportUI searchSupportUI;
 	private PeakListUI peakListUI;
 	private IChromatogramSelection chromatogramSelection;
 	//
@@ -165,7 +166,7 @@ public class ExtendedPeakListUI {
 
 	private Composite createToolbarSearch(Composite parent) {
 
-		SearchSupportUI searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
+		searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
 		searchSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		searchSupportUI.setSearchListener(new ISearchListener() {
 
@@ -551,6 +552,7 @@ public class ExtendedPeakListUI {
 
 	private void applySettings() {
 
+		searchSupportUI.reset();
 		updateChromatogramSelection();
 	}
 

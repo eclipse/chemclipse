@@ -46,16 +46,61 @@ public class PeakListFilter extends ViewerFilter {
 		//
 		if(element instanceof IPeak) {
 			IPeak peak = (IPeak)element;
-			for(ITarget target : peak.getTargets()) {
-				if(target instanceof IIdentificationTarget) {
-					IIdentificationTarget identificationTarget = (IIdentificationTarget)target;
-					if(libraryInformationSupport.matchSearchText(identificationTarget.getLibraryInformation(), searchText, caseSensitive)) {
-						return true;
+			if(isMatch(peak, searchText, caseSensitive)) {
+				return true;
+			} else {
+				for(ITarget target : peak.getTargets()) {
+					if(target instanceof IIdentificationTarget) {
+						IIdentificationTarget identificationTarget = (IIdentificationTarget)target;
+						if(libraryInformationSupport.matchSearchText(identificationTarget.getLibraryInformation(), searchText, caseSensitive)) {
+							return true;
+						}
 					}
 				}
 			}
 		}
 		//
 		return false;
+	}
+
+	private boolean isMatch(IPeak peak, String searchText, boolean caseSensitive) {
+
+		boolean isMatch = false;
+		//
+		String classifier = peak.getClassifier();
+		String detectorDescription = peak.getDetectorDescription();
+		String modelDescription = peak.getModelDescription();
+		String quantifierDescription = peak.getQuantifierDescription();
+		//
+		if(!caseSensitive) {
+			searchText = searchText.toLowerCase();
+			classifier = classifier.toLowerCase();
+			detectorDescription = detectorDescription.toLowerCase();
+			modelDescription = modelDescription.toLowerCase();
+			quantifierDescription = quantifierDescription.toLowerCase();
+		}
+		//
+		if(!isMatch && matchText(classifier, searchText)) {
+			isMatch = true;
+		}
+		//
+		if(!isMatch && detectorDescription.matches(searchText)) {
+			isMatch = true;
+		}
+		//
+		if(!isMatch && modelDescription.matches(searchText)) {
+			isMatch = true;
+		}
+		//
+		if(!isMatch && quantifierDescription.matches(searchText)) {
+			isMatch = true;
+		}
+		//
+		return isMatch;
+	}
+
+	private boolean matchText(String text, String searchText) {
+
+		return text.matches(searchText);
 	}
 }

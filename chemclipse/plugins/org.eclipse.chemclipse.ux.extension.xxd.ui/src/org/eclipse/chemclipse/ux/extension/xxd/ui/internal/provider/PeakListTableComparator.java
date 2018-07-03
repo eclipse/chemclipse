@@ -130,6 +130,9 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 						sortOrder = 0;
 					}
 					break;
+				case 15:
+					sortOrder = peak2.getClassifier().compareTo(peak1.getClassifier());
+					break;
 			}
 		}
 		if(getDirection() == ASCENDING) {

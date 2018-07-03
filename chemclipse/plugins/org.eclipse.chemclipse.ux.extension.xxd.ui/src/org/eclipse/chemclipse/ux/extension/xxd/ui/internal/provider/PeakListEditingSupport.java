@@ -59,6 +59,8 @@ public class PeakListEditingSupport extends EditingSupport {
 			switch(column) {
 				case PeakListLabelProvider.ACTIVE_FOR_ANALYSIS:
 					return peak.isActiveForAnalysis();
+				case PeakListLabelProvider.CLASSIFIER:
+					return peak.getClassifier();
 			}
 		}
 		return false;
@@ -72,6 +74,9 @@ public class PeakListEditingSupport extends EditingSupport {
 			switch(column) {
 				case PeakListLabelProvider.ACTIVE_FOR_ANALYSIS:
 					peak.setActiveForAnalysis((boolean)value);
+					break;
+				case PeakListLabelProvider.CLASSIFIER:
+					peak.setClassifier((String)value);
 					break;
 			}
 			tableViewer.refresh();

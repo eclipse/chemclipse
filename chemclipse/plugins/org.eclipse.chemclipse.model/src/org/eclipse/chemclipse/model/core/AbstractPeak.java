@@ -33,6 +33,8 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	 */
 	private static final long serialVersionUID = -491170278267735090L;
 	//
+	private static final String CLASSIFIER_DELIMITER = " ";
+	//
 	private String modelDescription = "";
 	private PeakType peakType = PeakType.DEFAULT;
 	private int suggestedNumberOfComponents = 0; // 0 is the default
@@ -44,6 +46,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	private IIntegrationConstraints integrationConstraints;
 	private Set<IQuantitationEntry> quantitationEntries;
 	private List<IInternalStandard> internalStandards;
+	private String classifier = "";
 
 	public AbstractPeak() {
 		/*
@@ -253,6 +256,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected void validateChromatogram(IChromatogram chromatogram) throws IllegalArgumentException {
 
 		/*
@@ -267,6 +271,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	 * Check that the peak model is within the chromatogram retention time
 	 * borders.
 	 */
+	@SuppressWarnings("rawtypes")
 	protected void validateRetentionTimes(IChromatogram chromatogram, IPeakModel peakModel) throws PeakException {
 
 		int start = chromatogram.getStartRetentionTime();
@@ -300,6 +305,28 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	public void removeInternalStandard(IInternalStandard internalStandard) {
 
 		internalStandards.remove(internalStandard);
+	}
+
+	@Override
+	public String getClassifier() {
+
+		return classifier;
+	}
+
+	@Override
+	public void setClassifier(String classifier) {
+
+		this.classifier = classifier;
+	}
+
+	@Override
+	public void addClassifier(String classifier) {
+
+		if(!"".equals(classifier)) {
+			if(!this.classifier.contains(classifier)) {
+				this.classifier = this.classifier + CLASSIFIER_DELIMITER + classifier;
+			}
+		}
 	}
 
 	@Override

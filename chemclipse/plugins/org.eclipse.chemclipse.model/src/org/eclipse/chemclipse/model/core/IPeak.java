@@ -224,4 +224,10 @@ public interface IPeak extends IPeakTargets, Comparable<IPeak> {
 	void addInternalStandards(List<IInternalStandard> internalStandards);
 
 	void removeInternalStandard(IInternalStandard internalStandard);
+
+	String getClassifier();
+
+	void setClassifier(String classifier);
+
+	void addClassifier(String classifier);
 }

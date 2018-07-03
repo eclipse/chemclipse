@@ -102,6 +102,8 @@ public class PeakListUI extends ExtendedTableViewer {
 			String label = tableViewerColumn.getColumn().getText();
 			if(label.equals(PeakListLabelProvider.ACTIVE_FOR_ANALYSIS)) {
 				tableViewerColumn.setEditingSupport(new PeakListEditingSupport(this, label));
+			} else if(label.equals(PeakListLabelProvider.CLASSIFIER)) {
+				tableViewerColumn.setEditingSupport(new PeakListEditingSupport(this, label));
 			}
 		}
 	}
