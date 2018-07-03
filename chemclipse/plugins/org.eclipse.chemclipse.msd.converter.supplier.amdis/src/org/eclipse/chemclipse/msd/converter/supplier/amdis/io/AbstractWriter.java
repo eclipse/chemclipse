@@ -19,12 +19,14 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.IVendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
@@ -69,6 +71,8 @@ public abstract class AbstractWriter {
 	private static final String ISTD = "ISTD: ";
 	private static final String QUANT = "QUANT: ";
 	private static final String AREA = "AREA: ";
+	//
+	private static final String NO_IDENTIFIER = "NO IDENTIFIER AVAILABLE";
 	//
 	private TargetExtendedComparator targetExtendedComparator;
 
@@ -156,9 +160,11 @@ public abstract class AbstractWriter {
 		} else if(identificationTarget != null) {
 			identification = identificationTarget.getLibraryInformation().getName();
 		}
-		//
+		/*
+		 * Set a default name if the identifier is empty.
+		 */
 		if(identification.equals("")) {
-			identification = "NO IDENTIFIER AVAILABLE";
+			identification = NO_IDENTIFIER;
 		}
 		//
 		return field + identification;
@@ -185,13 +191,24 @@ public abstract class AbstractWriter {
 			}
 		} else if(massSpectrum instanceof IRegularMassSpectrum) {
 			/*
-			 * Scan/Chromatogram MS
+			 * Scan MS
 			 */
 			List<IScanTargetMSD> targets = new ArrayList<>(massSpectrum.getTargets());
 			Collections.sort(targets, targetExtendedComparator);
 			if(targets.size() >= 1) {
 				identificationTarget = targets.get(0);
 			}
+		}
+		return identificationTarget;
+	}
+
+	protected IIdentificationTarget getPeakTarget(IPeak peak) {
+
+		IIdentificationTarget identificationTarget = null;
+		List<IPeakTarget> targets = new ArrayList<>(peak.getTargets());
+		Collections.sort(targets, targetExtendedComparator);
+		if(targets.size() >= 1) {
+			identificationTarget = targets.get(0);
 		}
 		return identificationTarget;
 	}

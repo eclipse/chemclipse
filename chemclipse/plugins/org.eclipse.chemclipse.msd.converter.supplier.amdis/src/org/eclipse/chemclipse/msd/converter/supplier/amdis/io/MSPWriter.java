@@ -26,6 +26,11 @@ public class MSPWriter extends AbstractMassSpectraWriter implements IMassSpectra
 
 		IScanMSD optimizedMassSpectrum = getOptimizedMassSpectrum(massSpectrum);
 		IIdentificationTarget identificationTarget = getIdentificationTarget(optimizedMassSpectrum);
+		if(identificationTarget == null) {
+			identificationTarget = getIdentificationTarget(massSpectrum);
+		} else if("".equals(identificationTarget.getLibraryInformation().getName())) {
+			identificationTarget = getIdentificationTarget(massSpectrum);
+		}
 		/*
 		 * Write the fields
 		 */

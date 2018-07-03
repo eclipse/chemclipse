@@ -24,8 +24,13 @@ public class MSLWriter extends AbstractMassSpectraWriter implements IMassSpectra
 	@Override
 	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
 
-		IScanMSD normalizedMassSpectrum = getOptimizedMassSpectrum(massSpectrum);
-		IIdentificationTarget identificationTarget = getIdentificationTarget(normalizedMassSpectrum);
+		IScanMSD optimizedMassSpectrum = getOptimizedMassSpectrum(massSpectrum);
+		IIdentificationTarget identificationTarget = getIdentificationTarget(optimizedMassSpectrum);
+		if(identificationTarget == null) {
+			identificationTarget = getIdentificationTarget(massSpectrum);
+		} else if("".equals(identificationTarget.getLibraryInformation().getName())) {
+			identificationTarget = getIdentificationTarget(massSpectrum);
+		}
 		/*
 		 * Write the fields
 		 */
@@ -35,18 +40,18 @@ public class MSLWriter extends AbstractMassSpectraWriter implements IMassSpectra
 		/*
 		 * Retention time, retention index
 		 */
-		fileWriter.write(getRetentionTimeField(normalizedMassSpectrum) + CRLF);
-		fileWriter.write(getRelativeRetentionTimeField(normalizedMassSpectrum) + CRLF);
-		fileWriter.write(getRetentionIndexField(normalizedMassSpectrum) + CRLF);
+		fileWriter.write(getRetentionTimeField(optimizedMassSpectrum) + CRLF);
+		fileWriter.write(getRelativeRetentionTimeField(optimizedMassSpectrum) + CRLF);
+		fileWriter.write(getRetentionIndexField(optimizedMassSpectrum) + CRLF);
 		fileWriter.write(getDBField(identificationTarget) + CRLF);
 		fileWriter.write(getReferenceIdentifierField(identificationTarget) + CRLF);
-		fileWriter.write(getCommentsField(normalizedMassSpectrum) + CRLF);
-		fileWriter.write(getSourceField(normalizedMassSpectrum, identificationTarget) + CRLF);
+		fileWriter.write(getCommentsField(optimizedMassSpectrum) + CRLF);
+		fileWriter.write(getSourceField(optimizedMassSpectrum, identificationTarget) + CRLF);
 		/*
 		 * Mass spectrum
 		 */
-		fileWriter.write(getNumberOfPeaks(normalizedMassSpectrum) + CRLF);
-		fileWriter.write(getIonsFormatMSL(normalizedMassSpectrum) + CRLF);
+		fileWriter.write(getNumberOfPeaks(optimizedMassSpectrum) + CRLF);
+		fileWriter.write(getIonsFormatMSL(optimizedMassSpectrum) + CRLF);
 		/*
 		 * To separate the mass spectra correctly.
 		 */

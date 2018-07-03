@@ -45,7 +45,15 @@ public class PeakWriterMSP extends AbstractWriter {
 
 		IScanMSD massSpectrum = peak.getExtractedMassSpectrum();
 		IScanMSD optimizedMassSpectrum = getOptimizedMassSpectrum(massSpectrum);
+		/*
+		 * Try to get the target.
+		 */
 		IIdentificationTarget identificationTarget = getIdentificationTarget(optimizedMassSpectrum);
+		if(identificationTarget == null) {
+			identificationTarget = getPeakTarget(peak);
+		} else if("".equals(identificationTarget.getLibraryInformation().getName())) {
+			identificationTarget = getIdentificationTarget(massSpectrum);
+		}
 		/*
 		 * Write the fields
 		 */
