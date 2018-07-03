@@ -75,9 +75,9 @@ public class BasePeakIdentifier {
 	private String massSpectraFiles;
 	static {
 		Integer[] syringyl = {149, 154, 167, 181, 182, 192, 194, 208, 210};
-		Integer[] guaiacyl = {109, 123, 136, 137, 138, 140, 150, 151, 152, 162, 164, 168, 178,};
+		Integer[] guaiacyl = {109, 123, 136, 137, 138, 140, 150, 151, 152, 162, 164, 168, 178};
 		Integer[] pHydroxyPhenyl = {94, 107, 108, 120, 121, 124, 134};
-		Integer[] carbohydrate = {29, 31, 39, 41, 42, 43, 44, 45, 46, 55, 56, 57, 58, 59, 60, 68, 69, 73, 81, 82, 84, 85, 87, 95, 96, 98, 114, 126, 142,};
+		Integer[] carbohydrate = {29, 31, 39, 41, 42, 43, 44, 45, 46, 55, 56, 57, 58, 59, 60, 68, 69, 73, 81, 82, 84, 85, 87, 95, 96, 98, 114, 126, 142};
 		for(Integer currentMZ : syringyl) {
 			syringylBaseMZs.add(currentMZ);
 		}
@@ -107,11 +107,17 @@ public class BasePeakIdentifier {
 			IScanMSD massSpectrum = peak.getExtractedMassSpectrum();
 			// identify the massSpectrum
 			String name = getIdentification(massSpectrum, settings, i);
+			/*
+			 * Add the peak target
+			 */
 			IMassSpectrumComparisonResult comparisonResult = getComparisonResult();
-			// construct a new target object using targetBuilder
 			IPeakTarget peakTarget = targetBuilder.getPeakTarget(massSpectrum, comparisonResult, IDENTIFIER);
 			setLibraryInformationFields(peakTarget.getLibraryInformation(), name);
 			peak.addTarget(peakTarget);
+			/*
+			 * Add the classifier field.
+			 */
+			peak.addClassifier(name);
 			/*
 			 * Grep all not identified peaks.
 			 */
