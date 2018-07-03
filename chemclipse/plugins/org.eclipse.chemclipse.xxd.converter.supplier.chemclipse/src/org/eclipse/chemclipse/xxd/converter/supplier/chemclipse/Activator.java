@@ -38,6 +38,7 @@ public class Activator implements BundleActivator {
 		System.out.println("ScanWSD - Targets");
 		System.out.println("ChromatogramWSD - Targets");
 		System.out.println("ILibraryInformation - retention time and retention index");
+		System.out.println("Peak Classifier Field");
 	}
 
 	/*
