@@ -11,8 +11,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-/**
- * @author eselmeister
- */
 public interface IRegularLibraryMassSpectrum extends IRegularMassSpectrum, ILibraryMassSpectrum {
 }

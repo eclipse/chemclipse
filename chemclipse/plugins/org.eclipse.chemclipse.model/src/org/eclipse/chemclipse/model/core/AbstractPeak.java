@@ -322,7 +322,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	@Override
 	public void addClassifier(String classifier) {
 
-		if(!"".equals(classifier)) {
+		if(classifier != null && !"".equals(classifier)) {
 			if(!this.classifier.contains(classifier)) {
 				this.classifier = this.classifier + CLASSIFIER_DELIMITER + classifier;
 			}

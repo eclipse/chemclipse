@@ -23,6 +23,8 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	 * methods.
 	 */
 	private static final long serialVersionUID = -3521383640386911035L;
+	//
+	private ILibraryInformation libraryInformation;
 
 	/**
 	 * Creates a new instance of {@code AbstractRegularLibraryMassSpectrum} by creating a
@@ -39,13 +41,10 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 		super(massSpectrometer, massSpectrumType);
 	}
 
-	private ILibraryInformation libraryInformation;
-
 	public AbstractRegularLibraryMassSpectrum() {
 		libraryInformation = new LibraryInformation();
 	}
 
-	// -----------------------------------------------ILibraryMassSpectrum
 	/*
 	 * Why is get/set LibraryInformation implemented twice? Here and in {@link
 	 * AbstractCombinedLibraryMassSpectrum}?<br/> Java does not support multiple
@@ -64,5 +63,4 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 			this.libraryInformation = libraryInformation;
 		}
 	}
-	// -----------------------------------------------ILibraryMassSpectrum
 }
