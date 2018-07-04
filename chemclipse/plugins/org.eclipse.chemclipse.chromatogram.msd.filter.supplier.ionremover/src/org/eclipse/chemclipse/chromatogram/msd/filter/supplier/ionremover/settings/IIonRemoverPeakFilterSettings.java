@@ -12,9 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 
 public interface IIonRemoverPeakFilterSettings extends IPeakFilterSettings {
 
-	IMarkedIons getIonsToRemove();
+	String getIonsToRemove();
+
+	void setIonsToRemove(String ionsToRemove);
 }

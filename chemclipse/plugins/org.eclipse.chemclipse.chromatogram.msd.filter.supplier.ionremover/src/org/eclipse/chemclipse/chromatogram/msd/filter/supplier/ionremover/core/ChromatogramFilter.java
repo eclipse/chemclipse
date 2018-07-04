@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
@@ -68,10 +69,15 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		/*
 		 * Get the excluded ions instance.
 		 */
+		IonSettingUtil settingIon = new IonSettingUtil();
+		ISupplierFilterSettings settings;
+		//
 		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
-			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
-			this.ionsToRemove = new MarkedIons(settings.getIonsToRemove());
+			settings = (ISupplierFilterSettings)chromatogramFilterSettings;
+		} else {
+			settings = PreferenceSupplier.getChromatogramFilterSettings();
 		}
+		this.ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(settings.getIonsToRemove())));
 	}
 
 	/**

@@ -27,10 +27,12 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakFilter extends AbstractPeakFilter {
@@ -51,7 +53,8 @@ public class PeakFilter extends AbstractPeakFilter {
 		if(peakFilterSettings instanceof IIonRemoverPeakFilterSettings) {
 			//
 			IIonRemoverPeakFilterSettings ionRemoverPeakFilterSettings = (IIonRemoverPeakFilterSettings)peakFilterSettings;
-			IMarkedIons ionsToRemove = ionRemoverPeakFilterSettings.getIonsToRemove();
+			IonSettingUtil settingIon = new IonSettingUtil();
+			IMarkedIons ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(ionRemoverPeakFilterSettings.getIonsToRemove())));
 			for(IPeakMSD peak : peaks) {
 				peak.removeAllTargets();
 				IPeakMassSpectrum peakMassSpectrum = peak.getPeakModel().getPeakMassSpectrum();

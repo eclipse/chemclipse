@@ -12,9 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 
 public interface IIonRemoverMassSpectrumFilterSettings extends IMassSpectrumFilterSettings {
 
-	IMarkedIons getIonsToRemove();
+	String getIonsToRemove();
+
+	void setIonsToRemove(String ionsToRemove);
 }

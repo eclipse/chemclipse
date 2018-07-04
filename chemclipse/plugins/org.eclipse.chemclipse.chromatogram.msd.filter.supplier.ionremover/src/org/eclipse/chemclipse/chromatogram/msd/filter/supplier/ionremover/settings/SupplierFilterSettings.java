@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.support.settings.IonsSelectionSettingProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -20,6 +21,7 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 
 	@JsonProperty(value = "Ions To Remove", defaultValue = "18;28;84;207")
 	@JsonPropertyDescription(value = "List the ions to remove, separated by a semicolon.")
+	@IonsSelectionSettingProperty
 	private String ionsToRemove = "18;28;84;207";
 
 	@Override

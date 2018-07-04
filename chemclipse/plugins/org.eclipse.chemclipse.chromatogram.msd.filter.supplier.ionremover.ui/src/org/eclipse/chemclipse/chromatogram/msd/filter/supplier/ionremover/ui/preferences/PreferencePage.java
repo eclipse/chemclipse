@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.pr
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.Activator;
-import org.eclipse.chemclipse.support.ui.preferences.editors.IonListEditor;
+import org.eclipse.chemclipse.support.ui.preferences.editors.IonTableEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -31,9 +31,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
-		addField(new IonListEditor(PreferenceSupplier.P_IONS_TO_REMOVE, "Remove ions", getFieldEditorParent()));
+		addField(new IonTableEditor(PreferenceSupplier.P_IONS_TO_REMOVE, "Remove ions", getFieldEditorParent()));
 	}
 
 	/*
@@ -41,6 +42,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

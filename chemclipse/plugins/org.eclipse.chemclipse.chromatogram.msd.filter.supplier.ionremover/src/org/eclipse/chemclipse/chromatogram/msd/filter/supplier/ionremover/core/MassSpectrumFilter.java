@@ -23,10 +23,12 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.prefer
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IIonRemoverMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
@@ -47,7 +49,8 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 		if(massSpectrumFilterSettings instanceof IIonRemoverMassSpectrumFilterSettings) {
 			//
 			IIonRemoverMassSpectrumFilterSettings ionRemoverPeakFilterSettings = (IIonRemoverMassSpectrumFilterSettings)massSpectrumFilterSettings;
-			IMarkedIons markedIons = ionRemoverPeakFilterSettings.getIonsToRemove();
+			IonSettingUtil settingIon = new IonSettingUtil();
+			IMarkedIons markedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(ionRemoverPeakFilterSettings.getIonsToRemove())));
 			for(IScanMSD massSpectrum : massSpectra) {
 				massSpectrum.getTargets().clear();
 				massSpectrum.removeIons(markedIons);
