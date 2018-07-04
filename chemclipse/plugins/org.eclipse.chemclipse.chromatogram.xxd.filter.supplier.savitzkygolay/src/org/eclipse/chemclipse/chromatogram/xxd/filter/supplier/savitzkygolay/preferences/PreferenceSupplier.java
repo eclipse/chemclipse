@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.Act
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISavitzkyGolayMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SavitzkyGolayMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SupplierSmoothingFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -85,8 +85,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static ISupplierFilterSettings getSupplierFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		ISupplierFilterSettings filterSettings = new SupplierFilterSettings();
-		filterSettings.setDerivative(preferences.getInt(P_DERIVATIVE, DEF_DERIVATIVE));
+		ISupplierFilterSettings filterSettings = new SupplierSmoothingFilterSettings();
 		filterSettings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
 		filterSettings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
 		return filterSettings;

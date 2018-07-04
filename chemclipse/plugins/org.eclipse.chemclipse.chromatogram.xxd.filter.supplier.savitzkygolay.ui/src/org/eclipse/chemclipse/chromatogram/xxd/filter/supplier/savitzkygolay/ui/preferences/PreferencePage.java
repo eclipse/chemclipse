@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences;
 
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.Activator;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditorBounded;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditorOddNumber;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.Activator;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -32,11 +32,11 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
-		addField(new SpinnerFieldEditor(PreferenceSupplier.P_DERIVATIVE, "Derivative", PreferenceSupplier.MIN_DERIVATIVE, PreferenceSupplier.MAX_DERIVATIVE, getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceSupplier.P_ORDER, "Order", PreferenceSupplier.MIN_ORDER, PreferenceSupplier.MAX_ORDER, getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceSupplier.P_WIDTH, "Width", PreferenceSupplier.MIN_WIDTH, PreferenceSupplier.MAX_WIDTH, getFieldEditorParent()));
+		addField(new SpinnerFieldEditorBounded(PreferenceSupplier.P_ORDER, "Order", PreferenceSupplier.MIN_ORDER, PreferenceSupplier.MAX_ORDER, getFieldEditorParent()));
+		addField(new SpinnerFieldEditorOddNumber(PreferenceSupplier.P_WIDTH, "Width", PreferenceSupplier.MIN_WIDTH, PreferenceSupplier.MAX_WIDTH, getFieldEditorParent()));
 	}
 
 	/*
@@ -44,6 +44,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}
