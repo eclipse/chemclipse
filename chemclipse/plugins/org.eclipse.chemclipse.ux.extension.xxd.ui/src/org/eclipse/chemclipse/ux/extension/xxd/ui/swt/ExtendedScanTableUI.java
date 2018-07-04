@@ -695,6 +695,7 @@ public class ExtendedScanTableUI {
 				//
 				textX.setText("");
 				textY.setText("");
+				scanTableUI.refresh();
 				fireScanUpdate();
 				//
 			} catch(Exception e) {

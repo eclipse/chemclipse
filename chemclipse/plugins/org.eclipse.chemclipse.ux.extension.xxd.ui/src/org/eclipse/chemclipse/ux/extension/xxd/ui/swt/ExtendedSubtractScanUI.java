@@ -225,6 +225,10 @@ public class ExtendedSubtractScanUI {
 				messageBox.setText("Clear Session");
 				messageBox.setMessage("Would you like to clear the session subtract scan?");
 				if(messageBox.open() == SWT.YES) {
+					//
+					scanMSD = null;
+					updateScan();
+					//
 					PreferenceSupplier.setSessionSubtractMassSpectrum(null);
 					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
