@@ -70,15 +70,21 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 	// ----------------------------private methods
 	private float getFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
 
-		float multiplier = PreferenceSupplier.DEF_MULTIPLIER;
+		double multiplier = 1;
+		double divisor = 1;
 		/*
 		 * Get the excluded ions instance.
 		 */
 		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
 			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
 			multiplier = settings.getMultiplier();
+			divisor = settings.getDivisor();
+		} else {
+			ISupplierFilterSettings filterSettings = PreferenceSupplier.getChromatogramFilterSettings();
+			multiplier = filterSettings.getMultiplier();
+			divisor = filterSettings.getDivisor();
 		}
-		return multiplier;
+		return (float)(multiplier / divisor);
 	}
 
 	private void applyMultiplierFilter(IChromatogramSelection chromatogramSelection, float multiplier) throws FilterException {

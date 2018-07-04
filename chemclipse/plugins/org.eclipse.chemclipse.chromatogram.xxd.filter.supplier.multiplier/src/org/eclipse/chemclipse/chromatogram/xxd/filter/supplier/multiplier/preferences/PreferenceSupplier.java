@@ -14,10 +14,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.prefe
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -27,8 +26,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_MULTIPLIER = "multiplier";
 	public static final float DEF_MULTIPLIER = 1.0f;
-	public static float MIN_MULTIPLIER = 1.0E-12f;
-	public static float MAX_MULTIPLIER = Float.MAX_VALUE;
+	public static final float MIN_MULTIPLIER = 1.0E-12f;
+	public static final float MAX_MULTIPLIER = Float.MAX_VALUE;
+	//
+	public static final String P_DIVISOR = "divisor";
+	public static final float DEF_DIVISOR = 1.0f;
+	public static final float MIN_DIVISOR = 1.0E-12f;
+	public static final float MAX_DIVISOR = Float.MAX_VALUE;
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -56,6 +60,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_MULTIPLIER, Float.toString(DEF_MULTIPLIER));
+		defaultValues.put(P_DIVISOR, Float.toString(DEF_DIVISOR));
 		return defaultValues;
 	}
 
@@ -70,11 +75,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * 
 	 * @return IChromatogramFilterSettings
 	 */
-	public static IChromatogramFilterSettings getChromatogramFilterSettings() {
+	public static ISupplierFilterSettings getChromatogramFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
 		chromatogramFilterSettings.setMultiplier(preferences.getFloat(P_MULTIPLIER, DEF_MULTIPLIER));
+		chromatogramFilterSettings.setDivisor(preferences.getFloat(P_DIVISOR, DEF_DIVISOR));
 		return chromatogramFilterSettings;
 	}
 }

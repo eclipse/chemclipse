@@ -12,15 +12,22 @@
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
 
-	@JsonProperty(value = "Multiplier", defaultValue = "10")
+	@JsonProperty(value = "Multiplier", defaultValue = "1")
 	@JsonPropertyDescription(value = "The factor to multiply the signals.")
-	private float multiplier;
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MULTIPLIER, maxValue = PreferenceSupplier.MAX_MULTIPLIER)
+	private float multiplier = 1.0f;
+	@JsonProperty(value = "Divisor", defaultValue = "1")
+	@JsonPropertyDescription(value = "The factor to divede the signals.")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MULTIPLIER, maxValue = PreferenceSupplier.MAX_MULTIPLIER)
+	private float divisor = 1.0f;
 
 	@Override
 	public float getMultiplier() {
@@ -32,5 +39,17 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	public void setMultiplier(float multiplier) {
 
 		this.multiplier = multiplier;
+	}
+
+	@Override
+	public float getDivisor() {
+
+		return divisor;
+	}
+
+	@Override
+	public void setDivisor(float divisor) {
+
+		this.divisor = divisor;
 	}
 }

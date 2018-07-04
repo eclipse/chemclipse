@@ -31,10 +31,12 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
 		// addField(new LabelFieldEditor("blablabla", getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MULTIPLIER, "Multiplier Factor", PreferenceSupplier.MIN_MULTIPLIER, PreferenceSupplier.MAX_MULTIPLIER, getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_DIVISOR, "Divisor Factor", PreferenceSupplier.MIN_DIVISOR, PreferenceSupplier.MAX_DIVISOR, getFieldEditorParent()));
 	}
 
 	/*
@@ -42,6 +44,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

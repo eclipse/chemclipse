@@ -18,4 +18,8 @@ public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
 	float getMultiplier();
 
 	void setMultiplier(float multiplier);
+
+	float getDivisor();
+
+	void setDivisor(float divisor);
 }
