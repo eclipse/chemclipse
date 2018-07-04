@@ -12,8 +12,10 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -21,6 +23,7 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
@@ -41,6 +44,7 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ListSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -84,11 +88,15 @@ public class ExtendedScanListUI {
 	//
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ListSupport listSupport = new ListSupport();
+	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
+	//
+	private Map<String, Object> map;
 
 	@Inject
 	public ExtendedScanListUI(Composite parent) {
+		map = new HashMap<String, Object>();
 		initialize(parent);
 	}
 
@@ -316,6 +324,21 @@ public class ExtendedScanListUI {
 				IScan scan = (IScan)object;
 				chromatogramSelection.setSelectedIdentifiedScan(scan);
 				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+				/*
+				 * Send the identification target update to let e.g. the molecule renderer react on an update.
+				 */
+				IIdentificationTarget identificationTarget = scanDataSupport.getBestScanTarget(scan);
+				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, identificationTarget);
+				/*
+				 * Send the mass spectrum update, e.g. used by the comparison part.
+				 */
+				if(scan instanceof IScanMSD) {
+					IScanMSD scanMSD = (IScanMSD)scan;
+					map.clear();
+					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, scanMSD);
+					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
+					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+				}
 			}
 		}
 	}

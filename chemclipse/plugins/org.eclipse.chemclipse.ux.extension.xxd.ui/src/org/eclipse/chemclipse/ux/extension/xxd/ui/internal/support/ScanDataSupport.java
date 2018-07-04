@@ -188,4 +188,10 @@ public class ScanDataSupport {
 		List<? extends IIdentificationTarget> identificationTargets = getIdentificationTargets(scan);
 		return identificationDataSupport.getBestLibraryInformation(identificationTargets);
 	}
+
+	public IIdentificationTarget getBestScanTarget(IScan scan) {
+
+		List<? extends IIdentificationTarget> identificationTargets = getIdentificationTargets(scan);
+		return identificationDataSupport.getBestIdentificationTarget(identificationTargets);
+	}
 }

@@ -12,8 +12,10 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -23,9 +25,11 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -42,6 +46,7 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ListSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
@@ -88,11 +93,15 @@ public class ExtendedPeakListUI {
 	//
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ListSupport listSupport = new ListSupport();
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
+	//
+	private Map<String, Object> map;
 
 	@Inject
 	public ExtendedPeakListUI(Composite parent) {
+		map = new HashMap<String, Object>();
 		initialize(parent);
 	}
 
@@ -389,6 +398,21 @@ public class ExtendedPeakListUI {
 				IPeak peak = (IPeak)object;
 				chromatogramSelection.setSelectedPeak(peak);
 				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+				/*
+				 * Send the identification target update to let e.g. the molecule renderer react on an update.
+				 */
+				IIdentificationTarget identificationTarget = peakDataSupport.getBestPeakTarget(peak.getTargets());
+				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, identificationTarget);
+				/*
+				 * Send the mass spectrum update, e.g. used by the comparison part.
+				 */
+				if(peak instanceof IPeakMSD) {
+					IPeakMSD peakMSD = (IPeakMSD)peak;
+					map.clear();
+					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, peakMSD.getExtractedMassSpectrum());
+					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
+					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+				}
 			}
 		}
 	}
