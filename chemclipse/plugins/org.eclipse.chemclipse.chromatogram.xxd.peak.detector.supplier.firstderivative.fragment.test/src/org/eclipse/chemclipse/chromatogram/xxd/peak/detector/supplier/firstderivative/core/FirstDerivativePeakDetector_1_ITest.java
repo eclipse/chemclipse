@@ -68,28 +68,28 @@ public class FirstDerivativePeakDetector_1_ITest extends TestCase {
 
 	public void testDetect_2() throws ChromatogramIsNullException, ValueMustNotBeNullException {
 
-		peakDetectorSettings.setThreshold(Threshold.OFF.toString());
+		peakDetectorSettings.setThreshold(Threshold.OFF);
 		peakDetector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
 		assertEquals("Peaks", 208, chromatogram.getNumberOfPeaks());
 	}
 
 	public void testDetect_3() throws ChromatogramIsNullException, ValueMustNotBeNullException {
 
-		peakDetectorSettings.setThreshold(Threshold.LOW.toString());
+		peakDetectorSettings.setThreshold(Threshold.LOW);
 		peakDetector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
 		assertEquals("Peaks", 185, chromatogram.getNumberOfPeaks());
 	}
 
 	public void testDetect_4() throws ChromatogramIsNullException, ValueMustNotBeNullException {
 
-		peakDetectorSettings.setThreshold(Threshold.MEDIUM.toString());
+		peakDetectorSettings.setThreshold(Threshold.MEDIUM);
 		peakDetector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
 		assertEquals("Peaks", 83, chromatogram.getNumberOfPeaks());
 	}
 
 	public void testDetect_5() throws ChromatogramIsNullException, ValueMustNotBeNullException {
 
-		peakDetectorSettings.setThreshold(Threshold.HIGH.toString());
+		peakDetectorSettings.setThreshold(Threshold.HIGH);
 		peakDetector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
 		assertEquals("Peaks", 4, chromatogram.getNumberOfPeaks());
 	}

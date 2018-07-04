@@ -12,14 +12,13 @@
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 public interface IFirstDerivativePeakDetectorMSDSettings extends IPeakDetectorMSDSettings {
 
-	Threshold INITIAL_THRESHOLD = Threshold.MEDIUM;
+	Threshold getThreshold();
 
-	String getThreshold();
-
-	void setThreshold(String threshold);
+	void setThreshold(Threshold threshold);
 
 	/**
 	 * If false, VB or BV will be calculated.
@@ -40,7 +39,7 @@ public interface IFirstDerivativePeakDetectorMSDSettings extends IPeakDetectorMS
 
 	void setMinimumSignalToNoiseRatio(float minimumSignalToNoiseRatio);
 
-	String getWindowSize();
+	WindowSize getWindowSize();
 
-	void setWindowSize(String windowSize);
+	void setWindowSize(WindowSize windowSize);
 }

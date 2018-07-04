@@ -12,32 +12,38 @@
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
+import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
+import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
+import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class FirstDerivativePeakDetectorMSDSettings extends AbstractPeakDetectorMSDSettings implements IFirstDerivativePeakDetectorMSDSettings {
 
-	@JsonProperty(value = "Threshold", defaultValue = "3")
-	@JsonPropertyDescription(value = "Threshold (Off -> High): 1, 2, 3, 4")
-	private String threshold = Threshold.MEDIUM.toString();
+	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
+	@EnumSelectionRadioButtonsSettingProperty
+	Threshold threshold = Threshold.MEDIUM;
 	@JsonProperty(value = "Include Background", defaultValue = "false")
 	private boolean includeBackground = false;
 	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_SN_RATIO_MIN, maxValue = PreferenceSupplier.MIN_SN_RATIO_MAX)
 	private float minimumSignalToNoiseRatio;
-	@JsonProperty(value = "Window Size", defaultValue = "5")
+	@JsonProperty(value = "Window Size", defaultValue = "SCANS_5")
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
-	private String windowSize = WindowSize.SCANS_5.toString();
+	@EnumSelectionSettingProperty
+	private WindowSize windowSize = WindowSize.SCANS_5;
 
 	@Override
-	public String getThreshold() {
+	public Threshold getThreshold() {
 
 		return threshold;
 	}
 
 	@Override
-	public void setThreshold(String threshold) {
+	public void setThreshold(Threshold threshold) {
 
 		this.threshold = threshold;
 	}
@@ -67,13 +73,13 @@ public class FirstDerivativePeakDetectorMSDSettings extends AbstractPeakDetector
 	}
 
 	@Override
-	public String getWindowSize() {
+	public WindowSize getWindowSize() {
 
 		return windowSize;
 	}
 
 	@Override
-	public void setWindowSize(String windowSize) {
+	public void setWindowSize(WindowSize windowSize) {
 
 		this.windowSize = windowSize;
 	}

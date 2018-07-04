@@ -31,13 +31,17 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_THRESHOLD = "threshold";
-	public static final String DEF_THRESHOLD = Threshold.MEDIUM.toString();
+	public static final String DEF_THRESHOLD = Threshold.MEDIUM.name();
 	public static final String P_INCLUDE_BACKGROUND = "includeBackground";
 	public static final boolean DEF_INCLUDE_BACKGROUND = false; // false will use BV oder VB, if true VV will be used.
+	//
 	public static final String P_MIN_SN_RATIO = "minSNRatio";
 	public static final float DEF_MIN_SN_RATIO = 0.0f; // 0 = all peaks will be added
+	public static final float MIN_SN_RATIO_MIN = 0.0f; // 0 = all peaks will be added
+	public static final float MIN_SN_RATIO_MAX = Float.MAX_VALUE; // 0 = all peaks will be added
+	//
 	public static final String P_MOVING_AVERAGE_WINDOW_SIZE = "movingAverageWindowSize";
-	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE = WindowSize.SCANS_3.toString();
+	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE = WindowSize.SCANS_3.name();
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -82,10 +86,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		IFirstDerivativePeakDetectorMSDSettings peakDetectorSettings = new FirstDerivativePeakDetectorMSDSettings();
-		peakDetectorSettings.setThreshold(preferences.get(P_THRESHOLD, DEF_THRESHOLD));
+		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD, DEF_THRESHOLD)));
 		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND, DEF_INCLUDE_BACKGROUND));
 		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
-		peakDetectorSettings.setWindowSize(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE, DEF_MOVING_AVERAGE_WINDOW_SIZE));
+		peakDetectorSettings.setWindowSize(WindowSize.valueOf(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE, DEF_MOVING_AVERAGE_WINDOW_SIZE)));
 		return peakDetectorSettings;
 	}
 

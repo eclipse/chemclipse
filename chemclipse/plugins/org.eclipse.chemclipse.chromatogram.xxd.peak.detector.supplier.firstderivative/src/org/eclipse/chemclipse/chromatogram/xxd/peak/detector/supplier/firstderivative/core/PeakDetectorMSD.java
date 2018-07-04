@@ -126,16 +126,16 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 			 * threshold defines the slope sensitivity.
 			 */
 			switch(firstDerivativePeakDetectorSettings.getThreshold()) {
-				case "1":
+				case OFF:
 					this.threshold = 0.0005d;
 					break;
-				case "2":
+				case LOW:
 					this.threshold = 0.005d;
 					break;
-				case "3":
+				case MEDIUM:
 					this.threshold = 0.05d;
 					break;
-				case "4":
+				case HIGH:
 					this.threshold = 0.5d;
 					break;
 				default:
@@ -165,7 +165,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorMSDSettings) {
 			IFirstDerivativePeakDetectorMSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorMSDSettings)peakDetectorSettings;
-			this.movingAverageWindow = WindowSize.valueOf(firstDerivativePeakDetectorSettings.getWindowSize());
+			this.movingAverageWindow = firstDerivativePeakDetectorSettings.getWindowSize();
 		}
 	}
 
