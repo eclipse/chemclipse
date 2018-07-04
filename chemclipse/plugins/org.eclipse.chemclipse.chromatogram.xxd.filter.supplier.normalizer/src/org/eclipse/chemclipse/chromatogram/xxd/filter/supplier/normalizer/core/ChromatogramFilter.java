@@ -33,7 +33,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
-	private float normalizationBase = ISupplierFilterSettings.DEFAULT_NORMALIZATION_BASE;
+	private float normalizationBase;
 
 	// TODO IProgressMonitor
 	@Override
@@ -76,6 +76,8 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
 			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
 			normalizationBase = settings.getNormalizationBase();
+		} else {
+			normalizationBase = PreferenceSupplier.getChromatogramFilterSettings().getNormalizationBase();
 		}
 	}
 

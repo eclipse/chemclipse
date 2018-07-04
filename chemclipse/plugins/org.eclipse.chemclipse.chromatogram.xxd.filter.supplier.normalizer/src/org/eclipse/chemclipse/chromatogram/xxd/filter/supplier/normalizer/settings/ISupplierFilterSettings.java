@@ -15,9 +15,6 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 
 public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
 
-	float MIN_NORMALIZATION_BASE = 1.0f;
-	float DEFAULT_NORMALIZATION_BASE = 1000.0f;
-
 	/**
 	 * Returns the normalization base.
 	 * 

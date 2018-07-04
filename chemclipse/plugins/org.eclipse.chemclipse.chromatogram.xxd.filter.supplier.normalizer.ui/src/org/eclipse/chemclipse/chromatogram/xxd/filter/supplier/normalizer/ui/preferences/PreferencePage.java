@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.ui.preferences;
 
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.ui.Activator;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -37,8 +39,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
+		addField(new FloatFieldEditor(PreferenceSupplier.P_NORMALIZATION_BASE, "Normalization Base", PreferenceSupplier.MIN_NORMALIZATION_BASE, PreferenceSupplier.MAX_NORMALIZATION_BASE, getFieldEditorParent()));
 	}
 
 	/*
@@ -46,6 +50,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

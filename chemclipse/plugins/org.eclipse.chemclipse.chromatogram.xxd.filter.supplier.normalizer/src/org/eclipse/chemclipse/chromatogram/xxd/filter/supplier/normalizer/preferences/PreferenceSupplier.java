@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.prefe
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.SupplierFilterSettings;
@@ -25,6 +24,10 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	public static final String P_NORMALIZATION_BASE = "normalizationBase";
+	public static final float DEF_NORMALIZATION_BASE = 1000.0f;
+	public static final float MIN_NORMALIZATION_BASE = 1.0f;
+	public static final float MAX_NORMALIZATION_BASE = Float.MAX_VALUE;
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -51,6 +54,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
+		defaultValues.put(P_NORMALIZATION_BASE, Float.toString(DEF_NORMALIZATION_BASE));
 		return defaultValues;
 	}
 
@@ -65,13 +69,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * 
 	 * @return IChromatogramFilterSettings
 	 */
-	public static IChromatogramFilterSettings getChromatogramFilterSettings() {
+	public static ISupplierFilterSettings getChromatogramFilterSettings() {
 
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
 		/*
 		 * Get the actual preference.
 		 * If it's not available, a default value will be returned.
 		 */
+		chromatogramFilterSettings.setNormalizationBase(preferences.getFloat(P_NORMALIZATION_BASE, DEF_NORMALIZATION_BASE));
 		return chromatogramFilterSettings;
 	}
 }

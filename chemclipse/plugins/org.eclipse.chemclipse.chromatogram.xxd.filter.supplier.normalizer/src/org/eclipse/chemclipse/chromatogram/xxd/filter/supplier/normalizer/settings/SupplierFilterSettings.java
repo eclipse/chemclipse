@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -20,7 +22,8 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 
 	@JsonProperty(value = "Normalization Base", defaultValue = "1000")
 	@JsonPropertyDescription(value = "Use this value to normalize the chromatogram.")
-	private float normalizationBase = ISupplierFilterSettings.DEFAULT_NORMALIZATION_BASE;
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_NORMALIZATION_BASE, maxValue = PreferenceSupplier.MAX_NORMALIZATION_BASE)
+	private float normalizationBase = PreferenceSupplier.DEF_NORMALIZATION_BASE;
 
 	@Override
 	public float getNormalizationBase() {
@@ -31,8 +34,6 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	@Override
 	public void setNormalizationBase(float normalizationBase) {
 
-		if(normalizationBase >= MIN_NORMALIZATION_BASE && !Float.isNaN(normalizationBase) && !Float.isInfinite(normalizationBase)) {
-			this.normalizationBase = normalizationBase;
-		}
+		this.normalizationBase = normalizationBase;
 	}
 }

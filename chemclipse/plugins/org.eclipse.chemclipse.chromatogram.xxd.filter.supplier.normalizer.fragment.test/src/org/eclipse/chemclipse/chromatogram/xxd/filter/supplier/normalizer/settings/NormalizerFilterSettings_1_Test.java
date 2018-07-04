@@ -11,8 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings;
 
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.preferences.PreferenceSupplier;
 
 import junit.framework.TestCase;
 
@@ -36,7 +35,7 @@ public class NormalizerFilterSettings_1_Test extends TestCase {
 
 	public void testGetNormalizationBase_1() {
 
-		assertEquals("NormalizationBase", ISupplierFilterSettings.DEFAULT_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
+		assertEquals("NormalizationBase", PreferenceSupplier.DEF_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
 	}
 
 	public void testGetNormalizationBase_2() {
@@ -54,30 +53,30 @@ public class NormalizerFilterSettings_1_Test extends TestCase {
 	public void testGetNormalizationBase_4() {
 
 		normalizerFilterSettings.setNormalizationBase(0.0f);
-		assertEquals("NormalizationBase", ISupplierFilterSettings.DEFAULT_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
+		assertEquals("NormalizationBase", PreferenceSupplier.DEF_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
 	}
 
 	public void testGetNormalizationBase_5() {
 
 		normalizerFilterSettings.setNormalizationBase(-1.0f);
-		assertEquals("NormalizationBase", ISupplierFilterSettings.DEFAULT_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
+		assertEquals("NormalizationBase", PreferenceSupplier.DEF_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
 	}
 
 	public void testGetNormalizationBase_6() {
 
 		normalizerFilterSettings.setNormalizationBase(Float.NaN);
-		assertEquals("NormalizationBase", ISupplierFilterSettings.DEFAULT_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
+		assertEquals("NormalizationBase", PreferenceSupplier.DEF_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
 	}
 
 	public void testGetNormalizationBase_7() {
 
 		normalizerFilterSettings.setNormalizationBase(Float.POSITIVE_INFINITY);
-		assertEquals("NormalizationBase", ISupplierFilterSettings.DEFAULT_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
+		assertEquals("NormalizationBase", PreferenceSupplier.DEF_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
 	}
 
 	public void testGetNormalizationBase_8() {
 
 		normalizerFilterSettings.setNormalizationBase(Float.NEGATIVE_INFINITY);
-		assertEquals("NormalizationBase", ISupplierFilterSettings.DEFAULT_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
+		assertEquals("NormalizationBase", PreferenceSupplier.DEF_NORMALIZATION_BASE, normalizerFilterSettings.getNormalizationBase());
 	}
 }
