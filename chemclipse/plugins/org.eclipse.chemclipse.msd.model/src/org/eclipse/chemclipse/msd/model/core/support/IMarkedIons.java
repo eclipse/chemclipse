@@ -34,4 +34,11 @@ public interface IMarkedIons extends Set<IMarkedIon> {
 	 * @param ionStop
 	 */
 	void add(int ionStart, int ionStop);
+
+	/**
+	 * add ions with magnification factor = 1.
+	 * 
+	 * @param ions
+	 */
+	void add(int[] ions);
 }

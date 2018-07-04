@@ -13,11 +13,11 @@ package org.eclipse.chemclipse.msd.model.core.support;
 
 public class MarkedIons extends AbstractMarkedIons implements IMarkedIons {
 
-	public MarkedIons() {
-		super();
+	public MarkedIons(int[] ionsList) {
+		super(ionsList);
 	}
 
-	public MarkedIons(String ionsList) {
-		super(ionsList);
+	public MarkedIons() {
+		super();
 	}
 }

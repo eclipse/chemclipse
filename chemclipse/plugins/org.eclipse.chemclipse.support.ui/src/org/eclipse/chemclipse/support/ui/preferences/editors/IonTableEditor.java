@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.editors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 
 public class IonTableEditor extends TableViewerFieldEditor<String> {
@@ -49,9 +51,11 @@ public class IonTableEditor extends TableViewerFieldEditor<String> {
 
 		InputDialog dialog = new InputDialog(getShell(), "Enter a ion.", "Standard values are 18 (water), 28 (nitrogen), 84 (solvent tailing), 207 (column bleed).", "", new IonInputValidator());
 		dialog.create();
-		dialog.open();
-		String ion = dialog.getValue();
-		return settinngUtils.extractRangesInput(ion);
+		if(Window.OK == dialog.open()) {
+			String ion = dialog.getValue();
+			return settinngUtils.parseInput(ion);
+		}
+		return new ArrayList<>();
 	}
 
 	@Override

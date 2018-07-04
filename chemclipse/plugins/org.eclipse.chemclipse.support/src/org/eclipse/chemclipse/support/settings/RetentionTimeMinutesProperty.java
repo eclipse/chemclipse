@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 @JacksonAnnotation
 public @interface RetentionTimeMinutesProperty {
 
-	int step() default 1;
+	int step() default 6000;
 
 	int minValue() default Integer.MIN_VALUE;
 

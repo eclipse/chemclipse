@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.support.model.RangesInteger;
 
@@ -32,15 +33,13 @@ public class IonSettingUtil implements IStringSerialization<String> {
 		objectMapper = new ObjectMapper();
 	}
 
-	private int[][] parseString(String stringList) {
+	private int[][] parseString(List<String> stringList) {
 
-		StringTokenizer stringTokenizer = new StringTokenizer(stringList, SEPARATOR);
-		int arraySize = stringTokenizer.countTokens();
+		int arraySize = stringList.size();
 		int[][] decodedArray = new int[arraySize][2];
 		try {
 			for(int i = 0; i < arraySize; i++) {
-				String token = stringTokenizer.nextToken();
-				String[] r = token.split(RANGE_SEPARATOR);
+				String[] r = stringList.get(i).split(RANGE_SEPARATOR);
 				if(r.length == 1) {
 					decodedArray[i][0] = Integer.parseInt(r[0].trim());
 					decodedArray[i][1] = Integer.parseInt(r[0].trim());
@@ -73,26 +72,33 @@ public class IonSettingUtil implements IStringSerialization<String> {
 
 		try {
 			if(deserialize != null && !deserialize.isEmpty()) {
-				String[] ss = objectMapper.readValue(deserialize, String[].class);
-				return Arrays.asList(ss);
+				String[] decodedArray = objectMapper.readValue(deserialize, String[].class);
+				return Arrays.stream(decodedArray).collect(Collectors.toList());
 			}
 		} catch(IOException e) {
 		}
-		return new ArrayList<>();
-	}
-
-	public List<String> extractRangesInput(String range) {
-
-		List<String> newRanges = new ArrayList<>();
-		int[][] ranges = parseString(range);
-		for(int i = 0; i < ranges.length; i++) {
-			if(ranges[i][0] == ranges[i][1]) {
-				newRanges.add(Integer.toString(ranges[i][0]));
-			} else {
-				newRanges.add(Integer.toString(ranges[i][0]) + " - " + Integer.toString(ranges[i][1]));
+		/*
+		 * support original save...
+		 */
+		String[] decodedArray;
+		String stringList = deserialize;
+		StringTokenizer stringTokenizer = new StringTokenizer(stringList, ";");
+		int arraySize = stringTokenizer.countTokens();
+		if(arraySize > 0) {
+			/*
+			 * There are values stored.
+			 */
+			decodedArray = new String[arraySize];
+			for(int i = 0; i < arraySize; i++) {
+				decodedArray[i] = stringTokenizer.nextToken(";");
 			}
+		} else {
+			/*
+			 * No value is stored.
+			 */
+			decodedArray = new String[0];
 		}
-		return newRanges;
+		return Arrays.stream(decodedArray).collect(Collectors.toList());
 	}
 
 	public int compare(String s1, String s2) {
@@ -104,7 +110,7 @@ public class IonSettingUtil implements IStringSerialization<String> {
 		return Integer.compare(i1, i2);
 	}
 
-	public int[] extractIntegerArray(String array) {
+	public int[] extractIons(List<String> array) {
 
 		RangesInteger rangesInteger = new RangesInteger();
 		int[][] ranges = parseString(array);
@@ -112,5 +118,46 @@ public class IonSettingUtil implements IStringSerialization<String> {
 			rangesInteger.addRange(r[0], r[1]);
 		}
 		return rangesInteger.getValues();
+	}
+
+	public List<String> parseInput(String ions) {
+
+		List<String> newRanges = new ArrayList<>();
+		if(ions != null) {
+			int[][] ranges = parseString(ions);
+			for(int i = 0; i < ranges.length; i++) {
+				if(ranges[i][0] == ranges[i][1]) {
+					newRanges.add(Integer.toString(ranges[i][0]));
+				} else {
+					newRanges.add(Integer.toString(ranges[i][0]) + " - " + Integer.toString(ranges[i][1]));
+				}
+			}
+		}
+		return newRanges;
+	}
+
+	private int[][] parseString(String stringList) {
+
+		StringTokenizer stringTokenizer = new StringTokenizer(stringList, SEPARATOR);
+		int arraySize = stringTokenizer.countTokens();
+		int[][] decodedArray = new int[arraySize][2];
+		try {
+			for(int i = 0; i < arraySize; i++) {
+				String token = stringTokenizer.nextToken();
+				String[] r = token.split(RANGE_SEPARATOR);
+				if(r.length == 1) {
+					decodedArray[i][0] = Integer.parseInt(r[0].trim());
+					decodedArray[i][1] = Integer.parseInt(r[0].trim());
+				} else if(r.length == 2) {
+					int r1 = Integer.parseInt(r[0].trim());
+					int r2 = Integer.parseInt(r[1].trim());
+					decodedArray[i][0] = Math.min(r1, r2);
+					decodedArray[i][1] = Math.max(r1, r2);
+				}
+			}
+		} catch(NumberFormatException e) {
+			// TODO: handle exception
+		}
+		return decodedArray;
 	}
 }

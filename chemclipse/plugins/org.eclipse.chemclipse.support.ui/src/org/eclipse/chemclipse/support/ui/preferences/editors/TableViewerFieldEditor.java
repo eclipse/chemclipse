@@ -263,7 +263,7 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 	@Override
 	protected void doLoad() {
 
-		String preferences = getPreferenceStore().getDefaultString(getPreferenceName());
+		String preferences = getPreferenceStore().getString(getPreferenceName());
 		List<Value> v = parseSavePreferences(preferences);
 		tableViewer.setInput(v);
 		update();

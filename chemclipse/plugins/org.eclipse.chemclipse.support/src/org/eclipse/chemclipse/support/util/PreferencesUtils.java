@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.util;
 
-public class PreferencesConverter {
+public class PreferencesUtils {
 
 	public static String[][] enumToArray(Class<? extends Enum> enums) {
 

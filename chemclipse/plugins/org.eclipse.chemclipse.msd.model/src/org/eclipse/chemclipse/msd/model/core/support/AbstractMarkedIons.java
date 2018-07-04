@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.support.util.IonListUtil;
 
 public class AbstractMarkedIons implements IMarkedIons {
 
@@ -29,15 +28,14 @@ public class AbstractMarkedIons implements IMarkedIons {
 
 	/**
 	 * Parse the ions string list.
-	 * "18;28;84;207" to 18 28 84 207
+	 * 
 	 * 
 	 * @param ions
 	 */
-	public AbstractMarkedIons(String ionsList) {
+	public AbstractMarkedIons(int[] ionsList) {
 		markedIons = new HashSet<IMarkedIon>();
-		if(ionsList != null && !"".equals(ionsList)) {
-			IonListUtil ionListUtil = new IonListUtil();
-			for(int ion : ionListUtil.getIons(ionsList)) {
+		if(ionsList != null) {
+			for(int ion : ionsList) {
 				markedIons.add(new MarkedIon(ion));
 			}
 		}
@@ -141,6 +139,14 @@ public class AbstractMarkedIons implements IMarkedIons {
 		}
 		for(int i = ionStart; i <= ionStop; i++) {
 			markedIons.add(new MarkedIon(i));
+		}
+	}
+
+	@Override
+	public void add(int[] ions) {
+
+		for(int ion : ions) {
+			markedIons.add(new MarkedIon(ion));
 		}
 	}
 }

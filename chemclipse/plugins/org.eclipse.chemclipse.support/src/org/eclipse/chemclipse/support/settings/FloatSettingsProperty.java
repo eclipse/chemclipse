@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 @JacksonAnnotation
 public @interface FloatSettingsProperty {
 
-	int step() default 1;
+	float step() default 1f;
 
 	float minValue() default -Float.MAX_VALUE;
 

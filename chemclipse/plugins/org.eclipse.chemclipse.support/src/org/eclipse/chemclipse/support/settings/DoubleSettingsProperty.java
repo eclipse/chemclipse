@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 @JacksonAnnotation
 public @interface DoubleSettingsProperty {
 
-	int step() default 1;
+	double step() default 1.0;
 
 	double minValue() default -Double.MAX_VALUE;
 
