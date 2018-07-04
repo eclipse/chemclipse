@@ -11,15 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.preferences;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.SupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.Activator;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.model.support.SegmentWidth;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -72,7 +71,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * 
 	 * @return IChromatogramFilterSettings
 	 */
-	public static IChromatogramFilterSettings getChromatogramFilterSettings() {
+	public static ISupplierFilterSettings getChromatogramFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
@@ -80,7 +79,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		 * Get the actual preference.
 		 * If it's not available, a default value will be returned.
 		 */
-		chromatogramFilterSettings.getCodaSettings().setCodaThreshold(preferences.getFloat(P_CODA_THRESHOLD, DEF_CODA_THRESHOLD));
+		chromatogramFilterSettings.setCodaThreshold(preferences.getFloat(P_CODA_THRESHOLD, DEF_CODA_THRESHOLD));
 		return chromatogramFilterSettings;
 	}
 

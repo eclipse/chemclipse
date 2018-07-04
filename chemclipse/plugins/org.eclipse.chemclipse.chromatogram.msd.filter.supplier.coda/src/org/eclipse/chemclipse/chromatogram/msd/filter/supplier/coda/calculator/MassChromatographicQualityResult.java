@@ -14,9 +14,9 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.calculator;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.exceptions.CodaCalculatorException;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.ICodaSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 public class MassChromatographicQualityResult implements IMassChromatographicQualityResult {
@@ -44,7 +43,6 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 	 */
 	public MassChromatographicQualityResult(IChromatogramSelectionMSD chromatogramSelection, float codaThreshold, WindowSize windowSize) throws CodaCalculatorException {
 		validateChromatogramSelection(chromatogramSelection);
-		codaThreshold = validateCodaThreshold(codaThreshold);
 		validateWindowSize(windowSize);
 		/*
 		 * Create a new excluded ions object.
@@ -128,16 +126,6 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 		return selected / mcqs.size();
 	}
 
-	/**
-	 * Validates the coda threshold.
-	 */
-	private float validateCodaThreshold(float codaThreshold) {
-
-		if(codaThreshold < ICodaSettings.MIN_CODA_THRESHOLD || codaThreshold > ICodaSettings.MAX_CODA_THRESHOLD) {
-			codaThreshold = ICodaSettings.DEFAULT_CODA_THRESHOLD;
-		}
-		return codaThreshold;
-	}
 
 	/**
 	 * Validates the window size.

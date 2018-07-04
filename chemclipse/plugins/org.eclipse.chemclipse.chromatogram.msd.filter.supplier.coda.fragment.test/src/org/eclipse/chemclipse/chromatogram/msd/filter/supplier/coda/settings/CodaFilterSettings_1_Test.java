@@ -16,7 +16,6 @@ import junit.framework.TestCase;
 public class CodaFilterSettings_1_Test extends TestCase {
 
 	private ISupplierFilterSettings settings;
-	private ICodaSettings codaSettings;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -29,13 +28,11 @@ public class CodaFilterSettings_1_Test extends TestCase {
 	protected void tearDown() throws Exception {
 
 		settings = null;
-		codaSettings = null;
 		super.tearDown();
 	}
 
 	public void testGetCodaSettings_1() {
 
-		codaSettings = settings.getCodaSettings();
-		assertNotNull(codaSettings);
+		assertNotNull(settings);
 	}
 }

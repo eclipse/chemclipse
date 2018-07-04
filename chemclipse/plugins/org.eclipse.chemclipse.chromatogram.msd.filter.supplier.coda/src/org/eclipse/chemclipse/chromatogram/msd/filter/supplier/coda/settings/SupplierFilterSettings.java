@@ -12,18 +12,26 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
 
-	private ICodaSettings codaSettings;
+	@JsonProperty(value = "Coda Threshold", defaultValue = "0.75f")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.CODA_THRESHOLD_MIN_VALUE, maxValue = PreferenceSupplier.CODA_THRESHOLD_MAX_VALUE, step = 0.05f)
+	private float codaThreshold;
 
-	public SupplierFilterSettings() {
-		codaSettings = new CodaSettings();
+	@Override
+	public float getCodaThreshold() {
+
+		return codaThreshold;
 	}
 
 	@Override
-	public ICodaSettings getCodaSettings() {
+	public void setCodaThreshold(float codaThreshold) {
 
-		return codaSettings;
+		this.codaThreshold = codaThreshold;
 	}
 }

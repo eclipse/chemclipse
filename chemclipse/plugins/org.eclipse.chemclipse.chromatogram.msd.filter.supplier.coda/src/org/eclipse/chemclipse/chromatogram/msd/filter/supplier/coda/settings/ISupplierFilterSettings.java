@@ -16,9 +16,18 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
 
 	/**
-	 * Returns the coda settings instance.
+	 * Returns the coda threshold value.
 	 * 
-	 * @return {@link ICodaSettings}
+	 * @return float
 	 */
-	ICodaSettings getCodaSettings();
+	float getCodaThreshold();
+
+	/**
+	 * Sets the coda threshold value.<br/>
+	 * The value must be in between the range of MIN_CODA_THRESHOLD 0.0f (low
+	 * quality) and MAX_CODA_THRESHOLD 1.0f (high quality).
+	 * 
+	 * @param codaThreshold
+	 */
+	void setCodaThreshold(float codaThreshold);
 }

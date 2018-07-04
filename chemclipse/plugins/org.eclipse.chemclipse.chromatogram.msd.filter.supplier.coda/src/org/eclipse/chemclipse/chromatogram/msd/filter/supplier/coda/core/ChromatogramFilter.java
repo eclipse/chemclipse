@@ -21,8 +21,6 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.calculator.M
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.exceptions.CodaCalculatorException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.CodaSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.ICodaSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
@@ -37,7 +35,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
 	// TODO als Option in CodaSettings?
 	private static WindowSize MOVING_AVERAGE_WINDOW = WindowSize.SCANS_5;
-	private ICodaSettings codaSettings = null;
+	private ISupplierFilterSettings supplierFilterSettings = null;
 
 	// TODO IProgressMonitor
 	@Override
@@ -78,10 +76,9 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		 * Get the excluded ions instance.
 		 */
 		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
-			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
-			codaSettings = settings.getCodaSettings();
+			supplierFilterSettings = (ISupplierFilterSettings)chromatogramFilterSettings;
 		} else {
-			codaSettings = new CodaSettings();
+			supplierFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
 		}
 	}
 
@@ -92,7 +89,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		 */
 		IMarkedIons excludedIons;
 		try {
-			IMassChromatographicQualityResult result = MassChromatographicQualityCalculator.calculate(chromatogramSelection, codaSettings.getCodaThreshold(), MOVING_AVERAGE_WINDOW);
+			IMassChromatographicQualityResult result = MassChromatographicQualityCalculator.calculate(chromatogramSelection, supplierFilterSettings.getCodaThreshold(), MOVING_AVERAGE_WINDOW);
 			excludedIons = result.getExcludedIons();
 		} catch(CodaCalculatorException e) {
 			throw new FilterException("A failure occured while calculating the coda mass chromatographic quality.");
