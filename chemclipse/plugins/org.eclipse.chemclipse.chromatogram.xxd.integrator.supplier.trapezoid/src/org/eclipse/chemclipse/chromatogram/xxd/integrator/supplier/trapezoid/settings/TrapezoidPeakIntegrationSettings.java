@@ -20,6 +20,10 @@ public class TrapezoidPeakIntegrationSettings extends PeakIntegrationSettings im
 	@JsonProperty(value = "Include Background", defaultValue = "false")
 	private boolean includeBackground = false;
 
+	public TrapezoidPeakIntegrationSettings() {
+		super();
+	}
+
 	@Override
 	public boolean isIncludeBackground() {
 
