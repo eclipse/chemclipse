@@ -56,6 +56,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	private Map<String, ITableMenuEntry> menuEntryMap;
 	private Map<String, MenuManager> menuManagerMap;
 	private Set<KeyListener> userDefinedKeyListeners;
+	private List<IColumnMoveListener> columnMoveListeners;
 	private boolean editEnabled;
 
 	public ExtendedTableViewer(Composite parent) {
@@ -70,6 +71,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		menuEntryMap = new HashMap<String, ITableMenuEntry>();
 		menuManagerMap = new HashMap<String, MenuManager>();
 		userDefinedKeyListeners = new HashSet<KeyListener>();
+		columnMoveListeners = new ArrayList<>();
 		applySettings(tableSettings);
 		editEnabled = true;
 		registerMenuListener();
@@ -94,6 +96,16 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		}
 		//
 		createKeyListener();
+	}
+
+	public void addColumnMoveListener(IColumnMoveListener columnMoveListener) {
+
+		columnMoveListeners.add(columnMoveListener);
+	}
+
+	public void removeColumnMoveListener(IColumnMoveListener columnMoveListener) {
+
+		columnMoveListeners.remove(columnMoveListener);
 	}
 
 	private void registerMenuListener() {
@@ -176,12 +188,30 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 					}
 				}
 			});
+			/*
+			 * Column Move Listener
+			 */
+			tableColumn.addListener(SWT.Move, new Listener() {
+
+				@Override
+				public void handleEvent(Event event) {
+
+					fireColumnMoved();
+				}
+			});
 		}
 		/*
 		 * Set header and lines visible.
 		 */
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+	}
+
+	private void fireColumnMoved() {
+
+		for(IColumnMoveListener columnMoveListener : columnMoveListeners) {
+			columnMoveListener.handle();
+		}
 	}
 
 	public List<TableViewerColumn> getTableViewerColumns() {

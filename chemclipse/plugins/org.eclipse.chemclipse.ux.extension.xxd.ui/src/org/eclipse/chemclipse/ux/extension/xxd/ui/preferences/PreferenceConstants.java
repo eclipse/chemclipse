@@ -335,4 +335,13 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_DATA_PCR = true;
 	public static final String P_SHOW_DATA_SEQUENCE = "showDataSequence";
 	public static final boolean DEF_SHOW_DATA_SEQUENCE = true;
+	/*
+	 * List Column Order
+	 */
+	public static final String P_COLUMN_ORDER_PEAK_LIST = "columnOrderPeakList";
+	public static final String DEF_COLUMN_ORDER_PEAK_LIST = "";
+	public static final String P_COLUMN_ORDER_SCAN_LIST = "columnOrderScanList";
+	public static final String DEF_COLUMN_ORDER_SCAN_LIST = "";
+	public static final String P_COLUMN_ORDER_TARGET_LIST = "columnOrderTargetList";
+	public static final String DEF_COLUMN_ORDER_TARGET_LIST = "";
 }

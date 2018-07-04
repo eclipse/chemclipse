@@ -34,13 +34,17 @@ import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ListSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -83,6 +87,7 @@ public class ExtendedPeakListUI {
 	private IChromatogramSelection chromatogramSelection;
 	//
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
+	private ListSupport listSupport = new ListSupport();
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
 
@@ -182,8 +187,8 @@ public class ExtendedPeakListUI {
 
 	private PeakListUI createPeakTable(Composite parent) {
 
-		PeakListUI peakListUI = new PeakListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		Table table = peakListUI.getTable();
+		PeakListUI listUI = new PeakListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		Table table = listUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.addSelectionListener(new SelectionAdapter() {
 
@@ -194,16 +199,29 @@ public class ExtendedPeakListUI {
 			}
 		});
 		/*
+		 * Set/Save the column order.
+		 */
+		String preferenceName = PreferenceConstants.P_COLUMN_ORDER_PEAK_LIST;
+		listSupport.setColumnOrder(table, preferenceName);
+		listUI.addColumnMoveListener(new IColumnMoveListener() {
+
+			@Override
+			public void handle() {
+
+				listSupport.saveColumnOrder(table, preferenceName);
+			}
+		});
+		/*
 		 * Add the delete targets support.
 		 */
-		ITableSettings tableSettings = peakListUI.getTableSettings();
+		ITableSettings tableSettings = listUI.getTableSettings();
 		addDeleteMenuEntry(tableSettings);
 		addVerifyTargetsMenuEntry(tableSettings);
 		addUnverifyTargetsMenuEntry(tableSettings);
 		addKeyEventProcessors(tableSettings);
-		peakListUI.applySettings(tableSettings);
+		listUI.applySettings(tableSettings);
 		//
-		return peakListUI;
+		return listUI;
 	}
 
 	private void addDeleteMenuEntry(ITableSettings tableSettings) {
@@ -353,7 +371,8 @@ public class ExtendedPeakListUI {
 				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
 				chromatogramCSD.removePeak((IChromatogramPeakCSD)peak);
 			} else if(chromatogram instanceof IChromatogramWSD) {
-				//
+				IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+				chromatogramWSD.removePeak((IChromatogramPeakWSD)peak);
 			}
 		}
 	}
@@ -513,14 +532,14 @@ public class ExtendedPeakListUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageChromatogram = new PreferencePageChromatogram();
-				preferencePageChromatogram.setTitle("Chromatogram Settings ");
 				IPreferencePage preferencePageSWT = new PreferencePageSWT();
 				preferencePageSWT.setTitle("Settings (SWT)");
+				IPreferencePage preferencePageLists = new PreferencePageLists();
+				preferencePageLists.setTitle("Lists");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageChromatogram));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
+				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageLists));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();

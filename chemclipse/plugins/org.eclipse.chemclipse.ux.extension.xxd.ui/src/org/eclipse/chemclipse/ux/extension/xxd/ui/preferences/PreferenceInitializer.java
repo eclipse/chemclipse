@@ -162,5 +162,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_CAL, PreferenceConstants.DEF_SHOW_DATA_CAL);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_PCR, PreferenceConstants.DEF_SHOW_DATA_PCR);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_SEQUENCE, PreferenceConstants.DEF_SHOW_DATA_SEQUENCE);
+		/*
+		 * List Column Order
+		 */
+		store.setDefault(PreferenceConstants.P_COLUMN_ORDER_PEAK_LIST, PreferenceConstants.DEF_COLUMN_ORDER_PEAK_LIST);
+		store.setDefault(PreferenceConstants.P_COLUMN_ORDER_SCAN_LIST, PreferenceConstants.DEF_COLUMN_ORDER_SCAN_LIST);
+		store.setDefault(PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST, PreferenceConstants.DEF_COLUMN_ORDER_TARGET_LIST);
 	}
 }

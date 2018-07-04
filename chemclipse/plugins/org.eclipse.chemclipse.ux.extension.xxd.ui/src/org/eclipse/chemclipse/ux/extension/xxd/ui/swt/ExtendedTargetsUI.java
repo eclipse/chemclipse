@@ -47,6 +47,7 @@ import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.support.util.TargetListUtil;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -55,9 +56,11 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
@@ -122,6 +125,7 @@ public class ExtendedTargetsUI {
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
+	private ListSupport listSupport = new ListSupport();
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
 
@@ -327,10 +331,13 @@ public class ExtendedTargetsUI {
 				preferencePageSWT.setTitle("Settings (SWT)");
 				IPreferencePage preferencePageTargets = new PreferencePageTargets();
 				preferencePageTargets.setTitle("Target Settings");
+				IPreferencePage preferencePageLists = new PreferencePageLists();
+				preferencePageLists.setTitle("Lists");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageTargets));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
+				preferenceManager.addToRoot(new PreferenceNode("3", preferencePageLists));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();
@@ -445,9 +452,10 @@ public class ExtendedTargetsUI {
 
 	private TargetsListUI createTargetTable(Composite parent) {
 
-		TargetsListUI targetsListUI = new TargetsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		targetsListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-		targetsListUI.getControl().addMouseListener(new MouseAdapter() {
+		TargetsListUI listUI = new TargetsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		Table table = listUI.getTable();
+		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		listUI.getControl().addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -456,16 +464,29 @@ public class ExtendedTargetsUI {
 			}
 		});
 		/*
+		 * Set/Save the column order.
+		 */
+		String preferenceName = PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST;
+		listSupport.setColumnOrder(table, preferenceName);
+		listUI.addColumnMoveListener(new IColumnMoveListener() {
+
+			@Override
+			public void handle() {
+
+				listSupport.saveColumnOrder(table, preferenceName);
+			}
+		});
+		/*
 		 * Add the delete targets support.
 		 */
-		ITableSettings tableSettings = targetsListUI.getTableSettings();
+		ITableSettings tableSettings = listUI.getTableSettings();
 		addDeleteMenuEntry(tableSettings);
 		addVerifyTargetsMenuEntry(tableSettings);
 		addUnverifyTargetsMenuEntry(tableSettings);
 		addKeyEventProcessors(tableSettings);
-		targetsListUI.applySettings(tableSettings);
+		listUI.applySettings(tableSettings);
 		//
-		return targetsListUI;
+		return listUI;
 	}
 
 	private void addDeleteMenuEntry(ITableSettings tableSettings) {
