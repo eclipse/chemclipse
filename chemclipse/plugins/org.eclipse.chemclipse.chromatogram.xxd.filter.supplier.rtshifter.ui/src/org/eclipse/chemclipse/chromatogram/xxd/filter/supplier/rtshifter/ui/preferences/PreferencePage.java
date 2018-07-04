@@ -36,6 +36,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHIFT_ALL_SCANS, "Shift all scans", getFieldEditorParent()));
@@ -59,8 +60,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_IS_LOCK_OFFSET, "Lock Offset", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_STRETCH_MILLISECONDS_SCAN_DELAY, "Stretch Scan Delay (minutes)", 0, Integer.MAX_VALUE, getFieldEditorParent()));
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_STRETCH_MILLISECONDS_LENGTH, "Stretch Length (minutes)", 0, Integer.MAX_VALUE, getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_STRETCH_MILLISECONDS_SCAN_DELAY, "Stretch Scan Delay (minutes)", PreferenceSupplier.STRETCH_MILLISECONDS_SCAN_DELAY_MIN, PreferenceSupplier.STRETCH_MILLISECONDS_SCAN_DELAY_MAX, getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_STRETCH_MILLISECONDS_LENGTH, "Stretch Length (minutes)", PreferenceSupplier.STRETCH_MILLISECONDS_LENGTH_MIN, PreferenceSupplier.STRETCH_MILLISECONDS_LENGTH_MAX, getFieldEditorParent()));
 	}
 
 	/*
@@ -68,6 +69,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

@@ -61,8 +61,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	public static final String P_STRETCH_MILLISECONDS_SCAN_DELAY = "stretchMillisecondsScanDelay";
 	public static final int DEF_STRETCH_MILLISECONDS_SCAN_DELAY = 0;
+	public static final int STRETCH_MILLISECONDS_SCAN_DELAY_MIN = 0;
+	public static final int STRETCH_MILLISECONDS_SCAN_DELAY_MAX = Integer.MAX_VALUE;
+	//
 	public static final String P_STRETCH_MILLISECONDS_LENGTH = "stretchMillisecondsLength";
 	public static final int DEF_STRETCH_MILLISECONDS_LENGTH = 6000000; // = 100.0 minutes;
+	public static final int STRETCH_MILLISECONDS_LENGTH_MIN = 0;
+	public static final int STRETCH_MILLISECONDS_LENGTH_MAX = Integer.MAX_VALUE;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 

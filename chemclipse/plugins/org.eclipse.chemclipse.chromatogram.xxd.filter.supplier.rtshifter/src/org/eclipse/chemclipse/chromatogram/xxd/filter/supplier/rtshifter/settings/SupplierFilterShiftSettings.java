@@ -12,14 +12,16 @@
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.support.settings.RetentionTimeMinutesProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class SupplierFilterShiftSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterShiftSettings {
 
-	@JsonProperty(value = "Shift Retention Time (Milliseconds)", defaultValue = "0")
+	@JsonProperty(value = "Shift Retention Time (Minutes)", defaultValue = "0")
 	@JsonPropertyDescription(value = "Set retention time shift.")
+	@RetentionTimeMinutesProperty
 	private int millisecondsToShift = 0;
 	@JsonProperty(value = "Shift All Scans", defaultValue = "true")
 	@JsonPropertyDescription(value = "Set shift all scans.")
