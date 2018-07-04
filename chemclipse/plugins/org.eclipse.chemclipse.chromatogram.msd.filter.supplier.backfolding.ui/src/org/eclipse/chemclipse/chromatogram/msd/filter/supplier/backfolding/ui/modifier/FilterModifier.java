@@ -15,7 +15,6 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
@@ -44,12 +43,11 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 			 * The filter settings.
 			 */
 			ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-			IBackfoldingSettings backfoldingSettings = chromatogramFilterSettings.getBackfoldingSettings();
 			/*
 			 * Set the values.
 			 */
-			backfoldingSettings.setMaximumRetentionTimeShift(PreferenceSupplier.getMaxRetentionTimeShift());
-			backfoldingSettings.setNumberOfBackfoldingRuns(PreferenceSupplier.getBackfoldingRuns());
+			chromatogramFilterSettings.setMaximumRetentionTimeShift(PreferenceSupplier.getMaxRetentionTimeShift());
+			chromatogramFilterSettings.setNumberOfBackfoldingRuns(PreferenceSupplier.getBackfoldingRuns());
 			/*
 			 * Apply the filter.
 			 */

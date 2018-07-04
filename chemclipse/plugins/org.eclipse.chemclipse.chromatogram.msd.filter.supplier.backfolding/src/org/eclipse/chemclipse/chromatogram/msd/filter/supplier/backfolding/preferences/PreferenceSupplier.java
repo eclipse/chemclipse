@@ -11,16 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.preferences;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.SupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingSettings;
-import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.Activator;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -78,17 +75,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * 
 	 * @return IChromatogramFilterSettings
 	 */
-	public static IChromatogramFilterSettings getChromatogramFilterSettings() {
+	public static ISupplierFilterSettings getChromatogramFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
+		SupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
 		/*
 		 * Get the actual preference.
 		 * If it's not available, a default value will be returned.
 		 */
-		IBackfoldingSettings backfoldingSettings = chromatogramFilterSettings.getBackfoldingSettings();
-		backfoldingSettings.setMaximumRetentionTimeShift(preferences.getInt(P_MAX_RETENTION_TIME_SHIFT, DEF_RETENTION_TIME_SHIFT));
-		backfoldingSettings.setNumberOfBackfoldingRuns(preferences.getInt(P_BACKFOLDING_RUNS, DEF_BACKFOLDING_RUNS));
+		chromatogramFilterSettings.setMaximumRetentionTimeShift(preferences.getInt(P_MAX_RETENTION_TIME_SHIFT, DEF_RETENTION_TIME_SHIFT));
+		chromatogramFilterSettings.setNumberOfBackfoldingRuns(preferences.getInt(P_BACKFOLDING_RUNS, DEF_BACKFOLDING_RUNS));
 		return chromatogramFilterSettings;
 	}
 

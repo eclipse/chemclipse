@@ -13,15 +13,5 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.sett
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 
-/**
- * @author eselmeister
- */
-public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
-
-	/**
-	 * Returns the backfolding settings.
-	 * 
-	 * @return {@link IBackfoldingSettings}
-	 */
-	IBackfoldingSettings getBackfoldingSettings();
+public interface ISupplierFilterSettings extends IChromatogramFilterSettings, IBackfoldingSettings {
 }

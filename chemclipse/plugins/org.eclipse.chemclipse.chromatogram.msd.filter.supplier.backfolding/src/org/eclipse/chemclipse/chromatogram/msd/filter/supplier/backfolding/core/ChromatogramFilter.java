@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.Abstract
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.detector.BackfoldingShifter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -33,7 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
-	private IBackfoldingSettings backfoldingSettings = null;
+	private ISupplierFilterSettings supplierFilterSettings = null;
 
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
@@ -73,8 +72,9 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		 * Get the excluded ions instance.
 		 */
 		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
-			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
-			backfoldingSettings = settings.getBackfoldingSettings();
+			supplierFilterSettings = (ISupplierFilterSettings)chromatogramFilterSettings;
+		} else {
+			supplierFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
 		}
 	}
 
@@ -89,7 +89,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		 * If backfoldingSettings == null, the default settings will be used.
 		 */
 		BackfoldingShifter backfoldingShifter = new BackfoldingShifter();
-		IExtractedIonSignals extractedIonSignals = backfoldingShifter.shiftIons(chromatogramSelection, backfoldingSettings, monitor);
+		IExtractedIonSignals extractedIonSignals = backfoldingShifter.shiftIons(chromatogramSelection, supplierFilterSettings, monitor);
 		IScanMSD massSpectrum;
 		IVendorMassSpectrum supplierMassSpectrum;
 		/*
