@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.model.exceptions.SegmentNotAcceptedException;
 import org.eclipse.chemclipse.model.support.AnalysisSupport;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.support.ScanRange;
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -75,12 +74,12 @@ public class Calculator {
 	 * 
 	 * @param IChromatogram
 	 */
-	public List<INoiseSegment> getNoiseSegments(IExtractedIonSignals extractedIonSignals, IMarkedIons ionsToPreserve, SegmentWidth segmentWidth, IProgressMonitor monitor) throws FilterException {
+	public List<INoiseSegment> getNoiseSegments(IExtractedIonSignals extractedIonSignals, IMarkedIons ionsToPreserve, int segmentWidth, IProgressMonitor monitor) throws FilterException {
 
 		/*
 		 * Check the scan range.
 		 */
-		int width = segmentWidth.getWidth();
+		int width = segmentWidth;
 		ScanRange scanRange = new ScanRange(extractedIonSignals.getStartScan(), extractedIonSignals.getStopScan());
 		calculatorSupport.checkScanRange(scanRange, width);
 		/*

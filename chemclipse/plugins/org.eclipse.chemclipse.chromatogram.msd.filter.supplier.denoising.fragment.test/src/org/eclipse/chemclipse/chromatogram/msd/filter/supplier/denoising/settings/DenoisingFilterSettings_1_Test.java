@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings;
 
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
+import org.eclipse.chemclipse.support.util.IonSettingUtil;
 
 import junit.framework.TestCase;
 
@@ -40,7 +41,8 @@ public class DenoisingFilterSettings_1_Test extends TestCase {
 
 	public void testGetIonsToRemove_2() {
 
-		assertEquals("IonsToRemove Size", 4, new MarkedIons(settings.getIonsToRemove()).getIonsNominal().size());
+		IonSettingUtil settingIon = new IonSettingUtil();
+		assertEquals("IonsToRemove Size", 4, new MarkedIons(settingIon.extractIons(settingIon.deserialize(settings.getIonsToRemove()))).getIonsNominal().size());
 	}
 
 	public void testGetIonsToPreserve_1() {
@@ -50,7 +52,8 @@ public class DenoisingFilterSettings_1_Test extends TestCase {
 
 	public void testGetIonsToPreserve_2() {
 
-		assertEquals("IonsToPreserve Size", 2, new MarkedIons(settings.getIonsToPreserve()).getIonsNominal().size());
+		IonSettingUtil settingIon = new IonSettingUtil();
+		assertEquals("IonsToPreserve Size", 2, new MarkedIons(settingIon.extractIons(settingIon.deserialize(settings.getIonsToPreserve()))).getIonsNominal().size());
 	}
 
 	public void testGetAdjustThresholdTransitions_1() {

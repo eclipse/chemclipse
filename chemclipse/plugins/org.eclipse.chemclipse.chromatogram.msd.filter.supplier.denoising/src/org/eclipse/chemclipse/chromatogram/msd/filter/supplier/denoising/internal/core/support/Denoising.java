@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -57,7 +56,7 @@ public class Denoising {
 	 * @param chromatogramSelection
 	 * @throws FilterException
 	 */
-	public static List<ICombinedMassSpectrum> applyDenoisingFilter(IChromatogramSelectionMSD chromatogramSelection, IMarkedIons ionsToRemove, IMarkedIons ionsToPreserve, boolean adjustThresholdTransitions, int numberOfUsedIonsForCoefficient, SegmentWidth segmentWidth, IProgressMonitor monitor) throws FilterException {
+	public static List<ICombinedMassSpectrum> applyDenoisingFilter(IChromatogramSelectionMSD chromatogramSelection, IMarkedIons ionsToRemove, IMarkedIons ionsToPreserve, boolean adjustThresholdTransitions, int numberOfUsedIonsForCoefficient, int segmentWidth, IProgressMonitor monitor) throws FilterException {
 
 		/*
 		 * Test if there are ions to remove.

@@ -31,7 +31,7 @@ public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
 
 	void setNumberOfUsedIonsForCoefficient(int numberOfUsedIonsForCoefficient);
 
-	String getSegmentWidth();
+	int getSegmentWidth();
 
-	void setSegmentWidth(String segmentWidth);
+	void setSegmentWidth(int segmentWidth);
 }

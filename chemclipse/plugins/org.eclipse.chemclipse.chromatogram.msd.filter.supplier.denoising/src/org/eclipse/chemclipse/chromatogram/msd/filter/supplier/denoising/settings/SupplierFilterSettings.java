@@ -12,7 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
-import org.eclipse.chemclipse.model.support.SegmentWidth;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
+import org.eclipse.chemclipse.support.settings.IonsSelectionSettingProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -21,19 +24,22 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 
 	@JsonProperty(value = "Ions To Remove", defaultValue = "18;28;84;207")
 	@JsonPropertyDescription(value = "List the ions to remove, separated by a white space.")
+	@IonsSelectionSettingProperty
 	private String ionsToRemove = "18;28;84;207";
 	@JsonProperty(value = "Ions To Preserve", defaultValue = "103;104")
 	@JsonPropertyDescription(value = "List the ions to preserve, separated by a white space.")
+	@IonsSelectionSettingProperty
 	private String ionsToPreserve = "103;104";
 	@JsonProperty(value = "Adjust Threshold Transitions", defaultValue = "true")
 	@JsonPropertyDescription(value = "Adjust zero threshold transitions.")
 	private boolean adjustThresholdTransitions = true;
 	@JsonProperty(value = "Number Used Ions For Coefficient", defaultValue = "1")
 	@JsonPropertyDescription(value = "The number of used ions for coefficient calculation.")
+	@IntSettingsProperty(minValue = PreferenceSupplier.NUMBER_OF_USE_IONS_FOR_COEFFICIENT_MIN, maxValue = PreferenceSupplier.NUMBER_OF_USE_IONS_FOR_COEFFICIENT_MAX)
 	private int numberOfUsedIonsForCoefficient = 1;
-	@JsonProperty(value = "Segment Width", defaultValue = "WIDTH_13")
-	@JsonPropertyDescription(value = "The used segment width: WIDTH_5, WIDTH_7, WIDTH_9, ..., WIDTH_19")
-	private String segmentWidth = SegmentWidth.WIDTH_13.toString();
+	@JsonProperty(value = "Segment Width", defaultValue = "13")
+	@IntSettingsProperty(minValue = PreferenceSupplier.SEGMENT_WIDTH_MIN, maxValue = PreferenceSupplier.SEGMENT_WIDTH_MAX, validation = Validation.ODD_NUMBER)
+	private int segmentWidth = 13;
 
 	@Override
 	public String getIonsToRemove() {
@@ -88,13 +94,13 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	}
 
 	@Override
-	public String getSegmentWidth() {
+	public int getSegmentWidth() {
 
 		return segmentWidth;
 	}
 
 	@Override
-	public void setSegmentWidth(String segmentWidth) {
+	public void setSegmentWidth(int segmentWidth) {
 
 		this.segmentWidth = segmentWidth;
 	}

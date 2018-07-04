@@ -13,12 +13,10 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.intern
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class Denoising_1_ITest extends ChromatogramImporterTestCase {
@@ -40,7 +38,7 @@ public class Denoising_1_ITest extends ChromatogramImporterTestCase {
 		ionsToPreserve = new MarkedIons();
 		ionsToPreserve.add(new MarkedIon(103));
 		ionsToPreserve.add(new MarkedIon(103));
-		noiseMassSpectra = Denoising.applyDenoisingFilter(chromatogramSelection, ionsToRemove, ionsToPreserve, true, 1, SegmentWidth.WIDTH_13, new NullProgressMonitor());
+		noiseMassSpectra = Denoising.applyDenoisingFilter(chromatogramSelection, ionsToRemove, ionsToPreserve, true, 1, 13, new NullProgressMonitor());
 	}
 
 	@Override

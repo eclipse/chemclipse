@@ -13,14 +13,12 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.intern
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class Calculator_3_ITest extends ChromatogramImporterTestCase {
@@ -41,7 +39,7 @@ public class Calculator_3_ITest extends ChromatogramImporterTestCase {
 		ionsToPreserve.add(new MarkedIon(104));
 		extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
 		extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals(chromatogramSelection);
-		noiseSegments = calculator.getNoiseSegments(extractedIonSignals, ionsToPreserve, SegmentWidth.WIDTH_13, new NullProgressMonitor());
+		noiseSegments = calculator.getNoiseSegments(extractedIonSignals, ionsToPreserve, 13, new NullProgressMonitor());
 	}
 
 	@Override

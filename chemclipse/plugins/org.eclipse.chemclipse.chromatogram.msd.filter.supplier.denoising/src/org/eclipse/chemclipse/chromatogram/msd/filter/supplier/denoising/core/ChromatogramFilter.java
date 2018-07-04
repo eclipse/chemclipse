@@ -22,13 +22,13 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.prefere
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.DenoisingFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.IDenoisingFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
@@ -37,7 +37,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 	private IMarkedIons ionsToPreserve;
 	private boolean adjustThresholdTransitions;
 	private int numberOfUsedIonsForCoefficient;
-	private SegmentWidth segmentWidth;
+	private int segmentWidth;
 
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
@@ -75,13 +75,17 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		/*
 		 * Get the excluded ions instance.
 		 */
+		ISupplierFilterSettings settings;
 		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
-			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
-			ionsToRemove = new MarkedIons(settings.getIonsToRemove());
-			ionsToPreserve = new MarkedIons(settings.getIonsToPreserve());
-			adjustThresholdTransitions = settings.isAdjustThresholdTransitions();
-			numberOfUsedIonsForCoefficient = settings.getNumberOfUsedIonsForCoefficient();
-			segmentWidth = SegmentWidth.valueOf(settings.getSegmentWidth());
+			settings = (ISupplierFilterSettings)chromatogramFilterSettings;
+		} else {
+			settings = PreferenceSupplier.getChromatogramFilterSettings();
 		}
+		IonSettingUtil settingIon = new IonSettingUtil();
+		ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(settings.getIonsToRemove())));
+		ionsToPreserve = new MarkedIons(settingIon.extractIons(settingIon.deserialize(settings.getIonsToPreserve())));
+		adjustThresholdTransitions = settings.isAdjustThresholdTransitions();
+		numberOfUsedIonsForCoefficient = settings.getNumberOfUsedIonsForCoefficient();
+		segmentWidth = settings.getSegmentWidth();
 	}
 }

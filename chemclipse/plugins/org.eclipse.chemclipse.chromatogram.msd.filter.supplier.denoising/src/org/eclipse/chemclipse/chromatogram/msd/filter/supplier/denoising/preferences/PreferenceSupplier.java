@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.SupplierFilterSettings;
@@ -36,9 +35,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_IONS_TO_PRESERVE = "ionsToPreserve";
 	public static final String P_SEGMENT_WIDTH = "segmentWidth";
 	public static final String P_ADJUST_THRESHOLD_TRANSITIONS = "adjustThresholdTransitions";
+	public static final String P_NUMBER_OF_USE_IONS_FOR_COEFFICIENT = "numberOfUsedIonsForCoefficient";
 	public static final String DEF_IONS_TO_REMOVE = "18;28;84;207";
 	public static final String DEF_IONS_TO_PRESERVE = "103;104";
-	public static final String DEF_SEGMENT_WIDTH = SegmentWidth.WIDTH_13.toString();
+	public static final int DEF_SEGMENT_WIDTH = 13;
+	public static final int SEGMENT_WIDTH_MIN = 5;
+	public static final int SEGMENT_WIDTH_MAX = 19;
+	public static final int NUMBER_OF_USE_IONS_FOR_COEFFICIENT_MIN = 1;
+	public static final int NUMBER_OF_USE_IONS_FOR_COEFFICIENT_MAX = 20;
 	public static final boolean DEF_USE_CHROMATOGRAM_SPECIFIC_IONS = false;
 	public static final boolean DEF_ADJUST_THRESHOLD_TRANSITIONS = true;
 	//
@@ -71,7 +75,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE);
 		defaultValues.put(P_IONS_TO_PRESERVE, DEF_IONS_TO_PRESERVE);
-		defaultValues.put(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH);
+		defaultValues.put(P_SEGMENT_WIDTH, Integer.toString(DEF_SEGMENT_WIDTH));
 		defaultValues.put(P_ADJUST_THRESHOLD_TRANSITIONS, Boolean.toString(DEF_ADJUST_THRESHOLD_TRANSITIONS));
 		return defaultValues;
 	}
@@ -87,7 +91,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * 
 	 * @return IChromatogramFilterSettings
 	 */
-	public static IChromatogramFilterSettings getChromatogramFilterSettings() {
+	public static ISupplierFilterSettings getChromatogramFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
@@ -99,7 +103,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		chromatogramFilterSettings.setNumberOfUsedIonsForCoefficient(1);
 		chromatogramFilterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
 		chromatogramFilterSettings.setIonsToPreserve(preferences.get(P_IONS_TO_PRESERVE, DEF_IONS_TO_PRESERVE));
-		chromatogramFilterSettings.setSegmentWidth(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
+		chromatogramFilterSettings.setSegmentWidth(preferences.getInt(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
 		return chromatogramFilterSettings;
 	}
 
@@ -226,9 +230,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * 
 	 * @return {@link SegmentWidth}
 	 */
-	public static SegmentWidth getSegmentWidth() {
+	public static int getSegmentWidth() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return SegmentWidth.valueOf(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
+		return preferences.getInt(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH);
 	}
 }
