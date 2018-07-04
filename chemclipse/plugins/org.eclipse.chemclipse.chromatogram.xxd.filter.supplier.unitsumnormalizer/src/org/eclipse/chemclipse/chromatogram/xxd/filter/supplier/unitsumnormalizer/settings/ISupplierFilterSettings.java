@@ -14,8 +14,4 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalize
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 
 public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
-
-	float getMultiplicationFactor();
-
-	void setMultiplicationFactor(float multiplicationFactor);
 }
