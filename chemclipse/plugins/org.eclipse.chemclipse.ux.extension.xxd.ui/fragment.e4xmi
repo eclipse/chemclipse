@@ -116,16 +116,16 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_oDbbwAyvEeisZuYp3s9MTg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier" positionInList="before:org.eclipse.chemclipse.ux.extension.ui.menu.identifier.separator.misc">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_Ns2UIAywEeisZuYp3s9MTg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledmenuitem.deleteAllIdentifications" label="Delete All Identifications" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_all_identifications.gif" command="_5YYy4AyjEeisZuYp3s9MTg">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_TPjuwAywEeisZuYp3s9MTg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_TPjuwAywEeisZuYp3s9MTg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
     </elements>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_U71N4AyxEeisZuYp3s9MTg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledmenuitem.deleteAllChromatogramIdentifications" label="Delete All Identifications (Chromatogram)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_all_identifications.gif" command="_Kc5w4AyxEeisZuYp3s9MTg">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_bEhqcAyxEeisZuYp3s9MTg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_bEhqcAyxEeisZuYp3s9MTg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
     </elements>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_OWOoUAywEeisZuYp3s9MTg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledmenuitem.deleteAllPeakIdentifications" label="Delete All Identifications (Peaks)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_all_identifications.gif" command="_54q1cAyjEeisZuYp3s9MTg">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_WMA40AywEeisZuYp3s9MTg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_WMA40AywEeisZuYp3s9MTg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
     </elements>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_OxQ-gAywEeisZuYp3s9MTg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledmenuitem.deleteAllScanIdentifications" label="Delete All Identifications (Scans)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_all_identifications.gif" command="_7aoXcAyjEeisZuYp3s9MTg">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_XQZuAAywEeisZuYp3s9MTg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_XQZuAAywEeisZuYp3s9MTg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>
