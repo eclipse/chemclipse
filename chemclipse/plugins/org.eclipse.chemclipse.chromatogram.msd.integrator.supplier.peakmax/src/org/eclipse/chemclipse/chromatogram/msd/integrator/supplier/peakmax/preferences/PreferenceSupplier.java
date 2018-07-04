@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.pref
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IAreaSupport;
@@ -21,9 +20,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.II
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.PeakIntegrationSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.chemclipse.support.util.IonListUtil;
+import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -97,8 +95,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		integrationSupport.setMinimumPeakWidth(PreferenceSupplier.getMinimumPeakWidth());
 		integrationSupport.setMinimumSignalToNoiseRatio(PreferenceSupplier.getMinimumSignalToNoiseRatio()); // int but float should be used.
 		IMarkedIons selectedIons = integrationSettings.getSelectedIons();
-		Set<Integer> ions = PreferenceSupplier.getIons(P_SELECTED_IONS, DEF_SELECTED_IONS);
-		setMarkedIons(selectedIons, ions);
+		String ions = PreferenceSupplier.getIons(P_SELECTED_IONS, DEF_SELECTED_IONS);
+		IonSettingUtil settingIon = new IonSettingUtil();
+		selectedIons.add(settingIon.extractIons(settingIon.deserialize(ions)));
 		return integrationSettings;
 	}
 
@@ -121,32 +120,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	}
 
 	/**
-	 * Sets the ions stored in the list to the marked ions
-	 * instance.
-	 * 
-	 * @param markedIons
-	 * @param ions
-	 */
-	public static void setMarkedIons(IMarkedIons markedIons, Set<Integer> ions) {
-
-		for(int ion : ions) {
-			markedIons.add(new MarkedIon(ion));
-		}
-	}
-
-	/**
 	 * Returns a list of ions to preserve stored in the settings.
 	 * 
 	 * @return List<Integer>
 	 */
-	public static Set<Integer> getIons(String preference, String def) {
+	public static String getIons(String preference, String def) {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		/*
 		 * E.g. "18;28;84;207" to 18 28 84 207
 		 */
-		IonListUtil ionListUtil = new IonListUtil();
-		String preferenceEntry = preferences.get(preference, def);
-		return ionListUtil.getIons(preferenceEntry);
+		return preferences.get(preference, def);
 	}
 }

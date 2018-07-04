@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.ui.p
 
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.ui.Activator;
-import org.eclipse.chemclipse.support.ui.preferences.editors.IonListEditor;
+import org.eclipse.chemclipse.support.ui.preferences.editors.IonTableEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.RetentionTimeMinutesFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
@@ -33,9 +33,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
-		addField(new IonListEditor(PreferenceSupplier.P_SELECTED_IONS, "Selected ions (default empty list: 0 = TIC)", getFieldEditorParent()));
+		addField(new IonTableEditor(PreferenceSupplier.P_SELECTED_IONS, "Selected ions (default empty list: 0 = TIC)", getFieldEditorParent()));
 		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_MINIMUM_PEAK_WIDTH, "Minimum peak width (minutes)", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_MINIMUM_SIGNAL_TO_NOISE_RATIO, "Minimum S/N ratio.", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_MINIMUM_PEAK_AREA, "Minimum peak area.", getFieldEditorParent()));
@@ -46,6 +47,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

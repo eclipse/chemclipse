@@ -11,14 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.ui.internal.handler;
 
-import java.util.Set;
-
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IAreaSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IIntegrationSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.PeakIntegrationSettings;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.support.util.IonSettingUtil;
 
 public class PeakIntegrationSettingsSupport {
 
@@ -37,8 +36,9 @@ public class PeakIntegrationSettingsSupport {
 		integrationSupport.setMinimumPeakWidth(PreferenceSupplier.getMinimumPeakWidth());
 		integrationSupport.setMinimumSignalToNoiseRatio(PreferenceSupplier.getMinimumSignalToNoiseRatio()); // int but float should be used.
 		IMarkedIons selectedIons = peakIntegrationSettings.getSelectedIons();
-		Set<Integer> ions = PreferenceSupplier.getIons(PreferenceSupplier.P_SELECTED_IONS, PreferenceSupplier.DEF_SELECTED_IONS);
-		PreferenceSupplier.setMarkedIons(selectedIons, ions);
+		String ions = PreferenceSupplier.getIons(PreferenceSupplier.P_SELECTED_IONS, PreferenceSupplier.DEF_SELECTED_IONS);
+		IonSettingUtil settingIon = new IonSettingUtil();
+		selectedIons.add(settingIon.extractIons(settingIon.deserialize(ions)));
 		return peakIntegrationSettings;
 	}
 }
