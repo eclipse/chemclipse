@@ -15,14 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.core.BackgroundIntegrator;
+import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.core.ChromatogramIntegrator;
+import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.core.ISumareaIntegrator;
+import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.ISumareaIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramIntegrationResult;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramIntegrationResults;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResult;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
-import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.core.BackgroundIntegrator;
-import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.core.ISumareaIntegrator;
-import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.core.ChromatogramIntegrator;
-import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.ISumareaIntegrationSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -32,12 +36,8 @@ import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramIntegrationResult;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResult;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class SumareaChromatogramIntegratorSupport implements ISumareaChromatogramIntegratorSupport {
 
@@ -140,7 +140,9 @@ public class SumareaChromatogramIntegratorSupport implements ISumareaChromatogra
 
 		IMarkedIons selectedIons;
 		if(chromatogramIntegrationSettings instanceof ISumareaIntegrationSettings) {
-			selectedIons = ((ISumareaIntegrationSettings)chromatogramIntegrationSettings).getSelectedIons();
+			String ions = ((ISumareaIntegrationSettings)chromatogramIntegrationSettings).getSelectedIons();
+			IonSettingUtil ionSettingUtil = new IonSettingUtil();
+			selectedIons = new MarkedIons(ionSettingUtil.extractIons(ionSettingUtil.deserialize(ions)));
 		} else {
 			selectedIons = new MarkedIons();
 		}

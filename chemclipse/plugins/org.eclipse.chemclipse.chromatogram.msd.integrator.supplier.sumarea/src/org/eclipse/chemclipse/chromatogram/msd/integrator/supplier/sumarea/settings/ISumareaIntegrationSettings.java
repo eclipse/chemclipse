@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings;
 
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
 
 /**
@@ -19,5 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromato
  */
 public interface ISumareaIntegrationSettings extends IChromatogramIntegrationSettings {
 
-	IMarkedIons getSelectedIons();
+	String getSelectedIons();
+
+	void setSelectedIons(String selectedIons);
 }

@@ -13,19 +13,14 @@ package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.pref
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.SumareaIntegrationSettings;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.chemclipse.support.util.IonListUtil;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
@@ -74,23 +69,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static IChromatogramIntegrationSettings getIntegrationSettings() {
 
 		SumareaIntegrationSettings integrationSettings = new SumareaIntegrationSettings();
-		IMarkedIons selectedIons = integrationSettings.getSelectedIons();
-		setMarkedIons(selectedIons, getIons(P_SELECTED_IONS, DEF_SELECTED_IONS));
+		String ions = getIons(P_SELECTED_IONS, DEF_SELECTED_IONS);
+		integrationSettings.setSelectedIons(ions);
 		return integrationSettings;
-	}
-
-	/**
-	 * Sets the ions stored in the list to the marked ions
-	 * instance.
-	 * 
-	 * @param markedIons
-	 * @param ions
-	 */
-	public static void setMarkedIons(IMarkedIons markedIons, Set<Integer> ions) {
-
-		for(int ion : ions) {
-			markedIons.add(new MarkedIon(ion));
-		}
 	}
 
 	/**
@@ -98,14 +79,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * 
 	 * @return List<Integer>
 	 */
-	public static Set<Integer> getIons(String preference, String def) {
+	public static String getIons(String preference, String def) {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		/*
 		 * E.g. "18;28;84;207" to 18 28 84 207
 		 */
-		IonListUtil ionListUtil = new IonListUtil();
-		String preferenceEntry = preferences.get(preference, def);
-		return ionListUtil.getIons(preferenceEntry);
+		return preferences.get(preference, def);
 	}
 }

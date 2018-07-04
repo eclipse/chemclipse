@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.ui.internal.handler;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.ISumareaIntegrationSettings;
@@ -23,9 +22,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.notifier.Integratio
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -48,9 +49,11 @@ public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 			 * Integrate the chromatogram selection.
 			 */
 			ISumareaIntegrationSettings chromatogramIntegrationSettings = new SumareaIntegrationSettings();
-			IMarkedIons selectedIons = chromatogramIntegrationSettings.getSelectedIons();
-			Set<Integer> ions = PreferenceSupplier.getIons(PreferenceSupplier.P_SELECTED_IONS, PreferenceSupplier.DEF_SELECTED_IONS);
-			PreferenceSupplier.setMarkedIons(selectedIons, ions);
+			IonSettingUtil ionSettingUtil = new IonSettingUtil();
+			IMarkedIons selectedIons = new MarkedIons(ionSettingUtil.extractIons(ionSettingUtil.deserialize(chromatogramIntegrationSettings.getSelectedIons())));
+			String ions = PreferenceSupplier.getIons(PreferenceSupplier.P_SELECTED_IONS, PreferenceSupplier.DEF_SELECTED_IONS);
+			IonSettingUtil settingIon = new IonSettingUtil();
+			selectedIons.add(settingIon.extractIons(settingIon.deserialize(ions)));
 			/*
 			 * Result
 			 */
