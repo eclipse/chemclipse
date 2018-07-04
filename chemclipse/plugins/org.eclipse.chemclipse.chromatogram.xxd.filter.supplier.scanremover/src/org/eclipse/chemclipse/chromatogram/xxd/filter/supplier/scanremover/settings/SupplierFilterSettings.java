@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -20,6 +22,7 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 
 	@JsonProperty(value = "Scan Remover Pattern", defaultValue = "XO")
 	@JsonPropertyDescription(value = "The pattern which is used to remove scans.")
+	@StringSettingsProperty(regExp = PreferenceSupplier.CHECK_REMOVER_PATTERM)
 	private String scanRemoverPattern;
 
 	@Override

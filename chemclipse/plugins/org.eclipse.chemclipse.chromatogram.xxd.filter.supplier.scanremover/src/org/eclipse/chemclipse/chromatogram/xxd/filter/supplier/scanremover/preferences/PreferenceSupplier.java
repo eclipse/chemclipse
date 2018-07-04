@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.pref
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.SupplierFilterSettings;
@@ -29,6 +28,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final Character PRESERVE_SIGN = 'O';
 	public static final String P_REMOVER_PATTERN = "removerPattern";
 	public static final String DEF_REMOVER_PATTERN = PRESERVE_SIGN.toString() + REMOVE_SIGN.toString();
+	public static final String CHECK_REMOVER_PATTERM = "^[OX]+";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -71,7 +71,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * 
 	 * @return IChromatogramFilterSettings
 	 */
-	public static IChromatogramFilterSettings getChromatogramFilterSettings() {
+	public static ISupplierFilterSettings getChromatogramFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();

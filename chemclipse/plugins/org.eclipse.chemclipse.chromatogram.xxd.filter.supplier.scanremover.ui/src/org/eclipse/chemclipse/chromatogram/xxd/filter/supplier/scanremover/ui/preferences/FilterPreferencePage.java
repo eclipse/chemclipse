@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.ui.p
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.StringRegexFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -36,6 +36,8 @@ public class FilterPreferencePage extends FieldEditorPreferencePage implements I
 	protected void createFieldEditors() {
 
 		addField(new LabelFieldEditor("Scan Remover Pattern (" + PreferenceSupplier.PRESERVE_SIGN.toString() + "=preserve " + PreferenceSupplier.REMOVE_SIGN + "=remove)", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceSupplier.P_REMOVER_PATTERN, "Pattern", getFieldEditorParent()));
+		StringRegexFieldEditor stringPattern = new StringRegexFieldEditor(PreferenceSupplier.P_REMOVER_PATTERN, "Pattern", getFieldEditorParent());
+		stringPattern.setRegEx(PreferenceSupplier.CHECK_REMOVER_PATTERM);
+		addField(stringPattern);
 	}
 }

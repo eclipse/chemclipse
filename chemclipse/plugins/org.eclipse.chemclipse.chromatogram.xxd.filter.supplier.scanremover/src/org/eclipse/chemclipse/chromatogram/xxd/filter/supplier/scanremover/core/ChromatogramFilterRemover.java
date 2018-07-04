@@ -75,15 +75,16 @@ public class ChromatogramFilterRemover extends AbstractChromatogramFilter {
 		/*
 		 * Get the excluded ions instance.
 		 */
+		ISupplierFilterSettings settings;
 		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
-			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
-			scanRemoverPattern = new ScanRemoverPattern(settings.getScanRemoverPattern());
+			settings = (ISupplierFilterSettings)chromatogramFilterSettings;
 		} else {
 			/*
 			 * Create a default scan remover pattern.
 			 */
-			scanRemoverPattern = new ScanRemoverPattern("");
+			settings = PreferenceSupplier.getChromatogramFilterSettings();
 		}
+		scanRemoverPattern = new ScanRemoverPattern(settings.getScanRemoverPattern());
 	}
 
 	/**
