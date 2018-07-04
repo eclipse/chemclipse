@@ -12,10 +12,17 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.AbstractMassSpectrumFilterSettings;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class XPassMassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettings implements IXPassMassSpectrumFilterSettings {
 
+	@JsonProperty(value = "Number Highes", defaultValue = "5")
+	@IntSettingsProperty(minValue = 2, maxValue = 50)
 	private int numberHighest;
+	@JsonProperty(value = "Number Lowest", defaultValue = "5")
+	@IntSettingsProperty(minValue = 2, maxValue = 50)
 	private int numberLowest;
 
 	@Override
