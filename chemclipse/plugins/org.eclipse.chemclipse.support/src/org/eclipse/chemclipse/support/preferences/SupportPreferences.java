@@ -25,6 +25,8 @@ public class SupportPreferences implements IPreferenceSupplier {
 	public static final boolean DEF_CHROMATOGRAM_OPERATION_IS_UNDOABLE = true;
 	public static final String P_APPLICATION_LANGUAGE = "applicationLanguage";
 	public static final String DEF_APPLICATION_LANGUAGE = "";
+	public static final String P_CLIPBOARD_TABLE_DEFAULT_SORTING = "clipboardTableDefaultSorting";
+	public static final boolean DEF_CLIPBOARD_TABLE_DEFAULT_SORTING = false;
 	//
 	public static final String LANGUAGE_AUTODETECT = "";
 	public static final String LANGUAGE_EN_GB = "en_GB";
@@ -64,6 +66,7 @@ public class SupportPreferences implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_CHROMATOGRAM_OPERATION_IS_UNDOABLE, Boolean.toString(DEF_CHROMATOGRAM_OPERATION_IS_UNDOABLE));
 		defaultValues.put(P_APPLICATION_LANGUAGE, DEF_APPLICATION_LANGUAGE);
+		defaultValues.put(P_CLIPBOARD_TABLE_DEFAULT_SORTING, Boolean.toString(DEF_CLIPBOARD_TABLE_DEFAULT_SORTING));
 		return defaultValues;
 	}
 
@@ -88,5 +91,11 @@ public class SupportPreferences implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.get(P_APPLICATION_LANGUAGE, DEF_APPLICATION_LANGUAGE);
+	}
+
+	public static boolean isClipboardDefaultSorting() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_CLIPBOARD_TABLE_DEFAULT_SORTING, DEF_CLIPBOARD_TABLE_DEFAULT_SORTING);
 	}
 }

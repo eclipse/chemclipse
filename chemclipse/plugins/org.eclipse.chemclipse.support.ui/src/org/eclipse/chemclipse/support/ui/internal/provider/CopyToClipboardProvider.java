@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.support.ui.internal.provider;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
+import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -28,50 +30,78 @@ public class CopyToClipboardProvider {
 
 	public void copyToClipboard(Clipboard clipboard, ExtendedTableViewer extendedTableViewer) {
 
-		String[] titles = getTitles(extendedTableViewer);
 		StringBuilder builder = new StringBuilder();
-		int size = titles.length;
-		/*
-		 * Header
-		 */
-		for(String title : titles) {
-			builder.append(title);
+		int[] columns = getColumns(extendedTableViewer);
+		addHeader(extendedTableViewer, builder, columns);
+		addContent(extendedTableViewer, builder, columns);
+		addNoContentMessageOnDemand(builder);
+		transferToClipboard(clipboard, builder.toString());
+	}
+
+	private int[] addHeader(ExtendedTableViewer extendedTableViewer, StringBuilder builder, int[] columns) {
+
+		String[] titles = getTitles(extendedTableViewer);
+		//
+		for(int column : columns) {
+			builder.append(titles[column]);
 			builder.append(DELIMITER);
 		}
 		builder.append(OperatingSystemUtils.getLineDelimiter());
-		/*
-		 * Copy the selected items.
-		 */
-		TableItem selection;
+		//
+		return columns;
+	}
+
+	private void addContent(ExtendedTableViewer extendedTableViewer, StringBuilder builder, int[] columns) {
+
 		Table table = extendedTableViewer.getTable();
+		//
+		TableItem selection;
 		for(int index : table.getSelectionIndices()) {
 			/*
-			 * Get the nth selected item.
+			 * Dump all elements of the item.
 			 */
 			selection = table.getItem(index);
-			/*
-			 * Dump all elements of the item, e.g. RT, Abundance, ... .
-			 */
-			for(int columnIndex = 0; columnIndex < size; columnIndex++) {
-				builder.append(selection.getText(columnIndex));
+			for(int column : columns) {
+				builder.append(selection.getText(column));
 				builder.append(DELIMITER);
 			}
 			builder.append(OperatingSystemUtils.getLineDelimiter());
 		}
-		/*
-		 * If the builder is empty, give a note that items needs to be selected.
-		 */
+	}
+
+	private void addNoContentMessageOnDemand(StringBuilder builder) {
+
 		if(builder.length() == 0) {
 			builder.append("Please select one or more entries in the list.");
 			builder.append(OperatingSystemUtils.getLineDelimiter());
 		}
+	}
+
+	private void transferToClipboard(Clipboard clipboard, String content) {
+
 		/*
 		 * Transfer the selected text (items) to the clipboard.
 		 */
 		TextTransfer textTransfer = TextTransfer.getInstance();
-		Object[] data = new Object[]{builder.toString()};
+		Object[] data = new Object[]{content};
 		Transfer[] dataTypes = new Transfer[]{textTransfer};
 		clipboard.setContents(data, dataTypes);
+	}
+
+	private int[] getColumns(ExtendedTableViewer extendedTableViewer) {
+
+		Table table = extendedTableViewer.getTable();
+		//
+		boolean useDefaultSorting = SupportPreferences.isClipboardDefaultSorting();
+		int[] columns;
+		if(useDefaultSorting) {
+			int size = extendedTableViewer.getTableViewerColumns().size();
+			columns = IntStream.range(0, size).toArray();
+		} else {
+			columns = table.getColumnOrder();
+		}
+		//
+		return columns;
 	}
 
 	private String[] getTitles(ExtendedTableViewer extendedTableViewer) {

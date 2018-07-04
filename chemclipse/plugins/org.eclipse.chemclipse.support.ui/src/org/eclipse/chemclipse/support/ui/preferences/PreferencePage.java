@@ -11,13 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences;
 
-import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.IWorkbench;
-
 import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.chemclipse.support.ui.Activator;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -29,7 +28,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(SupportPreferences.P_CHROMATOGRAM_OPERATION_IS_UNDOABLE, "Chromatogram operations are undoable.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(SupportPreferences.P_CHROMATOGRAM_OPERATION_IS_UNDOABLE, "Chromatogram operations are undoable", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(SupportPreferences.P_CLIPBOARD_TABLE_DEFAULT_SORTING, "Clipboard Table Default Sorting", getFieldEditorParent()));
 	}
 
 	/*
