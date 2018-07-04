@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettings;
+import org.eclipse.chemclipse.support.settings.MultiFileSettingProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -20,6 +21,7 @@ public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettings
 
 	@JsonProperty(value = "Mass Spectra Files", defaultValue = "")
 	@JsonPropertyDescription(value = "Use a semicolon to separate the path of several files.") // see FileListUtil()
+	@MultiFileSettingProperty
 	private String massSpectraFiles = "";
 	@JsonProperty(value = "Pre-Optimization", defaultValue = "false")
 	private boolean usePreOptimization = false;
