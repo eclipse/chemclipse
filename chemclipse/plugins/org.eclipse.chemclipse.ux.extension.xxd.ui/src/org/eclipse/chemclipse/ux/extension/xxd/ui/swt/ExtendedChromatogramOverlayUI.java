@@ -36,7 +36,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartS
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.IonsValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
@@ -55,7 +54,6 @@ import org.eclipse.eavp.service.swtchart.core.IExtendedChart;
 import org.eclipse.eavp.service.swtchart.core.ISeriesModificationListener;
 import org.eclipse.eavp.service.swtchart.core.SeriesStatusAdapter;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
@@ -809,12 +807,9 @@ public class ExtendedChromatogramOverlayUI {
 
 				IPreferencePage preferencePageOverlay = new PreferencePageOverlay();
 				preferencePageOverlay.setTitle("Overlay Settings");
-				IPreferencePage preferencePageChromatogram = new PreferencePageChromatogram();
-				preferencePageChromatogram.setTitle("Chromatogram Settings");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageOverlay));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageChromatogram));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();
@@ -1010,17 +1005,8 @@ public class ExtendedChromatogramOverlayUI {
 			/*
 			 * Add the selected series
 			 */
-			int compressionToLength;
-			int size = lineSeriesDataList.size();
-			if(size >= 15) {
-				compressionToLength = LineChart.EXTREME_COMPRESSION;
-			} else if(size >= 10) {
-				compressionToLength = LineChart.HIGH_COMPRESSION;
-			} else if(size >= 5) {
-				compressionToLength = LineChart.MEDIUM_COMPRESSION;
-			} else {
-				compressionToLength = LineChart.LOW_COMPRESSION;
-			}
+			String compressionType = preferenceStore.getString(PreferenceConstants.P_OVERLAY_CHART_COMPRESSION_TYPE);
+			int compressionToLength = chromatogramChartSupport.getCompressionLength(compressionType, lineSeriesDataList.size());
 			chromatogramChart.addSeriesData(lineSeriesDataList, compressionToLength);
 			/*
 			 * Delete non-available series.

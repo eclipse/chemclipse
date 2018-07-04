@@ -67,15 +67,48 @@ public class Colors {
 	 * Blue, Cyan, Gray, Magenta, Green, Black, Dark Yellow, Red
 	 */
 	public static final String COLOR_SCHEME_HIGH_CONTRAST = "High Contrast";
-	private static final int[] colorIdsGradientHighContrast = new int[]{SWT.COLOR_BLUE, SWT.COLOR_CYAN, SWT.COLOR_GRAY, SWT.COLOR_MAGENTA, SWT.COLOR_GREEN, SWT.COLOR_BLACK, SWT.COLOR_DARK_YELLOW, SWT.COLOR_RED};
+	private static final int[] colorIdsGradientHighContrast = new int[]{ //
+			SWT.COLOR_BLUE, //
+			SWT.COLOR_CYAN, //
+			SWT.COLOR_GRAY, //
+			SWT.COLOR_MAGENTA, //
+			SWT.COLOR_GREEN, //
+			SWT.COLOR_BLACK, //
+			SWT.COLOR_DARK_YELLOW, //
+			SWT.COLOR_RED //
+	};
 	private static List<Color> colorsGradientHighContrast;
 	/*
 	 * Publication
 	 * Red, Green, Blue, Dark Red, Dark Green, Dark Blue
 	 */
 	public static final String COLOR_SCHEME_PUBLICATION = "Publication";
-	private static final RGB[] colorIdsGradientPublication = new RGB[]{new RGB(255, 0, 0), new RGB(0, 255, 0), new RGB(0, 0, 255), new RGB(150, 0, 0), new RGB(0, 150, 0), new RGB(0, 0, 150)};
+	private static final RGB[] colorIdsGradientPublication = new RGB[]{ //
+			new RGB(255, 0, 0), //
+			new RGB(0, 255, 0), //
+			new RGB(0, 0, 255), //
+			new RGB(150, 0, 0), //
+			new RGB(0, 150, 0), //
+			new RGB(0, 0, 150) //
+	};
 	private static List<Color> colorsGradientPublication;
+	/*
+	 * Print
+	 */
+	public static final String COLOR_SCHEME_PRINT = "Print";
+	private static final RGB[] colorIdsGradientPrint = new RGB[]{ //
+			new RGB(0, 69, 134), //
+			new RGB(255, 66, 14), //
+			new RGB(255, 211, 32), //
+			new RGB(87, 157, 28), //
+			new RGB(126, 0, 33), //
+			new RGB(131, 202, 255), //
+			new RGB(49, 64, 4), //
+			new RGB(174, 207, 0), //
+			new RGB(75, 31, 111), //
+			new RGB(255, 149, 14) //
+	};
+	private static List<Color> colorsGradientPrint;
 	/*
 	 * 
 	 */
@@ -95,7 +128,7 @@ public class Colors {
 
 	public static String[][] getAvailableColorSchemes() {
 
-		String[][] elements = new String[6][2];
+		String[][] elements = new String[7][2];
 		//
 		elements[0][0] = COLOR_SCHEME_RED;
 		elements[0][1] = COLOR_SCHEME_RED;
@@ -112,8 +145,11 @@ public class Colors {
 		elements[4][0] = COLOR_SCHEME_PUBLICATION;
 		elements[4][1] = COLOR_SCHEME_PUBLICATION;
 		//
-		elements[5][0] = COLOR_SCHEME_UNLIMITED;
-		elements[5][1] = COLOR_SCHEME_UNLIMITED;
+		elements[5][0] = COLOR_SCHEME_PRINT;
+		elements[5][1] = COLOR_SCHEME_PRINT;
+		//
+		elements[6][0] = COLOR_SCHEME_UNLIMITED;
+		elements[6][1] = COLOR_SCHEME_UNLIMITED;
 		return elements;
 	}
 
@@ -137,6 +173,8 @@ public class Colors {
 			return new ColorScheme(colorsGradientHighContrast);
 		} else if(COLOR_SCHEME_PUBLICATION.equals(colorScheme)) {
 			return new ColorScheme(colorsGradientPublication);
+		} else if(COLOR_SCHEME_PRINT.equals(colorScheme)) {
+			return new ColorScheme(colorsGradientPrint);
 		} else if(COLOR_SCHEME_UNLIMITED.equals(colorScheme)) {
 			return new UnlimitedColorSchema();
 		} else {
@@ -273,6 +311,14 @@ public class Colors {
 		for(RGB rgb : colorIdsGradientPublication) {
 			Color color = getColor(rgb);
 			colorsGradientPublication.add(color);
+		}
+		/*
+		 * GRADIENT PRINT
+		 */
+		colorsGradientPrint = new ArrayList<Color>();
+		for(RGB rgb : colorIdsGradientPrint) {
+			Color color = getColor(rgb);
+			colorsGradientPrint.add(color);
 		}
 	}
 

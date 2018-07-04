@@ -13,8 +13,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
+import org.eclipse.eavp.service.swtchart.preferences.PreferenceSupport;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -31,6 +33,23 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 
 	public void createFieldEditors() {
 
+		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE, "Compression Type:", PreferenceConstants.COMPRESSION_TYPES, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		//
+		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY, "Display Color Scheme Normal", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SIC_OVERLAY, "Display Color Scheme SIC", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SWC_OVERLAY, "Display Color Scheme SWC", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_TIC_OVERLAY, "Line Style TIC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_BPC_OVERLAY, "Line Style BPC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_XIC_OVERLAY, "Line Style XIC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC_OVERLAY, "Line Style SIC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC_OVERLAY, "Line Style TSC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC_OVERLAY, "Line Style SWC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY, "Line Style Default:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		//
 		addField(new DoubleFieldEditor(PreferenceConstants.P_MINUTES_SHIFT_X, "Shift X (Minutes):", getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceConstants.P_ABSOLUTE_SHIFT_Y, "Shift Y (Absolute):", getFieldEditorParent()));
 		//

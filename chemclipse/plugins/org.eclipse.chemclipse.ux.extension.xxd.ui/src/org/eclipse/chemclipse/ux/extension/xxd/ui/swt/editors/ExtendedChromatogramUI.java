@@ -120,7 +120,6 @@ import org.eclipse.eavp.service.swtchart.core.RangeRestriction;
 import org.eclipse.eavp.service.swtchart.core.SecondaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
-import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.eavp.service.swtchart.menu.IChartMenuEntry;
 import org.eclipse.eavp.service.swtchart.menu.ResetChartHandler;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -965,25 +964,8 @@ public class ExtendedChromatogramUI {
 		/*
 		 * Define the compression level.
 		 */
-		int compressionToLength;
 		String compressionType = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE);
-		switch(compressionType) {
-			case LineChart.COMPRESSION_EXTREME:
-				compressionToLength = LineChart.EXTREME_COMPRESSION;
-				break;
-			case LineChart.COMPRESSION_HIGH:
-				compressionToLength = LineChart.HIGH_COMPRESSION;
-				break;
-			case LineChart.COMPRESSION_MEDIUM:
-				compressionToLength = LineChart.MEDIUM_COMPRESSION;
-				break;
-			case LineChart.COMPRESSION_LOW:
-				compressionToLength = LineChart.LOW_COMPRESSION;
-				break;
-			default:
-				compressionToLength = LineChart.NO_COMPRESSION;
-				break;
-		}
+		int compressionToLength = chromatogramChartSupport.getCompressionLength(compressionType, lineSeriesDataList.size());
 		chromatogramChart.addSeriesData(lineSeriesDataList, compressionToLength);
 	}
 

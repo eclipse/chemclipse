@@ -38,6 +38,7 @@ import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
+import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
@@ -88,16 +89,16 @@ public class ChromatogramChartSupport {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		//
-		colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL));
-		colorSchemeSIC = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SIC));
-		colorSchemeSWC = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SWC));
-		lineStyleTIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_TIC));
-		lineStyleBPC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_BPC));
-		lineStyleXIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_XIC));
-		lineStyleSIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC));
-		lineStyleTSC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC));
-		lineStyleSWC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC));
-		lineStyleDefault = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT));
+		colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY));
+		colorSchemeSIC = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SIC_OVERLAY));
+		colorSchemeSWC = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SWC_OVERLAY));
+		lineStyleTIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_TIC_OVERLAY));
+		lineStyleBPC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_BPC_OVERLAY));
+		lineStyleXIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_XIC_OVERLAY));
+		lineStyleSIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC_OVERLAY));
+		lineStyleTSC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC_OVERLAY));
+		lineStyleSWC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC_OVERLAY));
+		lineStyleDefault = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY));
 		//
 		resetColorMaps();
 	}
@@ -297,6 +298,39 @@ public class ChromatogramChartSupport {
 		lineSeriesSettingsHighlight.setLineWidth(2);
 		//
 		return lineSeriesData;
+	}
+
+	public int getCompressionLength(String compressionType, int sizeLineSeries) {
+
+		int compressionToLength = LineChart.LOW_COMPRESSION;
+		switch(compressionType) {
+			case LineChart.COMPRESSION_AUTO:
+				if(sizeLineSeries >= 15) {
+					compressionToLength = LineChart.EXTREME_COMPRESSION;
+				} else if(sizeLineSeries >= 10) {
+					compressionToLength = LineChart.HIGH_COMPRESSION;
+				} else if(sizeLineSeries >= 5) {
+					compressionToLength = LineChart.MEDIUM_COMPRESSION;
+				}
+				break;
+			case LineChart.COMPRESSION_NONE:
+				compressionToLength = LineChart.NO_COMPRESSION;
+				break;
+			case LineChart.COMPRESSION_LOW:
+				compressionToLength = LineChart.LOW_COMPRESSION;
+				break;
+			case LineChart.COMPRESSION_MEDIUM:
+				compressionToLength = LineChart.MEDIUM_COMPRESSION;
+				break;
+			case LineChart.COMPRESSION_HIGH:
+				compressionToLength = LineChart.HIGH_COMPRESSION;
+				break;
+			case LineChart.COMPRESSION_EXTREME:
+				compressionToLength = LineChart.EXTREME_COMPRESSION;
+				break;
+		}
+		//
+		return compressionToLength;
 	}
 
 	private double getIntensity(IScan scan, String overlayType, List<Integer> ions) {

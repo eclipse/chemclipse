@@ -41,7 +41,7 @@ public class PreferenceConstants {
 			{LineChart.COMPRESSION_EXTREME, LineChart.COMPRESSION_EXTREME}, //
 			{LineChart.COMPRESSION_HIGH, LineChart.COMPRESSION_HIGH}, //
 			{LineChart.COMPRESSION_MEDIUM, LineChart.COMPRESSION_MEDIUM}, //
-			{LineChart.COMPRESSION_LOW, LineChart.COMPRESSION_LOW}, //
+			{LineChart.COMPRESSION_LOW, LineChart.COMPRESSION_LOW}, {LineChart.COMPRESSION_AUTO, LineChart.COMPRESSION_AUTO}, //
 			{LineChart.COMPRESSION_NONE, LineChart.COMPRESSION_NONE}//
 	};
 	//
@@ -109,6 +109,28 @@ public class PreferenceConstants {
 	/*
 	 * Overlay
 	 */
+	public static final String P_OVERLAY_CHART_COMPRESSION_TYPE = "overlayChartCompressionType";
+	public static final String DEF_OVERLAY_CHART_COMPRESSION_TYPE = LineChart.COMPRESSION_MEDIUM;
+	public static final String P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY = "colorSchemeDisplayNormalOverlay";
+	public static final String DEF_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY = Colors.COLOR_SCHEME_RED;
+	public static final String P_COLOR_SCHEME_DISPLAY_SIC_OVERLAY = "colorSchemeDisplaySICOverlay";
+	public static final String DEF_COLOR_SCHEME_DISPLAY_SIC_OVERLAY = Colors.COLOR_SCHEME_HIGH_CONTRAST;
+	public static final String P_COLOR_SCHEME_DISPLAY_SWC_OVERLAY = "colorSchemeDisplaySWCOverlay";
+	public static final String DEF_COLOR_SCHEME_DISPLAY_SWC_OVERLAY = Colors.COLOR_SCHEME_HIGH_CONTRAST;
+	public static final String P_LINE_STYLE_DISPLAY_TIC_OVERLAY = "lineStyleDisplayTICOverlay";
+	public static final String DEF_LINE_STYLE_DISPLAY_TIC_OVERLAY = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_BPC_OVERLAY = "lineStyleDisplayBPCOverlay";
+	public static final String DEF_LINE_STYLE_DISPLAY_BPC_OVERLAY = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_XIC_OVERLAY = "lineStyleDisplayXICOverlay";
+	public static final String DEF_LINE_STYLE_DISPLAY_XIC_OVERLAY = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_SIC_OVERLAY = "lineStyleDisplaySICOverlay";
+	public static final String DEF_LINE_STYLE_DISPLAY_SIC_OVERLAY = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_TSC_OVERLAY = "lineStyleDisplayTSCOverlay";
+	public static final String DEF_LINE_STYLE_DISPLAY_TSC_OVERLAY = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_SWC_OVERLAY = "lineStyleDisplaySWCOverlay";
+	public static final String DEF_LINE_STYLE_DISPLAY_SWC_OVERLAY = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = "lineStyleDisplayDefaultOverlay";
+	public static final String DEF_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = LineStyle.SOLID.toString();
 	public static final String P_MINUTES_SHIFT_X = "minutesShiftX";
 	public static final double DEF_MINUTES_SHIFT_X = 0.5d;
 	public static final String P_ABSOLUTE_SHIFT_Y = "absoluteShiftY";
@@ -199,28 +221,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_PEAKS_IN_SELECTED_RANGE = true;
 	public static final String P_SHOW_SCANS_IN_SELECTED_RANGE = "showScansInSelectedRange";
 	public static final boolean DEF_SHOW_SCANS_IN_SELECTED_RANGE = true;
-	public static final String P_CHROMATOGRAM_CHART_COMPRESSION_TYPE = "chartCompressionType";
+	public static final String P_CHROMATOGRAM_CHART_COMPRESSION_TYPE = "chromatogramChartCompressionType";
 	public static final String DEF_CHROMATOGRAM_CHART_COMPRESSION_TYPE = LineChart.COMPRESSION_MEDIUM;
-	public static final String P_COLOR_SCHEME_DISPLAY_NORMAL = "colorSchemeDisplayNormal";
-	public static final String DEF_COLOR_SCHEME_DISPLAY_NORMAL = Colors.COLOR_SCHEME_RED;
-	public static final String P_COLOR_SCHEME_DISPLAY_SIC = "colorSchemeDisplaySIC";
-	public static final String DEF_COLOR_SCHEME_DISPLAY_SIC = Colors.COLOR_SCHEME_HIGH_CONTRAST;
-	public static final String P_COLOR_SCHEME_DISPLAY_SWC = "colorSchemeDisplaySWC";
-	public static final String DEF_COLOR_SCHEME_DISPLAY_SWC = Colors.COLOR_SCHEME_HIGH_CONTRAST;
-	public static final String P_LINE_STYLE_DISPLAY_TIC = "lineStyleDisplayTIC";
-	public static final String DEF_LINE_STYLE_DISPLAY_TIC = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_BPC = "lineStyleDisplayBPC";
-	public static final String DEF_LINE_STYLE_DISPLAY_BPC = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_XIC = "lineStyleDisplayXIC";
-	public static final String DEF_LINE_STYLE_DISPLAY_XIC = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_SIC = "lineStyleDisplaySIC";
-	public static final String DEF_LINE_STYLE_DISPLAY_SIC = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_TSC = "lineStyleDisplayTSC";
-	public static final String DEF_LINE_STYLE_DISPLAY_TSC = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_SWC = "lineStyleDisplaySWC";
-	public static final String DEF_LINE_STYLE_DISPLAY_SWC = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_DEFAULT = "lineStyleDisplayDefault";
-	public static final String DEF_LINE_STYLE_DISPLAY_DEFAULT = LineStyle.SOLID.toString();
 	public static final String P_COLOR_CHROMATOGRAM = "colorChromatogram";
 	public static final String DEF_COLOR_CHROMATOGRAM = "255,0,0";
 	public static final String P_ENABLE_CHROMATOGRAM_AREA = "enableChromatogramArea";

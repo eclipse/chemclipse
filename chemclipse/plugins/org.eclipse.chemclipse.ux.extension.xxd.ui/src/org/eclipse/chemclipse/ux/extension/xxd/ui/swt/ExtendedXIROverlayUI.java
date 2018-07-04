@@ -60,7 +60,7 @@ public class ExtendedXIROverlayUI {
 	//
 	private List<IScanXIR> scanSelections = new ArrayList<>();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private IColorScheme colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL));
+	private IColorScheme colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY));
 
 	@Inject
 	public ExtendedXIROverlayUI(Composite parent) {
