@@ -151,9 +151,9 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 		boolean canFinish = pageCalibrationSettings.canFinish();
 		if(canFinish) {
 			if(wizardElements.isUseMassSpectrometryData()) {
-				canFinish = (wizardElements.getChromatogramWizardElementsMSD().getSelectedChromatograms().size() > 0) ? true : false;
+				canFinish = (wizardElements.getSelectedChromatograms().size() > 0) ? true : false;
 			} else {
-				canFinish = (wizardElements.getChromatogramWizardElementsCSD().getSelectedChromatograms().size() > 0) ? true : false;
+				canFinish = (wizardElements.getSelectedChromatograms().size() > 0) ? true : false;
 			}
 		}
 		if(canFinish) {

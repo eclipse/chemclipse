@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
-import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 
 public class RetentionIndexWizardElements extends ChromatogramWizardElements implements IRetentionIndexWizardElements {
 
@@ -33,8 +32,6 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	private String filterPathRetentionIndexFile; // used for File Dialog
 	private String pathRetentionIndexFile;
 	private boolean useMassSpectrometryData;
-	private IChromatogramWizardElements chromatogramWizardElementsMSD;
-	private IChromatogramWizardElements chromatogramWizardElementsCSD;
 	private String startIndexName;
 	private String stopIndexName;
 	private boolean useAlreadyDetectedPeaks;
@@ -140,18 +137,6 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	}
 
 	@Override
-	public IChromatogramWizardElements getChromatogramWizardElementsMSD() {
-
-		return chromatogramWizardElementsMSD;
-	}
-
-	@Override
-	public IChromatogramWizardElements getChromatogramWizardElementsCSD() {
-
-		return chromatogramWizardElementsCSD;
-	}
-
-	@Override
 	public String getStartIndexName() {
 
 		return startIndexName;
@@ -235,8 +220,6 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 		//
 		useExistingRetentionIndexFile = false;
 		useMassSpectrometryData = true;
-		chromatogramWizardElementsMSD = new ChromatogramWizardElements();
-		chromatogramWizardElementsCSD = new ChromatogramWizardElements();
 		pathRetentionIndexFile = "";
 		startIndexName = "";
 		stopIndexName = "";

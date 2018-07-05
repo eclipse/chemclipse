@@ -42,10 +42,6 @@ public interface IRetentionIndexWizardElements extends IChromatogramWizardElemen
 
 	void setUseMassSpectrometryData(boolean useMassSpectrometryData);
 
-	IChromatogramWizardElements getChromatogramWizardElementsMSD();
-
-	IChromatogramWizardElements getChromatogramWizardElementsCSD();
-
 	String getStartIndexName();
 
 	void setStartIndexName(String startIndexName);

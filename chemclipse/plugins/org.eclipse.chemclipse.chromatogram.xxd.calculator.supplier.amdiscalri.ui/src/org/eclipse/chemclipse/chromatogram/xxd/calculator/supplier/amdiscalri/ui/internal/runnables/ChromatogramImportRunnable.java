@@ -51,12 +51,12 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 		 */
 		boolean useAlreadyDetectedPeaks = wizardElements.isUseAlreadyDetectedPeaks();
 		if(wizardElements.isUseMassSpectrometryData()) {
-			String chromatogramPath = wizardElements.getChromatogramWizardElementsMSD().getSelectedChromatograms().get(0);
+			String chromatogramPath = wizardElements.getSelectedChromatograms().get(0);
 			AlkanePatternDetectorMSD alkanePatternDetector = new AlkanePatternDetectorMSD();
 			chromatogram = alkanePatternDetector.parseChromatogram(chromatogramPath, pathRetentionIndexFile, useAlreadyDetectedPeaks, monitor);
 			PreferenceSupplier.setFilterPathModelsMSD(chromatogramPath);
 		} else {
-			String chromatogramPath = wizardElements.getChromatogramWizardElementsCSD().getSelectedChromatograms().get(0);
+			String chromatogramPath = wizardElements.getSelectedChromatograms().get(0);
 			AlkanePatternDetectorCSD alkanePatternDetector = new AlkanePatternDetectorCSD();
 			chromatogram = alkanePatternDetector.parseChromatogram(chromatogramPath, pathRetentionIndexFile, useAlreadyDetectedPeaks, monitor);
 			PreferenceSupplier.setFilterPathModelsCSD(chromatogramPath);

@@ -265,14 +265,8 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 	private void validateSelection() {
 
 		String message = null;
-		if(wizardElements.isUseMassSpectrometryData()) {
-			if(wizardElements.getChromatogramWizardElementsMSD().getSelectedChromatograms().size() == 0) {
-				message = "No chromatogram has been selected.";
-			}
-		} else {
-			if(wizardElements.getChromatogramWizardElementsCSD().getSelectedChromatograms().size() == 0) {
-				message = "No chromatogram has been selected.";
-			}
+		if(wizardElements.getSelectedChromatograms().size() == 0) {
+			message = "No chromatogram has been selected.";
 		}
 		//
 		if(message == null) {
