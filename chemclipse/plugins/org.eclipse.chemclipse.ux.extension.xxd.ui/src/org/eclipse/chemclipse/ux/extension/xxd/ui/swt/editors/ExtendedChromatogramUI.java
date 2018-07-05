@@ -742,7 +742,14 @@ public class ExtendedChromatogramUI {
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		rangeRestriction.setForceZeroMinY(false);
-		//
+		/*
+		 * Add space on top to show labels correctly.
+		 */
+		double extendX = preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_EXTEND_X);
+		rangeRestriction.setExtendMaxY(extendX);
+		/*
+		 * MSD has no negative intensity values, so setZeroY(true)
+		 */
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			rangeRestriction.setZeroY(true);
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
