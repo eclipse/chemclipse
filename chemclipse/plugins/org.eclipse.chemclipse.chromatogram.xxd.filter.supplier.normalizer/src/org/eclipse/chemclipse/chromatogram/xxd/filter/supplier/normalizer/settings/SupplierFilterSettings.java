@@ -34,6 +34,8 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	@Override
 	public void setNormalizationBase(float normalizationBase) {
 
-		this.normalizationBase = normalizationBase;
+		if(normalizationBase >= PreferenceSupplier.MIN_NORMALIZATION_BASE && !Float.isNaN(normalizationBase) && !Float.isInfinite(normalizationBase)) {
+			this.normalizationBase = normalizationBase;
+		}
 	}
 }
