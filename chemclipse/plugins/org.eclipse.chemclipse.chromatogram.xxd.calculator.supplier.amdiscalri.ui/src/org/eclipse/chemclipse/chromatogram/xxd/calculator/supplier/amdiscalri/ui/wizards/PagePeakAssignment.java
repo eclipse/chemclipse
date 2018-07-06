@@ -100,6 +100,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void setVisible(boolean visible) {
 

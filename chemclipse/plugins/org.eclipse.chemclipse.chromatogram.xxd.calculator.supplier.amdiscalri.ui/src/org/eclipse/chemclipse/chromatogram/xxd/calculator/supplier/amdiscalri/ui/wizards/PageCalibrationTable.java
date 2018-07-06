@@ -64,6 +64,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void setVisible(boolean visible) {
 
@@ -128,6 +129,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		RetentionIndexTableViewerUI retentionIndexTableViewerUI = extendedRetentionIndexTableViewerUI.getRetentionIndexTableViewerUI();
 		retentionIndexTableViewerUI.getTable().addSelectionListener(new SelectionAdapter() {
 
+			@SuppressWarnings({"rawtypes", "unchecked"})
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
