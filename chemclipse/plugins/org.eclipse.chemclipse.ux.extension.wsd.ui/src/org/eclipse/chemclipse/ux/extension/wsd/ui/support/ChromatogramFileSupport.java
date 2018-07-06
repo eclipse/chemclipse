@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSuppor
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.internal.support.ChromatogramExportRunnable;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
@@ -26,7 +27,6 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
@@ -51,12 +51,11 @@ public class ChromatogramFileSupport {
 	 */
 	public static boolean saveChromatogram(IChromatogramWSD chromatogram) throws NoConverterAvailableException {
 
-		Shell shell = Display.getCurrent().getActiveShell();
-		if(chromatogram == null || shell == null) {
+		if(chromatogram == null) {
 			return false;
 		}
 		//
-		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
+		FileDialog dialog = new FileDialog(DisplayUtils.getShell(), SWT.SAVE);
 		/*
 		 * Create the dialogue.
 		 */
@@ -79,7 +78,7 @@ public class ChromatogramFileSupport {
 		 */
 		String filename = dialog.open();
 		if(filename != null) {
-			validateFile(dialog, converterSupport.getExportSupplier(), shell, converterSupport, chromatogram);
+			validateFile(dialog, converterSupport.getExportSupplier(), DisplayUtils.getShell(), converterSupport, chromatogram);
 			return true;
 		} else {
 			return false;
@@ -106,7 +105,7 @@ public class ChromatogramFileSupport {
 		/*
 		 * Convert the given chromatogram.
 		 */
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
 		ChromatogramExportRunnable runnable = new ChromatogramExportRunnable(file, chromatogram, supplier);
 		try {
 			dialog.run(true, false, runnable);
@@ -117,7 +116,7 @@ public class ChromatogramFileSupport {
 		}
 		File data = runnable.getData();
 		if(data == null) {
-			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Save Chromatogram", "There is not suitable chromatogram converter available.");
+			MessageDialog.openInformation(DisplayUtils.getShell(), "Save Chromatogram", "There is not suitable chromatogram converter available.");
 		}
 	}
 

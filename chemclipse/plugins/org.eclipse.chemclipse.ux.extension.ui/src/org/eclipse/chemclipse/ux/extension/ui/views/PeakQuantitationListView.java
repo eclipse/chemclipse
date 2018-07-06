@@ -67,6 +67,7 @@ public class PeakQuantitationListView extends AbstractChromatogramSelectionView 
 		update(getChromatogramSelection(), false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void update(IChromatogramSelection chromatogramSelection, boolean forceReload) {
 

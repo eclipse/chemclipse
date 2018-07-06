@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.e4.ui.di.Focus;
@@ -37,7 +38,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 
@@ -54,7 +54,6 @@ public class ExtendedPeakDetailsUI {
 	private IPeak peak;
 	//
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
-	private Display display = Display.getDefault();
 
 	@Inject
 	public ExtendedPeakDetailsUI(Composite parent) {
@@ -146,7 +145,7 @@ public class ExtendedPeakDetailsUI {
 
 	private void createPeakList(Composite parent) {
 
-		clipboard = new Clipboard(display);
+		clipboard = new Clipboard(DisplayUtils.getDisplay());
 		list = new List(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		list.setLayoutData(new GridData(GridData.FILL_BOTH));
 		list.addKeyListener(new KeyAdapter() {

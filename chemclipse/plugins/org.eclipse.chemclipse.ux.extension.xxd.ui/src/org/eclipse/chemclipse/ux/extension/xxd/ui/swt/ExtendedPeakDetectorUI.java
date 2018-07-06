@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -73,10 +74,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.swtchart.IAxis;
 import org.swtchart.IAxisSet;
 import org.swtchart.ILineSeries.PlotSymbolType;
@@ -156,8 +155,6 @@ public class ExtendedPeakDetectorUI {
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 
 	private class KeyPressedEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
@@ -551,14 +548,14 @@ public class ExtendedPeakDetectorUI {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}
@@ -860,7 +857,7 @@ public class ExtendedPeakDetectorUI {
 
 	private void setCursor(int cursorId) {
 
-		chromatogramChart.getBaseChart().setCursor(display.getSystemCursor(cursorId));
+		chromatogramChart.getBaseChart().setCursor(DisplayUtils.getDisplay().getSystemCursor(cursorId));
 	}
 
 	private void setCursorDefault() {

@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -73,9 +74,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.swtchart.ISeries;
 
@@ -111,8 +110,6 @@ public class ExtendedChromatogramOverlayUI {
 	private Set<String> mirroredSeries;
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 	//
 	private List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
 
@@ -811,7 +808,7 @@ public class ExtendedChromatogramOverlayUI {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageOverlay));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
@@ -819,7 +816,7 @@ public class ExtendedChromatogramOverlayUI {
 						applyOverlaySettings();
 					} catch(Exception e1) {
 						System.out.println(e1);
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}

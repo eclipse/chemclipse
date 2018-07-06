@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -28,7 +29,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 public class ScanView extends AbstractChromatogramSelectionCSDView {
@@ -73,7 +73,7 @@ public class ScanView extends AbstractChromatogramSelectionCSDView {
 
 		Label info;
 		parent.setLayout(new GridLayout(2, false));
-		parent.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+		parent.setBackground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		//
 		info = new Label(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);

@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -54,7 +55,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 
 public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 
@@ -112,7 +112,7 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 							 */
 							IChromatogramSelectionMSD chromatogramSelection = getChromatogramSelection();
 							if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
-								Display display = Display.getDefault();
+								Display display = DisplayUtils.getDisplay();
 								try {
 									/*
 									 * Use the wait cursor.
@@ -241,8 +241,7 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 	 */
 	private void deleteSelectedPeaks() {
 
-		Shell shell = Display.getCurrent().getActiveShell();
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.YES | SWT.NO | SWT.CANCEL);
+		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_WARNING | SWT.YES | SWT.NO | SWT.CANCEL);
 		messageBox.setText("Delete Selected Peaks");
 		messageBox.setMessage("Do you really want to delete the selected peaks?");
 		int decision = messageBox.open();

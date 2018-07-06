@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.ui.handlers;
 
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
@@ -22,17 +23,15 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 
 public class CreateSnapshotHandler {
 
 	private Clipboard clipboard;
 
 	public CreateSnapshotHandler() {
-		clipboard = new Clipboard(Display.getDefault());
+		clipboard = new Clipboard(DisplayUtils.getDisplay());
 	}
 
 	@Execute
@@ -54,8 +53,7 @@ public class CreateSnapshotHandler {
 				/*
 				 * Save the image to a file.
 				 */
-				Shell shell = Display.getCurrent().getActiveShell();
-				FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+				FileDialog fileDialog = new FileDialog(DisplayUtils.getShell(), SWT.SAVE);
 				fileDialog.setText("Save Clipboard To File");
 				fileDialog.setFileName("Clipboard.png");
 				fileDialog.setFilterExtensions(new String[]{"*.png"});
@@ -85,12 +83,11 @@ public class CreateSnapshotHandler {
 		Image image = null;
 		//
 		if(composite != null && composite.getParent() != null) {
-			Display display = Display.getCurrent();
 			Composite compositeParent = composite.getParent();
 			GC gc = null;
 			try {
 				gc = new GC(compositeParent);
-				image = new Image(display, compositeParent.getBounds());
+				image = new Image(DisplayUtils.getDisplay(), compositeParent.getBounds());
 				gc.copyArea(image, 0, 0);
 			} finally {
 				if(gc != null) {
@@ -103,10 +100,8 @@ public class CreateSnapshotHandler {
 
 	private void openMessageBox(String message) {
 
-		Display display = Display.getCurrent();
 		String text = "Copy Selection To Clipboard";
-		Shell shell = display.getActiveShell();
-		MessageBox messageBox = new MessageBox(shell, SWT.NONE);
+		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.NONE);
 		messageBox.setText(text);
 		messageBox.setMessage(message);
 		messageBox.open();

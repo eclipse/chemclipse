@@ -27,13 +27,13 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
 
 public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 
@@ -98,7 +98,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 				if(cp instanceof IPeakComparisonResult) {
 					IPeakComparisonResult pcp = (IPeakComparisonResult)cp;
 					if(pcp.isMarkerPeak()) {
-						return new Color(Display.getDefault(), 255, 140, 0);
+						return new Color(DisplayUtils.getDisplay(), 255, 140, 0);
 					}
 				}
 			}

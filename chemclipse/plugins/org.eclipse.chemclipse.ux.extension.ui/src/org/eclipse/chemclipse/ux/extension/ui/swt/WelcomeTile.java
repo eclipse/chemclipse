@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.swt;
 
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -25,7 +26,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 public class WelcomeTile extends Composite {
@@ -207,7 +207,7 @@ public class WelcomeTile extends Composite {
 		} else {
 			fontSize = 18;
 		}
-		Font font = new Font(Display.getDefault(), "Arial", fontSize, SWT.BOLD);
+		Font font = new Font(DisplayUtils.getDisplay(), "Arial", fontSize, SWT.BOLD);
 		textSection.setFont(font);
 		font.dispose();
 	}

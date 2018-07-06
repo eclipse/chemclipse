@@ -90,6 +90,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -145,10 +146,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.swtchart.IAxis.Position;
 import org.swtchart.ILineSeries.PlotSymbolType;
@@ -226,8 +225,6 @@ public class ExtendedChromatogramUI {
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 
 	@Inject
 	public ExtendedChromatogramUI(Composite parent) {
@@ -332,7 +329,7 @@ public class ExtendedChromatogramUI {
 		/*
 		 * Excecute
 		 */
-		ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+		ProgressMonitorDialog monitor = new ProgressMonitorDialog(DisplayUtils.getShell());
 		try {
 			monitor.run(true, true, runnable);
 			updateChromatogram();
@@ -1376,7 +1373,7 @@ public class ExtendedChromatogramUI {
 
 	private void modifyChromatogramLength(String modifyLengthType) {
 
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Modify Chromatogram Length");
 		messageBox.setMessage("Would you like to modify the length of all opened chromatograms? Peaks will be deleted.");
 		if(messageBox.open() == SWT.YES) {
@@ -1402,7 +1399,7 @@ public class ExtendedChromatogramUI {
 				for(IChromatogramSelection chromatogramSelection : targetChromatogramSelections) {
 					if(realignChromatogram(modifyLengthType, chromatogramSelection, chromatogram)) {
 						IRunnableWithProgress runnable = new ChromatogramLengthModifier(chromatogramSelection, scanDelay, chromatogramLength);
-						ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+						ProgressMonitorDialog monitor = new ProgressMonitorDialog(DisplayUtils.getShell());
 						try {
 							monitor.run(true, true, runnable);
 						} catch(InvocationTargetException e) {
@@ -1506,7 +1503,7 @@ public class ExtendedChromatogramUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				setRanges();
-				MessageDialog.openInformation(shell, "Range Selection", "The selected editor range has been set successfully to all opened chromatograms.");
+				MessageDialog.openInformation(DisplayUtils.getShell(), "Range Selection", "The selected editor range has been set successfully to all opened chromatograms.");
 			}
 		});
 	}
@@ -1547,7 +1544,7 @@ public class ExtendedChromatogramUI {
 				/*
 				 * Question
 				 */
-				MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 				messageBox.setText("Transfer Peak Target(s)");
 				messageBox.setMessage("Would you like to transfer the selected peak target(s) to chromatogram: " + selection.getChromatogram().getName() + "?");
 				if(messageBox.open() == SWT.YES) {
@@ -1587,17 +1584,17 @@ public class ExtendedChromatogramUI {
 								}
 							}
 						} else {
-							MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "The sink chromatogram contains no peaks.");
+							MessageDialog.openWarning(DisplayUtils.getShell(), "Transfer Peak Target(s)", "The sink chromatogram contains no peaks.");
 						}
 					} else {
-						MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "The source chromatogram contains no peaks.");
+						MessageDialog.openWarning(DisplayUtils.getShell(), "Transfer Peak Target(s)", "The source chromatogram contains no peaks.");
 					}
 				}
 			} else {
-				MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "It's not possible to transfer targets to the same chromatogram.");
+				MessageDialog.openWarning(DisplayUtils.getShell(), "Transfer Peak Target(s)", "It's not possible to transfer targets to the same chromatogram.");
 			}
 		} else {
-			MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "Please select a chromatogram.");
+			MessageDialog.openWarning(DisplayUtils.getShell(), "Transfer Peak Target(s)", "Please select a chromatogram.");
 		}
 	}
 
@@ -1996,14 +1993,14 @@ public class ExtendedChromatogramUI {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageChromatogram));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}
@@ -2066,7 +2063,7 @@ public class ExtendedChromatogramUI {
 				ISecondaryAxisSettings secondaryAxisSettings = new SecondaryAxisSettings(LABEL_SCAN_NUMBER, new MillisecondsToScanNumberConverter(scanDelay, scanInterval));
 				secondaryAxisSettings.setPosition(Position.Secondary);
 				secondaryAxisSettings.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0"));
-				secondaryAxisSettings.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+				secondaryAxisSettings.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 				secondaryAxisSettings.setExtraSpaceTitle(0);
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettings);
 			}

@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -62,10 +63,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class ExtendedScanTableUI {
@@ -96,7 +95,6 @@ public class ExtendedScanTableUI {
 	private boolean fireUpdate = true;
 	//
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
-	private Shell shell = Display.getDefault().getActiveShell();
 
 	private class DeleteMenuEntry implements ITableMenuEntry {
 
@@ -382,7 +380,7 @@ public class ExtendedScanTableUI {
 						}
 						//
 						if(massSpectrum != null) {
-							DatabaseFileSupport.saveMassSpectrum(shell, massSpectrum, "Scan" + massSpectrum.getScanNumber());
+							DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), massSpectrum, "Scan" + massSpectrum.getScanNumber());
 						}
 					}
 				} catch(NoConverterAvailableException e1) {
@@ -433,14 +431,14 @@ public class ExtendedScanTableUI {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}
@@ -589,7 +587,7 @@ public class ExtendedScanTableUI {
 	@SuppressWarnings("rawtypes")
 	private void deleteSignals() {
 
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Signal(s)");
 		messageBox.setMessage("Would you like to delete the selected signal(s)?");
 		if(messageBox.open() == SWT.YES) {
@@ -656,7 +654,7 @@ public class ExtendedScanTableUI {
 		String y = textY.getText().trim();
 		//
 		if("".equals(x) || "".equals(y)) {
-			MessageDialog.openError(shell, "Add Signal", "The values must be not empty.");
+			MessageDialog.openError(DisplayUtils.getShell(), "Add Signal", "The values must be not empty.");
 		} else {
 			try {
 				/*
@@ -699,7 +697,7 @@ public class ExtendedScanTableUI {
 				fireScanUpdate();
 				//
 			} catch(Exception e) {
-				MessageDialog.openError(shell, "Add Signal", "Something has gone wrong to add the signal.");
+				MessageDialog.openError(DisplayUtils.getShell(), "Add Signal", "Something has gone wrong to add the signal.");
 			}
 		}
 	}

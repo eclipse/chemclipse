@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
@@ -67,10 +68,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -94,8 +93,6 @@ public class ExtendedPeakListUI {
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ListSupport listSupport = new ListSupport();
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 	//
 	private Map<String, Object> map;
 
@@ -338,7 +335,7 @@ public class ExtendedPeakListUI {
 
 	private void deletePeaks() {
 
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Peak(s)");
 		messageBox.setMessage("Would you like to delete the selected peak(s)?");
 		if(messageBox.open() == SWT.YES) {
@@ -394,24 +391,48 @@ public class ExtendedPeakListUI {
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
 			if(object instanceof IPeak) {
+				/*
+				 * Fire updates
+				 */
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				IPeak peak = (IPeak)object;
-				chromatogramSelection.setSelectedPeak(peak);
-				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
-				/*
-				 * Send the identification target update to let e.g. the molecule renderer react on an update.
-				 */
-				IIdentificationTarget identificationTarget = peakDataSupport.getBestPeakTarget(peak.getTargets());
-				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, identificationTarget);
-				/*
-				 * Send the mass spectrum update, e.g. used by the comparison part.
-				 */
+				IIdentificationTarget target = peakDataSupport.getBestPeakTarget(peak.getTargets());
+				//
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						chromatogramSelection.setSelectedPeak(peak);
+						eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+					}
+				});
+				//
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
+					}
+				});
+				//
 				if(peak instanceof IPeakMSD) {
 					IPeakMSD peakMSD = (IPeakMSD)peak;
-					map.clear();
-					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, peakMSD.getExtractedMassSpectrum());
-					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
-					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+					DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							/*
+							 * Send the mass spectrum update, e.g. used by the comparison part.
+							 */
+							map.clear();
+							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, peakMSD.getExtractedMassSpectrum());
+							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
+							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+						}
+					});
 				}
 			}
 		}
@@ -535,7 +556,7 @@ public class ExtendedPeakListUI {
 						} else {
 							peaks = getPeakList(table, indices);
 						}
-						DatabaseFileSupport.savePeaks(shell, peaks, chromatogram.getName());
+						DatabaseFileSupport.savePeaks(DisplayUtils.getShell(), peaks, chromatogram.getName());
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
@@ -565,14 +586,14 @@ public class ExtendedPeakListUI {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageLists));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}

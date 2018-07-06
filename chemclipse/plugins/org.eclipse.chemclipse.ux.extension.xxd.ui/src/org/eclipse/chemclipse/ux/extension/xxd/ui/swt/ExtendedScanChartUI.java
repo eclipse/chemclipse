@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
@@ -72,9 +73,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 @SuppressWarnings("rawtypes")
@@ -121,8 +120,6 @@ public class ExtendedScanChartUI {
 	//
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private EditorUpdateSupport editorUpdateSupport;
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 
 	private class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 
@@ -541,11 +538,11 @@ public class ExtendedScanChartUI {
 						 */
 						String identifierId = scanIdentifierIds.get(index);
 						IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(optimizedScan, identifierId);
-						ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+						ProgressMonitorDialog monitor = new ProgressMonitorDialog(DisplayUtils.getShell());
 						try {
 							monitor.run(true, true, runnable);
 							originalScan.setOptimizedMassSpectrum(optimizedScan);
-							display.asyncExec(new Runnable() {
+							DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 								@Override
 								public void run() {
@@ -751,14 +748,14 @@ public class ExtendedScanChartUI {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSubtract));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}
@@ -777,11 +774,11 @@ public class ExtendedScanChartUI {
 
 				try {
 					if(originalScan != null) {
-						DatabaseFileSupport.saveMassSpectrum(shell, originalScan, "OriginalScan");
+						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), originalScan, "OriginalScan");
 					}
 					//
 					if(optimizedScan != null) {
-						DatabaseFileSupport.saveMassSpectrum(shell, optimizedScan, "OptimizedScan");
+						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), optimizedScan, "OptimizedScan");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
@@ -981,7 +978,7 @@ public class ExtendedScanChartUI {
 			int scanNumber = chromatogram.getScanNumber(masterRetentionTime);
 			IScan referenceScan = chromatogram.getScan(scanNumber);
 			//
-			display.asyncExec(new Runnable() {
+			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {

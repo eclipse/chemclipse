@@ -49,6 +49,7 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.util.TargetListUtil;
 import org.eclipse.chemclipse.support.validators.TargetValidator;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -96,10 +97,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -135,8 +134,6 @@ public class ExtendedTargetsUI {
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private ListSupport listSupport = new ListSupport();
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent) {
@@ -349,14 +346,14 @@ public class ExtendedTargetsUI {
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
 				preferenceManager.addToRoot(new PreferenceNode("3", preferencePageLists));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}
@@ -645,24 +642,37 @@ public class ExtendedTargetsUI {
 			Object object = tableItem.getData();
 			if(object instanceof IIdentificationTarget) {
 				/*
-				 * Send the mass spectrum if available.
+				 * Fire updates
 				 */
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				IScanMSD massSpectrum = getMassSpectrum();
-				/*
-				 * Send the identification target update to let e.g. the molecule renderer react on an update.
-				 */
 				IIdentificationTarget target = (IIdentificationTarget)object;
-				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
-				/*
-				 * Send the mass spectrum update, e.g. used by the comparison part.
-				 */
+				//
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
+					}
+				});
+				//
 				if(massSpectrum != null) {
-					map.clear();
-					IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
-					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, massSpectrum);
-					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
-					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+					DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							/*
+							 * Send the identification target update to let e.g. the molecule renderer react on an update.
+							 */
+							map.clear();
+							IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, massSpectrum);
+							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
+							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+						}
+					});
 				}
 			}
 		}
@@ -702,7 +712,7 @@ public class ExtendedTargetsUI {
 			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			boolean propagateTargetOnUpdate = preferenceStore.getBoolean(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE);
 			if(propagateTargetOnUpdate) {
-				display.asyncExec(new Runnable() {
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 					@Override
 					public void run() {
@@ -764,7 +774,7 @@ public class ExtendedTargetsUI {
 	@SuppressWarnings("rawtypes")
 	private void deleteTargets() {
 
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Target(s)");
 		messageBox.setMessage("Would you like to delete the selected target(s)?");
 		if(messageBox.open() == SWT.YES) {
@@ -817,7 +827,7 @@ public class ExtendedTargetsUI {
 		if(isInputValid) {
 			setTarget(targetValidator);
 		} else {
-			MessageDialog.openError(shell, "Add Target", "The given target is invalid.");
+			MessageDialog.openError(DisplayUtils.getShell(), "Add Target", "The given target is invalid.");
 		}
 	}
 

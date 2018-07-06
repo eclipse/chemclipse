@@ -38,6 +38,7 @@ public class DeleteAllPeakIntegrationsHandler implements EventHandler {
 
 	private static IChromatogramSelection chromatogramSelection;
 
+	@SuppressWarnings("rawtypes")
 	@Execute
 	public void execute(UISynchronize uiSynchronize, final @Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
 

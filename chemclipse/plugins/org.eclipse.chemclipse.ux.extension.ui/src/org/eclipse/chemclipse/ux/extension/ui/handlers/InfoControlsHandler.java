@@ -11,19 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.handlers;
 
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 
 public class InfoControlsHandler {
 
 	@Execute
 	void execute() {
 
-		Shell shell = Display.getCurrent().getActiveShell();
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
+		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_INFORMATION);
 		messageBox.setText("Controls");
 		messageBox.setMessage("Add your commands to handle system control commands here.");
 		messageBox.open();

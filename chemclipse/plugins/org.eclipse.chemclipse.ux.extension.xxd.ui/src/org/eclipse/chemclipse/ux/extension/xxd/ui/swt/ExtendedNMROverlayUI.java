@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
 import org.eclipse.chemclipse.nmr.model.core.ISignalNMR;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -47,16 +48,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 public class ExtendedNMROverlayUI {
 
 	private ChartNMR chartNMR;
 	//
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 	//
 	private List<IScanNMR> scanSelections = new ArrayList<>();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -142,7 +139,7 @@ public class ExtendedNMROverlayUI {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageOverlay));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
@@ -150,7 +147,7 @@ public class ExtendedNMROverlayUI {
 						applyOverlaySettings();
 					} catch(Exception e1) {
 						System.out.println(e1);
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}

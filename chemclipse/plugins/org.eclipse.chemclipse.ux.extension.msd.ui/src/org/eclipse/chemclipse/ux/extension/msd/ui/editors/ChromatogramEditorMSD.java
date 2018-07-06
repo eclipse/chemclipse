@@ -48,6 +48,7 @@ import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionCheckBoxEditingSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionContentProvider;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionLabelProvider;
@@ -83,7 +84,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -217,7 +217,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			chromatogramSelection.dispose();
 		}
 		//
-		Display.getDefault().asyncExec(new Runnable() {
+		DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -233,7 +233,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
 			part.setVisible(false);
-			Display.getDefault().asyncExec(new Runnable() {
+			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
@@ -257,8 +257,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	@Persist
 	public void save() {
 
-		Shell shell = Display.getDefault().getActiveShell();
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 			@Override
@@ -267,7 +266,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 				try {
 					monitor.beginTask("Save Chromatogram", IProgressMonitor.UNKNOWN);
 					try {
-						saveChromatogram(monitor, shell);
+						saveChromatogram(monitor, DisplayUtils.getShell());
 					} catch(NoChromatogramConverterAvailableException e) {
 						throw new InvocationTargetException(e);
 					}
@@ -318,7 +317,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 					 * If no failures have occurred, set the dirty status to
 					 * false.
 					 */
-					File file = processingInfo.getProcessingResult(File.class);
+					processingInfo.getProcessingResult(File.class);
 					dirtyable.setDirty(false);
 				} catch(TypeCastException e) {
 					throw new NoChromatogramConverterAvailableException();
@@ -460,13 +459,14 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	 * @throws FileNotFoundException
 	 * @throws ChromatogramIsNullException
 	 */
+	@SuppressWarnings("rawtypes")
 	private void importChromatogram(File file, boolean batch) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
 		/*
 		 * Import the chromatogram here, but do not set to the chromatogram ui,
 		 * as it must be initialized first.
 		 */
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
 		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(file);
 		try {
 			/*
@@ -486,7 +486,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		 */
 		int sizeReferencedChromatograms = chromatogramSelection.getChromatogramMSD().getReferencedChromatograms().size();
 		if(sizeReferencedChromatograms > 0) {
-			ReferencedChromatogramDialog referencedChromatogramDialog = new ReferencedChromatogramDialog(Display.getCurrent().getActiveShell(), chromatogramSelection.getChromatogram());
+			ReferencedChromatogramDialog referencedChromatogramDialog = new ReferencedChromatogramDialog(DisplayUtils.getShell(), chromatogramSelection.getChromatogram());
 			referencedChromatogramDialog.create();
 			if(referencedChromatogramDialog.open() == Window.OK) {
 				List<IChromatogram> selectedChromatograms = referencedChromatogramDialog.getSelectedChromatograms();
@@ -1089,6 +1089,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		tabItem.setControl(composite);
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void createReferencedChromatogramPageSection(Composite parent) {
 
 		Section section;

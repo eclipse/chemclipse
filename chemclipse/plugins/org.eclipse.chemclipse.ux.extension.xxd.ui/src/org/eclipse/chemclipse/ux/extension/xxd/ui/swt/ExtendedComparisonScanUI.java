@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.LibraryServiceRunnable;
@@ -48,10 +49,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 
 public class ExtendedComparisonScanUI {
 
@@ -92,7 +91,6 @@ public class ExtendedComparisonScanUI {
 	private boolean displayShifted = false;
 	//
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
-	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
 	public ExtendedComparisonScanUI(Composite parent) {
@@ -140,7 +138,7 @@ public class ExtendedComparisonScanUI {
 			buttonOptimizedScan.setEnabled(true);
 			//
 			LibraryServiceRunnable runnable = new LibraryServiceRunnable(identificationTarget);
-			ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(DisplayUtils.getShell());
 			try {
 				monitor.run(true, true, runnable);
 				scan1 = unknownMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
@@ -542,10 +540,10 @@ public class ExtendedComparisonScanUI {
 
 				try {
 					if(scan1 != null) {
-						DatabaseFileSupport.saveMassSpectrum(shell, scan1, "UnknownMS");
+						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), scan1, "UnknownMS");
 					}
 					if(scan2 != null) {
-						DatabaseFileSupport.saveMassSpectrum(shell, scan2, "ReferenceMS");
+						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), scan2, "ReferenceMS");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
@@ -606,14 +604,14 @@ public class ExtendedComparisonScanUI {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}

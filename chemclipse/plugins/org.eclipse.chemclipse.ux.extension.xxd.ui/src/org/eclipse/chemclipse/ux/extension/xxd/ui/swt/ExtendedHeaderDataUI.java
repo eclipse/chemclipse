@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -37,10 +38,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
@@ -63,8 +62,6 @@ public class ExtendedHeaderDataUI {
 	private IMeasurementInfo measurementInfo;
 	private boolean editable;
 	//
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 
 	@Inject
 	public ExtendedHeaderDataUI(Composite parent) {
@@ -346,11 +343,11 @@ public class ExtendedHeaderDataUI {
 			String value = textHeaderValue.getText().trim();
 			//
 			if("".equals(key)) {
-				MessageDialog.openError(shell, HEADER_ENTRY, "The header key must be not empty.");
+				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The header key must be not empty.");
 			} else if(measurementInfo.headerDataContainsKey(key)) {
-				MessageDialog.openError(shell, HEADER_ENTRY, "The header key already exists.");
+				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The header key already exists.");
 			} else if("".equals(value)) {
-				MessageDialog.openError(shell, HEADER_ENTRY, "The header value must be not empty.");
+				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The header value must be not empty.");
 			} else {
 				measurementInfo.putHeaderData(key, value);
 				textHeaderKey.setText("");
@@ -363,7 +360,7 @@ public class ExtendedHeaderDataUI {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void deleteHeaderEntries() {
 
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Header Entrie(s)");
 		messageBox.setMessage("Would you like to delete the selected header entrie(s)?");
 		if(messageBox.open() == SWT.YES) {
@@ -391,7 +388,7 @@ public class ExtendedHeaderDataUI {
 				 * Show a message if certain keys couldn't be removed.
 				 */
 				if(keysNotRemoved.size() > 0) {
-					MessageDialog.openWarning(shell, HEADER_ENTRY, "The following keys can't be removed: " + keysNotRemoved);
+					MessageDialog.openWarning(DisplayUtils.getShell(), HEADER_ENTRY, "The following keys can't be removed: " + keysNotRemoved);
 				}
 				//
 				updateHeaderData();

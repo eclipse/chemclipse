@@ -17,13 +17,13 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.runnables.LibraryServiceRunnable;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -94,7 +94,7 @@ public abstract class AbstractMassSpectrumLibraryView {
 
 		if(isPartVisible()) {
 			IRunnableWithProgress runnable = new LibraryServiceRunnable(this, unknownMassSpectrum, identificationTarget);
-			ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(DisplayUtils.getShell());
 			try {
 				monitor.run(true, true, runnable);
 			} catch(InvocationTargetException e) {

@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -51,11 +52,9 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 
 public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 
-	private static final String POPUP_MENU_ID = "org.eclipse.chemclipse.chromatogram.csd.ui.perspective.views.peakListFIDView.popup";
 	@Inject
 	private Composite parent;
 	private PeakListUI peakListUI;
@@ -143,7 +142,7 @@ public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 							 */
 							IChromatogramSelectionCSD chromatogramSelection = getChromatogramSelection();
 							if(chromatogramSelection instanceof ChromatogramSelectionCSD) {
-								Display display = Display.getDefault();
+								Display display = DisplayUtils.getDisplay();
 								try {
 									/*
 									 * Use the wait cursor.
@@ -236,8 +235,7 @@ public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 	 */
 	private void deleteSelectedPeaks() {
 
-		Shell shell = Display.getCurrent().getActiveShell();
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.YES | SWT.NO | SWT.CANCEL);
+		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_WARNING | SWT.YES | SWT.NO | SWT.CANCEL);
 		messageBox.setText("Delete Selected Peaks");
 		messageBox.setMessage("Do you really want to delete the selected peaks?");
 		int decision = messageBox.open();

@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
@@ -41,9 +42,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
@@ -64,7 +63,6 @@ public class ExtendedCombinedScanUI {
 	private IScanMSD scanMSD;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
-	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
 	public ExtendedCombinedScanUI(Composite parent) {
@@ -216,7 +214,7 @@ public class ExtendedCombinedScanUI {
 
 				try {
 					if(scanMSD != null) {
-						DatabaseFileSupport.saveMassSpectrum(shell, scanMSD, "CombinedScan");
+						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), scanMSD, "CombinedScan");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
@@ -243,14 +241,14 @@ public class ExtendedCombinedScanUI {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}

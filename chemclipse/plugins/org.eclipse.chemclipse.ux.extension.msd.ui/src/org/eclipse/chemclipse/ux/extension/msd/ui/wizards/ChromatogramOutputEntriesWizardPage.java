@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.converter.model.ChromatogramOutputEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,9 +27,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class ChromatogramOutputEntriesWizardPage extends WizardPage {
@@ -133,8 +132,7 @@ public class ChromatogramOutputEntriesWizardPage extends WizardPage {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 
-					Shell shell = Display.getCurrent().getActiveShell();
-					DirectoryDialog dialog = new DirectoryDialog(shell);
+					DirectoryDialog dialog = new DirectoryDialog(DisplayUtils.getShell());
 					dialog.setText("Select chromatogram format output folder:");
 					String reportFolder = dialog.open();
 					if(reportFolder != null) {

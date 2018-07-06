@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
@@ -32,12 +33,10 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.widgets.Display;
 
 public class IdentificationLabelMarker extends LabelMarker {
 
-	private Display display = Display.getDefault();
-	private Font font = display.getSystemFont();
+	private Font font = DisplayUtils.getDisplay().getSystemFont();
 
 	/**
 	 * Peak or Scan can be null. If null, it won't be processed.

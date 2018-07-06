@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -28,7 +29,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
 public class ScanIdentifiedListView extends AbstractChromatogramSelectionCSDView {
@@ -80,7 +80,7 @@ public class ScanIdentifiedListView extends AbstractChromatogramSelectionCSDView
 	private void createControl(Composite parent) {
 
 		parent.setLayout(new GridLayout(1, true));
-		parent.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+		parent.setBackground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		//
 		targetsText = new Text(parent, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL);
 		targetsText.setText("");

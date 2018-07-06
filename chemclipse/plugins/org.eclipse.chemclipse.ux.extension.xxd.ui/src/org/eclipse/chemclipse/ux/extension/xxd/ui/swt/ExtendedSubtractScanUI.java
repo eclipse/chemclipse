@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
@@ -42,9 +43,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
@@ -61,7 +60,6 @@ public class ExtendedSubtractScanUI {
 	//
 	private IScanMSD scanMSD;
 	private IChromatogramSelectionMSD chromatogramSelectionMSD;
-	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
 	public ExtendedSubtractScanUI(Composite parent) {
@@ -221,7 +219,7 @@ public class ExtendedSubtractScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 				messageBox.setText("Clear Session");
 				messageBox.setMessage("Would you like to clear the session subtract scan?");
 				if(messageBox.open() == SWT.YES) {
@@ -247,7 +245,7 @@ public class ExtendedSubtractScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 				messageBox.setText("Load Session");
 				messageBox.setMessage("Would you like to load the session subtract scan?");
 				if(messageBox.open() == SWT.YES) {
@@ -270,7 +268,7 @@ public class ExtendedSubtractScanUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				PreferenceSupplier.storeSessionSubtractMassSpectrum();
-				MessageDialog.openInformation(shell, "Session", "The session subtract scan has been stored successfully.");
+				MessageDialog.openInformation(DisplayUtils.getShell(), "Session", "The session subtract scan has been stored successfully.");
 			}
 		});
 	}
@@ -287,7 +285,7 @@ public class ExtendedSubtractScanUI {
 
 				try {
 					if(scanMSD != null) {
-						DatabaseFileSupport.saveMassSpectrum(shell, scanMSD, "SubtractMS");
+						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), scanMSD, "SubtractMS");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
@@ -317,14 +315,14 @@ public class ExtendedSubtractScanUI {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSubtract));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}

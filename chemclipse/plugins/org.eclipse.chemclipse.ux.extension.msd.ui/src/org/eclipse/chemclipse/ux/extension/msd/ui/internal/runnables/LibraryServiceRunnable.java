@@ -18,10 +18,10 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.msd.ui.views.AbstractMassSpectrumLibraryView;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
 
 public class LibraryServiceRunnable implements IRunnableWithProgress {
 
@@ -61,7 +61,7 @@ public class LibraryServiceRunnable implements IRunnableWithProgress {
 	 */
 	private void updateSelection(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum, boolean forceReload) {
 
-		Display.getDefault().asyncExec(new Runnable() {
+		DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {

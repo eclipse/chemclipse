@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.SequenceImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
@@ -43,7 +44,6 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUpdateSupport {
@@ -57,8 +57,6 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 	//
 	private MPart part;
 	private MDirtyable dirtyable;
-	//
-	private Shell shell = Display.getDefault().getActiveShell();
 	//
 	private File sequenceFile;
 	private ExtendedSequenceTableUI extendedSequenceTableUI;
@@ -104,7 +102,7 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
 			part.setVisible(false);
-			Display.getDefault().asyncExec(new Runnable() {
+			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
@@ -165,7 +163,7 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 	private synchronized ISequence<? extends ISequenceRecord> loadSequence(File file, boolean batch) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
 		ISequence<? extends ISequenceRecord> sequence = null;
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
 		SequenceImportRunnable runnable = new SequenceImportRunnable(file);
 		try {
 			/*

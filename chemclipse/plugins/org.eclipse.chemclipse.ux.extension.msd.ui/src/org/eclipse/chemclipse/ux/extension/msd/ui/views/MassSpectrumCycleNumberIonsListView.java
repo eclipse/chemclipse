@@ -27,7 +27,6 @@ import org.eclipse.swt.widgets.Composite;
 
 public class MassSpectrumCycleNumberIonsListView extends AbstractChromatogramSelectionMSDView {
 
-	private static final String POPUP_MENU_ID = "org.eclipse.chemclipse.chromatogram.msd.ui.perspective.views.massSpectrumCycleNumberIonsListView.popup";
 	@Inject
 	private Composite parent;
 	private MassSpectrumCycleNumberIonsListUI massSpectrumCycleNumberIonsListUI;

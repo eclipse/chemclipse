@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -41,15 +42,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 public class DataExplorerPart {
 
 	private DataExplorerUI dataExplorerUI;
 	//
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 
 	@Inject
 	public DataExplorerPart(Composite parent) {
@@ -59,7 +56,7 @@ public class DataExplorerPart {
 	private void initialize(Composite parent) {
 
 		parent.setLayout(new GridLayout(1, true));
-		parent.setBackground(display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		parent.setBackground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		//
 		createToolbarMain(parent);
 		createFileExplorerTreeViewer(parent);
@@ -114,14 +111,14 @@ public class DataExplorerPart {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage1));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePage2));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						setSupplierFileEditorSupport();
 					} catch(Exception e1) {
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}

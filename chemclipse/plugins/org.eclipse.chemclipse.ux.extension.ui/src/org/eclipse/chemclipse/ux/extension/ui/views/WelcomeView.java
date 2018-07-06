@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.swt.ISelectionHandler;
 import org.eclipse.chemclipse.ux.extension.ui.swt.WelcomeTile;
 import org.eclipse.core.runtime.Platform;
@@ -43,7 +44,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
 public class WelcomeView {
 
@@ -91,7 +91,7 @@ public class WelcomeView {
 		public void handleEvent() {
 
 			switchPerspective(PERSPECTIVE_DATA_ANALYSIS);
-			Display.getCurrent().asyncExec(new Runnable() {
+			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {

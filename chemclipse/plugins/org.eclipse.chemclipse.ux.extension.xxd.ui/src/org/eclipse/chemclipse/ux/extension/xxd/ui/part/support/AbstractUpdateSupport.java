@@ -53,21 +53,6 @@ public abstract class AbstractUpdateSupport implements IUpdateSupport {
 			/**
 			 * Application does not have an active window
 			 * Should not happen, if yes have a look at the usage of Display or shell.
-			 * 
-			 * DON'T USE:
-			 * Display display = Display.getCurrent();
-			 * Display.getCurrent().getActiveShell()
-			 * ...
-			 * MessageDialog.openError(Display.getCurrent().getActiveShell(), "...", "...");
-			 * MessageDialog.openError(Display.getDefault().getActiveShell(), "...", "...");
-			 * 
-			 * USE:
-			 * private Display display = Display.getDefault();
-			 * private Shell shell = Display.getDefault().getActiveShell();
-			 * ...
-			 * public Constructor() ...
-			 * ...
-			 * MessageDialog.openError(shell, "...", "...");
 			 */
 			logger.warn(e + "\t" + part);
 			return false;

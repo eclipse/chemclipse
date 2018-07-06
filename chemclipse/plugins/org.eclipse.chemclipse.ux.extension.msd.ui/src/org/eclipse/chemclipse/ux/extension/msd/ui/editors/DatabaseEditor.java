@@ -35,6 +35,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.DatabaseImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumLibraryUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
@@ -53,7 +54,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -127,8 +127,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 	@Persist
 	public void save() {
 
-		Shell shell = Display.getDefault().getActiveShell();
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 			@Override
@@ -137,7 +136,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 				try {
 					monitor.beginTask("Save Mass Spectra", IProgressMonitor.UNKNOWN);
 					try {
-						saveMassSpectra(monitor, shell);
+						saveMassSpectra(monitor, DisplayUtils.getShell());
 					} catch(NoMassSpectrumConverterAvailableException e) {
 						throw new InvocationTargetException(e);
 					}
@@ -226,7 +225,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 
 	private void importMassSpectra(File file, boolean batch) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
 		DatabaseImportRunnable runnable = new DatabaseImportRunnable(file);
 		try {
 			/*

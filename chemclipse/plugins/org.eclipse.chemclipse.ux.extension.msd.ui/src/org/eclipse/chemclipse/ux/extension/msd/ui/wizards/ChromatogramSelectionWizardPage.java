@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
@@ -25,10 +26,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -275,8 +274,7 @@ public class ChromatogramSelectionWizardPage extends WizardPage {
 	private List<String> getChromatogramFileSelection() {
 
 		List<String> selectedFiles = new ArrayList<String>();
-		Shell shell = Display.getCurrent().getActiveShell();
-		FileDialog fileDialog = new FileDialog(shell, SWT.OPEN | SWT.MULTI);
+		FileDialog fileDialog = new FileDialog(DisplayUtils.getShell(), SWT.OPEN | SWT.MULTI);
 		fileDialog.setText("Please select the chromatograms used for reporting.");
 		fileDialog.setFilterExtensions(new String[]{"*.ocb"});
 		fileDialog.setFilterNames(new String[]{"OpenChrom Chromatogram (*.ocb)"});

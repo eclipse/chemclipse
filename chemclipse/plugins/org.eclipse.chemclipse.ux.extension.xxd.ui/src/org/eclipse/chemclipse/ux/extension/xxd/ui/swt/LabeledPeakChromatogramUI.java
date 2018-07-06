@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTarget
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.chromatogram.AbstractViewChromatogramUI;
 import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
 import org.eclipse.chemclipse.swt.ui.exceptions.NoIdentifiedScansAvailableException;
@@ -43,7 +44,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.swtchart.ICustomPaintListener;
 import org.swtchart.ILineSeries;
 import org.swtchart.ILineSeries.PlotSymbolType;
@@ -64,7 +64,6 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 	private TargetExtendedComparator targetComparator;
 	//
 	private Transform transform;
-	private Display display = Display.getDefault();
 
 	public LabeledPeakChromatogramUI(Composite parent, int style) {
 		super(parent, style, new AxisTitlesMassScale());
@@ -73,7 +72,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 		/*
 		 * Draw the text upright
 		 */
-		transform = new Transform(display);
+		transform = new Transform(DisplayUtils.getDisplay());
 		transform.rotate(-90);
 	}
 

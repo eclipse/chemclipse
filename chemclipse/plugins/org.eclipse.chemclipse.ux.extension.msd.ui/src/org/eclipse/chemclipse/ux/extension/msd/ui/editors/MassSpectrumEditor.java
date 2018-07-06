@@ -47,6 +47,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
@@ -65,7 +66,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -151,8 +151,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	@Persist
 	public boolean save() {
 
-		Shell shell = Display.getCurrent().getActiveShell();
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 			@Override
@@ -161,7 +160,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 				try {
 					monitor.beginTask("Save Mass Spectra", IProgressMonitor.UNKNOWN);
 					try {
-						saveMassSpectra(monitor, shell);
+						saveMassSpectra(monitor, DisplayUtils.getShell());
 					} catch(NoMassSpectrumConverterAvailableException e) {
 						throw new InvocationTargetException(e);
 					}
@@ -270,7 +269,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		 * Import the mass spectrum here, but do not set to the mass spectrum UI,
 		 * as it must be initialized first.
 		 */
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
 		MassSpectrumImportRunnable runnable = new MassSpectrumImportRunnable(file);
 		try {
 			/*

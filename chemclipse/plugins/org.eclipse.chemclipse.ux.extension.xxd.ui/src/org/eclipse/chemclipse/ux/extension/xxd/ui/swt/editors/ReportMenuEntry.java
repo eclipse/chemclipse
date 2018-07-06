@@ -18,13 +18,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
 import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupplier;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
 import org.eclipse.eavp.service.swtchart.menu.AbstractChartMenuEntry;
 import org.eclipse.eavp.service.swtchart.menu.IChartMenuEntry;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
@@ -35,8 +35,6 @@ public class ReportMenuEntry extends AbstractChartMenuEntry implements IChartMen
 	private IChromatogramReportSupplier chromatogramReportSupplier;
 	private String type;
 	//
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 
 	public ReportMenuEntry(ExtendedChromatogramUI extendedChromatogramUI, IChromatogramReportSupplier chromatogramReportSupplier, String type) {
 		this.extendedChromatogramUI = extendedChromatogramUI;
@@ -91,7 +89,7 @@ public class ReportMenuEntry extends AbstractChartMenuEntry implements IChartMen
 
 	private File getFileFromFileDialog(String defaultFileName, IChromatogramReportSupplier chromatogramReportSupplier) {
 
-		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+		FileDialog fileDialog = new FileDialog(DisplayUtils.getShell(), SWT.SAVE);
 		fileDialog.setOverwrite(true);
 		fileDialog.setText("Report");
 		fileDialog.setFileName(defaultFileName);

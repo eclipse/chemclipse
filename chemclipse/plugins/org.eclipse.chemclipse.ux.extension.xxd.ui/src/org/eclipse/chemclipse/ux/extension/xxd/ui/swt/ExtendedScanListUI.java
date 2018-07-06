@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
@@ -63,10 +64,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -89,8 +88,6 @@ public class ExtendedScanListUI {
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ListSupport listSupport = new ListSupport();
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 	//
 	private Map<String, Object> map;
 
@@ -287,7 +284,7 @@ public class ExtendedScanListUI {
 
 	private void deleteScanIdentifications() {
 
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Scan Identification(s)");
 		messageBox.setMessage("Would you like to delete the selected scan identification(s)?");
 		if(messageBox.open() == SWT.YES) {
@@ -320,24 +317,48 @@ public class ExtendedScanListUI {
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
 			if(object instanceof IScan) {
+				/*
+				 * Fire updates
+				 */
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				IScan scan = (IScan)object;
-				chromatogramSelection.setSelectedIdentifiedScan(scan);
-				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
-				/*
-				 * Send the identification target update to let e.g. the molecule renderer react on an update.
-				 */
-				IIdentificationTarget identificationTarget = scanDataSupport.getBestScanTarget(scan);
-				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, identificationTarget);
-				/*
-				 * Send the mass spectrum update, e.g. used by the comparison part.
-				 */
+				IIdentificationTarget target = scanDataSupport.getBestScanTarget(scan);
+				//
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						chromatogramSelection.setSelectedIdentifiedScan(scan);
+						eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+					}
+				});
+				//
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
+					}
+				});
+				//
 				if(scan instanceof IScanMSD) {
 					IScanMSD scanMSD = (IScanMSD)scan;
-					map.clear();
-					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, scanMSD);
-					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
-					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+					DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							/*
+							 * Send the identification target update to let e.g. the molecule renderer react on an update.
+							 */
+							map.clear();
+							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, scanMSD);
+							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
+							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+						}
+					});
 				}
 			}
 		}
@@ -468,7 +489,7 @@ public class ExtendedScanListUI {
 								massSpectra.addMassSpectrum((IScanMSD)scan);
 							}
 						}
-						DatabaseFileSupport.saveMassSpectra(shell, massSpectra, chromatogram.getName());
+						DatabaseFileSupport.saveMassSpectra(DisplayUtils.getShell(), massSpectra, chromatogram.getName());
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
@@ -498,14 +519,14 @@ public class ExtendedScanListUI {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageLists));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}

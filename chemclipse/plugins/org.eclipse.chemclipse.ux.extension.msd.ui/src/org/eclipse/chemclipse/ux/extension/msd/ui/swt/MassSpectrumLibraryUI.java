@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
@@ -52,7 +53,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 public class MassSpectrumLibraryUI extends Composite {
@@ -225,7 +225,7 @@ public class MassSpectrumLibraryUI extends Composite {
 
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH, massSpectrumFile);
-				MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "DB Search", "The library has been added.");
+				MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been added.");
 			}
 		});
 		//
@@ -245,7 +245,7 @@ public class MassSpectrumLibraryUI extends Composite {
 
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH, massSpectrumFile);
-				MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "DB Search", "The library has been removed.");
+				MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been removed.");
 			}
 		});
 		//
@@ -272,14 +272,14 @@ public class MassSpectrumLibraryUI extends Composite {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageMSD));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(Display.getDefault().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}

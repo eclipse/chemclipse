@@ -25,10 +25,11 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -51,9 +52,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
@@ -77,8 +76,6 @@ public abstract class AbstractSupplierFileExplorer {
 	 */
 	private List<ISupplierFileEditorSupport> supplierFileEditorSupportList = new ArrayList<ISupplierFileEditorSupport>();
 	//
-	private Display display = Display.getDefault();
-	private Shell shell = display.getActiveShell();
 
 	public AbstractSupplierFileExplorer(Composite parent) {
 		/*
@@ -252,7 +249,7 @@ public abstract class AbstractSupplierFileExplorer {
 								while(it.hasNext()) {
 									File f = (File)it.next();
 									if(f != null && f.isFile() && activeFileSupplier.isMatchMagicNumber(f)) {
-										display.asyncExec(new Runnable() {
+										DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 											@Override
 											public void run() {
@@ -289,7 +286,7 @@ public abstract class AbstractSupplierFileExplorer {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				DirectoryDialog directoryDialog = new DirectoryDialog(shell, SWT.READ_ONLY);
+				DirectoryDialog directoryDialog = new DirectoryDialog(DisplayUtils.getShell(), SWT.READ_ONLY);
 				directoryDialog.setText("Select a directory.");
 				String pathname = directoryDialog.open();
 				if(pathname != null) {
@@ -321,7 +318,7 @@ public abstract class AbstractSupplierFileExplorer {
 				while(iterator.hasNext()) {
 					Object object = iterator.next();
 					if(object instanceof File) {
-						display.asyncExec(new Runnable() {
+						DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 							@Override
 							public void run() {
@@ -484,7 +481,7 @@ public abstract class AbstractSupplierFileExplorer {
 
 	private void setTreeViewerContent(TreeViewer treeViewer, Object input) {
 
-		display.asyncExec(new Runnable() {
+		DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {

@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener;
 
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Display;
 import org.swtchart.ICustomPaintListener;
 
 public class SplitSelectionPaintListener implements ICustomPaintListener {
@@ -28,14 +28,13 @@ public class SplitSelectionPaintListener implements ICustomPaintListener {
 	private int x2;
 	private int y2;
 	//
-	private Display display = Display.getDefault();
 
 	@Override
 	public void paintControl(PaintEvent e) {
 
 		Color foreground = e.gc.getForeground();
 		Color background = e.gc.getBackground();
-		e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
+		e.gc.setForeground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		if(x1 == x2) {
 			if(x1 != 0) {
 				Point position = getLabelPosition(e, x1, y1, LABEL_PERPENDICULAR_DROP);
