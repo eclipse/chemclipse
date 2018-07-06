@@ -18,6 +18,7 @@ import java.util.List;
 public class TargetListUtil {
 
 	public static final String SEPARATOR_TOKEN = ";";
+	public static final String SEPARATOR_ENTRY = "|";
 
 	public String createList(String[] items) {
 

@@ -11,17 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.editors;
 
-import org.eclipse.chemclipse.support.util.TargetListUtil;
+import org.eclipse.chemclipse.support.validators.TargetValidator;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.swt.widgets.List;
 
 public class TargetInputValidator implements IInputValidator {
 
-	private String[] items;
-
-	public TargetInputValidator() {
-		items = new String[]{};
-	}
+	private String[] items = new String[]{};
+	private TargetValidator targetValidator = new TargetValidator();
 
 	public TargetInputValidator(List list) {
 		if(list != null) {
@@ -32,18 +30,17 @@ public class TargetInputValidator implements IInputValidator {
 	}
 
 	@Override
-	public String isValid(String newTarget) {
+	public String isValid(String target) {
 
-		if(newTarget.equals("")) {
-			return "The target must be not empty.";
-		} else if(newTarget.contains(TargetListUtil.SEPARATOR_TOKEN)) {
-			return "The target must not contain the following character: " + TargetListUtil.SEPARATOR_TOKEN;
-		} else {
+		IStatus status = targetValidator.validate(target);
+		if(status.isOK()) {
 			for(String item : items) {
-				if(item.equals(newTarget)) {
+				if(item.equals(target)) {
 					return "The target already exists.";
 				}
 			}
+		} else {
+			return status.getMessage();
 		}
 		return null;
 	}

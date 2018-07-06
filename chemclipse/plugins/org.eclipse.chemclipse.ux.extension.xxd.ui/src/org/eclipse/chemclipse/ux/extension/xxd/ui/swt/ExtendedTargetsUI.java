@@ -50,9 +50,11 @@ import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.support.util.TargetListUtil;
+import org.eclipse.chemclipse.support.validators.TargetValidator;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
@@ -68,10 +70,14 @@ import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogr
 import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ChromatogramTargetWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanTargetWSD;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -107,11 +113,14 @@ public class ExtendedTargetsUI {
 	private Composite toolbarInfo;
 	private Composite toolbarSearch;
 	private Composite toolbarModify;
+	private Label labelInputErrors;
 	private Combo comboTargetName;
 	private Button buttonAddTarget;
 	private Button buttonDeleteTarget;
 	private TargetsListUI targetListUI;
 	private TargetListUtil targetListUtil;
+	private TargetValidator targetValidator;
+	private ControlDecoration targetControlDecoration;
 	/*
 	 * IScan,
 	 * IPeak,
@@ -173,6 +182,7 @@ public class ExtendedTargetsUI {
 		PartSupport.setCompositeVisibility(toolbarModify, false);
 		//
 		targetListUI.setEditEnabled(false);
+		clearLabelInputErrors();
 		applySettings();
 	}
 
@@ -388,7 +398,10 @@ public class ExtendedTargetsUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		int columns = 3;
+		composite.setLayout(new GridLayout(columns, false));
+		//
+		labelInputErrors = createLabel(composite, columns);
 		//
 		comboTargetName = createComboTarget(composite);
 		buttonAddTarget = createButtonAdd(composite);
@@ -397,22 +410,39 @@ public class ExtendedTargetsUI {
 		return composite;
 	}
 
+	private Label createLabel(Composite parent, int horizontalSpan) {
+
+		Label label = new Label(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = horizontalSpan;
+		gridData.grabExcessHorizontalSpace = true;
+		label.setLayoutData(gridData);
+		//
+		return label;
+	}
+
 	private Combo createComboTarget(Composite parent) {
 
 		Combo combo = new Combo(parent, SWT.NONE);
 		combo.setText("");
 		combo.setToolTipText("Select a target or type in a new substance name.");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		targetValidator = new TargetValidator();
+		targetControlDecoration = new ControlDecoration(combo, SWT.LEFT | SWT.TOP);
+		//
 		combo.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 
+				validate(targetValidator, targetControlDecoration, combo);
 				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
 					addTarget();
 				}
 			}
 		});
+		//
 		return combo;
 	}
 
@@ -783,58 +813,68 @@ public class ExtendedTargetsUI {
 
 	private void addTarget() {
 
-		String substanceName = comboTargetName.getText().trim();
-		//
-		if("".equals(substanceName)) {
-			MessageDialog.openError(shell, "Add Target", "The substance name must be not empty.");
+		boolean isInputValid = validate(targetValidator, targetControlDecoration, comboTargetName);
+		if(isInputValid) {
+			setTarget(targetValidator);
 		} else {
-			/*
-			 * Add a new entry.
-			 */
-			ILibraryInformation libraryInformation = new LibraryInformation();
-			libraryInformation.setName(substanceName);
-			IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
-			//
-			if(object instanceof IScanMSD) {
-				IScanMSD scanMSD = (IScanMSD)object;
-				MassSpectrumTarget identificationTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
-				setIdentifier(identificationTarget);
-				scanMSD.addTarget(identificationTarget);
-			} else if(object instanceof IScanCSD) {
-				IScanCSD scanCSD = (IScanCSD)object;
-				ScanTargetCSD identificationTarget = new ScanTargetCSD(libraryInformation, comparisonResult);
-				setIdentifier(identificationTarget);
-				scanCSD.addTarget(identificationTarget);
-			} else if(object instanceof IScanWSD) {
-				IScanWSD scanWSD = (IScanWSD)object;
-				IScanTargetWSD identificationTarget = new ScanTargetWSD(libraryInformation, comparisonResult);
-				setIdentifier(identificationTarget);
-				scanWSD.addTarget(identificationTarget);
-			} else if(object instanceof IPeak) {
-				IPeak peak = (IPeak)object;
-				IPeakTarget identificationTarget = new PeakTarget(libraryInformation, comparisonResult);
-				setIdentifier(identificationTarget);
-				peak.addTarget(identificationTarget);
-			} else if(object instanceof IChromatogramMSD) {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)object;
-				IChromatogramTargetMSD identificationTarget = new ChromatogramTargetMSD(libraryInformation, comparisonResult);
-				setIdentifier(identificationTarget);
-				chromatogramMSD.addTarget(identificationTarget);
-			} else if(object instanceof IChromatogramCSD) {
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)object;
-				IChromatogramTargetCSD identificationTarget = new ChromatogramTargetCSD(libraryInformation, comparisonResult);
-				setIdentifier(identificationTarget);
-				chromatogramCSD.addTarget(identificationTarget);
-			} else if(object instanceof IChromatogramWSD) {
-				IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
-				IChromatogramTargetWSD identificationTarget = new ChromatogramTargetWSD(libraryInformation, comparisonResult);
-				setIdentifier(identificationTarget);
-				chromatogramWSD.addTarget(identificationTarget);
-			}
-			//
-			comboTargetName.setText("");
-			updateTargets();
+			MessageDialog.openError(shell, "Add Target", "The given target is invalid.");
 		}
+	}
+
+	private void setTarget(TargetValidator targetValidator) {
+
+		/*
+		 * Add a new entry.
+		 */
+		ILibraryInformation libraryInformation = new LibraryInformation();
+		//
+		libraryInformation.setName(targetValidator.getName());
+		libraryInformation.setCasNumber(targetValidator.getCasNumber());
+		libraryInformation.setComments(targetValidator.getComments());
+		libraryInformation.setContributor(targetValidator.getContributor());
+		libraryInformation.setReferenceIdentifier(targetValidator.getReferenceId());
+		//
+		IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+		//
+		if(object instanceof IScanMSD) {
+			IScanMSD scanMSD = (IScanMSD)object;
+			MassSpectrumTarget identificationTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
+			setIdentifier(identificationTarget);
+			scanMSD.addTarget(identificationTarget);
+		} else if(object instanceof IScanCSD) {
+			IScanCSD scanCSD = (IScanCSD)object;
+			ScanTargetCSD identificationTarget = new ScanTargetCSD(libraryInformation, comparisonResult);
+			setIdentifier(identificationTarget);
+			scanCSD.addTarget(identificationTarget);
+		} else if(object instanceof IScanWSD) {
+			IScanWSD scanWSD = (IScanWSD)object;
+			IScanTargetWSD identificationTarget = new ScanTargetWSD(libraryInformation, comparisonResult);
+			setIdentifier(identificationTarget);
+			scanWSD.addTarget(identificationTarget);
+		} else if(object instanceof IPeak) {
+			IPeak peak = (IPeak)object;
+			IPeakTarget identificationTarget = new PeakTarget(libraryInformation, comparisonResult);
+			setIdentifier(identificationTarget);
+			peak.addTarget(identificationTarget);
+		} else if(object instanceof IChromatogramMSD) {
+			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)object;
+			IChromatogramTargetMSD identificationTarget = new ChromatogramTargetMSD(libraryInformation, comparisonResult);
+			setIdentifier(identificationTarget);
+			chromatogramMSD.addTarget(identificationTarget);
+		} else if(object instanceof IChromatogramCSD) {
+			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)object;
+			IChromatogramTargetCSD identificationTarget = new ChromatogramTargetCSD(libraryInformation, comparisonResult);
+			setIdentifier(identificationTarget);
+			chromatogramCSD.addTarget(identificationTarget);
+		} else if(object instanceof IChromatogramWSD) {
+			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
+			IChromatogramTargetWSD identificationTarget = new ChromatogramTargetWSD(libraryInformation, comparisonResult);
+			setIdentifier(identificationTarget);
+			chromatogramWSD.addTarget(identificationTarget);
+		}
+		//
+		comboTargetName.setText("");
+		updateTargets();
 	}
 
 	/**
@@ -863,5 +903,33 @@ public class ExtendedTargetsUI {
 
 		String text = showChromatogramTargets ? "Chromatogram Targets Active" : "Scan/Peak Targets Active";
 		labelTargetOption.setText(text);
+	}
+
+	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Combo combo) {
+
+		IStatus status = validator.validate(combo.getText());
+		if(status.isOK()) {
+			controlDecoration.hide();
+			clearLabelInputErrors();
+			return true;
+		} else {
+			setLabelInputError(status.getMessage());
+			controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
+			controlDecoration.showHoverText("Input Error");
+			controlDecoration.show();
+			return false;
+		}
+	}
+
+	private void clearLabelInputErrors() {
+
+		labelInputErrors.setText("Example: Styrene | 100-42-5 | comment | contributor | referenceId");
+		labelInputErrors.setBackground(null);
+	}
+
+	private void setLabelInputError(String message) {
+
+		labelInputErrors.setText(message);
+		labelInputErrors.setBackground(Colors.YELLOW);
 	}
 }

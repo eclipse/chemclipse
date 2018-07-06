@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.e4.core.services;bundle-version="1.1.0",
  com.fasterxml.jackson.core.jackson-core;bundle-version="2.6.2",
  com.fasterxml.jackson.core.jackson-databind;bundle-version="2.6.2",
- com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2"
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2",
+ org.eclipse.core.databinding;bundle-version="1.6.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.support.comparator,
@@ -24,4 +25,5 @@ Export-Package: org.eclipse.chemclipse.support.comparator,
  org.eclipse.chemclipse.support.runtime,
  org.eclipse.chemclipse.support.settings,
  org.eclipse.chemclipse.support.text,
- org.eclipse.chemclipse.support.util
+ org.eclipse.chemclipse.support.util,
+ org.eclipse.chemclipse.support.validators
