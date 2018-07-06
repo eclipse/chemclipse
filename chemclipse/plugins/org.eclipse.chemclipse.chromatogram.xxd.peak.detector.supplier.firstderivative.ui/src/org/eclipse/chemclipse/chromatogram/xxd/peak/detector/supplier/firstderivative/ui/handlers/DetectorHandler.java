@@ -25,7 +25,6 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
@@ -34,9 +33,9 @@ public class DetectorHandler implements EventHandler {
 
 	private static final Logger logger = Logger.getLogger(DetectorHandler.class);
 	private static IChromatogramSelection chromatogramSelection;
-	
+
 	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part,@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
+	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
 
 		/*
 		 * Get the actual cursor, create a new wait cursor and show the wait

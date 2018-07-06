@@ -39,7 +39,7 @@ public interface IFirstDerivativePeakDetectorMSDSettings extends IPeakDetectorMS
 
 	void setMinimumSignalToNoiseRatio(float minimumSignalToNoiseRatio);
 
-	WindowSize getWindowSize();
+	WindowSize getMovingAverageWindowSize();
 
-	void setWindowSize(WindowSize windowSize);
+	void setMovingAverageWindowSize(WindowSize windowSize);
 }

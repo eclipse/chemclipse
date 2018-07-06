@@ -75,7 +75,7 @@ public class PeakDetectorWSD extends AbstractPeakDetectorWSD {
 		if(!processingInfo.hasErrorMessages()) {
 			setThresholdValue(peakDetectorSettings);
 			setIncludeBackground(peakDetectorSettings);
-			setMinimumSignalToNoiseRation(peakDetectorSettings);
+			setMinimumSignalToNoiseRatio(peakDetectorSettings);
 			setMovingAverageWindowSize(peakDetectorSettings);
 			//
 			detectPeaks(chromatogramSelection, monitor);
@@ -130,7 +130,7 @@ public class PeakDetectorWSD extends AbstractPeakDetectorWSD {
 		}
 	}
 
-	private void setMinimumSignalToNoiseRation(IPeakDetectorSettings peakDetectorSettings) {
+	private void setMinimumSignalToNoiseRatio(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorWSDSettings) {
 			IFirstDerivativePeakDetectorWSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorWSDSettings)peakDetectorSettings;

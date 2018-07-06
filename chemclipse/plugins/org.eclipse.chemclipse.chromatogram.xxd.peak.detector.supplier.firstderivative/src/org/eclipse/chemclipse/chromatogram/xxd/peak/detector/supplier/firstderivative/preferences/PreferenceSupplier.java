@@ -30,18 +30,35 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String P_THRESHOLD = "threshold";
-	public static final String DEF_THRESHOLD = Threshold.MEDIUM.name();
-	public static final String P_INCLUDE_BACKGROUND = "includeBackground";
-	public static final boolean DEF_INCLUDE_BACKGROUND = false; // false will use BV oder VB, if true VV will be used.
-	//
-	public static final String P_MIN_SN_RATIO = "minSNRatio";
-	public static final float DEF_MIN_SN_RATIO = 0.0f; // 0 = all peaks will be added
 	public static final float MIN_SN_RATIO_MIN = 0.0f; // 0 = all peaks will be added
 	public static final float MIN_SN_RATIO_MAX = Float.MAX_VALUE; // 0 = all peaks will be added
 	//
-	public static final String P_MOVING_AVERAGE_WINDOW_SIZE = "movingAverageWindowSize";
-	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE = WindowSize.SCANS_3.name();
+	public static final String P_THRESHOLD_MSD = "thresholdMSD";
+	public static final String DEF_THRESHOLD_MSD = Threshold.MEDIUM.name();
+	public static final String P_INCLUDE_BACKGROUND_MSD = "includeBackgroundMSD";
+	public static final boolean DEF_INCLUDE_BACKGROUND_MSD = false; // false will use BV oder VB, if true VV will be used.
+	public static final String P_MIN_SN_RATIO_MSD = "minSNRatioMSD";
+	public static final float DEF_MIN_SN_RATIO_MSD = 0.0f; // 0 = all peaks will be added
+	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_MSD = "movingAverageWindowSizeMSD";
+	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD = WindowSize.SCANS_3.name();
+	//
+	public static final String P_THRESHOLD_CSD = "thresholdCSD";
+	public static final String DEF_THRESHOLD_CSD = Threshold.MEDIUM.name();
+	public static final String P_INCLUDE_BACKGROUND_CSD = "includeBackgroundCSD";
+	public static final boolean DEF_INCLUDE_BACKGROUND_CSD = false; // false will use BV oder VB, if true VV will be used.
+	public static final String P_MIN_SN_RATIO_CSD = "minSNRatioCSD";
+	public static final float DEF_MIN_SN_RATIO_CSD = 0.0f; // 0 = all peaks will be added
+	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_CSD = "movingAverageWindowSizeCSD";
+	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD = WindowSize.SCANS_3.name();
+	//
+	public static final String P_THRESHOLD_WSD = "thresholdWSD";
+	public static final String DEF_THRESHOLD_WSD = Threshold.MEDIUM.name();
+	public static final String P_INCLUDE_BACKGROUND_WSD = "includeBackgroundWSD";
+	public static final boolean DEF_INCLUDE_BACKGROUND_WSD = false; // false will use BV oder VB, if true VV will be used.
+	public static final String P_MIN_SN_RATIO_WSD = "minSNRatioWSD";
+	public static final float DEF_MIN_SN_RATIO_WSD = 0.0f; // 0 = all peaks will be added
+	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_WSD = "movingAverageWindowSizeWSD";
+	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD = WindowSize.SCANS_3.name();
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -69,10 +86,22 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_INCLUDE_BACKGROUND, Boolean.toString(DEF_INCLUDE_BACKGROUND));
-		defaultValues.put(P_MIN_SN_RATIO, Float.toString(DEF_MIN_SN_RATIO));
-		defaultValues.put(P_MOVING_AVERAGE_WINDOW_SIZE, DEF_MOVING_AVERAGE_WINDOW_SIZE);
-		defaultValues.put(P_THRESHOLD, DEF_THRESHOLD);
+		//
+		defaultValues.put(P_INCLUDE_BACKGROUND_MSD, Boolean.toString(DEF_INCLUDE_BACKGROUND_MSD));
+		defaultValues.put(P_MIN_SN_RATIO_MSD, Float.toString(DEF_MIN_SN_RATIO_MSD));
+		defaultValues.put(P_MOVING_AVERAGE_WINDOW_SIZE_MSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD);
+		defaultValues.put(P_THRESHOLD_MSD, DEF_THRESHOLD_MSD);
+		//
+		defaultValues.put(P_INCLUDE_BACKGROUND_CSD, Boolean.toString(DEF_INCLUDE_BACKGROUND_CSD));
+		defaultValues.put(P_MIN_SN_RATIO_CSD, Float.toString(DEF_MIN_SN_RATIO_CSD));
+		defaultValues.put(P_MOVING_AVERAGE_WINDOW_SIZE_CSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD);
+		defaultValues.put(P_THRESHOLD_CSD, DEF_THRESHOLD_CSD);
+		//
+		defaultValues.put(P_INCLUDE_BACKGROUND_WSD, Boolean.toString(DEF_INCLUDE_BACKGROUND_WSD));
+		defaultValues.put(P_MIN_SN_RATIO_WSD, Float.toString(DEF_MIN_SN_RATIO_WSD));
+		defaultValues.put(P_MOVING_AVERAGE_WINDOW_SIZE_WSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD);
+		defaultValues.put(P_THRESHOLD_WSD, DEF_THRESHOLD_WSD);
+		//
 		return defaultValues;
 	}
 
@@ -86,10 +115,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		IFirstDerivativePeakDetectorMSDSettings peakDetectorSettings = new FirstDerivativePeakDetectorMSDSettings();
-		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD, DEF_THRESHOLD)));
-		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND, DEF_INCLUDE_BACKGROUND));
-		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
-		peakDetectorSettings.setWindowSize(WindowSize.valueOf(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE, DEF_MOVING_AVERAGE_WINDOW_SIZE)));
+		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD_MSD, DEF_THRESHOLD_MSD)));
+		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_MSD, DEF_INCLUDE_BACKGROUND_MSD));
+		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_MSD, DEF_MIN_SN_RATIO_MSD));
+		peakDetectorSettings.setMovingAverageWindowSize(WindowSize.valueOf(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_MSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD)));
 		return peakDetectorSettings;
 	}
 
@@ -97,10 +126,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		IFirstDerivativePeakDetectorCSDSettings peakDetectorSettings = new FirstDerivativePeakDetectorCSDSettings();
-		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD, DEF_THRESHOLD)));
-		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND, DEF_INCLUDE_BACKGROUND));
-		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
-		peakDetectorSettings.setMovingAverageWindowSize(getMovingAverageWindowSize());
+		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD_CSD, DEF_THRESHOLD_CSD)));
+		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_CSD, DEF_INCLUDE_BACKGROUND_CSD));
+		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_CSD, DEF_MIN_SN_RATIO_CSD));
+		peakDetectorSettings.setMovingAverageWindowSize(WindowSize.valueOf(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_CSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD)));
 		return peakDetectorSettings;
 	}
 
@@ -108,51 +137,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		IFirstDerivativePeakDetectorWSDSettings peakDetectorSettings = new FirstDerivativePeakDetectorWSDSettings();
-		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD, DEF_THRESHOLD)));
-		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND, DEF_INCLUDE_BACKGROUND));
-		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
-		peakDetectorSettings.setMovingAverageWindowSize(getMovingAverageWindowSize());
+		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD_WSD, DEF_THRESHOLD_WSD)));
+		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_WSD, DEF_INCLUDE_BACKGROUND_WSD));
+		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_WSD, DEF_MIN_SN_RATIO_WSD));
+		peakDetectorSettings.setMovingAverageWindowSize(WindowSize.valueOf(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_WSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD)));
 		return peakDetectorSettings;
-	}
-
-	public static WindowSize getMovingAverageWindowSize() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		String size = preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE, DEF_MOVING_AVERAGE_WINDOW_SIZE);
-		return WindowSize.valueOf(size);
-	}
-
-	/**
-	 * Returns the threshold stored in the settings.
-	 * 
-	 * @return {@link Threshold}
-	 */
-	public static Threshold getThreshold() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		String threshold = preferences.get(P_THRESHOLD, DEF_THRESHOLD);
-		if(threshold.equals("")) {
-			/*
-			 * TODO initialize preferenceStore at startup There is something
-			 * wrong when the preferenceStore isn't not actually
-			 * initialized.<br/> threshold =
-			 * preferenceStore.getDefaultString(PreferenceConstants
-			 * .P_THRESHOLD);
-			 */
-			threshold = Threshold.OFF.toString();
-		}
-		return Threshold.valueOf(threshold);
-	}
-
-	public static boolean isIncludeBackground() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_INCLUDE_BACKGROUND, DEF_INCLUDE_BACKGROUND);
-	}
-
-	public static float getMinimumSignalToNoiseRatio() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO);
 	}
 }

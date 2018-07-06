@@ -73,13 +73,13 @@ public class FirstDerivativePeakDetectorMSDSettings extends AbstractPeakDetector
 	}
 
 	@Override
-	public WindowSize getWindowSize() {
+	public WindowSize getMovingAverageWindowSize() {
 
 		return windowSize;
 	}
 
 	@Override
-	public void setWindowSize(WindowSize windowSize) {
+	public void setMovingAverageWindowSize(WindowSize windowSize) {
 
 		this.windowSize = windowSize;
 	}

@@ -67,7 +67,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	//
 	private double threshold = 0.005d;
 	private boolean includeBackground = false;
-	private float minimumSignalToNoiseRatio = 0;
+	private float minimumSignalToNoiseRatio = 0.0f;
 	private WindowSize movingAverageWindow = WindowSize.SCANS_3;
 
 	@Override
@@ -82,7 +82,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 		if(!processingInfo.hasErrorMessages()) {
 			setThresholdValue(peakDetectorSettings);
 			setIncludeBackground(peakDetectorSettings);
-			setMinimumSignalToNoiseRation(peakDetectorSettings);
+			setMinimumSignalToNoiseRatio(peakDetectorSettings);
 			setMovingAverageWindowSize(peakDetectorSettings);
 			//
 			detectPeaks(chromatogramSelection, monitor);
@@ -153,7 +153,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void setMinimumSignalToNoiseRation(IPeakDetectorSettings peakDetectorSettings) {
+	private void setMinimumSignalToNoiseRatio(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorMSDSettings) {
 			IFirstDerivativePeakDetectorMSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorMSDSettings)peakDetectorSettings;
@@ -165,7 +165,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorMSDSettings) {
 			IFirstDerivativePeakDetectorMSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorMSDSettings)peakDetectorSettings;
-			this.movingAverageWindow = firstDerivativePeakDetectorSettings.getWindowSize();
+			this.movingAverageWindow = firstDerivativePeakDetectorSettings.getMovingAverageWindowSize();
 		}
 	}
 

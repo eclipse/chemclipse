@@ -16,6 +16,24 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePage"
             name="First Derivative Peak Detector">
       </page>
+      <page
+            category="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.PreferencePageMSD"
+            id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePageMSD"
+            name="MSD">
+      </page>     
+      <page
+            category="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.PreferencePageCSD"
+            id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePageCSD"
+            name="CSD">
+      </page>     
+      <page
+            category="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.PreferencePageWSD"
+            id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePageWSD"
+            name="WSD">
+      </page>
    </extension>
    <extension
          point="org.eclipse.help.toc">
