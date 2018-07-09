@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 
 public class DisplayUtils {
@@ -49,11 +50,11 @@ public class DisplayUtils {
 		return display;
 	}
 
-	public static Shell getShell(Control control) {
+	public static Shell getShell(Widget widget) {
 
 		Shell shell = null;
-		if(control != null) {
-			shell = control.getShell();
+		if(widget instanceof Control) {
+			shell = ((Control)widget).getShell();
 		} else {
 			shell = getShell();
 		}

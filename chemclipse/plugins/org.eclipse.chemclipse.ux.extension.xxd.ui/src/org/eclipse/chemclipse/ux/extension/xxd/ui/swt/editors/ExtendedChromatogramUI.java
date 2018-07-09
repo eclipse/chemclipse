@@ -196,7 +196,6 @@ public class ExtendedChromatogramUI {
 	private Combo comboTargetTransfer;
 	private ComboViewer comboViewerSeparationColumn;
 	private Button executeMethod;
-	private Button executeMethodItems;
 	//
 	private IChromatogramSelection chromatogramSelection = null;
 	private List<IChromatogramSelection> referencedChromatogramSelections = null; // Might be null ... no references.
@@ -222,9 +221,7 @@ public class ExtendedChromatogramUI {
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
 	private boolean suspendUpdate = false;
-	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	//
 
 	@Inject
 	public ExtendedChromatogramUI(Composite parent) {
@@ -985,7 +982,6 @@ public class ExtendedChromatogramUI {
 		//
 		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
 		executeMethod.setEnabled(false);
-		executeMethodItems.setEnabled(false);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, false);
 		PartSupport.setCompositeVisibility(toolbarAnalyze, false);
@@ -1029,19 +1025,12 @@ public class ExtendedChromatogramUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(11, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
 		createVerticalSeparator(composite);
 		createComboPredefinedMethod(composite);
 		executeMethod = createButtonExecuteMethod(composite);
-		createVerticalSeparator(composite);
-		createComboFilter(composite);
-		createComboPeakDetector(composite);
-		createComboPeakIntegrator(composite);
-		createComboPeakIdentifier(composite);
-		createComboCalculator(composite);
-		executeMethodItems = createButtonExecuteMethodItems(composite);
 		//
 		return composite;
 	}
@@ -1101,93 +1090,6 @@ public class ExtendedChromatogramUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Apply the method to the selected chromatogram.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-		//
-		return button;
-	}
-
-	private void createComboFilter(Composite parent) {
-
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
-		combo.setToolTipText("Select a chromatogram filter method.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-	}
-
-	private void createComboPeakDetector(Composite parent) {
-
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
-		combo.setToolTipText("Select a chromatogram peak detector method.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-	}
-
-	private void createComboPeakIntegrator(Composite parent) {
-
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
-		combo.setToolTipText("Select a chromatogram peak integrator method.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-	}
-
-	private void createComboPeakIdentifier(Composite parent) {
-
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
-		combo.setToolTipText("Select a chromatogram peak detector method.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-	}
-
-	private void createComboCalculator(Composite parent) {
-
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
-		combo.setToolTipText("Select a chromatogram calculator method.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-	}
-
-	private Button createButtonExecuteMethodItems(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Apply the method items to the selected chromatogram.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 

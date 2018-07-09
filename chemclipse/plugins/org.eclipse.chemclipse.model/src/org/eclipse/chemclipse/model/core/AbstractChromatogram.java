@@ -125,7 +125,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		method = new TripleQuadMethod();
-		separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnFactory.TYPE_NONE);
+		separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnFactory.TYPE_DEFAULT);
 	}
 
 	@Override
