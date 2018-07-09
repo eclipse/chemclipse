@@ -17,10 +17,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileReader;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -53,6 +55,17 @@ public class RetentionIndexCalculator {
 		 */
 		ISeparationColumn separationColumn = chromatogramSelection.getChromatogram().getSeparationColumn();
 		ISeparationColumnIndices separationColumnIndices = calibrationMap.get(separationColumn.getName());
+		/*
+		 * Use Default?
+		 */
+		if(separationColumnIndices == null) {
+			if(PreferenceSupplier.isUseDefaultColumn()) {
+				separationColumnIndices = calibrationMap.get(SeparationColumnFactory.TYPE_DEFAULT);
+			}
+		}
+		/*
+		 * Calculate
+		 */
 		if(separationColumnIndices != null) {
 			calculateIndex(chromatogramSelection, separationColumnIndices);
 		}

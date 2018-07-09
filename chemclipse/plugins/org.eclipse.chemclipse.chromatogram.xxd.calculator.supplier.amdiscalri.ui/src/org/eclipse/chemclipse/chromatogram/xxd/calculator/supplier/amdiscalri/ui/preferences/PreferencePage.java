@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.pr
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.editors.CalibrationTableEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -41,9 +42,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		calibrationTableEditor.setFilterExtensionsAndNames(new String[]{"*.CAL", "*.cal"}, new String[]{"AMDIS Calibration *.CAL", "AMDIS Calibration *.cal"});
 		addField(calibrationTableEditor);
 		//
-		addField(new DirectoryFieldEditor(PreferenceSupplier.DEF_FILTER_PATH_INDEX_FILES, "Path Index Files:", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.DEF_FILTER_PATH_MODELS_MSD, "Path MSD Files:", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.DEF_FILTER_PATH_MODELS_CSD, "Path CSD Files:", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_DEFAULT_IF_COLUMN_IS_NA, "Use default if column is not available", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_INDEX_FILES, "Path Index Files:", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_MSD, "Path MSD Files:", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_CSD, "Path CSD Files:", getFieldEditorParent()));
 	}
 
 	/*

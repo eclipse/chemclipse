@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalibrationFile;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.CalibrationFileListUI;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.SWT;
@@ -186,31 +187,26 @@ public class CalibrationTableEditor extends FieldEditor {
 		return button;
 	}
 
-	private void createSelectionListener() {
-
-		selectionListener = new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-
-				Widget widget = event.widget;
-				if(widget == buttonAdd) {
-					addPressed();
-				} else if(widget == buttonRemove) {
-					removePressed();
-				} else if(widget == buttonClear) {
-					clearPressed();
-				} else if(widget == calibrationFileListUI.getTable()) {
-					removePressed();
-				}
-			}
-		};
-	}
-
 	private SelectionListener getSelectionListener() {
 
 		if(selectionListener == null) {
-			createSelectionListener();
+			selectionListener = new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent event) {
+
+					Widget widget = event.widget;
+					if(widget == buttonAdd) {
+						addPressed();
+					} else if(widget == buttonRemove) {
+						removePressed();
+					} else if(widget == buttonClear) {
+						clearPressed();
+					} else if(widget == calibrationFileListUI.getTable()) {
+						selectionChanged();
+					}
+				}
+			};
 		}
 		return selectionListener;
 	}
@@ -218,8 +214,7 @@ public class CalibrationTableEditor extends FieldEditor {
 	private void addPressed() {
 
 		setPresentsDefaultValue(false);
-		CalibrationFile calibrationFile = getNewCalibrationFile();
-		//
+		CalibrationFile calibrationFile = selectCalibrationFile();
 		if(calibrationFile != null) {
 			calibrationFileListUI.add(calibrationFile);
 			selectionChanged();
@@ -248,11 +243,14 @@ public class CalibrationTableEditor extends FieldEditor {
 
 		int index = calibrationFileListUI.getTable().getSelectionIndex();
 		buttonRemove.setEnabled(index >= 0);
+		buttonClear.setEnabled(index >= 0);
 	}
 
-	private CalibrationFile getNewCalibrationFile() {
+	private CalibrationFile selectCalibrationFile() {
 
-		FileDialog fileDialog = new FileDialog(buttonAdd.getShell(), SWT.OPEN);
+		CalibrationFile calibrationFile = null;
+		//
+		FileDialog fileDialog = new FileDialog(DisplayUtils.getShell(buttonAdd), SWT.OPEN);
 		fileDialog.setText("Select New Calibration File");
 		fileDialog.setFilterPath(PreferenceSupplier.getFilterPathIndexFiles());
 		//
@@ -265,30 +263,23 @@ public class CalibrationTableEditor extends FieldEditor {
 		if(filterPath != null) {
 			File file = new File(filterPath);
 			PreferenceSupplier.setFilterPathIndexFiles(file.getParentFile().getAbsolutePath());
-			CalibrationFile calibrationFile = new CalibrationFile(file);
-			return addFile(calibrationFile);
-		} else {
-			return null;
-		}
-	}
-
-	private CalibrationFile addFile(CalibrationFile calibrationFile) {
-
-		/*
-		 * Check that the file doesn't exist already.
-		 */
-		TableItem[] tableItems = calibrationFileListUI.getTable().getItems();
-		for(TableItem tableItem : tableItems) {
-			Object object = tableItem.getData();
-			if(object instanceof CalibrationFile) {
-				if(((CalibrationFile)object).equals(calibrationFile)) {
-					return calibrationFile;
+			calibrationFile = new CalibrationFile(file);
+			/*
+			 * Check that file and column not exists already.
+			 */
+			TableItem[] tableItems = calibrationFileListUI.getTable().getItems();
+			exitloop:
+			for(TableItem tableItem : tableItems) {
+				Object object = tableItem.getData();
+				if(object instanceof CalibrationFile) {
+					if(((CalibrationFile)object).equals(calibrationFile)) {
+						calibrationFile = null;
+						break exitloop;
+					}
 				}
 			}
 		}
-		/*
-		 * No, it doesn't exist. Return it.
-		 */
+		//
 		return calibrationFile;
 	}
 
@@ -314,6 +305,7 @@ public class CalibrationTableEditor extends FieldEditor {
 			compositeButtons.addDisposeListener(event -> {
 				buttonAdd = null;
 				buttonRemove = null;
+				buttonClear = null;
 				compositeButtons = null;
 			});
 		} else {
@@ -328,6 +320,7 @@ public class CalibrationTableEditor extends FieldEditor {
 
 		if(calibrationFileListUI == null) {
 			calibrationFileListUI = new CalibrationFileListUI(parent, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL);
+			calibrationFileListUI.getTable().addSelectionListener(getSelectionListener());
 		} else {
 			checkParent(calibrationFileListUI.getTable(), parent);
 		}

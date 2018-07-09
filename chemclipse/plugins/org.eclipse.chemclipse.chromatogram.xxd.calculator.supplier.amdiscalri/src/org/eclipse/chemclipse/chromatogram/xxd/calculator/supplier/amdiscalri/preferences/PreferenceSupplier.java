@@ -35,6 +35,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_RETENTION_INDEX_FILES = "retentionIndexFiles";
 	public static final String DEF_RETENTION_INDEX_FILES = "";
 	//
+	public static final String P_USE_DEFAULT_IF_COLUMN_IS_NA = "useDefaultIfColumnIsNA";
+	public static final boolean DEF_USE_DEFAULT_IF_COLUMN_IS_NA = true;
+	//
 	public static final String P_FILTER_PATH_INDEX_FILES = "filterPathIndexFiles";
 	public static final String DEF_FILTER_PATH_INDEX_FILES = "";
 	//
@@ -71,6 +74,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES);
+		defaultValues.put(P_USE_DEFAULT_IF_COLUMN_IS_NA, Boolean.toString(DEF_USE_DEFAULT_IF_COLUMN_IS_NA));
 		defaultValues.put(P_FILTER_PATH_INDEX_FILES, DEF_FILTER_PATH_INDEX_FILES);
 		defaultValues.put(P_FILTER_PATH_MODELS_MSD, DEF_FILTER_PATH_MODELS_MSD);
 		defaultValues.put(P_FILTER_PATH_MODELS_CSD, DEF_FILTER_PATH_MODELS_CSD);
@@ -95,6 +99,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		IRetentionIndexFilterSettingsPeak peakFilterSettings = new RetentionIndexFilterSettingsPeak();
 		peakFilterSettings.setRetentionIndexFiles(getRetentionIndexFiles());
 		return peakFilterSettings;
+	}
+
+	public static boolean isUseDefaultColumn() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		return preferences.getBoolean(P_USE_DEFAULT_IF_COLUMN_IS_NA, DEF_USE_DEFAULT_IF_COLUMN_IS_NA);
 	}
 
 	public static List<String> getRetentionIndexFiles() {

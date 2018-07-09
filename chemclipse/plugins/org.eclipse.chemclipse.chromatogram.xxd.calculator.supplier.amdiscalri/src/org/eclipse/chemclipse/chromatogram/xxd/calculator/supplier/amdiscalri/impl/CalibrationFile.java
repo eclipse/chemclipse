@@ -59,8 +59,9 @@ public class CalibrationFile {
 		if(file == null) {
 			if(other.file != null)
 				return false;
-		} else if(!file.equals(other.file))
+		} else if(!file.equals(other.file)) {
 			return false;
+		}
 		return true;
 	}
 

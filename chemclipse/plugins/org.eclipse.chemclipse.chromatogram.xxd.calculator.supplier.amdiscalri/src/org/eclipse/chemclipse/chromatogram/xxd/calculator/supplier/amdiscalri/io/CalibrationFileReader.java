@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.SeparationColumn;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 
@@ -37,9 +38,9 @@ public class CalibrationFileReader {
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 			/*
-			 * Column Secification
+			 * Column Specification
 			 */
-			String name = "";
+			String name = SeparationColumnFactory.TYPE_DEFAULT;
 			String length = "";
 			String diameter = "";
 			String phase = "";
