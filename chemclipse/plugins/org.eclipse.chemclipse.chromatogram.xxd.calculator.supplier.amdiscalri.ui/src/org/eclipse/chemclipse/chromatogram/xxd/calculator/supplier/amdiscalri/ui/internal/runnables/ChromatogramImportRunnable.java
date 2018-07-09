@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.runnables;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkanePatternDetectorCSD;
@@ -54,12 +55,14 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 			String chromatogramPath = wizardElements.getSelectedChromatograms().get(0);
 			AlkanePatternDetectorMSD alkanePatternDetector = new AlkanePatternDetectorMSD();
 			chromatogram = alkanePatternDetector.parseChromatogram(chromatogramPath, pathRetentionIndexFile, useAlreadyDetectedPeaks, monitor);
-			PreferenceSupplier.setFilterPathModelsMSD(chromatogramPath);
+			File file = new File(chromatogramPath);
+			PreferenceSupplier.setFilterPathModelsMSD(file.getParentFile().getAbsolutePath());
 		} else {
 			String chromatogramPath = wizardElements.getSelectedChromatograms().get(0);
 			AlkanePatternDetectorCSD alkanePatternDetector = new AlkanePatternDetectorCSD();
 			chromatogram = alkanePatternDetector.parseChromatogram(chromatogramPath, pathRetentionIndexFile, useAlreadyDetectedPeaks, monitor);
-			PreferenceSupplier.setFilterPathModelsCSD(chromatogramPath);
+			File file = new File(chromatogramPath);
+			PreferenceSupplier.setFilterPathModelsCSD(file.getParentFile().getAbsolutePath());
 		}
 	}
 }

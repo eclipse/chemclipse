@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.editors.CalibrationFileListEditor;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.editors.CalibrationTableEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -36,12 +36,12 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		CalibrationFileListEditor fileListEditor = new CalibrationFileListEditor(PreferenceSupplier.P_RETENTION_INDEX_FILES, "Retention Index (*.cal) Files:\nColumn\t\t(File Name) -> Path", getFieldEditorParent());
-		String[] filterExtensions = new String[]{"*.cal", "*.CAL"};
-		String[] filterNames = new String[]{"AMDIS Calibration *.cal", "AMDIS Calibration *.CAL"};
-		fileListEditor.setFilterExtensionsAndNames(filterExtensions, filterNames);
-		addField(fileListEditor);
 		//
+		CalibrationTableEditor calibrationTableEditor = new CalibrationTableEditor(PreferenceSupplier.P_RETENTION_INDEX_FILES, "Retention Index Files:", getFieldEditorParent());
+		calibrationTableEditor.setFilterExtensionsAndNames(new String[]{"*.CAL", "*.cal"}, new String[]{"AMDIS Calibration *.CAL", "AMDIS Calibration *.cal"});
+		addField(calibrationTableEditor);
+		//
+		addField(new DirectoryFieldEditor(PreferenceSupplier.DEF_FILTER_PATH_INDEX_FILES, "Path Index Files:", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.DEF_FILTER_PATH_MODELS_MSD, "Path MSD Files:", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.DEF_FILTER_PATH_MODELS_CSD, "Path CSD Files:", getFieldEditorParent()));
 	}

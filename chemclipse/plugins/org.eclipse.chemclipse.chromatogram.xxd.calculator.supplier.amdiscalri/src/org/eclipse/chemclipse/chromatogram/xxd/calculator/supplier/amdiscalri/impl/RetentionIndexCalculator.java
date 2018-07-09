@@ -51,7 +51,6 @@ public class RetentionIndexCalculator {
 		 * Run the calculation.
 		 * Use the separation column info to get the correct RI file.
 		 */
-		//
 		ISeparationColumn separationColumn = chromatogramSelection.getChromatogram().getSeparationColumn();
 		ISeparationColumnIndices separationColumnIndices = calibrationMap.get(separationColumn.getName());
 		if(separationColumnIndices != null) {

@@ -35,6 +35,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_RETENTION_INDEX_FILES = "retentionIndexFiles";
 	public static final String DEF_RETENTION_INDEX_FILES = "";
 	//
+	public static final String P_FILTER_PATH_INDEX_FILES = "filterPathIndexFiles";
+	public static final String DEF_FILTER_PATH_INDEX_FILES = "";
+	//
 	public static final String P_FILTER_PATH_MODELS_MSD = "filterPathModelsMSD";
 	public static final String DEF_FILTER_PATH_MODELS_MSD = "";
 	//
@@ -68,6 +71,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES);
+		defaultValues.put(P_FILTER_PATH_INDEX_FILES, DEF_FILTER_PATH_INDEX_FILES);
 		defaultValues.put(P_FILTER_PATH_MODELS_MSD, DEF_FILTER_PATH_MODELS_MSD);
 		defaultValues.put(P_FILTER_PATH_MODELS_CSD, DEF_FILTER_PATH_MODELS_CSD);
 		return defaultValues;
@@ -111,6 +115,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		} catch(BackingStoreException e) {
 			logger.warn(e);
 		}
+	}
+
+	public static String getFilterPathIndexFiles() {
+
+		return getFilterPath(P_FILTER_PATH_INDEX_FILES, DEF_FILTER_PATH_INDEX_FILES);
+	}
+
+	public static void setFilterPathIndexFiles(String filterPath) {
+
+		setFilterPath(P_FILTER_PATH_INDEX_FILES, filterPath);
 	}
 
 	public static String getFilterPathModelsMSD() {
