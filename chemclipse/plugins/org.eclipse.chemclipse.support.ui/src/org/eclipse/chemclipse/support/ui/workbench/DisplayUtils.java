@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.support.ui.workbench;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
@@ -46,6 +47,17 @@ public class DisplayUtils {
 		}
 		//
 		return display;
+	}
+
+	public static Shell getShell(Control control) {
+
+		Shell shell = null;
+		if(control != null) {
+			shell = control.getShell();
+		} else {
+			shell = getShell();
+		}
+		return shell;
 	}
 
 	public static Shell getShell() {
