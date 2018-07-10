@@ -307,4 +307,5 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_MEASUREMENT_RESULTS_ACTIVE = "measurementResultsActive.gif";
 	//
 	String IMAGE_PLATE_PCR = "plate-pcr.gif";
+	String IMAGE_METHOD = "method.gif";
 }

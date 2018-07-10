@@ -191,7 +191,7 @@ public class ExtendedChromatogramUI {
 	//
 	private Composite toolbarInfo;
 	private Label labelChromatogramInfo;
-	private Composite toolbarAnalyze;
+	private Composite toolbarMethod;
 	private Combo comboChromatograms;
 	private Composite toolbarEdit;
 	private ChromatogramChart chromatogramChart;
@@ -984,7 +984,7 @@ public class ExtendedChromatogramUI {
 		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
-		toolbarAnalyze = createToolbarAnalyze(parent);
+		toolbarMethod = createToolbarMethod(parent);
 		toolbarEdit = createToolbarEdit(parent);
 		createChromatogramChart(parent);
 		//
@@ -992,7 +992,7 @@ public class ExtendedChromatogramUI {
 		executeMethod.setEnabled(false);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, false);
-		PartSupport.setCompositeVisibility(toolbarAnalyze, false);
+		PartSupport.setCompositeVisibility(toolbarMethod, false);
 		PartSupport.setCompositeVisibility(toolbarEdit, false);
 	}
 
@@ -1002,10 +1002,11 @@ public class ExtendedChromatogramUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(9, false));
 		//
 		createButtonToggleToolbarInfo(composite);
-		createButtonToggleToolbarAnalyze(composite);
+		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
+		createButtonToggleToolbarMethod(composite);
 		createButtonToggleToolbarEdit(composite);
 		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
@@ -1028,15 +1029,13 @@ public class ExtendedChromatogramUI {
 		return composite;
 	}
 
-	private Composite createToolbarAnalyze(Composite parent) {
+	private Composite createToolbarMethod(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(2, false));
 		//
-		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
-		createVerticalSeparator(composite);
 		createComboPredefinedMethod(composite);
 		executeMethod = createButtonExecuteMethod(composite);
 		//
@@ -1775,22 +1774,22 @@ public class ExtendedChromatogramUI {
 		return button;
 	}
 
-	private Button createButtonToggleToolbarAnalyze(Composite parent) {
+	private Button createButtonToggleToolbarMethod(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the chromatogram analyze toolbar.");
+		button.setToolTipText("Toggle the chromatogram method toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarAnalyze);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarMethod);
 				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});
