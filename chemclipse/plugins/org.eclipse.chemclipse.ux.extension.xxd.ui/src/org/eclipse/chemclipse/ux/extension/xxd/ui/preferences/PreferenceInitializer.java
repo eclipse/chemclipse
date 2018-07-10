@@ -143,6 +143,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, PreferenceConstants.DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY);
 		store.setDefault(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, PreferenceConstants.DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_EXTEND_X, PreferenceConstants.DEF_CHROMATOGRAM_EXTEND_X);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_X_ZOOM_ONLY, PreferenceConstants.DEF_CHROMATOGRAM_X_ZOOM_ONLY);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_Y_ZOOM_ONLY, PreferenceConstants.DEF_CHROMATOGRAM_Y_ZOOM_ONLY);
 		//
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE);

@@ -107,6 +107,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionT
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
@@ -751,6 +753,12 @@ public class ExtendedChromatogramUI {
 		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
 			rangeRestriction.setZeroY(false);
 		}
+		/*
+		 * Zooming
+		 */
+		rangeRestriction.setXZoomOnly(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_X_ZOOM_ONLY));
+		rangeRestriction.setYZoomOnly(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_Y_ZOOM_ONLY));
+		//
 		chromatogramChart.applySettings(chartSettings);
 	}
 
@@ -1887,13 +1895,19 @@ public class ExtendedChromatogramUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				IPreferencePage preferencePageChromatogram = new PreferencePageChromatogram();
-				preferencePageChromatogram.setTitle("Chromatogram Settings ");
+				preferencePageChromatogram.setTitle("Chromatogram Settings");
+				IPreferencePage preferencePageChromatogramPeaks = new PreferencePageChromatogramPeaks();
+				preferencePageChromatogramPeaks.setTitle("Chromatogram Peaks");
+				IPreferencePage preferencePageChromatogramScans = new PreferencePageChromatogramScans();
+				preferencePageChromatogramScans.setTitle("Chromatogram Scans");
 				IPreferencePage preferencePageSWT = new PreferencePageSWT();
 				preferencePageSWT.setTitle("Settings (SWT)");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageChromatogram));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
+				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageChromatogramPeaks));
+				preferenceManager.addToRoot(new PreferenceNode("3", preferencePageChromatogramScans));
+				preferenceManager.addToRoot(new PreferenceNode("4", preferencePageSWT));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();

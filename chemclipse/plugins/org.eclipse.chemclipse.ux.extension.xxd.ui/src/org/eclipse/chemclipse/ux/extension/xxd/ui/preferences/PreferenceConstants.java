@@ -303,6 +303,10 @@ public class PreferenceConstants {
 	public static final double MIN_CHROMATOGRAM_EXTEND_X = 0.0d;
 	public static final double MAX_CHROMATOGRAM_EXTEND_X = 10.0d;
 	public static final double DEF_CHROMATOGRAM_EXTEND_X = 0.5d; // 50%
+	public static final String P_CHROMATOGRAM_X_ZOOM_ONLY = "chromatogramXZoomOnly";
+	public static final boolean DEF_CHROMATOGRAM_X_ZOOM_ONLY = false;
+	public static final String P_CHROMATOGRAM_Y_ZOOM_ONLY = "chromatogramYZoomOnly";
+	public static final boolean DEF_CHROMATOGRAM_Y_ZOOM_ONLY = false;
 	//
 	public static final String P_CHROMATOGRAM_OVERLAY_IONS_SELECTION = "chromatogramOverlayIonsSelection";
 	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION = OverlayChartSupport.SELECTED_IONS_USERS_CHOICE;

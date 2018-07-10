@@ -63,6 +63,24 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageFileExplorer"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageFileExplorer"
             name="File Explorer">
-      </page>                                         
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
+            name="Chromatogram Settings">
+      </page>  
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.referencePageChromatogramPeaks"
+            name="Chromatogram Peaks">
+      </page>   
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.referencePageChromatogramScans"
+            name="Chromatogram Scans">
+      </page>                                                           
    </extension>   
 </plugin>
