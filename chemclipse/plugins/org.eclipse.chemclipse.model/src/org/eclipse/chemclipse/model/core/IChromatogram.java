@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.model.core;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.baseline.IChromatogramBaseline;
-import org.eclipse.chemclipse.model.columns.ISeparationColumn;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.updates.IUpdater;
 import org.eclipse.chemclipse.model.versioning.IChromatogramVersioning;
 import org.eclipse.chemclipse.support.history.ISupplierEditHistory;
@@ -149,6 +149,7 @@ public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatog
 	 * 
 	 * @return {@link IChromatogram}
 	 */
+	@SuppressWarnings("rawtypes")
 	List<IChromatogram> getReferencedChromatograms();
 
 	/**
@@ -156,6 +157,7 @@ public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatog
 	 * 
 	 * @param chromatogram
 	 */
+	@SuppressWarnings("rawtypes")
 	void addReferencedChromatogram(IChromatogram chromatogram);
 
 	/**
@@ -163,6 +165,7 @@ public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatog
 	 * 
 	 * @param chromatogram
 	 */
+	@SuppressWarnings("rawtypes")
 	void removeReferencedChromatogram(IChromatogram chromatogram);
 
 	/**
@@ -206,7 +209,7 @@ public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatog
 	 */
 	IMethod getMethod();
 
-	ISeparationColumn getSeparationColumn();
+	ISeparationColumnIndices getSeparationColumnIndices();
 
-	void setSeparationColumn(ISeparationColumn separationColumn);
+	void setSeparationColumnIndices(ISeparationColumnIndices separationColumnIndices);
 }

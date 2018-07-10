@@ -45,4 +45,11 @@ public class SeparationColumnFactory {
 
 		return new SeparationColumn(name, "", "", "");
 	}
+
+	public static ISeparationColumnIndices getSeparationColumnIndices(String name) {
+
+		ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices();
+		separationColumnIndices.getSeparationColumn().setName(name);
+		return separationColumnIndices;
+	}
 }

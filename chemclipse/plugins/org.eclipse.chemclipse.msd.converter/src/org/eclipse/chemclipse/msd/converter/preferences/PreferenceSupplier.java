@@ -27,6 +27,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_REFERENCE_IDENTIFIER_PREFIX = "referenceIdentifierPrefix";
 	public static final String DEF_REFERENCE_IDENTIFIER_PREFIX = "";
 	//
+	public static final String P_PARSE_MASSLIB_RETENTION_INDEX_DATA = "parseMassLibRetentionIndexData";
+	public static final boolean DEF_PARSE_MASSLIB_RETENTION_INDEX_DATA = true;
+	public static final String P_PARSE_MASSLIB_TARGET_DATA = "parseMassLibTargetData";
+	public static final boolean DEF_PARSE_MASSLIB_TARGET_DATA = true;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -55,6 +60,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_REFERENCE_IDENTIFIER_MARKER, DEF_REFERENCE_IDENTIFIER_MARKER);
 		defaultValues.put(P_REFERENCE_IDENTIFIER_PREFIX, DEF_REFERENCE_IDENTIFIER_PREFIX);
+		defaultValues.put(P_PARSE_MASSLIB_RETENTION_INDEX_DATA, Boolean.toString(DEF_PARSE_MASSLIB_RETENTION_INDEX_DATA));
+		defaultValues.put(P_PARSE_MASSLIB_TARGET_DATA, Boolean.toString(DEF_PARSE_MASSLIB_TARGET_DATA));
 		return defaultValues;
 	}
 
@@ -74,5 +81,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.get(P_REFERENCE_IDENTIFIER_PREFIX, DEF_REFERENCE_IDENTIFIER_PREFIX);
+	}
+
+	public static boolean isParseMassLibRetentionIndexData() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_PARSE_MASSLIB_RETENTION_INDEX_DATA, DEF_PARSE_MASSLIB_RETENTION_INDEX_DATA);
+	}
+
+	public static boolean isParseMassLibTargetData() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_PARSE_MASSLIB_TARGET_DATA, DEF_PARSE_MASSLIB_TARGET_DATA);
 	}
 }

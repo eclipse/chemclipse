@@ -29,7 +29,7 @@ import java.util.TreeSet;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.BaselineModel;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
-import org.eclipse.chemclipse.model.columns.ISeparationColumn;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.implementation.TripleQuadMethod;
@@ -93,6 +93,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	/*
 	 * Some vendors store several chromatograms in one file.
 	 */
+	@SuppressWarnings("rawtypes")
 	private List<IChromatogram> referencedChromatograms;
 	/*
 	 * Integration entries.
@@ -103,7 +104,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	private List<IIntegrationEntry> backgroundIntegrationEntries;
 	//
 	private IMethod method;
-	private ISeparationColumn separationColumn;
+	private ISeparationColumnIndices separationColumnIndices;
 	/*
 	 * This set contains all the peaks of the chromatogram.
 	 * Specific chromatogram implementations might define
@@ -115,6 +116,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 * Constructs a normal chromatogram.
 	 * Several initialization will be performed.
 	 */
+	@SuppressWarnings("rawtypes")
 	public AbstractChromatogram() {
 		updateSupport = new ArrayList<IChromatogramUpdateListener>(5);
 		versionManagement = new VersionManagement();
@@ -125,7 +127,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		method = new TripleQuadMethod();
-		separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnFactory.TYPE_DEFAULT);
+		separationColumnIndices = SeparationColumnFactory.getSeparationColumnIndices(SeparationColumnFactory.TYPE_DEFAULT);
 	}
 
 	@Override
@@ -995,16 +997,16 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	}
 
 	@Override
-	public ISeparationColumn getSeparationColumn() {
+	public ISeparationColumnIndices getSeparationColumnIndices() {
 
-		return separationColumn;
+		return separationColumnIndices;
 	}
 
 	@Override
-	public void setSeparationColumn(ISeparationColumn separationColumn) {
+	public void setSeparationColumnIndices(ISeparationColumnIndices separationColumnIndices) {
 
-		if(separationColumn != null) {
-			this.separationColumn = separationColumn;
+		if(separationColumnIndices != null) {
+			this.separationColumnIndices = separationColumnIndices;
 		}
 	}
 

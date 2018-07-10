@@ -104,4 +104,40 @@ public class LibraryInformationSupport {
 			return false;
 		}
 	}
+
+	public void extractNameAndReferenceIdentifier(String name, ILibraryInformation libraryInformation, String referenceIdentifierMarker, String referenceIdentifierPrefix) {
+
+		if(name != null && libraryInformation != null) {
+			boolean setNameTraditionally = true;
+			if(referenceIdentifierMarker != null && !referenceIdentifierMarker.equals("")) {
+				if(name.contains(referenceIdentifierMarker)) {
+					String[] values = name.split(referenceIdentifierMarker);
+					if(values.length >= 2) {
+						/*
+						 * Extract the reference identifier.
+						 */
+						setNameTraditionally = false;
+						libraryInformation.setName(values[0].trim());
+						//
+						StringBuilder builder = new StringBuilder();
+						if(referenceIdentifierPrefix != null) {
+							builder.append(referenceIdentifierPrefix);
+						}
+						int size = values.length;
+						for(int i = 1; i < size; i++) {
+							builder.append(values[i]);
+							if(i < size - 1) {
+								builder.append(" ");
+							}
+						}
+						libraryInformation.setReferenceIdentifier(builder.toString().trim());
+					}
+				}
+			}
+			//
+			if(setNameTraditionally) {
+				libraryInformation.setName(name);
+			}
+		}
+	}
 }

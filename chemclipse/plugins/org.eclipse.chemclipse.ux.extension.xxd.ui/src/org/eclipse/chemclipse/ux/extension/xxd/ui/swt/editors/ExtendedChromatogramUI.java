@@ -109,6 +109,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
@@ -191,6 +192,8 @@ public class ExtendedChromatogramUI {
 	//
 	private Composite toolbarInfo;
 	private Label labelChromatogramInfo;
+	private Composite toolbarRetentionIndices;
+	private RetentionIndexTableViewerUI retentionIndexTableViewerUI;
 	private Composite toolbarMethod;
 	private Combo comboChromatograms;
 	private Composite toolbarEdit;
@@ -248,8 +251,10 @@ public class ExtendedChromatogramUI {
 				updateChromatogramCombo();
 				updateChromatogramTargetTransferCombo();
 			}
+			retentionIndexTableViewerUI.setInput(chromatogramSelection.getChromatogram().getSeparationColumnIndices());
 		} else {
 			comboChromatograms.setItems(new String[0]);
+			retentionIndexTableViewerUI.setInput(null);
 			updateChromatogram();
 		}
 	}
@@ -984,6 +989,7 @@ public class ExtendedChromatogramUI {
 		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
+		toolbarRetentionIndices = createToolbarRetentionIndices(parent);
 		toolbarMethod = createToolbarMethod(parent);
 		toolbarEdit = createToolbarEdit(parent);
 		createChromatogramChart(parent);
@@ -992,6 +998,7 @@ public class ExtendedChromatogramUI {
 		executeMethod.setEnabled(false);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, false);
+		PartSupport.setCompositeVisibility(toolbarRetentionIndices, false);
 		PartSupport.setCompositeVisibility(toolbarMethod, false);
 		PartSupport.setCompositeVisibility(toolbarEdit, false);
 	}
@@ -1002,10 +1009,11 @@ public class ExtendedChromatogramUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(9, false));
+		composite.setLayout(new GridLayout(10, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
+		createButtonToggleToolbarRetentionIndices(composite);
 		createButtonToggleToolbarMethod(composite);
 		createButtonToggleToolbarEdit(composite);
 		createToggleChartSeriesLegendButton(composite);
@@ -1025,6 +1033,19 @@ public class ExtendedChromatogramUI {
 		labelChromatogramInfo = new Label(composite, SWT.NONE);
 		labelChromatogramInfo.setText("");
 		labelChromatogramInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return composite;
+	}
+
+	private Composite createToolbarRetentionIndices(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, false));
+		//
+		retentionIndexTableViewerUI = new RetentionIndexTableViewerUI(composite, SWT.BORDER);
+		retentionIndexTableViewerUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
 		return composite;
 	}
@@ -1069,7 +1090,7 @@ public class ExtendedChromatogramUI {
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof ISeparationColumn && chromatogramSelection != null) {
 					ISeparationColumn separationColumn = (ISeparationColumn)object;
-					chromatogramSelection.getChromatogram().setSeparationColumn(separationColumn);
+					chromatogramSelection.getChromatogram().getSeparationColumnIndices().setSeparationColumn(separationColumn);
 					updateLabel();
 				}
 			}
@@ -1774,6 +1795,29 @@ public class ExtendedChromatogramUI {
 		return button;
 	}
 
+	private Button createButtonToggleToolbarRetentionIndices(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle retention indices toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RETENION_INDEX, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarRetentionIndices);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RETENION_INDEX, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RETENION_INDEX, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
+	}
+
 	private Button createButtonToggleToolbarMethod(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -2002,7 +2046,7 @@ public class ExtendedChromatogramUI {
 	private void setSeparationColumnSelection() {
 
 		if(chromatogramSelection != null) {
-			ISeparationColumn separationColumn = chromatogramSelection.getChromatogram().getSeparationColumn();
+			ISeparationColumn separationColumn = chromatogramSelection.getChromatogram().getSeparationColumnIndices().getSeparationColumn();
 			if(separationColumn != null) {
 				String name = separationColumn.getName();
 				int index = -1;

@@ -14,47 +14,20 @@ package org.eclipse.chemclipse.msd.converter.io;
 import org.eclipse.chemclipse.converter.io.AbstractFileHelper;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.support.LibraryInformationSupport;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 
 public abstract class AbstractMassSpectraReader extends AbstractFileHelper implements IMassSpectraReader {
 
 	private static final Logger logger = Logger.getLogger(AbstractMassSpectraReader.class);
+	private LibraryInformationSupport libraryInformationSupport = new LibraryInformationSupport();
 
 	@Override
 	public void extractNameAndReferenceIdentifier(IRegularLibraryMassSpectrum massSpectrum, String value, String referenceIdentifierMarker, String referenceIdentifierPrefix) {
 
-		if(value != null) {
-			boolean setNameTraditionally = true;
-			if(referenceIdentifierMarker != null && !referenceIdentifierMarker.equals("")) {
-				if(value.contains(referenceIdentifierMarker)) {
-					String[] values = value.split(referenceIdentifierMarker);
-					if(values.length >= 2) {
-						/*
-						 * Extract the reference identifier.
-						 */
-						setNameTraditionally = false;
-						massSpectrum.getLibraryInformation().setName(values[0].trim());
-						//
-						StringBuilder builder = new StringBuilder();
-						if(referenceIdentifierPrefix != null) {
-							builder.append(referenceIdentifierPrefix);
-						}
-						int size = values.length;
-						for(int i = 1; i < size; i++) {
-							builder.append(values[i]);
-							if(i < size - 1) {
-								builder.append(" ");
-							}
-						}
-						massSpectrum.getLibraryInformation().setReferenceIdentifier(builder.toString().trim());
-					}
-				}
-			}
-			//
-			if(setNameTraditionally) {
-				massSpectrum.getLibraryInformation().setName(value);
-			}
-		}
+		ILibraryInformation libraryInformation = massSpectrum.getLibraryInformation();
+		libraryInformationSupport.extractNameAndReferenceIdentifier(value, libraryInformation, referenceIdentifierMarker, referenceIdentifierPrefix);
 	}
 
 	@Override

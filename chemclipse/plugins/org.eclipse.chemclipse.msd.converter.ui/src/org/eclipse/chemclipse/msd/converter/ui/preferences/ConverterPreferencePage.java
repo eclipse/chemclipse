@@ -13,6 +13,9 @@ package org.eclipse.chemclipse.msd.converter.ui.preferences;
 
 import org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.converter.ui.Activator;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
@@ -31,6 +34,10 @@ public class ConverterPreferencePage extends FieldEditorPreferencePage implement
 
 		addField(new StringFieldEditor(PreferenceSupplier.P_REFERENCE_IDENTIFIER_MARKER, "Reference ID Marker", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceSupplier.P_REFERENCE_IDENTIFIER_PREFIX, "Reference ID Prefix", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Select whether to import MassLib data on loading chromatograms.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_PARSE_MASSLIB_RETENTION_INDEX_DATA, "Parse Retention Index Data", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_PARSE_MASSLIB_TARGET_DATA, "Parse Target Data", getFieldEditorParent()));
 	}
 
 	@Override

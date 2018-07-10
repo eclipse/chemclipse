@@ -14,18 +14,32 @@ package org.eclipse.chemclipse.msd.converter.chromatogram;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.io.MassLibConverter;
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramSupplier;
 import org.eclipse.chemclipse.converter.core.Converter;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.implementation.LibraryInformation;
+import org.eclipse.chemclipse.model.support.LibraryInformationSupport;
+import org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -234,20 +248,91 @@ public final class ChromatogramConverterMSD {
 		} catch(NoConverterAvailableException e) {
 			processingInfo.addErrorMessage("Chromatogram Export Converter", "There is no suitable converter available to save the chromatogram to the file: " + file.getAbsolutePath());
 		}
-		/*
-		 * Test if at least one converter was successful.
-		 * If not, add the error messages.
-		 */
+		//
 		if(processingInfo.getProcessingResult() == null) {
+			/*
+			 * Error
+			 */
 			for(IProcessingMessage processingMessage : processingMessagesError) {
 				processingInfo.addMessage(processingMessage);
 			}
+		} else {
+			/*
+			 * Post processing
+			 */
+			postProcessChromatogram(processingInfo);
 		}
 		//
 		return processingInfo;
 	}
 
-	// ------------------------------------convenience-import
+	@SuppressWarnings("unchecked")
+	private static void postProcessChromatogram(IProcessingInfo processingInfo) {
+
+		String referenceIdentifierMarker = PreferenceSupplier.getReferenceIdentifierMarker();
+		String referenceIdentifierPrefix = PreferenceSupplier.getReferenceIdentifierPrefix();
+		//
+		LibraryInformationSupport libraryInformationSupport = new LibraryInformationSupport();
+		IChromatogramMSD chromatogramMSD = processingInfo.getProcessingResult(IChromatogramMSD.class);
+		MassLibConverter massLibConverter = new MassLibConverter();
+		String chromatogramName = chromatogramMSD.getName();
+		File chromatogramFile = chromatogramMSD.getFile();
+		/*
+		 * MassLib *.inf Data
+		 */
+		if(chromatogramFile != null) {
+			//
+			if(chromatogramFile.isFile()) {
+				chromatogramFile = chromatogramFile.getParentFile();
+			}
+			//
+			exitloop:
+			for(File filex : chromatogramFile.listFiles()) {
+				String xName = filex.getName();
+				if(filex.isFile() && xName.endsWith(".inf")) {
+					if(xName.startsWith(chromatogramName)) {
+						/*
+						 * RI
+						 */
+						if(PreferenceSupplier.isParseMassLibRetentionIndexData()) {
+							try {
+								IProcessingInfo processingInfoIndices = massLibConverter.parseRetentionIndices(filex);
+								ISeparationColumnIndices separationColumnIndices = processingInfoIndices.getProcessingResult(ISeparationColumnIndices.class);
+								chromatogramMSD.setSeparationColumnIndices(separationColumnIndices);
+							} catch(TypeCastException e) {
+								logger.warn(e);
+							}
+						}
+						/*
+						 * Scan Targets
+						 */
+						if(PreferenceSupplier.isParseMassLibTargetData()) {
+							try {
+								IProcessingInfo processingInfoTargets = massLibConverter.parseTargets(filex);
+								Map<Integer, String> targets = (Map<Integer, String>)processingInfoTargets.getProcessingResult(Map.class);
+								for(Map.Entry<Integer, String> target : targets.entrySet()) {
+									IScan scan = chromatogramMSD.getScan(target.getKey());
+									if(scan != null && scan instanceof IScanMSD) {
+										IScanMSD scanMSD = (IScanMSD)scan;
+										ILibraryInformation libraryInformation = new LibraryInformation();
+										libraryInformationSupport.extractNameAndReferenceIdentifier(target.getValue(), libraryInformation, referenceIdentifierMarker, referenceIdentifierPrefix);
+										IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+										IScanTargetMSD scanTargetMSD = new MassSpectrumTarget(libraryInformation, comparisonResult);
+										scanMSD.addTarget(scanTargetMSD);
+									}
+								}
+							} catch(TypeCastException e) {
+								logger.warn(e);
+							}
+						}
+						//
+						break exitloop;
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * Returns an IChromatogramOverview instance if the given converter is
 	 * available.<br/>
