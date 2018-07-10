@@ -35,6 +35,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_RETENTION_INDEX_FILES = "retentionIndexFiles";
 	public static final String DEF_RETENTION_INDEX_FILES = "";
 	//
+	public static final String P_USE_AUTO_DETECT_INDICES = "useAutoDetectIndices";
+	public static final boolean DEF_USE_AUTO_DETECT_INDICES = true;
+	public static final String[][] AUTO_DETECT_OPTIONS = new String[][]{{"Auto-Detect (Chromatogram/File)", Boolean.toString(true)}, {"File Only", Boolean.toString(false)}};
+	//
 	public static final String P_USE_DEFAULT_IF_COLUMN_IS_NA = "useDefaultIfColumnIsNA";
 	public static final boolean DEF_USE_DEFAULT_IF_COLUMN_IS_NA = true;
 	//
@@ -74,6 +78,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES);
+		defaultValues.put(P_USE_AUTO_DETECT_INDICES, Boolean.toString(DEF_USE_AUTO_DETECT_INDICES));
 		defaultValues.put(P_USE_DEFAULT_IF_COLUMN_IS_NA, Boolean.toString(DEF_USE_DEFAULT_IF_COLUMN_IS_NA));
 		defaultValues.put(P_FILTER_PATH_INDEX_FILES, DEF_FILTER_PATH_INDEX_FILES);
 		defaultValues.put(P_FILTER_PATH_MODELS_MSD, DEF_FILTER_PATH_MODELS_MSD);
@@ -99,6 +104,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		IRetentionIndexFilterSettingsPeak peakFilterSettings = new RetentionIndexFilterSettingsPeak();
 		peakFilterSettings.setRetentionIndexFiles(getRetentionIndexFiles());
 		return peakFilterSettings;
+	}
+
+	public static boolean isUseAutoDetectIndices() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		return preferences.getBoolean(P_USE_AUTO_DETECT_INDICES, DEF_USE_AUTO_DETECT_INDICES);
 	}
 
 	public static boolean isUseDefaultColumn() {

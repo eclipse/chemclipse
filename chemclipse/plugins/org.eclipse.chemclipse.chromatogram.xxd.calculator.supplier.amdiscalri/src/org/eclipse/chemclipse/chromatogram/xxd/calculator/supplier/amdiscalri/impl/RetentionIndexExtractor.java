@@ -33,7 +33,7 @@ public class RetentionIndexExtractor {
 		Map<String, Integer> nameIndexMap = standardsReader.getNameIndexMap();
 		//
 		ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices();
-		separationColumnIndices.setSeparationColumn(chromatogram.getSeparationColumn());
+		separationColumnIndices.setSeparationColumn(chromatogram.getSeparationColumnIndices().getSeparationColumn());
 		//
 		List<? extends IPeak> peaks = getPeaks(chromatogram);
 		for(IPeak peak : peaks) {

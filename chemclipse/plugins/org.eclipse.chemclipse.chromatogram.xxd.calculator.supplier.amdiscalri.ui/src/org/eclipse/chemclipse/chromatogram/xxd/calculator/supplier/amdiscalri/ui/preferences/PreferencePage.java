@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEdi
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -42,7 +43,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		calibrationTableEditor.setFilterExtensionsAndNames(new String[]{"*.CAL", "*.cal"}, new String[]{"AMDIS Calibration *.CAL", "AMDIS Calibration *.cal"});
 		addField(calibrationTableEditor);
 		//
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_DEFAULT_IF_COLUMN_IS_NA, "Use default if column is not available", getFieldEditorParent()));
+		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_USE_AUTO_DETECT_INDICES, "Retention Index Strategy", 1, PreferenceSupplier.AUTO_DETECT_OPTIONS, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_DEFAULT_IF_COLUMN_IS_NA, "Use default if column is not available (Use File Option)", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_INDEX_FILES, "Path Index Files:", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_MSD, "Path MSD Files:", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_CSD, "Path CSD Files:", getFieldEditorParent()));

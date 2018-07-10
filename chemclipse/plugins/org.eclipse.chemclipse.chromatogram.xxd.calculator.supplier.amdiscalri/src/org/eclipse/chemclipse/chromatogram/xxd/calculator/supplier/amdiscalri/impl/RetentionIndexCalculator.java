@@ -37,10 +37,37 @@ public class RetentionIndexCalculator {
 	public IProcessingInfo apply(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		List<String> retentionIndexFiles = supplierCalculatorSettings.getRetentionIndexFiles();
+		ISeparationColumnIndices separationColumnIndices = null;
+		//
+		if(PreferenceSupplier.isUseAutoDetectIndices()) {
+			separationColumnIndices = getChromatogramIndices(chromatogramSelection);
+			if(separationColumnIndices == null) {
+				separationColumnIndices = getFileIndices(chromatogramSelection, supplierCalculatorSettings);
+			}
+		} else {
+			separationColumnIndices = getFileIndices(chromatogramSelection, supplierCalculatorSettings);
+		}
 		/*
-		 * Create a calibration map for different column polarities.
+		 * Calculate
 		 */
+		if(separationColumnIndices != null) {
+			calculateIndex(chromatogramSelection, separationColumnIndices);
+		}
+		//
+		return processingInfo;
+	}
+
+	private ISeparationColumnIndices getChromatogramIndices(IChromatogramSelection chromatogramSelection) {
+
+		return chromatogramSelection.getChromatogram().getSeparationColumnIndices();
+	}
+
+	private ISeparationColumnIndices getFileIndices(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings) {
+
+		/*
+		 * Prepare the index map.
+		 */
+		List<String> retentionIndexFiles = supplierCalculatorSettings.getRetentionIndexFiles();
 		CalibrationFileReader calibrationFileReader = new CalibrationFileReader();
 		Map<String, ISeparationColumnIndices> calibrationMap = new HashMap<String, ISeparationColumnIndices>();
 		for(String retentionIndexFile : retentionIndexFiles) {
@@ -51,26 +78,16 @@ public class RetentionIndexCalculator {
 		}
 		/*
 		 * Run the calculation.
-		 * Use the separation column info to get the correct RI file.
 		 */
-		ISeparationColumn separationColumn = chromatogramSelection.getChromatogram().getSeparationColumn();
-		ISeparationColumnIndices separationColumnIndices = calibrationMap.get(separationColumn.getName());
-		/*
-		 * Use Default?
-		 */
+		String columnName = chromatogramSelection.getChromatogram().getSeparationColumnIndices().getSeparationColumn().getName();
+		ISeparationColumnIndices separationColumnIndices = calibrationMap.get(columnName);
 		if(separationColumnIndices == null) {
 			if(PreferenceSupplier.isUseDefaultColumn()) {
 				separationColumnIndices = calibrationMap.get(SeparationColumnFactory.TYPE_DEFAULT);
 			}
 		}
-		/*
-		 * Calculate
-		 */
-		if(separationColumnIndices != null) {
-			calculateIndex(chromatogramSelection, separationColumnIndices);
-		}
 		//
-		return processingInfo;
+		return separationColumnIndices;
 	}
 
 	/**
