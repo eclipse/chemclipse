@@ -53,7 +53,6 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
@@ -127,17 +126,6 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 				extendedChromatogramUI.updateSelectedPeak();
 			}
 		}
-	}
-
-	@Focus
-	public void setFocus() {
-
-		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
-		if(chromatogramSelection != null) {
-			chromatogramSelection.update(false);
-		}
-		//
-		extendedChromatogramUI.update();
 	}
 
 	@PreDestroy

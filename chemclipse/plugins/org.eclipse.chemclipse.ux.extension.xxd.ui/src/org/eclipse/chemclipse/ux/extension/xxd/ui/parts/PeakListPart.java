@@ -88,6 +88,8 @@ public class PeakListPart extends AbstractDataUpdateSupport implements IDataUpda
 			return true;
 		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
 			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION)) {
+			return true;
 		}
 		return false;
 	}
