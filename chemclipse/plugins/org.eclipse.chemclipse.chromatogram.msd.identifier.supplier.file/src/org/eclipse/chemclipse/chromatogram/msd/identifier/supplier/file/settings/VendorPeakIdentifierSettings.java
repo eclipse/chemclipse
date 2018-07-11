@@ -11,12 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
+import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparatorDynamicSettingProperty;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.GenereteIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
+import org.eclipse.chemclipse.support.settings.DynamicSettingsProperty;
+import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.MultiFileSettingProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+@GenereteIdentifierSettings
 public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettings implements IVendorPeakIdentifierSettings {
 
 	@JsonProperty(value = "Mass Spectra Files", defaultValue = "")
@@ -26,16 +34,21 @@ public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettings
 	@JsonProperty(value = "Pre-Optimization", defaultValue = "false")
 	private boolean usePreOptimization = false;
 	@JsonProperty(value = "Threshold Pre-Optimization", defaultValue = "0.12")
+	@DoubleSettingsProperty(minValue = PreferenceSupplier.MIN_THRESHOLD_PRE_OPTIMIZATION, maxValue = PreferenceSupplier.MAX_THRESHOLD_PRE_OPTIMIZATION, step = 0.1)
 	private double thresholdPreOptimization = 0.12;
 	@JsonProperty(value = "Number of Targets", defaultValue = "15")
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_NUMBER_OF_TARGETS, maxValue = PreferenceSupplier.MAX_NUMBER_OF_TARGETS)
 	private int numberOfTargets = 15;
 	@JsonProperty(value = "Min Match Factor", defaultValue = "80.0")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MIN_MATCH_FACTOR, maxValue = PreferenceSupplier.MAX_MIN_MATCH_FACTOR)
 	private float minMatchFactor = 80.0f;
 	@JsonProperty(value = "Min Reverse Match Factor", defaultValue = "80.0")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MIN_REVERSE_MATCH_FACTOR, maxValue = PreferenceSupplier.MAX_MIN_REVERSE_MATCH_FACTOR)
 	private float minReverseMatchFactor = 80.0f;
 	@JsonProperty(value = "Add Unknown m/z List Target", defaultValue = "true")
 	private boolean addUnknownMzListTarget = true;
 	@JsonProperty(value = "Alternate Identifier Id", defaultValue = "")
+	@DynamicSettingsProperty(dynamicSettingPropertyClass = MassSpectrumComparatorDynamicSettingProperty.class)
 	private String alternateIdentifierId = "";
 
 	@Override
