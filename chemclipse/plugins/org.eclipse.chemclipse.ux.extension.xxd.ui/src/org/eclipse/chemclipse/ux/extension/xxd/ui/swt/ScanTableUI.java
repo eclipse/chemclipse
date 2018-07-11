@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.IonListConte
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanSignalListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanTableComparator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;

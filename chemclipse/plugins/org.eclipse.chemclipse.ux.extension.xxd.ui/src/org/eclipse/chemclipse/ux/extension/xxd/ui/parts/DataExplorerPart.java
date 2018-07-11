@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSuppor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ProjectExplorerSupportFactory;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageFileExplorer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DataExplorerUI;

@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 
 public class ScanDataSupport {

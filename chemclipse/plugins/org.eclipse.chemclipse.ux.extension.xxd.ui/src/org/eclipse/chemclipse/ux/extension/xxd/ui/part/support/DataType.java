@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
 public enum DataType {
 	AUTO_DETECT, // Auto-Detect

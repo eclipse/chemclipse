@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 

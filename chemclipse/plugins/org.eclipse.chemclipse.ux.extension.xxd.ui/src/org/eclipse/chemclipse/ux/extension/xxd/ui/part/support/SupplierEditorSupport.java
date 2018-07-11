@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,7 +34,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PlateEditorPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 import org.eclipse.e4.core.services.events.IEventBroker;

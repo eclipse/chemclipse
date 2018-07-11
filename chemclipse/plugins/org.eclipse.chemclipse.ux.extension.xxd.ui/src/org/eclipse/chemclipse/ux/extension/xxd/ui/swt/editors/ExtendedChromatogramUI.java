@@ -247,10 +247,8 @@ public class ExtendedChromatogramUI {
 			 */
 			addChartMenuEntries();
 			updateChromatogram();
-			if(referencedChromatogramSelections == null) {
-				updateChromatogramCombo();
-				updateChromatogramTargetTransferCombo();
-			}
+			updateChromatogramCombo();
+			updateChromatogramTargetTransferCombo();
 			retentionIndexTableViewerUI.setInput(chromatogramSelection.getChromatogram().getSeparationColumnIndices());
 		} else {
 			comboChromatograms.setItems(new String[0]);
@@ -1612,9 +1610,11 @@ public class ExtendedChromatogramUI {
 	private void selectChromatogram(int index) {
 
 		comboChromatograms.select(index);
-		IChromatogramSelection chromatogramSelection = referencedChromatogramSelections.get(index);
-		if(chromatogramSelection != null) {
-			updateChromatogramSelection(chromatogramSelection);
+		if(referencedChromatogramSelections != null) {
+			IChromatogramSelection chromatogramSelection = referencedChromatogramSelections.get(index);
+			if(chromatogramSelection != null) {
+				updateChromatogramSelection(chromatogramSelection);
+			}
 		}
 	}
 

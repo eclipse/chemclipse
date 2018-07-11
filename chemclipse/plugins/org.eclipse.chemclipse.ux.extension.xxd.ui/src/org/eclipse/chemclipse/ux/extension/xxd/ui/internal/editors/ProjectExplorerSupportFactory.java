@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors;
 
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 
 public class ProjectExplorerSupportFactory {
 

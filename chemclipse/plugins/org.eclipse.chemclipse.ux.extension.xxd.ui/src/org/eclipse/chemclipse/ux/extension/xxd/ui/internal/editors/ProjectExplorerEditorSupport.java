@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
