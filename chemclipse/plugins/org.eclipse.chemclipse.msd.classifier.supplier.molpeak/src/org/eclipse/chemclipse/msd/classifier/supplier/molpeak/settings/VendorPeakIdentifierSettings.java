@@ -13,12 +13,15 @@
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettings;
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettings implements IVendorPeakIdentifierSettings {
 
 	@JsonProperty(value = "Match Sensitivity", defaultValue = "80.0")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MATCH_SENSITIVITY, maxValue = PreferenceSupplier.MAX_MATCH_SENSITIVITY)
 	private float matchSensitivity;
 
 	@Override

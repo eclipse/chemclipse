@@ -34,7 +34,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final float DEF_MATCH_SENSITIVITY = 80.0f;
 	public static final float MIN_MATCH_SENSITIVITY = 0.0f;
 	public static final float MAX_MATCH_SENSITIVITY = 100.0f;
-	public static final String P_MATCH_SET = "matchSet";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -97,15 +96,5 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		settings.setMatchSensitivity(preferences.getFloat(P_MATCH_SENSITIVITY, DEF_MATCH_SENSITIVITY));
-	}
-
-	public static String[][] getPeakSets() {
-
-		// TODO make this dynamic!
-		String[][] elements = new String[1][2];
-		//
-		elements[0][0] = "CGSH Ratios";
-		elements[0][1] = "CGSH";
-		return elements;
 	}
 }

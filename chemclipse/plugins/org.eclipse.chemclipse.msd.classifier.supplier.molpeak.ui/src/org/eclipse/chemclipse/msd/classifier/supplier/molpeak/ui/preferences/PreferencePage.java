@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.preferences;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
-import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -33,10 +32,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MATCH_SENSITIVITY, "Match Sensitivity", PreferenceSupplier.MIN_MATCH_SENSITIVITY, PreferenceSupplier.MAX_MATCH_SENSITIVITY, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_MATCH_SET, "Choose Peak set to match against:", PreferenceSupplier.getPeakSets(), getFieldEditorParent()));
 	}
 
 	/*
@@ -44,6 +43,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}
