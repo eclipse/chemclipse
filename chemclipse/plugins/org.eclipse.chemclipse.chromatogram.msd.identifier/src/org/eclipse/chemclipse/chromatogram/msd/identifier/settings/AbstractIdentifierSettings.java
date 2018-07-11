@@ -14,18 +14,28 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class AbstractIdentifierSettings implements IIdentifierSettings {
 
+	@JsonIgnore
 	private String massSpectrumComparatorId = "";
+	@JsonIgnore
 	private boolean setResultAutomatically;
+	@JsonIgnore
 	private IMarkedIons excludedIons;
 	/*
 	 * Retention Time / Index Penalty Calculation
 	 */
+	@JsonIgnore
 	private String penaltyCalculation;
+	@JsonIgnore
 	private int retentionTimeWindow; // milliseconds
+	@JsonIgnore
 	private float retentionIndexWindow;
+	@JsonIgnore
 	private float penaltyCalculationLevelFactor;
+	@JsonIgnore
 	private float maxPenalty; // between 0 and 100, see IIdentifierSettings
 
 	public AbstractIdentifierSettings() {

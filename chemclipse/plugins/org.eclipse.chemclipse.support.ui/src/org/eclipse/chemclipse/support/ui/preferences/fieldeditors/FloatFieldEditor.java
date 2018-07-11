@@ -12,7 +12,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.fieldeditors;
 
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -22,7 +25,7 @@ public class FloatFieldEditor extends StringFieldEditor {
 	private float maxValue = Float.MAX_VALUE;
 
 	public FloatFieldEditor(String name, String labelText, Composite parent) {
-		super(name, labelText, parent);
+		this(name, labelText, -Float.MAX_VALUE, Float.MAX_VALUE, parent);
 	}
 
 	public FloatFieldEditor(String name, String labelText, float minValue, float maxValue, Composite parent) {
@@ -32,6 +35,20 @@ public class FloatFieldEditor extends StringFieldEditor {
 		}
 		this.minValue = minValue;
 		this.maxValue = maxValue;
+		getTextControl().addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+
+				getPage().setMessage(null, IMessageProvider.INFORMATION);
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+
+				getPage().setMessage("blablablabla blablablabla blablablabla blablablabla blablablabla blablablabla blablablabla", IMessageProvider.INFORMATION);
+			}
+		});
 	}
 
 	@Override

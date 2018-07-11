@@ -9,19 +9,13 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.settings;
+package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
-import com.fasterxml.jackson.annotation.JacksonAnnotation;
-
-@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@JacksonAnnotation
-public @interface DynamicSettingsProperty {
+public @interface GenereteIdentifierSettings {
 
-	Class<? extends IDynamicSettingProperty> dynamicSettingPropertyClass();
+	boolean isGenereted() default true;
 }
