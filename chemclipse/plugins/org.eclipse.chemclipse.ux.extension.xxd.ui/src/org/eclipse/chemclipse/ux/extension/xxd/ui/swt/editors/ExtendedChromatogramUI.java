@@ -249,6 +249,7 @@ public class ExtendedChromatogramUI {
 			updateChromatogram();
 			updateChromatogramCombo();
 			updateChromatogramTargetTransferCombo();
+			setSeparationColumnSelection();
 			retentionIndexTableViewerUI.setInput(chromatogramSelection.getChromatogram().getSeparationColumnIndices());
 		} else {
 			comboChromatograms.setItems(new String[0]);
