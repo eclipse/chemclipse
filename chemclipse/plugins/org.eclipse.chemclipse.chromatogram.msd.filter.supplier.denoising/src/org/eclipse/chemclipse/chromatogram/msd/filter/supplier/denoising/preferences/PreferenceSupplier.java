@@ -38,6 +38,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_NUMBER_OF_USE_IONS_FOR_COEFFICIENT = "numberOfUsedIonsForCoefficient";
 	public static final String DEF_IONS_TO_REMOVE = "18;28;84;207";
 	public static final String DEF_IONS_TO_PRESERVE = "103;104";
+	public static final int DEF_NUMBER_OF_USE_IONS_FOR_COEFFICIENT = 1;
 	public static final int DEF_SEGMENT_WIDTH = 13;
 	public static final int SEGMENT_WIDTH_MIN = 5;
 	public static final int SEGMENT_WIDTH_MAX = 19;
@@ -77,6 +78,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_IONS_TO_PRESERVE, DEF_IONS_TO_PRESERVE);
 		defaultValues.put(P_SEGMENT_WIDTH, Integer.toString(DEF_SEGMENT_WIDTH));
 		defaultValues.put(P_ADJUST_THRESHOLD_TRANSITIONS, Boolean.toString(DEF_ADJUST_THRESHOLD_TRANSITIONS));
+		defaultValues.put(P_NUMBER_OF_USE_IONS_FOR_COEFFICIENT, Integer.toString(DEF_NUMBER_OF_USE_IONS_FOR_COEFFICIENT));
 		return defaultValues;
 	}
 
@@ -100,7 +102,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		 * If it's not available, a default value will be returned.
 		 */
 		chromatogramFilterSettings.setAdjustThresholdTransitions(preferences.getBoolean(P_ADJUST_THRESHOLD_TRANSITIONS, DEF_ADJUST_THRESHOLD_TRANSITIONS));
-		chromatogramFilterSettings.setNumberOfUsedIonsForCoefficient(1);
+		chromatogramFilterSettings.setNumberOfUsedIonsForCoefficient(preferences.getInt(P_NUMBER_OF_USE_IONS_FOR_COEFFICIENT, DEF_NUMBER_OF_USE_IONS_FOR_COEFFICIENT));
 		chromatogramFilterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
 		chromatogramFilterSettings.setIonsToPreserve(preferences.get(P_IONS_TO_PRESERVE, DEF_IONS_TO_PRESERVE));
 		chromatogramFilterSettings.setSegmentWidth(preferences.getInt(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
