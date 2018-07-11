@@ -95,9 +95,9 @@ public class Chart3DScatter {
 		double sX = settings.getScaleX();
 		double sY = settings.getScaleY();
 		double sZ = settings.getScaleZ();
-		double shiftX = settings.getShiftX();
-		double shiftY = settings.getShiftY();
-		double shiftZ = settings.getShiftZ();
+		double shiftX = settings.getShiftX() * sX;
+		double shiftY = settings.getShiftY() * sY;
+		double shiftZ = settings.getShiftZ() * sZ;
 		for(IPcaResultVisualization d : data) {
 			String name = d.getName();
 			/*

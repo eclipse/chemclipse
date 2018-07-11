@@ -155,12 +155,16 @@ public class Axes extends Group {
 
 		Group group = new Group();
 		double lineSpacingScaled = lineSpacingH;
-		for(double x = -lenghtX / 2; x <= lenghtX / 2; x += lineSpacingScaled) {
-			group.getChildren().add(createGridLine(new Point3D(x, -lenghtY / 2, 0), new Point3D(x, lenghtY / 2, 0)));
+		double minX = -lenghtX / 2;
+		double maxX = lenghtX / 2;
+		for(int i = (int)(minX / lineSpacingScaled) + 1; i < (int)(maxX / lineSpacingScaled); i++) {
+			group.getChildren().add(createGridLine(new Point3D(i * lineSpacingScaled, -lenghtY / 2, 0), new Point3D(i * lineSpacingScaled, lenghtY / 2, 0)));
 		}
 		lineSpacingScaled = lineSpacingV;
-		for(double y = -lenghtY / 2; y <= lenghtY / 2; y += lineSpacingScaled) {
-			group.getChildren().add(createGridLine(new Point3D(-lenghtX / 2, y, 0), new Point3D(lenghtX / 2, y, 0)));
+		double minY = -lenghtY / 2;
+		double maxY = lenghtY / 2;
+		for(int i = (int)(minY / lineSpacingScaled) + 1; i < (int)(maxY / lineSpacingScaled); i++) {
+			group.getChildren().add(createGridLine(new Point3D(-lenghtX / 2, i * lineSpacingScaled, 0), new Point3D(lenghtX / 2, i * lineSpacingScaled, 0)));
 		}
 		return group;
 	}
@@ -208,7 +212,7 @@ public class Axes extends Group {
 		double maxZ = lenghtZ * sZ / 2;
 		boolean firstLabel = true;
 		for(int i = (int)(minX / lineSpacingScaled) + 1; i < (int)(maxX / lineSpacingScaled); i++) {
-			Label label = new Label(format.format(i * settings.getLineSpacingX()));
+			Label label = new Label(format.format(i * settings.getLineSpacingX() - settings.getShiftX()));
 			if(firstLabel) {
 				label.heightProperty().addListener((obs, oldVal, newVal) -> {
 					double labelHight = newVal.doubleValue();
@@ -261,7 +265,7 @@ public class Axes extends Group {
 		double lineSpacingScaled = settings.getLineSpacingY() * sY;
 		boolean firstLabel = true;
 		for(int i = (int)(minY / lineSpacingScaled) + 1; i < (int)(maxY / lineSpacingScaled); i++) {
-			Label label = new Label(format.format(i * settings.getLineSpacingY()));
+			Label label = new Label(format.format(i * settings.getLineSpacingY() - settings.getShiftY()));
 			if(firstLabel) {
 				label.heightProperty().addListener((obs, oldVal, newVal) -> {
 					double labelHight = newVal.doubleValue();
@@ -313,7 +317,7 @@ public class Axes extends Group {
 		double minY = -lenghtY * sY / 2;
 		double lineSpacingScaled = settings.getLineSpacingZ() * sZ;
 		for(int i = (int)(minZ / lineSpacingScaled) + 1; i < (int)(maxZ / lineSpacingScaled); i++) {
-			Label label = new Label(format.format(i * settings.getLineSpacingZ()));
+			Label label = new Label(format.format(i * settings.getLineSpacingZ() - settings.getShiftZ()));
 			label.widthProperty().addListener((obs, oldVal, newVal) -> {
 				double value = newVal.doubleValue();
 				if(value > labelMaxWidth.doubleValue()) {

@@ -181,8 +181,9 @@ public class ScorePlot3d {
 	public void update(IPcaResultsVisualization pcaResults) {
 
 		Chart3DSettings.setSettings(settings, pcaResults);
-		Chart3DSettings.setAxes(settings, 800);
+		Chart3DSettings.setAxes2(settings, 800);
 		axes = new Axes(settings);
+		axes.buildAxes();
 		scatter = new Chart3DScatter(settings, pcaResults);
 		createScene();
 		createScene();

@@ -65,9 +65,9 @@ public class Chart3DSettings {
 		settings.scaleX = point / maxDisX;
 		settings.scaleY = point / maxDisY;
 		settings.scaleZ = point / maxDisZ;
-		settings.shiftX = settings.scaleX * getShift(settings.axisMinX, settings.axisMaxX);
-		settings.shiftY = settings.scaleY * getShift(settings.axisMinY, settings.axisMaxY);
-		settings.shiftZ = settings.scaleZ * getShift(settings.axisMinZ, settings.axisMaxZ);
+		settings.shiftX = getShift(settings.axisMinX, settings.axisMaxX);
+		settings.shiftY = getShift(settings.axisMinY, settings.axisMaxY);
+		settings.shiftZ = getShift(settings.axisMinZ, settings.axisMaxZ);
 	}
 
 	private static double getShift(double x, double y) {
@@ -87,7 +87,7 @@ public class Chart3DSettings {
 		}
 	}
 
-	private static double[] setAxes(double x, double y, int numberLines) {
+	private static double[] setAxesSquered(double x, double y, int numberLines) {
 
 		double absMax = Math.max(Math.abs(x), Math.abs(y));
 		double numberDigits = Math.floor(Math.log10(absMax));
@@ -98,16 +98,20 @@ public class Chart3DSettings {
 		return new double[]{maxAxis, minAxis, lineSpacing};
 	}
 
-	private static double[] setAxesSquered(double x, double y, int numberLines) {
+	private static double[] setAxes(double x, double y, int numberLines) {
 
 		double max = Math.max(x, y);
 		double min = Math.min(x, y);
-		double absMax = Math.max(Math.abs(x), Math.abs(y));
+		double absMax = Math.abs(x - y);
 		double numberDigits = Math.floor(Math.log10(absMax));
 		double round = Math.pow(10, numberDigits);
 		double lineSpacing = (((Math.round(absMax / round) * round) / numberLines));
-		double maxAxis = Math.ceil(max / lineSpacing) * lineSpacing;
-		double minAxis = Math.floor(min / lineSpacing) * lineSpacing;
+		double maxAxis = Math.ceil(max / (2 * lineSpacing)) * 2 * lineSpacing;
+		double minAxis = Math.floor(min / (2 * lineSpacing)) * 2 * lineSpacing;
+		if((maxAxis - max) < (lineSpacing / 2) || (min - minAxis) < (lineSpacing / 2)) {
+			maxAxis = maxAxis + lineSpacing;
+			minAxis = minAxis - lineSpacing;
+		}
 		return new double[]{maxAxis, minAxis, lineSpacing};
 	}
 
@@ -141,7 +145,7 @@ public class Chart3DSettings {
 	private double lineSpacingX;
 	private double lineSpacingY;
 	private double lineSpacingZ;
-	private int maxNumberLine = 2;
+	private int maxNumberLine = 5;
 	private double maxX;
 	private double maxY;
 	private double maxZ;
@@ -161,10 +165,10 @@ public class Chart3DSettings {
 	public Chart3DSettings(int scale) {
 		maxX = 100;
 		maxY = 100;
-		maxZ = 400;
+		maxZ = 100;
 		minX = -100;
 		minY = -100;
-		minZ = 200;
+		minZ = -100;
 		pcX = 1;
 		pcY = 2;
 		pcZ = 3;
