@@ -33,7 +33,7 @@ public class ChromatogramSelectionHandler implements ICustomSelectionHandler {
 			/*
 			 * Get the range.
 			 */
-			BaseChart baseChart = extendedChromatogramUI.getBaseChart();
+			BaseChart baseChart = extendedChromatogramUI.getChromatogramChart().getBaseChart();
 			Range rangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
 			Range rangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
 			//

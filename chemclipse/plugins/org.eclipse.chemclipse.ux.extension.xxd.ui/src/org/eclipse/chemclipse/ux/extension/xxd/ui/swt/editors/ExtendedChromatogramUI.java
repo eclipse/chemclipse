@@ -95,7 +95,7 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChromatogramChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramLengthModifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
@@ -233,9 +233,9 @@ public class ExtendedChromatogramUI {
 		initialize(parent);
 	}
 
-	public BaseChart getBaseChart() {
+	public ChromatogramChart getChromatogramChart() {
 
-		return chromatogramChart.getBaseChart();
+		return chromatogramChart;
 	}
 
 	public synchronized void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
