@@ -45,6 +45,7 @@ import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
@@ -57,6 +58,7 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -207,14 +209,16 @@ public class ExtendedPeakListUI {
 		/*
 		 * Set/Save the column order.
 		 */
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String preferenceName = PreferenceConstants.P_COLUMN_ORDER_PEAK_LIST;
-		listSupport.setColumnOrder(table, preferenceName);
+		listSupport.setColumnOrder(table, preferenceStore.getString(preferenceName));
 		listUI.addColumnMoveListener(new IColumnMoveListener() {
 
 			@Override
 			public void handle() {
 
-				listSupport.saveColumnOrder(table, preferenceName);
+				String columnOrder = listSupport.getColumnOrder(table);
+				preferenceStore.setValue(preferenceName, columnOrder);
 			}
 		});
 		/*

@@ -12,8 +12,6 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Table;
 
@@ -22,13 +20,12 @@ public class ListSupport {
 	private static final Logger logger = Logger.getLogger(ListSupport.class);
 	//
 	private static final String COLUMN_DELIMITER = " ";
-	private static IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
-	public void setColumnOrder(Table table, String preferenceName) {
+	public void setColumnOrder(Table table, String columnOrder) {
 
 		try {
-			int[] columnOrder = convertColumnOrder(preferenceStore.getString(preferenceName));
-			table.setColumnOrder(columnOrder);
+			int[] columns = convertColumnOrder(columnOrder);
+			table.setColumnOrder(columns);
 		} catch(SWTException | IllegalArgumentException e) {
 			/*
 			 * On exception, default order will be used.
@@ -36,10 +33,9 @@ public class ListSupport {
 		}
 	}
 
-	public void saveColumnOrder(Table table, String preferenceName) {
+	public String getColumnOrder(Table table) {
 
-		String columnOrder = convertColumnOrder(table.getColumnOrder());
-		preferenceStore.setValue(preferenceName, columnOrder);
+		return convertColumnOrder(table.getColumnOrder());
 	}
 
 	private String convertColumnOrder(int[] columnOrder) {

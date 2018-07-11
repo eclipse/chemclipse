@@ -493,14 +493,16 @@ public class ExtendedTargetsUI {
 		/*
 		 * Set/Save the column order.
 		 */
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String preferenceName = PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST;
-		listSupport.setColumnOrder(table, preferenceName);
+		listSupport.setColumnOrder(table, preferenceStore.getString(preferenceName));
 		listUI.addColumnMoveListener(new IColumnMoveListener() {
 
 			@Override
 			public void handle() {
 
-				listSupport.saveColumnOrder(table, preferenceName);
+				String columnOrder = listSupport.getColumnOrder(table);
+				preferenceStore.setValue(preferenceName, columnOrder);
 			}
 		});
 		/*
