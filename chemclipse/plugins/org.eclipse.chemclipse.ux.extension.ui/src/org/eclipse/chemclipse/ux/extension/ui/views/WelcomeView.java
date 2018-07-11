@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.swt.ISelectionHandler;
-import org.eclipse.chemclipse.ux.extension.ui.swt.WelcomeTile;
+import org.eclipse.chemclipse.ux.extension.ui.swt.TaskTile;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -66,7 +66,7 @@ public class WelcomeView {
 	/*
 	 * Main
 	 */
-	private List<WelcomeTile> welcomeTiles;
+	private List<TaskTile> welcomeTiles;
 
 	private class Component implements ISelectionHandler {
 
@@ -131,7 +131,7 @@ public class WelcomeView {
 
 	@Inject
 	public WelcomeView(Composite parent) {
-		welcomeTiles = new ArrayList<WelcomeTile>();
+		welcomeTiles = new ArrayList<TaskTile>();
 		initializeContent(parent);
 	}
 
@@ -163,17 +163,17 @@ public class WelcomeView {
 		 * Default Tiles
 		 */
 		Image imageDataAnalysis = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_DATA_ANALYSIS, IApplicationImage.SIZE_128x128);
-		initializeTile(new WelcomeTile(parent, WelcomeTile.HIGHLIGHT), 2, 2, new Component(PERSPECTIVE_DATA_ANALYSIS), imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.");
-		initializeTile(new WelcomeTile(parent, WelcomeTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_QUANTITATION), null, "Quantitation", "Used for ISTD and ESTD quantitation");
-		initializeTile(new WelcomeTile(parent, WelcomeTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_LOGGING), null, "Logging", "Have a look at the log files.");
-		initializeTile(new WelcomeTile(parent, WelcomeTile.HIGHLIGHT), 2, 1, new ComponentDemo(), null, "Demo", "Load a demo chromatogram.");
+		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 2, 2, new Component(PERSPECTIVE_DATA_ANALYSIS), imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.");
+		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_QUANTITATION), null, "Quantitation", "Used for ISTD and ESTD quantitation");
+		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_LOGGING), null, "Logging", "Have a look at the log files.");
+		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 2, 1, new ComponentDemo(), null, "Demo", "Load a demo chromatogram.");
 		/*
 		 * Registered Tiles
 		 */
 		new WelcomeViewExtensionHandler(parent, this);
 	}
 
-	private void initializeTile(WelcomeTile welcomeTile, int horizontalSpan, int verticalSpan, ISelectionHandler selectionHandler, Image image, String section, String description) {
+	private void initializeTile(TaskTile welcomeTile, int horizontalSpan, int verticalSpan, ISelectionHandler selectionHandler, Image image, String section, String description) {
 
 		welcomeTile.setSelectionHandler(selectionHandler);
 		welcomeTile.setContent(image, section, description);
@@ -183,7 +183,7 @@ public class WelcomeView {
 		gridData.verticalSpan = verticalSpan;
 	}
 
-	void addWelcomeTile(WelcomeTile welcomeTile) {
+	void addWelcomeTile(TaskTile welcomeTile) {
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		welcomeTile.setLayoutData(gridData);
@@ -198,9 +198,9 @@ public class WelcomeView {
 		welcomeTiles.add(welcomeTile);
 	}
 
-	private void highlightComposite(WelcomeTile welcomeTileHighlight) {
+	private void highlightComposite(TaskTile welcomeTileHighlight) {
 
-		for(WelcomeTile welcomeTile : welcomeTiles) {
+		for(TaskTile welcomeTile : welcomeTiles) {
 			if(welcomeTile == welcomeTileHighlight) {
 				welcomeTile.setActive();
 			} else {

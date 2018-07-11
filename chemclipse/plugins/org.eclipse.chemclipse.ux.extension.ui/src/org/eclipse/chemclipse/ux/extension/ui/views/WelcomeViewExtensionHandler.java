@@ -27,7 +27,7 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.ux.extension.ui.swt.ExtensionsTileSelectionDialog;
 import org.eclipse.chemclipse.ux.extension.ui.swt.ISelectionHandler;
-import org.eclipse.chemclipse.ux.extension.ui.swt.WelcomeTile;
+import org.eclipse.chemclipse.ux.extension.ui.swt.TaskTile;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
@@ -73,7 +73,7 @@ public class WelcomeViewExtensionHandler {
 			return c1.getAttribute(ATTRIBUTE_SECTION).compareTo(c2.getAttribute(ATTRIBUTE_SECTION));
 		}
 	};
-	private final Collection<WelcomeTile> tiles = new ArrayList<>();
+	private final Collection<TaskTile> tiles = new ArrayList<>();
 	private final Set<String> removedTiles;
 	private final Set<String> addedTiles;
 	private final WelcomeView welcomeView;
@@ -91,9 +91,9 @@ public class WelcomeViewExtensionHandler {
 	public void initTiles(Composite parent) {
 
 		List<IConfigurationElement> extensions = getAllExtensions();
-		WelcomeTile tilePrev = null;
+		TaskTile tilePrev = null;
 		for(int i = 0; i < MAX_EXTENSION_TILES; i++) {
-			WelcomeTile tile = createTile(parent);
+			TaskTile tile = createTile(parent);
 			tile.setData(DATA_TILE_INDEX, i);
 			tile.setData(DATA_PREV, tilePrev);
 			tilePrev = tile;
@@ -109,9 +109,9 @@ public class WelcomeViewExtensionHandler {
 		}
 	}
 
-	public WelcomeTile createTile(Composite parent) {
+	public TaskTile createTile(Composite parent) {
 
-		WelcomeTile tile = new WelcomeTile(parent, SWT.NONE);
+		TaskTile tile = new TaskTile(parent, SWT.NONE);
 		tile.setSelectionHandler(new ISelectionHandler() {
 
 			@Override
@@ -180,7 +180,7 @@ public class WelcomeViewExtensionHandler {
 		// sort them
 		Collections.sort(used, EXTENSION_COMPARATOR);
 		// now we can update all tiles text and status...
-		for(WelcomeTile welcomeTile : tiles) {
+		for(TaskTile welcomeTile : tiles) {
 			IConfigurationElement extension;
 			if(used.isEmpty()) {
 				extension = null;
@@ -192,7 +192,7 @@ public class WelcomeViewExtensionHandler {
 				// a tile with an extension!
 				String attribute = extension.getAttribute(ATTRIBUTE_PERSPECTIVE_ID);
 				if(attribute != null && !attribute.isEmpty()) {
-					welcomeTile.updateStyle(WelcomeTile.HIGHLIGHT);
+					welcomeTile.updateStyle(TaskTile.HIGHLIGHT);
 				} else {
 					welcomeTile.updateStyle(SWT.NONE);
 				}
@@ -201,7 +201,7 @@ public class WelcomeViewExtensionHandler {
 			} else {
 				welcomeTile.setMenu(null);
 				if(isLastEmptyTile(welcomeTile) && !unusedExtensions.isEmpty()) {
-					welcomeTile.updateStyle(WelcomeTile.HIGHLIGHT | WelcomeTile.LARGE_TITLE);
+					welcomeTile.updateStyle(TaskTile.HIGHLIGHT | TaskTile.LARGE_TITLE);
 					welcomeTile.setContent(null, "+", "Add shortcut");
 				} else {
 					// clear empty ones...
@@ -219,7 +219,7 @@ public class WelcomeViewExtensionHandler {
 		}
 	}
 
-	private void tileSelected(WelcomeTile tile) {
+	private void tileSelected(TaskTile tile) {
 
 		IConfigurationElement configurationElement = getExtension(tile);
 		if(configurationElement != null) {
@@ -229,7 +229,7 @@ public class WelcomeViewExtensionHandler {
 		}
 	}
 
-	private void selectExtensionForTile(WelcomeTile tile) {
+	private void selectExtensionForTile(TaskTile tile) {
 
 		List<IConfigurationElement> allExtensions = getUnusedExtensions();
 		// show selection dialog to the user...
@@ -298,7 +298,7 @@ public class WelcomeViewExtensionHandler {
 		// remove all used extension
 		for(Iterator<IConfigurationElement> iterator = allExtensions.iterator(); iterator.hasNext();) {
 			IConfigurationElement element = (IConfigurationElement)iterator.next();
-			for(WelcomeTile welcomeTile : tiles) {
+			for(TaskTile welcomeTile : tiles) {
 				if(element.equals(getExtension(welcomeTile))) {
 					iterator.remove();
 					break;
@@ -311,7 +311,7 @@ public class WelcomeViewExtensionHandler {
 	public List<IConfigurationElement> getUsedExtensions() {
 
 		List<IConfigurationElement> usedExtensions = new ArrayList<>();
-		for(WelcomeTile welcomeTile : tiles) {
+		for(TaskTile welcomeTile : tiles) {
 			IConfigurationElement extension = getExtension(welcomeTile);
 			if(extension != null) {
 				usedExtensions.add(extension);
@@ -328,15 +328,15 @@ public class WelcomeViewExtensionHandler {
 		return new ArrayList<>(Arrays.asList(elements));
 	}
 
-	private static IConfigurationElement getExtension(WelcomeTile tile) {
+	private static IConfigurationElement getExtension(TaskTile tile) {
 
 		return (IConfigurationElement)tile.getData(DATA_EXTENSION);
 	}
 
-	private static boolean isLastEmptyTile(WelcomeTile tile) {
+	private static boolean isLastEmptyTile(TaskTile tile) {
 
 		if(tile.getData(DATA_EXTENSION) == null) {
-			WelcomeTile prevTile = (WelcomeTile)tile.getData(DATA_PREV);
+			TaskTile prevTile = (TaskTile)tile.getData(DATA_PREV);
 			if(prevTile == null) {
 				// this is the first tile!
 				return true;

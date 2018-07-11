@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
-public class WelcomeTile extends Composite {
+public class TaskTile extends Composite {
 
 	public static final int LARGE_TITLE = (1 << 1);
 	public static final int HIGHLIGHT = (1 << 2);
@@ -44,7 +44,7 @@ public class WelcomeTile extends Composite {
 	private Cursor handCursor;
 	private Cursor waitCursor;
 
-	public WelcomeTile(Composite parent, int style) {
+	public TaskTile(Composite parent, int style) {
 		super(parent, SWT.NONE);
 		initialize();
 		waitCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_WAIT);
@@ -58,6 +58,16 @@ public class WelcomeTile extends Composite {
 		super.dispose();
 		handCursor.dispose();
 		waitCursor.dispose();
+	}
+
+	public void setColors(Color colorActive, Color colorInactive) {
+
+		this.colorActive = colorActive;
+		this.colorInactive = colorInactive;
+		//
+		setBackground(colorInactive);
+		textSection.setBackground(colorInactive);
+		textDesciption.setBackground(colorInactive);
 	}
 
 	public void setSelectionHandler(ISelectionHandler selectionHandler) {
@@ -112,23 +122,23 @@ public class WelcomeTile extends Composite {
 
 	private Label addTextSection(Composite parent) {
 
-		Label text = new Label(parent, SWT.NONE);
-		text.setForeground(Colors.WHITE);
-		text.setBackground(colorInactive);
-		text.setText("");
-		text.setLayoutData(getGridData(SWT.BEGINNING, SWT.END, 1));
-		addControlListener(text);
-		return text;
+		Label label = new Label(parent, SWT.NONE);
+		label.setForeground(Colors.WHITE);
+		label.setBackground(colorInactive);
+		label.setText("");
+		label.setLayoutData(getGridData(SWT.BEGINNING, SWT.END, 1));
+		addControlListener(label);
+		return label;
 	}
 
 	private Label addTextDescription(Composite parent) {
 
-		Label text = new Label(parent, SWT.CENTER | SWT.WRAP);
-		text.setBackground(colorInactive);
-		text.setText("");
-		text.setLayoutData(getGridData(SWT.CENTER, SWT.BEGINNING, 2));
-		addControlListener(text);
-		return text;
+		Label label = new Label(parent, SWT.CENTER | SWT.WRAP);
+		label.setBackground(colorInactive);
+		label.setText("");
+		label.setLayoutData(getGridData(SWT.CENTER, SWT.BEGINNING, 2));
+		addControlListener(label);
+		return label;
 	}
 
 	private GridData getGridData(int horizontalAlignment, int verticalAlignment, int horizontalSpan) {
