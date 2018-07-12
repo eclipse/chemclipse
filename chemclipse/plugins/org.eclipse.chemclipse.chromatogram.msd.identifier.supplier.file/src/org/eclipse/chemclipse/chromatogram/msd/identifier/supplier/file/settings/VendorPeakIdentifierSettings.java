@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.setting
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparatorDynamicSettingProperty;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.GenereteIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.GeneratedIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.DynamicSettingsProperty;
@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.support.settings.MultiFileSettingProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-@GenereteIdentifierSettings
+@GeneratedIdentifierSettings
 public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettings implements IVendorPeakIdentifierSettings {
 
 	@JsonProperty(value = "Mass Spectra Files", defaultValue = "")
