@@ -42,9 +42,9 @@ public class Chart3DSettings {
 	public static void setAxes(Chart3DSettings settings, int scale) {
 
 		int numberLines = settings.getMaxNumberLine();
-		double[] X = setAxesSquered(settings.minX, settings.maxX, numberLines);
-		double[] Y = setAxesSquered(settings.minY, settings.maxY, numberLines);
-		double[] Z = setAxesSquered(settings.minZ, settings.maxZ, numberLines);
+		double[] X = setAxesSquared(settings.minX, settings.maxX, numberLines);
+		double[] Y = setAxesSquared(settings.minY, settings.maxY, numberLines);
+		double[] Z = setAxesSquared(settings.minZ, settings.maxZ, numberLines);
 		settings.axisMaxX = X[0];
 		settings.axisMaxY = Y[0];
 		settings.axisMaxZ = Z[0];
@@ -87,7 +87,7 @@ public class Chart3DSettings {
 		}
 	}
 
-	private static double[] setAxesSquered(double x, double y, int numberLines) {
+	private static double[] setAxesSquared(double x, double y, int numberLines) {
 
 		double absMax = Math.max(Math.abs(x), Math.abs(y));
 		double numberDigits = Math.floor(Math.log10(absMax));
