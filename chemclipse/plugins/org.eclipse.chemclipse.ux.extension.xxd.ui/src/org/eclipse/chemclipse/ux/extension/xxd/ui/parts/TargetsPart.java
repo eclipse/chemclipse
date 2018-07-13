@@ -54,6 +54,8 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
 		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
 		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+		registerEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_IDENTIFICATION_TARGETS);
+		registerEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_IDENTIFICATION_TARGETS);
 	}
 
 	@Override
@@ -65,8 +67,8 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 		if(objects.size() == 1) {
 			if(isChromatogramUnloadEvent(topic)) {
 				extendedTargetsUI.updateChromatogram(null);
-			} else if(isScanOrPeakUnloadEvent(topic)) {
-				extendedTargetsUI.updateScanOrPeak(null);
+			} else if(isOtherUnloadEvent(topic)) {
+				extendedTargetsUI.updateNotChromatogram(null);
 			} else {
 				Object object = objects.get(0);
 				if(isChromatogramTopic(topic)) {
@@ -76,7 +78,9 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 						extendedTargetsUI.updateChromatogram(object);
 					}
 				} else if(isScanOrPeakTopic(topic)) {
-					extendedTargetsUI.updateScanOrPeak(object);
+					extendedTargetsUI.updateNotChromatogram(object);
+				} else if(isIdentificationTopic(topic)) {
+					extendedTargetsUI.updateNotChromatogram(object);
 				}
 			}
 		}
@@ -102,11 +106,13 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 		return false;
 	}
 
-	private boolean isScanOrPeakUnloadEvent(String topic) {
+	private boolean isOtherUnloadEvent(String topic) {
 
 		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION)) {
 			return true;
 		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
+			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION)) {
 			return true;
 		}
 		return false;
@@ -117,6 +123,14 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
 			return true;
 		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isIdentificationTopic(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION)) {
 			return true;
 		}
 		return false;

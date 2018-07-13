@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -156,7 +157,7 @@ public class ExtendedTargetsUI {
 		}
 	}
 
-	public void updateScanOrPeak(Object object) {
+	public void updateNotChromatogram(Object object) {
 
 		if(!showChromatogramTargets) {
 			this.object = object;
@@ -756,6 +757,9 @@ public class ExtendedTargetsUI {
 			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
 			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramWSD));
 			targetListUI.setInput(chromatogramWSD.getTargets());
+		} else if(object instanceof List) {
+			labelInfo.setText("Idenitification Targets");
+			targetListUI.setInput(object);
 		} else {
 			labelInfo.setText("No target data has been selected yet.");
 			targetListUI.clear();

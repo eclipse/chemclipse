@@ -176,4 +176,10 @@ public interface IChemClipseEvents {
 	String PROPERTY_TOGGLE_PART_VISIBILITY = IEventBroker.DATA;
 	String TOPIC_TOGGLE_PART_VISIBILITY_TRUE = "toggle/part/visibility/true"; // $NON-NLS-1$
 	String TOPIC_TOGGLE_PART_VISIBILITY_FALSE = "toggle/part/visibility/false"; // $NON-NLS-1$
+	/*
+	 * IIdenticiation Targets
+	 */
+	String TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION = "identification/targets/update/selection";
+	String TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION = "identification/targets/unload/selection";
+	String PROPERTY_SELECTED_IDENTIFICATION_TARGETS = IEventBroker.DATA; // List<IIdentificationTarget>
 }
