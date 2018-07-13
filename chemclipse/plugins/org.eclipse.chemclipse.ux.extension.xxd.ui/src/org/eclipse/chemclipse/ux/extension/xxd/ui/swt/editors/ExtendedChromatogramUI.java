@@ -252,8 +252,12 @@ public class ExtendedChromatogramUI {
 			 */
 			addChartMenuEntries();
 			updateChromatogram();
-			updateChromatogramCombo();
-			updateChromatogramTargetTransferCombo();
+			if(referencedChromatogramSelections == null) {
+				updateChromatogramCombo();
+				updateChromatogramTargetTransferCombo();
+			} else {
+				updateChromatogramTargetTransferCombo();
+			}
 			setSeparationColumnSelection();
 			retentionIndexTableViewerUI.setInput(chromatogramSelection.getChromatogram().getSeparationColumnIndices());
 		} else {
@@ -1762,6 +1766,7 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void focusGained(FocusEvent e) {
 
+				updateChromatogramTargetTransferCombo();
 				DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 					@Override

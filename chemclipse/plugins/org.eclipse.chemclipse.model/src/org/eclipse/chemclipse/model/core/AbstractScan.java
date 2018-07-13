@@ -24,6 +24,7 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	 * methods.
 	 */
 	private static final long serialVersionUID = 642924518234776409L;
+	@SuppressWarnings("rawtypes")
 	private transient IChromatogram parentChromatogram;
 	//
 	private int retentionTime = 0;
@@ -81,12 +82,14 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 		return getTotalSignal();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IChromatogram getParentChromatogram() {
 
 		return parentChromatogram;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void setParentChromatogram(IChromatogram parentChromatogram) {
 

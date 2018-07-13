@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
+@SuppressWarnings({"serial", "rawtypes"})
 public class Chromatogram extends AbstractChromatogram implements IChromatogram {
 
 	@Override
