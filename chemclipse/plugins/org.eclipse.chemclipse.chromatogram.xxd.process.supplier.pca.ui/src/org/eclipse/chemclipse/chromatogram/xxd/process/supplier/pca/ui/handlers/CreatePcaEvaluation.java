@@ -17,14 +17,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.PCAEditorFX;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -35,6 +33,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 public class CreatePcaEvaluation {
 
 	private static final String PCA_EDITOR_PART_STACK_ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.stackId.pcaeditorStack";
+	private static final String PCA_EDITOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcaeditorfx";
 	private static final String PCA_PERSPECTIVE = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	public static final String PCA_CREATE_NEW_EDITOR = "CREATE_NEW_EDITOR";
 	public static final String DATA_SAMPLES = "DATA_SAMPLES";
@@ -48,13 +47,7 @@ public class CreatePcaEvaluation {
 		/*
 		 * Create the input part and prepare it.
 		 */
-		MPart inputPart = MBasicFactory.INSTANCE.createInputPart();
-		inputPart.setElementId(PCAEditorFX.ID);
-		inputPart.setContributionURI(PCAEditorFX.CONTRIBUTION_URI);
-		inputPart.setLabel(PCAEditorFX.LABEL);
-		inputPart.setIconURI(PCAEditorFX.ICON_URI);
-		inputPart.setTooltip(PCAEditorFX.TOOL_TIPS);
-		inputPart.setCloseable(true);
+		MPart inputPart = partService.createPart(PCA_EDITOR_ID);
 		inputPart.getTransientData().put(DATA_SAMPLES, samplesVisualization);
 		/*
 		 * Add it to the stack and show it.
