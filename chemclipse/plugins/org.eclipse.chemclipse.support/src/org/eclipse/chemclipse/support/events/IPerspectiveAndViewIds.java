@@ -33,7 +33,6 @@ public interface IPerspectiveAndViewIds {
 	 */
 	String PERSPECTIVE_WELCOME = "org.eclipse.chemclipse.ux.extension.ui.perspective.welcome";
 	String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
-	String PERSPECTIVE_SUBTRACT = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.perspective.main";
 	/*
 	 * Views
 	 */
@@ -64,8 +63,6 @@ public interface IPerspectiveAndViewIds {
 	String VIEW_PROFILE_MASS_SPECTRUM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.profileMassSpectrumView";
 	String VIEW_PEAK_QUANTITATION_ENRTIES = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakQuantitationEntries";
 	String VIEW_PEAK_INTEGRATION_ENRTIES = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakIntegrationEntries";
-	String VIEW_COMBINED_MASS_SPECTRUM = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.part.combinedMassSpectrumChromatogramSelection";
-	String VIEW_SUBTRACT_MASS_SPECTRUM = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.part.sessionSubtractMassSpectrum";
 	String VIEW_INTEGRATION_RESULTS = "org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.integrationResultView";
 	String VIEW_MASS_SPECTRUM_IDENTIFICATION_RESULTS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumTargetsView";
 	String VIEW_CHROMATOGRAM_FILE_EXPLORER_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramFileExplorerView";

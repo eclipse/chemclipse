@@ -219,7 +219,7 @@ public class ExtendedSubtractScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				MessageBox messageBox = new MessageBox(DisplayUtils.getShell(button), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 				messageBox.setText("Clear Session");
 				messageBox.setMessage("Would you like to clear the session subtract scan?");
 				if(messageBox.open() == SWT.YES) {
@@ -245,7 +245,7 @@ public class ExtendedSubtractScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				MessageBox messageBox = new MessageBox(DisplayUtils.getShell(button), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 				messageBox.setText("Load Session");
 				messageBox.setMessage("Would you like to load the session subtract scan?");
 				if(messageBox.open() == SWT.YES) {
@@ -285,7 +285,7 @@ public class ExtendedSubtractScanUI {
 
 				try {
 					if(scanMSD != null) {
-						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), scanMSD, "SubtractMS");
+						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(button), scanMSD, "SubtractMS");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
