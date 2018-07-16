@@ -64,6 +64,13 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 		super(parent, style, axisTitles);
 	}
 
+	public void update(IChromatogramSelection chromatogramSelection) {
+
+		if(chromatogramSelection != null) {
+			updateSelection(chromatogramSelection, true);
+		}
+	}
+
 	@Override
 	public void updateSelection(IChromatogramSelection chromatogramSelection, boolean forceReload) {
 
@@ -233,6 +240,7 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 				/*
 				 * Retention Time
 				 */
+				@SuppressWarnings("rawtypes")
 				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 				int startRetentionTime = chromatogram.getStartRetentionTime();
 				int stopRetentionTime = chromatogram.getStopRetentionTime();
@@ -247,6 +255,7 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void adjustYRange() {
 

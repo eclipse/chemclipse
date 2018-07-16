@@ -31,6 +31,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA, PreferenceConstants.DEF_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_OVERLAY_NMR, PreferenceConstants.DEF_STACK_POSITION_OVERLAY_NMR);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_OVERLAY_XIR, PreferenceConstants.DEF_STACK_POSITION_OVERLAY_XIR);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_BASELINE, PreferenceConstants.DEF_STACK_POSITION_BASELINE);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_TARGETS, PreferenceConstants.DEF_STACK_POSITION_TARGETS);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_SCAN_CHART, PreferenceConstants.DEF_STACK_POSITION_SCAN_CHART);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE, PreferenceConstants.DEF_STACK_POSITION_SCAN_TABLE);

@@ -74,6 +74,8 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_OVERLAY_NMR = PartSupport.PARTSTACK_NONE;
 	public static final String P_STACK_POSITION_OVERLAY_XIR = "stackPositionOverlayXIR";
 	public static final String DEF_STACK_POSITION_OVERLAY_XIR = PartSupport.PARTSTACK_NONE;
+	public static final String P_STACK_POSITION_BASELINE = "stackPositionBaseline";
+	public static final String DEF_STACK_POSITION_BASELINE = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_TARGETS = "stackPositionTargets";
 	public static final String DEF_STACK_POSITION_TARGETS = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_SCAN_CHART = "stackPositionScanChart";

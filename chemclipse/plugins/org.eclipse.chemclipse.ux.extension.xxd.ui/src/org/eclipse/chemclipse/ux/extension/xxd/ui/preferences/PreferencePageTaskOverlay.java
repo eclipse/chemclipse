@@ -31,6 +31,7 @@ public class PreferencePageTaskOverlay extends FieldEditorPreferencePage impleme
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA, "Overlay Chromatogram Extra:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_NMR, "Overlay NMR:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_XIR, "Overlay XIR:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_BASELINE, "Baseline:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {
