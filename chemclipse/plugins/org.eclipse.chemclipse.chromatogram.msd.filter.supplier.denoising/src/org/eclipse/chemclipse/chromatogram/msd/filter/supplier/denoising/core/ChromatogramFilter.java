@@ -22,6 +22,8 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.prefere
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.DenoisingFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.IDenoisingFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
+import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -54,6 +56,8 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		IDenoisingFilterResult chromatogramFilterResult;
 		try {
 			List<ICombinedMassSpectrum> noiseMassSpectra = Denoising.applyDenoisingFilter(chromatogramSelection, ionsToRemove, ionsToPreserve, adjustThresholdTransitions, numberOfUsedIonsForCoefficient, segmentWidth, monitor);
+			IMeasurementResult measurementResult = new MeasurementResult("MS Denoising Filter", "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising", "This list contains the calculated noise mass spectra.", noiseMassSpectra);
+			chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
 			chromatogramFilterResult = new DenoisingFilterResult(ResultStatus.OK, "The chromatogram selection has been denoised successfully.", noiseMassSpectra);
 		} catch(FilterException e) {
 			chromatogramFilterResult = new DenoisingFilterResult(ResultStatus.EXCEPTION, e.getMessage());

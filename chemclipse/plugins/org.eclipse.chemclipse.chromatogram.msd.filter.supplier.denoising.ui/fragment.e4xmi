@@ -13,22 +13,4 @@
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Tsub4AP7Eea988xguwzXfA" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
     </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_TUG-kDshEeK8yJqmargYRA" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
-    <elements xsi:type="basic:Part" xmi:id="_VWftEDshEeK8yJqmargYRA" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.part.interactiveDenoisingFilterMassSpectrumView" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.views.InteractiveDenoisingFilterMassSpectrumView" label="Noise Mass Spectra" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/denoising.gif"/>
-  </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IliIYGbZEeKBdtzNTd3LVg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
-    <elements xsi:type="advanced:Perspective" xmi:id="_Pr348GbZEeKBdtzNTd3LVg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.perspective" label="Denoising" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/denoising.gif">
-      <children xsi:type="basic:PartSashContainer" xmi:id="_bIYyMJMQEeKNu55-ehn3TQ" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.partsashcontainer.0">
-        <children xsi:type="advanced:Placeholder" xmi:id="_c9Oz8JMQEeKNu55-ehn3TQ" elementId="org.eclipse.ui.editorss" ref="_Dy4EUJMQEeKNu55-ehn3TQ"/>
-        <children xsi:type="basic:PartSashContainer" xmi:id="_hWc28JMQEeKNu55-ehn3TQ" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.partsashcontainer.1" horizontal="true">
-          <children xsi:type="basic:PartStack" xmi:id="_i7ds8JMQEeKNu55-ehn3TQ" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.partstack.0">
-            <children xsi:type="advanced:Placeholder" xmi:id="_j5CIcJMQEeKNu55-ehn3TQ" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.placeholder.1" ref="_XyU1UJMQEeKNu55-ehn3TQ"/>
-          </children>
-          <children xsi:type="basic:PartStack" xmi:id="_WSeZgGbZEeKBdtzNTd3LVg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.partstack.1">
-            <children xsi:type="advanced:Placeholder" xmi:id="_X8SP8GbZEeKBdtzNTd3LVg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.placeholder.2" ref="_VWftEDshEeK8yJqmargYRA"/>
-          </children>
-        </children>
-      </children>
-    </elements>
-  </fragments>
 </fragment:ModelFragments>

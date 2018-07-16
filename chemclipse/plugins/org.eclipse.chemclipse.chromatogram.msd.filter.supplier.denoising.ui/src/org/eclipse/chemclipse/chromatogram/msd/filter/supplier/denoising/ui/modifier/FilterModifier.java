@@ -12,34 +12,28 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.modifier;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.IDenoisingFilterResult;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.preferences.IDenoisingEvents;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
-import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
 
 public class FilterModifier extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
 	private static final Logger logger = Logger.getLogger(FilterModifier.class);
 	private static final String DESCRIPTION = "Denoising Filter";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising";
-	private IEventBroker eventBroker;
 
-	public FilterModifier(IChromatogramSelectionMSD chromatogramSelection, IEventBroker eventBroker) {
+	public FilterModifier(IChromatogramSelectionMSD chromatogramSelection) {
 		super(chromatogramSelection);
-		this.eventBroker = eventBroker;
 	}
 
 	@Override
@@ -51,13 +45,8 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 				final IProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, FILTER_ID, monitor);
 				IChromatogramFilterResult result = processingInfo.getProcessingResult(IChromatogramFilterResult.class);
 				if(result instanceof IDenoisingFilterResult) {
-					final IDenoisingFilterResult denoisingResult = (IDenoisingFilterResult)result;
 					ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
-					if(eventBroker != null) {
-						List<ICombinedMassSpectrum> noiseMassSpectra = denoisingResult.getNoiseMassSpectra();
-						eventBroker.send(IDenoisingEvents.TOPIC_NOISE_MASS_SPECTRA_UPDATE, noiseMassSpectra);
-					}
-					Display.getDefault().asyncExec(new Runnable() {
+					DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 						@Override
 						public void run() {

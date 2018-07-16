@@ -23,4 +23,15 @@
             file="toc_filter.xml">
       </toc>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.ux.extension.ui.measurementResultVisualization">
+      <MeasurementResultVisualization
+            Comparator="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.ResultsTableComparator"
+            ContentProvider="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.ResultsContentProvider"
+            Identifier="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising"
+            LabelProvider="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.ResultsLabelProvider"
+            SelectionListener="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.SelectionHandler"
+            Titles="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.ResultTitles">
+      </MeasurementResultVisualization>
+   </extension>   
 </plugin>
