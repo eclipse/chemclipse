@@ -42,6 +42,7 @@ public class SubtractCalculator {
 	 * @param chromatogramSelection
 	 * @param subtractFilterSettings
 	 */
+	@SuppressWarnings("rawtypes")
 	public void subtractPeakMassSpectraFromChromatogramSelection(IChromatogramSelectionMSD chromatogramSelection, ISupplierFilterSettings subtractFilterSettings) {
 
 		/*
