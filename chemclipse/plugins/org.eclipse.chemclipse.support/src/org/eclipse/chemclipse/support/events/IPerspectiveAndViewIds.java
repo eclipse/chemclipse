@@ -44,7 +44,6 @@ public interface IPerspectiveAndViewIds {
 	String VIEW_BASELINE = "org.eclipse.chemclipse.ux.extension.ui.part.baselineAndChromatogramView";
 	String VIEW_SELECTED_ION_CHROMATOGRAM_NOMINAL = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedNominalIonChromtogramView";
 	String VIEW_PEAK_LIST_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakListView";
-	String VIEW_PEAK_LIST_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.part.peakListView";
 	String VIEW_PROCESSING_INFO = "org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart";
 	String VIEW_CHROMATOGRAM_TARGETS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramTargetsView";
 	String VIEW_EXCLUDED_ION_CHROMATOGRAM_NOMINAL = "org.eclipse.chemclipse.ux.extension.msd.ui.part.excludedIonChromatogramView";
@@ -54,7 +53,6 @@ public interface IPerspectiveAndViewIds {
 	String VIEW_PEAK_MASS_SPECTRUM_IONS_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMassSpectrumIonsListView";
 	String VIEW_PEAK_MASS_SPECTRUM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMassSpectrumView";
 	String VIEW_PEAK_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMSDView";
-	String VIEW_PEAK_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.part.peakCSDView";
 	String VIEW_SELECTED_ION_CHROMATOGRAM_ACCURATE = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedAccurateIonChromtogramView";
 	String VIEW_SELECTED_ION_CHROMATOGRAM_EXACT = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedExactIonChromtogramView";
 	String VIEW_SELECTED_ION_CHROMATOGRAM_NOMINAL_COMBINED = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedIonCombinedChromtogramView";
@@ -66,11 +64,8 @@ public interface IPerspectiveAndViewIds {
 	String VIEW_INTEGRATION_RESULTS = "org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.integrationResultView";
 	String VIEW_MASS_SPECTRUM_IDENTIFICATION_RESULTS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumTargetsView";
 	String VIEW_CHROMATOGRAM_FILE_EXPLORER_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramFileExplorerView";
-	String VIEW_CHROMATOGRAM_FILE_EXPLORER_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.part.chromatogramFileExplorerView";
-	String VIEW_CHROMATOGRAM_OVERVIEW_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.part.chromatogramOverviewView";
 	String VIEW_CHROMATOGRAM_FILE_EXPLORER_WSD = "org.eclipse.chemclipse.ux.extension.wsd.ui.part.chromatogramFileExplorerView";
 	String VIEW_CHROMATOGRAM_OVERVIEW_WSD = "org.eclipse.chemclipse.ux.extension.wsd.ui.part.chromatogramOverviewView";
-	String VIEW_SCAN_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.part.selectedScan";
 	String VIEW_MASS_SPECTRA_IDENTIFIED_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectraIdentifiedList";
 	String VIEW_MASS_SPECTRUM_TARGETS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumTargetsView";
 	String VIEW_OPTIMIZED_MASS_SPECTRUM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleOptimizedNominalMassSpectrumView";

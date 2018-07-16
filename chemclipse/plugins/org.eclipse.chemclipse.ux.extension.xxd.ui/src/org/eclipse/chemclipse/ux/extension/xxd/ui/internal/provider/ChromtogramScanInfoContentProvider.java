@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -30,6 +30,7 @@ public class PreferencePageTaskOverview extends FieldEditorPreferencePage implem
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_HEADER_DATA, "Header Data:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_OVERVIEW, "Chromatogram Overview:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_MISCELLANEOUS_INFO, "Miscellaneous Info:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_SCAN_INFO, "Chromatogram Scan Info:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

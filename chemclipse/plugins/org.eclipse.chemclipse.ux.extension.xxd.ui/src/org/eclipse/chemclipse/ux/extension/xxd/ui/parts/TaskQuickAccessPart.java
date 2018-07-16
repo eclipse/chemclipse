@@ -131,6 +131,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_HEADER_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_HEADER_DATA));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_OVERVIEW));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_MISCELLANEOUS_INFO, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_MISCELLANEOUS_INFO));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_SCAN_INFO, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_SCAN_INFO));
 			}
 		});
 		//
