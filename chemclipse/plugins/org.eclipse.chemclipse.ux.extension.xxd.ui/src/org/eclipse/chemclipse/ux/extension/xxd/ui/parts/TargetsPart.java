@@ -65,22 +65,18 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			if(isChromatogramUnloadEvent(topic)) {
-				extendedTargetsUI.updateChromatogram(null);
-			} else if(isOtherUnloadEvent(topic)) {
-				extendedTargetsUI.updateNotChromatogram(null);
+			if(isChromatogramUnloadEvent(topic) || isOtherUnloadEvent(topic)) {
+				extendedTargetsUI.update(null);
 			} else {
 				Object object = objects.get(0);
 				if(isChromatogramTopic(topic)) {
 					if(object instanceof IChromatogramSelection) {
 						IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
 						object = chromatogramSelection.getChromatogram();
-						extendedTargetsUI.updateChromatogram(object);
+						extendedTargetsUI.update(object);
 					}
-				} else if(isScanOrPeakTopic(topic)) {
-					extendedTargetsUI.updateNotChromatogram(object);
-				} else if(isIdentificationTopic(topic)) {
-					extendedTargetsUI.updateNotChromatogram(object);
+				} else if(isScanOrPeakTopic(topic) || isIdentificationTopic(topic)) {
+					extendedTargetsUI.update(object);
 				}
 			}
 		}

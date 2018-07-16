@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogr
 import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ChromatogramTargetCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ScanTargetCSD;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -149,17 +150,19 @@ public class ExtendedTargetsUI {
 		updateTargets();
 	}
 
-	public void updateChromatogram(Object object) {
+	public void update(Object object) {
 
-		if(showChromatogramTargets) {
-			this.object = object;
-			updateTargets();
-		}
-	}
-
-	public void updateNotChromatogram(Object object) {
-
-		if(!showChromatogramTargets) {
+		if(object instanceof IChromatogram) {
+			if(showChromatogramTargets) {
+				this.object = object;
+				updateTargets();
+			}
+		} else if(object != null) {
+			if(!showChromatogramTargets) {
+				this.object = object;
+				updateTargets();
+			}
+		} else {
 			this.object = object;
 			updateTargets();
 		}
@@ -188,7 +191,7 @@ public class ExtendedTargetsUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
+		// gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(7, false));
 		//
@@ -917,7 +920,7 @@ public class ExtendedTargetsUI {
 
 	private void updateTargetOptionLabel() {
 
-		String text = showChromatogramTargets ? "Chromatogram Targets Active" : "Scan/Peak Targets Active";
+		String text = showChromatogramTargets ? "Chromatogram Targets (Active)" : "Targets (Active)";
 		labelTargetOption.setText(text);
 	}
 
