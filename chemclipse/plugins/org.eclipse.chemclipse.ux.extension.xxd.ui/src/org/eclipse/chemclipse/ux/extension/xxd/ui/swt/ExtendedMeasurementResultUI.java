@@ -39,6 +39,7 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -57,6 +58,7 @@ public class ExtendedMeasurementResultUI {
 	private static final String ATTRIBUTE_CONTENT_PROVIDER = "ContentProvider";
 	private static final String ATTRIBUTE_LABEL_PROVIDER = "LabelProvider";
 	private static final String ATTRIBUTE_COMPARATOR = "Comparator";
+	private static final String ATTRIBUTE_SELECTION_LISTENER = "SelectionListener";
 	//
 	private Label labelChromatogramInfo;
 	private Label labelMeasurementResultInfo;
@@ -68,7 +70,8 @@ public class ExtendedMeasurementResultUI {
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	//
 	private String resultProviderId = "";
-	List<IMeasurementResult> measurementResults = null;
+	private List<IMeasurementResult> measurementResults = null;
+	private SelectionListener selectionListener = null;
 
 	@Inject
 	public ExtendedMeasurementResultUI(Composite parent) {
@@ -143,7 +146,8 @@ public class ExtendedMeasurementResultUI {
 	private void createResultSection(Composite parent) {
 
 		extendedTableViewer = new ExtendedTableViewer(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		extendedTableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		Table table = extendedTableViewer.getTable();
+		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	private Button createButtonToggleChromatogramToolbarInfo(Composite parent) {
@@ -343,11 +347,20 @@ public class ExtendedMeasurementResultUI {
 					IStructuredContentProvider contentProvider = (IStructuredContentProvider)provider.createExecutableExtension(ATTRIBUTE_CONTENT_PROVIDER);
 					ITableLabelProvider tableLableProvider = (ITableLabelProvider)provider.createExecutableExtension(ATTRIBUTE_LABEL_PROVIDER);
 					ViewerComparator viewerComparator = (ViewerComparator)provider.createExecutableExtension(ATTRIBUTE_COMPARATOR);
+					SelectionListener selectionListenerNew = (SelectionListener)provider.createExecutableExtension(ATTRIBUTE_SELECTION_LISTENER);
 					//
 					extendedTableViewer.createColumns(titles.getTitles(), titles.getBounds());
 					extendedTableViewer.setLabelProvider(tableLableProvider);
 					extendedTableViewer.setContentProvider(contentProvider);
 					extendedTableViewer.setComparator(viewerComparator);
+					/*
+					 * Add the selection listener.
+					 */
+					if(selectionListener != null) {
+						table.removeSelectionListener(selectionListener);
+					}
+					table.addSelectionListener(selectionListenerNew);
+					selectionListener = selectionListenerNew;
 				}
 			}
 		} else {

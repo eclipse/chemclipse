@@ -96,6 +96,16 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="SelectionListener" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.swt.events.SelectionAdapter:org.eclipse.swt.events.SelectionListener"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
