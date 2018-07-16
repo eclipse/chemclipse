@@ -62,6 +62,7 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 @SuppressWarnings("rawtypes")
@@ -71,6 +72,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	public static final String TOOLTIP = "Chromatogram Editor";
 	//
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramEditor.class);
+	private static final Runnable runGC = () -> System.gc();
 	//
 	private DataType dataType;
 	private MPart part;
@@ -153,7 +155,12 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		/*
 		 * Run the garbage collector.
 		 */
-		System.gc();
+		Display display = DisplayUtils.getDisplay();
+		if(display != null) {
+			display.timerExec(200, runGC);
+		} else {
+			runGC.run();
+		}
 	}
 
 	@Persist
