@@ -24,7 +24,18 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskCombined;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskComparison;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskHeatmaps;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskLists;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskOverlay;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskOverview;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskPeaks;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskQuantitation;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskResults;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskScans;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskSubtract;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTasks;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -365,11 +376,44 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePage();
-				preferencePage.setTitle("UI Settings");
+				IPreferencePage preferencePageTasks = new PreferencePageTasks();
+				preferencePageTasks.setTitle("Task Bar (Quick Access)");
+				IPreferencePage preferencePageTaskOverview = new PreferencePageTaskOverview();
+				preferencePageTaskOverview.setTitle("Overview");
+				IPreferencePage preferencePageTaskOverlay = new PreferencePageTaskOverlay();
+				preferencePageTaskOverlay.setTitle("Overlay");
+				IPreferencePage preferencePageTaskScans = new PreferencePageTaskScans();
+				preferencePageTaskScans.setTitle("Scans");
+				IPreferencePage preferencePageTaskPeaks = new PreferencePageTaskPeaks();
+				preferencePageTaskPeaks.setTitle("Peaks");
+				IPreferencePage preferencePageTaskLists = new PreferencePageTaskLists();
+				preferencePageTaskLists.setTitle("Lists");
+				IPreferencePage preferencePageTaskQuantitation = new PreferencePageTaskQuantitation();
+				preferencePageTaskQuantitation.setTitle("Quantitation");
+				IPreferencePage preferencePageTaskSubtract = new PreferencePageTaskSubtract();
+				preferencePageTaskSubtract.setTitle("Subtract");
+				IPreferencePage preferencePageTaskCombined = new PreferencePageTaskCombined();
+				preferencePageTaskCombined.setTitle("Combined");
+				IPreferencePage preferencePageTaskComparison = new PreferencePageTaskComparison();
+				preferencePageTaskComparison.setTitle("Comparison");
+				IPreferencePage preferencePageTaskResults = new PreferencePageTaskResults();
+				preferencePageTaskResults.setTitle("Results");
+				IPreferencePage preferencePageTaskHeatmaps = new PreferencePageTaskHeatmaps();
+				preferencePageTaskHeatmaps.setTitle("Heatmaps");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageTasks));
+				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageTaskOverview));
+				preferenceManager.addToRoot(new PreferenceNode("3", preferencePageTaskOverlay));
+				preferenceManager.addToRoot(new PreferenceNode("4", preferencePageTaskScans));
+				preferenceManager.addToRoot(new PreferenceNode("5", preferencePageTaskPeaks));
+				preferenceManager.addToRoot(new PreferenceNode("6", preferencePageTaskLists));
+				preferenceManager.addToRoot(new PreferenceNode("7", preferencePageTaskQuantitation));
+				preferenceManager.addToRoot(new PreferenceNode("8", preferencePageTaskSubtract));
+				preferenceManager.addToRoot(new PreferenceNode("9", preferencePageTaskCombined));
+				preferenceManager.addToRoot(new PreferenceNode("10", preferencePageTaskComparison));
+				preferenceManager.addToRoot(new PreferenceNode("11", preferencePageTaskResults));
+				preferenceManager.addToRoot(new PreferenceNode("12", preferencePageTaskHeatmaps));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();

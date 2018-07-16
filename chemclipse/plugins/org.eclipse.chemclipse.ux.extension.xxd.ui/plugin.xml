@@ -26,8 +26,80 @@
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
-            name="UI Settings">
+            name="Settings">
       </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTasks"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            name="Task Bar (Quick Access)">
+      </page>      
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskOverview"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskOverview"
+            name="Overview">
+      </page>      
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskOverlay"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskOverlay"
+            name="Overlay">
+      </page>           
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskScans"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskScans"
+            name="Scans">
+      </page>           
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskPeaks"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskPeaks"
+            name="Peaks">
+      </page>  
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskLists"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskLists"
+            name="Lists">
+      </page>  
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskQuantitation"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskQuantitation"
+            name="Quantitation">
+      </page>  
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskSubtract"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskSubtract"
+            name="Subtract">
+      </page>  
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskCombined"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskCombined"
+            name="Combined Scans">
+      </page>  
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskComparison"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskComparison"
+            name="Comparison">
+      </page> 
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskResults"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskResults"
+            name="Results">
+      </page>           
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskHeatmaps"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskHeatmaps"
+            name="Heatmaps">
+      </page>     
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay"
