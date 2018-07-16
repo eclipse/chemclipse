@@ -104,7 +104,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 		createOverlayTask(parent);
 		createScansTask(parent);
 		createPeaksTask(parent);
-		createScanAndPeakListTask(parent);
+		createListTask(parent);
 		createQuantitationTask(parent);
 		createSubtractScanTask(parent);
 		createCombinedScanTask(parent);
@@ -211,7 +211,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_PEAK_DETECTOR, button, imageActive, imageDefault);
 	}
 
-	private void createScanAndPeakListTask(Composite parent) {
+	private void createListTask(Composite parent) {
 
 		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SCAN_PEAK_LIST_ACTIVE, IApplicationImage.SIZE_16x16);
 		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SCAN_PEAK_LIST_DEFAULT, IApplicationImage.SIZE_16x16);
@@ -227,6 +227,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_LIST));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_LIST));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_LIST));
 			}
 		});
 		//

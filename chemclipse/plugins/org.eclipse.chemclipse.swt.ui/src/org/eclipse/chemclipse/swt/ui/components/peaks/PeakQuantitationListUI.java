@@ -34,27 +34,31 @@ public class PeakQuantitationListUI extends ExtendedTableViewer {
 	public void update(PeakQuantitations peakQuantitations) {
 
 		getTable().clearAll();
-		List<String> quantitationTitles = peakQuantitations.getTitles();
-		int length = quantitationTitles.size();
-		String[] titles;
-		int[] bounds;
-		if(length == 0) {
-			titles = this.titles;
-			bounds = this.bounds;
-		} else {
-			titles = new String[length];
-			bounds = new int[length];
-			//
-			for(int i = 0; i < length; i++) {
-				titles[i] = quantitationTitles.get(i);
-				bounds[i] = DEFAULT_COLUMN_WIDTH;
+		if(peakQuantitations != null) {
+			List<String> quantitationTitles = peakQuantitations.getTitles();
+			int length = quantitationTitles.size();
+			String[] titles;
+			int[] bounds;
+			if(length == 0) {
+				titles = this.titles;
+				bounds = this.bounds;
+			} else {
+				titles = new String[length];
+				bounds = new int[length];
+				//
+				for(int i = 0; i < length; i++) {
+					titles[i] = quantitationTitles.get(i);
+					bounds[i] = DEFAULT_COLUMN_WIDTH;
+				}
 			}
+			/*
+			 * Set the columns
+			 */
+			setColumns(titles, bounds);
+			setInput(peakQuantitations.getQuantitationEntries());
+		} else {
+			setInput(null);
 		}
-		/*
-		 * Set the columns
-		 */
-		setColumns(titles, bounds);
-		setInput(peakQuantitations.getQuantitationEntries());
 	}
 
 	public void clear() {
