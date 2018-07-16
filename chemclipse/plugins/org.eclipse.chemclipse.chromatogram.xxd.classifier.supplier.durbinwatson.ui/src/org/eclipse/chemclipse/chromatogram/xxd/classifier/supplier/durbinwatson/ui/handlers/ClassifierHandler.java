@@ -26,7 +26,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -36,19 +36,18 @@ public class ClassifierHandler implements EventHandler {
 	private static IChromatogramSelectionMSD chromatogramSelection;
 
 	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
+	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part, Shell shell) {
 
 		/*
 		 * Run the handler.
 		 */
 		if(chromatogramSelection != null) {
-			final Display display = Display.getCurrent();
-			StatusLineLogger.setInfo(InfoType.MESSAGE, "Start Durbin-Watson Classifier");
 			/*
 			 * Do the operation.<br/> Open a progress monitor dialog.
 			 */
+			StatusLineLogger.setInfo(InfoType.MESSAGE, "Start Durbin-Watson Classifier");
 			IRunnableWithProgress runnable = new ClassifierEvaluator(chromatogramSelection);
-			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 			try {
 				/*
 				 * Use true, true ... instead of false, true ... if the progress bar
