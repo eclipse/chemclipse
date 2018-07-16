@@ -351,7 +351,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			}
 		});
 		//
-		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_MEASUREMENT_RESULTS, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEATMAP, button, imageActive, imageDefault);
 	}
 
 	private void createSettingsTask(Composite parent) {
