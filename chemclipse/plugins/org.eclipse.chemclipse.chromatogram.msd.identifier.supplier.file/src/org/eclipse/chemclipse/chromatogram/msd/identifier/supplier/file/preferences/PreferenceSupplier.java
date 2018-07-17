@@ -53,13 +53,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	public static final String P_MIN_MATCH_FACTOR = "minMatchFactor";
 	public static final float DEF_MIN_MATCH_FACTOR = 80.0f;
-	public static final float MIN_MIN_MATCH_FACTOR = 0f;
-	public static final float MAX_MIN_MATCH_FACTOR = 100f;
+	public static final float MIN_MIN_MATCH_FACTOR = 0.0f;
+	public static final float MAX_MIN_MATCH_FACTOR = 100.0f;
 	//
 	public static final String P_MIN_REVERSE_MATCH_FACTOR = "minReverseMatchFactor";
 	public static final float DEF_MIN_REVERSE_MATCH_FACTOR = 80.0f;
-	public static final float MIN_MIN_REVERSE_MATCH_FACTOR = 0f;
-	public static final float MAX_MIN_REVERSE_MATCH_FACTOR = 100f;
+	public static final float MIN_MIN_REVERSE_MATCH_FACTOR = 0.0f;
+	public static final float MAX_MIN_REVERSE_MATCH_FACTOR = 100.0f;
 	//
 	public static final String P_ADD_UNKNOWN_MZ_LIST_TARGET = "addUnknownMzListTarget";
 	public static final Boolean DEF_ADD_UNKNOWN_MZ_LIST_TARGET = true;
