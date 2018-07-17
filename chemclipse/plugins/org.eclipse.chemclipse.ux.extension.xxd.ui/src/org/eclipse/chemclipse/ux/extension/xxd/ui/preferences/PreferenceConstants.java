@@ -117,6 +117,8 @@ public class PreferenceConstants {
 	 */
 	public static final String P_OVERLAY_CHART_COMPRESSION_TYPE = "overlayChartCompressionType";
 	public static final String DEF_OVERLAY_CHART_COMPRESSION_TYPE = LineChart.COMPRESSION_MEDIUM;
+	public static final String P_SHOW_REFERENCED_CHROMATOGRAMS = "showReferencedChromatograms";
+	public static final boolean DEF_SHOW_REFERENCED_CHROMATOGRAMS = true;
 	public static final String P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY = "colorSchemeDisplayNormalOverlay";
 	public static final String DEF_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY = Colors.COLOR_SCHEME_RED;
 	public static final String P_COLOR_SCHEME_DISPLAY_SIC_OVERLAY = "colorSchemeDisplaySICOverlay";

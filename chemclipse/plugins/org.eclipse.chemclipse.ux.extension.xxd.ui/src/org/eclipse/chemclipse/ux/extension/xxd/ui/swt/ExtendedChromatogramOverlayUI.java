@@ -914,7 +914,7 @@ public class ExtendedChromatogramOverlayUI {
 		setComboAxisItems();
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void refreshUpdateOverlayChart() {
 
 		if(chromatogramSelections.size() > 0) {
@@ -927,7 +927,8 @@ public class ExtendedChromatogramOverlayUI {
 			for(int i = 0; i < chromatogramSelections.size(); i++) {
 				IChromatogramSelection chromatogramSelection = chromatogramSelections.get(i);
 				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-				String chromatogramName = chromatogram.getName() + OverlayChartSupport.EDITOR_TAB + (i + 1);
+				List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
+				String chromatogramName = chromatogram.getName() + ChromatogramChartSupport.EDITOR_TAB + (i + 1);
 				/*
 				 * Select which series shall be displayed.
 				 */
@@ -994,6 +995,18 @@ public class ExtendedChromatogramOverlayUI {
 							availableSeriesIds.add(seriesId);
 							if(!baseChart.isSeriesContained(seriesId)) {
 								lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, ions, false));
+							}
+							//
+							if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+								int j = 1;
+								for(IChromatogram referencedChromatogram : referencedChromatograms) {
+									String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j;
+									String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
+									availableSeriesIds.add(referenceSeriesId);
+									if(!baseChart.isSeriesContained(referenceSeriesId)) {
+										lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, overlayType, derivativeType, color, ions, false));
+									}
+								}
 							}
 						}
 					}

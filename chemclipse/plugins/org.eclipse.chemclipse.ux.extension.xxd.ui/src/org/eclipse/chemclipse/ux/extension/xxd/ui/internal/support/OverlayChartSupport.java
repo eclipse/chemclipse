@@ -20,7 +20,6 @@ public class OverlayChartSupport {
 	public static final String OVERLAY_TYPE_CONCATENATOR = "+";
 	public static final String ESCAPE_CONCATENATOR = "\\";
 	public static final String SELECTED_IONS_CONCATENATOR = " ";
-	public static final String EDITOR_TAB = "_EditorTab#";
 	public static final String OVERLAY_START_MARKER = "_(";
 	public static final String OVERLAY_STOP_MARKER = ")";
 	public static final String DELIMITER_SIGNAL_DERIVATIVE = ",";

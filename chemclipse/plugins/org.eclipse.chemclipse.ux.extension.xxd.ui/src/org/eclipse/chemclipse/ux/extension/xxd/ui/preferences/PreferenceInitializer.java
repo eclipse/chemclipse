@@ -54,6 +54,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 * Overlay
 		 */
 		store.setDefault(PreferenceConstants.P_OVERLAY_CHART_COMPRESSION_TYPE, PreferenceConstants.DEF_OVERLAY_CHART_COMPRESSION_TYPE);
+		store.setDefault(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS, PreferenceConstants.DEF_SHOW_REFERENCED_CHROMATOGRAMS);
 		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY);
 		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SIC_OVERLAY, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_SIC_OVERLAY);
 		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SWC_OVERLAY, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_SWC_OVERLAY);

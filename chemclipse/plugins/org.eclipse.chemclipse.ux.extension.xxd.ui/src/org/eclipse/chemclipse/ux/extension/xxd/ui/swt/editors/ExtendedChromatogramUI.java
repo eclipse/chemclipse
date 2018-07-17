@@ -1728,7 +1728,7 @@ public class ExtendedChromatogramUI {
 				if(chromatogramSelection == referencedChromatogramSelection) {
 					references.add("Current Chromatogram " + type);
 				} else {
-					references.add("Chromatogram Reference #" + i++ + " " + type);
+					references.add("Chromatogram" + ChromatogramChartSupport.REFERENCE_MARKER + i++ + " " + type);
 				}
 			}
 		}

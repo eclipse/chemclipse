@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.eavp.service.swtchart.preferences.PreferenceSupport;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -38,6 +39,7 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		//
 		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY, "Display Color Scheme Normal", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS, "Show Referenced Chromatograms", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SIC_OVERLAY, "Display Color Scheme SIC", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SWC_OVERLAY, "Display Color Scheme SWC", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_TIC_OVERLAY, "Line Style TIC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));

@@ -46,6 +46,8 @@ import org.swtchart.LineStyle;
 
 public class ChromatogramChartSupport {
 
+	public static final String EDITOR_TAB = "_EditorTab#";
+	public static final String REFERENCE_MARKER = "_Reference#";
 	/*
 	 * Overlay Type
 	 */
