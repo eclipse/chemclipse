@@ -63,8 +63,6 @@ public interface IPerspectiveAndViewIds {
 	String VIEW_INTEGRATION_RESULTS = "org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.integrationResultView";
 	String VIEW_MASS_SPECTRUM_IDENTIFICATION_RESULTS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumTargetsView";
 	String VIEW_CHROMATOGRAM_FILE_EXPLORER_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramFileExplorerView";
-	String VIEW_CHROMATOGRAM_FILE_EXPLORER_WSD = "org.eclipse.chemclipse.ux.extension.wsd.ui.part.chromatogramFileExplorerView";
-	String VIEW_CHROMATOGRAM_OVERVIEW_WSD = "org.eclipse.chemclipse.ux.extension.wsd.ui.part.chromatogramOverviewView";
 	String VIEW_MASS_SPECTRA_IDENTIFIED_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectraIdentifiedList";
 	String VIEW_MASS_SPECTRUM_TARGETS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumTargetsView";
 	String VIEW_OPTIMIZED_MASS_SPECTRUM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleOptimizedNominalMassSpectrumView";
