@@ -22,9 +22,9 @@ import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageCalculator extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePage() {
+	public PreferencePageCalculator() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Retention Index Filter Settings.");

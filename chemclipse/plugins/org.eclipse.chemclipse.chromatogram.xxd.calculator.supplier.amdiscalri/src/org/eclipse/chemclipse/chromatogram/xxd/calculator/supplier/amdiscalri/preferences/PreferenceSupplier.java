@@ -31,25 +31,39 @@ import org.osgi.service.prefs.BackingStoreException;
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	//
+	/*
+	 * RI Calculation
+	 */
 	public static final String P_RETENTION_INDEX_FILES = "retentionIndexFiles";
 	public static final String DEF_RETENTION_INDEX_FILES = "";
-	//
 	public static final String P_USE_AUTO_DETECT_INDICES = "useAutoDetectIndices";
 	public static final boolean DEF_USE_AUTO_DETECT_INDICES = true;
 	public static final String[][] AUTO_DETECT_OPTIONS = new String[][]{{"Auto-Detect (Chromatogram/File)", Boolean.toString(true)}, {"File Only", Boolean.toString(false)}};
-	//
 	public static final String P_USE_DEFAULT_IF_COLUMN_IS_NA = "useDefaultIfColumnIsNA";
 	public static final boolean DEF_USE_DEFAULT_IF_COLUMN_IS_NA = true;
-	//
 	public static final String P_FILTER_PATH_INDEX_FILES = "filterPathIndexFiles";
 	public static final String DEF_FILTER_PATH_INDEX_FILES = "";
-	//
 	public static final String P_FILTER_PATH_MODELS_MSD = "filterPathModelsMSD";
 	public static final String DEF_FILTER_PATH_MODELS_MSD = "";
-	//
 	public static final String P_FILTER_PATH_MODELS_CSD = "filterPathModelsCSD";
 	public static final String DEF_FILTER_PATH_MODELS_CSD = "";
+	/*
+	 * Alkane Identifier
+	 */
+	public static final String P_NUMBER_OF_TARGETS = "numberOfTargets";
+	public static final int DEF_NUMBER_OF_TARGETS = 15;
+	public static final int MIN_NUMBER_OF_TARGETS = 1;
+	public static final int MAX_NUMBER_OF_TARGETS = 100;
+	public static final String P_MIN_MATCH_FACTOR = "minMatchFactor";
+	public static final float DEF_MIN_MATCH_FACTOR = 70.0f;
+	public static final float MIN_MIN_MATCH_FACTOR = 0.0f;
+	public static final float MAX_MIN_MATCH_FACTOR = 100.0f;
+	public static final String P_MIN_REVERSE_MATCH_FACTOR = "minReverseMatchFactor";
+	public static final float DEF_MIN_REVERSE_MATCH_FACTOR = 70.0f;
+	public static final float MIN_MIN_REVERSE_MATCH_FACTOR = 0.0f;
+	public static final float MAX_MIN_REVERSE_MATCH_FACTOR = 100.0f;
+	public static final String P_ADD_UNKNOWN_MZ_LIST = "addUnknownMzList";
+	public static final boolean DEF_ADD_UNKNOWN_MZ_LIST = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -83,6 +97,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_FILTER_PATH_INDEX_FILES, DEF_FILTER_PATH_INDEX_FILES);
 		defaultValues.put(P_FILTER_PATH_MODELS_MSD, DEF_FILTER_PATH_MODELS_MSD);
 		defaultValues.put(P_FILTER_PATH_MODELS_CSD, DEF_FILTER_PATH_MODELS_CSD);
+		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
+		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
+		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
+		defaultValues.put(P_ADD_UNKNOWN_MZ_LIST, Boolean.toString(DEF_ADD_UNKNOWN_MZ_LIST));
 		return defaultValues;
 	}
 
@@ -166,6 +184,30 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static void setFilterPathModelsCSD(String filterPath) {
 
 		setFilterPath(P_FILTER_PATH_MODELS_CSD, filterPath);
+	}
+
+	public static int getNumberOfTargets() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		return preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS);
+	}
+
+	public static float getMinMatchFactor() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		return preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR);
+	}
+
+	public static float getMinReverseMatchFactor() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		return preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR);
+	}
+
+	public static boolean isAddUnknownMzList() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		return preferences.getBoolean(P_ADD_UNKNOWN_MZ_LIST, DEF_ADD_UNKNOWN_MZ_LIST);
 	}
 
 	private static String getFilterPath(String key, String def) {

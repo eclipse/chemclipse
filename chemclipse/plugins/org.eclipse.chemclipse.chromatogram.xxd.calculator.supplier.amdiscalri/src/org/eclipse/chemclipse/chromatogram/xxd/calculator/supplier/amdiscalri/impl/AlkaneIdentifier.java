@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorPeakIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.DatabasesCache;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.PathResolver;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -131,10 +132,10 @@ public class AlkaneIdentifier {
 		fileIdentifierSettings.setMassSpectraFiles(massSpectraFiles);
 		fileIdentifierSettings.setUsePreOptimization(false);
 		fileIdentifierSettings.setThresholdPreOptimization(0.1d);
-		fileIdentifierSettings.setNumberOfTargets(5);
-		fileIdentifierSettings.setMinMatchFactor(70.0f);
-		fileIdentifierSettings.setMinReverseMatchFactor(70.0f);
-		fileIdentifierSettings.setAddUnknownMzListTarget(false);
+		fileIdentifierSettings.setNumberOfTargets(PreferenceSupplier.getNumberOfTargets());
+		fileIdentifierSettings.setMinMatchFactor(PreferenceSupplier.getMinMatchFactor());
+		fileIdentifierSettings.setMinReverseMatchFactor(PreferenceSupplier.getMinReverseMatchFactor());
+		fileIdentifierSettings.setAddUnknownMzListTarget(PreferenceSupplier.isAddUnknownMzList());
 		fileIdentifierSettings.setAlternateIdentifierId(IDENTIFIER);
 	}
 }

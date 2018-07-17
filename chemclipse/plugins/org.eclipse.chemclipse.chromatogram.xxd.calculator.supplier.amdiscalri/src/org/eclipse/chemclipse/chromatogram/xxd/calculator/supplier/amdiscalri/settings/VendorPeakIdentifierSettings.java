@@ -15,17 +15,12 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakI
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettings implements IVendorPeakIdentifierSettings {
 
-	@JsonProperty(value = "Mass Spectra Files", defaultValue = "")
-	@JsonPropertyDescription(value = "Use a semicolon to separate the path of several files.") // see FileListUtil()
-	private String massSpectraFiles = "";
-	@JsonProperty(value = "Pre-Optimization", defaultValue = "false")
-	private boolean usePreOptimization = false;
-	@JsonProperty(value = "Threshold Pre-Optimization", defaultValue = "0.12")
-	private double thresholdPreOptimization = 0.12;
+	private String massSpectraFiles = ""; // Don't modify. The value will be set by the plugin.
+	private boolean usePreOptimization = false; // Don't modify. The value will be set by the plugin.
+	private double thresholdPreOptimization = 0.12; // Don't modify. The value will be set by the plugin.
 	@JsonProperty(value = "Number of Targets", defaultValue = "15")
 	private int numberOfTargets = 15;
 	@JsonProperty(value = "Min Match Factor", defaultValue = "80.0")
@@ -34,8 +29,7 @@ public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettings
 	private float minReverseMatchFactor = 80.0f;
 	@JsonProperty(value = "Add Unknown m/z List Target", defaultValue = "true")
 	private boolean addUnknownMzListTarget = true;
-	@JsonProperty(value = "Alternate Identifier Id", defaultValue = "")
-	private String alternateIdentifierId = "";
+	private String alternateIdentifierId = ""; // Don't modify. The value will be set by the plugin.
 
 	@Override
 	public String getMassSpectraFiles() {
