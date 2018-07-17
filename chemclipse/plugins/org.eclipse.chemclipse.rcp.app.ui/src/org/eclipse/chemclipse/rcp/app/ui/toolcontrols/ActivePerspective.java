@@ -30,13 +30,12 @@ public class ActivePerspective {
 
 	@Inject
 	private Composite parent;
-	@Inject
-	private IEventBroker eventBroker;
-	@Inject
-	private EventHandler eventHandler;
+	//
+	private IEventBroker eventBroker = null;
+	private EventHandler eventHandler = null;
 
 	@PostConstruct
-	private void createControl() {
+	private void initialize() {
 
 		parent.setLayout(new GridLayout(1, true));
 		//
@@ -72,7 +71,7 @@ public class ActivePerspective {
 	@PreDestroy
 	private void preDestroy() {
 
-		if(eventBroker != null) {
+		if(eventBroker != null && eventHandler != null) {
 			eventBroker.unsubscribe(eventHandler);
 		}
 	}
