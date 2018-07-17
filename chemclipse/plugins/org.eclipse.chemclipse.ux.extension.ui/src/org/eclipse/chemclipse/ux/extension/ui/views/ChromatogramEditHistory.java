@@ -26,18 +26,18 @@ import org.osgi.service.event.EventHandler;
 
 public class ChromatogramEditHistory extends EditHistoryPart {
 
-	@Inject
 	private EPartService partService;
-	@Inject
 	private MPart part;
-	@Inject
 	private IEventBroker eventBroker;
-	@Inject
 	private EventHandler eventHandler;
 
 	@Inject
-	public ChromatogramEditHistory(EPartService partService, MPart part, IEventBroker eventBroker) {
+	public ChromatogramEditHistory(EPartService partService, MPart part, IEventBroker eventBroker, EventHandler eventHandler) {
 		super(partService, part, eventBroker);
+		this.partService = partService;
+		this.part = part;
+		this.eventBroker = eventBroker;
+		this.eventHandler = eventHandler;
 		subscribe();
 	}
 

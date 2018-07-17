@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.internal.provider.EditHistoryContentProvider;
 import org.eclipse.chemclipse.support.ui.internal.provider.EditHistoryLabelProvider;
 import org.eclipse.chemclipse.support.ui.internal.provider.EditHistoryTableSorter;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -44,7 +45,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -55,8 +55,7 @@ import org.osgi.service.event.EventHandler;
 public class EditHistoryPart {
 
 	private static final String POPUP_MENU_ID = "org.eclipse.chemclipse.support.ui.parts.editHistoryPart.popup"; // $NON-NLS-1$
-	@Inject
-	private Composite parent;
+	//
 	private TableViewer tableViewer;
 	private String COLUMN_DATE = SupportMessages.INSTANCE().getMessage(ISupportMessages.COLUMN_DATE);
 	private String COLUMN_DESCRIPTION = SupportMessages.INSTANCE().getMessage(ISupportMessages.COLUMN_DESCRIPTION);
@@ -64,6 +63,8 @@ public class EditHistoryPart {
 	private String[] titles = {COLUMN_DATE, COLUMN_DESCRIPTION, COLUMN_EDITOR};
 	private int[] bounds = {100, 100, 100};
 	//
+	@Inject
+	private Composite parent;
 	private EPartService partService;
 	private MPart part;
 	private IEventBroker eventBroker;
@@ -89,7 +90,7 @@ public class EditHistoryPart {
 		/*
 		 * Clipboard
 		 */
-		clipboard = new Clipboard(Display.getDefault());
+		clipboard = new Clipboard(DisplayUtils.getDisplay());
 		//
 		parent.setLayout(new FillLayout());
 		tableViewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
