@@ -142,13 +142,19 @@ public class ExtendedScanTableUI {
 		updateObject();
 	}
 
+	public void update(Object object) {
+
+		this.object = object;
+		updateObject();
+	}
+
 	/**
 	 * Enable or disable the edit functionality.
 	 * It is disabled by default.
 	 * 
 	 * @param enabled
 	 */
-	public void enableEditModus(boolean enabled) {
+	protected void enableEditModus(boolean enabled) {
 
 		/*
 		 * Modify the toolbar and show/hide the toolbar edit button.
@@ -175,15 +181,9 @@ public class ExtendedScanTableUI {
 	 * 
 	 * @param fireUpdate
 	 */
-	public void setFireUpdate(boolean fireUpdate) {
+	protected void setFireUpdate(boolean fireUpdate) {
 
 		this.fireUpdate = fireUpdate;
-	}
-
-	public void update(Object object) {
-
-		this.object = object;
-		updateObject();
 	}
 
 	private void updateObject() {
@@ -504,13 +504,6 @@ public class ExtendedScanTableUI {
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
 		return text;
 	}
 
@@ -526,13 +519,6 @@ public class ExtendedScanTableUI {
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
 		return text;
 	}
 
@@ -547,7 +533,11 @@ public class ExtendedScanTableUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				addSignal();
+				if(object != null) {
+					addSignal();
+				} else {
+					MessageDialog.openError(DisplayUtils.getShell(button), "Add Signal", "Please load a scan first.");
+				}
 			}
 		});
 	}

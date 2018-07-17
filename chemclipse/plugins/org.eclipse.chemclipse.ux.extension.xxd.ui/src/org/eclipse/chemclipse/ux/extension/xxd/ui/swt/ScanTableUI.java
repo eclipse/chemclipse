@@ -102,6 +102,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 			IScanWSD scanWSD = (IScanWSD)scan;
 			super.setInput(scanWSD.getScanSignals());
 		} else {
+			getTable().removeAll();
 			super.setInput(null);
 		}
 	}

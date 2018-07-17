@@ -315,7 +315,7 @@ public class ExtendedSubtractScanUI {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSubtract));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(button), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
@@ -338,14 +338,10 @@ public class ExtendedSubtractScanUI {
 
 		switch(tabFolder.getSelectionIndex()) {
 			case INDEX_CHART:
-				if(scanChartUI != null) {
-					scanChartUI.setInput(scanMSD);
-				}
+				scanChartUI.setInput(scanMSD);
 				break;
 			case INDEX_TABLE:
-				if(extendedScanTableUI != null) {
-					extendedScanTableUI.update(scanMSD);
-				}
+				extendedScanTableUI.update(scanMSD);
 				break;
 		}
 	}
