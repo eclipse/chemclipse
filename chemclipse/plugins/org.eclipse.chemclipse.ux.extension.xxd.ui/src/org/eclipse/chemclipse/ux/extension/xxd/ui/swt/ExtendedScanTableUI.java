@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
@@ -91,7 +92,10 @@ public class ExtendedScanTableUI {
 	//
 	private DeleteMenuEntry deleteMenuEntry;
 	private DeleteKeyEventProcessor deleteKeyEventProcessor;
-	//
+	/*
+	 * Set whether to force the edit modus.
+	 */
+	private boolean forceEnableEditModus = false;
 	private boolean fireUpdate = true;
 	//
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
@@ -149,12 +153,28 @@ public class ExtendedScanTableUI {
 	}
 
 	/**
+	 * By default, an update is fired when modifying the scan.
+	 * If this value is set to false, no update will be fired.
+	 * 
+	 * @param fireUpdate
+	 */
+	protected void setFireUpdate(boolean fireUpdate) {
+
+		this.fireUpdate = fireUpdate;
+	}
+
+	protected void forceEnableEditModus(boolean forceEnableEditModus) {
+
+		this.forceEnableEditModus = forceEnableEditModus;
+	}
+
+	/**
 	 * Enable or disable the edit functionality.
 	 * It is disabled by default.
 	 * 
 	 * @param enabled
 	 */
-	protected void enableEditModus(boolean enabled) {
+	private void enableEditModus(boolean enabled) {
 
 		/*
 		 * Modify the toolbar and show/hide the toolbar edit button.
@@ -175,22 +195,16 @@ public class ExtendedScanTableUI {
 		scanTableUI.applySettings(tableSettings);
 	}
 
-	/**
-	 * By default, an update is fired when modifying the scan.
-	 * If this value is set to false, no update will be fired.
-	 * 
-	 * @param fireUpdate
-	 */
-	protected void setFireUpdate(boolean fireUpdate) {
-
-		this.fireUpdate = fireUpdate;
-	}
-
 	private void updateObject() {
 
 		IScan scan = null;
 		if(object instanceof IScan) {
 			scan = (IScan)object;
+			if(forceEnableEditModus) {
+				enableEditModus(true);
+			} else {
+				enableEditModus(scan instanceof ILibraryMassSpectrum);
+			}
 		} else if(object instanceof IPeak) {
 			IPeak peak = (IPeak)object;
 			scan = peak.getPeakModel().getPeakMaximum();

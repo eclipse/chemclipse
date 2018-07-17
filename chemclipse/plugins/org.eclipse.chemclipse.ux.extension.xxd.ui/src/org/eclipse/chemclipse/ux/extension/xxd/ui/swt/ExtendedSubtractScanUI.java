@@ -156,7 +156,7 @@ public class ExtendedSubtractScanUI {
 		tabItem.setControl(composite);
 		//
 		extendedScanTableUI = new ExtendedScanTableUI(composite);
-		extendedScanTableUI.enableEditModus(true);
+		extendedScanTableUI.forceEnableEditModus(true);
 		extendedScanTableUI.setFireUpdate(false);
 	}
 
