@@ -727,6 +727,12 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	}
 
 	@Override
+	public void removeAllReferencedChromatograms() {
+
+		referencedChromatograms.clear();
+	}
+
+	@Override
 	public String getChromatogramIntegratorDescription() {
 
 		return chromatogramIntegratorDescription;

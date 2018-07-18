@@ -168,6 +168,8 @@ public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatog
 	@SuppressWarnings("rawtypes")
 	void removeReferencedChromatogram(IChromatogram chromatogram);
 
+	void removeAllReferencedChromatograms();
+
 	/**
 	 * Removes all targets from the chromatogram.
 	 */
