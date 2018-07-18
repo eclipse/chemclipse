@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.Chro
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1006;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1007;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1100;
+import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1300;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.ReaderHelper;
@@ -121,6 +122,8 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 			chromatogramReader = new ChromatogramReader_1007();
 		} else if(version.equals(IFormat.VERSION_1100)) {
 			chromatogramReader = new ChromatogramReader_1100();
+		} else if(version.equals(IFormat.VERSION_1300)) {
+			chromatogramReader = new ChromatogramReader_1300();
 		}
 		//
 		return chromatogramReader;

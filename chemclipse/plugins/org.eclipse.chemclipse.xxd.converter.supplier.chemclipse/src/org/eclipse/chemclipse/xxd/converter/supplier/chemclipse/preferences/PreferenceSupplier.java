@@ -111,7 +111,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static String[][] getVersions() {
 
 		// TODO optimize the version handling!
-		int versions = 5;
+		int versions = 6;
 		String[][] elements = new String[versions][2];
 		//
 		elements[0][0] = IFormat.VERSION_0701 + " (Nernst)";
@@ -128,6 +128,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		//
 		elements[4][0] = IFormat.VERSION_1100 + " (Diels)";
 		elements[4][1] = IFormat.VERSION_1100;
+		//
+		elements[5][0] = IFormat.VERSION_1300 + " (Dalton)";
+		elements[5][1] = IFormat.VERSION_1300;
 		//
 		return elements;
 	}

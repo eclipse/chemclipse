@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.Chro
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1006;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1007;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1100;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1300;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.VendorChromatogram;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.VendorScan;
@@ -144,6 +145,8 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 			chromatogramReader = new ChromatogramReader_1007();
 		} else if(version.equals(IFormat.VERSION_1100)) {
 			chromatogramReader = new ChromatogramReader_1100();
+		} else if(version.equals(IFormat.VERSION_1300)) {
+			chromatogramReader = new ChromatogramReader_1300();
 		}
 		//
 		return chromatogramReader;

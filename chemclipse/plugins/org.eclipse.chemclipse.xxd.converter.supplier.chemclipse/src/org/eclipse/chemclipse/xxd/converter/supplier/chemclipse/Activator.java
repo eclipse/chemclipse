@@ -30,17 +30,13 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 
 		Activator.context = bundleContext;
-		System.out.println("Create new *.ocb version. Persist:");
-		System.out.println("Scan - relative retention time");
-		System.out.println("IMeasurementInfo - header data map");
-		System.out.println("ScanWSD - wavelength int -> double");
-		System.out.println("Alex - Compound Class + Identification");
+		System.out.println("ReferenceChromatograms");
+		System.out.println("WSD Peaks");
 		System.out.println("ScanWSD - Targets");
 		System.out.println("ChromatogramWSD - Targets");
-		System.out.println("ILibraryInformation - retention time and retention index");
-		System.out.println("Peak Classifier Field");
-		System.out.println("ISeparationColumn");
+		System.out.println("ChromatogramCSD - Targets");
 		System.out.println("CSD, WSD save Chromatogram/Peak/Scan Targets");
+		System.out.println("Write Monitor ... Progress");
 	}
 
 	/*

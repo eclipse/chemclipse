@@ -47,7 +47,7 @@ public class MagicNumberMatcherWSD extends AbstractMagicNumberMatcher implements
 						 * DIR_CHROMATOGRAM
 						 * Versions <= 0.9.0.3
 						 */
-						if(name.equals(IFormat.DIR_CHROMATOGRAM_FID) || name.equals(IFormat.DIR_CHROMATOGRAM_MSD) || name.equals(IFormat.DIR_CHROMATOGRAM_WSD) || name.equals(IFormat.DIR_CHROMATOGRAM)) {
+						if(name.equals(IFormat.DIR_CHROMATOGRAM_FID) || name.equals(IFormat.DIR_CHROMATOGRAM_CSD) || name.equals(IFormat.DIR_CHROMATOGRAM_MSD) || name.equals(IFormat.DIR_CHROMATOGRAM_WSD) || name.equals(IFormat.DIR_CHROMATOGRAM)) {
 							isValidFormat = true;
 							break exitloop;
 						}
