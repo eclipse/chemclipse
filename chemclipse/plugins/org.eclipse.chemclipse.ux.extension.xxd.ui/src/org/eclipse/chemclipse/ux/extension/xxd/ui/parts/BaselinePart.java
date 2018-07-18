@@ -17,38 +17,38 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.swt.ui.components.baseline.BaselineAndChromatogramUI;
-import org.eclipse.chemclipse.swt.ui.support.AxisTitlesIntensityScale;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedBaselineUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 public class BaselinePart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private BaselineAndChromatogramUI baselineAndChromatogramUI;
+	private ExtendedBaselineUI extendedBaselineUI;
 
 	@Inject
 	public BaselinePart(Composite parent, MPart part) {
 		super(part);
 		parent.setLayout(new FillLayout());
-		baselineAndChromatogramUI = new BaselineAndChromatogramUI(parent, SWT.NONE, new AxisTitlesIntensityScale());
+		extendedBaselineUI = new ExtendedBaselineUI(parent);
 	}
 
 	@Focus
 	public void setFocus() {
 
 		updateObjects(getObjects(), getTopic());
-		baselineAndChromatogramUI.setFocus();
 	}
 
 	@Override
 	public void registerEvents() {
 
 		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
 	}
 
@@ -63,12 +63,10 @@ public class BaselinePart extends AbstractDataUpdateSupport implements IDataUpda
 			if(!isUnloadEvent(topic)) {
 				object = objects.get(0);
 				if(object instanceof IChromatogramSelection) {
-					baselineAndChromatogramUI.update((IChromatogramSelection)object);
-				} else {
-					baselineAndChromatogramUI.update(null);
+					extendedBaselineUI.update((IChromatogramSelection)object);
 				}
 			} else {
-				baselineAndChromatogramUI.update(null);
+				extendedBaselineUI.update(null);
 			}
 		}
 	}

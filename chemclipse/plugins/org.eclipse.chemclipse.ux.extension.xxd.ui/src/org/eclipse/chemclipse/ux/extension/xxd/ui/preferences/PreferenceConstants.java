@@ -362,4 +362,11 @@ public class PreferenceConstants {
 	public static final String DEF_COLUMN_ORDER_SCAN_LIST = "";
 	public static final String P_COLUMN_ORDER_TARGET_LIST = "columnOrderTargetList";
 	public static final String DEF_COLUMN_ORDER_TARGET_LIST = "";
+	/*
+	 * Baseline
+	 */
+	public static final String P_BASELINE_CHART_COMPRESSION_TYPE = "baselineChartCompressionType";
+	public static final String DEF_BASELINE_CHART_COMPRESSION_TYPE = LineChart.COMPRESSION_MEDIUM;
+	public static final String P_COLOR_SCHEME_DISPLAY_BASELINE = "colorSchemeDisplayBaseline";
+	public static final String DEF_COLOR_SCHEME_DISPLAY_BASELINE = Colors.COLOR_SCHEME_RED;
 }

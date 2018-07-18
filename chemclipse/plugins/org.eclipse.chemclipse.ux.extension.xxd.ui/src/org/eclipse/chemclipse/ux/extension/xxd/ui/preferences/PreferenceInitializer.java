@@ -176,5 +176,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_COLUMN_ORDER_PEAK_LIST, PreferenceConstants.DEF_COLUMN_ORDER_PEAK_LIST);
 		store.setDefault(PreferenceConstants.P_COLUMN_ORDER_SCAN_LIST, PreferenceConstants.DEF_COLUMN_ORDER_SCAN_LIST);
 		store.setDefault(PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST, PreferenceConstants.DEF_COLUMN_ORDER_TARGET_LIST);
+		/*
+		 * Baseline
+		 */
+		store.setDefault(PreferenceConstants.P_BASELINE_CHART_COMPRESSION_TYPE, PreferenceConstants.DEF_BASELINE_CHART_COMPRESSION_TYPE);
+		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_BASELINE, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_BASELINE);
 	}
 }
