@@ -24,6 +24,11 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IChromatogram
 
 public abstract class AbstractChromatogramReader extends AbstractChromatogramMSDReader implements IChromatogramMSDZipReader {
 
+	public DataInputStream getDataInputStream(Object object, String entryName) throws IOException {
+
+		return getDataInputStream(object, entryName, false);
+	}
+
 	/**
 	 * Object = ZipFile or ZipInputStream
 	 * May return null;
@@ -33,12 +38,12 @@ public abstract class AbstractChromatogramReader extends AbstractChromatogramMSD
 	 * @return {@link DataInputStream}
 	 * @throws IOException
 	 */
-	public DataInputStream getDataInputStream(Object object, String entryName) throws IOException {
+	public DataInputStream getDataInputStream(Object object, String entryName, boolean isDirectory) throws IOException {
 
 		if(object instanceof ZipFile) {
-			return getDataInputStream((ZipFile)object, entryName);
+			return getDataInputStream((ZipFile)object, entryName, isDirectory);
 		} else if(object instanceof ZipInputStream) {
-			return getDataInputStream((ZipInputStream)object, entryName);
+			return getDataInputStream((ZipInputStream)object, entryName, isDirectory);
 		} else {
 			return null;
 		}
@@ -46,16 +51,28 @@ public abstract class AbstractChromatogramReader extends AbstractChromatogramMSD
 
 	public DataInputStream getDataInputStream(ZipFile zipFile, String entryName) throws IOException {
 
+		return getDataInputStream(zipFile, entryName, false);
+	}
+
+	public DataInputStream getDataInputStream(ZipFile zipFile, String entryName, boolean isDirectory) throws IOException {
+
 		Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
 		while(zipEntries.hasMoreElements()) {
 			/*
 			 * Check each file.
 			 */
 			ZipEntry zipEntry = zipEntries.nextElement();
-			if(!zipEntry.isDirectory()) {
-				String name = zipEntry.getName();
+			String name = zipEntry.getName();
+			//
+			if(isDirectory && zipEntry.isDirectory()) {
 				if(name.equals(entryName)) {
 					return new DataInputStream(new BufferedInputStream(zipFile.getInputStream(zipEntry)));
+				}
+			} else {
+				if(!zipEntry.isDirectory()) {
+					if(name.equals(entryName)) {
+						return new DataInputStream(new BufferedInputStream(zipFile.getInputStream(zipEntry)));
+					}
 				}
 			}
 		}
@@ -64,15 +81,26 @@ public abstract class AbstractChromatogramReader extends AbstractChromatogramMSD
 
 	public DataInputStream getDataInputStream(ZipInputStream zipInputStream, String entryName) throws IOException {
 
+		return getDataInputStream(zipInputStream, entryName, false);
+	}
+
+	public DataInputStream getDataInputStream(ZipInputStream zipInputStream, String entryName, boolean isDirectory) throws IOException {
+
 		ZipEntry zipEntry;
 		while((zipEntry = zipInputStream.getNextEntry()) != null) {
 			/*
 			 * Check each file.
 			 */
-			if(!zipEntry.isDirectory()) {
-				String name = zipEntry.getName();
+			String name = zipEntry.getName();
+			if(isDirectory && zipEntry.isDirectory()) {
 				if(name.equals(entryName)) {
 					return new DataInputStream(zipInputStream);
+				}
+			} else {
+				if(!zipEntry.isDirectory()) {
+					if(name.equals(entryName)) {
+						return new DataInputStream(zipInputStream);
+					}
 				}
 			}
 		}

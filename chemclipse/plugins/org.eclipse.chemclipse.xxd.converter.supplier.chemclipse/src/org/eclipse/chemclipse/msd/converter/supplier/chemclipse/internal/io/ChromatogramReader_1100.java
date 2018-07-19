@@ -320,7 +320,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		/*
 		 * Scans
 		 */
-		IReaderProxy readerProxy = new ReaderProxy_1007();
+		IReaderProxy readerProxy = new ReaderProxy_1100();
 		int scans = dataInputStream.readInt();
 		SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_SCAN, scans * 2);
 		try {

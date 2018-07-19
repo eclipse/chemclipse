@@ -108,7 +108,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		 * Referenced Chromatograms
 		 */
 		List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
-		writeChromatogramReferenceInfo(zipOutputStream, directoryPrefix, referencedChromatograms.size(), monitor);
+		writeChromatogramReferenceInfo(zipOutputStream, directoryPrefix, referencedChromatograms, monitor);
 		writeReferencedChromatograms(zipOutputStream, directoryPrefix, referencedChromatograms, monitor);
 	}
 
@@ -680,12 +680,13 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramReferenceInfo(ZipOutputStream zipOutputStream, String directoryPrefix, int numberOfReferencedChromatograms, IProgressMonitor monitor) throws IOException {
+	@SuppressWarnings("rawtypes")
+	private void writeChromatogramReferenceInfo(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram> referencedChromatograms, IProgressMonitor monitor) throws IOException {
 
 		ZipEntry zipEntryType = new ZipEntry(directoryPrefix + IFormat.FILE_REFERENCE_INFO);
 		zipOutputStream.putNextEntry(zipEntryType);
 		DataOutputStream dataOutputStream = new DataOutputStream(zipOutputStream);
-		dataOutputStream.writeInt(numberOfReferencedChromatograms);
+		dataOutputStream.writeInt(referencedChromatograms.size());
 		zipOutputStream.closeEntry();
 	}
 
