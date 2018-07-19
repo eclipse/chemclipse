@@ -13,10 +13,6 @@ package org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram;
 
 import java.util.List;
 
-/**
- * This interfaces declares some method to get and set identities of a
- * chromatogram.
- */
 public interface IChromatogramTargetsWSD {
 
 	/**

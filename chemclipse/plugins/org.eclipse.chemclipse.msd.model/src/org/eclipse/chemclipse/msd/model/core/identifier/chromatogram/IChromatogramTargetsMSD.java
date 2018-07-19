@@ -13,12 +13,6 @@ package org.eclipse.chemclipse.msd.model.core.identifier.chromatogram;
 
 import java.util.List;
 
-/**
- * This interfaces declares some method to get and set identities of a
- * chromatogram.
- * 
- * @author eselmeister
- */
 public interface IChromatogramTargetsMSD {
 
 	/**
