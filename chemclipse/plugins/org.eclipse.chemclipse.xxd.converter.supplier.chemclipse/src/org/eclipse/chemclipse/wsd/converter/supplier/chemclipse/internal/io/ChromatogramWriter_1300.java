@@ -17,20 +17,27 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramWriterCSD;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramWriterMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
+import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.ChromatogramWriterWSD;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.IChromatogramWSDZipWriter;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
@@ -64,12 +71,19 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.close();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void writeChromatogram(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		writeVersion(zipOutputStream, directoryPrefix, monitor);
 		writeOverviewFolder(zipOutputStream, directoryPrefix, chromatogram, monitor);
 		writeChromatogramFolder(zipOutputStream, directoryPrefix, chromatogram, monitor);
+		/*
+		 * Referenced Chromatograms
+		 */
+		List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
+		writeChromatogramReferenceInfo(zipOutputStream, directoryPrefix, referencedChromatograms, monitor);
+		writeReferencedChromatograms(zipOutputStream, directoryPrefix, referencedChromatograms, monitor);
 	}
 
 	private void writeVersion(ZipOutputStream zipOutputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException {
@@ -314,6 +328,72 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		//
 		dataOutputStream.flush();
 		zipOutputStream.closeEntry();
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void writeChromatogramReferenceInfo(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram> referencedChromatograms, IProgressMonitor monitor) throws IOException {
+
+		ZipEntry zipEntryType = new ZipEntry(directoryPrefix + IFormat.FILE_REFERENCE_INFO);
+		zipOutputStream.putNextEntry(zipEntryType);
+		DataOutputStream dataOutputStream = new DataOutputStream(zipOutputStream);
+		dataOutputStream.writeInt(referencedChromatograms.size());
+		zipOutputStream.closeEntry();
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void writeReferencedChromatograms(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram> referencedChromatograms, IProgressMonitor monitor) throws IOException {
+
+		ChromatogramWriterMSD chromatogramWriterMSD = new ChromatogramWriterMSD();
+		ChromatogramWriterCSD chromatogramWriterCSD = new ChromatogramWriterCSD();
+		ChromatogramWriterWSD chromatogramWriterWSD = new ChromatogramWriterWSD();
+		//
+		int i = 0;
+		for(IChromatogram referencedChromatogram : referencedChromatograms) {
+			/*
+			 * Create the measurement folder.
+			 */
+			directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.CHROMATOGRAM_REFERENCE_SEPARATOR + i++ + IFormat.DIR_SEPARATOR;
+			ZipEntry zipEntryType = new ZipEntry(directoryPrefix + IFormat.FILE_CHROMATOGRAM_TYPE);
+			zipOutputStream.putNextEntry(zipEntryType);
+			DataOutputStream dataOutputStream = new DataOutputStream(zipOutputStream);
+			//
+			if(referencedChromatogram instanceof IChromatogramMSD) {
+				/*
+				 * MSD
+				 */
+				writeString(dataOutputStream, IFormat.DATA_TYPE_MSD);
+				dataOutputStream.flush();
+				//
+				directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
+				ZipEntry zipEntryChromtogram = new ZipEntry(directoryPrefix);
+				zipOutputStream.putNextEntry(zipEntryChromtogram);
+				chromatogramWriterMSD.writeChromatogram(zipOutputStream, directoryPrefix, (IChromatogramMSD)referencedChromatogram, monitor);
+			} else if(referencedChromatogram instanceof IChromatogramCSD) {
+				/*
+				 * CSD
+				 */
+				writeString(dataOutputStream, IFormat.DATA_TYPE_CSD);
+				dataOutputStream.flush();
+				//
+				directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
+				ZipEntry zipEntryChromtogram = new ZipEntry(directoryPrefix);
+				zipOutputStream.putNextEntry(zipEntryChromtogram);
+				chromatogramWriterCSD.writeChromatogram(zipOutputStream, directoryPrefix, (IChromatogramCSD)referencedChromatogram, monitor);
+			} else if(referencedChromatogram instanceof IChromatogramWSD) {
+				/*
+				 * WSD
+				 */
+				writeString(dataOutputStream, IFormat.DATA_TYPE_WSD);
+				dataOutputStream.flush();
+				//
+				directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
+				ZipEntry zipEntryChromtogram = new ZipEntry(directoryPrefix);
+				zipOutputStream.putNextEntry(zipEntryChromtogram);
+				chromatogramWriterWSD.writeChromatogram(zipOutputStream, directoryPrefix, (IChromatogramWSD)referencedChromatogram, monitor);
+			}
+			//
+			zipOutputStream.closeEntry();
+		}
 	}
 
 	private void writeString(DataOutputStream dataOutputStream, String value) throws IOException {

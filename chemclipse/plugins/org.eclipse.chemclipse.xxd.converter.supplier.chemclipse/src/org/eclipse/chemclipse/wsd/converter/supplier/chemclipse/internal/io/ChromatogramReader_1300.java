@@ -23,6 +23,9 @@ import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramReaderCSD;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
@@ -31,9 +34,12 @@ import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramReaderMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
+import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.ChromatogramReaderWSD;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.IChromatogramWSDZipReader;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.IVendorChromatogram;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorChromatogram;
@@ -53,6 +59,8 @@ import org.eclipse.core.runtime.SubMonitor;
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
 public class ChromatogramReader_1300 extends AbstractChromatogramReader implements IChromatogramWSDZipReader {
+
+	private static final Logger logger = Logger.getLogger(ChromatogramReader_1300.class);
 
 	@Override
 	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -155,8 +163,18 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_WSD), closeStream, chromatogram, monitor);
 			readSeparationColumn(getDataInputStream(object, directoryPrefix + IFormat.FILE_SEPARATION_COLUMN_CSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
-			//
 			setAdditionalInformation(file, chromatogram, monitor);
+			//
+			try {
+				/*
+				 * Read the referenced chromatograms.
+				 * Get the size could lead to an exception if no reference info is stored.
+				 */
+				int size = readChromatogramReferenceInfo(getDataInputStream(object, directoryPrefix + IFormat.FILE_REFERENCE_INFO), closeStream, monitor);
+				readReferencedChromatograms(object, directoryPrefix, chromatogram, size, closeStream, monitor);
+			} catch(IOException e) {
+				logger.info(e);
+			}
 		} finally {
 			SubMonitor.done(monitor);
 		}
@@ -349,6 +367,64 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		//
 		if(closeStream) {
 			dataInputStream.close();
+		}
+	}
+
+	private int readChromatogramReferenceInfo(DataInputStream dataInputStream, boolean closeStream, IProgressMonitor monitor) throws IOException {
+
+		int size = dataInputStream.readInt();
+		if(closeStream) {
+			dataInputStream.close();
+		}
+		return size;
+	}
+
+	private void readReferencedChromatograms(Object object, String directoryPrefix, IChromatogramWSD chromatogram, int size, boolean closeStream, IProgressMonitor monitor) throws IOException {
+
+		for(int i = 0; i < size; i++) {
+			//
+			String directory = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.CHROMATOGRAM_REFERENCE_SEPARATOR + i + IFormat.DIR_SEPARATOR;
+			DataInputStream dataInputStream = getDataInputStream(object, directory + IFormat.FILE_CHROMATOGRAM_TYPE);
+			String dataType = readString(dataInputStream);
+			//
+			if(closeStream) {
+				dataInputStream.close();
+			}
+			//
+			parseChromatogram(object, dataType, directory, chromatogram, closeStream, monitor);
+		}
+	}
+
+	private void parseChromatogram(Object object, String dataType, String directoryPrefix, IChromatogramWSD chromatogram, boolean closeStream, IProgressMonitor monitor) throws IOException {
+
+		String directory = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
+		if(object instanceof ZipFile) {
+			/*
+			 * Chromatogram
+			 */
+			ZipFile zipFile = (ZipFile)object;
+			if(dataType.equals(IFormat.DATA_TYPE_MSD)) {
+				ChromatogramReaderMSD chromatogramReaderMSD = new ChromatogramReaderMSD();
+				IChromatogramMSD chromatogramMSD = chromatogramReaderMSD.read(zipFile, directory, monitor);
+				chromatogram.addReferencedChromatogram(chromatogramMSD);
+			} else if(dataType.equals(IFormat.DATA_TYPE_CSD)) {
+				ChromatogramReaderCSD chromatogramReaderCSD = new ChromatogramReaderCSD();
+				IChromatogramCSD chromatogramCSD = chromatogramReaderCSD.read(zipFile, directory, monitor);
+				chromatogram.addReferencedChromatogram(chromatogramCSD);
+			} else if(dataType.equals(IFormat.DATA_TYPE_WSD)) {
+				ChromatogramReaderWSD chromatogramReaderWSD = new ChromatogramReaderWSD();
+				IChromatogramWSD chromatogramWSD = chromatogramReaderWSD.read(zipFile, directory, monitor);
+				chromatogram.addReferencedChromatogram(chromatogramWSD);
+			}
+		} else {
+			/*
+			 * Reading from a stream currently makes problems.
+			 */
+			// ZipInputStream zipInputStream = new ZipInputStream(getDataInputStream(object, directory, true));
+			//
+			// if(closeStream) {
+			// zipInputStream.close();
+			// }
 		}
 	}
 
