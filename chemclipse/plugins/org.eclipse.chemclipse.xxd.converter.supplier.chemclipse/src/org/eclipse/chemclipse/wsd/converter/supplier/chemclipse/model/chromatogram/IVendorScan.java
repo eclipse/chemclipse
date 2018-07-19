@@ -14,4 +14,11 @@ package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatog
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 
 public interface IVendorScan extends IScanWSD {
+
+	/**
+	 * Stores the total signal.
+	 * 
+	 * @param totalSignal
+	 */
+	void setTotalSignal(float totalSignal);
 }

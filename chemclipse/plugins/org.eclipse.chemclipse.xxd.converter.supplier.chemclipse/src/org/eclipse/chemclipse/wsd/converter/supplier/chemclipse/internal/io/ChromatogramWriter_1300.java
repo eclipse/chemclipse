@@ -32,18 +32,28 @@ import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.ChromatogramWriterWSD;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.IChromatogramWSDZipWriter;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IIntegrationEntryWSD;
+import org.eclipse.chemclipse.wsd.model.core.IPeakModelWSD;
+import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetWSD;
@@ -157,6 +167,8 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 			writeChromatogramScans(zipOutputStream, directoryPrefix, chromatogram, monitor);
 			subMonitor.worked(20);
 			writeChromatogramBaseline(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			writeChromatogramPeaks(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			writeChromatogramArea(zipOutputStream, directoryPrefix, chromatogram, monitor);
 			subMonitor.worked(20);
 			writeChromatogramIdentification(zipOutputStream, directoryPrefix, chromatogram, monitor);
 			writeChromatogramHistory(zipOutputStream, directoryPrefix, chromatogram, monitor);
@@ -274,6 +286,164 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		//
 		dataOutputStream.flush();
 		zipOutputStream.closeEntry();
+	}
+
+	private void writeChromatogramPeaks(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		ZipEntry zipEntry;
+		DataOutputStream dataOutputStream;
+		/*
+		 * Peaks
+		 */
+		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_PEAKS_WSD);
+		zipOutputStream.putNextEntry(zipEntry);
+		dataOutputStream = new DataOutputStream(zipOutputStream);
+		List<IChromatogramPeakWSD> peaks = chromatogram.getPeaks();
+		dataOutputStream.writeInt(peaks.size()); // Number of Peaks
+		// Peaks
+		// int counter = 1;
+		for(IChromatogramPeakWSD peak : peaks) {
+			// monitor.subTask(IConstants.EXPORT_PEAK + counter++);
+			writePeak(dataOutputStream, peak);
+		}
+		//
+		dataOutputStream.flush();
+		zipOutputStream.closeEntry();
+	}
+
+	private void writeChromatogramArea(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		ZipEntry zipEntry;
+		DataOutputStream dataOutputStream;
+		/*
+		 * Area
+		 */
+		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_AREA_WSD);
+		zipOutputStream.putNextEntry(zipEntry);
+		dataOutputStream = new DataOutputStream(zipOutputStream);
+		//
+		List<IIntegrationEntry> chromatogramIntegrationEntries = chromatogram.getChromatogramIntegrationEntries();
+		writeString(dataOutputStream, chromatogram.getChromatogramIntegratorDescription()); // Chromatogram Integrator Description
+		writeIntegrationEntries(dataOutputStream, chromatogramIntegrationEntries);
+		//
+		List<IIntegrationEntry> backgroundIntegrationEntries = chromatogram.getBackgroundIntegrationEntries();
+		writeString(dataOutputStream, chromatogram.getBackgroundIntegratorDescription()); // Background Integrator Description
+		writeIntegrationEntries(dataOutputStream, backgroundIntegrationEntries);
+		//
+		dataOutputStream.flush();
+		zipOutputStream.closeEntry();
+	}
+
+	private void writePeak(DataOutputStream dataOutputStream, IPeakWSD peak) throws IOException {
+
+		IPeakModelWSD peakModel = peak.getPeakModel();
+		//
+		writeString(dataOutputStream, peak.getDetectorDescription()); // Detector Description
+		writeString(dataOutputStream, peak.getQuantifierDescription());
+		dataOutputStream.writeBoolean(peak.isActiveForAnalysis());
+		writeString(dataOutputStream, peak.getIntegratorDescription()); // Integrator Description
+		writeString(dataOutputStream, peak.getModelDescription()); // Model Description
+		writeString(dataOutputStream, peak.getPeakType().toString()); // Peak Type
+		dataOutputStream.writeInt(peak.getSuggestedNumberOfComponents()); // Suggest Number Of Components
+		writeString(dataOutputStream, peak.getClassifier());
+		//
+		dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStartRetentionTime())); // Start Background Abundance
+		dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStopRetentionTime())); // Stop Background Abundance
+		//
+		IScan scan = peakModel.getPeakMaximum();
+		dataOutputStream.writeInt(scan.getRetentionTime()); // Retention Time
+		dataOutputStream.writeInt(scan.getRelativeRetentionTime());
+		dataOutputStream.writeFloat(scan.getTotalSignal()); // Total Signal
+		dataOutputStream.writeInt(scan.getRetentionTimeColumn1());
+		dataOutputStream.writeInt(scan.getRetentionTimeColumn2());
+		dataOutputStream.writeFloat(scan.getRetentionIndex()); // Retention Index
+		dataOutputStream.writeBoolean(scan.hasAdditionalRetentionIndices());
+		if(scan.hasAdditionalRetentionIndices()) {
+			Map<RetentionIndexType, Float> retentionIndicesTyped = scan.getRetentionIndicesTyped();
+			dataOutputStream.writeInt(retentionIndicesTyped.size());
+			for(Map.Entry<RetentionIndexType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
+				writeString(dataOutputStream, retentionIndexTyped.getKey().toString());
+				dataOutputStream.writeFloat(retentionIndexTyped.getValue());
+			}
+		}
+		dataOutputStream.writeInt(scan.getTimeSegmentId()); // Time Segment Id
+		dataOutputStream.writeInt(scan.getCycleNumber()); // Cycle Number
+		//
+		List<Integer> retentionTimes = peakModel.getRetentionTimes();
+		dataOutputStream.writeInt(retentionTimes.size()); // Number Retention Times
+		for(int retentionTime : retentionTimes) {
+			dataOutputStream.writeInt(retentionTime); // Retention Time
+			dataOutputStream.writeFloat(peakModel.getPeakAbundance(retentionTime)); // Intensity
+		}
+		//
+		List<IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
+		writeIntegrationEntries(dataOutputStream, integrationEntries);
+		/*
+		 * Identification Results
+		 */
+		List<IPeakTarget> peakTargets = peak.getTargets();
+		dataOutputStream.writeInt(peakTargets.size()); // Number Peak Targets
+		for(IPeakTarget peakTarget : peakTargets) {
+			if(peakTarget instanceof IIdentificationTarget) {
+				IIdentificationTarget identificationEntry = peakTarget;
+				writeIdentificationEntry(dataOutputStream, identificationEntry);
+			}
+		}
+		/*
+		 * Quantitation Results
+		 */
+		List<IQuantitationEntry> quantitationEntries = peak.getQuantitationEntries();
+		dataOutputStream.writeInt(quantitationEntries.size()); // Number Quantitation Entries
+		for(IQuantitationEntry quantitationEntry : quantitationEntries) {
+			writeString(dataOutputStream, quantitationEntry.getName()); // Name
+			writeString(dataOutputStream, quantitationEntry.getChemicalClass()); // Chemical Class
+			dataOutputStream.writeDouble(quantitationEntry.getConcentration()); // Concentration
+			writeString(dataOutputStream, quantitationEntry.getConcentrationUnit()); // Concentration Unit
+			dataOutputStream.writeDouble(quantitationEntry.getArea()); // Area
+			writeString(dataOutputStream, quantitationEntry.getCalibrationMethod()); // Calibration Method
+			dataOutputStream.writeBoolean(quantitationEntry.getUsedCrossZero()); // Used Cross Zero
+			writeString(dataOutputStream, quantitationEntry.getDescription()); // Description
+			/*
+			 * Only MSD stores an ion.
+			 */
+			if(quantitationEntry instanceof IQuantitationEntryMSD) {
+				dataOutputStream.writeBoolean(true); // Ion value is stored.
+				IQuantitationEntryMSD quantitationEntryMSD = (IQuantitationEntryMSD)quantitationEntry;
+				dataOutputStream.writeDouble(quantitationEntryMSD.getIon()); // Ion
+			} else {
+				dataOutputStream.writeBoolean(false); // No ion values is stored.
+			}
+		}
+		/*
+		 * Internal Standards
+		 */
+		writeIntenalStandards(dataOutputStream, peak.getInternalStandards());
+	}
+
+	private void writeIntegrationEntries(DataOutputStream dataOutputStream, List<? extends IIntegrationEntry> integrationEntries) throws IOException {
+
+		dataOutputStream.writeInt(integrationEntries.size()); // Number Integration Entries
+		for(IIntegrationEntry integrationEntry : integrationEntries) {
+			if(integrationEntry instanceof IIntegrationEntryWSD) {
+				/*
+				 * It must be a WSD integration entry.
+				 */
+				IIntegrationEntryWSD integrationEntryWSD = (IIntegrationEntryWSD)integrationEntry;
+				dataOutputStream.writeDouble(integrationEntryWSD.getIntegratedArea()); // Integrated Area
+			}
+		}
+	}
+
+	private void writeIntenalStandards(DataOutputStream dataOutputStream, List<IInternalStandard> internalStandards) throws IOException {
+
+		dataOutputStream.writeInt(internalStandards.size()); // size
+		for(IInternalStandard internalStandard : internalStandards) {
+			writeString(dataOutputStream, internalStandard.getName());
+			dataOutputStream.writeDouble(internalStandard.getConcentration());
+			writeString(dataOutputStream, internalStandard.getConcentrationUnit());
+			dataOutputStream.writeDouble(internalStandard.getResponseFactor());
+			writeString(dataOutputStream, internalStandard.getChemicalClass());
+		}
 	}
 
 	private void writeChromatogramIdentification(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {

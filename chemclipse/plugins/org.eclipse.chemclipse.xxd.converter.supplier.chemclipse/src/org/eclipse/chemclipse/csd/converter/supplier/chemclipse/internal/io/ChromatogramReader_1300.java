@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogr
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IIntegrationEntryCSD;
+import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogramTargetCSD;
@@ -63,12 +64,20 @@ import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IChromatogramLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
+import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
+import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
+import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramReaderMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
@@ -174,6 +183,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_CSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
 			readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_CSD), closeStream, chromatogram, monitor);
+			readArea(getDataInputStream(object, directoryPrefix + IFormat.FILE_AREA_CSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
 			readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_CSD), closeStream, chromatogram, monitor);
 			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_CSD), closeStream, chromatogram, monitor);
@@ -384,11 +394,34 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		//
 		List<IIntegrationEntry> integrationEntries = readIntegrationEntries(dataInputStream);
 		peak.setIntegratedArea(integrationEntries, integratorDescription);
+		/*
+		 * Identification Results
+		 */
+		readPeakIdentificationTargets(dataInputStream, peak, monitor);
+		/*
+		 * Quantitation Results
+		 */
+		readPeakQuantitationEntries(dataInputStream, peak, monitor);
 		//
 		List<IInternalStandard> internalStandards = readInternalStandards(dataInputStream);
 		peak.addInternalStandards(internalStandards);
 		//
 		return peak;
+	}
+
+	private void readArea(DataInputStream dataInputStream, boolean closeStream, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		String chromatogramIntegratorDescription = readString(dataInputStream); // Chromatogram Integrator Description
+		List<IIntegrationEntry> chromatogramIntegrationEntries = readIntegrationEntries(dataInputStream);
+		chromatogram.setChromatogramIntegratedArea(chromatogramIntegrationEntries, chromatogramIntegratorDescription);
+		//
+		String backgroundIntegratorDescription = readString(dataInputStream); // Background Integrator Description
+		List<IIntegrationEntry> backgroundIntegrationEntries = readIntegrationEntries(dataInputStream);
+		chromatogram.setBackgroundIntegratedArea(backgroundIntegrationEntries, backgroundIntegratorDescription);
+		//
+		if(closeStream) {
+			dataInputStream.close();
+		}
 	}
 
 	private void setAdditionalInformation(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) {
@@ -674,6 +707,103 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}
+		}
+	}
+
+	private void readPeakIdentificationTargets(DataInputStream dataInputStream, IPeakCSD peak, IProgressMonitor monitor) throws IOException {
+
+		int numberOfPeakTargets = dataInputStream.readInt(); // Number Peak Targets
+		for(int i = 1; i <= numberOfPeakTargets; i++) {
+			//
+			String identifier = readString(dataInputStream); // Identifier
+			boolean manuallyVerified = dataInputStream.readBoolean();
+			//
+			int retentionTime = dataInputStream.readInt();
+			float retentionIndex = dataInputStream.readFloat();
+			String casNumber = readString(dataInputStream); // CAS-Number
+			String comments = readString(dataInputStream); // Comments
+			String referenceIdentifier = readString(dataInputStream);
+			String miscellaneous = readString(dataInputStream); // Miscellaneous
+			String database = readString(dataInputStream);
+			String contributor = readString(dataInputStream);
+			String name = readString(dataInputStream); // Name
+			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			int numberOfSynonyms = dataInputStream.readInt();
+			for(int j = 0; j < numberOfSynonyms; j++) {
+				synonyms.add(readString(dataInputStream));
+			}
+			String formula = readString(dataInputStream); // Formula
+			String smiles = readString(dataInputStream); // SMILES
+			String inChI = readString(dataInputStream); // InChI
+			double molWeight = dataInputStream.readDouble(); // Mol Weight
+			float matchFactor = dataInputStream.readFloat(); // Match Factor
+			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
+			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
+			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
+			float probability = dataInputStream.readFloat(); // Probability
+			boolean isMatch = dataInputStream.readBoolean();
+			//
+			IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
+			libraryInformation.setRetentionTime(retentionTime);
+			libraryInformation.setRetentionIndex(retentionIndex);
+			libraryInformation.setCasNumber(casNumber);
+			libraryInformation.setComments(comments);
+			libraryInformation.setReferenceIdentifier(referenceIdentifier);
+			libraryInformation.setMiscellaneous(miscellaneous);
+			libraryInformation.setDatabase(database);
+			libraryInformation.setContributor(contributor);
+			libraryInformation.setName(name);
+			libraryInformation.setSynonyms(synonyms);
+			libraryInformation.setFormula(formula);
+			libraryInformation.setSmiles(smiles);
+			libraryInformation.setInChI(inChI);
+			libraryInformation.setMolWeight(molWeight);
+			//
+			IComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+			comparisonResult.setMatch(isMatch);
+			//
+			try {
+				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
+				identificationEntry.setIdentifier(identifier);
+				identificationEntry.setManuallyVerified(manuallyVerified);
+				peak.addTarget(identificationEntry);
+			} catch(ReferenceMustNotBeNullException e) {
+				logger.warn(e);
+			}
+		}
+	}
+
+	private void readPeakQuantitationEntries(DataInputStream dataInputStream, IPeakCSD peak, IProgressMonitor monitor) throws IOException {
+
+		int numberOfQuantitationEntries = dataInputStream.readInt(); // Number Quantitation Entries
+		for(int i = 1; i <= numberOfQuantitationEntries; i++) {
+			//
+			String name = readString(dataInputStream); // Name
+			String chemicalClass = readString(dataInputStream); // Chemical Class
+			double concentration = dataInputStream.readDouble(); // Concentration
+			String concentrationUnit = readString(dataInputStream); // Concentration Unit
+			double area = dataInputStream.readDouble(); // Area
+			String calibrationMethod = readString(dataInputStream); // Calibration Method
+			boolean usedCrossZero = dataInputStream.readBoolean(); // Used Cross Zero
+			String description = readString(dataInputStream); // Description
+			/*
+			 * Only MSD stores an ion.
+			 */
+			IQuantitationEntry quantitationEntry;
+			boolean isMSD = dataInputStream.readBoolean(); // Ion value is stored or not.
+			if(isMSD) {
+				double ion = dataInputStream.readDouble(); // Ion
+				quantitationEntry = new QuantitationEntryMSD(name, concentration, concentrationUnit, area, ion);
+			} else {
+				quantitationEntry = new QuantitationEntry(name, concentration, concentrationUnit, area);
+			}
+			//
+			quantitationEntry.setChemicalClass(chemicalClass);
+			quantitationEntry.setCalibrationMethod(calibrationMethod);
+			quantitationEntry.setUsedCrossZero(usedCrossZero);
+			quantitationEntry.setDescription(description);
+			//
+			peak.addQuantitationEntry(quantitationEntry);
 		}
 	}
 

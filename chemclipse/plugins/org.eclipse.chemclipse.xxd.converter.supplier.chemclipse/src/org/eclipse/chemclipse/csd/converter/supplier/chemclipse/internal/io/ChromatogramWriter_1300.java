@@ -48,8 +48,11 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.ChromatogramWriterWSD;
@@ -344,6 +347,42 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		//
 		List<IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
 		writeIntegrationEntries(dataOutputStream, integrationEntries);
+		/*
+		 * Identification Results
+		 */
+		List<IPeakTarget> peakTargets = peak.getTargets();
+		dataOutputStream.writeInt(peakTargets.size()); // Number Peak Targets
+		for(IPeakTarget peakTarget : peakTargets) {
+			if(peakTarget instanceof IIdentificationTarget) {
+				IIdentificationTarget identificationEntry = peakTarget;
+				writeIdentificationEntry(dataOutputStream, identificationEntry);
+			}
+		}
+		/*
+		 * Quantitation Results
+		 */
+		List<IQuantitationEntry> quantitationEntries = peak.getQuantitationEntries();
+		dataOutputStream.writeInt(quantitationEntries.size()); // Number Quantitation Entries
+		for(IQuantitationEntry quantitationEntry : quantitationEntries) {
+			writeString(dataOutputStream, quantitationEntry.getName()); // Name
+			writeString(dataOutputStream, quantitationEntry.getChemicalClass()); // Chemical Class
+			dataOutputStream.writeDouble(quantitationEntry.getConcentration()); // Concentration
+			writeString(dataOutputStream, quantitationEntry.getConcentrationUnit()); // Concentration Unit
+			dataOutputStream.writeDouble(quantitationEntry.getArea()); // Area
+			writeString(dataOutputStream, quantitationEntry.getCalibrationMethod()); // Calibration Method
+			dataOutputStream.writeBoolean(quantitationEntry.getUsedCrossZero()); // Used Cross Zero
+			writeString(dataOutputStream, quantitationEntry.getDescription()); // Description
+			/*
+			 * Only MSD stores an ion.
+			 */
+			if(quantitationEntry instanceof IQuantitationEntryMSD) {
+				dataOutputStream.writeBoolean(true); // Ion value is stored.
+				IQuantitationEntryMSD quantitationEntryMSD = (IQuantitationEntryMSD)quantitationEntry;
+				dataOutputStream.writeDouble(quantitationEntryMSD.getIon()); // Ion
+			} else {
+				dataOutputStream.writeBoolean(false); // No ion values is stored.
+			}
+		}
 		/*
 		 * Internal Standards
 		 */

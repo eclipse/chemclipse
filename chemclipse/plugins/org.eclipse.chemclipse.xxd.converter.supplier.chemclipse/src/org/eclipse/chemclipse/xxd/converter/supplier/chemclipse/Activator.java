@@ -30,8 +30,6 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 
 		Activator.context = bundleContext;
-		System.out.println("WSD Peaks");
-		System.out.println("CSD, WSD save Peak Targets");
 		System.out.println("Write Monitor ... Progress");
 	}
 
