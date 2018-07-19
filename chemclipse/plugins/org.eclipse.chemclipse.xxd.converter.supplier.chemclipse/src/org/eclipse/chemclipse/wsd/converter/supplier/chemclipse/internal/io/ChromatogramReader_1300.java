@@ -17,7 +17,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
@@ -34,6 +36,11 @@ import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
+import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.ChromatogramComparisonResult;
+import org.eclipse.chemclipse.model.identifier.ChromatogramLibraryInformation;
+import org.eclipse.chemclipse.model.identifier.IChromatogramLibraryInformation;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramReaderMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.support.history.EditInformation;
@@ -48,6 +55,8 @@ import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogr
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetWSD;
+import org.eclipse.chemclipse.wsd.model.core.implementation.ChromatogramTargetWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IBaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -158,6 +167,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			subMonitor.worked(20);
 			readBaselines(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_WSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
+			readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_CSD), closeStream, chromatogram, monitor);
 			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_WSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
 			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_WSD), closeStream, chromatogram, monitor);
@@ -300,6 +310,75 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		//
 		if(closeStream) {
 			dataInputStream.close();
+		}
+	}
+
+	private void readIdentification(DataInputStream dataInputStream, boolean closeStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		try {
+			int numberOfTargets = dataInputStream.readInt(); // Number of Targets
+			SubMonitor subMonitor = SubMonitor.convert(monitor, numberOfTargets);
+			for(int i = 1; i <= numberOfTargets; i++) {
+				//
+				String identifier = readString(dataInputStream); // Identifier
+				boolean manuallyVerified = dataInputStream.readBoolean();
+				//
+				String casNumber = readString(dataInputStream); // CAS-Number
+				String comments = readString(dataInputStream); // Comments
+				String referenceIdentifier = readString(dataInputStream);
+				String miscellaneous = readString(dataInputStream); // Miscellaneous
+				String database = readString(dataInputStream);
+				String contributor = readString(dataInputStream);
+				String name = readString(dataInputStream); // Name
+				Set<String> synonyms = new HashSet<String>(); // Synonyms
+				int numberOfSynonyms = dataInputStream.readInt();
+				for(int j = 0; j < numberOfSynonyms; j++) {
+					synonyms.add(readString(dataInputStream));
+				}
+				String formula = readString(dataInputStream); // Formula
+				String smiles = readString(dataInputStream); // SMILES
+				String inChI = readString(dataInputStream); // InChI
+				double molWeight = dataInputStream.readDouble(); // Mol Weight
+				float matchFactor = dataInputStream.readFloat(); // Match Factor
+				float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
+				float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
+				float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
+				float probability = dataInputStream.readFloat(); // Probability
+				boolean isMatch = dataInputStream.readBoolean();
+				//
+				IChromatogramLibraryInformation libraryInformation = new ChromatogramLibraryInformation();
+				libraryInformation.setCasNumber(casNumber);
+				libraryInformation.setComments(comments);
+				libraryInformation.setReferenceIdentifier(referenceIdentifier);
+				libraryInformation.setMiscellaneous(miscellaneous);
+				libraryInformation.setDatabase(database);
+				libraryInformation.setContributor(contributor);
+				libraryInformation.setName(name);
+				libraryInformation.setSynonyms(synonyms);
+				libraryInformation.setFormula(formula);
+				libraryInformation.setSmiles(smiles);
+				libraryInformation.setInChI(inChI);
+				libraryInformation.setMolWeight(molWeight);
+				//
+				IComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+				comparisonResult.setMatch(isMatch);
+				//
+				try {
+					IChromatogramTargetWSD identificationEntry = new ChromatogramTargetWSD(libraryInformation, comparisonResult);
+					identificationEntry.setIdentifier(identifier);
+					identificationEntry.setManuallyVerified(manuallyVerified);
+					chromatogram.addTarget(identificationEntry);
+				} catch(ReferenceMustNotBeNullException e) {
+					logger.warn(e);
+				}
+				subMonitor.worked(1);
+			}
+			//
+			if(closeStream) {
+				dataInputStream.close();
+			}
+		} finally {
+			SubMonitor.done(monitor);
 		}
 	}
 

@@ -30,12 +30,9 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 
 		Activator.context = bundleContext;
-		System.out.println("ReferenceChromatograms");
 		System.out.println("WSD Peaks");
 		System.out.println("ScanWSD - Targets");
-		System.out.println("ChromatogramWSD - Targets");
-		System.out.println("ChromatogramCSD - Targets");
-		System.out.println("CSD, WSD save Chromatogram/Peak/Scan Targets");
+		System.out.println("CSD, WSD save Peak/Scan Targets");
 		System.out.println("Write Monitor ... Progress");
 	}
 

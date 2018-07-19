@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -33,6 +34,9 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.support.history.IEditHistory;
@@ -42,6 +46,7 @@ import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.IChromatogram
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -152,6 +157,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 			subMonitor.worked(20);
 			writeChromatogramBaseline(zipOutputStream, directoryPrefix, chromatogram, monitor);
 			subMonitor.worked(20);
+			writeChromatogramIdentification(zipOutputStream, directoryPrefix, chromatogram, monitor);
 			writeChromatogramHistory(zipOutputStream, directoryPrefix, chromatogram, monitor);
 			subMonitor.worked(20);
 			writeChromatogramMiscellaneous(zipOutputStream, directoryPrefix, chromatogram, monitor);
@@ -256,6 +262,65 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		//
 		dataOutputStream.flush();
 		zipOutputStream.closeEntry();
+	}
+
+	private void writeChromatogramIdentification(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		ZipEntry zipEntry;
+		DataOutputStream dataOutputStream;
+		/*
+		 * Identification
+		 */
+		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_IDENTIFICATION_WSD);
+		zipOutputStream.putNextEntry(zipEntry);
+		dataOutputStream = new DataOutputStream(zipOutputStream);
+		//
+		List<IChromatogramTargetWSD> chromatogramTargets = chromatogram.getTargets();
+		dataOutputStream.writeInt(chromatogramTargets.size()); // Number of Targets
+		for(IChromatogramTargetWSD chromatogramTarget : chromatogramTargets) {
+			if(chromatogramTarget instanceof IIdentificationTarget) {
+				IIdentificationTarget identificationEntry = chromatogramTarget;
+				writeIdentificationEntry(dataOutputStream, identificationEntry);
+			}
+		}
+		//
+		dataOutputStream.flush();
+		zipOutputStream.closeEntry();
+	}
+
+	private void writeIdentificationEntry(DataOutputStream dataOutputStream, IIdentificationTarget identificationEntry) throws IOException {
+
+		ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
+		IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
+		//
+		writeString(dataOutputStream, identificationEntry.getIdentifier()); // Identifier
+		dataOutputStream.writeBoolean(identificationEntry.isManuallyVerified());
+		//
+		dataOutputStream.writeInt(libraryInformation.getRetentionTime());
+		dataOutputStream.writeFloat(libraryInformation.getRetentionIndex());
+		writeString(dataOutputStream, libraryInformation.getCasNumber()); // CAS-Number
+		writeString(dataOutputStream, libraryInformation.getComments()); // Comments
+		writeString(dataOutputStream, libraryInformation.getReferenceIdentifier());
+		writeString(dataOutputStream, libraryInformation.getMiscellaneous()); // Miscellaneous
+		writeString(dataOutputStream, libraryInformation.getDatabase());
+		writeString(dataOutputStream, libraryInformation.getContributor());
+		writeString(dataOutputStream, libraryInformation.getName()); // Name
+		Set<String> synonyms = libraryInformation.getSynonyms(); // Synonyms
+		int numberOfSynonyms = synonyms.size();
+		dataOutputStream.writeInt(numberOfSynonyms);
+		for(String synonym : synonyms) {
+			writeString(dataOutputStream, synonym);
+		}
+		writeString(dataOutputStream, libraryInformation.getFormula()); // Formula
+		writeString(dataOutputStream, libraryInformation.getSmiles()); // SMILES
+		writeString(dataOutputStream, libraryInformation.getInChI()); // InChI
+		dataOutputStream.writeDouble(libraryInformation.getMolWeight()); // Mol Weight
+		dataOutputStream.writeFloat(comparisonResult.getMatchFactor()); // Match Factor
+		dataOutputStream.writeFloat(comparisonResult.getMatchFactorDirect()); // Match Factor Direct
+		dataOutputStream.writeFloat(comparisonResult.getReverseMatchFactor()); // Reverse Match Factor
+		dataOutputStream.writeFloat(comparisonResult.getReverseMatchFactorDirect()); // Reverse Match Factor Direct
+		dataOutputStream.writeFloat(comparisonResult.getProbability()); // Probability
+		dataOutputStream.writeBoolean(comparisonResult.isMatch()); // Is Match
 	}
 
 	private void writeChromatogramHistory(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
