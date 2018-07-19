@@ -47,6 +47,7 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetWSD;
+import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -231,8 +232,19 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 			dataOutputStream.writeFloat(scanWSD.getTotalSignal()); // Total Signal
 			dataOutputStream.writeInt(scanWSD.getTimeSegmentId()); // Time Segment Id
 			dataOutputStream.writeInt(scanWSD.getCycleNumber()); // Cycle Number
+			/*
+			 * Identification Results
+			 */
+			List<IScanTargetWSD> scanTargets = scanWSD.getTargets();
+			dataOutputStream.writeInt(scanTargets.size()); // Number Mass Spectrum Targets
+			for(IScanTargetWSD scanTarget : scanTargets) {
+				if(scanTarget instanceof IIdentificationTarget) {
+					IIdentificationTarget identificationEntry = scanTarget;
+					writeIdentificationEntry(dataOutputStream, identificationEntry);
+				}
+			}
 		}
-		// clean up flush the stream and close zip-entry 1
+		//
 		dataOutputStream.flush();
 		zipOutputStream.closeEntry();
 	}

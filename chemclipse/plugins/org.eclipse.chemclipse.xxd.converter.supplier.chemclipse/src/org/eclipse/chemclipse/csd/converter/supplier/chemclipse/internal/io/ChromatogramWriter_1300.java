@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogramTargetCSD;
+import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
@@ -190,25 +191,36 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		// Scans
 		for(int scan = 1; scan <= scans; scan++) {
 			// monitor.subTask(IConstants.EXPORT_SCAN + scan);
-			IScanCSD scanFID = chromatogram.getSupplierScan(scan);
+			IScanCSD scanCSD = chromatogram.getSupplierScan(scan);
 			//
-			dataOutputStream.writeInt(scanFID.getRetentionTime()); // Retention Time
-			dataOutputStream.writeInt(scanFID.getRelativeRetentionTime());
-			dataOutputStream.writeFloat(scanFID.getTotalSignal()); // Total Signal
-			dataOutputStream.writeInt(scanFID.getRetentionTimeColumn1());
-			dataOutputStream.writeInt(scanFID.getRetentionTimeColumn2());
-			dataOutputStream.writeFloat(scanFID.getRetentionIndex()); // Retention Index
-			dataOutputStream.writeBoolean(scanFID.hasAdditionalRetentionIndices());
-			if(scanFID.hasAdditionalRetentionIndices()) {
-				Map<RetentionIndexType, Float> retentionIndicesTyped = scanFID.getRetentionIndicesTyped();
+			dataOutputStream.writeInt(scanCSD.getRetentionTime()); // Retention Time
+			dataOutputStream.writeInt(scanCSD.getRelativeRetentionTime());
+			dataOutputStream.writeFloat(scanCSD.getTotalSignal()); // Total Signal
+			dataOutputStream.writeInt(scanCSD.getRetentionTimeColumn1());
+			dataOutputStream.writeInt(scanCSD.getRetentionTimeColumn2());
+			dataOutputStream.writeFloat(scanCSD.getRetentionIndex()); // Retention Index
+			dataOutputStream.writeBoolean(scanCSD.hasAdditionalRetentionIndices());
+			if(scanCSD.hasAdditionalRetentionIndices()) {
+				Map<RetentionIndexType, Float> retentionIndicesTyped = scanCSD.getRetentionIndicesTyped();
 				dataOutputStream.writeInt(retentionIndicesTyped.size());
 				for(Map.Entry<RetentionIndexType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
 					writeString(dataOutputStream, retentionIndexTyped.getKey().toString());
 					dataOutputStream.writeFloat(retentionIndexTyped.getValue());
 				}
 			}
-			dataOutputStream.writeInt(scanFID.getTimeSegmentId()); // Time Segment Id
-			dataOutputStream.writeInt(scanFID.getCycleNumber()); // Cycle Number
+			dataOutputStream.writeInt(scanCSD.getTimeSegmentId()); // Time Segment Id
+			dataOutputStream.writeInt(scanCSD.getCycleNumber()); // Cycle Number
+			/*
+			 * Identification Results
+			 */
+			List<IScanTargetCSD> scanTargets = scanCSD.getTargets();
+			dataOutputStream.writeInt(scanTargets.size()); // Number Mass Spectrum Targets
+			for(IScanTargetCSD scanTarget : scanTargets) {
+				if(scanTarget instanceof IIdentificationTarget) {
+					IIdentificationTarget identificationEntry = scanTarget;
+					writeIdentificationEntry(dataOutputStream, identificationEntry);
+				}
+			}
 		}
 		//
 		dataOutputStream.flush();

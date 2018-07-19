@@ -31,8 +31,7 @@ public class Activator implements BundleActivator {
 
 		Activator.context = bundleContext;
 		System.out.println("WSD Peaks");
-		System.out.println("ScanWSD - Targets");
-		System.out.println("CSD, WSD save Peak/Scan Targets");
+		System.out.println("CSD, WSD save Peak Targets");
 		System.out.println("Write Monitor ... Progress");
 	}
 

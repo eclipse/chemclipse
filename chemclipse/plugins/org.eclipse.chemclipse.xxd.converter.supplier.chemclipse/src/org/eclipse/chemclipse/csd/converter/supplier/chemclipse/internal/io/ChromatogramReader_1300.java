@@ -35,11 +35,14 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IIntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
+import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogramTargetCSD;
+import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ChromatogramTargetCSD;
 import org.eclipse.chemclipse.csd.model.implementation.IntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.implementation.PeakModelCSD;
+import org.eclipse.chemclipse.csd.model.implementation.ScanTargetCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
@@ -56,8 +59,11 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ChromatogramComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ChromatogramLibraryInformation;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IChromatogramLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
@@ -223,8 +229,8 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			int retentionTime = dataInputStream.readInt();
 			int relativeRetentionTime = dataInputStream.readInt();
 			float totalSignal = dataInputStream.readFloat();
-			IVendorScan scanFID = new VendorScan(retentionTime, totalSignal);
-			scanFID.setRelativeRetentionTime(relativeRetentionTime);
+			IVendorScan scanCSD = new VendorScan(retentionTime, totalSignal);
+			scanCSD.setRelativeRetentionTime(relativeRetentionTime);
 			//
 			int retentionTimeColumn1 = dataInputStream.readInt();
 			int retentionTimeColumn2 = dataInputStream.readInt();
@@ -234,18 +240,23 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				for(int i = 0; i < size; i++) {
 					RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
 					float retentionIndexAdditional = dataInputStream.readFloat();
-					scanFID.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+					scanCSD.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
 				}
 			}
 			int timeSegmentId = dataInputStream.readInt();
 			int cycleNumber = dataInputStream.readInt();
 			//
-			scanFID.setRetentionTimeColumn1(retentionTimeColumn1);
-			scanFID.setRetentionTimeColumn2(retentionTimeColumn2);
-			scanFID.setRetentionIndex(retentionIndex);
-			scanFID.setTimeSegmentId(timeSegmentId);
-			scanFID.setCycleNumber(cycleNumber);
-			chromatogram.addScan(scanFID);
+			scanCSD.setRetentionTimeColumn1(retentionTimeColumn1);
+			scanCSD.setRetentionTimeColumn2(retentionTimeColumn2);
+			scanCSD.setRetentionIndex(retentionIndex);
+			scanCSD.setTimeSegmentId(timeSegmentId);
+			scanCSD.setCycleNumber(cycleNumber);
+			/*
+			 * Identification Results
+			 */
+			readScanIdentificationTargets(dataInputStream, scanCSD, monitor);
+			//
+			chromatogram.addScan(scanCSD);
 		}
 		//
 		if(closeStream) {
@@ -604,6 +615,65 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			// if(closeStream) {
 			// zipInputStream.close();
 			// }
+		}
+	}
+
+	private void readScanIdentificationTargets(DataInputStream dataInputStream, IScanCSD scanCSD, IProgressMonitor monitor) throws IOException {
+
+		int numberOfTargets = dataInputStream.readInt();
+		for(int i = 1; i <= numberOfTargets; i++) {
+			//
+			String identifier = readString(dataInputStream); // Identifier
+			boolean manuallyVerified = dataInputStream.readBoolean();
+			//
+			String casNumber = readString(dataInputStream); // CAS-Number
+			String comments = readString(dataInputStream); // Comments
+			String referenceIdentifier = readString(dataInputStream);
+			String miscellaneous = readString(dataInputStream); // Miscellaneous
+			String database = readString(dataInputStream);
+			String contributor = readString(dataInputStream);
+			String name = readString(dataInputStream); // Name
+			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			int numberOfSynonyms = dataInputStream.readInt();
+			for(int j = 0; j < numberOfSynonyms; j++) {
+				synonyms.add(readString(dataInputStream));
+			}
+			String formula = readString(dataInputStream); // Formula
+			String smiles = readString(dataInputStream); // SMILES
+			String inChI = readString(dataInputStream); // InChI
+			double molWeight = dataInputStream.readDouble(); // Mol Weight
+			float matchFactor = dataInputStream.readFloat(); // Match Factor
+			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
+			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
+			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
+			float probability = dataInputStream.readFloat(); // Probability
+			boolean isMatch = dataInputStream.readBoolean();
+			//
+			ILibraryInformation libraryInformation = new LibraryInformation();
+			libraryInformation.setCasNumber(casNumber);
+			libraryInformation.setComments(comments);
+			libraryInformation.setReferenceIdentifier(referenceIdentifier);
+			libraryInformation.setMiscellaneous(miscellaneous);
+			libraryInformation.setDatabase(database);
+			libraryInformation.setContributor(contributor);
+			libraryInformation.setName(name);
+			libraryInformation.setSynonyms(synonyms);
+			libraryInformation.setFormula(formula);
+			libraryInformation.setSmiles(smiles);
+			libraryInformation.setInChI(inChI);
+			libraryInformation.setMolWeight(molWeight);
+			//
+			IComparisonResult comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+			comparisonResult.setMatch(isMatch);
+			//
+			try {
+				IScanTargetCSD identificationEntry = new ScanTargetCSD(libraryInformation, comparisonResult);
+				identificationEntry.setIdentifier(identifier);
+				identificationEntry.setManuallyVerified(manuallyVerified);
+				scanCSD.addTarget(identificationEntry);
+			} catch(ReferenceMustNotBeNullException e) {
+				logger.warn(e);
+			}
 		}
 	}
 
