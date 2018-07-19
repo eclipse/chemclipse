@@ -173,7 +173,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 	private IChromatogramMSD readZipData(Object object, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorChromatogram chromatogram = new VendorChromatogram();
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read compressed data", 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Chromatogram", 100);
 		try {
 			boolean closeStream;
 			boolean useScanProxies;
@@ -194,22 +194,25 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			} else {
 				return null;
 			}
-			subMonitor.worked(10);
 			//
-			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_MSD), closeStream, chromatogram, subMonitor.split(10));
+			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_MSD), closeStream, chromatogram, monitor);
 			if(useScanProxies) {
 				readScanProxies((ZipFile)object, directoryPrefix, file, chromatogram, subMonitor.split(10));
 			} else {
-				readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_MSD), closeStream, chromatogram, subMonitor.split(10));
+				readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_MSD), closeStream, chromatogram, monitor);
 			}
-			readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_MSD), closeStream, chromatogram, subMonitor.split(10));
-			readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_MSD), closeStream, chromatogram, subMonitor.split(10));
-			readArea(getDataInputStream(object, directoryPrefix + IFormat.FILE_AREA_MSD), closeStream, chromatogram, subMonitor.split(10));
-			readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_MSD), closeStream, chromatogram, subMonitor.split(10));
-			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_MSD), closeStream, chromatogram, subMonitor.split(10));
-			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_MSD), closeStream, chromatogram, subMonitor.split(5));
-			readSeparationColumn(getDataInputStream(object, directoryPrefix + IFormat.FILE_SEPARATION_COLUMN_MSD), closeStream, chromatogram, subMonitor.split(5));
-			setAdditionalInformation(file, chromatogram, subMonitor.split(10));
+			readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_MSD), closeStream, chromatogram, monitor);
+			subMonitor.worked(20);
+			readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_MSD), closeStream, chromatogram, monitor);
+			readArea(getDataInputStream(object, directoryPrefix + IFormat.FILE_AREA_MSD), closeStream, chromatogram, monitor);
+			subMonitor.worked(20);
+			readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_MSD), closeStream, chromatogram, monitor);
+			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_MSD), closeStream, chromatogram, monitor);
+			subMonitor.worked(20);
+			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_MSD), closeStream, chromatogram, monitor);
+			readSeparationColumn(getDataInputStream(object, directoryPrefix + IFormat.FILE_SEPARATION_COLUMN_MSD), closeStream, chromatogram, monitor);
+			subMonitor.worked(20);
+			setAdditionalInformation(file, chromatogram, monitor);
 			//
 			try {
 				/*
@@ -218,6 +221,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				 */
 				int size = readChromatogramReferenceInfo(getDataInputStream(object, directoryPrefix + IFormat.FILE_REFERENCE_INFO), closeStream, monitor);
 				readReferencedChromatograms(object, directoryPrefix, chromatogram, size, closeStream, monitor);
+				subMonitor.worked(20);
 			} catch(IOException e) {
 				logger.info(e);
 			}

@@ -176,9 +176,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			 * Read the chromatographic information.
 			 */
 			chromatogram = new VendorChromatogram();
-			subMonitor.worked(20);
 			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_CSD), closeStream, chromatogram, monitor);
-			subMonitor.worked(20);
 			readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_CSD), closeStream, chromatogram, monitor);
 			readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_CSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
@@ -187,6 +185,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			subMonitor.worked(20);
 			readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_CSD), closeStream, chromatogram, monitor);
 			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_CSD), closeStream, chromatogram, monitor);
+			subMonitor.worked(20);
 			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_CSD), closeStream, chromatogram, monitor);
 			readSeparationColumn(getDataInputStream(object, directoryPrefix + IFormat.FILE_SEPARATION_COLUMN_CSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
@@ -199,6 +198,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				 */
 				int size = readChromatogramReferenceInfo(getDataInputStream(object, directoryPrefix + IFormat.FILE_REFERENCE_INFO), closeStream, monitor);
 				readReferencedChromatograms(object, directoryPrefix, chromatogram, size, closeStream, monitor);
+				subMonitor.worked(20);
 			} catch(IOException e) {
 				logger.info(e);
 			}

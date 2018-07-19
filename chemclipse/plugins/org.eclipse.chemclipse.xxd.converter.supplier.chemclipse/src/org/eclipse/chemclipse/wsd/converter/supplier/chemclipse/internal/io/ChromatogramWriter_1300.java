@@ -590,56 +590,62 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 	@SuppressWarnings("rawtypes")
 	private void writeReferencedChromatograms(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram> referencedChromatograms, IProgressMonitor monitor) throws IOException {
 
-		ChromatogramWriterMSD chromatogramWriterMSD = new ChromatogramWriterMSD();
-		ChromatogramWriterCSD chromatogramWriterCSD = new ChromatogramWriterCSD();
-		ChromatogramWriterWSD chromatogramWriterWSD = new ChromatogramWriterWSD();
-		//
-		int i = 0;
-		for(IChromatogram referencedChromatogram : referencedChromatograms) {
-			/*
-			 * Create the measurement folder.
-			 */
-			directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.CHROMATOGRAM_REFERENCE_SEPARATOR + i++ + IFormat.DIR_SEPARATOR;
-			ZipEntry zipEntryType = new ZipEntry(directoryPrefix + IFormat.FILE_CHROMATOGRAM_TYPE);
-			zipOutputStream.putNextEntry(zipEntryType);
-			DataOutputStream dataOutputStream = new DataOutputStream(zipOutputStream);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Chromatogram", referencedChromatograms.size() * 20);
+		try {
+			ChromatogramWriterMSD chromatogramWriterMSD = new ChromatogramWriterMSD();
+			ChromatogramWriterCSD chromatogramWriterCSD = new ChromatogramWriterCSD();
+			ChromatogramWriterWSD chromatogramWriterWSD = new ChromatogramWriterWSD();
 			//
-			if(referencedChromatogram instanceof IChromatogramMSD) {
+			int i = 0;
+			for(IChromatogram referencedChromatogram : referencedChromatograms) {
 				/*
-				 * MSD
+				 * Create the measurement folder.
 				 */
-				writeString(dataOutputStream, IFormat.DATA_TYPE_MSD);
-				dataOutputStream.flush();
+				directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.CHROMATOGRAM_REFERENCE_SEPARATOR + i++ + IFormat.DIR_SEPARATOR;
+				ZipEntry zipEntryType = new ZipEntry(directoryPrefix + IFormat.FILE_CHROMATOGRAM_TYPE);
+				zipOutputStream.putNextEntry(zipEntryType);
+				DataOutputStream dataOutputStream = new DataOutputStream(zipOutputStream);
 				//
-				directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
-				ZipEntry zipEntryChromtogram = new ZipEntry(directoryPrefix);
-				zipOutputStream.putNextEntry(zipEntryChromtogram);
-				chromatogramWriterMSD.writeChromatogram(zipOutputStream, directoryPrefix, (IChromatogramMSD)referencedChromatogram, monitor);
-			} else if(referencedChromatogram instanceof IChromatogramCSD) {
-				/*
-				 * CSD
-				 */
-				writeString(dataOutputStream, IFormat.DATA_TYPE_CSD);
-				dataOutputStream.flush();
+				if(referencedChromatogram instanceof IChromatogramMSD) {
+					/*
+					 * MSD
+					 */
+					writeString(dataOutputStream, IFormat.DATA_TYPE_MSD);
+					dataOutputStream.flush();
+					//
+					directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
+					ZipEntry zipEntryChromtogram = new ZipEntry(directoryPrefix);
+					zipOutputStream.putNextEntry(zipEntryChromtogram);
+					chromatogramWriterMSD.writeChromatogram(zipOutputStream, directoryPrefix, (IChromatogramMSD)referencedChromatogram, monitor);
+				} else if(referencedChromatogram instanceof IChromatogramCSD) {
+					/*
+					 * CSD
+					 */
+					writeString(dataOutputStream, IFormat.DATA_TYPE_CSD);
+					dataOutputStream.flush();
+					//
+					directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
+					ZipEntry zipEntryChromtogram = new ZipEntry(directoryPrefix);
+					zipOutputStream.putNextEntry(zipEntryChromtogram);
+					chromatogramWriterCSD.writeChromatogram(zipOutputStream, directoryPrefix, (IChromatogramCSD)referencedChromatogram, monitor);
+				} else if(referencedChromatogram instanceof IChromatogramWSD) {
+					/*
+					 * WSD
+					 */
+					writeString(dataOutputStream, IFormat.DATA_TYPE_WSD);
+					dataOutputStream.flush();
+					//
+					directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
+					ZipEntry zipEntryChromtogram = new ZipEntry(directoryPrefix);
+					zipOutputStream.putNextEntry(zipEntryChromtogram);
+					chromatogramWriterWSD.writeChromatogram(zipOutputStream, directoryPrefix, (IChromatogramWSD)referencedChromatogram, monitor);
+				}
 				//
-				directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
-				ZipEntry zipEntryChromtogram = new ZipEntry(directoryPrefix);
-				zipOutputStream.putNextEntry(zipEntryChromtogram);
-				chromatogramWriterCSD.writeChromatogram(zipOutputStream, directoryPrefix, (IChromatogramCSD)referencedChromatogram, monitor);
-			} else if(referencedChromatogram instanceof IChromatogramWSD) {
-				/*
-				 * WSD
-				 */
-				writeString(dataOutputStream, IFormat.DATA_TYPE_WSD);
-				dataOutputStream.flush();
-				//
-				directoryPrefix = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
-				ZipEntry zipEntryChromtogram = new ZipEntry(directoryPrefix);
-				zipOutputStream.putNextEntry(zipEntryChromtogram);
-				chromatogramWriterWSD.writeChromatogram(zipOutputStream, directoryPrefix, (IChromatogramWSD)referencedChromatogram, monitor);
+				subMonitor.worked(20);
+				zipOutputStream.closeEntry();
 			}
-			//
-			zipOutputStream.closeEntry();
+		} finally {
+			SubMonitor.done(monitor);
 		}
 	}
 

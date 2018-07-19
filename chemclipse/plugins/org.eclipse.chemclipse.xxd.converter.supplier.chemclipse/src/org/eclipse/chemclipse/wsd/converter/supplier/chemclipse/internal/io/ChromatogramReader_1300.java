@@ -190,7 +190,6 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			 */
 			chromatogram = new VendorChromatogram();
 			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_WSD), closeStream, chromatogram, monitor);
-			subMonitor.worked(20);
 			readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_WSD), closeStream, chromatogram, monitor);
 			readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_WSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
@@ -212,6 +211,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				 */
 				int size = readChromatogramReferenceInfo(getDataInputStream(object, directoryPrefix + IFormat.FILE_REFERENCE_INFO), closeStream, monitor);
 				readReferencedChromatograms(object, directoryPrefix, chromatogram, size, closeStream, monitor);
+				subMonitor.worked(20);
 			} catch(IOException e) {
 				logger.info(e);
 			}
