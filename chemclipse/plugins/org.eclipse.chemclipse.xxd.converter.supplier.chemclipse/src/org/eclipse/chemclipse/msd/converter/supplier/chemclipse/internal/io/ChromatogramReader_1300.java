@@ -439,7 +439,6 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 40);
 		try {
-			// TODO monitor handling...
 			IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
 			//
 			String detectorDescription = readString(dataInputStream); // Detector Description
@@ -606,6 +605,8 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			String identifier = readString(dataInputStream); // Identifier
 			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
+			int retentionTime = dataInputStream.readInt();
+			float retentionIndex = dataInputStream.readFloat();
 			String casNumber = readString(dataInputStream); // CAS-Number
 			String comments = readString(dataInputStream); // Comments
 			String referenceIdentifier = readString(dataInputStream);
@@ -630,6 +631,8 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			boolean isMatch = dataInputStream.readBoolean();
 			//
 			IMassSpectrumLibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
+			libraryInformation.setRetentionTime(retentionTime);
+			libraryInformation.setRetentionIndex(retentionIndex);
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
 			libraryInformation.setReferenceIdentifier(referenceIdentifier);
@@ -716,6 +719,8 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				String identifier = readString(dataInputStream); // Identifier
 				boolean manuallyVerified = dataInputStream.readBoolean();
 				//
+				int retentionTime = dataInputStream.readInt();
+				float retentionIndex = dataInputStream.readFloat();
 				String casNumber = readString(dataInputStream); // CAS-Number
 				String comments = readString(dataInputStream); // Comments
 				String referenceIdentifier = readString(dataInputStream);
@@ -740,6 +745,8 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				boolean isMatch = dataInputStream.readBoolean();
 				//
 				IChromatogramLibraryInformation libraryInformation = new ChromatogramLibraryInformation();
+				libraryInformation.setRetentionTime(retentionTime);
+				libraryInformation.setRetentionIndex(retentionIndex);
 				libraryInformation.setCasNumber(casNumber);
 				libraryInformation.setComments(comments);
 				libraryInformation.setReferenceIdentifier(referenceIdentifier);

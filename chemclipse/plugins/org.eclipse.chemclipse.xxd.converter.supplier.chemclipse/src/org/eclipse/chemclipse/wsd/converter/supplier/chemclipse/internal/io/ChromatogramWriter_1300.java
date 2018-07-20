@@ -300,10 +300,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		List<IChromatogramPeakWSD> peaks = chromatogram.getPeaks();
 		dataOutputStream.writeInt(peaks.size()); // Number of Peaks
-		// Peaks
-		// int counter = 1;
 		for(IChromatogramPeakWSD peak : peaks) {
-			// monitor.subTask(IConstants.EXPORT_PEAK + counter++);
 			writePeak(dataOutputStream, peak);
 		}
 		//
@@ -366,6 +363,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 				dataOutputStream.writeFloat(retentionIndexTyped.getValue());
 			}
 		}
+		//
 		dataOutputStream.writeInt(scan.getTimeSegmentId()); // Time Segment Id
 		dataOutputStream.writeInt(scan.getCycleNumber()); // Cycle Number
 		//

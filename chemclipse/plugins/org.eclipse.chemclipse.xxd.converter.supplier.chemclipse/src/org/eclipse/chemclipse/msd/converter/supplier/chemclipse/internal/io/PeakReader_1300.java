@@ -385,6 +385,8 @@ public class PeakReader_1300 extends AbstractZipReader implements IPeakReader {
 			String identifier = readString(dataInputStream); // Identifier
 			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
+			int retentionTime = dataInputStream.readInt();
+			float retentionIndex = dataInputStream.readFloat();
 			String casNumber = readString(dataInputStream); // CAS-Number
 			String comments = readString(dataInputStream); // Comments
 			String referenceIdentifier = readString(dataInputStream);
@@ -409,6 +411,8 @@ public class PeakReader_1300 extends AbstractZipReader implements IPeakReader {
 			boolean isMatch = dataInputStream.readBoolean();
 			//
 			IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
+			libraryInformation.setRetentionTime(retentionTime);
+			libraryInformation.setRetentionIndex(retentionIndex);
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
 			libraryInformation.setReferenceIdentifier(referenceIdentifier);

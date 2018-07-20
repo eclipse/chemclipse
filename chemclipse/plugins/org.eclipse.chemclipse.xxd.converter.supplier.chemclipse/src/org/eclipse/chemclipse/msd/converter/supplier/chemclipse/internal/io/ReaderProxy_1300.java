@@ -174,6 +174,8 @@ public class ReaderProxy_1300 extends AbstractZipReader implements IReaderProxy 
 			String identifier = readString(dataInputStream); // Identifier
 			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
+			int retentionTime = dataInputStream.readInt();
+			float retentionIndex = dataInputStream.readFloat();
 			String casNumber = readString(dataInputStream); // CAS-Number
 			String comments = readString(dataInputStream); // Comments
 			String referenceIdentifier = readString(dataInputStream);
@@ -198,6 +200,8 @@ public class ReaderProxy_1300 extends AbstractZipReader implements IReaderProxy 
 			boolean isMatch = dataInputStream.readBoolean();
 			//
 			ILibraryInformation libraryInformation = new LibraryInformation();
+			libraryInformation.setRetentionTime(retentionTime);
+			libraryInformation.setRetentionIndex(retentionIndex);
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
 			libraryInformation.setReferenceIdentifier(referenceIdentifier);

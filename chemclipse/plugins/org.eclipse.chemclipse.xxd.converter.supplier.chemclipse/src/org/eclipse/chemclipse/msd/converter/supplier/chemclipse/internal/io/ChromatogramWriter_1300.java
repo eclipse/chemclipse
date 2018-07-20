@@ -336,8 +336,6 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
 		dataOutputStream.writeInt(peaks.size()); // Number of Peaks
-		// Peaks
-		// int counter = 1;
 		for(IChromatogramPeakMSD peak : peaks) {
 			writePeak(dataOutputStream, peak);
 		}

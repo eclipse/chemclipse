@@ -363,6 +363,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				peakMaximum.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
 			}
 		}
+		//
 		int timeSegmentId = dataInputStream.readInt();
 		int cycleNumber = dataInputStream.readInt();
 		//
@@ -477,6 +478,8 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				String identifier = readString(dataInputStream); // Identifier
 				boolean manuallyVerified = dataInputStream.readBoolean();
 				//
+				int retentionTime = dataInputStream.readInt();
+				float retentionIndex = dataInputStream.readFloat();
 				String casNumber = readString(dataInputStream); // CAS-Number
 				String comments = readString(dataInputStream); // Comments
 				String referenceIdentifier = readString(dataInputStream);
@@ -501,6 +504,8 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				boolean isMatch = dataInputStream.readBoolean();
 				//
 				IChromatogramLibraryInformation libraryInformation = new ChromatogramLibraryInformation();
+				libraryInformation.setRetentionTime(retentionTime);
+				libraryInformation.setRetentionIndex(retentionIndex);
 				libraryInformation.setCasNumber(casNumber);
 				libraryInformation.setComments(comments);
 				libraryInformation.setReferenceIdentifier(referenceIdentifier);
@@ -659,6 +664,8 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			String identifier = readString(dataInputStream); // Identifier
 			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
+			int retentionTime = dataInputStream.readInt();
+			float retentionIndex = dataInputStream.readFloat();
 			String casNumber = readString(dataInputStream); // CAS-Number
 			String comments = readString(dataInputStream); // Comments
 			String referenceIdentifier = readString(dataInputStream);
@@ -683,6 +690,8 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			boolean isMatch = dataInputStream.readBoolean();
 			//
 			ILibraryInformation libraryInformation = new LibraryInformation();
+			libraryInformation.setRetentionTime(retentionTime);
+			libraryInformation.setRetentionIndex(retentionIndex);
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
 			libraryInformation.setReferenceIdentifier(referenceIdentifier);

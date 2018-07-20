@@ -37,6 +37,7 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1006 = "testData/files/import/Chromatogram1-1006.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1007 = "testData/files/import/Chromatogram1-1007.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1100 = "testData/files/import/Chromatogram1-1100.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1300 = "testData/files/import/Chromatogram1-1300.ocb";
 	//
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_0701 = "testData/files/import/Chromatogram2-0701.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_0801 = "testData/files/import/Chromatogram2-0801.ocb";
@@ -53,6 +54,7 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1006 = "testData/files/import/Chromatogram2-1006.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1007 = "testData/files/import/Chromatogram2-1007.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1100 = "testData/files/import/Chromatogram2-1100.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1300 = "testData/files/import/Chromatogram2-1300.ocb";
 	/*
 	 * IMPORT FID
 	 */
@@ -64,6 +66,7 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1006 = "testData/files/import/Chromatogram3-1006.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1007 = "testData/files/import/Chromatogram3-1007.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1100 = "testData/files/import/Chromatogram3-1100.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1300 = "testData/files/import/Chromatogram3-1300.ocb";
 	/*
 	 * Import WSD
 	 */

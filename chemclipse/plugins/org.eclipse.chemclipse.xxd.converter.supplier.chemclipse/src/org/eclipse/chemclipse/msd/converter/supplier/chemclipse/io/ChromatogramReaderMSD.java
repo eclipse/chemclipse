@@ -221,6 +221,7 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 				for(IScan scan : chromatogramFID.getScans()) {
 					IVendorScan massSpectrum = new VendorScan();
 					massSpectrum.setRetentionTime(scan.getRetentionTime());
+					massSpectrum.setRelativeRetentionTime(scan.getRelativeRetentionTime());
 					massSpectrum.setRetentionIndex(scan.getRetentionIndex());
 					try {
 						IVendorIon ion = new VendorIon(mz, scan.getTotalSignal());

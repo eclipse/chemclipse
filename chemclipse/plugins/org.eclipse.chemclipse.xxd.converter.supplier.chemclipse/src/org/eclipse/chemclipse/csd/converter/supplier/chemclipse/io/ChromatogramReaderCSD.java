@@ -166,11 +166,12 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 				IChromatogram<? extends IPeak> chromatogram = (IChromatogram<? extends IPeak>)chromatogramOverview;
 				chromatogramFID = new VendorChromatogram();
 				for(IScan scan : chromatogram.getScans()) {
-					IVendorScan scanFID = new VendorScan(scan.getRetentionTime(), scan.getTotalSignal());
-					scanFID.setRetentionIndex(scan.getRetentionIndex());
-					scanFID.setTimeSegmentId(scan.getTimeSegmentId());
-					scanFID.setCycleNumber(scan.getCycleNumber());
-					chromatogramFID.addScan(scanFID);
+					IVendorScan scanCSD = new VendorScan(scan.getRetentionTime(), scan.getTotalSignal());
+					scanCSD.setRelativeRetentionTime(scan.getRelativeRetentionTime());
+					scanCSD.setRetentionIndex(scan.getRetentionIndex());
+					scanCSD.setTimeSegmentId(scan.getTimeSegmentId());
+					scanCSD.setCycleNumber(scan.getCycleNumber());
+					chromatogramFID.addScan(scanCSD);
 				}
 				//
 				chromatogramFID.setConverterId(IFormat.CONVERTER_ID);
