@@ -43,6 +43,10 @@ public class RetentionIndexCalculator {
 			separationColumnIndices = getChromatogramIndices(chromatogramSelection);
 			if(separationColumnIndices == null) {
 				separationColumnIndices = getFileIndices(chromatogramSelection, supplierCalculatorSettings);
+			} else {
+				if(separationColumnIndices.size() == 0) {
+					separationColumnIndices = getFileIndices(chromatogramSelection, supplierCalculatorSettings);
+				}
 			}
 		} else {
 			separationColumnIndices = getFileIndices(chromatogramSelection, supplierCalculatorSettings);
