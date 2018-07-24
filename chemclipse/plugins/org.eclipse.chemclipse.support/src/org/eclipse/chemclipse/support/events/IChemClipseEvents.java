@@ -31,6 +31,8 @@ public interface IChemClipseEvents {
 	String PROPERTY_CHROMATOGRAM_MSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map
 	String PROPERTY_CHROMATOGRAM_CSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map
 	String PROPERTY_CHROMATOGRAM_WSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map
+	String PROPERTY_SCAN_NMR_OVERVIEW = IEventBroker.DATA;
+	String PROPERTY_SCAN_XIR_OVERVIEW = IEventBroker.DATA;
 	//
 	String PROPERTY_CHROMATOGRAM_SELECTION = "ChromatogramSelection"; // IChromatogramSelection (MSD, CSD, WSD)
 	String PROPERTY_CHROMATOGRAM_SELECTION_XXD = IEventBroker.DATA; // IChromatogramSelection

@@ -104,6 +104,18 @@ public interface IChromatogramSelection extends IChromatogramUpdateListener, Ser
 	void setRanges(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance);
 
 	/**
+	 * Sets the stop abundance.<br/>
+	 * The stopAbundance must be >= 0.
+	 */
+	void setRangeRetentionTime(int startRetentionTime, int stopRetentionTime, boolean validate);
+
+	/**
+	 * Sets the stop abundance.<br/>
+	 * The stopAbundance must be >= 0.
+	 */
+	void setRangeRetentionTime(int startRetentionTime, int stopRetentionTime);
+
+	/**
 	 * Sets the values and fires an update after validating and setting all
 	 * values.
 	 * 

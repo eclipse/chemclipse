@@ -80,7 +80,7 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 
 	private void setStartRetentionTime(int startRetentionTime, boolean update) {
 
-		if(startRetentionTime > 0 && startRetentionTime <= stopRetentionTime) {
+		if(startRetentionTime > 0 && startRetentionTime <= stopRetentionTime && startRetentionTime >= chromatogram.getStartRetentionTime()) {
 			this.startRetentionTime = startRetentionTime;
 		} else {
 			this.startRetentionTime = chromatogram.getStartRetentionTime();
@@ -183,9 +183,22 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 		stopAbundance = chromatogram.getMaxSignal();
 	}
 
+	@Override
 	public void setRanges(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) {
 
 		setRanges(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance, true);
+	}
+
+	@Override
+	public void setRangeRetentionTime(int startRetentionTime, int stopRetentionTime) {
+
+		setRanges(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance, true);
+	}
+
+	@Override
+	public void setRangeRetentionTime(int startRetentionTime, int stopRetentionTime, boolean validate) {
+
+		setRanges(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance, validate);
 	}
 
 	// TODO JUnit
