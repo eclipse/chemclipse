@@ -43,8 +43,9 @@ public class ChromatogramFilter extends AbstractChromatogramFilter implements IC
 			supplierFilterSettings = PreferenceSupplier.getSupplierFilterSettings();
 		}
 		//
-		chromatogramSelection.setStartRetentionTime((int)(supplierFilterSettings.getStartRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-		chromatogramSelection.setStopRetentionTime((int)(supplierFilterSettings.getStopRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+		int startRetentionTime = (int)(supplierFilterSettings.getStartRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+		int stopRetentionTime = (int)(supplierFilterSettings.getStopRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+		chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime);
 		IChromatogramFilterResult chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "Chromatogram Selection applied");
 		processingInfo.setProcessingResult(chromatogramFilterResult);
 		return processingInfo;

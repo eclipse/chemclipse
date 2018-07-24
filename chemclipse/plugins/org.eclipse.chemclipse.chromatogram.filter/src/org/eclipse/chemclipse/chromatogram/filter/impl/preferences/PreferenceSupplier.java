@@ -74,7 +74,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ISupplierFilterSettings filterSettings = new SupplierFilterSettings();
 		filterSettings.setStartRetentionTimeMinutes(preferences.getDouble(P_START_RETENTION_TIME_MINUTES, DEF_START_RETENTION_TIME_MINUTES));
-		filterSettings.setStartRetentionTimeMinutes(preferences.getDouble(P_STOP_RETENTION_TIME_MINUTES, DEF_STOP_RETENTION_TIME_MINUTES));
+		filterSettings.setStopRetentionTimeMinutes(preferences.getDouble(P_STOP_RETENTION_TIME_MINUTES, DEF_STOP_RETENTION_TIME_MINUTES));
 		return filterSettings;
 	}
 }
