@@ -181,5 +181,12 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 */
 		store.setDefault(PreferenceConstants.P_BASELINE_CHART_COMPRESSION_TYPE, PreferenceConstants.DEF_BASELINE_CHART_COMPRESSION_TYPE);
 		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_BASELINE, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_BASELINE);
+		/*
+		 * Sequences
+		 */
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_USE_SUBFOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_USE_SUBFOLDER);
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER);
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER);
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_SUB_FOLDER);
 	}
 }

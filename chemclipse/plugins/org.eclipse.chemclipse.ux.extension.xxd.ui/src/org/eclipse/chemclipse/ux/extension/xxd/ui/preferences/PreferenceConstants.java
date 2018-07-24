@@ -369,4 +369,15 @@ public class PreferenceConstants {
 	public static final String DEF_BASELINE_CHART_COMPRESSION_TYPE = LineChart.COMPRESSION_MEDIUM;
 	public static final String P_COLOR_SCHEME_DISPLAY_BASELINE = "colorSchemeDisplayBaseline";
 	public static final String DEF_COLOR_SCHEME_DISPLAY_BASELINE = Colors.COLOR_SCHEME_RED;
+	/*
+	 * Sequences
+	 */
+	public static final String P_SEQUENCE_EXPLORER_USE_SUBFOLDER = "sequenceExplorerUseSubfolder";
+	public static final boolean DEF_SEQUENCE_EXPLORER_USE_SUBFOLDER = true;
+	public static final String P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER = "sequenceExplorerPathRootFolder";
+	public static final String DEF_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER = "";
+	public static final String P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER = "sequenceExplorerPathParentFolder";
+	public static final String DEF_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER = "";
+	public static final String P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER = "sequenceExplorerPathSubFolder";
+	public static final String DEF_SEQUENCE_EXPLORER_PATH_SUB_FOLDER = "";
 }

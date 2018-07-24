@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -26,6 +28,10 @@ public class PreferencePageSequences extends FieldEditorPreferencePage implement
 
 	public void createFieldEditors() {
 
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SEQUENCE_EXPLORER_USE_SUBFOLDER, "Use Subfolder", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER, "Root Folder", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER, "Parent Folder", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER, "Sub Folder", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {
