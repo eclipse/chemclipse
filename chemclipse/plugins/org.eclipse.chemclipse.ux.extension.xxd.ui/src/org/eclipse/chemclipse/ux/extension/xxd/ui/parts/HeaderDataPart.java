@@ -42,9 +42,9 @@ public class HeaderDataPart extends AbstractOverviewUpdateSupport implements IOv
 
 		if(object instanceof IMeasurementInfo) {
 			IMeasurementInfo measurementInfo = (IMeasurementInfo)object;
-			extendedHeaderDataUI.update(measurementInfo, false);
+			extendedHeaderDataUI.update(measurementInfo);
 		} else {
-			extendedHeaderDataUI.update(null, false);
+			extendedHeaderDataUI.update(null);
 		}
 	}
 }

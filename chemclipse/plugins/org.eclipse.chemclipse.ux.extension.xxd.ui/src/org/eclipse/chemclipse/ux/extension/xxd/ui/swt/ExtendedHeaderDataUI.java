@@ -18,8 +18,10 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
+import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
@@ -29,6 +31,7 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -74,11 +77,23 @@ public class ExtendedHeaderDataUI {
 		updateHeaderData();
 	}
 
-	public void update(IMeasurementInfo measurementInfo, boolean editable) {
+	public void update(IMeasurementInfo measurementInfo) {
 
 		this.measurementInfo = measurementInfo;
-		this.editable = editable;
+		this.editable = isEditable(measurementInfo);
 		updateHeaderData();
+	}
+
+	private boolean isEditable(IMeasurementInfo measurementInfo) {
+
+		if(measurementInfo instanceof IChromatogram) {
+			return true;
+		} else if(measurementInfo instanceof IScanXIR) {
+			return true;
+		} else if(measurementInfo instanceof IScanNMR) {
+			return true;
+		}
+		return false;
 	}
 
 	private void initialize(Composite parent) {
@@ -400,6 +415,7 @@ public class ExtendedHeaderDataUI {
 
 		updateWidgets();
 		updateLabel();
+		//
 		headerDataListUI.sortTable();
 		Table table = headerDataListUI.getTable();
 		if(table.getItemCount() > 0) {
