@@ -19,7 +19,7 @@ public class Sequence<T> extends AbstractFileAttributes implements ISequence<T> 
 	private String sequenceId = "";
 	private String info = "";
 	private String method = "";
-	private String data = "";
+	private String dataPath = "";
 	private List<T> sequenceRecords;
 
 	public Sequence() {
@@ -63,15 +63,15 @@ public class Sequence<T> extends AbstractFileAttributes implements ISequence<T> 
 	}
 
 	@Override
-	public String getData() {
+	public String getDataPath() {
 
-		return data;
+		return dataPath;
 	}
 
 	@Override
-	public void setData(String data) {
+	public void setDataPath(String dataPath) {
 
-		this.data = data;
+		this.dataPath = dataPath;
 	}
 
 	@Override

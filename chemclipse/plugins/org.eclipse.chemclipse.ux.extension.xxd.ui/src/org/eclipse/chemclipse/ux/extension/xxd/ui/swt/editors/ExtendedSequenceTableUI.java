@@ -11,14 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.chemclipse.converter.model.reports.ISequence;
 import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.EditorSupportFactory;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.SequenceListUI;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -27,35 +35,48 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 
 public class ExtendedSequenceTableUI {
 
-	private Label labelDataInfo;
+	private static final Logger logger = Logger.getLogger(ExtendedSequenceTableUI.class);
+	//
+	private Text dataPath;
 	private Composite toolbarSearch;
+	private Composite toolbarDataPath;
+	private Composite toolbarMethod;
 	private SearchSupportUI searchSupportUI;
 	private SequenceListUI sequenceListUI;
 	//
+	private ISequence<? extends ISequenceRecord> sequence;
+	//
+	private List<ISupplierEditorSupport> supplierEditorSupportList;
 
 	public ExtendedSequenceTableUI(Composite parent) {
+		supplierEditorSupportList = new ArrayList<>();
+		supplierEditorSupportList.add(new EditorSupportFactory(DataType.MSD).getInstanceEditorSupport());
+		supplierEditorSupportList.add(new EditorSupportFactory(DataType.CSD).getInstanceEditorSupport());
+		supplierEditorSupportList.add(new EditorSupportFactory(DataType.WSD).getInstanceEditorSupport());
 		initialize(parent);
 	}
 
 	public void update(ISequence<? extends ISequenceRecord> sequence) {
 
-		if(sequence != null) {
-			labelDataInfo.setText("Data Path: " + sequence.getData());
-			sequenceListUI.setInput(sequence.getSequenceRecords());
-		} else {
-			labelDataInfo.setText("Data Path:");
-			sequenceListUI.setInput(null);
-		}
+		this.sequence = sequence;
+		updateDataSequenceData();
 	}
 
 	private void initialize(Composite parent) {
@@ -64,20 +85,27 @@ public class ExtendedSequenceTableUI {
 		//
 		createToolbarMain(parent);
 		toolbarSearch = createToolbarSearch(parent);
+		toolbarDataPath = createToolbarDataPath(parent);
+		toolbarMethod = createToolbarMethod(parent);
 		createSequenceList(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
+		PartSupport.setCompositeVisibility(toolbarDataPath, false);
+		PartSupport.setCompositeVisibility(toolbarMethod, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
-		createDataInfoLabel(composite);
 		createButtonToggleToolbarSearch(composite);
+		createButtonToggleToolbarDataPath(composite);
+		createButtonToggleToolbarMethod(composite);
+		createBatchOpenButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
 	}
@@ -98,13 +126,130 @@ public class ExtendedSequenceTableUI {
 		return searchSupportUI;
 	}
 
-	private void createDataInfoLabel(Composite parent) {
+	private Composite createToolbarDataPath(Composite parent) {
 
-		labelDataInfo = new Label(parent, SWT.NONE);
-		labelDataInfo.setText("");
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		composite.setLayout(new GridLayout(4, false));
+		//
+		createDataPathLabel(composite);
+		createDataPathText(composite);
+		createSetDataPathButton(composite);
+		createSelectDataPathButton(composite);
+		//
+		return composite;
+	}
+
+	private Composite createToolbarMethod(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(2, false));
+		//
+		createComboPredefinedMethod(composite);
+		createButtonExecuteMethod(composite);
+		//
+		return composite;
+	}
+
+	private void createComboPredefinedMethod(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setToolTipText("Select a chromatogram method.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private Button createButtonExecuteMethod(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Apply the method to the selected chromatogram.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+		//
+		return button;
+	}
+
+	private void createDataPathLabel(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("Data Path:");
+	}
+
+	private void createDataPathText(Composite parent) {
+
+		dataPath = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
+		dataPath.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
-		labelDataInfo.setLayoutData(gridData);
+		dataPath.setLayoutData(gridData);
+	}
+
+	private Button createSetDataPathButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Set the data path folder.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(sequence != null) {
+					File file = new File(sequence.getCanonicalPath());
+					if(file.exists()) {
+						sequence.setDataPath(file.getParent());
+						updateDataSequenceData();
+					}
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createSelectDataPathButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Select the data path folder.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(sequence != null) {
+					DirectoryDialog directoryDialog = new DirectoryDialog(DisplayUtils.getShell(button));
+					directoryDialog.setText("Sequence Folder");
+					directoryDialog.setMessage("Select the sequence root folder.");
+					// directoryDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER));
+					String directory = directoryDialog.open();
+					if(directory != null) {
+						// preferenceStore.setValue(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER, directory);
+						sequence.setDataPath(directory);
+						updateDataSequenceData();
+					}
+				}
+			}
+		});
+		//
+		return button;
 	}
 
 	private Button createButtonToggleToolbarSearch(Composite parent) {
@@ -128,6 +273,85 @@ public class ExtendedSequenceTableUI {
 		});
 		//
 		return button;
+	}
+
+	private Button createButtonToggleToolbarDataPath(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the data path toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarDataPath);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleToolbarMethod(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the method toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarMethod);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private void createBatchOpenButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Open the selected chromatograms");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Table table = sequenceListUI.getTable();
+				int[] indices = table.getSelectionIndices();
+				List<File> files = new ArrayList<>();
+				//
+				for(int index : indices) {
+					Object object = table.getItem(index).getData();
+					if(object instanceof ISequenceRecord) {
+						ISequenceRecord sequenceRecord = (ISequenceRecord)object;
+						files.add(new File(sequence.getDataPath() + File.separator + sequenceRecord.getDataFile()));
+					}
+				}
+				//
+				try {
+					openFiles(files);
+				} catch(Exception e1) {
+					showDataPathWarningMessage();
+					logger.warn(e1);
+				}
+			}
+		});
 	}
 
 	private void createResetButton(Composite parent) {
@@ -188,6 +412,85 @@ public class ExtendedSequenceTableUI {
 	private void createSequenceList(Composite parent) {
 
 		sequenceListUI = new SequenceListUI(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		sequenceListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		Table table = sequenceListUI.getTable();
+		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		table.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				Object object = sequenceListUI.getStructuredSelection().getFirstElement();
+				if(object instanceof ISequenceRecord) {
+					ISequenceRecord sequenceRecord = (ISequenceRecord)object;
+					List<File> files = new ArrayList<>();
+					files.add(new File(sequence.getDataPath() + File.separator + sequenceRecord.getDataFile()));
+					try {
+						openFiles(files);
+					} catch(Exception e1) {
+						showDataPathWarningMessage();
+						logger.warn(e1);
+					}
+				}
+			}
+		});
+	}
+
+	private boolean isSupplierFile(ISupplierEditorSupport supplierEditorSupport, File file) {
+
+		if(file.isDirectory()) {
+			if(supplierEditorSupport.isSupplierFileDirectory(file)) {
+				return true;
+			}
+		} else {
+			if(supplierEditorSupport.isSupplierFile(file)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void updateDataSequenceData() {
+
+		if(sequence != null) {
+			dataPath.setText(sequence.getDataPath());
+			sequenceListUI.setInput(sequence.getSequenceRecords());
+		} else {
+			dataPath.setText("");
+			sequenceListUI.setInput(null);
+		}
+	}
+
+	private void openFiles(List<File> files) throws Exception {
+
+		Display display = DisplayUtils.getDisplay();
+		//
+		if(display != null) {
+			for(File file : files) {
+				if(file.exists()) {
+					exitloop:
+					for(ISupplierEditorSupport supplierEditorSupport : supplierEditorSupportList) {
+						if(isSupplierFile(supplierEditorSupport, file)) {
+							display.asyncExec(new Runnable() {
+
+								@Override
+								public void run() {
+
+									supplierEditorSupport.openEditor(file);
+								}
+							});
+							break exitloop;
+						}
+					}
+				} else {
+					throw new Exception();
+				}
+			}
+		}
+	}
+
+	private void showDataPathWarningMessage() {
+
+		MessageDialog.openWarning(DisplayUtils.getShell(), "Open Chromatogram", "The file doesn't exist. Please check that the data path is set correctly.");
 	}
 }

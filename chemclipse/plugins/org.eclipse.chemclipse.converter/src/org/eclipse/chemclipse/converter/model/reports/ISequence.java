@@ -27,9 +27,9 @@ public interface ISequence<T> extends IFileAttributes {
 
 	void setMethod(String method);
 
-	String getData();
+	String getDataPath();
 
-	void setData(String data);
+	void setDataPath(String dataPath);
 
 	List<T> getSequenceRecords();
 }

@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.SequenceListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.SequenceListLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.SequenceListTableComparator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsTableComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
@@ -40,18 +39,6 @@ public class SequenceListUI extends ExtendedTableViewer {
 	public void clear() {
 
 		setInput(null);
-	}
-
-	public void sortTable() {
-
-		int column = 0;
-		int sortOrder = TargetsTableComparator.DESCENDING;
-		//
-		sequenceListTableComparator.setColumn(column);
-		sequenceListTableComparator.setDirection(sortOrder);
-		refresh();
-		sequenceListTableComparator.setDirection(1 - sortOrder);
-		sequenceListTableComparator.setColumn(column);
 	}
 
 	private void createColumns() {

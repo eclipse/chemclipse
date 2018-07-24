@@ -25,10 +25,8 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.SupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -62,7 +60,6 @@ public class ExtendedSequenceExplorerUI {
 	private SequenceFilesUI sequenceFilesUI;
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private ISupplierFileIdentifier supplierFileIdentifier = new SupplierFileIdentifier(DataType.SEQ);
 	private ISupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(DataType.SEQ);
 
 	@Inject
@@ -397,7 +394,7 @@ public class ExtendedSequenceExplorerUI {
 
 	private boolean isSequenceFile(File file) {
 
-		return supplierFileIdentifier.isSupplierFile(file);
+		return supplierEditorSupport.isSupplierFile(file);
 	}
 
 	private void setRootFolderContent(List<File> files) {
