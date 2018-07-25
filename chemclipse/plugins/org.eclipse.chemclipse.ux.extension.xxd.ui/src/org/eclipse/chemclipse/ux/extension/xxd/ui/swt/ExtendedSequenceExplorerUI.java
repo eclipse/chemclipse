@@ -394,7 +394,12 @@ public class ExtendedSequenceExplorerUI {
 
 	private boolean isSequenceFile(File file) {
 
-		return supplierEditorSupport.isSupplierFile(file);
+		if(supplierEditorSupport.isSupplierFile(file)) {
+			if(supplierEditorSupport.isMatchMagicNumber(file)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void setRootFolderContent(List<File> files) {
