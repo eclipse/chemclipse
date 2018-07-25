@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,23 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.model.reports;
 
-import java.util.List;
+public enum SequenceRecordAdvice {
+	NONE("No advice available yet."), //
+	DATA_IS_VALID("The data is valid."), //
+	FILE_NOT_AVAILABLE("The file is not available.");
 
-public interface ISequence<T extends ISequenceRecord> extends List<T>, IFileAttributes {
+	private String decsription;
 
-	String getSequenceId();
+	private SequenceRecordAdvice(String description) {
+		this.decsription = description;
+	}
 
-	void setSequenceId(String sequenceId);
+	public String getDecsription() {
 
-	String getInfo();
-
-	void setInfo(String info);
-
-	String getMethod();
-
-	void setMethod(String method);
-
-	String getDataPath();
-
-	void setDataPath(String dataPath);
+		return decsription;
+	}
 }

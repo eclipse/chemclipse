@@ -33,6 +33,10 @@ public interface ISequenceRecord {
 
 	void setMultiplier(double multiplier);
 
+	String getDataPath();
+
+	void setDataPath(String dataPath);
+
 	String getDataFile();
 
 	void setDataFile(String dataFile);
@@ -40,4 +44,6 @@ public interface ISequenceRecord {
 	String getDescription();
 
 	void setDescription(String description);
+
+	SequenceRecordAdvice getAdvice();
 }

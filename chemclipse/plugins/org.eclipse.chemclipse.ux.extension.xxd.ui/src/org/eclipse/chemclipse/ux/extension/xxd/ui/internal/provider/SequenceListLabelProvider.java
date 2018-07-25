@@ -22,7 +22,9 @@ import org.eclipse.swt.graphics.Image;
 public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String SAMPLE_NAME = "Sample Name";
+	public static final String DATA_PATH = "Data Path";
 	public static final String DATA_FILE = "Data File";
+	public static final String ADVICE = "Advice";
 	public static final String VIAL = "Vial";
 	public static final String SUBSTANCE = "Substance";
 	public static final String DESCRIPTION = "Description";
@@ -31,7 +33,9 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 	//
 	public static String[] TITLES = {//
 			SAMPLE_NAME, //
+			DATA_PATH, //
 			DATA_FILE, //
+			ADVICE, //
 			VIAL, //
 			SUBSTANCE, //
 			DESCRIPTION, //
@@ -41,6 +45,8 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 	//
 	public static int[] BOUNDS = {//
 			200, //
+			150, //
+			150, //
 			150, //
 			60, //
 			150, //
@@ -54,6 +60,18 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 
 		if(columnIndex == 0) {
 			return getImage(element);
+		} else if(columnIndex == 3) {
+			if(element instanceof ISequenceRecord) {
+				ISequenceRecord sequenceRecord = (ISequenceRecord)element;
+				switch(sequenceRecord.getAdvice()) {
+					case NONE:
+						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_EMPTY, IApplicationImage.SIZE_16x16);
+					case DATA_IS_VALID:
+						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_OK, IApplicationImage.SIZE_16x16);
+					case FILE_NOT_AVAILABLE:
+						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_ERROR, IApplicationImage.SIZE_16x16);
+				}
+			}
 		}
 		return null;
 	}
@@ -71,21 +89,27 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 					text = sequenceRecord.getSampleName();
 					break;
 				case 1:
-					text = sequenceRecord.getDataFile();
+					text = sequenceRecord.getDataPath();
 					break;
 				case 2:
-					text = Integer.toString(sequenceRecord.getVial());
+					text = sequenceRecord.getDataFile();
 					break;
 				case 3:
-					text = sequenceRecord.getSubstance();
+					text = sequenceRecord.getAdvice().getDecsription();
 					break;
 				case 4:
-					text = sequenceRecord.getDescription();
+					text = Integer.toString(sequenceRecord.getVial());
 					break;
 				case 5:
-					text = sequenceRecord.getMethod();
+					text = sequenceRecord.getSubstance();
 					break;
 				case 6:
+					text = sequenceRecord.getDescription();
+					break;
+				case 7:
+					text = sequenceRecord.getMethod();
+					break;
+				case 8:
 					text = decimalFormat.format(sequenceRecord.getMultiplier());
 					break;
 			}
@@ -96,7 +120,6 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 
-		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
-		return image;
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
 	}
 }

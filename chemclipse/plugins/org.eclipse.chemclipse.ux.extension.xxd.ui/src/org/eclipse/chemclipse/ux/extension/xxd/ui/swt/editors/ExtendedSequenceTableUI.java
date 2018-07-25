@@ -454,7 +454,7 @@ public class ExtendedSequenceTableUI {
 
 		if(sequence != null) {
 			dataPath.setText(sequence.getDataPath());
-			sequenceListUI.setInput(sequence.getSequenceRecords());
+			sequenceListUI.setInput(sequence);
 		} else {
 			dataPath.setText("");
 			sequenceListUI.setInput(null);

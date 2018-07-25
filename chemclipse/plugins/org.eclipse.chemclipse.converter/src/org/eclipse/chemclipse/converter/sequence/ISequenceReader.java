@@ -14,9 +14,10 @@ package org.eclipse.chemclipse.converter.sequence;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.model.reports.ISequence;
+import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface ISequenceReader {
 
-	<T> ISequence<T> read(File file, IProgressMonitor monitor);
+	<T extends ISequenceRecord> ISequence<T> read(File file, IProgressMonitor monitor);
 }

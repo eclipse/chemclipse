@@ -31,21 +31,27 @@ public class SequenceListTableComparator extends AbstractRecordTableComparator i
 					sortOrder = sequenceRecord2.getSampleName().compareTo(sequenceRecord1.getSampleName());
 					break;
 				case 1:
-					sortOrder = sequenceRecord2.getDataFile().compareTo(sequenceRecord1.getDataFile());
+					sortOrder = sequenceRecord2.getDataPath().compareTo(sequenceRecord1.getDataPath());
 					break;
 				case 2:
-					sortOrder = Integer.compare(sequenceRecord2.getVial(), sequenceRecord1.getVial());
+					sortOrder = sequenceRecord2.getDataFile().compareTo(sequenceRecord1.getDataFile());
 					break;
 				case 3:
-					sortOrder = sequenceRecord2.getSubstance().compareTo(sequenceRecord1.getSubstance());
+					sortOrder = sequenceRecord2.getAdvice().compareTo(sequenceRecord1.getAdvice());
 					break;
 				case 4:
-					sortOrder = sequenceRecord2.getDescription().compareTo(sequenceRecord1.getDescription());
+					sortOrder = Integer.compare(sequenceRecord2.getVial(), sequenceRecord1.getVial());
 					break;
 				case 5:
-					sortOrder = sequenceRecord2.getMethod().compareTo(sequenceRecord1.getMethod());
+					sortOrder = sequenceRecord2.getSubstance().compareTo(sequenceRecord1.getSubstance());
 					break;
 				case 6:
+					sortOrder = sequenceRecord2.getDescription().compareTo(sequenceRecord1.getDescription());
+					break;
+				case 7:
+					sortOrder = sequenceRecord2.getMethod().compareTo(sequenceRecord1.getMethod());
+					break;
+				case 8:
 					sortOrder = Double.compare(sequenceRecord2.getMultiplier(), sequenceRecord1.getMultiplier());
 					break;
 			}

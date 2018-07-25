@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.model.reports;
 
+import java.io.File;
+
 public class SequenceRecord implements ISequenceRecord {
 
 	private String substance = "";
@@ -18,8 +20,10 @@ public class SequenceRecord implements ISequenceRecord {
 	private int vial = 0;
 	private String sampleName = ""; // Sample Name/Keyword Text
 	private double multiplier = 1;
+	private String dataPath = "";
 	private String dataFile = "";
 	private String description = "";
+	private SequenceRecordAdvice sequenceRecordAdvice = SequenceRecordAdvice.NONE;
 
 	@Override
 	public String getSubstance() {
@@ -82,6 +86,19 @@ public class SequenceRecord implements ISequenceRecord {
 	}
 
 	@Override
+	public String getDataPath() {
+
+		return dataPath;
+	}
+
+	@Override
+	public void setDataPath(String dataPath) {
+
+		this.dataPath = dataPath;
+		validate();
+	}
+
+	@Override
 	public String getDataFile() {
 
 		return dataFile;
@@ -91,6 +108,7 @@ public class SequenceRecord implements ISequenceRecord {
 	public void setDataFile(String dataFile) {
 
 		this.dataFile = dataFile;
+		validate();
 	}
 
 	@Override
@@ -103,6 +121,12 @@ public class SequenceRecord implements ISequenceRecord {
 	public void setDescription(String description) {
 
 		this.description = description;
+	}
+
+	@Override
+	public SequenceRecordAdvice getAdvice() {
+
+		return sequenceRecordAdvice;
 	}
 
 	@Override
@@ -119,6 +143,16 @@ public class SequenceRecord implements ISequenceRecord {
 		result = prime * result + ((substance == null) ? 0 : substance.hashCode());
 		result = prime * result + vial;
 		return result;
+	}
+
+	private void validate() {
+
+		File file = new File(dataPath + File.separator + dataFile);
+		if(file.exists()) {
+			sequenceRecordAdvice = SequenceRecordAdvice.DATA_IS_VALID;
+		} else {
+			sequenceRecordAdvice = SequenceRecordAdvice.FILE_NOT_AVAILABLE;
+		}
 	}
 
 	@Override

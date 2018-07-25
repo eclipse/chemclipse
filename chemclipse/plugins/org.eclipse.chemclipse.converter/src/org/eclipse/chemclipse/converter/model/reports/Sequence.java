@@ -11,20 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.model.reports;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.function.UnaryOperator;
 
-public class Sequence<T> extends AbstractFileAttributes implements ISequence<T> {
+public class Sequence<T extends ISequenceRecord> extends AbstractFileAttributes<T> implements ISequence<T> {
 
+	private static final long serialVersionUID = 5584821269053736876L;
+	//
 	private String sequenceId = "";
 	private String info = "";
 	private String method = "";
 	private String dataPath = "";
-	private List<T> sequenceRecords;
-
-	public Sequence() {
-		sequenceRecords = new ArrayList<T>();
-	}
 
 	@Override
 	public String getSequenceId() {
@@ -72,11 +69,52 @@ public class Sequence<T> extends AbstractFileAttributes implements ISequence<T> 
 	public void setDataPath(String dataPath) {
 
 		this.dataPath = dataPath;
+		updateDataPath();
 	}
 
 	@Override
-	public List<T> getSequenceRecords() {
+	public void add(int arg0, T arg1) {
 
-		return sequenceRecords;
+		super.add(arg0, arg1);
+		updateDataPath();
+	}
+
+	@Override
+	public boolean add(T arg0) {
+
+		boolean result = super.add(arg0);
+		updateDataPath();
+		return result;
+	}
+
+	@Override
+	public boolean addAll(Collection<? extends T> arg0) {
+
+		boolean result = super.addAll(arg0);
+		updateDataPath();
+		return result;
+	}
+
+	@Override
+	public boolean addAll(int arg0, Collection<? extends T> arg1) {
+
+		boolean result = super.addAll(arg0, arg1);
+		updateDataPath();
+		return result;
+	}
+
+	@Override
+	public void replaceAll(UnaryOperator<T> arg0) {
+
+		super.replaceAll(arg0);
+		updateDataPath();
+	}
+
+	private void updateDataPath() {
+
+		for(int i = 0; i < size(); i++) {
+			T sequenceRecord = get(i);
+			sequenceRecord.setDataPath(dataPath);
+		}
 	}
 }
