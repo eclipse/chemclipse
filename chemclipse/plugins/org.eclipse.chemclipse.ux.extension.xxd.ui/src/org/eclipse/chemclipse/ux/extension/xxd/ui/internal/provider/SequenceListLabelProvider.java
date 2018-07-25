@@ -47,7 +47,7 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 			200, //
 			150, //
 			150, //
-			150, //
+			200, //
 			60, //
 			150, //
 			150, //

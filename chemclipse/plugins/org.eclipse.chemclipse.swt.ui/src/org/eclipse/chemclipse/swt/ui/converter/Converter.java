@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.converter;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
@@ -20,7 +21,6 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.swt.ui.support.PlotSeries;
-import org.eclipse.chemclipse.logging.core.Logger;
 
 public class Converter {
 
@@ -74,6 +74,7 @@ public class Converter {
 	 * @param chromatogram
 	 * @return {@link PlotSeries}
 	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static PlotSeries convertBaseline(IChromatogram chromatogram) {
 
 		PlotSeries baselineSeries = null;

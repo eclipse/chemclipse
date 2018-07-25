@@ -93,6 +93,8 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
+import org.eclipse.chemclipse.swt.ui.components.MethodSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -205,7 +207,7 @@ public class ExtendedChromatogramUI {
 	private ChromatogramChart chromatogramChart;
 	private Combo comboTargetTransfer;
 	private ComboViewer comboViewerSeparationColumn;
-	private Button executeMethod;
+	private MethodSupportUI methodSupportUI;
 	//
 	private IChromatogramSelection chromatogramSelection = null;
 	private List<IChromatogramSelection> referencedChromatogramSelections = null; // Might be null ... no references.
@@ -1003,7 +1005,6 @@ public class ExtendedChromatogramUI {
 		createChromatogramChart(parent);
 		//
 		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
-		executeMethod.setEnabled(false);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, false);
 		PartSupport.setCompositeVisibility(toolbarRetentionIndices, false);
@@ -1060,15 +1061,17 @@ public class ExtendedChromatogramUI {
 
 	private Composite createToolbarMethod(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, false));
+		methodSupportUI = new MethodSupportUI(parent, SWT.NONE);
+		methodSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		methodSupportUI.setMethodListener(new IMethodListener() {
+
+			@Override
+			public void execute() {
+
+			}
+		});
 		//
-		createComboPredefinedMethod(composite);
-		executeMethod = createButtonExecuteMethod(composite);
-		//
-		return composite;
+		return methodSupportUI;
 	}
 
 	private ComboViewer createComboViewerSeparationColumn(Composite parent) {
@@ -1105,37 +1108,6 @@ public class ExtendedChromatogramUI {
 		});
 		//
 		return comboViewer;
-	}
-
-	private void createComboPredefinedMethod(Composite parent) {
-
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
-		combo.setToolTipText("Select a chromatogram method.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-	}
-
-	private Button createButtonExecuteMethod(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Apply the method to the selected chromatogram.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-		//
-		return button;
 	}
 
 	private Composite createToolbarEdit(Composite parent) {

@@ -21,7 +21,9 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
+import org.eclipse.chemclipse.swt.ui.components.MethodSupportUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -42,7 +44,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
@@ -59,6 +60,7 @@ public class ExtendedSequenceTableUI {
 	private Composite toolbarDataPath;
 	private Composite toolbarMethod;
 	private SearchSupportUI searchSupportUI;
+	private MethodSupportUI methodSupportUI;
 	private SequenceListUI sequenceListUI;
 	//
 	private ISequence<? extends ISequenceRecord> sequence;
@@ -142,46 +144,17 @@ public class ExtendedSequenceTableUI {
 
 	private Composite createToolbarMethod(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, false));
-		//
-		createComboPredefinedMethod(composite);
-		createButtonExecuteMethod(composite);
-		//
-		return composite;
-	}
-
-	private void createComboPredefinedMethod(Composite parent) {
-
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
-		combo.setToolTipText("Select a chromatogram method.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addSelectionListener(new SelectionAdapter() {
+		methodSupportUI = new MethodSupportUI(parent, SWT.NONE);
+		methodSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		methodSupportUI.setMethodListener(new IMethodListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-	}
-
-	private Button createButtonExecuteMethod(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Apply the method to the selected chromatogram.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void execute() {
 
 			}
 		});
 		//
-		return button;
+		return methodSupportUI;
 	}
 
 	private void createDataPathLabel(Composite parent) {
