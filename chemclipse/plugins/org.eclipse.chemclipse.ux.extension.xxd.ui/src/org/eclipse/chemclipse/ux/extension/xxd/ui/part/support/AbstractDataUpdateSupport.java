@@ -139,10 +139,12 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 
 		EventHandler eventHandler = new EventHandler() {
 
+			@Override
 			public void handleEvent(Event event) {
 
 				try {
 					objects.clear();
+					AbstractDataUpdateSupport.this.topic = topic;
 					for(String property : properties) {
 						Object object = event.getProperty(property);
 						objects.add(object);

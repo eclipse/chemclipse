@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,9 +24,7 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -36,9 +33,7 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -55,9 +50,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSuppor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
-import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -120,64 +113,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	@Focus
 	public void onFocus() {
 
-		fireUpdate();
-	}
-
-	protected void fireUpdate() {
-
-		updateChromatogram();
-		if(!updatePeak()) {
-			updateScan();
-		}
-	}
-
-	public boolean updateChromatogram() {
-
-		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
-		if(chromatogramSelection != null) {
-			eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
-			final Map<String, Object> map = new HashMap<>();
-			map.put(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION, chromatogramSelection);
-			map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, true);
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, map);
-			}
-			if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, map);
-			}
-			if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, map);
-			}
-		}
-		return chromatogramSelection != null ? true : false;
-	}
-
-	public boolean updatePeak() {
-
-		IPeak peak = extendedChromatogramUI.getChromatogramSelection().getSelectedPeak();
-		if(peak != null) {
-			eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
-			final Map<String, Object> map = new HashMap<>();
-			map.put(IChemClipseEvents.PROPERTY_PEAK_MSD, peak);
-			map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, true);
-			if(peak instanceof IPeakMSD) {
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAK, map);
-			}
-			if(peak instanceof IPeakCSD) {
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_PEAK, map);
-			}
-			if(peak instanceof IPeakWSD) {
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_PEAK, map);
-			}
-		}
-		return peak != null ? true : false;
-	}
-
-	public boolean updateScan() {
-
-		IScan scan = extendedChromatogramUI.getChromatogramSelection().getSelectedScan();
-		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
-		return scan != null ? true : false;
+		extendedChromatogramUI.fireUpdate();
 	}
 
 	@Override
