@@ -34,7 +34,7 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSuppor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.SequenceImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedSequenceTableUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedSequenceListUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -59,7 +59,7 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 	private MDirtyable dirtyable;
 	//
 	private File sequenceFile;
-	private ExtendedSequenceTableUI extendedSequenceTableUI;
+	private ExtendedSequenceListUI extendedSequenceListUI;
 
 	@Inject
 	public SequenceEditor(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
@@ -127,7 +127,7 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 	private void initialize(Composite parent) {
 
 		createEditorPages(parent);
-		extendedSequenceTableUI.update(loadSequence());
+		extendedSequenceListUI.update(loadSequence());
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -189,6 +189,6 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 
 	private void createScanPage(Composite parent) {
 
-		extendedSequenceTableUI = new ExtendedSequenceTableUI(parent);
+		extendedSequenceListUI = new ExtendedSequenceListUI(parent);
 	}
 }

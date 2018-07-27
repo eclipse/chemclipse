@@ -51,9 +51,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
-public class ExtendedSequenceTableUI {
+public class ExtendedSequenceListUI {
 
-	private static final Logger logger = Logger.getLogger(ExtendedSequenceTableUI.class);
+	private static final Logger logger = Logger.getLogger(ExtendedSequenceListUI.class);
 	//
 	private Text dataPath;
 	private Composite toolbarSearch;
@@ -67,7 +67,7 @@ public class ExtendedSequenceTableUI {
 	//
 	private List<ISupplierEditorSupport> supplierEditorSupportList;
 
-	public ExtendedSequenceTableUI(Composite parent) {
+	public ExtendedSequenceListUI(Composite parent) {
 		supplierEditorSupportList = new ArrayList<>();
 		supplierEditorSupportList.add(new EditorSupportFactory(DataType.MSD).getInstanceEditorSupport());
 		supplierEditorSupportList.add(new EditorSupportFactory(DataType.CSD).getInstanceEditorSupport());
@@ -380,6 +380,7 @@ public class ExtendedSequenceTableUI {
 	private void reset() {
 
 		searchSupportUI.reset();
+		sequenceListUI.setInput(sequence);
 	}
 
 	private void createSequenceList(Composite parent) {
