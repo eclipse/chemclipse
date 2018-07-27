@@ -149,6 +149,18 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_EXTEND_X, PreferenceConstants.DEF_CHROMATOGRAM_EXTEND_X);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_X_ZOOM_ONLY, PreferenceConstants.DEF_CHROMATOGRAM_X_ZOOM_ONLY);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_Y_ZOOM_ONLY, PreferenceConstants.DEF_CHROMATOGRAM_Y_ZOOM_ONLY);
+		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_MILLISECONDS);
+		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_POSITION_X_AXIS_MILLISECONDS);
+		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_SECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_SECONDS);
+		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_SECONDS, PreferenceConstants.DEF_POSITION_X_AXIS_SECONDS);
+		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_MINUTES, PreferenceConstants.DEF_SHOW_X_AXIS_MINUTES);
+		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_MINUTES, PreferenceConstants.DEF_POSITION_X_AXIS_MINUTES);
+		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_SCANS, PreferenceConstants.DEF_SHOW_X_AXIS_SCANS);
+		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_SCANS, PreferenceConstants.DEF_POSITION_X_AXIS_SCANS);
+		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_INTENSITY);
+		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY, PreferenceConstants.DEF_POSITION_Y_AXIS_INTENSITY);
+		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY);
+		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY);
 		//
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE);

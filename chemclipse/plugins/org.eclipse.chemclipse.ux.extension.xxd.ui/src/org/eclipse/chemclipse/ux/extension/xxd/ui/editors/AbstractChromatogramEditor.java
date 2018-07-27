@@ -242,6 +242,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 			} else if(chromatogram instanceof IChromatogramWSD) {
 				type = " [WSD]";
 			}
+			//
 			part.setLabel(chromatogram.getName() + type);
 			dirtyable.setDirty(true);
 			chromatogramSelection.update(true);

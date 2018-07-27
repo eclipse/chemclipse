@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.swt.SWT;
+import org.swtchart.IAxis.Position;
 import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.LineStyle;
 
@@ -54,6 +55,11 @@ public class PreferenceConstants {
 			{"Plus", PlotSymbolType.PLUS.toString()}, //
 			{"Square", PlotSymbolType.SQUARE.toString()}, //
 			{"Triangle", PlotSymbolType.TRIANGLE.toString()}//
+	};
+	//
+	public static String[][] POSITIONS = new String[][]{//
+			{"Primary", Position.Primary.toString()}, //
+			{"Secondary", Position.Secondary.toString()}//
 	};
 	/*
 	 * General / Task Quick Access
@@ -315,6 +321,30 @@ public class PreferenceConstants {
 	public static final boolean DEF_CHROMATOGRAM_X_ZOOM_ONLY = false;
 	public static final String P_CHROMATOGRAM_Y_ZOOM_ONLY = "chromatogramYZoomOnly";
 	public static final boolean DEF_CHROMATOGRAM_Y_ZOOM_ONLY = false;
+	public static final String P_SHOW_X_AXIS_MILLISECONDS = "showXAxisMilliseconds";
+	public static final boolean DEF_SHOW_X_AXIS_MILLISECONDS = false;
+	public static final String P_POSITION_X_AXIS_MILLISECONDS = "positionXAxisMilliseconds";
+	public static final String DEF_POSITION_X_AXIS_MILLISECONDS = Position.Secondary.toString();
+	public static final String P_SHOW_X_AXIS_SECONDS = "showXAxisSeconds";
+	public static final boolean DEF_SHOW_X_AXIS_SECONDS = false;
+	public static final String P_POSITION_X_AXIS_SECONDS = "positionXAxisSeconds";
+	public static final String DEF_POSITION_X_AXIS_SECONDS = Position.Primary.toString();
+	public static final String P_SHOW_X_AXIS_MINUTES = "showXAxisMinutes";
+	public static final boolean DEF_SHOW_X_AXIS_MINUTES = true;
+	public static final String P_POSITION_X_AXIS_MINUTES = "positionXAxisMinutes";
+	public static final String DEF_POSITION_X_AXIS_MINUTES = Position.Primary.toString();
+	public static final String P_SHOW_X_AXIS_SCANS = "showXAxisScans";
+	public static final boolean DEF_SHOW_X_AXIS_SCANS = false;
+	public static final String P_POSITION_X_AXIS_SCANS = "positionXAxisScans";
+	public static final String DEF_POSITION_X_AXIS_SCANS = Position.Primary.toString();
+	public static final String P_SHOW_Y_AXIS_INTENSITY = "showYAxisIntensity";
+	public static final boolean DEF_SHOW_Y_AXIS_INTENSITY = true;
+	public static final String P_POSITION_Y_AXIS_INTENSITY = "positionYAxisIntensity";
+	public static final String DEF_POSITION_Y_AXIS_INTENSITY = Position.Primary.toString();
+	public static final String P_SHOW_Y_AXIS_RELATIVE_INTENSITY = "showYAxisRelativeIntensity";
+	public static final boolean DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY = true;
+	public static final String P_POSITION_Y_AXIS_RELATIVE_INTENSITY = "positionYAxisRelativeIntensity";
+	public static final String DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY = Position.Secondary.toString();
 	//
 	public static final String P_CHROMATOGRAM_OVERLAY_IONS_SELECTION = "chromatogramOverlayIonsSelection";
 	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION = OverlayChartSupport.SELECTED_IONS_USERS_CHOICE;

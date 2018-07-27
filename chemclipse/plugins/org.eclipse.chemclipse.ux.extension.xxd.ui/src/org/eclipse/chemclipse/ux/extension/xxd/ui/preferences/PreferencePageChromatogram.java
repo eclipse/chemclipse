@@ -49,6 +49,18 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(new DoubleFieldEditor(PreferenceConstants.P_CHROMATOGRAM_EXTEND_X, "Extend X (1.0 = 100%)", PreferenceConstants.MIN_CHROMATOGRAM_EXTEND_X, PreferenceConstants.MAX_CHROMATOGRAM_EXTEND_X, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_X_ZOOM_ONLY, "X Zoom Only", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_Y_ZOOM_ONLY, "Y Zoom Only", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, "Show Milliseconds X Axis", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, "Position Milliseconds X Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_SECONDS, "Show Seconds X Axis", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_SECONDS, "Position Seconds X Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MINUTES, "Show Minutes X Axis", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MINUTES, "Position Minutes X Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_SCANS, "Show Scans X Axis", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_SCANS, "Position Scans X Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY, "Show Intensity Y Axis", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY, "Position Intensity Y Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, "Show Relative Intensity Y Axis", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, "Position Relative Intensity Y Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
 	}
 
 	private void addIntegerField(String name, String labelText, int min, int max) {

@@ -177,6 +177,7 @@ public class ExtendedChromatogramUI {
 	protected static final String TYPE_CSD = "TYPE_CSD";
 	protected static final String TYPE_WSD = "TYPE_WSD";
 	//
+	private static final String TITLE_X_AXIS_SCANS = "Scans (approx.)";
 	private static final String LABEL_SCAN_NUMBER = "Scan Number";
 	//
 	private static final String SERIES_ID_CHROMATOGRAM = "Chromatogram";
@@ -317,6 +318,7 @@ public class ExtendedChromatogramUI {
 			/*
 			 * Adjust
 			 */
+			adjustAxisSettings();
 			addChartMenuEntries();
 			updateChromatogram();
 			if(referencedChromatogramSelections == null) {
@@ -2028,6 +2030,7 @@ public class ExtendedChromatogramUI {
 
 	private void applySettings() {
 
+		adjustAxisSettings();
 		updateChromatogram();
 	}
 
@@ -2124,6 +2127,48 @@ public class ExtendedChromatogramUI {
 				if(index >= 0) {
 					comboViewerSeparationColumn.getCombo().select(index);
 				}
+			}
+		}
+	}
+
+	private void adjustAxisSettings() {
+
+		chromatogramChart.modifyAxisSet();
+		/*
+		 * Scan Axis
+		 */
+		if(chromatogramSelection != null) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			if(chromatogram != null) {
+				IChartSettings chartSettings = chromatogramChart.getChartSettings();
+				ISecondaryAxisSettings axisSettings = chromatogramChart.getSecondaryAxisSettingsX(TITLE_X_AXIS_SCANS);
+				//
+				if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SCANS)) {
+					/*
+					 * Add
+					 */
+					if(axisSettings == null) {
+						try {
+							int scanDelay = chromatogram.getScanDelay();
+							int scanInterval = chromatogram.getScanInterval();
+							ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_SCANS, new MillisecondsToScanNumberConverter(scanDelay, scanInterval));
+							secondaryAxisSettingsX.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SCANS)));
+							secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
+							secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+							chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
+						} catch(Exception e) {
+							logger.warn(e);
+						}
+					}
+				} else {
+					/*
+					 * Remove
+					 */
+					if(axisSettings != null) {
+						chartSettings.getSecondaryAxisSettingsListX().remove(axisSettings);
+					}
+				}
+				chromatogramChart.applySettings(chartSettings);
 			}
 		}
 	}

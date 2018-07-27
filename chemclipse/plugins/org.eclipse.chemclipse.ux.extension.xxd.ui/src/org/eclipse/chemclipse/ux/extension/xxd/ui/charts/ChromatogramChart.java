@@ -13,22 +13,35 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToMinuteConverter;
+import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToSecondsConverter;
 import org.eclipse.eavp.service.swtchart.axisconverter.RelativeIntensityConverter;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.IPrimaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.core.ISecondaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.core.SecondaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.IAxis.Position;
 import org.swtchart.LineStyle;
 
 public class ChromatogramChart extends LineChart {
+
+	private static final String TITLE_X_AXIS_MILLISECONDS = "Retention Time (milliseconds)";
+	private static final String TITLE_X_AXIS_SECONDS = "Seconds";
+	private static final String TITLE_X_AXIS_MINUTES = "Minutes";
+	private static final String TITLE_Y_AXIS_INTENSITY = "Intensity";
+	private static final String TITLE_Y_AXIS_RELATIVE_INTENSITY = "Relative Intensity [%]";
+	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ChromatogramChart() {
 		super();
@@ -38,6 +51,30 @@ public class ChromatogramChart extends LineChart {
 	public ChromatogramChart(Composite parent, int style) {
 		super(parent, style);
 		initialize();
+	}
+
+	/**
+	 * Modifies the x and y axis set given in accordance to the given settings.
+	 */
+	public void modifyAxisSet() {
+
+		modifyMillisecondsXAxis();
+		modifyIntensityYAxis();
+		modifySecondsXAxis();
+		modifyMinutesXAxis();
+		modifyRelativeIntensityYAxis();
+	}
+
+	public ISecondaryAxisSettings getSecondaryAxisSettingsX(String title) {
+
+		IChartSettings chartSettings = getChartSettings();
+		return getSecondaryAxisSettings(chartSettings.getSecondaryAxisSettingsListX(), title);
+	}
+
+	public ISecondaryAxisSettings getSecondaryAxisSettingsY(String title) {
+
+		IChartSettings chartSettings = getChartSettings();
+		return getSecondaryAxisSettings(chartSettings.getSecondaryAxisSettingsListY(), title);
 	}
 
 	private void initialize() {
@@ -52,40 +89,107 @@ public class ChromatogramChart extends LineChart {
 		chartSettings.getRangeRestriction().setZeroX(true);
 		chartSettings.getRangeRestriction().setZeroY(true);
 		//
-		setPrimaryAxisSet(chartSettings);
-		addSecondaryAxisSet(chartSettings);
+		modifyAxisSet();
 		applySettings(chartSettings);
 	}
 
-	private void setPrimaryAxisSet(IChartSettings chartSettings) {
+	private void modifyMillisecondsXAxis() {
 
+		IChartSettings chartSettings = getChartSettings();
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
-		primaryAxisSettingsX.setTitle("Retention Time (milliseconds)");
+		primaryAxisSettingsX.setTitle(TITLE_X_AXIS_MILLISECONDS);
 		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		primaryAxisSettingsX.setPosition(Position.Secondary);
-		primaryAxisSettingsX.setVisible(false);
+		primaryAxisSettingsX.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS)));
+		primaryAxisSettingsX.setVisible(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS));
 		primaryAxisSettingsX.setGridLineStyle(LineStyle.NONE);
-		//
+	}
+
+	private void modifyIntensityYAxis() {
+
+		IChartSettings chartSettings = getChartSettings();
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
-		primaryAxisSettingsY.setTitle("Intensity");
+		primaryAxisSettingsY.setTitle(TITLE_Y_AXIS_INTENSITY);
 		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsY.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY)));
+		primaryAxisSettingsY.setVisible(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY));
 		primaryAxisSettingsY.setGridLineStyle(LineStyle.NONE);
 	}
 
-	private void addSecondaryAxisSet(IChartSettings chartSettings) {
+	private void modifyRelativeIntensityYAxis() {
 
-		ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings("Minutes", new MillisecondsToMinuteConverter());
-		secondaryAxisSettingsX.setPosition(Position.Primary);
-		secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
+		IChartSettings chartSettings = getChartSettings();
+		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsY(TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY)) {
+			if(axisSettings == null) {
+				ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(TITLE_Y_AXIS_RELATIVE_INTENSITY, new RelativeIntensityConverter(SWT.VERTICAL, true));
+				secondaryAxisSettingsY.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY)));
+				secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
+				secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+				chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
+			} else {
+				axisSettings.setVisible(true);
+			}
+		} else {
+			if(axisSettings != null) {
+				axisSettings.setVisible(false);
+			}
+		}
+	}
+
+	private void modifySecondsXAxis() {
+
+		IChartSettings chartSettings = getChartSettings();
+		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsX(TITLE_X_AXIS_SECONDS);
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SECONDS)) {
+			if(axisSettings == null) {
+				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_SECONDS, new MillisecondsToSecondsConverter());
+				secondaryAxisSettingsX.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SECONDS)));
+				secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
+				secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
+			} else {
+				axisSettings.setVisible(true);
+			}
+		} else {
+			if(axisSettings != null) {
+				axisSettings.setVisible(false);
+			}
+		}
+	}
+
+	private void modifyMinutesXAxis() {
+
+		IChartSettings chartSettings = getChartSettings();
+		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsX(TITLE_X_AXIS_MINUTES);
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MINUTES)) {
+			if(axisSettings == null) {
+				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_MINUTES, new MillisecondsToMinuteConverter());
+				secondaryAxisSettingsX.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_MINUTES)));
+				secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
+				secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
+			} else {
+				axisSettings.setVisible(true);
+			}
+		} else {
+			if(axisSettings != null) {
+				axisSettings.setVisible(false);
+			}
+		}
+	}
+
+	private ISecondaryAxisSettings getSecondaryAxisSettings(List<ISecondaryAxisSettings> secondaryAxisSettingsList, String title) {
+
+		ISecondaryAxisSettings secondaryAxisSettings = null;
 		//
-		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter(SWT.VERTICAL, true));
-		secondaryAxisSettingsY.setPosition(Position.Secondary);
-		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
+		for(ISecondaryAxisSettings secondaryAxisSetting : secondaryAxisSettingsList) {
+			if(title.equals(secondaryAxisSetting.getTitle())) {
+				secondaryAxisSettings = secondaryAxisSetting;
+			}
+		}
+		//
+		return secondaryAxisSettings;
 	}
 }
