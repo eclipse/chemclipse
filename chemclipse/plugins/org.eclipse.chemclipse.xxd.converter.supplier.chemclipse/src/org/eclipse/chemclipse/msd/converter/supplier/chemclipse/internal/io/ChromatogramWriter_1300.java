@@ -662,7 +662,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		ISeparationColumnIndices separationColumnIndices = chromatogram.getSeparationColumnIndices();
 		dataOutputStream.writeInt(separationColumnIndices.size());
 		for(Map.Entry<Integer, IRetentionIndexEntry> entry : separationColumnIndices.entrySet()) {
-			IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)entry;
+			IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)entry.getValue();
 			writeString(dataOutputStream, retentionIndexEntry.getName());
 			dataOutputStream.writeInt(retentionIndexEntry.getRetentionTime());
 			dataOutputStream.writeFloat(retentionIndexEntry.getRetentionIndex());
