@@ -276,21 +276,25 @@ public class ExtendedChromatogramUI {
 
 	public boolean fireUpdatePeak() {
 
-		IPeak peak = getChromatogramSelection().getSelectedPeak();
-		if(peak != null) {
-			IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-			eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
-			final Map<String, Object> map = new HashMap<>();
-			map.put(IChemClipseEvents.PROPERTY_PEAK_MSD, peak);
-			map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, true);
-			if(peak instanceof IPeakMSD) {
-				eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAK, map);
-			}
-			if(peak instanceof IPeakCSD) {
-				eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_PEAK, map);
-			}
-			if(peak instanceof IPeakWSD) {
-				eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_PEAK, map);
+		IPeak peak = null;
+		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
+		if(chromatogramSelection != null) {
+			peak = chromatogramSelection.getSelectedPeak();
+			if(peak != null) {
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+				final Map<String, Object> map = new HashMap<>();
+				map.put(IChemClipseEvents.PROPERTY_PEAK_MSD, peak);
+				map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, true);
+				if(peak instanceof IPeakMSD) {
+					eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAK, map);
+				}
+				if(peak instanceof IPeakCSD) {
+					eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_PEAK, map);
+				}
+				if(peak instanceof IPeakWSD) {
+					eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_PEAK, map);
+				}
 			}
 		}
 		return peak != null ? true : false;
@@ -298,10 +302,14 @@ public class ExtendedChromatogramUI {
 
 	public boolean fireUpdateScan() {
 
-		IScan scan = getChromatogramSelection().getSelectedScan();
-		if(scan != null) {
-			IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-			eventBroker.post(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+		IScan scan = null;
+		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
+		if(chromatogramSelection != null) {
+			scan = chromatogramSelection.getSelectedScan();
+			if(scan != null) {
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+				eventBroker.post(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+			}
 		}
 		return scan != null ? true : false;
 	}
