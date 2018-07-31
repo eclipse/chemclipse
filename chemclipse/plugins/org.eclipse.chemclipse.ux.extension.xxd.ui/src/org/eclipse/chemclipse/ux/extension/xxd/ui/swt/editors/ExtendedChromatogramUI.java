@@ -256,19 +256,42 @@ public class ExtendedChromatogramUI {
 
 		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
 		if(chromatogramSelection != null) {
-			IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-			eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
+			//
+			DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+					eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
+				}
+			});
+			//
 			final Map<String, Object> map = new HashMap<>();
 			map.put(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION, chromatogramSelection);
 			map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, true);
+			final String topic;
+			//
 			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, map);
+				topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION;
+			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+				topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION;
+			} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+				topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION;
+			} else {
+				topic = null;
 			}
-			if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-				eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, map);
-			}
-			if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-				eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, map);
+			//
+			if(topic != null) {
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+						eventBroker.post(topic, map);
+					}
+				});
 			}
 		}
 		return chromatogramSelection != null ? true : false;
@@ -276,42 +299,74 @@ public class ExtendedChromatogramUI {
 
 	public boolean fireUpdatePeak() {
 
-		IPeak peak = null;
+		boolean update = false;
 		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
 		if(chromatogramSelection != null) {
-			peak = chromatogramSelection.getSelectedPeak();
+			final IPeak peak = chromatogramSelection.getSelectedPeak();
 			if(peak != null) {
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+				//
+				update = true;
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+						eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+					}
+				});
+				//
 				final Map<String, Object> map = new HashMap<>();
 				map.put(IChemClipseEvents.PROPERTY_PEAK_MSD, peak);
 				map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, true);
+				final String topic;
+				//
 				if(peak instanceof IPeakMSD) {
-					eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAK, map);
+					topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAK;
+				} else if(peak instanceof IPeakCSD) {
+					topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_PEAK;
+				} else if(peak instanceof IPeakWSD) {
+					topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_PEAK;
+				} else {
+					topic = null;
 				}
-				if(peak instanceof IPeakCSD) {
-					eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_PEAK, map);
-				}
-				if(peak instanceof IPeakWSD) {
-					eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_PEAK, map);
+				//
+				if(topic != null) {
+					DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+							eventBroker.post(topic, map);
+						}
+					});
 				}
 			}
 		}
-		return peak != null ? true : false;
+		return update;
 	}
 
 	public boolean fireUpdateScan() {
 
-		IScan scan = null;
+		boolean update = false;
 		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
 		if(chromatogramSelection != null) {
-			scan = chromatogramSelection.getSelectedScan();
+			final IScan scan = chromatogramSelection.getSelectedScan();
 			if(scan != null) {
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.post(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+				update = true;
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+						eventBroker.post(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+					}
+				});
 			}
 		}
-		return scan != null ? true : false;
+		return update;
 	}
 
 	public ChromatogramChart getChromatogramChart() {

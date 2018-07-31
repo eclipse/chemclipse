@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.ui.support.IMeasurementResultTitles;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
@@ -300,30 +301,14 @@ public class ExtendedMeasurementResultUI {
 
 	private void updateMeasurementResult(IMeasurementResult measurementResult) {
 
-		/*
-		 * TODO
-		 * Somehow, setContentProvider fails when switching to a new
-		 * measurement result. I definitively don't understand why it happens,
-		 * cause it shouldn't. That's why it's called twice on error.
-		 */
-		try {
-			prepareMeasurementResultTable(measurementResult);
+		if(prepareMeasurementResultTable(measurementResult)) {
 			extendedTableViewer.setInput(measurementResult);
-		} catch(Exception e) {
-			logger.warn(e);
-			try {
-				prepareMeasurementResultTable(measurementResult);
-				extendedTableViewer.setInput(measurementResult);
-			} catch(Exception e1) {
-				logger.warn(e1);
-			}
 		}
-		//
-		extendedTableViewer.setInput(measurementResult);
 	}
 
-	private void prepareMeasurementResultTable(IMeasurementResult measurementResult) throws Exception {
+	private boolean prepareMeasurementResultTable(IMeasurementResult measurementResult) {
 
+		boolean isContentProviderSet = false;
 		if(measurementResult != null) {
 			/*
 			 * Get the UI provider and display the results.
@@ -331,48 +316,65 @@ public class ExtendedMeasurementResultUI {
 			labelMeasurementResultInfo.setText(measurementResult.getDescription());
 			if(!resultProviderId.equals(measurementResult.getIdentifier())) {
 				resultProviderId = measurementResult.getIdentifier();
-				IConfigurationElement provider = getMeasurementResultVisualizationProvider(resultProviderId);
-				if(provider != null) {
-					/*
-					 * Clear / Initialize
-					 */
-					Table table = extendedTableViewer.getTable();
-					extendedTableViewer.setComparator(null);
-					if(table.getItemCount() > 0) {
-						extendedTableViewer.setInput(null);
+				IConfigurationElement configurationElement = getMeasurementResultVisualizationProvider(resultProviderId);
+				if(configurationElement != null) {
+					try {
+						/*
+						 * Clear / Initialize
+						 */
+						Table table = extendedTableViewer.getTable();
+						extendedTableViewer.setComparator(null);
+						if(table.getItemCount() > 0) {
+							extendedTableViewer.setInput(null);
+						}
+						table.clearAll();
+						//
+						setContentProvider(configurationElement, table);
+						setSelectionListener(configurationElement, table);
+						isContentProviderSet = true;
+					} catch(CoreException e) {
+						logger.info(e);
 					}
-					table.clearAll();
-					//
-					IMeasurementResultTitles titles = (IMeasurementResultTitles)provider.createExecutableExtension(ATTRIBUTE_TITLES);
-					IStructuredContentProvider contentProvider = (IStructuredContentProvider)provider.createExecutableExtension(ATTRIBUTE_CONTENT_PROVIDER);
-					ITableLabelProvider tableLableProvider = (ITableLabelProvider)provider.createExecutableExtension(ATTRIBUTE_LABEL_PROVIDER);
-					ViewerComparator viewerComparator = (ViewerComparator)provider.createExecutableExtension(ATTRIBUTE_COMPARATOR);
-					SelectionListener selectionListenerNew = (SelectionListener)provider.createExecutableExtension(ATTRIBUTE_SELECTION_LISTENER);
-					//
-					extendedTableViewer.createColumns(titles.getTitles(), titles.getBounds());
-					extendedTableViewer.setLabelProvider(tableLableProvider);
-					extendedTableViewer.setContentProvider(contentProvider);
-					extendedTableViewer.setComparator(viewerComparator);
-					/*
-					 * Add the selection listener.
-					 */
-					if(selectionListener != null) {
-						table.removeSelectionListener(selectionListener);
-					}
-					table.addSelectionListener(selectionListenerNew);
-					selectionListener = selectionListenerNew;
 				}
 			}
-		} else {
+		}
+		//
+		return isContentProviderSet;
+	}
+
+	private void setContentProvider(IConfigurationElement configurationElement, Table table) throws CoreException {
+
+		IMeasurementResultTitles titles = (IMeasurementResultTitles)configurationElement.createExecutableExtension(ATTRIBUTE_TITLES);
+		IStructuredContentProvider contentProvider = (IStructuredContentProvider)configurationElement.createExecutableExtension(ATTRIBUTE_CONTENT_PROVIDER);
+		ITableLabelProvider tableLabelProvider = (ITableLabelProvider)configurationElement.createExecutableExtension(ATTRIBUTE_LABEL_PROVIDER);
+		ViewerComparator viewerComparator = (ViewerComparator)configurationElement.createExecutableExtension(ATTRIBUTE_COMPARATOR);
+		extendedTableViewer.createColumns(titles.getTitles(), titles.getBounds());
+		extendedTableViewer.setLabelProvider(tableLabelProvider);
+		extendedTableViewer.setContentProvider(contentProvider);
+		extendedTableViewer.setComparator(viewerComparator);
+	}
+
+	private void setSelectionListener(IConfigurationElement configurationElement, Table table) {
+
+		try {
 			/*
-			 * Reset
+			 * Remove an existing listener.
 			 */
-			extendedTableViewer.setComparator(null);
-			Table table = extendedTableViewer.getTable();
-			if(table.getItemCount() > 0) {
-				extendedTableViewer.setInput(null);
+			if(this.selectionListener != null) {
+				table.removeSelectionListener(selectionListener);
 			}
-			table.removeAll();
+			/*
+			 * Be aware, the selection listener is optional.
+			 */
+			SelectionListener selectionListener = null;
+			Object object = configurationElement.createExecutableExtension(ATTRIBUTE_SELECTION_LISTENER);
+			if(object instanceof SelectionListener) {
+				selectionListener = (SelectionListener)object;
+				table.addSelectionListener(selectionListener);
+			}
+			this.selectionListener = selectionListener;
+		} catch(CoreException e) {
+			logger.info(e);
 		}
 	}
 
