@@ -61,7 +61,13 @@ public class ChromatogramFilter {
 		IProcessingInfo processingInfo;
 		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
+			try {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
+			} catch(Exception e) {
+				logger.error(e.getLocalizedMessage(), e);
+				processingInfo = new ProcessingInfo();
+				processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, e.getLocalizedMessage());
+			}
 		} else {
 			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
@@ -84,7 +90,13 @@ public class ChromatogramFilter {
 		IProcessingInfo processingInfo;
 		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
+			try {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
+			} catch(Exception e) {
+				logger.error(e.getLocalizedMessage(), e);
+				processingInfo = new ProcessingInfo();
+				processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, e.getLocalizedMessage());
+			}
 		} else {
 			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
