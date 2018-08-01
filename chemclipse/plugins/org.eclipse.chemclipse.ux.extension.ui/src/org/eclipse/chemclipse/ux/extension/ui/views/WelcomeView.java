@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.views;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +20,8 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.swt.ISelectionHandler;
 import org.eclipse.chemclipse.ux.extension.ui.swt.TaskTile;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -47,7 +43,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class WelcomeView {
 
-	private static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
+	public static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
 	private static final String PERSPECTIVE_QUANTITATION = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.perspective";
 	private static final String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
 	//
@@ -85,49 +81,6 @@ public class WelcomeView {
 		}
 	}
 
-	private class ComponentDemo implements ISelectionHandler {
-
-		@Override
-		public void handleEvent() {
-
-			switchPerspective(PERSPECTIVE_DATA_ANALYSIS);
-			DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					try {
-						URL url = new URL(Platform.getInstallLocation().getURL() + "DemoChromatogram.ocb");
-						File file = new File(url.getFile());
-						if(file.exists()) {
-							/*
-							 * Get the editor part stack.
-							 */
-							MPartStack partStack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
-							/*
-							 * Create the input part and prepare it.
-							 */
-							MPart part = MBasicFactory.INSTANCE.createInputPart();
-							part.setElementId("org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramEditorMSD");
-							part.setContributionURI("bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD");
-							part.setObject(file.getAbsolutePath());
-							part.setIconURI("platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif");
-							part.setLabel(file.getName());
-							part.setTooltip("Demo Chromatogram (MSD)");
-							part.setCloseable(true);
-							/*
-							 * Add it to the stack and show it.
-							 */
-							partStack.getChildren().add(part);
-							partService.showPart(part, PartState.ACTIVATE);
-						}
-					} catch(Exception e) {
-						System.out.println(e);
-					}
-				}
-			});
-		}
-	}
 
 	@Inject
 	public WelcomeView(Composite parent) {
@@ -166,7 +119,7 @@ public class WelcomeView {
 		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 2, 2, new Component(PERSPECTIVE_DATA_ANALYSIS), imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.");
 		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_QUANTITATION), null, "Quantitation", "Used for ISTD and ESTD quantitation");
 		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_LOGGING), null, "Logging", "Have a look at the log files.");
-		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 2, 1, new ComponentDemo(), null, "Demo", "Load a demo chromatogram.");
+		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 2, 1, new DemoWelcomeTile(this), null, "Demo", "Load a demo chromatogram.");
 		/*
 		 * Registered Tiles
 		 */
@@ -225,6 +178,31 @@ public class WelcomeView {
 				eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, model.getLabel());
 			}
 		}
+	}
+	
+	MPart createChromatogramPart() {
+		
+		/*
+		 * Create the input part and prepare it.
+		 */
+		MPart part = MBasicFactory.INSTANCE.createInputPart();
+		part.setElementId("org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramEditorMSD");
+		part.setContributionURI("bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD");
+		part.setIconURI("platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif");
+		part.setCloseable(true);
+		return part;
+	}
+	
+	void showEditorPart(MPart part) {
+		/*
+		 * Get the editor part stack.
+		 */
+		MPartStack partStack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
+		/*
+		 * Add it to the stack and show it.
+		 */
+		partStack.getChildren().add(part);
+		partService.showPart(part, PartState.ACTIVATE);
 	}
 
 	MPerspective getPerspectiveModel(String perspectiveId) {
