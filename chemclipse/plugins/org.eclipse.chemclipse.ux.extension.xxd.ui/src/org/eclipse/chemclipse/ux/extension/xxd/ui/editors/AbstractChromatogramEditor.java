@@ -40,8 +40,8 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
@@ -260,8 +260,8 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 				 */
 				@SuppressWarnings("unchecked")
 				Map<String, Object> map = (Map<String, Object>)object;
-				File file = new File((String)map.get(ISupplierFileEditorSupport.MAP_FILE));
-				boolean batch = (boolean)map.get(ISupplierFileEditorSupport.MAP_BATCH);
+				File file = new File((String)map.get(EditorSupport.MAP_FILE));
+				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
 				chromatogramSelection = loadChromatogramSelection(file, batch);
 			} else {
 				/*

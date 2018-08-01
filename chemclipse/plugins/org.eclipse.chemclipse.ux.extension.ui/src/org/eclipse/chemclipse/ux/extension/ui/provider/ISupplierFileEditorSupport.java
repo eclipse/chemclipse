@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.e4.core.internal.contexts.EclipseContext;
@@ -36,9 +37,6 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
 @SuppressWarnings({"restriction"})
 public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
-
-	String MAP_FILE = "File";
-	String MAP_BATCH = "Batch";
 
 	boolean openEditor(final File file);
 
@@ -105,8 +103,8 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 			 * Get the file to load via the map.
 			 */
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put(MAP_FILE, file.getAbsolutePath());
-			map.put(MAP_BATCH, batch);
+			map.put(EditorSupport.MAP_FILE, file.getAbsolutePath());
+			map.put(EditorSupport.MAP_BATCH, batch);
 			part.setObject(map);
 			part.setLabel(file.getName());
 		}

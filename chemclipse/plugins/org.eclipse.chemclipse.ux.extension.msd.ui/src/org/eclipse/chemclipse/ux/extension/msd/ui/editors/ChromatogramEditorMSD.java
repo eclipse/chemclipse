@@ -49,6 +49,7 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionCheckBoxEditingSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionContentProvider;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionLabelProvider;
@@ -57,7 +58,6 @@ import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.ChromatogramI
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
 import org.eclipse.chemclipse.ux.extension.ui.dialogs.ReferencedChromatogramDialog;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -430,8 +430,8 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 				 */
 				@SuppressWarnings("unchecked")
 				Map<String, Object> map = (Map<String, Object>)object;
-				File file = new File((String)map.get(ISupplierFileEditorSupport.MAP_FILE));
-				boolean batch = (boolean)map.get(ISupplierFileEditorSupport.MAP_BATCH);
+				File file = new File((String)map.get(EditorSupport.MAP_FILE));
+				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
 				importChromatogram(file, batch);
 			} else if(object instanceof IChromatogramMSD) {
 				IChromatogramMSD chromatogram = (IChromatogramMSD)object;

@@ -36,10 +36,10 @@ import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.DatabaseImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumLibraryUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -208,8 +208,8 @@ public class DatabaseEditor implements IChemClipseEditor {
 				 */
 				@SuppressWarnings("unchecked")
 				Map<String, Object> map = (Map<String, Object>)object;
-				File file = new File((String)map.get(ISupplierFileEditorSupport.MAP_FILE));
-				boolean batch = (boolean)map.get(ISupplierFileEditorSupport.MAP_BATCH);
+				File file = new File((String)map.get(EditorSupport.MAP_FILE));
+				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
 				importMassSpectra(file, batch);
 			} else if(object instanceof String) {
 				/*
