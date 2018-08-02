@@ -11,21 +11,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
-import javax.inject.Inject;
-
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
-public class ChromatogramEditorCSD extends ChromatogramEditor {
+public class ChromatogramEditor extends AbstractChromatogramEditor {
 
-	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramEditorCSD";
-	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorCSD";
+	private Composite parent;
 
-	@Inject
-	public ChromatogramEditorCSD(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
-		super(DataType.CSD, parent, part, dirtyable, shell);
+	public ChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
+		super(dataType, parent, part, dirtyable, shell);
+		this.parent = parent;
+	}
+
+	public void setFocus() {
+
+		parent.setFocus();
 	}
 }

@@ -154,5 +154,15 @@
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.referencePageChromatogramScans"
             name="Chromatogram Scans">
       </page>                                                           
-   </extension>   
+   </extension> 
+   <extension
+         point="org.eclipse.ui.editors">  
+      <editor
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditor3x"
+            extensions="ocb"
+            icon="icons/16x16/chromatogram.gif"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.editors.chromatogramEditor3x"
+            name="Chromatogram">
+      </editor>      
+   </extension>     
 </plugin>
