@@ -292,7 +292,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 		try {
 			ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(this, forceReload);
 		} catch(Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 

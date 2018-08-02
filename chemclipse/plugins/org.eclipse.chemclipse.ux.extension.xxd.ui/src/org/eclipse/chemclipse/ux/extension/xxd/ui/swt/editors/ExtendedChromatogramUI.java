@@ -478,10 +478,8 @@ public class ExtendedChromatogramUI {
 			monitor.run(true, true, runnable);
 			updateChromatogram();
 			updateSelection();
-		} catch(InvocationTargetException e) {
-			logger.warn(e);
-		} catch(InterruptedException e) {
-			logger.warn(e);
+		} catch(Exception e) {
+			logger.error(e.getLocalizedMessage(), e);
 		}
 	}
 
