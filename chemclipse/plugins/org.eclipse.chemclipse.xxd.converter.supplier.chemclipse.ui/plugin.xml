@@ -9,15 +9,5 @@
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences.converterPreferencePage"
             name="OpenChrom Converter (*.ocb)">
       </page>
-   </extension>
-   <extension
-         point="org.eclipse.ui.editors">  
-      <editor
-            class="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.editors.EditorChromatogram"
-            extensions="ocb"
-            icon="icons/16x16/chromatogram.gif"
-            id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.editors.editorChromatogram"
-            name="Chromatogram">
-      </editor>      
-   </extension>   
+   </extension>  
 </plugin>
