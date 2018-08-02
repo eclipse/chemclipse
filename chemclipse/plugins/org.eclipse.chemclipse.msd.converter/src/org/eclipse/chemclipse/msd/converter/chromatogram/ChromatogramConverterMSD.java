@@ -146,7 +146,6 @@ public final class ChromatogramConverterMSD {
 	public static IProcessingInfo convert(final File file, final IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = getChromatogram(file, false, monitor);
-		processingInfo.addMessages(processingInfo);
 		processingInfo.setProcessingResult(processingInfo.getProcessingResult());
 		return processingInfo;
 	}

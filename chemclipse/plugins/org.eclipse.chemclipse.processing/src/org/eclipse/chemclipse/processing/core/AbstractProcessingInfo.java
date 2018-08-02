@@ -34,7 +34,7 @@ public abstract class AbstractProcessingInfo implements IProcessingInfo {
 	@Override
 	public void addMessages(IProcessingInfo processingInfo) {
 
-		if(processingInfo != null) {
+		if(processingInfo != null && processingInfo != this) {
 			/*
 			 * Add each message to this message queue.
 			 */

@@ -85,10 +85,8 @@ public class ChromatogramConverterCSD {
 	public static IProcessingInfo convert(final File file, final IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = getChromatogram(file, false, monitor);
-		IProcessingInfo processingInfoImport = new ProcessingInfo();
-		processingInfoImport.addMessages(processingInfo);
-		processingInfoImport.setProcessingResult(processingInfo.getProcessingResult());
-		return processingInfoImport;
+		processingInfo.setProcessingResult(processingInfo.getProcessingResult());
+		return processingInfo;
 	}
 
 	/**
