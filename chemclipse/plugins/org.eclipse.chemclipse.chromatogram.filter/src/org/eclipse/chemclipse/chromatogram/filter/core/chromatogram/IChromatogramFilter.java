@@ -12,12 +12,13 @@
 package org.eclipse.chemclipse.chromatogram.filter.core.chromatogram;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-public interface IChromatogramFilter {
+public interface IChromatogramFilter<T extends IPeak> {
 
 	/**
 	 * Apply the filter in the given chromatogram selection and take care of the
@@ -30,7 +31,7 @@ public interface IChromatogramFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(IChromatogramSelection<T> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor);
 
 	/**
 	 * Apply the filter in the given chromatogram selection.
@@ -41,7 +42,7 @@ public interface IChromatogramFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo applyFilter(IChromatogramSelection<T> chromatogramSelection, IProgressMonitor monitor);
 
 	/**
 	 * Validates the selection and settings and returns a process info instance.
@@ -50,5 +51,5 @@ public interface IChromatogramFilter {
 	 * @param chromatogramFilterSettings
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings);
+	IProcessingInfo validate(IChromatogramSelection<T> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings);
 }
