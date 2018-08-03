@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Eclipse 4.6.x (Neon)" sequenceNumber="436">
+<?pde version="3.8"?><target name="Eclipse 4.6.x (Neon)" sequenceNumber="437">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.python.pydev.feature.feature.group" version="0.0.0"/>
@@ -182,6 +182,14 @@
 <unit id="org.eclipse.e4.tools.preference.spy.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.e4.tools.spies.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/e4/snapshots/org.eclipse.e4.tools/latest"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.persistence.sdk.feature.group" version="2.7.1.v20171221-bd47e8f"/>
+<repository location="http://download.eclipse.org/rt/eclipselink/updates/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.gemini.jpa.feature.feature.group" version="1.2.0.M1"/>
+<repository location="http://download.eclipse.org/gemini/jpa/updates"/>
 </location>
 </locations>
 </target>
