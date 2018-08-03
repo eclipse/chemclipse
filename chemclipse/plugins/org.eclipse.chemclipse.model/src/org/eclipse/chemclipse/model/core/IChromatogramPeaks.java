@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
-public interface IChromatogramPeaks<T> {
+public interface IChromatogramPeaks<T extends IPeak> {
 
 	void removeAllPeaks();
 

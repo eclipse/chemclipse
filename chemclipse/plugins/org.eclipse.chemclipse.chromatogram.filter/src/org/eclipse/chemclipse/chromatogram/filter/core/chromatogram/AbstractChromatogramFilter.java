@@ -12,16 +12,17 @@
 package org.eclipse.chemclipse.chromatogram.filter.core.chromatogram;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
-public abstract class AbstractChromatogramFilter implements IChromatogramFilter {
+public abstract class AbstractChromatogramFilter<T extends IPeak> implements IChromatogramFilter<T> {
 
 	private static final String DESCRIPTION = "Chromatogram Filter";
 
 	@Override
-	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings) {
+	public IProcessingInfo validate(IChromatogramSelection<T> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validateChromatogramSelection(chromatogramSelection));
@@ -37,7 +38,7 @@ public abstract class AbstractChromatogramFilter implements IChromatogramFilter 
 	 * @param chromatogramSelection
 	 * @return {@link IProcessingInfo}
 	 */
-	private IProcessingInfo validateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
+	private IProcessingInfo validateChromatogramSelection(IChromatogramSelection<T> chromatogramSelection) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramSelection == null) {

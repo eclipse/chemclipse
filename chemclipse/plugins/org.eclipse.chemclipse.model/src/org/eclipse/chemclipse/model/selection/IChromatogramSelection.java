@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.numeric.core.Point;
 
-public interface IChromatogramSelection extends IChromatogramUpdateListener, Serializable {
+public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUpdateListener, Serializable {
 
 	/**
 	 * Returns the stored chromatogram.
@@ -27,7 +27,7 @@ public interface IChromatogramSelection extends IChromatogramUpdateListener, Ser
 	 * 
 	 * @return {@link IChromatogram}
 	 */
-	IChromatogram getChromatogram();
+	IChromatogram<T> getChromatogram();
 
 	/**
 	 * Reset all values to the given chromatogram bounds.<br/>
