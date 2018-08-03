@@ -299,10 +299,8 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 			dialog.run(fork, false, runnable);
 			chromatogramSelection = runnable.getChromatogramSelection();
 			chromatogramFile = file;
-		} catch(InvocationTargetException e) {
-			logger.warn(e);
-		} catch(InterruptedException e) {
-			logger.warn(e);
+		} catch(Exception e) {
+			logger.error(e.getLocalizedMessage(), e);
 		}
 		//
 		return chromatogramSelection;
