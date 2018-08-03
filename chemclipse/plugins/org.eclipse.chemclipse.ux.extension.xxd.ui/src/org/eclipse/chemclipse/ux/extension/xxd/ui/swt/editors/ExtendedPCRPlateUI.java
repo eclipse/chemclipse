@@ -25,6 +25,7 @@ import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -136,5 +137,9 @@ public class ExtendedPCRPlateUI {
 
 		Composite composite = new Composite(parent, SWT.BORDER);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite.setLayout(new FillLayout());
+		//
+		Label label = new Label(composite, SWT.NONE);
+		label.setText("The PCR editor will be available soon. If you have test data, please contact the OpenChrom team.");
 	}
 }
