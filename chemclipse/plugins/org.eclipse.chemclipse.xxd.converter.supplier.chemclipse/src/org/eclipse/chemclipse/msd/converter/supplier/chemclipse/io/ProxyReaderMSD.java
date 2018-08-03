@@ -48,7 +48,7 @@ public class ProxyReaderMSD {
 		}
 		//
 		if(scanReaderProxy != null) {
-			scanReaderProxy.readMassSpectrum(file, offset, massSpectrum, ionTransitionSettings, monitor);
+			scanReaderProxy.readMassSpectrum(file, offset, massSpectrum, ionTransitionSettings);
 		}
 	}
 }

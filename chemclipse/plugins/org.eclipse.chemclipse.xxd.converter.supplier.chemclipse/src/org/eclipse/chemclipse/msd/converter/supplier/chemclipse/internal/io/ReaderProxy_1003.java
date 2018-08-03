@@ -38,7 +38,6 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectru
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
@@ -49,13 +48,13 @@ public class ReaderProxy_1003 extends AbstractZipReader implements IReaderProxy 
 	private static final Logger logger = Logger.getLogger(ReaderProxy_1003.class);
 
 	@Override
-	public void readMassSpectrum(File file, int offset, IVendorScanProxy massSpectrum, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
+	public void readMassSpectrum(File file, int offset, IVendorScanProxy massSpectrum, IIonTransitionSettings ionTransitionSettings) throws IOException {
 
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SCANS_MSD);
 			dataInputStream.skipBytes(offset);
-			readMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings, monitor);
+			readMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings);
 			dataInputStream.close();
 		} finally {
 			zipFile.close();
@@ -63,7 +62,7 @@ public class ReaderProxy_1003 extends AbstractZipReader implements IReaderProxy 
 	}
 
 	@Override
-	public void readMassSpectrum(IVendorScan massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
+	public void readMassSpectrum(IVendorScan massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
 
 		short massSpectrometer = dataInputStream.readShort(); // Mass Spectrometer
 		short massSpectrumType = dataInputStream.readShort(); // Mass Spectrum Type
@@ -94,7 +93,7 @@ public class ReaderProxy_1003 extends AbstractZipReader implements IReaderProxy 
 		/*
 		 * Identification Results
 		 */
-		readMassSpectrumIdentificationTargets(dataInputStream, massSpectrum, monitor);
+		readMassSpectrumIdentificationTargets(dataInputStream, massSpectrum);
 	}
 
 	private IVendorIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException, AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
@@ -128,7 +127,7 @@ public class ReaderProxy_1003 extends AbstractZipReader implements IReaderProxy 
 		return ion;
 	}
 
-	private void readMassSpectrumIdentificationTargets(DataInputStream dataInputStream, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
+	private void readMassSpectrumIdentificationTargets(DataInputStream dataInputStream, IScanMSD massSpectrum) throws IOException {
 
 		int numberOfMassSpectrumTargets = dataInputStream.readInt(); // Number Mass Spectrum Targets
 		for(int i = 1; i <= numberOfMassSpectrumTargets; i++) {

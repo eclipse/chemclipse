@@ -135,26 +135,26 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 			/*
 			 * WRITE THE FILES
 			 */
-			writeChromatogramMethod(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			writeChromatogramMethod(zipOutputStream, directoryPrefix, chromatogram);
 			subMonitor.worked(20);
-			writeChromatogramScans(zipOutputStream, directoryPrefix, chromatogram, monitor);
-			writeChromatogramBaseline(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			writeChromatogramScans(zipOutputStream, directoryPrefix, chromatogram);
+			writeChromatogramBaseline(zipOutputStream, directoryPrefix, chromatogram);
 			subMonitor.worked(20);
-			writeChromatogramPeaks(zipOutputStream, directoryPrefix, chromatogram, monitor);
-			writeChromatogramArea(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			writeChromatogramPeaks(zipOutputStream, directoryPrefix, chromatogram);
+			writeChromatogramArea(zipOutputStream, directoryPrefix, chromatogram);
 			subMonitor.worked(20);
-			writeChromatogramIdentification(zipOutputStream, directoryPrefix, chromatogram, monitor);
-			writeChromatogramHistory(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			writeChromatogramIdentification(zipOutputStream, directoryPrefix, chromatogram);
+			writeChromatogramHistory(zipOutputStream, directoryPrefix, chromatogram);
 			subMonitor.worked(20);
-			writeChromatogramMiscellaneous(zipOutputStream, directoryPrefix, chromatogram, monitor);
-			writeSeparationColumn(zipOutputStream, directoryPrefix, chromatogram, monitor);
+			writeChromatogramMiscellaneous(zipOutputStream, directoryPrefix, chromatogram);
+			writeSeparationColumn(zipOutputStream, directoryPrefix, chromatogram);
 			subMonitor.worked(20);
 		} finally {
 			SubMonitor.done(monitor);
 		}
 	}
 
-	private void writeChromatogramMethod(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramMethod(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -179,7 +179,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramScans(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramScans(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -230,7 +230,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramBaseline(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramBaseline(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -257,7 +257,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramPeaks(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramPeaks(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -277,7 +277,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramArea(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramArea(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -413,7 +413,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		}
 	}
 
-	private void writeChromatogramIdentification(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramIdentification(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -472,7 +472,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeBoolean(comparisonResult.isMatch()); // Is Match
 	}
 
-	private void writeChromatogramHistory(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramHistory(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -494,7 +494,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramMiscellaneous(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramMiscellaneous(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -516,7 +516,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeSeparationColumn(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeSeparationColumn(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;

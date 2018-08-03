@@ -99,7 +99,6 @@ import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.ChromatogramR
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IBaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -195,31 +194,31 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				return null;
 			}
 			//
-			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_MSD), closeStream, chromatogram, monitor);
+			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_MSD), closeStream, chromatogram);
 			if(useScanProxies) {
-				readScanProxies((ZipFile)object, directoryPrefix, file, chromatogram, subMonitor.split(10));
+				readScanProxies((ZipFile)object, directoryPrefix, file, chromatogram);
 			} else {
-				readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_MSD), closeStream, chromatogram, monitor);
+				readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_MSD), closeStream, chromatogram);
 			}
-			readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_MSD), closeStream, chromatogram, monitor);
+			readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_MSD), closeStream, chromatogram);
 			subMonitor.worked(20);
-			readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_MSD), closeStream, chromatogram, monitor);
-			readArea(getDataInputStream(object, directoryPrefix + IFormat.FILE_AREA_MSD), closeStream, chromatogram, monitor);
+			readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_MSD), closeStream, chromatogram);
+			readArea(getDataInputStream(object, directoryPrefix + IFormat.FILE_AREA_MSD), closeStream, chromatogram);
 			subMonitor.worked(20);
-			readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_MSD), closeStream, chromatogram, monitor);
-			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_MSD), closeStream, chromatogram, monitor);
+			readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_MSD), closeStream, chromatogram);
+			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_MSD), closeStream, chromatogram);
 			subMonitor.worked(20);
-			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_MSD), closeStream, chromatogram, monitor);
-			readSeparationColumn(getDataInputStream(object, directoryPrefix + IFormat.FILE_SEPARATION_COLUMN_MSD), closeStream, chromatogram, monitor);
+			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_MSD), closeStream, chromatogram);
+			readSeparationColumn(getDataInputStream(object, directoryPrefix + IFormat.FILE_SEPARATION_COLUMN_MSD), closeStream, chromatogram);
+			setAdditionalInformation(file, chromatogram);
 			subMonitor.worked(20);
-			setAdditionalInformation(file, chromatogram, monitor);
 			//
 			try {
 				/*
 				 * Read the referenced chromatograms.
 				 * Get the size could lead to an exception if no reference info is stored.
 				 */
-				int size = readChromatogramReferenceInfo(getDataInputStream(object, directoryPrefix + IFormat.FILE_REFERENCE_INFO), closeStream, monitor);
+				int size = readChromatogramReferenceInfo(getDataInputStream(object, directoryPrefix + IFormat.FILE_REFERENCE_INFO), closeStream);
 				readReferencedChromatograms(object, directoryPrefix, chromatogram, size, closeStream, monitor);
 				subMonitor.worked(20);
 			} catch(IOException e) {
@@ -232,7 +231,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		return chromatogram;
 	}
 
-	private void readMethod(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readMethod(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
 
 		IMethod method = chromatogram.getMethod();
 		//
@@ -255,14 +254,14 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + IFormat.FILE_TIC_MSD);
 		//
 		IVendorChromatogram chromatogram = new VendorChromatogram();
-		readScansOverview(dataInputStream, chromatogram, monitor);
+		readScansOverview(dataInputStream, chromatogram);
 		//
 		dataInputStream.close();
 		//
 		return chromatogram;
 	}
 
-	private void readScansOverview(DataInputStream dataInputStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readScansOverview(DataInputStream dataInputStream, IChromatogramMSD chromatogram) throws IOException {
 
 		IVendorScan massSpectrum;
 		IVendorIon ion;
@@ -287,7 +286,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	private void setAdditionalInformation(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) {
+	private void setAdditionalInformation(File file, IChromatogramMSD chromatogram) {
 
 		chromatogram.setConverterId(IFormat.CONVERTER_ID);
 		chromatogram.setFile(file);
@@ -301,45 +300,37 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		chromatogram.setScanInterval(scanInterval);
 	}
 
-	private void readScanProxies(ZipFile zipFile, String directoryPrefix, File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readScanProxies(ZipFile zipFile, String directoryPrefix, File file, IChromatogramMSD chromatogram) throws IOException {
 
 		IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
 		//
 		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + IFormat.FILE_SCANPROXIES_MSD);
-		/*
-		 * Scans
-		 */
 		int scans = dataInputStream.readInt();
-		SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_SCAN, scans);
-		try {
-			for(int scan = 1; scan <= scans; scan++) {
-				//
-				int offset = dataInputStream.readInt(); // Offset
-				int retentionTime = dataInputStream.readInt(); // Retention Time
-				int numberOfIons = dataInputStream.readInt(); // Number of Ions
-				float totalSignal = dataInputStream.readFloat(); // Total Signal
-				float retentionIndex = dataInputStream.readFloat(); // Retention Index
-				int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
-				int cycleNumber = dataInputStream.readInt(); // Cycle Number
-				//
-				IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, IFormat.VERSION_1300, ionTransitionSettings);
-				massSpectrum.setRetentionTime(retentionTime);
-				massSpectrum.setNumberOfIons(numberOfIons);
-				massSpectrum.setTotalSignal(totalSignal);
-				massSpectrum.setRetentionIndex(retentionIndex);
-				massSpectrum.setTimeSegmentId(timeSegmentId);
-				massSpectrum.setCycleNumber(cycleNumber);
-				chromatogram.addScan(massSpectrum);
-				subMonitor.worked(1);
-			}
+		//
+		for(int scan = 1; scan <= scans; scan++) {
 			//
-			dataInputStream.close();
-		} finally {
-			SubMonitor.done(monitor);
+			int offset = dataInputStream.readInt(); // Offset
+			int retentionTime = dataInputStream.readInt(); // Retention Time
+			int numberOfIons = dataInputStream.readInt(); // Number of Ions
+			float totalSignal = dataInputStream.readFloat(); // Total Signal
+			float retentionIndex = dataInputStream.readFloat(); // Retention Index
+			int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
+			int cycleNumber = dataInputStream.readInt(); // Cycle Number
+			//
+			IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, IFormat.VERSION_1300, ionTransitionSettings);
+			massSpectrum.setRetentionTime(retentionTime);
+			massSpectrum.setNumberOfIons(numberOfIons);
+			massSpectrum.setTotalSignal(totalSignal);
+			massSpectrum.setRetentionIndex(retentionIndex);
+			massSpectrum.setTimeSegmentId(timeSegmentId);
+			massSpectrum.setCycleNumber(cycleNumber);
+			chromatogram.addScan(massSpectrum);
 		}
+		//
+		dataInputStream.close();
 	}
 
-	private void readScans(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readScans(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
 
 		IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
 		/*
@@ -347,161 +338,139 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		 */
 		IReaderProxy readerProxy = new ReaderProxy_1300();
 		int scans = dataInputStream.readInt();
-		SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_SCAN, scans * 2);
-		try {
-			for(int scan = 1; scan <= scans; scan++) {
-				IVendorScan massSpectrum = new VendorScan();
-				readerProxy.readMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings, subMonitor.split(1));
-				chromatogram.addScan(massSpectrum);
-				subMonitor.worked(1);
-			}
-			//
-			if(closeStream) {
-				dataInputStream.close();
-			}
-		} finally {
-			SubMonitor.done(monitor);
+		//
+		for(int scan = 1; scan <= scans; scan++) {
+			IVendorScan massSpectrum = new VendorScan();
+			readerProxy.readMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings);
+			chromatogram.addScan(massSpectrum);
+		}
+		//
+		if(closeStream) {
+			dataInputStream.close();
 		}
 	}
 
-	private void readBaseline(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readBaseline(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
 
-		try {
+		/*
+		 * Get the Baseline
+		 */
+		int scans = dataInputStream.readInt(); // Number of Scans
+		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
+		for(int scan = 1; scan <= scans; scan++) {
+			int retentionTime = dataInputStream.readInt(); // Retention Time
+			float backgroundAbundance = dataInputStream.readFloat(); // Background Abundance
+			IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);
+			baselineElements.add(baselineElement);
+		}
+		/*
+		 * Set the Baseline
+		 */
+		IBaselineModel baselineModel = chromatogram.getBaselineModel();
+		for(int index = 0; index < (scans - 1); index++) {
 			/*
-			 * Get the Baseline
+			 * Retention times and background abundances.
+			 * Set the baseline.
 			 */
-			int scans = dataInputStream.readInt(); // Number of Scans
-			List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
-			SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_BASELINE, scans * 2);
-			for(int scan = 1; scan <= scans; scan++) {
-				int retentionTime = dataInputStream.readInt(); // Retention Time
-				float backgroundAbundance = dataInputStream.readFloat(); // Background Abundance
-				IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);
-				baselineElements.add(baselineElement);
-				subMonitor.worked(1);
-			}
+			IBaselineElement baselineElement = baselineElements.get(index);
+			IBaselineElement baselineElementNext = baselineElements.get(index + 1);
+			int startRetentionTime = baselineElement.getRetentionTime();
+			float startBackgroundAbundance = baselineElement.getBackgroundAbundance();
+			int stopRetentionTime = baselineElementNext.getRetentionTime();
+			float stopBackgroundAbundance = baselineElementNext.getBackgroundAbundance();
 			/*
-			 * Set the Baseline
+			 * Add the baseline in validate == false modus, cause we know, that the baseline
+			 * has been saved without overlapping segments.
 			 */
-			IBaselineModel baselineModel = chromatogram.getBaselineModel();
-			for(int index = 0; index < (scans - 1); index++) {
-				/*
-				 * Retention times and background abundances.
-				 * Set the baseline.
-				 */
-				IBaselineElement baselineElement = baselineElements.get(index);
-				IBaselineElement baselineElementNext = baselineElements.get(index + 1);
-				int startRetentionTime = baselineElement.getRetentionTime();
-				float startBackgroundAbundance = baselineElement.getBackgroundAbundance();
-				int stopRetentionTime = baselineElementNext.getRetentionTime();
-				float stopBackgroundAbundance = baselineElementNext.getBackgroundAbundance();
-				/*
-				 * Add the baseline in validate == false modus, cause we know, that the baseline
-				 * has been saved without overlapping segments.
-				 */
-				baselineModel.addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
-				subMonitor.worked(1);
-			}
-			//
-			if(closeStream) {
-				dataInputStream.close();
-			}
-		} finally {
-			SubMonitor.done(monitor);
+			baselineModel.addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
+		}
+		//
+		if(closeStream) {
+			dataInputStream.close();
 		}
 	}
 
-	private void readPeaks(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readPeaks(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
 
-		try {
-			int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
-			SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_PEAK, numberOfPeaks);
-			for(int i = 1; i <= numberOfPeaks; i++) {
-				try {
-					IChromatogramPeakMSD peak = readPeak(dataInputStream, chromatogram, subMonitor.split(1));
-					chromatogram.addPeak(peak);
-				} catch(IllegalArgumentException e) {
-					logger.warn(e);
-				} catch(PeakException e) {
-					logger.warn(e);
-				}
+		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
+		for(int i = 1; i <= numberOfPeaks; i++) {
+			try {
+				IChromatogramPeakMSD peak = readPeak(dataInputStream, chromatogram);
+				chromatogram.addPeak(peak);
+			} catch(IllegalArgumentException e) {
+				logger.warn(e);
+			} catch(PeakException e) {
+				logger.warn(e);
 			}
-			//
-			if(closeStream) {
-				dataInputStream.close();
-			}
-		} finally {
-			SubMonitor.done(monitor);
+		}
+		//
+		if(closeStream) {
+			dataInputStream.close();
 		}
 	}
 
-	private IChromatogramPeakMSD readPeak(DataInputStream dataInputStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException, IllegalArgumentException, PeakException {
+	private IChromatogramPeakMSD readPeak(DataInputStream dataInputStream, IChromatogramMSD chromatogram) throws IOException, IllegalArgumentException, PeakException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, 40);
-		try {
-			IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
-			//
-			String detectorDescription = readString(dataInputStream); // Detector Description
-			String quantifierDescription = readString(dataInputStream);
-			boolean activeForAnalysis = dataInputStream.readBoolean();
-			String integratorDescription = readString(dataInputStream); // Integrator Description
-			String modelDescription = readString(dataInputStream); // Model Description
-			PeakType peakType = PeakType.valueOf(readString(dataInputStream)); // Peak Type
-			int suggestedNumberOfComponents = dataInputStream.readInt(); // Suggest Number Of Components
-			String classifier = readString(dataInputStream);
-			//
-			float startBackgroundAbundance = dataInputStream.readFloat(); // Start Background Abundance
-			float stopBackgroundAbundance = dataInputStream.readFloat(); // Stop Background Abundance
-			//
-			IPeakMassSpectrum peakMaximum = readPeakMassSpectrum(dataInputStream, ionTransitionSettings, subMonitor.split(10));
-			//
-			int numberOfRetentionTimes = dataInputStream.readInt(); // Number Retention Times
-			IPeakIntensityValues intensityValues = new PeakIntensityValues(Float.MAX_VALUE);
-			for(int i = 1; i <= numberOfRetentionTimes; i++) {
-				int retentionTime = dataInputStream.readInt(); // Retention Time
-				float relativeIntensity = dataInputStream.readFloat(); // Intensity
-				intensityValues.addIntensityValue(retentionTime, relativeIntensity);
-			}
-			intensityValues.normalize();
-			//
-			IPeakModelMSD peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
-			IChromatogramPeakMSD peak = new ChromatogramPeakMSD(peakModel, chromatogram);
-			peak.setDetectorDescription(detectorDescription);
-			peak.setQuantifierDescription(quantifierDescription);
-			peak.setActiveForAnalysis(activeForAnalysis);
-			peak.setIntegratorDescription(integratorDescription);
-			peak.setModelDescription(modelDescription);
-			peak.setPeakType(peakType);
-			peak.setSuggestedNumberOfComponents(suggestedNumberOfComponents);
-			peak.setClassifier(classifier);
-			//
-			List<IIntegrationEntry> integrationEntries = readIntegrationEntries(dataInputStream);
-			peak.setIntegratedArea(integrationEntries, integratorDescription);
-			/*
-			 * Identification Results
-			 */
-			readPeakIdentificationTargets(dataInputStream, peak, subMonitor.split(10));
-			/*
-			 * Quantitation Results
-			 */
-			readPeakQuantitationEntries(dataInputStream, peak, subMonitor.split(10));
-			/*
-			 * Optimized Mass Spectrum
-			 */
-			boolean readOptimizedMassSpectrum = dataInputStream.readBoolean();
-			if(readOptimizedMassSpectrum) {
-				IScanMSD optimizedMassSpectrum = new ScanMSD();
-				readNormalMassSpectrum(optimizedMassSpectrum, dataInputStream, ionTransitionSettings, subMonitor.split(10));
-				peakMaximum.setOptimizedMassSpectrum(optimizedMassSpectrum);
-			}
-			//
-			List<IInternalStandard> internalStandards = readInternalStandards(dataInputStream);
-			peak.addInternalStandards(internalStandards);
-			//
-			return peak;
-		} finally {
-			SubMonitor.done(monitor);
+		IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
+		//
+		String detectorDescription = readString(dataInputStream); // Detector Description
+		String quantifierDescription = readString(dataInputStream);
+		boolean activeForAnalysis = dataInputStream.readBoolean();
+		String integratorDescription = readString(dataInputStream); // Integrator Description
+		String modelDescription = readString(dataInputStream); // Model Description
+		PeakType peakType = PeakType.valueOf(readString(dataInputStream)); // Peak Type
+		int suggestedNumberOfComponents = dataInputStream.readInt(); // Suggest Number Of Components
+		String classifier = readString(dataInputStream);
+		//
+		float startBackgroundAbundance = dataInputStream.readFloat(); // Start Background Abundance
+		float stopBackgroundAbundance = dataInputStream.readFloat(); // Stop Background Abundance
+		//
+		IPeakMassSpectrum peakMaximum = readPeakMassSpectrum(dataInputStream, ionTransitionSettings);
+		//
+		int numberOfRetentionTimes = dataInputStream.readInt(); // Number Retention Times
+		IPeakIntensityValues intensityValues = new PeakIntensityValues(Float.MAX_VALUE);
+		for(int i = 1; i <= numberOfRetentionTimes; i++) {
+			int retentionTime = dataInputStream.readInt(); // Retention Time
+			float relativeIntensity = dataInputStream.readFloat(); // Intensity
+			intensityValues.addIntensityValue(retentionTime, relativeIntensity);
 		}
+		intensityValues.normalize();
+		//
+		IPeakModelMSD peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
+		IChromatogramPeakMSD peak = new ChromatogramPeakMSD(peakModel, chromatogram);
+		peak.setDetectorDescription(detectorDescription);
+		peak.setQuantifierDescription(quantifierDescription);
+		peak.setActiveForAnalysis(activeForAnalysis);
+		peak.setIntegratorDescription(integratorDescription);
+		peak.setModelDescription(modelDescription);
+		peak.setPeakType(peakType);
+		peak.setSuggestedNumberOfComponents(suggestedNumberOfComponents);
+		peak.setClassifier(classifier);
+		//
+		List<IIntegrationEntry> integrationEntries = readIntegrationEntries(dataInputStream);
+		peak.setIntegratedArea(integrationEntries, integratorDescription);
+		/*
+		 * Identification Results
+		 */
+		readPeakIdentificationTargets(dataInputStream, peak);
+		/*
+		 * Quantitation Results
+		 */
+		readPeakQuantitationEntries(dataInputStream, peak);
+		/*
+		 * Optimized Mass Spectrum
+		 */
+		boolean readOptimizedMassSpectrum = dataInputStream.readBoolean();
+		if(readOptimizedMassSpectrum) {
+			IScanMSD optimizedMassSpectrum = new ScanMSD();
+			readNormalMassSpectrum(optimizedMassSpectrum, dataInputStream, ionTransitionSettings);
+			peakMaximum.setOptimizedMassSpectrum(optimizedMassSpectrum);
+		}
+		//
+		List<IInternalStandard> internalStandards = readInternalStandards(dataInputStream);
+		peak.addInternalStandards(internalStandards);
+		//
+		return peak;
 	}
 
 	private List<IInternalStandard> readInternalStandards(DataInputStream dataInputStream) throws IOException {
@@ -534,7 +503,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		return integrationEntries;
 	}
 
-	private void readPeakIdentificationTargets(DataInputStream dataInputStream, IPeakMSD peak, IProgressMonitor monitor) throws IOException {
+	private void readPeakIdentificationTargets(DataInputStream dataInputStream, IPeakMSD peak) throws IOException {
 
 		int numberOfPeakTargets = dataInputStream.readInt(); // Number Peak Targets
 		for(int i = 1; i <= numberOfPeakTargets; i++) {
@@ -597,7 +566,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	private void readMassSpectrumIdentificationTargets(DataInputStream dataInputStream, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
+	private void readMassSpectrumIdentificationTargets(DataInputStream dataInputStream, IScanMSD massSpectrum) throws IOException {
 
 		int numberOfMassSpectrumTargets = dataInputStream.readInt(); // Number Mass Spectrum Targets
 		for(int i = 1; i <= numberOfMassSpectrumTargets; i++) {
@@ -660,7 +629,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	private void readPeakQuantitationEntries(DataInputStream dataInputStream, IPeakMSD peak, IProgressMonitor monitor) throws IOException {
+	private void readPeakQuantitationEntries(DataInputStream dataInputStream, IPeakMSD peak) throws IOException {
 
 		int numberOfQuantitationEntries = dataInputStream.readInt(); // Number Quantitation Entries
 		for(int i = 1; i <= numberOfQuantitationEntries; i++) {
@@ -694,7 +663,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	private void readArea(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readArea(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
 
 		String chromatogramIntegratorDescription = readString(dataInputStream); // Chromatogram Integrator Description
 		List<IIntegrationEntry> chromatogramIntegrationEntries = readIntegrationEntries(dataInputStream);
@@ -709,104 +678,92 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	private void readIdentification(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readIdentification(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
 
-		try {
-			int numberOfTargets = dataInputStream.readInt(); // Number of Targets
-			SubMonitor subMonitor = SubMonitor.convert(monitor, numberOfTargets);
-			for(int i = 1; i <= numberOfTargets; i++) {
-				//
-				String identifier = readString(dataInputStream); // Identifier
-				boolean manuallyVerified = dataInputStream.readBoolean();
-				//
-				int retentionTime = dataInputStream.readInt();
-				float retentionIndex = dataInputStream.readFloat();
-				String casNumber = readString(dataInputStream); // CAS-Number
-				String comments = readString(dataInputStream); // Comments
-				String referenceIdentifier = readString(dataInputStream);
-				String miscellaneous = readString(dataInputStream); // Miscellaneous
-				String database = readString(dataInputStream);
-				String contributor = readString(dataInputStream);
-				String name = readString(dataInputStream); // Name
-				Set<String> synonyms = new HashSet<String>(); // Synonyms
-				int numberOfSynonyms = dataInputStream.readInt();
-				for(int j = 0; j < numberOfSynonyms; j++) {
-					synonyms.add(readString(dataInputStream));
-				}
-				String formula = readString(dataInputStream); // Formula
-				String smiles = readString(dataInputStream); // SMILES
-				String inChI = readString(dataInputStream); // InChI
-				double molWeight = dataInputStream.readDouble(); // Mol Weight
-				float matchFactor = dataInputStream.readFloat(); // Match Factor
-				float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
-				float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
-				float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
-				float probability = dataInputStream.readFloat(); // Probability
-				boolean isMatch = dataInputStream.readBoolean();
-				//
-				IChromatogramLibraryInformation libraryInformation = new ChromatogramLibraryInformation();
-				libraryInformation.setRetentionTime(retentionTime);
-				libraryInformation.setRetentionIndex(retentionIndex);
-				libraryInformation.setCasNumber(casNumber);
-				libraryInformation.setComments(comments);
-				libraryInformation.setReferenceIdentifier(referenceIdentifier);
-				libraryInformation.setMiscellaneous(miscellaneous);
-				libraryInformation.setDatabase(database);
-				libraryInformation.setContributor(contributor);
-				libraryInformation.setName(name);
-				libraryInformation.setSynonyms(synonyms);
-				libraryInformation.setFormula(formula);
-				libraryInformation.setSmiles(smiles);
-				libraryInformation.setInChI(inChI);
-				libraryInformation.setMolWeight(molWeight);
-				//
-				IComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
-				comparisonResult.setMatch(isMatch);
-				//
-				try {
-					IChromatogramTargetMSD identificationEntry = new ChromatogramTargetMSD(libraryInformation, comparisonResult);
-					identificationEntry.setIdentifier(identifier);
-					identificationEntry.setManuallyVerified(manuallyVerified);
-					chromatogram.addTarget(identificationEntry);
-				} catch(ReferenceMustNotBeNullException e) {
-					logger.warn(e);
-				}
-				subMonitor.worked(1);
-			}
+		int numberOfTargets = dataInputStream.readInt(); // Number of Targets
+		for(int i = 1; i <= numberOfTargets; i++) {
 			//
-			if(closeStream) {
-				dataInputStream.close();
+			String identifier = readString(dataInputStream); // Identifier
+			boolean manuallyVerified = dataInputStream.readBoolean();
+			//
+			int retentionTime = dataInputStream.readInt();
+			float retentionIndex = dataInputStream.readFloat();
+			String casNumber = readString(dataInputStream); // CAS-Number
+			String comments = readString(dataInputStream); // Comments
+			String referenceIdentifier = readString(dataInputStream);
+			String miscellaneous = readString(dataInputStream); // Miscellaneous
+			String database = readString(dataInputStream);
+			String contributor = readString(dataInputStream);
+			String name = readString(dataInputStream); // Name
+			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			int numberOfSynonyms = dataInputStream.readInt();
+			for(int j = 0; j < numberOfSynonyms; j++) {
+				synonyms.add(readString(dataInputStream));
 			}
-		} finally {
-			SubMonitor.done(monitor);
+			String formula = readString(dataInputStream); // Formula
+			String smiles = readString(dataInputStream); // SMILES
+			String inChI = readString(dataInputStream); // InChI
+			double molWeight = dataInputStream.readDouble(); // Mol Weight
+			float matchFactor = dataInputStream.readFloat(); // Match Factor
+			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
+			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
+			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
+			float probability = dataInputStream.readFloat(); // Probability
+			boolean isMatch = dataInputStream.readBoolean();
+			//
+			IChromatogramLibraryInformation libraryInformation = new ChromatogramLibraryInformation();
+			libraryInformation.setRetentionTime(retentionTime);
+			libraryInformation.setRetentionIndex(retentionIndex);
+			libraryInformation.setCasNumber(casNumber);
+			libraryInformation.setComments(comments);
+			libraryInformation.setReferenceIdentifier(referenceIdentifier);
+			libraryInformation.setMiscellaneous(miscellaneous);
+			libraryInformation.setDatabase(database);
+			libraryInformation.setContributor(contributor);
+			libraryInformation.setName(name);
+			libraryInformation.setSynonyms(synonyms);
+			libraryInformation.setFormula(formula);
+			libraryInformation.setSmiles(smiles);
+			libraryInformation.setInChI(inChI);
+			libraryInformation.setMolWeight(molWeight);
+			//
+			IComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+			comparisonResult.setMatch(isMatch);
+			//
+			try {
+				IChromatogramTargetMSD identificationEntry = new ChromatogramTargetMSD(libraryInformation, comparisonResult);
+				identificationEntry.setIdentifier(identifier);
+				identificationEntry.setManuallyVerified(manuallyVerified);
+				chromatogram.addTarget(identificationEntry);
+			} catch(ReferenceMustNotBeNullException e) {
+				logger.warn(e);
+			}
+		}
+		//
+		if(closeStream) {
+			dataInputStream.close();
 		}
 	}
 
-	private void readHistory(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readHistory(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
 
-		try {
-			IEditHistory editHistory = chromatogram.getEditHistory();
-			int numberOfEntries = dataInputStream.readInt(); // Number of entries
-			SubMonitor subMonitor = SubMonitor.convert(monitor, numberOfEntries);
-			for(int i = 1; i <= numberOfEntries; i++) {
-				long time = dataInputStream.readLong(); // Date
-				String description = readString(dataInputStream); // Description
-				//
-				Date date = new Date(time);
-				IEditInformation editInformation = new EditInformation(date, description);
-				editHistory.add(editInformation);
-				subMonitor.worked(1);
-			}
+		IEditHistory editHistory = chromatogram.getEditHistory();
+		int numberOfEntries = dataInputStream.readInt(); // Number of entries
+		for(int i = 1; i <= numberOfEntries; i++) {
+			long time = dataInputStream.readLong(); // Date
+			String description = readString(dataInputStream); // Description
 			//
-			if(closeStream) {
-				dataInputStream.close();
-			}
-		} finally {
-			SubMonitor.done(monitor);
+			Date date = new Date(time);
+			IEditInformation editInformation = new EditInformation(date, description);
+			editHistory.add(editInformation);
+		}
+		//
+		if(closeStream) {
+			dataInputStream.close();
 		}
 	}
 
-	private void readMiscellaneous(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readMiscellaneous(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
 
 		int numberOfEntries = dataInputStream.readInt();
 		for(int i = 0; i < numberOfEntries; i++) {
@@ -820,7 +777,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	private IPeakMassSpectrum readPeakMassSpectrum(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
+	private IPeakMassSpectrum readPeakMassSpectrum(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
 
 		short massSpectrometer = dataInputStream.readShort(); // Mass Spectrometer
 		short massSpectrumType = dataInputStream.readShort(); // Mass Spectrum Type
@@ -831,12 +788,12 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		massSpectrum.setMassSpectrumType(massSpectrumType);
 		massSpectrum.setPrecursorIon(precursorIon);
 		//
-		readNormalMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings, monitor);
+		readNormalMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings);
 		//
 		return massSpectrum;
 	}
 
-	private void readNormalMassSpectrum(IScanMSD massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
+	private void readNormalMassSpectrum(IScanMSD massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
 
 		int retentionTime = dataInputStream.readInt(); // Retention Time
 		int relativeRetentionTime = dataInputStream.readInt();
@@ -880,7 +837,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		/*
 		 * Identification Results
 		 */
-		readMassSpectrumIdentificationTargets(dataInputStream, massSpectrum, monitor);
+		readMassSpectrumIdentificationTargets(dataInputStream, massSpectrum);
 	}
 
 	private IVendorIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException, AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
@@ -917,7 +874,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		return ion;
 	}
 
-	private void readSeparationColumn(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readSeparationColumn(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
 
 		int numberOfEntries = dataInputStream.readInt();
 		ISeparationColumnIndices separationColumnIndices = chromatogram.getSeparationColumnIndices();
@@ -940,7 +897,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	private int readChromatogramReferenceInfo(DataInputStream dataInputStream, boolean closeStream, IProgressMonitor monitor) throws IOException {
+	private int readChromatogramReferenceInfo(DataInputStream dataInputStream, boolean closeStream) throws IOException {
 
 		int size = dataInputStream.readInt();
 		if(closeStream) {

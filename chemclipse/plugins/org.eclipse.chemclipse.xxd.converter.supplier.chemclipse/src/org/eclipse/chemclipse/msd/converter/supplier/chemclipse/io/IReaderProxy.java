@@ -18,7 +18,6 @@ import java.io.IOException;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorScanProxy;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IReaderProxy {
 
@@ -33,7 +32,7 @@ public interface IReaderProxy {
 	 * @param monitor
 	 * @throws IOException
 	 */
-	void readMassSpectrum(File file, int offset, IVendorScanProxy massSpectrum, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException;
+	void readMassSpectrum(File file, int offset, IVendorScanProxy massSpectrum, IIonTransitionSettings ionTransitionSettings) throws IOException;
 
 	/**
 	 * Reads the mass spectrum by using the given data input stream.
@@ -44,5 +43,5 @@ public interface IReaderProxy {
 	 * @param monitor
 	 * @throws IOException
 	 */
-	void readMassSpectrum(IVendorScan massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException;
+	void readMassSpectrum(IVendorScan massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException;
 }

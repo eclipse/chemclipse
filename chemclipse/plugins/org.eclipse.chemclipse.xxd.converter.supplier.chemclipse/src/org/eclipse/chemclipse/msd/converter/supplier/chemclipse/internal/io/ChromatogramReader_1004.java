@@ -291,7 +291,7 @@ public class ChromatogramReader_1004 extends AbstractChromatogramReader implemen
 		for(int scan = 1; scan <= scans; scan++) {
 			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			IVendorScan massSpectrum = new VendorScan();
-			readerProxy.readMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings, monitor);
+			readerProxy.readMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings);
 			chromatogram.addScan(massSpectrum);
 		}
 		//
