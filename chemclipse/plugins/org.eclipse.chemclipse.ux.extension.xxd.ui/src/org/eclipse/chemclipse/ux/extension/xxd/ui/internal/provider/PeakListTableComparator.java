@@ -131,6 +131,9 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 					}
 					break;
 				case 15:
+					sortOrder = Integer.compare(peak2.getInternalStandards().size(), peak1.getInternalStandards().size());
+					break;
+				case 16:
 					sortOrder = peak2.getClassifier().compareTo(peak1.getClassifier());
 					break;
 			}

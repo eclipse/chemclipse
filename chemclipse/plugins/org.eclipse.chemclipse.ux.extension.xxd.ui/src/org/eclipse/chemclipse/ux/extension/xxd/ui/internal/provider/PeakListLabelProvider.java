@@ -60,6 +60,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 			"Suggested Components", //
 			"Name", //
 			"Area Percent", //
+			"Quantifier", //
 			CLASSIFIER //
 	};
 	//
@@ -67,6 +68,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 			30, //
 			100, //
 			60, //
+			100, //
 			100, //
 			100, //
 			100, //
@@ -218,6 +220,9 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 					}
 					break;
 				case 15:
+					text = (peak.getInternalStandards().size() > 0) ? "ISTD" : "";
+					break;
+				case 16:
 					text = peak.getClassifier();
 					break;
 			}
