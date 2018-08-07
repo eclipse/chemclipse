@@ -24,6 +24,7 @@ public class ChromatogramResetHandler extends ResetChartHandler {
 		this.extendedChromatogramUI = extendedChromatogramUI;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void execute(Shell shell, ScrollableChart scrollableChart) {
 

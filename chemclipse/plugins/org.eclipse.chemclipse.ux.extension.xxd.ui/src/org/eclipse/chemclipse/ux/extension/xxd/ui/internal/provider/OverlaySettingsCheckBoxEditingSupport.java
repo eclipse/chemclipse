@@ -41,6 +41,7 @@ public class OverlaySettingsCheckBoxEditingSupport extends EditingSupport {
 		return true;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected Object getValue(Object element) {
 
@@ -55,6 +56,7 @@ public class OverlaySettingsCheckBoxEditingSupport extends EditingSupport {
 		return false;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void setValue(Object element, Object value) {
 

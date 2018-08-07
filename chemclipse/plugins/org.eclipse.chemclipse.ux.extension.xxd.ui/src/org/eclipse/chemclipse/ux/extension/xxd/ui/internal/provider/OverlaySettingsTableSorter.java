@@ -37,6 +37,7 @@ public class OverlaySettingsTableSorter extends EnhancedViewerSorter {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
 

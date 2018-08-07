@@ -25,12 +25,14 @@ import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.IonListContentProviderLazy;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanSignalEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanSignalListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanTableComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
@@ -138,6 +140,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 		//
 		scanSignalListFilter = new ScanSignalListFilter();
 		setFilters(new ViewerFilter[]{scanSignalListFilter});
+		setEditingSupport();
 	}
 
 	private String[] getTitles(DataType dataType) {
@@ -232,5 +235,17 @@ public class ScanTableUI extends ExtendedTableViewer {
 	private boolean isVirtualTable() {
 
 		return ((getTable().getStyle() & SWT.VIRTUAL) == SWT.VIRTUAL);
+	}
+
+	private void setEditingSupport() {
+
+		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
+		for(int i = 0; i < tableViewerColumns.size(); i++) {
+			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
+			String label = tableViewerColumn.getColumn().getText();
+			if(label.equals(ScanLabelProvider.ABUNDANCE)) {
+				tableViewerColumn.setEditingSupport(new ScanSignalEditingSupport(this, label));
+			}
+		}
 	}
 }

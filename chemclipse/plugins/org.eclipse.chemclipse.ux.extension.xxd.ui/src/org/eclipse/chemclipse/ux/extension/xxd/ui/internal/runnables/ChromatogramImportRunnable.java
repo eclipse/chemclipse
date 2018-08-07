@@ -37,6 +37,7 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 	//
 	private File file;
 	private DataType dataType;
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 
 	public ChromatogramImportRunnable(File file, DataType dataType) {
@@ -44,6 +45,7 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 		this.dataType = dataType;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public IChromatogramSelection getChromatogramSelection() {
 
 		return chromatogramSelection;

@@ -49,6 +49,7 @@ public class PeakDetectorPart extends AbstractDataUpdateSupport implements IData
 		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateObjects(List<Object> objects, String topic) {
 

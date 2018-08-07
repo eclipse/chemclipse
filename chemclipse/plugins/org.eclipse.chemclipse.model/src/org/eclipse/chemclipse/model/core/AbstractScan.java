@@ -82,7 +82,7 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 		return getTotalSignal();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public IChromatogram getParentChromatogram() {
 

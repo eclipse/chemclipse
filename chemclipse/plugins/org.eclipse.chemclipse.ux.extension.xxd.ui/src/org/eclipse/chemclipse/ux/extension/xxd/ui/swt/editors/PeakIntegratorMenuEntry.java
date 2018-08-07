@@ -28,8 +28,10 @@ public class PeakIntegratorMenuEntry extends AbstractChartMenuEntry implements I
 	private String name;
 	private String peakIntegratorId;
 	private String type;
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 
+	@SuppressWarnings("rawtypes")
 	public PeakIntegratorMenuEntry(ExtendedChromatogramUI extendedChromatogramUI, String name, String peakIntegratorId, String type, IChromatogramSelection chromatogramSelection) {
 		this.extendedChromatogramUI = extendedChromatogramUI;
 		this.name = name;

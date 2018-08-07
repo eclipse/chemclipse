@@ -29,16 +29,17 @@ import org.eclipse.swt.graphics.Image;
 public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
 
 	public static final String NO_VALUE = "n.a.";
+	public static final String ABUNDANCE = "abundance";
 	//
-	public static final String[] TITLES_MSD_NOMINAL = {"m/z", "abundance"};
+	public static final String[] TITLES_MSD_NOMINAL = {"m/z", ABUNDANCE};
 	public static final int[] BOUNDS_MSD_NOMINAL = {150, 150};
-	public static final String[] TITLES_MSD_TANDEM = {"m/z", "abundance", "parent m/z", "parent resolution", "daughter m/z", "daughter resolution", "collision energy"};
+	public static final String[] TITLES_MSD_TANDEM = {"m/z", ABUNDANCE, "parent m/z", "parent resolution", "daughter m/z", "daughter resolution", "collision energy"};
 	public static final int[] BOUNDS_MSD_TANDEM = {100, 100, 120, 120, 120, 120, 120};
-	public static final String[] TITLES_MSD_HIGHRES = {"m/z", "abundance"};
+	public static final String[] TITLES_MSD_HIGHRES = {"m/z", ABUNDANCE};
 	public static final int[] BOUNDS_MSD_HIGHRES = {150, 150};
-	public static final String[] TITLES_CSD = {"retention time (minutes)", "abundance"};
+	public static final String[] TITLES_CSD = {"retention time (minutes)", ABUNDANCE};
 	public static final int[] BOUNDS_CSD = {150, 150};
-	public static final String[] TITLES_WSD = {"wavelength", "abundance"};
+	public static final String[] TITLES_WSD = {"wavelength", ABUNDANCE};
 	public static final int[] BOUNDS_WSD = {150, 150};
 	public static final String[] TITLES_EMPTY = {NO_VALUE};
 	public static final int[] BOUNDS_EMPTY = {150};

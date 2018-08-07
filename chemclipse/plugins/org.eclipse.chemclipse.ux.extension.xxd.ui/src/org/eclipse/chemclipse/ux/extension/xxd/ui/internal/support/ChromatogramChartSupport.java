@@ -142,6 +142,7 @@ public class ChromatogramChartSupport {
 		return color;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
 
 		String overlayType = DISPLAY_TYPE_TIC;
@@ -157,6 +158,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, null, false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
 
 		String overlayType = DISPLAY_TYPE_TIC;

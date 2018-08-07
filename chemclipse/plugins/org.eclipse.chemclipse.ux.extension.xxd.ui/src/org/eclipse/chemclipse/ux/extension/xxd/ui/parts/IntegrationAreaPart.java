@@ -51,6 +51,7 @@ public class IntegrationAreaPart extends AbstractDataUpdateSupport implements ID
 		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateObjects(List<Object> objects, String topic) {
 

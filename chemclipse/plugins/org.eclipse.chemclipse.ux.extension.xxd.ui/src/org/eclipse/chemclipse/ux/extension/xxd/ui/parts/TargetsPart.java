@@ -58,6 +58,7 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 		registerEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_IDENTIFICATION_TARGETS);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateObjects(List<Object> objects, String topic) {
 

@@ -30,6 +30,7 @@ public class DeleteAllChromatogramIdentificationsHandler extends AbstractIdentif
 		deleteIdentifications(shell, "Delete All Identifications (Chromatogram)", true, false, false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void handleEvent(Event event) {
 

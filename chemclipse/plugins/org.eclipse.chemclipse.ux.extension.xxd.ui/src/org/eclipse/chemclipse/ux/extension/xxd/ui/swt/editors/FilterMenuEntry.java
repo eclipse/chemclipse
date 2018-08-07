@@ -34,8 +34,10 @@ public class FilterMenuEntry extends AbstractChartMenuEntry implements IChartMen
 	private String name;
 	private String filterId;
 	private String type;
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 
+	@SuppressWarnings("rawtypes")
 	public FilterMenuEntry(ExtendedChromatogramUI extendedChromatogramUI, String name, String filterId, String type, IChromatogramSelection chromatogramSelection) {
 		this.extendedChromatogramUI = extendedChromatogramUI;
 		this.name = name;

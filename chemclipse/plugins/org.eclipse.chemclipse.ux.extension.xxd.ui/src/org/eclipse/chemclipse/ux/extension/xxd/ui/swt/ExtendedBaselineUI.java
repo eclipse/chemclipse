@@ -66,7 +66,7 @@ public class ExtendedBaselineUI {
 		initialize(parent);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void update(IChromatogramSelection chromatogramSelection) {
 
 		if(chromatogramSelection != null) {

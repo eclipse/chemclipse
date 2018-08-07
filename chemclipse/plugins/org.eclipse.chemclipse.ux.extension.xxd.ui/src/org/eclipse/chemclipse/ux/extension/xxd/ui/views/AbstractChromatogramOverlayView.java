@@ -40,6 +40,7 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 	 * 
 	 * @return List<IChromatogramSelection>
 	 */
+	@SuppressWarnings("rawtypes")
 	public List<IChromatogramSelection> getChromatogramSelections(IChromatogramSelection masterChromatogramSelection, boolean ignoreOverlaySelection) {
 
 		/*

@@ -77,8 +77,9 @@ public class ExtendedScanTableUI {
 	private Composite toolbarEdit;
 	private Composite toolbarSearch;
 	private Button buttonSaveScan;
-	private Button buttonToggleToolbarEdit;
 	private Button buttonOptimizedScan;
+	private Button buttonToggleToolbarEdit;
+	private Button buttonToggleEditModus;
 	//
 	private Label labelX;
 	private Text textX;
@@ -176,13 +177,11 @@ public class ExtendedScanTableUI {
 	 */
 	private void enableEditModus(boolean enabled) {
 
-		/*
-		 * Modify the toolbar and show/hide the toolbar edit button.
-		 * Initially, don't show the edit toolbar.
-		 */
-		PartSupport.setCompositeVisibility(toolbarEdit, false);
 		buttonToggleToolbarEdit.setEnabled(enabled);
 		PartSupport.setControlVisibility(buttonToggleToolbarEdit, enabled);
+		//
+		buttonToggleEditModus.setEnabled(enabled);
+		PartSupport.setControlVisibility(buttonToggleEditModus, enabled);
 		//
 		ITableSettings tableSettings = scanTableUI.getTableSettings();
 		if(enabled) {
@@ -192,25 +191,36 @@ public class ExtendedScanTableUI {
 			tableSettings.removeMenuEntry(deleteMenuEntry);
 			tableSettings.removeKeyEventProcessor(deleteKeyEventProcessor);
 		}
+		//
 		scanTableUI.applySettings(tableSettings);
 	}
 
 	private void updateObject() {
 
 		IScan scan = null;
+		boolean isLibraryMassSpectrum = false;
+		//
 		if(object instanceof IScan) {
 			scan = (IScan)object;
-			if(forceEnableEditModus) {
+			isLibraryMassSpectrum = (scan instanceof ILibraryMassSpectrum);
+			//
+			if(forceEnableEditModus || isLibraryMassSpectrum) {
 				enableEditModus(true);
-			} else {
-				enableEditModus(scan instanceof ILibraryMassSpectrum);
 			}
 		} else if(object instanceof IPeak) {
 			IPeak peak = (IPeak)object;
 			scan = peak.getPeakModel().getPeakMaximum();
 		}
+		/*
+		 * Label
+		 */
+		if(forceEnableEditModus || isLibraryMassSpectrum) {
+			String editInformation = scanTableUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
+			labelInfo.setText(scanDataSupport.getScanLabel(scan) + " - " + editInformation);
+		} else {
+			labelInfo.setText(scanDataSupport.getScanLabel(scan));
+		}
 		//
-		labelInfo.setText(scanDataSupport.getScanLabel(scan));
 		scanTableUI.setInput(scan);
 		/*
 		 * Fields
@@ -262,8 +272,10 @@ public class ExtendedScanTableUI {
 		createTable(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
-		enableEditModus(false); // Disable the edit modus by default.
+		PartSupport.setCompositeVisibility(toolbarEdit, false);
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
+		//
+		enableEditModus(false); // Disable the edit modus by default.
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -272,10 +284,11 @@ public class ExtendedScanTableUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(8, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		buttonToggleToolbarEdit = createButtonToggleToolbarEdit(composite);
+		buttonToggleEditModus = createButtonToggleEditModus(composite);
 		createButtonToggleToolbarSearch(composite);
 		createResetButton(composite);
 		buttonSaveScan = createSaveButton(composite);
@@ -324,6 +337,27 @@ public class ExtendedScanTableUI {
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleEditModus(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Enable/disable to edit the table.");
+		button.setText("");
+		button.setLayoutData(new GridData()); // GridData is needed to show/hide the control, see: enableEditModus(boolean enabled)
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean editEnabled = !scanTableUI.isEditEnabled();
+				scanTableUI.setEditEnabled(editEnabled);
+				updateObject();
 			}
 		});
 		//

@@ -25,6 +25,7 @@ public class ChromatogramSelectionHandler implements ICustomSelectionHandler {
 		this.extendedChromatogramUI = extendedChromatogramUI;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void handleUserSelection(Event event) {
 

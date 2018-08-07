@@ -28,8 +28,10 @@ public class CalculatorMenuEntry extends AbstractChartMenuEntry implements IChar
 	private String name;
 	private String calculatorId;
 	private String type;
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 
+	@SuppressWarnings("rawtypes")
 	public CalculatorMenuEntry(ExtendedChromatogramUI extendedChromatogramUI, String name, String calculatorId, String type, IChromatogramSelection chromatogramSelection) {
 		this.extendedChromatogramUI = extendedChromatogramUI;
 		this.name = name;

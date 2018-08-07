@@ -56,6 +56,7 @@ public class LabeledPeakChromatogramView extends AbstractChromatogramOverlayView
 		update(getChromatogramSelection(), false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void update(IChromatogramSelection chromatogramSelection, boolean forceReload) {
 

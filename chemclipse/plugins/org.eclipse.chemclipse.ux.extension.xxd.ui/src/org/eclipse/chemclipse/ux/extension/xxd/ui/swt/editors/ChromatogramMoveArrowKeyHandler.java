@@ -59,6 +59,7 @@ public class ChromatogramMoveArrowKeyHandler extends AbstractHandledEventProcess
 		handleArrowMoveWindowSelection(keyCode);
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void handleArrowMoveWindowSelection(int keyCode) {
 
 		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();

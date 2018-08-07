@@ -90,6 +90,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void setViewSeries() {
 

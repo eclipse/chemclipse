@@ -58,6 +58,7 @@ public class ScanSelectionArrowKeyHandler extends AbstractHandledEventProcessor 
 		handleControlScanSelection(keyCode);
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected void handleControlScanSelection(int keyCode) {
 
 		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();

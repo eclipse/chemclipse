@@ -36,6 +36,7 @@ public class EditorUpdateSupport {
 	private static final Logger logger = Logger.getLogger(EditorUpdateSupport.class);
 	private EPartService partService = ModelSupportAddon.getPartService();
 
+	@SuppressWarnings("rawtypes")
 	public List<IChromatogramSelection> getChromatogramSelections() {
 
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();

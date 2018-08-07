@@ -30,6 +30,7 @@ public class DeleteAllPeakIdentificationsHandler extends AbstractIdentifications
 		deleteIdentifications(shell, "Delete All Identifications (Peaks)", false, true, false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void handleEvent(Event event) {
 

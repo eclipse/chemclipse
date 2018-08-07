@@ -30,6 +30,7 @@ public class DeleteAllIdentificationsHandler extends AbstractIdentificationsHand
 		deleteIdentifications(shell, "Delete All Identifications", true, true, true);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void handleEvent(Event event) {
 

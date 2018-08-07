@@ -45,6 +45,7 @@ public class OverlaySettingsView extends AbstractChromatogramOverlayView {
 		overlaySettingsTableViewer.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void update(IChromatogramSelection chromatogramSelection, boolean forceReload) {
 

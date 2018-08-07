@@ -62,6 +62,7 @@ public class SubtractChromatogramOverlayView extends AbstractChromatogramOverlay
 		update(getChromatogramSelection(), false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void update(IChromatogramSelection chromatogramSelection, boolean forceReload) {
 

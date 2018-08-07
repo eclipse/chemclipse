@@ -29,8 +29,10 @@ public class ClassifierMenuEntry extends AbstractChartMenuEntry implements IChar
 	private String name;
 	private String classifierId;
 	private String type;
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 
+	@SuppressWarnings("rawtypes")
 	public ClassifierMenuEntry(ExtendedChromatogramUI extendedChromatogramUI, String name, String classifierId, String type, IChromatogramSelection chromatogramSelection) {
 		this.extendedChromatogramUI = extendedChromatogramUI;
 		this.name = name;

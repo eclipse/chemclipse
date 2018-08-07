@@ -20,6 +20,7 @@ import org.eclipse.swt.graphics.Image;
 
 public class OverlaySettingsLabelProvider extends LabelProvider implements ITableLabelProvider {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 
@@ -47,6 +48,7 @@ public class OverlaySettingsLabelProvider extends LabelProvider implements ITabl
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 

@@ -62,6 +62,7 @@ public class MirroredChromatogramOverlayView extends AbstractChromatogramOverlay
 		update(getChromatogramSelection(), false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void update(IChromatogramSelection chromatogramSelection, boolean forceReload) {
 
