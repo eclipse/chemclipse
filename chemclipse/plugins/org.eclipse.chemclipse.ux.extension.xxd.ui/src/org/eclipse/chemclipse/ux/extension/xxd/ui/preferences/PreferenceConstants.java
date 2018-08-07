@@ -145,10 +145,38 @@ public class PreferenceConstants {
 	public static final String DEF_LINE_STYLE_DISPLAY_SWC_OVERLAY = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = "lineStyleDisplayDefaultOverlay";
 	public static final String DEF_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = LineStyle.SOLID.toString();
-	public static final String P_MINUTES_SHIFT_X = "minutesShiftX";
-	public static final double DEF_MINUTES_SHIFT_X = 0.5d;
-	public static final String P_ABSOLUTE_SHIFT_Y = "absoluteShiftY";
-	public static final double DEF_ABSOLUTE_SHIFT_Y = 100000.0d;
+	//
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_SELECTION = "chromatogramOverlayIonsSelection";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION = OverlayChartSupport.SELECTED_IONS_USERS_CHOICE;
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE = "chromatogramOverlayIonsUsersChoice";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE = "18 28 32 84 207";
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS = "chromatogramOverlayIonsHydrocarbons";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS = "57 71 85";
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS = "chromatogramOverlayIonsFattyAcids";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS = "74 84";
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_FAME = "chromatogramOverlayIonsFAME";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_FAME = "79 81";
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING = "chromatogramOverlayIonsSolventTailing";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING = "84";
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "chromatogramOverlayIonsColumnBleed";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "207";
+	//
+	public static final String P_OVERLAY_SHIFT_X = "overlayShiftX";
+	public static final double DEF_OVERLAY_SHIFT_X = 0.0d;
+	public static final double MIN_OVERLAY_SHIFT_X = 0.0d;
+	public static final double MAX_OVERLAY_SHIFT_X = Double.MAX_VALUE;
+	public static final String P_INDEX_SHIFT_X = "indexShiftX";
+	public static final int DEF_INDEX_SHIFT_X = 0;
+	public static final int MIN_INDEX_SHIFT_X = 0;
+	public static final int MAX_INDEX_SHIFT_X = 100;
+	public static final String P_OVERLAY_SHIFT_Y = "overlayShiftY";
+	public static final double DEF_OVERLAY_SHIFT_Y = 0.0d;
+	public static final double MIN_OVERLAY_SHIFT_Y = 0.0d;
+	public static final double MAX_OVERLAY_SHIFT_Y = Double.MAX_VALUE;
+	public static final String P_INDEX_SHIFT_Y = "indexShiftY";
+	public static final int DEF_INDEX_SHIFT_Y = 0;
+	public static final int MIN_INDEX_SHIFT_Y = 0;
+	public static final int MAX_INDEX_SHIFT_Y = 100;
 	/*
 	 * Scans
 	 */
@@ -345,21 +373,6 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY = true;
 	public static final String P_POSITION_Y_AXIS_RELATIVE_INTENSITY = "positionYAxisRelativeIntensity";
 	public static final String DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY = Position.Secondary.toString();
-	//
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_SELECTION = "chromatogramOverlayIonsSelection";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION = OverlayChartSupport.SELECTED_IONS_USERS_CHOICE;
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE = "chromatogramOverlayIonsUsersChoice";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE = "18 28 32 84 207";
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS = "chromatogramOverlayIonsHydrocarbons";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS = "57 71 85";
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS = "chromatogramOverlayIonsFattyAcids";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS = "74 84";
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_FAME = "chromatogramOverlayIonsFAME";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_FAME = "79 81";
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING = "chromatogramOverlayIonsSolventTailing";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING = "84";
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "chromatogramOverlayIonsColumnBleed";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "207";
 	/*
 	 * File Explorer
 	 */

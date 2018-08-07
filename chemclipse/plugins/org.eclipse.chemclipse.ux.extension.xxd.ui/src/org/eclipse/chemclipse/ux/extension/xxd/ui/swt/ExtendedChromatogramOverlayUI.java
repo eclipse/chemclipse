@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -80,16 +79,18 @@ import org.swtchart.ISeries;
 
 public class ExtendedChromatogramOverlayUI {
 
+	private static final Logger logger = Logger.getLogger(ExtendedChromatogramOverlayUI.class);
+	//
 	private Composite toolbarType;
 	private Composite toolbarProfile;
 	private Composite toolbarShift;
 	private ChromatogramChart chromatogramChart;
 	//
-	private Combo comboOverlayType1;
-	private Combo comboOverlayType2;
+	private Combo comboOverlayTypeDefault;
+	private Combo comboOverlayTypeProfile;
 	private Combo comboDerivativeType;
-	private Combo comboSelectedSeries1;
-	private Combo comboSelectedSeries2;
+	private Combo comboSelectedSeriesDefault;
+	private Combo comboSelectedSeriesShift;
 	private Combo comboDisplayModus;
 	private Combo comboSelectedIons;
 	private Text textIonsFromSettings;
@@ -107,15 +108,15 @@ public class ExtendedChromatogramOverlayUI {
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private OverlayChartSupport overlayChartSupport = new OverlayChartSupport();
 	private ControlDecoration controlDecoration;
-	private Set<String> mirroredSeries;
+	private Set<String> mirroredSeries = new HashSet<String>();
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
+	@SuppressWarnings("rawtypes")
 	private List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
 
 	@Inject
 	public ExtendedChromatogramOverlayUI(Composite parent) {
-		mirroredSeries = new HashSet<String>();
 		initialize(parent);
 	}
 
@@ -150,7 +151,7 @@ public class ExtendedChromatogramOverlayUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(9, false));
+		composite.setLayout(new GridLayout(8, false));
 		//
 		createDataStatusLabel(composite);
 		createButtonToggleToolbarType(composite);
@@ -158,7 +159,6 @@ public class ExtendedChromatogramOverlayUI {
 		createButtonToggleToolbarShift(composite);
 		createToggleChartLegendButton(composite);
 		createResetButton(composite);
-		createButtonPseudo3D(composite);
 		createNewOverlayPartButton(composite);
 		createSettingsButton(composite);
 	}
@@ -168,12 +168,15 @@ public class ExtendedChromatogramOverlayUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
-		comboOverlayType1 = createOverlayTypeCombo(composite);
+		comboOverlayTypeDefault = createOverlayTypeCombo(composite);
 		createDerivativeTypeCombo(composite);
-		comboSelectedSeries1 = createSelectedSeriesCombo(composite);
+		createVerticalSeparator(composite);
+		comboSelectedSeriesDefault = createSelectedSeriesCombo(composite);
 		createDisplayModusCombo(composite);
+		createVerticalSeparator(composite);
+		createButtonAutoMirror(composite);
 		//
 		return composite;
 	}
@@ -185,7 +188,7 @@ public class ExtendedChromatogramOverlayUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		comboOverlayType2 = createOverlayTypeCombo(composite);
+		comboOverlayTypeProfile = createOverlayTypeCombo(composite);
 		createSelectedIonsCombo(composite);
 		createIonsFromText(composite);
 		//
@@ -200,17 +203,21 @@ public class ExtendedChromatogramOverlayUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(9, false));
+		composite.setLayout(new GridLayout(13, false));
 		//
-		comboSelectedSeries2 = createSelectedSeriesCombo(composite);
 		createTextShiftX(composite);
 		createComboScaleX(composite);
-		createButtonLeft(composite);
-		createButtonRight(composite);
 		createTextShiftY(composite);
 		createComboScaleY(composite);
+		createVerticalSeparator(composite);
+		comboSelectedSeriesShift = createSelectedSeriesCombo(composite);
+		createButtonLeft(composite);
+		createButtonRight(composite);
 		createButtonUp(composite);
 		createButtonDown(composite);
+		createVerticalSeparator(composite);
+		createButtonShiftY(composite);
+		createButtonShiftXY(composite);
 		//
 		return composite;
 	}
@@ -231,8 +238,8 @@ public class ExtendedChromatogramOverlayUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				int index = combo.getSelectionIndex();
-				comboOverlayType1.select(index);
-				comboOverlayType2.select(index);
+				comboOverlayTypeDefault.select(index);
+				comboOverlayTypeProfile.select(index);
 				//
 				modifyWidgetStatus();
 				refreshUpdateOverlayChart();
@@ -288,8 +295,8 @@ public class ExtendedChromatogramOverlayUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				int index = combo.getSelectionIndex();
-				comboSelectedSeries1.select(index);
-				comboSelectedSeries2.select(index);
+				comboSelectedSeriesDefault.select(index);
+				comboSelectedSeriesShift.select(index);
 				//
 				String selectedSeriesId = combo.getText().trim();
 				BaseChart baseChart = chromatogramChart.getBaseChart();
@@ -316,35 +323,55 @@ public class ExtendedChromatogramOverlayUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				BaseChart baseChart = chromatogramChart.getBaseChart();
-				String displayModus = comboDisplayModus.getText().trim();
-				String selectedSeriesId = getSelectedSeriesId();
-				String derivativeType = comboDerivativeType.getText();
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
+				String displayModus = comboDisplayModus.getText().trim();
+				String seriesId = getSelectedSeriesId();
 				//
 				if(displayModus.equals(OverlayChartSupport.DISPLAY_MODUS_MIRRORED)) {
-					/*
-					 * Mirror
-					 */
-					chartSettings.getRangeRestriction().setZeroY(false);
-					//
-					if(!mirroredSeries.contains(selectedSeriesId)) {
-						baseChart.multiplySeries(selectedSeriesId, IExtendedChart.Y_AXIS, -1.0d);
-						mirroredSeries.add(selectedSeriesId);
-					}
-				} else {
-					/*
-					 * Normal
-					 */
-					if(mirroredSeries.contains(selectedSeriesId)) {
-						baseChart.multiplySeries(selectedSeriesId, IExtendedChart.Y_AXIS, -1.0d);
-						mirroredSeries.remove(selectedSeriesId);
-					}
-					//
-					if(mirroredSeries.size() == 0 && ChromatogramChartSupport.DERIVATIVE_NONE.equals(derivativeType)) {
-						chartSettings.getRangeRestriction().setZeroY(true);
-					} else {
+					if(!mirroredSeries.contains(seriesId)) {
+						baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
+						mirroredSeries.add(seriesId);
 						chartSettings.getRangeRestriction().setZeroY(false);
 					}
+				} else {
+					if(mirroredSeries.contains(seriesId)) {
+						baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
+						mirroredSeries.remove(seriesId);
+					}
+				}
+				//
+				chromatogramChart.applySettings(chartSettings);
+				chromatogramChart.adjustRange(true);
+				chromatogramChart.redraw();
+			}
+		});
+	}
+
+	private void createButtonAutoMirror(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Auto Mirror Chromatograms");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_AUTO_MIRROR, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				BaseChart baseChart = chromatogramChart.getBaseChart();
+				IChartSettings chartSettings = chromatogramChart.getChartSettings();
+				//
+				int i = 0;
+				for(ISeries series : baseChart.getSeriesSet().getSeries()) {
+					if(i % 2 == 1) {
+						String seriesId = series.getId();
+						if(!mirroredSeries.contains(seriesId)) {
+							baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
+							mirroredSeries.add(seriesId);
+							chartSettings.getRangeRestriction().setZeroY(false);
+						}
+					}
+					i++;
 				}
 				//
 				chromatogramChart.applySettings(chartSettings);
@@ -520,7 +547,7 @@ public class ExtendedChromatogramOverlayUI {
 				String selectedSeriesId = getSelectedSeriesId();
 				baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
 				baseChart.redraw();
-				persistShiftXSelection();
+				persistOverlayShiftX();
 			}
 		});
 	}
@@ -541,15 +568,9 @@ public class ExtendedChromatogramOverlayUI {
 				String selectedSeriesId = getSelectedSeriesId();
 				baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
 				baseChart.redraw();
-				persistShiftXSelection();
+				persistOverlayShiftX();
 			}
 		});
-	}
-
-	private void persistShiftXSelection() {
-
-		double minutesShiftX = getShiftValuePrimary(IExtendedChart.X_AXIS) / AbstractChromatogram.MINUTE_CORRELATION_FACTOR;
-		overlayChartSupport.setSettingsMinutesShiftX(minutesShiftX);
 	}
 
 	private void createTextShiftY(Composite parent) {
@@ -585,7 +606,7 @@ public class ExtendedChromatogramOverlayUI {
 				String selectedSeriesId = getSelectedSeriesId();
 				baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
 				baseChart.redraw();
-				persistShiftYSelection();
+				persistOverlayShiftY();
 			}
 		});
 	}
@@ -606,35 +627,53 @@ public class ExtendedChromatogramOverlayUI {
 				String selectedSeriesId = getSelectedSeriesId();
 				baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
 				baseChart.redraw();
-				persistShiftYSelection();
+				persistOverlayShiftY();
 			}
 		});
 	}
 
-	private void persistShiftYSelection() {
+	private void createButtonShiftY(Composite parent) {
 
-		double absoluteShiftY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
-		overlayChartSupport.setSettingsAbsoluteShiftY(absoluteShiftY);
-	}
-
-	private void createButtonPseudo3D(Composite parent) {
-
-		Button buttonShiftDown = new Button(parent, SWT.PUSH);
-		buttonShiftDown.setToolTipText("Pseudo 3d");
-		buttonShiftDown.setText("");
-		buttonShiftDown.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_3D, IApplicationImage.SIZE_16x16));
-		buttonShiftDown.addSelectionListener(new SelectionAdapter() {
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Shift Y");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_Y, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				/*
-				 * Reset the chart.
-				 */
 				applyOverlaySettings();
-				/*
-				 * Move equidistant.
-				 */
+				//
+				BaseChart baseChart = chromatogramChart.getBaseChart();
+				baseChart.suspendUpdate(true);
+				double shiftY = 0.0d;
+				double deltaY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
+				for(ISeries series : baseChart.getSeriesSet().getSeries()) {
+					shiftY += deltaY;
+					String seriesId = series.getId();
+					baseChart.shiftSeries(seriesId, 0.0d, shiftY);
+				}
+				baseChart.suspendUpdate(false);
+				baseChart.redraw();
+				persistOverlayShiftY();
+			}
+		});
+	}
+
+	private void createButtonShiftXY(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Shift XY");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_XY, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				applyOverlaySettings();
+				//
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				baseChart.suspendUpdate(true);
 				double shiftX = 0.0d;
@@ -649,6 +688,8 @@ public class ExtendedChromatogramOverlayUI {
 				}
 				baseChart.suspendUpdate(false);
 				baseChart.redraw();
+				persistOverlayShiftX();
+				persistOverlayShiftY();
 			}
 		});
 	}
@@ -689,7 +730,7 @@ public class ExtendedChromatogramOverlayUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle profile toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_PROFILE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_PROFILE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -697,9 +738,9 @@ public class ExtendedChromatogramOverlayUI {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarProfile);
 				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_PROFILE, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_PROFILE, IApplicationImage.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_PROFILE, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_PROFILE, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});
@@ -848,12 +889,8 @@ public class ExtendedChromatogramOverlayUI {
 		String selectedSeries = getSelectedSeriesId();
 		boolean isSeriesSelected = !selectedSeries.equals(BaseChart.SELECTED_SERIES_NONE);
 		comboDisplayModus.setEnabled(isSeriesSelected);
-		textShiftX.setEnabled(isSeriesSelected);
-		comboScaleX.setEnabled(isSeriesSelected);
 		buttonShiftLeft.setEnabled(isSeriesSelected);
 		buttonShiftRight.setEnabled(isSeriesSelected);
-		textShiftY.setEnabled(isSeriesSelected);
-		comboScaleY.setEnabled(isSeriesSelected);
 		buttonShiftUp.setEnabled(isSeriesSelected);
 		buttonShiftDown.setEnabled(isSeriesSelected);
 	}
@@ -871,6 +908,7 @@ public class ExtendedChromatogramOverlayUI {
 		chromatogramChartSupport.loadUserSettings();
 		chromatogramChart.deleteSeries();
 		textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE));
+		mirroredSeries.clear();
 		refreshUpdateOverlayChart();
 		modifyWidgetStatus();
 		modifyDataStatusLabel();
@@ -905,8 +943,8 @@ public class ExtendedChromatogramOverlayUI {
 			@Override
 			public void handleSeriesSelectionEvent(String seriesId) {
 
-				comboSelectedSeries1.setText(seriesId);
-				comboSelectedSeries2.setText(seriesId);
+				comboSelectedSeriesDefault.setText(seriesId);
+				comboSelectedSeriesShift.setText(seriesId);
 				modifyWidgetStatus();
 			}
 		});
@@ -1145,17 +1183,19 @@ public class ExtendedChromatogramOverlayUI {
 			/*
 			 * Get the shift value from the settings.
 			 */
-			double minutesShiftX = overlayChartSupport.getSettingsMinutesShiftX();
-			int selectedIndex = 1; // "Minutes"
+			double overlayShiftX = overlayChartSupport.getOverlayShiftX();
+			int indexShiftX = overlayChartSupport.getIndexShiftX();
 			//
-			if(selectedIndex >= 0 && selectedIndex < axisLabelsX.length) {
-				DecimalFormat decimalFormat = baseChart.getDecimalFormat(IExtendedChart.X_AXIS, selectedIndex);
-				comboScaleX.select(selectedIndex);
-				textShiftX.setText(decimalFormat.format(minutesShiftX));
+			if(indexShiftX >= 0 && indexShiftX < axisLabelsX.length) {
+				DecimalFormat decimalFormat = baseChart.getDecimalFormat(IExtendedChart.X_AXIS, indexShiftX);
+				comboScaleX.select(indexShiftX);
+				textShiftX.setText(decimalFormat.format(overlayShiftX));
 			} else {
-				int millisecondsShiftX = (int)(minutesShiftX * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
-				comboScaleX.select(0); // Milliseconds
-				textShiftX.setText(Integer.toString(millisecondsShiftX));
+				/*
+				 * Default: Milliseconds
+				 */
+				comboScaleX.select(0);
+				textShiftX.setText(Integer.toString(0));
 			}
 		}
 		/*
@@ -1167,13 +1207,19 @@ public class ExtendedChromatogramOverlayUI {
 			/*
 			 * Get the shift value from the settings.
 			 */
-			double absoluteShiftY = overlayChartSupport.getSettingsAbsoluteShiftY();
-			int selectedIndex = 0; // Absolute Intensity
-			DecimalFormat decimalFormat = baseChart.getDecimalFormat(IExtendedChart.X_AXIS, selectedIndex);
+			double absoluteShiftY = overlayChartSupport.getOverlayShiftY();
+			int indexShiftY = overlayChartSupport.getIndexShiftY();
 			//
-			if(selectedIndex >= 0 && selectedIndex < axisLabelsY.length) {
-				comboScaleY.select(0); // Intensity
+			if(indexShiftY >= 0 && indexShiftY < axisLabelsY.length) {
+				DecimalFormat decimalFormat = baseChart.getDecimalFormat(IExtendedChart.Y_AXIS, indexShiftY);
+				comboScaleY.select(indexShiftY);
 				textShiftY.setText(decimalFormat.format(absoluteShiftY));
+			} else {
+				/*
+				 * Default: Absolute Intensity
+				 */
+				comboScaleY.select(0);
+				textShiftY.setText(Double.toString(0.0d));
 			}
 		}
 	}
@@ -1181,43 +1227,33 @@ public class ExtendedChromatogramOverlayUI {
 	private double getShiftValuePrimary(String axis) {
 
 		double shiftValue = 0.0d;
-		try {
-			/*
-			 * Try to calculate the primary unit.
-			 */
-			BaseChart baseChart = chromatogramChart.getBaseChart();
-			DecimalFormat decimalFormat;
-			/*
-			 * Get the selected axis.
-			 */
-			int selectedAxis;
-			if(axis.equals(IExtendedChart.X_AXIS)) {
-				selectedAxis = comboScaleX.getSelectionIndex();
-				decimalFormat = baseChart.getDecimalFormat(IExtendedChart.X_AXIS, selectedAxis);
-			} else {
-				selectedAxis = comboScaleY.getSelectionIndex();
-				decimalFormat = baseChart.getDecimalFormat(IExtendedChart.Y_AXIS, selectedAxis);
-			}
-			/*
-			 * Get the value.
-			 */
-			double value;
-			if(axis.equals(IExtendedChart.X_AXIS)) {
-				value = decimalFormat.parse(textShiftX.getText().trim()).doubleValue();
-			} else {
-				value = decimalFormat.parse(textShiftY.getText().trim()).doubleValue();
-			}
-			/*
-			 * Convert the range on demand.
-			 */
-			if(selectedAxis == 0) {
-				shiftValue = value;
-			} else {
-				IAxisScaleConverter axisScaleConverter = baseChart.getAxisScaleConverter(axis, selectedAxis);
-				shiftValue = axisScaleConverter.convertToPrimaryUnit(value);
-			}
-		} catch(ParseException e) {
-			System.out.println(e);
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		/*
+		 * Get the selected axis.
+		 */
+		int selectedAxis;
+		if(axis.equals(IExtendedChart.X_AXIS)) {
+			selectedAxis = comboScaleX.getSelectionIndex();
+		} else {
+			selectedAxis = comboScaleY.getSelectionIndex();
+		}
+		/*
+		 * Get the value.
+		 */
+		double value;
+		if(axis.equals(IExtendedChart.X_AXIS)) {
+			value = getTextValue(textShiftX);
+		} else {
+			value = getTextValue(textShiftY);
+		}
+		/*
+		 * Convert the range on demand.
+		 */
+		if(selectedAxis == 0) {
+			shiftValue = value;
+		} else {
+			IAxisScaleConverter axisScaleConverter = baseChart.getAxisScaleConverter(axis, selectedAxis);
+			shiftValue = axisScaleConverter.convertToPrimaryUnit(value);
 		}
 		//
 		return shiftValue;
@@ -1225,20 +1261,51 @@ public class ExtendedChromatogramOverlayUI {
 
 	private String getSelectedSeriesId() {
 
-		return comboSelectedSeries1.getText().trim();
+		return comboSelectedSeriesDefault.getText().trim();
 	}
 
 	private void setSelectedSeries(String[] items, String text) {
 
-		comboSelectedSeries1.setItems(items);
-		comboSelectedSeries1.setText(text);
+		comboSelectedSeriesDefault.setItems(items);
+		comboSelectedSeriesDefault.setText(text);
 		//
-		comboSelectedSeries2.setItems(items);
-		comboSelectedSeries2.setText(text);
+		comboSelectedSeriesShift.setItems(items);
+		comboSelectedSeriesShift.setText(text);
 	}
 
 	private String getOverlayType() {
 
-		return comboOverlayType1.getText().trim();
+		return comboOverlayTypeDefault.getText().trim();
+	}
+
+	private void createVerticalSeparator(Composite parent) {
+
+		Label label = new Label(parent, SWT.SEPARATOR | SWT.VERTICAL);
+		GridData gridData = new GridData();
+		gridData.heightHint = 35;
+		label.setLayoutData(gridData);
+	}
+
+	private double getTextValue(Text text) {
+
+		double value = 0.0d;
+		try {
+			value = Double.parseDouble(text.getText().trim());
+		} catch(NumberFormatException e) {
+			logger.warn(e);
+		}
+		return value;
+	}
+
+	private void persistOverlayShiftX() {
+
+		overlayChartSupport.setOverlayShiftX(getTextValue(textShiftX));
+		overlayChartSupport.setIndexShiftX(comboScaleX.getSelectionIndex());
+	}
+
+	private void persistOverlayShiftY() {
+
+		overlayChartSupport.setOverlayShiftY(getTextValue(textShiftY));
+		overlayChartSupport.setIndexShiftY(comboScaleY.getSelectionIndex());
 	}
 }

@@ -25,6 +25,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_EDIT_ENTRY = "edit_entry.gif";
 	String IMAGE_EDIT_SHIFT = "editShift.gif";
 	String IMAGE_EDIT_PROFILE = "editProfile.gif";
+	String IMAGE_CHROMATOGRAM_PROFILE = "chromatogramProfile.gif";
 	//
 	String IMAGE_EMPTY = "empty.png";
 	String IMAGE_LOGO = "logo.png";
@@ -267,7 +268,9 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SKIP = "skip.gif";
 	String IMAGE_SKIPPED = "skipped.gif";
 	String IMAGE_TAG = "tag.gif";
-	String IMAGE_3D = "three-dimensional.gif";
+	String IMAGE_SHIFT_Y = "shiftY.gif";
+	String IMAGE_SHIFT_XY = "shiftXY.gif";
+	String IMAGE_SHIFT_AUTO_MIRROR = "shiftAutoMirror.gif";
 	String IMAGE_SCAN_RETENTION_TIME = "scanRetentionTime.gif";
 	String IMAGE_CHART_LEGEND_MARKER = "chartLegendMarker.gif";
 	String IMAGE_CHART_RANGE_SELECTOR = "chartRangeSelector.gif";

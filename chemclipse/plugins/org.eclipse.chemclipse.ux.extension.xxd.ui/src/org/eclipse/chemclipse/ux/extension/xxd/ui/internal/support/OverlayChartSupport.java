@@ -73,30 +73,6 @@ public class OverlayChartSupport {
 		return displayModi;
 	}
 
-	public double getSettingsMinutesShiftX() {
-
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		return preferenceStore.getDouble(PreferenceConstants.P_MINUTES_SHIFT_X);
-	}
-
-	public void setSettingsMinutesShiftX(double value) {
-
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		preferenceStore.setValue(PreferenceConstants.P_MINUTES_SHIFT_X, value);
-	}
-
-	public double getSettingsAbsoluteShiftY() {
-
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		return preferenceStore.getDouble(PreferenceConstants.P_ABSOLUTE_SHIFT_Y);
-	}
-
-	public void setSettingsAbsoluteShiftY(double value) {
-
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		preferenceStore.setValue(PreferenceConstants.P_ABSOLUTE_SHIFT_Y, value);
-	}
-
 	private void initialize() {
 
 		overlayTypes = new String[]{//
@@ -129,5 +105,53 @@ public class OverlayChartSupport {
 				DISPLAY_MODUS_NORMAL, //
 				DISPLAY_MODUS_MIRRORED //
 		};
+	}
+
+	public double getOverlayShiftX() {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		return preferenceStore.getDouble(PreferenceConstants.P_OVERLAY_SHIFT_X);
+	}
+
+	public void setOverlayShiftX(double value) {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		preferenceStore.setValue(PreferenceConstants.P_OVERLAY_SHIFT_X, value);
+	}
+
+	public int getIndexShiftX() {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		return preferenceStore.getInt(PreferenceConstants.P_INDEX_SHIFT_X);
+	}
+
+	public void setIndexShiftX(int value) {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		preferenceStore.setValue(PreferenceConstants.P_INDEX_SHIFT_X, value);
+	}
+
+	public double getOverlayShiftY() {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		return preferenceStore.getDouble(PreferenceConstants.P_OVERLAY_SHIFT_Y);
+	}
+
+	public void setOverlayShiftY(double value) {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		preferenceStore.setValue(PreferenceConstants.P_OVERLAY_SHIFT_Y, value);
+	}
+
+	public int getIndexShiftY() {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		return preferenceStore.getInt(PreferenceConstants.P_INDEX_SHIFT_Y);
+	}
+
+	public void setIndexShiftY(int value) {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		preferenceStore.setValue(PreferenceConstants.P_INDEX_SHIFT_Y, value);
 	}
 }

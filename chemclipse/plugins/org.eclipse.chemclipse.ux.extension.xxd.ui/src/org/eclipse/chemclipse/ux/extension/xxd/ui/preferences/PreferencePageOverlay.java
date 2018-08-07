@@ -20,7 +20,9 @@ import org.eclipse.eavp.service.swtchart.preferences.PreferenceSupport;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -52,11 +54,6 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		//
-		addField(new DoubleFieldEditor(PreferenceConstants.P_MINUTES_SHIFT_X, "Shift X (Minutes):", getFieldEditorParent()));
-		addField(new DoubleFieldEditor(PreferenceConstants.P_ABSOLUTE_SHIFT_Y, "Shift Y (Absolute):", getFieldEditorParent()));
-		//
-		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		//
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, "Selected Overlay:", OverlayChartSupport.SELECTED_IONS_CHOICES, getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE, "Overlay Ions User Choice:", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS, "Overlay Ions Hydrocarbons:", getFieldEditorParent()));
@@ -64,6 +61,20 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FAME, "Overlay Ions FAME:", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING, "Overlay Ions Solvent Tailing:", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED, "Overlay Ions Column Bleed:", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		//
+		addField(new DoubleFieldEditor(PreferenceConstants.P_OVERLAY_SHIFT_X, "Overlay Shift X:", PreferenceConstants.MIN_OVERLAY_SHIFT_X, PreferenceConstants.MAX_OVERLAY_SHIFT_X, getFieldEditorParent()));
+		addField(getIntegerFieldEditor(PreferenceConstants.P_INDEX_SHIFT_X, "Index Shift X", PreferenceConstants.MIN_INDEX_SHIFT_X, PreferenceConstants.MAX_INDEX_SHIFT_X, getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceConstants.P_OVERLAY_SHIFT_Y, "Overlay Shift Y:", PreferenceConstants.MIN_OVERLAY_SHIFT_Y, PreferenceConstants.MAX_OVERLAY_SHIFT_Y, getFieldEditorParent()));
+		addField(getIntegerFieldEditor(PreferenceConstants.P_INDEX_SHIFT_Y, "Index Shift Y", PreferenceConstants.MIN_INDEX_SHIFT_Y, PreferenceConstants.MAX_INDEX_SHIFT_Y, getFieldEditorParent()));
+	}
+
+	private IntegerFieldEditor getIntegerFieldEditor(String name, String labelText, int min, int max, Composite parent) {
+
+		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(name, labelText, parent);
+		integerFieldEditor.setValidRange(min, max);
+		return integerFieldEditor;
 	}
 
 	public void init(IWorkbench workbench) {
