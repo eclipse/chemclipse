@@ -183,6 +183,8 @@ public class ExtendedScanTableUI {
 		buttonToggleEditModus.setEnabled(enabled);
 		PartSupport.setControlVisibility(buttonToggleEditModus, enabled);
 		//
+		scanTableUI.setEditEnabled(enabled);
+		//
 		ITableSettings tableSettings = scanTableUI.getTableSettings();
 		if(enabled) {
 			tableSettings.addMenuEntry(deleteMenuEntry);
@@ -206,6 +208,8 @@ public class ExtendedScanTableUI {
 			//
 			if(forceEnableEditModus || isLibraryMassSpectrum) {
 				enableEditModus(true);
+			} else {
+				enableEditModus(false);
 			}
 		} else if(object instanceof IPeak) {
 			IPeak peak = (IPeak)object;
