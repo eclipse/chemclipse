@@ -93,7 +93,7 @@ public class ScanConverterNMR {
 				}
 			}
 		} catch(NoConverterAvailableException e) {
-			logger.info(e);
+			logger.error(e.getLocalizedMessage(), e);
 		}
 		return getProcessingError(file);
 	}
