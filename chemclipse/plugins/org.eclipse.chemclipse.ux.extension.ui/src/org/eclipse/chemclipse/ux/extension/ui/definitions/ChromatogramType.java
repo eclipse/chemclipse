@@ -32,26 +32,44 @@ public class ChromatogramType implements EventHandler {
 	public static final String CHROMATOGRAM_TYPE_XXD = "CHROMATOGRAM_TYPE_XXD";
 	public static final String CHROMATOGRAM_TYPE_NONE = "CHROMATOGRAM_TYPE_NONE";
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void handleEvent(Event event) {
 
 		String topic = event.getTopic();
-		Object property = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		/*
-		 * Get the chromatogram selection.
-		 */
 		IChromatogramSelection chromatogramSelection = null;
 		String chromatogramType = CHROMATOGRAM_TYPE_NONE;
 		//
 		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			chromatogramSelection = (IChromatogramSelectionMSD)property;
-			chromatogramType = CHROMATOGRAM_TYPE_MSD;
+			Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+			if(object instanceof IChromatogramSelectionMSD) {
+				chromatogramSelection = (IChromatogramSelectionMSD)object;
+				chromatogramType = CHROMATOGRAM_TYPE_MSD;
+			}
 		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			chromatogramSelection = (IChromatogramSelectionCSD)property;
-			chromatogramType = CHROMATOGRAM_TYPE_CSD;
+			Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+			if(object instanceof IChromatogramSelectionCSD) {
+				chromatogramSelection = (IChromatogramSelectionCSD)object;
+				chromatogramType = CHROMATOGRAM_TYPE_CSD;
+			}
 		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			chromatogramSelection = (IChromatogramSelectionWSD)property;
-			chromatogramType = CHROMATOGRAM_TYPE_WSD;
+			Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+			if(object instanceof IChromatogramSelectionWSD) {
+				chromatogramSelection = (IChromatogramSelectionWSD)object;
+				chromatogramType = CHROMATOGRAM_TYPE_WSD;
+			}
+		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION)) {
+			Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+			if(object instanceof IChromatogramSelection) {
+				chromatogramSelection = (IChromatogramSelection)object;
+				if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+					chromatogramType = CHROMATOGRAM_TYPE_CSD;
+				} else if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+					chromatogramType = CHROMATOGRAM_TYPE_MSD;
+				} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+					chromatogramType = CHROMATOGRAM_TYPE_WSD;
+				}
+			}
 		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION)) {
 			chromatogramSelection = null;
 			chromatogramType = CHROMATOGRAM_TYPE_NONE;
@@ -73,6 +91,7 @@ public class ChromatogramType implements EventHandler {
 	 * 
 	 * @return {@link IChromatogramSelection}
 	 */
+	@SuppressWarnings("rawtypes")
 	public static IChromatogramSelection getChromatogramSelection() {
 
 		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
