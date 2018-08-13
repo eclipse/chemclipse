@@ -29,6 +29,7 @@ public class PreferencePageTaskLists extends FieldEditorPreferencePage implement
 
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_PEAK_LIST, "Peak List:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SCAN_LIST, "Scan List:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_PEAK_SCAN_LIST, "Peak/Scan List:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_LIST, "Peak Quantitation List:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 	}
 

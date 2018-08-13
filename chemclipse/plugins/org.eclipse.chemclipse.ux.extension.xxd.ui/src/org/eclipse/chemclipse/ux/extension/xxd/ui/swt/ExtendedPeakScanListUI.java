@@ -25,11 +25,13 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -48,6 +50,7 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
@@ -76,11 +79,11 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
 @SuppressWarnings("rawtypes")
-public class ExtendedPeakListUI {
+public class ExtendedPeakScanListUI {
 
-	private static final Logger logger = Logger.getLogger(ExtendedPeakListUI.class);
+	private static final Logger logger = Logger.getLogger(ExtendedPeakScanListUI.class);
 	//
-	private static final String MENU_CATEGORY = "Peaks";
+	private static final String MENU_CATEGORY = "Peaks/Scans";
 	//
 	private Composite toolbarInfoTop;
 	private Composite toolbarInfoBottom;
@@ -89,18 +92,18 @@ public class ExtendedPeakListUI {
 	private Label labelChromatogramName;
 	private Label labelChromatogramInfo;
 	private SearchSupportUI searchSupportUI;
-	private PeakListUI peakListUI;
+	private PeakScanListUI peakScanListUI;
 	private IChromatogramSelection chromatogramSelection;
 	//
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ListSupport listSupport = new ListSupport();
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
+	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	//
-	private Map<String, Object> map;
+	private Map<String, Object> map = new HashMap<String, Object>();
 
 	@Inject
-	public ExtendedPeakListUI(Composite parent) {
-		map = new HashMap<String, Object>();
+	public ExtendedPeakScanListUI(Composite parent) {
 		initialize(parent);
 	}
 
@@ -122,9 +125,9 @@ public class ExtendedPeakListUI {
 		buttonSavePeaks.setEnabled(false);
 		//
 		if(chromatogramSelection == null) {
-			peakListUI.clear();
+			peakScanListUI.clear();
 		} else {
-			peakListUI.setInput(chromatogramSelection);
+			peakScanListUI.setInput(chromatogramSelection);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				buttonSavePeaks.setEnabled(true);
@@ -139,7 +142,7 @@ public class ExtendedPeakListUI {
 		createToolbarMain(parent);
 		toolbarInfoTop = createToolbarInfoTop(parent);
 		toolbarSearch = createToolbarSearch(parent);
-		peakListUI = createPeakTable(parent);
+		peakScanListUI = createPeakTable(parent);
 		toolbarInfoBottom = createToolbarInfoBottom(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfoTop, true);
@@ -186,16 +189,16 @@ public class ExtendedPeakListUI {
 			@Override
 			public void performSearch(String searchText, boolean caseSensitive) {
 
-				peakListUI.setSearchText(searchText, caseSensitive);
+				peakScanListUI.setSearchText(searchText, caseSensitive);
 			}
 		});
 		//
 		return searchSupportUI;
 	}
 
-	private PeakListUI createPeakTable(Composite parent) {
+	private PeakScanListUI createPeakTable(Composite parent) {
 
-		PeakListUI listUI = new PeakListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		PeakScanListUI listUI = new PeakScanListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		Table table = listUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.addSelectionListener(new SelectionAdapter() {
@@ -203,7 +206,7 @@ public class ExtendedPeakListUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				propagatePeak();
+				propagateSelection();
 			}
 		});
 		/*
@@ -331,7 +334,7 @@ public class ExtendedPeakListUI {
 						setPeaksActiveForAnalysis(true);
 					}
 				} else {
-					propagatePeak();
+					propagateSelection();
 				}
 			}
 		});
@@ -346,7 +349,7 @@ public class ExtendedPeakListUI {
 			/*
 			 * Delete Target
 			 */
-			Iterator iterator = peakListUI.getStructuredSelection().iterator();
+			Iterator iterator = peakScanListUI.getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof IPeak) {
@@ -359,7 +362,7 @@ public class ExtendedPeakListUI {
 
 	private void setPeaksActiveForAnalysis(boolean activeForAnalysis) {
 
-		Iterator iterator = peakListUI.getStructuredSelection().iterator();
+		Iterator iterator = peakScanListUI.getStructuredSelection().iterator();
 		while(iterator.hasNext()) {
 			Object object = iterator.next();
 			if(object instanceof IPeak) {
@@ -387,9 +390,9 @@ public class ExtendedPeakListUI {
 		}
 	}
 
-	private void propagatePeak() {
+	private void propagateSelection() {
 
-		Table table = peakListUI.getTable();
+		Table table = peakScanListUI.getTable();
 		int index = table.getSelectionIndex();
 		if(index >= 0) {
 			TableItem tableItem = table.getItem(index);
@@ -433,6 +436,50 @@ public class ExtendedPeakListUI {
 							 */
 							map.clear();
 							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, peakMSD.getExtractedMassSpectrum());
+							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
+							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+						}
+					});
+				}
+			} else if(object instanceof IScan) {
+				/*
+				 * Fire updates
+				 */
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+				IScan scan = (IScan)object;
+				IIdentificationTarget target = scanDataSupport.getBestScanTarget(scan);
+				//
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						chromatogramSelection.setSelectedIdentifiedScan(scan);
+						eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+					}
+				});
+				//
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
+					}
+				});
+				//
+				if(scan instanceof IScanMSD) {
+					IScanMSD scanMSD = (IScanMSD)scan;
+					DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							/*
+							 * Send the identification target update to let e.g. the molecule renderer react on an update.
+							 */
+							map.clear();
+							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, scanMSD);
 							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
 							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
 						}
@@ -514,8 +561,8 @@ public class ExtendedPeakListUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean editEnabled = !peakListUI.isEditEnabled();
-				peakListUI.setEditEnabled(editEnabled);
+				boolean editEnabled = !peakScanListUI.isEditEnabled();
+				peakScanListUI.setEditEnabled(editEnabled);
 				updateLabel();
 			}
 		});
@@ -552,7 +599,7 @@ public class ExtendedPeakListUI {
 				try {
 					if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
 						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-						Table table = peakListUI.getTable();
+						Table table = peakScanListUI.getTable();
 						int[] indices = table.getSelectionIndices();
 						List<IPeak> peaks;
 						if(indices.length == 0) {
@@ -610,7 +657,7 @@ public class ExtendedPeakListUI {
 			labelChromatogramName.setText(chromatogramDataSupport.getChromatogramLabel(null));
 			labelChromatogramInfo.setText("");
 		} else {
-			String editInformation = peakListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
+			String editInformation = peakScanListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			String chromatogramLabel = chromatogramDataSupport.getChromatogramLabel(chromatogram);
 			labelChromatogramName.setText(chromatogramLabel + " - " + editInformation);

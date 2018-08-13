@@ -29,6 +29,7 @@ public class PreferencePageLists extends FieldEditorPreferencePage implements IW
 
 		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_ORDER_PEAK_LIST, "Peak List", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_ORDER_SCAN_LIST, "Scan List", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_ORDER_PEAK_SCAN_LIST, "Peak/Scan List", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST, "Target List", getFieldEditorParent()));
 	}
 

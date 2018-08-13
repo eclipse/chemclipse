@@ -32,6 +32,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_ABOUT = "about.png";
 	//
 	String IMAGE_DESELECTED = "deselected.gif";
+	String IMAGE_DESELECTED_INACTIVE = "deselected_inactive.gif";
 	String IMAGE_SELECTED = "selected.gif";
 	String IMAGE_CHECK_ALL = "checkAll.gif";
 	String IMAGE_UNCHECK_ALL = "uncheckAll.gif";

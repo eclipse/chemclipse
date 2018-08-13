@@ -40,6 +40,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_DETAILS, PreferenceConstants.DEF_STACK_POSITION_PEAK_DETAILS);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_DETECTOR, PreferenceConstants.DEF_STACK_POSITION_PEAK_DETECTOR);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_LIST, PreferenceConstants.DEF_STACK_POSITION_PEAK_LIST);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_SCAN_LIST, PreferenceConstants.DEF_STACK_POSITION_PEAK_SCAN_LIST);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_LIST, PreferenceConstants.DEF_STACK_POSITION_PEAK_QUANTITATION_LIST);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART, PreferenceConstants.DEF_STACK_POSITION_SUBTRACT_SCAN_PART);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_COMBINED_SCAN_PART, PreferenceConstants.DEF_STACK_POSITION_COMBINED_SCAN_PART);
