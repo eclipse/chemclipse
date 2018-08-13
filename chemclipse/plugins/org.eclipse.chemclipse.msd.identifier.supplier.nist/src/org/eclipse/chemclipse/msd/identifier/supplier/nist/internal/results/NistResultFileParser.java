@@ -33,6 +33,9 @@ public class NistResultFileParser {
 	private static final String MATCH_FACTOR_PATTERN = "(MF:\\s*)(.*?)(;\\s*RMF:\\s*)(.*?)(;\\s*Prob:\\s*)(.*?)(;)";
 	private static final String CAS_PATTERN = "(CAS:\\s*)(.*?)(;)";
 	private static final String LIB_PATTERN = "(Mw:\\s*)(.*)(;\\s*Lib:.*<<)(.*)(>>;\\s*Id:\\s*)(.*)(\\.)";
+	//
+	private static final String RI_MARKER = "; RI:";
+	//
 	private Pattern compoundPattern;
 	private Pattern identifierPattern;
 	private Pattern hitPattern;
@@ -242,7 +245,17 @@ public class NistResultFileParser {
 		if(matcher.find()) {
 			hit.setMw(Integer.valueOf(matcher.group(2)));
 			hit.setLib(matcher.group(4));
-			hit.setId(Integer.valueOf(matcher.group(6)));
+			String value = matcher.group(6); // NIST17 -> "4178; RI: 0"
+			String id = "-1";
+			if(value.contains(RI_MARKER)) {
+				String[] values = value.split(RI_MARKER);
+				if(values.length > 0) {
+					id = values[0].trim();
+				}
+			} else {
+				id = value;
+			}
+			hit.setId(Integer.valueOf(id));
 		}
 	}
 	// -------------------------------------------private methods
