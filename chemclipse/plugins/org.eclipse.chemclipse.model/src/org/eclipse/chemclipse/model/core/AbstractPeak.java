@@ -42,21 +42,12 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	private String detectorDescription = "";
 	private String quantifierDescription = "";
 	private boolean activeForAnalysis = true;
-	private List<IIntegrationEntry> integrationEntries;
-	private IIntegrationConstraints integrationConstraints;
-	private Set<IQuantitationEntry> quantitationEntries;
-	private List<IInternalStandard> internalStandards;
+	private List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+	private IIntegrationConstraints integrationConstraints = new IntegrationConstraints();
+	private Set<IQuantitationEntry> quantitationEntries = new HashSet<IQuantitationEntry>();
+	private List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
+	private List<String> quantitationReferences = new ArrayList<String>(); // Used to quantify against certain ISTDs or ESTDs
 	private String classifier = "";
-
-	public AbstractPeak() {
-		/*
-		 * Create new default instances.
-		 */
-		integrationConstraints = new IntegrationConstraints();
-		integrationEntries = new ArrayList<IIntegrationEntry>();
-		quantitationEntries = new HashSet<IQuantitationEntry>();
-		internalStandards = new ArrayList<IInternalStandard>();
-	}
 
 	@Override
 	public String getModelDescription() {
@@ -305,6 +296,30 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	public void removeInternalStandard(IInternalStandard internalStandard) {
 
 		internalStandards.remove(internalStandard);
+	}
+
+	@Override
+	public List<String> getQuantitationReferences() {
+
+		return Collections.unmodifiableList(quantitationReferences);
+	}
+
+	@Override
+	public void addQuantitationReference(String quantitationReference) {
+
+		quantitationReferences.add(quantitationReference);
+	}
+
+	@Override
+	public void addQuantitationReferences(List<String> quantitationReferences) {
+
+		this.quantitationReferences.addAll(quantitationReferences);
+	}
+
+	@Override
+	public void removeQuantitationReference(String quantitationReference) {
+
+		quantitationReferences.remove(quantitationReference);
 	}
 
 	@Override

@@ -225,6 +225,14 @@ public interface IPeak extends IPeakTargets, Comparable<IPeak> {
 
 	void removeInternalStandard(IInternalStandard internalStandard);
 
+	List<String> getQuantitationReferences();
+
+	void addQuantitationReference(String quantitationReference);
+
+	void addQuantitationReferences(List<String> quantitationReferences);
+
+	void removeQuantitationReference(String quantitationReference);
+
 	String getClassifier();
 
 	void setClassifier(String classifier);

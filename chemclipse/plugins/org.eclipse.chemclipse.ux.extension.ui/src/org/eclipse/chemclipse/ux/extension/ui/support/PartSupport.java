@@ -74,6 +74,7 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_INTERNAL_STANDARDS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.internalStandardsPartDescriptor";
 	public static final String PARTDESCRIPTOR_MEASUREMENT_RESULTS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.measurementResultsPartDescriptor";
 	public static final String PARTDESCRIPTOR_CHROMATOGRAM_HEATMAP = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.chromatogramHeatmapPartDescriptor";
+	public static final String PARTDESCRIPTOR_PEAK_QUANTITATION_REFERENCES = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.peakQuantitationReferencesPartDescriptor";
 	//
 	public static final String PARTSTACK_NONE = "";
 	public static final String PARTSTACK_QUICKACCESS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.quickaccess";

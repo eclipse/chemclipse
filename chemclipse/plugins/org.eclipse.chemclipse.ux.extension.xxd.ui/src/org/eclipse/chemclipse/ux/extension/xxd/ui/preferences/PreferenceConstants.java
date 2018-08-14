@@ -116,6 +116,8 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_MEASUREMENT_RESULTS = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_CHROMATOGRAM_HEATMAP = "stackPositionChromatogramHeatmap";
 	public static final String DEF_STACK_POSITION_CHROMATOGRAM_HEATMAP = PartSupport.PARTSTACK_BOTTOM_CENTER;
+	public static final String P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES = "stackPositionPeakQuantitationReferences";
+	public static final String DEF_STACK_POSITION_PEAK_QUANTITATION_REFERENCES = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	/*
 	 * Overlay
 	 */

@@ -30,6 +30,7 @@ public class PreferencePageTaskQuantitation extends FieldEditorPreferencePage im
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_QUANTITATION, "Quantitation:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA, "Integration Area:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS, "Internal Standards:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES, "Peak Quantitation References:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

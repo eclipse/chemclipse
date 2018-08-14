@@ -262,12 +262,14 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANTITATION, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANTITATION));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_REFERENCES, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES));
 			}
 		});
 		//
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANTITATION, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_REFERENCES, button, imageActive, imageDefault);
 	}
 
 	private void createSubtractScanTask(Composite parent) {

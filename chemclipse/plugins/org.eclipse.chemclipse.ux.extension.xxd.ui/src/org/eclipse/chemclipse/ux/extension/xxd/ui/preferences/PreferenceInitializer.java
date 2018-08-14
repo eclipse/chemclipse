@@ -49,6 +49,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS, PreferenceConstants.DEF_STACK_POSITION_INTERNAL_STANDARDS);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_MEASUREMENT_RESULTS, PreferenceConstants.DEF_STACK_POSITION_MEASUREMENT_RESULTS);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_HEATMAP, PreferenceConstants.DEF_STACK_POSITION_CHROMATOGRAM_HEATMAP);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES, PreferenceConstants.DEF_STACK_POSITION_PEAK_QUANTITATION_REFERENCES);
 		/*
 		 * Overlay
 		 */
