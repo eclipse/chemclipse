@@ -27,12 +27,15 @@ import org.eclipse.chemclipse.swt.ui.components.MethodSupportUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.SequenceListUI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -63,6 +66,7 @@ public class ExtendedSequenceListUI {
 	private MethodSupportUI methodSupportUI;
 	private SequenceListUI sequenceListUI;
 	//
+	private String initialDataPath = "";
 	private ISequence<? extends ISequenceRecord> sequence;
 	//
 	private List<ISupplierEditorSupport> supplierEditorSupportList;
@@ -78,6 +82,9 @@ public class ExtendedSequenceListUI {
 	public void update(ISequence<? extends ISequenceRecord> sequence) {
 
 		this.sequence = sequence;
+		if(sequence != null) {
+			initialDataPath = sequence.getDataPath();
+		}
 		updateDataSequenceData();
 	}
 
@@ -211,10 +218,11 @@ public class ExtendedSequenceListUI {
 					DirectoryDialog directoryDialog = new DirectoryDialog(DisplayUtils.getShell(button));
 					directoryDialog.setText("Sequence Folder");
 					directoryDialog.setMessage("Select the sequence root folder.");
-					// directoryDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER));
+					IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+					directoryDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER));
 					String directory = directoryDialog.open();
 					if(directory != null) {
-						// preferenceStore.setValue(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER, directory);
+						preferenceStore.setValue(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER, directory);
 						sequence.setDataPath(directory);
 						updateDataSequenceData();
 					}
@@ -330,7 +338,7 @@ public class ExtendedSequenceListUI {
 	private void createResetButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Reset the scan");
+		button.setToolTipText("Reset the sequence");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -375,12 +383,18 @@ public class ExtendedSequenceListUI {
 
 	private void applySettings() {
 
+		sequenceListUI.setComparator();
+		searchSupportUI.reset();
+		updateDataSequenceData();
 	}
 
 	private void reset() {
 
 		searchSupportUI.reset();
-		sequenceListUI.setInput(sequence);
+		if(sequence != null) {
+			sequence.setDataPath(initialDataPath);
+		}
+		updateDataSequenceData();
 	}
 
 	private void createSequenceList(Composite parent) {

@@ -29,9 +29,11 @@ public class PreferencePageSequences extends FieldEditorPreferencePage implement
 	public void createFieldEditors() {
 
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SEQUENCE_EXPLORER_USE_SUBFOLDER, "Use Subfolder", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SEQUENCE_EXPLORER_SORT_DATA, "Sort Data", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER, "Root Folder", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER, "Parent Folder", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER, "Sub Folder", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER, "Dialog Folder", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

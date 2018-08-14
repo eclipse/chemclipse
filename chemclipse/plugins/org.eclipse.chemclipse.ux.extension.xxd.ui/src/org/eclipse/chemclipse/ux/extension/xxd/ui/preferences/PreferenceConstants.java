@@ -417,10 +417,14 @@ public class PreferenceConstants {
 	 */
 	public static final String P_SEQUENCE_EXPLORER_USE_SUBFOLDER = "sequenceExplorerUseSubfolder";
 	public static final boolean DEF_SEQUENCE_EXPLORER_USE_SUBFOLDER = true;
+	public static final String P_SEQUENCE_EXPLORER_SORT_DATA = "sequenceExplorerSortData";
+	public static final boolean DEF_SEQUENCE_EXPLORER_SORT_DATA = false;
 	public static final String P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER = "sequenceExplorerPathRootFolder";
 	public static final String DEF_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER = "";
 	public static final String P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER = "sequenceExplorerPathParentFolder";
 	public static final String DEF_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER = "";
 	public static final String P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER = "sequenceExplorerPathSubFolder";
 	public static final String DEF_SEQUENCE_EXPLORER_PATH_SUB_FOLDER = "";
+	public static final String P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER = "sequenceExplorerPathDialogFolder";
+	public static final String DEF_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER = "";
 }

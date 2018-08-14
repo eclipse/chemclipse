@@ -13,9 +13,12 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.SequenceListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.SequenceListLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.SequenceListTableComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
@@ -41,12 +44,22 @@ public class SequenceListUI extends ExtendedTableViewer {
 		setInput(null);
 	}
 
+	public void setComparator() {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SEQUENCE_EXPLORER_SORT_DATA)) {
+			setComparator(sequenceListTableComparator);
+		} else {
+			setComparator(null);
+		}
+	}
+
 	private void createColumns() {
 
 		createColumns(SequenceListLabelProvider.TITLES, SequenceListLabelProvider.BOUNDS);
 		setLabelProvider(new SequenceListLabelProvider());
 		setContentProvider(new ListContentProvider());
-		setComparator(sequenceListTableComparator);
+		setComparator();
 		sequenceListFilter = new SequenceListFilter();
 		setFilters(new ViewerFilter[]{sequenceListFilter});
 	}

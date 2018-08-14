@@ -199,8 +199,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 * Sequences
 		 */
 		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_USE_SUBFOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_USE_SUBFOLDER);
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_SORT_DATA, PreferenceConstants.DEF_SEQUENCE_EXPLORER_SORT_DATA);
 		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER);
 		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER);
 		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_SUB_FOLDER);
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER);
 	}
 }
