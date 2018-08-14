@@ -140,9 +140,32 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	@PreDestroy
 	private void preDestroy() {
 
-		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, null);
-		eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, null);
-		eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, null);
+		DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, null);
+			}
+		});
+		//
+		DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, null);
+			}
+		});
+		//
+		DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, null);
+			}
+		});
 		//
 		EModelService modelService = ModelSupportAddon.getModelService();
 		if(modelService != null) {
