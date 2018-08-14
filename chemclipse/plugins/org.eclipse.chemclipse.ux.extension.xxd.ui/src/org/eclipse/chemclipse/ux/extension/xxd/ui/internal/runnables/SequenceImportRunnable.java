@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class SequenceImportRunnable implements IRunnableWithProgress {
@@ -43,21 +44,20 @@ public class SequenceImportRunnable implements IRunnableWithProgress {
 	@Override
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Sequence", 2);
 		try {
-			monitor.beginTask("Import Chromatogram", IProgressMonitor.UNKNOWN);
-			/*
-			 * Don't fire an update.
-			 */
 			try {
+				subMonitor.worked(1);
 				IProcessingInfo processingInfo = SequenceConverter.convert(file, monitor);
 				sequence = processingInfo.getProcessingResult(ISequence.class);
+				subMonitor.worked(2);
 			} catch(TypeCastException e) {
 				// No action - can't parse the chromatogram.
 			}
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		} finally {
-			monitor.done();
+			subMonitor.done();
 		}
 	}
 }

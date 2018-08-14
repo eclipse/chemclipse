@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -27,11 +28,13 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.SequenceFileRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -54,6 +57,8 @@ import org.eclipse.swt.widgets.Table;
 
 public class ExtendedSequenceExplorerUI {
 
+	private static final Logger logger = Logger.getLogger(ExtendedSequenceExplorerUI.class);
+	//
 	private Composite toolbarSearch;
 	private ComboViewer rootFolderComboViewer;
 	private ComboViewer subFolderComboViewer;
@@ -69,6 +74,7 @@ public class ExtendedSequenceExplorerUI {
 
 	public void setFocus() {
 
+		sequenceFilesUI.getTable().setFocus();
 	}
 
 	private void initialize(Composite parent) {
@@ -225,7 +231,6 @@ public class ExtendedSequenceExplorerUI {
 					//
 					File file = (File)object;
 					preferenceStore.setValue(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER, file.getAbsolutePath());
-					//
 					if(preferenceStore.getBoolean(PreferenceConstants.P_SEQUENCE_EXPLORER_USE_SUBFOLDER)) {
 						List<File> files = getDirectories(file);
 						setSubFolderContent(files);
@@ -372,36 +377,6 @@ public class ExtendedSequenceExplorerUI {
 		return files;
 	}
 
-	private List<File> getSequenceFiles(File file, List<File> files) {
-
-		if(file.isDirectory()) {
-			for(File subfile : file.listFiles()) {
-				if(subfile.isDirectory()) {
-					files = getSequenceFiles(subfile, files);
-				} else {
-					if(isSequenceFile(subfile)) {
-						files.add(subfile);
-					}
-				}
-			}
-		} else {
-			if(isSequenceFile(file)) {
-				files.add(file);
-			}
-		}
-		return files;
-	}
-
-	private boolean isSequenceFile(File file) {
-
-		if(supplierEditorSupport.isSupplierFile(file)) {
-			if(supplierEditorSupport.isMatchMagicNumber(file)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	private void setRootFolderContent(List<File> files) {
 
 		Collections.sort(files);
@@ -426,7 +401,6 @@ public class ExtendedSequenceExplorerUI {
 			int index = getSelectedDirectoryIndex(files, preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER));
 			File file = files.get(index);
 			subFolderComboViewer.getCombo().select(index);
-			//
 			setSequenceListContent(file);
 		}
 	}
@@ -447,8 +421,15 @@ public class ExtendedSequenceExplorerUI {
 	private void setSequenceListContent(File file) {
 
 		if(file.isDirectory()) {
-			List<File> files = getSequenceFiles(file, new ArrayList<>());
-			sequenceFilesUI.setInput(files);
+			ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
+			SequenceFileRunnable runnable = new SequenceFileRunnable(file);
+			try {
+				dialog.run(true, true, runnable);
+				List<File> files = runnable.getSequenceFiles();
+				sequenceFilesUI.setInput(files);
+			} catch(Exception e) {
+				logger.error(e.getLocalizedMessage(), e);
+			}
 		} else {
 			sequenceFilesUI.setInput(null);
 		}
