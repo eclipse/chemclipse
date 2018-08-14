@@ -27,7 +27,7 @@ public class PeakScanListEditingSupport extends EditingSupport {
 	public PeakScanListEditingSupport(ExtendedTableViewer tableViewer, String column) {
 		super(tableViewer);
 		this.column = column;
-		if(column.equals(PeakListLabelProvider.ACTIVE_FOR_ANALYSIS)) {
+		if(column.equals(PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS)) {
 			this.cellEditor = new CheckboxCellEditor(tableViewer.getTable());
 		} else {
 			this.cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -44,7 +44,7 @@ public class PeakScanListEditingSupport extends EditingSupport {
 	@Override
 	protected boolean canEdit(Object element) {
 
-		if(column == PeakListLabelProvider.ACTIVE_FOR_ANALYSIS) {
+		if(column == PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS) {
 			return (element instanceof IPeak);
 		} else {
 			return tableViewer.isEditEnabled();
@@ -57,9 +57,9 @@ public class PeakScanListEditingSupport extends EditingSupport {
 		if(element instanceof IPeak) {
 			IPeak peak = (IPeak)element;
 			switch(column) {
-				case PeakListLabelProvider.ACTIVE_FOR_ANALYSIS:
+				case PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS:
 					return peak.isActiveForAnalysis();
-				case PeakListLabelProvider.CLASSIFIER:
+				case PeakScanListLabelProvider.CLASSIFIER:
 					return peak.getClassifier();
 			}
 		}
@@ -72,10 +72,10 @@ public class PeakScanListEditingSupport extends EditingSupport {
 		if(element instanceof IPeak) {
 			IPeak peak = (IPeak)element;
 			switch(column) {
-				case PeakListLabelProvider.ACTIVE_FOR_ANALYSIS:
+				case PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS:
 					peak.setActiveForAnalysis((boolean)value);
 					break;
-				case PeakListLabelProvider.CLASSIFIER:
+				case PeakScanListLabelProvider.CLASSIFIER:
 					peak.setClassifier((String)value);
 					break;
 			}

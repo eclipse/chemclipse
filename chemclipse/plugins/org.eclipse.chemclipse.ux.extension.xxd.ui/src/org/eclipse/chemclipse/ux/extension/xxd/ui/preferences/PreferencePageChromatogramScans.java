@@ -32,7 +32,6 @@ public class PreferencePageChromatogramScans extends FieldEditorPreferencePage i
 
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE, "Show scans in selected range", getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN, "Color Chromatogram Selected Scan:", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE, "Chromatogram Selected Scan Marker Size:", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE, "Chromatogram Selected Scan Marker Type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));

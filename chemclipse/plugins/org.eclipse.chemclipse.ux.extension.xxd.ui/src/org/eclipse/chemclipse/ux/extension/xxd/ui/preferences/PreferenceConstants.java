@@ -88,16 +88,12 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_SCAN_CHART = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_SCAN_TABLE = "stackPositionScanTable";
 	public static final String DEF_STACK_POSITION_SCAN_TABLE = PartSupport.PARTSTACK_BOTTOM_RIGHT;
-	public static final String P_STACK_POSITION_SCAN_LIST = "stackPositionScanList";
-	public static final String DEF_STACK_POSITION_SCAN_LIST = PartSupport.PARTSTACK_LEFT_TOP;
 	public static final String P_STACK_POSITION_PEAK_CHART = "stackPositionPeakChart";
 	public static final String DEF_STACK_POSITION_PEAK_CHART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_PEAK_DETAILS = "stackPositionPeakDetails";
 	public static final String DEF_STACK_POSITION_PEAK_DETAILS = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_PEAK_DETECTOR = "stackPositionPeakDetector";
 	public static final String DEF_STACK_POSITION_PEAK_DETECTOR = PartSupport.PARTSTACK_BOTTOM_CENTER;
-	public static final String P_STACK_POSITION_PEAK_LIST = "stackPositionPeakList";
-	public static final String DEF_STACK_POSITION_PEAK_LIST = PartSupport.PARTSTACK_LEFT_TOP;
 	public static final String P_STACK_POSITION_PEAK_SCAN_LIST = "stackPositionPeakScanList";
 	public static final String DEF_STACK_POSITION_PEAK_SCAN_LIST = PartSupport.PARTSTACK_LEFT_TOP;
 	public static final String P_STACK_POSITION_PEAK_QUANTITATION_LIST = "stackPositionPeakQuantitationList";
@@ -261,10 +257,6 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS = true;
 	public static final String P_SHOW_AREA_WITHOUT_DECIMALS = "showAreaWithoutDecimals";
 	public static final boolean DEF_SHOW_AREA_WITHOUT_DECIMALS = true;
-	public static final String P_SHOW_PEAKS_IN_SELECTED_RANGE = "showPeaksInSelectedRange";
-	public static final boolean DEF_SHOW_PEAKS_IN_SELECTED_RANGE = true;
-	public static final String P_SHOW_SCANS_IN_SELECTED_RANGE = "showScansInSelectedRange";
-	public static final boolean DEF_SHOW_SCANS_IN_SELECTED_RANGE = true;
 	public static final String P_CHROMATOGRAM_CHART_COMPRESSION_TYPE = "chromatogramChartCompressionType";
 	public static final String DEF_CHROMATOGRAM_CHART_COMPRESSION_TYPE = LineChart.COMPRESSION_MEDIUM;
 	public static final String P_COLOR_CHROMATOGRAM = "colorChromatogram";
@@ -399,12 +391,16 @@ public class PreferenceConstants {
 	public static final String P_SHOW_DATA_SEQUENCE = "showDataSequence";
 	public static final boolean DEF_SHOW_DATA_SEQUENCE = true;
 	/*
-	 * List Column Order
+	 * Lists
 	 */
-	public static final String P_COLUMN_ORDER_PEAK_LIST = "columnOrderPeakList";
-	public static final String DEF_COLUMN_ORDER_PEAK_LIST = "";
-	public static final String P_COLUMN_ORDER_SCAN_LIST = "columnOrderScanList";
-	public static final String DEF_COLUMN_ORDER_SCAN_LIST = "";
+	public static final String P_SHOW_PEAKS_IN_LIST = "showPeaksInList";
+	public static final boolean DEF_SHOW_PEAKS_IN_LIST = true;
+	public static final String P_SHOW_PEAKS_IN_SELECTED_RANGE = "showPeaksInSelectedRange";
+	public static final boolean DEF_SHOW_PEAKS_IN_SELECTED_RANGE = true;
+	public static final String P_SHOW_SCANS_IN_LIST = "showScansInList";
+	public static final boolean DEF_SHOW_SCANS_IN_LIST = true;
+	public static final String P_SHOW_SCANS_IN_SELECTED_RANGE = "showScansInSelectedRange";
+	public static final boolean DEF_SHOW_SCANS_IN_SELECTED_RANGE = true;
 	public static final String P_COLUMN_ORDER_PEAK_SCAN_LIST = "columnOrderPeakScanList";
 	public static final String DEF_COLUMN_ORDER_PEAK_SCAN_LIST = "";
 	public static final String P_COLUMN_ORDER_TARGET_LIST = "columnOrderTargetList";

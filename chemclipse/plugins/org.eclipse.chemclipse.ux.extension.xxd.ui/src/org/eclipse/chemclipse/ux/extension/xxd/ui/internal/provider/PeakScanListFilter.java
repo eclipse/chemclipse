@@ -45,10 +45,10 @@ public class PeakScanListFilter extends ViewerFilter {
 		if(element instanceof IPeak || element instanceof IScan) {
 			if(element instanceof IPeak) {
 				IPeak peak = (IPeak)element;
-				matchPeak(peak);
-			} else {
+				return matchPeak(peak);
+			} else if(element instanceof IScan) {
 				IScan scan = (IScan)element;
-				matchScan(scan);
+				return matchScan(scan);
 			}
 		}
 		//

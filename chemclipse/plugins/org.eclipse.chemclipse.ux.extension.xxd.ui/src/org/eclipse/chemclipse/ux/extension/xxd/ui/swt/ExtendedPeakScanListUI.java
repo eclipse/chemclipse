@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -88,7 +89,7 @@ public class ExtendedPeakScanListUI {
 	private Composite toolbarInfoTop;
 	private Composite toolbarInfoBottom;
 	private Composite toolbarSearch;
-	private Button buttonSavePeaks;
+	private Button buttonSave;
 	private Label labelChromatogramName;
 	private Label labelChromatogramInfo;
 	private SearchSupportUI searchSupportUI;
@@ -122,7 +123,7 @@ public class ExtendedPeakScanListUI {
 	private void updateChromatogramSelection() {
 
 		updateLabel();
-		buttonSavePeaks.setEnabled(false);
+		buttonSave.setEnabled(false);
 		//
 		if(chromatogramSelection == null) {
 			peakScanListUI.clear();
@@ -130,7 +131,7 @@ public class ExtendedPeakScanListUI {
 			peakScanListUI.setInput(chromatogramSelection);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
-				buttonSavePeaks.setEnabled(true);
+				buttonSave.setEnabled(true);
 			}
 		}
 	}
@@ -162,7 +163,7 @@ public class ExtendedPeakScanListUI {
 		createButtonToggleToolbarSearch(composite);
 		createButtonToggleEditModus(composite);
 		createResetButton(composite);
-		buttonSavePeaks = createSaveButton(composite);
+		buttonSave = createSaveButton(composite);
 		createSettingsButton(composite);
 	}
 
@@ -213,7 +214,7 @@ public class ExtendedPeakScanListUI {
 		 * Set/Save the column order.
 		 */
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		String preferenceName = PreferenceConstants.P_COLUMN_ORDER_PEAK_LIST;
+		String preferenceName = PreferenceConstants.P_COLUMN_ORDER_PEAK_SCAN_LIST;
 		listSupport.setColumnOrder(table, preferenceStore.getString(preferenceName));
 		listUI.addColumnMoveListener(new IColumnMoveListener() {
 
@@ -244,7 +245,7 @@ public class ExtendedPeakScanListUI {
 			@Override
 			public String getName() {
 
-				return "Delete Peak(s)";
+				return "Delete Peak(s)/Scan Identification(s)";
 			}
 
 			@Override
@@ -256,7 +257,7 @@ public class ExtendedPeakScanListUI {
 			@Override
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
-				deletePeaks();
+				deletePeaksOrIdentifications();
 			}
 		});
 	}
@@ -320,7 +321,7 @@ public class ExtendedPeakScanListUI {
 					/*
 					 * DEL
 					 */
-					deletePeaks();
+					deletePeaksOrIdentifications();
 				} else if(e.keyCode == BaseChart.KEY_CODE_i && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
 					if((e.stateMask & SWT.ALT) == SWT.ALT) {
 						/*
@@ -340,23 +341,29 @@ public class ExtendedPeakScanListUI {
 		});
 	}
 
-	private void deletePeaks() {
+	private void deletePeaksOrIdentifications() {
 
 		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Delete Peak(s)");
-		messageBox.setMessage("Would you like to delete the selected peak(s)?");
+		messageBox.setText("Delete Peak(s)/Scan Identification(s)");
+		messageBox.setMessage("Would you like to delete the selected peak(s)/scan identification(s)?");
 		if(messageBox.open() == SWT.YES) {
-			/*
-			 * Delete Target
-			 */
 			Iterator iterator = peakScanListUI.getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof IPeak) {
 					deletePeak((IPeak)object);
+				} else if(object instanceof IScan) {
+					deleteScanIdentification((IScan)object);
 				}
 			}
 			updateChromatogramSelection();
+		}
+	}
+
+	private void deleteScanIdentification(IScan scan) {
+
+		if(chromatogramSelection != null) {
+			scan.removeAllTargets();
 		}
 	}
 
@@ -573,7 +580,7 @@ public class ExtendedPeakScanListUI {
 	private void createResetButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Reset the peak list.");
+		button.setToolTipText("Reset the peak/scan list.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -589,7 +596,7 @@ public class ExtendedPeakScanListUI {
 	private Button createSaveButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Save the peak list.");
+		button.setToolTipText("Save the peak/scan list.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -598,6 +605,9 @@ public class ExtendedPeakScanListUI {
 
 				try {
 					if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
+						/*
+						 * Peaks
+						 */
 						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 						Table table = peakScanListUI.getTable();
 						int[] indices = table.getSelectionIndices();
@@ -607,7 +617,30 @@ public class ExtendedPeakScanListUI {
 						} else {
 							peaks = getPeakList(table, indices);
 						}
-						DatabaseFileSupport.savePeaks(DisplayUtils.getShell(), peaks, chromatogram.getName());
+						//
+						if(peaks.size() > 0) {
+							DatabaseFileSupport.savePeaks(DisplayUtils.getShell(), peaks, chromatogram.getName());
+						}
+						/*
+						 * Scans
+						 */
+						List<IScan> scans;
+						if(indices.length == 0) {
+							scans = getScanList(table);
+						} else {
+							scans = getScanList(table, indices);
+						}
+						//
+						MassSpectra massSpectra = new MassSpectra();
+						for(IScan scan : scans) {
+							if(scan instanceof IScanMSD) {
+								massSpectra.addMassSpectrum((IScanMSD)scan);
+							}
+						}
+						//
+						if(massSpectra.size() > 0) {
+							DatabaseFileSupport.saveMassSpectra(DisplayUtils.getShell(), massSpectra, chromatogram.getName());
+						}
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
@@ -660,8 +693,11 @@ public class ExtendedPeakScanListUI {
 			String editInformation = peakScanListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			String chromatogramLabel = chromatogramDataSupport.getChromatogramLabel(chromatogram);
+			int identifiedPeaks = chromatogram.getNumberOfPeaks();
+			int identifiedScans = chromatogramDataSupport.getIdentifiedScans(chromatogram).size();
+			//
 			labelChromatogramName.setText(chromatogramLabel + " - " + editInformation);
-			labelChromatogramInfo.setText("Number of Peaks: " + chromatogram.getNumberOfPeaks());
+			labelChromatogramInfo.setText("Number of Peaks: " + identifiedPeaks + " | Scans: " + identifiedScans);
 		}
 	}
 
@@ -699,5 +735,30 @@ public class ExtendedPeakScanListUI {
 			}
 		}
 		return peakList;
+	}
+
+	private List<IScan> getScanList(Table table) {
+
+		List<IScan> scanList = new ArrayList<IScan>();
+		for(TableItem tableItem : table.getItems()) {
+			Object object = tableItem.getData();
+			if(object instanceof IScan) {
+				scanList.add((IScan)object);
+			}
+		}
+		return scanList;
+	}
+
+	private List<IScan> getScanList(Table table, int[] indices) {
+
+		List<IScan> scanList = new ArrayList<IScan>();
+		for(int index : indices) {
+			TableItem tableItem = table.getItem(index);
+			Object object = tableItem.getData();
+			if(object instanceof IScan) {
+				scanList.add((IScan)object);
+			}
+		}
+		return scanList;
 	}
 }

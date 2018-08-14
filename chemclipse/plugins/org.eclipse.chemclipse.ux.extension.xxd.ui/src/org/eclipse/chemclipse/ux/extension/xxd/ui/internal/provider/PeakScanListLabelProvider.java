@@ -150,7 +150,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			if(element instanceof IPeak) {
 				IPeak peak = (IPeak)element;
 				text = getPeakText(peak, columnIndex);
-			} else {
+			} else if(element instanceof IScan) {
 				IScan scan = (IScan)element;
 				text = getScanText(scan, columnIndex);
 			}

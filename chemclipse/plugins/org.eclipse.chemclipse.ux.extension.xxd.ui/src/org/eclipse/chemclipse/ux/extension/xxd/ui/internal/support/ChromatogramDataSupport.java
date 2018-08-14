@@ -249,6 +249,23 @@ public class ChromatogramDataSupport {
 		return peaks;
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<? extends IScan> getIdentifiedScans(IChromatogramSelection chromatogramSelection, boolean showScansInSelectedRange) {
+
+		List<? extends IScan> scans = new ArrayList<IScan>();
+		//
+		if(chromatogramSelection != null) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			if(showScansInSelectedRange) {
+				scans = getIdentifiedScans(chromatogram, chromatogramSelection);
+			} else {
+				scans = getIdentifiedScans(chromatogram);
+			}
+		}
+		//
+		return scans;
+	}
+
 	private boolean scanIsInSelectedRange(IScan scan, int startRetentionTime, int stopRetentionTime) {
 
 		int retentionTime = scan.getRetentionTime();

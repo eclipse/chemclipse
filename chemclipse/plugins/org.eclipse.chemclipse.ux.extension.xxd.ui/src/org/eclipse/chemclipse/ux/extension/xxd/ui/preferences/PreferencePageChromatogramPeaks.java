@@ -32,7 +32,6 @@ public class PreferencePageChromatogramPeaks extends FieldEditorPreferencePage i
 
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE, "Show peaks in selected range", getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_PEAK, "Color Chromatogram Selected Peak:", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_SIZE, "Chromatogram Selected Peak Marker Size:", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE, "Chromatogram Selected Peak Marker Type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -24,7 +23,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakScanList
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakScanListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakScanListLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakScanListTableComparator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsTableComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -56,42 +54,22 @@ public class PeakScanListUI extends ExtendedTableViewer {
 			tableComparator.setChromatogramPeakArea(chromatogramPeakArea);
 			//
 			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-			boolean showPeaks = true;
-			boolean showPeaksInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
-			boolean showScans = true;
-			boolean showScansInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
+			List<Object> input = new ArrayList<Object>();
 			//
-			List<Object> input = new ArrayList<>();
-			//
-			if(showPeaks) {
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_LIST)) {
+				boolean showPeaksInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
 				input.addAll(chromatogramDataSupport.getPeaks(chromatogramSelection, showPeaksInSelectedRange));
 			}
 			//
-			if(showScans) {
-				input.addAll(getScans(chromatogramSelection, showScansInSelectedRange));
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_LIST)) {
+				boolean showScansInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
+				input.addAll(chromatogramDataSupport.getIdentifiedScans(chromatogramSelection, showScansInSelectedRange));
 			}
 			//
 			super.setInput(input);
 		} else {
 			clear();
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private List<? extends IScan> getScans(IChromatogramSelection chromatogramSelection, boolean showScansInSelectedRange) {
-
-		List<? extends IScan> scans = new ArrayList<IScan>();
-		//
-		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			if(showScansInSelectedRange) {
-				scans = chromatogramDataSupport.getIdentifiedScans(chromatogram, chromatogramSelection);
-			} else {
-				scans = chromatogramDataSupport.getIdentifiedScans(chromatogram);
-			}
-		}
-		//
-		return scans;
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
@@ -103,18 +81,6 @@ public class PeakScanListUI extends ExtendedTableViewer {
 	public void clear() {
 
 		super.setInput(null);
-	}
-
-	public void sortTable() {
-
-		int column = 0;
-		int sortOrder = TargetsTableComparator.DESCENDING;
-		//
-		tableComparator.setColumn(column);
-		tableComparator.setDirection(sortOrder);
-		refresh();
-		tableComparator.setDirection(1 - sortOrder);
-		tableComparator.setColumn(column);
 	}
 
 	private void createColumns() {
