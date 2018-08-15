@@ -24,11 +24,13 @@ public class ChemClipsePeakQuantifierISTD {
 		calculatorISTD = new PeakQuantitationCalculatorISTD();
 	}
 
+	@SuppressWarnings("rawtypes")
 	public IProcessingInfo quantifySelectedPeak(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		return calculatorISTD.quantifySelectedPeak(chromatogramSelection, monitor);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public IProcessingInfo quantifyAllPeaks(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		return calculatorISTD.quantifyAllPeaks(chromatogramSelection, monitor);

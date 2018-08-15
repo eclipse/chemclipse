@@ -32,10 +32,12 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakQuantitationCalculatorISTD {
 
+	@SuppressWarnings("rawtypes")
 	public IProcessingInfo quantifySelectedPeak(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
@@ -48,6 +50,7 @@ public class PeakQuantitationCalculatorISTD {
 		return processingInfo;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public IProcessingInfo quantifyAllPeaks(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
@@ -75,38 +78,49 @@ public class PeakQuantitationCalculatorISTD {
 					 * ISTD
 					 */
 					String name = internalStandard.getName();
-					double concentration = internalStandard.getConcentration();
-					String concentrationUnit = internalStandard.getConcentrationUnit();
-					double responseFactor = internalStandard.getResponseFactor();
-					String chemicalClass = internalStandard.getChemicalClass();
-					//
-					double integratedArea = peakToQuantify.getIntegratedArea();
-					double concentrationCalculated = ((concentration / peakAreaISTD) * integratedArea) * responseFactor;
-					//
-					if(peakToQuantify instanceof IChromatogramPeakMSD) {
-						/*
-						 * MSD
-						 */
-						IQuantitationEntryMSD quantitationEntryMSD = new QuantitationEntryMSD(name, concentrationCalculated, concentrationUnit, integratedArea, IIon.TIC_ION);
-						quantitationEntryMSD.setCalibrationMethod(CalibrationMethod.ISTD.toString());
-						quantitationEntryMSD.setUsedCrossZero(false);
-						quantitationEntryMSD.setChemicalClass(chemicalClass);
-						peakToQuantify.addQuantitationEntry(quantitationEntryMSD);
-					} else if(peakToQuantify instanceof IChromatogramPeakCSD) {
-						/*
-						 * CSD
-						 */
-						IQuantitationEntry quantitationEntry = new QuantitationEntry(name, concentrationCalculated, concentrationUnit, integratedArea);
-						quantitationEntry.setCalibrationMethod(CalibrationMethod.ISTD.toString());
-						quantitationEntry.setUsedCrossZero(false);
-						quantitationEntry.setChemicalClass(chemicalClass);
-						peakToQuantify.addQuantitationEntry(quantitationEntry);
+					boolean doIntegrate = false;
+					List<String> quantitationReferences = peakToQuantify.getQuantitationReferences();
+					if(quantitationReferences.size() == 0 || quantitationReferences.contains(name)) {
+						doIntegrate = true;
+					}
+					/*
+					 * Only integrate if
+					 */
+					if(doIntegrate) {
+						double concentration = internalStandard.getConcentration();
+						String concentrationUnit = internalStandard.getConcentrationUnit();
+						double responseFactor = internalStandard.getResponseFactor();
+						String chemicalClass = internalStandard.getChemicalClass();
+						//
+						double integratedArea = peakToQuantify.getIntegratedArea();
+						double concentrationCalculated = ((concentration / peakAreaISTD) * integratedArea) * responseFactor;
+						//
+						if(peakToQuantify instanceof IChromatogramPeakMSD) {
+							/*
+							 * MSD
+							 */
+							IQuantitationEntryMSD quantitationEntryMSD = new QuantitationEntryMSD(name, concentrationCalculated, concentrationUnit, integratedArea, IIon.TIC_ION);
+							quantitationEntryMSD.setCalibrationMethod(CalibrationMethod.ISTD.toString());
+							quantitationEntryMSD.setUsedCrossZero(false);
+							quantitationEntryMSD.setChemicalClass(chemicalClass);
+							peakToQuantify.addQuantitationEntry(quantitationEntryMSD);
+						} else if(peakToQuantify instanceof IChromatogramPeakCSD || peakToQuantify instanceof IChromatogramPeakWSD) {
+							/*
+							 * CSD/WSD
+							 */
+							IQuantitationEntry quantitationEntry = new QuantitationEntry(name, concentrationCalculated, concentrationUnit, integratedArea);
+							quantitationEntry.setCalibrationMethod(CalibrationMethod.ISTD.toString());
+							quantitationEntry.setUsedCrossZero(false);
+							quantitationEntry.setChemicalClass(chemicalClass);
+							peakToQuantify.addQuantitationEntry(quantitationEntry);
+						}
 					}
 				}
 			}
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private List<? extends IPeak> getInternalStandardPeaks(IChromatogram chromatogram) {
 
 		if(chromatogram != null) {
@@ -142,6 +156,7 @@ public class PeakQuantitationCalculatorISTD {
 		return new ArrayList<IPeak>();
 	}
 
+	@SuppressWarnings("rawtypes")
 	private List<IPeak> getPeaksToQuantify(IChromatogramSelection chromatogramSelection) {
 
 		List<IPeak> peaksToQuantify = new ArrayList<IPeak>();

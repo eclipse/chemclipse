@@ -204,6 +204,13 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 				double factor = quantitationCompound.getConcentrationResponseEntriesMSD().getAverageFactor(ion, isCrossZero);
 				concentration = factor * integratedArea;
 				break;
+			case ISTD:
+				/*
+				 * Handles separately.
+				 */
+				break;
+			default:
+				break;
 		}
 		//
 		IQuantitationEntryMSD quantitationEntryMSD = new QuantitationEntryMSD(name, concentration, concentrationUnit, integratedArea, ion);
