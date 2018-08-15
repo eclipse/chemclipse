@@ -205,5 +205,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER);
 		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_SUB_FOLDER);
 		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER);
+		/*
+		 * Quantitation
+		 */
+		store.setDefault(PreferenceConstants.P_USE_QUANTITATION_REFERENCE_LIST, PreferenceConstants.DEF_USE_QUANTITATION_REFERENCE_LIST);
+		store.setDefault(PreferenceConstants.P_QUANTITATION_REFERENCE_LIST, PreferenceConstants.DEF_QUANTITATION_REFERENCE_LIST);
 	}
 }

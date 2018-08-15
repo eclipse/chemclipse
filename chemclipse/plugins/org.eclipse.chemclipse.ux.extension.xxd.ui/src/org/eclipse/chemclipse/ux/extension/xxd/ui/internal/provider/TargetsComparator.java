@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
-public class TargetsTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
+public class TargetsComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {

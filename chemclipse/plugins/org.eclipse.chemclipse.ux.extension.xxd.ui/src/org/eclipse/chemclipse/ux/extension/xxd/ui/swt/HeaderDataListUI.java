@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.HeaderDataEd
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.HeaderDataLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.HeaderDataListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.HeaderDataTableComparator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsTableComparator;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
@@ -61,13 +60,11 @@ public class HeaderDataListUI extends ExtendedTableViewer {
 	public void sortTable() {
 
 		int column = 0;
-		int sortOrder = TargetsTableComparator.DESCENDING;
+		int sortOrder = HeaderDataTableComparator.DESCENDING;
 		//
 		headerDataTableComparator.setColumn(column);
 		headerDataTableComparator.setDirection(sortOrder);
 		refresh();
-		// headerDataTableComparator.setDirection(1 - sortOrder);
-		// headerDataTableComparator.setColumn(column);
 	}
 
 	public IMeasurementInfo getMeasurementInfo() {
