@@ -16,38 +16,38 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.apache.commons.math3.stat.inference.OneWayAnova;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
-public class AnovaFilter implements IFilter {
+public class AnovaFilter extends AbstractPreprocessing implements IFilter {
 
 	private double alpha;
 	final private String name = "Anova filter";
-	private boolean onlySelected;
 	private String selectionResult = "";
 
 	public AnovaFilter() {
+		super();
 		alpha = 0.05;
-		onlySelected = true;
+		setDataTypeProcessing(DATA_TYPE_PROCESSING.RAW_DATA);
 	}
 
 	@Override
 	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
 
-		List<S> samplesList = samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
+		List<S> samplesList = selectSamples(samples);
 		List<V> variables = samples.getVariables();
 		List<Boolean> selection = new ArrayList<>(variables.size());
 		for(int i = 0; i < variables.size(); i++) {
 			selection.add(false);
 		}
-		Map<String, Set<S>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samplesList, false, onlySelected);
+		Map<String, Set<S>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samplesList, false, isOnlySelected());
 		Collection<Set<S>> samplesByGroupName = samplesByGroupNameMap.values();
 		try {
 			for(int i = 0; i < selection.size(); i++) {
@@ -56,7 +56,7 @@ public class AnovaFilter implements IFilter {
 				for(Set<S> group : samplesByGroupName) {
 					SummaryStatistics summaryStatistics = new SummaryStatistics();
 					for(ISample<?> sample : group) {
-						double d = sample.getSampleData().get(i).getModifiedData();
+						double d = getData(sample.getSampleData().get(i));
 						summaryStatistics.addValue(d);
 					}
 					categoryData.add(summaryStatistics);
@@ -94,20 +94,8 @@ public class AnovaFilter implements IFilter {
 		return selectionResult;
 	}
 
-	@Override
-	public boolean isOnlySelected() {
-
-		return onlySelected;
-	}
-
 	public void setAlpha(double alpha) {
 
 		this.alpha = alpha;
-	}
-
-	@Override
-	public void setOnlySelected(boolean onlySelected) {
-
-		this.onlySelected = onlySelected;
 	}
 }

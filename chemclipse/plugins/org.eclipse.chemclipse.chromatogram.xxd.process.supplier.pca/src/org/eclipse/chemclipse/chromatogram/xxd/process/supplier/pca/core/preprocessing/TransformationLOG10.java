@@ -35,7 +35,7 @@ public class TransformationLOG10 extends AbstractPreprocessing implements ITrans
 
 		samples.getSampleList().stream().filter(s -> s.isSelected() || !isOnlySelected()).forEach(s -> {
 			for(ISampleData data : s.getSampleData()) {
-				data.setModifiedData(10.0 * Math.log10(data.getModifiedData()));
+				data.setModifiedData(10.0 * Math.log10(getData(data)));
 			}
 		});
 	}

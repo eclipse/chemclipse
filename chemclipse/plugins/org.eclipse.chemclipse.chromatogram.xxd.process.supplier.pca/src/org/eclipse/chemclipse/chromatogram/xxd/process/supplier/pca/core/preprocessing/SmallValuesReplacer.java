@@ -43,7 +43,7 @@ public class SmallValuesReplacer extends AbstractPreprocessing {
 			for(S sample : sampleList) {
 				if(sample.isSelected() || !isOnlySelected()) {
 					ISampleData sampleData = sample.getSampleData().get(i);
-					if(Double.isNaN(sampleData.getModifiedData())) {
+					if(Double.isNaN(getData(sampleData))) {
 						double replacement = -1.0;
 						while(replacement < 0) {
 							replacement = Double.longBitsToDouble(rand.nextLong());

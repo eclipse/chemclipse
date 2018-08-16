@@ -41,7 +41,7 @@ public class CenteringMean extends AbstractCentering {
 			final int j = i;
 			samples.getSampleList().stream().forEach(s -> {
 				ISampleData data = s.getSampleData().get(j);
-				data.setModifiedData(data.getModifiedData() - value);
+				data.setModifiedData(getData(data) - value);
 			});
 		}
 	}

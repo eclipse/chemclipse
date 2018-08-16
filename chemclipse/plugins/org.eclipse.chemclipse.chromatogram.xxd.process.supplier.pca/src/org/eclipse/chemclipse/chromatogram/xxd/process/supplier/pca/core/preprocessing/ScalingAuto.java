@@ -49,7 +49,7 @@ public class ScalingAuto extends AbstaractScaling {
 			for(ISample<?> sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if((sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getModifiedData();
+					double data = getData(sampleData);
 					double scaleData = 0;
 					scaleData = (data - mean) / deviation;
 					sampleData.setModifiedData(scaleData);

@@ -33,13 +33,13 @@ public class ScalingRange extends AbstaractScaling {
 	private <S extends ISample<? extends ISampleData>> double getMax(List<S> samples, int index) {
 
 		boolean onlySelected = isOnlySelected();
-		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(s -> s.getModifiedData()).summaryStatistics().getMax();
+		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(s -> getData(s)).summaryStatistics().getMax();
 	}
 
 	private <S extends ISample<? extends ISampleData>> double getMin(List<S> samples, int index) {
 
 		boolean onlySelected = isOnlySelected();
-		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(s -> s.getModifiedData()).summaryStatistics().getMin();
+		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(s -> getData(s)).summaryStatistics().getMin();
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ScalingRange extends AbstaractScaling {
 			for(ISample<?> sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if((sample.isSelected() || !onlySelected)) {
-					double data = sampleData.getModifiedData();
+					double data = getData(sampleData);
 					double scaleData = (data - mean) / (max - min);
 					sampleData.setModifiedData(scaleData);
 				}

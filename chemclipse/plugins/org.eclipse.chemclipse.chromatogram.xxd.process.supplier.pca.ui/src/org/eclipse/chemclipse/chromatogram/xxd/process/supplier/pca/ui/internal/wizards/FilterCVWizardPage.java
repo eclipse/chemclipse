@@ -12,11 +12,14 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.CVFilter;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing.DATA_TYPE_PROCESSING;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.SelectObservableValue;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
@@ -25,6 +28,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -33,12 +37,14 @@ public class FilterCVWizardPage extends WizardPage implements IFilterWizardPage 
 
 	final private DataBindingContext dbc = new DataBindingContext();
 	private IObservableValue<Double> observeAlfa;
+	private IObservableValue<DATA_TYPE_PROCESSING> dataTypeFiltration;
 
 	protected FilterCVWizardPage(CVFilter cvFilter) {
 		super("CV filter");
 		setTitle("Coefficient of Variation Filter for Noise Reduction");
 		setDescription("CV filter works just with selected samples, which are in group (contains group name)");
 		observeAlfa = PojoProperties.value(CVFilter.class, "alpha", Double.class).observe(cvFilter);
+		dataTypeFiltration = PojoProperties.value(AbstractPreprocessing.class, "dataTypeProcessing", DATA_TYPE_PROCESSING.class).observe(cvFilter);
 	}
 
 	@Override
@@ -48,7 +54,19 @@ public class FilterCVWizardPage extends WizardPage implements IFilterWizardPage 
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, true));
 		WizardPageSupport.create(this, dbc);
+		//
 		Label label = new Label(composite, SWT.None);
+		label.setText("Select data type filtration");
+		SelectObservableValue<DATA_TYPE_PROCESSING> selectedRadioButtonObservableProcessData = new SelectObservableValue<>();
+		Button button = new Button(composite, SWT.RADIO);
+		button.setText("Use on raw data");
+		selectedRadioButtonObservableProcessData.addOption(DATA_TYPE_PROCESSING.RAW_DATA, WidgetProperties.selection().observe(button));
+		button = new Button(composite, SWT.RADIO);
+		button.setText("Use on modified data");
+		selectedRadioButtonObservableProcessData.addOption(DATA_TYPE_PROCESSING.MODIFIED_DATA, WidgetProperties.selection().observe(button));
+		dbc.bindValue(selectedRadioButtonObservableProcessData, dataTypeFiltration, new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT), null);
+		//
+		label = new Label(composite, SWT.None);
 		label.setText("Select a row in a data table whose noise for each group is less than the value (in %)");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 		Text text = new Text(composite, SWT.BORDER);

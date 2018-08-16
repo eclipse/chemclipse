@@ -16,9 +16,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
-public class Normalization2Norm implements INormalization {
+public class Normalization2Norm extends AbstractPreprocessing implements INormalization {
 
-	private boolean isOnlySelected;
+	public Normalization2Norm() {
+		super();
+	}
 
 	@Override
 	public String getDescription() {
@@ -33,25 +35,13 @@ public class Normalization2Norm implements INormalization {
 	}
 
 	@Override
-	public boolean isOnlySelected() {
-
-		return isOnlySelected;
-	}
-
-	@Override
 	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
 
 		for(ISample<?> sample : samples.getSampleList()) {
-			if(sample.isSelected() || !isOnlySelected) {
-				double sum = Math.sqrt(sample.getSampleData().stream().filter(d -> !d.isEmpty()).mapToDouble(d -> d.getModifiedData() * d.getModifiedData()).sum());
-				sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> d.setModifiedData(d.getModifiedData() / sum));
+			if(sample.isSelected() || !isOnlySelected()) {
+				double sum = Math.sqrt(sample.getSampleData().stream().filter(d -> !d.isEmpty()).mapToDouble(d -> getData(d) * getData(d)).sum());
+				sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> d.setModifiedData(getData(d) / sum));
 			}
 		}
-	}
-
-	@Override
-	public void setOnlySelected(boolean onlySelected) {
-
-		this.isOnlySelected = onlySelected;
 	}
 }

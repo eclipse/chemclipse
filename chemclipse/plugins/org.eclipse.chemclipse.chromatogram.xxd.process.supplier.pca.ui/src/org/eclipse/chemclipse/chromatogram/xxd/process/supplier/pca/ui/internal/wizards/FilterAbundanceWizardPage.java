@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AbundanceFilter;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing.DATA_TYPE_PROCESSING;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
@@ -38,6 +40,7 @@ public class FilterAbundanceWizardPage extends WizardPage implements IFilterWiza
 	private IObservableValue<Integer> observableFilterType;
 	private IObservableValue<Integer> observableLimitType;
 	private IObservableValue<Double> observeLimitValue;
+	private IObservableValue<DATA_TYPE_PROCESSING> dataTypeFiltration;
 
 	protected FilterAbundanceWizardPage(AbundanceFilter abundanceFilter) {
 		super("Abundance Filter");
@@ -45,6 +48,7 @@ public class FilterAbundanceWizardPage extends WizardPage implements IFilterWiza
 		observableLimitType = PojoProperties.value(AbundanceFilter.class, "limitType", Integer.class).observe(abundanceFilter);
 		observeLimitValue = PojoProperties.value(AbundanceFilter.class, "limitValue", Double.class).observe(abundanceFilter);
 		observableFilterType = PojoProperties.value(AbundanceFilter.class, "filterType", Integer.class).observe(abundanceFilter);
+		dataTypeFiltration = PojoProperties.value(AbstractPreprocessing.class, "dataTypeProcessing", DATA_TYPE_PROCESSING.class).observe(abundanceFilter);
 	}
 
 	@Override
@@ -53,10 +57,24 @@ public class FilterAbundanceWizardPage extends WizardPage implements IFilterWiza
 		WizardPageSupport.create(this, dbc);
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, false));
-		Label label = new Label(composite, SWT.None);
+		//
+		Composite groupDataSelection = new Composite(composite, SWT.None);
+		groupDataSelection.setLayout(new GridLayout(1, false));
+		Label label = new Label(groupDataSelection, SWT.None);
+		label.setText("Select data type filtration");
+		SelectObservableValue<DATA_TYPE_PROCESSING> selectedRadioButtonObservableProcessData = new SelectObservableValue<>();
+		Button button = new Button(groupDataSelection, SWT.RADIO);
+		button.setText("Use on raw data");
+		selectedRadioButtonObservableProcessData.addOption(DATA_TYPE_PROCESSING.RAW_DATA, WidgetProperties.selection().observe(button));
+		button = new Button(groupDataSelection, SWT.RADIO);
+		button.setText("Use on modified data");
+		selectedRadioButtonObservableProcessData.addOption(DATA_TYPE_PROCESSING.MODIFIED_DATA, WidgetProperties.selection().observe(button));
+		dbc.bindValue(selectedRadioButtonObservableProcessData, dataTypeFiltration, new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT), null);
+		//
+		label = new Label(composite, SWT.None);
 		label.setText("Select row in data table under the condition");
 		SelectObservableValue<Integer> selectedRadioButtonObservable = new SelectObservableValue<>();
-		Button button = new Button(composite, SWT.RADIO);
+		button = new Button(composite, SWT.RADIO);
 		button.setText("All value in row are");
 		button.setSelection(true);
 		selectedRadioButtonObservable.addOption(AbundanceFilter.ALL_VALUE, WidgetProperties.selection().observe(button));

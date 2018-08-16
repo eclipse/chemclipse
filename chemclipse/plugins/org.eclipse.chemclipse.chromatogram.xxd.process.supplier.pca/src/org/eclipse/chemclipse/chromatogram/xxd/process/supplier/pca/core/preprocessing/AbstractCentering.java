@@ -26,7 +26,7 @@ public abstract class AbstractCentering extends AbstractPreprocessing implements
 	protected <S extends ISample<? extends ISampleData>> double getCenteringValue(List<S> list, int position, int type) {
 
 		boolean onlySelected = isOnlySelected();
-		DoubleStream selectedData = list.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).mapToDouble(d -> d.getModifiedData());
+		DoubleStream selectedData = list.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).mapToDouble(d -> getData(d));
 		switch(type) {
 			case CENTERING_MEAN:
 				return selectedData.summaryStatistics().getAverage();
@@ -58,7 +58,7 @@ public abstract class AbstractCentering extends AbstractPreprocessing implements
 		if(count > 1) {
 			final double mean = getCenteringValue(samples, position, type);
 			double sum = sampleData.stream().mapToDouble(d -> {
-				double data = d.getModifiedData();
+				double data = getData(d);
 				return (data - mean) * (data - mean);
 			}).sum();
 			return sum / (count - 1);

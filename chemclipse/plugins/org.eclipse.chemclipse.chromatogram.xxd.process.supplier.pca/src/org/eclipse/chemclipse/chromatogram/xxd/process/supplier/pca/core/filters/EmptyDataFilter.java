@@ -13,26 +13,26 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filter
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
-public class EmptyDataFilter implements IFilter {
+public class EmptyDataFilter extends AbstractPreprocessing implements IFilter {
 
-	private boolean onlySelected;
 	private String selectionResult = "";
 
 	public EmptyDataFilter() {
-		onlySelected = true;
+		super();
+		setDataTypeProcessing(DATA_TYPE_PROCESSING.MODIFIED_DATA);
 	}
 
 	@Override
 	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
 
-		List<ISample<?>> selectedSamples = samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
+		List<S> selectedSamples = selectSamples(samples);
 		List<Boolean> selection = new ArrayList<>();
 		for(int i = 0; i < samples.getVariables().size(); i++) {
 			final int index = i;
@@ -59,17 +59,5 @@ public class EmptyDataFilter implements IFilter {
 	public String getSelectionResult() {
 
 		return selectionResult;
-	}
-
-	@Override
-	public boolean isOnlySelected() {
-
-		return onlySelected;
-	}
-
-	@Override
-	public void setOnlySelected(boolean onlySelected) {
-
-		this.onlySelected = onlySelected;
 	}
 }

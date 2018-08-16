@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filter
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
@@ -21,19 +22,19 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 
-public class RetentionTimeFilter implements IFilter {
+public class RetentionTimeFilter extends AbstractPreprocessing implements IFilter {
 
 	final public static int DESELECT_INTERVAL = 1;
 	final public static int SELECT_INTERVAL = 0;
 	private int filtrationType;
 	private List<int[]> intervals;
-	private boolean onlySelected;
 	private String selectionResult = "";
 
 	public RetentionTimeFilter() {
-		onlySelected = true;
+		super();
 		filtrationType = SELECT_INTERVAL;
 		intervals = new ArrayList<>();
+		setDataTypeProcessing(DATA_TYPE_PROCESSING.VARIABLES);
 	}
 
 	public List<int[]> copyInterval() {
@@ -118,22 +119,10 @@ public class RetentionTimeFilter implements IFilter {
 		return selectionResult;
 	}
 
-	@Override
-	public boolean isOnlySelected() {
-
-		return onlySelected;
-	}
-
 	public void setFiltrationType(int filtrationType) {
 
 		if(filtrationType >= 0 && filtrationType <= 1) {
 			this.filtrationType = filtrationType;
 		}
-	}
-
-	@Override
-	public void setOnlySelected(boolean onlySelected) {
-
-		this.onlySelected = onlySelected;
 	}
 }

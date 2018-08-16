@@ -18,6 +18,24 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaria
 
 public interface IPreprocessing {
 
+	enum DATA_TYPE_PROCESSING {
+		RAW_DATA("Raw Data"), //
+		MODIFIED_DATA("Modified Data"), //
+		VARIABLES("Variables");
+
+		private String string;
+
+		private DATA_TYPE_PROCESSING(String string) {
+			this.string = string;
+		}
+
+		@Override
+		public String toString() {
+
+			return string;
+		}
+	}
+
 	String getDescription();
 
 	String getName();
@@ -27,4 +45,8 @@ public interface IPreprocessing {
 	<V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples);
 
 	void setOnlySelected(boolean onlySelected);
+
+	void setDataTypeProcessing(DATA_TYPE_PROCESSING processType);
+
+	DATA_TYPE_PROCESSING getDataTypeProcessing();
 }

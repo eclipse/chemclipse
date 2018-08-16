@@ -42,7 +42,7 @@ public class MeanValuesReplacer extends AbstractPreprocessing {
 			int count = 0;
 			for(S sample : sampleList) {
 				if(sample.isSelected() || !isOnlySelected()) {
-					double sampleData = sample.getSampleData().get(i).getModifiedData();
+					double sampleData = getData(sample.getSampleData().get(i));
 					if(!Double.isNaN(sampleData)) {
 						sum += sampleData;
 						count++;
@@ -53,7 +53,7 @@ public class MeanValuesReplacer extends AbstractPreprocessing {
 			for(S sample : sampleList) {
 				if(sample.isSelected() || !isOnlySelected()) {
 					ISampleData sampleData = sample.getSampleData().get(i);
-					if(Double.isNaN(sampleData.getModifiedData())) {
+					if(Double.isNaN(getData(sampleData))) {
 						sampleData.setModifiedData(mean);
 					}
 				}

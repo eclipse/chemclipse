@@ -14,15 +14,15 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filter
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
-public class AbundanceFilter implements IFilter {
+public class AbundanceFilter extends AbstractPreprocessing implements IFilter {
 
 	final static public int ALL_VALUE = 0;
 	final static public int ANY_VALUE = 1;
@@ -35,27 +35,26 @@ public class AbundanceFilter implements IFilter {
 	private double limitValue;
 	private Function<Double, Boolean> lt = d -> d < this.limitValue;
 	final private String name = "Abundance filter";
-	private boolean onlySelected;
 	private String selectionResult = "";
 
 	public AbundanceFilter() {
-		onlySelected = true;
+		super();
 		comparator = gt;
 		filterType = ALL_VALUE;
 		limitType = LIMIT_GREATER_THAN;
 		limitValue = 0;
-		onlySelected = true;
+		setDataTypeProcessing(DATA_TYPE_PROCESSING.RAW_DATA);
 	}
 
 	@Override
 	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
 
-		List<S> selectedSamples = samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
+		List<S> selectedSamples = selectSamples(samples);
 		List<Boolean> selection = new ArrayList<>();
 		for(int i = 0; i < selectedSamples.get(0).getSampleData().size(); i++) {
 			final int index = i;
 			boolean b;
-			DoubleStream stream = selectedSamples.stream().mapToDouble(s -> s.getSampleData().get(index).getModifiedData());
+			DoubleStream stream = selectedSamples.stream().mapToDouble(s -> getData(s.getSampleData().get(index)));
 			if(filterType == ALL_VALUE) {
 				b = stream.allMatch(d -> comparator.apply(d));
 			} else {
@@ -112,12 +111,6 @@ public class AbundanceFilter implements IFilter {
 		return selectionResult;
 	}
 
-	@Override
-	public boolean isOnlySelected() {
-
-		return onlySelected;
-	}
-
 	public void setFilterType(int filterType) {
 
 		if(filterType == ALL_VALUE || filterType == ANY_VALUE) {
@@ -143,11 +136,5 @@ public class AbundanceFilter implements IFilter {
 	public void setLimitValue(double limitValue) {
 
 		this.limitValue = limitValue;
-	}
-
-	@Override
-	public void setOnlySelected(boolean onlySelected) {
-
-		this.onlySelected = onlySelected;
 	}
 }

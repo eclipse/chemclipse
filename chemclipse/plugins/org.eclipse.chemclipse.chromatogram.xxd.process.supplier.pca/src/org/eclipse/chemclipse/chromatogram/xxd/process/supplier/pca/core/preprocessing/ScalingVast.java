@@ -49,7 +49,7 @@ public class ScalingVast extends AbstaractScaling {
 			for(ISample<?> sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if((sample.isSelected() || !onlySelected)) {
-					double data = sampleData.getModifiedData();
+					double data = getData(sampleData);
 					double scaleData = ((data - mean) / variace) * mean;
 					sampleData.setModifiedData(scaleData);
 				}

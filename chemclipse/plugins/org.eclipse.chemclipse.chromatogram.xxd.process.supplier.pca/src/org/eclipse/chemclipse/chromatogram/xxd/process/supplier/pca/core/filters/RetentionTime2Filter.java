@@ -16,21 +16,23 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
-public class RetentionTime2Filter implements IFilter {
+public class RetentionTime2Filter extends AbstractPreprocessing implements IFilter {
 
 	private boolean inverse;
-	private boolean onlySelected = true;
 	private String selectionResult = "";
 	private List<IVariable> variablesSelected;
 
 	public RetentionTime2Filter(List<IVariable> variables, boolean inverse) {
+		super();
 		this.variablesSelected = new ArrayList<>(variables);
 		this.inverse = inverse;
+		setDataTypeProcessing(DATA_TYPE_PROCESSING.VARIABLES);
 	}
 
 	@Override
@@ -81,17 +83,5 @@ public class RetentionTime2Filter implements IFilter {
 	public List<IVariable> getVariables() {
 
 		return variablesSelected;
-	}
-
-	@Override
-	public boolean isOnlySelected() {
-
-		return onlySelected;
-	}
-
-	@Override
-	public void setOnlySelected(boolean onlySelected) {
-
-		this.onlySelected = onlySelected;
 	}
 }

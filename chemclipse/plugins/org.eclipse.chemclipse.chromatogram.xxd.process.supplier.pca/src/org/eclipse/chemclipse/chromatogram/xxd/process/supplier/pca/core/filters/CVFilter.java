@@ -16,37 +16,37 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
-public class CVFilter implements IFilter {
+public class CVFilter extends AbstractPreprocessing implements IFilter {
 
 	private double alpha;
 	final private String name = "CV filter";
-	private boolean onlySelected;
 	private String selectionResult = "";
 
 	public CVFilter() {
-		this.onlySelected = true;
+		super();
 		this.alpha = 0.7;
+		setDataTypeProcessing(DATA_TYPE_PROCESSING.RAW_DATA);
 	}
 
 	@Override
 	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
 
-		List<S> samplesList = samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
+		List<S> samplesList = selectSamples(samples);
 		List<Boolean> selection = new ArrayList<>();
 		List<V> variables = samples.getVariables();
 		for(int i = 0; i < variables.size(); i++) {
 			selection.add(false);
 		}
-		Map<String, Set<S>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samplesList, false, onlySelected);
+		Map<String, Set<S>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samplesList, false, isOnlySelected());
 		Collection<Set<S>> samplesByGroupName = samplesByGroupNameMap.values();
 		if(!samplesByGroupName.isEmpty()) {
 			for(int i = 0; i < variables.size(); i++) {
@@ -54,7 +54,7 @@ public class CVFilter implements IFilter {
 				for(Set<S> set : samplesByGroupName) {
 					SummaryStatistics summaryStatistics = new SummaryStatistics();
 					for(ISample<?> sample : set) {
-						double d = sample.getSampleData().get(i).getModifiedData();
+						double d = getData(sample.getSampleData().get(i));
 						summaryStatistics.addValue(d);
 					}
 					categoryData.add(summaryStatistics);
@@ -98,20 +98,8 @@ public class CVFilter implements IFilter {
 		return selectionResult;
 	}
 
-	@Override
-	public boolean isOnlySelected() {
-
-		return onlySelected;
-	}
-
 	public void setAlpha(double alpha) {
 
 		this.alpha = alpha;
-	}
-
-	@Override
-	public void setOnlySelected(boolean onlySelected) {
-
-		this.onlySelected = onlySelected;
 	}
 }

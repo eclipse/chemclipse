@@ -42,7 +42,7 @@ public class MedianValuesReplacer extends AbstractPreprocessing {
 			List<Double> collectedValues = new ArrayList<>();
 			for(S sample : sampleList) {
 				if(sample.isSelected() || !isOnlySelected()) {
-					double sampleData = sample.getSampleData().get(i).getModifiedData();
+					double sampleData = getData(sample.getSampleData().get(i));
 					if(!Double.isNaN(sampleData)) {
 						collectedValues.add(sampleData);
 					}
@@ -58,7 +58,7 @@ public class MedianValuesReplacer extends AbstractPreprocessing {
 			for(S sample : sampleList) {
 				if(sample.isSelected() || !isOnlySelected()) {
 					ISampleData sampleData = sample.getSampleData().get(i);
-					if(Double.isNaN(sampleData.getModifiedData())) {
+					if(Double.isNaN(getData(sampleData))) {
 						sampleData.setModifiedData(median);
 					}
 				}
