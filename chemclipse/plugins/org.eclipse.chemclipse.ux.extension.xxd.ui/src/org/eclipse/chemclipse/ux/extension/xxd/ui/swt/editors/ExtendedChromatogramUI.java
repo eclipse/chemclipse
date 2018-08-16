@@ -1147,7 +1147,7 @@ public class ExtendedChromatogramUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(10, false));
+		composite.setLayout(new GridLayout(12, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
@@ -1157,6 +1157,8 @@ public class ExtendedChromatogramUI {
 		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
 		createToggleRangeSelectorButton(composite);
+		createExecuteButton(composite);
+		createShowExtensionsButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
 	}
@@ -2029,6 +2031,36 @@ public class ExtendedChromatogramUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				chromatogramChart.toggleRangeSelectorVisibility();
+			}
+		});
+	}
+
+	private void createExecuteButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Execute a selected action");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_EXTENSION, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createShowExtensionsButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Select the execute action");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_POPUP_MENU, IApplicationImage.SIZE_7x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
 			}
 		});
 	}

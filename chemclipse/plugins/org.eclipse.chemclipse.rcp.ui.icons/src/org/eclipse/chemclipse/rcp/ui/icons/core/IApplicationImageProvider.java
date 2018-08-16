@@ -28,13 +28,14 @@ public interface IApplicationImageProvider {
 	/*
 	 * Sizes of icons, overlays ...
 	 */
+	String SIZE_7x8 = "7x8";
+	String SIZE_7x16 = "7x16";
 	String SIZE_16x16 = "16x16";
 	String SIZE_32x32 = "32x32";
 	String SIZE_48x48 = "48x48";
 	String SIZE_64x64 = "64x64";
-	String SIZE_128x128 = "128x128";
 	String SIZE_75x66 = "75x66";
-	String SIZE_7x8 = "7x8";
+	String SIZE_128x128 = "128x128";
 	String SIZE_250x300 = "250x330"; // About
 
 	/**
