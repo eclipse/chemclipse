@@ -73,6 +73,17 @@
             class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.evaluation.WizardEvaluation"
             id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.evaluation.WizardEvaluation">
       </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.ux.extension.xxd.ui.chromatogramEditorActionSupplier">
+      <ChromatogramEditorActionSupplier
+            label="Single Chromatogram Evaluation"
+            description="This applies the single chromatogram evaluation process workflow."
+            actionExecutable="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handlers.ChromatogramEditorAction"
+            CSD="false"
+            MSD="true"
+            WSD="false">
+      </ChromatogramEditorActionSupplier>
    </extension>             
     
 </plugin>
