@@ -179,12 +179,18 @@ public class ExtendedScanTableUI {
 
 		buttonToggleToolbarEdit.setEnabled(enabled);
 		PartSupport.setControlVisibility(buttonToggleToolbarEdit, enabled);
+		/*
+		 * Don't necessarily show the edit toolbar.
+		 * But hide it, if appropriate.
+		 */
+		if(enabled == false) {
+			PartSupport.setCompositeVisibility(toolbarEdit, false);
+		}
 		//
 		buttonToggleEditModus.setEnabled(enabled);
 		PartSupport.setControlVisibility(buttonToggleEditModus, enabled);
 		//
 		scanTableUI.setEditEnabled(enabled);
-		//
 		ITableSettings tableSettings = scanTableUI.getTableSettings();
 		if(enabled) {
 			tableSettings.addMenuEntry(deleteMenuEntry);
@@ -193,7 +199,6 @@ public class ExtendedScanTableUI {
 			tableSettings.removeMenuEntry(deleteMenuEntry);
 			tableSettings.removeKeyEventProcessor(deleteKeyEventProcessor);
 		}
-		//
 		scanTableUI.applySettings(tableSettings);
 	}
 
