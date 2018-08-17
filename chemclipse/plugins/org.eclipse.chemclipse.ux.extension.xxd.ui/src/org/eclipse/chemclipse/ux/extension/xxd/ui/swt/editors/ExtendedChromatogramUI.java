@@ -87,6 +87,8 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -106,6 +108,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.Identification
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramLengthModifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramEditorActionExtension;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanChartSupport;
@@ -115,13 +118,17 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.IChromatogramEditorAction;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToScanNumberConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -159,7 +166,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.swtchart.IAxis.Position;
@@ -201,6 +211,14 @@ public class ExtendedChromatogramUI {
 	private static final int THREE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 3);
 	private static final int FIVE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 5);
 	//
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.ux.extension.xxd.ui.chromatogramEditorActionSupplier";
+	private static final String EXTENSION_LABEL = "label"; //$NON-NLS-1$
+	private static final String EXTENSION_DESCRIPTION = "description"; //$NON-NLS-1$
+	private static final String EXTENSION_ACTION_EXECUTABLE = "actionExecutable"; //$NON-NLS-1$
+	private static final String EXTENSION_MSD = "MSD"; //$NON-NLS-1$
+	private static final String EXTENSION_CSD = "CSD"; //$NON-NLS-1$
+	private static final String EXTENSION_WSD = "WSD"; //$NON-NLS-1$
+	//
 	private Composite toolbarInfo;
 	private Label labelChromatogramInfo;
 	private Composite toolbarRetentionIndices;
@@ -212,6 +230,7 @@ public class ExtendedChromatogramUI {
 	private Combo comboTargetTransfer;
 	private ComboViewer comboViewerSeparationColumn;
 	private MethodSupportUI methodSupportUI;
+	private Button buttonChromatogramAction;
 	//
 	private IChromatogramSelection chromatogramSelection = null;
 	private List<IChromatogramSelection> referencedChromatogramSelections = null; // Might be null ... no references.
@@ -235,6 +254,9 @@ public class ExtendedChromatogramUI {
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
+	//
+	private String selectedActionId = "";
+	private HashMap<String, ChromatogramEditorActionExtension> actionHashMap = new HashMap<>();
 	//
 	private boolean suspendUpdate = false;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -377,6 +399,8 @@ public class ExtendedChromatogramUI {
 	public synchronized void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;
+		setChromatogramActionMenu();
+		//
 		if(chromatogramSelection != null) {
 			/*
 			 * Adjust
@@ -1139,6 +1163,8 @@ public class ExtendedChromatogramUI {
 		PartSupport.setCompositeVisibility(toolbarRetentionIndices, false);
 		PartSupport.setCompositeVisibility(toolbarMethod, false);
 		PartSupport.setCompositeVisibility(toolbarEdit, false);
+		//
+		setChromatogramActionMenu();
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -1147,7 +1173,7 @@ public class ExtendedChromatogramUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(12, false));
+		composite.setLayout(new GridLayout(11, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
@@ -1157,8 +1183,7 @@ public class ExtendedChromatogramUI {
 		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
 		createToggleRangeSelectorButton(composite);
-		createExecuteButton(composite);
-		createShowExtensionsButton(composite);
+		buttonChromatogramAction = createChromatogramActionButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
 	}
@@ -1696,6 +1721,7 @@ public class ExtendedChromatogramUI {
 				if(referencedChromatogramSelections != null) {
 					int index = comboChromatograms.getSelectionIndex();
 					selectChromatogram(index);
+					setChromatogramActionMenu();
 					fireUpdate();
 				}
 			}
@@ -2035,34 +2061,34 @@ public class ExtendedChromatogramUI {
 		});
 	}
 
-	private void createExecuteButton(Composite parent) {
+	private Button createChromatogramActionButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Execute a selected action");
+		button.setToolTipText("Select an action from the popup menu of the button (right mouse click).");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_EXTENSION, IApplicationImage.SIZE_16x16));
+		//
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				ChromatogramEditorActionExtension extension = actionHashMap.get(selectedActionId);
+				if(extension != null) {
+					IChromatogramEditorAction action = extension.getChromatogramEditorAction();
+					if(action != null) {
+						IProcessingInfo processingInfo = action.applyAction(chromatogramSelection);
+						ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+						update();
+					}
+				} else {
+					MessageDialog.openInformation(DisplayUtils.getShell(), "Action", "Please select a execute method first via the button popup menu (right mouse click).");
+				}
 			}
 		});
-	}
-
-	private void createShowExtensionsButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Select the execute action");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_POPUP_MENU, IApplicationImage.SIZE_7x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
+		//
+		return button;
 	}
 
 	private void createResetButton(Composite parent) {
@@ -2264,5 +2290,116 @@ public class ExtendedChromatogramUI {
 				chromatogramChart.applySettings(chartSettings);
 			}
 		}
+	}
+
+	private void setChromatogramActionMenu() {
+
+		boolean enabled = enableChromatogramActionMenu();
+		buttonChromatogramAction.setEnabled(enabled);
+		if(enabled) {
+			Menu menu = getActionMenu(buttonChromatogramAction);
+			buttonChromatogramAction.setMenu(menu);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Menu getActionMenu(Control parent) {
+
+		selectedActionId = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID);
+		actionHashMap.clear();
+		//
+		Menu menu = new Menu(parent);
+		List<ChromatogramEditorActionExtension> extensions = getChromatogramEditorExtensions();
+		for(ChromatogramEditorActionExtension extension : extensions) {
+			/*
+			 * Handler / Menu Item
+			 */
+			if(isChromatogramSuitableForExtension(extension, chromatogramSelection)) {
+				String label = extension.getLabel();
+				String id = Long.toString(extension.hashCode());
+				actionHashMap.put(id, extension);
+				//
+				MenuItem menuItem = new MenuItem(menu, SWT.NONE);
+				menuItem.setText(label);
+				menuItem.addSelectionListener(new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+
+						preferenceStore.putValue(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID, id);
+						buttonChromatogramAction.setToolTipText(extension.getDescription());
+						selectedActionId = id;
+					}
+				});
+			}
+		}
+		//
+		ChromatogramEditorActionExtension extension = actionHashMap.get(selectedActionId);
+		if(extension != null) {
+			buttonChromatogramAction.setToolTipText(extension.getDescription());
+		}
+		//
+		return menu;
+	}
+
+	@SuppressWarnings("unchecked")
+	private boolean enableChromatogramActionMenu() {
+
+		boolean enabled = false;
+		IConfigurationElement[] elements = getConfigurationElements();
+		exitloop:
+		for(IConfigurationElement element : elements) {
+			ChromatogramEditorActionExtension extension = new ChromatogramEditorActionExtension();
+			extension.setMSD(Boolean.valueOf(element.getAttribute(EXTENSION_MSD)));
+			extension.setCSD(Boolean.valueOf(element.getAttribute(EXTENSION_CSD)));
+			extension.setWSD(Boolean.valueOf(element.getAttribute(EXTENSION_WSD)));
+			if(isChromatogramSuitableForExtension(extension, chromatogramSelection)) {
+				enabled = true;
+				break exitloop;
+			}
+		}
+		return enabled;
+	}
+
+	private List<ChromatogramEditorActionExtension> getChromatogramEditorExtensions() {
+
+		List<ChromatogramEditorActionExtension> extensions = new ArrayList<>();
+		IConfigurationElement[] elements = getConfigurationElements();
+		for(IConfigurationElement element : elements) {
+			try {
+				ChromatogramEditorActionExtension extension = new ChromatogramEditorActionExtension();
+				extension.setLabel(element.getAttribute(EXTENSION_LABEL));
+				extension.setDescription(element.getAttribute(EXTENSION_DESCRIPTION));
+				extension.setChromatogramEditorAction((IChromatogramEditorAction)element.createExecutableExtension(EXTENSION_ACTION_EXECUTABLE));
+				extension.setMSD(Boolean.valueOf(element.getAttribute(EXTENSION_MSD)));
+				extension.setCSD(Boolean.valueOf(element.getAttribute(EXTENSION_CSD)));
+				extension.setWSD(Boolean.valueOf(element.getAttribute(EXTENSION_WSD)));
+				extensions.add(extension);
+			} catch(Exception e) {
+				logger.warn(e);
+			}
+		}
+		return extensions;
+	}
+
+	private boolean isChromatogramSuitableForExtension(ChromatogramEditorActionExtension extension, IChromatogramSelection<? extends IPeak> chromatogramSelection) {
+
+		if(extension != null && chromatogramSelection != null) {
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD && extension.isMSD()) {
+				return true;
+			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD && extension.isCSD()) {
+				return true;
+			} else if(chromatogramSelection instanceof IChromatogramSelectionWSD && extension.isWSD()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private IConfigurationElement[] getConfigurationElements() {
+
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IConfigurationElement[] elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
+		return elements;
 	}
 }

@@ -369,6 +369,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY = true;
 	public static final String P_POSITION_Y_AXIS_RELATIVE_INTENSITY = "positionYAxisRelativeIntensity";
 	public static final String DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY = Position.Secondary.toString();
+	public static final String P_CHROMATOGRAM_SELECTED_ACTION_ID = "chromatogramSelectedActionId";
+	public static final String DEF_CHROMATOGRAM_SELECTED_ACTION_ID = "";
 	/*
 	 * File Explorer
 	 */

@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.processing.ui.support;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -47,7 +48,7 @@ public class ProcessingInfoViewSupport {
 		/*
 		 * Info error message.
 		 */
-		Display display = Display.getDefault();
+		Display display = DisplayUtils.getDisplay();
 		display.asyncExec(new Runnable() {
 
 			@Override
