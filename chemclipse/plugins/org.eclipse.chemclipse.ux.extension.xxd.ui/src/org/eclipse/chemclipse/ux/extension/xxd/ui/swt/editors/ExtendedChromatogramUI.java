@@ -2252,7 +2252,7 @@ public class ExtendedChromatogramUI {
 
 	private void adjustAxisSettings() {
 
-		chromatogramChart.modifyAxisSet();
+		chromatogramChart.modifyAxisSet(false);
 		/*
 		 * Scan Axis
 		 */
@@ -2261,23 +2261,22 @@ public class ExtendedChromatogramUI {
 			if(chromatogram != null) {
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
 				ISecondaryAxisSettings axisSettings = chromatogramChart.getSecondaryAxisSettingsX(TITLE_X_AXIS_SCANS);
-				//
 				if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SCANS)) {
-					/*
-					 * Add
-					 */
+					Position position = Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SCANS));
 					if(axisSettings == null) {
 						try {
 							int scanDelay = chromatogram.getScanDelay();
 							int scanInterval = chromatogram.getScanInterval();
 							ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_SCANS, new MillisecondsToScanNumberConverter(scanDelay, scanInterval));
-							secondaryAxisSettingsX.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SCANS)));
+							secondaryAxisSettingsX.setPosition(position);
 							secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 							secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 							chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 						} catch(Exception e) {
 							logger.warn(e);
 						}
+					} else {
+						axisSettings.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SCANS)));
 					}
 				} else {
 					/*

@@ -56,13 +56,18 @@ public class ChromatogramChart extends LineChart {
 	/**
 	 * Modifies the x and y axis set given in accordance to the given settings.
 	 */
-	public void modifyAxisSet() {
+	public void modifyAxisSet(boolean applySettings) {
 
 		modifyMillisecondsXAxis();
 		modifyIntensityYAxis();
 		modifySecondsXAxis();
 		modifyMinutesXAxis();
 		modifyRelativeIntensityYAxis();
+		//
+		if(applySettings) {
+			IChartSettings chartSettings = getChartSettings();
+			applySettings(chartSettings);
+		}
 	}
 
 	public ISecondaryAxisSettings getSecondaryAxisSettingsX(String title) {
@@ -88,9 +93,7 @@ public class ChromatogramChart extends LineChart {
 		chartSettings.setVerticalSliderVisible(false);
 		chartSettings.getRangeRestriction().setZeroX(true);
 		chartSettings.getRangeRestriction().setZeroY(true);
-		//
-		modifyAxisSet();
-		applySettings(chartSettings);
+		modifyAxisSet(true);
 	}
 
 	private void modifyMillisecondsXAxis() {
@@ -122,13 +125,15 @@ public class ChromatogramChart extends LineChart {
 		IChartSettings chartSettings = getChartSettings();
 		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsY(TITLE_Y_AXIS_RELATIVE_INTENSITY);
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY)) {
+			Position position = Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY));
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(TITLE_Y_AXIS_RELATIVE_INTENSITY, new RelativeIntensityConverter(SWT.VERTICAL, true));
-				secondaryAxisSettingsY.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY)));
+				secondaryAxisSettingsY.setPosition(position);
 				secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 				secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 				chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 			} else {
+				axisSettings.setPosition(position);
 				axisSettings.setVisible(true);
 			}
 		} else {
@@ -143,13 +148,15 @@ public class ChromatogramChart extends LineChart {
 		IChartSettings chartSettings = getChartSettings();
 		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsX(TITLE_X_AXIS_SECONDS);
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SECONDS)) {
+			Position position = Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SECONDS));
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_SECONDS, new MillisecondsToSecondsConverter());
-				secondaryAxisSettingsX.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SECONDS)));
+				secondaryAxisSettingsX.setPosition(position);
 				secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 				secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 			} else {
+				axisSettings.setPosition(position);
 				axisSettings.setVisible(true);
 			}
 		} else {
@@ -164,13 +171,15 @@ public class ChromatogramChart extends LineChart {
 		IChartSettings chartSettings = getChartSettings();
 		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsX(TITLE_X_AXIS_MINUTES);
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MINUTES)) {
+			Position position = Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_MINUTES));
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_MINUTES, new MillisecondsToMinuteConverter());
-				secondaryAxisSettingsX.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_MINUTES)));
+				secondaryAxisSettingsX.setPosition(position);
 				secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 				secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 			} else {
+				axisSettings.setPosition(position);
 				axisSettings.setVisible(true);
 			}
 		} else {
