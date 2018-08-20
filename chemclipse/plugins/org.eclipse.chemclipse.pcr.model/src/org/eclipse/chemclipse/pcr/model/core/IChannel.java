@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018 pwenig.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,11 +7,31 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * pwenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
-import org.eclipse.chemclipse.model.core.IMeasurementInfo;
+import java.util.List;
 
-public interface IScanPCR extends IMeasurementInfo {
+public interface IChannel {
+
+	int getId();
+
+	void setId(int id);
+
+	int getTime();
+
+	void setTime(int time);
+
+	double getTemperature();
+
+	void setTemperature(double temperature);
+
+	boolean isValid();
+
+	void setValid(boolean valid);
+
+	List<Double> getPoints();
+
+	void setPoints(List<Double> points);
 }

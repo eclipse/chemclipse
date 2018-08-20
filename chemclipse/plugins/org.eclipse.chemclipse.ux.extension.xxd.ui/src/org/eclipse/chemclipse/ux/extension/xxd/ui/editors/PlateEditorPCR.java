@@ -13,18 +13,23 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
-import org.eclipse.chemclipse.pcr.model.core.Plate;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedPCRPlateUI;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -119,7 +124,26 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IDataUp
 
 	private synchronized IPlate loadPlate() {
 
-		return new Plate();
+		IPlate plate = null;
+		Object object = part.getObject();
+		if(object instanceof Map) {
+			/*
+			 * Map
+			 */
+			@SuppressWarnings("unchecked")
+			Map<String, Object> map = (Map<String, Object>)object;
+			File file = new File((String)map.get(EditorSupport.MAP_FILE));
+			boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
+			//
+			IProcessingInfo processingInfo = PlateConverterPCR.convert(file, new NullProgressMonitor());
+			try {
+				plate = (IPlate)processingInfo.getProcessingResult();
+			} catch(TypeCastException e) {
+				plate = null;
+			}
+		}
+		//
+		return plate;
 	}
 
 	private void createEditorPages(Composite parent) {

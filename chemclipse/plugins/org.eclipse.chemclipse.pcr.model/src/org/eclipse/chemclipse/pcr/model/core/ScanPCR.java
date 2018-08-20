@@ -11,21 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
-import java.util.TreeSet;
-
 import org.eclipse.chemclipse.model.core.AbstractMeasurementInfo;
 
 public class ScanPCR extends AbstractMeasurementInfo implements IScanPCR {
 
 	private static final long serialVersionUID = -5957842720637103236L;
-	//
-	private TreeSet<ISignalPCR> processedSignals = new TreeSet<ISignalPCR>();
-
-	@Override
-	public TreeSet<ISignalPCR> getProcessedSignals() {
-
-		return processedSignals;
-	}
 
 	@Override
 	public int hashCode() {

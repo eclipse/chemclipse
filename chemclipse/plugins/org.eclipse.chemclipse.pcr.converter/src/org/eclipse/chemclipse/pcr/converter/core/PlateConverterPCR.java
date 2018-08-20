@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.converter.scan.ScanConverterSupport;
 import org.eclipse.chemclipse.converter.scan.ScanSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
-import org.eclipse.chemclipse.pcr.model.core.IScanPCR;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
@@ -87,7 +86,7 @@ public class PlateConverterPCR {
 					processingInfo = importConverter.convert(file, monitor);
 					if(!processingInfo.hasErrorMessages()) {
 						Object object = processingInfo.getProcessingResult();
-						if(object instanceof IScanPCR) {
+						if(object instanceof IPlate) {
 							return processingInfo;
 						}
 					}

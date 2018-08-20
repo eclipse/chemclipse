@@ -11,9 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
+import java.util.Map;
+
 import javax.swing.text.Position;
 
-public interface IWell extends IScanPCR {
+public interface IWell extends IScanPCR, Comparable<IWell> {
+
+	int getId();
+
+	void setId(int id);
 
 	Position getPosition();
 
@@ -34,4 +40,6 @@ public interface IWell extends IScanPCR {
 	String getInterpretation();
 
 	void setInterpretation(String interpretation);
+
+	Map<Integer, IChannel> getChannels();
 }

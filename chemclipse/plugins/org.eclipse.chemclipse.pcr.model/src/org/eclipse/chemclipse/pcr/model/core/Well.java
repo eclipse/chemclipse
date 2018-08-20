@@ -11,17 +11,34 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.text.Position;
 
 public class Well extends ScanPCR implements IWell {
 
 	private static final long serialVersionUID = -9183326941662161376L;
 	//
+	private int id = 0;
 	private Position position;
-	private String sampleId;
-	private String status;
-	private String result;
-	private String interpretation;
+	private String sampleId = "";
+	private String status = "";
+	private String result = "";
+	private String interpretation = "";
+	private Map<Integer, IChannel> channels = new HashMap<>();
+
+	@Override
+	public int getId() {
+
+		return id;
+	}
+
+	@Override
+	public void setId(int id) {
+
+		this.id = id;
+	}
 
 	@Override
 	public Position getPosition() {
@@ -81,5 +98,21 @@ public class Well extends ScanPCR implements IWell {
 	public void setInterpretation(String interpretation) {
 
 		this.interpretation = interpretation;
+	}
+
+	@Override
+	public Map<Integer, IChannel> getChannels() {
+
+		return channels;
+	}
+
+	@Override
+	public int compareTo(IWell well) {
+
+		if(well != null) {
+			return Integer.compare(id, well.getId());
+		} else {
+			return 0;
+		}
 	}
 }
