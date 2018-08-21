@@ -22,4 +22,15 @@ public class Plate implements IPlate {
 
 		return wells;
 	}
+
+	@Override
+	public IWell getWell(int id) {
+
+		for(IWell well : wells) {
+			if(well.getPosition().getId() == id) {
+				return well;
+			}
+		}
+		return null;
+	}
 }

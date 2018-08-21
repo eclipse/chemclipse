@@ -16,4 +16,6 @@ import java.util.TreeSet;
 public interface IPlate {
 
 	TreeSet<IWell> getWells();
+
+	IWell getWell(int id);
 }

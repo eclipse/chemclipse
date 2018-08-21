@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 pwenig.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,14 +7,43 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * pwenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Position implements Comparable<Position> {
 
-	private String row;
-	private int column;
+	private int id = 0;
+	private String row = "";
+	private int column = 0;
+	private Pattern pattern = Pattern.compile("([a-zA-Z]*)(\\d*)");
+
+	/*
+	 * A1, H12
+	 */
+	public void setRowAndColumn(String positionAsString) {
+
+		if(positionAsString != null) {
+			Matcher matcher = pattern.matcher(positionAsString);
+			if(matcher.matches()) {
+				row = matcher.group(1).trim();
+				column = Integer.parseInt(matcher.group(2).trim());
+			}
+		}
+	}
+
+	public int getId() {
+
+		return id;
+	}
+
+	public void setId(int id) {
+
+		this.id = id;
+	}
 
 	public String getRow() {
 

@@ -205,7 +205,7 @@ public class ExtendedPCRPlateUI {
 
 				if(element instanceof IWell) {
 					IWell well = (IWell)element;
-					return "Sample: " + well.getId();
+					return well.getSampleId() + " " + well.getPosition().toString();
 				}
 				return null;
 			}
