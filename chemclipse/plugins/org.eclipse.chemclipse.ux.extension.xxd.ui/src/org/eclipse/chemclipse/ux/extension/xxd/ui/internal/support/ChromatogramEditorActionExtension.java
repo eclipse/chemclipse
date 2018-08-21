@@ -82,52 +82,25 @@ public class ChromatogramEditorActionExtension {
 		this.wsd = wsd;
 	}
 
-	@Override
-	public int hashCode() {
+	public String getUniqueId() {
 
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((chromatogramEditorAction == null) ? 0 : chromatogramEditorAction.getClass().hashCode());
-		result = prime * result + (csd ? 1231 : 1237);
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((label == null) ? 0 : label.hashCode());
-		result = prime * result + (msd ? 1231 : 1237);
-		result = prime * result + (wsd ? 1231 : 1237);
-		return result;
+		if(chromatogramEditorAction != null) {
+			return Integer.toString(chromatogramEditorAction.getClass().getName().hashCode());
+		} else {
+			return "";
+		}
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj)
-			return true;
-		if(obj == null)
-			return false;
-		if(getClass() != obj.getClass())
-			return false;
-		ChromatogramEditorActionExtension other = (ChromatogramEditorActionExtension)obj;
-		if(chromatogramEditorAction == null) {
-			if(other.chromatogramEditorAction != null)
-				return false;
-		} else if(!chromatogramEditorAction.equals(other.chromatogramEditorAction))
-			return false;
-		if(csd != other.csd)
-			return false;
-		if(description == null) {
-			if(other.description != null)
-				return false;
-		} else if(!description.equals(other.description))
-			return false;
-		if(label == null) {
-			if(other.label != null)
-				return false;
-		} else if(!label.equals(other.label))
-			return false;
-		if(msd != other.msd)
-			return false;
-		if(wsd != other.wsd)
-			return false;
-		return true;
+		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return super.hashCode();
 	}
 
 	@Override

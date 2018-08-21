@@ -168,8 +168,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.swtchart.IAxis.Position;
@@ -230,6 +228,7 @@ public class ExtendedChromatogramUI {
 	private Combo comboTargetTransfer;
 	private ComboViewer comboViewerSeparationColumn;
 	private MethodSupportUI methodSupportUI;
+	private ComboViewer comboChromatogramAction;
 	private Button buttonChromatogramAction;
 	//
 	private IChromatogramSelection chromatogramSelection = null;
@@ -1173,7 +1172,7 @@ public class ExtendedChromatogramUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(11, false));
+		composite.setLayout(new GridLayout(12, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
@@ -1183,6 +1182,7 @@ public class ExtendedChromatogramUI {
 		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
 		createToggleRangeSelectorButton(composite);
+		comboChromatogramAction = createChromatogramActionCombo(composite);
 		buttonChromatogramAction = createChromatogramActionButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
@@ -1248,7 +1248,9 @@ public class ExtendedChromatogramUI {
 			}
 		});
 		combo.setToolTipText("Select a chromatogram column.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -2061,10 +2063,50 @@ public class ExtendedChromatogramUI {
 		});
 	}
 
+	private ComboViewer createChromatogramActionCombo(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof ChromatogramEditorActionExtension) {
+					return ((ChromatogramEditorActionExtension)element).getLabel();
+				}
+				return null;
+			}
+		});
+		combo.setToolTipText("Select a chromatogram action.");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Object object = comboViewer.getStructuredSelection().getFirstElement();
+				if(object instanceof ChromatogramEditorActionExtension) {
+					ChromatogramEditorActionExtension extension = (ChromatogramEditorActionExtension)object;
+					combo.setToolTipText(extension.getDescription());
+					buttonChromatogramAction.setEnabled(true);
+					String id = extension.getUniqueId();
+					preferenceStore.putValue(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID, id);
+					selectedActionId = id;
+				}
+			}
+		});
+		//
+		return comboViewer;
+	}
+
 	private Button createChromatogramActionButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Select an action from the popup menu of the button (right mouse click).");
+		button.setToolTipText("Execute the selected chromatogram action.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_EXTENSION, IApplicationImage.SIZE_16x16));
 		//
@@ -2294,51 +2336,64 @@ public class ExtendedChromatogramUI {
 	private void setChromatogramActionMenu() {
 
 		boolean enabled = enableChromatogramActionMenu();
-		buttonChromatogramAction.setEnabled(enabled);
+		comboChromatogramAction.getCombo().setEnabled(enabled);
+		//
 		if(enabled) {
-			Menu menu = getActionMenu(buttonChromatogramAction);
-			buttonChromatogramAction.setMenu(menu);
+			boolean success = setChromatogramActionItems(comboChromatogramAction.getCombo());
+			buttonChromatogramAction.setEnabled(success);
+		} else {
+			buttonChromatogramAction.setEnabled(false);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private Menu getActionMenu(Control parent) {
+	private boolean setChromatogramActionItems(Control parent) {
 
-		selectedActionId = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID);
+		/*
+		 * Fill the hash map.
+		 */
 		actionHashMap.clear();
-		//
-		Menu menu = new Menu(parent);
-		List<ChromatogramEditorActionExtension> extensions = getChromatogramEditorExtensions();
-		for(ChromatogramEditorActionExtension extension : extensions) {
-			/*
-			 * Handler / Menu Item
-			 */
+		List<ChromatogramEditorActionExtension> activeExtensions = new ArrayList<>();
+		for(ChromatogramEditorActionExtension extension : getChromatogramEditorExtensions()) {
 			if(isChromatogramSuitableForExtension(extension, chromatogramSelection)) {
-				String label = extension.getLabel();
-				String id = Long.toString(extension.hashCode());
+				String id = extension.getUniqueId();
 				actionHashMap.put(id, extension);
-				//
-				MenuItem menuItem = new MenuItem(menu, SWT.NONE);
-				menuItem.setText(label);
-				menuItem.addSelectionListener(new SelectionAdapter() {
-
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-
-						preferenceStore.putValue(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID, id);
-						buttonChromatogramAction.setToolTipText(extension.getDescription());
-						selectedActionId = id;
-					}
-				});
+				activeExtensions.add(extension);
+			}
+		}
+		comboChromatogramAction.setInput(activeExtensions);
+		/*
+		 * Get the stored action id and set the selected entry and the description.
+		 */
+		boolean success = false;
+		selectedActionId = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID);
+		ChromatogramEditorActionExtension extension = actionHashMap.get(selectedActionId);
+		if(extension != null) {
+			Combo combo = comboChromatogramAction.getCombo();
+			combo.setToolTipText(extension.getDescription());
+			int index = getChromatogramActionSelectionIndex(activeExtensions, selectedActionId);
+			if(index > -1) {
+				combo.select(index);
+				success = true;
 			}
 		}
 		//
-		ChromatogramEditorActionExtension extension = actionHashMap.get(selectedActionId);
-		if(extension != null) {
-			buttonChromatogramAction.setToolTipText(extension.getDescription());
+		return success;
+	}
+
+	private int getChromatogramActionSelectionIndex(List<ChromatogramEditorActionExtension> extensions, String actionId) {
+
+		int index = -1;
+		exitloop:
+		for(int i = 0; i < extensions.size(); i++) {
+			ChromatogramEditorActionExtension extension = extensions.get(i);
+			String id = extension.getUniqueId();
+			if(id.equals(actionId)) {
+				index = i;
+				break exitloop;
+			}
 		}
-		//
-		return menu;
+		return index;
 	}
 
 	@SuppressWarnings("unchecked")
