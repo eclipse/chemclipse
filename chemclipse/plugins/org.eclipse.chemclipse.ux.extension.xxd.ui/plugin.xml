@@ -100,7 +100,13 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskHeatmaps"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskHeatmaps"
             name="Heatmaps">
-      </page>     
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskPCR"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskPCR"
+            name="PCR">
+      </page>            
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay"

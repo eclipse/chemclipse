@@ -137,7 +137,7 @@ public interface IChemClipseEvents {
 	String TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE = "identification/target/update/massspectrum/unknown";
 	String TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_LIBRARY_UPDATE = "identification/target/update/massspectrum/library";
 	/*
-	 * FTIR, NMR
+	 * FTIR, NMR, PCR
 	 */
 	String TOPIC_SCAN_XIR_UPDATE_OVERVIEW = "scan/xir/update/overview";
 	String TOPIC_SCAN_NMR_UPDATE_OVERVIEW = "scan/nmr/update/overview";
@@ -145,8 +145,12 @@ public interface IChemClipseEvents {
 	String TOPIC_SCAN_NMR_UPDATE_SELECTION = "scan/nmr/update/selection";
 	String TOPIC_SCAN_XIR_UNLOAD_SELECTION = "scan/xir/unload/selection";
 	String TOPIC_SCAN_NMR_UNLOAD_SELECTION = "scan/nmr/unload/selection";
-	String TOPIC_PLATE_PCR_UPDATE_OVERVIEW = "plate/pcr/update/overview";
 	String TOPIC_SEQUENCE_UPDATE_OVERVIEW = "sequence/update/overview";
+	String TOPIC_PLATE_PCR_UPDATE_OVERVIEW = "plate/pcr/update/overview";
+	String TOPIC_PLATE_PCR_UPDATE_SELECTION = "plate/pcr/update/selection";
+	String TOPIC_PLATE_PCR_UNLOAD_SELECTION = "plate/pcr/unload/selection";
+	String TOPIC_WELL_PCR_UPDATE_SELECTION = "well/pcr/update/selection";
+	String TOPIC_WELL_PCR_UNLOAD_SELECTION = "well/pcr/unload/selection";
 	/*
 	 * Converter
 	 */

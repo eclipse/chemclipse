@@ -438,4 +438,13 @@ public class PreferenceConstants {
 	public static final boolean DEF_USE_QUANTITATION_REFERENCE_LIST = true;
 	public static final String P_QUANTITATION_REFERENCE_LIST = "quantitationReferenceList";
 	public static final String DEF_QUANTITATION_REFERENCE_LIST = "";
+	/*
+	 * PCR
+	 */
+	public static final String P_STACK_POSITION_PLATE_CHARTS = "stackPositionPlateCharts";
+	public static final String DEF_STACK_POSITION_PLATE_CHARTS = PartSupport.PARTSTACK_BOTTOM_LEFT;
+	public static final String P_STACK_POSITION_WELL_DATA = "stackPositionWellData";
+	public static final String DEF_STACK_POSITION_WELL_DATA = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String P_STACK_POSITION_WELL_CHART = "stackPositionWellChart";
+	public static final String DEF_STACK_POSITION_WELL_CHART = PartSupport.PARTSTACK_BOTTOM_CENTER;
 }

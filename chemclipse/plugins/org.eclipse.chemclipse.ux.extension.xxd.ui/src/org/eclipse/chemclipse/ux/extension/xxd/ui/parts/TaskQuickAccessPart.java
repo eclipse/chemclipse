@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTask
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskOverlay;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskOverview;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskQuantitation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskResults;
@@ -414,6 +415,8 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 				preferencePageTaskResults.setTitle("Results");
 				IPreferencePage preferencePageTaskHeatmaps = new PreferencePageTaskHeatmaps();
 				preferencePageTaskHeatmaps.setTitle("Heatmaps");
+				IPreferencePage preferencePageTaskPcr = new PreferencePageTaskPCR();
+				preferencePageTaskPcr.setTitle("PCR");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageTasks));
@@ -428,6 +431,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 				preferenceManager.addToRoot(new PreferenceNode("10", preferencePageTaskComparison));
 				preferenceManager.addToRoot(new PreferenceNode("11", preferencePageTaskResults));
 				preferenceManager.addToRoot(new PreferenceNode("12", preferencePageTaskHeatmaps));
+				preferenceManager.addToRoot(new PreferenceNode("12", preferencePageTaskPcr));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();

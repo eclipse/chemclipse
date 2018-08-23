@@ -50,6 +50,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_MEASUREMENT_RESULTS, PreferenceConstants.DEF_STACK_POSITION_MEASUREMENT_RESULTS);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_HEATMAP, PreferenceConstants.DEF_STACK_POSITION_CHROMATOGRAM_HEATMAP);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES, PreferenceConstants.DEF_STACK_POSITION_PEAK_QUANTITATION_REFERENCES);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_PLATE_CHARTS, PreferenceConstants.DEF_STACK_POSITION_PLATE_CHARTS);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_WELL_DATA, PreferenceConstants.DEF_STACK_POSITION_WELL_DATA);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_WELL_CHART, PreferenceConstants.DEF_STACK_POSITION_WELL_CHART);
 		/*
 		 * Overlay
 		 */
@@ -210,5 +213,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 */
 		store.setDefault(PreferenceConstants.P_USE_QUANTITATION_REFERENCE_LIST, PreferenceConstants.DEF_USE_QUANTITATION_REFERENCE_LIST);
 		store.setDefault(PreferenceConstants.P_QUANTITATION_REFERENCE_LIST, PreferenceConstants.DEF_QUANTITATION_REFERENCE_LIST);
+		/*
+		 * PCR
+		 */
 	}
 }
