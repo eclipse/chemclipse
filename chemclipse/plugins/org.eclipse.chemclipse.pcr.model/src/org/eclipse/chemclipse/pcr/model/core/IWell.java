@@ -15,61 +15,23 @@ import java.util.Map;
 
 public interface IWell extends IScanPCR, Comparable<IWell> {
 
+	String SAMPLE_ID = "Sample ID";
+	String TARGET_NAME = "Target Name";
+	String MAX_FLUOR = "Max Fluor";
+
 	Position getPosition();
-
-	String getSampleId();
-
-	void setSampleId(String sampleId);
-
-	String getStatus();
-
-	void setStatus(String status);
-
-	String getResult();
-
-	void setResult(String result);
-
-	String getInterpretation();
-
-	void setInterpretation(String interpretation);
 
 	Map<Integer, IChannel> getChannels();
 
-	int getCall();
+	Map<String, String> getData();
 
-	void setCall(int call);
+	String getData(String key, String defaultValue);
 
-	int getChannel();
+	void setData(String key, String value);
 
-	void setChannel(int channel);
-
-	boolean isIncluded();
-
-	void setIncluded(boolean isIncluded);
+	String getSampleId();
 
 	String getTargetName();
 
-	void setTargetName(String targetName);
-
-	String getWarnDesc();
-
-	void setWarnDesc(String warnDesc);
-
-	String getWarnCodes();
-
-	void setWarnCodes(String warnCodes);
-
 	double getMaxFluor();
-
-	void setMaxFluor(double maxFluor);
-
-	double getMaxFluorBack();
-
-	void setMaxFluorBack(double maxFluorBack);
-
-	double getCrossingPoint();
-
-	void setCrossingPoint(double crossingPoint);
-
-	void setPosition(Position position);
 }

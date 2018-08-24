@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.pcr.model.core.IWell;
@@ -41,34 +43,14 @@ public class ExtendedWellDataUI {
 	public void update(IWell well) {
 
 		if(well != null) {
-			labelInfo.setText(well.getSampleId());
+			labelInfo.setText("Position: " + well.getPosition().getId() + ", Id:" + well.getSampleId());
 			StringBuilder builder = new StringBuilder();
-			builder.append("Sample ID: ");
-			builder.append(well.getSampleId());
-			builder.append("\n");
-			builder.append("Target Name: ");
-			builder.append(well.getTargetName());
-			builder.append("\n");
-			builder.append("Call: ");
-			builder.append(well.getCall());
-			builder.append("\n");
-			builder.append("Included: ");
-			builder.append(well.isIncluded());
-			builder.append("\n");
-			builder.append("Warn Code: ");
-			builder.append(well.getWarnCodes());
-			builder.append("\n");
-			builder.append("Warn Description: ");
-			builder.append(well.getWarnDesc());
-			builder.append("\n");
-			builder.append("Max Fluor: ");
-			builder.append(well.getMaxFluor());
-			builder.append("\n");
-			builder.append("Max Fluor Back: ");
-			builder.append(well.getMaxFluorBack());
-			builder.append("\n");
-			builder.append("Crossing Point: ");
-			builder.append(well.getCrossingPoint());
+			for(Map.Entry<String, String> entry : well.getData().entrySet()) {
+				builder.append(entry.getKey());
+				builder.append(": ");
+				builder.append(entry.getValue());
+				builder.append("\n");
+			}
 			text.setText(builder.toString());
 		} else {
 			labelInfo.setText("No well data available.");

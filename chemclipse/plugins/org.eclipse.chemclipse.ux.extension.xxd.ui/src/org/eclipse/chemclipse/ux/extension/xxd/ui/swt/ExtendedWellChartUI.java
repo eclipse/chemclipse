@@ -52,7 +52,7 @@ public class ExtendedWellChartUI {
 	public void update(IWell well) {
 
 		if(well != null) {
-			labelInfo.setText(well.getSampleId());
+			labelInfo.setText("Position: " + well.getPosition().getId() + ", Id:" + well.getSampleId());
 			updateChart(well);
 		} else {
 			labelInfo.setText("No well data available.");

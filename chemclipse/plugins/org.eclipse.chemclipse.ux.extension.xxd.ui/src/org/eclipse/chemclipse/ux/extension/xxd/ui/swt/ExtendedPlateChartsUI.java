@@ -135,7 +135,7 @@ public class ExtendedPlateChartsUI {
 				for(int index = 0; index < pointList.size(); index++) {
 					points[index] = pointList.get(index);
 				}
-				ISeriesData seriesData = new SeriesData(points, well.getSampleId() + " -> Channel: " + channel.getId());
+				ISeriesData seriesData = new SeriesData(points, well.getPosition().getId() + " -> Channel: " + channel.getId());
 				lineSeriesData = new LineSeriesData(seriesData);
 				lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 				lineSeriesSettings.setLineColor(colorScheme.getColor());
