@@ -53,7 +53,9 @@ public class Well extends ScanPCR implements IWell {
 	@Override
 	public void setData(String key, String value) {
 
-		data.put(key, value);
+		if(key != null && value != null) {
+			data.put(key, value);
+		}
 	}
 
 	@Override

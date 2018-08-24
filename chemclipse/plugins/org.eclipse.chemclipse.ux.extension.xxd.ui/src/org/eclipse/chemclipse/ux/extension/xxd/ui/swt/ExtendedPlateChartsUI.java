@@ -44,6 +44,7 @@ public class ExtendedPlateChartsUI {
 	private Label labelInfo;
 	private Composite toolbarInfo;
 	private ChartPCR chartPCR;
+	private IPlate plate = null;
 
 	@Inject
 	public ExtendedPlateChartsUI(Composite parent) {
@@ -53,10 +54,13 @@ public class ExtendedPlateChartsUI {
 	public void update(IPlate plate) {
 
 		if(plate != null) {
-			updateChart(plate);
+			if(this.plate != plate) {
+				updateChart(plate);
+			}
 		} else {
 			chartPCR.deleteSeries();
 		}
+		this.plate = plate;
 	}
 
 	private void initialize(Composite parent) {
