@@ -12,10 +12,12 @@
 package org.eclipse.chemclipse.msd.converter.supplier.csv.core;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.internal.converter.SpecificationValidator;
+import org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.ChromatogramReader;
 
 public class MagicNumberMatcherChromatogram extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
 
@@ -25,12 +27,25 @@ public class MagicNumberMatcherChromatogram extends AbstractMagicNumberMatcher i
 		boolean isValidFormat = false;
 		try {
 			file = SpecificationValidator.validateSpecification(file, "csv");
-			if(file.exists()) {
+			if(file.exists() && readTest(file)) {
 				isValidFormat = true;
+				if(isValidFormat) {
+					int wait = 0;
+				}
 			}
 		} catch(Exception e) {
 			// Print no exception.
 		}
 		return isValidFormat;
+	}
+
+	public static boolean readTest(File file) {
+
+		try {
+			return ChromatogramReader.isValidFileFormat(file);
+		} catch(IOException e) {
+			// failed to parse
+			return false;
+		}
 	}
 }

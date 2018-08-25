@@ -51,6 +51,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 	private static final int Ion_COLUMN_START = 3;
 
 	public ChromatogramReader() {
+
 	}
 
 	@Override
@@ -71,7 +72,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		return null;
 	}
 
-	private boolean isValidFileFormat(File file) throws IOException {
+	public static boolean isValidFileFormat(File file) throws IOException {
 
 		/*
 		 * Check the first column header.
