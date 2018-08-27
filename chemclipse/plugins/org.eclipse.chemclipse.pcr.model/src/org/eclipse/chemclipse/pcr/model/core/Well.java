@@ -13,9 +13,12 @@ package org.eclipse.chemclipse.pcr.model.core;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
 
 public class Well implements IWell {
 
@@ -24,6 +27,13 @@ public class Well implements IWell {
 	private Position position = new Position();
 	private Map<Integer, IChannel> channels = new HashMap<>();
 	private Map<String, String> data = new HashMap<>();
+	private Set<String> protectKeys = new HashSet<>();
+
+	public Well() {
+		protectKeys.add(SAMPLE_ID);
+		protectKeys.add(TARGET_NAME);
+		protectKeys.add(CROSSING_POINT);
+	}
 
 	@Override
 	public Position getPosition() {
@@ -54,6 +64,16 @@ public class Well implements IWell {
 
 		if(key != null && value != null) {
 			data.put(key, value);
+		}
+	}
+
+	@Override
+	public void removeData(String key) throws InvalidHeaderModificationException {
+
+		if(protectKeys.contains(key)) {
+			throw new InvalidHeaderModificationException("It's not possible to remove the following key: " + key);
+		} else {
+			data.remove(key);
 		}
 	}
 

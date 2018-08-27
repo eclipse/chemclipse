@@ -166,7 +166,13 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageQuantitation"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageQuantitation"
             name="Quantitation">
-      </page>                                                                   
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePagePCR"
+            name="PCR">
+      </page>                                                                         
    </extension> 
    <extension
          point="org.eclipse.ui.editors">  

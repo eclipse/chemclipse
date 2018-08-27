@@ -18,6 +18,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -47,8 +48,10 @@ public class ExtendedWellDataUI {
 	private static final String MENU_CATEGORY_HEADER_ENTRIES = "Header Entries";
 	private static final String HEADER_ENTRY = "Header Entry";
 	//
-	private Label labelInfo;
-	private Composite toolbarInfo;
+	private Label labelInfoTop;
+	private Composite toolbarInfoTop;
+	private Label labelInfoBottom;
+	private Composite toolbarInfoBottom;
 	private Composite toolbarSearch;
 	private Composite toolbarModify;
 	private Button buttonToggleEditModus;
@@ -56,7 +59,7 @@ public class ExtendedWellDataUI {
 	private Text textHeaderValue;
 	private Button buttonAddHeaderEntry;
 	private Button buttonDeleteHeaderEntry;
-	private HeaderDataListUI headerDataListUI;
+	private WellDataListUI wellDataListUI;
 	//
 	private IWell well;
 	private boolean editable;
@@ -75,6 +78,7 @@ public class ExtendedWellDataUI {
 	public void update(IWell well) {
 
 		this.well = well;
+		this.editable = (well != null);
 		updateHeaderData();
 	}
 
@@ -83,16 +87,18 @@ public class ExtendedWellDataUI {
 		parent.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
+		toolbarInfoTop = createToolbarInfoTop(parent);
 		toolbarSearch = createToolbarSearch(parent);
 		toolbarModify = createToolbarModify(parent);
-		headerDataListUI = createHeaderDataTable(parent);
+		wellDataListUI = createWellDataTable(parent);
+		toolbarInfoBottom = createToolbarInfoBottom(parent);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		PartSupport.setCompositeVisibility(toolbarInfoTop, true);
+		PartSupport.setCompositeVisibility(toolbarInfoBottom, true);
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
 		PartSupport.setCompositeVisibility(toolbarModify, false);
 		//
-		headerDataListUI.setEditEnabled(false);
+		wellDataListUI.setEditEnabled(false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -120,7 +126,9 @@ public class ExtendedWellDataUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfoTop);
+				PartSupport.toggleCompositeVisibility(toolbarInfoBottom);
+				//
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
 				} else {
@@ -189,8 +197,8 @@ public class ExtendedWellDataUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean editEnabled = !headerDataListUI.isEditEnabled();
-				headerDataListUI.setEditEnabled(editEnabled);
+				boolean editEnabled = !wellDataListUI.isEditEnabled();
+				wellDataListUI.setEditEnabled(editEnabled);
 				updateLabel();
 			}
 		});
@@ -198,16 +206,30 @@ public class ExtendedWellDataUI {
 		return button;
 	}
 
-	private Composite createToolbarInfo(Composite parent) {
+	private Composite createToolbarInfoTop(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		//
-		labelInfo = new Label(composite, SWT.NONE);
-		labelInfo.setText("");
-		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		labelInfoTop = new Label(composite, SWT.NONE);
+		labelInfoTop.setText("");
+		labelInfoTop.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return composite;
+	}
+
+	private Composite createToolbarInfoBottom(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, false));
+		//
+		labelInfoBottom = new Label(composite, SWT.NONE);
+		labelInfoBottom.setText("");
+		labelInfoBottom.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return composite;
 	}
@@ -221,7 +243,7 @@ public class ExtendedWellDataUI {
 			@Override
 			public void performSearch(String searchText, boolean caseSensitive) {
 
-				headerDataListUI.setSearchText(searchText, caseSensitive);
+				wellDataListUI.setSearchText(searchText, caseSensitive);
 			}
 		});
 		//
@@ -247,7 +269,7 @@ public class ExtendedWellDataUI {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
-		text.setToolTipText("Set a new header key.");
+		text.setToolTipText("Set a new data key.");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return text;
 	}
@@ -256,7 +278,7 @@ public class ExtendedWellDataUI {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
-		text.setToolTipText("Set a new header value.");
+		text.setToolTipText("Set a new data value.");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return text;
 	}
@@ -265,7 +287,7 @@ public class ExtendedWellDataUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Add the header entry.");
+		button.setToolTipText("Add the data entry.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -282,7 +304,7 @@ public class ExtendedWellDataUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the selected target(s).");
+		button.setToolTipText("Delete the selected entrie(s).");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -295,18 +317,18 @@ public class ExtendedWellDataUI {
 		return button;
 	}
 
-	private HeaderDataListUI createHeaderDataTable(Composite parent) {
+	private WellDataListUI createWellDataTable(Composite parent) {
 
-		HeaderDataListUI measuremntListUI = new HeaderDataListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		measuremntListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		WellDataListUI listUI = new WellDataListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		listUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Add the delete targets support.
 		 */
-		ITableSettings tableSettings = measuremntListUI.getTableSettings();
+		ITableSettings tableSettings = listUI.getTableSettings();
 		addDeleteMenuEntry(tableSettings);
-		measuremntListUI.applySettings(tableSettings);
+		listUI.applySettings(tableSettings);
 		//
-		return measuremntListUI;
+		return listUI;
 	}
 
 	private void addDeleteMenuEntry(ITableSettings tableSettings) {
@@ -316,7 +338,7 @@ public class ExtendedWellDataUI {
 			@Override
 			public String getName() {
 
-				return "Delete Header Entrie(s)";
+				return "Delete Data Entrie(s)";
 			}
 
 			@Override
@@ -340,13 +362,13 @@ public class ExtendedWellDataUI {
 			String value = textHeaderValue.getText().trim();
 			//
 			if("".equals(key)) {
-				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The header key must be not empty.");
+				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The data key must be not empty.");
 			} else if(well.getData().containsKey(key)) {
-				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The header key already exists.");
+				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The data key already exists.");
 			} else if("".equals(value)) {
-				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The header value must be not empty.");
+				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The data value must be not empty.");
 			} else {
-				well.getData().put(key, value);
+				well.setData(key, value);
 				textHeaderKey.setText("");
 				textHeaderValue.setText("");
 				updateHeaderData();
@@ -358,18 +380,22 @@ public class ExtendedWellDataUI {
 	private void deleteHeaderEntries() {
 
 		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Header Entrie(s)");
-		messageBox.setMessage("Would you like to delete the selected header entrie(s)?");
+		messageBox.setText("Data Entrie(s)");
+		messageBox.setMessage("Would you like to delete the selected data entrie(s)?");
 		if(messageBox.open() == SWT.YES) {
 			if(well != null) {
-				Iterator iterator = headerDataListUI.getStructuredSelection().iterator();
+				Iterator iterator = wellDataListUI.getStructuredSelection().iterator();
 				Set<String> keysNotRemoved = new HashSet<String>();
 				while(iterator.hasNext()) {
 					Object mapObject = iterator.next();
 					if(mapObject instanceof Map.Entry) {
 						Map.Entry<String, String> entry = (Map.Entry<String, String>)mapObject;
 						String key = entry.getKey();
-						well.getData().remove(key);
+						try {
+							well.removeData(key);
+						} catch(InvalidHeaderModificationException e) {
+							keysNotRemoved.add(key);
+						}
 					}
 				}
 				/*
@@ -389,8 +415,8 @@ public class ExtendedWellDataUI {
 		updateWidgets();
 		updateLabel();
 		//
-		headerDataListUI.sortTable();
-		Table table = headerDataListUI.getTable();
+		wellDataListUI.sortTable();
+		Table table = wellDataListUI.getTable();
 		if(table.getItemCount() > 0) {
 			table.setSelection(0);
 		}
@@ -399,13 +425,16 @@ public class ExtendedWellDataUI {
 	private void updateLabel() {
 
 		if(well != null) {
-			labelInfo.setText("Position: " + well.getPosition().getId() + " | Id:" + well.getSampleId() + " | Number of Entries: " + well.getData().size());
-			headerDataListUI.setInput(well.getData());
-			String editInformation = headerDataListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
-			labelInfo.setText(labelInfo.getText() + " - " + editInformation);
+			String text = "Position: " + (well.getPosition().getId() + 1) + " | Id:" + well.getSampleId();
+			String editInformation = wellDataListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
+			//
+			labelInfoTop.setText(text + " - " + editInformation);
+			labelInfoBottom.setText("Number of Entries: " + well.getData().size());
+			wellDataListUI.setInput(well);
 		} else {
-			labelInfo.setText("");
-			headerDataListUI.setInput(null);
+			labelInfoTop.setText("");
+			labelInfoBottom.setText("");
+			wellDataListUI.setInput(null);
 		}
 	}
 

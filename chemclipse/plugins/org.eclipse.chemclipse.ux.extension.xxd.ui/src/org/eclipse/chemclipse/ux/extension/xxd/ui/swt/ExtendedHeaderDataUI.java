@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
 import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
+import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
@@ -91,6 +92,8 @@ public class ExtendedHeaderDataUI {
 		} else if(measurementInfo instanceof IScanXIR) {
 			return true;
 		} else if(measurementInfo instanceof IScanNMR) {
+			return true;
+		} else if(measurementInfo instanceof IPlate) {
 			return true;
 		}
 		return false;
@@ -300,7 +303,7 @@ public class ExtendedHeaderDataUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the selected target(s).");
+		button.setToolTipText("Delete the selected header entrie(s).");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -318,7 +321,7 @@ public class ExtendedHeaderDataUI {
 		HeaderDataListUI measuremntListUI = new HeaderDataListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		measuremntListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
-		 * Add the delete targets support.
+		 * Add the delete support.
 		 */
 		ITableSettings tableSettings = measuremntListUI.getTableSettings();
 		addDeleteMenuEntry(tableSettings);
@@ -380,7 +383,7 @@ public class ExtendedHeaderDataUI {
 		messageBox.setMessage("Would you like to delete the selected header entrie(s)?");
 		if(messageBox.open() == SWT.YES) {
 			/*
-			 * Delete Target
+			 * Delete
 			 */
 			if(measurementInfo != null) {
 				Iterator iterator = headerDataListUI.getStructuredSelection().iterator();
@@ -388,14 +391,12 @@ public class ExtendedHeaderDataUI {
 				while(iterator.hasNext()) {
 					Object mapObject = iterator.next();
 					if(mapObject instanceof Map.Entry) {
-						if(measurementInfo != null) {
-							Map.Entry<String, String> entry = (Map.Entry<String, String>)mapObject;
-							String key = entry.getKey();
-							try {
-								measurementInfo.removeHeaderData(key);
-							} catch(InvalidHeaderModificationException e) {
-								keysNotRemoved.add(key);
-							}
+						Map.Entry<String, String> entry = (Map.Entry<String, String>)mapObject;
+						String key = entry.getKey();
+						try {
+							measurementInfo.removeHeaderData(key);
+						} catch(InvalidHeaderModificationException e) {
+							keysNotRemoved.add(key);
 						}
 					}
 				}

@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.pcr.model.core;
 
 import java.util.Map;
 
+import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
+
 public interface IWell extends Comparable<IWell> {
 
 	String SAMPLE_ID = "Sample ID";
@@ -28,6 +30,8 @@ public interface IWell extends Comparable<IWell> {
 	String getData(String key, String defaultValue);
 
 	void setData(String key, String value);
+
+	void removeData(String key) throws InvalidHeaderModificationException;
 
 	String getSampleId();
 

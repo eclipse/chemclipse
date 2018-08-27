@@ -59,7 +59,7 @@ public class PlateListLabelProvider extends AbstractChemClipseLabelProvider {
 		String text;
 		if(well != null) {
 			if(well.isEmptyMeasurement()) {
-				text = "Position " + well.getPosition().getId();
+				text = "Position " + (well.getPosition().getId() + 1);
 			} else {
 				StringBuilder builder = new StringBuilder();
 				builder.append(well.getSampleId());
