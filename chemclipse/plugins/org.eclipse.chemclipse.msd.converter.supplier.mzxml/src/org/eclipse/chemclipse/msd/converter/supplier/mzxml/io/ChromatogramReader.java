@@ -76,7 +76,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 	}
 
 	@Override
-	public IChromatogramMSD read(final File file, final IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramMSD read(final File file, final IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException, InterruptedException {
 
 		final IChromatogramMSDReader chromatogramReader = getReader(file);
 		if(chromatogramReader != null) {
