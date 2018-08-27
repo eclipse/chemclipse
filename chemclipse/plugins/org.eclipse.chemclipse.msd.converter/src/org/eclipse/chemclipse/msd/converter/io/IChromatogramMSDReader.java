@@ -15,12 +15,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.io.IChromatogramReader;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramMSDReader extends IChromatogramReader {
 
@@ -34,6 +33,8 @@ public interface IChromatogramMSDReader extends IChromatogramReader {
 	 * @throws FileIsNotReadableException
 	 * @throws FileIsEmptyException
 	 * @throws IOException
+	 * @throws InterruptedException
+	 *             if reading was interrupted/ cancelled
 	 */
-	IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException;
+	IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException, InterruptedException;
 }
