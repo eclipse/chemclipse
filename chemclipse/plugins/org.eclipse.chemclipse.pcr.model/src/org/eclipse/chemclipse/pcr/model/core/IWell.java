@@ -13,11 +13,11 @@ package org.eclipse.chemclipse.pcr.model.core;
 
 import java.util.Map;
 
-public interface IWell extends IScanPCR, Comparable<IWell> {
+public interface IWell extends Comparable<IWell> {
 
 	String SAMPLE_ID = "Sample ID";
 	String TARGET_NAME = "Target Name";
-	String MAX_FLUOR = "Max Fluor";
+	String CROSSING_POINT = "Crossing Point";
 
 	Position getPosition();
 
@@ -33,5 +33,7 @@ public interface IWell extends IScanPCR, Comparable<IWell> {
 
 	String getTargetName();
 
-	double getMaxFluor();
+	double getCrossingPoint();
+
+	boolean isEmptyMeasurement();
 }

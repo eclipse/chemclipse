@@ -58,11 +58,18 @@ public class PlateListLabelProvider extends AbstractChemClipseLabelProvider {
 		DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		String text;
 		if(well != null) {
-			String sampleId = well.getSampleId();
-			if(!"".equals(sampleId)) {
-				text = sampleId + "\n" + well.getTargetName() + "\n" + decimalFormat.format(well.getMaxFluor());
-			} else {
+			if(well.isEmptyMeasurement()) {
 				text = "Position " + well.getPosition().getId();
+			} else {
+				StringBuilder builder = new StringBuilder();
+				builder.append(well.getSampleId());
+				if(!"".equals(well.getTargetName())) {
+					builder.append("\n");
+					builder.append(well.getTargetName());
+				}
+				builder.append("\n");
+				builder.append(decimalFormat.format(well.getCrossingPoint()));
+				text = builder.toString();
 			}
 		} else {
 			text = "n.v.";

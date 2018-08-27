@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.pcr.model.core;
 
 import java.util.TreeSet;
 
-public interface IPlate {
+import org.eclipse.chemclipse.model.core.IMeasurementInfo;
+
+public interface IPlate extends IMeasurementInfo {
 
 	TreeSet<IWell> getWells();
 

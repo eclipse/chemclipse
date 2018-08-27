@@ -17,10 +17,9 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 
-public class Well extends ScanPCR implements IWell {
+public class Well implements IWell {
 
-	private static final long serialVersionUID = -9183326941662161376L;
-	private static final Logger logger = Logger.getLogger(ScanPCR.class);
+	private static final Logger logger = Logger.getLogger(Well.class);
 	//
 	private Position position = new Position();
 	private Map<Integer, IChannel> channels = new HashMap<>();
@@ -71,19 +70,19 @@ public class Well extends ScanPCR implements IWell {
 	@Override
 	public String getSampleId() {
 
-		return getData(SAMPLE_ID, "");
+		return getData(SAMPLE_ID, "").trim();
 	}
 
 	@Override
 	public String getTargetName() {
 
-		return getData(TARGET_NAME, "");
+		return getData(TARGET_NAME, "").trim();
 	}
 
 	@Override
-	public double getMaxFluor() {
+	public double getCrossingPoint() {
 
-		String value = getData(MAX_FLUOR, "0");
+		String value = getData(CROSSING_POINT, "0");
 		double result = 0.0d;
 		try {
 			result = Double.parseDouble(value);
@@ -91,5 +90,11 @@ public class Well extends ScanPCR implements IWell {
 			logger.warn(e);
 		}
 		return result;
+	}
+
+	@Override
+	public boolean isEmptyMeasurement() {
+
+		return ("".equals(getSampleId().trim()) || "_".equals(getSampleId().trim()));
 	}
 }

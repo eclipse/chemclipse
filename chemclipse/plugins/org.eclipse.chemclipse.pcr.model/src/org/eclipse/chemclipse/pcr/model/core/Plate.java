@@ -13,8 +13,11 @@ package org.eclipse.chemclipse.pcr.model.core;
 
 import java.util.TreeSet;
 
-public class Plate implements IPlate {
+import org.eclipse.chemclipse.model.core.AbstractMeasurementInfo;
 
+public class Plate extends AbstractMeasurementInfo implements IPlate {
+
+	private static final long serialVersionUID = -7209280707411376156L;
 	private TreeSet<IWell> wells = new TreeSet<IWell>();
 
 	@Override
