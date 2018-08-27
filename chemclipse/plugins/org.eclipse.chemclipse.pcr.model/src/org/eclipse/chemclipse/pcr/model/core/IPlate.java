@@ -20,4 +20,6 @@ public interface IPlate extends IMeasurementInfo {
 	TreeSet<IWell> getWells();
 
 	IWell getWell(int id);
+
+	String getName();
 }

@@ -36,4 +36,10 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 		}
 		return null;
 	}
+
+	@Override
+	public String getName() {
+
+		return getHeaderDataOrDefault("name", "");
+	}
 }
