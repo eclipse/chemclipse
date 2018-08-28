@@ -22,6 +22,17 @@ public class DisplayUtils {
 
 	private static final Logger logger = Logger.getLogger(DisplayUtils.class);
 
+	public static Display getDisplay(Widget widget) {
+
+		Display display = null;
+		if(widget instanceof Control) {
+			display = ((Control)widget).getDisplay();
+		} else {
+			display = getDisplay();
+		}
+		return display;
+	}
+
 	public static Display getDisplay() {
 
 		Display display = null;
