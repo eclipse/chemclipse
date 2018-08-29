@@ -93,6 +93,8 @@
     <module>../../plugins/org.eclipse.chemclipse.msd.converter.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.nmr.converter</module>
     <module>../../plugins/org.eclipse.chemclipse.nmr.converter.ui</module>
+    <module>../../plugins/org.eclipse.chemclipse.nmr.processor</module>
+    <module>../../plugins/org.eclipse.chemclipse.nmr.processor.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.pcr.converter</module>
     <module>../../plugins/org.eclipse.chemclipse.pcr.converter.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.xir.converter</module>
@@ -177,6 +179,7 @@
     <!--<module>../../plugins/org.eclipse.chemclipse.wsd.converter.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.msd.converter.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.nmr.converter.fragment.test</module>-->
+    <!--<module>../../plugins/org.eclipse.chemclipse.nmr.processor.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.pcr.converter.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.xir.converter.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.classifier.fragment.test</module>-->

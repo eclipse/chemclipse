@@ -9,22 +9,17 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.nmr.model.core;
+package org.eclipse.chemclipse.nmr.processor.exceptions;
 
-import java.util.TreeSet;
+public class NoProcessorAvailableException extends Exception {
 
-import org.apache.commons.math3.complex.Complex;
-import org.eclipse.chemclipse.model.core.IMeasurementInfo;
+	private static final long serialVersionUID = -7708871910751651047L;
 
-public interface IScanNMR extends IMeasurementInfo {
+	public NoProcessorAvailableException() {
+		super();
+	}
 
-	double[] getRawSignals();
-
-	void setRawSignals(double[] rawSignals);
-
-	Complex[] getModifiedSignals();
-
-	void setModifiedSignals(Complex[] modifiedSignals);
-
-	TreeSet<ISignalNMR> getProcessedSignals();
+	public NoProcessorAvailableException(String message) {
+		super(message);
+	}
 }

@@ -14,20 +14,16 @@ package org.eclipse.chemclipse.nmr.model.core;
 import java.util.Arrays;
 import java.util.TreeSet;
 
+import org.apache.commons.math3.complex.Complex;
 import org.eclipse.chemclipse.model.core.AbstractMeasurementInfo;
 
 public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 
 	private static final long serialVersionUID = -4448729586928333575L;
 	//
-	private TreeSet<ISignalNMR> processedSignals = new TreeSet<ISignalNMR>();
 	private double[] rawSignals = new double[0];
-
-	@Override
-	public TreeSet<ISignalNMR> getProcessedSignals() {
-
-		return processedSignals;
-	}
+	private Complex[] modifiedSignals = new Complex[0];
+	private TreeSet<ISignalNMR> processedSignals = new TreeSet<ISignalNMR>();
 
 	@Override
 	public double[] getRawSignals() {
@@ -39,6 +35,24 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	public void setRawSignals(double[] rawSignals) {
 
 		this.rawSignals = rawSignals;
+	}
+
+	@Override
+	public Complex[] getModifiedSignals() {
+
+		return modifiedSignals;
+	}
+
+	@Override
+	public void setModifiedSignals(Complex[] modifiedSignals) {
+
+		this.modifiedSignals = modifiedSignals;
+	}
+
+	@Override
+	public TreeSet<ISignalNMR> getProcessedSignals() {
+
+		return processedSignals;
 	}
 
 	@Override

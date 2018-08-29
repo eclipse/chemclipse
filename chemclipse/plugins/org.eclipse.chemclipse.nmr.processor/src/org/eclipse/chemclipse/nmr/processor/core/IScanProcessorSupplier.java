@@ -9,22 +9,19 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.nmr.model.core;
+package org.eclipse.chemclipse.nmr.processor.core;
 
-import java.util.TreeSet;
+public interface IScanProcessorSupplier {
 
-import org.apache.commons.math3.complex.Complex;
-import org.eclipse.chemclipse.model.core.IMeasurementInfo;
+	String getId();
 
-public interface IScanNMR extends IMeasurementInfo {
+	void setId(String id);
 
-	double[] getRawSignals();
+	String getDescription();
 
-	void setRawSignals(double[] rawSignals);
+	void setDescription(String description);
 
-	Complex[] getModifiedSignals();
+	String getProcessorName();
 
-	void setModifiedSignals(Complex[] modifiedSignals);
-
-	TreeSet<ISignalNMR> getProcessedSignals();
+	void setProcessorName(String processorName);
 }
