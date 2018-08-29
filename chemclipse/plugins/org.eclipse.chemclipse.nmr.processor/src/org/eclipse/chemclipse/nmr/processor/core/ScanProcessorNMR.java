@@ -32,6 +32,9 @@ public class ScanProcessorNMR {
 	private static final String PROCESSOR_NAME = "processorName"; //$NON-NLS-1$
 	private static final String PROCESSOR = "processor"; //$NON-NLS-1$
 
+	private ScanProcessorNMR() {
+	}
+
 	public static IProcessingInfo process(IScanNMR scanNMR, IProcessorSettings processorSettings, String processorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
