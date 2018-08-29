@@ -12,14 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.preferences;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.swt.widgets.Composite;
 
-/**
- * @author eselmeister
- */
 public class IonListEditor extends ListEditor {
 
 	public IonListEditor(String name, String labelText, Composite parent) {
@@ -35,7 +31,7 @@ public class IonListEditor extends ListEditor {
 	@Override
 	protected String getNewInputObject() {
 
-		InputDialog dialog = new InputDialog(DisplayUtils.getShell(), "Enter a ion.", "Standard values are 18 (water), 28 (nitrogen), 84 (solvent tailing), 207 (column bleed).", "", new IonInputValidator());
+		InputDialog dialog = new InputDialog(getShell(), "Enter a ion.", "Standard values are 18 (water), 28 (nitrogen), 84 (solvent tailing), 207 (column bleed).", "", new IonInputValidator());
 		dialog.create();
 		dialog.open();
 		String ion = dialog.getValue();
