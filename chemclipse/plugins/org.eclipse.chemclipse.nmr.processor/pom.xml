@@ -8,7 +8,7 @@
     <version>BUILD-VERSION</version>
   </parent>
 
-  <artifactId>org.eclipse.chemclipse.nmr.processor.converter</artifactId>
+  <artifactId>org.eclipse.chemclipse.nmr.processor</artifactId>
   <packaging>eclipse-plugin</packaging>
   <version>0.8.0-SNAPSHOT</version>
   
