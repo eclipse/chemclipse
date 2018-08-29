@@ -48,7 +48,7 @@ public class QuantReferencesListEditor extends ListEditor {
 	protected String getNewInputObject() {
 
 		List list = getList();
-		InputDialog dialog = new InputDialog(Display.getCurrent().getActiveShell(), "Quantitation Reference", "You can create a new quantitation reference here.", "Styrene", new TargetInputValidator(list));
+		InputDialog dialog = new InputDialog(getShell(), "Quantitation Reference", "You can create a new quantitation reference here.", "Styrene", new TargetInputValidator(list));
 		dialog.create();
 		if(dialog.open() == Dialog.OK) {
 			String target = dialog.getValue();

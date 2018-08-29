@@ -51,7 +51,7 @@ public class InstrumentListEditor extends ListEditor {
 
 		List list = getList();
 		Messages messages = SupportMessages.INSTANCE();
-		InputDialog dialog = new InputDialog(Display.getCurrent().getActiveShell(), messages.getMessage(ISupportMessages.LABEL_INSTRUMENT_NAME), messages.getMessage(ISupportMessages.LABEL_ADD_INSTRUMENT, "API 5000"), "", new InstrumentInputValidator(list));
+		InputDialog dialog = new InputDialog(getShell(), messages.getMessage(ISupportMessages.LABEL_INSTRUMENT_NAME), messages.getMessage(ISupportMessages.LABEL_ADD_INSTRUMENT, "API 5000"), "", new InstrumentInputValidator(list));
 		dialog.create();
 		if(dialog.open() == Dialog.OK) {
 			String instrument = dialog.getValue();

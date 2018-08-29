@@ -51,7 +51,7 @@ public class DilutionListEditor extends ListEditor {
 
 		List list = getList();
 		Messages messages = SupportMessages.INSTANCE();
-		InputDialog dialog = new InputDialog(Display.getCurrent().getActiveShell(), messages.getMessage(ISupportMessages.LABEL_DILUTION), messages.getMessage(ISupportMessages.LABEL_ADD_DILUTION, "1:10"), "", new DilutionInputValidator(list));
+		InputDialog dialog = new InputDialog(getShell(), messages.getMessage(ISupportMessages.LABEL_DILUTION), messages.getMessage(ISupportMessages.LABEL_ADD_DILUTION, "1:10"), "", new DilutionInputValidator(list));
 		dialog.create();
 		if(dialog.open() == Dialog.OK) {
 			String dilution = dialog.getValue();

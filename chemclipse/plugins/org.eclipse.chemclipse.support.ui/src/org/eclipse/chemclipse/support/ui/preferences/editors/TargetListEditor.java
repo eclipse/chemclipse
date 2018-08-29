@@ -47,7 +47,7 @@ public class TargetListEditor extends ListEditor {
 	protected String getNewInputObject() {
 
 		List list = getList();
-		InputDialog dialog = new InputDialog(Display.getCurrent().getActiveShell(), "Target", "You can create a new target here.", "Styrene | 100-42-5 | comment | contributor | referenceId", new TargetInputValidator(list));
+		InputDialog dialog = new InputDialog(getShell(), "Target", "You can create a new target here.", "Styrene | 100-42-5 | comment | contributor | referenceId", new TargetInputValidator(list));
 		dialog.create();
 		if(dialog.open() == Dialog.OK) {
 			String target = dialog.getValue();
