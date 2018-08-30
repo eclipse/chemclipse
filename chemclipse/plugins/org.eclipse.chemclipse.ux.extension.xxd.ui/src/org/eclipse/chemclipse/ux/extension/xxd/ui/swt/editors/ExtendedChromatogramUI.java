@@ -202,6 +202,7 @@ public class ExtendedChromatogramUI {
 	private static final int THREE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 3);
 	private static final int FIVE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 5);
 	//
+	private Composite toolbarMain;
 	private Composite toolbarInfo;
 	private Label labelChromatogramInfo;
 	private Composite toolbarRetentionIndices;
@@ -244,6 +245,11 @@ public class ExtendedChromatogramUI {
 	@Inject
 	public ExtendedChromatogramUI(Composite parent) {
 		initialize(parent);
+	}
+
+	public void setToolbarVisible(boolean visible) {
+
+		PartSupport.setCompositeVisibility(toolbarMain, visible);
 	}
 
 	public void fireUpdate() {
@@ -1130,7 +1136,7 @@ public class ExtendedChromatogramUI {
 
 		parent.setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
+		toolbarMain = createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
 		toolbarRetentionIndices = createToolbarRetentionIndices(parent);
 		toolbarMethod = createToolbarMethod(parent);
@@ -1139,6 +1145,7 @@ public class ExtendedChromatogramUI {
 		//
 		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
 		//
+		PartSupport.setCompositeVisibility(toolbarMain, true);
 		PartSupport.setCompositeVisibility(toolbarInfo, false);
 		PartSupport.setCompositeVisibility(toolbarRetentionIndices, false);
 		PartSupport.setCompositeVisibility(toolbarMethod, false);
@@ -1147,7 +1154,7 @@ public class ExtendedChromatogramUI {
 		chromatogramActionUI.setChromatogramActionMenu(chromatogramSelection);
 	}
 
-	private void createToolbarMain(Composite parent) {
+	private Composite createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -1166,6 +1173,8 @@ public class ExtendedChromatogramUI {
 		chromatogramActionUI = createChromatogramActionUI(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
+		//
+		return composite;
 	}
 
 	private Composite createToolbarInfo(Composite parent) {
