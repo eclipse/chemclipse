@@ -147,6 +147,7 @@ import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -2103,7 +2104,7 @@ public class ExtendedChromatogramUI {
 				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == PreferenceDialog.OK) {
+				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {

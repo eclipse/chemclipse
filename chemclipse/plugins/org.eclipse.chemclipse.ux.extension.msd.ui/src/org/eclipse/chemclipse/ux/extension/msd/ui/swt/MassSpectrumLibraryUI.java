@@ -46,6 +46,7 @@ import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -275,7 +276,7 @@ public class MassSpectrumLibraryUI extends Composite {
 				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == PreferenceDialog.OK) {
+				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
