@@ -25,6 +25,9 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.ChromatogramFilterCSD;
 import org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.IChromatogramFilterSupportCSD;
+import org.eclipse.chemclipse.chromatogram.csd.identifier.peak.IPeakIdentifierSupplierCSD;
+import org.eclipse.chemclipse.chromatogram.csd.identifier.peak.IPeakIdentifierSupportCSD;
+import org.eclipse.chemclipse.chromatogram.csd.identifier.peak.PeakIdentifierCSD;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.core.IPeakDetectorCSDSupplier;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.core.IPeakDetectorCSDSupport;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.core.PeakDetectorCSD;
@@ -789,6 +792,8 @@ public class ExtendedChromatogramUI {
 			 */
 			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 				addChartMenuEntriesPeakIdentifierMSD(chartSettings);
+			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+				addChartMenuEntriesPeakIdentifierCSD(chartSettings);
 			}
 		}
 	}
@@ -801,6 +806,22 @@ public class ExtendedChromatogramUI {
 				IPeakIdentifierSupplierMSD peakIdentifierSupplier = peakIdentifierSupport.getIdentifierSupplier(peakIdentifierId);
 				String name = peakIdentifierSupplier.getIdentifierName();
 				PeakIdentifierMenuEntry menuEntry = new PeakIdentifierMenuEntry(this, name, peakIdentifierId, TYPE_MSD, chromatogramSelection);
+				chartMenuEntriesPeakIdentifier.add(menuEntry);
+				chartSettings.addMenuEntry(menuEntry);
+			}
+		} catch(NoIdentifierAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	private void addChartMenuEntriesPeakIdentifierCSD(IChartSettings chartSettings) {
+
+		try {
+			IPeakIdentifierSupportCSD peakIdentifierSupport = PeakIdentifierCSD.getPeakIdentifierSupport();
+			for(String peakIdentifierId : peakIdentifierSupport.getAvailableIdentifierIds()) {
+				IPeakIdentifierSupplierCSD peakIdentifierSupplier = peakIdentifierSupport.getIdentifierSupplier(peakIdentifierId);
+				String name = peakIdentifierSupplier.getIdentifierName();
+				PeakIdentifierMenuEntry menuEntry = new PeakIdentifierMenuEntry(this, name, peakIdentifierId, TYPE_CSD, chromatogramSelection);
 				chartMenuEntriesPeakIdentifier.add(menuEntry);
 				chartSettings.addMenuEntry(menuEntry);
 			}

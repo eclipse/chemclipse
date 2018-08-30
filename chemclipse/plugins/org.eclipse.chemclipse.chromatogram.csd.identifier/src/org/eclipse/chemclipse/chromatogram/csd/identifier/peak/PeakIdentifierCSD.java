@@ -35,7 +35,7 @@ public class PeakIdentifierCSD {
 
 	private static final Logger logger = Logger.getLogger(PeakIdentifierCSD.class);
 	//
-	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.msd.identifier.peakIdentifier";
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.csd.identifier.peakIdentifier";
 	private static final String NO_IDENTIFIER_AVAILABLE = "There is no suitable peak identifier available";
 
 	/**
