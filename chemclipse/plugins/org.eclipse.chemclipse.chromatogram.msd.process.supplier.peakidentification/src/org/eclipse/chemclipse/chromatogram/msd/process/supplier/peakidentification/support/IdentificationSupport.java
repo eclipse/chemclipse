@@ -14,10 +14,10 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificat
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIntegrationEntry;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.ISupplier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
+import org.eclipse.chemclipse.model.identifier.core.ISupplier;
 
 public class IdentificationSupport {
 
@@ -43,7 +43,7 @@ public class IdentificationSupport {
 
 		String processorName = NOT_AVAILABLE;
 		try {
-			ISupplier peakIdentifierSupplier = PeakIdentifier.getPeakIdentifierSupport().getIdentifierSupplier(identifierId);
+			ISupplier peakIdentifierSupplier = PeakIdentifierMSD.getPeakIdentifierSupport().getIdentifierSupplier(identifierId);
 			processorName = peakIdentifierSupplier.getIdentifierName();
 		} catch(NoIdentifierAvailableException e) {
 			logger.warn(e);
@@ -56,7 +56,7 @@ public class IdentificationSupport {
 		List<String> ids;
 		String[] pluginIds = {NOT_AVAILABLE};
 		try {
-			ids = PeakIdentifier.getPeakIdentifierSupport().getAvailableIdentifierIds();
+			ids = PeakIdentifierMSD.getPeakIdentifierSupport().getAvailableIdentifierIds();
 			pluginIds = ids.toArray(new String[ids.size()]);
 		} catch(NoIdentifierAvailableException e) {
 			logger.warn(e);

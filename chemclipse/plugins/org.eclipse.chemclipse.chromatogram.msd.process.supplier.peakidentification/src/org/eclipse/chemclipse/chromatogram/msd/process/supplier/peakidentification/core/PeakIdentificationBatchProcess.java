@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.internal.report.PeakReport;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakInputEntry;
@@ -120,7 +120,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		 * Identifier
 		 */
 		String identifierId = peakIdentificationBatchJob.getPeakIdentificationEntry().getProcessorId();
-		IProcessingInfo processingInfoIdentifier = PeakIdentifier.identify(peaks, identifierId, monitor);
+		IProcessingInfo processingInfoIdentifier = PeakIdentifierMSD.identify(peaks, identifierId, monitor);
 		peakIdentificationProcessingInfo.addMessages(processingInfoIdentifier);
 		/*
 		 * Add the peaks to the report.
