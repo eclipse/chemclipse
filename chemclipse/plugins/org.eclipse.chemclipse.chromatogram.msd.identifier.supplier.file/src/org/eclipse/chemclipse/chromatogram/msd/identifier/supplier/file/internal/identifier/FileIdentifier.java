@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
@@ -287,16 +287,16 @@ public class FileIdentifier {
 		}
 	}
 
-	private void applyPenaltyOnDemand(IScanMSD unknown, IScanMSD reference, IComparisonResult comparisonResult, IIdentifierSettings identifierSettings) {
+	private void applyPenaltyOnDemand(IScanMSD unknown, IScanMSD reference, IComparisonResult comparisonResult, IIdentifierSettingsMSD identifierSettings) {
 
 		float penalty = 0.0f;
 		String penaltyCalculation = identifierSettings.getPenaltyCalculation();
 		//
 		switch(penaltyCalculation) {
-			case IIdentifierSettings.PENALTY_CALCULATION_RETENTION_TIME:
+			case IIdentifierSettingsMSD.PENALTY_CALCULATION_RETENTION_TIME:
 				penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown.getRetentionTime(), reference.getRetentionTime(), identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
 				break;
-			case IIdentifierSettings.PENALTY_CALCULATION_RETENTION_INDEX:
+			case IIdentifierSettingsMSD.PENALTY_CALCULATION_RETENTION_INDEX:
 				penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
 				break;
 		}

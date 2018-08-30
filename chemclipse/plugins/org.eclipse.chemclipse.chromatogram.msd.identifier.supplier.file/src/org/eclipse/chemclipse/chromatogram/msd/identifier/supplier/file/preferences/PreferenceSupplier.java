@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
@@ -67,7 +67,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * RI / RT penalty calculation.
 	 */
 	public static final String P_PENALTY_CALCULATION = "penaltyCalculation";
-	public static final String DEF_PENALTY_CALCULATION = IIdentifierSettings.PENALTY_CALCULATION_NONE;
+	public static final String DEF_PENALTY_CALCULATION = IIdentifierSettingsMSD.PENALTY_CALCULATION_NONE;
 	//
 	public static final String P_PENALTY_CALCULATION_LEVEL_FACTOR = "penaltyCalculationLevelFactor";
 	public static final String P_MAX_PENALTY = "maxPenalty";
@@ -117,7 +117,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
 		defaultValues.put(P_ADD_UNKNOWN_MZ_LIST_TARGET, Boolean.toString(DEF_ADD_UNKNOWN_MZ_LIST_TARGET));
 		defaultValues.put(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION);
-		defaultValues.put(P_PENALTY_CALCULATION_LEVEL_FACTOR, Float.toString(IIdentifierSettings.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
+		defaultValues.put(P_PENALTY_CALCULATION_LEVEL_FACTOR, Float.toString(IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
 		defaultValues.put(P_MAX_PENALTY, Float.toString(IComparisonResult.DEF_MAX_PENALTY));
 		defaultValues.put(P_RETENTION_TIME_WINDOW, Integer.toString(DEF_RETENTION_TIME_WINDOW));
 		defaultValues.put(P_RETENTION_INDEX_WINDOW, Float.toString(DEF_RETENTION_INDEX_WINDOW));
@@ -144,7 +144,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setAddUnknownMzListTarget(preferences.getBoolean(P_ADD_UNKNOWN_MZ_LIST_TARGET, DEF_ADD_UNKNOWN_MZ_LIST_TARGET));
 		//
 		settings.setPenaltyCalculation(preferences.get(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION));
-		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettings.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
+		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
 		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, IComparisonResult.DEF_MAX_PENALTY));
 		settings.setRetentionTimeWindow(preferences.getInt(P_RETENTION_TIME_WINDOW, DEF_RETENTION_TIME_WINDOW));
 		settings.setRetentionIndexWindow(preferences.getFloat(P_RETENTION_INDEX_WINDOW, DEF_RETENTION_INDEX_WINDOW));
@@ -166,7 +166,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setAddUnknownMzListTarget(preferences.getBoolean(P_ADD_UNKNOWN_MZ_LIST_TARGET, DEF_ADD_UNKNOWN_MZ_LIST_TARGET));
 		//
 		settings.setPenaltyCalculation(preferences.get(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION));
-		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettings.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
+		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
 		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, IComparisonResult.DEF_MAX_PENALTY));
 		settings.setRetentionTimeWindow(preferences.getInt(P_RETENTION_TIME_WINDOW, DEF_RETENTION_TIME_WINDOW));
 		settings.setRetentionIndexWindow(preferences.getFloat(P_RETENTION_INDEX_WINDOW, DEF_RETENTION_INDEX_WINDOW));

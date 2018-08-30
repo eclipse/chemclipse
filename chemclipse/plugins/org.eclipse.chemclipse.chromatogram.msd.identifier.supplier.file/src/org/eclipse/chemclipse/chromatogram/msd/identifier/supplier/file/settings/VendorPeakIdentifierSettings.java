@@ -12,9 +12,9 @@
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparatorDynamicSettingProperty;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.GeneratedIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.model.identifier.GeneratedIdentifierSettings;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.DynamicSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 @GeneratedIdentifierSettings
-public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettings implements IVendorPeakIdentifierSettings {
+public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD implements IVendorPeakIdentifierSettings {
 
 	@JsonProperty(value = "Mass Spectra Files", defaultValue = "")
 	@JsonPropertyDescription(value = "Use a semicolon to separate the path of several files.") // see FileListUtil()

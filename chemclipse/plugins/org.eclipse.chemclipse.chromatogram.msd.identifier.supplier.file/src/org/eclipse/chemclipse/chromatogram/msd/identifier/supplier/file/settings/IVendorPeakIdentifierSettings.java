@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
 
-public interface IVendorPeakIdentifierSettings extends IPeakIdentifierSettings, IFileIdentifierSettings {
+public interface IVendorPeakIdentifierSettings extends IPeakIdentifierSettingsMSD, IFileIdentifierSettings {
 }
