@@ -36,6 +36,7 @@ public class PeakDetectorCSD {
 	private static final String DESCRIPTION = "description";
 	private static final String PEAK_DETECTOR_NAME = "peakDetectorName";
 	private static final String PEAK_DETECTOR = "peakDetector";
+	private static final String PEAK_DETECTOR_SETTINGS = "peakDetectorSettings";
 	/*
 	 * Processing Info
 	 */
@@ -105,6 +106,16 @@ public class PeakDetectorCSD {
 			String description = element.getAttribute(DESCRIPTION);
 			String peakDetectorName = element.getAttribute(PEAK_DETECTOR_NAME);
 			supplier = new PeakDetectorCSDSupplier(id, description, peakDetectorName);
+			if(element.getAttribute(PEAK_DETECTOR_SETTINGS) != null) {
+				try {
+					IPeakDetectorCSDSettings instance = (IPeakDetectorCSDSettings)element.createExecutableExtension(PEAK_DETECTOR_SETTINGS);
+					supplier.setPeakDetectorSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.error(e.getLocalizedMessage(), e);
+					// settings class is optional, set null instead
+					supplier.setPeakDetectorSettingsClass(null);
+				}
+			}
 			peakDetectorSupport.add(supplier);
 		}
 		return peakDetectorSupport;
