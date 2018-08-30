@@ -451,7 +451,7 @@ public class ExtendedPeakChartUI {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}

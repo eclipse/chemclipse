@@ -52,7 +52,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
@@ -333,7 +332,7 @@ public class ExtendedRetentionIndexListUI extends Composite {
 
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS, retentionIndexFile);
-				MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "RI Calculator", "The RI library has been added.");
+				MessageDialog.openConfirm(e.widget.getDisplay().getActiveShell(), "RI Calculator", "The RI library has been added.");
 			}
 		});
 		//
@@ -353,7 +352,7 @@ public class ExtendedRetentionIndexListUI extends Composite {
 
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS, retentionIndexFile);
-				MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "RI Calculator", "The RI library has been removed.");
+				MessageDialog.openConfirm(e.widget.getDisplay().getActiveShell(), "RI Calculator", "The RI library has been removed.");
 			}
 		});
 		//
@@ -380,14 +379,14 @@ public class ExtendedRetentionIndexListUI extends Composite {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageMSD));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.widget.getDisplay().getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(Display.getDefault().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}
@@ -477,7 +476,7 @@ public class ExtendedRetentionIndexListUI extends Composite {
 				Table table = retentionIndexListUI.getTable();
 				int index = table.getSelectionIndex();
 				if(index >= 0) {
-					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING);
+					MessageBox messageBox = new MessageBox(e.widget.getDisplay().getActiveShell(), SWT.ICON_WARNING);
 					messageBox.setText("Delete reference(s)?");
 					messageBox.setMessage("Would you like to delete the reference(s)?");
 					if(messageBox.open() == SWT.OK) {

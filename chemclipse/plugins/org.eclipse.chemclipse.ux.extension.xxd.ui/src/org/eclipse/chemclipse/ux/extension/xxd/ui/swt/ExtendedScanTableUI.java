@@ -67,6 +67,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class ExtendedScanTableUI {
@@ -496,7 +497,7 @@ public class ExtendedScanTableUI {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}
@@ -592,9 +593,9 @@ public class ExtendedScanTableUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(object != null) {
-					addSignal();
+					addSignal(e.widget.getDisplay().getActiveShell());
 				} else {
-					MessageDialog.openError(DisplayUtils.getShell(button), "Add Signal", "Please load a scan first.");
+					MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Add Signal", "Please load a scan first.");
 				}
 			}
 		});
@@ -696,13 +697,13 @@ public class ExtendedScanTableUI {
 		}
 	}
 
-	private void addSignal() {
+	private void addSignal(Shell shell) {
 
 		String x = textX.getText().trim();
 		String y = textY.getText().trim();
 		//
 		if("".equals(x) || "".equals(y)) {
-			MessageDialog.openError(DisplayUtils.getShell(), "Add Signal", "The values must be not empty.");
+			MessageDialog.openError(shell, "Add Signal", "The values must be not empty.");
 		} else {
 			try {
 				/*
@@ -745,7 +746,7 @@ public class ExtendedScanTableUI {
 				fireScanUpdate();
 				//
 			} catch(Exception e) {
-				MessageDialog.openError(DisplayUtils.getShell(), "Add Signal", "Something has gone wrong to add the signal.");
+				MessageDialog.openError(shell, "Add Signal", "Something has gone wrong to add the signal.");
 			}
 		}
 	}

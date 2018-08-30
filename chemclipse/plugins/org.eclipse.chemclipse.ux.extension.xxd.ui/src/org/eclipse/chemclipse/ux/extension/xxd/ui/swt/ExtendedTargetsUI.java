@@ -102,6 +102,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -358,7 +359,7 @@ public class ExtendedTargetsUI {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}
@@ -440,7 +441,7 @@ public class ExtendedTargetsUI {
 
 				validate(targetValidator, targetControlDecoration, combo);
 				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
-					addTarget();
+					addTarget(e.widget.getDisplay().getActiveShell());
 				}
 			}
 		});
@@ -459,7 +460,7 @@ public class ExtendedTargetsUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				addTarget();
+				addTarget(e.widget.getDisplay().getActiveShell());
 			}
 		});
 		return button;
@@ -831,13 +832,13 @@ public class ExtendedTargetsUI {
 		 */
 	}
 
-	private void addTarget() {
+	private void addTarget(Shell shell) {
 
 		boolean isInputValid = validate(targetValidator, targetControlDecoration, comboTargetName);
 		if(isInputValid) {
 			setTarget(targetValidator);
 		} else {
-			MessageDialog.openError(DisplayUtils.getShell(), "Add Target", "The given target is invalid.");
+			MessageDialog.openError(shell, "Add Target", "The given target is invalid.");
 		}
 	}
 

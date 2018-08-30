@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 
 public class ExtendedPeakQuantReferencesUI {
@@ -185,7 +186,7 @@ public class ExtendedPeakQuantReferencesUI {
 
 				validate(validator, controlDecoration, combo);
 				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
-					addReference();
+					addReference(e.widget.getDisplay().getActiveShell());
 				}
 			}
 		});
@@ -204,7 +205,7 @@ public class ExtendedPeakQuantReferencesUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				addReference();
+				addReference(e.widget.getDisplay().getActiveShell());
 			}
 		});
 		return button;
@@ -318,7 +319,7 @@ public class ExtendedPeakQuantReferencesUI {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(DisplayUtils.getShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}
@@ -339,13 +340,13 @@ public class ExtendedPeakQuantReferencesUI {
 		setComboQuantReferenceItems();
 	}
 
-	private void addReference() {
+	private void addReference(Shell shell) {
 
 		boolean isInputValid = validate(validator, controlDecoration, comboQuantReferences);
 		if(isInputValid) {
 			setReference(validator);
 		} else {
-			MessageDialog.openError(DisplayUtils.getShell(), "Add Quantitation Reference", "The given quantitation reference is invalid.");
+			MessageDialog.openError(shell, "Add Quantitation Reference", "The given quantitation reference is invalid.");
 		}
 	}
 

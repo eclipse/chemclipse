@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
@@ -294,7 +295,7 @@ public class ExtendedWellDataUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				addHeaderEntry();
+				addHeaderEntry(e.widget.getDisplay().getActiveShell());
 			}
 		});
 		return button;
@@ -355,18 +356,18 @@ public class ExtendedWellDataUI {
 		});
 	}
 
-	private void addHeaderEntry() {
+	private void addHeaderEntry(Shell shell) {
 
 		if(well != null) {
 			String key = textHeaderKey.getText().trim();
 			String value = textHeaderValue.getText().trim();
 			//
 			if("".equals(key)) {
-				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The data key must be not empty.");
+				MessageDialog.openError(shell, HEADER_ENTRY, "The data key must be not empty.");
 			} else if(well.getData().containsKey(key)) {
-				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The data key already exists.");
+				MessageDialog.openError(shell, HEADER_ENTRY, "The data key already exists.");
 			} else if("".equals(value)) {
-				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The data value must be not empty.");
+				MessageDialog.openError(shell, HEADER_ENTRY, "The data value must be not empty.");
 			} else {
 				well.setData(key, value);
 				textHeaderKey.setText("");

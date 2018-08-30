@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
@@ -293,7 +294,7 @@ public class ExtendedHeaderDataUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				addHeaderEntry();
+				addHeaderEntry(e.widget.getDisplay().getActiveShell());
 			}
 		});
 		return button;
@@ -354,18 +355,18 @@ public class ExtendedHeaderDataUI {
 		});
 	}
 
-	private void addHeaderEntry() {
+	private void addHeaderEntry(Shell shell) {
 
 		if(measurementInfo != null) {
 			String key = textHeaderKey.getText().trim();
 			String value = textHeaderValue.getText().trim();
 			//
 			if("".equals(key)) {
-				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The header key must be not empty.");
+				MessageDialog.openError(shell, HEADER_ENTRY, "The header key must be not empty.");
 			} else if(measurementInfo.headerDataContainsKey(key)) {
-				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The header key already exists.");
+				MessageDialog.openError(shell, HEADER_ENTRY, "The header key already exists.");
 			} else if("".equals(value)) {
-				MessageDialog.openError(DisplayUtils.getShell(), HEADER_ENTRY, "The header value must be not empty.");
+				MessageDialog.openError(shell, HEADER_ENTRY, "The header value must be not empty.");
 			} else {
 				measurementInfo.putHeaderData(key, value);
 				textHeaderKey.setText("");
