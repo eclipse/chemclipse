@@ -21,11 +21,10 @@ import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogra
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupplierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupportMSD;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.ISupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpectrumIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupport;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupportMSD;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramCalculatorTypeSupplier;
@@ -46,6 +45,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.IPeakIntegr
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.IPeakIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.Activator;
+import org.eclipse.chemclipse.model.identifier.core.ISupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -163,7 +163,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static String[][] getPeakIdentifier() {
 
 		try {
-			IPeakIdentifierSupport support = PeakIdentifier.getPeakIdentifierSupport();
+			IPeakIdentifierSupportMSD support = PeakIdentifierMSD.getPeakIdentifierSupport();
 			List<String> ids = support.getAvailableIdentifierIds();
 			//
 			String[][] elements = new String[ids.size() + 1][2];
