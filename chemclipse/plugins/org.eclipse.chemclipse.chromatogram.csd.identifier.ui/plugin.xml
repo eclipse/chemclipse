@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.csd.identifier.ui.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="Identifier (CSD)"
+            category="org.eclipse.chemclipse.chromatogram.ui.swt.preferencePageIdentifier"
+            class="org.eclipse.chemclipse.chromatogram.csd.identifier.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.csd.identifier.ui.preferences.preferencePage">
+      </page>
+   </extension>   
+
+</plugin>
