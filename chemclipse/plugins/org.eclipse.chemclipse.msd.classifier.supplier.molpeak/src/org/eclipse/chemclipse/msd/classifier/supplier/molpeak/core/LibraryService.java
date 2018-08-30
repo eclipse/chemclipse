@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.library.AbstractLibraryService;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.library.ILibraryService;
+import org.eclipse.chemclipse.model.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.identifier.BasePeakIdentifier;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;

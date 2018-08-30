@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
 
-public interface IVendorPeakIdentifierSettings extends IPeakIdentifierSettings, IBasePeakSettings {
+public interface IVendorPeakIdentifierSettings extends IPeakIdentifierSettingsMSD, IBasePeakSettings {
 }
