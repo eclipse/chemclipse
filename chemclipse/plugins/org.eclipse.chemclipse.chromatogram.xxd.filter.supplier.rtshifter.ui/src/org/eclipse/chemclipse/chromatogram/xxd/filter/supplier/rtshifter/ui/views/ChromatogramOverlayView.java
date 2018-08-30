@@ -37,6 +37,7 @@ import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -179,7 +180,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getCurrent().getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Overlay/Shifter Settings");
-				if(preferenceDialog.open() == PreferenceDialog.OK) {
+				if(preferenceDialog.open() == Window.OK) {
 					/*
 					 * Update the chromatogram.
 					 */
