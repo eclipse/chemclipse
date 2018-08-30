@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.runnables;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorPeakIdentifierSettings;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.VendorPeakIdentifierSettings;
@@ -52,7 +52,7 @@ public class PeakIdentifierRunnable implements IRunnableWithProgress {
 			identifierSettings.setStoreTargets(PreferenceSupplier.getStoreTargets());
 			identifierSettings.setTimeoutInMinutes(PreferenceSupplier.getTimeoutInMinutes());
 			IChromatogramPeakMSD peak = chromatogramSelection.getSelectedPeak();
-			IProcessingInfo processingInfo = PeakIdentifier.identify(peak, identifierSettings, IDENTIFIER_ID, monitor);
+			IProcessingInfo processingInfo = PeakIdentifierMSD.identify(peak, identifierSettings, IDENTIFIER_ID, monitor);
 			/*
 			 * Update the chromatogram selection.
 			 */
