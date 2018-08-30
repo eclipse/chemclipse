@@ -15,7 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.PeakIdentifier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.SupplierCalculatorSettings;
@@ -107,7 +107,7 @@ public class AlkanePatternDetectorMSD {
 			 * The settings are not needed by the CALRI peak identifier.
 			 */
 			PeakIdentifier peakIdentifier = new PeakIdentifier();
-			IPeakIdentifierSettings peakIdentifierSettings = null;
+			IPeakIdentifierSettingsMSD peakIdentifierSettings = null;
 			peakIdentifier.identify(peaks, peakIdentifierSettings, monitor);
 		} catch(Exception e) {
 			logger.warn(e);

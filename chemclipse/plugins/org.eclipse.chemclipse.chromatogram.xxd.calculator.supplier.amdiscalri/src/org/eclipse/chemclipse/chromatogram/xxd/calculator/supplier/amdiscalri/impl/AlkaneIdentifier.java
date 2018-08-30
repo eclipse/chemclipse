@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileIdentifierSettings;
@@ -117,10 +117,10 @@ public class AlkaneIdentifier {
 		return massSpectra;
 	}
 
-	private void setIdentifierSettings(IIdentifierSettings identifierSettings) {
+	private void setIdentifierSettings(IIdentifierSettingsMSD identifierSettings) {
 
 		identifierSettings.setMassSpectrumComparatorId(MASS_SPECTRUM_COMPARATOR_ID);
-		identifierSettings.setPenaltyCalculation(IIdentifierSettings.PENALTY_CALCULATION_NONE);
+		identifierSettings.setPenaltyCalculation(IIdentifierSettingsMSD.PENALTY_CALCULATION_NONE);
 		identifierSettings.setPenaltyCalculationLevelFactor(0.0f);
 		identifierSettings.setMaxPenalty(0.0f);
 		identifierSettings.setRetentionTimeWindow(0);

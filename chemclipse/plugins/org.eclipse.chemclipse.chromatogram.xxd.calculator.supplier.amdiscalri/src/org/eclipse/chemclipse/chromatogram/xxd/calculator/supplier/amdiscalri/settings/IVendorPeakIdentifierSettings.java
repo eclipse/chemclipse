@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileIdentifierSettings;
 
-public interface IVendorPeakIdentifierSettings extends IPeakIdentifierSettings, IFileIdentifierSettings {
+public interface IVendorPeakIdentifierSettings extends IPeakIdentifierSettingsMSD, IFileIdentifierSettings {
 }
