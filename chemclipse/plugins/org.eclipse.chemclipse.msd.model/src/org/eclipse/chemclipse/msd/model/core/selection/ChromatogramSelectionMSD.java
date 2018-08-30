@@ -47,10 +47,12 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 	private IMarkedIons excludedIons;
 	private IMarkedIonTransitions markedIonTransitions;
 
+	@SuppressWarnings("rawtypes")
 	public ChromatogramSelectionMSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
 		this(chromatogram, true);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ChromatogramSelectionMSD(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
 		super(chromatogram, fireUpdate);
 		/*
@@ -92,6 +94,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 	@Override
 	public IChromatogramMSD getChromatogramMSD() {
 
+		@SuppressWarnings("rawtypes")
 		IChromatogram chromatogram = getChromatogram();
 		if(chromatogram instanceof IChromatogramMSD) {
 			return (IChromatogramMSD)chromatogram;
@@ -147,6 +150,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 	public void reset(boolean fireUpdate) {
 
 		super.reset(fireUpdate);
+		@SuppressWarnings("rawtypes")
 		IChromatogram chromatogram = getChromatogram();
 		/*
 		 * Scan

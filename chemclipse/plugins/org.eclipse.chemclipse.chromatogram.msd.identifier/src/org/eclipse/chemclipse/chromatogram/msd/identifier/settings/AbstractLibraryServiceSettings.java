@@ -12,5 +12,5 @@
 package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 
 
-public class AbstractLibraryServiceSettings extends AbstractIdentifierSettings implements ILibraryServiceSettings{
+public class AbstractLibraryServiceSettings extends AbstractIdentifierSettingsMSD implements ILibraryServiceSettings{
 }

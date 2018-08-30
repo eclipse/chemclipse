@@ -11,5 +11,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 
-public abstract class AbstractMassSpectrumIdentifierSettings extends AbstractIdentifierSettings implements IMassSpectrumIdentifierSettings {
+public abstract class AbstractMassSpectrumIdentifierSettings extends AbstractIdentifierSettingsMSD implements IMassSpectrumIdentifierSettings {
 }

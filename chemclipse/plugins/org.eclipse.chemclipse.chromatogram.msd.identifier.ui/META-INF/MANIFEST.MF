@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Ui
+Bundle-Name: MSD Identifier UI
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.msd.identifier.ui;singleton:=true
 Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.msd.identifier.ui.Activator

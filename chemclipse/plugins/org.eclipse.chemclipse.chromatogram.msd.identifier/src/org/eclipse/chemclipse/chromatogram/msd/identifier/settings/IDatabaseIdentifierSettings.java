@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 
-public interface IDatabaseIdentifierSettings extends IIdentifierSettings {
+public interface IDatabaseIdentifierSettings extends IIdentifierSettingsMSD {
 
 	// Database
 	String getForceMatchFactorPenaltyCalculationForDatabase();

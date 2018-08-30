@@ -38,10 +38,9 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.core.IChromatogramClas
 import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.NoChromatogramClassifierSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupportMSD;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupport;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupplierMSD;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupportMSD;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSDSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSDSupport;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMSD;
@@ -75,6 +74,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -796,9 +796,9 @@ public class ExtendedChromatogramUI {
 	private void addChartMenuEntriesPeakIdentifierMSD(IChartSettings chartSettings) {
 
 		try {
-			IPeakIdentifierSupport peakIdentifierSupport = PeakIdentifier.getPeakIdentifierSupport();
+			IPeakIdentifierSupportMSD peakIdentifierSupport = PeakIdentifierMSD.getPeakIdentifierSupport();
 			for(String peakIdentifierId : peakIdentifierSupport.getAvailableIdentifierIds()) {
-				IPeakIdentifierSupplier peakIdentifierSupplier = peakIdentifierSupport.getIdentifierSupplier(peakIdentifierId);
+				IPeakIdentifierSupplierMSD peakIdentifierSupplier = peakIdentifierSupport.getIdentifierSupplier(peakIdentifierId);
 				String name = peakIdentifierSupplier.getIdentifierName();
 				PeakIdentifierMenuEntry menuEntry = new PeakIdentifierMenuEntry(this, name, peakIdentifierId, TYPE_MSD, chromatogramSelection);
 				chartMenuEntriesPeakIdentifier.add(menuEntry);

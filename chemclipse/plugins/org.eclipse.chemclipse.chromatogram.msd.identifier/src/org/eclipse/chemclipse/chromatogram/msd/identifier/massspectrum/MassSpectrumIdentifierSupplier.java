@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.AbstractSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.model.identifier.core.AbstractSupplier;
 
 public class MassSpectrumIdentifierSupplier extends AbstractSupplier<IMassSpectrumIdentifierSettings> implements IMassSpectrumIdentifierSupplier {
 

@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.ValueMustNotBeNullException;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
+import org.eclipse.chemclipse.model.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 public abstract class AbstractMassSpectrumIdentifier implements IMassSpectrumIdentifier {
@@ -37,7 +37,7 @@ public abstract class AbstractMassSpectrumIdentifier implements IMassSpectrumIde
 	 * @param identifierSettings
 	 * @throws ValueMustNotBeNullException
 	 */
-	public void validateSettings(IIdentifierSettings identifierSettings) throws ValueMustNotBeNullException {
+	public void validateSettings(IIdentifierSettingsMSD identifierSettings) throws ValueMustNotBeNullException {
 
 		if(identifierSettings == null) {
 			throw new ValueMustNotBeNullException("The identifier settings must not be null.");

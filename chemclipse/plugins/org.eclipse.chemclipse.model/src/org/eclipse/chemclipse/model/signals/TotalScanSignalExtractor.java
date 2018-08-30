@@ -156,6 +156,7 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection) {
 
 		return getTotalScanSignals(chromatogramSelection, true);
@@ -181,12 +182,14 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection, boolean validatePositive) {
 
 		return getTotalScanSignals(chromatogramSelection, validatePositive, false);
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection, boolean validatePositive, boolean condenseCycleNumberScans) {
 
 		/*

@@ -25,9 +25,8 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
  * filter should be applied.<br/>
  * Start and stop scan are not provided as they can be calculated by the
  * retention time.<br/>
- * 
- * @author eselmeister
  */
+@SuppressWarnings("rawtypes")
 public interface IChromatogramSelectionMSD extends IChromatogramSelection {
 
 	/**

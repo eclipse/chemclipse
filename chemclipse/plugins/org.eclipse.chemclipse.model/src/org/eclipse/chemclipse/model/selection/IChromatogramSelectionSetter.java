@@ -11,5 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.selection;
 
+@SuppressWarnings("rawtypes")
 public interface IChromatogramSelectionSetter extends IChromatogramSelection {
 }

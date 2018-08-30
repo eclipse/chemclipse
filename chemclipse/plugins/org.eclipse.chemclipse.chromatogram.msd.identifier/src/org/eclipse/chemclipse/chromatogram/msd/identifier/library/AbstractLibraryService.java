@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.library;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.model.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 
 public abstract class AbstractLibraryService implements ILibraryService {

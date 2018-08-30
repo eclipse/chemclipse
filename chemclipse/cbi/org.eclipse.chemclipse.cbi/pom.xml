@@ -109,6 +109,8 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.filter.ui</module>        
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.identifier</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.ui</module>
+    <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.identifier</module>
+    <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.identifier.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.peak.detector</module>
@@ -187,6 +189,7 @@
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.filter.fragment.test</module>-->  
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.filter.fragment.test</module>-->        
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.fragment.test</module>-->
+    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.identifier.fragment.test</module>-->    
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.peak.detector.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.peak.detector.fragment.test</module>-->

@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.Identifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IChromatogramIdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.identifier.core.Identifier;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;

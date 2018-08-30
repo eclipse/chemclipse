@@ -29,12 +29,14 @@ import org.eclipse.chemclipse.numeric.equations.LinearEquation;
  */
 public class BaselineModel implements IBaselineModel {
 
+	@SuppressWarnings("rawtypes")
 	private transient IChromatogram chromatogram;
 	/*
 	 * The start retention time is the key.
 	 */
 	private NavigableMap<Integer, IBaselineSegment> baselineSegments = null;
 
+	@SuppressWarnings("rawtypes")
 	public BaselineModel(IChromatogram chromatogram) {
 		this.chromatogram = chromatogram;
 		clearBaseline();

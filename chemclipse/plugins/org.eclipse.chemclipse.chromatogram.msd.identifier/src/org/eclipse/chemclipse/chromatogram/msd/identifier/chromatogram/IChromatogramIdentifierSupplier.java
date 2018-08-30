@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.ISupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IChromatogramIdentifierSettings;
+import org.eclipse.chemclipse.model.identifier.core.ISupplier;
 
 public interface IChromatogramIdentifierSupplier extends ISupplier {
 

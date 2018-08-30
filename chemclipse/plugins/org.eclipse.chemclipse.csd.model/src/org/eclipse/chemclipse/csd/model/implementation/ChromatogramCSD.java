@@ -15,4 +15,6 @@ import org.eclipse.chemclipse.csd.model.core.AbstractChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 
 public class ChromatogramCSD extends AbstractChromatogramCSD implements IChromatogramCSD {
+
+	private static final long serialVersionUID = -5133287349482286074L;
 }

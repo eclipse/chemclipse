@@ -31,10 +31,12 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 	private IChromatogramPeakCSD selectedPeak;
 	private IScan identifiedScan;
 
+	@SuppressWarnings("rawtypes")
 	public ChromatogramSelectionCSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
 		this(chromatogram, true);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ChromatogramSelectionCSD(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
@@ -51,6 +53,7 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 		selectedPeak = null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IChromatogramCSD getChromatogramCSD() {
 
@@ -79,6 +82,7 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 		reset(true);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void reset(boolean fireUpdate) {
 

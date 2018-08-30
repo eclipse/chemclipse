@@ -4,8 +4,8 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            name="Identifier"
-            category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
+            name="Identifier (MSD)"
+            category="org.eclipse.chemclipse.chromatogram.ui.swt.preferencePageIdentifier"
             class="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.preferences.identifierPreferencePage">
       </page>

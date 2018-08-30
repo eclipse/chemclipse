@@ -17,7 +17,9 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public interface IChromatogramSelectionUpdateNotifier {
 
+	@SuppressWarnings("rawtypes")
 	void updateSelection(IChromatogramSelection chromatogramSelection, boolean forceReload);
 
+	@SuppressWarnings("rawtypes")
 	void updateSelection(List<IChromatogramSelection> chromatogramSelections, boolean forceReload);
 }

@@ -11,10 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.model.processor.IChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramProcessorSupport {
 
@@ -45,6 +44,7 @@ public interface IChromatogramProcessorSupport {
 	 * 
 	 * @param chromatogramSelection
 	 */
+	@SuppressWarnings("rawtypes")
 	void undoOperation(IChromatogramSelection chromatogramSelection);
 
 	/**
@@ -54,6 +54,7 @@ public interface IChromatogramProcessorSupport {
 	 * 
 	 * @param chromatogramSelection
 	 */
+	@SuppressWarnings("rawtypes")
 	void redoOperation(IChromatogramSelection chromatogramSelection);
 
 	/**
@@ -61,5 +62,6 @@ public interface IChromatogramProcessorSupport {
 	 * 
 	 * @param chromatogramSelection
 	 */
+	@SuppressWarnings("rawtypes")
 	void fireUpdate(IChromatogramSelection chromatogramSelection);
 }

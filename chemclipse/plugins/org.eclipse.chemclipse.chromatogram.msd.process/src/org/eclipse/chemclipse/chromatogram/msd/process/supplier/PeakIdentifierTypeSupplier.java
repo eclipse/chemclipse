@@ -14,9 +14,9 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.ISupplier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.model.identifier.core.ISupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -37,20 +37,20 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 	@Override
 	public String getProcessorName(String processorId) throws Exception {
 
-		ISupplier peakIdentifierSupplier = PeakIdentifier.getPeakIdentifierSupport().getIdentifierSupplier(processorId);
+		ISupplier peakIdentifierSupplier = PeakIdentifierMSD.getPeakIdentifierSupport().getIdentifierSupplier(processorId);
 		return peakIdentifierSupplier.getIdentifierName();
 	}
 
 	@Override
 	public List<String> getPluginIds() throws Exception {
 
-		return PeakIdentifier.getPeakIdentifierSupport().getAvailableIdentifierIds();
+		return PeakIdentifierMSD.getPeakIdentifierSupport().getAvailableIdentifierIds();
 	}
 
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelectionMSD chromatogramSelection, String processorId, IProgressMonitor monitor) {
 
-		return PeakIdentifier.identify(getPeakList(chromatogramSelection), processorId, monitor);
+		return PeakIdentifierMSD.identify(getPeakList(chromatogramSelection), processorId, monitor);
 	}
 
 	private List<IPeakMSD> getPeakList(IChromatogramSelectionMSD chromatogramSelection) {

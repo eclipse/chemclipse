@@ -16,7 +16,6 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram,
- org.eclipse.chemclipse.chromatogram.msd.identifier.core,
  org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions,
  org.eclipse.chemclipse.chromatogram.msd.identifier.library,
  org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum,

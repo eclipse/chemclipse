@@ -846,6 +846,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		 * Test, that chromatogram selection is != null and the given
 		 * chromatogram is == this chromatogram.
 		 */
+		@SuppressWarnings("rawtypes")
 		final IChromatogramSelection chromatogramSelection = chromatogramProcessor.getChromatogramSelection();
 		if(chromatogramSelection != null && chromatogramSelection.getChromatogram() == this) {
 			File file;
@@ -899,6 +900,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	}
 
 	// TODO Junit
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void redoOperation(IChromatogramSelection chromatogramSelection) {
 
@@ -920,6 +922,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	}
 
 	// TODO Junit
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void undoOperation(IChromatogramSelection chromatogramSelection) {
 
@@ -1055,6 +1058,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	}
 
 	// TODO JUnit
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List<T> getPeaks(IChromatogramSelection chromatogramSelection) {
 

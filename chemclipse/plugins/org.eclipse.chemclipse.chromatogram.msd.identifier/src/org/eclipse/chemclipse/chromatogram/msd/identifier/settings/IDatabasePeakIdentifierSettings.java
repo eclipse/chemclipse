@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 
-public interface IDatabasePeakIdentifierSettings extends IDatabaseIdentifierSettings, IPeakIdentifierSettings {
+public interface IDatabasePeakIdentifierSettings extends IDatabaseIdentifierSettings, IPeakIdentifierSettingsMSD {
 
 	/*
 	 * Identification

@@ -11,5 +11,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 
-public interface IMassSpectrumIdentifierSettings extends IIdentifierSettings {
+public interface IMassSpectrumIdentifierSettings extends IIdentifierSettingsMSD {
 }

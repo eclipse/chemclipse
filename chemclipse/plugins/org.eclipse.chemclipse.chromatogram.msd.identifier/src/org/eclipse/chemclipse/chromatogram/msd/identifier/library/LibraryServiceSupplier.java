@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.library;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.AbstractSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.ILibraryServiceSettings;
+import org.eclipse.chemclipse.model.identifier.core.AbstractSupplier;
 
 public class LibraryServiceSupplier extends AbstractSupplier<ILibraryServiceSettings> implements ILibraryServiceSupplier {
 

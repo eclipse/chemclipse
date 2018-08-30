@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.numeric.core.Point;
 
+@SuppressWarnings("rawtypes")
 public abstract class AbstractChromatogramSelection implements IChromatogramSelection {
 
 	/**

@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
  * by a mass selective, a flame ionization or another detector.
  * 
  */
+@SuppressWarnings("rawtypes")
 public class ChromatogramSelection extends AbstractChromatogramSelection implements IChromatogramSelection {
 
 	/**

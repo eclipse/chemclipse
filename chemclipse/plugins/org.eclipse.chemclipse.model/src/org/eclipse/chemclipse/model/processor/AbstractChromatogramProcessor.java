@@ -15,12 +15,15 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public abstract class AbstractChromatogramProcessor implements IChromatogramProcessor {
 
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 
+	@SuppressWarnings("rawtypes")
 	public AbstractChromatogramProcessor(IChromatogramSelection chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IChromatogramSelection getChromatogramSelection() {
 

@@ -73,6 +73,7 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram<IChro
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void fireUpdate(IChromatogramSelection chromatogramSelection) {
 

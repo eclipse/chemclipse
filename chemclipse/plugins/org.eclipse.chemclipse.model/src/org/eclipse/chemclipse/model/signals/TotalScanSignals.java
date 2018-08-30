@@ -27,6 +27,7 @@ public class TotalScanSignals implements ITotalScanSignals {
 	private List<ITotalScanSignal> signals;
 	private int startScan;
 	private int stopScan;
+	@SuppressWarnings("rawtypes")
 	private IChromatogram chromatogram = null;
 
 	/**
@@ -49,6 +50,7 @@ public class TotalScanSignals implements ITotalScanSignals {
 	/**
 	 * Sets additionally the parent chromatogram to the signals instance.
 	 */
+	@SuppressWarnings("rawtypes")
 	public TotalScanSignals(int numberOfScans, IChromatogram chromatogram) {
 		this(numberOfScans);
 		this.chromatogram = chromatogram;
@@ -87,17 +89,20 @@ public class TotalScanSignals implements ITotalScanSignals {
 	 * @param stopScan
 	 * @param chromatogram
 	 */
+	@SuppressWarnings("rawtypes")
 	public TotalScanSignals(int startScan, int stopScan, IChromatogram chromatogram) {
 		this(startScan, stopScan);
 		this.chromatogram = chromatogram;
 	}
 
 	// TODO JUnit
+	@SuppressWarnings("rawtypes")
 	public TotalScanSignals(IChromatogram chromatogram) throws ChromatogramIsNullException {
 		this(new ChromatogramSelection(chromatogram));
 	}
 
 	// TODO JUnit
+	@SuppressWarnings("rawtypes")
 	public TotalScanSignals(IChromatogramSelection chromatogramSelection) {
 		chromatogram = chromatogramSelection.getChromatogram();
 		startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
@@ -116,7 +121,7 @@ public class TotalScanSignals implements ITotalScanSignals {
 		}
 	}
 
-	// ---------------------------------------------ITotalIonSignals
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IChromatogram getChromatogram() {
 

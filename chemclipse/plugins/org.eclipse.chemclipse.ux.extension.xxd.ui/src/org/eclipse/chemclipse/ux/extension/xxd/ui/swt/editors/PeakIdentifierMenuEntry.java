@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -69,7 +69,7 @@ public class PeakIdentifierMenuEntry extends AbstractChartMenuEntry implements I
 						case ExtendedChromatogramUI.TYPE_MSD:
 							if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 								IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-								PeakIdentifier.identify(chromatogramSelectionMSD, peakIdentifierId, monitor);
+								PeakIdentifierMSD.identify(chromatogramSelectionMSD, peakIdentifierId, monitor);
 							}
 							break;
 					}

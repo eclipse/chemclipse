@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CSD Identifier
+Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.csd.identifier;singleton:=true
+Bundle-Version: 0.8.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.chromatogram.csd.identifier.Activator
+Bundle-Vendor: ChemClipse
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.csd.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.processing;bundle-version="0.8.0",
+ org.eclipse.chemclipse.logging;bundle-version="0.8.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.chemclipse.chromatogram.csd.identifier.impl,
+ org.eclipse.chemclipse.chromatogram.csd.identifier.peak,
+ org.eclipse.chemclipse.chromatogram.csd.identifier.settings

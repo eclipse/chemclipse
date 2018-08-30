@@ -43,5 +43,6 @@ public interface IChromatogramPeaks<T extends IPeak> {
 	 * 
 	 * @return List<T>
 	 */
+	@SuppressWarnings("rawtypes")
 	List<T> getPeaks(IChromatogramSelection chromatogramSelection);
 }

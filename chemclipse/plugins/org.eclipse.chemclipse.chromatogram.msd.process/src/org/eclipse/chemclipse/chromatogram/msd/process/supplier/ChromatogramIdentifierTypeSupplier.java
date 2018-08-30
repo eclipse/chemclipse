@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram.ChromatogramIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.ISupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.model.identifier.core.ISupplier;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;

@@ -70,8 +70,10 @@ public interface ITotalScanSignalExtractor {
 	 * @param chromatogramSelection
 	 * @return {@link ITotalScanSignal}
 	 */
+	@SuppressWarnings("rawtypes")
 	ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection);
 
+	@SuppressWarnings("rawtypes")
 	ITotalScanSignals getTotalScanSignals(IChromatogram chromatogram, boolean validatePositive, boolean condenseCycleNumberScans);
 
 	/**
@@ -81,7 +83,9 @@ public interface ITotalScanSignalExtractor {
 	 * @param chromatogramSelection
 	 * @return {@link ITotalScanSignal}
 	 */
+	@SuppressWarnings("rawtypes")
 	ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection, boolean validatePositive);
 
+	@SuppressWarnings("rawtypes")
 	ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection, boolean validatePositive, boolean condenseCycleNumberScans);
 }

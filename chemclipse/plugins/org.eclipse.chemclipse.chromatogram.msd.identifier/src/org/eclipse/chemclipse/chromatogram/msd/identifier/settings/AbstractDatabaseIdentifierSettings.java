@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 
-public abstract class AbstractDatabaseIdentifierSettings extends AbstractIdentifierSettings implements IDatabaseIdentifierSettings {
+public abstract class AbstractDatabaseIdentifierSettings extends AbstractIdentifierSettingsMSD implements IDatabaseIdentifierSettings {
 
 	private int retentionTimeWindowForDatabase; // milliseconds
 	private int retentionIndexWindowForDatabase;

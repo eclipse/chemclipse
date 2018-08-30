@@ -18,6 +18,7 @@ public class ChromatogramSelectionSupport {
 	private ChromatogramSelectionSupport() {
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static void moveRetentionTimeWindow(IChromatogramSelection chromatogramSelection, MoveDirection moveDirection, int retentionTimeDivider) {
 
 		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
@@ -32,6 +33,7 @@ public class ChromatogramSelectionSupport {
 		chromatogramSelection.setRanges(startRetentionTimeNew, stopRetentionTimeNew, chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static int getValidatedStartRetentionTime(IChromatogramSelection chromatogramSelection, int startRetentionTimeNew) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
@@ -43,6 +45,7 @@ public class ChromatogramSelectionSupport {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static int getValidatedStopRetentionTime(IChromatogramSelection chromatogramSelection, int stopRetentionTimeNew) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();

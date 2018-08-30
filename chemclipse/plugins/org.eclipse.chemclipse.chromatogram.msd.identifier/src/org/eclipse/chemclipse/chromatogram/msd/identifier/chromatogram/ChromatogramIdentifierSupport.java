@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.AbstractSupport;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
+import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
+import org.eclipse.chemclipse.model.identifier.core.AbstractSupport;
 
 public class ChromatogramIdentifierSupport extends AbstractSupport<IChromatogramIdentifierSupplier> implements IChromatogramIdentifierSupport {
 

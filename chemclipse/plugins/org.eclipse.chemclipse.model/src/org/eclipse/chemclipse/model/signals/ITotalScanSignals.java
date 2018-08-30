@@ -24,6 +24,7 @@ public interface ITotalScanSignals {
 	 * 
 	 * @return {@link IChromatogram}
 	 */
+	@SuppressWarnings("rawtypes")
 	IChromatogram getChromatogram();
 
 	/**

@@ -14,6 +14,9 @@ package org.eclipse.chemclipse.msd.model.implementation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.AbstractNoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -26,9 +29,6 @@ import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.support.IAnalysisSupport;
 import org.eclipse.chemclipse.model.support.SegmentValidator;
 import org.eclipse.chemclipse.model.support.SegmentWidth;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.AbstractNoiseCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 
 /*
@@ -37,11 +37,13 @@ import org.eclipse.chemclipse.numeric.statistics.Calculations;
 public class DefaultNoiseCalculator extends AbstractNoiseCalculator implements INoiseCalculator {
 
 	private static final Logger logger = Logger.getLogger(DefaultNoiseCalculator.class);
+	@SuppressWarnings("rawtypes")
 	private IChromatogram chromatogram;
 	private int segmentWidth;
 	private boolean recalculate = false;
 	private float noiseValue = 0.0f;
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void setChromatogram(IChromatogram chromatogram, int segmentWidth) {
 
@@ -81,6 +83,7 @@ public class DefaultNoiseCalculator extends AbstractNoiseCalculator implements I
 	 * 
 	 * @param IChromatogram
 	 */
+	@SuppressWarnings("rawtypes")
 	private float calculateNoiseFactorByDyson(IChromatogram chromatogram) {
 
 		float noiseValue = 0.0f;

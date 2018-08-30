@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
@@ -46,7 +46,7 @@ public class PeakIdentifierRunnable implements IRunnableWithProgress {
 			for(IChromatogramPeakMSD chromatogramPeak : peaks) {
 				peakList.add(chromatogramPeak);
 			}
-			IProcessingInfo processingInfo = PeakIdentifier.identify(peakList, IDENTIFIER_ID, monitor);
+			IProcessingInfo processingInfo = PeakIdentifierMSD.identify(peakList, IDENTIFIER_ID, monitor);
 			/*
 			 * Update the chromatogram selection.
 			 */

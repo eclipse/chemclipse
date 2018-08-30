@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractPeakDetector implements IPeakDetector {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
