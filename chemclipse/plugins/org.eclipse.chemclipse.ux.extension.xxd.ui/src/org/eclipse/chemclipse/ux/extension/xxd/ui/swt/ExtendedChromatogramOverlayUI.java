@@ -34,7 +34,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.IonsValidator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -105,7 +104,6 @@ public class ExtendedChromatogramOverlayUI {
 	private Button buttonShiftDown;
 	private Label labelDataStatus;
 	//
-	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private OverlayChartSupport overlayChartSupport = new OverlayChartSupport();
 	private ControlDecoration controlDecoration;
@@ -121,9 +119,11 @@ public class ExtendedChromatogramOverlayUI {
 		initialize(parent);
 	}
 
-	public void update() {
+	@SuppressWarnings("rawtypes")
+	public void update(List<IChromatogramSelection> chromatogramSelections) {
 
-		chromatogramSelections = editorUpdateSupport.getChromatogramSelections();
+		this.chromatogramSelections.clear();
+		this.chromatogramSelections.addAll(chromatogramSelections);
 		refreshUpdateOverlayChart();
 	}
 

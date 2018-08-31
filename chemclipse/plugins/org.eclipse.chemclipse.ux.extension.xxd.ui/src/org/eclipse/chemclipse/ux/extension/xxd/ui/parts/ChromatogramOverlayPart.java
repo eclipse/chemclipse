@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedChromatogramOverlayUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.widgets.Composite;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 public class ChromatogramOverlayPart {
 
 	private ExtendedChromatogramOverlayUI extendedChromatogramOverlayUI;
+	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 
 	@Inject
 	public ChromatogramOverlayPart(Composite parent) {
@@ -29,6 +31,6 @@ public class ChromatogramOverlayPart {
 	@Focus
 	public void setFocus() {
 
-		extendedChromatogramOverlayUI.update();
+		extendedChromatogramOverlayUI.update(editorUpdateSupport.getChromatogramSelections());
 	}
 }
