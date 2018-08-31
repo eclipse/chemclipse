@@ -247,8 +247,8 @@ public class ExtendedChromatogramUI {
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	@Inject
-	public ExtendedChromatogramUI(Composite parent) {
-		initialize(parent);
+	public ExtendedChromatogramUI(Composite parent, int style) {
+		initialize(parent, style);
 	}
 
 	public void setToolbarVisible(boolean visible) {
@@ -1154,7 +1154,7 @@ public class ExtendedChromatogramUI {
 		chromatogramChart.addSeriesData(lineSeriesDataList, compressionToLength);
 	}
 
-	private void initialize(Composite parent) {
+	private void initialize(Composite parent, int style) {
 
 		parent.setLayout(new GridLayout(1, true));
 		//
@@ -1163,7 +1163,7 @@ public class ExtendedChromatogramUI {
 		toolbarRetentionIndices = createToolbarRetentionIndices(parent);
 		toolbarMethod = createToolbarMethod(parent);
 		toolbarEdit = createToolbarEdit(parent);
-		createChromatogramChart(parent);
+		createChromatogramChart(parent, style);
 		//
 		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
 		//
@@ -1892,9 +1892,9 @@ public class ExtendedChromatogramUI {
 		return references;
 	}
 
-	private void createChromatogramChart(Composite parent) {
+	private void createChromatogramChart(Composite parent, int style) {
 
-		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
+		chromatogramChart = new ChromatogramChart(parent, style);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Custom Selection Handler
