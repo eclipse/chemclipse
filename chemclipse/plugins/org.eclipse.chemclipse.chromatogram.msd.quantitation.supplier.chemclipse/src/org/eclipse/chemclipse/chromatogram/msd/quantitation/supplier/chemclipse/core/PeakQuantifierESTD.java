@@ -20,38 +20,39 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuanti
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.core.PeakQuantitationCalculatorESTD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.IChemClipsePeakQuantifierSettings;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChemClipsePeakQuantifierESTD extends AbstractPeakQuantifier implements IPeakQuantifier {
+public class PeakQuantifierESTD extends AbstractPeakQuantifier implements IPeakQuantifier {
+
+	private PeakQuantitationCalculatorESTD calculatorESTD = new PeakQuantitationCalculatorESTD();
 
 	@Override
-	public IProcessingInfo quantify(IPeakMSD peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
+		return calculatorESTD.quantify(peaks, peakQuantifierSettings, monitor);
+	}
+
+	@Override
+	public IProcessingInfo quantify(IPeak peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
+
+		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
 		return quantify(peaks, peakQuantifierSettings, monitor);
 	}
 
 	@Override
-	public IProcessingInfo quantify(IPeakMSD peak, IProgressMonitor monitor) {
+	public IProcessingInfo quantify(IPeak peak, IProgressMonitor monitor) {
 
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
+		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
 		IChemClipsePeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSetting();
 		return quantify(peaks, peakQuantifierSettings, monitor);
 	}
 
 	@Override
-	public IProcessingInfo quantify(List<IPeakMSD> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
-
-		PeakQuantitationCalculatorESTD peakQuantitationCalculator = new PeakQuantitationCalculatorESTD();
-		return peakQuantitationCalculator.quantify(peaks, peakQuantifierSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo quantify(List<IPeakMSD> peaks, IProgressMonitor monitor) {
+	public IProcessingInfo quantify(List<IPeak> peaks, IProgressMonitor monitor) {
 
 		IChemClipsePeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSetting();
 		return quantify(peaks, peakQuantifierSettings, monitor);

@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.PeakQuantifier;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -40,7 +40,7 @@ public class QuantifyAllPeaksESTDRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Peak List Quantifier", IProgressMonitor.UNKNOWN);
 			//
-			List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
+			List<IPeak> peaks = new ArrayList<IPeak>();
 			for(IChromatogramPeakMSD peak : chromatogramSelection.getChromatogramMSD().getPeaks()) {
 				peaks.add(peak);
 			}

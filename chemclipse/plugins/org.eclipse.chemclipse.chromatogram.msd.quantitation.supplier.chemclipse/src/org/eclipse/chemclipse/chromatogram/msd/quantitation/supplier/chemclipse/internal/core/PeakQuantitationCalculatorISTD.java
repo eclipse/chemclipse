@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
@@ -59,6 +60,23 @@ public class PeakQuantitationCalculatorISTD {
 		List<? extends IPeak> peaksToQuantify = getPeaksToQuantify(chromatogramSelection);
 		//
 		for(IPeak peakToQuantify : peaksToQuantify) {
+			quantifyPeak(internalStandardPeaks, peakToQuantify);
+		}
+		//
+		return processingInfo;
+	}
+
+	public IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
+		//
+		List<IPeak> internalStandardPeaks = new ArrayList<>();
+		for(IPeak peak : peaks) {
+			if(peak.getInternalStandards().size() > 0) {
+				internalStandardPeaks.add(peak);
+			}
+		}
+		for(IPeak peakToQuantify : peaks) {
 			quantifyPeak(internalStandardPeaks, peakToQuantify);
 		}
 		//

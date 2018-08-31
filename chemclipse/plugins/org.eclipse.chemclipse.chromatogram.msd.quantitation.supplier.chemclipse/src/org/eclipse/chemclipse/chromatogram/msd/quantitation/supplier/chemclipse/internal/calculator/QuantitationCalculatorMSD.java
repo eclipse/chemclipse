@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -37,7 +38,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	private static final Logger logger = Logger.getLogger(QuantitationCalculatorMSD.class);
 
 	@Override
-	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeakMSD peak, List<IQuantitationCompoundMSD> quantitationCompounds, IProcessingInfo processingInfo) {
+	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, List<IQuantitationCompoundMSD> quantitationCompounds, IProcessingInfo processingInfo) {
 
 		List<IQuantitationEntryMSD> quantitationEntries = new ArrayList<IQuantitationEntryMSD>();
 		for(IQuantitationCompoundMSD quantitationCompound : quantitationCompounds) {
@@ -53,7 +54,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	}
 
 	@Override
-	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeakMSD peak, IQuantitationCompoundMSD quantitationCompound) throws EvaluationException {
+	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, IQuantitationCompoundMSD quantitationCompound) throws EvaluationException {
 
 		if(peak == null || quantitationCompound == null) {
 			throw new EvaluationException("Peak and QuantitationCompound must be not null.");
@@ -86,7 +87,12 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 			IQuantitationSignalsMSD quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
 			List<Double> selectedQuantitationIons = quantitationSignals.getSelectedIons();
 			if(integrationQuantitationSupport.validateXIC(selectedQuantitationIons)) {
-				return getQuantitationEntriesXIC(quantitationCompound, peak, selectedQuantitationIons, integrationQuantitationSupport);
+				if(peak instanceof IPeakMSD) {
+					IPeakMSD peakMSD = (IPeakMSD)peak;
+					return getQuantitationEntriesXIC(quantitationCompound, peakMSD, selectedQuantitationIons, integrationQuantitationSupport);
+				} else {
+					throw new EvaluationException("The peak is not of type peakMSD.");
+				}
 			} else {
 				throw new EvaluationException("The peak integration entries (m/z - abundance) do not match with the quantitation XIC ions. See log file.");
 			}
@@ -101,7 +107,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	 * @param isZeroCrossing
 	 * @return List<IQuantitationEntryMSD>
 	 */
-	private List<IQuantitationEntryMSD> getQuantitationEntriesTIC(IQuantitationCompoundMSD quantitationCompound, IPeakMSD peak) {
+	private List<IQuantitationEntryMSD> getQuantitationEntriesTIC(IQuantitationCompoundMSD quantitationCompound, IPeak peak) {
 
 		List<IQuantitationEntryMSD> quantitationEntries = new ArrayList<IQuantitationEntryMSD>();
 		double integratedArea = peak.getIntegratedArea();
