@@ -47,6 +47,10 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSDSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSDSupport;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMSD;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.IPeakQuantifierSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.IPeakQuantifierSupport;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.PeakQuantifier;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.exceptions.NoPeakQuantifierAvailableException;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.NoPeakDetectorAvailableException;
 import org.eclipse.chemclipse.chromatogram.wsd.filter.core.chromatogram.ChromatogramFilterWSD;
 import org.eclipse.chemclipse.chromatogram.wsd.filter.core.chromatogram.IChromatogramFilterSupportWSD;
@@ -230,6 +234,7 @@ public class ExtendedChromatogramUI {
 	private List<IChartMenuEntry> chartMenuEntriesPeakDetectors = new ArrayList<IChartMenuEntry>();
 	private List<IChartMenuEntry> chartMenuEntriesPeakIntegrators = new ArrayList<IChartMenuEntry>();
 	private List<IChartMenuEntry> chartMenuEntriesPeakIdentifier = new ArrayList<IChartMenuEntry>();
+	private List<IChartMenuEntry> chartMenuEntriesPeakQuantifier = new ArrayList<IChartMenuEntry>();
 	private List<IChartMenuEntry> chartMenuEntriesReports = new ArrayList<IChartMenuEntry>();
 	//
 	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
@@ -528,6 +533,7 @@ public class ExtendedChromatogramUI {
 		addChartMenuEntriesPeakDetectors();
 		addChartMenuEntriesPeakIntegrators();
 		addChartMenuEntriesPeakIdentifier();
+		addChartMenuEntriesPeakQuantifier();
 		addChartMenuEntriesReport();
 	}
 
@@ -826,6 +832,35 @@ public class ExtendedChromatogramUI {
 				chartSettings.addMenuEntry(menuEntry);
 			}
 		} catch(NoIdentifierAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	private void addChartMenuEntriesPeakQuantifier() {
+
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		cleanChartMenuEntries(chartSettings, chartMenuEntriesPeakQuantifier);
+		//
+		if(chromatogramSelection != null) {
+			/*
+			 * Generic
+			 */
+			addChartMenuEntriesPeakQuantifier(chartSettings);
+		}
+	}
+
+	private void addChartMenuEntriesPeakQuantifier(IChartSettings chartSettings) {
+
+		try {
+			IPeakQuantifierSupport peakQuantifierSupport = PeakQuantifier.getPeakQuantifierSupport();
+			for(String peakQuantifierId : peakQuantifierSupport.getAvailablePeakQuantifierIds()) {
+				IPeakQuantifierSupplier peakQuantifierSupplier = peakQuantifierSupport.getPeakQuantifierSupplier(peakQuantifierId);
+				String name = peakQuantifierSupplier.getPeakQuantifierName();
+				PeakQuantifierMenuEntry menuEntry = new PeakQuantifierMenuEntry(this, name, peakQuantifierId, TYPE_GENERIC, chromatogramSelection);
+				chartMenuEntriesPeakQuantifier.add(menuEntry);
+				chartSettings.addMenuEntry(menuEntry);
+			}
+		} catch(NoPeakQuantifierAvailableException e) {
 			logger.warn(e);
 		}
 	}

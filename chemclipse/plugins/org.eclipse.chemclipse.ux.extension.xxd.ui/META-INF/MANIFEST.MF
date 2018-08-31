@@ -73,7 +73,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.chromatogram.xxd.calculator;bundle-version="0.8.0",
  org.eclipse.chemclipse.pcr.converter;bundle-version="0.8.0",
  org.eclipse.chemclipse.pcr.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.chromatogram.csd.identifier;bundle-version="0.8.0"
+ org.eclipse.chemclipse.chromatogram.csd.identifier;bundle-version="0.8.0",
+ org.eclipse.chemclipse.chromatogram.msd.quantitation;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="1.1.0",

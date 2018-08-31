@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -58,7 +58,7 @@ public class PeakQuantifier {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo quantify(IPeakMSD peak, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo quantify(IPeak peak, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
@@ -78,7 +78,7 @@ public class PeakQuantifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo quantify(IPeakMSD peak, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo quantify(IPeak peak, final String peakQuantifierId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
@@ -99,7 +99,7 @@ public class PeakQuantifier {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo quantify(List<IPeakMSD> peaks, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
@@ -119,7 +119,7 @@ public class PeakQuantifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo quantify(List<IPeakMSD> peaks, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo quantify(List<IPeak> peaks, final String peakQuantifierId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);

@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.IPeakQuantifierSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.PeakQuantifier;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -48,7 +49,7 @@ public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier im
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelectionMSD chromatogramSelection, String processorId, IProgressMonitor monitor) {
 
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
+		List<IPeak> peaks = new ArrayList<IPeak>();
 		for(IPeakMSD peak : chromatogramSelection.getChromatogramMSD().getPeaks()) {
 			peaks.add(peak);
 		}

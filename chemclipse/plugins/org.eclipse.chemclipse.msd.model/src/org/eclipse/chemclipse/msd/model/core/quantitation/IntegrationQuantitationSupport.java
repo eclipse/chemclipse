@@ -15,19 +15,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.logging.core.Logger;
 
 public class IntegrationQuantitationSupport {
 
 	private static final Logger logger = Logger.getLogger(IntegrationQuantitationSupport.class);
-	private IPeakMSD peak;
+	private IPeak peak;
 	private Map<Double, Double> integratedIons;
 
-	public IntegrationQuantitationSupport(IPeakMSD peak) {
+	public IntegrationQuantitationSupport(IPeak peak) {
 		this.peak = peak;
 		integratedIons = getListOfIntegratedIons();
 	}

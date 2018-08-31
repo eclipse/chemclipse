@@ -18,11 +18,6 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.exceptions.NoPeakQua
 
 import junit.framework.TestCase;
 
-/**
- * Test the IBaselineDetectorSupport.
- * 
- * @author eselmeister
- */
 public class PeakQuantifier_1_Test extends TestCase {
 
 	IPeakQuantifierSupport support;
@@ -46,7 +41,7 @@ public class PeakQuantifier_1_Test extends TestCase {
 		int count = 0;
 		String[] names = support.getPeakQuantifierNames();
 		String[] rcs = new String[1];
-		rcs[0] = "Peak Quantifier";
+		rcs[0] = "Peak Quantifier (ESTD)";
 		for(String name : names) {
 			for(String rc : rcs) {
 				if(name.equals(rc)) {
@@ -62,7 +57,7 @@ public class PeakQuantifier_1_Test extends TestCase {
 		int count = 0;
 		List<String> ids = support.getAvailablePeakQuantifierIds();
 		String[] rcs = new String[1];
-		rcs[0] = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak";
+		rcs[0] = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak.estd";
 		for(String id : ids) {
 			for(String rc : rcs) {
 				if(id.equals(rc)) {
@@ -107,9 +102,9 @@ public class PeakQuantifier_1_Test extends TestCase {
 
 	public void testGetMassSpectrumComparisonSupplier_3() throws NoPeakQuantifierAvailableException {
 
-		String comparatorName = "Peak Quantifier";
-		String description = "This quantifier handles to execute a peak quantitation.";
-		String id = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak";
+		String comparatorName = "Peak Quantifier (ESTD)";
+		String description = "This quantifier handles to execute a peak quantitation via external standards.";
+		String id = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak.estd";
 		IPeakQuantifierSupplier supplier = support.getPeakQuantifierSupplier(id);
 		assertEquals("DetectorName", comparatorName, supplier.getPeakQuantifierName());
 		assertEquals("Description", description, supplier.getDescription());
