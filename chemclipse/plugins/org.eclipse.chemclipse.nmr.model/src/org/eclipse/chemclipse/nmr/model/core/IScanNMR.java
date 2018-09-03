@@ -22,8 +22,19 @@ public interface IScanNMR extends IMeasurementInfo {
 
 	void setRawSignals(double[] rawSignals);
 
+	/**
+	 * Returns the fourier-transformed data.
+	 * 
+	 * @return the fourier-transformed data
+	 */
 	Complex[] getModifiedSignals();
 
+	/**
+	 * Sets the the fourier-transformed data.
+	 * 
+	 * @param modifiedSignals
+	 *            the fourier-transformed data
+	 */
 	void setModifiedSignals(Complex[] modifiedSignals);
 
 	TreeSet<ISignalNMR> getProcessedSignals();
