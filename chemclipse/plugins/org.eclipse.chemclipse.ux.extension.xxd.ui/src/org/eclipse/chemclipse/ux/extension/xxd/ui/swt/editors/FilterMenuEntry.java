@@ -20,6 +20,9 @@ import org.eclipse.chemclipse.chromatogram.wsd.filter.core.chromatogram.Chromato
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
@@ -70,28 +73,32 @@ public class FilterMenuEntry extends AbstractChartMenuEntry implements IChartMen
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
+					IProcessingInfo processingInfo = null;
 					switch(type) {
 						case ExtendedChromatogramUI.TYPE_GENERIC:
-							ChromatogramFilter.applyFilter(chromatogramSelection, filterId, monitor);
+							processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, filterId, monitor);
 							break;
 						case ExtendedChromatogramUI.TYPE_MSD:
 							if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 								IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-								ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, filterId, monitor);
+								processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, filterId, monitor);
 							}
 							break;
 						case ExtendedChromatogramUI.TYPE_CSD:
 							if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
 								IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
-								ChromatogramFilterCSD.applyFilter(chromatogramSelectionCSD, filterId, monitor);
+								processingInfo = ChromatogramFilterCSD.applyFilter(chromatogramSelectionCSD, filterId, monitor);
 							}
 							break;
 						case ExtendedChromatogramUI.TYPE_WSD:
 							if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
 								IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
-								ChromatogramFilterWSD.applyFilter(chromatogramSelectionWSD, filterId, monitor);
+								processingInfo = ChromatogramFilterWSD.applyFilter(chromatogramSelectionWSD, filterId, monitor);
 							}
 							break;
+					}
+					if(processingInfo != null && !processingInfo.getMessages().isEmpty()) {
+						ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 					}
 				}
 			};
