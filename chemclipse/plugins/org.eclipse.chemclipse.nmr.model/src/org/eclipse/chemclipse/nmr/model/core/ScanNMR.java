@@ -22,8 +22,35 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	private static final long serialVersionUID = -4448729586928333575L;
 	//
 	private double[] rawSignals = new double[0];
-	private Complex[] modifiedSignals = new Complex[0];
+	private Complex[] fourierTransformedData = new Complex[0];
+	private Complex[] phaseCorrectedData = new Complex[0];
+	private Complex[] baselineCorrectedData = new Complex[0];
+	
+	public Complex[] getBaselineCorrectedData() {
+	
+		return baselineCorrectedData;
+	}
+
+
+	
+	public void setBaselineCorrectedData(Complex[] baselineCorrectedData) {
+	
+		this.baselineCorrectedData = baselineCorrectedData;
+	}
+
 	private TreeSet<ISignalNMR> processedSignals = new TreeSet<ISignalNMR>();
+
+	
+	public Complex[] getPhaseCorrectedData() {
+	
+		return phaseCorrectedData;
+	}
+
+	
+	public void setPhaseCorrectedData(Complex[] phaseCorrectedData) {
+	
+		this.phaseCorrectedData = phaseCorrectedData;
+	}
 
 	@Override
 	public double[] getRawSignals() {
@@ -38,15 +65,15 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	}
 
 	@Override
-	public Complex[] getModifiedSignals() {
+	public Complex[] getFourierTransformedData() {
 
-		return modifiedSignals;
+		return fourierTransformedData;
 	}
 
 	@Override
-	public void setModifiedSignals(Complex[] modifiedSignals) {
+	public void setFourierTransformedData(Complex[] modifiedSignals) {
 
-		this.modifiedSignals = modifiedSignals;
+		this.fourierTransformedData = modifiedSignals;
 	}
 
 	@Override

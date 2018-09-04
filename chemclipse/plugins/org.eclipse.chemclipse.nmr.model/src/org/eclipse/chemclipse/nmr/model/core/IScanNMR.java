@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -24,18 +24,26 @@ public interface IScanNMR extends IMeasurementInfo {
 
 	/**
 	 * Returns the fourier-transformed data.
-	 * 
+	 *
 	 * @return the fourier-transformed data
 	 */
-	Complex[] getModifiedSignals();
+	Complex[] getFourierTransformedData();
 
 	/**
 	 * Sets the the fourier-transformed data.
-	 * 
+	 *
 	 * @param modifiedSignals
 	 *            the fourier-transformed data
 	 */
-	void setModifiedSignals(Complex[] modifiedSignals);
+	void setFourierTransformedData(Complex[] data);
+
+	Complex[] getPhaseCorrectedData();
+
+	void setPhaseCorrectedData(Complex[] data);
+
+	Complex[] getBaselineCorrectedData();
+
+	void setBaselineCorrectedData(Complex[] data);
 
 	TreeSet<ISignalNMR> getProcessedSignals();
 }
