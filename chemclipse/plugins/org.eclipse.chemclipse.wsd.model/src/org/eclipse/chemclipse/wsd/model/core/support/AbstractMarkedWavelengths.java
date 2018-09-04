@@ -112,6 +112,7 @@ public class AbstractMarkedWavelengths implements IMarkedWavelengths {
 		return wavelengths;
 	}
 
+	@Deprecated
 	@Override
 	public void add(int ionStart, int ionStop) {
 
@@ -122,6 +123,22 @@ public class AbstractMarkedWavelengths implements IMarkedWavelengths {
 		}
 		for(int i = ionStart; i <= ionStop; i++) {
 			markedWavelengths.add(new MarkedWavelength(i));
+		}
+	}
+
+	@Override
+	public void add(double... wavelenghts) {
+
+		for(double wavelenght : wavelenghts) {
+			markedWavelengths.add(new MarkedWavelength(wavelenght));
+		}
+	}
+
+	@Override
+	public void add(Collection<Double> wavelenghts) {
+
+		for(double wavelenght : wavelenghts) {
+			markedWavelengths.add(new MarkedWavelength(wavelenght));
 		}
 	}
 }
