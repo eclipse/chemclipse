@@ -361,6 +361,7 @@ public class ExtendedChromatogramOverlayUI {
 
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
+				chartSettings.getRangeRestriction().setZeroY(false);
 				//
 				int i = 0;
 				for(ISeries series : baseChart.getSeriesSet().getSeries()) {
@@ -369,7 +370,6 @@ public class ExtendedChromatogramOverlayUI {
 						if(!mirroredSeries.contains(seriesId)) {
 							baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
 							mirroredSeries.add(seriesId);
-							chartSettings.getRangeRestriction().setZeroY(false);
 						}
 					}
 					i++;
