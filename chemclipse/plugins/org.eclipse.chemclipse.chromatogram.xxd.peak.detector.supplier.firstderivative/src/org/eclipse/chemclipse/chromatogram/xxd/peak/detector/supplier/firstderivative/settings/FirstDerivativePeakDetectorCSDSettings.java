@@ -12,14 +12,29 @@
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.AbstractPeakDetectorCSDSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
+import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
+import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
+import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class FirstDerivativePeakDetectorCSDSettings extends AbstractPeakDetectorCSDSettings implements IFirstDerivativePeakDetectorCSDSettings {
 
-	private Threshold threshold = IFirstDerivativePeakDetectorCSDSettings.INITIAL_THRESHOLD;
+	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
+	@EnumSelectionRadioButtonsSettingProperty
+	private Threshold threshold = Threshold.MEDIUM;
+	@JsonProperty(value = "Include Background", defaultValue = "false")
 	private boolean includeBackground = false;
+	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_SN_RATIO_MIN, maxValue = PreferenceSupplier.MIN_SN_RATIO_MAX)
 	private float minimumSignalToNoiseRatio;
-	private WindowSize windowSize;
+	@JsonProperty(value = "Window Size", defaultValue = "SCANS_5")
+	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
+	@EnumSelectionSettingProperty
+	private WindowSize windowSize = WindowSize.SCANS_5;
 
 	public FirstDerivativePeakDetectorCSDSettings() {
 		windowSize = WindowSize.SCANS_5;

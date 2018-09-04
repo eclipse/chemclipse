@@ -16,8 +16,6 @@ import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 public interface IFirstDerivativePeakDetectorCSDSettings extends IPeakDetectorCSDSettings {
 
-	Threshold INITIAL_THRESHOLD = Threshold.MEDIUM;
-
 	/**
 	 * Return the threshold.
 	 * 
