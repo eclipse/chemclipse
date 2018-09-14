@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.wsd.model.core;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetsWSD;
@@ -20,6 +21,14 @@ import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 public interface IScanWSD extends IScan, IScanTargetsWSD {
 
 	IScanSignalWSD getScanSignal(int scan);
+
+	/**
+	 * method return signal on exact wavelength
+	 * 
+	 * @param wavelenght
+	 * @return signal scan
+	 */
+	Optional<IScanSignalWSD> getScanSignal(double wavelenght);
 
 	void addScanSignal(IScanSignalWSD scanSignalWSD);
 

@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core.support;
 
-public interface IMarkedWavelength {
+import org.eclipse.chemclipse.model.core.IMarkedSignal;
+
+public interface IMarkedWavelength extends IMarkedSignal {
 
 	double getWavelength();
 

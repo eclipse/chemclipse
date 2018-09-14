@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
+import java.util.Collection;
 import java.util.Set;
+
+import org.eclipse.chemclipse.model.core.IMarkedSignals;
 
 /**
  * This class stores a list of ions which should be considered or not
@@ -23,7 +26,7 @@ import java.util.Set;
  * 
  * @author eselmeister
  */
-public interface IMarkedIons extends Set<IMarkedIon> {
+public interface IMarkedIons extends IMarkedSignals<IMarkedIon> {
 
 	Set<Integer> getIonsNominal();
 
@@ -40,5 +43,12 @@ public interface IMarkedIons extends Set<IMarkedIon> {
 	 * 
 	 * @param ions
 	 */
-	void add(int[] ions);
+	void add(int... ions);
+
+	/**
+	 * add ions with magnification factor = 1.
+	 * 
+	 * @param ions
+	 */
+	void add(Collection<Integer> ions);
 }

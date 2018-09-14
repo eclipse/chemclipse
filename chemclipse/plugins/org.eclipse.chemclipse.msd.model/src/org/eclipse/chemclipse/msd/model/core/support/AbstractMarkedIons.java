@@ -143,7 +143,15 @@ public class AbstractMarkedIons implements IMarkedIons {
 	}
 
 	@Override
-	public void add(int[] ions) {
+	public void add(int... ions) {
+
+		for(int ion : ions) {
+			markedIons.add(new MarkedIon(ion));
+		}
+	}
+
+	@Override
+	public void add(Collection<Integer> ions) {
 
 		for(int ion : ions) {
 			markedIons.add(new MarkedIon(ion));

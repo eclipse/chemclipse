@@ -11,9 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core.support;
 
+import java.util.Collection;
 import java.util.Set;
 
-public interface IMarkedWavelengths extends Set<IMarkedWavelength> {
+import org.eclipse.chemclipse.model.core.IMarkedSignals;
+
+public interface IMarkedWavelengths extends IMarkedSignals<IMarkedWavelength> {
 
 	/**
 	 * Returns the set of wavelengths.
@@ -25,8 +28,19 @@ public interface IMarkedWavelengths extends Set<IMarkedWavelength> {
 	/**
 	 * Adds the ion range with magnification factor = 1.
 	 * 
+	 * @param wavelength
+	 */
+	void add(double... wavelength);
+
+	void add(Collection<Double> wavelength);
+
+	/**
+	 * Adds the ion range with magnification factor = 1.
+	 * Deprecated because wavelength could be double values
+	 * 
 	 * @param wavelengthStart
 	 * @param wavelengthStop
 	 */
+	@Deprecated
 	void add(int wavelengthStart, int wavelengthStop);
 }

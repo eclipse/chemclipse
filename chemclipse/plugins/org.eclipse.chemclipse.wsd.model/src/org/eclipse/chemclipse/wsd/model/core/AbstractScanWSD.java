@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.AbstractScan;
@@ -59,6 +60,17 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	public IScanSignalWSD getScanSignal(int scan) {
 
 		return scanSignals.get(scan);
+	}
+
+	@Override
+	public Optional<IScanSignalWSD> getScanSignal(double wavelengt) {
+
+		for(IScanSignalWSD scanSignal : scanSignals) {
+			if(scanSignal.getWavelength() == wavelengt) {
+				return Optional.of(scanSignal);
+			}
+		}
+		return Optional.empty();
 	}
 
 	@Override

@@ -11,12 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 
+import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IMarkedSignal;
+import org.eclipse.chemclipse.model.core.IMarkedSignals;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
@@ -25,6 +30,8 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIon;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
@@ -32,6 +39,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
@@ -175,22 +184,23 @@ public class ChromatogramChartSupport {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions, boolean baseline) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, String overlayType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, ions, baseline);
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, signals, baseline);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions, boolean baseline) {
+	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		int startScan = 1;
 		int stopScan = chromatogram.getNumberOfScans();
-		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, ions, baseline);
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, signals, baseline);
 	}
 
+	@Deprecated
 	public ILineSeriesData getLineSeriesData(IExtractedWavelengthSignals extractedWavelengthSignals, int wavelength, String seriesId, String overlayType) {
 
 		Color color = getSeriesColor(seriesId, overlayType);
@@ -223,7 +233,7 @@ public class ChromatogramChartSupport {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions, boolean baseline) {
+	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, String overlayType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		IBaselineModel baselineModel = chromatogram.getBaselineModel();
 		LineStyle lineStyle = getLineStyle(overlayType);
@@ -277,10 +287,29 @@ public class ChromatogramChartSupport {
 				if(baseline) {
 					ySeries[index] = baselineModel.getBackgroundAbundance(retentionTime);
 				} else {
-					ySeries[index] = getIntensity(scan, overlayType, ions);
+					ySeries[index] = getIntensity(scan, overlayType, signals);
 				}
 				index++;
 			}
+		}
+		/*
+		 * remove NAN values
+		 */
+		int numberNaN = (int)Arrays.stream(ySeries).filter(Double::isNaN).count();
+		if(numberNaN > 0) {
+			int newSize = ySeries.length - numberNaN;
+			double[] xSeriesWithoutNanValues = new double[newSize];
+			double[] ySeriesWithoutNanValues = new double[newSize];
+			int j = 0;
+			for(int i = 0; i < ySeries.length; i++) {
+				if(!Double.isNaN(ySeries[i])) {
+					xSeriesWithoutNanValues[j] = xSeries[i];
+					ySeriesWithoutNanValues[j] = ySeries[i];
+					j++;
+				}
+			}
+			xSeries = xSeriesWithoutNanValues;
+			ySeries = ySeriesWithoutNanValues;
 		}
 		/*
 		 * Calculate a derivative?
@@ -337,14 +366,16 @@ public class ChromatogramChartSupport {
 		return compressionToLength;
 	}
 
-	private double getIntensity(IScan scan, String overlayType, List<Integer> ions) {
+	private double getIntensity(IScan scan, String overlayType, IMarkedSignals<? extends IMarkedSignal> signals) {
 
-		double intensity = 0.0d;
+		double intensity = Double.NaN;
 		if(overlayType.equals(DISPLAY_TYPE_TIC)) {
 			/*
 			 * TIC
 			 */
-			intensity = scan.getTotalSignal();
+			if(scan instanceof IScanMSD || scan instanceof IScanCSD) {
+				intensity = scan.getTotalSignal();
+			}
 		} else if(overlayType.equals(DISPLAY_TYPE_BPC)) {
 			/*
 			 * BPC
@@ -360,12 +391,14 @@ public class ChromatogramChartSupport {
 			/*
 			 * XIC, SIC
 			 */
-			if(scan instanceof IScanMSD) {
+			if(scan instanceof IScanMSD && signals instanceof IMarkedIons) {
 				IScanMSD scanMSD = (IScanMSD)scan;
+				IMarkedIons markedIons = (IMarkedIons)signals;
 				IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
-				if(ions != null) {
-					for(int ion : ions) {
-						intensity += extractedIonSignal.getAbundance(ion);
+				intensity = 0.0d;
+				if(signals != null) {
+					for(IMarkedIon markedIon : markedIons) {
+						intensity += extractedIonSignal.getAbundance((int)markedIon.getIon());
 					}
 				}
 			}
@@ -373,13 +406,14 @@ public class ChromatogramChartSupport {
 			/*
 			 * TSC
 			 */
-			if(scan instanceof IScanMSD) {
+			if(scan instanceof IScanMSD && signals instanceof IMarkedIons) {
 				IScanMSD scanMSD = (IScanMSD)scan;
+				IMarkedIons markedIons = (IMarkedIons)signals;
 				IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
 				intensity = scanMSD.getTotalSignal();
-				if(ions != null) {
-					for(int ion : ions) {
-						intensity -= extractedIonSignal.getAbundance(ion);
+				if(signals != null) {
+					for(IMarkedIon markedIon : markedIons) {
+						intensity -= extractedIonSignal.getAbundance((int)markedIon.getIon());
 					}
 				}
 			}
@@ -387,12 +421,14 @@ public class ChromatogramChartSupport {
 			/*
 			 * SWC
 			 */
-			if(scan instanceof IScanWSD) {
+			if(scan instanceof IScanWSD && signals instanceof IMarkedWavelengths) {
 				IScanWSD scanWSD = (IScanWSD)scan;
-				List<IScanSignalWSD> scanSignalsWSD = scanWSD.getScanSignals();
-				if(scanSignalsWSD != null) {
-					for(IScanSignalWSD scanSignalWSD : scanSignalsWSD) {
-						intensity += scanSignalWSD.getAbundance();
+				IMarkedWavelengths markedWavelengths = (IMarkedWavelengths)signals;
+				Iterator<IMarkedWavelength> it = markedWavelengths.iterator();
+				if(it.hasNext()) {
+					Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(it.next().getWavelength());
+					if(scanSignal.isPresent()) {
+						intensity = scanSignal.get().getWavelength();
 					}
 				}
 			}
