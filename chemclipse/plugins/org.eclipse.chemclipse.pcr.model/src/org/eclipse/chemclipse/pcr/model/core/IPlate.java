@@ -17,6 +17,11 @@ import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 
 public interface IPlate extends IMeasurementInfo {
 
+	String NAME = "name";
+	String DATE = "Date";
+	String NOISEBAND = "Noiseband";
+	String THRESHOLD = "Threshold";
+
 	TreeSet<IWell> getWells();
 
 	IWell getWell(int id);

@@ -20,6 +20,7 @@ public interface IWell extends Comparable<IWell> {
 	String SAMPLE_ID = "Sample ID";
 	String TARGET_NAME = "Target Name";
 	String CROSSING_POINT = "Crossing Point";
+	String SAMPLE_SUBSET = "Sample Subset";
 
 	Position getPosition();
 

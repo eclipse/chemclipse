@@ -12,28 +12,26 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.PCRFileSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.PCRImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedPCRPlateUI;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -42,12 +40,14 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
-public class PlateEditorPCR extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class PlateEditorPCR extends AbstractDataUpdateSupport implements IChemClipseEditor, IDataUpdateSupport {
 
+	private static final Logger logger = Logger.getLogger(PlateEditorPCR.class);
+	//
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.plateEditorPCR";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PlateEditorPCR";
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/plate-pcr.gif";
@@ -56,11 +56,11 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IDataUp
 	private MPart part;
 	private MDirtyable dirtyable;
 	//
-	private File scanFile;
+	private File plateFile;
 	private IPlate plate = null;
 	private ExtendedPCRPlateUI extendedPCRPlateUI;
 	//
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private Shell shell;
 
 	@Inject
 	public PlateEditorPCR(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
@@ -68,6 +68,7 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IDataUp
 		//
 		this.part = part;
 		this.dirtyable = dirtyable;
+		this.shell = shell;
 		//
 		initialize(parent);
 	}
@@ -91,20 +92,13 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IDataUp
 	@Focus
 	public void setFocus() {
 
-		showPart(PartSupport.PARTDESCRIPTOR_PlATE_CHARTS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PLATE_CHARTS));
-		showPart(PartSupport.PARTDESCRIPTOR_WELL_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_DATA));
-		showPart(PartSupport.PARTDESCRIPTOR_WELL_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_CHART));
 		updatePlate();
 	}
 
 	@PreDestroy
 	private void preDestroy() {
 
-		hidePart(PartSupport.PARTDESCRIPTOR_PlATE_CHARTS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PLATE_CHARTS));
-		hidePart(PartSupport.PARTDESCRIPTOR_WELL_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_DATA));
-		hidePart(PartSupport.PARTDESCRIPTOR_WELL_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_CHART));
 		unloadPlate();
-		//
 		EModelService modelService = ModelSupportAddon.getModelService();
 		if(modelService != null) {
 			MApplication application = ModelSupportAddon.getApplication();
@@ -129,8 +123,27 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IDataUp
 	@Persist
 	public void save() {
 
-		System.out.println(scanFile);
-		dirtyable.setDirty(false);
+		/*
+		 * Save the data is not supported yet.
+		 * dirtyable.setDirty(false);
+		 */
+		System.out.println("Plate File: " + plateFile);
+		saveAs();
+	}
+
+	@Override
+	public boolean saveAs() {
+
+		boolean saveSuccessful = false;
+		if(plate != null) {
+			try {
+				saveSuccessful = PCRFileSupport.savePlate(shell, plate);
+				dirtyable.setDirty(!saveSuccessful);
+			} catch(Exception e) {
+				logger.warn(e);
+			}
+		}
+		return saveSuccessful;
 	}
 
 	private void initialize(Composite parent) {
@@ -152,16 +165,30 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IDataUp
 			Map<String, Object> map = (Map<String, Object>)object;
 			File file = new File((String)map.get(EditorSupport.MAP_FILE));
 			boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
-			//
-			IProcessingInfo processingInfo = PlateConverterPCR.convert(file, new NullProgressMonitor());
-			try {
-				plate = (IPlate)processingInfo.getProcessingResult();
-			} catch(TypeCastException e) {
-				plate = null;
-			}
+			plate = loadPlate(file, batch);
 		}
 		//
 		return plate;
+	}
+
+	private IPlate loadPlate(File file, boolean batch) {
+
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+		PCRImportRunnable runnable = new PCRImportRunnable(file);
+		try {
+			/*
+			 * No fork, otherwise it might crash when loading the data takes too long.
+			 */
+			boolean fork = (batch) ? false : true;
+			dialog.run(fork, false, runnable);
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+		} catch(InterruptedException e) {
+			logger.warn(e);
+		}
+		//
+		plateFile = file;
+		return runnable.getPlate();
 	}
 
 	private void createEditorPages(Composite parent) {
@@ -185,17 +212,6 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IDataUp
 				eventBroker.send(IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_SELECTION, plate);
 			}
 		});
-	}
-
-	private void showPart(String partId, String partStackId) {
-
-		PartSupport.setPartVisibility(partId, partStackId, true);
-		PartSupport.showPart(partId, partStackId);
-	}
-
-	private void hidePart(String partId, String partStackId) {
-
-		PartSupport.setPartVisibility(partId, partStackId, false);
 	}
 
 	private void unloadPlate() {

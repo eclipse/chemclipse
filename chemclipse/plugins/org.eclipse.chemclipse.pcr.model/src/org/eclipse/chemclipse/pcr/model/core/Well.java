@@ -33,6 +33,7 @@ public class Well implements IWell {
 		protectKeys.add(SAMPLE_ID);
 		protectKeys.add(TARGET_NAME);
 		protectKeys.add(CROSSING_POINT);
+		protectKeys.add(SAMPLE_SUBSET);
 	}
 
 	@Override

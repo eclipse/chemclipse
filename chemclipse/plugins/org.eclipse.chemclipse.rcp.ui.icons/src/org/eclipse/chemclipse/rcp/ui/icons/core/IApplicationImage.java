@@ -302,6 +302,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_HEATMAP_DEFAULT = "heatmapDefault.gif";
 	String IMAGE_SEQUENCE_LIST_DEFAULT = "sequenceListDefault.gif";
 	String IMAGE_SEQUENCE_LIST_ACTIVE = "sequenceListActive.gif";
+	String IMAGE_PCR_ACTIVE = "pcrActive.gif";
+	String IMAGE_PCR_DEFAULT = "pcrDefault.gif";
 	//
 	String IMAGE_PROCESS_CONTROL = "processControl.gif";
 	String IMAGE_START_PROCESSING = "startProcessing.gif";

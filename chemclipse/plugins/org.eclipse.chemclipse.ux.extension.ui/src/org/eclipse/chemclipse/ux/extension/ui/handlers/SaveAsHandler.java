@@ -47,7 +47,7 @@ public class SaveAsHandler {
 			Object object = part.getObject();
 			if(object != null) {
 				/*
-				 * Save the chromatogram as ...
+				 * Save the data as ...
 				 */
 				if(object instanceof IChemClipseEditor) {
 					IChemClipseEditor editor = (IChemClipseEditor)object;

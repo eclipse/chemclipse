@@ -13,8 +13,5 @@ package org.eclipse.chemclipse.ux.extension.ui.editors;
 
 public interface IChemClipseEditor {
 
-	/**
-	 * Saves the chromatogram in a different format.
-	 */
 	boolean saveAs();
 }

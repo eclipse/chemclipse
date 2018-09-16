@@ -112,6 +112,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 		createComparisonScanTask(parent);
 		createMeasurementResultTask(parent);
 		createHeatmapTask(parent);
+		createPcrTask(parent);
 		createSettingsTask(parent);
 		//
 		showInitialViews();
@@ -378,6 +379,31 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 		});
 		//
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEATMAP, button, imageActive, imageDefault);
+	}
+
+	private void createPcrTask(Composite parent) {
+
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PCR_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PCR_DEFAULT, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the PCR modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PlATE_CHARTS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PLATE_CHARTS));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_WELL_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_DATA));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_WELL_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_CHART));
+			}
+		});
+		//
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_PlATE_CHARTS, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_WELL_DATA, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_WELL_CHART, button, imageActive, imageDefault);
 	}
 
 	private void createSettingsTask(Composite parent) {
