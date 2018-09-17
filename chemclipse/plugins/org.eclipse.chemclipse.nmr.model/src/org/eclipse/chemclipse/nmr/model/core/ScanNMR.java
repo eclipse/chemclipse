@@ -5,13 +5,15 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.apache.commons.math3.complex.Complex;
@@ -25,30 +27,30 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	private Complex[] fourierTransformedData = new Complex[0];
 	private Complex[] phaseCorrectedData = new Complex[0];
 	private Complex[] baselineCorrectedData = new Complex[0];
-	
+	private final TreeSet<ISignalNMR> processedSignals = new TreeSet<>();
+	private Map<String, Double> processingParameters = new LinkedHashMap<>();
+
+	@Override
 	public Complex[] getBaselineCorrectedData() {
-	
+
 		return baselineCorrectedData;
 	}
 
+	@Override
+	public void setBaselineCorrectedData(final Complex[] baselineCorrectedData) {
 
-	
-	public void setBaselineCorrectedData(Complex[] baselineCorrectedData) {
-	
 		this.baselineCorrectedData = baselineCorrectedData;
 	}
 
-	private TreeSet<ISignalNMR> processedSignals = new TreeSet<ISignalNMR>();
-
-	
+	@Override
 	public Complex[] getPhaseCorrectedData() {
-	
+
 		return phaseCorrectedData;
 	}
 
-	
-	public void setPhaseCorrectedData(Complex[] phaseCorrectedData) {
-	
+	@Override
+	public void setPhaseCorrectedData(final Complex[] phaseCorrectedData) {
+
 		this.phaseCorrectedData = phaseCorrectedData;
 	}
 
@@ -59,7 +61,7 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	}
 
 	@Override
-	public void setRawSignals(double[] rawSignals) {
+	public void setRawSignals(final double[] rawSignals) {
 
 		this.rawSignals = rawSignals;
 	}
@@ -71,7 +73,7 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	}
 
 	@Override
-	public void setFourierTransformedData(Complex[] modifiedSignals) {
+	public void setFourierTransformedData(final Complex[] modifiedSignals) {
 
 		this.fourierTransformedData = modifiedSignals;
 	}
@@ -92,17 +94,21 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 
-		if(this == obj)
+		if(this == obj) {
 			return true;
-		if(!super.equals(obj))
+		}
+		if(!super.equals(obj)) {
 			return false;
-		if(getClass() != obj.getClass())
+		}
+		if(getClass() != obj.getClass()) {
 			return false;
-		ScanNMR other = (ScanNMR)obj;
-		if(!Arrays.equals(rawSignals, other.rawSignals))
+		}
+		final ScanNMR other = (ScanNMR)obj;
+		if(!Arrays.equals(rawSignals, other.rawSignals)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -110,5 +116,17 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	public String toString() {
 
 		return "ScanNMR [rawSignals=" + Arrays.toString(rawSignals) + "]";
+	}
+
+	@Override
+	public Map<String, Double> getProcessingParameters() {
+
+		return processingParameters;
+	}
+
+	@Override
+	public void setProcessingParameters(final Map<String, Double> processingParameters) {
+
+		this.processingParameters = processingParameters;
 	}
 }

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.apache.commons.math3.complex.Complex;
@@ -46,4 +47,8 @@ public interface IScanNMR extends IMeasurementInfo {
 	void setBaselineCorrectedData(Complex[] data);
 
 	TreeSet<ISignalNMR> getProcessedSignals();
+
+	Map<String, Double> getProcessingParameters();
+
+	void setProcessingParameters(Map<String, Double> processingParameters);
 }
