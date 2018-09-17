@@ -29,6 +29,7 @@ public interface ISupplierFileIdentifier {
 	String TYPE_CAL = "CAL";
 	String TYPE_PCR = "PCR";
 	String TYPE_SEQ = "SEQ";
+	String TYPE_MTH = "MTH"; // Method
 
 	/**
 	 * Returns the identifier type.

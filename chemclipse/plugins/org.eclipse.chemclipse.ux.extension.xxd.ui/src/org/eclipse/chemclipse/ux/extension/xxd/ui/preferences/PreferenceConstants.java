@@ -394,6 +394,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_DATA_PCR = true;
 	public static final String P_SHOW_DATA_SEQUENCE = "showDataSequence";
 	public static final boolean DEF_SHOW_DATA_SEQUENCE = true;
+	public static final String P_SHOW_DATA_METHOD = "showDataMethod";
+	public static final boolean DEF_SHOW_DATA_METHOD = true;
 	/*
 	 * Lists
 	 */

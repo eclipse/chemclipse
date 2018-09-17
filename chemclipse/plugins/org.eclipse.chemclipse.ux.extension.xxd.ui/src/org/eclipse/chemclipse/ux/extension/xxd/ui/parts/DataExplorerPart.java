@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.EditorSupportFactory;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.MethodSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ProjectExplorerSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -199,6 +200,12 @@ public class DataExplorerPart {
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_SEQUENCE)) {
 			editorSupportList.add(new EditorSupportFactory(DataType.SEQ).getInstanceEditorSupport());
+		}
+		/*
+		 * MTH
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_METHOD)) {
+			editorSupportList.add(new MethodSupportFactory().getInstanceEditorSupport());
 		}
 		//
 		dataExplorerUI.setSupplierFileEditorSupportList(editorSupportList);

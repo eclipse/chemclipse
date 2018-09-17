@@ -184,10 +184,10 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 
 	private void createEditorPages(Composite parent) {
 
-		createScanPage(parent);
+		createPage(parent);
 	}
 
-	private void createScanPage(Composite parent) {
+	private void createPage(Composite parent) {
 
 		extendedSequenceListUI = new ExtendedSequenceListUI(parent);
 	}
