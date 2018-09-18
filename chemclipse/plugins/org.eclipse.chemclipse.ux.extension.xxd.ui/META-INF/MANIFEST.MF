@@ -74,7 +74,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.pcr.converter;bundle-version="0.8.0",
  org.eclipse.chemclipse.pcr.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.chromatogram.csd.identifier;bundle-version="0.8.0",
- org.eclipse.chemclipse.chromatogram.msd.quantitation;bundle-version="0.8.0"
+ org.eclipse.chemclipse.chromatogram.msd.quantitation;bundle-version="0.8.0",
+ com.fasterxml.jackson.core.jackson-core;bundle-version="2.7.1",
+ com.fasterxml.jackson.core.jackson-databind;bundle-version="2.7.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="1.1.0",
@@ -82,6 +84,7 @@ Import-Package: javax.annotation;version="1.1.0",
 Export-Package: org.eclipse.chemclipse.ux.extension.xxd.ui.charts,
  org.eclipse.chemclipse.ux.extension.xxd.ui.editors,
  org.eclipse.chemclipse.ux.extension.xxd.ui.handlers,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.methods,
  org.eclipse.chemclipse.ux.extension.xxd.ui.part.support,
  org.eclipse.chemclipse.ux.extension.xxd.ui.parts,
  org.eclipse.chemclipse.ux.extension.xxd.ui.support,

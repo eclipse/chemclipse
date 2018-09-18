@@ -434,6 +434,11 @@ public class PreferenceConstants {
 	public static final String P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER = "sequenceExplorerPathDialogFolder";
 	public static final String DEF_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER = "";
 	/*
+	 * Methods
+	 */
+	public static final String P_METHOD_EXPLORER_PATH_ROOT_FOLDER = "methodExplorerPathRootFolder";
+	public static final String DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER = "";
+	/*
 	 * Quanititation
 	 */
 	public static final String P_USE_QUANTITATION_REFERENCE_LIST = "useQuantitationReferenceList";

@@ -9,11 +9,24 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.swt.ui.components;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
+
+import java.io.File;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.MethodEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -27,6 +40,7 @@ import org.eclipse.swt.widgets.Composite;
 public class MethodSupportUI extends Composite {
 
 	private IMethodListener methodListener;
+	private ISupplierEditorSupport supplierEditorSupport = new MethodEditorSupport();
 
 	public MethodSupportUI(Composite parent, int style) {
 		super(parent, style);
@@ -49,7 +63,7 @@ public class MethodSupportUI extends Composite {
 		//
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setBackground(Colors.WHITE);
-		GridLayout gridLayout = new GridLayout(4, false);
+		GridLayout gridLayout = new GridLayout(5, false);
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
@@ -58,6 +72,7 @@ public class MethodSupportUI extends Composite {
 		createButtonAddMethod(composite);
 		createButtonEditMethod(composite);
 		createButtonExecuteMethod(composite);
+		createButtonSettings(composite);
 	}
 
 	private void createComboPredefinedMethod(Composite parent) {
@@ -85,6 +100,7 @@ public class MethodSupportUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				supplierEditorSupport.openEditor(new File(""));
 			}
 		});
 		//
@@ -102,6 +118,7 @@ public class MethodSupportUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				supplierEditorSupport.openEditor(new File(""));
 			}
 		});
 		//
@@ -124,6 +141,46 @@ public class MethodSupportUI extends Composite {
 		});
 		//
 		return button;
+	}
+
+	private Button createButtonSettings(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Settings");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IPreferencePage preferencePage = new PreferencePageMethods();
+				preferencePage.setTitle("Methods");
+				//
+				PreferenceManager preferenceManager = new PreferenceManager();
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
+				//
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				preferenceDialog.create();
+				preferenceDialog.setMessage("Settings");
+				if(preferenceDialog.open() == Window.OK) {
+					try {
+						applySettings();
+					} catch(Exception e1) {
+						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+					}
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private void applySettings() {
+
+		/*
+		 * Set combo items.
+		 */
 	}
 
 	private void runMethod() {

@@ -172,7 +172,19 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePagePCR"
             name="PCR">
-      </page>                                                                         
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageSequences"
+            name="Sequences">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageMethods"
+            name="Methods">
+      </page>                                                                                     
    </extension> 
    <extension
          point="org.eclipse.ui.editors">  

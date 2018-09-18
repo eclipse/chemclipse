@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,9 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.filter.settings;
+package org.eclipse.chemclipse.model.settings;
 
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
-
-public interface IChromatogramFilterSettings extends IProcessSettings {
+public interface IProcessSettings {
 }
