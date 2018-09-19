@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
@@ -35,7 +36,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesValue
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesYComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToMinuteConverter;

@@ -62,11 +62,6 @@ public class MethodSupportUI extends Composite {
 		createControl();
 	}
 
-	public void reset() {
-
-		//
-	}
-
 	public void setMethodListener(IMethodListener methodListener) {
 
 		this.methodListener = methodListener;

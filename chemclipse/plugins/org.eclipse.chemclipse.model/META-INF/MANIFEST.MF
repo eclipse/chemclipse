@@ -33,5 +33,6 @@ Export-Package: org.eclipse.chemclipse.model.baseline,
  org.eclipse.chemclipse.model.signals,
  org.eclipse.chemclipse.model.support,
  org.eclipse.chemclipse.model.targets,
+ org.eclipse.chemclipse.model.types,
  org.eclipse.chemclipse.model.updates,
  org.eclipse.chemclipse.model.versioning

@@ -39,9 +39,11 @@ public class SettingsWizardPage extends WizardPage {
 	//
 	private List<WidgetItem> widgetItems = new ArrayList<>();
 
-	public SettingsWizardPage(List<InputValue> inputValues) {
+	protected SettingsWizardPage(List<InputValue> inputValues) {
 		super("SettingsWizardPage");
-		setMessage("Modify the process settings.");
+		setTitle("Process Settings");
+		setDescription("Modify the process settings.");
+		//
 		if(inputValues != null) {
 			for(InputValue inputValue : inputValues) {
 				widgetItems.add(new WidgetItem(inputValue));

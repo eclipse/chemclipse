@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataType;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;

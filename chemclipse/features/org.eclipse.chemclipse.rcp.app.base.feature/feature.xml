@@ -248,14 +248,14 @@ http://www.eclipse.org/legal/epl-v10.html
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.chemclipse.chromatogram.msd.process"
+         id="org.eclipse.chemclipse.xxd.process"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.chemclipse.chromatogram.msd.process.ui"
+         id="org.eclipse.chemclipse.xxd.process.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"

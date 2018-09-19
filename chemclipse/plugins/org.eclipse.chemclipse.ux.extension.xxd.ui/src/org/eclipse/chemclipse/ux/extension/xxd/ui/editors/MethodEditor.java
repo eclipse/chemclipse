@@ -17,7 +17,6 @@ import java.util.List;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -36,8 +35,6 @@ import org.eclipse.swt.widgets.Shell;
 
 public class MethodEditor extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private static final Logger logger = Logger.getLogger(MethodEditor.class);
-	//
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.methodEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.MethodEditor";
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/sequenceListDefault.gif";
