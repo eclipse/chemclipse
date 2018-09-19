@@ -47,6 +47,13 @@ public class PeakFilterTypeSupplier extends AbstractProcessTypeSupplier implemen
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		IPeakFilterSupplier filterSupplier = PeakFilter.getPeakFilterSupport().getFilterSupplier(processorId);
+		return filterSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return PeakFilter.getPeakFilterSupport().getAvailableFilterIds();

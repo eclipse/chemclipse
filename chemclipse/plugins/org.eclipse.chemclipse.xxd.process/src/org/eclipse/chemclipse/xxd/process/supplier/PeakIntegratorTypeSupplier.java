@@ -45,6 +45,13 @@ public class PeakIntegratorTypeSupplier extends AbstractProcessTypeSupplier impl
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		IPeakIntegratorSupplier integratorSupplier = PeakIntegrator.getPeakIntegratorSupport().getIntegratorSupplier(processorId);
+		return integratorSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return PeakIntegrator.getPeakIntegratorSupport().getAvailableIntegratorIds();

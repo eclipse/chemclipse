@@ -45,6 +45,13 @@ public class ChromatogramIntegratorTypeSupplier extends AbstractProcessTypeSuppl
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		IChromatogramIntegratorSupplier integratorSupplier = ChromatogramIntegrator.getChromatogramIntegratorSupport().getIntegratorSupplier(processorId);
+		return integratorSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return ChromatogramIntegrator.getChromatogramIntegratorSupport().getAvailableIntegratorIds();

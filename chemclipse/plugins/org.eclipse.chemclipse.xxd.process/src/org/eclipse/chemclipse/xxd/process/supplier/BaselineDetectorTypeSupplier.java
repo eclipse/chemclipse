@@ -45,6 +45,13 @@ public class BaselineDetectorTypeSupplier extends AbstractProcessTypeSupplier im
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		IBaselineDetectorSupplier baselineSupplier = BaselineDetector.getBaselineDetectorSupport().getBaselineDetectorSupplier(processorId);
+		return baselineSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return BaselineDetector.getBaselineDetectorSupport().getAvailableDetectorIds();

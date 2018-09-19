@@ -49,6 +49,13 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		ISupplier peakIdentifierSupplier = PeakIdentifierMSD.getPeakIdentifierSupport().getIdentifierSupplier(processorId);
+		return peakIdentifierSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return PeakIdentifierMSD.getPeakIdentifierSupport().getAvailableIdentifierIds();

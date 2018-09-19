@@ -17,7 +17,6 @@ import java.util.Collections;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethods;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -65,10 +64,8 @@ public class ExtendedMethodUI {
 
 	public void update(ProcessMethods processMethods) {
 
+		System.out.println("TODO - set process methods");
 		this.processMethods = new ProcessMethods();
-		this.processMethods.add(new ProcessMethod("msd.filter.id", "RT Filter", "Set the retention time range.", "{\"Start RT (Minutes)\":10.16,\"Stop RT (Minutes)\":13.45}", "MSD"));
-		this.processMethods.add(new ProcessMethod("msd.sg.id", "SG Filter", "Savitzky-Golay smoothing.", "", "XXD"));
-		this.processMethods.add(new ProcessMethod("csd.unitsum", "Unit Filter", "Unit Sum Normalizer.", "", "CSD"));
 		//
 		updateList();
 	}
@@ -192,8 +189,10 @@ public class ExtendedMethodUI {
 					//
 					if(wizardDialog.open() == WizardDialog.OK) {
 						IProcessMethod processMethod = wizard.getProcessMethod();
-						processMethods.add(processMethod);
-						updateList();
+						if(processMethod != null) {
+							processMethods.add(processMethod);
+							updateList();
+						}
 					}
 				}
 			}

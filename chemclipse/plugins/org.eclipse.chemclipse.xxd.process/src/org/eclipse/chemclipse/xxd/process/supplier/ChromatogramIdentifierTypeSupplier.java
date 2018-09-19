@@ -47,6 +47,13 @@ public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSuppl
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		ISupplier chromatogramIdentifierSupplier = ChromatogramIdentifier.getChromatogramIdentifierSupport().getIdentifierSupplier(processorId);
+		return chromatogramIdentifierSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return ChromatogramIdentifier.getChromatogramIdentifierSupport().getAvailableIdentifierIds();

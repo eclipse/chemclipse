@@ -49,6 +49,13 @@ public class PeakDetectorTypeSupplier extends AbstractProcessTypeSupplier implem
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		IPeakDetectorSupplier peakDetectorSupplier = PeakDetectorMSD.getPeakDetectorSupport().getPeakDetectorSupplier(processorId);
+		return peakDetectorSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return PeakDetectorMSD.getPeakDetectorSupport().getAvailablePeakDetectorIds();

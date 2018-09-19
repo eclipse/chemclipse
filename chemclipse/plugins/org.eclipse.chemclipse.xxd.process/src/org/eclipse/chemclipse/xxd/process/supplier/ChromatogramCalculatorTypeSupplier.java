@@ -45,6 +45,13 @@ public class ChromatogramCalculatorTypeSupplier extends AbstractProcessTypeSuppl
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		IChromatogramCalculatorSupplier calculatorSupplier = ChromatogramCalculator.getChromatogramCalculatorSupport().getCalculatorSupplier(processorId);
+		return calculatorSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return ChromatogramCalculator.getChromatogramCalculatorSupport().getAvailableCalculatorIds();

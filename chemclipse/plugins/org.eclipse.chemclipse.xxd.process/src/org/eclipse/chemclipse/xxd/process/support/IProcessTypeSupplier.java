@@ -27,6 +27,8 @@ public interface IProcessTypeSupplier {
 
 	String getProcessorName(String processorId) throws Exception;
 
+	String getProcessorDescription(String processorId) throws Exception;
+
 	List<String> getPluginIds() throws Exception;
 
 	@SuppressWarnings("rawtypes")

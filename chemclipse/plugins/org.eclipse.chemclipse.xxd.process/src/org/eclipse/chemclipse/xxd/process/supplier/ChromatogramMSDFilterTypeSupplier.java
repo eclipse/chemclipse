@@ -47,6 +47,13 @@ public class ChromatogramMSDFilterTypeSupplier extends AbstractProcessTypeSuppli
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		IChromatogramFilterSupplierMSD filterSupplier = ChromatogramFilterMSD.getChromatogramFilterSupport().getFilterSupplier(processorId);
+		return filterSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return ChromatogramFilterMSD.getChromatogramFilterSupport().getAvailableFilterIds();

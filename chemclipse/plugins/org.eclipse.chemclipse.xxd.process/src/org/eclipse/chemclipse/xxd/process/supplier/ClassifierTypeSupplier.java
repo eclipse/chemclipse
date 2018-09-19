@@ -47,6 +47,13 @@ public class ClassifierTypeSupplier extends AbstractProcessTypeSupplier implemen
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		IChromatogramClassifierSupplier classifierSupplier = ChromatogramClassifier.getChromatogramClassifierSupport().getClassifierSupplier(processorId);
+		return classifierSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return ChromatogramClassifier.getChromatogramClassifierSupport().getAvailableClassifierIds();

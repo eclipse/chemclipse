@@ -45,6 +45,13 @@ public class CombinedIntegratorTypeSupplier extends AbstractProcessTypeSupplier 
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		ICombinedIntegratorSupplier integratorSupplier = CombinedIntegrator.getCombinedIntegratorSupport().getIntegratorSupplier(processorId);
+		return integratorSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return CombinedIntegrator.getCombinedIntegratorSupport().getAvailableIntegratorIds();

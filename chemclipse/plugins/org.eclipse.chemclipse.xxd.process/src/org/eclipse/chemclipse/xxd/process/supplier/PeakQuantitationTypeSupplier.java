@@ -46,6 +46,13 @@ public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier im
 	}
 
 	@Override
+	public String getProcessorDescription(String processorId) throws Exception {
+
+		IPeakQuantifierSupplier quantifierSupplier = PeakQuantifier.getPeakQuantifierSupport().getPeakQuantifierSupplier(processorId);
+		return quantifierSupplier.getDescription();
+	}
+
+	@Override
 	public List<String> getPluginIds() throws Exception {
 
 		return PeakQuantifier.getPeakQuantifierSupport().getAvailablePeakQuantifierIds();
