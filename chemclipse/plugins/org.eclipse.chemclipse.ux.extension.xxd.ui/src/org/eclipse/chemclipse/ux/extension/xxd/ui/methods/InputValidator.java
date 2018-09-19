@@ -36,11 +36,7 @@ public class InputValidator implements IValidator {
 		} else {
 			Class<?> rawType = inputValue.getRawType();
 			if(rawType != null) {
-				try {
-					parse(rawType, (String)value);
-				} catch(NumberFormatException e) {
-					message = ERROR;
-				}
+				message = parse(rawType, (String)value);
 			}
 		}
 		//
@@ -51,25 +47,41 @@ public class InputValidator implements IValidator {
 		}
 	}
 
-	private void parse(Class<?> rawType, String value) throws NumberFormatException {
+	private String parse(Class<?> rawType, String value) {
 
-		if(rawType == int.class || rawType == Integer.class) {
-			Integer.parseInt(value);
-		} else if(rawType == float.class || rawType == Float.class) {
-			Float.parseFloat(value);
-		} else if(rawType == double.class || rawType == Double.class) {
-			Double.parseDouble(value);
-		} else if(rawType == String.class) {
-			//
-		} else if(rawType == boolean.class || rawType == Boolean.class) {
-			Boolean.parseBoolean(value);
-		} else if(rawType.isEnum()) {
-			// Enum[] enums = (Enum[])rawType.getEnumConstants();
-			// for(Enum enumm : enums) {
-			// System.out.println(enumm);
-			// }
-		} else {
-			logger.info("Unknown Raw Type: " + rawType);
+		String message = null;
+		try {
+			if(rawType == int.class || rawType == Integer.class) {
+				Integer.parseInt(value);
+			} else if(rawType == float.class || rawType == Float.class) {
+				float parsedValue = Float.parseFloat(value);
+				if(inputValue.isConstraintAvailble()) {
+					if(parsedValue < (float)inputValue.getMinValue() || parsedValue > (float)inputValue.getMaxValue()) {
+						message = "The value must be >= " + inputValue.getMinValue() + " and <= " + inputValue.getMaxValue();
+					}
+				}
+			} else if(rawType == double.class || rawType == Double.class) {
+				double parsedValue = Double.parseDouble(value);
+				if(inputValue.isConstraintAvailble()) {
+					if(parsedValue < (double)inputValue.getMinValue() || parsedValue > (double)inputValue.getMaxValue()) {
+						message = "The value must be >= " + inputValue.getMinValue() + " and <= " + inputValue.getMaxValue();
+					}
+				}
+			} else if(rawType == String.class) {
+				//
+			} else if(rawType == boolean.class || rawType == Boolean.class) {
+				Boolean.parseBoolean(value);
+			} else if(rawType.isEnum()) {
+				// Enum[] enums = (Enum[])rawType.getEnumConstants();
+				// for(Enum enumm : enums) {
+				// System.out.println(enumm);
+				// }
+			} else {
+				logger.info("Unknown Raw Type: " + rawType);
+			}
+		} catch(NumberFormatException e) {
+			message = ERROR;
 		}
+		return message;
 	}
 }

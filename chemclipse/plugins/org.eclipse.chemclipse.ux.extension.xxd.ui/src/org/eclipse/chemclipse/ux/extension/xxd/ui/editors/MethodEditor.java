@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -30,11 +31,7 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 public class MethodEditor extends AbstractDataUpdateSupport implements IDataUpdateSupport {
@@ -50,6 +47,7 @@ public class MethodEditor extends AbstractDataUpdateSupport implements IDataUpda
 	private MDirtyable dirtyable;
 	//
 	private File methodFile;
+	private ExtendedMethodUI extendedMethodUI;
 
 	@Inject
 	public MethodEditor(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
@@ -117,10 +115,7 @@ public class MethodEditor extends AbstractDataUpdateSupport implements IDataUpda
 	private void initialize(Composite parent) {
 
 		createEditorPages(parent);
-		/*
-		 * Load Method from Input
-		 */
-		logger.info("Load Method from Input");
+		extendedMethodUI.update(null); // TODO
 	}
 
 	private void createEditorPages(Composite parent) {
@@ -130,13 +125,6 @@ public class MethodEditor extends AbstractDataUpdateSupport implements IDataUpda
 
 	private void createPage(Composite parent) {
 
-		parent.setLayout(new GridLayout(1, true));
-		//
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("Method");
-		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		Composite composite = new Composite(parent, SWT.BORDER);
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		extendedMethodUI = new ExtendedMethodUI(parent);
 	}
 }

@@ -12,20 +12,28 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.MethodEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -36,11 +44,18 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 
 public class MethodSupportUI extends Composite {
 
+	private static final Logger logger = Logger.getLogger(MethodSupportUI.class);
+	//
+	private ComboViewer comboViewerMethods;
+	private Button buttonEditMethod;
+	//
 	private IMethodListener methodListener;
 	private ISupplierEditorSupport supplierEditorSupport = new MethodEditorSupport();
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public MethodSupportUI(Composite parent, int style) {
 		super(parent, style);
@@ -68,25 +83,51 @@ public class MethodSupportUI extends Composite {
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
 		//
-		createComboPredefinedMethod(composite);
+		comboViewerMethods = createComboMethod(composite);
 		createButtonAddMethod(composite);
-		createButtonEditMethod(composite);
+		buttonEditMethod = createButtonEditMethod(composite);
 		createButtonExecuteMethod(composite);
 		createButtonSettings(composite);
+		//
+		computeMethodComboItems();
 	}
 
-	private void createComboPredefinedMethod(Composite parent) {
+	private ComboViewer createComboMethod(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
-		combo.setToolTipText("Select a chromatogram method.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof File) {
+					File file = (File)element;
+					return file.getName();
+				}
+				return null;
+			}
+		});
+		combo.setToolTipText("Select a process method.");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				Object object = comboViewer.getStructuredSelection().getFirstElement();
+				if(object instanceof File) {
+					File file = (File)object;
+					preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
+				}
+				enableMethodEditButton();
 			}
 		});
+		//
+		return comboViewer;
 	}
 
 	private Button createButtonAddMethod(Composite parent) {
@@ -100,7 +141,26 @@ public class MethodSupportUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				supplierEditorSupport.openEditor(new File(""));
+				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+				fileDialog.setOverwrite(true);
+				fileDialog.setText("Process Method");
+				fileDialog.setFileName("ProcessMethod.ocm");
+				fileDialog.setFilterExtensions(new String[]{"*.ocm"});
+				fileDialog.setFilterNames(new String[]{"Process Method (*.ocm)"});
+				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER));
+				String filePath = fileDialog.open();
+				if(filePath != null && !filePath.equals("")) {
+					try {
+						File file = new File(filePath);
+						if(file.createNewFile()) {
+							preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
+							computeMethodComboItems();
+							supplierEditorSupport.openEditor(file);
+						}
+					} catch(IOException e1) {
+						logger.warn(e1);
+					}
+				}
 			}
 		});
 		//
@@ -118,7 +178,11 @@ public class MethodSupportUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				supplierEditorSupport.openEditor(new File(""));
+				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
+				if(object instanceof File) {
+					File file = (File)object;
+					supplierEditorSupport.openEditor(file);
+				}
 			}
 		});
 		//
@@ -178,9 +242,49 @@ public class MethodSupportUI extends Composite {
 
 	private void applySettings() {
 
-		/*
-		 * Set combo items.
-		 */
+		computeMethodComboItems();
+	}
+
+	private void computeMethodComboItems() {
+
+		String methodRootFolder = preferenceStore.getString(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER);
+		String selectedMethodName = preferenceStore.getString(PreferenceConstants.P_SELECTED_METHOD_NAME);
+		//
+		File directory = new File(methodRootFolder);
+		if(directory.exists() && directory.isDirectory()) {
+			comboViewerMethods.setInput(directory.listFiles());
+			Combo combo = comboViewerMethods.getCombo();
+			if(combo.getItemCount() > 0) {
+				exitloop:
+				for(int i = 0; i < combo.getItemCount(); i++) {
+					if(combo.getItem(i).equals(selectedMethodName)) {
+						combo.select(i);
+						break exitloop;
+					}
+				}
+				//
+				if(combo.getSelectionIndex() == -1) {
+					combo.select(0);
+					preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, combo.getItem(0));
+				}
+			}
+		} else {
+			comboViewerMethods.setInput(null);
+		}
+		//
+		enableMethodEditButton();
+	}
+
+	private void enableMethodEditButton() {
+
+		buttonEditMethod.setEnabled(false);
+		Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
+		if(object instanceof File) {
+			File file = (File)object;
+			if(file.exists()) {
+				buttonEditMethod.setEnabled(true);
+			}
+		}
 	}
 
 	private void runMethod() {

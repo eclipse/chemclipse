@@ -438,6 +438,8 @@ public class PreferenceConstants {
 	 */
 	public static final String P_METHOD_EXPLORER_PATH_ROOT_FOLDER = "methodExplorerPathRootFolder";
 	public static final String DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER = "";
+	public static final String P_SELECTED_METHOD_NAME = "selectedMethodName";
+	public static final String DEF_SELECTED_METHOD_NAME = "";
 	/*
 	 * Quanititation
 	 */

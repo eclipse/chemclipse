@@ -16,7 +16,15 @@ public class InputValue {
 	private Class<?> rawType = null;
 	private String name = "";
 	private String description = "";
+	private String value = null; // Needed for initialization.
 	private String defaultValue = "";
+	private Object minValue = null;
+	private Object maxValue = null;
+
+	public boolean isConstraintAvailble() {
+
+		return (minValue != null) && (maxValue != null);
+	}
 
 	public Class<?> getRawType() {
 
@@ -48,6 +56,16 @@ public class InputValue {
 		this.description = description;
 	}
 
+	public String getValue() {
+
+		return value;
+	}
+
+	public void setValue(String value) {
+
+		this.value = value;
+	}
+
 	public String getDefaultValue() {
 
 		return defaultValue;
@@ -56,5 +74,25 @@ public class InputValue {
 	public void setDefaultValue(String defaultValue) {
 
 		this.defaultValue = defaultValue;
+	}
+
+	public Object getMinValue() {
+
+		return minValue;
+	}
+
+	public void setMinValue(Object minValue) {
+
+		this.minValue = minValue;
+	}
+
+	public Object getMaxValue() {
+
+		return maxValue;
+	}
+
+	public void setMaxValue(Object maxValue) {
+
+		this.maxValue = maxValue;
 	}
 }

@@ -213,6 +213,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 * Methods
 		 */
 		store.setDefault(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, PreferenceConstants.DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER);
+		store.setDefault(PreferenceConstants.P_SELECTED_METHOD_NAME, PreferenceConstants.DEF_SELECTED_METHOD_NAME);
 		/*
 		 * Quantitation
 		 */

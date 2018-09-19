@@ -14,11 +14,13 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.filter.impl.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
+import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
@@ -31,43 +33,53 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 
-public class MapperDemo {
+public class SettingsSupport {
 
-	public void test1() {
+	public <T extends IProcessSettings> T getSettings(String content, Class<T> clazz, Shell shell) throws JsonParseException, JsonMappingException, IOException {
 
-		try {
-			/*
-			 * "{\"Start RT (Minutes)\":10.16,\"Stop RT (Minutes)\":13.45}"
-			 */
-			// ObjectMapper mapper = new ObjectMapper();
-			// Map<String, Object> values = new HashMap<>();
-			// values.put("Start RT (Minutes)", 10.16);
-			// values.put("Stop RT (Minutes)", 13.45);
-			// String content = mapper.writeValueAsString(values);
-			String content = null;
-			Shell shell = DisplayUtils.getShell();
-			SupplierFilterSettings settings = getSettings(content, SupplierFilterSettings.class, shell);
-		} catch(JsonParseException e) {
-			System.out.println(e);
-		} catch(JsonMappingException e) {
-			System.out.println(e);
-		} catch(IOException e) {
-			System.out.println(e);
-		}
+		String contentModified = getSettingsAsJson(content, clazz, shell);
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		T settings = objectMapper.readValue(contentModified, clazz);
+		return settings;
 	}
 
-	private <T extends IProcessSettings> T getSettings(String content, Class<T> clazz, Shell shell) throws JsonParseException, JsonMappingException, IOException {
+	public String getSettingsAsJson(String content, Class<? extends IProcessSettings> clazz, Shell shell) throws JsonParseException, JsonMappingException, IOException {
+
+		/*
+		 * Initialize the input values with existing values.
+		 */
+		List<InputValue> inputValues = getInputValues(clazz);
+		initializeInputValues(content, inputValues);
+		return getContentViaWizard(shell, inputValues);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void initializeInputValues(String content, List<InputValue> inputValues) throws JsonParseException, JsonMappingException, IOException {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		//
-		if(content == null) {
-			List<InputValue> inputValues = getInputValues(objectMapper, clazz);
-			content = getContentViaWizard(shell, inputValues);
+		/*
+		 * Set existing values.
+		 */
+		if(content != null) {
+			Map<String, Object> map = objectMapper.readValue(content, HashMap.class);
+			for(Map.Entry<String, Object> entry : map.entrySet()) {
+				for(InputValue inputValue : inputValues) {
+					if(inputValue.getName().equals(entry.getKey())) {
+						inputValue.setValue(entry.getValue().toString());
+					}
+				}
+			}
 		}
-		//
-		T settings = objectMapper.readValue(content, clazz);
-		return settings;
+		/*
+		 * Set default values on demand.
+		 */
+		for(InputValue inputValue : inputValues) {
+			if(inputValue.getValue() == null) {
+				inputValue.setValue(inputValue.getDefaultValue());
+			}
+		}
 	}
 
 	private String getContentViaWizard(Shell shell, List<InputValue> inputValues) {
@@ -87,8 +99,11 @@ public class MapperDemo {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private List<InputValue> getInputValues(ObjectMapper objectMapper, Class clazz) {
+	private List<InputValue> getInputValues(Class clazz) {
 
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		//
 		List<InputValue> inputValues = new ArrayList<>();
 		JavaType javaType = objectMapper.getSerializationConfig().constructType(clazz);
 		BeanDescription beanDescription = objectMapper.getSerializationConfig().introspect(javaType);
@@ -108,10 +123,17 @@ public class MapperDemo {
 				 * SettingsProperty ...
 				 */
 				for(Annotation annotation : annotatedField.annotations()) {
-					// System.out.println(annotation.annotationType().getName());
-					// DoubleSettingsProperty doubleSettingsProperty = (DoubleSettingsProperty)annotation;
-					// System.out.println(doubleSettingsProperty.minValue());
-					// System.out.println(doubleSettingsProperty.maxValue());
+					if(annotation.annotationType().getName().contains("SettingsProperty")) {
+						if(annotation instanceof FloatSettingsProperty) {
+							FloatSettingsProperty settingsProperty = (FloatSettingsProperty)annotation;
+							inputValue.setMinValue(settingsProperty.minValue());
+							inputValue.setMaxValue(settingsProperty.maxValue());
+						} else if(annotation instanceof DoubleSettingsProperty) {
+							DoubleSettingsProperty settingsProperty = (DoubleSettingsProperty)annotation;
+							inputValue.setMinValue(settingsProperty.minValue());
+							inputValue.setMaxValue(settingsProperty.maxValue());
+						}
+					}
 				}
 			}
 		}

@@ -63,7 +63,7 @@ public class SettingsWizardPage extends WizardPage {
 			label.setText(inputValue.getName());
 			//
 			Text text = new Text(composite, SWT.BORDER);
-			text.setText(inputValue.getDefaultValue());
+			text.setText(inputValue.getValue());
 			text.setToolTipText(inputValue.getDescription());
 			text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			//
