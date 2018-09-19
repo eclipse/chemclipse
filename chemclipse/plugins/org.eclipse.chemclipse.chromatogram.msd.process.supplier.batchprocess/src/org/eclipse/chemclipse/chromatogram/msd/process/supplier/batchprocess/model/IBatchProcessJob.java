@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
+import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
 
 /**

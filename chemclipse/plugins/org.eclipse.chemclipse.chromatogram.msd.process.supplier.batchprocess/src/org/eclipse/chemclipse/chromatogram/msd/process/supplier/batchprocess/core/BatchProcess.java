@@ -13,9 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.co
 
 import java.io.File;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
 import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
@@ -31,6 +29,8 @@ import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class BatchProcess implements IBatchProcess {

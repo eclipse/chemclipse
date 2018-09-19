@@ -14,10 +14,9 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io
 import java.io.File;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
+import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 
 import junit.framework.TestCase;
 

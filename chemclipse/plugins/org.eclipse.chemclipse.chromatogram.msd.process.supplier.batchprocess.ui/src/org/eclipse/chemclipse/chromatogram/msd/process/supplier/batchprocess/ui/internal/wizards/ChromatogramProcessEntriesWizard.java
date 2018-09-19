@@ -11,9 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.wizards;
 
+import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 import org.eclipse.jface.wizard.Wizard;
-
-import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
 
 /**
  * @author Dr. Philip Wenig

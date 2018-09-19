@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
 import org.eclipse.chemclipse.converter.model.ChromatogramOutputEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.model.ChromatogramProcessEntry;
+import org.eclipse.chemclipse.xxd.process.model.ChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.core.BatchProcess;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;

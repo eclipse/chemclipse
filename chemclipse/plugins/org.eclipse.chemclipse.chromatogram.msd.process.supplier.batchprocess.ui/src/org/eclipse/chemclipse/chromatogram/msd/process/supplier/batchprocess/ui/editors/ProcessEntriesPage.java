@@ -33,12 +33,11 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
-
-import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.wizards.ChromatogramProcessEntriesWizard;
-import org.eclipse.chemclipse.chromatogram.msd.process.support.ProcessTypeSupport;
+import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 
 /**
  * @author Dr. Philip Wenig
