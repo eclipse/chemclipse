@@ -15,13 +15,13 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.core.EvaluationProcessor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizardPage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings.DataType;
+import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;

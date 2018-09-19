@@ -14,16 +14,16 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wi
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.model.ChromatogramProcessEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.BaselineDetectorTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramCalculatorTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramFilterTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramMSDFilterTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakDetectorTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakIdentifierTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
+import org.eclipse.chemclipse.xxd.process.model.ChromatogramProcessEntry;
+import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
+import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramMSDFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 
 public class EvaluationWizardElements extends ChromatogramWizardElements implements IEvaluationWizardElements {
 

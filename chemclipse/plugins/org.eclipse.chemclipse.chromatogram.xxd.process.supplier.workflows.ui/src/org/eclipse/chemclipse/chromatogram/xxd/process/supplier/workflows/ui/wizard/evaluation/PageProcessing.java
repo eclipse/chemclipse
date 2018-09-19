@@ -11,18 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.evaluation;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.BaselineDetectorTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramCalculatorTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramFilterTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramMSDFilterTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakDetectorTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakIdentifierTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakIntegratorTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
+import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
+import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramMSDFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;

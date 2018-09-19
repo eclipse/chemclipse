@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wi
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
+import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 
 public interface IEvaluationWizardElements extends IChromatogramWizardElements {
 

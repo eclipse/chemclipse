@@ -26,13 +26,6 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpect
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupportMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMSD;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.BaselineDetectorTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramCalculatorTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramFilterTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramMSDFilterTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakDetectorTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakIdentifierTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupplier;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetector;
@@ -47,6 +40,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegra
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.Activator;
 import org.eclipse.chemclipse.model.identifier.core.ISupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramMSDFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
