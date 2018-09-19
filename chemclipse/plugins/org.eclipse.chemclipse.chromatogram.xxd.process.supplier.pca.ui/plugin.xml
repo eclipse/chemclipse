@@ -12,7 +12,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-      		category="org.eclipse.chemclipse.chromatogram.msd.process.ui.preferences.processPreferencePage"
+      		category="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferencePage"
             name="PCA Preferences">
