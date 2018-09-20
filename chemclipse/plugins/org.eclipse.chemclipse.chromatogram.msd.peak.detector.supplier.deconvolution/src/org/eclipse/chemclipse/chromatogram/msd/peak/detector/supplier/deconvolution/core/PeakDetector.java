@@ -65,8 +65,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.IDurbinWatsonClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.calculator.SnipCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayProcessor;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -150,7 +149,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validate(chromatogramSelection, peakDetectorSettings, monitor));
 		if(!processingInfo.hasErrorMessages()) {
-			ISupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings();
+			FilterSettings filterSettings = new FilterSettings();
 			IDurbinWatsonClassifierResult durbinWatsonClassifierResult = new DurbinWatsonClassifierResult(ResultStatus.OK, "Test");
 			setMinimumSignalToNoise(peakDetectorSettings);
 			setMinimumPeakWidth(peakDetectorSettings);
@@ -158,7 +157,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			setBaselineIterations(peakDetectorSettings);
 			setQuantityNoiseSegments(peakDetectorSettings);
 			setSensitivityOfDeconvolution(peakDetectorSettings);
-			deconv(chromatogramSelection, durbinWatsonClassifierResult, supplierFilterSettings, monitor);
+			deconv(chromatogramSelection, durbinWatsonClassifierResult, filterSettings, monitor);
 			processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Peak Detector Deconvolution", "Peaks have been detected successfully."));
 		}
 		return processingInfo;
@@ -218,7 +217,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void deconv(IChromatogramSelectionMSD chromatogramSelection, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, ISupplierFilterSettings supplierFilterSettings, IProgressMonitor monitor) {
+	private void deconv(IChromatogramSelectionMSD chromatogramSelection, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, FilterSettings filterSettings, IProgressMonitor monitor) {
 
 		chromatogram = chromatogramSelection.getChromatogramMSD();
 		try {
@@ -246,12 +245,12 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			/*
 			 * Smoothed Values
 			 */
-			double[] smoothedValues = savitzkyGolaySmooth(noDerivative, allIonSignals.getIonSignals(0).getIonSignals(), supplierFilterSettings, durbinWatsonClassifierResult, monitor);
-			double[] smoothedValues2 = savitzkyGolaySmooth(firstDerivative, allIonSignals.getIonSignals(0).getIonSignals(), supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			double[] smoothedValues = savitzkyGolaySmooth(noDerivative, allIonSignals.getIonSignals(0).getIonSignals(), filterSettings, durbinWatsonClassifierResult, monitor);
+			double[] smoothedValues2 = savitzkyGolaySmooth(firstDerivative, allIonSignals.getIonSignals(0).getIonSignals(), filterSettings, durbinWatsonClassifierResult, monitor);
 			/*
 			 * PeakRanges and set up for the view
 			 */
-			IPeakRanges peakRanges = getPeakRangesTicSignal(allIonSignals, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			IPeakRanges peakRanges = getPeakRangesTicSignal(allIonSignals, filterSettings, durbinWatsonClassifierResult, monitor);
 			/*
 			 * Get excludedIons, but its for the ionsignal output, which segment are accepted from stein
 			 */
@@ -265,7 +264,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			 * ueber alle Ionen welchen im PeakRange liegen, druebergehen, und anschauen ob diese Peaks haben koennen
 			 */
 			// IPeakRanges peaksDeconv = getPeaksFromDeconvolution(allIonSignals, peakRanges, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
-			setPeaksFromDeconvolution(allIonSignals, peakRanges, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			setPeaksFromDeconvolution(allIonSignals, peakRanges, filterSettings, durbinWatsonClassifierResult, monitor);
 			/*
 			 * Output
 			 */
@@ -297,12 +296,12 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 				ionSignal = allIonSignals.getIonSignals(numberOfIonInList).getIonSignals();
 			}
 			DurbinWatsonRatings(ionSignal, null, durbinWatsonClassifierResult, monitor);
-			double[] smoothedIonSignal = savitzkyGolaySmooth(noDerivative, ionSignal, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			double[] smoothedIonSignal = savitzkyGolaySmooth(noDerivative, ionSignal, filterSettings, durbinWatsonClassifierResult, monitor);
 			double[] signal = allIonSignals.getIonSignals(numberOfIonInList).getIonSignals();
-			double[] firstDerivIon2 = savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(firstDerivative, signal, supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor);
-			double[] firstDerivIon2smoother = savitzkyGolaySmooth(noDerivative, firstDerivIon2, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
-			double[] secondDerivIon2 = savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(this.firstDerivative, savitzkyGolaySmooth(this.firstDerivative, signal, supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor);
-			double[] secondDerivIon2smoother = savitzkyGolaySmooth(noDerivative, secondDerivIon2, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			double[] firstDerivIon2 = savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(firstDerivative, signal, filterSettings, durbinWatsonClassifierResult, monitor), filterSettings, durbinWatsonClassifierResult, monitor);
+			double[] firstDerivIon2smoother = savitzkyGolaySmooth(noDerivative, firstDerivIon2, filterSettings, durbinWatsonClassifierResult, monitor);
+			double[] secondDerivIon2 = savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(this.firstDerivative, savitzkyGolaySmooth(this.firstDerivative, signal, filterSettings, durbinWatsonClassifierResult, monitor), filterSettings, durbinWatsonClassifierResult, monitor), filterSettings, durbinWatsonClassifierResult, monitor);
+			double[] secondDerivIon2smoother = savitzkyGolaySmooth(noDerivative, secondDerivIon2, filterSettings, durbinWatsonClassifierResult, monitor);
 			double[] noiseFirstDeriv = getNoiseOfTic(signal, 0, false);
 			//
 			int numberOfIon2 = 168;
@@ -325,7 +324,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 				ionSignal2 = allIonSignals.getIonSignals(numberOfIonInList).getIonSignals();
 			}
 			DurbinWatsonRatings(ionSignal2, null, durbinWatsonClassifierResult, monitor);
-			double[] smoothedIonSignal2 = savitzkyGolaySmooth(noDerivative, ionSignal, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			double[] smoothedIonSignal2 = savitzkyGolaySmooth(noDerivative, ionSignal, filterSettings, durbinWatsonClassifierResult, monitor);
 			double[] signal2 = allIonSignals.getIonSignals(numberOfIonInList2).getIonSignals();
 			fillArraysViewDeconv(deconvHelper.setXValueforPrint(totalIONsignals), smoothedValues, deconvHelper.factorisingValues(signal2, factorSizeNormal2), null, null, null, deconvHelper.factorisingValues(signal, factorSizeNormal), null, null, null);
 			/*
@@ -338,11 +337,11 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private IPeakRanges getPeakRangesTicSignal(IAllIonSignals allIonSignals, ISupplierFilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	private IPeakRanges getPeakRangesTicSignal(IAllIonSignals allIonSignals, FilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		IPeakRanges peakRanges = new PeakRanges(allIonSignals);
 		double[] yChromatogram = allIonSignals.getIonSignals(0).getIonSignals();
-		derivativesAndNoise = setDerivatives(yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+		derivativesAndNoise = setDerivatives(yChromatogram, filterSettings, durbinWatsonClassifierResult, monitor);
 		/*
 		 * SNIP
 		 */
@@ -391,7 +390,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void setPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges, ISupplierFilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	private void setPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges, FilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		boolean doingAll = false;
 		boolean foundPeakModel = false;
@@ -547,7 +546,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	/*
 	 * Testing different peak models
 	 */
-	private IPeakRanges getPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges, ISupplierFilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	private IPeakRanges getPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges, FilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		List<IChromatogramPeakMSD> peakList = chromatogram.getPeaks();
 		IChromatogramPeakMSD peak, peak2, peak3, peak4, peak5, peak6 = null;
@@ -996,12 +995,12 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	/**
 	 * 
 	 * @param yChromatogram
-	 * @param supplierFilterSettings
+	 * @param filterSettings
 	 * @param durbinWatsonClassifierResult
 	 * @param monitor
 	 * @return
 	 */
-	private IDerivativesAndNoise setDerivatives(double[] yChromatogram, ISupplierFilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	private IDerivativesAndNoise setDerivatives(double[] yChromatogram, FilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		/*
 		 * Savitzky Golay max second Derivative
@@ -1010,7 +1009,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		/*
 		 * First deriv by Savitzky Golay with Noise (Factorised by 2 => now it's the same range like firstderiv by normal function)
 		 */
-		double[] firstDerivSmoothedFactorised = deconvHelper.factorisingValues(savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(firstDerivative, yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), 2);
+		double[] firstDerivSmoothedFactorised = deconvHelper.factorisingValues(savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(firstDerivative, yChromatogram, filterSettings, durbinWatsonClassifierResult, monitor), filterSettings, durbinWatsonClassifierResult, monitor), 2);
 		double[] noiseFirstDeriv = getNoiseOfTic(firstDerivSmoothedFactorised, 1, true);
 		double[] noiseNegativeFirstDeriv = deconvHelper.positivToNegativ(noiseFirstDeriv);
 		IFirstDerivativeAndNoise firstDerivative = new FirstDerivativeAndNoise(firstDerivSmoothedFactorised, noiseFirstDeriv, noiseNegativeFirstDeriv);
@@ -1021,7 +1020,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		 * (second derivative + SG(no derivative = smooth) => second derivative smoothed)
 		 * (second derivative smoothed + factorising => better for output)
 		 */
-		double[] secondDerivSmoothedFactorised = deconvHelper.factorisingValues(savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(this.firstDerivative, savitzkyGolaySmooth(this.firstDerivative, yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), 9);
+		double[] secondDerivSmoothedFactorised = deconvHelper.factorisingValues(savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(this.firstDerivative, savitzkyGolaySmooth(this.firstDerivative, yChromatogram, filterSettings, durbinWatsonClassifierResult, monitor), filterSettings, durbinWatsonClassifierResult, monitor), filterSettings, durbinWatsonClassifierResult, monitor), 9);
 		double[] noiseSecondDeriv = getNoiseOfTic(secondDerivSmoothedFactorised, 2, true);
 		double[] noiseNegativeSecondDeriv = deconvHelper.positivToNegativ(noiseSecondDeriv);
 		ISecondDerivativeAndNoise secondDerivative = new SecondDerivativeAndNoise(secondDerivSmoothedFactorised, noiseSecondDeriv, noiseNegativeSecondDeriv);
@@ -1033,7 +1032,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		 * (third derivative + SG(no derivative=smooth) => third derivative smoothed)
 		 * (third derivative smoothed + factorising => better for output)
 		 */
-		double[] thirdDerivSmoothedFactorised = deconvHelper.factorisingValues(savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(this.firstDerivative, savitzkyGolaySmooth(this.firstDerivative, savitzkyGolaySmooth(this.firstDerivative, yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), 19);
+		double[] thirdDerivSmoothedFactorised = deconvHelper.factorisingValues(savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(this.firstDerivative, savitzkyGolaySmooth(this.firstDerivative, savitzkyGolaySmooth(this.firstDerivative, yChromatogram, filterSettings, durbinWatsonClassifierResult, monitor), filterSettings, durbinWatsonClassifierResult, monitor), filterSettings, durbinWatsonClassifierResult, monitor), filterSettings, durbinWatsonClassifierResult, monitor), 19);
 		double[] noiseThirdDeriv = getNoiseOfTic(thirdDerivSmoothedFactorised, 3, false);
 		double[] noiseNegativeThirdDeriv = deconvHelper.positivToNegativ(noiseThirdDeriv);
 		IThirdDerivativeAndNoise thirdDerivative = new ThirdDerivativeAndNoise(thirdDerivSmoothedFactorised, noiseThirdDeriv, noiseNegativeThirdDeriv);
@@ -1652,7 +1651,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	 * @param monitor
 	 * @return
 	 */
-	private double[] savitzkyGolaySmooth(int whichDerivative, double[] ticValues, ISupplierFilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	private double[] savitzkyGolaySmooth(int whichDerivative, double[] ticValues, FilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		supplierFilterSettings.setDerivative(whichDerivative);
 		supplierFilterSettings = DurbinWatsonSetBestValuesForSavitzkyGolay(durbinWatsonClassifierResult, supplierFilterSettings, whichDerivative);
@@ -1678,10 +1677,10 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	 * 
 	 * @param durbinWatsonClassifierResult
 	 * @param whichderivative
-	 * @param supplierFilterSettings
+	 * @param filterSettings
 	 * @return supplierFilterSettings
 	 */
-	private ISupplierFilterSettings DurbinWatsonSetBestValuesForSavitzkyGolay(IDurbinWatsonClassifierResult durbinWatsonClassifierResult, ISupplierFilterSettings supplierFilterSettings, int whichderivative) {
+	private FilterSettings DurbinWatsonSetBestValuesForSavitzkyGolay(IDurbinWatsonClassifierResult durbinWatsonClassifierResult, FilterSettings filterSettings, int whichderivative) {
 
 		if(durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings() != null) {
 			int sizeRating = durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().size() - 1;
@@ -1690,7 +1689,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			int bestDurbinWatson = 0;
 			boolean setbestDB = false;
 			for(int i = 1; i < sizeRating; i++) {
-				if(durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().get(i).getSupplierFilterSettings().getDerivative() == whichderivative) {
+				if(durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().get(i).getFilterSettings().getDerivative() == whichderivative) {
 					/*
 					 * DW: PerfectValue is close to 2
 					 */
@@ -1706,13 +1705,13 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 					}
 				}
 			}
-			int order = durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().get(bestDurbinWatson).getSupplierFilterSettings().getOrder();
-			int width = durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().get(bestDurbinWatson).getSupplierFilterSettings().getWidth();
-			supplierFilterSettings.setDerivative(whichderivative);
-			supplierFilterSettings.setOrder(order);
-			supplierFilterSettings.setWidth(width);
+			int order = durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().get(bestDurbinWatson).getFilterSettings().getOrder();
+			int width = durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().get(bestDurbinWatson).getFilterSettings().getWidth();
+			filterSettings.setDerivative(whichderivative);
+			filterSettings.setOrder(order);
+			filterSettings.setWidth(width);
 		}
-		return supplierFilterSettings;
+		return filterSettings;
 	}
 
 	/**
