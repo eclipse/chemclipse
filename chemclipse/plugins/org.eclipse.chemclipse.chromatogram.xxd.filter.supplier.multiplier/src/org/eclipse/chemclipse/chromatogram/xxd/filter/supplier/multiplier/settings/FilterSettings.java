@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
+public class FilterSettings extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Multiplier", defaultValue = "1")
 	@JsonPropertyDescription(value = "The factor to multiply the signals.")
@@ -29,25 +29,21 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MULTIPLIER, maxValue = PreferenceSupplier.MAX_MULTIPLIER)
 	private float divisor = 1.0f;
 
-	@Override
 	public float getMultiplier() {
 
 		return multiplier;
 	}
 
-	@Override
 	public void setMultiplier(float multiplier) {
 
 		this.multiplier = multiplier;
 	}
 
-	@Override
 	public float getDivisor() {
 
 		return divisor;
 	}
 
-	@Override
 	public void setDivisor(float divisor) {
 
 		this.divisor = divisor;

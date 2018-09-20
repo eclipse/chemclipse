@@ -13,21 +13,21 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.core.ChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.SupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.FilterSettings;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class MultiplierFilter_1_Test extends ChromatogramImporterTestCase {
 
 	private IChromatogramFilter chromatogramFilter;
-	private ISupplierFilterSettings multiplierFilterSettings;
+	private FilterSettings multiplierFilterSettings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
 		chromatogramFilter = new ChromatogramFilter();
-		multiplierFilterSettings = new SupplierFilterSettings();
+		multiplierFilterSettings = new FilterSettings();
 		multiplierFilterSettings.setMultiplier(0.01f);
 	}
 

@@ -15,8 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.FilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -70,17 +69,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the chromatogram filter settings.
-	 * 
-	 * @return IChromatogramFilterSettings
-	 */
-	public static ISupplierFilterSettings getChromatogramFilterSettings() {
+	public static FilterSettings getFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-		chromatogramFilterSettings.setMultiplier(preferences.getFloat(P_MULTIPLIER, DEF_MULTIPLIER));
-		chromatogramFilterSettings.setDivisor(preferences.getFloat(P_DIVISOR, DEF_DIVISOR));
-		return chromatogramFilterSettings;
+		FilterSettings filterSettings = new FilterSettings();
+		filterSettings.setMultiplier(preferences.getFloat(P_MULTIPLIER, DEF_MULTIPLIER));
+		filterSettings.setDivisor(preferences.getFloat(P_DIVISOR, DEF_DIVISOR));
+		return filterSettings;
 	}
 }

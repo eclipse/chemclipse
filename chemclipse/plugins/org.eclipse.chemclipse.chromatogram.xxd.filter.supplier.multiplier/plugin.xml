@@ -7,7 +7,7 @@
             description="This filter multiplies all signals of a chromatogram."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.core.ChromatogramFilter"
             filterName="Multiplier Filter"
-            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.SupplierFilterSettings"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.FilterSettings"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier">
       </ChromatogramFilterSupplier>
    </extension>
