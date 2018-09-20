@@ -15,8 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.FilterSettings;
 import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -66,21 +65,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the chromatogram filter settings.
-	 * 
-	 * @return IChromatogramFilterSettings
-	 */
-	public static ISupplierFilterSettings getChromatogramFilterSettings() {
+	public static FilterSettings getChromatogramFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-		/*
-		 * Get the actual preference.
-		 * If it's not available, a default value will be returned.
-		 */
-		chromatogramFilterSettings.setCodaThreshold(preferences.getFloat(P_CODA_THRESHOLD, DEF_CODA_THRESHOLD));
-		return chromatogramFilterSettings;
+		FilterSettings filterSettings = new FilterSettings();
+		filterSettings.setCodaThreshold(preferences.getFloat(P_CODA_THRESHOLD, DEF_CODA_THRESHOLD));
+		return filterSettings;
 	}
 
 	/**

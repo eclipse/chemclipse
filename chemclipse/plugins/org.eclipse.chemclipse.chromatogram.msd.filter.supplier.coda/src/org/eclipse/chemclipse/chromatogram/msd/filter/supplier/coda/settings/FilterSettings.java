@@ -17,19 +17,17 @@ import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
+public class FilterSettings extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Coda Threshold", defaultValue = "0.75f")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.CODA_THRESHOLD_MIN_VALUE, maxValue = PreferenceSupplier.CODA_THRESHOLD_MAX_VALUE, step = 0.05f)
 	private float codaThreshold;
 
-	@Override
 	public float getCodaThreshold() {
 
 		return codaThreshold;
 	}
 
-	@Override
 	public void setCodaThreshold(float codaThreshold) {
 
 		this.codaThreshold = codaThreshold;
