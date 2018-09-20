@@ -12,47 +12,40 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
-import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
-	private IMarkedIons ionsToRemove;
-
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
+		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(chromatogramFilterSettings instanceof FilterSettings) {
+				try {
+					FilterSettings filterSettings = (FilterSettings)chromatogramFilterSettings;
+					IonSettingUtil ionSettingUtil = new IonSettingUtil();
+					IMarkedIons ionsToRemove = new MarkedIons(ionSettingUtil.extractIons(ionSettingUtil.deserialize(filterSettings.getIonsToRemove())));
+					applyIonRemoverFilter(chromatogramSelection, ionsToRemove, monitor);
+					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Mass fragments have been removed successfully."));
+				} catch(FilterException e) {
+					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
+				}
+			}
 		}
-		/*
-		 * Try to remove the given ions.
-		 */
-		setFilterSettings(chromatogramFilterSettings);
-		IChromatogramFilterResult chromatogramFilterResult;
-		try {
-			applyIonRemoverFilter(chromatogramSelection, monitor);
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "Mass fragments have been removed successfully.");
-		} catch(FilterException e) {
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage());
-		}
-		processingInfo.setProcessingResult(chromatogramFilterResult);
 		return processingInfo;
 	}
 
@@ -60,24 +53,8 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
-		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
-	}
-
-	private void setFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
-
-		/*
-		 * Get the excluded ions instance.
-		 */
-		IonSettingUtil settingIon = new IonSettingUtil();
-		ISupplierFilterSettings settings;
-		//
-		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
-			settings = (ISupplierFilterSettings)chromatogramFilterSettings;
-		} else {
-			settings = PreferenceSupplier.getChromatogramFilterSettings();
-		}
-		this.ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(settings.getIonsToRemove())));
+		FilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
+		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
 	/**
@@ -87,7 +64,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 	 * @param chromatogramSelection
 	 * @throws FilterException
 	 */
-	private void applyIonRemoverFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) throws FilterException {
+	private void applyIonRemoverFilter(IChromatogramSelectionMSD chromatogramSelection, IMarkedIons ionsToRemove, IProgressMonitor monitor) throws FilterException {
 
 		/*
 		 * Test if there are ions to remove.

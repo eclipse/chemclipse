@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 public class MFRemoverFilter_1_ITest extends ChromatogramImporterTestCase {
 
 	private IChromatogramFilterMSD chromatogramFilter;
-	private ISupplierFilterSettings chromatogramFilterSettings;
+	private FilterSettings chromatogramFilterSettings;
 	private IMarkedIons excludedIons;
 
 	@Override
@@ -31,7 +31,7 @@ public class MFRemoverFilter_1_ITest extends ChromatogramImporterTestCase {
 
 		super.setUp();
 		chromatogramFilter = new ChromatogramFilter();
-		chromatogramFilterSettings = new SupplierFilterSettings();
+		chromatogramFilterSettings = new FilterSettings();
 		IonSettingUtil settingIon = new IonSettingUtil();
 		excludedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(chromatogramFilterSettings.getIonsToRemove())));
 		excludedIons.add(new MarkedIon(28));

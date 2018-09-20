@@ -19,8 +19,8 @@ import org.eclipse.chemclipse.chromatogram.filter.exceptions.ChromatogramSelecti
 import org.eclipse.chemclipse.chromatogram.filter.exceptions.FilterSettingsException;
 import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoFilterAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -88,7 +88,7 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		/**
 		 * Filter Background
 		 */
-		ISupplierFilterSettings rFilterSettings = new SupplierFilterSettings();
+		FilterSettings rFilterSettings = new FilterSettings();
 		IonSettingUtil settingIon = new IonSettingUtil();
 		excludedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(rFilterSettings.getIonsToRemove())));
 		excludedIons.add(new MarkedIon(28));
@@ -143,7 +143,7 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		/**
 		 * Filter Background
 		 */
-		ISupplierFilterSettings rFilterSettings = new SupplierFilterSettings();
+		FilterSettings rFilterSettings = new FilterSettings();
 		IonSettingUtil settingIon = new IonSettingUtil();
 		excludedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(rFilterSettings.getIonsToRemove())));
 		excludedIons.add(new MarkedIon(28));
