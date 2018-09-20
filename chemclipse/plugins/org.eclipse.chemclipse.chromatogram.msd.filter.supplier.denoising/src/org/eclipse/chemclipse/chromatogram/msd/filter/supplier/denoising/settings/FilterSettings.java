@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.support.settings.IonsSelectionSettingProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
+public class FilterSettings extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Ions To Remove", defaultValue = "18;28;84;207")
 	@JsonPropertyDescription(value = "List the ions to remove, separated by a white space.")
@@ -41,49 +41,41 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	@IntSettingsProperty(minValue = PreferenceSupplier.SEGMENT_WIDTH_MIN, maxValue = PreferenceSupplier.SEGMENT_WIDTH_MAX, validation = Validation.ODD_NUMBER)
 	private int segmentWidth = 13;
 
-	@Override
 	public String getIonsToRemove() {
 
 		return ionsToRemove;
 	}
 
-	@Override
 	public void setIonsToRemove(String ionsToRemove) {
 
 		this.ionsToRemove = ionsToRemove;
 	}
 
-	@Override
 	public String getIonsToPreserve() {
 
 		return ionsToPreserve;
 	}
 
-	@Override
 	public void setIonsToPreserve(String ionsToPreserve) {
 
 		this.ionsToPreserve = ionsToPreserve;
 	}
 
-	@Override
 	public boolean isAdjustThresholdTransitions() {
 
 		return adjustThresholdTransitions;
 	}
 
-	@Override
 	public void setAdjustThresholdTransitions(boolean adjustThresholdTransitions) {
 
 		this.adjustThresholdTransitions = adjustThresholdTransitions;
 	}
 
-	@Override
 	public int getNumberOfUsedIonsForCoefficient() {
 
 		return numberOfUsedIonsForCoefficient;
 	}
 
-	@Override
 	public void setNumberOfUsedIonsForCoefficient(int numberOfUsedIonsForCoefficient) {
 
 		if(numberOfUsedIonsForCoefficient <= 0) {
@@ -93,13 +85,11 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 		}
 	}
 
-	@Override
 	public int getSegmentWidth() {
 
 		return segmentWidth;
 	}
 
-	@Override
 	public void setSegmentWidth(int segmentWidth) {
 
 		this.segmentWidth = segmentWidth;

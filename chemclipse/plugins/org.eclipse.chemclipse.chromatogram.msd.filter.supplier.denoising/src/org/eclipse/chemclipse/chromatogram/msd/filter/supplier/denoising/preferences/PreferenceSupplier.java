@@ -18,8 +18,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.FilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -88,25 +87,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the chromatogram filter settings.
-	 * 
-	 * @return IChromatogramFilterSettings
-	 */
-	public static ISupplierFilterSettings getChromatogramFilterSettings() {
+	public static FilterSettings getFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-		/*
-		 * Get the actual preference.
-		 * If it's not available, a default value will be returned.
-		 */
-		chromatogramFilterSettings.setAdjustThresholdTransitions(preferences.getBoolean(P_ADJUST_THRESHOLD_TRANSITIONS, DEF_ADJUST_THRESHOLD_TRANSITIONS));
-		chromatogramFilterSettings.setNumberOfUsedIonsForCoefficient(preferences.getInt(P_NUMBER_OF_USE_IONS_FOR_COEFFICIENT, DEF_NUMBER_OF_USE_IONS_FOR_COEFFICIENT));
-		chromatogramFilterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
-		chromatogramFilterSettings.setIonsToPreserve(preferences.get(P_IONS_TO_PRESERVE, DEF_IONS_TO_PRESERVE));
-		chromatogramFilterSettings.setSegmentWidth(preferences.getInt(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
-		return chromatogramFilterSettings;
+		FilterSettings filterSettings = new FilterSettings();
+		filterSettings.setAdjustThresholdTransitions(preferences.getBoolean(P_ADJUST_THRESHOLD_TRANSITIONS, DEF_ADJUST_THRESHOLD_TRANSITIONS));
+		filterSettings.setNumberOfUsedIonsForCoefficient(preferences.getInt(P_NUMBER_OF_USE_IONS_FOR_COEFFICIENT, DEF_NUMBER_OF_USE_IONS_FOR_COEFFICIENT));
+		filterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
+		filterSettings.setIonsToPreserve(preferences.get(P_IONS_TO_PRESERVE, DEF_IONS_TO_PRESERVE));
+		filterSettings.setSegmentWidth(preferences.getInt(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
+		return filterSettings;
 	}
 
 	/**

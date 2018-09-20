@@ -18,13 +18,13 @@ import junit.framework.TestCase;
 
 public class DenoisingFilterSettings_1_Test extends TestCase {
 
-	private ISupplierFilterSettings settings;
+	private FilterSettings settings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		settings = new SupplierFilterSettings();
+		settings = new FilterSettings();
 	}
 
 	@Override

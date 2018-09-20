@@ -20,8 +20,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.excepti
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.internal.core.support.Denoising;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.DenoisingFilterResult;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.IDenoisingFilterResult;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.FilterSettings;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
@@ -29,40 +28,35 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
-	private IMarkedIons ionsToRemove;
-	private IMarkedIons ionsToPreserve;
-	private boolean adjustThresholdTransitions;
-	private int numberOfUsedIonsForCoefficient;
-	private int segmentWidth;
-
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
+		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(chromatogramFilterSettings instanceof FilterSettings) {
+				try {
+					FilterSettings filterSettings = (FilterSettings)chromatogramFilterSettings;
+					IonSettingUtil ionSettingsUtil = new IonSettingUtil();
+					IMarkedIons ionsToRemove = new MarkedIons(ionSettingsUtil.extractIons(ionSettingsUtil.deserialize(filterSettings.getIonsToRemove())));
+					IMarkedIons ionsToPreserve = new MarkedIons(ionSettingsUtil.extractIons(ionSettingsUtil.deserialize(filterSettings.getIonsToPreserve())));
+					boolean adjustThresholdTransitions = filterSettings.isAdjustThresholdTransitions();
+					int numberOfUsedIonsForCoefficient = filterSettings.getNumberOfUsedIonsForCoefficient();
+					int segmentWidth = filterSettings.getSegmentWidth();
+					//
+					List<ICombinedMassSpectrum> noiseMassSpectra = Denoising.applyDenoisingFilter(chromatogramSelection, ionsToRemove, ionsToPreserve, adjustThresholdTransitions, numberOfUsedIonsForCoefficient, segmentWidth, monitor);
+					IMeasurementResult measurementResult = new MeasurementResult("MS Denoising Filter", "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising", "This list contains the calculated noise mass spectra.", noiseMassSpectra);
+					chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
+					processingInfo.setProcessingResult(new DenoisingFilterResult(ResultStatus.OK, "The chromatogram selection has been denoised successfully.", noiseMassSpectra));
+				} catch(FilterException e) {
+					processingInfo.setProcessingResult(new DenoisingFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
+				}
+			}
 		}
-		/*
-		 * Try to denoise the chromatogram selection.
-		 */
-		setFilterSettings(chromatogramFilterSettings);
-		IDenoisingFilterResult chromatogramFilterResult;
-		try {
-			List<ICombinedMassSpectrum> noiseMassSpectra = Denoising.applyDenoisingFilter(chromatogramSelection, ionsToRemove, ionsToPreserve, adjustThresholdTransitions, numberOfUsedIonsForCoefficient, segmentWidth, monitor);
-			IMeasurementResult measurementResult = new MeasurementResult("MS Denoising Filter", "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising", "This list contains the calculated noise mass spectra.", noiseMassSpectra);
-			chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
-			chromatogramFilterResult = new DenoisingFilterResult(ResultStatus.OK, "The chromatogram selection has been denoised successfully.", noiseMassSpectra);
-		} catch(FilterException e) {
-			chromatogramFilterResult = new DenoisingFilterResult(ResultStatus.EXCEPTION, e.getMessage());
-		}
-		processingInfo.setProcessingResult(chromatogramFilterResult);
 		return processingInfo;
 	}
 
@@ -70,26 +64,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
-		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
-	}
-
-	private void setFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
-
-		/*
-		 * Get the excluded ions instance.
-		 */
-		ISupplierFilterSettings settings;
-		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
-			settings = (ISupplierFilterSettings)chromatogramFilterSettings;
-		} else {
-			settings = PreferenceSupplier.getChromatogramFilterSettings();
-		}
-		IonSettingUtil settingIon = new IonSettingUtil();
-		ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(settings.getIonsToRemove())));
-		ionsToPreserve = new MarkedIons(settingIon.extractIons(settingIon.deserialize(settings.getIonsToPreserve())));
-		adjustThresholdTransitions = settings.isAdjustThresholdTransitions();
-		numberOfUsedIonsForCoefficient = settings.getNumberOfUsedIonsForCoefficient();
-		segmentWidth = settings.getSegmentWidth();
+		FilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
+		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 }
