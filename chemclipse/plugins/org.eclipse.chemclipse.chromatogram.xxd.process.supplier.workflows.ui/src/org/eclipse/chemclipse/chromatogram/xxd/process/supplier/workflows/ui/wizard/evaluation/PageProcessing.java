@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramMSDFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
@@ -101,7 +101,7 @@ public class PageProcessing extends AbstractExtendedWizardPage {
 
 	private void createFilterMSDSection(Composite parent) {
 
-		String category = ChromatogramMSDFilterTypeSupplier.CATEGORY;
+		String category = ChromatogramFilterTypeSupplierMSD.CATEGORY;
 		GridData gridData;
 		/*
 		 * Analysis system.
@@ -333,7 +333,7 @@ public class PageProcessing extends AbstractExtendedWizardPage {
 	private void validateProcessSettings() {
 
 		String message = null;
-		message = validateComboSelection(ChromatogramMSDFilterTypeSupplier.CATEGORY, comboChromatogramMSDFilter.getText().trim());
+		message = validateComboSelection(ChromatogramFilterTypeSupplierMSD.CATEGORY, comboChromatogramMSDFilter.getText().trim());
 		if(message == null) {
 			message = validateComboSelection(ChromatogramFilterTypeSupplier.CATEGORY, comboChromatogramFilter.getText().trim());
 		}

@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramMSDFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
@@ -79,7 +79,7 @@ public class EvaluationWizardElements extends ChromatogramWizardElements impleme
 	private void initalizeProcessingEntries() {
 
 		processingEntries = new ArrayList<IChromatogramProcessEntry>();
-		processingEntries.add(new ChromatogramProcessEntry(ChromatogramMSDFilterTypeSupplier.CATEGORY, ""));
+		processingEntries.add(new ChromatogramProcessEntry(ChromatogramFilterTypeSupplierMSD.CATEGORY, ""));
 		processingEntries.add(new ChromatogramProcessEntry(ChromatogramFilterTypeSupplier.CATEGORY, ""));
 		processingEntries.add(new ChromatogramProcessEntry(BaselineDetectorTypeSupplier.CATEGORY, ""));
 		processingEntries.add(new ChromatogramProcessEntry(PeakDetectorTypeSupplier.CATEGORY, ""));

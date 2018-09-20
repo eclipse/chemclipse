@@ -31,7 +31,7 @@ import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramMSDFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
@@ -101,7 +101,7 @@ public class EvaluationProcessor {
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		//
 		List<IChromatogramProcessEntry> chromatogramProcessingEntries = new ArrayList<IChromatogramProcessEntry>();
-		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(ChromatogramMSDFilterTypeSupplier.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_CHROMATOGRAM_MSD_FILTER, PreferenceSupplier.DEF_EVALUATION_CHROMATOGRAM_MSD_FILTER)));
+		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(ChromatogramFilterTypeSupplierMSD.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_CHROMATOGRAM_MSD_FILTER, PreferenceSupplier.DEF_EVALUATION_CHROMATOGRAM_MSD_FILTER)));
 		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(ChromatogramFilterTypeSupplier.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_CHROMATOGRAM_FILTER, PreferenceSupplier.DEF_EVALUATION_CHROMATOGRAM_FILTER)));
 		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(BaselineDetectorTypeSupplier.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_BASELINE_DETECTOR, PreferenceSupplier.DEF_EVALUATION_BASELINE_DETECTOR)));
 		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(PeakDetectorTypeSupplier.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_PEAK_DETECTOR, PreferenceSupplier.DEF_EVALUATION_PEAK_DETECTOR)));

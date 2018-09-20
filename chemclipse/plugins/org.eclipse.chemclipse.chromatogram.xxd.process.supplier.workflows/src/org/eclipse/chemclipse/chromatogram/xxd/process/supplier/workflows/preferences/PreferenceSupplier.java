@@ -43,7 +43,7 @@ import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramMSDFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
@@ -53,7 +53,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String P_EVALUATION_CHROMATOGRAM_MSD_FILTER = ChromatogramMSDFilterTypeSupplier.CATEGORY;
+	public static final String P_EVALUATION_CHROMATOGRAM_MSD_FILTER = ChromatogramFilterTypeSupplierMSD.CATEGORY;
 	public static final String DEF_EVALUATION_CHROMATOGRAM_MSD_FILTER = "";
 	public static final String P_EVALUATION_CHROMATOGRAM_FILTER = ChromatogramFilterTypeSupplier.CATEGORY;
 	public static final String DEF_EVALUATION_CHROMATOGRAM_FILTER = "";
