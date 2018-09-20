@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.detector;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.FilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IBackfoldingShifter {
 
@@ -36,5 +36,5 @@ public interface IBackfoldingShifter {
 	 * @param monitor
 	 * @return {@link IExtractedIonSignals}
 	 */
-	IExtractedIonSignals shiftIons(IChromatogramSelectionMSD chromatogramSelection, IBackfoldingSettings backfoldingSettings, IProgressMonitor monitor);
+	IExtractedIonSignals shiftIons(IChromatogramSelectionMSD chromatogramSelection, FilterSettings filterSettings, IProgressMonitor monitor);
 }

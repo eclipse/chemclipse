@@ -14,38 +14,33 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.sett
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
-import org.eclipse.chemclipse.support.settings.RetentionTimeMinutesProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
+public class FilterSettings extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Backfolding Runs", defaultValue = "3")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_BACKFOLDING_RUNS, maxValue = PreferenceSupplier.MAX_BACKFOLDING_RUNS)
 	private int numberOfBackfoldingRuns;
-	@JsonProperty(value = "Max Retention Time Shift (Minutes)", defaultValue = "5000")
-	@RetentionTimeMinutesProperty(minValue = PreferenceSupplier.MIN_RETENTION_TIME_SHIFT, maxValue = PreferenceSupplier.MAX_RETENTION_TIME_SHIFT)
+	@JsonProperty(value = "Max Retention Time Shift (Milliseconds)", defaultValue = "5000")
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_RETENTION_TIME_SHIFT, maxValue = PreferenceSupplier.MAX_RETENTION_TIME_SHIFT)
 	private int maximumRetentionTimeShift;
 
-	@Override
 	public int getNumberOfBackfoldingRuns() {
 
 		return numberOfBackfoldingRuns;
 	}
 
-	@Override
 	public void setNumberOfBackfoldingRuns(int numberOfBackfoldingRuns) {
 
 		this.numberOfBackfoldingRuns = numberOfBackfoldingRuns;
 	}
 
-	@Override
 	public int getMaximumRetentionTimeShift() {
 
 		return maximumRetentionTimeShift;
 	}
 
-	@Override
 	public void setMaximumRetentionTimeShift(int maximumRetentionTimeShift) {
 
 		this.maximumRetentionTimeShift = maximumRetentionTimeShift;

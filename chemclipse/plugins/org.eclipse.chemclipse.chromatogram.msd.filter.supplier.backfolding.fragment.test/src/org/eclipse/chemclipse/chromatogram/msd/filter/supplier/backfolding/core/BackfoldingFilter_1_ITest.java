@@ -12,21 +12,21 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.FilterSettings;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class BackfoldingFilter_1_ITest extends ChromatogramImporterTestCase {
 
 	private IChromatogramFilterMSD chromatogramFilter;
-	private ISupplierFilterSettings chromatogramFilterSettings;
+	private FilterSettings chromatogramFilterSettings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
 		chromatogramFilter = new ChromatogramFilter();
-		chromatogramFilterSettings = new SupplierFilterSettings();
+		chromatogramFilterSettings = new FilterSettings();
 	}
 
 	@Override

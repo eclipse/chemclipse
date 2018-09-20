@@ -15,8 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.FilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -70,22 +69,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the chromatogram filter settings.
-	 * 
-	 * @return IChromatogramFilterSettings
-	 */
-	public static ISupplierFilterSettings getChromatogramFilterSettings() {
+	public static FilterSettings getFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		SupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-		/*
-		 * Get the actual preference.
-		 * If it's not available, a default value will be returned.
-		 */
-		chromatogramFilterSettings.setMaximumRetentionTimeShift(preferences.getInt(P_MAX_RETENTION_TIME_SHIFT, DEF_RETENTION_TIME_SHIFT));
-		chromatogramFilterSettings.setNumberOfBackfoldingRuns(preferences.getInt(P_BACKFOLDING_RUNS, DEF_BACKFOLDING_RUNS));
-		return chromatogramFilterSettings;
+		FilterSettings filterSettings = new FilterSettings();
+		filterSettings.setMaximumRetentionTimeShift(preferences.getInt(P_MAX_RETENTION_TIME_SHIFT, DEF_RETENTION_TIME_SHIFT));
+		filterSettings.setNumberOfBackfoldingRuns(preferences.getInt(P_BACKFOLDING_RUNS, DEF_BACKFOLDING_RUNS));
+		return filterSettings;
 	}
 
 	public static int getMaxRetentionTimeShift() {

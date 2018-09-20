@@ -12,14 +12,13 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
-import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.detector.BackfoldingShifter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.FilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -27,33 +26,25 @@ import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
-	private ISupplierFilterSettings supplierFilterSettings = null;
-
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
+		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(chromatogramFilterSettings instanceof FilterSettings) {
+				try {
+					FilterSettings filterSettings = (FilterSettings)chromatogramFilterSettings;
+					applyBackfoldingFilter(chromatogramSelection, filterSettings, monitor);
+					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection has been successfully backfolded."));
+				} catch(FilterException e) {
+					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
+				}
+			}
 		}
-		/*
-		 * Try to fold back the chromatogram selection.
-		 */
-		setFilterSettings(chromatogramFilterSettings);
-		IChromatogramFilterResult chromatogramFilterResult;
-		try {
-			applyBackfoldingFilter(chromatogramSelection, monitor);
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection has been successfully backfolded.");
-		} catch(FilterException e) {
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage());
-		}
-		processingInfo.setProcessingResult(chromatogramFilterResult);
 		return processingInfo;
 	}
 
@@ -61,24 +52,11 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
-		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
+		FilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
+		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	// ----------------------------private methods
-	private void setFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
-
-		/*
-		 * Get the excluded ions instance.
-		 */
-		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
-			supplierFilterSettings = (ISupplierFilterSettings)chromatogramFilterSettings;
-		} else {
-			supplierFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
-		}
-	}
-
-	private void applyBackfoldingFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) throws FilterException {
+	private void applyBackfoldingFilter(IChromatogramSelectionMSD chromatogramSelection, FilterSettings filterSettings, IProgressMonitor monitor) throws FilterException {
 
 		/*
 		 * The chromatogram has already been checked by
@@ -89,7 +67,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		 * If backfoldingSettings == null, the default settings will be used.
 		 */
 		BackfoldingShifter backfoldingShifter = new BackfoldingShifter();
-		IExtractedIonSignals extractedIonSignals = backfoldingShifter.shiftIons(chromatogramSelection, supplierFilterSettings, monitor);
+		IExtractedIonSignals extractedIonSignals = backfoldingShifter.shiftIons(chromatogramSelection, filterSettings, monitor);
 		IScanMSD massSpectrum;
 		IVendorMassSpectrum supplierMassSpectrum;
 		/*
@@ -111,5 +89,4 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 			}
 		}
 	}
-	// ----------------------------private methods
 }

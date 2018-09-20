@@ -17,28 +17,26 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.BackfoldingPeakDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingPeakDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.Threshold;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.support.IBackfoldingDetectorSlopes;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.signals.ExtendedTotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignals;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.BackfoldingPeakDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.BackfoldingSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingPeakDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.Threshold;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.support.IBackfoldingDetectorSlopes;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
-import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 // TODO JUnit
 /**
@@ -58,11 +56,10 @@ import org.eclipse.chemclipse.numeric.statistics.Calculations;
 public class BackfoldingShifter implements IBackfoldingShifter {
 
 	private static final Logger logger = Logger.getLogger(BackfoldingShifter.class);
-	private IBackfoldingSettings backfoldingSettings;
 
 	// ---------------------------------------------------IBackfoldingShifter
 	@Override
-	public IExtractedIonSignals shiftIons(IChromatogramSelectionMSD chromatogramSelection, IBackfoldingSettings backfoldingSettings, IProgressMonitor monitor) {
+	public IExtractedIonSignals shiftIons(IChromatogramSelectionMSD chromatogramSelection, FilterSettings filterSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Get the extracted ion signals in the range of the chromatogram
@@ -74,21 +71,14 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 			IExtractedIonSignalExtractor extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
 			extractedIonSignalsShifted = extractedIonSignalExtractor.getExtractedIonSignals(chromatogramSelection);
 			/*
-			 * Create a valid backfolding instance if null.
-			 */
-			if(backfoldingSettings == null) {
-				backfoldingSettings = new BackfoldingSettings();
-			}
-			this.backfoldingSettings = backfoldingSettings;
-			/*
 			 * There must be at least 1 backfolding run. Run the backfolding the
 			 * number of times given in getNumberOfBackfoldingRuns().
 			 */
-			int runs = backfoldingSettings.getNumberOfBackfoldingRuns();
+			int runs = filterSettings.getNumberOfBackfoldingRuns();
 			for(int run = 1; run <= runs; run++) {
 				String taskDescription = "Shift scans run (" + run + "/" + runs + ")";
 				monitor.subTask(taskDescription);
-				extractedIonSignalsShifted = calculateExtractedIonSignals(extractedIonSignalsShifted, taskDescription, monitor);
+				extractedIonSignalsShifted = calculateExtractedIonSignals(extractedIonSignalsShifted, taskDescription, filterSettings, monitor);
 			}
 		} catch(ChromatogramIsNullException e) {
 			logger.warn(e);
@@ -105,7 +95,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	 * @param IExtractedIonSignals
 	 * @return {@link IExtractedIonSignals}
 	 */
-	private IExtractedIonSignals calculateExtractedIonSignals(IExtractedIonSignals extractedIonSignals, String taskDescription, IProgressMonitor monitor) {
+	private IExtractedIonSignals calculateExtractedIonSignals(IExtractedIonSignals extractedIonSignals, String taskDescription, FilterSettings filterSettings, IProgressMonitor monitor) {
 
 		ITotalScanSignals totalIonSignals;
 		/*
@@ -127,7 +117,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 		for(int ion = startIon; ion <= stopIon; ion++) {
 			monitor.subTask(taskDescription + " - ion: " + ion);
 			totalIonSignals = extractedIonSignals.getTotalIonSignals(ion);
-			adjustIon(ion, totalIonSignals, extractedIonSignalsShifted);
+			adjustIon(ion, totalIonSignals, extractedIonSignalsShifted, filterSettings);
 		}
 		return extractedIonSignalsShifted;
 	}
@@ -141,13 +131,13 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	 * @param totalIonSignals
 	 * @param extractedIonSignalsShifted
 	 */
-	private void adjustIon(int ion, ITotalScanSignals totalIonSignals, IExtractedIonSignals extractedIonSignalsShifted) {
+	private void adjustIon(int ion, ITotalScanSignals totalIonSignals, IExtractedIonSignals extractedIonSignalsShifted, FilterSettings filterSettings) {
 
 		int startScan = extractedIonSignalsShifted.getStartScan();
 		int stopScan = extractedIonSignalsShifted.getStopScan();
 		IChromatogramMSD chromatogram = extractedIonSignalsShifted.getChromatogram();
 		ITotalScanSignals totalIonSignalsShifted = calculateTotalIonSignalsShifted(totalIonSignals, chromatogram, startScan, stopScan);
-		addShiftedIonSignalsToExtractedIonSignals(ion, totalIonSignalsShifted, extractedIonSignalsShifted);
+		addShiftedIonSignalsToExtractedIonSignals(ion, totalIonSignalsShifted, extractedIonSignalsShifted, filterSettings);
 	}
 
 	/**
@@ -220,7 +210,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	 * @param totalIonSignalsShifted
 	 * @param extractedIonSignalsShifted
 	 */
-	private void addShiftedIonSignalsToExtractedIonSignals(int ion, ITotalScanSignals totalIonSignalsShifted, IExtractedIonSignals extractedIonSignalsShifted) {
+	private void addShiftedIonSignalsToExtractedIonSignals(int ion, ITotalScanSignals totalIonSignalsShifted, IExtractedIonSignals extractedIonSignalsShifted, FilterSettings filterSettings) {
 
 		ITotalScanSignal totalIonSignal;
 		/*
@@ -240,7 +230,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 		 * shifted.<br/> Negative values will be shifted backwards, positive
 		 * values will be shifted forwards.
 		 */
-		int deltaRetentionTime = calculateDeltaRetentionTimeShift(totalIonSignalsShifted);
+		int deltaRetentionTime = calculateDeltaRetentionTimeShift(totalIonSignalsShifted, filterSettings);
 		for(int scan = startScan; scan < stopScan; scan++) {
 			totalIonSignal = totalIonSignalsShifted.getTotalScanSignal(scan);
 			/*
@@ -269,7 +259,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	 * @param totalIonSignalsShifted
 	 * @return int
 	 */
-	private int calculateDeltaRetentionTimeShift(ITotalScanSignals totalIonSignalsShifted) {
+	private int calculateDeltaRetentionTimeShift(ITotalScanSignals totalIonSignalsShifted, FilterSettings filterSettings) {
 
 		ITotalScanSignals totalIonSignalsNegative = getTotalIonSignalsNegative(totalIonSignalsShifted);
 		ITotalScanSignals totalIonSignalsPositive = getTotalIonSignalsPositive(totalIonSignalsShifted);
@@ -302,7 +292,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 		/*
 		 * There shall be no value 0, so that median could be used.
 		 */
-		int[] deltaPeakDistances = calculateDeltaPeakDistances(peaks, rawPeaksNegative, positiveTreeMap);
+		int[] deltaPeakDistances = calculateDeltaPeakDistances(peaks, rawPeaksNegative, positiveTreeMap, filterSettings);
 		int result = Calculations.getMedian(deltaPeakDistances);
 		return result / 2;
 	}
@@ -375,7 +365,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	 * @param positiveTreeMap
 	 * @return int[]
 	 */
-	private int[] calculateDeltaPeakDistances(int peaks, List<IRawPeak> rawPeaksNegative, NavigableMap<Integer, Integer> positiveTreeMap) {
+	private int[] calculateDeltaPeakDistances(int peaks, List<IRawPeak> rawPeaksNegative, NavigableMap<Integer, Integer> positiveTreeMap, FilterSettings filterSettings) {
 
 		IRawPeak negativeRawPeak;
 		int deltaDistance = 0;
@@ -385,7 +375,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 		/*
 		 * Divide the result by 2.
 		 */
-		int maxDistance = this.backfoldingSettings.getMaximumRetentionTimeShift() * 2;
+		int maxDistance = filterSettings.getMaximumRetentionTimeShift() * 2;
 		/*
 		 * Calculate the distance between the positive and negative peaks.
 		 */

@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.core
 import java.io.File;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.FilterSettings;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
@@ -29,7 +29,7 @@ public class Show_BackfoldingFilter extends ChromatogramImporterTestCase {
 	protected IChromatogramMSD chromatogram;
 	protected IChromatogramSelectionMSD chromatogramSelection;
 	private IChromatogramFilterMSD chromatogramFilter;
-	private SupplierFilterSettings chromatogramFilterSettings;
+	private FilterSettings chromatogramFilterSettings;
 	private File fileImport;
 	private File fileExport;
 
@@ -47,7 +47,7 @@ public class Show_BackfoldingFilter extends ChromatogramImporterTestCase {
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		chromatogramFilter = new ChromatogramFilter();
-		chromatogramFilterSettings = new SupplierFilterSettings();
+		chromatogramFilterSettings = new FilterSettings();
 	}
 
 	@Override
