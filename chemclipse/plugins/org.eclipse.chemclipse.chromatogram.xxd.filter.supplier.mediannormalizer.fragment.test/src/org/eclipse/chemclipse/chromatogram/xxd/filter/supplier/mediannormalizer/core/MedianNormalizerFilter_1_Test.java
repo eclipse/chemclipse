@@ -13,29 +13,27 @@
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.filter.settings.ChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.core.ChromatogramFilter;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.settings.FilterSettings;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class MedianNormalizerFilter_1_Test extends ChromatogramImporterTestCase {
 
 	private IChromatogramFilter chromatogramFilter;
-	private IChromatogramFilterSettings chromatogramFilterSettings;
+	private FilterSettings filterSettings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
 		chromatogramFilter = new ChromatogramFilter();
-		chromatogramFilterSettings = new ChromatogramFilterSettings();
+		filterSettings = new FilterSettings();
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 
 		chromatogramFilter = null;
-		chromatogramFilterSettings = null;
+		filterSettings = null;
 		super.tearDown();
 	}
 
@@ -50,7 +48,7 @@ public class MedianNormalizerFilter_1_Test extends ChromatogramImporterTestCase 
 		assertEquals("scan totalSignal", 94184.0f, totalSignal);
 		totalSignal = chromatogram.getScan(628).getTotalSignal();
 		assertEquals("scan totalSignal", 2747568.0f, totalSignal);
-		chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, new NullProgressMonitor());
+		chromatogramFilter.applyFilter(chromatogramSelection, filterSettings, new NullProgressMonitor());
 		totalSignal = chromatogram.getScan(1).getTotalSignal(); // Median signal is 100558.5, the values above need to be divided with this number
 		assertEquals("scan totalSignal", 0.67487085f, totalSignal);
 		totalSignal = chromatogram.getScan(5726).getTotalSignal();
