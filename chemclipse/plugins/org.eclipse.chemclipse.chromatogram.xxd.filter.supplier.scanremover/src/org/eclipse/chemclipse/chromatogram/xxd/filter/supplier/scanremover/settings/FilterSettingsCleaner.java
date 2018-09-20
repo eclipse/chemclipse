@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.sett
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 
-public class CleanerFilterSettings extends AbstractChromatogramFilterSettings implements ICleanerFilterSettings {
+public class FilterSettingsCleaner extends AbstractChromatogramFilterSettings {
 }

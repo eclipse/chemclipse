@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsCleaner;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsRemover;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -66,17 +66,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the chromatogram filter settings.
-	 * 
-	 * @return IChromatogramFilterSettings
-	 */
-	public static ISupplierFilterSettings getChromatogramFilterSettings() {
+	public static FilterSettingsCleaner getCleanerFilterSettings() {
+
+		return new FilterSettingsCleaner();
+	}
+
+	public static FilterSettingsRemover getRemoverFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-		chromatogramFilterSettings.setScanRemoverPattern(preferences.get(P_REMOVER_PATTERN, DEF_REMOVER_PATTERN));
-		return chromatogramFilterSettings;
+		FilterSettingsRemover filterSettings = new FilterSettingsRemover();
+		filterSettings.setScanRemoverPattern(preferences.get(P_REMOVER_PATTERN, DEF_REMOVER_PATTERN));
+		return filterSettings;
 	}
 
 	/**

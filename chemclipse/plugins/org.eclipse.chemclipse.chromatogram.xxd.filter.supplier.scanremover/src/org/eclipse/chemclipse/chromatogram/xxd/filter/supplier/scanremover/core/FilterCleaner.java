@@ -16,11 +16,11 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
-import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsCleaner;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -37,39 +36,31 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * This filter removes empty scans.
  *
  */
-public class ChromatogramFilterCleaner extends AbstractChromatogramFilter {
+@SuppressWarnings("rawtypes")
+public class FilterCleaner extends AbstractChromatogramFilter {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		/*
-		 * Validate the settings.
-		 */
-		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
+		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			try {
+				applyChromatogramCleanerFilter(chromatogramSelection, monitor);
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Chromatogram Cleaner", "Empty scans have been removed successfully."));
+				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Empty scans have been removed successfully."));
+			} catch(FilterException e) {
+				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
+			}
 		}
-		/*
-		 * Try to remove the given scans.
-		 */
-		IChromatogramFilterResult chromatogramFilterResult;
-		try {
-			applyChromatogramCleanerFilter(chromatogramSelection, monitor);
-			processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Chromatogram Cleaner", "Empty scans have been removed successfully."));
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "Empty scans have been removed successfully.");
-		} catch(FilterException e) {
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage());
-		}
-		processingInfo.setProcessingResult(chromatogramFilterResult);
 		return processingInfo;
 	}
 
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
-		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
+		FilterSettingsCleaner filterSettings = PreferenceSupplier.getCleanerFilterSettings();
+		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
 	private void applyChromatogramCleanerFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) throws FilterException {

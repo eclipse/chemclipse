@@ -18,20 +18,18 @@ import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
+public class FilterSettingsRemover extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Scan Remover Pattern", defaultValue = "XO")
 	@JsonPropertyDescription(value = "The pattern which is used to remove scans.")
 	@StringSettingsProperty(regExp = PreferenceSupplier.CHECK_REMOVER_PATTERM)
 	private String scanRemoverPattern;
 
-	@Override
 	public String getScanRemoverPattern() {
 
 		return scanRemoverPattern;
 	}
 
-	@Override
 	public void setScanRemoverPattern(String scanRemoverPattern) {
 
 		if(scanRemoverPattern != null) {
