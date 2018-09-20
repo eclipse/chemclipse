@@ -13,12 +13,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
-import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.FilterSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -28,34 +27,28 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+@SuppressWarnings("rawtypes")
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
-	private float normalizationBase;
-
-	// TODO IProgressMonitor
+	@SuppressWarnings("unchecked")
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
+		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(chromatogramFilterSettings instanceof FilterSettings) {
+				FilterSettings filterSettings = (FilterSettings)chromatogramFilterSettings;
+				float normalizationBase = filterSettings.getNormalizationBase();
+				try {
+					applyNormalizerFilter(chromatogramSelection, normalizationBase);
+					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection was successfully normalized."));
+				} catch(FilterException e) {
+					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
+				}
+			}
 		}
-		/*
-		 * Try to normalize the chromatogram selection.
-		 */
-		setFilterSettings(chromatogramFilterSettings);
-		IChromatogramFilterResult chromatogramFilterResult;
-		try {
-			applyNormalizerFilter(chromatogramSelection);
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection was successfully normalized.");
-		} catch(FilterException e) {
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage());
-		}
-		processingInfo.setProcessingResult(chromatogramFilterResult);
 		return processingInfo;
 	}
 
@@ -63,25 +56,12 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
-		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
+		FilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
+		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	// ----------------------------private methods
-	private void setFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
-
-		/*
-		 * Get the excluded ions instance.
-		 */
-		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
-			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
-			normalizationBase = settings.getNormalizationBase();
-		} else {
-			normalizationBase = PreferenceSupplier.getChromatogramFilterSettings().getNormalizationBase();
-		}
-	}
-
-	private void applyNormalizerFilter(IChromatogramSelection chromatogramSelection) throws FilterException {
+	@SuppressWarnings("unchecked")
+	private void applyNormalizerFilter(IChromatogramSelection chromatogramSelection, float normalizationBase) throws FilterException {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());

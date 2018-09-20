@@ -18,20 +18,18 @@ import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
+public class FilterSettings extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Normalization Base", defaultValue = "1000")
 	@JsonPropertyDescription(value = "Use this value to normalize the chromatogram.")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_NORMALIZATION_BASE, maxValue = PreferenceSupplier.MAX_NORMALIZATION_BASE)
 	private float normalizationBase = PreferenceSupplier.DEF_NORMALIZATION_BASE;
 
-	@Override
 	public float getNormalizationBase() {
 
 		return normalizationBase;
 	}
 
-	@Override
 	public void setNormalizationBase(float normalizationBase) {
 
 		if(normalizationBase >= PreferenceSupplier.MIN_NORMALIZATION_BASE && !Float.isNaN(normalizationBase) && !Float.isInfinite(normalizationBase)) {

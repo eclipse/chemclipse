@@ -17,13 +17,13 @@ import junit.framework.TestCase;
 
 public class NormalizerFilterSettings_1_Test extends TestCase {
 
-	private ISupplierFilterSettings normalizerFilterSettings;
+	private FilterSettings normalizerFilterSettings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		normalizerFilterSettings = new SupplierFilterSettings();
+		normalizerFilterSettings = new FilterSettings();
 	}
 
 	@Override

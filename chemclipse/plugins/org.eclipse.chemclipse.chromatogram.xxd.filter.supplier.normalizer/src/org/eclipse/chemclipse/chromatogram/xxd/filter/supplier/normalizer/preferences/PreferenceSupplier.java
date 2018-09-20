@@ -15,8 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.FilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -64,20 +63,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the chromatogram filter settings.
-	 * 
-	 * @return IChromatogramFilterSettings
-	 */
-	public static ISupplierFilterSettings getChromatogramFilterSettings() {
+	public static FilterSettings getFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-		/*
-		 * Get the actual preference.
-		 * If it's not available, a default value will be returned.
-		 */
-		chromatogramFilterSettings.setNormalizationBase(preferences.getFloat(P_NORMALIZATION_BASE, DEF_NORMALIZATION_BASE));
-		return chromatogramFilterSettings;
+		FilterSettings filterSettings = new FilterSettings();
+		filterSettings.setNormalizationBase(preferences.getFloat(P_NORMALIZATION_BASE, DEF_NORMALIZATION_BASE));
+		return filterSettings;
 	}
 }

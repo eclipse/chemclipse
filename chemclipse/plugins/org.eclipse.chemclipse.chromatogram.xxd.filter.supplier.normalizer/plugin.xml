@@ -7,7 +7,7 @@
             description="This filter normalizes all signals of a chromatogram."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.core.ChromatogramFilter"
             filterName="Normalizer"
-            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.SupplierFilterSettings"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.FilterSettings"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer">
       </ChromatogramFilterSupplier>
    </extension>
