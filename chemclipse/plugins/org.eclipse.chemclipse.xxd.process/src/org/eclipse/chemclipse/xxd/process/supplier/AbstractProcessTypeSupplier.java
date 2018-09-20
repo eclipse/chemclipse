@@ -11,7 +11,32 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 
 public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+
+	private List<DataType> supportedDataTypes = new ArrayList<>();
+
+	public AbstractProcessTypeSupplier(DataType[] dataTypes) {
+		for(DataType dataType : dataTypes) {
+			supportedDataTypes.add(dataType);
+		}
+	}
+
+	@Override
+	public List<DataType> getSupportedDataTypes() {
+
+		return supportedDataTypes;
+	}
+
+	@Override
+	public Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception {
+
+		return null;
+	}
 }

@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.xxd.process.support;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -23,7 +25,9 @@ public interface IProcessTypeSupplier {
 
 	String getCategory();
 
-	String getSupportedDataTypes();
+	List<DataType> getSupportedDataTypes();
+
+	Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception;
 
 	String getProcessorName(String processorId) throws Exception;
 
@@ -32,5 +36,5 @@ public interface IProcessTypeSupplier {
 	List<String> getPluginIds() throws Exception;
 
 	@SuppressWarnings("rawtypes")
-	IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProgressMonitor monitor);
+	IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor);
 }

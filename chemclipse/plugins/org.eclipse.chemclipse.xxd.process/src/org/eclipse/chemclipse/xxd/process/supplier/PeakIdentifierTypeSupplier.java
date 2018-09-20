@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.identifier.core.ISupplier;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -29,16 +30,14 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 
 	public static final String CATEGORY = "Peak Identifier";
 
+	public PeakIdentifierTypeSupplier() {
+		super(new DataType[]{DataType.MSD, DataType.CSD});
+	}
+
 	@Override
 	public String getCategory() {
 
 		return CATEGORY;
-	}
-
-	@Override
-	public String getSupportedDataTypes() {
-
-		return DataType.MSD.toString() + ", " + DataType.CSD.toString();
 	}
 
 	@Override
@@ -63,7 +62,7 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProgressMonitor monitor) {
+	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {

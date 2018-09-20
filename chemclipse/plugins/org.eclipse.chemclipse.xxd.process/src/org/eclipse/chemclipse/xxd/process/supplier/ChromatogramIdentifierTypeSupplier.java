@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram.ChromatogramIdentifier;
 import org.eclipse.chemclipse.model.identifier.core.ISupplier;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -27,16 +28,14 @@ public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSuppl
 
 	public static final String CATEGORY = "Chromatogram Identifier [MSD]";
 
+	public ChromatogramIdentifierTypeSupplier() {
+		super(new DataType[]{DataType.MSD});
+	}
+
 	@Override
 	public String getCategory() {
 
 		return CATEGORY;
-	}
-
-	@Override
-	public String getSupportedDataTypes() {
-
-		return DataType.MSD.toString();
 	}
 
 	@Override
@@ -61,7 +60,7 @@ public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSuppl
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProgressMonitor monitor) {
+	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {

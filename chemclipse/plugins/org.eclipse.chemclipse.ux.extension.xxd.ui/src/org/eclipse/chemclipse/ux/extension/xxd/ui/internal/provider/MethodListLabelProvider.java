@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
+import java.util.Arrays;
+
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -28,9 +30,9 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	};
 	//
 	public static int[] BOUNDS = {//
-			110, //
-			110, //
-			110, //
+			250, //
+			250, //
+			160, //
 			300, //
 			110 //
 	};
@@ -58,10 +60,10 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 					text = entry.getDescription();
 					break;
 				case 2:
-					text = entry.getType();
+					text = Arrays.toString(entry.getSupportedDataTypes().toArray());
 					break;
 				case 3:
-					text = entry.getSettings();
+					text = entry.getJsonSettings();
 					break;
 				case 4:
 					text = entry.getId();

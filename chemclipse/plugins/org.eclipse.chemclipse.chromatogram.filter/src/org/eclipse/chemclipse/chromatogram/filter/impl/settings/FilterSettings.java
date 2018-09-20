@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramF
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
+public class FilterSettings extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Start RT (Minutes)", defaultValue = "1")
 	@JsonPropertyDescription(value = "Start Retention Time (Minutes)")
@@ -25,25 +25,21 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	@JsonPropertyDescription(value = "Stop Retention Time (Minutes)")
 	private double stopRetentionTimeMinutes;
 
-	@Override
 	public double getStartRetentionTimeMinutes() {
 
 		return startRetentionTimeMinutes;
 	}
 
-	@Override
 	public void setStartRetentionTimeMinutes(double startRetentionTimeMinutes) {
 
 		this.startRetentionTimeMinutes = startRetentionTimeMinutes;
 	}
 
-	@Override
 	public double getStopRetentionTimeMinutes() {
 
 		return stopRetentionTimeMinutes;
 	}
 
-	@Override
 	public void setStopRetentionTimeMinutes(double stopRetentionTimeMinutes) {
 
 		this.stopRetentionTimeMinutes = stopRetentionTimeMinutes;

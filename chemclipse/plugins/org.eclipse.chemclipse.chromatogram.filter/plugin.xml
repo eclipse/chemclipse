@@ -8,7 +8,7 @@
             description="This filter selects the chromatogram range."
             filter="org.eclipse.chemclipse.chromatogram.filter.impl.ChromatogramFilter"
             filterName="Set Chromatogram Selection"
-            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.SupplierFilterSettings"
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettings"
             id="org.eclipse.chemclipse.chromatogram.filter.setChromatogramSelection">
       </ChromatogramFilterSupplier>
    </extension>

@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram.ChromatogramIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram.IChromatogramIntegratorSupplier;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
@@ -25,16 +26,14 @@ public class ChromatogramIntegratorTypeSupplier extends AbstractProcessTypeSuppl
 
 	public static final String CATEGORY = "Chromatogram Integrator";
 
+	public ChromatogramIntegratorTypeSupplier() {
+		super(new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
+	}
+
 	@Override
 	public String getCategory() {
 
 		return CATEGORY;
-	}
-
-	@Override
-	public String getSupportedDataTypes() {
-
-		return DataType.MSD.toString() + ", " + DataType.CSD.toString() + ", " + DataType.WSD.toString();
 	}
 
 	@Override
@@ -59,7 +58,7 @@ public class ChromatogramIntegratorTypeSupplier extends AbstractProcessTypeSuppl
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProgressMonitor monitor) {
+	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		return ChromatogramIntegrator.integrate(chromatogramSelection, processorId, monitor);
 	}

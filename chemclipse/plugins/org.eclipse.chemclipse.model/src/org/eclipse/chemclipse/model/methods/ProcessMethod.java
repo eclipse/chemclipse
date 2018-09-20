@@ -11,23 +11,25 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.methods;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+import org.eclipse.chemclipse.model.types.DataType;
+
 public class ProcessMethod implements IProcessMethod {
 
 	private String id = "";
 	private String name = "";
 	private String description = "";
-	private String settings = "";
-	private String type = ""; // MSD, CSD, ...
+	private String jsonSettings = "{}";
+	private List<DataType> supportedDataTypes = new ArrayList<>();
+	private Class<? extends IProcessSettings> processSettingsClass = null;
 
-	public ProcessMethod() {
-	}
-
-	public ProcessMethod(String id, String name, String description, String settings, String type) {
+	public ProcessMethod(String id, String name, String description) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.settings = settings;
-		this.type = type;
 	}
 
 	@Override
@@ -67,27 +69,33 @@ public class ProcessMethod implements IProcessMethod {
 	}
 
 	@Override
-	public String getSettings() {
+	public String getJsonSettings() {
 
-		return settings;
+		return jsonSettings;
 	}
 
 	@Override
-	public void setSettings(String settings) {
+	public void setJsonSettings(String jsonSettings) {
 
-		this.settings = settings;
+		this.jsonSettings = jsonSettings;
 	}
 
 	@Override
-	public String getType() {
+	public List<DataType> getSupportedDataTypes() {
 
-		return type;
+		return supportedDataTypes;
 	}
 
 	@Override
-	public void setType(String type) {
+	public Class<? extends IProcessSettings> getProcessSettingsClass() {
 
-		this.type = type;
+		return processSettingsClass;
+	}
+
+	@Override
+	public void setProcessSettingsClass(Class<? extends IProcessSettings> processSettingsClass) {
+
+		this.processSettingsClass = processSettingsClass;
 	}
 
 	@Override
@@ -96,7 +104,7 @@ public class ProcessMethod implements IProcessMethod {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((settings == null) ? 0 : settings.hashCode());
+		result = prime * result + ((jsonSettings == null) ? 0 : jsonSettings.hashCode());
 		return result;
 	}
 
@@ -115,10 +123,10 @@ public class ProcessMethod implements IProcessMethod {
 				return false;
 		} else if(!id.equals(other.id))
 			return false;
-		if(settings == null) {
-			if(other.settings != null)
+		if(jsonSettings == null) {
+			if(other.jsonSettings != null)
 				return false;
-		} else if(!settings.equals(other.settings))
+		} else if(!jsonSettings.equals(other.jsonSettings))
 			return false;
 		return true;
 	}
@@ -126,6 +134,6 @@ public class ProcessMethod implements IProcessMethod {
 	@Override
 	public String toString() {
 
-		return "ProcessMethod [id=" + id + ", name=" + name + ", description=" + description + ", settings=" + settings + "]";
+		return "ProcessMethod [id=" + id + ", name=" + name + ", description=" + description + ", jsonSettings=" + jsonSettings + ", supportedDataTypes=" + supportedDataTypes + ", processSettingsClass=" + processSettingsClass + "]";
 	}
 }

@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.IPeakFilterSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.PeakFilter;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -27,16 +28,14 @@ public class PeakFilterTypeSupplier extends AbstractProcessTypeSupplier implemen
 
 	public static final String CATEGORY = "Peak Filter [MSD]";
 
+	public PeakFilterTypeSupplier() {
+		super(new DataType[]{DataType.MSD});
+	}
+
 	@Override
 	public String getCategory() {
 
 		return CATEGORY;
-	}
-
-	@Override
-	public String getSupportedDataTypes() {
-
-		return DataType.MSD.toString();
 	}
 
 	@Override
@@ -61,7 +60,7 @@ public class PeakFilterTypeSupplier extends AbstractProcessTypeSupplier implemen
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProgressMonitor monitor) {
+	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {

@@ -14,10 +14,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 import java.io.IOException;
 import java.util.Collections;
 
-import org.eclipse.chemclipse.chromatogram.filter.impl.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethods;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -285,17 +285,20 @@ public class ExtendedMethodUI {
 					Object object = listUI.getStructuredSelection().getFirstElement();
 					if(object instanceof IProcessMethod) {
 						IProcessMethod processMethod = (IProcessMethod)object;
-						try {
-							SettingsSupport settingsSupport = new SettingsSupport();
-							String content = settingsSupport.getSettingsAsJson(null, SupplierFilterSettings.class, e.widget.getDisplay().getActiveShell());
-							processMethod.setSettings(content);
-							updateList();
-						} catch(JsonParseException e1) {
-							logger.warn(e1);
-						} catch(JsonMappingException e1) {
-							logger.warn(e1);
-						} catch(IOException e1) {
-							logger.warn(e1);
+						Class<? extends IProcessSettings> processSettingsClass = processMethod.getProcessSettingsClass();
+						if(processSettingsClass != null) {
+							try {
+								SettingsSupport settingsSupport = new SettingsSupport();
+								String content = settingsSupport.getSettingsAsJson(null, processSettingsClass, e.widget.getDisplay().getActiveShell());
+								processMethod.setJsonSettings(content);
+								updateList();
+							} catch(JsonParseException e1) {
+								logger.warn(e1);
+							} catch(JsonMappingException e1) {
+								logger.warn(e1);
+							} catch(IOException e1) {
+								logger.warn(e1);
+							}
 						}
 					}
 				}

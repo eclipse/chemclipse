@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupplierMSD;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -23,9 +24,13 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramMSDFilterTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+public class ChromatogramFilterTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
 	public static final String CATEGORY = "Chromatogram Filter [MSD]";
+
+	public ChromatogramFilterTypeSupplierMSD() {
+		super(new DataType[]{DataType.MSD});
+	}
 
 	@Override
 	public String getCategory() {
@@ -34,9 +39,10 @@ public class ChromatogramMSDFilterTypeSupplier extends AbstractProcessTypeSuppli
 	}
 
 	@Override
-	public String getSupportedDataTypes() {
+	public Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception {
 
-		return DataType.MSD.toString();
+		IChromatogramFilterSupplierMSD filterSupplier = ChromatogramFilterMSD.getChromatogramFilterSupport().getFilterSupplier(processorId);
+		return filterSupplier.getFilterSettingsClass();
 	}
 
 	@Override
@@ -61,7 +67,7 @@ public class ChromatogramMSDFilterTypeSupplier extends AbstractProcessTypeSuppli
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProgressMonitor monitor) {
+	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {

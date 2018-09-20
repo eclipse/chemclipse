@@ -18,12 +18,21 @@ public class InputValue {
 	private String description = "";
 	private String value = null; // Needed for initialization.
 	private String defaultValue = "";
+	/*
+	 * SettingsProperty ...
+	 */
 	private Object minValue = null;
 	private Object maxValue = null;
+	private String regularExpression = null;
 
-	public boolean isConstraintAvailble() {
+	public boolean hasMinMaxConstraint() {
 
 		return (minValue != null) && (maxValue != null);
+	}
+
+	public boolean hasRegexConstraint() {
+
+		return (regularExpression != null);
 	}
 
 	public Class<?> getRawType() {
@@ -94,5 +103,15 @@ public class InputValue {
 	public void setMaxValue(Object maxValue) {
 
 		this.maxValue = maxValue;
+	}
+
+	public String getRegularExpression() {
+
+		return regularExpression;
+	}
+
+	public void setRegularExpression(String regularExpression) {
+
+		this.regularExpression = regularExpression;
 	}
 }

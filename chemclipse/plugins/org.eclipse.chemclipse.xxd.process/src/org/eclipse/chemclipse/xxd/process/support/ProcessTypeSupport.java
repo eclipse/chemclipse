@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSup
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramIdentifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramIntegratorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramMSDFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.ClassifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.CombinedIntegratorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
@@ -52,7 +52,7 @@ public class ProcessTypeSupport {
 		processTypeSuppliers.add(new ClassifierTypeSupplier());
 		processTypeSuppliers.add(new CombinedIntegratorTypeSupplier());
 		processTypeSuppliers.add(new ChromatogramFilterTypeSupplier());
-		processTypeSuppliers.add(new ChromatogramMSDFilterTypeSupplier());
+		processTypeSuppliers.add(new ChromatogramFilterTypeSupplierMSD());
 		processTypeSuppliers.add(new PeakFilterTypeSupplier());
 		processTypeSuppliers.add(new PeakDetectorTypeSupplier());
 		processTypeSuppliers.add(new PeakIdentifierTypeSupplier());
@@ -164,7 +164,7 @@ public class ProcessTypeSupport {
 			 * Check each registered process supplier.
 			 */
 			if(processTypeSupplier.getCategory().equals(processEntry.getProcessCategory())) {
-				return processTypeSupplier.applyProcessor(chromatogramSelection, processEntry.getProcessorId(), monitor);
+				return processTypeSupplier.applyProcessor(chromatogramSelection, processEntry.getProcessorId(), null, monitor);
 			}
 		}
 		processingInfo.addErrorMessage("Process Type Support", "There was now supplier to process the chromatogram selection.");

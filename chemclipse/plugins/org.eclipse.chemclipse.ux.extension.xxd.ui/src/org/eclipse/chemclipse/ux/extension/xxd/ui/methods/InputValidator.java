@@ -55,20 +55,24 @@ public class InputValidator implements IValidator {
 				Integer.parseInt(value);
 			} else if(rawType == float.class || rawType == Float.class) {
 				float parsedValue = Float.parseFloat(value);
-				if(inputValue.isConstraintAvailble()) {
+				if(inputValue.hasMinMaxConstraint()) {
 					if(parsedValue < (float)inputValue.getMinValue() || parsedValue > (float)inputValue.getMaxValue()) {
 						message = "The value must be >= " + inputValue.getMinValue() + " and <= " + inputValue.getMaxValue();
 					}
 				}
 			} else if(rawType == double.class || rawType == Double.class) {
 				double parsedValue = Double.parseDouble(value);
-				if(inputValue.isConstraintAvailble()) {
+				if(inputValue.hasMinMaxConstraint()) {
 					if(parsedValue < (double)inputValue.getMinValue() || parsedValue > (double)inputValue.getMaxValue()) {
 						message = "The value must be >= " + inputValue.getMinValue() + " and <= " + inputValue.getMaxValue();
 					}
 				}
 			} else if(rawType == String.class) {
-				//
+				if(inputValue.hasRegexConstraint()) {
+					if(!value.matches(inputValue.getRegularExpression())) {
+						message = "The value must match the expression: " + inputValue.getRegularExpression();
+					}
+				}
 			} else if(rawType == boolean.class || rawType == Boolean.class) {
 				Boolean.parseBoolean(value);
 			} else if(rawType.isEnum()) {

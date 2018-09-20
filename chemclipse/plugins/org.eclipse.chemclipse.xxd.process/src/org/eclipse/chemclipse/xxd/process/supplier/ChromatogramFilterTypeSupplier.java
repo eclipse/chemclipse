@@ -15,7 +15,9 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupplier;
+import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
@@ -25,6 +27,10 @@ public class ChromatogramFilterTypeSupplier extends AbstractProcessTypeSupplier 
 
 	public static final String CATEGORY = "Chromatogram Filter";
 
+	public ChromatogramFilterTypeSupplier() {
+		super(new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
+	}
+
 	@Override
 	public String getCategory() {
 
@@ -32,9 +38,10 @@ public class ChromatogramFilterTypeSupplier extends AbstractProcessTypeSupplier 
 	}
 
 	@Override
-	public String getSupportedDataTypes() {
+	public Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception {
 
-		return DataType.MSD.toString() + ", " + DataType.CSD.toString() + ", " + DataType.WSD.toString();
+		IChromatogramFilterSupplier filterSupplier = ChromatogramFilter.getChromatogramFilterSupport().getFilterSupplier(processorId);
+		return filterSupplier.getFilterSettingsClass();
 	}
 
 	@Override
@@ -59,8 +66,12 @@ public class ChromatogramFilterTypeSupplier extends AbstractProcessTypeSupplier 
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProgressMonitor monitor) {
+	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
-		return ChromatogramFilter.applyFilter(chromatogramSelection, processorId, monitor);
+		if(processSettings != null && processSettings instanceof IChromatogramFilterSettings) {
+			return ChromatogramFilter.applyFilter(chromatogramSelection, (IChromatogramFilterSettings)processSettings, processorId, monitor);
+		} else {
+			return ChromatogramFilter.applyFilter(chromatogramSelection, processorId, monitor);
+		}
 	}
 }

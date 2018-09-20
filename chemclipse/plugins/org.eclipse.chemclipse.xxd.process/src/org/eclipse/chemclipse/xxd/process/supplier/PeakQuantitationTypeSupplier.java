@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.IPeakQuantifier
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.PeakQuantifier;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
@@ -24,18 +25,16 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	public static final String CATEGORY = "Peak Quantifier";
+	private static final String CATEGORY = "Peak Quantifier";
+
+	public PeakQuantitationTypeSupplier() {
+		super(new DataType[]{DataType.MSD, DataType.CSD});
+	}
 
 	@Override
 	public String getCategory() {
 
 		return CATEGORY;
-	}
-
-	@Override
-	public String getSupportedDataTypes() {
-
-		return DataType.MSD.toString() + ", " + DataType.CSD.toString();
 	}
 
 	@Override
@@ -60,7 +59,7 @@ public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier im
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProgressMonitor monitor) {
+	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		List<IPeak> peaks = chromatogramSelection.getChromatogram().getPeaks();
 		return PeakQuantifier.quantify(peaks, processorId, monitor);

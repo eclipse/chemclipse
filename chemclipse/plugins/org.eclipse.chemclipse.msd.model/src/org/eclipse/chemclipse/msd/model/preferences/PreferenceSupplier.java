@@ -30,6 +30,8 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
+	//
 	public static final String P_SUBTRACT_MASS_SPECTRUM = "subtractMassSpectrum";
 	public static final String DEF_SUBTRACT_MASS_SPECTRUM = "18:200;28:1000;32:500";
 	public static final String P_USE_NOMINAL_MZ = "useNominalMZ";
@@ -44,7 +46,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	private static IScanMSD sessionSubtractMassSpectrum;
 	//
-	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -126,15 +127,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return preferences.getBoolean(P_USE_NORMALIZED_SCAN, DEF_USE_NORMALIZED_SCAN);
 	}
 
-	private static IScanMSD getSubtractMassSpectrum() {
+	public static String getSessionSubtractMassSpectrumAsString() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		String value = preferences.get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
-		if(value == null || value.equals("")) {
-			return null;
-		} else {
-			ICombinedMassSpectrum subtractMassSpectrum = new CombinedMassSpectrum();
-			//
+		return preferences.get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
+	}
+
+	public static IScanMSD getMassSpectrum(String value) {
+
+		ICombinedMassSpectrum scanMSD = null;
+		if(value != null && !"".equals(value)) {
+			scanMSD = new CombinedMassSpectrum();
 			String[] ions = value.split(DELIMITER_IONS);
 			for(String ion : ions) {
 				String[] fragment = ion.split(DELIMITER_ION_ABUNDANCE);
@@ -146,7 +149,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 					float abundance = Float.parseFloat(fragment[1]);
 					try {
 						IIon subtractIon = new Ion(mz, abundance);
-						subtractMassSpectrum.addIon(subtractIon);
+						scanMSD.addIon(subtractIon);
 					} catch(AbundanceLimitExceededException e) {
 						logger.warn(e);
 					} catch(IonLimitExceededException e) {
@@ -154,11 +157,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 					}
 				}
 			}
-			/*
-			 * Returns the parsed mass spectrum.
-			 */
-			return subtractMassSpectrum;
 		}
+		return scanMSD;
+	}
+
+	private static IScanMSD getSubtractMassSpectrum() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		String value = preferences.get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
+		return getMassSpectrum(value);
 	}
 
 	private static void setSubtractMassSpectrum(IScanMSD subtractMassSpectrum) {

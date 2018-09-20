@@ -11,6 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.methods;
 
+import java.util.List;
+
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+import org.eclipse.chemclipse.model.types.DataType;
+
 public interface IProcessMethod {
 
 	String getId();
@@ -25,11 +30,13 @@ public interface IProcessMethod {
 
 	void setDescription(String description);
 
-	String getSettings();
+	String getJsonSettings();
 
-	void setSettings(String settings);
+	void setJsonSettings(String jsonSettings);
 
-	String getType();
+	List<DataType> getSupportedDataTypes();
 
-	void setType(String type);
+	Class<? extends IProcessSettings> getProcessSettingsClass();
+
+	void setProcessSettingsClass(Class<? extends IProcessSettings> processSettingsClass);
 }

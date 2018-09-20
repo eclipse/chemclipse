@@ -21,6 +21,8 @@ import java.util.Map;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
@@ -124,7 +126,11 @@ public class SettingsSupport {
 				 */
 				for(Annotation annotation : annotatedField.annotations()) {
 					if(annotation.annotationType().getName().contains("SettingsProperty")) {
-						if(annotation instanceof FloatSettingsProperty) {
+						if(annotation instanceof IntSettingsProperty) {
+							IntSettingsProperty settingsProperty = (IntSettingsProperty)annotation;
+							inputValue.setMinValue(settingsProperty.minValue());
+							inputValue.setMaxValue(settingsProperty.maxValue());
+						} else if(annotation instanceof FloatSettingsProperty) {
 							FloatSettingsProperty settingsProperty = (FloatSettingsProperty)annotation;
 							inputValue.setMinValue(settingsProperty.minValue());
 							inputValue.setMaxValue(settingsProperty.maxValue());
@@ -132,7 +138,12 @@ public class SettingsSupport {
 							DoubleSettingsProperty settingsProperty = (DoubleSettingsProperty)annotation;
 							inputValue.setMinValue(settingsProperty.minValue());
 							inputValue.setMaxValue(settingsProperty.maxValue());
+						} else if(annotation instanceof StringSettingsProperty) {
+							StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
+							inputValue.setRegularExpression(settingsProperty.regExp());
 						}
+						// IonsSelectionSettingProperty
+						// RetentionTimeMinutesProperty - remove?
 					}
 				}
 			}
