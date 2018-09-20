@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.modi
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
@@ -46,8 +45,7 @@ public class FilterModifierChromatogram extends AbstractChromatogramProcessor im
 		 */
 		if(getChromatogramSelection() instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)getChromatogramSelection();
-			IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
-			final IProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, chromatogramFilterSettings, PreferenceSupplier.FILTER_ID_CHROMATOGRAM, monitor);
+			final IProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, PreferenceSupplier.FILTER_ID_CHROMATOGRAM, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		}
 	}

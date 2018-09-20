@@ -16,9 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.FilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsMassSpectrum;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsPeak;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -40,21 +40,21 @@ public class SubtractCalculator {
 	 * Subtracts the mass spectrum stored in the filter settings from each scan of the chromatogram selection.
 	 * 
 	 * @param chromatogramSelection
-	 * @param subtractFilterSettings
+	 * @param filterSettings
 	 */
 	@SuppressWarnings("rawtypes")
-	public void subtractPeakMassSpectraFromChromatogramSelection(IChromatogramSelectionMSD chromatogramSelection, ISupplierFilterSettings subtractFilterSettings) {
+	public void subtractPeakMassSpectraFromChromatogramSelection(IChromatogramSelectionMSD chromatogramSelection, FilterSettings filterSettings) {
 
 		/*
 		 * Test if null.
 		 */
-		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null || subtractFilterSettings == null) {
+		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null || filterSettings == null) {
 			return;
 		}
 		/*
 		 * The mass spectrum must be not null.
 		 */
-		IScanMSD massSpectrum = subtractFilterSettings.getSubtractMassSpectrum();
+		IScanMSD massSpectrum = filterSettings.getSubtractMassSpectrum();
 		if(massSpectrum == null) {
 			logger.warn("The mass spectrum must be not null.");
 			return;
@@ -63,8 +63,8 @@ public class SubtractCalculator {
 		 * Make a deep copy to prevent an unwanted modification
 		 * of the original spectrum.
 		 */
-		boolean useNominalMasses = subtractFilterSettings.isUseNominalMasses();
-		boolean useNormalize = subtractFilterSettings.isNormalize();
+		boolean useNominalMasses = filterSettings.isUseNominalMasses();
+		boolean useNormalize = filterSettings.isUseNormalize();
 		Map<Double, Float> subtractMassSpectrumMap = getMassSpectrumMap(massSpectrum, useNominalMasses, useNormalize);
 		/*
 		 * Subtract the mass spectrum from each scan.
