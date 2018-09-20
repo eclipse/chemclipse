@@ -18,9 +18,10 @@ import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SupplierSmoothingFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
+public class FilterSettings extends AbstractChromatogramFilterSettings {
 
-	private static final Logger logger = Logger.getLogger(SupplierSmoothingFilterSettings.class);
+	private static final Logger logger = Logger.getLogger(FilterSettings.class);
+	//
 	@JsonProperty(value = "Order", defaultValue = "2")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_ORDER, maxValue = PreferenceSupplier.MAX_ORDER)
 	private int order;
@@ -28,13 +29,11 @@ public class SupplierSmoothingFilterSettings extends AbstractChromatogramFilterS
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
 	private int width;
 
-	@Override
 	public int getDerivative() {
 
 		return 0;
 	}
 
-	@Override
 	public void setDerivative(int derivative) {
 
 		if(derivative != 0) {
@@ -42,25 +41,21 @@ public class SupplierSmoothingFilterSettings extends AbstractChromatogramFilterS
 		}
 	}
 
-	@Override
 	public int getOrder() {
 
 		return order;
 	}
 
-	@Override
 	public void setOrder(int order) {
 
 		this.order = order;
 	}
 
-	@Override
 	public int getWidth() {
 
 		return width;
 	}
 
-	@Override
 	public void setWidth(int width) {
 
 		this.width = width;

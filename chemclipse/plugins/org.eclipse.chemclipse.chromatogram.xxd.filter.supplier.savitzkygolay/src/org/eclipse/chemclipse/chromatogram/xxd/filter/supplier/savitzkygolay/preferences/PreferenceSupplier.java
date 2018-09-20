@@ -15,10 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISavitzkyGolayMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SavitzkyGolayMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SupplierSmoothingFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -82,10 +81,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static ISupplierFilterSettings getSupplierFilterSettings() {
+	public static FilterSettings getFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		ISupplierFilterSettings filterSettings = new SupplierSmoothingFilterSettings();
+		FilterSettings filterSettings = new FilterSettings();
 		filterSettings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
 		filterSettings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
 		return filterSettings;

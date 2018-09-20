@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResul
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -31,9 +31,11 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+@SuppressWarnings("rawtypes")
 public class SavitzkyGolayProcessor {
 
-	public IChromatogramFilterResult smooth(IChromatogramSelection chromatogramSelection, boolean validatePositive, ISupplierFilterSettings supplierFilterSettings, IProgressMonitor monitor) {
+	@SuppressWarnings("unchecked")
+	public IChromatogramFilterResult smooth(IChromatogramSelection chromatogramSelection, boolean validatePositive, FilterSettings filterSettings, IProgressMonitor monitor) {
 
 		IChromatogramFilterResult chromatogramFilterResult;
 		try {
@@ -41,7 +43,7 @@ public class SavitzkyGolayProcessor {
 			TotalScanSignalExtractor signalExtractor = new TotalScanSignalExtractor(chromatogram);
 			ITotalScanSignals totalScanSignals = signalExtractor.getTotalScanSignals(chromatogramSelection, validatePositive);
 			//
-			double[] sgTic = smooth(totalScanSignals, supplierFilterSettings, monitor);
+			double[] sgTic = smooth(totalScanSignals, filterSettings, monitor);
 			int i = 0;
 			for(ITotalScanSignal signal : totalScanSignals.getTotalScanSignals()) {
 				signal.setTotalSignal((float)sgTic[i++]);
@@ -90,15 +92,15 @@ public class SavitzkyGolayProcessor {
 		return smoothValues(ticValues, derivative, order, width);
 	}
 
-	public double[] smooth(double[] ticValues, ISupplierFilterSettings supplierFilterSettings, IProgressMonitor monitor) {
+	public double[] smooth(double[] ticValues, FilterSettings filterSettings, IProgressMonitor monitor) {
 
-		int derivative = supplierFilterSettings.getDerivative();
-		int order = supplierFilterSettings.getOrder();
-		int width = supplierFilterSettings.getWidth();
+		int derivative = filterSettings.getDerivative();
+		int order = filterSettings.getOrder();
+		int width = filterSettings.getWidth();
 		return smoothValues(ticValues, derivative, order, width);
 	}
 
-	public double[] smooth(ITotalScanSignals totalScanSignals, ISupplierFilterSettings supplierFilterSettings, IProgressMonitor monitor) {
+	public double[] smooth(ITotalScanSignals totalScanSignals, FilterSettings filterSettings, IProgressMonitor monitor) {
 
 		int size = totalScanSignals.size();
 		double[] ticValues = new double[size];
@@ -107,9 +109,9 @@ public class SavitzkyGolayProcessor {
 			ticValues[column++] = signal.getTotalSignal();
 		}
 		//
-		int derivative = supplierFilterSettings.getDerivative();
-		int order = supplierFilterSettings.getOrder();
-		int width = supplierFilterSettings.getWidth();
+		int derivative = filterSettings.getDerivative();
+		int order = filterSettings.getOrder();
+		int width = filterSettings.getWidth();
 		return smoothValues(ticValues, derivative, order, width);
 	}
 

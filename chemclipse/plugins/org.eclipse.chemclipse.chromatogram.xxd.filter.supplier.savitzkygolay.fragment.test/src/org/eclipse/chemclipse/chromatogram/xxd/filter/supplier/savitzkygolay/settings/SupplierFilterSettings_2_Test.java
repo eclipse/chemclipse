@@ -15,13 +15,13 @@ import junit.framework.TestCase;
 
 public class SupplierFilterSettings_2_Test extends TestCase {
 
-	private SupplierFilterSettings settings;
+	private FilterSettings settings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		settings = new SupplierFilterSettings();
+		settings = new FilterSettings();
 	}
 
 	@Override
@@ -32,8 +32,8 @@ public class SupplierFilterSettings_2_Test extends TestCase {
 
 	public void test1() {
 
-		settings.setDerivative(5);
-		assertEquals(5, settings.getDerivative());
+		settings.setDerivative(5); // Other than 0 not supported
+		assertEquals(0, settings.getDerivative());
 	}
 
 	public void test2() {

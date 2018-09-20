@@ -20,8 +20,8 @@ import junit.framework.TestCase;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.TestPathHelper;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignal;
@@ -31,7 +31,7 @@ public class SavitzkyGolayProcessor_4_ITest extends TestCase {
 
 	private ITotalScanSignals totalScanSignals;
 	private SavitzkyGolayProcessor processor;
-	private ISupplierFilterSettings supplierFilterSettings;
+	private FilterSettings supplierFilterSettings;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -53,7 +53,7 @@ public class SavitzkyGolayProcessor_4_ITest extends TestCase {
 		 * Processor and settings
 		 */
 		processor = new SavitzkyGolayProcessor();
-		supplierFilterSettings = new SupplierFilterSettings();
+		supplierFilterSettings = new FilterSettings();
 		supplierFilterSettings.setWidth(27);
 		supplierFilterSettings.setOrder(3);
 		supplierFilterSettings.setDerivative(2);

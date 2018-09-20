@@ -7,7 +7,7 @@
             description="This filter applies the Savitzky-Golay filter."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.ChromatogramFilter"
             filterName="Savitzky-Golay Smoothing"
-            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SupplierSmoothingFilterSettings"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay">
       </ChromatogramFilterSupplier>
    </extension>
