@@ -13,12 +13,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson
 
 import java.text.DecimalFormat;
 
-import org.eclipse.swt.graphics.Image;
-
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.ISavitzkyGolayFilterRating;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.swt.graphics.Image;
 
 public class ClassifierResultLabelProvider extends AbstractChemClipseLabelProvider {
 
@@ -44,13 +43,13 @@ public class ClassifierResultLabelProvider extends AbstractChemClipseLabelProvid
 					text = decimalFormat.format(result.getRating());
 					break;
 				case 1: // Derivative
-					text = Integer.toString(result.getSupplierFilterSettings().getDerivative());
+					text = Integer.toString(result.getFilterSettings().getDerivative());
 					break;
 				case 2: // Order
-					text = Integer.toString(result.getSupplierFilterSettings().getOrder());
+					text = Integer.toString(result.getFilterSettings().getOrder());
 					break;
 				case 3: // Width
-					text = Integer.toString(result.getSupplierFilterSettings().getWidth());
+					text = Integer.toString(result.getFilterSettings().getWidth());
 					break;
 				default:
 					text = "n.v.";

@@ -30,13 +30,13 @@ public class ClassifierResultTableComparator extends AbstractRecordTableComparat
 					sortOrder = Double.compare(result2.getRating(), result1.getRating());
 					break;
 				case 1: // Derivative
-					sortOrder = result2.getSupplierFilterSettings().getDerivative() - result1.getSupplierFilterSettings().getDerivative();
+					sortOrder = result2.getFilterSettings().getDerivative() - result1.getFilterSettings().getDerivative();
 					break;
 				case 2: // Order
-					sortOrder = result2.getSupplierFilterSettings().getOrder() - result1.getSupplierFilterSettings().getOrder();
+					sortOrder = result2.getFilterSettings().getOrder() - result1.getFilterSettings().getOrder();
 					break;
 				case 3: // Width
-					sortOrder = result2.getSupplierFilterSettings().getWidth() - result1.getSupplierFilterSettings().getWidth();
+					sortOrder = result2.getFilterSettings().getWidth() - result1.getFilterSettings().getWidth();
 					break;
 			}
 			if(getDirection() == ASCENDING) {

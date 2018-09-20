@@ -16,8 +16,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.IDurbinWatsonClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayProcessor;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -71,16 +70,16 @@ public class DurbinWatsonProcessor {
 					 * Width must be odd.
 					 */
 					if(width % 2 == 1) {
-						ISupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings();
-						supplierFilterSettings.setDerivative(derivative);
-						supplierFilterSettings.setOrder(order);
-						supplierFilterSettings.setWidth(width);
-						double[] valuesSmoothed = savitzkyGolayProcessor.smooth(valuesOriginal, supplierFilterSettings, monitor);
+						FilterSettings filterSettings = new FilterSettings();
+						filterSettings.setDerivative(derivative);
+						filterSettings.setOrder(order);
+						filterSettings.setWidth(width);
+						double[] valuesSmoothed = savitzkyGolayProcessor.smooth(valuesOriginal, filterSettings, monitor);
 						double rating = calculateDurbinWatsonRating(valuesOriginal, valuesSmoothed);
 						/*
 						 * Store the result
 						 */
-						durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().add(new SavitzkyGolayFilterRating(rating, supplierFilterSettings));
+						durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().add(new SavitzkyGolayFilterRating(rating, filterSettings));
 					}
 				}
 			}
