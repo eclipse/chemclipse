@@ -16,7 +16,6 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.Activator;
 import org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.core.settings.FilterSettings;
-import org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.core.settings.IFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -59,14 +58,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the chromatogram filter settings.
-	 * 
-	 * @return IChromatogramFilterSettings
-	 */
-	public static IFilterSettings getChromatogramFilterSettings() {
+	public static FilterSettings getFilterSettings() {
 
-		IFilterSettings chromatogramFilterSettings = new FilterSettings();
-		return chromatogramFilterSettings;
+		FilterSettings filterSettings = new FilterSettings();
+		return filterSettings;
 	}
 }

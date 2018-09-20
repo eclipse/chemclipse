@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.core;
 
+import org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.core.settings.FilterSettings;
 import org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
-import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -22,33 +22,28 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+@SuppressWarnings("rawtypes")
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
+		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			applyFilter(chromatogramSelection);
+			processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection was successfully set to zero"));
 		}
-		/*
-		 * Try to normalize the chromatogram selection.
-		 */
-		applyFilter(chromatogramSelection);
-		IChromatogramFilterResult chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection was successfully set to zero");
-		processingInfo.setProcessingResult(chromatogramFilterResult);
 		return processingInfo;
 	}
 
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
-		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
+		FilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
+		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
 	@SuppressWarnings("unchecked")
