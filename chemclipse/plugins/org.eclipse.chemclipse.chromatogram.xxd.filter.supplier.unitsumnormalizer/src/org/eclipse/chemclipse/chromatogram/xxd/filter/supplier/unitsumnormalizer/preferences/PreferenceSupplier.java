@@ -15,10 +15,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalize
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.settings.FilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -61,14 +59,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the chromatogram filter settings.
-	 * 
-	 * @return IChromatogramFilterSettings
-	 */
-	public static IChromatogramFilterSettings getChromatogramFilterSettings() {
+	public static FilterSettings getFilterSettings() {
 
-		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-		return chromatogramFilterSettings;
+		FilterSettings filterSettings = new FilterSettings();
+		return filterSettings;
 	}
 }

@@ -13,11 +13,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalize
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
-import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.settings.FilterSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -28,40 +28,37 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+@SuppressWarnings("rawtypes")
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		/* Check whether selection is fine */
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
+		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(chromatogramFilterSettings instanceof FilterSettings) {
+				try {
+					applyUnitSumNormalizerFilter(chromatogramSelection);
+					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection was successfully normalized."));
+				} catch(FilterException e) {
+					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
+				}
+			}
 		}
-		// TODO set filter settings?
-		IChromatogramFilterResult chromatogramFilterResult;
-		try {
-			applyUnitSumNormalizerFilter(chromatogramSelection);
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection was successfully normalized.");
-		} catch(FilterException e) {
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage());
-		}
-		processingInfo.setProcessingResult(chromatogramFilterResult);
 		return processingInfo;
 	}
 
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
-		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
+		FilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
+		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	// ----------------------------private methods
+	@SuppressWarnings("unchecked")
 	private void applyUnitSumNormalizerFilter(IChromatogramSelection chromatogramSelection) throws FilterException {
 
 		/*

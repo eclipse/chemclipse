@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.settings;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 
-public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
+public class FilterSettings extends AbstractChromatogramFilterSettings {
 }

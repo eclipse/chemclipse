@@ -7,7 +7,7 @@
             description="This filter applies a unit sum normalization on the chromatogram."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.core.ChromatogramFilter"
             filterName="Unit Sum Normalizer"
-            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.settings.SupplierFilterSettings"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.settings.FilterSettings"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer">
       </ChromatogramFilterSupplier>
    </extension>
