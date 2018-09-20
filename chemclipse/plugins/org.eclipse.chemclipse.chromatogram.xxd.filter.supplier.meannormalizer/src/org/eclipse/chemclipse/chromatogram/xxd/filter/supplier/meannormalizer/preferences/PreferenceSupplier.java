@@ -14,9 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.p
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.ChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.settings.FilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -59,14 +58,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the chromatogram filter settings.
-	 * 
-	 * @return IChromatogramFilterSettings
-	 */
-	public static IChromatogramFilterSettings getChromatogramFilterSettings() {
+	public static FilterSettings getFilterSettings() {
 
-		IChromatogramFilterSettings chromatogramFilterSettings = new ChromatogramFilterSettings();
-		return chromatogramFilterSettings;
+		FilterSettings filterSettings = new FilterSettings();
+		return filterSettings;
 	}
 }

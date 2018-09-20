@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.s
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 
-public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
+public class FilterSettings extends AbstractChromatogramFilterSettings {
 }
