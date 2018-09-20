@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 
-public class FilterSettings extends AbstractChromatogramFilterSettings implements IFilterSettings {
+public class FilterSettings extends AbstractChromatogramFilterSettings {
 }
