@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.i
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.internal.support.RetentionTimeShifter;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.exceptions.FilterException;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterShiftSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterShiftSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
@@ -57,7 +57,7 @@ public class RTShifter_2_Test extends RTShifterChromatogramTestCase {
 
 		IVendorMassSpectrum scan;
 		try {
-			ISupplierFilterShiftSettings supplierFilterSettings = new SupplierFilterShiftSettings(0, true);
+			FilterSettingsShift supplierFilterSettings = new FilterSettingsShift(0, true);
 			RetentionTimeShifter.shiftRetentionTimes(chromatogramSelection, supplierFilterSettings);
 			assertEquals(10, chromatogram.getNumberOfScans());
 			assertEquals(1500, chromatogram.getScanDelay());
@@ -74,7 +74,7 @@ public class RTShifter_2_Test extends RTShifterChromatogramTestCase {
 
 		IVendorMassSpectrum scan;
 		try {
-			ISupplierFilterShiftSettings supplierFilterSettings = new SupplierFilterShiftSettings(1000, true);
+			FilterSettingsShift supplierFilterSettings = new FilterSettingsShift(1000, true);
 			RetentionTimeShifter.shiftRetentionTimes(chromatogramSelection, supplierFilterSettings);
 			assertEquals(10, chromatogram.getNumberOfScans());
 			assertEquals(2500, chromatogram.getScanDelay());
@@ -91,7 +91,7 @@ public class RTShifter_2_Test extends RTShifterChromatogramTestCase {
 
 		IVendorMassSpectrum scan;
 		try {
-			ISupplierFilterShiftSettings supplierFilterSettings = new SupplierFilterShiftSettings(1499, true);
+			FilterSettingsShift supplierFilterSettings = new FilterSettingsShift(1499, true);
 			RetentionTimeShifter.shiftRetentionTimes(chromatogramSelection, supplierFilterSettings);
 			assertEquals(10, chromatogram.getNumberOfScans());
 			assertEquals(2999, chromatogram.getScanDelay());
@@ -108,7 +108,7 @@ public class RTShifter_2_Test extends RTShifterChromatogramTestCase {
 
 		IVendorMassSpectrum scan;
 		try {
-			ISupplierFilterShiftSettings supplierFilterSettings = new SupplierFilterShiftSettings(1500, true);
+			FilterSettingsShift supplierFilterSettings = new FilterSettingsShift(1500, true);
 			RetentionTimeShifter.shiftRetentionTimes(chromatogramSelection, supplierFilterSettings);
 			assertEquals(10, chromatogram.getNumberOfScans());
 			assertEquals(3000, chromatogram.getScanDelay());

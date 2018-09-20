@@ -15,8 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterShiftSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterShiftSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -41,8 +40,8 @@ public class FilterModifierShift extends AbstractChromatogramProcessor implement
 		if(getChromatogramSelection() != null) {
 			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
 			boolean isShiftAllScans = PreferenceSupplier.getIsShiftAllScans();
-			ISupplierFilterShiftSettings chromatogramFilterSettings = new SupplierFilterShiftSettings(millisecondsToShift, isShiftAllScans);
-			final IProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
+			FilterSettingsShift filterSettings = new FilterSettingsShift(millisecondsToShift, isShiftAllScans);
+			final IProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, filterSettings, FILTER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		}
 	}

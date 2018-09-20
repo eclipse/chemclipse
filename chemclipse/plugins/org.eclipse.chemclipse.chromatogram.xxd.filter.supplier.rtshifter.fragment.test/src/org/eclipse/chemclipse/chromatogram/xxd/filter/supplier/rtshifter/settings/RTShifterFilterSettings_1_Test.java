@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings;
 
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterShiftSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift;
 
 import junit.framework.TestCase;
 
 public class RTShifterFilterSettings_1_Test extends TestCase {
 
-	private SupplierFilterShiftSettings rtShifterFilterSettings;
+	private FilterSettingsShift rtShifterFilterSettings;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -34,35 +34,35 @@ public class RTShifterFilterSettings_1_Test extends TestCase {
 	public void testCreateSettings_1() {
 
 		int millisecondsToShift = 0;
-		rtShifterFilterSettings = new SupplierFilterShiftSettings(millisecondsToShift, true);
+		rtShifterFilterSettings = new FilterSettingsShift(millisecondsToShift, true);
 		assertEquals(millisecondsToShift, rtShifterFilterSettings.getMillisecondsToShift());
 	}
 
 	public void testCreateSettings_2() {
 
 		int millisecondsToShift = 1;
-		rtShifterFilterSettings = new SupplierFilterShiftSettings(millisecondsToShift, true);
+		rtShifterFilterSettings = new FilterSettingsShift(millisecondsToShift, true);
 		assertEquals(millisecondsToShift, rtShifterFilterSettings.getMillisecondsToShift());
 	}
 
 	public void testCreateSettings_3() {
 
 		int millisecondsToShift = -1;
-		rtShifterFilterSettings = new SupplierFilterShiftSettings(millisecondsToShift, true);
+		rtShifterFilterSettings = new FilterSettingsShift(millisecondsToShift, true);
 		assertEquals(millisecondsToShift, rtShifterFilterSettings.getMillisecondsToShift());
 	}
 
 	public void testCreateSettings_4() {
 
 		int millisecondsToShift = 1500;
-		rtShifterFilterSettings = new SupplierFilterShiftSettings(millisecondsToShift, true);
+		rtShifterFilterSettings = new FilterSettingsShift(millisecondsToShift, true);
 		assertEquals(millisecondsToShift, rtShifterFilterSettings.getMillisecondsToShift());
 	}
 
 	public void testCreateSettings_5() {
 
 		int millisecondsToShift = -1500;
-		rtShifterFilterSettings = new SupplierFilterShiftSettings(millisecondsToShift, true);
+		rtShifterFilterSettings = new FilterSettingsShift(millisecondsToShift, true);
 		assertEquals(millisecondsToShift, rtShifterFilterSettings.getMillisecondsToShift());
 	}
 }

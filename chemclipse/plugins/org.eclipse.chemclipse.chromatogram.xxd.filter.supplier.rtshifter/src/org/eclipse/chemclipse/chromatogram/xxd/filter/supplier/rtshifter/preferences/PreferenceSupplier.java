@@ -15,11 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterShiftSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterStretchSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsStretch;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ShiftDirection;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterShiftSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterStretchSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -38,6 +36,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int DEF_MILLISECONDS_FORWARD = 500;
 	public static final String P_MILLISECONDS_FAST_FORWARD = "millisecondsFastForward";
 	public static final int DEF_MILLISECONDS_FAST_FORWARD = 1500;
+	public static final int SHIFT_MILLISECONDS_MIN = 0;
+	public static final int SHIFT_MILLISECONDS_MAX = Integer.MAX_VALUE;
 	//
 	public static final String P_DEFAULT_SHIFT_DIRECTION = "defaultShiftDirection";
 	public static final String DEF_DEFAULT_SHIFT_DIRECTION = ShiftDirection.FORWARD.toString();
@@ -122,30 +122,22 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static ISupplierFilterShiftSettings getChromatogramFilterSettingsShift() {
+	public static FilterSettingsShift getFilterSettingsShift() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		/*
-		 * Set the properties.
-		 */
 		ShiftDirection defaultShiftDirection = ShiftDirection.valueOf(preferences.get(P_DEFAULT_SHIFT_DIRECTION, DEF_DEFAULT_SHIFT_DIRECTION));
 		boolean isShiftAllScans = getIsShiftAllScans();
 		int millisecondsToShift = getMillisecondsToShift(preferences, defaultShiftDirection);
-		ISupplierFilterShiftSettings chromatogramFilterSettings = new SupplierFilterShiftSettings(millisecondsToShift, isShiftAllScans);
-		return chromatogramFilterSettings;
+		FilterSettingsShift filterSettings = new FilterSettingsShift(millisecondsToShift, isShiftAllScans);
+		return filterSettings;
 	}
 
-	public static ISupplierFilterStretchSettings getChromatogramFilterSettingsStretch() {
+	public static FilterSettingsStretch getFilterSettingsStretch() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		/*
-		 * Set the properties.
-		 */
-		int scanDelay = preferences.getInt(P_STRETCH_MILLISECONDS_SCAN_DELAY, DEF_STRETCH_MILLISECONDS_SCAN_DELAY);
-		int chromatogramLength = preferences.getInt(P_STRETCH_MILLISECONDS_LENGTH, DEF_STRETCH_MILLISECONDS_LENGTH);
-		ISupplierFilterStretchSettings chromatogramFilterSettings = new SupplierFilterStretchSettings(chromatogramLength);
-		chromatogramFilterSettings.setScanDelay(scanDelay);
-		return chromatogramFilterSettings;
+		FilterSettingsStretch filterSettings = new FilterSettingsStretch(preferences.getInt(P_STRETCH_MILLISECONDS_LENGTH, DEF_STRETCH_MILLISECONDS_LENGTH));
+		filterSettings.setScanDelay(preferences.getInt(P_STRETCH_MILLISECONDS_SCAN_DELAY, DEF_STRETCH_MILLISECONDS_SCAN_DELAY));
+		return filterSettings;
 	}
 
 	public static boolean getIsShiftAllScans() {

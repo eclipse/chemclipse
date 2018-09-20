@@ -7,7 +7,7 @@
             description="This filter shifts retention times."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.ChromatogramFilterShift"
             filterName="Retention Time Shifter"
-			filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterShiftSettings"                     
+			filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift"                     
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter">
       </ChromatogramFilterSupplier>
    </extension>
@@ -17,7 +17,7 @@
             description="This filter stretches retention times."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.ChromatogramFilterStretch"
             filterName="Retention Time Stretcher"
-			filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterStretchSettings"            
+			filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsStretch"            
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtstretcher">
       </ChromatogramFilterSupplier>
    </extension>   

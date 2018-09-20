@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterStretchSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsStretch;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -37,8 +37,8 @@ public class FilterModifierStretch extends AbstractChromatogramProcessor impleme
 
 		if(getChromatogramSelection() != null) {
 			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
-			ISupplierFilterStretchSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettingsStretch();
-			final IProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
+			FilterSettingsStretch filterSettings = PreferenceSupplier.getFilterSettingsStretch();
+			final IProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, filterSettings, FILTER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		}
 	}

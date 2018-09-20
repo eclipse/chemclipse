@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public abstract class AbstractRetentionTimeModifier {
 
+	@SuppressWarnings("rawtypes")
 	protected static void adjustScanDelayAndRetentionTimeRange(IChromatogramSelection chromatogramSelection) throws FilterException {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();

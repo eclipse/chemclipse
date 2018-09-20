@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.internal.support;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.exceptions.FilterException;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterStretchSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsStretch;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
@@ -24,7 +24,8 @@ public class RetentionTimeStretcher extends AbstractRetentionTimeModifier {
 	private RetentionTimeStretcher() {
 	}
 
-	public static void stretchChromatogram(IChromatogramSelection chromatogramSelection, ISupplierFilterStretchSettings supplierFilterSettings) throws FilterException {
+	@SuppressWarnings("rawtypes")
+	public static void stretchChromatogram(IChromatogramSelection chromatogramSelection, FilterSettingsStretch filterSettings) throws FilterException {
 
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
 			throw new FilterException("The chromatogram must not be null.");
@@ -33,10 +34,10 @@ public class RetentionTimeStretcher extends AbstractRetentionTimeModifier {
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int scanRange = chromatogram.getNumberOfScans() - 1;
 		if(scanRange > 0) {
-			float retentionTimeRange = supplierFilterSettings.getChromatogramLength() - supplierFilterSettings.getScanDelay();
+			float retentionTimeRange = filterSettings.getChromatogramLength() - filterSettings.getScanDelay();
 			int scanInterval = Math.round(retentionTimeRange / scanRange);
 			//
-			chromatogram.setScanDelay(supplierFilterSettings.getScanDelay());
+			chromatogram.setScanDelay(filterSettings.getScanDelay());
 			chromatogram.setScanInterval(scanInterval);
 			chromatogram.recalculateRetentionTimes();
 		}

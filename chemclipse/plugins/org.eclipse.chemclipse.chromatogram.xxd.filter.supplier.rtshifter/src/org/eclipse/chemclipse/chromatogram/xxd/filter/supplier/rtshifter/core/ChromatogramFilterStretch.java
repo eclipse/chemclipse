@@ -13,58 +13,42 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
-import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.internal.support.RetentionTimeStretcher;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterStretchSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsStretch;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+@SuppressWarnings("rawtypes")
 public class ChromatogramFilterStretch extends AbstractChromatogramFilter {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
+		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(chromatogramFilterSettings instanceof FilterSettingsStretch) {
+				FilterSettingsStretch filterSettings = (FilterSettingsStretch)chromatogramFilterSettings;
+				try {
+					RetentionTimeStretcher.stretchChromatogram(chromatogramSelection, filterSettings);
+					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram has been stretched successfully."));
+				} catch(FilterException e) {
+					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
+				}
+			}
 		}
-		/*
-		 * Try to shift the retention times.
-		 */
-		IChromatogramFilterResult chromatogramFilterResult;
-		try {
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram has been stretched successfully.");
-			RetentionTimeStretcher.stretchChromatogram(chromatogramSelection, getSupplierFilterSettings(chromatogramFilterSettings));
-		} catch(FilterException e) {
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage());
-		}
-		processingInfo.setProcessingResult(chromatogramFilterResult);
 		return processingInfo;
 	}
 
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettingsStretch();
-		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
-	}
-
-	private ISupplierFilterStretchSettings getSupplierFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
-
-		/*
-		 * Get the excluded ions instance.
-		 */
-		if(chromatogramFilterSettings instanceof ISupplierFilterStretchSettings) {
-			return (ISupplierFilterStretchSettings)chromatogramFilterSettings;
-		} else {
-			return PreferenceSupplier.getChromatogramFilterSettingsStretch();
-		}
+		FilterSettingsStretch filterSettings = PreferenceSupplier.getFilterSettingsStretch();
+		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 }

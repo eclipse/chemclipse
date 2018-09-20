@@ -15,11 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.exceptions.FilterException;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterShiftSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
+@SuppressWarnings("rawtypes")
 public class RetentionTimeShifter extends AbstractRetentionTimeModifier {
 
 	/*
@@ -28,21 +29,21 @@ public class RetentionTimeShifter extends AbstractRetentionTimeModifier {
 	private RetentionTimeShifter() {
 	}
 
-	public static void shiftRetentionTimes(IChromatogramSelection chromatogramSelection, ISupplierFilterShiftSettings supplierFilterSettings) throws FilterException {
+	public static void shiftRetentionTimes(IChromatogramSelection chromatogramSelection, FilterSettingsShift filterSettings) throws FilterException {
 
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
 			throw new FilterException("The chromatogram must not be null.");
 		}
 		//
-		List<Integer> scansToRemove = adjustRetentionTimesAndReturnScansToRemove(chromatogramSelection, supplierFilterSettings);
+		List<Integer> scansToRemove = adjustRetentionTimesAndReturnScansToRemove(chromatogramSelection, filterSettings);
 		removeMarkedScans(chromatogramSelection, scansToRemove);
 		adjustScanDelayAndRetentionTimeRange(chromatogramSelection);
 	}
 
-	private static List<Integer> adjustRetentionTimesAndReturnScansToRemove(IChromatogramSelection chromatogramSelection, ISupplierFilterShiftSettings supplierFilterSettings) {
+	private static List<Integer> adjustRetentionTimesAndReturnScansToRemove(IChromatogramSelection chromatogramSelection, FilterSettingsShift filterSettings) {
 
-		boolean isShiftAllScans = supplierFilterSettings.isShiftAllScans();
-		int millisecondToShift = supplierFilterSettings.getMillisecondsToShift();
+		boolean isShiftAllScans = filterSettings.isShiftAllScans();
+		int millisecondToShift = filterSettings.getMillisecondsToShift();
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		//
 		int startScan;
