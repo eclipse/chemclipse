@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
-import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMarkedSignal;
@@ -90,6 +89,7 @@ public class ChromatogramChartSupport {
 	private LineStyle lineStyleDefault;
 
 	public ChromatogramChartSupport() {
+
 		usedColorsNormal = new HashMap<String, Color>();
 		usedColorsSIC = new HashMap<String, Color>();
 		usedColorsSWC = new HashMap<String, Color>();
@@ -373,9 +373,7 @@ public class ChromatogramChartSupport {
 			/*
 			 * TIC
 			 */
-			if(scan instanceof IScanMSD || scan instanceof IScanCSD) {
-				intensity = scan.getTotalSignal();
-			}
+			intensity = scan.getTotalSignal();
 		} else if(overlayType.equals(DISPLAY_TYPE_BPC)) {
 			/*
 			 * BPC
@@ -428,7 +426,7 @@ public class ChromatogramChartSupport {
 				if(it.hasNext()) {
 					Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(it.next().getWavelength());
 					if(scanSignal.isPresent()) {
-						intensity = scanSignal.get().getWavelength();
+						intensity = scanSignal.get().getAbundance();
 					}
 				}
 			}
