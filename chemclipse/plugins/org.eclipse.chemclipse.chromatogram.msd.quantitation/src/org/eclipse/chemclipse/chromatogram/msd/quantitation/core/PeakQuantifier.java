@@ -38,6 +38,7 @@ public class PeakQuantifier {
 	private static final String DESCRIPTION = "description";
 	private static final String PEAK_QUANTIFIER_NAME = "peakQuantifierName";
 	private static final String PEAK_QUANTIFIER = "peakQuantifier";
+	private static final String PEAK_QUANTIFIER_SETTINGS = "peakQuantifierSettings";
 	/*
 	 * Processing Info
 	 */
@@ -146,6 +147,16 @@ public class PeakQuantifier {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setPeakQuantifierName(element.getAttribute(PEAK_QUANTIFIER_NAME));
+			if(element.getAttribute(PEAK_QUANTIFIER_SETTINGS) != null) {
+				try {
+					IPeakQuantifierSettings instance = (IPeakQuantifierSettings)element.createExecutableExtension(PEAK_QUANTIFIER_SETTINGS);
+					supplier.setQuantifierSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setQuantifierSettingsClass(null);
+				}
+			}
 			baselineDetectorSupport.add(supplier);
 		}
 		return baselineDetectorSupport;

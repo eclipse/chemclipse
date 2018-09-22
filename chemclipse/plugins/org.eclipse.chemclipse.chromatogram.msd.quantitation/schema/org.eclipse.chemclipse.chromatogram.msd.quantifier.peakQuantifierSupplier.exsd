@@ -80,6 +80,16 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="peakQuantifierSettings" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

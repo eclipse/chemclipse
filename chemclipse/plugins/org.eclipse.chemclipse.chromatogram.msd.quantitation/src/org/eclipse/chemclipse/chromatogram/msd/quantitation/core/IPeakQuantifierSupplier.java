@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.core;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
+
 public interface IPeakQuantifierSupplier {
 
 	/**
@@ -34,4 +36,14 @@ public interface IPeakQuantifierSupplier {
 	 * @return String
 	 */
 	String getPeakQuantifierName();
+
+	/**
+	 * TODO: either returns a bean-like class or with annotations ..., with a public default constructor, ... or returns <code>null</code> if no filter settings are associated
+	 * 
+	 * @return setting class or null, default method return null
+	 */
+	default Class<? extends IPeakQuantifierSettings> getQuantifierSettingsClass() {
+
+		return null;
+	}
 }

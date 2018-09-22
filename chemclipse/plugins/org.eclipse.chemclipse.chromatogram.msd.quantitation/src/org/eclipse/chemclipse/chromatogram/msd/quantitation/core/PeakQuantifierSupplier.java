@@ -11,11 +11,25 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.core;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
+
 public class PeakQuantifierSupplier implements IPeakQuantifierSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String peakQuantifierName = "";
+	private Class<? extends IPeakQuantifierSettings> settingsClass;
+
+	protected void setQuantifierSettingsClass(Class<? extends IPeakQuantifierSettings> settingsClass) {
+
+		this.settingsClass = settingsClass;
+	}
+
+	@Override
+	public Class<? extends IPeakQuantifierSettings> getQuantifierSettingsClass() {
+
+		return settingsClass;
+	}
 
 	@Override
 	public String getId() {
