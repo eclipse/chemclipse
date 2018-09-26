@@ -56,4 +56,13 @@ public interface IProcessingMessage {
 	 * @return
 	 */
 	String getProposedSolution();
+
+	/**
+	 * 
+	 * @return the details for this message or <code>null</code> if none are supplied
+	 */
+	default String getDetails() {
+
+		return null;
+	}
 }

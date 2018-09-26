@@ -16,27 +16,43 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoContentProvider;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoLabelProvider;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoTableComparator;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.ExpandEvent;
+import org.eclipse.swt.events.ExpandListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.ExpandBar;
+import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
 public class ProcessingInfoUI {
 
+	private static final int DETAILS_MAX_HEIGHT = 300;
+	private static final int DETAILS_MIN_HEIGHT = 50;
 	private TableViewer tableViewer;
 	private ProcessingInfoTableComparator processingInfoTableComparator;
 	private Clipboard clipboard;
@@ -46,15 +62,74 @@ public class ProcessingInfoUI {
 	private static final String DELIMITER = "\t";
 
 	public ProcessingInfoUI(Composite parent, int style) {
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayout(new GridLayout());
 		/*
 		 * Clipboard / OS utils
 		 */
-		parent.setLayout(new FillLayout());
 		clipboard = new Clipboard(Display.getDefault());
 		Map<Long, String> substances = new HashMap<Long, String>();
-		tableViewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		tableViewer = new TableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		createColumns(tableViewer);
 		setTableProvider(substances);
+		parent.addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+
+				clipboard.dispose();
+			}
+		});
+		tableViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+		ExpandBar expandBar = new ExpandBar(container, SWT.V_SCROLL);
+		expandBar.setLayout(new FillLayout());
+		ExpandItem item = new ExpandItem(expandBar, SWT.NONE);
+		item.setText("Details");
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		expandBar.addExpandListener(new ExpandListener() {
+
+			@Override
+			public void itemExpanded(ExpandEvent e) {
+
+				ExpandItem expandItem = (ExpandItem)e.item;
+				int height = expandItem.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+				expandItem.setHeight(height);
+				data.heightHint = Math.max(Math.min(height, DETAILS_MAX_HEIGHT), DETAILS_MIN_HEIGHT) + expandItem.getHeaderHeight();
+				parent.layout(true, true);
+			}
+
+			@Override
+			public void itemCollapsed(ExpandEvent e) {
+
+				ExpandItem expandItem = (ExpandItem)e.item;
+				data.heightHint = expandItem.getHeaderHeight();
+				parent.layout(true, true);
+			}
+		});
+		Text infoTextControl = new Text(expandBar, SWT.MULTI | SWT.READ_ONLY);
+		item.setControl(infoTextControl);
+		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				ISelection selection = event.getSelection();
+				if(selection instanceof IStructuredSelection) {
+					IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+					Object element = structuredSelection.getFirstElement();
+					if(element instanceof IProcessingMessage) {
+						IProcessingMessage message = (IProcessingMessage)element;
+						String details = message.getDetails();
+						if(details != null) {
+							infoTextControl.setText(details);
+							return;
+						}
+					}
+				}
+				infoTextControl.setText("");
+			}
+		});
+		expandBar.setLayoutData(data);
 	}
 
 	public void setFocus() {
