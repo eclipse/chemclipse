@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.signals;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.numeric.statistics.Calculations;
 
-public interface ITotalScanSignals {
+public interface ITotalScanSignals extends Iterable<Integer> {
 
 	float NORMALIZATION_BASE = 1000.0f;
 
@@ -51,7 +54,11 @@ public interface ITotalScanSignals {
 	 * @param scan
 	 * @return ITotalIonSignal
 	 */
-	ITotalScanSignal getNextTotalScanSignal(int scan);
+	default ITotalScanSignal getNextTotalScanSignal(int scan) {
+
+		ITotalScanSignal signal = getTotalScanSignal(++scan);
+		return signal;
+	}
 
 	/**
 	 * Returns the previous scan relative to the given scan.<br/>
@@ -60,7 +67,11 @@ public interface ITotalScanSignals {
 	 * @param scan
 	 * @return IPoint
 	 */
-	ITotalScanSignal getPreviousTotalScanSignal(int scan);
+	default ITotalScanSignal getPreviousTotalScanSignal(int scan) {
+
+		ITotalScanSignal signal = getTotalScanSignal(--scan);
+		return signal;
+	}
 
 	/**
 	 * Returns the size.
@@ -88,14 +99,36 @@ public interface ITotalScanSignals {
 	 * 
 	 * @return float
 	 */
-	float getMaxSignal();
+	default float getMaxSignal() {
+
+		if(size() == 0) {
+			return 0.0f;
+		}
+		/*
+		 * Get the highest value.
+		 */
+		float[] values = getValues();
+		float max = Calculations.getMax(values);
+		return max;
+	}
 
 	/**
 	 * Returns the lowest total signal from the stored total ion signals.
 	 * 
 	 * @return float
 	 */
-	float getMinSignal();
+	default float getMinSignal() {
+
+		if(size() == 0) {
+			return 0.0f;
+		}
+		/*
+		 * Get the lowest value.
+		 */
+		float[] values = getValues();
+		float min = Calculations.getMin(values);
+		return min;
+	}
 
 	/**
 	 * Makes a deep copy of the actual total ion signals list.
@@ -114,31 +147,80 @@ public interface ITotalScanSignals {
 	List<ITotalScanSignal> getTotalScanSignals();
 
 	/**
+	 * Returns a list of the stored total ion signals. The list is unmodifiable.
+	 * 
+	 * @return List<ITotalIonSignal>
+	 */
+	Collection<ITotalScanSignal> getTotalScanSignalCollection();
+
+	/**
 	 * Returns the highest total ion signal.
 	 * 
 	 * @return {@link ITotalScanSignal}
 	 */
-	ITotalScanSignal getMaxTotalScanSignal();
+	default ITotalScanSignal getMaxTotalScanSignal() {
+
+		return Collections.max(getTotalScanSignalCollection(), new TotalScanSignalComparator());
+	}
 
 	/**
 	 * Returns the lowest total ion signal.
 	 * 
 	 * @return {@link ITotalScanSignal}
 	 */
-	ITotalScanSignal getMinTotalScanSignal();
+	default ITotalScanSignal getMinTotalScanSignal() {
+
+		return Collections.min(getTotalScanSignalCollection(), new TotalScanSignalComparator());
+	}
 
 	/**
 	 * Sets all negative total ion signals to 0.
 	 */
-	void setNegativeTotalSignalsToZero();
+	default void setNegativeTotalSignalsToZero() {
+
+		for(ITotalScanSignal signal : getTotalScanSignalCollection()) {
+			if(signal.getTotalSignal() < 0) {
+				signal.setTotalSignal(0.0f);
+			}
+		}
+	}
 
 	/**
 	 * Sets all positive total ion signals to 0.
 	 */
-	void setPositiveTotalSignalsToZero();
+	default void setPositiveTotalSignalsToZero() {
+
+		for(ITotalScanSignal signal : getTotalScanSignalCollection()) {
+			if(signal.getTotalSignal() > 0) {
+				signal.setTotalSignal(0.0f);
+			}
+		}
+	}
 
 	/**
 	 * Sets all total signals as its absolute value.
 	 */
-	void setTotalSignalsAsAbsoluteValues();
+	default void setTotalSignalsAsAbsoluteValues() {
+
+		float abundance = 0.0f;
+		for(ITotalScanSignal signal : getTotalScanSignalCollection()) {
+			abundance = Math.abs(signal.getTotalSignal());
+			signal.setTotalSignal(abundance);
+		}
+	}
+
+	/**
+	 * Returns all total ion signals as an float array.
+	 * 
+	 * @return float[]
+	 */
+	default float[] getValues() {
+
+		float[] values = new float[size()];
+		int i = 0;
+		for(ITotalScanSignal signal : getTotalScanSignalCollection()) {
+			values[i++] = signal.getTotalSignal();
+		}
+		return values;
+	}
 }

@@ -7,16 +7,20 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Jan Holy - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.xwc;
 
-public interface IWavelengthRange {
+import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 
-	double MIN_WAVELENGTH = 100;
-	double MAX_WAVELENGTH = 1000;
+public interface IExtractedSingleWavelengthSignal extends ITotalScanSignal {
 
-	double getStartWavelength();
+	/**
+	 * 
+	 * @return signal wavelength
+	 */
+	double getWavelength();
 
-	double getStopWavelength();
+	@Override
+	IExtractedSingleWavelengthSignal makeDeepCopy();
 }

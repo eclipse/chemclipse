@@ -17,6 +17,14 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 
+/**
+ * @deprecated Use {@link ExtractedSingleWavelengthSignalExtractor} instead
+ *
+ * @see {@link ExtractedSingleWavelengthSignals}
+ * @see {@link ExtractedSingleWavelengthSignal}
+ * 
+ */
+@Deprecated
 public class ExtractedWavelengthSignalExtractor implements IExtractedWavelengthSignalExtractor {
 
 	private IChromatogramWSD chromatogram;

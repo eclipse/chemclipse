@@ -20,6 +20,14 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.exceptions.NoExtractedWavelengthSignalStoredException;
 
+/**
+ * @deprecated Use {@link IExtractedSingleWavelengthSignals} instead
+ *
+ * @see {@link IExtractedSingleWavelengthSignal}
+ * @see {@link IExtractedSingleWavelengthSignalExtractor}
+ * 
+ */
+@Deprecated
 public interface IExtractedWavelengthSignals {
 
 	IChromatogramWSD getChromatogram();

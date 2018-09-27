@@ -12,15 +12,17 @@
 package org.eclipse.chemclipse.model.signals;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.numeric.statistics.Calculations;
 
 public class TotalScanSignals implements ITotalScanSignals {
 
@@ -36,6 +38,7 @@ public class TotalScanSignals implements ITotalScanSignals {
 	 * @param numberOfScans
 	 */
 	public TotalScanSignals(int numberOfScans) {
+
 		if(numberOfScans <= 0) {
 			numberOfScans = 0;
 			startScan = 0;
@@ -52,6 +55,7 @@ public class TotalScanSignals implements ITotalScanSignals {
 	 */
 	@SuppressWarnings("rawtypes")
 	public TotalScanSignals(int numberOfScans, IChromatogram chromatogram) {
+
 		this(numberOfScans);
 		this.chromatogram = chromatogram;
 	}
@@ -65,6 +69,7 @@ public class TotalScanSignals implements ITotalScanSignals {
 	 * @param stopScan
 	 */
 	public TotalScanSignals(int startScan, int stopScan) {
+
 		startScan = (startScan <= 0) ? 0 : startScan;
 		stopScan = (stopScan <= 0) ? 0 : stopScan;
 		int start = Math.min(startScan, stopScan);
@@ -91,6 +96,7 @@ public class TotalScanSignals implements ITotalScanSignals {
 	 */
 	@SuppressWarnings("rawtypes")
 	public TotalScanSignals(int startScan, int stopScan, IChromatogram chromatogram) {
+
 		this(startScan, stopScan);
 		this.chromatogram = chromatogram;
 	}
@@ -98,12 +104,14 @@ public class TotalScanSignals implements ITotalScanSignals {
 	// TODO JUnit
 	@SuppressWarnings("rawtypes")
 	public TotalScanSignals(IChromatogram chromatogram) throws ChromatogramIsNullException {
+
 		this(new ChromatogramSelection(chromatogram));
 	}
 
 	// TODO JUnit
 	@SuppressWarnings("rawtypes")
 	public TotalScanSignals(IChromatogramSelection chromatogramSelection) {
+
 		chromatogram = chromatogramSelection.getChromatogram();
 		startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
@@ -149,20 +157,6 @@ public class TotalScanSignals implements ITotalScanSignals {
 	}
 
 	@Override
-	public ITotalScanSignal getNextTotalScanSignal(int scan) {
-
-		ITotalScanSignal signal = getTotalScanSignal(++scan);
-		return signal;
-	}
-
-	@Override
-	public ITotalScanSignal getPreviousTotalScanSignal(int scan) {
-
-		ITotalScanSignal signal = getTotalScanSignal(--scan);
-		return signal;
-	}
-
-	@Override
 	public int size() {
 
 		return signals.size();
@@ -181,31 +175,32 @@ public class TotalScanSignals implements ITotalScanSignals {
 	}
 
 	@Override
-	public float getMaxSignal() {
+	public Iterator<Integer> iterator() {
 
-		if(size() == 0) {
-			return 0.0f;
-		}
-		/*
-		 * Get the highest value.
-		 */
-		float[] values = getValues();
-		float max = Calculations.getMax(values);
-		return max;
-	}
+		return new Iterator<Integer>() {
 
-	@Override
-	public float getMinSignal() {
+			private int startScan = getStartScan();
+			private int stopScan = getStartScan();
+			private int actualScan = getStartScan();
 
-		if(size() == 0) {
-			return 0.0f;
-		}
-		/*
-		 * Get the lowest value.
-		 */
-		float[] values = getValues();
-		float min = Calculations.getMin(values);
-		return min;
+			@Override
+			public Integer next() {
+
+				if(!this.hasNext()) {
+					throw new NoSuchElementException();
+				}
+				return actualScan++;
+			}
+
+			@Override
+			public boolean hasNext() {
+
+				if(startScan == 0 || stopScan == 0) {
+					return false;
+				}
+				return actualScan <= stopScan;
+			}
+		};
 	}
 
 	@Override
@@ -227,60 +222,9 @@ public class TotalScanSignals implements ITotalScanSignals {
 	}
 
 	@Override
-	public ITotalScanSignal getMaxTotalScanSignal() {
+	public Collection<ITotalScanSignal> getTotalScanSignalCollection() {
 
-		return Collections.max(signals, new TotalScanSignalComparator());
+		return Collections.unmodifiableCollection(signals);
 	}
-
-	@Override
-	public ITotalScanSignal getMinTotalScanSignal() {
-
-		return Collections.min(signals, new TotalScanSignalComparator());
-	}
-
-	@Override
-	public void setNegativeTotalSignalsToZero() {
-
-		for(ITotalScanSignal signal : signals) {
-			if(signal.getTotalSignal() < 0) {
-				signal.setTotalSignal(0.0f);
-			}
-		}
-	}
-
-	@Override
-	public void setPositiveTotalSignalsToZero() {
-
-		for(ITotalScanSignal signal : signals) {
-			if(signal.getTotalSignal() > 0) {
-				signal.setTotalSignal(0.0f);
-			}
-		}
-	}
-
-	@Override
-	public void setTotalSignalsAsAbsoluteValues() {
-
-		float abundance = 0.0f;
-		for(ITotalScanSignal signal : signals) {
-			abundance = Math.abs(signal.getTotalSignal());
-			signal.setTotalSignal(abundance);
-		}
-	}
-
 	// ---------------------------------------------ITotalIonSignals
-	/**
-	 * Returns all total ion signals as an float array.
-	 * 
-	 * @return float[]
-	 */
-	private float[] getValues() {
-
-		float[] values = new float[size()];
-		int i = 0;
-		for(ITotalScanSignal signal : signals) {
-			values[i++] = signal.getTotalSignal();
-		}
-		return values;
-	}
 }

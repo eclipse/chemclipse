@@ -31,6 +31,14 @@ import org.eclipse.chemclipse.wsd.model.core.exceptions.NoExtractedWavelengthSig
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanWSD;
 
+/**
+ * @deprecated Use {@link ExtractedSingleWavelengthSignals} instead
+ *
+ * @see {@link ExtractedSingleWavelengthSignalExtractor}
+ * @see {@link ExtractedSingleWavelengthSignal}
+ * 
+ */
+@Deprecated
 public class ExtractedWavelengthSignals implements IExtractedWavelengthSignals {
 
 	private static final Logger logger = Logger.getLogger(ExtractedWavelengthSignals.class);

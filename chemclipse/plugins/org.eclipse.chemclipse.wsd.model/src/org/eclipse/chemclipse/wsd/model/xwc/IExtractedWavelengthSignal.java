@@ -13,6 +13,14 @@ package org.eclipse.chemclipse.wsd.model.xwc;
 
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 
+/**
+ * @deprecated Use {@link IExtractedSingleWavelengthSignal} instead
+ *
+ * @see {@link IExtractedSingleWavelengthSignalExtractor}
+ * @see {@link IExtractedSingleWavelengthSignals}
+ * 
+ */
+@Deprecated
 public interface IExtractedWavelengthSignal {
 
 	void setAbundance(IScanSignalWSD scanSignal, boolean removePreviousAbundance);
