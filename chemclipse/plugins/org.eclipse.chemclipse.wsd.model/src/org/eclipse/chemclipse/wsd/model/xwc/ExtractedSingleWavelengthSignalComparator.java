@@ -15,19 +15,18 @@ import java.util.Comparator;
 
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
-@Deprecated
-public class ExtractedWavelengthSignalComparator implements Comparator<IExtractedWavelengthSignal> {
+public class ExtractedSingleWavelengthSignalComparator implements Comparator<IExtractedSingleWavelengthSignal> {
 
 	private SortOrder sortOrder = SortOrder.ASC;
 
-	public ExtractedWavelengthSignalComparator(SortOrder sortOrder) {
+	public ExtractedSingleWavelengthSignalComparator(SortOrder sortOrder) {
 		if(sortOrder != null) {
 			this.sortOrder = sortOrder;
 		}
 	}
 
 	@Override
-	public int compare(IExtractedWavelengthSignal signal1, IExtractedWavelengthSignal signal2) {
+	public int compare(IExtractedSingleWavelengthSignal signal1, IExtractedSingleWavelengthSignal signal2) {
 
 		int result = 0;
 		if(signal1 == null || signal2 == null) {

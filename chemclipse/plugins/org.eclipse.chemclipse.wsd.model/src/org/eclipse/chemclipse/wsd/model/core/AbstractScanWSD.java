@@ -24,7 +24,9 @@ import org.eclipse.chemclipse.wsd.model.comparator.WavelengthCombinedComparator;
 import org.eclipse.chemclipse.wsd.model.comparator.WavelengthComparatorMode;
 import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
+import org.eclipse.chemclipse.wsd.model.xwc.ExtractedSingleWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.ExtractedWavelengthSignal;
+import org.eclipse.chemclipse.wsd.model.xwc.IExtractedSingleWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 
 public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
@@ -140,6 +142,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	}
 
 	@Override
+	@Deprecated
 	public IExtractedWavelengthSignal getExtractedWavelengthSignal() {
 
 		if(hasScanSignals()) {
@@ -153,6 +156,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	}
 
 	@Override
+	@Deprecated
 	public IExtractedWavelengthSignal getExtractedWavelengthSignal(double startWavelength, double stopWavelength) {
 
 		ExtractedWavelengthSignal extractedWavelengthSignal;
@@ -168,6 +172,17 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 			extractedWavelengthSignal.setRetentionTime(getRetentionTime());
 			return extractedWavelengthSignal;
 		}
+	}
+
+	@Override
+	public Optional<IExtractedSingleWavelengthSignal> getExtractedSingleWavelengthSignal(double wavelength) {
+
+		Optional<IScanSignalWSD> signal = getScanSignal(wavelength);
+		if(signal.isPresent()) {
+			IExtractedSingleWavelengthSignal extractedSingleWavelengthSignal = new ExtractedSingleWavelengthSignal(signal.get(), getRetentionTime(), getRetentionIndex());
+			return Optional.of(extractedSingleWavelengthSignal);
+		}
+		return Optional.empty();
 	}
 
 	@Override

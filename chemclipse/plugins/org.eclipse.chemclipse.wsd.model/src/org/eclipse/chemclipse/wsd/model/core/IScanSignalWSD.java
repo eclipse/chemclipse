@@ -13,6 +13,10 @@ package org.eclipse.chemclipse.wsd.model.core;
 
 public interface IScanSignalWSD {
 
+	/**
+	 * @deprecated because in WSD chromatography total signal does not exist
+	 */
+	@Deprecated
 	double TIC_SIGNAL = 0;
 
 	/**

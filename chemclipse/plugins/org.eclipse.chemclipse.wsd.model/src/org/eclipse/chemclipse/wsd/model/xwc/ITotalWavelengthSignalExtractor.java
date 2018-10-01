@@ -15,6 +15,14 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 
+/**
+ * @deprecated Use {@link IExtractedSingleWavelengthSignalExtractor} instead
+ *
+ * @see {@link ISingleWavelengthSignals}
+ * @see {@link ISingleWavelengthSignal}
+ * 
+ */
+@Deprecated
 public interface ITotalWavelengthSignalExtractor extends ITotalScanSignalExtractor {
 
 	ITotalScanSignals getTotalWavelengthSignals(IChromatogramSelectionWSD chromatogramSelection);

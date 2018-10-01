@@ -11,14 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.xwc;
 
+import java.util.Objects;
+
 public class WavelengthRange implements IWavelengthRange {
 
-	private int startWavelength;
-	private int stopWavelength;
+	private double startWavelength;
+	private double stopWavelength;
 
-	public WavelengthRange(int startWavelength, int stopWavelength) {
+	public WavelengthRange(double startWavelength, double stopWavelength) {
 		if(startWavelength > stopWavelength) {
-			int tmp = startWavelength;
+			double tmp = startWavelength;
 			startWavelength = stopWavelength;
 			stopWavelength = tmp;
 		}
@@ -33,13 +35,13 @@ public class WavelengthRange implements IWavelengthRange {
 	}
 
 	@Override
-	public int getStartWavelength() {
+	public double getStartWavelength() {
 
 		return startWavelength;
 	}
 
 	@Override
-	public int getStopWavelength() {
+	public double getStopWavelength() {
 
 		return stopWavelength;
 	}
@@ -63,7 +65,7 @@ public class WavelengthRange implements IWavelengthRange {
 	@Override
 	public int hashCode() {
 
-		return 7 * Integer.valueOf(getStartWavelength()).hashCode() + 11 * Integer.valueOf(getStopWavelength()).hashCode();
+		return Objects.hash(startWavelength, stopWavelength);
 	}
 
 	@Override

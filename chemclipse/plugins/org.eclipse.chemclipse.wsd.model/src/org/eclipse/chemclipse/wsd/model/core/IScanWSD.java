@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetsWSD;
+import org.eclipse.chemclipse.wsd.model.xwc.IExtractedSingleWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 
 public interface IScanWSD extends IScan, IScanTargetsWSD {
@@ -40,9 +41,23 @@ public interface IScanWSD extends IScan, IScanTargetsWSD {
 
 	void removeScanSignal(int scan);
 
+	/**
+	 * use method {@link #getExtractedSingleWavelengthSignal(double)} instead
+	 * 
+	 * @return IExtractedWavelengthSignal
+	 */
+	@Deprecated
 	IExtractedWavelengthSignal getExtractedWavelengthSignal();
 
+	/**
+	 * use method {@link #getExtractedSingleWavelengthSignal(double)} instead
+	 * 
+	 * @return IExtractedWavelengthSignal
+	 */
+	@Deprecated
 	IExtractedWavelengthSignal getExtractedWavelengthSignal(double startIon, double stopIon);
+
+	Optional<IExtractedSingleWavelengthSignal> getExtractedSingleWavelengthSignal(double wavelength);
 
 	boolean hasScanSignals();
 
