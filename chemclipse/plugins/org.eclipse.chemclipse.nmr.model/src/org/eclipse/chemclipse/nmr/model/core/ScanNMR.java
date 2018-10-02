@@ -12,15 +12,19 @@
 package org.eclipse.chemclipse.nmr.model.core;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.math3.complex.Complex;
 import org.eclipse.chemclipse.model.core.AbstractMeasurementInfo;
+import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
 
 public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
-
+	
 	private static final long serialVersionUID = -4448729586928333575L;
 	//
 	private double[] rawSignals = new double[0];
@@ -28,7 +32,9 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	private Complex[] phaseCorrectedData = new Complex[0];
 	private Complex[] baselineCorrectedData = new Complex[0];
 	private final TreeSet<ISignalNMR> processedSignals = new TreeSet<>();
-	private Map<String, Double> processingParameters = new LinkedHashMap<>();
+	
+	private Map<String, Double> processingParametersMap = new LinkedHashMap<String, Double>();
+	private Set<String> protectKeys = new LinkedHashSet<String>(processingParametersMap.keySet());
 
 	@Override
 	public Complex[] getBaselineCorrectedData() {
@@ -117,16 +123,45 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 
 		return "ScanNMR [rawSignals=" + Arrays.toString(rawSignals) + "]";
 	}
-
+	
 	@Override
-	public Map<String, Double> getProcessingParameters() {
+	public Double getProcessingParameters(String key) {
 
-		return processingParameters;
+		return processingParametersMap.get(key);
 	}
 
 	@Override
-	public void setProcessingParameters(final Map<String, Double> processingParameters) {
+	public Double getProcessingParametersOrDefault(String key, Double defaultValue) {
 
-		this.processingParameters = processingParameters;
+		return processingParametersMap.getOrDefault(key, defaultValue);
 	}
+
+	@Override
+	public boolean processingParametersContainsKey(String key) {
+
+		return processingParametersMap.containsKey(key);
+	}
+
+	@Override
+	public void putProcessingParameters(String key, Double value) {
+
+		processingParametersMap.put(key, value);
+	}
+
+	@Override
+	public void removeProcessingParameters(String key) throws InvalidHeaderModificationException {
+
+		if(protectKeys.contains(key)) {
+			throw new InvalidHeaderModificationException("It's not possible to remove the following key: " + key);
+		} else {
+			processingParametersMap.remove(key);
+		}
+	}
+
+	@Override
+	public Map<String, Double> getprocessingParametersMap() {
+
+		return Collections.unmodifiableMap(processingParametersMap);
+	}
+
 }

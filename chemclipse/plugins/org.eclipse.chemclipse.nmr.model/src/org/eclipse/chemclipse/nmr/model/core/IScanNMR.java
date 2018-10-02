@@ -16,6 +16,7 @@ import java.util.TreeSet;
 
 import org.apache.commons.math3.complex.Complex;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
+import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
 
 public interface IScanNMR extends IMeasurementInfo {
 
@@ -47,8 +48,20 @@ public interface IScanNMR extends IMeasurementInfo {
 	void setBaselineCorrectedData(Complex[] data);
 
 	TreeSet<ISignalNMR> getProcessedSignals();
+	
+	/*
+	 * processing parameters
+	 */
+	Double getProcessingParameters(String key);
 
-	Map<String, Double> getProcessingParameters();
+	Double getProcessingParametersOrDefault(String key, Double defaultValue);
 
-	void setProcessingParameters(Map<String, Double> processingParameters);
+	boolean processingParametersContainsKey(String key);
+
+	void putProcessingParameters(String key, Double value);
+
+	Map<String, Double> getprocessingParametersMap();
+
+	void removeProcessingParameters(String key) throws InvalidHeaderModificationException;
+
 }
