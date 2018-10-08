@@ -19,7 +19,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -117,6 +116,7 @@ public class ExtendedChromatogramOverlayUI {
 
 	@Inject
 	public ExtendedChromatogramOverlayUI(Composite parent) {
+
 		initialize(parent);
 	}
 
@@ -1114,11 +1114,9 @@ public class ExtendedChromatogramOverlayUI {
 							/*
 							 * TIC
 							 */
-							if(chromatogram instanceof IChromatogramMSD || chromatogram instanceof IChromatogramCSD) {
-								availableSeriesIds.add(seriesId);
-								if(!baseChart.isSeriesContained(seriesId)) {
-									lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, null, false));
-								}
+							availableSeriesIds.add(seriesId);
+							if(!baseChart.isSeriesContained(seriesId)) {
+								lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, null, false));
 							}
 							/*
 							 * References
@@ -1126,14 +1124,12 @@ public class ExtendedChromatogramOverlayUI {
 							if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
 								int j = 1;
 								for(IChromatogram referencedChromatogram : referencedChromatograms) {
-									if(chromatogram instanceof IChromatogramMSD || chromatogram instanceof IChromatogramCSD) {
-										String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j;
-										String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
-										availableSeriesIds.add(referenceSeriesId);
-										if(!baseChart.isSeriesContained(referenceSeriesId)) {
-											color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, overlayType);
-											lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, overlayType, derivativeType, color, null, false));
-										}
+									String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j;
+									String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
+									availableSeriesIds.add(referenceSeriesId);
+									if(!baseChart.isSeriesContained(referenceSeriesId)) {
+										color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, overlayType);
+										lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, overlayType, derivativeType, color, null, false));
 									}
 								}
 							}
