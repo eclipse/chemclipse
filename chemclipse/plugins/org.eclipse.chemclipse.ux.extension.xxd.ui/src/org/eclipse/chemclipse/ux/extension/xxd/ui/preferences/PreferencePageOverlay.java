@@ -42,6 +42,10 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 		//
 		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY, "Display Color Scheme Normal", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS, "Show Referenced Chromatograms", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_SHOW_AREA, "Show Area", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		//
 		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SIC_OVERLAY, "Display Color Scheme SIC", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SWC_OVERLAY, "Display Color Scheme SWC", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_TIC_OVERLAY, "Line Style TIC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));

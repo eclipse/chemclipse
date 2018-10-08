@@ -81,6 +81,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_INDEX_SHIFT_X, PreferenceConstants.DEF_INDEX_SHIFT_X);
 		store.setDefault(PreferenceConstants.P_OVERLAY_SHIFT_Y, PreferenceConstants.DEF_OVERLAY_SHIFT_Y);
 		store.setDefault(PreferenceConstants.P_INDEX_SHIFT_Y, PreferenceConstants.DEF_INDEX_SHIFT_Y);
+		//
+		store.setDefault(PreferenceConstants.P_OVERLAY_SHOW_AREA, PreferenceConstants.DEF_OVERLAY_SHOW_AREA);
 		/*
 		 * Scans
 		 */

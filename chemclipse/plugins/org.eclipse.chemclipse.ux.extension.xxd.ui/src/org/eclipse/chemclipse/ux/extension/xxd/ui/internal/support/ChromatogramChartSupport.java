@@ -87,9 +87,10 @@ public class ChromatogramChartSupport {
 	private LineStyle lineStyleTSC;
 	private LineStyle lineStyleSWC;
 	private LineStyle lineStyleDefault;
+	//
+	private boolean showArea = false;
 
 	public ChromatogramChartSupport() {
-
 		usedColorsNormal = new HashMap<String, Color>();
 		usedColorsSIC = new HashMap<String, Color>();
 		usedColorsSWC = new HashMap<String, Color>();
@@ -110,6 +111,7 @@ public class ChromatogramChartSupport {
 		lineStyleTSC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC_OVERLAY));
 		lineStyleSWC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC_OVERLAY));
 		lineStyleDefault = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY));
+		showArea = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_SHOW_AREA);
 		//
 		resetColorMaps();
 	}
@@ -225,7 +227,7 @@ public class ChromatogramChartSupport {
 		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 		lineSeriesSettings.setLineColor(color);
 		lineSeriesSettings.setLineStyle(lineStyle);
-		lineSeriesSettings.setEnableArea(false);
+		lineSeriesSettings.setEnableArea(showArea);
 		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
 		lineSeriesSettingsHighlight.setLineWidth(2);
 		//
@@ -326,7 +328,7 @@ public class ChromatogramChartSupport {
 		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 		lineSeriesSettings.setLineColor(color);
 		lineSeriesSettings.setLineStyle(lineStyle);
-		lineSeriesSettings.setEnableArea(false);
+		lineSeriesSettings.setEnableArea(showArea);
 		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
 		lineSeriesSettingsHighlight.setLineWidth(2);
 		//

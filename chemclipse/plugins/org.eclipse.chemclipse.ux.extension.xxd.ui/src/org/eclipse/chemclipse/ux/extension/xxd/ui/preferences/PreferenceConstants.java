@@ -177,6 +177,9 @@ public class PreferenceConstants {
 	public static final int DEF_INDEX_SHIFT_Y = 0;
 	public static final int MIN_INDEX_SHIFT_Y = 0;
 	public static final int MAX_INDEX_SHIFT_Y = 100;
+	//
+	public static final String P_OVERLAY_SHOW_AREA = "overlayShowArea";
+	public static final boolean DEF_OVERLAY_SHOW_AREA = false;
 	/*
 	 * Scans
 	 */
