@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core;
 
+import java.util.Set;
+
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetsWSD;
 
@@ -24,4 +26,10 @@ public interface IChromatogramWSD extends IChromatogram<IChromatogramPeakWSD>, I
 	 * @return {@link IScanWSD}
 	 */
 	IScanWSD getSupplierScan(int scan);
+
+	/**
+	 * 
+	 * @return all wavelengths in scan
+	 */
+	Set<Double> getWavelengths();
 }

@@ -260,8 +260,9 @@ public class PartSupport {
 	public static void setCompositeVisibility(Composite composite, boolean visible) {
 
 		composite.setVisible(visible);
-		GridData gridData = (GridData)composite.getLayoutData();
-		if(gridData != null) {
+		Object layoutData = composite.getLayoutData();
+		if(layoutData instanceof GridData) {
+			GridData gridData = (GridData)layoutData;
 			gridData.exclude = !visible;
 		}
 		Composite parent = composite.getParent();

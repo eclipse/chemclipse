@@ -186,6 +186,12 @@ public class ChromatogramChartSupport {
 	}
 
 	@SuppressWarnings("rawtypes")
+	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
+
+		return getLineSeriesData(chromatogram, seriesId, overlayType, DERIVATIVE_NONE, color, signals, false);
+	}
+
+	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, String overlayType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();

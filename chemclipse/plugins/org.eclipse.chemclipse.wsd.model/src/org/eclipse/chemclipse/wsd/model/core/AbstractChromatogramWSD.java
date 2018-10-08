@@ -33,6 +33,7 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	private INoiseCalculator noiseCalculator;
 
 	public AbstractChromatogramWSD() {
+
 		targets = new HashSet<IChromatogramTargetWSD>();
 		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
 		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
@@ -40,6 +41,16 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 			int segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
 			noiseCalculator.setChromatogram(this, segmentWidth);
 		}
+	}
+
+	@Override
+	public Set<Double> getWavelengths() {
+
+		Set<Double> wavelengths = new HashSet<>();
+		for(int i = 1; i < getNumberOfScans(); i++) {
+			getSupplierScan(i).getScanSignals().forEach(signal -> wavelengths.add(signal.getWavelength()));
+		}
+		return wavelengths;
 	}
 
 	@Override

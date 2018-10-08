@@ -18,10 +18,8 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
-import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelength;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateNotifier;
 
@@ -36,10 +34,12 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 	private IScan identifiedScan;
 
 	public ChromatogramSelectionWSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
+
 		this(chromatogram, true);
 	}
 
 	public ChromatogramSelectionWSD(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.
@@ -51,13 +51,12 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 		IChromatogramWSD wsdChromatogram = (IChromatogramWSD)chromatogram;
 		IScanWSD scan = (IScanWSD)wsdChromatogram.getScans().stream().findFirst().get();
 		selectedWavelengths = new MarkedWavelengths();
-		for(IScanSignalWSD signal : scan.getScanSignals()) {
-			selectedWavelengths.add(new MarkedWavelength(signal.getWavelength()));
-		}
+		selectedWavelengths.add(scan.getScanSignals().stream().findFirst().get().getWavelength());
 		//
 		reset(fireUpdate);
 	}
 
+	@Override
 	public void dispose() {
 
 		selectedScan = null;

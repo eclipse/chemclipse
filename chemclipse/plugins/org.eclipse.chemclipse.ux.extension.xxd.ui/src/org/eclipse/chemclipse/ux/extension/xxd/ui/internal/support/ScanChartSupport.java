@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse Public LicensepeakChartSupport v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * 
@@ -14,8 +14,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
+import org.eclipse.chemclipse.model.core.IMarkedSignals;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -24,6 +26,8 @@ import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.wsd.model.comparator.WavelengthValueComparator;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.eavp.service.swtchart.barcharts.BarSeriesData;
 import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesData;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
@@ -33,6 +37,8 @@ import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 
 public class ScanChartSupport {
 
+	public static final String DISPLAY_TYPE_TIC = "TIC"; // Total Intensity Chromatogram
+	public static final String DISPLAY_TYPE_SWC = "SWC"; // Selected Wavelength Chromatogram
 	private IonValueComparator ionValueComparator = new IonValueComparator(SortOrder.ASC);
 	private WavelengthValueComparator wavelengthValueComparator = new WavelengthValueComparator(SortOrder.ASC);
 
@@ -54,24 +60,48 @@ public class ScanChartSupport {
 
 		List<IScan> scans = new ArrayList<>();
 		scans.add(scan);
-		return getLineSeriesDataPoint(scans, mirrored, seriesId);
+		return getLineSeriesDataPoint(scans, mirrored, seriesId, DISPLAY_TYPE_TIC, null);
 	}
 
 	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId) {
 
-		double[] xSeries = new double[scans.size()];
-		double[] ySeries = new double[scans.size()];
+		return getLineSeriesDataPoint(scans, mirrored, seriesId, DISPLAY_TYPE_TIC, null);
+	}
+
+	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId, String type, IMarkedSignals markedSignals) {
+
+		List<IScan> scans = new ArrayList<>();
+		scans.add(scan);
+		return getLineSeriesDataPoint(scans, mirrored, seriesId, type, markedSignals);
+	}
+
+	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId, String type, IMarkedSignals markedSignals) {
+
+		List<Double> xSeries = new ArrayList<>(scans.size());
+		List<Double> ySeries = new ArrayList<>(scans.size());
 		//
-		int i = 0;
 		for(IScan scan : scans) {
-			if(scan != null) {
-				xSeries[i] = scan.getRetentionTime();
-				ySeries[i] = (mirrored) ? scan.getTotalSignal() * -1 : scan.getTotalSignal();
+			if(type.equals(DISPLAY_TYPE_TIC)) {
+				if(scan != null) {
+					xSeries.add((double)scan.getRetentionTime());
+					ySeries.add((double)((mirrored) ? scan.getTotalSignal() * -1 : scan.getTotalSignal()));
+				}
+			} else if(type.equals(DISPLAY_TYPE_SWC)) {
+				if(scan instanceof IScanWSD && markedSignals instanceof IMarkedWavelengths) {
+					IScanWSD scanWSD = (IScanWSD)scan;
+					IMarkedWavelengths markedWavelengths = (IMarkedWavelengths)markedSignals;
+					for(IMarkedWavelength markedWavelength : markedWavelengths) {
+						Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(markedWavelength.getWavelength());
+						if(scanSignal.isPresent()) {
+							xSeries.add((double)scan.getRetentionTime());
+							ySeries.add((double)scanSignal.get().getAbundance());
+						}
+					}
+				}
 			}
-			i++;
 		}
 		//
-		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
+		ISeriesData seriesData = new SeriesData(xSeries.stream().mapToDouble(Double::doubleValue).toArray(), ySeries.stream().mapToDouble(Double::doubleValue).toArray(), seriesId);
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 		return lineSeriesData;
 	}

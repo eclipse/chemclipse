@@ -123,11 +123,13 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramActionUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeatmapUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -156,6 +158,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyAdapter;
@@ -163,6 +166,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -207,6 +211,9 @@ public class ExtendedChromatogramUI {
 	private static final String MODIFY_LENGTH_LONGEST = "MODIFY_LENGTH_LONGEST";
 	private static final String MODIFY_LENGTH_ADJUST = "MODIFY_LENGTH_ADJUST";
 	//
+	private static final String DISPLAY_TYPE_TOTAL_SIGNAL = "DISPLAY_TYPE_TOTAL_SIGNAL";
+	private static final String DISPLAY_TYPE_SELECTED_SIGNAL = "DISPLAY_TYPE_SELECTED_SIGNAL";
+	//
 	private static final int THREE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 3);
 	private static final int FIVE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 5);
 	//
@@ -223,6 +230,8 @@ public class ExtendedChromatogramUI {
 	private ComboViewer comboViewerSeparationColumn;
 	private MethodSupportUI methodSupportUI;
 	private ChromatogramActionUI chromatogramActionUI;
+	private HeatmapUI heatmapUI;
+	private Composite heatmapArea;
 	//
 	private IChromatogramSelection chromatogramSelection = null;
 	private List<IChromatogramSelection> referencedChromatogramSelections = null; // Might be null ... no references.
@@ -248,11 +257,14 @@ public class ExtendedChromatogramUI {
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
+	private String displayType = DISPLAY_TYPE_TOTAL_SIGNAL;
+	//
 	private boolean suspendUpdate = false;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	@Inject
 	public ExtendedChromatogramUI(Composite parent, int style) {
+
 		initialize(parent, style);
 	}
 
@@ -992,8 +1004,17 @@ public class ExtendedChromatogramUI {
 		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
 		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
 		//
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-		ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesDataChromatogram(chromatogram, SERIES_ID_CHROMATOGRAM, color);
+		ILineSeriesData lineSeriesData = null;
+		if(displayType.equals(DISPLAY_TYPE_TOTAL_SIGNAL)) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			lineSeriesData = chromatogramChartSupport.getLineSeriesDataChromatogram(chromatogram, SERIES_ID_CHROMATOGRAM, color);
+		} else if(displayType.equals(DISPLAY_TYPE_SELECTED_SIGNAL)) {
+			if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+				IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+				IMarkedWavelengths markedWavelengths = chromatogramSelectionWSD.getSelectedWavelengths();
+				lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelectionWSD.getChromatogram(), SERIES_ID_CHROMATOGRAM, ChromatogramChartSupport.DISPLAY_TYPE_SWC, color, markedWavelengths);
+			}
+		}
 		lineSeriesData.getLineSeriesSettings().setEnableArea(enableChromatogramArea);
 		lineSeriesDataList.add(lineSeriesData);
 	}
@@ -1086,7 +1107,15 @@ public class ExtendedChromatogramUI {
 	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList, List<IScan> scans, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
 
 		if(scans.size() > 0) {
-			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId);
+			ILineSeriesData lineSeriesData = null;
+			if(displayType.equals(DISPLAY_TYPE_TOTAL_SIGNAL)) {
+				lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId);
+			} else {
+				if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+					IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+					lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId, ScanChartSupport.DISPLAY_TYPE_SWC, chromatogramSelectionWSD.getSelectedWavelengths());
+				}
+			}
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
 			lineSeriesSettings.setSymbolType(plotSymbolType);
@@ -1155,7 +1184,15 @@ public class ExtendedChromatogramUI {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN));
 			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE);
 			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE));
-			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN);
+			ILineSeriesData lineSeriesData = null;
+			if(displayType.equals(DISPLAY_TYPE_TOTAL_SIGNAL)) {
+				lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN);
+			} else {
+				if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+					IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+					lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN, ScanChartSupport.DISPLAY_TYPE_SWC, chromatogramSelectionWSD.getSelectedWavelengths());
+				}
+			}
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
 			lineSeriesSettings.setSymbolType(symbolType);
@@ -1198,7 +1235,11 @@ public class ExtendedChromatogramUI {
 		toolbarRetentionIndices = createToolbarRetentionIndices(parent);
 		toolbarMethod = createToolbarMethod(parent);
 		toolbarEdit = createToolbarEdit(parent);
-		createChromatogramChart(parent, style);
+		//
+		SashForm chartsArea = new SashForm(parent, SWT.HORIZONTAL);
+		chartsArea.setLayoutData(new GridData(GridData.FILL_BOTH));
+		createChromatogramChart(chartsArea, style);
+		createHeatmap(chartsArea);
 		//
 		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
 		//
@@ -1207,6 +1248,7 @@ public class ExtendedChromatogramUI {
 		PartSupport.setCompositeVisibility(toolbarRetentionIndices, false);
 		PartSupport.setCompositeVisibility(toolbarMethod, false);
 		PartSupport.setCompositeVisibility(toolbarEdit, false);
+		PartSupport.setCompositeVisibility(heatmapArea, false);
 		//
 		chromatogramActionUI.setChromatogramActionMenu(chromatogramSelection);
 	}
@@ -1217,7 +1259,7 @@ public class ExtendedChromatogramUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(11, false));
+		composite.setLayout(new GridLayout(12, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
@@ -1229,6 +1271,7 @@ public class ExtendedChromatogramUI {
 		createToggleRangeSelectorButton(composite);
 		chromatogramActionUI = createChromatogramActionUI(composite);
 		createResetButton(composite);
+		createButtonSignalSelection(composite);
 		createSettingsButton(composite);
 		//
 		return composite;
@@ -1319,7 +1362,7 @@ public class ExtendedChromatogramUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(15, false));
+		composite.setLayout(new GridLayout(16, false));
 		//
 		createButtonSelectPreviousChromatogram(composite);
 		createComboChromatograms(composite);
@@ -1620,6 +1663,39 @@ public class ExtendedChromatogramUI {
 				MessageDialog.openInformation(DisplayUtils.getShell(), "Range Selection", "The selected editor range has been set successfully to all opened chromatograms.");
 			}
 		});
+	}
+
+	private void createButtonSignalSelection(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Select signal");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEATMAP_DEFAULT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				signalSelectionHeatMap();
+			}
+		});
+	}
+
+	private void signalSelectionHeatMap() {
+
+		PartSupport.setCompositeVisibility(heatmapArea, !heatmapArea.getVisible());
+		heatmapUI.setChromatogramSelection(chromatogramSelection);
+		if(chromatogramSelection instanceof ChromatogramSelectionWSD) {
+			if(displayType.equals(DISPLAY_TYPE_SELECTED_SIGNAL)) {
+				displayType = DISPLAY_TYPE_TOTAL_SIGNAL;
+				update();
+			} else if(displayType.equals(DISPLAY_TYPE_TOTAL_SIGNAL)) {
+				displayType = DISPLAY_TYPE_SELECTED_SIGNAL;
+				if(chromatogramSelection != null) {
+				}
+				update();
+			}
+		}
 	}
 
 	private void setRanges() {
@@ -1969,6 +2045,13 @@ public class ExtendedChromatogramUI {
 		chartSettings.addHandledEventProcessor(new ChromatogramMoveArrowKeyHandler(this, SWT.ARROW_DOWN));
 		//
 		chromatogramChart.applySettings(chartSettings);
+	}
+
+	private void createHeatmap(Composite composite) {
+
+		heatmapArea = new Composite(composite, SWT.None);
+		heatmapArea.setLayout(new FillLayout());
+		heatmapUI = new HeatmapUI(heatmapArea);
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
