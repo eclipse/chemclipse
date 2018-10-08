@@ -451,6 +451,11 @@ public class ExtendedChromatogramOverlayUI {
 		}
 	}
 
+	private void setSelectedWavelengthsText(String wavelengthSelection) {
+
+		textSignalsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE));
+	}
+
 	private void createIonsFromText(Composite parent) {
 
 		textSignalsFromSettings = new Text(parent, SWT.BORDER);
@@ -467,32 +472,39 @@ public class ExtendedChromatogramOverlayUI {
 					chromatogramChart.deleteSeries();
 					refreshUpdateOverlayChart();
 				} else {
-					IonsValidator ionsValidator = new IonsValidator();
-					if(validate(ionsValidator, controlDecoration, textSignalsFromSettings)) {
-						String ionsAsText = ionsValidator.getIonsAsString();
-						String ionSelection = comboSelectedIons.getText().trim();
-						switch(ionSelection) {
-							case OverlayChartSupport.SELECTED_IONS_USERS_CHOICE:
-								preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE, ionsAsText);
-								break;
-							case OverlayChartSupport.SELECTED_IONS_HYDROCARBONS:
-								preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS, ionsAsText);
-								break;
-							case OverlayChartSupport.SELECTED_IONS_FATTY_ACIDS:
-								preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS, ionsAsText);
-								break;
-							case OverlayChartSupport.SELECTED_IONS_FAME:
-								preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FAME, ionsAsText);
-								break;
-							case OverlayChartSupport.SELECTED_IONS_SOLVENT_TAILING:
-								preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING, ionsAsText);
-								break;
-							case OverlayChartSupport.SELECTED_IONS_COLUMN_BLEED:
-								preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED, ionsAsText);
-								break;
-							default:
-								textSignalsFromSettings.setText("");
-								break;
+					if(isExtractedIonsModusEnabled()) {
+						IonsValidator ionsValidator = new IonsValidator();
+						if(validate(ionsValidator, controlDecoration, textSignalsFromSettings)) {
+							String ionsAsText = ionsValidator.getIonsAsString();
+							String ionSelection = comboSelectedIons.getText().trim();
+							switch(ionSelection) {
+								case OverlayChartSupport.SELECTED_IONS_USERS_CHOICE:
+									preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE, ionsAsText);
+									break;
+								case OverlayChartSupport.SELECTED_IONS_HYDROCARBONS:
+									preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS, ionsAsText);
+									break;
+								case OverlayChartSupport.SELECTED_IONS_FATTY_ACIDS:
+									preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS, ionsAsText);
+									break;
+								case OverlayChartSupport.SELECTED_IONS_FAME:
+									preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FAME, ionsAsText);
+									break;
+								case OverlayChartSupport.SELECTED_IONS_SOLVENT_TAILING:
+									preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING, ionsAsText);
+									break;
+								case OverlayChartSupport.SELECTED_IONS_COLUMN_BLEED:
+									preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED, ionsAsText);
+									break;
+								default:
+									textSignalsFromSettings.setText("");
+									break;
+							}
+						}
+					} else if(isExtractedWavelengthsModusEnabled()) {
+						WavelengthValidator wavelengthValidator = new WavelengthValidator();
+						if(validate(wavelengthValidator, controlDecoration, textSignalsFromSettings)) {
+							preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE, wavelengthValidator.getWavelengthsAsString());
 						}
 					}
 				}
@@ -892,6 +904,7 @@ public class ExtendedChromatogramOverlayUI {
 			comboSelectedIons.setEnabled(false);
 			textSignalsFromSettings.setEnabled(true);
 			textSignalsFromSettings.setText("");
+			setSelectedWavelengthsText("");
 		} else {
 			comboSelectedIons.setEnabled(false);
 			textSignalsFromSettings.setEnabled(false);
@@ -927,7 +940,6 @@ public class ExtendedChromatogramOverlayUI {
 
 		chromatogramChartSupport.loadUserSettings();
 		chromatogramChart.deleteSeries();
-		textSignalsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE));
 		mirroredSeries.clear();
 		refreshUpdateOverlayChart();
 		modifyWidgetStatus();
@@ -987,6 +999,7 @@ public class ExtendedChromatogramOverlayUI {
 				List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
 				String chromatogramName = chromatogram.getName() + ChromatogramChartSupport.EDITOR_TAB + (i + 1);
 				/*
+				 * refreshUpdateOverlayChart
 				 * Select which series shall be displayed.
 				 */
 				String[] overlayTypes = getOverlayType().split(OverlayChartSupport.ESCAPE_CONCATENATOR + OverlayChartSupport.OVERLAY_TYPE_CONCATENATOR);
@@ -1059,6 +1072,48 @@ public class ExtendedChromatogramOverlayUI {
 									if(referencedChromatogram instanceof IChromatogramWSD) {
 										String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j;
 										for(double wavelength : wavelengths) {
+											//
+											String seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
+											availableSeriesIds.add(seriesId);
+											Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
+											IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+											markedWavelengths.add(wavelength);
+											//
+											if(!baseChart.isSeriesContained(seriesId)) {
+												lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, markedWavelengths, false));
+											}
+										}
+									}
+								}
+							}
+						}
+					} else if(overlayType.equals(ChromatogramChartSupport.DISPLAY_TYPE_AWC)) {
+						/*
+						 * AWC
+						 */
+						if(chromatogram instanceof IChromatogramWSD) {
+							//
+							for(double wavelength : ((IChromatogramWSD)chromatogram).getWavelengths()) {
+								//
+								String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
+								availableSeriesIds.add(seriesId);
+								Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
+								IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+								markedWavelengths.add(wavelength);
+								//
+								if(!baseChart.isSeriesContained(seriesId)) {
+									lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, markedWavelengths, false));
+								}
+							}
+							/*
+							 * References
+							 */
+							if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+								int j = 1;
+								for(IChromatogram referencedChromatogram : referencedChromatograms) {
+									if(referencedChromatogram instanceof IChromatogramWSD) {
+										String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j;
+										for(double wavelength : ((IChromatogramWSD)referencedChromatogram).getWavelengths()) {
 											//
 											String seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
 											availableSeriesIds.add(seriesId);
@@ -1171,16 +1226,16 @@ public class ExtendedChromatogramOverlayUI {
 
 	private List<Double> getSelectedWavelengths() {
 
-		List<Double> selectedIons = new ArrayList<>();
-		String ionsText = textSignalsFromSettings.getText().trim();
+		List<Double> selectedWavelengths = new ArrayList<>();
+		String wavelengthsText = textSignalsFromSettings.getText().trim();
 		//
 		WavelengthValidator wavelengthValidator = new WavelengthValidator();
-		IStatus status = wavelengthValidator.validate(ionsText);
+		IStatus status = wavelengthValidator.validate(wavelengthsText);
 		if(status.isOK()) {
-			selectedIons = wavelengthValidator.getWavelengths();
+			selectedWavelengths = wavelengthValidator.getWavelengths();
 		}
 		//
-		return selectedIons;
+		return selectedWavelengths;
 	}
 
 	private List<Integer> getSelectedIons() {

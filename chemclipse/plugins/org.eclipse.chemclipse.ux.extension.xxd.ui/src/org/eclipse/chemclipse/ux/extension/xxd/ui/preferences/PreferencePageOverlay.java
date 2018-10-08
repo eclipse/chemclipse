@@ -29,11 +29,13 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageOverlay extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageOverlay() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Overlay");
 	}
 
+	@Override
 	public void createFieldEditors() {
 
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE, "Compression Type:", PreferenceConstants.COMPRESSION_TYPES, getFieldEditorParent()));
@@ -54,6 +56,7 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC_OVERLAY, "Line Style SIC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC_OVERLAY, "Line Style TSC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC_OVERLAY, "Line Style SWC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_AWC_OVERLAY, "Line Style AWC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY, "Line Style Default:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
@@ -81,6 +84,7 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 		return integerFieldEditor;
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}
