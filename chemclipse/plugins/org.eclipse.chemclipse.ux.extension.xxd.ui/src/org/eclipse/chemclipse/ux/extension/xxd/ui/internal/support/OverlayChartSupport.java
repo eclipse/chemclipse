@@ -51,6 +51,7 @@ public class OverlayChartSupport {
 	//
 
 	public OverlayChartSupport() {
+
 		initialize();
 	}
 
@@ -83,6 +84,7 @@ public class OverlayChartSupport {
 				ChromatogramChartSupport.DISPLAY_TYPE_SIC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_TSC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_SWC, //
+				ChromatogramChartSupport.DISPLAY_TYPE_AWC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + ChromatogramChartSupport.DISPLAY_TYPE_BPC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + ChromatogramChartSupport.DISPLAY_TYPE_XIC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + ChromatogramChartSupport.DISPLAY_TYPE_SIC, //

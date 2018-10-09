@@ -67,6 +67,7 @@ public class ChromatogramChartSupport {
 	public static final String DISPLAY_TYPE_SRM = "SRM"; // Single Reaction Monitoring
 	public static final String DISPLAY_TYPE_MRM = "MRM"; // Single Reaction Monitoring
 	public static final String DISPLAY_TYPE_SWC = "SWC"; // Selected Wavelength Chromatogram
+	public static final String DISPLAY_TYPE_AWC = "AWC"; // Selected Wavelength Chromatogram
 	//
 	public static final String DERIVATIVE_NONE = "--";
 	public static final String DERIVATIVE_FIRST = "1st";
@@ -86,11 +87,13 @@ public class ChromatogramChartSupport {
 	private LineStyle lineStyleSIC;
 	private LineStyle lineStyleTSC;
 	private LineStyle lineStyleSWC;
+	private LineStyle lineStyleAWC;
 	private LineStyle lineStyleDefault;
 	//
 	private boolean showArea = false;
 
 	public ChromatogramChartSupport() {
+
 		usedColorsNormal = new HashMap<String, Color>();
 		usedColorsSIC = new HashMap<String, Color>();
 		usedColorsSWC = new HashMap<String, Color>();
@@ -110,6 +113,7 @@ public class ChromatogramChartSupport {
 		lineStyleSIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC_OVERLAY));
 		lineStyleTSC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC_OVERLAY));
 		lineStyleSWC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC_OVERLAY));
+		lineStyleAWC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_AWC_OVERLAY));
 		lineStyleDefault = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY));
 		showArea = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_SHOW_AREA);
 		//
@@ -423,7 +427,7 @@ public class ChromatogramChartSupport {
 					}
 				}
 			}
-		} else if(overlayType.equals(DISPLAY_TYPE_SWC)) {
+		} else if(overlayType.equals(DISPLAY_TYPE_SWC) | overlayType.equals(DISPLAY_TYPE_AWC)) {
 			/*
 			 * SWC
 			 */
@@ -458,6 +462,8 @@ public class ChromatogramChartSupport {
 			lineStyle = lineStyleTSC;
 		} else if(overlayType.equals(DISPLAY_TYPE_SWC)) {
 			lineStyle = lineStyleSWC;
+		} else if(overlayType.equals(DISPLAY_TYPE_AWC)) {
+			lineStyle = lineStyleAWC;
 		} else {
 			lineStyle = lineStyleDefault;
 		}

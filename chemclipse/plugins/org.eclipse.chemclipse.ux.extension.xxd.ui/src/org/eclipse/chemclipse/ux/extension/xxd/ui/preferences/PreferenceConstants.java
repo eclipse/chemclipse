@@ -143,6 +143,8 @@ public class PreferenceConstants {
 	public static final String DEF_LINE_STYLE_DISPLAY_TSC_OVERLAY = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_DISPLAY_SWC_OVERLAY = "lineStyleDisplaySWCOverlay";
 	public static final String DEF_LINE_STYLE_DISPLAY_SWC_OVERLAY = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_AWC_OVERLAY = "lineStyleDisplayAWCOverlay";
+	public static final String DEF_LINE_STYLE_DISPLAY_AWC_OVERLAY = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = "lineStyleDisplayDefaultOverlay";
 	public static final String DEF_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = LineStyle.SOLID.toString();
 	//
@@ -160,6 +162,8 @@ public class PreferenceConstants {
 	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING = "84";
 	public static final String P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "chromatogramOverlayIonsColumnBleed";
 	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "207";
+	public static final String P_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE = "chromatogramOverlayWavelengthsUsersChoice";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE = "237";
 	//
 	public static final String P_OVERLAY_SHIFT_X = "overlayShiftX";
 	public static final double DEF_OVERLAY_SHIFT_X = 0.0d;
