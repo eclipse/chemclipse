@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.ProcessMethods;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -52,6 +54,7 @@ public class MethodSupportUI extends Composite {
 	//
 	private ComboViewer comboViewerMethods;
 	private Button buttonEditMethod;
+	private Button buttonExecuteMethod;
 	//
 	private IMethodListener methodListener;
 	private ISupplierEditorSupport supplierEditorSupport = new MethodEditorSupport();
@@ -81,7 +84,7 @@ public class MethodSupportUI extends Composite {
 		comboViewerMethods = createComboMethod(composite);
 		createButtonAddMethod(composite);
 		buttonEditMethod = createButtonEditMethod(composite);
-		createButtonExecuteMethod(composite);
+		buttonExecuteMethod = createButtonExecuteMethod(composite);
 		createButtonSettings(composite);
 		//
 		computeMethodComboItems();
@@ -188,14 +191,20 @@ public class MethodSupportUI extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Apply the method to the selected chromatogram.");
+		button.setToolTipText("Apply the method to the selected chromatogram(s).");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				runMethod();
+				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
+				if(object instanceof File) {
+					File file = (File)object;
+					if(file.exists()) {
+						runMethod(file);
+					}
+				}
 			}
 		});
 		//
@@ -273,19 +282,40 @@ public class MethodSupportUI extends Composite {
 	private void enableMethodEditButton() {
 
 		buttonEditMethod.setEnabled(false);
+		buttonExecuteMethod.setEnabled(false);
+		//
 		Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
 		if(object instanceof File) {
 			File file = (File)object;
 			if(file.exists()) {
 				buttonEditMethod.setEnabled(true);
+				buttonExecuteMethod.setEnabled(true);
 			}
 		}
 	}
 
-	private void runMethod() {
+	private void runMethod(File file) {
 
 		if(methodListener != null) {
-			methodListener.execute();
+			/*
+			 * Example
+			 * Load from file when processing is finished.
+			 */
+			ProcessMethods processMethods = new ProcessMethods();
+			//
+			ProcessMethod processMethod1 = new ProcessMethod();
+			processMethod1.setProcessorId("org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.chromatogram");
+			processMethod1.setJsonSettings("{\"Ions To Remove\":\"18;28;84;207\"}");
+			processMethod1.setProcessSettingsClass("org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover", "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings");
+			processMethods.add(processMethod1);
+			//
+			ProcessMethod processMethod2 = new ProcessMethod();
+			processMethod2.setProcessorId("org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay");
+			processMethod2.setJsonSettings("{\"Order\":2,\"Width\":5}");
+			processMethod2.setProcessSettingsClass("org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay", "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings");
+			processMethods.add(processMethod2);
+			//
+			methodListener.execute(processMethods);
 		}
 	}
 }

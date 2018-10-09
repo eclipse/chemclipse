@@ -87,6 +87,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.implementation.ComparisonResult;
 import org.eclipse.chemclipse.model.implementation.LibraryInformation;
+import org.eclipse.chemclipse.model.methods.ProcessMethods;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.PeakTarget;
@@ -130,8 +131,10 @@ import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToScanNumberConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -264,7 +267,6 @@ public class ExtendedChromatogramUI {
 
 	@Inject
 	public ExtendedChromatogramUI(Composite parent, int style) {
-
 		initialize(parent, style);
 	}
 
@@ -1311,8 +1313,10 @@ public class ExtendedChromatogramUI {
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
 			@Override
-			public void execute() {
+			public void execute(ProcessMethods processMethods) {
 
+				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
+				processTypeSupport.applyProcessor(chromatogramSelection, processMethods, new NullProgressMonitor());
 			}
 		});
 		//

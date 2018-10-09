@@ -14,34 +14,33 @@ package org.eclipse.chemclipse.model.methods;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.core.runtime.Platform;
+import org.osgi.framework.Bundle;
 
 public class ProcessMethod implements IProcessMethod {
 
-	private String id = "";
+	private static final Logger logger = Logger.getLogger(ProcessMethod.class);
+	//
+	private String processorId = "";
 	private String name = "";
 	private String description = "";
 	private String jsonSettings = "{}";
 	private List<DataType> supportedDataTypes = new ArrayList<>();
 	private Class<? extends IProcessSettings> processSettingsClass = null;
 
-	public ProcessMethod(String id, String name, String description) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
+	@Override
+	public String getProcessorId() {
+
+		return processorId;
 	}
 
 	@Override
-	public String getId() {
+	public void setProcessorId(String processorId) {
 
-		return id;
-	}
-
-	@Override
-	public void setId(String id) {
-
-		this.id = id;
+		this.processorId = processorId;
 	}
 
 	@Override
@@ -92,6 +91,23 @@ public class ProcessMethod implements IProcessMethod {
 		return processSettingsClass;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setProcessSettingsClass(String symbolicName, String className) {
+
+		if(symbolicName != null && className != null) {
+			if(!symbolicName.equals("") && !className.equals("")) {
+				try {
+					Bundle bundle = Platform.getBundle(symbolicName);
+					Class<IProcessSettings> clazz = (Class<IProcessSettings>)bundle.loadClass(className);
+					setProcessSettingsClass(clazz);
+				} catch(ClassNotFoundException e) {
+					logger.warn(e);
+				}
+			}
+		}
+	}
+
 	@Override
 	public void setProcessSettingsClass(Class<? extends IProcessSettings> processSettingsClass) {
 
@@ -103,7 +119,7 @@ public class ProcessMethod implements IProcessMethod {
 
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((processorId == null) ? 0 : processorId.hashCode());
 		result = prime * result + ((jsonSettings == null) ? 0 : jsonSettings.hashCode());
 		return result;
 	}
@@ -118,10 +134,10 @@ public class ProcessMethod implements IProcessMethod {
 		if(getClass() != obj.getClass())
 			return false;
 		ProcessMethod other = (ProcessMethod)obj;
-		if(id == null) {
-			if(other.id != null)
+		if(processorId == null) {
+			if(other.processorId != null)
 				return false;
-		} else if(!id.equals(other.id))
+		} else if(!processorId.equals(other.processorId))
 			return false;
 		if(jsonSettings == null) {
 			if(other.jsonSettings != null)
@@ -134,6 +150,6 @@ public class ProcessMethod implements IProcessMethod {
 	@Override
 	public String toString() {
 
-		return "ProcessMethod [id=" + id + ", name=" + name + ", description=" + description + ", jsonSettings=" + jsonSettings + ", supportedDataTypes=" + supportedDataTypes + ", processSettingsClass=" + processSettingsClass + "]";
+		return "ProcessMethod [processorId=" + processorId + ", name=" + name + ", description=" + description + ", jsonSettings=" + jsonSettings + ", supportedDataTypes=" + supportedDataTypes + ", processSettingsClass=" + processSettingsClass + "]";
 	}
 }

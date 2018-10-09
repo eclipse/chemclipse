@@ -18,9 +18,9 @@ import org.eclipse.chemclipse.model.types.DataType;
 
 public interface IProcessMethod {
 
-	String getId();
+	String getProcessorId();
 
-	void setId(String id);
+	void setProcessorId(String processorId);
 
 	String getName();
 
@@ -37,6 +37,12 @@ public interface IProcessMethod {
 	List<DataType> getSupportedDataTypes();
 
 	Class<? extends IProcessSettings> getProcessSettingsClass();
+
+	/**
+	 * String symbolicName = FrameworkUtil.getBundle(processSettingsClass).getSymbolicName();
+	 * String className = processSettingsClass.getName();
+	 */
+	void setProcessSettingsClass(String symbolicName, String className);
 
 	void setProcessSettingsClass(Class<? extends IProcessSettings> processSettingsClass);
 }

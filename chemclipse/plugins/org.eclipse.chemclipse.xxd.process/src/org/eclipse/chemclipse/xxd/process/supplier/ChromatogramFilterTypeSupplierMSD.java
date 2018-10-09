@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.xxd.process.supplier;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupplierMSD;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -72,7 +73,11 @@ public class ChromatogramFilterTypeSupplierMSD extends AbstractProcessTypeSuppli
 		IProcessingInfo processingInfo;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-			processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, processorId, monitor);
+			if(processSettings != null && processSettings instanceof IChromatogramFilterSettings) {
+				processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, (IChromatogramFilterSettings)processSettings, processorId, monitor);
+			} else {
+				processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, processorId, monitor);
+			}
 		} else {
 			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage(processorId, "The data is not supported by the processor.");

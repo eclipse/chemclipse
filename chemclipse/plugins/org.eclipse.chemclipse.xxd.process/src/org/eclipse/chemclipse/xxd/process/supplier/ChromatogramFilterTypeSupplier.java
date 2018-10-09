@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupplier;
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupport;
+import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -26,9 +29,20 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramFilterTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
 	public static final String CATEGORY = "Chromatogram Filter";
+	private static final Logger logger = Logger.getLogger(ChromatogramCalculatorTypeSupplier.class);
+	//
+	private IChromatogramFilterSupport support = null;
+	private List<String> pluginIds = new ArrayList<>();
 
 	public ChromatogramFilterTypeSupplier() {
 		super(new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
+		//
+		try {
+			support = ChromatogramFilter.getChromatogramFilterSupport();
+			pluginIds = support.getAvailableFilterIds();
+		} catch(NoChromatogramFilterSupplierAvailableException e) {
+			logger.warn(e);
+		}
 	}
 
 	@Override
@@ -40,28 +54,25 @@ public class ChromatogramFilterTypeSupplier extends AbstractProcessTypeSupplier 
 	@Override
 	public Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception {
 
-		IChromatogramFilterSupplier filterSupplier = ChromatogramFilter.getChromatogramFilterSupport().getFilterSupplier(processorId);
-		return filterSupplier.getFilterSettingsClass();
+		return support.getFilterSupplier(processorId).getFilterSettingsClass();
 	}
 
 	@Override
 	public String getProcessorName(String processorId) throws Exception {
 
-		IChromatogramFilterSupplier filterSupplier = ChromatogramFilter.getChromatogramFilterSupport().getFilterSupplier(processorId);
-		return filterSupplier.getFilterName();
+		return support.getFilterSupplier(processorId).getFilterName();
 	}
 
 	@Override
 	public String getProcessorDescription(String processorId) throws Exception {
 
-		IChromatogramFilterSupplier filterSupplier = ChromatogramFilter.getChromatogramFilterSupport().getFilterSupplier(processorId);
-		return filterSupplier.getDescription();
+		return support.getFilterSupplier(processorId).getDescription();
 	}
 
 	@Override
 	public List<String> getPluginIds() throws Exception {
 
-		return ChromatogramFilter.getChromatogramFilterSupport().getAvailableFilterIds();
+		return pluginIds;
 	}
 
 	@SuppressWarnings("rawtypes")

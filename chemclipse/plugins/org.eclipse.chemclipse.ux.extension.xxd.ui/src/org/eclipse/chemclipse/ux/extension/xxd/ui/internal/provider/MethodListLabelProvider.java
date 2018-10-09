@@ -66,7 +66,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 					text = entry.getJsonSettings();
 					break;
 				case 4:
-					text = entry.getId();
+					text = entry.getProcessorId();
 					break;
 				default:
 					break;

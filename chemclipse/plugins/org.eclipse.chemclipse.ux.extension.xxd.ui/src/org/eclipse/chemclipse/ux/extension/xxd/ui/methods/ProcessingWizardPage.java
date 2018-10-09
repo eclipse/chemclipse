@@ -71,10 +71,16 @@ public class ProcessingWizardPage extends WizardPage {
 			Object object = comboViewerProcessor.getStructuredSelection().getFirstElement();
 			if(object instanceof String) {
 				try {
+					/*
+					 * Get the process method.
+					 */
 					int index = comboViewerProcessor.getCombo().getSelectionIndex();
 					String processorId = processTypeSupplier.getPluginIds().get(index);
-					String description = processTypeSupplier.getProcessorDescription(processorId);
-					processMethod = new ProcessMethod(processorId, object.toString(), description);
+					//
+					processMethod = new ProcessMethod();
+					processMethod.setProcessorId(processorId);
+					processMethod.setName(object.toString());
+					processMethod.setDescription(processTypeSupplier.getProcessorDescription(processorId));
 					processMethod.getSupportedDataTypes().addAll(processTypeSupplier.getSupportedDataTypes());
 					processMethod.setProcessSettingsClass(processTypeSupplier.getProcessSettingsClass(processorId));
 				} catch(Exception e) {

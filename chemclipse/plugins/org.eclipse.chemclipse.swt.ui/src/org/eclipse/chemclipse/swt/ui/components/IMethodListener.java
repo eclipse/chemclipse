@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.components;
 
+import org.eclipse.chemclipse.model.methods.ProcessMethods;
+
 public interface IMethodListener {
 
-	void execute();
+	void execute(ProcessMethods processMethods);
 }

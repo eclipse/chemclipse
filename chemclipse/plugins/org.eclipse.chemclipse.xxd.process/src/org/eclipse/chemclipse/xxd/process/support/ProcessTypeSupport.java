@@ -11,11 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
+import org.eclipse.chemclipse.model.methods.ProcessMethods;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -23,9 +30,9 @@ import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramIdentifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramIntegratorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.ClassifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.CombinedIntegratorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
@@ -35,30 +42,57 @@ import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakQuantitationTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class ProcessTypeSupport {
 
 	private static final Logger logger = Logger.getLogger(ProcessTypeSupport.class);
-	private List<IProcessTypeSupplier> processTypeSuppliers;
+	//
+	private List<IProcessTypeSupplier> processTypeSuppliers = new ArrayList<IProcessTypeSupplier>();
+	private Map<String, IProcessTypeSupplier> processSupplierMap = new HashMap<>();
 
 	public ProcessTypeSupport() {
 		/*
 		 * Add all available process supplier here.
 		 */
-		processTypeSuppliers = new ArrayList<IProcessTypeSupplier>();
-		//
-		processTypeSuppliers.add(new BaselineDetectorTypeSupplier());
-		processTypeSuppliers.add(new ChromatogramIdentifierTypeSupplier());
-		processTypeSuppliers.add(new ChromatogramIntegratorTypeSupplier());
-		processTypeSuppliers.add(new ClassifierTypeSupplier());
-		processTypeSuppliers.add(new CombinedIntegratorTypeSupplier());
-		processTypeSuppliers.add(new ChromatogramFilterTypeSupplier());
-		processTypeSuppliers.add(new ChromatogramFilterTypeSupplierMSD());
-		processTypeSuppliers.add(new PeakFilterTypeSupplier());
-		processTypeSuppliers.add(new PeakDetectorTypeSupplier());
-		processTypeSuppliers.add(new PeakIdentifierTypeSupplier());
-		processTypeSuppliers.add(new PeakIntegratorTypeSupplier());
-		processTypeSuppliers.add(new PeakQuantitationTypeSupplier());
-		processTypeSuppliers.add(new ChromatogramCalculatorTypeSupplier());
+		addProcessSupplier(new BaselineDetectorTypeSupplier());
+		addProcessSupplier(new ChromatogramIdentifierTypeSupplier());
+		addProcessSupplier(new ChromatogramIntegratorTypeSupplier());
+		addProcessSupplier(new ClassifierTypeSupplier());
+		addProcessSupplier(new CombinedIntegratorTypeSupplier());
+		addProcessSupplier(new ChromatogramFilterTypeSupplier());
+		addProcessSupplier(new ChromatogramFilterTypeSupplierMSD());
+		addProcessSupplier(new PeakFilterTypeSupplier());
+		addProcessSupplier(new PeakDetectorTypeSupplier());
+		addProcessSupplier(new PeakIdentifierTypeSupplier());
+		addProcessSupplier(new PeakIntegratorTypeSupplier());
+		addProcessSupplier(new PeakQuantitationTypeSupplier());
+		addProcessSupplier(new ChromatogramCalculatorTypeSupplier());
+	}
+
+	private void addProcessSupplier(IProcessTypeSupplier processTypeSupplier) {
+
+		/*
+		 * Legacy
+		 * Remove list when IChromatogramProcessEntry is removed.
+		 */
+		processTypeSuppliers.add(processTypeSupplier);
+		/*
+		 * This map stores the process type supplier to a given processor id.
+		 */
+		try {
+			for(String processorId : processTypeSupplier.getPluginIds()) {
+				if(processSupplierMap.containsKey(processorId)) {
+					logger.warn("The following processor id is contained twice: " + processorId);
+				}
+				processSupplierMap.put(processorId, processTypeSupplier);
+			}
+		} catch(Exception e) {
+			logger.warn(e);
+		}
 	}
 
 	/**
@@ -169,5 +203,53 @@ public class ProcessTypeSupport {
 		}
 		processingInfo.addErrorMessage("Process Type Support", "There was now supplier to process the chromatogram selection.");
 		return processingInfo;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, ProcessMethods processMethods, IProgressMonitor monitor) {
+
+		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
+		chromatogramSelections.add(chromatogramSelection);
+		return applyProcessor(chromatogramSelections, processMethods, monitor);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public IProcessingInfo applyProcessor(List<IChromatogramSelection> chromatogramSelections, ProcessMethods processMethods, IProgressMonitor monitor) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
+		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+			for(IProcessMethod processMethod : processMethods) {
+				String processorId = processMethod.getProcessorId();
+				IProcessTypeSupplier processTypeSupplier = processSupplierMap.get(processorId);
+				if(processTypeSupplier != null) {
+					IProcessSettings processSettings = getProcessSettings(processMethod);
+					processTypeSupplier.applyProcessor(chromatogramSelection, processorId, processSettings, monitor);
+				}
+			}
+		}
+		return processingInfo;
+	}
+
+	public IProcessSettings getProcessSettings(IProcessMethod processMethod) {
+
+		IProcessSettings processSettings = null;
+		Class<? extends IProcessSettings> clazz = processMethod.getProcessSettingsClass();
+		//
+		if(clazz != null) {
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+			try {
+				String content = processMethod.getJsonSettings();
+				processSettings = objectMapper.readValue(content, clazz);
+			} catch(JsonParseException e) {
+				logger.warn(e);
+			} catch(JsonMappingException e) {
+				logger.warn(e);
+			} catch(IOException e) {
+				logger.warn(e);
+			}
+		}
+		//
+		return processSettings;
 	}
 }

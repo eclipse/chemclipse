@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.chemclipse.converter.model.reports.ISequence;
 import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.methods.ProcessMethods;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -157,8 +158,10 @@ public class ExtendedSequenceListUI {
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
 			@Override
-			public void execute() {
+			public void execute(ProcessMethods processMethods) {
 
+				// ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
+				// processTypeSupport.applyProcessor(chromatogramSelection, processMethods, new NullProgressMonitor());
 			}
 		});
 		//
