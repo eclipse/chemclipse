@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
-import org.eclipse.chemclipse.model.methods.ProcessMethods;
+import org.eclipse.chemclipse.model.methods.IProcessEntry;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -206,23 +206,23 @@ public class ProcessTypeSupport {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, ProcessMethods processMethods, IProgressMonitor monitor) {
+	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, ProcessMethod processMethod, IProgressMonitor monitor) {
 
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
 		chromatogramSelections.add(chromatogramSelection);
-		return applyProcessor(chromatogramSelections, processMethods, monitor);
+		return applyProcessor(chromatogramSelections, processMethod, monitor);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public IProcessingInfo applyProcessor(List<IChromatogramSelection> chromatogramSelections, ProcessMethods processMethods, IProgressMonitor monitor) {
+	public IProcessingInfo applyProcessor(List<IChromatogramSelection> chromatogramSelections, ProcessMethod processMethod, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
-			for(IProcessMethod processMethod : processMethods) {
-				String processorId = processMethod.getProcessorId();
+			for(IProcessEntry processEntry : processMethod) {
+				String processorId = processEntry.getProcessorId();
 				IProcessTypeSupplier processTypeSupplier = processSupplierMap.get(processorId);
 				if(processTypeSupplier != null) {
-					IProcessSettings processSettings = getProcessSettings(processMethod);
+					IProcessSettings processSettings = getProcessSettings(processEntry);
 					processTypeSupplier.applyProcessor(chromatogramSelection, processorId, processSettings, monitor);
 				}
 			}
@@ -230,16 +230,16 @@ public class ProcessTypeSupport {
 		return processingInfo;
 	}
 
-	public IProcessSettings getProcessSettings(IProcessMethod processMethod) {
+	public IProcessSettings getProcessSettings(IProcessEntry processEntry) {
 
 		IProcessSettings processSettings = null;
-		Class<? extends IProcessSettings> clazz = processMethod.getProcessSettingsClass();
+		Class<? extends IProcessSettings> clazz = processEntry.getProcessSettingsClass();
 		//
 		if(clazz != null) {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 			try {
-				String content = processMethod.getJsonSettings();
+				String content = processEntry.getJsonSettings();
 				processSettings = objectMapper.readValue(content, clazz);
 			} catch(JsonParseException e) {
 				logger.warn(e);

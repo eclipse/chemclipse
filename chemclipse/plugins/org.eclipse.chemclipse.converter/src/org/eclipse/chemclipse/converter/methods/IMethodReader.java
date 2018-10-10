@@ -9,11 +9,14 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.methods;
+package org.eclipse.chemclipse.converter.methods;
 
-import java.util.ArrayList;
+import java.io.File;
 
-public class ProcessMethods extends ArrayList<IProcessMethod> {
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-	private static final long serialVersionUID = 1143302899750627448L;
+public interface IMethodReader {
+
+	ProcessMethod read(File file, IProgressMonitor monitor);
 }

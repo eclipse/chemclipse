@@ -101,7 +101,7 @@ public interface IConverterSupport {
 	 * If the file ends with "*.D" all converter ids which can convert
 	 * directories ending with "*.D" will be returned.<br/>
 	 * The same thing if the file is a file and not a directory.<br/>
-	 * The header of {@link SequenceConverter} lists some file format
+	 * The header of {@link MethodConverter} lists some file format
 	 * endings.
 	 * 
 	 * @param file

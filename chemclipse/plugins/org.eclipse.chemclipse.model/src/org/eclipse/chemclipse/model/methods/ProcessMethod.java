@@ -12,144 +12,31 @@
 package org.eclipse.chemclipse.model.methods;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
-import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.core.runtime.Platform;
-import org.osgi.framework.Bundle;
+public class ProcessMethod extends ArrayList<IProcessEntry> {
 
-public class ProcessMethod implements IProcessMethod {
-
-	private static final Logger logger = Logger.getLogger(ProcessMethod.class);
+	private static final long serialVersionUID = 1143302899750627448L;
 	//
-	private String processorId = "";
-	private String name = "";
+	private String operator = "";
 	private String description = "";
-	private String jsonSettings = "{}";
-	private List<DataType> supportedDataTypes = new ArrayList<>();
-	private Class<? extends IProcessSettings> processSettingsClass = null;
 
-	@Override
-	public String getProcessorId() {
+	public String getOperator() {
 
-		return processorId;
+		return operator;
 	}
 
-	@Override
-	public void setProcessorId(String processorId) {
+	public void setOperator(String operator) {
 
-		this.processorId = processorId;
+		this.operator = operator;
 	}
 
-	@Override
-	public String getName() {
-
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-
-		this.name = name;
-	}
-
-	@Override
 	public String getDescription() {
 
 		return description;
 	}
 
-	@Override
 	public void setDescription(String description) {
 
 		this.description = description;
-	}
-
-	@Override
-	public String getJsonSettings() {
-
-		return jsonSettings;
-	}
-
-	@Override
-	public void setJsonSettings(String jsonSettings) {
-
-		this.jsonSettings = jsonSettings;
-	}
-
-	@Override
-	public List<DataType> getSupportedDataTypes() {
-
-		return supportedDataTypes;
-	}
-
-	@Override
-	public Class<? extends IProcessSettings> getProcessSettingsClass() {
-
-		return processSettingsClass;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setProcessSettingsClass(String symbolicName, String className) {
-
-		if(symbolicName != null && className != null) {
-			if(!symbolicName.equals("") && !className.equals("")) {
-				try {
-					Bundle bundle = Platform.getBundle(symbolicName);
-					Class<IProcessSettings> clazz = (Class<IProcessSettings>)bundle.loadClass(className);
-					setProcessSettingsClass(clazz);
-				} catch(ClassNotFoundException e) {
-					logger.warn(e);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void setProcessSettingsClass(Class<? extends IProcessSettings> processSettingsClass) {
-
-		this.processSettingsClass = processSettingsClass;
-	}
-
-	@Override
-	public int hashCode() {
-
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((processorId == null) ? 0 : processorId.hashCode());
-		result = prime * result + ((jsonSettings == null) ? 0 : jsonSettings.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-
-		if(this == obj)
-			return true;
-		if(obj == null)
-			return false;
-		if(getClass() != obj.getClass())
-			return false;
-		ProcessMethod other = (ProcessMethod)obj;
-		if(processorId == null) {
-			if(other.processorId != null)
-				return false;
-		} else if(!processorId.equals(other.processorId))
-			return false;
-		if(jsonSettings == null) {
-			if(other.jsonSettings != null)
-				return false;
-		} else if(!jsonSettings.equals(other.jsonSettings))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-
-		return "ProcessMethod [processorId=" + processorId + ", name=" + name + ", description=" + description + ", jsonSettings=" + jsonSettings + ", supportedDataTypes=" + supportedDataTypes + ", processSettingsClass=" + processSettingsClass + "]";
 	}
 }

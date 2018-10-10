@@ -87,7 +87,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.implementation.ComparisonResult;
 import org.eclipse.chemclipse.model.implementation.LibraryInformation;
-import org.eclipse.chemclipse.model.methods.ProcessMethods;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.PeakTarget;
@@ -1313,10 +1313,10 @@ public class ExtendedChromatogramUI {
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
 			@Override
-			public void execute(ProcessMethods processMethods) {
+			public void execute(ProcessMethod processMethod) {
 
 				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
-				processTypeSupport.applyProcessor(chromatogramSelection, processMethods, new NullProgressMonitor());
+				processTypeSupport.applyProcessor(chromatogramSelection, processMethod, new NullProgressMonitor());
 			}
 		});
 		//

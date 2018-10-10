@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.MethodEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor;
 
 public class MethodEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierEditorSupport {
 
@@ -50,10 +50,10 @@ public class MethodEditorSupport extends AbstractSupplierFileEditorSupport imple
 	@Override
 	public boolean openEditor(final File file, boolean batch) {
 
-		String elementId = MethodEditor.ID;
-		String contributionURI = MethodEditor.CONTRIBUTION_URI;
-		String iconURI = MethodEditor.ICON_URI;
-		String tooltip = MethodEditor.TOOLTIP;
+		String elementId = ProcessMethodEditor.ID;
+		String contributionURI = ProcessMethodEditor.CONTRIBUTION_URI;
+		String iconURI = ProcessMethodEditor.ICON_URI;
+		String tooltip = ProcessMethodEditor.TOOLTIP;
 		openEditor(file, null, elementId, contributionURI, iconURI, tooltip, batch);
 		return true;
 	}

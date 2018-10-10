@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.Collections;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
-import org.eclipse.chemclipse.model.methods.ProcessMethods;
+import org.eclipse.chemclipse.model.methods.IProcessEntry;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -33,6 +33,8 @@ import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -41,6 +43,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -50,31 +53,40 @@ public class ExtendedMethodUI {
 	private static final Logger logger = Logger.getLogger(ExtendedMethodUI.class);
 	//
 	private Label labelDataInfo;
+	private Text textOperator;
+	private Text textDescription;
 	private Button buttonRemove;
 	private Button buttonMoveUp;
 	private Button buttonMoveDown;
 	private Button buttonProcessSettings;
 	private MethodListUI listUI;
 	//
-	private ProcessMethods processMethods = null;
+	private ProcessMethod processMethod = null;
+	//
+	private IModificationHandler modificationHandler = null;
 
 	public ExtendedMethodUI(Composite parent) {
 		initialize(parent);
 	}
 
-	public void update(ProcessMethods processMethods) {
+	public void update(ProcessMethod processMethod) {
 
-		System.out.println("TODO - set process methods");
-		this.processMethods = new ProcessMethods();
-		//
-		updateList();
+		this.processMethod = processMethod;
+		updateProcessMethod();
+	}
+
+	public void setModificationHandler(IModificationHandler modificationHandler) {
+
+		this.modificationHandler = modificationHandler;
 	}
 
 	private void initialize(Composite parent) {
 
-		parent.setLayout(new GridLayout(1, true));
+		parent.setLayout(new GridLayout(2, false));
 		//
 		createToolbarMain(parent);
+		textOperator = createOperatorSection(parent);
+		textDescription = createDescriptionSection(parent);
 		createTable(parent);
 		createToolbarBottom(parent);
 		//
@@ -85,6 +97,7 @@ public class ExtendedMethodUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(2, false));
 		//
@@ -134,6 +147,55 @@ public class ExtendedMethodUI {
 
 	private void applySettings() {
 
+		setDirty(true);
+	}
+
+	private Text createOperatorSection(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("Operator:");
+		//
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");
+		text.setToolTipText("Operator");
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+
+				if(processMethod != null) {
+					processMethod.setOperator(text.getText().trim());
+					setDirty(true);
+				}
+			}
+		});
+		//
+		return text;
+	}
+
+	private Text createDescriptionSection(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("Description:");
+		//
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");
+		text.setToolTipText("Description");
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+
+				if(processMethod != null) {
+					processMethod.setDescription(text.getText().trim());
+					setDirty(true);
+				}
+			}
+		});
+		//
+		return text;
 	}
 
 	private void createTable(Composite parent) {
@@ -144,7 +206,9 @@ public class ExtendedMethodUI {
 		 */
 		listUI = new MethodListUI(parent, SWT.BORDER);
 		Table table = listUI.getTable();
-		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.horizontalSpan = 2;
+		table.setLayoutData(gridData);
 		table.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -160,6 +224,7 @@ public class ExtendedMethodUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
+		gridData.horizontalSpan = 2;
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(5, false));
 		//
@@ -181,17 +246,17 @@ public class ExtendedMethodUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(processMethods != null) {
+				if(processMethod != null) {
 					ProcessingWizard wizard = new ProcessingWizard();
 					WizardDialog wizardDialog = new WizardDialog(e.widget.getDisplay().getActiveShell(), wizard);
 					wizardDialog.setMinimumPageSize(ProcessingWizard.DEFAULT_WIDTH, ProcessingWizard.DEFAULT_HEIGHT);
 					wizardDialog.create();
 					//
 					if(wizardDialog.open() == WizardDialog.OK) {
-						IProcessMethod processMethod = wizard.getProcessMethod();
-						if(processMethod != null) {
-							processMethods.add(processMethod);
-							updateList();
+						IProcessEntry processEntry = wizard.getProcessEntry();
+						if(processEntry != null) {
+							processMethod.add(processEntry);
+							updateProcessMethod();
 						}
 					}
 				}
@@ -210,12 +275,12 @@ public class ExtendedMethodUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(processMethods != null) {
+				if(processMethod != null) {
 					if(MessageDialog.openQuestion(e.widget.getDisplay().getActiveShell(), "Delete Process Method(s)", "Would you like to delete the selected processor(s)?")) {
 						for(Object object : listUI.getStructuredSelection().toArray()) {
-							processMethods.remove(object);
+							processMethod.remove(object);
 						}
-						updateList();
+						updateProcessMethod();
 					}
 				}
 			}
@@ -235,11 +300,11 @@ public class ExtendedMethodUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(processMethods != null) {
+				if(processMethod != null) {
 					Table table = listUI.getTable();
 					int index = table.getSelectionIndex();
-					Collections.swap(processMethods, index, index - 1);
-					updateList();
+					Collections.swap(processMethod, index, index - 1);
+					updateProcessMethod();
 				}
 			}
 		});
@@ -258,11 +323,11 @@ public class ExtendedMethodUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(processMethods != null) {
+				if(processMethod != null) {
 					Table table = listUI.getTable();
 					int index = table.getSelectionIndex();
-					Collections.swap(processMethods, index, index + 1);
-					updateList();
+					Collections.swap(processMethod, index, index + 1);
+					updateProcessMethod();
 				}
 			}
 		});
@@ -281,17 +346,17 @@ public class ExtendedMethodUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(processMethods != null) {
+				if(processMethod != null) {
 					Object object = listUI.getStructuredSelection().getFirstElement();
-					if(object instanceof IProcessMethod) {
-						IProcessMethod processMethod = (IProcessMethod)object;
-						Class<? extends IProcessSettings> processSettingsClass = processMethod.getProcessSettingsClass();
+					if(object instanceof IProcessEntry) {
+						IProcessEntry processEntry = (IProcessEntry)object;
+						Class<? extends IProcessSettings> processSettingsClass = processEntry.getProcessSettingsClass();
 						if(processSettingsClass != null) {
 							try {
 								SettingsSupport settingsSupport = new SettingsSupport();
 								String content = settingsSupport.getSettingsAsJson(null, processSettingsClass, e.widget.getDisplay().getActiveShell());
-								processMethod.setJsonSettings(content);
-								updateList();
+								processEntry.setJsonSettings(content);
+								updateProcessMethod();
 							} catch(JsonParseException e1) {
 								logger.warn(e1);
 							} catch(JsonMappingException e1) {
@@ -308,10 +373,19 @@ public class ExtendedMethodUI {
 		return button;
 	}
 
-	private void updateList() {
+	private void updateProcessMethod() {
 
-		listUI.setInput(processMethods);
+		if(processMethod != null) {
+			textOperator.setText(processMethod.getOperator());
+			textDescription.setText(processMethod.getDescription());
+		} else {
+			textOperator.setText("");
+			textDescription.setText("");
+		}
+		//
+		listUI.setInput(processMethod);
 		enableTableButtons();
+		setDirty(true);
 	}
 
 	private void enableTableButtons() {
@@ -321,5 +395,12 @@ public class ExtendedMethodUI {
 		buttonMoveUp.setEnabled(enabled);
 		buttonMoveDown.setEnabled(enabled);
 		buttonProcessSettings.setEnabled(enabled);
+	}
+
+	private void setDirty(boolean dirty) {
+
+		if(modificationHandler != null) {
+			modificationHandler.setDirty(dirty);
+		}
 	}
 }

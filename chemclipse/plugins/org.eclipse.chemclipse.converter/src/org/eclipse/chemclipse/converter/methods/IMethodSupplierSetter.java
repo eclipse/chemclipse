@@ -9,11 +9,21 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.swt.ui.components;
+package org.eclipse.chemclipse.converter.methods;
 
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 
-public interface IMethodListener {
+public interface IMethodSupplierSetter extends IMethodSupplier {
 
-	void execute(ProcessMethod processMethods);
+	void setId(final String id);
+
+	void setDescription(final String description);
+
+	void setFilterName(final String filterName);
+
+	void setFileExtension(final String fileExtension);
+
+	void setFileName(final String fileName);
+
+	void setMagicNumberMatcher(final IMagicNumberMatcher magicNumberMatcher);
 }

@@ -12,13 +12,14 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.File;
-import java.io.IOException;
 
+import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
-import org.eclipse.chemclipse.model.methods.ProcessMethods;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
@@ -28,6 +29,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.MethodEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -142,21 +144,25 @@ public class MethodSupportUI extends Composite {
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
 				fileDialog.setText("Process Method");
-				fileDialog.setFileName("ProcessMethod.ocm");
-				fileDialog.setFilterExtensions(new String[]{"*.ocm"});
-				fileDialog.setFilterNames(new String[]{"Process Method (*.ocm)"});
+				fileDialog.setFileName(MethodConverter.DEFAULT_METHOD_FILE_NAME);
+				fileDialog.setFilterExtensions(MethodConverter.DEFAULT_METHOD_FILE_EXTENSIONS);
+				fileDialog.setFilterNames(MethodConverter.DEFAULT_METHOD_FILE_NAMES);
 				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER));
 				String filePath = fileDialog.open();
 				if(filePath != null && !filePath.equals("")) {
-					try {
-						File file = new File(filePath);
-						if(file.createNewFile()) {
-							preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
-							computeMethodComboItems();
-							supplierEditorSupport.openEditor(file);
-						}
-					} catch(IOException e1) {
-						logger.warn(e1);
+					/*
+					 * New process method file.
+					 */
+					File file = new File(filePath);
+					ProcessMethod processMethod = new ProcessMethod();
+					processMethod.setOperator(UserManagement.getCurrentUser());
+					processMethod.setDescription("This is an empty process method. Please modify.");
+					//
+					IProcessingInfo processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_MÉTHOD_CONVERTER_ID, new NullProgressMonitor());
+					if(!processingInfo.hasErrorMessages()) {
+						preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
+						computeMethodComboItems();
+						supplierEditorSupport.openEditor(file);
 					}
 				}
 			}
@@ -296,26 +302,16 @@ public class MethodSupportUI extends Composite {
 
 	private void runMethod(File file) {
 
-		if(methodListener != null) {
-			/*
-			 * Example
-			 * Load from file when processing is finished.
-			 */
-			ProcessMethods processMethods = new ProcessMethods();
-			//
-			ProcessMethod processMethod1 = new ProcessMethod();
-			processMethod1.setProcessorId("org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.chromatogram");
-			processMethod1.setJsonSettings("{\"Ions To Remove\":\"18;28;84;207\"}");
-			processMethod1.setProcessSettingsClass("org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover", "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings");
-			processMethods.add(processMethod1);
-			//
-			ProcessMethod processMethod2 = new ProcessMethod();
-			processMethod2.setProcessorId("org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay");
-			processMethod2.setJsonSettings("{\"Order\":2,\"Width\":5}");
-			processMethod2.setProcessSettingsClass("org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay", "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings");
-			processMethods.add(processMethod2);
-			//
-			methodListener.execute(processMethods);
+		if(methodListener != null && file != null) {
+			IProcessingInfo processingInfo = MethodConverter.convert(file, new NullProgressMonitor());
+			if(!processingInfo.hasErrorMessages()) {
+				try {
+					ProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
+					methodListener.execute(processMethod);
+				} catch(Exception e) {
+					logger.warn(e);
+				}
+			}
 		}
 	}
 }

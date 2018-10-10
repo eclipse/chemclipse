@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.util.Arrays;
 
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -50,8 +50,8 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IProcessMethod) {
-			IProcessMethod entry = (IProcessMethod)element;
+		if(element instanceof IProcessEntry) {
+			IProcessEntry entry = (IProcessEntry)element;
 			switch(columnIndex) {
 				case 0:
 					text = entry.getName();

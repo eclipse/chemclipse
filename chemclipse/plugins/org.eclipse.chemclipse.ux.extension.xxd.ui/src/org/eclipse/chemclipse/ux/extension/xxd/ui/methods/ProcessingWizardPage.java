@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessEntry;
+import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
@@ -64,9 +64,9 @@ public class ProcessingWizardPage extends WizardPage {
 		validate();
 	}
 
-	public IProcessMethod getProcessMethod() {
+	public IProcessEntry getProcessEntry() {
 
-		IProcessMethod processMethod = null;
+		IProcessEntry processEntry = null;
 		if(processTypeSupplier != null) {
 			Object object = comboViewerProcessor.getStructuredSelection().getFirstElement();
 			if(object instanceof String) {
@@ -77,18 +77,18 @@ public class ProcessingWizardPage extends WizardPage {
 					int index = comboViewerProcessor.getCombo().getSelectionIndex();
 					String processorId = processTypeSupplier.getPluginIds().get(index);
 					//
-					processMethod = new ProcessMethod();
-					processMethod.setProcessorId(processorId);
-					processMethod.setName(object.toString());
-					processMethod.setDescription(processTypeSupplier.getProcessorDescription(processorId));
-					processMethod.getSupportedDataTypes().addAll(processTypeSupplier.getSupportedDataTypes());
-					processMethod.setProcessSettingsClass(processTypeSupplier.getProcessSettingsClass(processorId));
+					processEntry = new ProcessEntry();
+					processEntry.setProcessorId(processorId);
+					processEntry.setName(object.toString());
+					processEntry.setDescription(processTypeSupplier.getProcessorDescription(processorId));
+					processEntry.getSupportedDataTypes().addAll(processTypeSupplier.getSupportedDataTypes());
+					processEntry.setProcessSettingsClass(processTypeSupplier.getProcessSettingsClass(processorId));
 				} catch(Exception e) {
 					logger.warn(e);
 				}
 			}
 		}
-		return processMethod;
+		return processEntry;
 	}
 
 	private void createLabel(Composite parent, String text) {

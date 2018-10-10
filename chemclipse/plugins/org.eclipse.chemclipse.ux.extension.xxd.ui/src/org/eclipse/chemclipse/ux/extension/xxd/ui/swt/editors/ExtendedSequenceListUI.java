@@ -18,7 +18,8 @@ import java.util.List;
 import org.eclipse.chemclipse.converter.model.reports.ISequence;
 import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.methods.ProcessMethods;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -27,14 +28,18 @@ import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.EditorSupportFactory;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.SequenceListUI;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -54,6 +59,7 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 public class ExtendedSequenceListUI {
@@ -157,11 +163,34 @@ public class ExtendedSequenceListUI {
 		methodSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
+			@SuppressWarnings("rawtypes")
 			@Override
-			public void execute(ProcessMethods processMethods) {
+			public void execute(ProcessMethod processMethod) {
 
-				// ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
-				// processTypeSupport.applyProcessor(chromatogramSelection, processMethods, new NullProgressMonitor());
+				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
+				TableItem[] tableItems = sequenceListUI.getTable().getItems();
+				for(TableItem tableItem : tableItems) {
+					Object object = tableItem.getData();
+					if(object instanceof ISequenceRecord) {
+						/*
+						 * Get the file.
+						 */
+						ISequenceRecord sequenceRecord = (ISequenceRecord)object;
+						File file = new File(sequence.getDataPath() + File.separator + sequenceRecord.getDataFile());
+						DataType dataType = detectDataType(file);
+						if(dataType != null) {
+							ProgressMonitorDialog dialog = new ProgressMonitorDialog(parent.getShell());
+							ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(file, dataType);
+							try {
+								dialog.run(false, false, runnable);
+								IChromatogramSelection chromatogramSelection = runnable.getChromatogramSelection();
+								processTypeSupport.applyProcessor(chromatogramSelection, processMethod, dialog.getProgressMonitor());
+							} catch(Exception e) {
+								logger.error(e.getLocalizedMessage(), e);
+							}
+						}
+					}
+				}
 			}
 		});
 		//
@@ -451,6 +480,38 @@ public class ExtendedSequenceListUI {
 			dataPath.setText("");
 			sequenceListUI.setInput(null);
 		}
+	}
+
+	private DataType detectDataType(File file) {
+
+		String type = "";
+		if(file.exists()) {
+			exitloop:
+			for(ISupplierEditorSupport supplierEditorSupport : supplierEditorSupportList) {
+				if(isSupplierFile(supplierEditorSupport, file)) {
+					type = supplierEditorSupport.getType();
+					break exitloop;
+				}
+			}
+		}
+		//
+		DataType dataType;
+		switch(type) {
+			case ISupplierFileIdentifier.TYPE_MSD:
+				dataType = DataType.MSD;
+				break;
+			case ISupplierFileIdentifier.TYPE_CSD:
+				dataType = DataType.CSD;
+				break;
+			case ISupplierFileIdentifier.TYPE_WSD:
+				dataType = DataType.WSD;
+				break;
+			default:
+				dataType = null;
+				break;
+		}
+		//
+		return dataType;
 	}
 
 	private void openFiles(List<File> files) throws Exception {

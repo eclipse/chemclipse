@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,11 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.swt.ui.components;
+package org.eclipse.chemclipse.converter.methods;
 
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
-
-public interface IMethodListener {
-
-	void execute(ProcessMethod processMethods);
+public abstract class AbstractMethodReader implements IMethodReader {
 }

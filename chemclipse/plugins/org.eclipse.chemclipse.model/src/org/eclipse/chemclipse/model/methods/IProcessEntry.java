@@ -16,7 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 
-public interface IProcessMethod {
+public interface IProcessEntry {
 
 	String getProcessorId();
 
