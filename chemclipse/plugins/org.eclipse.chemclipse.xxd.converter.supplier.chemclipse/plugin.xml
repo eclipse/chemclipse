@@ -62,4 +62,18 @@
             isImportable="true">
       </ChromatogramSupplier>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.converter.processMethodSupplier">
+      <ProcessMethodSupplier
+            description="Reads and writes process methods."
+            exportConverter="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.methods.MethodExportConverter"
+            fileExtension=".ocm"
+            filterName="Process Method (*.ocm)"
+            id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.processMethodSupplier"
+            importConverter="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.methods.MethodImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.methods.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="true">
+      </ProcessMethodSupplier>
+   </extension>
 </plugin>

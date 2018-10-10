@@ -114,15 +114,15 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 
 		IChromatogramWSDZipReader chromatogramReader = null;
 		//
-		if(version.equals(IFormat.VERSION_1005)) {
+		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1005)) {
 			chromatogramReader = new ChromatogramReader_1005();
-		} else if(version.equals(IFormat.VERSION_1006)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1006)) {
 			chromatogramReader = new ChromatogramReader_1006();
-		} else if(version.equals(IFormat.VERSION_1007)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1007)) {
 			chromatogramReader = new ChromatogramReader_1007();
-		} else if(version.equals(IFormat.VERSION_1100)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1100)) {
 			chromatogramReader = new ChromatogramReader_1100();
-		} else if(version.equals(IFormat.VERSION_1300)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
 			chromatogramReader = new ChromatogramReader_1300();
 		}
 		//

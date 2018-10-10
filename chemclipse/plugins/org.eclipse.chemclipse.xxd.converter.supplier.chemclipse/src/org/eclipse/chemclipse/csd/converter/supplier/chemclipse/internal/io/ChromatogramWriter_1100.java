@@ -57,8 +57,8 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 		 */
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(fileOutputStream));
-		zipOutputStream.setLevel(PreferenceSupplier.getCompressionLevel());
-		zipOutputStream.setMethod(IFormat.METHOD);
+		zipOutputStream.setLevel(PreferenceSupplier.getChromatogramCompressionLevel());
+		zipOutputStream.setMethod(IFormat.CHROMATOGRAM_COMPRESSION_TYPE);
 		/*
 		 * Write the data
 		 */
@@ -87,7 +87,7 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_VERSION);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
-		String version = IFormat.VERSION_1100;
+		String version = IFormat.CHROMATOGRAM_VERSION_1100;
 		dataOutputStream.writeInt(version.length()); // Length Version
 		dataOutputStream.writeChars(version); // Version
 		//

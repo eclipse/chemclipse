@@ -315,7 +315,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		boolean isValid = false;
 		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(IFormat.VERSION_1005)) {
+		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1005)) {
 			isValid = true;
 		}
 		//
@@ -326,7 +326,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 
 	private void setAdditionalInformation(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) {
 
-		chromatogram.setConverterId(IFormat.CONVERTER_ID);
+		chromatogram.setConverterId(IFormat.CONVERTER_ID_CHROMATOGRAM);
 		chromatogram.setFile(file);
 		// Delay
 		int startRetentionTime = chromatogram.getStartRetentionTime();

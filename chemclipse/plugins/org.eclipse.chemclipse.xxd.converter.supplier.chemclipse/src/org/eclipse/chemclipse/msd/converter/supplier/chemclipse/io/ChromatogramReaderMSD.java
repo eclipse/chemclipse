@@ -170,37 +170,37 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 
 		IChromatogramMSDZipReader chromatogramReader = null;
 		//
-		if(version.equals(IFormat.VERSION_0701)) {
+		if(version.equals(IFormat.CHROMATOGRAM_VERSION_0701)) {
 			chromatogramReader = new ChromatogramReader_0701();
-		} else if(version.equals(IFormat.VERSION_0801)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_0801)) {
 			chromatogramReader = new ChromatogramReader_0801();
-		} else if(version.equals(IFormat.VERSION_0802)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_0802)) {
 			chromatogramReader = new ChromatogramReader_0802();
-		} else if(version.equals(IFormat.VERSION_0803)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_0803)) {
 			chromatogramReader = new ChromatogramReader_0803();
-		} else if(version.equals(IFormat.VERSION_0901)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_0901)) {
 			chromatogramReader = new ChromatogramReader_0901();
-		} else if(version.equals(IFormat.VERSION_0902)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_0902)) {
 			chromatogramReader = new ChromatogramReader_0902();
-		} else if(version.equals(IFormat.VERSION_0903)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_0903)) {
 			chromatogramReader = new ChromatogramReader_0903();
-		} else if(version.equals(IFormat.VERSION_1001)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1001)) {
 			chromatogramReader = new ChromatogramReader_1001();
-		} else if(version.equals(IFormat.VERSION_1002)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1002)) {
 			chromatogramReader = new ChromatogramReader_1002();
-		} else if(version.equals(IFormat.VERSION_1003)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1003)) {
 			chromatogramReader = new ChromatogramReader_1003();
-		} else if(version.equals(IFormat.VERSION_1004)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1004)) {
 			chromatogramReader = new ChromatogramReader_1004();
-		} else if(version.equals(IFormat.VERSION_1005)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1005)) {
 			chromatogramReader = new ChromatogramReader_1005();
-		} else if(version.equals(IFormat.VERSION_1006)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1006)) {
 			chromatogramReader = new ChromatogramReader_1006();
-		} else if(version.equals(IFormat.VERSION_1007)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1007)) {
 			chromatogramReader = new ChromatogramReader_1007();
-		} else if(version.equals(IFormat.VERSION_1100)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1100)) {
 			chromatogramReader = new ChromatogramReader_1100();
-		} else if(version.equals(IFormat.VERSION_1300)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
 			chromatogramReader = new ChromatogramReader_1300();
 		}
 		//
@@ -232,7 +232,7 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 					chromatogramMSD.addScan(massSpectrum);
 				}
 				//
-				chromatogramMSD.setConverterId(IFormat.CONVERTER_ID);
+				chromatogramMSD.setConverterId(IFormat.CONVERTER_ID_CHROMATOGRAM);
 				File fileConverted = new File(file.getAbsolutePath().replace(".ocb", "-fromFID.ocb"));
 				chromatogramMSD.setFile(fileConverted);
 				// Delay

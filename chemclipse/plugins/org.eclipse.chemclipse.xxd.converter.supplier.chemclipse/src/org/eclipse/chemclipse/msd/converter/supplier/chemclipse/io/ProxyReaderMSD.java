@@ -31,19 +31,19 @@ public class ProxyReaderMSD {
 	public void readMassSpectrum(File file, int offset, String version, IVendorScanProxy massSpectrum, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
 
 		IReaderProxy scanReaderProxy = null;
-		if(version.equals(IFormat.VERSION_1003)) {
+		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1003)) {
 			scanReaderProxy = new ReaderProxy_1003();
-		} else if(version.equals(IFormat.VERSION_1004)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1004)) {
 			scanReaderProxy = new ReaderProxy_1004();
-		} else if(version.equals(IFormat.VERSION_1005)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1005)) {
 			scanReaderProxy = new ReaderProxy_1005();
-		} else if(version.equals(IFormat.VERSION_1006)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1006)) {
 			scanReaderProxy = new ReaderProxy_1006();
-		} else if(version.equals(IFormat.VERSION_1007)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1007)) {
 			scanReaderProxy = new ReaderProxy_1007();
-		} else if(version.equals(IFormat.VERSION_1100)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1100)) {
 			scanReaderProxy = new ReaderProxy_1100();
-		} else if(version.equals(IFormat.VERSION_1300)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
 			scanReaderProxy = new ReaderProxy_1300();
 		}
 		//

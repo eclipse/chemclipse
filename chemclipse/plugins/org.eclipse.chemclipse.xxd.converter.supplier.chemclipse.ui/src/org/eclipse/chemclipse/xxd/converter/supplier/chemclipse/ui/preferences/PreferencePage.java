@@ -37,10 +37,15 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_VERSION_SAVE, "Save (*.ocb) as version:", PreferenceSupplier.getVersions(), getFieldEditorParent()));
-		IntegerFieldEditor compressionLevelEditor = new IntegerFieldEditor(PreferenceSupplier.P_COMPRESSION_LEVEL, "Compression 0 = off, 9 = best", getFieldEditorParent());
-		compressionLevelEditor.setValidRange(PreferenceSupplier.MIN_COMPRESSION_LEVEL, PreferenceSupplier.MAX_COMPRESSION_LEVEL);
-		addField(compressionLevelEditor);
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_VERSION_SAVE, "Save (*.ocb) as version:", PreferenceSupplier.getChromatogramVersions(), getFieldEditorParent()));
+		IntegerFieldEditor chromatogramCompressionLevelEditor = new IntegerFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_COMPRESSION_LEVEL, "Compression 0 = off, 9 = best", getFieldEditorParent());
+		chromatogramCompressionLevelEditor.setValidRange(PreferenceSupplier.MIN_COMPRESSION_LEVEL, PreferenceSupplier.MAX_COMPRESSION_LEVEL);
+		addField(chromatogramCompressionLevelEditor);
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_METHOD_VERSION_SAVE, "Save (*.ocm) as version:", PreferenceSupplier.getMethodVersions(), getFieldEditorParent()));
+		IntegerFieldEditor methodCompressionLevelEditor = new IntegerFieldEditor(PreferenceSupplier.P_METHOD_COMPRESSION_LEVEL, "Compression 0 = off, 9 = best", getFieldEditorParent());
+		methodCompressionLevelEditor.setValidRange(PreferenceSupplier.MIN_COMPRESSION_LEVEL, PreferenceSupplier.MAX_COMPRESSION_LEVEL);
+		addField(methodCompressionLevelEditor);
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_FORCE_LOAD_ALTERNATE_DETECTOR, "Force load as alternate detector type", getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));

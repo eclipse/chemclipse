@@ -129,23 +129,23 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 
 		IChromatogramCSDZipReader chromatogramReader = null;
 		//
-		if(version.equals(IFormat.VERSION_1001)) {
+		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1001)) {
 			chromatogramReader = new ChromatogramReader_1001();
-		} else if(version.equals(IFormat.VERSION_1002)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1002)) {
 			chromatogramReader = new ChromatogramReader_1002();
-		} else if(version.equals(IFormat.VERSION_1003)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1003)) {
 			chromatogramReader = new ChromatogramReader_1003();
-		} else if(version.equals(IFormat.VERSION_1004)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1004)) {
 			chromatogramReader = new ChromatogramReader_1004();
-		} else if(version.equals(IFormat.VERSION_1005)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1005)) {
 			chromatogramReader = new ChromatogramReader_1005();
-		} else if(version.equals(IFormat.VERSION_1006)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1006)) {
 			chromatogramReader = new ChromatogramReader_1006();
-		} else if(version.equals(IFormat.VERSION_1007)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1007)) {
 			chromatogramReader = new ChromatogramReader_1007();
-		} else if(version.equals(IFormat.VERSION_1100)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1100)) {
 			chromatogramReader = new ChromatogramReader_1100();
-		} else if(version.equals(IFormat.VERSION_1300)) {
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
 			chromatogramReader = new ChromatogramReader_1300();
 		}
 		//
@@ -174,7 +174,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 					chromatogramFID.addScan(scanCSD);
 				}
 				//
-				chromatogramFID.setConverterId(IFormat.CONVERTER_ID);
+				chromatogramFID.setConverterId(IFormat.CONVERTER_ID_CHROMATOGRAM);
 				File fileConverted = new File(file.getAbsolutePath().replace(".ocb", "-fromMSD.ocb"));
 				chromatogramFID.setFile(fileConverted);
 				// Delay

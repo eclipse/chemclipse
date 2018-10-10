@@ -47,19 +47,19 @@ public class ChromatogramWriterWSD extends AbstractChromatogramWriter implements
 
 	private IChromatogramWSDZipWriter getChromatogramWriter(IChromatogramWSD chromatogram, IProgressMonitor monitor) {
 
-		String versionSave = PreferenceSupplier.getVersionSave();
+		String versionSave = PreferenceSupplier.getChromatogramVersionSave();
 		IChromatogramWSDZipWriter chromatogramWriter;
 		/*
 		 * Check the requested version of the file to be exported.
 		 * TODO Optimize
 		 */
-		if(versionSave.equals(IFormat.VERSION_1005)) {
+		if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1005)) {
 			chromatogramWriter = new ChromatogramWriter_1005();
-		} else if(versionSave.equals(IFormat.VERSION_1006)) {
+		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1006)) {
 			chromatogramWriter = new ChromatogramWriter_1006();
-		} else if(versionSave.equals(IFormat.VERSION_1007)) {
+		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1007)) {
 			chromatogramWriter = new ChromatogramWriter_1007();
-		} else if(versionSave.equals(IFormat.VERSION_1100)) {
+		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1100)) {
 			chromatogramWriter = new ChromatogramWriter_1100();
 		} else {
 			chromatogramWriter = new ChromatogramWriter_1300();

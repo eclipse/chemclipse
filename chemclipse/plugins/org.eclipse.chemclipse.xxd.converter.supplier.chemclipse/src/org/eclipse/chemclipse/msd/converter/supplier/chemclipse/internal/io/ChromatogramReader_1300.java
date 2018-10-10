@@ -288,7 +288,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 
 	private void setAdditionalInformation(File file, IChromatogramMSD chromatogram) {
 
-		chromatogram.setConverterId(IFormat.CONVERTER_ID);
+		chromatogram.setConverterId(IFormat.CONVERTER_ID_CHROMATOGRAM);
 		chromatogram.setFile(file);
 		// Delay
 		int startRetentionTime = chromatogram.getStartRetentionTime();
@@ -317,7 +317,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
 			int cycleNumber = dataInputStream.readInt(); // Cycle Number
 			//
-			IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, IFormat.VERSION_1300, ionTransitionSettings);
+			IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, IFormat.CHROMATOGRAM_VERSION_1300, ionTransitionSettings);
 			massSpectrum.setRetentionTime(retentionTime);
 			massSpectrum.setNumberOfIons(numberOfIons);
 			massSpectrum.setTotalSignal(totalSignal);
@@ -962,7 +962,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		//
 		dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(IFormat.VERSION_1300)) {
+		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
 			isValid = true;
 		}
 		//

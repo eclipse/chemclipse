@@ -23,12 +23,18 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String P_VERSION_SAVE = "versionSave";
-	public static final String DEF_VERSION_SAVE = IFormat.VERSION_LATEST;
-	public static final String P_COMPRESSION_LEVEL = "compressionLevel";
-	public static final int DEF_COMPRESSION_LEVEL = IFormat.COMPRESSION_LEVEL;
 	public static final int MIN_COMPRESSION_LEVEL = 0;
 	public static final int MAX_COMPRESSION_LEVEL = 9;
+	//
+	public static final String P_CHROMATOGRAM_VERSION_SAVE = "chromaotgramVersionSave";
+	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = IFormat.CHROMATOGRAM_VERSION_LATEST;
+	public static final String P_CHROMATOGRAM_COMPRESSION_LEVEL = "chromatogramCompressionLevel";
+	public static final int DEF_CHROMATOGRAM_COMPRESSION_LEVEL = IFormat.CHROMATOGRAM_COMPRESSION_LEVEL;
+	//
+	public static final String P_METHOD_VERSION_SAVE = "chromaotgramVersionSave";
+	public static final String DEF_METHOD_VERSION_SAVE = IFormat.METHOD_VERSION_LATEST;
+	public static final String P_METHOD_COMPRESSION_LEVEL = "chromatogramCompressionLevel";
+	public static final int DEF_METHOD_COMPRESSION_LEVEL = IFormat.METHOD_COMPRESSION_LEVEL;
 	//
 	public static final String P_FORCE_LOAD_ALTERNATE_DETECTOR = "forceLoadAlternateDetector";
 	public static final boolean DEF_FORCE_LOAD_ALTERNATE_DETECTOR = false;
@@ -66,8 +72,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_VERSION_SAVE, DEF_VERSION_SAVE);
-		defaultValues.put(P_COMPRESSION_LEVEL, Integer.toString(DEF_COMPRESSION_LEVEL));
+		defaultValues.put(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
+		defaultValues.put(P_CHROMATOGRAM_COMPRESSION_LEVEL, Integer.toString(DEF_CHROMATOGRAM_COMPRESSION_LEVEL));
+		defaultValues.put(P_METHOD_VERSION_SAVE, DEF_METHOD_VERSION_SAVE);
+		defaultValues.put(P_METHOD_COMPRESSION_LEVEL, Integer.toString(DEF_METHOD_COMPRESSION_LEVEL));
 		defaultValues.put(P_FORCE_LOAD_ALTERNATE_DETECTOR, Boolean.toString(DEF_FORCE_LOAD_ALTERNATE_DETECTOR));
 		defaultValues.put(P_USE_SCAN_PROXIES, Boolean.toString(DEF_USE_SCAN_PROXIES));
 		defaultValues.put(P_LOAD_SCAN_PROXIES_IN_BACKGROUND, Boolean.toString(DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND));
@@ -81,19 +89,28 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the export version.
-	 */
-	public static String getVersionSave() {
+	public static String getChromatogramVersionSave() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_VERSION_SAVE, DEF_VERSION_SAVE);
+		return preferences.get(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
 	}
 
-	public static int getCompressionLevel() {
+	public static int getChromatogramCompressionLevel() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_COMPRESSION_LEVEL, DEF_COMPRESSION_LEVEL);
+		return preferences.getInt(P_CHROMATOGRAM_COMPRESSION_LEVEL, DEF_CHROMATOGRAM_COMPRESSION_LEVEL);
+	}
+
+	public static String getMethodVersionSave() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(P_METHOD_VERSION_SAVE, DEF_METHOD_VERSION_SAVE);
+	}
+
+	public static int getMethodCompressionLevel() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_METHOD_COMPRESSION_LEVEL, DEF_METHOD_COMPRESSION_LEVEL);
 	}
 
 	public static void setForceLoadAlternateDetector(boolean forceLoadAlternateDetector) {
@@ -108,29 +125,41 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return preferences.getBoolean(P_FORCE_LOAD_ALTERNATE_DETECTOR, DEF_FORCE_LOAD_ALTERNATE_DETECTOR);
 	}
 
-	public static String[][] getVersions() {
+	public static String[][] getChromatogramVersions() {
 
 		// TODO optimize the version handling!
 		int versions = 6;
 		String[][] elements = new String[versions][2];
 		//
-		elements[0][0] = IFormat.VERSION_0701 + " (Nernst)";
-		elements[0][1] = IFormat.VERSION_0701;
+		elements[0][0] = IFormat.CHROMATOGRAM_VERSION_0701 + " (Nernst)";
+		elements[0][1] = IFormat.CHROMATOGRAM_VERSION_0701;
 		//
-		elements[1][0] = IFormat.VERSION_0803 + " (Dempster)";
-		elements[1][1] = IFormat.VERSION_0803;
+		elements[1][0] = IFormat.CHROMATOGRAM_VERSION_0803 + " (Dempster)";
+		elements[1][1] = IFormat.CHROMATOGRAM_VERSION_0803;
 		//
-		elements[2][0] = IFormat.VERSION_0903 + " (Mattauch)";
-		elements[2][1] = IFormat.VERSION_0903;
+		elements[2][0] = IFormat.CHROMATOGRAM_VERSION_0903 + " (Mattauch)";
+		elements[2][1] = IFormat.CHROMATOGRAM_VERSION_0903;
 		//
-		elements[3][0] = IFormat.VERSION_1004 + " (Aston)";
-		elements[3][1] = IFormat.VERSION_1004;
+		elements[3][0] = IFormat.CHROMATOGRAM_VERSION_1004 + " (Aston)";
+		elements[3][1] = IFormat.CHROMATOGRAM_VERSION_1004;
 		//
-		elements[4][0] = IFormat.VERSION_1100 + " (Diels)";
-		elements[4][1] = IFormat.VERSION_1100;
+		elements[4][0] = IFormat.CHROMATOGRAM_VERSION_1100 + " (Diels)";
+		elements[4][1] = IFormat.CHROMATOGRAM_VERSION_1100;
 		//
-		elements[5][0] = IFormat.VERSION_1300 + " (Dalton)";
-		elements[5][1] = IFormat.VERSION_1300;
+		elements[5][0] = IFormat.CHROMATOGRAM_VERSION_1300 + " (Dalton)";
+		elements[5][1] = IFormat.CHROMATOGRAM_VERSION_1300;
+		//
+		return elements;
+	}
+
+	public static String[][] getMethodVersions() {
+
+		// TODO optimize the version handling!
+		int versions = 1;
+		String[][] elements = new String[versions][2];
+		//
+		elements[0][0] = IFormat.METHOD_VERSION_0001 + " (Test)";
+		elements[0][1] = IFormat.METHOD_VERSION_0001;
 		//
 		return elements;
 	}

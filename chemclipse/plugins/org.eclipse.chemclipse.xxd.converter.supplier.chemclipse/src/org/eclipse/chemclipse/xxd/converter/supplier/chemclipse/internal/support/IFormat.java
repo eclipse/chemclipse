@@ -15,33 +15,43 @@ import java.util.zip.ZipOutputStream;
 
 public interface IFormat {
 
-	String CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
+	String CONVERTER_ID_CHROMATOGRAM = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
+	String CONVERTER_ID_METHOD = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.processMethodSupplier";
 	/*
-	 * Zip Settings
+	 * Version
 	 */
-	int COMPRESSION_LEVEL = 0; // 0 - 9 => 0 no compression
-	int METHOD = ZipOutputStream.DEFLATED;
-	/*
-	 * File Settings
-	 */
-	String VERSION_0701 = "0.7.0.1"; // Version 0.7.0, Release 1 (Nernst)
-	String VERSION_0801 = "0.8.0.1"; // Version 0.8.0, Release 1
-	String VERSION_0802 = "0.8.0.2"; // Version 0.8.0, Release 2
-	String VERSION_0803 = "0.8.0.3"; // Version 0.8.0, Release 3 (Dempster)
-	String VERSION_0901 = "0.9.0.1"; // Version 0.9.0, Release 1
-	String VERSION_0902 = "0.9.0.2"; // Version 0.9.0, Release 2
-	String VERSION_0903 = "0.9.0.3"; // Version 0.9.0, Release 3 (Mattauch)
-	String VERSION_1001 = "1.0.0.1"; // Version 1.0.0, Release 1
-	String VERSION_1002 = "1.0.0.2"; // Version 1.0.0, Release 2
-	String VERSION_1003 = "1.0.0.3"; // Version 1.0.0, Release 3
-	String VERSION_1004 = "1.0.0.4"; // Version 1.0.0, Release 4 (Aston)
-	String VERSION_1005 = "1.0.0.5"; // Version 1.0.0, Release 5
-	String VERSION_1006 = "1.0.0.6"; // Version 1.0.0, Release 6
-	String VERSION_1007 = "1.0.0.7"; // Version 1.0.0, Release 7
-	String VERSION_1100 = "1.1.0.0"; // Version 1.1.0, Release 1 (Diels)
-	String VERSION_1300 = "1.3.0.0"; // Version 1.3.0, Release 1 (Dalton)
-	String VERSION_LATEST = VERSION_1300;
 	String FILE_VERSION = "VERSION";
+	/*
+	 * Chromatogram
+	 */
+	int CHROMATOGRAM_COMPRESSION_LEVEL = 0; // 0 - 9 => 0 no compression
+	int CHROMATOGRAM_COMPRESSION_TYPE = ZipOutputStream.DEFLATED;
+	//
+	String CHROMATOGRAM_VERSION_0701 = "0.7.0.1"; // Version 0.7.0, Release 1 (Nernst)
+	String CHROMATOGRAM_VERSION_0801 = "0.8.0.1"; // Version 0.8.0, Release 1
+	String CHROMATOGRAM_VERSION_0802 = "0.8.0.2"; // Version 0.8.0, Release 2
+	String CHROMATOGRAM_VERSION_0803 = "0.8.0.3"; // Version 0.8.0, Release 3 (Dempster)
+	String CHROMATOGRAM_VERSION_0901 = "0.9.0.1"; // Version 0.9.0, Release 1
+	String CHROMATOGRAM_VERSION_0902 = "0.9.0.2"; // Version 0.9.0, Release 2
+	String CHROMATOGRAM_VERSION_0903 = "0.9.0.3"; // Version 0.9.0, Release 3 (Mattauch)
+	String CHROMATOGRAM_VERSION_1001 = "1.0.0.1"; // Version 1.0.0, Release 1
+	String CHROMATOGRAM_VERSION_1002 = "1.0.0.2"; // Version 1.0.0, Release 2
+	String CHROMATOGRAM_VERSION_1003 = "1.0.0.3"; // Version 1.0.0, Release 3
+	String CHROMATOGRAM_VERSION_1004 = "1.0.0.4"; // Version 1.0.0, Release 4 (Aston)
+	String CHROMATOGRAM_VERSION_1005 = "1.0.0.5"; // Version 1.0.0, Release 5
+	String CHROMATOGRAM_VERSION_1006 = "1.0.0.6"; // Version 1.0.0, Release 6
+	String CHROMATOGRAM_VERSION_1007 = "1.0.0.7"; // Version 1.0.0, Release 7
+	String CHROMATOGRAM_VERSION_1100 = "1.1.0.0"; // Version 1.1.0, Release 1 (Diels)
+	String CHROMATOGRAM_VERSION_1300 = "1.3.0.0"; // Version 1.3.0, Release 1 (Dalton)
+	String CHROMATOGRAM_VERSION_LATEST = CHROMATOGRAM_VERSION_1300;
+	/*
+	 * Method
+	 */
+	int METHOD_COMPRESSION_LEVEL = 0; // 0 - 9 => 0 no compression
+	int METHOD_COMPRESSION_TYPE = ZipOutputStream.DEFLATED;
+	//
+	String METHOD_VERSION_0001 = "0.0.0.1";
+	String METHOD_VERSION_LATEST = METHOD_VERSION_0001;
 	//
 	String DIR_SEPARATOR = "/";
 	String WSD = "WSD";
@@ -158,4 +168,8 @@ public interface IFormat {
 	String FILE_MISC_WSD = DIR_CHROMATOGRAM_WSD + MISC;
 	String FILE_SYSTEM_SETTINGS_WSD = DIR_CHROMATOGRAM_WSD + SYSTEM_SETTINGS;
 	String FILE_SEPARATION_COLUMN_WSD = DIR_CHROMATOGRAM_WSD + SEPARATION_COLUMN;
+	/*
+	 * Process Method
+	 */
+	String FILE_PROCESS_METHOD = "PROCESS_METHOD";
 }
