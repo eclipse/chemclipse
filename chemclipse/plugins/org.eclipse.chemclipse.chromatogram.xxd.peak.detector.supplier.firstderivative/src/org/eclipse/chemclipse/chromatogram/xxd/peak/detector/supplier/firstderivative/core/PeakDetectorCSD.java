@@ -61,7 +61,7 @@ public class PeakDetectorCSD extends AbstractPeakDetectorCSD {
 	private double threshold = 0.005d;
 	private boolean includeBackground = false;
 	private float minimumSignalToNoiseRatio = 0.0f;
-	private WindowSize movingAverageWindow = WindowSize.SCANS_3;
+	private WindowSize movingAverageWindow = WindowSize.WIDTH_3;
 
 	@Override
 	public IProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorCSDSettings peakDetectorSettings, IProgressMonitor monitor) {

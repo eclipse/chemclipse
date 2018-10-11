@@ -34,10 +34,10 @@ public class FirstDerivativePeakDetectorCSDSettings extends AbstractPeakDetector
 	@JsonProperty(value = "Window Size", defaultValue = "SCANS_5")
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
 	@EnumSelectionSettingProperty
-	private WindowSize windowSize = WindowSize.SCANS_5;
+	private WindowSize windowSize = WindowSize.WIDTH_5;
 
 	public FirstDerivativePeakDetectorCSDSettings() {
-		windowSize = WindowSize.SCANS_5;
+		windowSize = WindowSize.WIDTH_5;
 	}
 
 	@Override

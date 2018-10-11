@@ -40,7 +40,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_MIN_SN_RATIO_MSD = "minSNRatioMSD";
 	public static final float DEF_MIN_SN_RATIO_MSD = 0.0f; // 0 = all peaks will be added
 	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_MSD = "movingAverageWindowSizeMSD";
-	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD = WindowSize.SCANS_3.name();
+	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD = WindowSize.WIDTH_3.name();
 	//
 	public static final String P_THRESHOLD_CSD = "thresholdCSD";
 	public static final String DEF_THRESHOLD_CSD = Threshold.MEDIUM.name();
@@ -49,7 +49,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_MIN_SN_RATIO_CSD = "minSNRatioCSD";
 	public static final float DEF_MIN_SN_RATIO_CSD = 0.0f; // 0 = all peaks will be added
 	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_CSD = "movingAverageWindowSizeCSD";
-	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD = WindowSize.SCANS_3.name();
+	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD = WindowSize.WIDTH_3.name();
 	//
 	public static final String P_THRESHOLD_WSD = "thresholdWSD";
 	public static final String DEF_THRESHOLD_WSD = Threshold.MEDIUM.name();
@@ -58,7 +58,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_MIN_SN_RATIO_WSD = "minSNRatioWSD";
 	public static final float DEF_MIN_SN_RATIO_WSD = 0.0f; // 0 = all peaks will be added
 	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_WSD = "movingAverageWindowSizeWSD";
-	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD = WindowSize.SCANS_3.name();
+	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD = WindowSize.WIDTH_3.name();
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 

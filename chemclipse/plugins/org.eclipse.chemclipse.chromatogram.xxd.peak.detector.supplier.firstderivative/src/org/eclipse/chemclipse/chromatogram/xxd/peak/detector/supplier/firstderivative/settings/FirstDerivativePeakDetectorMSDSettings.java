@@ -34,7 +34,7 @@ public class FirstDerivativePeakDetectorMSDSettings extends AbstractPeakDetector
 	@JsonProperty(value = "Window Size", defaultValue = "SCANS_5")
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
 	@EnumSelectionSettingProperty
-	private WindowSize windowSize = WindowSize.SCANS_5;
+	private WindowSize windowSize = WindowSize.WIDTH_5;
 
 	@Override
 	public Threshold getThreshold() {

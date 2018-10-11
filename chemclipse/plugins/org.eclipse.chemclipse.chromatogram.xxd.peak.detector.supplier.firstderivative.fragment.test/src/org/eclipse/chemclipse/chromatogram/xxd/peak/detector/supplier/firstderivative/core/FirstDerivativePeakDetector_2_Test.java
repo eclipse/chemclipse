@@ -38,7 +38,7 @@ public class FirstDerivativePeakDetector_2_Test extends FirstDerivativeSlopesTes
 		firstDerivativePeakDetector = new PeakDetectorMSD();
 		firstDerivativePeakDetectorClass = PeakDetectorMSD.class;
 		slopes = getFirstDerivativeSlopes();
-		slopes.calculateMovingAverage(WindowSize.SCANS_5);
+		slopes.calculateMovingAverage(WindowSize.WIDTH_5);
 	}
 
 	@Override

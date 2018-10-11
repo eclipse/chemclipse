@@ -22,7 +22,7 @@ public class FirstDerivativePeakDetectorWSDSettings extends AbstractPeakDetector
 	private WindowSize windowSize;
 
 	public FirstDerivativePeakDetectorWSDSettings() {
-		windowSize = WindowSize.SCANS_5;
+		windowSize = WindowSize.WIDTH_5;
 	}
 
 	@Override
