@@ -31,7 +31,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
-	private static WindowSize MOVING_AVERAGE_WINDOW = WindowSize.SCANS_5;
+	private static WindowSize MOVING_AVERAGE_WINDOW = WindowSize.WIDTH_5;
 
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {

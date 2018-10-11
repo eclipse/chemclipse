@@ -32,7 +32,7 @@ public class MassChromatographicQualityCalculator_1_ITest extends TestCase {
 	private IChromatogramMSD chromatogram;
 	private IChromatogramSelectionMSD chromatogramSelection;
 	private float codaThreshold;
-	private WindowSize windowSize = WindowSize.SCANS_3;
+	private WindowSize windowSize = WindowSize.WIDTH_3;
 	private File importFile;
 
 	@Override

@@ -58,7 +58,7 @@ public class MassChromatographicQualityResult_1_ITest extends TestCase {
 	public void testConstructor_1() {
 
 		try {
-			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, WindowSize.SCANS_3);
+			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, WindowSize.WIDTH_3);
 			float drv = result.getDataReductionValue();
 			assertEquals("Data reduction value", 0.8737201f, drv);
 			IMarkedIons exludedIons = result.getExcludedIons();
@@ -71,7 +71,7 @@ public class MassChromatographicQualityResult_1_ITest extends TestCase {
 	public void testConstructor_2() {
 
 		try {
-			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, WindowSize.SCANS_5);
+			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, WindowSize.WIDTH_5);
 			float drv = result.getDataReductionValue();
 			assertEquals("Data reduction value", 0.78327644f, drv);
 			IMarkedIons exludedIons = result.getExcludedIons();
@@ -84,7 +84,7 @@ public class MassChromatographicQualityResult_1_ITest extends TestCase {
 	public void testConstructor_3() {
 
 		try {
-			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, WindowSize.SCANS_7);
+			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, WindowSize.WIDTH_7);
 			float drv = result.getDataReductionValue();
 			assertEquals("Data reduction value", 0.721843f, drv);
 			IMarkedIons exludedIons = result.getExcludedIons();
