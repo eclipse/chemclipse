@@ -14,12 +14,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.ISnipBaselineDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.BaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.ISnipMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.ISnipPeakFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.SnipBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.SnipMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.SnipPeakFilterSettings;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
@@ -35,7 +33,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MIN_ITERATIONS = 5;
 	public static final int MAX_ITERATIONS = 2000;
 	public static final String P_WINDOW_SIZE = "windowSize";
-	public static final String DEF_WINDOW_SIZE = WindowSize.SCANS_7.toString();
+	public static final String DEF_WINDOW_SIZE = WindowSize.WIDTH_7.toString();
 	public static final String P_MAGNIFICATION_FACTOR = "magnificationFactor";
 	public static final double DEF_MAGNIFICATION_FACTOR = 1;
 	public static final double MIN_MAGNIFICATION_FACTOR = 0.01d;
@@ -84,9 +82,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IBaselineDetectorSettings getBaselineDetectorSettings() {
+	public static BaselineDetectorSettings getBaselineDetectorSettings() {
 
-		ISnipBaselineDetectorSettings settings = new SnipBaselineDetectorSettings();
+		BaselineDetectorSettings settings = new BaselineDetectorSettings();
 		settings.setIterations(getIterations());
 		settings.setWindowSize(getWindowSize());
 		return settings;

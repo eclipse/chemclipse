@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.AbstractBa
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.calculator.SnipCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.ISnipBaselineDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.BaselineDetectorSettings;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -31,27 +31,32 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class BaselineDetector extends AbstractBaselineDetector {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
-			calculateBaseline(chromatogramSelection, baselineDetectorSettings, monitor);
+			if(baselineDetectorSettings instanceof BaselineDetectorSettings) {
+				calculateBaseline(chromatogramSelection, (BaselineDetectorSettings)baselineDetectorSettings, monitor);
+			}
 		}
 		return processingInfo;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IBaselineDetectorSettings baselineDetectorSettings = PreferenceSupplier.getBaselineDetectorSettings();
+		BaselineDetectorSettings baselineDetectorSettings = PreferenceSupplier.getBaselineDetectorSettings();
 		return setBaseline(chromatogramSelection, baselineDetectorSettings, monitor);
 	}
 
 	/**
 	 * Calculates the baseline.
 	 */
-	private void calculateBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private void calculateBaseline(IChromatogramSelection chromatogramSelection, BaselineDetectorSettings detectorSettings, IProgressMonitor monitor) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
@@ -60,16 +65,8 @@ public class BaselineDetector extends AbstractBaselineDetector {
 		/*
 		 * Iterations
 		 */
-		int iterations = 0;
-		int windowSize = 0;
-		if(baselineDetectorSettings instanceof ISnipBaselineDetectorSettings) {
-			ISnipBaselineDetectorSettings snipSettings = (ISnipBaselineDetectorSettings)baselineDetectorSettings;
-			iterations = snipSettings.getIterations();
-			windowSize = snipSettings.getWindowSize().getSize();
-		} else {
-			iterations = PreferenceSupplier.getIterations();
-			windowSize = PreferenceSupplier.getWindowSize().getSize();
-		}
+		int iterations = detectorSettings.getIterations();
+		int windowSize = detectorSettings.getWindowSize().getSize();
 		/*
 		 * If the scan range is lower than the given window size, do nothing.
 		 */

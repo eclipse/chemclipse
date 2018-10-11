@@ -12,36 +12,40 @@
 package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings;
 
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.AbstractBaselineDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
+import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
-public class SnipBaselineDetectorSettings extends AbstractBaselineDetectorSettings implements ISnipBaselineDetectorSettings {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-	private int iterations;
-	private WindowSize windowSize;
+public class BaselineDetectorSettings extends AbstractBaselineDetectorSettings {
 
-	public SnipBaselineDetectorSettings() {
-		windowSize = WindowSize.SCANS_5;
-	}
+	@JsonProperty(value = "Number of Iterations", defaultValue = "100")
+	@JsonPropertyDescription(value = "The number of iterations to apply the SNIP filter.")
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_ITERATIONS, maxValue = PreferenceSupplier.MAX_ITERATIONS)
+	private int iterations = PreferenceSupplier.DEF_ITERATIONS;
+	@JsonProperty(value = "Window Size", defaultValue = "SCANS_5")
+	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
+	@EnumSelectionSettingProperty
+	private WindowSize windowSize = WindowSize.WIDTH_5;
 
-	@Override
 	public WindowSize getWindowSize() {
 
 		return windowSize;
 	}
 
-	@Override
 	public void setWindowSize(WindowSize windowSize) {
 
 		this.windowSize = windowSize;
 	}
 
-	@Override
 	public int getIterations() {
 
 		return iterations;
 	}
 
-	@Override
 	public void setIterations(int iterations) {
 
 		this.iterations = iterations;

@@ -7,6 +7,7 @@
             baselineDetector="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core.BaselineDetector"
             description="This baseline detector uses the SNIP algorithm."
             detectorName="SNIP Baseline Detector"
+            detectorSettings="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.BaselineDetectorSettings"
             id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.snip">
       </BaselineDetectorSupplier>
    </extension>
