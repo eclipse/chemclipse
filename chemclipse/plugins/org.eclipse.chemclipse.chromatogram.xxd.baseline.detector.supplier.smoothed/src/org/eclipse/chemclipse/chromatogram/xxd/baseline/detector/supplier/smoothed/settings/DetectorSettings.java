@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.settings;
 
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.AbstractBaselineDetectorSettings;
 
-public interface ISmoothedBaselineDetectorSettings extends IBaselineDetectorSettings {
+public class DetectorSettings extends AbstractBaselineDetectorSettings {
 }

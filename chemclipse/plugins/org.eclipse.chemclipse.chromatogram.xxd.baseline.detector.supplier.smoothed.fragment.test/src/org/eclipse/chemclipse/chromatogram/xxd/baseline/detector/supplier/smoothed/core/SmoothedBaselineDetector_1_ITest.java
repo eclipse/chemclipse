@@ -15,8 +15,7 @@ import java.io.File;
 
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetector;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.TestPathHelper;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.settings.ISmoothedBaselineDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.settings.SmoothedBaselineDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.settings.DetectorSettings;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
@@ -33,7 +32,7 @@ public class SmoothedBaselineDetector_1_ITest extends TestCase {
 	private final static String DETECTOR_ID = "org.eclipse.chemclipse.chromatogram.msd.baseline.detector.supplier.smoothed";
 	private IChromatogramMSD chromatogram;
 	private IChromatogramSelectionMSD chromatogramSelection;
-	private ISmoothedBaselineDetectorSettings settings;
+	private DetectorSettings settings;
 	private String pathImport;
 	private File fileImport;
 
@@ -46,7 +45,7 @@ public class SmoothedBaselineDetector_1_ITest extends TestCase {
 		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, CHROMATOGRAM_CONVERTER_ID, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(ChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
-		settings = new SmoothedBaselineDetectorSettings();
+		settings = new DetectorSettings();
 	}
 
 	@Override

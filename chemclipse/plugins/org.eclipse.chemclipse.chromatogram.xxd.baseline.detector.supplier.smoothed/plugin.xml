@@ -4,9 +4,10 @@
    <extension
          point="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.baselineDetectorSupplier">
       <BaselineDetectorSupplier
-            baselineDetector="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.core.SmoothedBaselineDetector"
+            baselineDetector="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.core.BaselineDetector"
             description="This is a simple total ion current (TIC) smoothed baseline detector."
             detectorName="Smoothed TIC Baseline Detector"
+            detectorSettings="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.settings.DetectorSettings"
             id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed">
       </BaselineDetectorSupplier>
    </extension>

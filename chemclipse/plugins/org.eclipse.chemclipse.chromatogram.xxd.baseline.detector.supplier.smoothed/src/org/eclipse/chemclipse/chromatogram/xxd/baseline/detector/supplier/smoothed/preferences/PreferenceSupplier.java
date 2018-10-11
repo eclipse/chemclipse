@@ -14,13 +14,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoot
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.settings.DetectorSettings;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.settings.SmoothedBaselineDetectorSettings;
-import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
@@ -59,9 +58,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IBaselineDetectorSettings getBaselineDetectorSettings() {
+	public static DetectorSettings getDetectorSettings() {
 
-		SmoothedBaselineDetectorSettings baselineDetectorSettings = new SmoothedBaselineDetectorSettings();
-		return baselineDetectorSettings;
+		DetectorSettings detectorSettings = new DetectorSettings();
+		return detectorSettings;
 	}
 }

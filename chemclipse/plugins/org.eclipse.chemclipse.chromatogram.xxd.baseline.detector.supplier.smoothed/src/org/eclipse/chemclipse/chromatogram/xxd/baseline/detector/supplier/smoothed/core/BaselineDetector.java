@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoot
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.AbstractBaselineDetector;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.settings.ISmoothedBaselineDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.settings.DetectorSettings;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -31,44 +31,35 @@ import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class SmoothedBaselineDetector extends AbstractBaselineDetector {
+public class BaselineDetector extends AbstractBaselineDetector {
 
-	private static WindowSize WINDOW_SIZE = WindowSize.SCANS_7;
+	private static WindowSize WINDOW_SIZE = WindowSize.WIDTH_7;
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
-			setDetectorSettings(baselineDetectorSettings);
-			calculateBaseline(chromatogramSelection);
+			if(baselineDetectorSettings instanceof DetectorSettings) {
+				calculateBaseline(chromatogramSelection);
+			}
 		}
 		return processingInfo;
 	}
 
-	// TODO Junit
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IBaselineDetectorSettings baselineDetectorSettings = PreferenceSupplier.getBaselineDetectorSettings();
-		return setBaseline(chromatogramSelection, baselineDetectorSettings, monitor);
-	}
-
-	// ---------------------------------------------private methods
-	private void setDetectorSettings(IBaselineDetectorSettings baselineDetectorSettings) {
-
-		if(baselineDetectorSettings instanceof ISmoothedBaselineDetectorSettings) {
-			@SuppressWarnings("unused")
-			ISmoothedBaselineDetectorSettings settings = (ISmoothedBaselineDetectorSettings)baselineDetectorSettings;
-			/*
-			 * Retrieve the settings here.
-			 */
-		}
+		DetectorSettings detectorSettings = PreferenceSupplier.getDetectorSettings();
+		return setBaseline(chromatogramSelection, detectorSettings, monitor);
 	}
 
 	/**
 	 * Calculates the baseline.
 	 */
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void calculateBaseline(IChromatogramSelection chromatogramSelection) {
 
 		ITotalScanSignal totalIonSignal;
@@ -200,5 +191,4 @@ public class SmoothedBaselineDetector extends AbstractBaselineDetector {
 		int window = scans * scanInterval;
 		return window / actualScanInterval;
 	}
-	// ---------------------------------------------private methods
 }
