@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.c
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.AbstractBaselineDetector;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.settings.DetectorSettings;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -23,26 +24,31 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class BaselineDetector extends AbstractBaselineDetector {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
-			calculateBaseline(chromatogramSelection);
+			if(baselineDetectorSettings instanceof DetectorSettings) {
+				calculateBaseline(chromatogramSelection);
+			}
 		}
 		return processingInfo;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IBaselineDetectorSettings baselineDetectorSettings = PreferenceSupplier.getBaselineDetectorSettings();
-		return setBaseline(chromatogramSelection, baselineDetectorSettings, monitor);
+		DetectorSettings detectorSettings = PreferenceSupplier.getDetectorSettings();
+		return setBaseline(chromatogramSelection, detectorSettings, monitor);
 	}
 
 	/**
 	 * Calculates the baseline.
 	 */
+	@SuppressWarnings("rawtypes")
 	private void calculateBaseline(IChromatogramSelection chromatogramSelection) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
@@ -80,6 +86,7 @@ public class BaselineDetector extends AbstractBaselineDetector {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private float getLowestTIC(IChromatogram chromatogram, int startScan, int stopScan) {
 
 		float lowestTIC = Float.MAX_VALUE;

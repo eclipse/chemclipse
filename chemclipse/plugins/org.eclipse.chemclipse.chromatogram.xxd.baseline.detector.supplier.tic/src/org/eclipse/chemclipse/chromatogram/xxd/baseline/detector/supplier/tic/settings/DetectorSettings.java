@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.s
 
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.AbstractBaselineDetectorSettings;
 
-public class TicBaselineDetectorSettings extends AbstractBaselineDetectorSettings implements ITicBaselineDetectorSettings {
+public class DetectorSettings extends AbstractBaselineDetectorSettings {
 }

@@ -14,9 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.p
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.settings.TicBaselineDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.settings.DetectorSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -59,9 +58,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IBaselineDetectorSettings getBaselineDetectorSettings() {
+	public static DetectorSettings getDetectorSettings() {
 
-		TicBaselineDetectorSettings baselineDetectorSettings = new TicBaselineDetectorSettings();
-		return baselineDetectorSettings;
+		DetectorSettings detectorSettings = new DetectorSettings();
+		return detectorSettings;
 	}
 }
