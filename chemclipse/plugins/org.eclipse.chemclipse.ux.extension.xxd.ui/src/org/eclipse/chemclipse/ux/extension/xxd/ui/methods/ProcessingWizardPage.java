@@ -75,7 +75,7 @@ public class ProcessingWizardPage extends WizardPage {
 					 * Get the process method.
 					 */
 					int index = comboViewerProcessor.getCombo().getSelectionIndex();
-					String processorId = processTypeSupplier.getPluginIds().get(index);
+					String processorId = processTypeSupplier.getProcessorIds().get(index);
 					//
 					processEntry = new ProcessEntry();
 					processEntry.setProcessorId(processorId);
@@ -128,7 +128,7 @@ public class ProcessingWizardPage extends WizardPage {
 					try {
 						processTypeSupplier = (IProcessTypeSupplier)object;
 						List<String> names = new ArrayList<>();
-						for(String processorId : processTypeSupplier.getPluginIds()) {
+						for(String processorId : processTypeSupplier.getProcessorIds()) {
 							names.add(processTypeSupplier.getProcessorName(processorId));
 						}
 						comboViewerProcessor.setInput(names);

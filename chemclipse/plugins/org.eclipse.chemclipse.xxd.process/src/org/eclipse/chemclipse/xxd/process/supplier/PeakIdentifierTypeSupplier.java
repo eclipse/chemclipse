@@ -31,13 +31,7 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 	public static final String CATEGORY = "Peak Identifier";
 
 	public PeakIdentifierTypeSupplier() {
-		super(new DataType[]{DataType.MSD, DataType.CSD});
-	}
-
-	@Override
-	public String getCategory() {
-
-		return CATEGORY;
+		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD});
 	}
 
 	@Override
@@ -55,7 +49,7 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 	}
 
 	@Override
-	public List<String> getPluginIds() throws Exception {
+	public List<String> getProcessorIds() throws Exception {
 
 		return PeakIdentifierMSD.getPeakIdentifierSupport().getAvailableIdentifierIds();
 	}

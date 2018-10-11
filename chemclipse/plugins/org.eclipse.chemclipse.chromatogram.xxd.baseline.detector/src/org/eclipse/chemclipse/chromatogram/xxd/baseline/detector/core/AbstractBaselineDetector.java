@@ -24,6 +24,7 @@ public abstract class AbstractBaselineDetector implements IBaselineDetector {
 
 	private static final String ERROR_DESCRIPTION = "Baseline Detector";
 
+	@SuppressWarnings("rawtypes")
 	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();

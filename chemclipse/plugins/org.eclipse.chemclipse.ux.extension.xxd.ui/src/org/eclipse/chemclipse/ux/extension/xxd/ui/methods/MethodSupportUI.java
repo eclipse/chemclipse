@@ -16,6 +16,7 @@ import java.io.File;
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -26,7 +27,7 @@ import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.MethodEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -59,7 +60,7 @@ public class MethodSupportUI extends Composite {
 	private Button buttonExecuteMethod;
 	//
 	private IMethodListener methodListener;
-	private ISupplierEditorSupport supplierEditorSupport = new MethodEditorSupport();
+	private ISupplierEditorSupport supplierEditorSupport = new EditorSupportFactory(DataType.MTH).getInstanceEditorSupport();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public MethodSupportUI(Composite parent, int style) {

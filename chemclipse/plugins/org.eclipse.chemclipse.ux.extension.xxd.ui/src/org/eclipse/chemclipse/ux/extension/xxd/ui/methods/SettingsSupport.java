@@ -37,6 +37,8 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 
 public class SettingsSupport {
 
+	public static final String EMPTY_JSON_SETTINGS = "{}";
+
 	public <T extends IProcessSettings> T getSettings(String content, Class<T> clazz, Shell shell) throws JsonParseException, JsonMappingException, IOException {
 
 		String contentModified = getSettingsAsJson(content, clazz, shell);
@@ -53,7 +55,14 @@ public class SettingsSupport {
 		 */
 		List<InputValue> inputValues = getInputValues(clazz);
 		initializeInputValues(content, inputValues);
-		return getContentViaWizard(shell, inputValues);
+		try {
+			return getContentViaWizard(shell, inputValues);
+		} catch(Exception e) {
+			/*
+			 * Cancel pressed
+			 */
+			return (content == null) ? EMPTY_JSON_SETTINGS : content;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -84,20 +93,18 @@ public class SettingsSupport {
 		}
 	}
 
-	private String getContentViaWizard(Shell shell, List<InputValue> inputValues) {
+	private String getContentViaWizard(Shell shell, List<InputValue> inputValues) throws Exception {
 
-		String content = "{}";
-		//
 		SettingsWizard wizard = new SettingsWizard(inputValues);
 		WizardDialog wizardDialog = new WizardDialog(shell, wizard);
 		wizardDialog.setMinimumPageSize(SettingsWizard.DEFAULT_WIDTH, SettingsWizard.DEFAULT_HEIGHT);
 		wizardDialog.create();
 		//
 		if(wizardDialog.open() == WizardDialog.OK) {
-			content = wizard.getDialogSettings().get(SettingsWizard.JSON_SETTINGS);
+			return wizard.getDialogSettings().get(SettingsWizard.JSON_SETTINGS);
+		} else {
+			throw new Exception("Cancel has been pressed.");
 		}
-		//
-		return content;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -130,6 +137,14 @@ public class SettingsSupport {
 							IntSettingsProperty settingsProperty = (IntSettingsProperty)annotation;
 							inputValue.setMinValue(settingsProperty.minValue());
 							inputValue.setMaxValue(settingsProperty.maxValue());
+							switch(settingsProperty.validation()) {
+								case ODD_NUMBER:
+									inputValue.setIntegerValidation(IntegerValidation.ODD);
+									break;
+								default:
+									inputValue.setIntegerValidation(null);
+									break;
+							}
 						} else if(annotation instanceof FloatSettingsProperty) {
 							FloatSettingsProperty settingsProperty = (FloatSettingsProperty)annotation;
 							inputValue.setMinValue(settingsProperty.minValue());

@@ -33,7 +33,7 @@ public interface IProcessTypeSupplier {
 
 	String getProcessorDescription(String processorId) throws Exception;
 
-	List<String> getPluginIds() throws Exception;
+	List<String> getProcessorIds() throws Exception;
 
 	@SuppressWarnings("rawtypes")
 	IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor);

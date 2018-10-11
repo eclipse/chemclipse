@@ -81,7 +81,7 @@ public class DetectorSlopes_3_Test extends TestCase {
 	// -----------------------------------------------WindowSize.SCANS_3
 	public void testCalculateMovingAverage_1() {
 
-		slopes.calculateMovingAverage(WindowSize.SCANS_3);
+		slopes.calculateMovingAverage(WindowSize.WIDTH_3);
 		slope = slopes.getDetectorSlope(1);
 		assertEquals("scan 1 slope", 0.1549296875, slope.getSlope());
 		assertEquals("scan 1 retention time", 1000, slope.getRetentionTime());

@@ -29,13 +29,7 @@ public class ClassifierTypeSupplier extends AbstractProcessTypeSupplier implemen
 	public static final String CATEGORY = "Classifier [MSD]";
 
 	public ClassifierTypeSupplier() {
-		super(new DataType[]{DataType.MSD});
-	}
-
-	@Override
-	public String getCategory() {
-
-		return CATEGORY;
+		super(CATEGORY, new DataType[]{DataType.MSD});
 	}
 
 	@Override
@@ -53,7 +47,7 @@ public class ClassifierTypeSupplier extends AbstractProcessTypeSupplier implemen
 	}
 
 	@Override
-	public List<String> getPluginIds() throws Exception {
+	public List<String> getProcessorIds() throws Exception {
 
 		return ChromatogramClassifier.getChromatogramClassifierSupport().getAvailableClassifierIds();
 	}

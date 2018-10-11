@@ -29,13 +29,7 @@ public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSuppl
 	public static final String CATEGORY = "Chromatogram Identifier [MSD]";
 
 	public ChromatogramIdentifierTypeSupplier() {
-		super(new DataType[]{DataType.MSD});
-	}
-
-	@Override
-	public String getCategory() {
-
-		return CATEGORY;
+		super(CATEGORY, new DataType[]{DataType.MSD});
 	}
 
 	@Override
@@ -53,7 +47,7 @@ public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSuppl
 	}
 
 	@Override
-	public List<String> getPluginIds() throws Exception {
+	public List<String> getProcessorIds() throws Exception {
 
 		return ChromatogramIdentifier.getChromatogramIdentifierSupport().getAvailableIdentifierIds();
 	}

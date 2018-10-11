@@ -38,7 +38,7 @@ public class TotalIonSignalsModifier_6_Test extends TestCase {
 			signal = new TotalScanSignal(i * 100, 0.0f, abundance[i - 1]);
 			signals.add(signal);
 		}
-		TotalScanSignalsModifier.calculateMovingAverage(signals, WindowSize.SCANS_5);
+		TotalScanSignalsModifier.calculateMovingAverage(signals, WindowSize.WIDTH_5);
 	}
 
 	@Override

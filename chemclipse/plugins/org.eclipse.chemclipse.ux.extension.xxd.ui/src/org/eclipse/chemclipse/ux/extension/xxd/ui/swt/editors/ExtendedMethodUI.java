@@ -354,7 +354,7 @@ public class ExtendedMethodUI {
 						if(processSettingsClass != null) {
 							try {
 								SettingsSupport settingsSupport = new SettingsSupport();
-								String content = settingsSupport.getSettingsAsJson(null, processSettingsClass, e.widget.getDisplay().getActiveShell());
+								String content = settingsSupport.getSettingsAsJson(processEntry.getJsonSettings(), processSettingsClass, e.widget.getDisplay().getActiveShell());
 								processEntry.setJsonSettings(content);
 								updateProcessMethod();
 							} catch(JsonParseException e1) {

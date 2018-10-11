@@ -36,14 +36,14 @@ public class TotalIonSignalsModifier_7_Test extends TestCase {
 	public void testCalculateMovingAverage_1() {
 
 		signals = null;
-		TotalScanSignalsModifier.calculateMovingAverage(signals, WindowSize.SCANS_5);
+		TotalScanSignalsModifier.calculateMovingAverage(signals, WindowSize.WIDTH_5);
 		assertNull(signals);
 	}
 
 	public void testCalculateMovingAverage_2() {
 
 		signals = new TotalScanSignals(5);
-		TotalScanSignalsModifier.calculateMovingAverage(signals, WindowSize.SCANS_5);
+		TotalScanSignalsModifier.calculateMovingAverage(signals, WindowSize.WIDTH_5);
 		assertNotNull(signals);
 	}
 }

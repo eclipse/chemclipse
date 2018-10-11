@@ -25,16 +25,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	private static final String CATEGORY = "Peak Quantifier";
+	public static final String CATEGORY = "Peak Quantifier";
 
 	public PeakQuantitationTypeSupplier() {
-		super(new DataType[]{DataType.MSD, DataType.CSD});
-	}
-
-	@Override
-	public String getCategory() {
-
-		return CATEGORY;
+		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD});
 	}
 
 	@Override
@@ -52,7 +46,7 @@ public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier im
 	}
 
 	@Override
-	public List<String> getPluginIds() throws Exception {
+	public List<String> getProcessorIds() throws Exception {
 
 		return PeakQuantifier.getPeakQuantifierSupport().getAvailablePeakQuantifierIds();
 	}

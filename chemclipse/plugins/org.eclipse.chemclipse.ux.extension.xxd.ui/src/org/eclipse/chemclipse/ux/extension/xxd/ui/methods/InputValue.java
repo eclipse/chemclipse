@@ -24,6 +24,7 @@ public class InputValue {
 	private Object minValue = null;
 	private Object maxValue = null;
 	private String regularExpression = null;
+	private IntegerValidation integerValidation = null;
 
 	public boolean hasMinMaxConstraint() {
 
@@ -33,6 +34,11 @@ public class InputValue {
 	public boolean hasRegexConstraint() {
 
 		return (regularExpression != null);
+	}
+
+	public boolean hasIntegerValidation() {
+
+		return (integerValidation != null);
 	}
 
 	public Class<?> getRawType() {
@@ -113,5 +119,15 @@ public class InputValue {
 	public void setRegularExpression(String regularExpression) {
 
 		this.regularExpression = regularExpression;
+	}
+
+	public IntegerValidation getIntegerValidation() {
+
+		return integerValidation;
+	}
+
+	public void setIntegerValidation(IntegerValidation integerValidation) {
+
+		this.integerValidation = integerValidation;
 	}
 }

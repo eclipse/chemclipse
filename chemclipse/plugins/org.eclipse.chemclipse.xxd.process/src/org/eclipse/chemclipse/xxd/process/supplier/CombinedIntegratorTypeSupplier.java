@@ -27,13 +27,7 @@ public class CombinedIntegratorTypeSupplier extends AbstractProcessTypeSupplier 
 	public static final String CATEGORY = "Combined Chromatogram and Peak Integrator";
 
 	public CombinedIntegratorTypeSupplier() {
-		super(new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
-	}
-
-	@Override
-	public String getCategory() {
-
-		return CATEGORY;
+		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
 	}
 
 	@Override
@@ -51,7 +45,7 @@ public class CombinedIntegratorTypeSupplier extends AbstractProcessTypeSupplier 
 	}
 
 	@Override
-	public List<String> getPluginIds() throws Exception {
+	public List<String> getProcessorIds() throws Exception {
 
 		return CombinedIntegrator.getCombinedIntegratorSupport().getAvailableIntegratorIds();
 	}

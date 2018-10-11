@@ -58,19 +58,21 @@ public class ProcessTypeSupport {
 		/*
 		 * Add all available process supplier here.
 		 */
-		addProcessSupplier(new BaselineDetectorTypeSupplier());
+		addProcessSupplier(new BaselineDetectorTypeSupplier()); // OK
 		addProcessSupplier(new ChromatogramIdentifierTypeSupplier());
 		addProcessSupplier(new ChromatogramIntegratorTypeSupplier());
 		addProcessSupplier(new ClassifierTypeSupplier());
 		addProcessSupplier(new CombinedIntegratorTypeSupplier());
-		addProcessSupplier(new ChromatogramFilterTypeSupplier());
-		addProcessSupplier(new ChromatogramFilterTypeSupplierMSD());
+		addProcessSupplier(new ChromatogramFilterTypeSupplier()); // OK
+		addProcessSupplier(new ChromatogramFilterTypeSupplierMSD()); // OK
 		addProcessSupplier(new PeakFilterTypeSupplier());
 		addProcessSupplier(new PeakDetectorTypeSupplier());
 		addProcessSupplier(new PeakIdentifierTypeSupplier());
 		addProcessSupplier(new PeakIntegratorTypeSupplier());
 		addProcessSupplier(new PeakQuantitationTypeSupplier());
 		addProcessSupplier(new ChromatogramCalculatorTypeSupplier());
+		// File Export
+		// Report
 	}
 
 	private void addProcessSupplier(IProcessTypeSupplier processTypeSupplier) {
@@ -84,11 +86,12 @@ public class ProcessTypeSupport {
 		 * This map stores the process type supplier to a given processor id.
 		 */
 		try {
-			for(String processorId : processTypeSupplier.getPluginIds()) {
+			for(String processorId : processTypeSupplier.getProcessorIds()) {
 				if(processSupplierMap.containsKey(processorId)) {
 					logger.warn("The following processor id is contained twice: " + processorId);
+				} else {
+					processSupplierMap.put(processorId, processTypeSupplier);
 				}
-				processSupplierMap.put(processorId, processTypeSupplier);
 			}
 		} catch(Exception e) {
 			logger.warn(e);
@@ -180,7 +183,7 @@ public class ProcessTypeSupport {
 			 */
 			if(processTypeSupplier.getCategory().equals(processCategory)) {
 				try {
-					pluginIds = processTypeSupplier.getPluginIds().toArray(new String[]{});
+					pluginIds = processTypeSupplier.getProcessorIds().toArray(new String[]{});
 					return pluginIds;
 				} catch(Exception e) {
 					logger.warn(e);

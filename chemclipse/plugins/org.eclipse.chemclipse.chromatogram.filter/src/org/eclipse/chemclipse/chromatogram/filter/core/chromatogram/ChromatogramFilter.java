@@ -56,13 +56,14 @@ public class ChromatogramFilter {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public static IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			try {
-			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
+				processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 			} catch(Exception e) {
 				logger.error(e.getLocalizedMessage(), e);
 				processingInfo = new ProcessingInfo();
@@ -85,13 +86,14 @@ public class ChromatogramFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public static IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, String filterId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			try {
-			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
+				processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
 			} catch(Exception e) {
 				logger.error(e.getLocalizedMessage(), e);
 				processingInfo = new ProcessingInfo();
@@ -122,11 +124,11 @@ public class ChromatogramFilter {
 			if(element.getAttribute(FILTER_SETTINGS) != null) {
 				try {
 					IChromatogramFilterSettings instance = (IChromatogramFilterSettings)element.createExecutableExtension(FILTER_SETTINGS);
-					supplier.setFilterSettingsClass(instance.getClass());
+					supplier.setSettingsClass(instance.getClass());
 				} catch(CoreException e) {
 					logger.warn(e);
 					// settings class is optional, set null instead
-					supplier.setFilterSettingsClass(null);
+					supplier.setSettingsClass(null);
 				}
 			}
 			filterSupport.add(supplier);
@@ -134,11 +136,11 @@ public class ChromatogramFilter {
 		return filterSupport;
 	}
 
-	// --------------------------------------------private methods
 	/**
 	 * Returns a {@link IChromatogramFilter} instance given by the filterId or
 	 * null, if none is available.
 	 */
+	@SuppressWarnings("rawtypes")
 	private static IChromatogramFilter getChromatogramFilter(final String filterId) {
 
 		IConfigurationElement element;

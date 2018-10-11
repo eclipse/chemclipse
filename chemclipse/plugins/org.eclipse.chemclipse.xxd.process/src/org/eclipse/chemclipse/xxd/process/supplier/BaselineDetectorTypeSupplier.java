@@ -11,10 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
-import java.util.List;
-
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetector;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineDetectorSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineDetectorSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.exceptions.NoBaselineDetectorAvailableException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -25,35 +26,22 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class BaselineDetectorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
 	public static final String CATEGORY = "Baseline Detector";
+	private static final Logger logger = Logger.getLogger(BaselineDetectorTypeSupplier.class);
 
 	public BaselineDetectorTypeSupplier() {
-		super(new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
-	}
-
-	@Override
-	public String getCategory() {
-
-		return CATEGORY;
-	}
-
-	@Override
-	public String getProcessorName(String processorId) throws Exception {
-
-		IBaselineDetectorSupplier baselineSupplier = BaselineDetector.getBaselineDetectorSupport().getBaselineDetectorSupplier(processorId);
-		return baselineSupplier.getDetectorName();
-	}
-
-	@Override
-	public String getProcessorDescription(String processorId) throws Exception {
-
-		IBaselineDetectorSupplier baselineSupplier = BaselineDetector.getBaselineDetectorSupport().getBaselineDetectorSupplier(processorId);
-		return baselineSupplier.getDescription();
-	}
-
-	@Override
-	public List<String> getPluginIds() throws Exception {
-
-		return BaselineDetector.getBaselineDetectorSupport().getAvailableDetectorIds();
+		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
+		try {
+			IBaselineDetectorSupport support = BaselineDetector.getBaselineDetectorSupport();
+			for(String processorId : support.getAvailableDetectorIds()) {
+				IBaselineDetectorSupplier supplier = support.getBaselineDetectorSupplier(processorId);
+				addProcessorId(processorId);
+				addProcessorSettingsClass(processorId, supplier.getSettingsClass());
+				addProcessorName(processorId, supplier.getDetectorName());
+				addProcessorDescription(processorId, supplier.getDescription());
+			}
+		} catch(NoBaselineDetectorAvailableException e) {
+			logger.warn(e);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")

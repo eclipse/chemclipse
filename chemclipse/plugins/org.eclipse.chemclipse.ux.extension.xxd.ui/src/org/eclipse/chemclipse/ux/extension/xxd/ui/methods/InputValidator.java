@@ -52,7 +52,23 @@ public class InputValidator implements IValidator {
 		String message = null;
 		try {
 			if(rawType == int.class || rawType == Integer.class) {
-				Integer.parseInt(value);
+				int parsedValue = Integer.parseInt(value);
+				if(inputValue.hasIntegerValidation()) {
+					switch(inputValue.getIntegerValidation()) {
+						case ODD:
+							if(parsedValue % 2 == 0) {
+								message = "The value must be odd.";
+							}
+							break;
+						case EVEN:
+							if(parsedValue % 2 == 1) {
+								message = "The value must be even.";
+							}
+							break;
+						default:
+							break;
+					}
+				}
 			} else if(rawType == float.class || rawType == Float.class) {
 				float parsedValue = Float.parseFloat(value);
 				if(inputValue.hasMinMaxConstraint()) {

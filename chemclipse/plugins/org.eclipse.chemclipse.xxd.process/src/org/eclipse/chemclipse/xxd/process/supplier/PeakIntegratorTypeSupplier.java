@@ -27,13 +27,7 @@ public class PeakIntegratorTypeSupplier extends AbstractProcessTypeSupplier impl
 	public static final String CATEGORY = "Peak Integrator";
 
 	public PeakIntegratorTypeSupplier() {
-		super(new DataType[]{DataType.MSD, DataType.CSD});
-	}
-
-	@Override
-	public String getCategory() {
-
-		return CATEGORY;
+		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD});
 	}
 
 	@Override
@@ -51,7 +45,7 @@ public class PeakIntegratorTypeSupplier extends AbstractProcessTypeSupplier impl
 	}
 
 	@Override
-	public List<String> getPluginIds() throws Exception {
+	public List<String> getProcessorIds() throws Exception {
 
 		return PeakIntegrator.getPeakIntegratorSupport().getAvailableIntegratorIds();
 	}

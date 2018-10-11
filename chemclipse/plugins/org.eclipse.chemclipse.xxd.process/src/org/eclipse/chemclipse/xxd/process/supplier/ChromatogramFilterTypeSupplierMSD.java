@@ -11,11 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
-import java.util.List;
-
+import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupplierMSD;
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupportMSD;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -28,42 +29,22 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramFilterTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
 	public static final String CATEGORY = "Chromatogram Filter [MSD]";
+	private static final Logger logger = Logger.getLogger(ChromatogramFilterTypeSupplierMSD.class);
 
 	public ChromatogramFilterTypeSupplierMSD() {
-		super(new DataType[]{DataType.MSD});
-	}
-
-	@Override
-	public String getCategory() {
-
-		return CATEGORY;
-	}
-
-	@Override
-	public Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception {
-
-		IChromatogramFilterSupplierMSD filterSupplier = ChromatogramFilterMSD.getChromatogramFilterSupport().getFilterSupplier(processorId);
-		return filterSupplier.getFilterSettingsClass();
-	}
-
-	@Override
-	public String getProcessorName(String processorId) throws Exception {
-
-		IChromatogramFilterSupplierMSD filterSupplier = ChromatogramFilterMSD.getChromatogramFilterSupport().getFilterSupplier(processorId);
-		return filterSupplier.getFilterName();
-	}
-
-	@Override
-	public String getProcessorDescription(String processorId) throws Exception {
-
-		IChromatogramFilterSupplierMSD filterSupplier = ChromatogramFilterMSD.getChromatogramFilterSupport().getFilterSupplier(processorId);
-		return filterSupplier.getDescription();
-	}
-
-	@Override
-	public List<String> getPluginIds() throws Exception {
-
-		return ChromatogramFilterMSD.getChromatogramFilterSupport().getAvailableFilterIds();
+		super(CATEGORY, new DataType[]{DataType.MSD});
+		try {
+			IChromatogramFilterSupportMSD support = ChromatogramFilterMSD.getChromatogramFilterSupport();
+			for(String processorId : support.getAvailableFilterIds()) {
+				IChromatogramFilterSupplierMSD supplier = support.getFilterSupplier(processorId);
+				addProcessorId(processorId);
+				addProcessorSettingsClass(processorId, supplier.getSettingsClass());
+				addProcessorName(processorId, supplier.getFilterName());
+				addProcessorDescription(processorId, supplier.getDescription());
+			}
+		} catch(NoChromatogramFilterSupplierAvailableException e) {
+			logger.warn(e);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -73,7 +54,7 @@ public class ChromatogramFilterTypeSupplierMSD extends AbstractProcessTypeSuppli
 		IProcessingInfo processingInfo;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-			if(processSettings != null && processSettings instanceof IChromatogramFilterSettings) {
+			if(processSettings instanceof IChromatogramFilterSettings) {
 				processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, (IChromatogramFilterSettings)processSettings, processorId, monitor);
 			} else {
 				processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, processorId, monitor);

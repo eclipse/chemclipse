@@ -29,13 +29,7 @@ public class PeakFilterTypeSupplier extends AbstractProcessTypeSupplier implemen
 	public static final String CATEGORY = "Peak Filter [MSD]";
 
 	public PeakFilterTypeSupplier() {
-		super(new DataType[]{DataType.MSD});
-	}
-
-	@Override
-	public String getCategory() {
-
-		return CATEGORY;
+		super(CATEGORY, new DataType[]{DataType.MSD});
 	}
 
 	@Override
@@ -53,7 +47,7 @@ public class PeakFilterTypeSupplier extends AbstractProcessTypeSupplier implemen
 	}
 
 	@Override
-	public List<String> getPluginIds() throws Exception {
+	public List<String> getProcessorIds() throws Exception {
 
 		return PeakFilter.getPeakFilterSupport().getAvailableFilterIds();
 	}

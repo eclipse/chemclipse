@@ -48,6 +48,7 @@ public class BaselineDetector {
 	private static final String DESCRIPTION = "description";
 	private static final String DETECTOR_NAME = "detectorName";
 	private static final String BASELINE_DETECTOR = "baselineDetector";
+	private static final String DETECTOR_SETTINGS = "detectorSettings";
 	/*
 	 * Processing Info
 	 */
@@ -69,6 +70,7 @@ public class BaselineDetector {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, final String detectorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -89,6 +91,7 @@ public class BaselineDetector {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, final String detectorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -116,12 +119,21 @@ public class BaselineDetector {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setDetectorName(element.getAttribute(DETECTOR_NAME));
+			if(element.getAttribute(DETECTOR_SETTINGS) != null) {
+				try {
+					IBaselineDetectorSettings instance = (IBaselineDetectorSettings)element.createExecutableExtension(DETECTOR_SETTINGS);
+					supplier.setSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setSettingsClass(null);
+				}
+			}
 			baselineDetectorSupport.add(supplier);
 		}
 		return baselineDetectorSupport;
 	}
 
-	// --------------------------------------------private methods
 	private static IBaselineDetector getBaselineDetector(final String detectorId) {
 
 		IConfigurationElement element;
@@ -158,7 +170,6 @@ public class BaselineDetector {
 		return null;
 	}
 
-	// --------------------------------------------private methods
 	private static IProcessingInfo getNoDetectorAvailableProcessingInfo() {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();

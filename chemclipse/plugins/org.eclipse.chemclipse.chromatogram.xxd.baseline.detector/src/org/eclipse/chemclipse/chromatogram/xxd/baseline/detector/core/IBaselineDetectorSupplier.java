@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core;
 
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
+
 public interface IBaselineDetectorSupplier {
 
 	/**
@@ -34,4 +36,11 @@ public interface IBaselineDetectorSupplier {
 	 * @return String
 	 */
 	String getDetectorName();
+
+	/**
+	 * TODO: either returns a bean-like class or with annotations ..., with a public default constructor, ... or returns <code>null</code> if no filter settings are associated
+	 * 
+	 * @return
+	 */
+	Class<? extends IBaselineDetectorSettings> getSettingsClass();
 }

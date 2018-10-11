@@ -27,13 +27,7 @@ public class ChromatogramCalculatorTypeSupplier extends AbstractProcessTypeSuppl
 	public static final String CATEGORY = "Chromatogram Calculator";
 
 	public ChromatogramCalculatorTypeSupplier() {
-		super(new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
-	}
-
-	@Override
-	public String getCategory() {
-
-		return CATEGORY;
+		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
 	}
 
 	@Override
@@ -51,7 +45,7 @@ public class ChromatogramCalculatorTypeSupplier extends AbstractProcessTypeSuppl
 	}
 
 	@Override
-	public List<String> getPluginIds() throws Exception {
+	public List<String> getProcessorIds() throws Exception {
 
 		return ChromatogramCalculator.getChromatogramCalculatorSupport().getAvailableCalculatorIds();
 	}

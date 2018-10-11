@@ -18,7 +18,7 @@ public class ChromatogramFilterSupplierMSD implements IChromatogramFilterSupplie
 	private String id = "";
 	private String description = "";
 	private String filterName = "";
-	private Class<? extends IChromatogramFilterSettings> filterSettingsClass;
+	private Class<? extends IChromatogramFilterSettings> settingsClass;
 
 	@Override
 	public String getDescription() {
@@ -76,14 +76,14 @@ public class ChromatogramFilterSupplierMSD implements IChromatogramFilterSupplie
 	}
 
 	@Override
-	public Class<? extends IChromatogramFilterSettings> getFilterSettingsClass() {
+	public Class<? extends IChromatogramFilterSettings> getSettingsClass() {
 
-		return this.filterSettingsClass;
+		return this.settingsClass;
 	}
 
-	protected void setFilterSettingsClass(Class<? extends IChromatogramFilterSettings> filterSettingsClass) {
+	protected void setFilterSettingsClass(Class<? extends IChromatogramFilterSettings> settingsClass) {
 
-		this.filterSettingsClass = filterSettingsClass;
+		this.settingsClass = settingsClass;
 	}
 
 	@Override

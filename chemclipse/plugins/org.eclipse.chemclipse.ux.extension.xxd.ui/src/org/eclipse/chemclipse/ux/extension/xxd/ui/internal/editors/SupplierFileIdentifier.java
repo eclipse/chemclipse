@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -63,6 +64,8 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 			case SEQ:
 				supplier = SequenceConverter.getSequenceConverterSupport().getSupplier();
 				break;
+			case MTH:
+				supplier = MethodConverter.getMethodConverterSupport().getSupplier();
 			default:
 				// No action
 		}
@@ -96,6 +99,9 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case SEQ:
 				type = TYPE_SEQ;
+				break;
+			case MTH:
+				type = TYPE_MTH;
 				break;
 			default:
 				type = "";

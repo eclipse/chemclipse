@@ -15,9 +15,9 @@ package org.eclipse.chemclipse.numeric.statistics;
  * Determines the window size for the moving average calculation.
  */
 public enum WindowSize {
-	SCANS_3(3), //
-	SCANS_5(5), //
-	SCANS_7(7), //
+	WIDTH_3(3), //
+	WIDTH_5(5), //
+	WIDTH_7(7), //
 	WIDTH_9(9), //
 	WIDTH_11(11), //
 	WIDTH_13(13), //

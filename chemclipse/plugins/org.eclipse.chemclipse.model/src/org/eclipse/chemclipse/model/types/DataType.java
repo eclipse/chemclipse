@@ -23,5 +23,6 @@ public enum DataType {
 	NMR, // Nuclear magnetic resonance
 	CAL, // Retention Index Calibration
 	PCR, // Polymerase Chain Reaction
-	SEQ // Sequences
+	SEQ, // Sequences
+	MTH // Methods
 }

@@ -31,13 +31,7 @@ public class PeakDetectorTypeSupplier extends AbstractProcessTypeSupplier implem
 	public static final String CATEGORY = "Peak Detector";
 
 	public PeakDetectorTypeSupplier() {
-		super(new DataType[]{DataType.MSD, DataType.CSD});
-	}
-
-	@Override
-	public String getCategory() {
-
-		return CATEGORY;
+		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD});
 	}
 
 	@Override
@@ -55,7 +49,7 @@ public class PeakDetectorTypeSupplier extends AbstractProcessTypeSupplier implem
 	}
 
 	@Override
-	public List<String> getPluginIds() throws Exception {
+	public List<String> getProcessorIds() throws Exception {
 
 		return PeakDetectorMSD.getPeakDetectorSupport().getAvailablePeakDetectorIds();
 	}

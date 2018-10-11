@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.model.core.IMeasurement;
@@ -32,6 +33,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PlateEditorPCR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor;
@@ -82,6 +84,9 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case SEQ:
 				supplier = SequenceConverter.getSequenceConverterSupport().getSupplier();
+				break;
+			case MTH:
+				supplier = MethodConverter.getMethodConverterSupport().getSupplier();
 				break;
 			default:
 				// No action
@@ -158,6 +163,15 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				tooltip = SequenceEditor.TOOLTIP;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_SEQUENCE_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_SEQUENCE_UPDATE_OVERVIEW;
+				break;
+			case MTH:
+				type = TYPE_MTH;
+				elementId = ProcessMethodEditor.ID;
+				contributionURI = ProcessMethodEditor.CONTRIBUTION_URI;
+				iconURI = ProcessMethodEditor.ICON_URI;
+				tooltip = ProcessMethodEditor.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_METHOD_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_METHOD_UPDATE_OVERVIEW;
 				break;
 			default:
 				type = "";

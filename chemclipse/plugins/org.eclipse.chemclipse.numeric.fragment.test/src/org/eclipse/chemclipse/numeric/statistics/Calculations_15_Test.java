@@ -51,7 +51,7 @@ public class Calculations_15_Test extends TestCase {
 
 	public void testGetWindowReducedLength_1() {
 
-		Calculations.smooth(values, WindowSize.SCANS_3);
+		Calculations.smooth(values, WindowSize.WIDTH_3);
 		double[] smoothed;
 		smoothed = new double[13];
 		smoothed[0] = 600.0d;

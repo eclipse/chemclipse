@@ -42,5 +42,5 @@ public interface IChromatogramFilterSupplier {
 	 * 
 	 * @return
 	 */
-	Class<? extends IChromatogramFilterSettings> getFilterSettingsClass();
+	Class<? extends IChromatogramFilterSettings> getSettingsClass();
 }

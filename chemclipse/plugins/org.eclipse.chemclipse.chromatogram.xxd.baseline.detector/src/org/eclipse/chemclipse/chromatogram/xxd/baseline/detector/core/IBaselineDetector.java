@@ -33,6 +33,7 @@ public interface IBaselineDetector {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
 
 	/**
@@ -42,6 +43,7 @@ public interface IBaselineDetector {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
 
 	/**
@@ -52,5 +54,6 @@ public interface IBaselineDetector {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
 }

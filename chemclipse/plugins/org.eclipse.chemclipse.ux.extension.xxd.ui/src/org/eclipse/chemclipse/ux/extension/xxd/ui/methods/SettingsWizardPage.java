@@ -17,18 +17,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,36 +56,71 @@ public class SettingsWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		//
-		for(WidgetItem widgetItem : widgetItems) {
-			//
-			InputValue inputValue = widgetItem.getInputValue();
-			//
-			Label label = new Label(composite, SWT.NONE);
-			label.setText(inputValue.getName());
-			//
-			Text text = new Text(composite, SWT.BORDER);
-			text.setText(inputValue.getValue());
-			text.setToolTipText(inputValue.getDescription());
-			text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			//
-			widgetItem.setText(text);
-			InputValidator inputValidator = new InputValidator(inputValue);
-			widgetItem.setInputValidator(inputValidator);
-			ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
-			widgetItem.setControlDecoration(controlDecoration);
-			//
-			text.addModifyListener(new ModifyListener() {
-
-				@Override
-				public void modifyText(ModifyEvent e) {
-
-					validate();
-				}
-			});
+		if(widgetItems.size() > 0) {
+			createOptionWidgets(composite);
+		} else {
+			createNoOptionsMessage(composite);
 		}
 		//
 		setControl(composite);
 		validate();
+	}
+
+	private void createOptionWidgets(Composite parent) {
+
+		for(WidgetItem widgetItem : widgetItems) {
+			//
+			Label label = new Label(parent, SWT.NONE);
+			label.setText(widgetItem.getInputValue().getName());
+			//
+			try {
+				widgetItem.initializeControl(parent);
+				Control control = widgetItem.getControl();
+				addKeyListener(control);
+				addMouseListener(control);
+			} catch(Exception e) {
+				logger.warn(e);
+				Label info = new Label(parent, SWT.NONE);
+				info.setText("Error to create the widget.");
+			}
+		}
+	}
+
+	private void addKeyListener(Control control) {
+
+		control.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				validate();
+			}
+		});
+	}
+
+	private void addMouseListener(Control control) {
+
+		control.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				validate();
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+				validate();
+			}
+		});
+	}
+
+	private void createNoOptionsMessage(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("This processor offers no options.");
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	private void validate() {
@@ -94,21 +128,8 @@ public class SettingsWizardPage extends WizardPage {
 		String message = null;
 		exitloop:
 		for(WidgetItem widgetItem : widgetItems) {
-			/*
-			 * Validation
-			 */
-			InputValidator inputValidator = widgetItem.getInputValidator();
-			ControlDecoration controlDecoration = widgetItem.getControlDecoration();
-			Text text = widgetItem.getText();
-			//
-			IStatus status = inputValidator.validate(text.getText().trim());
-			if(status.isOK()) {
-				controlDecoration.hide();
-			} else {
-				message = status.getMessage();
-				controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
-				controlDecoration.showHoverText(status.getMessage());
-				controlDecoration.show();
+			message = widgetItem.validate();
+			if(message != null) {
 				break exitloop;
 			}
 		}
@@ -122,7 +143,7 @@ public class SettingsWizardPage extends WizardPage {
 
 	private String getJsonSettings() {
 
-		String settings = "{}";
+		String settings = SettingsSupport.EMPTY_JSON_SETTINGS;
 		try {
 			Map<String, Object> values = new HashMap<>();
 			for(WidgetItem widgetItem : widgetItems) {

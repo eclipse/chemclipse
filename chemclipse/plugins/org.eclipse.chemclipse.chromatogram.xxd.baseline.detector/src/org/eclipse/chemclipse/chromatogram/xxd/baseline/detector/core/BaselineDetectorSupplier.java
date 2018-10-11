@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core;
 
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
+
 public class BaselineDetectorSupplier implements IBaselineDetectorSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String detectorName = "";
+	private Class<? extends IBaselineDetectorSettings> settingsClass;
 
 	@Override
 	public String getId() {
@@ -72,7 +75,17 @@ public class BaselineDetectorSupplier implements IBaselineDetectorSupplier {
 		}
 	}
 
-	// ------------------------------------hashCode, equals, toString
+	@Override
+	public Class<? extends IBaselineDetectorSettings> getSettingsClass() {
+
+		return this.settingsClass;
+	}
+
+	protected void setSettingsClass(Class<? extends IBaselineDetectorSettings> settingsClass) {
+
+		this.settingsClass = settingsClass;
+	}
+
 	@Override
 	public boolean equals(Object other) {
 
@@ -109,5 +122,4 @@ public class BaselineDetectorSupplier implements IBaselineDetectorSupplier {
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------------hashCode, equals, toString
 }
