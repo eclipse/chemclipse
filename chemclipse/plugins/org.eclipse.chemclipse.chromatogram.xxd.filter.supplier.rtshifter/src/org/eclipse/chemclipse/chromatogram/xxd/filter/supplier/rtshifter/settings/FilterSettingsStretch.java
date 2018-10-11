@@ -20,11 +20,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class FilterSettingsStretch extends AbstractChromatogramFilterSettings {
 
-	@JsonProperty(value = "Scan Delay (Minutes)", defaultValue = "0")
+	@JsonProperty(value = "Scan Delay (Milliseconds)", defaultValue = "0")
 	@JsonPropertyDescription(value = "Set the scan delay.")
 	@IntSettingsProperty(minValue = PreferenceSupplier.STRETCH_MILLISECONDS_SCAN_DELAY_MIN, maxValue = PreferenceSupplier.STRETCH_MILLISECONDS_SCAN_DELAY_MAX)
 	private int scanDelay = 0;
-	@JsonProperty(value = "Chromatogram Runtime (Minutes)", defaultValue = "300000")
+	@JsonProperty(value = "Chromatogram Runtime (Milliseconds)", defaultValue = "300000")
 	@JsonPropertyDescription(value = "Set the length of the chromatogram.")
 	@IntSettingsProperty(minValue = PreferenceSupplier.STRETCH_MILLISECONDS_LENGTH_MIN, maxValue = PreferenceSupplier.STRETCH_MILLISECONDS_LENGTH_MAX)
 	private int chromatogramLength = 300000;
