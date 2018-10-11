@@ -37,7 +37,7 @@ public class BackfoldingPeakDetectorSupport {
 
 	private static float NORMALIZATION_BASE = 100000.0f;
 	private static int CONSECUTIVE_SCAN_STEPS = 3;
-	private static WindowSize MOVING_AVERAGE_WINDOW = WindowSize.SCANS_5;
+	private static WindowSize MOVING_AVERAGE_WINDOW = WindowSize.WIDTH_5;
 	private static double threshold = 0.005d;
 
 	/**
