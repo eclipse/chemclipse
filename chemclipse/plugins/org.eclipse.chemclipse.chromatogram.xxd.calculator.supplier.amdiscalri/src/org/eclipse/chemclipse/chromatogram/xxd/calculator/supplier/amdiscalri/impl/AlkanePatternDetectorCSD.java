@@ -63,7 +63,7 @@ public class AlkanePatternDetectorCSD {
 				peakDetectorSettings.setThreshold(Threshold.LOW);
 				peakDetectorSettings.setIncludeBackground(false);
 				peakDetectorSettings.setMinimumSignalToNoiseRatio(50.0f);
-				peakDetectorSettings.setMovingAverageWindowSize(WindowSize.SCANS_5);
+				peakDetectorSettings.setMovingAverageWindowSize(WindowSize.WIDTH_5);
 				peakDetectorCSD.detect(chromatogramSelectionCSD, peakDetectorSettings, monitor);
 				/*
 				 * Peak integrator
