@@ -13,13 +13,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.in
 
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakIntegrator {
 
@@ -41,7 +40,7 @@ public interface IPeakIntegrator {
 	 * @param integrationSettings
 	 * @return {@link TrapezoidPeakIntegrationResult}
 	 */
-	IPeakIntegrationResult integrate(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException;
+	IPeakIntegrationResult integrate(IPeak peak, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException;
 
 	/**
 	 * Integrates a list of peaks and returns a results object.
@@ -50,5 +49,5 @@ public interface IPeakIntegrator {
 	 * @param integrationSettings
 	 * @return {@link TrapezoidPeakIntegrationResults}
 	 */
-	IPeakIntegrationResults integrate(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException;
+	IPeakIntegrationResults integrate(List<? extends IPeak> peaks, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException;
 }

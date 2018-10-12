@@ -19,14 +19,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNo
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.ITrapezoidPeakIntegratorSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.TrapezoidPeakIntegratorSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.PeakIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakIntegrator extends AbstractPeakIntegrator {
@@ -36,17 +35,19 @@ public class PeakIntegrator extends AbstractPeakIntegrator {
 	@Override
 	public IProcessingInfo integrate(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		try {
-			super.validate(peak, peakIntegrationSettings);
-			ITrapezoidPeakIntegratorSupport firstDerivativePeakIntegratorSupport = new TrapezoidPeakIntegratorSupport();
-			IPeakIntegrationResult peakIntegrationResult = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResult(peak, peakIntegrationSettings, monitor);
-			IPeakIntegrationResults peakIntegrationResults = new PeakIntegrationResults();
-			peakIntegrationResults.add(peakIntegrationResult);
-			processingInfo.setProcessingResult(peakIntegrationResults);
-		} catch(ValueMustNotBeNullException e) {
-			logger.warn(e);
-			addIntegratorExceptionInfo(processingInfo);
+		IProcessingInfo processingInfo = super.validate(peak, peakIntegrationSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(peakIntegrationSettings instanceof PeakIntegrationSettings) {
+				try {
+					PeakIntegratorSupport firstDerivativePeakIntegratorSupport = new PeakIntegratorSupport();
+					IPeakIntegrationResult peakIntegrationResult = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResult(peak, (PeakIntegrationSettings)peakIntegrationSettings, monitor);
+					IPeakIntegrationResults peakIntegrationResults = new PeakIntegrationResults();
+					peakIntegrationResults.add(peakIntegrationResult);
+					processingInfo.setProcessingResult(peakIntegrationResults);
+				} catch(ValueMustNotBeNullException e) {
+					logger.warn(e);
+				}
+			}
 		}
 		return processingInfo;
 	}
@@ -54,22 +55,24 @@ public class PeakIntegrator extends AbstractPeakIntegrator {
 	@Override
 	public IProcessingInfo integrate(IPeak peak, IProgressMonitor monitor) {
 
-		IPeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
+		PeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
 		return integrate(peak, peakIntegrationSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo integrate(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		try {
-			super.validate(peaks, peakIntegrationSettings);
-			ITrapezoidPeakIntegratorSupport firstDerivativePeakIntegratorSupport = new TrapezoidPeakIntegratorSupport();
-			IPeakIntegrationResults peakIntegrationResults = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResults(peaks, peakIntegrationSettings, monitor);
-			processingInfo.setProcessingResult(peakIntegrationResults);
-		} catch(ValueMustNotBeNullException e) {
-			logger.warn(e);
-			addIntegratorExceptionInfo(processingInfo);
+		IProcessingInfo processingInfo = super.validate(peaks, peakIntegrationSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(peakIntegrationSettings instanceof PeakIntegrationSettings) {
+				try {
+					PeakIntegratorSupport firstDerivativePeakIntegratorSupport = new PeakIntegratorSupport();
+					IPeakIntegrationResults peakIntegrationResults = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResults(peaks, (PeakIntegrationSettings)peakIntegrationSettings, monitor);
+					processingInfo.setProcessingResult(peakIntegrationResults);
+				} catch(ValueMustNotBeNullException e) {
+					logger.warn(e);
+				}
+			}
 		}
 		return processingInfo;
 	}
@@ -77,35 +80,34 @@ public class PeakIntegrator extends AbstractPeakIntegrator {
 	@Override
 	public IProcessingInfo integrate(List<? extends IPeak> peaks, IProgressMonitor monitor) {
 
-		IPeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
+		PeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
 		return integrate(peaks, peakIntegrationSettings, monitor);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		try {
-			super.validate(chromatogramSelection, peakIntegrationSettings);
-			ITrapezoidPeakIntegratorSupport firstDerivativePeakIntegratorSupport = new TrapezoidPeakIntegratorSupport();
-			IPeakIntegrationResults peakIntegrationResults = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResults(chromatogramSelection, peakIntegrationSettings, monitor);
-			processingInfo.setProcessingResult(peakIntegrationResults);
-		} catch(ValueMustNotBeNullException e) {
-			logger.warn(e);
-			addIntegratorExceptionInfo(processingInfo);
+		IProcessingInfo processingInfo = super.validate(chromatogramSelection, peakIntegrationSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(peakIntegrationSettings instanceof PeakIntegrationSettings) {
+				try {
+					PeakIntegratorSupport firstDerivativePeakIntegratorSupport = new PeakIntegratorSupport();
+					IPeakIntegrationResults peakIntegrationResults = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResults(chromatogramSelection, (PeakIntegrationSettings)peakIntegrationSettings, monitor);
+					processingInfo.setProcessingResult(peakIntegrationResults);
+				} catch(ValueMustNotBeNullException e) {
+					logger.warn(e);
+				}
+			}
 		}
 		return processingInfo;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IPeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
+		PeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
 		return integrate(chromatogramSelection, peakIntegrationSettings, monitor);
-	}
-
-	private void addIntegratorExceptionInfo(IProcessingInfo processingInfo) {
-
-		processingInfo.addErrorMessage("Peak Integrator Trapezoid", "The peak(s) or settings couldn't be validated correctly.");
 	}
 }

@@ -33,6 +33,7 @@ import org.osgi.service.event.EventHandler;
 public class PeakIntegratorHandler implements EventHandler {
 
 	private static final Logger logger = Logger.getLogger(PeakIntegratorHandler.class);
+	@SuppressWarnings("rawtypes")
 	private static IChromatogramSelection chromatogramSelection;
 
 	@Execute
@@ -69,6 +70,7 @@ public class PeakIntegratorHandler implements EventHandler {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void handleEvent(Event event) {
 

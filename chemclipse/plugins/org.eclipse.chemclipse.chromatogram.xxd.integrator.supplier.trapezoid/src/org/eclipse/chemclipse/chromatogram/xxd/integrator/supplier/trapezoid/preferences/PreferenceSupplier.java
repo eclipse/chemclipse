@@ -22,8 +22,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.II
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.TrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.IonSettingUtil;
@@ -93,9 +92,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return settings;
 	}
 
-	public static ITrapezoidPeakIntegrationSettings getPeakIntegrationSettings() {
+	public static PeakIntegrationSettings getPeakIntegrationSettings() {
 
-		ITrapezoidPeakIntegrationSettings integrationSettings = new TrapezoidPeakIntegrationSettings();
+		PeakIntegrationSettings integrationSettings = new PeakIntegrationSettings();
 		// baselineSupport.setBaselineHoldOn(5000, 100000);
 		integrationSettings.setIncludeBackground(getPeakAreaIncludeBackground());
 		/*

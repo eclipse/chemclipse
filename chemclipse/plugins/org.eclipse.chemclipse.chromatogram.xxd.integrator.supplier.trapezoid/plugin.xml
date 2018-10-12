@@ -27,7 +27,7 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.peakIntegrator"
             integrator="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core.PeakIntegrator"
             integratorName="Peak Integrator Trapezoid"
-            integratorSettings="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.TrapezoidPeakIntegrationSettings">
+            integratorSettings="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings">
       </PeakIntegratorSupplier>
    </extension>
    <extension

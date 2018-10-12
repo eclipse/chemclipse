@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core;
 
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.ISegment;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.Segment;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.SegmentAreaCalculator;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -19,10 +23,6 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.ISegment;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.Segment;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.SegmentAreaCalculator;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 
@@ -30,6 +30,7 @@ public class BackgroundIntegrator implements IBackgroundIntegrator {
 
 	private static final Logger logger = Logger.getLogger(BackgroundIntegrator.class);
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public double integrate(IChromatogramSelection chromatogramSelection) {
 

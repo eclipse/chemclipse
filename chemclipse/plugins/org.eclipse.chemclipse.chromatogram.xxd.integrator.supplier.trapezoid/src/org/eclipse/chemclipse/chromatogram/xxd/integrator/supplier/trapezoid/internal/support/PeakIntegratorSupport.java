@@ -13,13 +13,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.in
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IPeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.PeakIntegrator;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -30,10 +30,9 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class TrapezoidPeakIntegratorSupport implements ITrapezoidPeakIntegratorSupport {
+public class PeakIntegratorSupport {
 
-	@Override
-	public IPeakIntegrationResults calculatePeakIntegrationResults(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
+	public IPeakIntegrationResults calculatePeakIntegrationResults(List<? extends IPeak> peaks, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		/*
 		 * Get the peak integration results.
@@ -49,8 +48,8 @@ public class TrapezoidPeakIntegratorSupport implements ITrapezoidPeakIntegratorS
 		return peakIntegrationResults;
 	}
 
-	@Override
-	public IPeakIntegrationResults calculatePeakIntegrationResults(IChromatogramSelection chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
+	@SuppressWarnings("rawtypes")
+	public IPeakIntegrationResults calculatePeakIntegrationResults(IChromatogramSelection chromatogramSelection, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		/*
 		 * Get the chromatogram.
@@ -73,8 +72,7 @@ public class TrapezoidPeakIntegratorSupport implements ITrapezoidPeakIntegratorS
 		return calculatePeakIntegrationResults(peaks, peakIntegrationSettings, monitor);
 	}
 
-	@Override
-	public IPeakIntegrationResult calculatePeakIntegrationResult(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
+	public IPeakIntegrationResult calculatePeakIntegrationResult(IPeak peak, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		monitor.subTask("Integrate the peak");
 		IPeakIntegrator peakIntegrator = new PeakIntegrator();

@@ -14,27 +14,20 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.in
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.TestPathHelper;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.BackgroundIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.ChromatogramIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IBackgroundIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IChromatogramIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IPeakIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.TrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class Integrator_1_ITest extends ChromatogramImportOCBTestCase {
 
 	private IChromatogramIntegrator chromatogramIntegrator;
 	private IBackgroundIntegrator backgroundIntegrator;
 	private IPeakIntegrator peakIntegrator;
-	private IPeakIntegrationSettings peakIntegrationSettings;
+	private PeakIntegrationSettings peakIntegrationSettings;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -44,7 +37,7 @@ public class Integrator_1_ITest extends ChromatogramImportOCBTestCase {
 		chromatogramIntegrator = new ChromatogramIntegrator();
 		backgroundIntegrator = new BackgroundIntegrator();
 		peakIntegrator = new PeakIntegrator();
-		peakIntegrationSettings = new TrapezoidPeakIntegrationSettings();
+		peakIntegrationSettings = new PeakIntegrationSettings();
 	}
 
 	@Override

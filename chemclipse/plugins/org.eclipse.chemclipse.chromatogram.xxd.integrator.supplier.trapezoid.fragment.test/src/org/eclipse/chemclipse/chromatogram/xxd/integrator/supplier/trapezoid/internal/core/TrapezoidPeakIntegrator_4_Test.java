@@ -14,17 +14,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.in
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IPeakIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.PeakIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.TrapezoidPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
  * @author eselmeister
@@ -34,7 +30,7 @@ public class TrapezoidPeakIntegrator_4_Test extends DefaultPeakTestCase {
 	private IPeakIntegrator integrator;
 	private IPeakIntegrationResult result;
 	private IPeakIntegrationResults results;
-	private ITrapezoidPeakIntegrationSettings peakIntegrationSettings;
+	private PeakIntegrationSettings peakIntegrationSettings;
 	private List<IPeakMSD> peaks;
 
 	@Override
@@ -42,7 +38,7 @@ public class TrapezoidPeakIntegrator_4_Test extends DefaultPeakTestCase {
 
 		super.setUp();
 		integrator = new PeakIntegrator();
-		peakIntegrationSettings = new TrapezoidPeakIntegrationSettings();
+		peakIntegrationSettings = new PeakIntegrationSettings();
 		peaks = new ArrayList<IPeakMSD>();
 		for(int i = 1; i <= 100; i++) {
 			peaks.add(super.getPeak());

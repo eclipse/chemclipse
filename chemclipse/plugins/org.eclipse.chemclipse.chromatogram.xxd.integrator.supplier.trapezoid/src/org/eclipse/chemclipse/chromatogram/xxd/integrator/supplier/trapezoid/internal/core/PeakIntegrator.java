@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegratio
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.ISegment;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.Segment;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.SegmentAreaCalculator;
@@ -68,18 +68,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class PeakIntegrator implements IPeakIntegrator {
 
 	@Override
-	public IPeakIntegrationResult integrate(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
+	public IPeakIntegrationResult integrate(IPeak peak, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		validatePeak(peak);
 		validateSettings(peakIntegrationSettings);
 		/*
 		 * The background shall be not included normally.
 		 */
-		boolean includeBackground = false;
-		if(peakIntegrationSettings instanceof ITrapezoidPeakIntegrationSettings) {
-			includeBackground = ((ITrapezoidPeakIntegrationSettings)peakIntegrationSettings).isIncludeBackground();
-		}
-		//
+		boolean includeBackground = peakIntegrationSettings.isIncludeBackground();
 		ISettingStatus settingStatus;
 		PeakIntegrationResult result = null;
 		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
@@ -98,7 +94,7 @@ public class PeakIntegrator implements IPeakIntegrator {
 	}
 
 	@Override
-	public IPeakIntegrationResults integrate(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
+	public IPeakIntegrationResults integrate(List<? extends IPeak> peaks, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		validatePeakList(peaks);
 		validateSettings(peakIntegrationSettings);

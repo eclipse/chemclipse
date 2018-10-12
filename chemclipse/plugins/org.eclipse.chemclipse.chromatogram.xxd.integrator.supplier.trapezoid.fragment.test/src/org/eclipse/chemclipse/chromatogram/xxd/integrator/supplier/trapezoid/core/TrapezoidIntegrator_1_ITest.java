@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ICombinedIntegr
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.ChromatogramImportTestCase;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.TrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
@@ -41,7 +41,7 @@ public class TrapezoidIntegrator_1_ITest extends ChromatogramImportTestCase {
 		super.setUp();
 		integrator = new CombinedIntegrator();
 		chromatogramIntegrationSettings = new ChromatogramIntegrationSettings();
-		peakIntegrationSettings = new TrapezoidPeakIntegrationSettings();
+		peakIntegrationSettings = new PeakIntegrationSettings();
 		combinedIntegrationSettings = new CombinedIntegrationSettings(chromatogramIntegrationSettings, peakIntegrationSettings);
 	}
 

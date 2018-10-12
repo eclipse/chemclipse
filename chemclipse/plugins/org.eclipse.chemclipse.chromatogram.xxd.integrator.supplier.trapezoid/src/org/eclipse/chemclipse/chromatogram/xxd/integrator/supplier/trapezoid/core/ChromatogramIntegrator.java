@@ -31,7 +31,7 @@ public class ChromatogramIntegrator extends AbstractChromatogramIntegrator {
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramIntegrationSettings instanceof ChromatogramIntegrationSettings) {
 				ChromatogramIntegratorSupport chromatogramIntegratorSupport = new ChromatogramIntegratorSupport();
-				IChromatogramIntegrationResults chromatogramIntegrationResults = chromatogramIntegratorSupport.calculateChromatogramIntegrationResults(chromatogramSelection, chromatogramIntegrationSettings, monitor);
+				IChromatogramIntegrationResults chromatogramIntegrationResults = chromatogramIntegratorSupport.calculateChromatogramIntegrationResults(chromatogramSelection, (ChromatogramIntegrationSettings)chromatogramIntegrationSettings, monitor);
 				processingInfo.setProcessingResult(chromatogramIntegrationResults);
 			}
 		}

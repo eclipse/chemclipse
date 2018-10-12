@@ -21,5 +21,6 @@ public interface IChromatogramIntegrator {
 	 * @param chromatogram
 	 * @return double
 	 */
+	@SuppressWarnings("rawtypes")
 	double integrate(IChromatogramSelection chromatogramSelection);
 }

@@ -13,8 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.in
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResult;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.TrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.model.support.IntegrationConstraint;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -29,7 +28,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 
 	private IPeakIntegrator integrator;
 	private IPeakIntegrationResult result;
-	private ITrapezoidPeakIntegrationSettings peakIntegrationSettings;
+	private PeakIntegrationSettings peakIntegrationSettings;
 	private String INTEGRATOR = "Integrator Trapezoid";
 	private String INTEGRATOR_TIC = "Integrator Trapezoid: TIC";
 
@@ -38,7 +37,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 
 		super.setUp();
 		integrator = new PeakIntegrator();
-		peakIntegrationSettings = new TrapezoidPeakIntegrationSettings();
+		peakIntegrationSettings = new PeakIntegrationSettings();
 	}
 
 	@Override

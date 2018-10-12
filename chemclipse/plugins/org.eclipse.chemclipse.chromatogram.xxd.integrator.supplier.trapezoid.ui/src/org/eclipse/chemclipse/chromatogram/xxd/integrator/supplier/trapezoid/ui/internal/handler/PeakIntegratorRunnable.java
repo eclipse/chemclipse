@@ -16,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.notifier.IntegrationResultUpdateNotifier;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -33,8 +33,10 @@ public class PeakIntegratorRunnable implements IRunnableWithProgress {
 
 	private static final Logger logger = Logger.getLogger(PeakIntegratorRunnable.class);
 	private static final String PEAK_INTEGRATOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.peakIntegrator";
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 
+	@SuppressWarnings("rawtypes")
 	public PeakIntegratorRunnable(IChromatogramSelection chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
@@ -45,7 +47,7 @@ public class PeakIntegratorRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Integrator Trapezoid", IProgressMonitor.UNKNOWN);
 			//
-			ITrapezoidPeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
+			PeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
 			IProcessingInfo processingInfo = PeakIntegrator.integrate(chromatogramSelection, peakIntegrationSettings, PEAK_INTEGRATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			/*
@@ -63,7 +65,6 @@ public class PeakIntegratorRunnable implements IRunnableWithProgress {
 		}
 	}
 
-	// ---------------------------------------------------------private methods
 	/*
 	 * Updates the selection using the GUI thread.
 	 */
@@ -82,5 +83,4 @@ public class PeakIntegratorRunnable implements IRunnableWithProgress {
 			}
 		});
 	}
-	// ---------------------------------------------------------private methods
 }

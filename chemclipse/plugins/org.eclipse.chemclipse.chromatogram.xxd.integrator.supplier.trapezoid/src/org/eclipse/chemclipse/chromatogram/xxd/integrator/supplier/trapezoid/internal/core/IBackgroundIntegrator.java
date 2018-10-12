@@ -22,5 +22,6 @@ public interface IBackgroundIntegrator {
 	 *            selection
 	 * @return double
 	 */
+	@SuppressWarnings("rawtypes")
 	double integrate(IChromatogramSelection chromatogramSelection);
 }
