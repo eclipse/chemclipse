@@ -12,24 +12,23 @@
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.AbstractChromatogramIntegrationSettings;
+import org.eclipse.chemclipse.support.settings.IonsSelectionSettingProperty;
 
-/**
- * @author eselmeister
- */
-public class SumareaIntegrationSettings extends AbstractChromatogramIntegrationSettings implements ISumareaIntegrationSettings {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-	private String selectedIons;
+public class ChromatogramIntegrationSettings extends AbstractChromatogramIntegrationSettings {
 
-	public SumareaIntegrationSettings() {
-	}
+	@JsonProperty(value = "Ions To Integrate", defaultValue = "")
+	@JsonPropertyDescription(value = "List the ions to integrate, separated by a semicolon. Empty means TIC.")
+	@IonsSelectionSettingProperty
+	private String selectedIons = "";
 
-	@Override
 	public String getSelectedIons() {
 
 		return selectedIons;
 	}
 
-	@Override
 	public void setSelectedIons(String selectedIons) {
 
 		this.selectedIons = selectedIons;

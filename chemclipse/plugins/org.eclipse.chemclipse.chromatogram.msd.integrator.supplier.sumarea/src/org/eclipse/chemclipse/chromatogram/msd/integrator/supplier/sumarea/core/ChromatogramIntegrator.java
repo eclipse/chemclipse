@@ -11,54 +11,43 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.core;
 
-import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.support.ISumareaChromatogramIntegratorSupport;
-import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.support.SumareaChromatogramIntegratorSupport;
+import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.support.ChromatogramIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram.AbstractChromatogramIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramIntegrator extends AbstractChromatogramIntegrator {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramIntegrator.class);
-
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		try {
-			super.validate(chromatogramSelection, chromatogramIntegrationSettings);
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+		IProcessingInfo processingInfo = super.validate(chromatogramSelection, chromatogramIntegrationSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD && chromatogramIntegrationSettings instanceof ChromatogramIntegrationSettings) {
 				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-				ISumareaChromatogramIntegratorSupport sumareaChromatogramIntegratorSupport = new SumareaChromatogramIntegratorSupport();
-				IChromatogramIntegrationResults chromatogramIntegrationResults = sumareaChromatogramIntegratorSupport.calculateChromatogramIntegrationResults(chromatogramSelectionMSD, chromatogramIntegrationSettings, monitor);
+				ChromatogramIntegrationSettings settings = (ChromatogramIntegrationSettings)chromatogramIntegrationSettings;
+				ChromatogramIntegratorSupport chromatogramIntegratorSupport = new ChromatogramIntegratorSupport();
+				IChromatogramIntegrationResults chromatogramIntegrationResults = chromatogramIntegratorSupport.calculateChromatogramIntegrationResults(chromatogramSelectionMSD, settings, monitor);
 				processingInfo.setProcessingResult(chromatogramIntegrationResults);
 			} else {
-				addIntegratorExceptionInfo(processingInfo);
+				processingInfo.addErrorMessage("Sumarea Integrator", "The settings and/or chromatogram are not of type MSD.");
 			}
-		} catch(ValueMustNotBeNullException e) {
-			logger.warn(e);
-			addIntegratorExceptionInfo(processingInfo);
 		}
 		return processingInfo;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		IChromatogramIntegrationSettings chromatogramIntegrationSettings = PreferenceSupplier.getIntegrationSettings();
 		return integrate(chromatogramSelection, chromatogramIntegrationSettings, monitor);
-	}
-
-	private void addIntegratorExceptionInfo(IProcessingInfo processingInfo) {
-
-		processingInfo.addErrorMessage("Sumarea Integrator", "The peak(s) or settings couldn't be validated correctly.");
 	}
 }

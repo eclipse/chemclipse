@@ -15,8 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.SumareaIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -66,25 +65,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	/**
 	 * Returns a settings instance.
 	 */
-	public static IChromatogramIntegrationSettings getIntegrationSettings() {
+	public static ChromatogramIntegrationSettings getIntegrationSettings() {
 
-		SumareaIntegrationSettings integrationSettings = new SumareaIntegrationSettings();
-		String ions = getIons(P_SELECTED_IONS, DEF_SELECTED_IONS);
+		ChromatogramIntegrationSettings integrationSettings = new ChromatogramIntegrationSettings();
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		String ions = preferences.get(P_SELECTED_IONS, DEF_SELECTED_IONS);
 		integrationSettings.setSelectedIons(ions);
 		return integrationSettings;
-	}
-
-	/**
-	 * Returns a list of ions to preserve stored in the settings.
-	 * 
-	 * @return List<Integer>
-	 */
-	public static String getIons(String preference, String def) {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		/*
-		 * E.g. "18;28;84;207" to 18 28 84 207
-		 */
-		return preferences.get(preference, def);
 	}
 }

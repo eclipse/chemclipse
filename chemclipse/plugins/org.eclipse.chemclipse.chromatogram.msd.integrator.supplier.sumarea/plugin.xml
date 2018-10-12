@@ -7,7 +7,8 @@
             description="This integrator calculates the area of all ions of the chromatogram."
             id="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.chromatogramIntegrator"
             integrator="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.core.ChromatogramIntegrator"
-            integratorName="Sumarea Chromatogram Integrator">
+            integratorName="Sumarea Chromatogram Integrator"
+            integratorSettings="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.ChromatogramIntegrationSettings">
       </ChromatogramIntegratorSupplier>
    </extension>
    <extension

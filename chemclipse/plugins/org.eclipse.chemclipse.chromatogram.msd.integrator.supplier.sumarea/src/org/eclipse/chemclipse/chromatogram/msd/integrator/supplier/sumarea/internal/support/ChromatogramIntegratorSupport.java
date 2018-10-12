@@ -18,8 +18,7 @@ import java.util.Set;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.core.BackgroundIntegrator;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.core.ChromatogramIntegrator;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.core.ISumareaIntegrator;
-import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.ISumareaIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResult;
@@ -39,13 +38,12 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class SumareaChromatogramIntegratorSupport implements ISumareaChromatogramIntegratorSupport {
+public class ChromatogramIntegratorSupport {
 
-	private static final Logger logger = Logger.getLogger(SumareaChromatogramIntegratorSupport.class);
+	private static final Logger logger = Logger.getLogger(ChromatogramIntegratorSupport.class);
 	public static String INTEGRATOR_DESCRIPTION = "SumArea Integrator";
 
-	@Override
-	public IChromatogramIntegrationResults calculateChromatogramIntegrationResults(IChromatogramSelectionMSD chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {
+	public IChromatogramIntegrationResults calculateChromatogramIntegrationResults(IChromatogramSelectionMSD chromatogramSelection, ChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {
 
 		boolean integrateAll = false;
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
@@ -136,16 +134,10 @@ public class SumareaChromatogramIntegratorSupport implements ISumareaChromatogra
 		return backgroundIntegrationEntry;
 	}
 
-	private IMarkedIons getSelectedIons(IChromatogramIntegrationSettings chromatogramIntegrationSettings) {
+	private IMarkedIons getSelectedIons(ChromatogramIntegrationSettings chromatogramIntegrationSettings) {
 
-		IMarkedIons selectedIons;
-		if(chromatogramIntegrationSettings instanceof ISumareaIntegrationSettings) {
-			String ions = ((ISumareaIntegrationSettings)chromatogramIntegrationSettings).getSelectedIons();
-			IonSettingUtil ionSettingUtil = new IonSettingUtil();
-			selectedIons = new MarkedIons(ionSettingUtil.extractIons(ionSettingUtil.deserialize(ions)));
-		} else {
-			selectedIons = new MarkedIons();
-		}
-		return selectedIons;
+		String ions = chromatogramIntegrationSettings.getSelectedIons();
+		IonSettingUtil ionSettingUtil = new IonSettingUtil();
+		return new MarkedIons(ionSettingUtil.extractIons(ionSettingUtil.deserialize(ions)));
 	}
 }
