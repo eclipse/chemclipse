@@ -21,8 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.Ar
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IAreaSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IIntegrationSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core.PeakIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.TrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorCSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorCSDSettings;
@@ -69,7 +68,7 @@ public class AlkanePatternDetectorCSD {
 				 * Peak integrator
 				 */
 				PeakIntegrator peakIntegrator = new PeakIntegrator();
-				ITrapezoidPeakIntegrationSettings peakIntegratorSettings = new TrapezoidPeakIntegrationSettings();
+				PeakIntegrationSettings peakIntegratorSettings = new PeakIntegrationSettings();
 				peakIntegratorSettings.setIncludeBackground(false);
 				IAreaSupport areaSupport = new AreaSupport();
 				areaSupport.setMinimumArea(0.0d);
