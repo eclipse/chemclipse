@@ -23,11 +23,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class FilterSettings extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Ions To Remove", defaultValue = "18;28;84;207")
-	@JsonPropertyDescription(value = "List the ions to remove, separated by a white space.")
+	@JsonPropertyDescription(value = "List the ions to remove, separated by a semicolon..")
 	@IonsSelectionSettingProperty
 	private String ionsToRemove = "18;28;84;207";
 	@JsonProperty(value = "Ions To Preserve", defaultValue = "103;104")
-	@JsonPropertyDescription(value = "List the ions to preserve, separated by a white space.")
+	@JsonPropertyDescription(value = "List the ions to preserve, separated by a semicolon..")
 	@IonsSelectionSettingProperty
 	private String ionsToPreserve = "103;104";
 	@JsonProperty(value = "Adjust Threshold Transitions", defaultValue = "true")
