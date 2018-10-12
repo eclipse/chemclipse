@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.pr
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.CombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
@@ -22,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IA
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IIntegrationSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.TrapezoidPeakIntegrationSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -87,10 +87,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IChromatogramIntegrationSettings getChromatogramIntegrationSettings() {
+	public static ChromatogramIntegrationSettings getChromatogramIntegrationSettings() {
 
-		IChromatogramIntegrationSettings integrationSettings = new ChromatogramIntegrationSettings();
-		return integrationSettings;
+		ChromatogramIntegrationSettings settings = new ChromatogramIntegrationSettings();
+		return settings;
 	}
 
 	public static ITrapezoidPeakIntegrationSettings getPeakIntegrationSettings() {

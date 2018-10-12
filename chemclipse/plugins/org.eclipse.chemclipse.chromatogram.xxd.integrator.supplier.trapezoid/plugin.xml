@@ -16,7 +16,8 @@
             description="This extension point tries to implement a ChemStation similar chromatogram integrator."
             id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.chromatogramIntegrator"
             integrator="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core.ChromatogramIntegrator"
-            integratorName="Chromatogram Integrator Trapezoid">
+            integratorName="Chromatogram Integrator Trapezoid"
+            integratorSettings="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings">
       </ChromatogramIntegratorSupplier>
    </extension>
    <extension

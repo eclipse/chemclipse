@@ -14,16 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.in
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.csd.model.implementation.IntegrationEntryCSD;
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IIntegrationEntry;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramIntegrationResults;
@@ -33,11 +23,21 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.int
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.ChromatogramIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IBackgroundIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IChromatogramIntegrator;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.csd.model.implementation.IntegrationEntryCSD;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-public class TrapezoidChromatogramIntegratorSupport implements ITrapezoidChromatogramIntegratorSupport {
+public class ChromatogramIntegratorSupport {
 
 	public static final String INTEGRATOR_DESCRIPTION = "Integrator Trapezoid";
 
+	@SuppressWarnings("rawtypes")
 	public IChromatogramIntegrationResults calculateChromatogramIntegrationResults(IChromatogramSelection chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {
 
 		/*
@@ -76,6 +76,7 @@ public class TrapezoidChromatogramIntegratorSupport implements ITrapezoidChromat
 	 * @param monitor
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	private IIntegrationEntry calculateChromatogramIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		monitor.subTask("Integrate the chromatogram area");
@@ -101,6 +102,7 @@ public class TrapezoidChromatogramIntegratorSupport implements ITrapezoidChromat
 		return chromatogramIntegrationEntry;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private IIntegrationEntry calculateBackgroundIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		monitor.subTask("Integrate the background area");

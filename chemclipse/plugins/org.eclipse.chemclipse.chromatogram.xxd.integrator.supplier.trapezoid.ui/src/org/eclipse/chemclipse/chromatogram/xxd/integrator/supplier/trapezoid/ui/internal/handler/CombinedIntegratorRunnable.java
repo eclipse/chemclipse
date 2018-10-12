@@ -14,12 +14,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined.CombinedIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.ChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.CombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ICombinedIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.notifier.IntegrationResultUpdateNotifier;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
@@ -37,8 +36,10 @@ public class CombinedIntegratorRunnable implements IRunnableWithProgress {
 
 	private static final Logger logger = Logger.getLogger(CombinedIntegratorRunnable.class);
 	private static final String COMBINED_INTEGRATOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.combinedIntegrator";
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 
+	@SuppressWarnings("rawtypes")
 	public CombinedIntegratorRunnable(IChromatogramSelection chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
@@ -49,12 +50,9 @@ public class CombinedIntegratorRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Integrator Trapezoid", IProgressMonitor.UNKNOWN);
 			/*
-			 * Detect Peaks in actual chromatogram selection.
+			 * Chromatogram / Peak Settings
 			 */
-			IChromatogramIntegrationSettings chromatogramIntegrationSettings = new ChromatogramIntegrationSettings();
-			/*
-			 * Peak Settings
-			 */
+			ChromatogramIntegrationSettings chromatogramIntegrationSettings = new ChromatogramIntegrationSettings();
 			ITrapezoidPeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
 			ICombinedIntegrationSettings combinedIntegrationSettings = new CombinedIntegrationSettings(chromatogramIntegrationSettings, peakIntegrationSettings);
 			/*

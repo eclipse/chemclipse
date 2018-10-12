@@ -14,9 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram.ChromatogramIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.ChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.notifier.IntegrationResultUpdateNotifier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -30,8 +29,10 @@ public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramIntegratorRunnable.class);
 	private static final String CHROMATOGRAM_INTEGRATOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.chromatogramIntegrator";
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 
+	@SuppressWarnings("rawtypes")
 	public ChromatogramIntegratorRunnable(IChromatogramSelection chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
@@ -41,13 +42,8 @@ public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Integrator Trapezoid", IProgressMonitor.UNKNOWN);
-			/*
-			 * Detect Peaks in actual chromatogram selection.
-			 */
-			IChromatogramIntegrationSettings chromatogramIntegrationSettings = new ChromatogramIntegrationSettings();
-			/*
-			 * Show the processing view if error messages occurred.
-			 */
+			//
+			ChromatogramIntegrationSettings chromatogramIntegrationSettings = new ChromatogramIntegrationSettings();
 			IProcessingInfo processingInfo = ChromatogramIntegrator.integrate(chromatogramSelection, chromatogramIntegrationSettings, CHROMATOGRAM_INTEGRATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			/*

@@ -17,9 +17,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNo
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.CombinedIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.ITrapezoidChromatogramIntegratorSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.ChromatogramIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.ITrapezoidPeakIntegratorSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.TrapezoidChromatogramIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.TrapezoidPeakIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -32,6 +31,7 @@ public class CombinedIntegrator extends AbstractCombinedIntegrator {
 
 	private static final Logger logger = Logger.getLogger(CombinedIntegrator.class);
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings, IProgressMonitor monitor) {
 
@@ -46,8 +46,8 @@ public class CombinedIntegrator extends AbstractCombinedIntegrator {
 			/*
 			 * Chromatogram Integration Results.
 			 */
-			ITrapezoidChromatogramIntegratorSupport firstDerivativeChromatogramIntegratorSupport = new TrapezoidChromatogramIntegratorSupport();
-			IChromatogramIntegrationResults chromatogramIntegrationResults = firstDerivativeChromatogramIntegratorSupport.calculateChromatogramIntegrationResults(chromatogramSelection, combinedIntegrationSettings.getChromatogramIntegrationSettings(), monitor);
+			ChromatogramIntegratorSupport chromatogramIntegratorSupport = new ChromatogramIntegratorSupport();
+			IChromatogramIntegrationResults chromatogramIntegrationResults = chromatogramIntegratorSupport.calculateChromatogramIntegrationResults(chromatogramSelection, combinedIntegrationSettings.getChromatogramIntegrationSettings(), monitor);
 			/*
 			 * Build the result and return it.
 			 */
@@ -73,6 +73,7 @@ public class CombinedIntegrator extends AbstractCombinedIntegrator {
 		return this;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
