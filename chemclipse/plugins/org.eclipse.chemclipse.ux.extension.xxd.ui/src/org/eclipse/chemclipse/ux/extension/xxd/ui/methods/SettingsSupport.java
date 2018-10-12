@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.IonsSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -32,6 +33,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyMetadata;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 
@@ -124,9 +126,10 @@ public class SettingsSupport {
 				//
 				InputValue inputValue = new InputValue();
 				inputValue.setRawType(annotatedField.getRawType());
-				inputValue.setName(property.getName());
-				inputValue.setDescription(property.getMetadata().getDescription());
-				inputValue.setDefaultValue(property.getMetadata().getDefaultValue());
+				inputValue.setName((property.getName() == null) ? "" : property.getName());
+				PropertyMetadata propertyMetadata = property.getMetadata();
+				inputValue.setDescription((propertyMetadata.getDescription() == null) ? "" : propertyMetadata.getDescription());
+				inputValue.setDefaultValue((propertyMetadata.getDefaultValue() == null) ? "" : propertyMetadata.getDefaultValue());
 				inputValues.add(inputValue);
 				/*
 				 * SettingsProperty ...
@@ -156,8 +159,13 @@ public class SettingsSupport {
 						} else if(annotation instanceof StringSettingsProperty) {
 							StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
 							inputValue.setRegularExpression(settingsProperty.regExp());
+						} else if(annotation instanceof IonsSelectionSettingProperty) {
+							// IonsSelectionSettingProperty settingsProperty = (IonsSelectionSettingProperty)annotation;
+							/*
+							 * Find a better regex to match empty or 28;32 ...
+							 */
+							inputValue.setRegularExpression("(^$|\\d+;?)");
 						}
-						// IonsSelectionSettingProperty
 						// RetentionTimeMinutesProperty - remove?
 					}
 				}

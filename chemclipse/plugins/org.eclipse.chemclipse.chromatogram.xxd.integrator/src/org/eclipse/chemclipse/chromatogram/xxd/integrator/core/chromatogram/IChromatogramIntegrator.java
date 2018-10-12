@@ -18,7 +18,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramIntegrator {
 
+	@SuppressWarnings("rawtypes")
 	IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor);
 
+	@SuppressWarnings("rawtypes")
 	IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
 }

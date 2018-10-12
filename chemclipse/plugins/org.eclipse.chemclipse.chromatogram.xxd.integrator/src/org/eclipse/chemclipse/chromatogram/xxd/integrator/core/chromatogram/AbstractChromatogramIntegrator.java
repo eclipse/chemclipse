@@ -11,27 +11,25 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram;
 
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
 public abstract class AbstractChromatogramIntegrator implements IChromatogramIntegrator {
 
-	protected void validate(IChromatogramSelection chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings) throws ValueMustNotBeNullException {
+	private static final String DESCRIPTON = "Chromatogram Integrator";
 
-		/*
-		 * Test that the values are not null.
-		 */
+	@SuppressWarnings("rawtypes")
+	protected IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramSelection == null) {
-			throw new ValueMustNotBeNullException("The given chromatogram selection must not be null.");
+			processingInfo.addErrorMessage(DESCRIPTON, "The given chromatogram selection must not be null.");
 		}
-		testChromatogramIntegrationSettings(chromatogramIntegrationSettings);
-	}
-
-	private void testChromatogramIntegrationSettings(IChromatogramIntegrationSettings chromatogramIntegrationSettings) throws ValueMustNotBeNullException {
-
 		if(chromatogramIntegrationSettings == null) {
-			throw new ValueMustNotBeNullException("The given chromatogram integration settings must not be null");
+			processingInfo.addErrorMessage(DESCRIPTON, "The given chromatogram integration settings must not be null");
 		}
+		return processingInfo;
 	}
 }

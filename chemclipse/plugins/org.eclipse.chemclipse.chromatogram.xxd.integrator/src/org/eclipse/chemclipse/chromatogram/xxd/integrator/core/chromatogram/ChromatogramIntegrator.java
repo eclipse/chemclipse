@@ -52,6 +52,8 @@ public class ChromatogramIntegrator {
 	private static final String DESCRIPTION = "description";
 	private static final String INTEGRATOR_NAME = "integratorName";
 	private static final String INTEGRATOR = "integrator";
+	private static final String INTEGRATOR_SETTINGS = "integratorSettings";
+	//
 	private static final String NO_INTEGRATOR_AVAILABLE = "There is no chromatogram integrator available.";
 
 	/**
@@ -69,6 +71,7 @@ public class ChromatogramIntegrator {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings, String integratorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -89,6 +92,7 @@ public class ChromatogramIntegrator {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, String integratorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -117,6 +121,16 @@ public class ChromatogramIntegrator {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setIntegratorName(element.getAttribute(INTEGRATOR_NAME));
+			if(element.getAttribute(INTEGRATOR_SETTINGS) != null) {
+				try {
+					IChromatogramIntegrationSettings instance = (IChromatogramIntegrationSettings)element.createExecutableExtension(INTEGRATOR_SETTINGS);
+					supplier.setSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setSettingsClass(null);
+				}
+			}
 			integratorSupport.add(supplier);
 		}
 		return integratorSupport;

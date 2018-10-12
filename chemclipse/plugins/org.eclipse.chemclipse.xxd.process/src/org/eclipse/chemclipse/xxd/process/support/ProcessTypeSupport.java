@@ -60,7 +60,7 @@ public class ProcessTypeSupport {
 		 */
 		addProcessSupplier(new BaselineDetectorTypeSupplier()); // OK
 		addProcessSupplier(new ChromatogramIdentifierTypeSupplier());
-		addProcessSupplier(new ChromatogramIntegratorTypeSupplier());
+		addProcessSupplier(new ChromatogramIntegratorTypeSupplier()); // OK
 		addProcessSupplier(new ClassifierTypeSupplier());
 		addProcessSupplier(new CombinedIntegratorTypeSupplier());
 		addProcessSupplier(new ChromatogramFilterTypeSupplier()); // OK

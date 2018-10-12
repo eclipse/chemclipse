@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings;
 
-public interface IIntegrationSettings {
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+
+public interface IIntegrationSettings extends IProcessSettings {
 
 	/**
 	 * Returns the {@link IBaselineSupport} instance.

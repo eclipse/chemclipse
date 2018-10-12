@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
+
 /**
  * @author eselmeister
  */
@@ -37,4 +39,11 @@ public interface IChromatogramIntegratorSupplier {
 	 * @return String
 	 */
 	String getIntegratorName();
+
+	/**
+	 * TODO: either returns a bean-like class or with annotations ..., with a public default constructor, ... or returns <code>null</code> if no filter settings are associated
+	 * 
+	 * @return
+	 */
+	Class<? extends IChromatogramIntegrationSettings> getSettingsClass();
 }

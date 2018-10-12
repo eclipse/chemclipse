@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDe
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineDetectorSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineDetectorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.exceptions.NoBaselineDetectorAvailableException;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
@@ -48,6 +49,10 @@ public class BaselineDetectorTypeSupplier extends AbstractProcessTypeSupplier im
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
-		return BaselineDetector.setBaseline(chromatogramSelection, processorId, monitor);
+		if(processSettings instanceof IBaselineDetectorSettings) {
+			return BaselineDetector.setBaseline(chromatogramSelection, (IBaselineDetectorSettings)processSettings, processorId, monitor);
+		} else {
+			return BaselineDetector.setBaseline(chromatogramSelection, processorId, monitor);
+		}
 	}
 }

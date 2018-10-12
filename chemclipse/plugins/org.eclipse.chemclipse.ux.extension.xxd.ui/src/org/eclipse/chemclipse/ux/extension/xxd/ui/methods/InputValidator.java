@@ -31,7 +31,7 @@ public class InputValidator implements IValidator {
 	public IStatus validate(Object value) {
 
 		String message = null;
-		if(value == null || "".equals(value)) {
+		if(value == null) {
 			message = ERROR;
 		} else {
 			Class<?> rawType = inputValue.getRawType();
@@ -92,10 +92,9 @@ public class InputValidator implements IValidator {
 			} else if(rawType == boolean.class || rawType == Boolean.class) {
 				Boolean.parseBoolean(value);
 			} else if(rawType.isEnum()) {
-				// Enum[] enums = (Enum[])rawType.getEnumConstants();
-				// for(Enum enumm : enums) {
-				// System.out.println(enumm);
-				// }
+				if("".equals(value)) {
+					message = "Please select and option from the combo box.";
+				}
 			} else {
 				logger.info("Unknown Raw Type: " + rawType);
 			}

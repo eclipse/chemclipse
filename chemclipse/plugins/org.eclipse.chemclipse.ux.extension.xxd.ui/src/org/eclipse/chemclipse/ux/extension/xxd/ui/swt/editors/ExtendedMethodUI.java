@@ -58,7 +58,8 @@ public class ExtendedMethodUI {
 	private Button buttonRemove;
 	private Button buttonMoveUp;
 	private Button buttonMoveDown;
-	private Button buttonProcessSettings;
+	private Button buttonModifySettings;
+	private Button buttonResetSettings;
 	private MethodListUI listUI;
 	//
 	private ProcessMethod processMethod = null;
@@ -200,11 +201,7 @@ public class ExtendedMethodUI {
 
 	private void createTable(Composite parent) {
 
-		/*
-		 * Don't enable multi-select for now.
-		 * If yes, then adjust the move up, down methods.
-		 */
-		listUI = new MethodListUI(parent, SWT.BORDER);
+		listUI = new MethodListUI(parent, SWT.BORDER | SWT.MULTI);
 		Table table = listUI.getTable();
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 2;
@@ -226,13 +223,14 @@ public class ExtendedMethodUI {
 		gridData.horizontalAlignment = SWT.END;
 		gridData.horizontalSpan = 2;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
 		createAddButton(composite);
 		buttonRemove = createRemoveButton(composite);
 		buttonMoveUp = createMoveUpButton(composite);
 		buttonMoveDown = createMoveDownButton(composite);
-		buttonProcessSettings = createProcessSettingsButton(composite);
+		buttonModifySettings = createModifySettingsButton(composite);
+		buttonResetSettings = createResetSettingsButton(composite);
 	}
 
 	private void createAddButton(Composite parent) {
@@ -278,7 +276,10 @@ public class ExtendedMethodUI {
 				if(processMethod != null) {
 					if(MessageDialog.openQuestion(e.widget.getDisplay().getActiveShell(), "Delete Process Method(s)", "Would you like to delete the selected processor(s)?")) {
 						for(Object object : listUI.getStructuredSelection().toArray()) {
-							processMethod.remove(object);
+							if(object instanceof IProcessEntry) {
+								IProcessEntry processEntry = (IProcessEntry)object;
+								processMethod.remove(processEntry);
+							}
 						}
 						updateProcessMethod();
 					}
@@ -302,8 +303,9 @@ public class ExtendedMethodUI {
 
 				if(processMethod != null) {
 					Table table = listUI.getTable();
-					int index = table.getSelectionIndex();
-					Collections.swap(processMethod, index, index - 1);
+					for(int index : table.getSelectionIndices()) {
+						Collections.swap(processMethod, index, index - 1);
+					}
 					updateProcessMethod();
 				}
 			}
@@ -325,8 +327,9 @@ public class ExtendedMethodUI {
 
 				if(processMethod != null) {
 					Table table = listUI.getTable();
-					int index = table.getSelectionIndex();
-					Collections.swap(processMethod, index, index + 1);
+					for(int index : table.getSelectionIndices()) {
+						Collections.swap(processMethod, index, index + 1);
+					}
 					updateProcessMethod();
 				}
 			}
@@ -335,7 +338,7 @@ public class ExtendedMethodUI {
 		return button;
 	}
 
-	private Button createProcessSettingsButton(Composite parent) {
+	private Button createModifySettingsButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Modify the process method settings.");
@@ -373,6 +376,32 @@ public class ExtendedMethodUI {
 		return button;
 	}
 
+	private Button createResetSettingsButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Reset the process method settings.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(processMethod != null) {
+					for(Object object : listUI.getStructuredSelection().toArray()) {
+						if(object instanceof IProcessEntry) {
+							IProcessEntry processEntry = (IProcessEntry)object;
+							processEntry.setJsonSettings(SettingsSupport.EMPTY_JSON_SETTINGS);
+						}
+					}
+					updateProcessMethod();
+				}
+			}
+		});
+		//
+		return button;
+	}
+
 	private void updateProcessMethod() {
 
 		if(processMethod != null) {
@@ -394,7 +423,8 @@ public class ExtendedMethodUI {
 		buttonRemove.setEnabled(enabled);
 		buttonMoveUp.setEnabled(enabled);
 		buttonMoveDown.setEnabled(enabled);
-		buttonProcessSettings.setEnabled(enabled);
+		buttonModifySettings.setEnabled(enabled);
+		buttonResetSettings.setEnabled(enabled);
 	}
 
 	private void setDirty(boolean dirty) {
