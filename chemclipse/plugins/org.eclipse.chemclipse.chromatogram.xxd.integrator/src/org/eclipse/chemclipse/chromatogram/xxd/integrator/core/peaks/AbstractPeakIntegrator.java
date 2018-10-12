@@ -13,51 +13,56 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
 public abstract class AbstractPeakIntegrator implements IPeakIntegrator {
 
-	protected void validate(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings) throws ValueMustNotBeNullException {
+	public static final String DESCRIPTION = "Peak Integrator";
 
-		/*
-		 * Test that the values are not null.
-		 */
+	protected IProcessingInfo validate(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(peak == null) {
-			throw new ValueMustNotBeNullException("The given peak must not be null.");
+			processingInfo.addErrorMessage(DESCRIPTION, "The given peak must not be null.");
 		}
-		testPeakIntegrationSettings(peakIntegrationSettings);
+		testPeakIntegrationSettings(peakIntegrationSettings, processingInfo);
+		return processingInfo;
 	}
 
-	protected void validate(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings) throws ValueMustNotBeNullException {
+	protected IProcessingInfo validate(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings) {
 
-		/*
-		 * Test that the values are not null.
-		 */
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(peaks == null) {
-			throw new ValueMustNotBeNullException("The given list of peaks must not be null.");
+			processingInfo.addErrorMessage(DESCRIPTION, "The given list of peaks must not be null.");
 		}
-		testPeakIntegrationSettings(peakIntegrationSettings);
+		testPeakIntegrationSettings(peakIntegrationSettings, processingInfo);
+		return processingInfo;
 	}
 
-	protected void validate(IChromatogramSelection chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings) throws ValueMustNotBeNullException {
+	@SuppressWarnings("rawtypes")
+	protected IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings) {
 
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramSelection == null) {
-			throw new ValueMustNotBeNullException("The chromatogram selection must not be null.");
+			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram selection must not be null.");
 		}
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		if(chromatogram == null) {
-			throw new ValueMustNotBeNullException("The chromatogram must not be null.");
+			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram must not be null.");
 		}
+		testPeakIntegrationSettings(peakIntegrationSettings, processingInfo);
+		return processingInfo;
 	}
 
-	private void testPeakIntegrationSettings(IPeakIntegrationSettings peakIntegrationSettings) throws ValueMustNotBeNullException {
+	private void testPeakIntegrationSettings(IPeakIntegrationSettings peakIntegrationSettings, IProcessingInfo processingInfo) {
 
 		if(peakIntegrationSettings == null) {
-			throw new ValueMustNotBeNullException("The given peak integration settings must not be null");
+			processingInfo.addErrorMessage(DESCRIPTION, "The given peak integration settings must not be null");
 		}
 	}
 }

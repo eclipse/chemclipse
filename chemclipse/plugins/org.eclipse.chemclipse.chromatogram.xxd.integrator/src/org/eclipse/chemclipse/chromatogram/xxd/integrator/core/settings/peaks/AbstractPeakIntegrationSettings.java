@@ -15,9 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.AbstractIntegrationSettings;
+import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
+import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,11 +41,29 @@ public abstract class AbstractPeakIntegrationSettings extends AbstractIntegratio
 		integratorSupport = new IntegrationSupport();
 		reportDeciders = new ArrayList<IReportDecider>();
 		/*
-		 * The report deciders support decisions about integrating or not
+		 * The report decider support decisions about integrating or not
 		 * integrating a peak.
 		 */
 		reportDeciders.add(areaSupport);
 		reportDeciders.add(integratorSupport);
+	}
+
+	@Override
+	public ISettingStatus getSettingStatus(IPeak peak) {
+
+		boolean report = report(peak);
+		int startRetentionTime = 0;
+		if(peak instanceof IPeakMSD) {
+			startRetentionTime = ((IPeakMSD)peak).getPeakModel().getStartRetentionTime();
+		} else if(peak instanceof IPeakCSD) {
+			startRetentionTime = ((IPeakCSD)peak).getPeakModel().getStartRetentionTime();
+		} else if(peak instanceof IPeakWSD) {
+			startRetentionTime = ((IPeakWSD)peak).getPeakModel().getStartRetentionTime();
+		}
+		//
+		boolean sumOn = getAreaSupport().isAreaSumOn(startRetentionTime);
+		ISettingStatus status = new SettingStatus(report, sumOn);
+		return status;
 	}
 
 	@Override
@@ -75,8 +96,6 @@ public abstract class AbstractPeakIntegrationSettings extends AbstractIntegratio
 		return integratorSupport;
 	}
 
-	// ------------------------------------------IIntegrationSettings
-	// ------------------------------------------IReportDecider
 	@Override
 	public boolean report(IPeak peak) {
 
@@ -94,5 +113,4 @@ public abstract class AbstractPeakIntegrationSettings extends AbstractIntegratio
 		}
 		return report;
 	}
-	// ------------------------------------------IReportDecider
 }

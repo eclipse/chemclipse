@@ -29,7 +29,9 @@ public interface IPeakIntegrator {
 
 	IProcessingInfo integrate(List<? extends IPeak> peaks, IProgressMonitor monitor);
 
+	@SuppressWarnings("rawtypes")
 	IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor);
 
+	@SuppressWarnings("rawtypes")
 	IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
 }

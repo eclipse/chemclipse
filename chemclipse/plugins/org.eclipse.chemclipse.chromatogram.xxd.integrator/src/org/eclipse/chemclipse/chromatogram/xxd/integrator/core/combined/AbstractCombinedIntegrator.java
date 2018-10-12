@@ -11,37 +11,28 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined;
 
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
 public abstract class AbstractCombinedIntegrator implements ICombinedIntegrator {
 
-	protected void validate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings) throws ValueMustNotBeNullException {
+	public static final String DESCRIPTION = "Combined Integrator";
 
-		/*
-		 * Test that the values are not null.
-		 */
+	@SuppressWarnings("rawtypes")
+	protected IProcessingInfo validate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramSelection == null) {
-			throw new ValueMustNotBeNullException("The given chromatogram selection must not be null.");
+			processingInfo.addErrorMessage(DESCRIPTION, "The given chromatogram selection must not be null.");
 		}
-		testChromatogramIntegrationSettings(combinedIntegrationSettings.getChromatogramIntegrationSettings());
-		testPeakIntegrationSettings(combinedIntegrationSettings.getPeakIntegrationSettings());
-	}
-
-	private void testChromatogramIntegrationSettings(IChromatogramIntegrationSettings chromatogramIntegrationSettings) throws ValueMustNotBeNullException {
-
-		if(chromatogramIntegrationSettings == null) {
-			throw new ValueMustNotBeNullException("The given chromatogram integration settings must not be null");
+		if(combinedIntegrationSettings.getChromatogramIntegrationSettings() == null) {
+			processingInfo.addErrorMessage(DESCRIPTION, "The given chromatogram integration settings must not be null");
 		}
-	}
-
-	private void testPeakIntegrationSettings(IPeakIntegrationSettings peakIntegrationSettings) throws ValueMustNotBeNullException {
-
-		if(peakIntegrationSettings == null) {
-			throw new ValueMustNotBeNullException("The given peak integration settings must not be null");
+		if(combinedIntegrationSettings.getPeakIntegrationSettings() == null) {
+			processingInfo.addErrorMessage(DESCRIPTION, "The given peak integration settings must not be null");
 		}
+		return processingInfo;
 	}
 }

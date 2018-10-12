@@ -68,7 +68,7 @@ public class ProcessTypeSupport {
 		addProcessSupplier(new PeakFilterTypeSupplier());
 		addProcessSupplier(new PeakDetectorTypeSupplier());
 		addProcessSupplier(new PeakIdentifierTypeSupplier());
-		addProcessSupplier(new PeakIntegratorTypeSupplier());
+		addProcessSupplier(new PeakIntegratorTypeSupplier()); // TODO
 		addProcessSupplier(new PeakQuantitationTypeSupplier());
 		addProcessSupplier(new ChromatogramCalculatorTypeSupplier());
 		// File Export

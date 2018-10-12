@@ -136,6 +136,7 @@ public class PeakIntegrator {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings, String integratorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -156,6 +157,7 @@ public class PeakIntegrator {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, String integratorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -168,7 +170,6 @@ public class PeakIntegrator {
 		return processingInfo;
 	}
 
-	// ---------------------------------------------------
 	public static IPeakIntegratorSupport getPeakIntegratorSupport() {
 
 		PeakIntegratorSupplier supplier;

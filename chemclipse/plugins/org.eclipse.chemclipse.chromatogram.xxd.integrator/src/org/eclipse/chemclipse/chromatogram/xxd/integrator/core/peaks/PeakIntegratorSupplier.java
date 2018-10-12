@@ -18,7 +18,7 @@ public class PeakIntegratorSupplier implements IPeakIntegratorSupplier {
 	private String id = "";
 	private String description = "";
 	private String integratorName = "";
-	private Class<? extends IPeakIntegrationSettings> peakIntegrationSettingsClass;
+	private Class<? extends IPeakIntegrationSettings> settingsClass;
 
 	@Override
 	public String getId() {
@@ -76,17 +76,16 @@ public class PeakIntegratorSupplier implements IPeakIntegratorSupplier {
 	}
 
 	@Override
-	public Class<? extends IPeakIntegrationSettings> getPeakIntegrationSettingsClass() {
+	public Class<? extends IPeakIntegrationSettings> getSettingsClass() {
 
-		return this.peakIntegrationSettingsClass;
+		return this.settingsClass;
 	}
 
-	public void setPeakIntegrationSettingsClass(Class<? extends IPeakIntegrationSettings> peakIntegrationSettingsClass) {
+	public void setPeakIntegrationSettingsClass(Class<? extends IPeakIntegrationSettings> settingsClass) {
 
-		this.peakIntegrationSettingsClass = peakIntegrationSettingsClass;
+		this.settingsClass = settingsClass;
 	}
 
-	// ------------------------------------hashCode, equals, toString
 	@Override
 	public boolean equals(Object other) {
 
@@ -123,5 +122,4 @@ public class PeakIntegratorSupplier implements IPeakIntegratorSupplier {
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------------hashCode, equals, toString
 }

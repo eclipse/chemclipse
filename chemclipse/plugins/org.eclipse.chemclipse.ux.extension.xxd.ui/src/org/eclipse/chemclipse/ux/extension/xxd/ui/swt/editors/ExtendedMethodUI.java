@@ -327,7 +327,9 @@ public class ExtendedMethodUI {
 
 				if(processMethod != null) {
 					Table table = listUI.getTable();
-					for(int index : table.getSelectionIndices()) {
+					int[] indices = table.getSelectionIndices();
+					for(int i = indices.length - 1; i >= 0; i--) {
+						int index = indices[i];
 						Collections.swap(processMethod, index, index + 1);
 					}
 					updateProcessMethod();

@@ -45,5 +45,5 @@ public interface IPeakIntegratorSupplier {
 	 * 
 	 * @return
 	 */
-	Class<? extends IPeakIntegrationSettings> getPeakIntegrationSettingsClass();
+	Class<? extends IPeakIntegrationSettings> getSettingsClass();
 }
