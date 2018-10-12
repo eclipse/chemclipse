@@ -15,10 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.Activator;
+import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IAreaSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IIntegrationSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.PeakIntegrationSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.IonSettingUtil;
@@ -79,26 +78,26 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IPeakIntegrationSettings getPeakIntegrationSettings() {
+	public static PeakIntegrationSettings getPeakIntegrationSettings() {
 
-		IPeakIntegrationSettings integrationSettings = new PeakIntegrationSettings();
+		PeakIntegrationSettings peakIntegrationSettings = new PeakIntegrationSettings();
 		// baselineSupport.setBaselineHoldOn(5000, 100000);
 		/*
 		 * Area Support
 		 */
-		IAreaSupport areaSupport = integrationSettings.getAreaSupport();
+		IAreaSupport areaSupport = peakIntegrationSettings.getAreaSupport();
 		areaSupport.setMinimumArea(PreferenceSupplier.getMinimumPeakArea()); // int but double should be used.
 		/*
 		 * Integration Support
 		 */
-		IIntegrationSupport integrationSupport = integrationSettings.getIntegrationSupport();
+		IIntegrationSupport integrationSupport = peakIntegrationSettings.getIntegrationSupport();
 		integrationSupport.setMinimumPeakWidth(PreferenceSupplier.getMinimumPeakWidth());
 		integrationSupport.setMinimumSignalToNoiseRatio(PreferenceSupplier.getMinimumSignalToNoiseRatio()); // int but float should be used.
-		IMarkedIons selectedIons = integrationSettings.getSelectedIons();
+		IMarkedIons selectedIons = peakIntegrationSettings.getSelectedIons();
 		String ions = PreferenceSupplier.getIons(P_SELECTED_IONS, DEF_SELECTED_IONS);
 		IonSettingUtil settingIon = new IonSettingUtil();
 		selectedIons.add(settingIon.extractIons(settingIon.deserialize(ions)));
-		return integrationSettings;
+		return peakIntegrationSettings;
 	}
 
 	public static int getMinimumPeakWidth() {

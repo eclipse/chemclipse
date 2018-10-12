@@ -12,10 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.ui.internal.handler;
 
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IAreaSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IIntegrationSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.PeakIntegrationSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.support.util.IonSettingUtil;
 
@@ -23,7 +23,7 @@ public class PeakIntegrationSettingsSupport {
 
 	public IPeakIntegrationSettings getPeakIntegrationSettings() {
 
-		IPeakIntegrationSettings peakIntegrationSettings = new PeakIntegrationSettings();
+		PeakIntegrationSettings peakIntegrationSettings = new PeakIntegrationSettings();
 		/*
 		 * Area Support
 		 */

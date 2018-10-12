@@ -8,7 +8,7 @@
             id="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.peakIntegrator"
             integrator="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.core.PeakIntegrator"
             integratorName="Peak Max Integrator"
-            integratorSettings="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings.MaxPeakIntegrationSettings">
+            integratorSettings="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings.PeakIntegrationSettings">
       </PeakIntegratorSupplier>
    </extension>
    <extension

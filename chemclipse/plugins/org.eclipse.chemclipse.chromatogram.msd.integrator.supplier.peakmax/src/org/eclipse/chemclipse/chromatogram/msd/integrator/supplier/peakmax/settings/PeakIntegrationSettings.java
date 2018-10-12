@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings;
 
-public interface IMaxPeakIntegrationSettings {
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.AbstractPeakIntegrationSettings;
+
+public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 }
