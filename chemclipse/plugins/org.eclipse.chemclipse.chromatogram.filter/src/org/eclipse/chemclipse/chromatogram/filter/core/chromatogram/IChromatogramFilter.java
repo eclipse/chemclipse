@@ -52,4 +52,21 @@ public interface IChromatogramFilter<T extends IPeak> {
 	 * @return {@link IProcessingInfo}
 	 */
 	IProcessingInfo validate(IChromatogramSelection<T> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings);
+
+	/**
+	 * Validates that chromatogram selection and the stored chromatogram are not
+	 * null.
+	 * 
+	 * @param chromatogramSelection
+	 * @return {@link IProcessingInfo}
+	 */
+	IProcessingInfo validateChromatogramSelection(IChromatogramSelection<T> chromatogramSelection);
+
+	/**
+	 * Validates that the filter settings are not null.
+	 * 
+	 * @param chromatogramFilterSettings
+	 * @return {@link IProcessingInfo}
+	 */
+	IProcessingInfo validateFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings);
 }

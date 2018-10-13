@@ -30,15 +30,8 @@ public abstract class AbstractChromatogramFilter<T extends IPeak> implements ICh
 		return processingInfo;
 	}
 
-	// --------------------------------------------private methods
-	/**
-	 * Validates that chromatogram selection and the stored chromatogram are not
-	 * null.
-	 * 
-	 * @param chromatogramSelection
-	 * @return {@link IProcessingInfo}
-	 */
-	private IProcessingInfo validateChromatogramSelection(IChromatogramSelection<T> chromatogramSelection) {
+	@Override
+	public IProcessingInfo validateChromatogramSelection(IChromatogramSelection<T> chromatogramSelection) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramSelection == null) {
@@ -51,13 +44,8 @@ public abstract class AbstractChromatogramFilter<T extends IPeak> implements ICh
 		return processingInfo;
 	}
 
-	/**
-	 * Validates that the filter settings are not null.
-	 * 
-	 * @param chromatogramFilterSettings
-	 * @return {@link IProcessingInfo}
-	 */
-	private IProcessingInfo validateFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
+	@Override
+	public IProcessingInfo validateFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramFilterSettings == null) {
