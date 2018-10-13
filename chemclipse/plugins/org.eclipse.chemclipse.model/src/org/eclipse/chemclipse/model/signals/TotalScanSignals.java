@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.model.signals;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -180,7 +179,7 @@ public class TotalScanSignals implements ITotalScanSignals {
 		return new Iterator<Integer>() {
 
 			private int startScan = getStartScan();
-			private int stopScan = getStartScan();
+			private int stopScan = getStopScan();
 			private int actualScan = getStartScan();
 
 			@Override
@@ -222,9 +221,9 @@ public class TotalScanSignals implements ITotalScanSignals {
 	}
 
 	@Override
-	public Collection<ITotalScanSignal> getTotalScanSignalCollection() {
+	public List<ITotalScanSignal> getTotalScanSignalList() {
 
-		return Collections.unmodifiableCollection(signals);
+		return Collections.unmodifiableList(signals);
 	}
 	// ---------------------------------------------ITotalIonSignals
 }

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.signals;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -151,7 +150,7 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	 * 
 	 * @return List<ITotalIonSignal>
 	 */
-	Collection<ITotalScanSignal> getTotalScanSignalCollection();
+	List<ITotalScanSignal> getTotalScanSignalList();
 
 	/**
 	 * Returns the highest total ion signal.
@@ -160,7 +159,7 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	 */
 	default ITotalScanSignal getMaxTotalScanSignal() {
 
-		return Collections.max(getTotalScanSignalCollection(), new TotalScanSignalComparator());
+		return Collections.max(getTotalScanSignalList(), new TotalScanSignalComparator());
 	}
 
 	/**
@@ -170,7 +169,7 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	 */
 	default ITotalScanSignal getMinTotalScanSignal() {
 
-		return Collections.min(getTotalScanSignalCollection(), new TotalScanSignalComparator());
+		return Collections.min(getTotalScanSignalList(), new TotalScanSignalComparator());
 	}
 
 	/**
@@ -178,7 +177,7 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	 */
 	default void setNegativeTotalSignalsToZero() {
 
-		for(ITotalScanSignal signal : getTotalScanSignalCollection()) {
+		for(ITotalScanSignal signal : getTotalScanSignalList()) {
 			if(signal.getTotalSignal() < 0) {
 				signal.setTotalSignal(0.0f);
 			}
@@ -190,7 +189,7 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	 */
 	default void setPositiveTotalSignalsToZero() {
 
-		for(ITotalScanSignal signal : getTotalScanSignalCollection()) {
+		for(ITotalScanSignal signal : getTotalScanSignalList()) {
 			if(signal.getTotalSignal() > 0) {
 				signal.setTotalSignal(0.0f);
 			}
@@ -203,7 +202,7 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	default void setTotalSignalsAsAbsoluteValues() {
 
 		float abundance = 0.0f;
-		for(ITotalScanSignal signal : getTotalScanSignalCollection()) {
+		for(ITotalScanSignal signal : getTotalScanSignalList()) {
 			abundance = Math.abs(signal.getTotalSignal());
 			signal.setTotalSignal(abundance);
 		}
@@ -218,7 +217,7 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 
 		float[] values = new float[size()];
 		int i = 0;
-		for(ITotalScanSignal signal : getTotalScanSignalCollection()) {
+		for(ITotalScanSignal signal : getTotalScanSignalList()) {
 			values[i++] = signal.getTotalSignal();
 		}
 		return values;

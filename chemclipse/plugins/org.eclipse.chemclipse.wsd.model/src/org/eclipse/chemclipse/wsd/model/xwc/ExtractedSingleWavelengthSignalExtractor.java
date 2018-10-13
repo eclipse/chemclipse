@@ -21,6 +21,9 @@ import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.chemclipse.numeric.equations.Equations;
+import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
@@ -37,6 +40,9 @@ public class ExtractedSingleWavelengthSignalExtractor implements IExtractedSingl
 	 * All values will be extracted from IChromatogram.
 	 * 
 	 * @param chromatogram
+	 * @param joinSignal
+	 *            if set true, signal, which has some wavelength, will be storage together and missing signal will be interpolated
+	 *            otherwise if signal contains discontinuity, it will be split to several IExtractedSingleWavelengthSignals objects.
 	 * @throws ChromatogramIsNullException
 	 */
 	public ExtractedSingleWavelengthSignalExtractor(IChromatogramWSD chromatogram, boolean joinSignal) throws ChromatogramIsNullException {
@@ -51,18 +57,12 @@ public class ExtractedSingleWavelengthSignalExtractor implements IExtractedSingl
 	@Override
 	public List<IExtractedSingleWavelengthSignals> getExtractedWavelengthSignals(IChromatogramSelectionWSD chromatogramSelection) {
 
-		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() != chromatogram) {
-			List<IExtractedSingleWavelengthSignals> extractedWavelengthSignals = new ArrayList<>();
-			extractedWavelengthSignals.add(new ExtractedSingleWavelengthSignals(0, Double.NaN, chromatogram));
-			return extractedWavelengthSignals;
-		}
 		/*
 		 * Get the start and stop scan.
 		 */
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-		IMarkedWavelengths markedWavelengths = chromatogramSelection.getSelectedWavelengths();
-		return getExtractedWavelengthSignals(startScan, stopScan, markedWavelengths, joinSignal);
+		return getExtractedWavelengthSignals(startScan, stopScan);
 	}
 
 	@Override
@@ -86,24 +86,24 @@ public class ExtractedSingleWavelengthSignalExtractor implements IExtractedSingl
 			extractedWavelengthSignals.add(new ExtractedSingleWavelengthSignals(0, Double.NaN, chromatogram));
 			return extractedWavelengthSignals;
 		}
-		Iterator<Double> it = markedWavelengths.getWavelengths().stream().sorted().iterator();
-		while(it.hasNext()) {
-			double wavelength = it.next();
+		Iterator<Double> itWavelengths = markedWavelengths.getWavelengths().stream().sorted().iterator();
+		while(itWavelengths.hasNext()) {
+			double wavelength = itWavelengths.next();
 			SortedMap<Integer, IExtractedSingleWavelengthSignal> extractedSignalsMap = null;
 			int startScanSignal = 0;
 			int stopScanSignal = 0;
 			for(int scan = startScan; scan <= stopScan; scan++) {
 				IScanWSD scanWSD = chromatogram.getSupplierScan(scan);
 				if(scanWSD.getScanSignals().size() > 0) {
-					/*
-					 * 
-					 */
 					Optional<IExtractedSingleWavelengthSignal> extractedWavelengthSignal = scanWSD.getExtractedSingleWavelengthSignal(wavelength);
 					if(extractedWavelengthSignal.isPresent()) {
 						/*
 						 * if signal on wavelength exist
 						 */
 						if(extractedSignalsMap == null) {
+							/*
+							 * create new map, where signal is stored
+							 */
 							extractedSignalsMap = new TreeMap<>();
 							extractedSignalsMap.put(scan, extractedWavelengthSignal.get());
 							startScanSignal = scan;
@@ -118,7 +118,7 @@ public class ExtractedSingleWavelengthSignalExtractor implements IExtractedSingl
 						 */
 						IExtractedSingleWavelengthSignals extractedSingleWavelengthSignals = new ExtractedSingleWavelengthSignals(startScanSignal, stopScanSignal, wavelength, chromatogram);
 						for(Entry<Integer, IExtractedSingleWavelengthSignal> entry : extractedSignalsMap.entrySet()) {
-							extractedSingleWavelengthSignals.add(entry.getValue(), entry.getKey());
+							extractedSingleWavelengthSignals.add(entry.getValue());
 						}
 						extractedWavelengthSignals.add(extractedSingleWavelengthSignals);
 						extractedSignalsMap = null;
@@ -126,11 +126,45 @@ public class ExtractedSingleWavelengthSignalExtractor implements IExtractedSingl
 				}
 			}
 			if(extractedSignalsMap != null) {
-				IExtractedSingleWavelengthSignals extractedIonSignals = new ExtractedSingleWavelengthSignals(startScanSignal, stopScanSignal, wavelength, chromatogram);
-				for(Entry<Integer, IExtractedSingleWavelengthSignal> entry : extractedSignalsMap.entrySet()) {
-					extractedIonSignals.add(entry.getValue(), entry.getKey());
+				if(!join) {
+					IExtractedSingleWavelengthSignals extractedSingleWavelengthSignals = new ExtractedSingleWavelengthSignals(startScanSignal, stopScanSignal, wavelength, chromatogram);
+					for(Entry<Integer, IExtractedSingleWavelengthSignal> entry : extractedSignalsMap.entrySet()) {
+						extractedSingleWavelengthSignals.add(entry.getValue());
+					}
+				} else {
+					/*
+					 * if signal should be join missing signal between scan is interpolated
+					 */
+					IExtractedSingleWavelengthSignals extractedIonSignals = new ExtractedSingleWavelengthSignals(startScanSignal, stopScanSignal, wavelength, chromatogram);
+					Iterator<Entry<Integer, IExtractedSingleWavelengthSignal>> it = extractedSignalsMap.entrySet().iterator();
+					while(it.hasNext()) {
+						Entry<Integer, IExtractedSingleWavelengthSignal> entry = it.next();
+						int scenNumber = entry.getKey();
+						IExtractedSingleWavelengthSignal extractedSingleWavelengthSignal = entry.getValue();
+						if(it.hasNext()) {
+							entry = it.next();
+							int scenNumberNext = entry.getKey();
+							IExtractedSingleWavelengthSignal extractedSingleWavelengthSignalNext = entry.getValue();
+							extractedIonSignals.add(extractedSingleWavelengthSignal);
+							/*
+							 * interpolate missing signals
+							 */
+							for(int i = scenNumber + 1; i < scenNumberNext; i++) {
+								IScan s = chromatogram.getScan(i);
+								int retentionTime = s.getRetentionTime();
+								float retentionIndex = s.getRetentionIndex();
+								Point p1 = new Point(extractedSingleWavelengthSignal.getRetentionTime(), extractedSingleWavelengthSignal.getTotalSignal());
+								Point p2 = new Point(extractedSingleWavelengthSignalNext.getRetentionTime(), extractedSingleWavelengthSignalNext.getTotalSignal());
+								LinearEquation eq = Equations.createLinearEquation(p1, p2);
+								extractedIonSignals.add(new ExtractedSingleWavelengthSignal(wavelength, (float)eq.calculateY(retentionTime), retentionTime, retentionIndex));
+							}
+							extractedIonSignals.add(extractedSingleWavelengthSignalNext);
+						} else {
+							extractedIonSignals.add(extractedSingleWavelengthSignal);
+						}
+					}
+					extractedWavelengthSignals.add(extractedIonSignals);
 				}
-				extractedWavelengthSignals.add(extractedIonSignals);
 			}
 		}
 		return extractedWavelengthSignals;
@@ -193,7 +227,7 @@ public class ExtractedSingleWavelengthSignalExtractor implements IExtractedSingl
 
 		IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
 		markedWavelengths.add(markedWavelength);
-		List<IExtractedSingleWavelengthSignals> extracetedSignals = getExtractedWavelengthSignals(startScan, stopScan, markedWavelengths, false);
+		List<IExtractedSingleWavelengthSignals> extracetedSignals = getExtractedWavelengthSignals(startScan, stopScan, markedWavelengths, joinSignal);
 		if(extracetedSignals.size() == 1) {
 			IExtractedSingleWavelengthSignals extracetedSignal = extracetedSignals.get(0);
 			if(extracetedSignal.getStartScan() == startScan && extracetedSignal.getStopScan() == stopScan) {
