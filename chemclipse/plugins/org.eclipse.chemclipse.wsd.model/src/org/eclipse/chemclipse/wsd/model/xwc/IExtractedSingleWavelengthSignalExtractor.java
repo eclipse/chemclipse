@@ -92,14 +92,16 @@ public interface IExtractedSingleWavelengthSignalExtractor {
 	Optional<IExtractedSingleWavelengthSignals> getExtractWavelengthContinuousSignal(IMarkedWavelength markedWavelength);
 
 	/**
-	 * if set true, signal, which has some wavelength, will be storage together otherwise will be split if signal contains discontinuity
+	 * if set true, signal, which has some wavelength, will be storage together and missing signal will be interpolated
+	 * otherwise if signal contains discontinuity, it will be split.
 	 * 
 	 * @return
 	 */
 	boolean isJoinSignal();
 
 	/**
-	 * if set true, signal, which has some wavelength, will be storage together otherwise will be split if signal contains discontinuity
+	 * if set true, signal, which has some wavelength, will be storage together and missing signal will be interpolated
+	 * otherwise if signal contains discontinuity, it will be split.
 	 * 
 	 * @param joinSignal
 	 */

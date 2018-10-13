@@ -26,15 +26,6 @@ public interface IExtractedSingleWavelengthSignals extends ITotalScanSignals {
 	 */
 	void add(IExtractedSingleWavelengthSignal extractedWavelengthSignal);
 
-	/**
-	 * Adds an {@link IExtractedSingleWavelengthSignal} instance at the scan
-	 * 
-	 * @param extractedWavelengthSignal
-	 * @param scan
-	 * 
-	 */
-	void add(IExtractedSingleWavelengthSignal extractedWavelengthSignal, int scan);
-
 	@Override
 	IExtractedSingleWavelengthSignal getTotalScanSignal(int scan);
 
