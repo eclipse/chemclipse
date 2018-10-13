@@ -375,4 +375,14 @@ public class SavitzkyGolayProcessor {
 		}
 		return array;
 	}
+
+	public IChromatogramFilterResult apply(ITotalScanSignals totalSignals, FilterSettings filterSettings, IProgressMonitor monitor) {
+
+		double[] sgTic = smooth(totalSignals, filterSettings, monitor);
+		int i = 0;
+		for(ITotalScanSignal signal : totalSignals.getTotalScanSignals()) {
+			signal.setTotalSignal((float)sgTic[i++]);
+		}
+		return new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
+	}
 }
