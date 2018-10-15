@@ -131,6 +131,7 @@ public class ExtractedSingleWavelengthSignalExtractor implements IExtractedSingl
 					for(Entry<Integer, IExtractedSingleWavelengthSignal> entry : extractedSignalsMap.entrySet()) {
 						extractedSingleWavelengthSignals.add(entry.getValue());
 					}
+					extractedWavelengthSignals.add(extractedSingleWavelengthSignals);
 				} else {
 					/*
 					 * if signal should be join missing signal between scan is interpolated
@@ -139,24 +140,26 @@ public class ExtractedSingleWavelengthSignalExtractor implements IExtractedSingl
 					Iterator<Entry<Integer, IExtractedSingleWavelengthSignal>> it = extractedSignalsMap.entrySet().iterator();
 					while(it.hasNext()) {
 						Entry<Integer, IExtractedSingleWavelengthSignal> entry = it.next();
-						int scenNumber = entry.getKey();
+						int scanNumber = entry.getKey();
 						IExtractedSingleWavelengthSignal extractedSingleWavelengthSignal = entry.getValue();
 						if(it.hasNext()) {
 							entry = it.next();
-							int scenNumberNext = entry.getKey();
+							int scanNumberNext = entry.getKey();
 							IExtractedSingleWavelengthSignal extractedSingleWavelengthSignalNext = entry.getValue();
 							extractedIonSignals.add(extractedSingleWavelengthSignal);
 							/*
 							 * interpolate missing signals
 							 */
-							for(int i = scenNumber + 1; i < scenNumberNext; i++) {
-								IScan s = chromatogram.getScan(i);
-								int retentionTime = s.getRetentionTime();
-								float retentionIndex = s.getRetentionIndex();
+							if(scanNumber + 1 != scanNumberNext) {
 								Point p1 = new Point(extractedSingleWavelengthSignal.getRetentionTime(), extractedSingleWavelengthSignal.getTotalSignal());
 								Point p2 = new Point(extractedSingleWavelengthSignalNext.getRetentionTime(), extractedSingleWavelengthSignalNext.getTotalSignal());
 								LinearEquation eq = Equations.createLinearEquation(p1, p2);
-								extractedIonSignals.add(new ExtractedSingleWavelengthSignal(wavelength, (float)eq.calculateY(retentionTime), retentionTime, retentionIndex));
+								for(int i = scanNumber + 1; i < scanNumberNext; i++) {
+									IScan s = chromatogram.getScan(i);
+									int retentionTime = s.getRetentionTime();
+									float retentionIndex = s.getRetentionIndex();
+									extractedIonSignals.add(new ExtractedSingleWavelengthSignal(wavelength, (float)eq.calculateY(retentionTime), retentionTime, retentionIndex));
+								}
 							}
 							extractedIonSignals.add(extractedSingleWavelengthSignalNext);
 						} else {
