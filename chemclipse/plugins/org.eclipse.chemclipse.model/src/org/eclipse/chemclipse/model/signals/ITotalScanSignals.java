@@ -73,6 +73,24 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	}
 
 	/**
+	 * 
+	 * @return first signal with index start scan if signals is empty return null
+	 */
+	default ITotalScanSignal getFirstTotalScanSignal() {
+
+		return getTotalScanSignal(getStartScan());
+	}
+
+	/**
+	 * 
+	 * @return first signal with index stop scan if signals is empty return null
+	 */
+	default ITotalScanSignal getLastTotalScanSignal() {
+
+		return getTotalScanSignal(getStopScan());
+	}
+
+	/**
 	 * Returns the size.
 	 * 
 	 * @return int
