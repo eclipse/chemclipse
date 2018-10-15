@@ -13,6 +13,10 @@ package org.eclipse.chemclipse.wsd.model.xwc;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
@@ -106,4 +110,16 @@ public interface IExtractedSingleWavelengthSignalExtractor {
 	 * @param joinSignal
 	 */
 	void setJoinSignal(boolean joinSignal);
+
+	static SortedMap<Double, SortedSet<IExtractedSingleWavelengthSignals>> sortExtractedSignals(List<IExtractedSingleWavelengthSignals> extractedSingleWavelengthSignals) {
+
+		SortedMap<Double, SortedSet<IExtractedSingleWavelengthSignals>> sortedMap = new TreeMap<>();
+		for(IExtractedSingleWavelengthSignals signals : extractedSingleWavelengthSignals) {
+			double wavelength = signals.getWavelength();
+			sortedMap.putIfAbsent(wavelength, new TreeSet<>((s1, s2) -> Integer.compare(s1.getStartScan(), s2.getStartScan())));
+			SortedSet<IExtractedSingleWavelengthSignals> signalOnWavelength = sortedMap.get(wavelength);
+			signalOnWavelength.add(signals);
+		}
+		return sortedMap;
+	}
 }
