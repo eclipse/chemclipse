@@ -31,8 +31,10 @@ public class ScanProcessorNMR {
 	private static final String DESCRIPTION = "description"; //$NON-NLS-1$
 	private static final String PROCESSOR_NAME = "processorName"; //$NON-NLS-1$
 	private static final String PROCESSOR = "processor"; //$NON-NLS-1$
+	private static final String SETTINGS = "settings";
 
 	private ScanProcessorNMR() {
+
 	}
 
 	public static IProcessingInfo process(IScanNMR scanNMR, IProcessorSettings processorSettings, String processorId, IProgressMonitor monitor) {
@@ -88,6 +90,16 @@ public class ScanProcessorNMR {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setProcessorName(element.getAttribute(PROCESSOR_NAME));
+			if(element.getAttribute(SETTINGS) != null) {
+				try {
+					IProcessorSettings instance = (IProcessorSettings)element.createExecutableExtension(SETTINGS);
+					supplier.setSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setSettingsClass(null);
+				}
+			}
 			support.add(supplier);
 		}
 		return support;

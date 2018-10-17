@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.processor.core;
 
+import org.eclipse.chemclipse.nmr.processor.settings.IProcessorSettings;
+
 public class ScanProcessorSupplier implements IScanProcessorSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String processorName = "";
+	private Class<? extends IProcessorSettings> settingClass = null;
 
 	@Override
 	public String getId() {
@@ -51,5 +54,17 @@ public class ScanProcessorSupplier implements IScanProcessorSupplier {
 	public void setProcessorName(String processorName) {
 
 		this.processorName = processorName;
+	}
+
+	@Override
+	public void setSettingsClass(Class<? extends IProcessorSettings> settingsClass) {
+
+		this.settingClass = settingsClass;
+	}
+
+	@Override
+	public Class<? extends IProcessorSettings> getSettingsClass() {
+
+		return settingClass;
 	}
 }

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.processor.core;
 
+import org.eclipse.chemclipse.nmr.processor.settings.IProcessorSettings;
+
 public interface IScanProcessorSupplier {
 
 	String getId();
@@ -24,4 +26,8 @@ public interface IScanProcessorSupplier {
 	String getProcessorName();
 
 	void setProcessorName(String processorName);
+
+	void setSettingsClass(Class<? extends IProcessorSettings> settingsClass);
+
+	Class<? extends IProcessorSettings> getSettingsClass();
 }
