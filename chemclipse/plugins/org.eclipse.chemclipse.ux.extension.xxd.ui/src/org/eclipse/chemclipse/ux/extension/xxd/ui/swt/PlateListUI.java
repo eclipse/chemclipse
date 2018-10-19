@@ -79,13 +79,12 @@ public class PlateListUI extends ExtendedTableViewer {
 								cell.setBackground(Colors.GRAY);
 								cell.setForeground(Colors.WHITE);
 							} else {
-								double crossingPoint = well.getCrossingPoint();
-								if(crossingPoint == 0.0d) {
-									cell.setBackground(Colors.GREEN);
-									cell.setForeground(Colors.BLACK);
-								} else {
+								if(well.isPositiveMeasurement()) {
 									cell.setBackground(Colors.RED);
 									cell.setForeground(Colors.WHITE);
+								} else {
+									cell.setBackground(Colors.GREEN);
+									cell.setForeground(Colors.BLACK);
 								}
 							}
 						}

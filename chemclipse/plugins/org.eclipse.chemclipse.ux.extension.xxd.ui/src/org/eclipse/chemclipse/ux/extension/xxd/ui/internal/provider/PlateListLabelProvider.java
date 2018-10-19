@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
+import java.util.Iterator;
 
+import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IPlateTableEntry;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -69,6 +71,17 @@ public class PlateListLabelProvider extends AbstractChemClipseLabelProvider {
 				}
 				builder.append("\n");
 				builder.append(decimalFormat.format(well.getCrossingPoint()));
+				//
+				builder.append(" [");
+				Iterator<IChannel> iterator = well.getChannels().values().iterator();
+				while(iterator.hasNext()) {
+					IChannel channel = iterator.next();
+					builder.append(decimalFormat.format(channel.getCrossingPoint()));
+					if(iterator.hasNext()) {
+						builder.append(" | ");
+					}
+				}
+				builder.append("]");
 				text = builder.toString();
 			}
 		} else {

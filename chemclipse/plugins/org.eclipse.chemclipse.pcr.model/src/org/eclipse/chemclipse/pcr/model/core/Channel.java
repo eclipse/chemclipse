@@ -21,6 +21,7 @@ public class Channel implements IChannel {
 	private double temperature = 0.0d;
 	private boolean valid = false;
 	private List<Double> points = new ArrayList<>();
+	private double crossingPoint = 0.0d;
 
 	@Override
 	public int getId() {
@@ -80,5 +81,17 @@ public class Channel implements IChannel {
 	public void setPoints(List<Double> points) {
 
 		this.points = points;
+	}
+
+	@Override
+	public double getCrossingPoint() {
+
+		return crossingPoint;
+	}
+
+	@Override
+	public void setCrossingPoint(double crossingPoint) {
+
+		this.crossingPoint = crossingPoint;
 	}
 }

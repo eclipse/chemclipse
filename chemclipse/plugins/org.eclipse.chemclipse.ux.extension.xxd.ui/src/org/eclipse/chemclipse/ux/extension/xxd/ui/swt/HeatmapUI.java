@@ -61,6 +61,7 @@ public class HeatmapUI {
 	private Trace trace;
 	private ScaledSliderFigure slider;
 	private List<IMarkedSignal> signals;
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 	private ChromatogramHeatmapData chromatogramHeatmap;
 	private Label selectedWavelengthLabel;
@@ -70,11 +71,11 @@ public class HeatmapUI {
 	private Composite parent;
 
 	public HeatmapUI(Composite parent) {
-
 		signals = new ArrayList<>();
 		this.parent = parent;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
 		Optional<ChromatogramHeatmapData> heatmap = chromatogramHeatmapSupport.getHeatmap(chromatogramSelection.getChromatogram());
@@ -274,6 +275,7 @@ public class HeatmapUI {
 		m_plot.addTrace(trace);
 		// overlay the graphs
 		org.eclipse.swt.graphics.Rectangle client = cavens.getClientArea();
+		@SuppressWarnings("unused")
 		Rectangle constraint = new Rectangle(0, 0, client.width, client.height);
 		m_container = new Figure();
 		m_container.setLayoutManager(new XYLayout());

@@ -73,10 +73,16 @@ public class ExtendedWellChartUI {
 
 		this.well = well;
 		if(well != null) {
-			labelInfo.setText("Position: " + (well.getPosition().getId() + 1) + ", Id:" + well.getSampleId());
-			comboChannels.setItems(getComboItems(well));
-			comboChannels.select(0);
-			updateChart();
+			if(well.isEmptyMeasurement()) {
+				labelInfo.setText("Position: " + (well.getPosition().getId() + 1));
+				comboChannels.setItems(new String[]{});
+				chartPCR.deleteSeries();
+			} else {
+				labelInfo.setText("Position: " + (well.getPosition().getId() + 1) + ", Id:" + well.getSampleId());
+				comboChannels.setItems(getComboItems(well));
+				comboChannels.select(0);
+				updateChart();
+			}
 		} else {
 			labelInfo.setText("No well data available.");
 			comboChannels.setItems(getComboItems(well));

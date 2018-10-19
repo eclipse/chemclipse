@@ -41,4 +41,6 @@ public interface IWell extends Comparable<IWell> {
 	double getCrossingPoint();
 
 	boolean isEmptyMeasurement();
+
+	boolean isPositiveMeasurement();
 }

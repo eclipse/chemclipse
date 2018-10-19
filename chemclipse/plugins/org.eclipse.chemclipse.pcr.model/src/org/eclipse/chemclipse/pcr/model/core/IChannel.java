@@ -34,4 +34,8 @@ public interface IChannel {
 	List<Double> getPoints();
 
 	void setPoints(List<Double> points);
+
+	double getCrossingPoint();
+
+	void setCrossingPoint(double crossingPoint);
 }

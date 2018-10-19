@@ -118,4 +118,15 @@ public class Well implements IWell {
 
 		return ("".equals(getSampleId().trim()) || "_".equals(getSampleId().trim()));
 	}
+
+	@Override
+	public boolean isPositiveMeasurement() {
+
+		for(IChannel channel : getChannels().values()) {
+			if(channel.getCrossingPoint() > 0.0d) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
