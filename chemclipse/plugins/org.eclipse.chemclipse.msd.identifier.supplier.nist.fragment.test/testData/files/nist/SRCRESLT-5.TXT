@@ -1,0 +1,640 @@
+Unknown: ID-1                                                        Compound in Library Factor = 107
+Hit 1  : <<Gallic acid, 4TMS derivative>>;<<C19H38O5Si4>>; MF: 778; RMF: 844; Prob: 91.43; CAS:2078-17-3; Mw: 458; Lib: <<replib>>; Id: 11826; RI: 1987.
+Hit 2  : <<Cholest-7-en-3-ol, (3á,5à)-, TMS derivative>>;<<C30H54OSi>>; MF: 581; RMF: 650; Prob: 1.26; CAS:2665-03-4; Mw: 458; Lib: <<replib>>; Id: 39175; RI: 3195.
+Hit 3  : <<Triptophenolide, pentafluoropropionate>>;<<C23H23F5O4>>; MF: 572; RMF: 580; Prob: 0.91; CAS:0-00-0; Mw: 458; Lib: <<mainlib>>; Id: 264887; RI: 2722.
+Unknown: ID-2                                                        Compound in Library Factor = -117
+Hit 1  : <<D-Glucose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 923; RMF: 935; Prob: 9.59; CAS:6736-97-6; Mw: 540; Lib: <<mainlib>>; Id: 205539; RI: 1926.
+Hit 2  : <<á-D-Allopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 921; RMF: 922; Prob: 8.85; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 205524; RI: 1829.
+Hit 3  : <<á-D-Glucopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 917; RMF: 920; Prob: 7.47; CAS:2775-90-8; Mw: 540; Lib: <<mainlib>>; Id: 205541; RI: 1931.
+Unknown: ID-3                                                        Compound in Library Factor = 413
+Hit 1  : <<D-Gluconic acid, 6TMS derivative>>;<<C24H60O7Si6>>; MF: 901; RMF: 948; Prob: 90.63; CAS:34290-52-3; Mw: 628; Lib: <<replib>>; Id: 11881; RI: 2043.
+Hit 2  : <<2-Keto-L-gluconic acid, penta(O-trimethylsilyl)->>;<<C21H50O7Si5>>; MF: 733; RMF: 822; Prob: 2.06; CAS:0-00-0; Mw: 554; Lib: <<mainlib>>; Id: 47914; RI: 0.
+Hit 3  : <<Galactaric acid, (R,S,R,S)-, 6TMS derivative>>;<<C24H58O8Si6>>; MF: 731; RMF: 789; Prob: 1.90; CAS:56272-61-8; Mw: 642; Lib: <<replib>>; Id: 11882; RI: 2092.
+Unknown: ID-4                                                        Compound in Library Factor = -1210
+Hit 1  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 654; RMF: 673; Prob: 13.15; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 2  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 652; RMF: 713; Prob: 12.13; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 3  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 637; RMF: 697; Prob: 7.35; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Unknown: ID-5                                                        Compound in Library Factor = -1149
+Hit 1  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 677; RMF: 726; Prob: 19.86; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Hit 2  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 669; RMF: 730; Prob: 14.81; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 3  : <<à-Cortolone, 4TMS derivative>>;<<C33H66O5Si4>>; MF: 661; RMF: 680; Prob: 11.05; CAS:56196-46-4; Mw: 654; Lib: <<replib>>; Id: 11494; RI: 3210.
+Unknown: ID-6                                                        Compound in Library Factor = -1224
+Hit 1  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 646; RMF: 692; Prob: 18.30; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Hit 2  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 636; RMF: 693; Prob: 12.92; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 3  : <<Galactaric acid, (R,S,R,S)-, 6TMS derivative>>;<<C24H58O8Si6>>; MF: 621; RMF: 769; Prob: 7.82; CAS:56272-61-8; Mw: 642; Lib: <<replib>>; Id: 11882; RI: 2092.
+Unknown: ID-7                                                        Compound in Library Factor = -897
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 701; RMF: 763; Prob: 18.82; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 696; RMF: 710; Prob: 15.17; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 3  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 691; RMF: 733; Prob: 12.22; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Unknown: ID-8                                                        Compound in Library Factor = -1149
+Hit 1  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 2)>>;<<C21H52O6Si5>>; MF: 679; RMF: 808; Prob: 10.49; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47398; RI: 1800.
+Hit 2  : <<D-Psicofuranose, pentakis(trimethylsilyl) ether (isomer 2)>>;<<C21H52O6Si5>>; MF: 666; RMF: 800; Prob: 6.77; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47395; RI: 1837.
+Hit 3  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 1)>>;<<C21H52O6Si5>>; MF: 666; RMF: 797; Prob: 6.77; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47397; RI: 1792.
+Unknown: ID-9                                                        Compound in Library Factor = 103
+Hit 1  : <<Palmitic Acid, TMS derivative>>;<<C19H40O2Si>>; MF: 832; RMF: 917; Prob: 88.78; CAS:55520-89-3; Mw: 328; Lib: <<replib>>; Id: 38117; RI: 2050.
+Hit 2  : <<Palmitic Acid, TBDMS derivative>>;<<C22H46O2Si>>; MF: 715; RMF: 808; Prob: 5.06; CAS:58160-87-5; Mw: 370; Lib: <<mainlib>>; Id: 250739; RI: 2289.
+Hit 3  : <<Hexadecanoic acid, dimethyl(isopropyl)silyl ester>>;<<C21H44O2Si>>; MF: 664; RMF: 823; Prob: 1.02; CAS:0-00-0; Mw: 356; Lib: <<mainlib>>; Id: 250733; RI: 0.
+Unknown: ID-10                                                       Compound in Library Factor = -1032
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 684; RMF: 721; Prob: 11.47; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 680; RMF: 691; Prob: 9.69; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 3  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 662; RMF: 696; Prob: 4.99; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Unknown: ID-11                                                       Compound in Library Factor = 336
+Hit 1  : <<1,2,3,4,5,6-Hexa-O-trimethelsilyl-myo-inositol>>;<<C24H60O6Si6>>; MF: 943; RMF: 968; Prob: 45.98; CAS:0-00-0; Mw: 612; Lib: <<mainlib>>; Id: 214190; RI: 0.
+Hit 2  : <<Myo-Inositol, 6TMS derivative>>;<<C24H60O6Si6>>; MF: 943; RMF: 943; Prob: 45.98; CAS:2582-79-8; Mw: 612; Lib: <<mainlib>>; Id: 46633; RI: 2129.
+Hit 3  : <<Scyllo-Inositol, 6TMS derivative>>;<<C24H60O6Si6>>; MF: 872; RMF: 878; Prob: 6.54; CAS:14251-18-4; Mw: 612; Lib: <<replib>>; Id: 11605; RI: 0.
+Unknown: ID-12                                                       Compound in Library Factor = -1169
+Hit 1  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 662; RMF: 689; Prob: 19.37; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 2  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 648; RMF: 713; Prob: 12.13; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 3  : <<(+)-Prostaglandin F2à, 4TMS derivative>>;<<C32H66O5Si4>>; MF: 637; RMF: 670; Prob: 8.32; CAS:50669-95-9; Mw: 642; Lib: <<mainlib>>; Id: 45269; RI: 0.
+Unknown: ID-13                                                       Compound in Library Factor = -1048
+Hit 1  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 674; RMF: 692; Prob: 25.29; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 2  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 660; RMF: 714; Prob: 15.83; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 3  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 658; RMF: 709; Prob: 14.60; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Unknown: ID-14                                                       Compound in Library Factor = -1006
+Hit 1  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 2)>>;<<C21H52O6Si5>>; MF: 694; RMF: 822; Prob: 9.80; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47398; RI: 1800.
+Hit 2  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 686; RMF: 765; Prob: 7.31; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 3  : <<D-Fructose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 685; RMF: 774; Prob: 7.03; CAS:19126-98-8; Mw: 540; Lib: <<mainlib>>; Id: 47428; RI: 1867.
+Unknown: ID-15                                                       Compound in Library Factor = -695
+Hit 1  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 2)>>;<<C21H52O6Si5>>; MF: 711; RMF: 851; Prob: 24.62; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47398; RI: 1800.
+Hit 2  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 1)>>;<<C21H52O6Si5>>; MF: 695; RMF: 837; Prob: 14.18; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47397; RI: 1792.
+Hit 3  : <<D-Psicofuranose, pentakis(trimethylsilyl) ether (isomer 2)>>;<<C21H52O6Si5>>; MF: 690; RMF: 832; Prob: 11.43; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47395; RI: 1837.
+Unknown: ID-16                                                       Compound in Library Factor = 216
+Hit 1  : <<Hydracrylic acid, 2TMS derivative>>;<<C9H22O3Si2>>; MF: 918; RMF: 930; Prob: 88.06; CAS:55162-32-8; Mw: 234; Lib: <<replib>>; Id: 26865; RI: 1151.
+Hit 2  : <<2-Propenoic acid, 2-[(trimethylsilyl)oxy]-, trimethylsilyl ester>>;<<C9H20O3Si2>>; MF: 829; RMF: 850; Prob: 7.60; CAS:55191-13-4; Mw: 232; Lib: <<replib>>; Id: 26854; RI: 1099.
+Hit 3  : <<1,4-Butanediol, 2TMS derivative>>;<<C10H26O2Si2>>; MF: 787; RMF: 800; Prob: 1.70; CAS:18001-91-7; Mw: 234; Lib: <<mainlib>>; Id: 148158; RI: 1174.
+Unknown: ID-17                                                       Compound in Library Factor = -658
+Hit 1  : <<Pentasiloxane, dodecamethyl->>;<<C12H36O4Si5>>; MF: 681; RMF: 775; Prob: 39.36; CAS:141-63-9; Mw: 384; Lib: <<replib>>; Id: 11586; RI: 1189.
+Hit 2  : <<Trisiloxane, 1,1,1,5,5,5-hexamethyl-3,3-bis[(trimethylsilyl)oxy]->>;<<C12H36O4Si5>>; MF: 675; RMF: 732; Prob: 30.93; CAS:3555-47-3; Mw: 384; Lib: <<mainlib>>; Id: 46685; RI: 1125.
+Hit 3  : <<3-Hydroxybutyric acid, 2TMS derivative>>;<<C10H24O3Si2>>; MF: 651; RMF: 919; Prob: 10.36; CAS:55133-94-3; Mw: 248; Lib: <<replib>>; Id: 26837; RI: 1167.
+Unknown: ID-18                                                       Compound in Library Factor = -282
+Hit 1  : <<Dihydroxyacetone, 2TMS derivative>>;<<C9H22O3Si2>>; MF: 771; RMF: 893; Prob: 69.05; CAS:17877-42-8; Mw: 234; Lib: <<replib>>; Id: 11346; RI: 1218.
+Hit 2  : <<1,2,4-Butanetriol, 3TMS derivative>>;<<C13H34O3Si3>>; MF: 711; RMF: 779; Prob: 12.25; CAS:33581-75-8; Mw: 322; Lib: <<replib>>; Id: 17995; RI: 1354.
+Hit 3  : <<2'-Deoxyribolactone, 2TMS derivative>>;<<C11H24O4Si2>>; MF: 649; RMF: 718; Prob: 2.09; CAS:10589-33-0; Mw: 276; Lib: <<mainlib>>; Id: 45159; RI: 1660.
+Unknown: ID-19                                                       Compound in Library Factor = -197
+Hit 1  : <<Diethylene glycol, 2TMS derivative>>;<<C10H26O3Si2>>; MF: 839; RMF: 895; Prob: 49.87; CAS:16654-74-3; Mw: 250; Lib: <<mainlib>>; Id: 46088; RI: 1233.
+Hit 2  : <<Ethyltriethylene glycol, TMS derivative>>;<<C11H26O4Si>>; MF: 783; RMF: 843; Prob: 9.51; CAS:0-00-0; Mw: 250; Lib: <<mainlib>>; Id: 44612; RI: 1418.
+Hit 3  : <<Triethylene glycol, 2TMS derivative>>;<<C12H30O4Si2>>; MF: 762; RMF: 810; Prob: 4.04; CAS:62185-58-4; Mw: 294; Lib: <<mainlib>>; Id: 46087; RI: 1489.
+Unknown: ID-20                                                       Compound in Library Factor = 497
+Hit 1  : <<Glycerol, 3TMS derivative>>;<<C12H32O3Si3>>; MF: 942; RMF: 942; Prob: 82.02; CAS:6787-10-6; Mw: 308; Lib: <<mainlib>>; Id: 46617; RI: 1289.
+Hit 2  : <<1,2,3-Butanetriol, 3TMS derivative>>;<<C13H34O3Si3>>; MF: 786; RMF: 799; Prob: 2.11; CAS:33581-76-9; Mw: 322; Lib: <<replib>>; Id: 21063; RI: 1286.
+Hit 3  : <<L-(+)-Threose, tris(trimethylsilyl) ether, trimethylsilyloxime (isomer 1)>>;<<C16H41NO4Si4>>; MF: 785; RMF: 785; Prob: 2.03; CAS:0-00-0; Mw: 423; Lib: <<mainlib>>; Id: 46599; RI: 1542.
+Unknown: ID-21                                                       Compound in Library Factor = -151
+Hit 1  : <<2-Butenedioic acid, (Z)-, 2TMS derivative>>;<<C10H20O4Si2>>; MF: 811; RMF: 908; Prob: 78.21; CAS:23508-82-9; Mw: 260; Lib: <<replib>>; Id: 26877; RI: 1312.
+Hit 2  : <<2-Pentenoic acid, 2-[(trimethylsilyl)oxy]-, trimethylsilyl ester>>;<<C11H24O3Si2>>; MF: 722; RMF: 804; Prob: 6.75; CAS:55045-17-5; Mw: 260; Lib: <<mainlib>>; Id: 148215; RI: 1314.
+Hit 3  : <<2-Butenedioic acid, (E)-, 2TMS derivative>>;<<C10H20O4Si2>>; MF: 693; RMF: 786; Prob: 1.91; CAS:17962-03-7; Mw: 260; Lib: <<mainlib>>; Id: 228416; RI: 1353.
+Unknown: ID-22                                                       Compound in Library Factor = 244
+Hit 1  : <<Butanedioic acid, 2TMS derivative>>;<<C10H22O4Si2>>; MF: 943; RMF: 946; Prob: 88.91; CAS:40309-57-7; Mw: 262; Lib: <<replib>>; Id: 26820; RI: 1321.
+Hit 2  : <<Methylmalonic acid, 2TMS derivative>>;<<C10H22O4Si2>>; MF: 854; RMF: 879; Prob: 7.68; CAS:40333-07-1; Mw: 262; Lib: <<mainlib>>; Id: 148142; RI: 1223.
+Hit 3  : <<5-Trimethylsilyloxy-N-valeric acid, trimethylsilyl ester>>;<<C11H26O3Si2>>; MF: 824; RMF: 833; Prob: 2.13; CAS:0-00-0; Mw: 262; Lib: <<mainlib>>; Id: 148133; RI: 0.
+Unknown: ID-23                                                       Compound in Library Factor = 413
+Hit 1  : <<Glyceric acid, 3TMS derivative>>;<<C12H30O4Si3>>; MF: 909; RMF: 954; Prob: 91.62; CAS:38191-87-6; Mw: 322; Lib: <<replib>>; Id: 11535; RI: 1344.
+Hit 2  : <<Tartaric acid, 4TMS derivative>>;<<C16H38O6Si4>>; MF: 746; RMF: 757; Prob: 2.23; CAS:18602-86-3; Mw: 438; Lib: <<replib>>; Id: 11597; RI: 1665.
+Hit 3  : <<2,3,4-Trihydroxybutyric acid tetrakis(trimethylsilyl) deriv., (, (R*,R*)-)>>;<<C16H40O5Si4>>; MF: 736; RMF: 744; Prob: 1.57; CAS:38191-88-7; Mw: 424; Lib: <<mainlib>>; Id: 46689; RI: 0.
+Unknown: ID-24                                                       Compound in Library Factor = 447
+Hit 1  : <<2-Butenedioic acid, (E)-, 2TMS derivative>>;<<C10H20O4Si2>>; MF: 911; RMF: 949; Prob: 92.70; CAS:17962-03-7; Mw: 260; Lib: <<replib>>; Id: 36045; RI: 1353.
+Hit 2  : <<Acetic acid, 2-acetyl-1,2-bis(trimethylsilyl)hydrazide>>;<<C10H24N2O2Si2>>; MF: 743; RMF: 766; Prob: 2.11; CAS:87580-23-2; Mw: 260; Lib: <<mainlib>>; Id: 228418; RI: 0.
+Hit 3  : <<2-Butenedioic acid, (Z)-, 2TMS derivative>>;<<C10H20O4Si2>>; MF: 739; RMF: 753; Prob: 1.78; CAS:23508-82-9; Mw: 260; Lib: <<mainlib>>; Id: 148183; RI: 1312.
+Unknown: ID-25                                                       Compound in Library Factor = -1224
+Hit 1  : <<1,2,3-Butanetriol, 3TMS derivative>>;<<C13H34O3Si3>>; MF: 648; RMF: 742; Prob: 6.47; CAS:33581-76-9; Mw: 322; Lib: <<replib>>; Id: 21063; RI: 1286.
+Hit 2  : <<Tartaric acid (2R,3R)-, 3TMS derivative>>;<<C13H30O6Si3>>; MF: 648; RMF: 709; Prob: 6.47; CAS:0-00-0; Mw: 366; Lib: <<mainlib>>; Id: 46573; RI: 0.
+Hit 3  : <<1-Monoacetin, 2O-TMS>>;<<C11H26O4Si2>>; MF: 631; RMF: 737; Prob: 3.53; CAS:0-00-0; Mw: 278; Lib: <<mainlib>>; Id: 179782; RI: 1324.
+Unknown: ID-26                                                       Compound in Library Factor = -988
+Hit 1  : <<Erythro-Pentonic acid, 2-deoxy-3,4,5-tris-O-(trimethylsilyl)-, trimethylsilyl ester>>;<<C17H42O5Si4>>; MF: 637; RMF: 706; Prob: 18.93; CAS:74742-30-6; Mw: 438; Lib: <<mainlib>>; Id: 46491; RI: 1698.
+Hit 2  : <<Malic acid, 3TMS derivative>>;<<C13H30O5Si3>>; MF: 634; RMF: 698; Prob: 16.72; CAS:38166-11-9; Mw: 350; Lib: <<mainlib>>; Id: 46657; RI: 1497.
+Hit 3  : <<2,2,3,3,4,4,5,5,6,6-Decametyl-[1,2,3,4,5,6]oxapentasilepane>>;<<C10H30OSi5>>; MF: 623; RMF: 715; Prob: 11.47; CAS:0-00-0; Mw: 306; Lib: <<mainlib>>; Id: 44419; RI: 0.
+Unknown: ID-27                                                       Compound in Library Factor = -1949
+Hit 1  : <<D-(-)- Erythrofuranose, tris(trimethylsilyl) ether (isomer 2)>>;<<C13H32O4Si3>>; MF: 598; RMF: 687; Prob: 3.71; CAS:0-00-0; Mw: 336; Lib: <<mainlib>>; Id: 46579; RI: 1417.
+Hit 2  : <<Tartaric acid (2R,3R)-, 3TMS derivative>>;<<C13H30O6Si3>>; MF: 597; RMF: 674; Prob: 3.56; CAS:0-00-0; Mw: 366; Lib: <<mainlib>>; Id: 46573; RI: 0.
+Hit 3  : <<Malic acid, 2TMS derivative>>;<<C10H22O5Si2>>; MF: 595; RMF: 679; Prob: 3.29; CAS:0-00-0; Mw: 278; Lib: <<mainlib>>; Id: 46478; RI: 0.
+Unknown: ID-28                                                       Compound in Library Factor = 296
+Hit 1  : <<Pentanedioic acid, 2TMS derivative>>;<<C11H24O4Si2>>; MF: 886; RMF: 949; Prob: 95.27; CAS:55494-07-0; Mw: 276; Lib: <<replib>>; Id: 26826; RI: 1409.
+Hit 2  : <<Methylsuccinic acid, 2TMS derivative>>;<<C11H24O4Si2>>; MF: 731; RMF: 886; Prob: 2.47; CAS:55557-26-1; Mw: 276; Lib: <<replib>>; Id: 26821; RI: 1331.
+Hit 3  : <<6-Hydroxyhexanoic acid, 2TMS derivative>>;<<C12H28O3Si2>>; MF: 697; RMF: 724; Prob: 0.63; CAS:150367-75-2; Mw: 276; Lib: <<mainlib>>; Id: 148221; RI: 0.
+Unknown: ID-29                                                       Compound in Library Factor = 103
+Hit 1  : <<Butanoic acid, 3,4-bis[(trimethylsilyl)oxy]-, trimethylsilyl ester>>;<<C13H32O4Si3>>; MF: 837; RMF: 904; Prob: 84.39; CAS:55191-53-2; Mw: 336; Lib: <<replib>>; Id: 11571; RI: 1443.
+Hit 2  : <<Dimethylolacetic acid, 3TMS>>;<<C13H32O4Si3>>; MF: 723; RMF: 750; Prob: 5.13; CAS:97639-23-1; Mw: 336; Lib: <<replib>>; Id: 11514; RI: 1408.
+Hit 3  : <<Malic acid 1-ethyl ester, 2TMS>>;<<C12H26O5Si2>>; MF: 686; RMF: 748; Prob: 1.24; CAS:0-00-0; Mw: 306; Lib: <<mainlib>>; Id: 46574; RI: 1426.
+Unknown: ID-30                                                       Compound in Library Factor = -186
+Hit 1  : <<3-Hydroxy-2,3-dihydromaltol, 2-O-TMS>>;<<C12H24O4Si2>>; MF: 809; RMF: 878; Prob: 80.31; CAS:0-00-0; Mw: 288; Lib: <<mainlib>>; Id: 47819; RI: 1461.
+Hit 2  : <<2-Isopropyl-3-ketobutyrate, bis(O-trimethylsilyl)->>;<<C13H28O3Si2>>; MF: 753; RMF: 820; Prob: 15.31; CAS:0-00-0; Mw: 288; Lib: <<mainlib>>; Id: 47065; RI: 0.
+Hit 3  : <<trans-4-Trimethylsilyloxy-cyclohexyl(trimethylsilyl)carboxylate>>;<<C13H28O3Si2>>; MF: 669; RMF: 754; Prob: 1.43; CAS:0-00-0; Mw: 288; Lib: <<mainlib>>; Id: 45481; RI: 1522.
+Unknown: ID-31                                                       Compound in Library Factor = 163
+Hit 1  : <<Malic acid, 4-ethyl ester, 2TMS>>;<<C12H26O5Si2>>; MF: 877; RMF: 925; Prob: 91.22; CAS:0-00-0; Mw: 306; Lib: <<mainlib>>; Id: 46654; RI: 1442.
+Hit 2  : <<Malic acid 1-ethyl ester, 2TMS>>;<<C12H26O5Si2>>; MF: 778; RMF: 818; Prob: 6.91; CAS:0-00-0; Mw: 306; Lib: <<mainlib>>; Id: 46574; RI: 1426.
+Hit 3  : <<Malic acid, 3TMS derivative>>;<<C13H30O5Si3>>; MF: 671; RMF: 707; Prob: 0.45; CAS:38166-11-9; Mw: 350; Lib: <<mainlib>>; Id: 46657; RI: 1497.
+Unknown: ID-32                                                       Compound in Library Factor = -1679
+Hit 1  : <<Erythro-Pentonic acid, 2-deoxy-3,4,5-tris-O-(trimethylsilyl)-, trimethylsilyl ester>>;<<C17H42O5Si4>>; MF: 643; RMF: 775; Prob: 9.35; CAS:74742-30-6; Mw: 438; Lib: <<mainlib>>; Id: 46491; RI: 1698.
+Hit 2  : <<D-Fructose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 635; RMF: 700; Prob: 6.98; CAS:19126-98-8; Mw: 540; Lib: <<replib>>; Id: 11517; RI: 1867.
+Hit 3  : <<Glycerol, 3TMS derivative>>;<<C12H32O3Si3>>; MF: 630; RMF: 826; Prob: 5.62; CAS:6787-10-6; Mw: 308; Lib: <<mainlib>>; Id: 46617; RI: 1289.
+Unknown: ID-33                                                       Compound in Library Factor = 683
+Hit 1  : <<Malic acid, 3TMS derivative>>;<<C13H30O5Si3>>; MF: 957; RMF: 960; Prob: 97.18; CAS:38166-11-9; Mw: 350; Lib: <<mainlib>>; Id: 46657; RI: 1497.
+Hit 2  : <<Malic acid 1-ethyl ester, 2TMS>>;<<C12H26O5Si2>>; MF: 720; RMF: 768; Prob: 0.97; CAS:0-00-0; Mw: 306; Lib: <<mainlib>>; Id: 46574; RI: 1426.
+Hit 3  : <<Malic acid, 4-ethyl ester, 2TMS>>;<<C12H26O5Si2>>; MF: 709; RMF: 764; Prob: 0.66; CAS:0-00-0; Mw: 306; Lib: <<mainlib>>; Id: 46654; RI: 1442.
+Unknown: ID-34                                                       Compound in Library Factor = -315
+Hit 1  : <<L-Threitol, 4TMS derivative>>;<<C16H42O4Si4>>; MF: 817; RMF: 895; Prob: 25.13; CAS:0-00-0; Mw: 410; Lib: <<mainlib>>; Id: 46628; RI: 1510.
+Hit 2  : <<meso-Erythritol, 4TMS derivative>>;<<C16H42O4Si4>>; MF: 808; RMF: 886; Prob: 18.24; CAS:0-00-0; Mw: 410; Lib: <<mainlib>>; Id: 46630; RI: 1501.
+Hit 3  : <<Erythritol, 4TMS derivative>>;<<C16H42O4Si4>>; MF: 804; RMF: 888; Prob: 15.41; CAS:18547-29-0; Mw: 410; Lib: <<mainlib>>; Id: 47433; RI: 1508.
+Unknown: ID-35                                                       Compound in Library Factor = -197
+Hit 1  : <<L-Threitol, 4TMS derivative>>;<<C16H42O4Si4>>; MF: 877; RMF: 911; Prob: 38.40; CAS:0-00-0; Mw: 410; Lib: <<mainlib>>; Id: 46628; RI: 1510.
+Hit 2  : <<meso-Erythritol, 4TMS derivative>>;<<C16H42O4Si4>>; MF: 876; RMF: 911; Prob: 36.91; CAS:0-00-0; Mw: 410; Lib: <<mainlib>>; Id: 46630; RI: 1501.
+Hit 3  : <<Erythritol, 4TMS derivative>>;<<C16H42O4Si4>>; MF: 847; RMF: 886; Prob: 10.46; CAS:18547-29-0; Mw: 410; Lib: <<mainlib>>; Id: 47433; RI: 1508.
+Unknown: ID-36                                                       Compound in Library Factor = -744
+Hit 1  : <<4-Hydroxy-5-(hydroxymethyl)oxolan-2-one, 2TMS derivative>>;<<C11H24O4Si2>>; MF: 733; RMF: 787; Prob: 20.89; CAS:74742-34-0; Mw: 276; Lib: <<mainlib>>; Id: 45157; RI: 0.
+Hit 2  : <<2'-Deoxyribolactone, 2TMS derivative>>;<<C11H24O4Si2>>; MF: 732; RMF: 784; Prob: 20.08; CAS:10589-33-0; Mw: 276; Lib: <<mainlib>>; Id: 45159; RI: 1660.
+Hit 3  : <<Tartaric acid (2R,3R)-, 3TMS derivative>>;<<C13H30O6Si3>>; MF: 707; RMF: 757; Prob: 6.12; CAS:0-00-0; Mw: 366; Lib: <<mainlib>>; Id: 46573; RI: 0.
+Unknown: ID-37                                                       Compound in Library Factor = -361
+Hit 1  : <<L-5-Oxoproline, , 2TMS derivative>>;<<C11H23NO3Si2>>; MF: 743; RMF: 856; Prob: 74.94; CAS:30274-77-2; Mw: 273; Lib: <<mainlib>>; Id: 160123; RI: 1522.
+Hit 2  : <<5-Oxoproline, 2TMS derivative>>;<<C11H23NO3Si2>>; MF: 670; RMF: 882; Prob: 10.20; CAS:213608-51-6; Mw: 273; Lib: <<mainlib>>; Id: 160122; RI: 0.
+Hit 3  : <<Pipecolic acid, 2TMS derivative>>;<<C12H27NO2Si2>>; MF: 664; RMF: 770; Prob: 8.02; CAS:55255-44-2; Mw: 273; Lib: <<mainlib>>; Id: 160130; RI: 1363.
+Unknown: ID-38                                                       Compound in Library Factor = 208
+Hit 1  : <<2-Hydroxyglutaric acid, 5 ethyl ester, 2TMS>>;<<C13H28O5Si2>>; MF: 848; RMF: 913; Prob: 95.23; CAS:0-00-0; Mw: 320; Lib: <<mainlib>>; Id: 204867; RI: 1522.
+Hit 2  : <<2-Hydroxyglutaric acid, 1-ethyl ester, 2TMS>>;<<C13H28O5Si2>>; MF: 637; RMF: 706; Prob: 0.95; CAS:0-00-0; Mw: 320; Lib: <<mainlib>>; Id: 123666; RI: 1535.
+Hit 3  : <<Octadecanamide, N-(2-methylpropyl)-N-nitroso->>;<<C22H44N2O2>>; MF: 607; RMF: 651; Prob: 0.26; CAS:74420-93-2; Mw: 368; Lib: <<mainlib>>; Id: 204874; RI: 0.
+Unknown: ID-39                                                       Compound in Library Factor = 143
+Hit 1  : <<2,3,4-Trihydroxybutyric acid tetrakis(trimethylsilyl) deriv., (, (R*,R*)-)>>;<<C16H40O5Si4>>; MF: 832; RMF: 885; Prob: 83.73; CAS:38191-88-7; Mw: 424; Lib: <<mainlib>>; Id: 46689; RI: 0.
+Hit 2  : <<(R*,S*)-2,3-Dihydroxybutanoic acid, tris(trimethylsilyl) deriv.>>;<<C13H32O4Si3>>; MF: 691; RMF: 849; Prob: 2.78; CAS:38165-91-2; Mw: 336; Lib: <<mainlib>>; Id: 46134; RI: 0.
+Hit 3  : <<2-Keto-L-gluconic acid, penta(O-trimethylsilyl)->>;<<C21H50O7Si5>>; MF: 685; RMF: 767; Prob: 2.18; CAS:0-00-0; Mw: 554; Lib: <<mainlib>>; Id: 47914; RI: 0.
+Unknown: ID-40                                                       Compound in Library Factor = -134
+Hit 1  : <<2,3,4-Trihydroxybutyric acid tetrakis(trimethylsilyl) deriv., (, (R*,R*)-)>>;<<C16H40O5Si4>>; MF: 772; RMF: 881; Prob: 66.00; CAS:38191-88-7; Mw: 424; Lib: <<mainlib>>; Id: 46689; RI: 0.
+Hit 2  : <<Tartaric acid, 4TMS derivative>>;<<C16H38O6Si4>>; MF: 650; RMF: 770; Prob: 3.26; CAS:18602-86-3; Mw: 438; Lib: <<replib>>; Id: 11597; RI: 1665.
+Hit 3  : <<Ribonic acid, 2,3,4,5-tetrakis-O-(trimethylsilyl)-, trimethylsilyl ester>>;<<C20H50O6Si5>>; MF: 642; RMF: 781; Prob: 2.43; CAS:57197-35-0; Mw: 526; Lib: <<mainlib>>; Id: 46529; RI: 1799.
+Unknown: ID-41                                                       Compound in Library Factor = -1224
+Hit 1  : <<2-Deoxypentofuranose, 3TMS derivative>>;<<C14H34O4Si3>>; MF: 643; RMF: 760; Prob: 10.98; CAS:56227-33-9; Mw: 350; Lib: <<replib>>; Id: 11250; RI: 0.
+Hit 2  : <<Hexonic acid, 3-deoxy-, ç-lactone, 2,5,6-tris-O-TMS>>;<<C15H34O5Si3>>; MF: 634; RMF: 763; Prob: 7.97; CAS:0-00-0; Mw: 378; Lib: <<mainlib>>; Id: 46226; RI: 1766.
+Hit 3  : <<Trimethylsilyl 3,5-bis(trimethylsilyloxy)-3-methylvalerate>>;<<C15H36O4Si3>>; MF: 630; RMF: 706; Prob: 6.73; CAS:0-00-0; Mw: 364; Lib: <<mainlib>>; Id: 46517; RI: 0.
+Unknown: ID-42                                                       Compound in Library Factor = -1224
+Hit 1  : <<D-(-)-Citramalic acid, 3TMS derivative>>;<<C14H32O5Si3>>; MF: 644; RMF: 711; Prob: 12.30; CAS:0-00-0; Mw: 364; Lib: <<mainlib>>; Id: 47651; RI: 1487.
+Hit 2  : <<D-(+)-Ribono-1,4-lactone (R,S,R)-, 3TMS derivative>>;<<C14H32O5Si3>>; MF: 638; RMF: 715; Prob: 9.67; CAS:10589-36-3; Mw: 364; Lib: <<replib>>; Id: 11522; RI: 0.
+Hit 3  : <<Trimethylsilyl 3,5-bis(trimethylsilyloxy)-3-methylvalerate>>;<<C15H36O4Si3>>; MF: 632; RMF: 712; Prob: 7.60; CAS:0-00-0; Mw: 364; Lib: <<mainlib>>; Id: 46517; RI: 0.
+Unknown: ID-43                                                       Compound in Library Factor = -1210
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 654; RMF: 670; Prob: 14.39; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<à-D-Galactopyranoside, methyl 2,6-bis-O-(trimethylsilyl)-, cyclic methylboronate>>;<<C14H31BO6Si2>>; MF: 636; RMF: 741; Prob: 7.42; CAS:54400-89-4; Mw: 362; Lib: <<mainlib>>; Id: 45989; RI: 0.
+Hit 3  : <<à-D-Galactopyranose, 1,2,3-tris-O-(trimethylsilyl)-, cyclic methylboronate>>;<<C16H37BO6Si3>>; MF: 636; RMF: 722; Prob: 7.42; CAS:56196-95-3; Mw: 420; Lib: <<mainlib>>; Id: 45333; RI: 0.
+Unknown: ID-44                                                       Compound in Library Factor = -905
+Hit 1  : <<2,3,4-Trihydroxybutyric acid tetrakis(trimethylsilyl) deriv., (, (R*,R*)-)>>;<<C16H40O5Si4>>; MF: 662; RMF: 735; Prob: 21.70; CAS:38191-88-7; Mw: 424; Lib: <<mainlib>>; Id: 46689; RI: 0.
+Hit 2  : <<Ethyl tartrate, tris(trimethylsilyl)->>;<<C15H34O6Si3>>; MF: 623; RMF: 719; Prob: 5.11; CAS:0-00-0; Mw: 394; Lib: <<mainlib>>; Id: 46438; RI: 0.
+Hit 3  : <<1,2,2,3,4,4,5,5,6,6-Decamethylhexasilinane-1,3-diol>>;<<C10H32O2Si6>>; MF: 622; RMF: 663; Prob: 4.91; CAS:0-00-0; Mw: 352; Lib: <<mainlib>>; Id: 45178; RI: 0.
+Unknown: ID-45                                                       Compound in Library Factor = 101
+Hit 1  : <<Pentanedioic acid, 3-methyl-3-[(trimethylsilyl)oxy]-, bis(trimethylsilyl) ester>>;<<C15H34O5Si3>>; MF: 826; RMF: 930; Prob: 89.46; CAS:55590-95-9; Mw: 378; Lib: <<mainlib>>; Id: 46664; RI: 1615.
+Hit 2  : <<Hexanedioic acid, 3-trimethylsiloxy-, bis(trimethylsilyl) ester>>;<<C15H34O5Si3>>; MF: 724; RMF: 789; Prob: 6.43; CAS:73105-00-7; Mw: 378; Lib: <<mainlib>>; Id: 46497; RI: 1699.
+Hit 3  : <<D-(-)-Citramalic acid, 3TMS derivative>>;<<C14H32O5Si3>>; MF: 610; RMF: 706; Prob: 0.39; CAS:0-00-0; Mw: 364; Lib: <<mainlib>>; Id: 47651; RI: 1487.
+Unknown: ID-46                                                       Compound in Library Factor = -804
+Hit 1  : <<D-(-)-Ribofuranose, tetrakis(trimethylsilyl) ether (isomer 2)>>;<<C17H42O5Si4>>; MF: 747; RMF: 825; Prob: 14.52; CAS:0-00-0; Mw: 438; Lib: <<mainlib>>; Id: 213643; RI: 1641.
+Hit 2  : <<D-(-)-Ribofuranose, tetrakis(trimethylsilyl) ether (isomer 1)>>;<<C17H42O5Si4>>; MF: 742; RMF: 827; Prob: 11.70; CAS:0-00-0; Mw: 438; Lib: <<mainlib>>; Id: 213642; RI: 1624.
+Hit 3  : <<Arabinofuranose, 1,2,3,5-tetrakis-O-(trimethylsilyl)->>;<<C17H42O5Si4>>; MF: 741; RMF: 827; Prob: 11.25; CAS:55399-49-0; Mw: 438; Lib: <<replib>>; Id: 34487; RI: 0.
+Unknown: ID-47                                                       Compound in Library Factor = -520
+Hit 1  : <<D-(-)-Ribofuranose, tetrakis(trimethylsilyl) ether (isomer 1)>>;<<C17H42O5Si4>>; MF: 781; RMF: 793; Prob: 22.14; CAS:0-00-0; Mw: 438; Lib: <<mainlib>>; Id: 213642; RI: 1624.
+Hit 2  : <<D-(-)-Ribofuranose, tetrakis(trimethylsilyl) ether (isomer 2)>>;<<C17H42O5Si4>>; MF: 771; RMF: 782; Prob: 15.63; CAS:0-00-0; Mw: 438; Lib: <<mainlib>>; Id: 213643; RI: 1641.
+Hit 3  : <<Arabinofuranose, 1,2,3,5-tetrakis-O-(trimethylsilyl)->>;<<C17H42O5Si4>>; MF: 766; RMF: 779; Prob: 12.60; CAS:55399-49-0; Mw: 438; Lib: <<replib>>; Id: 34487; RI: 0.
+Unknown: ID-48                                                       Compound in Library Factor = -1169
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 665; RMF: 696; Prob: 15.38; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<1,5-Anhydroglucitol, 4TMS derivative>>;<<C18H44O5Si4>>; MF: 648; RMF: 741; Prob: 8.39; CAS:82682-67-5; Mw: 452; Lib: <<mainlib>>; Id: 46635; RI: 1842.
+Hit 3  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 633; RMF: 660; Prob: 5.08; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Unknown: ID-49                                                       Compound in Library Factor = -306
+Hit 1  : <<4-Hydroxybenzoic acid, 2TMS derivative>>;<<C13H22O3Si2>>; MF: 725; RMF: 891; Prob: 53.23; CAS:2078-13-9; Mw: 282; Lib: <<replib>>; Id: 11811; RI: 1635.
+Hit 2  : <<3-Hydroxybenzoic acid, 2TMS derivative>>;<<C13H22O3Si2>>; MF: 708; RMF: 831; Prob: 29.05; CAS:3782-84-1; Mw: 282; Lib: <<mainlib>>; Id: 237392; RI: 1574.
+Hit 3  : <<3,4-Dihydroxybenzaldehyde, bis(trimethylsilyl) ether>>;<<C13H22O3Si2>>; MF: 623; RMF: 747; Prob: 2.61; CAS:10586-13-7; Mw: 282; Lib: <<mainlib>>; Id: 47780; RI: 1612.
+Unknown: ID-50                                                       Compound in Library Factor = 202
+Hit 1  : <<D-(+)-Ribono-1,4-lactone (R,S,R)-, 3TMS derivative>>;<<C14H32O5Si3>>; MF: 878; RMF: 890; Prob: 31.90; CAS:10589-36-3; Mw: 364; Lib: <<replib>>; Id: 11522; RI: 0.
+Hit 2  : <<2,3,4,5-Tetrahydroxypentanoic acid-1,4-lactone, tris(trimethylsilyl)->>;<<C14H32O5Si3>>; MF: 873; RMF: 932; Prob: 25.71; CAS:0-00-0; Mw: 364; Lib: <<mainlib>>; Id: 46104; RI: 0.
+Hit 3  : <<Arabinonic acid, 2,3,5-tris-O-(trimethylsilyl)-, ç-lactone, D->>;<<C14H32O5Si3>>; MF: 867; RMF: 935; Prob: 20.21; CAS:32384-55-7; Mw: 364; Lib: <<mainlib>>; Id: 46111; RI: 1623.
+Unknown: ID-51                                                       Compound in Library Factor = -503
+Hit 1  : <<á-Lyxopyranose, 4TMS derivative>>;<<C17H42O5Si4>>; MF: 830; RMF: 916; Prob: 8.81; CAS:56271-66-0; Mw: 438; Lib: <<mainlib>>; Id: 47424; RI: 0.
+Hit 2  : <<D-Ribopyranose, 4TMS derivative>>;<<C17H42O5Si4>>; MF: 823; RMF: 907; Prob: 6.75; CAS:56271-70-6; Mw: 438; Lib: <<mainlib>>; Id: 47426; RI: 0.
+Hit 3  : <<á-D-Xylopyranose, 4TMS derivative>>;<<C17H42O5Si4>>; MF: 819; RMF: 912; Prob: 5.70; CAS:18623-27-3; Mw: 438; Lib: <<mainlib>>; Id: 205564; RI: 1777.
+Unknown: ID-52                                                       Compound in Library Factor = -1169
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 661; RMF: 694; Prob: 13.44; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 655; RMF: 684; Prob: 10.56; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Hit 3  : <<Ribonic acid, 2-desoxy-tetrakis-O-(trimethylsilyl)->>;<<C17H42O5Si4>>; MF: 651; RMF: 754; Prob: 8.92; CAS:0-00-0; Mw: 438; Lib: <<mainlib>>; Id: 46595; RI: 1682.
+Unknown: ID-53                                                       Compound in Library Factor = -1210
+Hit 1  : <<á-D-Galactopyranoside, methyl 2,6-bis-O-(trimethylsilyl)-, cyclic methylboronate>>;<<C14H31BO6Si2>>; MF: 655; RMF: 737; Prob: 14.83; CAS:56211-06-4; Mw: 362; Lib: <<mainlib>>; Id: 45193; RI: 0.
+Hit 2  : <<D-Glucose, 6-O-à-D-galactopyranosyl-, bis-O-(trimethylsilyl) deriv., cyclic tris(methylboronate)>>;<<C21H41B3O11Si2>>; MF: 638; RMF: 685; Prob: 8.09; CAS:72347-76-3; Mw: 558; Lib: <<mainlib>>; Id: 45341; RI: 0.
+Hit 3  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 635; RMF: 662; Prob: 7.15; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Unknown: ID-54                                                       Compound in Library Factor = -1302
+Hit 1  : <<2,3,4-Trihydroxybutyric acid tetrakis(trimethylsilyl) deriv., (, (R*,R*)-)>>;<<C16H40O5Si4>>; MF: 629; RMF: 781; Prob: 11.96; CAS:38191-88-7; Mw: 424; Lib: <<mainlib>>; Id: 46689; RI: 0.
+Hit 2  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 617; RMF: 639; Prob: 7.97; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Hit 3  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 614; RMF: 638; Prob: 7.04; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Unknown: ID-55                                                       Compound in Library Factor = -234
+Hit 1  : <<D-(+)-Ribono-1,4-lactone (R,S,R)-, 3TMS derivative>>;<<C14H32O5Si3>>; MF: 826; RMF: 877; Prob: 67.49; CAS:10589-36-3; Mw: 364; Lib: <<replib>>; Id: 11522; RI: 0.
+Hit 2  : <<D-(+)-Ribono-1,4-lactone (R,R,R)-, 3TMS derivative>>;<<C14H32O5Si3>>; MF: 781; RMF: 848; Prob: 14.37; CAS:10589-34-1; Mw: 364; Lib: <<mainlib>>; Id: 46636; RI: 0.
+Hit 3  : <<2,3,4,5-Tetrahydroxypentanoic acid-1,4-lactone, tris(trimethylsilyl)->>;<<C14H32O5Si3>>; MF: 766; RMF: 913; Prob: 8.71; CAS:0-00-0; Mw: 364; Lib: <<mainlib>>; Id: 46104; RI: 0.
+Unknown: ID-56                                                       Compound in Library Factor = -211
+Hit 1  : <<D-(+)-Arabitol, 5TMS derivative>>;<<C20H52O5Si5>>; MF: 849; RMF: 897; Prob: 17.98; CAS:0-00-0; Mw: 512; Lib: <<mainlib>>; Id: 46629; RI: 1710.
+Hit 2  : <<L-(-)-Arabitol, 5TMS derivative>>;<<C20H52O5Si5>>; MF: 849; RMF: 897; Prob: 17.98; CAS:0-00-0; Mw: 512; Lib: <<mainlib>>; Id: 46520; RI: 0.
+Hit 3  : <<Xylitol, 5TMS derivative>>;<<C20H52O5Si5>>; MF: 842; RMF: 884; Prob: 13.77; CAS:14199-72-5; Mw: 512; Lib: <<replib>>; Id: 34488; RI: 1741.
+Unknown: ID-57                                                       Compound in Library Factor = -816
+Hit 1  : <<Suberic acid, 2TMS derivative>>;<<C14H30O4Si2>>; MF: 733; RMF: 867; Prob: 12.18; CAS:43199-48-0; Mw: 318; Lib: <<replib>>; Id: 11244; RI: 1707.
+Hit 2  : <<Levoglucosan, 3TMS derivative>>;<<C15H34O5Si3>>; MF: 724; RMF: 788; Prob: 8.84; CAS:7449-14-1; Mw: 378; Lib: <<mainlib>>; Id: 47262; RI: 1691.
+Hit 3  : <<á-Lyxopyranose, 4TMS derivative>>;<<C17H42O5Si4>>; MF: 710; RMF: 822; Prob: 5.53; CAS:56271-66-0; Mw: 438; Lib: <<mainlib>>; Id: 47424; RI: 0.
+Unknown: ID-58                                                       Compound in Library Factor = -181
+Hit 1  : <<L-(-)-Arabitol, 5TMS derivative>>;<<C20H52O5Si5>>; MF: 853; RMF: 902; Prob: 20.48; CAS:0-00-0; Mw: 512; Lib: <<mainlib>>; Id: 46520; RI: 0.
+Hit 2  : <<D-(+)-Arabitol, 5TMS derivative>>;<<C20H52O5Si5>>; MF: 850; RMF: 899; Prob: 18.09; CAS:0-00-0; Mw: 512; Lib: <<mainlib>>; Id: 46629; RI: 1710.
+Hit 3  : <<Adonitol, 5TMS derivative>>;<<C20H52O5Si5>>; MF: 844; RMF: 893; Prob: 14.22; CAS:0-00-0; Mw: 512; Lib: <<mainlib>>; Id: 46631; RI: 0.
+Unknown: ID-59                                                       Compound in Library Factor = -328
+Hit 1  : <<Adonitol, 5TMS derivative>>;<<C20H52O5Si5>>; MF: 837; RMF: 881; Prob: 16.83; CAS:0-00-0; Mw: 512; Lib: <<mainlib>>; Id: 46631; RI: 0.
+Hit 2  : <<Ribitol, 5TMS derivative>>;<<C20H52O5Si5>>; MF: 836; RMF: 887; Prob: 16.18; CAS:32381-53-6; Mw: 512; Lib: <<mainlib>>; Id: 47383; RI: 1747.
+Hit 3  : <<L-(-)-Arabitol, 5TMS derivative>>;<<C20H52O5Si5>>; MF: 834; RMF: 878; Prob: 14.92; CAS:0-00-0; Mw: 512; Lib: <<mainlib>>; Id: 46520; RI: 0.
+Unknown: ID-60                                                       Compound in Library Factor = -744
+Hit 1  : <<1,5-Anhydroglucitol, 4TMS derivative>>;<<C18H44O5Si4>>; MF: 734; RMF: 785; Prob: 27.79; CAS:82682-67-5; Mw: 452; Lib: <<mainlib>>; Id: 46635; RI: 1842.
+Hit 2  : <<5-Methyluridine, 3TMS derivative>>;<<C19H38N2O6Si3>>; MF: 722; RMF: 777; Prob: 18.51; CAS:0-00-0; Mw: 474; Lib: <<mainlib>>; Id: 47381; RI: 0.
+Hit 3  : <<Uridine, 3TMS derivative>>;<<C18H36N2O6Si3>>; MF: 706; RMF: 765; Prob: 10.66; CAS:10457-16-6; Mw: 460; Lib: <<mainlib>>; Id: 47402; RI: 2470.
+Unknown: ID-61                                                       Compound in Library Factor = -819
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 714; RMF: 746; Prob: 24.16; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 693; RMF: 716; Prob: 10.27; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Hit 3  : <<D-(+)-Ribono-1,4-lactone (R,S,R)-, 3TMS derivative>>;<<C14H32O5Si3>>; MF: 687; RMF: 808; Prob: 8.07; CAS:10589-36-3; Mw: 364; Lib: <<replib>>; Id: 11522; RI: 0.
+Unknown: ID-62                                                       Compound in Library Factor = -566
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 688; RMF: 715; Prob: 21.20; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 674; RMF: 695; Prob: 13.27; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Hit 3  : <<N-Acetyl glucosamine methoxime, tetrakis(trimethylsilyl)>>;<<C21H50N2O6Si4>>; MF: 618; RMF: 704; Prob: 2.53; CAS:128637-19-4; Mw: 538; Lib: <<mainlib>>; Id: 45260; RI: 0.
+Unknown: ID-63                                                       Compound in Library Factor = -135
+Hit 1  : <<2-Keto-L-gluconic acid, penta(O-trimethylsilyl)->>;<<C21H50O7Si5>>; MF: 817; RMF: 884; Prob: 47.89; CAS:0-00-0; Mw: 554; Lib: <<mainlib>>; Id: 47914; RI: 0.
+Hit 2  : <<Ribonic acid, 2,3,4,5-tetrakis-O-(trimethylsilyl)-, trimethylsilyl ester>>;<<C20H50O6Si5>>; MF: 806; RMF: 913; Prob: 32.85; CAS:57197-35-0; Mw: 526; Lib: <<mainlib>>; Id: 46529; RI: 1799.
+Hit 3  : <<D-Gluconic acid, 6TMS derivative>>;<<C24H60O7Si6>>; MF: 709; RMF: 792; Prob: 2.57; CAS:34290-52-3; Mw: 628; Lib: <<replib>>; Id: 11881; RI: 2043.
+Unknown: ID-64                                                       Compound in Library Factor = -816
+Hit 1  : <<D-(-)-Tagatofuranose, pentakis(trimethylsilyl) ether (isomer 2)>>;<<C21H52O6Si5>>; MF: 739; RMF: 858; Prob: 20.11; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 213644; RI: 1813.
+Hit 2  : <<D-(-)-Tagatofuranose, pentakis(trimethylsilyl) ether (isomer 1)>>;<<C21H52O6Si5>>; MF: 722; RMF: 821; Prob: 10.98; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47393; RI: 1801.
+Hit 3  : <<D-Psicofuranose, pentakis(trimethylsilyl) ether (isomer 1)>>;<<C21H52O6Si5>>; MF: 720; RMF: 774; Prob: 10.12; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47394; RI: 1799.
+Unknown: ID-65                                                       Compound in Library Factor = 140
+Hit 1  : <<Hexonic acid, 3-deoxy-, ç-lactone, 2,5,6-tris-O-TMS>>;<<C15H34O5Si3>>; MF: 838; RMF: 889; Prob: 86.20; CAS:0-00-0; Mw: 378; Lib: <<mainlib>>; Id: 46226; RI: 1766.
+Hit 2  : <<D-Ribo-Hexonic acid, 3-deoxy-2,5,6-tris-O-(trimethylsilyl)-, lactone>>;<<C15H34O5Si3>>; MF: 705; RMF: 843; Prob: 3.39; CAS:55570-78-0; Mw: 378; Lib: <<mainlib>>; Id: 46207; RI: 1791.
+Hit 3  : <<1,5-Anhydroglucitol, 4TMS derivative>>;<<C18H44O5Si4>>; MF: 680; RMF: 689; Prob: 1.03; CAS:82682-67-5; Mw: 452; Lib: <<mainlib>>; Id: 46635; RI: 1842.
+Unknown: ID-66                                                       Compound in Library Factor = -104
+Hit 1  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 1)>>;<<C21H52O6Si5>>; MF: 905; RMF: 914; Prob: 36.11; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47397; RI: 1792.
+Hit 2  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 2)>>;<<C21H52O6Si5>>; MF: 905; RMF: 912; Prob: 36.11; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47398; RI: 1800.
+Hit 3  : <<D-Psicofuranose, pentakis(trimethylsilyl) ether (isomer 1)>>;<<C21H52O6Si5>>; MF: 876; RMF: 893; Prob: 10.23; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47394; RI: 1799.
+Unknown: ID-67                                                       Compound in Library Factor = 133
+Hit 1  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 2)>>;<<C21H52O6Si5>>; MF: 930; RMF: 932; Prob: 57.90; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47398; RI: 1800.
+Hit 2  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 1)>>;<<C21H52O6Si5>>; MF: 907; RMF: 909; Prob: 21.14; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47397; RI: 1792.
+Hit 3  : <<D-Psicofuranose, pentakis(trimethylsilyl) ether (isomer 1)>>;<<C21H52O6Si5>>; MF: 880; RMF: 892; Prob: 6.22; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47394; RI: 1799.
+Unknown: ID-68                                                       Compound in Library Factor = 152
+Hit 1  : <<Protocatechoic acid, 3TMS derivative>>;<<C16H30O4Si3>>; MF: 850; RMF: 942; Prob: 95.00; CAS:2347-40-2; Mw: 370; Lib: <<replib>>; Id: 32555; RI: 1835.
+Hit 2  : <<3,5-Dihydroxybenzoic acid, 3TMS derivative>>;<<C16H30O4Si3>>; MF: 716; RMF: 783; Prob: 3.67; CAS:79314-27-5; Mw: 370; Lib: <<replib>>; Id: 11905; RI: 1822.
+Hit 3  : <<2,5-Dihydroxybenzoic acid, 3TMS derivative>>;<<C16H30O4Si3>>; MF: 606; RMF: 618; Prob: 0.23; CAS:3618-20-0; Mw: 370; Lib: <<mainlib>>; Id: 258225; RI: 1798.
+Unknown: ID-69                                                       Compound in Library Factor = -526
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 729; RMF: 758; Prob: 34.40; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 687; RMF: 693; Prob: 7.72; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 3  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 684; RMF: 723; Prob: 6.82; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Unknown: ID-70                                                       Compound in Library Factor = 137
+Hit 1  : <<D-Allofuranose, pentakis(trimethylsilyl) ether>>;<<C21H52O6Si5>>; MF: 899; RMF: 911; Prob: 34.72; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 213647; RI: 1853.
+Hit 2  : <<D-(+)-Talofuranose, pentakis(trimethylsilyl) ether (isomer 2)>>;<<C21H52O6Si5>>; MF: 892; RMF: 908; Prob: 26.59; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 213645; RI: 1841.
+Hit 3  : <<á-D-Galactofuranose, 1,2,3,5,6-pentakis-O-(trimethylsilyl)->>;<<C21H52O6Si5>>; MF: 882; RMF: 926; Prob: 18.77; CAS:7045-52-5; Mw: 540; Lib: <<mainlib>>; Id: 213655; RI: 1852.
+Unknown: ID-71                                                       Compound in Library Factor = -625
+Hit 1  : <<1,5-Anhydroglucitol, 4TMS derivative>>;<<C18H44O5Si4>>; MF: 761; RMF: 826; Prob: 16.20; CAS:82682-67-5; Mw: 452; Lib: <<mainlib>>; Id: 46635; RI: 1842.
+Hit 2  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 2)>>;<<C21H52O6Si5>>; MF: 754; RMF: 822; Prob: 12.41; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47398; RI: 1800.
+Hit 3  : <<D-Fructose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 745; RMF: 790; Prob: 9.01; CAS:19126-98-8; Mw: 540; Lib: <<mainlib>>; Id: 47428; RI: 1867.
+Unknown: ID-72                                                       Compound in Library Factor = -632
+Hit 1  : <<3-Deoxyhexonic acid, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 736; RMF: 847; Prob: 44.08; CAS:55517-66-3; Mw: 540; Lib: <<mainlib>>; Id: 47638; RI: 1902.
+Hit 2  : <<Pentanedioic acid, 2,4-bis[(trimethylsilyl)oxy]-, bis(trimethylsilyl) ester, (R*,S*)->>;<<C17H40O6Si4>>; MF: 704; RMF: 870; Prob: 11.78; CAS:38166-12-0; Mw: 452; Lib: <<mainlib>>; Id: 47637; RI: 0.
+Hit 3  : <<D-Fructose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 683; RMF: 695; Prob: 5.01; CAS:19126-98-8; Mw: 540; Lib: <<mainlib>>; Id: 47428; RI: 1867.
+Unknown: ID-73                                                       Compound in Library Factor = -591
+Hit 1  : <<D-Fructose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 771; RMF: 828; Prob: 25.38; CAS:19126-98-8; Mw: 540; Lib: <<mainlib>>; Id: 47428; RI: 1867.
+Hit 2  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 2)>>;<<C21H52O6Si5>>; MF: 755; RMF: 837; Prob: 14.62; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47398; RI: 1800.
+Hit 3  : <<D-(-)-Fructofuranose, pentakis(trimethylsilyl) ether (isomer 1)>>;<<C21H52O6Si5>>; MF: 745; RMF: 828; Prob: 10.32; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47397; RI: 1792.
+Unknown: ID-74                                                       Compound in Library Factor = -278
+Hit 1  : <<D-Fructose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 840; RMF: 857; Prob: 36.47; CAS:19126-98-8; Mw: 540; Lib: <<mainlib>>; Id: 47428; RI: 1867.
+Hit 2  : <<D-Psicopyranose, 5TMS derivative (isomer 2)>>;<<C21H52O6Si5>>; MF: 804; RMF: 832; Prob: 9.01; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47241; RI: 1818.
+Hit 3  : <<D-(-)-Fructopyranose, 5TMS derivative (isomer 2)>>;<<C21H52O6Si5>>; MF: 801; RMF: 833; Prob: 7.96; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47243; RI: 1836.
+Unknown: ID-75                                                       Compound in Library Factor = -570
+Hit 1  : <<D-Fructose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 766; RMF: 817; Prob: 27.25; CAS:19126-98-8; Mw: 540; Lib: <<mainlib>>; Id: 47428; RI: 1867.
+Hit 2  : <<D-Psicopyranose, 5TMS derivative (isomer 2)>>;<<C21H52O6Si5>>; MF: 745; RMF: 817; Prob: 11.59; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47241; RI: 1818.
+Hit 3  : <<D-(-)-Fructopyranose, 5TMS derivative (isomer 1)>>;<<C21H52O6Si5>>; MF: 735; RMF: 805; Prob: 8.18; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 47244; RI: 1802.
+Unknown: ID-76                                                       Compound in Library Factor = -124
+Hit 1  : <<á-D-(+)-Mannopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 920; RMF: 929; Prob: 9.21; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 205521; RI: 1890.
+Hit 2  : <<á-D-Allopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 915; RMF: 922; Prob: 7.42; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 205524; RI: 1829.
+Hit 3  : <<á-D-Glucopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 914; RMF: 922; Prob: 7.13; CAS:2775-90-8; Mw: 540; Lib: <<mainlib>>; Id: 205541; RI: 1931.
+Unknown: ID-77                                                       Compound in Library Factor = -124
+Hit 1  : <<á-D-(+)-Mannopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 911; RMF: 924; Prob: 9.49; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 205521; RI: 1890.
+Hit 2  : <<D-Glucose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 907; RMF: 938; Prob: 8.01; CAS:6736-97-6; Mw: 540; Lib: <<mainlib>>; Id: 205539; RI: 1926.
+Hit 3  : <<á-D-Allopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 906; RMF: 918; Prob: 7.70; CAS:0-00-0; Mw: 540; Lib: <<mainlib>>; Id: 205524; RI: 1829.
+Unknown: ID-78                                                       Compound in Library Factor = -1149
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 673; RMF: 722; Prob: 12.15; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 663; RMF: 694; Prob: 8.58; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Hit 3  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 653; RMF: 660; Prob: 6.05; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Unknown: ID-79                                                       Compound in Library Factor = -520
+Hit 1  : <<D-Sorbitol, 6TMS derivative>>;<<C24H62O6Si6>>; MF: 789; RMF: 892; Prob: 14.20; CAS:0-00-0; Mw: 614; Lib: <<mainlib>>; Id: 46704; RI: 1920.
+Hit 2  : <<D-Mannitol, 6TMS derivative>>;<<C24H62O6Si6>>; MF: 788; RMF: 894; Prob: 13.65; CAS:14317-07-8; Mw: 614; Lib: <<mainlib>>; Id: 46715; RI: 1964.
+Hit 3  : <<D-Glucitol, 6TMS derivative>>;<<C24H62O6Si6>>; MF: 777; RMF: 897; Prob: 9.36; CAS:14199-80-5; Mw: 614; Lib: <<mainlib>>; Id: 48147; RI: 1980.
+Unknown: ID-80                                                       Compound in Library Factor = 165
+Hit 1  : <<D-Sorbitol, 6TMS derivative>>;<<C24H62O6Si6>>; MF: 944; RMF: 946; Prob: 34.04; CAS:0-00-0; Mw: 614; Lib: <<mainlib>>; Id: 46704; RI: 1920.
+Hit 2  : <<D-Mannitol, 6TMS derivative>>;<<C24H62O6Si6>>; MF: 936; RMF: 939; Prob: 25.39; CAS:14317-07-8; Mw: 614; Lib: <<mainlib>>; Id: 46715; RI: 1964.
+Hit 3  : <<D-Glucitol, 6TMS derivative>>;<<C24H62O6Si6>>; MF: 927; RMF: 931; Prob: 18.43; CAS:14199-80-5; Mw: 614; Lib: <<mainlib>>; Id: 48147; RI: 1980.
+Unknown: ID-81                                                       Compound in Library Factor = 263
+Hit 1  : <<Myo-Inositol, 6TMS derivative>>;<<C24H60O6Si6>>; MF: 908; RMF: 910; Prob: 45.61; CAS:2582-79-8; Mw: 612; Lib: <<mainlib>>; Id: 46633; RI: 2129.
+Hit 2  : <<1,2,3,4,5,6-Hexa-O-trimethelsilyl-myo-inositol>>;<<C24H60O6Si6>>; MF: 906; RMF: 939; Prob: 42.07; CAS:0-00-0; Mw: 612; Lib: <<mainlib>>; Id: 214190; RI: 0.
+Hit 3  : <<Scyllo-Inositol, 6TMS derivative>>;<<C24H60O6Si6>>; MF: 870; RMF: 878; Prob: 10.40; CAS:14251-18-4; Mw: 612; Lib: <<replib>>; Id: 11605; RI: 0.
+Unknown: ID-82                                                       Compound in Library Factor = 107
+Hit 1  : <<Gallic acid, 4TMS derivative>>;<<C19H38O5Si4>>; MF: 778; RMF: 844; Prob: 91.43; CAS:2078-17-3; Mw: 458; Lib: <<replib>>; Id: 11826; RI: 1987.
+Hit 2  : <<Cholest-7-en-3-ol, (3á,5à)-, TMS derivative>>;<<C30H54OSi>>; MF: 581; RMF: 650; Prob: 1.26; CAS:2665-03-4; Mw: 458; Lib: <<replib>>; Id: 39175; RI: 3195.
+Hit 3  : <<Triptophenolide, pentafluoropropionate>>;<<C23H23F5O4>>; MF: 572; RMF: 580; Prob: 0.91; CAS:0-00-0; Mw: 458; Lib: <<mainlib>>; Id: 264887; RI: 2722.
+Unknown: ID-83                                                       Compound in Library Factor = -1149
+Hit 1  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 672; RMF: 742; Prob: 15.49; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Hit 2  : <<Methyl glycocholate, 3TMS derivative>>;<<C36H69NO6Si3>>; MF: 664; RMF: 737; Prob: 11.55; CAS:57326-16-6; Mw: 695; Lib: <<mainlib>>; Id: 45192; RI: 0.
+Hit 3  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 663; RMF: 725; Prob: 11.10; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Unknown: ID-84                                                       Compound in Library Factor = 106
+Hit 1  : <<Oleic Acid, (Z)-, TMS derivative>>;<<C21H42O2Si>>; MF: 859; RMF: 884; Prob: 21.99; CAS:21556-26-3; Mw: 354; Lib: <<replib>>; Id: 21071; RI: 2218.
+Hit 2  : <<11-Octadecenoic acid, (Z)-, TMS derivative>>;<<C21H42O2Si>>; MF: 858; RMF: 883; Prob: 21.13; CAS:0-00-0; Mw: 354; Lib: <<mainlib>>; Id: 255850; RI: 2227.
+Hit 3  : <<11-Octadecenoic acid, (E)-, TMS derivative>>;<<C21H42O2Si>>; MF: 850; RMF: 875; Prob: 15.76; CAS:0-00-0; Mw: 354; Lib: <<mainlib>>; Id: 45183; RI: 2223.
+Unknown: ID-85                                                       Compound in Library Factor = -1149
+Hit 1  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 677; RMF: 696; Prob: 13.77; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 2  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 658; RMF: 714; Prob: 6.68; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Hit 3  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 656; RMF: 708; Prob: 6.16; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Unknown: ID-86                                                       Compound in Library Factor = -168
+Hit 1  : <<Stearic acid, TMS derivative>>;<<C21H44O2Si>>; MF: 769; RMF: 922; Prob: 66.16; CAS:18748-91-9; Mw: 356; Lib: <<replib>>; Id: 11414; RI: 2246.
+Hit 2  : <<Stearic acid, TBDMS derivative>>;<<C24H50O2Si>>; MF: 655; RMF: 796; Prob: 4.02; CAS:87020-51-7; Mw: 398; Lib: <<mainlib>>; Id: 256192; RI: 2489.
+Hit 3  : <<4,6'-Dimethoxy-2'(trimethylsilyl)oxychalcone>>;<<C20H24O4Si>>; MF: 644; RMF: 679; Prob: 2.75; CAS:0-00-0; Mw: 356; Lib: <<mainlib>>; Id: 256367; RI: 0.
+Unknown: ID-87                                                       Compound in Library Factor = -1350
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 706; RMF: 752; Prob: 7.52; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 700; RMF: 806; Prob: 5.91; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 3  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 698; RMF: 813; Prob: 5.45; CAS:42390-78-3; Mw: 918; Lib: <<mainlib>>; Id: 205554; RI: 0.
+Unknown: ID-88                                                       Compound in Library Factor = -1381
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 694; RMF: 750; Prob: 8.68; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 689; RMF: 705; Prob: 6.99; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 3  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 680; RMF: 800; Prob: 5.08; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Unknown: ID-89                                                       Compound in Library Factor = -752
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 721; RMF: 779; Prob: 21.13; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 704; RMF: 723; Prob: 11.53; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 3  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 681; RMF: 794; Prob: 4.21; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Unknown: ID-90                                                       Compound in Library Factor = -918
+Hit 1  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 692; RMF: 721; Prob: 27.42; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 2  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 672; RMF: 776; Prob: 12.49; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 3  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 667; RMF: 734; Prob: 10.06; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Unknown: ID-91                                                       Compound in Library Factor = -1032
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 685; RMF: 759; Prob: 9.80; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 674; RMF: 706; Prob: 6.72; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 3  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 666; RMF: 796; Prob: 5.01; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Unknown: ID-92                                                       Compound in Library Factor = -1604
+Hit 1  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 664; RMF: 768; Prob: 5.03; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 2  : <<Lactulose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 664; RMF: 749; Prob: 5.03; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 47237; RI: 2667.
+Hit 3  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 2)>>;<<C37H89NO11Si8>>; MF: 661; RMF: 721; Prob: 4.44; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 47240; RI: 2675.
+Unknown: ID-93                                                       Compound in Library Factor = -762
+Hit 1  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 707; RMF: 776; Prob: 21.13; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 2  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 707; RMF: 734; Prob: 21.13; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 3  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 674; RMF: 741; Prob: 5.53; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Unknown: ID-94                                                       Compound in Library Factor = -1006
+Hit 1  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 694; RMF: 779; Prob: 12.21; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 2  : <<Lactulose, octakis(trimethylsilyl) ether (isomer 2)>>;<<C36H86O11Si8>>; MF: 687; RMF: 757; Prob: 9.35; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46591; RI: 2639.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 678; RMF: 829; Prob: 6.79; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-95                                                       Compound in Library Factor = -898
+Hit 1  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 716; RMF: 802; Prob: 13.85; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 2  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 711; RMF: 790; Prob: 11.16; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 699; RMF: 859; Prob: 7.43; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-96                                                       Compound in Library Factor = -804
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 747; RMF: 827; Prob: 21.85; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 730; RMF: 798; Prob: 11.92; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 716; RMF: 850; Prob: 7.46; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-97                                                       Compound in Library Factor = -520
+Hit 1  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 787; RMF: 843; Prob: 8.38; CAS:42390-78-3; Mw: 918; Lib: <<mainlib>>; Id: 205554; RI: 0.
+Hit 2  : <<3-à-Mannobiose, octakis(trimethylsilyl) ether (isomer 1)>>;<<C36H86O11Si8>>; MF: 780; RMF: 831; Prob: 6.42; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 47256; RI: 2631.
+Hit 3  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 2)>>;<<C37H89NO11Si8>>; MF: 780; RMF: 824; Prob: 6.42; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 47240; RI: 2675.
+Unknown: ID-98                                                       Compound in Library Factor = -570
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 761; RMF: 849; Prob: 40.15; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 734; RMF: 873; Prob: 11.81; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 732; RMF: 805; Prob: 10.89; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-99                                                       Compound in Library Factor = -1006
+Hit 1  : <<D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-1,3-dimethyl-2,4,6-trioxo-5-pyrimidinyl)-1-methylbutyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C29H56N2O10Si3>>; MF: 695; RMF: 732; Prob: 19.03; CAS:55556-79-1; Mw: 676; Lib: <<mainlib>>; Id: 47681; RI: 0.
+Hit 2  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 677; RMF: 761; Prob: 9.81; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 3  : <<á-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 669; RMF: 746; Prob: 7.32; CAS:55556-80-4; Mw: 648; Lib: <<mainlib>>; Id: 47675; RI: 0.
+Unknown: ID-100                                                      Compound in Library Factor = -1149
+Hit 1  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 679; RMF: 784; Prob: 13.69; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 2  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 662; RMF: 745; Prob: 7.47; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 658; RMF: 757; Prob: 6.31; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-101                                                      Compound in Library Factor = 106
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 856; RMF: 876; Prob: 71.35; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 766; RMF: 788; Prob: 6.10; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 758; RMF: 824; Prob: 4.55; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-102                                                      Compound in Library Factor = 465
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 955; RMF: 955; Prob: 91.01; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 823; RMF: 846; Prob: 3.64; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<D-Fructose, 3-O-[2,3,4,6-tetrakis-O-(trimethylsilyl)-à-D-glucopyranosyl]-1,4,5,6-tetrakis-O-(trimethylsilyl)->>;<<C36H86O11Si8>>; MF: 787; RMF: 800; Prob: 0.90; CAS:39523-07-4; Mw: 918; Lib: <<mainlib>>; Id: 259087; RI: 0.
+Unknown: ID-103                                                      Compound in Library Factor = 312
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 938; RMF: 939; Prob: 85.28; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 838; RMF: 855; Prob: 6.35; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 799; RMF: 821; Prob: 1.49; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-104                                                      Compound in Library Factor = 374
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 926; RMF: 927; Prob: 92.08; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 800; RMF: 824; Prob: 4.07; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<D-Fructose, 3-O-[2,3,4,6-tetrakis-O-(trimethylsilyl)-à-D-glucopyranosyl]-1,4,5,6-tetrakis-O-(trimethylsilyl)->>;<<C36H86O11Si8>>; MF: 760; RMF: 773; Prob: 0.94; CAS:39523-07-4; Mw: 918; Lib: <<mainlib>>; Id: 259087; RI: 0.
+Unknown: ID-105                                                      Compound in Library Factor = -804
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 747; RMF: 840; Prob: 16.96; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 738; RMF: 829; Prob: 12.31; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<Maltitol, nonakis(trimethylsilyl) ether>>;<<C39H96O11Si9>>; MF: 736; RMF: 776; Prob: 11.35; CAS:0-00-0; Mw: 992; Lib: <<mainlib>>; Id: 259084; RI: 2820.
+Unknown: ID-106                                                      Compound in Library Factor = -259
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 811; RMF: 871; Prob: 54.79; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 767; RMF: 814; Prob: 11.88; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 745; RMF: 853; Prob: 4.69; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-107                                                      Compound in Library Factor = -458
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 776; RMF: 855; Prob: 44.54; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 744; RMF: 810; Prob: 11.90; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 736; RMF: 865; Prob: 8.87; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-108                                                      Compound in Library Factor = -509
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 794; RMF: 843; Prob: 21.93; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 786; RMF: 817; Prob: 16.36; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 782; RMF: 821; Prob: 13.82; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Unknown: ID-109                                                      Compound in Library Factor = -161
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 837; RMF: 872; Prob: 64.05; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 764; RMF: 797; Prob: 8.72; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 760; RMF: 845; Prob: 7.37; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-110                                                      Compound in Library Factor = 162
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 889; RMF: 905; Prob: 70.67; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 791; RMF: 825; Prob: 5.44; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 788; RMF: 838; Prob: 4.81; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-111                                                      Compound in Library Factor = -388
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 809; RMF: 885; Prob: 46.03; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 770; RMF: 836; Prob: 10.85; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 754; RMF: 874; Prob: 6.25; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-112                                                      Compound in Library Factor = -898
+Hit 1  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 718; RMF: 810; Prob: 8.80; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 2  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 718; RMF: 809; Prob: 8.80; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 3  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 708; RMF: 808; Prob: 6.21; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Unknown: ID-113                                                      Compound in Library Factor = -858
+Hit 1  : <<3-à-Mannobiose, octakis(trimethylsilyl) ether (isomer 1)>>;<<C36H86O11Si8>>; MF: 763; RMF: 823; Prob: 8.85; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 47256; RI: 2631.
+Hit 2  : <<D-Fructose, 6-O-[2,3,4,6-tetrakis-O-(trimethylsilyl)-à-D-glucopyranosyl]-1,3,4,5-tetrakis-O-(trimethylsilyl)->>;<<C36H86O11Si8>>; MF: 758; RMF: 831; Prob: 7.13; CAS:56145-26-7; Mw: 918; Lib: <<mainlib>>; Id: 213664; RI: 0.
+Hit 3  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 757; RMF: 814; Prob: 6.85; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Unknown: ID-114                                                      Compound in Library Factor = -457
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 802; RMF: 847; Prob: 38.99; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 775; RMF: 837; Prob: 11.47; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 765; RMF: 839; Prob: 8.09; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Unknown: ID-115                                                      Compound in Library Factor = -501
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 806; RMF: 839; Prob: 20.11; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<3-à-Mannobiose, octakis(trimethylsilyl) ether (isomer 1)>>;<<C36H86O11Si8>>; MF: 790; RMF: 830; Prob: 11.58; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 47256; RI: 2631.
+Hit 3  : <<D-Fructose, 6-O-[2,3,4,6-tetrakis-O-(trimethylsilyl)-à-D-glucopyranosyl]-1,3,4,5-tetrakis-O-(trimethylsilyl)->>;<<C36H86O11Si8>>; MF: 771; RMF: 821; Prob: 5.62; CAS:56145-26-7; Mw: 918; Lib: <<mainlib>>; Id: 213664; RI: 0.
+Unknown: ID-116                                                      Compound in Library Factor = -1302
+Hit 1  : <<Glycerol monostearate, 2TMS derivative>>;<<C27H58O4Si2>>; MF: 628; RMF: 767; Prob: 8.60; CAS:1188-75-6; Mw: 502; Lib: <<mainlib>>; Id: 262652; RI: 2806.
+Hit 2  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 623; RMF: 820; Prob: 6.93; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 611; RMF: 798; Prob: 4.61; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-117                                                      Compound in Library Factor = -984
+Hit 1  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 705; RMF: 821; Prob: 8.57; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 2  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 694; RMF: 777; Prob: 5.88; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Hit 3  : <<3-à-Mannobiose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 692; RMF: 799; Prob: 5.42; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205577; RI: 2656.
+Unknown: ID-118                                                      Compound in Library Factor = -1604
+Hit 1  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 670; RMF: 801; Prob: 9.30; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 662; RMF: 784; Prob: 6.94; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 660; RMF: 747; Prob: 6.40; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Unknown: ID-119                                                      Compound in Library Factor = -1276
+Hit 1  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 635; RMF: 748; Prob: 6.23; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 634; RMF: 798; Prob: 5.99; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<Aucubin, hexakis(trimethylsilyl) ether>>;<<C33H70O9Si6>>; MF: 628; RMF: 798; Prob: 4.71; CAS:0-00-0; Mw: 778; Lib: <<mainlib>>; Id: 45403; RI: 2769.
+Unknown: ID-120                                                      Compound in Library Factor = -520
+Hit 1  : <<Melibiose, octakis(trimethylsilyl)->>;<<C36H86O11Si8>>; MF: 789; RMF: 891; Prob: 10.48; CAS:86087-85-6; Mw: 918; Lib: <<replib>>; Id: 33547; RI: 2949.
+Hit 2  : <<3-à-Mannobiose, octakis(trimethylsilyl) ether (isomer 1)>>;<<C36H86O11Si8>>; MF: 783; RMF: 873; Prob: 8.23; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 47256; RI: 2631.
+Hit 3  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 781; RMF: 865; Prob: 7.60; CAS:42390-78-3; Mw: 918; Lib: <<mainlib>>; Id: 205554; RI: 0.
+Unknown: ID-121                                                      Compound in Library Factor = -984
+Hit 1  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 709; RMF: 764; Prob: 7.73; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 2  : <<D-(+)-Cellobiose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 702; RMF: 777; Prob: 5.92; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205574; RI: 2677.
+Hit 3  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 702; RMF: 735; Prob: 5.92; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Unknown: ID-122                                                      Compound in Library Factor = -285
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 789; RMF: 880; Prob: 41.99; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 739; RMF: 869; Prob: 8.54; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 734; RMF: 807; Prob: 6.88; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-123                                                      Compound in Library Factor = -127
+Hit 1  : <<Galactinol, nonakis(trimethylsilyl) ether>>;<<C39H94O11Si9>>; MF: 853; RMF: 900; Prob: 42.62; CAS:0-00-0; Mw: 990; Lib: <<mainlib>>; Id: 205562; RI: 2946.
+Hit 2  : <<á-D-Lactose, (isomer 1), 8TMS derivative>>;<<C36H86O11Si8>>; MF: 778; RMF: 848; Prob: 5.54; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 205518; RI: 2529.
+Hit 3  : <<D-Lactose, (isomer 1), 8TMS derivative>>;<<C36H86O11Si8>>; MF: 773; RMF: 846; Prob: 4.46; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 205516; RI: 2612.
+Unknown: ID-124                                                      Compound in Library Factor = -1231
+Hit 1  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 711; RMF: 791; Prob: 7.15; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Hit 2  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 707; RMF: 835; Prob: 6.04; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 704; RMF: 814; Prob: 5.34; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-125                                                      Compound in Library Factor = -1421
+Hit 1  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 593; RMF: 796; Prob: 8.00; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 2  : <<à-D-Glucopyranosiduronic acid, 3-(5-ethylhexahydro-2,4,6-trioxo-5-pyrimidinyl)-1,1-dimethylpropyl 2,3,4-tris-O-(trimethylsilyl)-, methyl ester>>;<<C27H52N2O10Si3>>; MF: 586; RMF: 719; Prob: 6.13; CAS:55556-81-5; Mw: 648; Lib: <<mainlib>>; Id: 47429; RI: 0.
+Hit 3  : <<Aucubin, hexakis(trimethylsilyl) ether>>;<<C33H70O9Si6>>; MF: 584; RMF: 793; Prob: 5.65; CAS:0-00-0; Mw: 778; Lib: <<mainlib>>; Id: 45403; RI: 2769.
+Unknown: ID-126                                                      Compound in Library Factor = -324
+Hit 1  : <<Galactinol, nonakis(trimethylsilyl) ether>>;<<C39H94O11Si9>>; MF: 778; RMF: 869; Prob: 25.19; CAS:0-00-0; Mw: 990; Lib: <<mainlib>>; Id: 205562; RI: 2946.
+Hit 2  : <<3-à-Mannobiose, octakis(trimethylsilyl) ether (isomer 1)>>;<<C36H86O11Si8>>; MF: 723; RMF: 848; Prob: 4.88; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 47256; RI: 2631.
+Hit 3  : <<á-D-Lactose, (isomer 1), 8TMS derivative>>;<<C36H86O11Si8>>; MF: 721; RMF: 837; Prob: 4.50; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 205518; RI: 2529.
+Unknown: ID-127                                                      Compound in Library Factor = -1785
+Hit 1  : <<Aucubin, hexakis(trimethylsilyl) ether>>;<<C33H70O9Si6>>; MF: 622; RMF: 760; Prob: 7.78; CAS:0-00-0; Mw: 778; Lib: <<mainlib>>; Id: 45403; RI: 2769.
+Hit 2  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 617; RMF: 717; Prob: 6.27; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Hit 3  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 614; RMF: 781; Prob: 5.54; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Unknown: ID-128                                                      Compound in Library Factor = -1750
+Hit 1  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 637; RMF: 779; Prob: 8.85; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 2  : <<Aucubin, hexakis(trimethylsilyl) ether>>;<<C33H70O9Si6>>; MF: 632; RMF: 781; Prob: 7.13; CAS:0-00-0; Mw: 778; Lib: <<mainlib>>; Id: 45403; RI: 2769.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 625; RMF: 755; Prob: 5.46; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-129                                                      Compound in Library Factor = -1660
+Hit 1  : <<Palatinose, heptakis(trimethylsilyl) ether, methyloxime>>;<<C33H79NO10Si7>>; MF: 659; RMF: 774; Prob: 9.01; CAS:0-00-0; Mw: 845; Lib: <<mainlib>>; Id: 259086; RI: 2823.
+Hit 2  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 653; RMF: 887; Prob: 7.08; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 652; RMF: 787; Prob: 6.81; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-130                                                      Compound in Library Factor = -1679
+Hit 1  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 645; RMF: 741; Prob: 8.37; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Hit 2  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 640; RMF: 885; Prob: 6.75; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 640; RMF: 787; Prob: 6.75; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-131                                                      Compound in Library Factor = -1276
+Hit 1  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 634; RMF: 787; Prob: 9.55; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 2  : <<Aucubin, hexakis(trimethylsilyl) ether>>;<<C33H70O9Si6>>; MF: 624; RMF: 785; Prob: 6.74; CAS:0-00-0; Mw: 778; Lib: <<mainlib>>; Id: 45403; RI: 2769.
+Hit 3  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 623; RMF: 733; Prob: 6.48; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Unknown: ID-132                                                      Compound in Library Factor = -1276
+Hit 1  : <<Aucubin, hexakis(trimethylsilyl) ether>>;<<C33H70O9Si6>>; MF: 631; RMF: 803; Prob: 7.47; CAS:0-00-0; Mw: 778; Lib: <<mainlib>>; Id: 45403; RI: 2769.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 630; RMF: 786; Prob: 7.18; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 624; RMF: 740; Prob: 5.64; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Unknown: ID-133                                                      Compound in Library Factor = -1149
+Hit 1  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 674; RMF: 796; Prob: 9.85; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 2  : <<Aucubin, hexakis(trimethylsilyl) ether>>;<<C33H70O9Si6>>; MF: 664; RMF: 808; Prob: 6.95; CAS:0-00-0; Mw: 778; Lib: <<mainlib>>; Id: 45403; RI: 2769.
+Hit 3  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 662; RMF: 785; Prob: 6.41; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Unknown: ID-134                                                      Compound in Library Factor = -1679
+Hit 1  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 643; RMF: 748; Prob: 6.89; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Hit 2  : <<Aucubin, hexakis(trimethylsilyl) ether>>;<<C33H70O9Si6>>; MF: 637; RMF: 797; Prob: 5.41; CAS:0-00-0; Mw: 778; Lib: <<mainlib>>; Id: 45403; RI: 2769.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 637; RMF: 783; Prob: 5.41; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-135                                                      Compound in Library Factor = -984
+Hit 1  : <<3-à-Mannobiose, octakis(trimethylsilyl) ether (isomer 1)>>;<<C36H86O11Si8>>; MF: 709; RMF: 864; Prob: 6.26; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 47256; RI: 2631.
+Hit 2  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 709; RMF: 790; Prob: 6.26; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Hit 3  : <<D-(+)-Cellobiose, octakis(trimethylsilyl) ether, methyloxime (isomer 2)>>;<<C37H89NO11Si8>>; MF: 708; RMF: 826; Prob: 6.02; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 47239; RI: 2708.
+Unknown: ID-136                                                      Compound in Library Factor = -632
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 731; RMF: 858; Prob: 36.09; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 696; RMF: 868; Prob: 9.06; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Hit 3  : <<Palatinose, heptakis(trimethylsilyl) ether, methyloxime>>;<<C33H79NO10Si7>>; MF: 689; RMF: 779; Prob: 6.94; CAS:0-00-0; Mw: 845; Lib: <<mainlib>>; Id: 259086; RI: 2823.
+Unknown: ID-137                                                      Compound in Library Factor = -918
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 691; RMF: 837; Prob: 19.33; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 668; RMF: 785; Prob: 7.06; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<Palatinose, heptakis(trimethylsilyl) ether, methyloxime>>;<<C33H79NO10Si7>>; MF: 668; RMF: 773; Prob: 7.06; CAS:0-00-0; Mw: 845; Lib: <<mainlib>>; Id: 259086; RI: 2823.
+Unknown: ID-138                                                      Compound in Library Factor = -1660
+Hit 1  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 659; RMF: 785; Prob: 9.55; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 2  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 650; RMF: 875; Prob: 6.94; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Hit 3  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 649; RMF: 803; Prob: 6.67; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Unknown: ID-139                                                      Compound in Library Factor = -941
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 687; RMF: 857; Prob: 20.95; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38772; RI: 2712.
+Hit 2  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 664; RMF: 865; Prob: 7.65; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 663; RMF: 777; Prob: 7.35; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-140                                                      Compound in Library Factor = -1679
+Hit 1  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 643; RMF: 785; Prob: 7.77; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 2  : <<D-Lactose, octakis(trimethylsilyl) ether, methyloxime (isomer 1)>>;<<C37H89NO11Si8>>; MF: 642; RMF: 740; Prob: 7.47; CAS:0-00-0; Mw: 947; Lib: <<mainlib>>; Id: 205575; RI: 2659.
+Hit 3  : <<Aucubin, hexakis(trimethylsilyl) ether>>;<<C33H70O9Si6>>; MF: 641; RMF: 800; Prob: 7.18; CAS:0-00-0; Mw: 778; Lib: <<mainlib>>; Id: 45403; RI: 2769.
+Unknown: ID-141                                                      Compound in Library Factor = -1302
+Hit 1  : <<Aucubin, hexakis(trimethylsilyl) ether>>;<<C33H70O9Si6>>; MF: 627; RMF: 802; Prob: 9.61; CAS:0-00-0; Mw: 778; Lib: <<mainlib>>; Id: 45403; RI: 2769.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 614; RMF: 769; Prob: 6.21; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<Palatinose, heptakis(trimethylsilyl) ether, methyloxime>>;<<C33H79NO10Si7>>; MF: 612; RMF: 755; Prob: 5.72; CAS:0-00-0; Mw: 845; Lib: <<mainlib>>; Id: 259086; RI: 2823.
+Unknown: ID-142                                                      Compound in Library Factor = -447
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 732; RMF: 854; Prob: 34.51; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 674; RMF: 767; Prob: 6.35; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 673; RMF: 841; Prob: 6.10; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-143                                                      Compound in Library Factor = -240
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 807; RMF: 882; Prob: 51.78; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 738; RMF: 811; Prob: 7.69; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 735; RMF: 837; Prob: 6.79; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-144                                                      Compound in Library Factor = -183
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 820; RMF: 885; Prob: 52.79; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 746; RMF: 811; Prob: 7.02; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 745; RMF: 837; Prob: 6.75; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-145                                                      Compound in Library Factor = -1381
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 697; RMF: 827; Prob: 10.81; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Palatinose, heptakis(trimethylsilyl) ether, methyloxime>>;<<C33H79NO10Si7>>; MF: 690; RMF: 787; Prob: 8.28; CAS:0-00-0; Mw: 845; Lib: <<mainlib>>; Id: 259086; RI: 2823.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 687; RMF: 795; Prob: 7.31; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-146                                                      Compound in Library Factor = -121
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 824; RMF: 911; Prob: 66.44; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38772; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 733; RMF: 804; Prob: 5.62; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 732; RMF: 830; Prob: 5.40; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-147                                                      Compound in Library Factor = -248
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 781; RMF: 881; Prob: 42.66; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 717; RMF: 856; Prob: 7.00; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 716; RMF: 789; Prob: 6.73; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-148                                                      Compound in Library Factor = -197
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 840; RMF: 897; Prob: 54.00; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 782; RMF: 841; Prob: 9.94; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 769; RMF: 851; Prob: 6.42; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-149                                                      Compound in Library Factor = 242
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 911; RMF: 946; Prob: 80.14; CAS:19159-25-2; Mw: 918; Lib: <<mainlib>>; Id: 259089; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 817; RMF: 839; Prob: 6.56; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 794; RMF: 823; Prob: 2.39; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Unknown: ID-150                                                      Compound in Library Factor = 405
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 920; RMF: 922; Prob: 80.17; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 787; RMF: 813; Prob: 3.15; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<Maltitol, nonakis(trimethylsilyl) ether>>;<<C39H96O11Si9>>; MF: 776; RMF: 787; Prob: 2.16; CAS:0-00-0; Mw: 992; Lib: <<mainlib>>; Id: 259084; RI: 2820.
+Unknown: ID-151                                                      Compound in Library Factor = 124
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 874; RMF: 903; Prob: 63.84; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 790; RMF: 826; Prob: 6.00; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<Maltitol, nonakis(trimethylsilyl) ether>>;<<C39H96O11Si9>>; MF: 788; RMF: 809; Prob: 5.53; CAS:0-00-0; Mw: 992; Lib: <<mainlib>>; Id: 259084; RI: 2820.
+Unknown: ID-152                                                      Compound in Library Factor = -279
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 791; RMF: 889; Prob: 37.53; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<D-Trehalose, 7TMS derivative>>;<<C33H78O11Si7>>; MF: 739; RMF: 874; Prob: 7.49; CAS:60065-05-6; Mw: 846; Lib: <<mainlib>>; Id: 48317; RI: 0.
+Hit 3  : <<Maltitol, nonakis(trimethylsilyl) ether>>;<<C39H96O11Si9>>; MF: 736; RMF: 806; Prob: 6.62; CAS:0-00-0; Mw: 992; Lib: <<mainlib>>; Id: 259084; RI: 2820.
+Unknown: ID-153                                                      Compound in Library Factor = -315
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 813; RMF: 884; Prob: 39.58; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 774; RMF: 847; Prob: 9.33; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<Maltitol, nonakis(trimethylsilyl) ether>>;<<C39H96O11Si9>>; MF: 767; RMF: 817; Prob: 7.14; CAS:0-00-0; Mw: 992; Lib: <<mainlib>>; Id: 259084; RI: 2820.
+Unknown: ID-154                                                      Compound in Library Factor = -570
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 766; RMF: 870; Prob: 27.22; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 738; RMF: 844; Prob: 7.86; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<Palatinose, heptakis(trimethylsilyl) ether, methyloxime>>;<<C33H79NO10Si7>>; MF: 737; RMF: 818; Prob: 7.55; CAS:0-00-0; Mw: 845; Lib: <<mainlib>>; Id: 259086; RI: 2823.
+Unknown: ID-155                                                      Compound in Library Factor = -328
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 838; RMF: 881; Prob: 20.10; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 829; RMF: 875; Prob: 14.59; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<Maltitol, nonakis(trimethylsilyl) ether>>;<<C39H96O11Si9>>; MF: 820; RMF: 850; Prob: 10.59; CAS:0-00-0; Mw: 992; Lib: <<mainlib>>; Id: 259084; RI: 2820.
+Unknown: ID-156                                                      Compound in Library Factor = -175
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 827; RMF: 901; Prob: 52.27; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 767; RMF: 853; Prob: 9.27; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<Maltitol, nonakis(trimethylsilyl) ether>>;<<C39H96O11Si9>>; MF: 751; RMF: 809; Prob: 5.34; CAS:0-00-0; Mw: 992; Lib: <<mainlib>>; Id: 259084; RI: 2820.
+Unknown: ID-157                                                      Compound in Library Factor = -194
+Hit 1  : <<Sucrose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 814; RMF: 899; Prob: 48.01; CAS:19159-25-2; Mw: 918; Lib: <<replib>>; Id: 38773; RI: 2712.
+Hit 2  : <<Lactose, 8TMS derivative>>;<<C36H86O11Si8>>; MF: 745; RMF: 831; Prob: 7.13; CAS:42390-78-3; Mw: 918; Lib: <<replib>>; Id: 38774; RI: 0.
+Hit 3  : <<Palatinose, heptakis(trimethylsilyl) ether, methyloxime>>;<<C33H79NO10Si7>>; MF: 736; RMF: 804; Prob: 5.18; CAS:0-00-0; Mw: 845; Lib: <<mainlib>>; Id: 259086; RI: 2823.
+Unknown: ID-158                                                      Compound in Library Factor = -1302
+Hit 1  : <<Aucubin, hexakis(trimethylsilyl) ether>>;<<C33H70O9Si6>>; MF: 619; RMF: 786; Prob: 7.38; CAS:0-00-0; Mw: 778; Lib: <<mainlib>>; Id: 45403; RI: 2769.
+Hit 2  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 619; RMF: 771; Prob: 7.38; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Hit 3  : <<D-(+)-Turanose, octakis(trimethylsilyl) ether>>;<<C36H86O11Si8>>; MF: 617; RMF: 765; Prob: 6.80; CAS:0-00-0; Mw: 918; Lib: <<mainlib>>; Id: 46731; RI: 2693.
+Unknown: ID-159                                                      Compound in Library Factor = -871
+Hit 1  : <<Tris(2,4-di-tert-butylphenyl) phosphate>>;<<C42H63O4P>>; MF: 552; RMF: 651; Prob: 31.93; CAS:95906-11-9; Mw: 662; Lib: <<mainlib>>; Id: 29955; RI: 3582.
+Hit 2  : <<Pregn-5-en-20-one, 3,16,17,21-tetrakis[(trimethylsilyl)oxy]-, O-(phenylmethyl)oxime, (3á,16à)->>;<<C40H71NO5Si4>>; MF: 502; RMF: 505; Prob: 6.49; CAS:57326-04-2; Mw: 757; Lib: <<mainlib>>; Id: 48702; RI: 0.
+Hit 3  : <<Hexopyranose, 5TMS derivative>>;<<C21H52O6Si5>>; MF: 484; RMF: 763; Prob: 3.35; CAS:55521-15-8; Mw: 540; Lib: <<mainlib>>; Id: 47245; RI: 0.
+Unknown: ID-160                                                      Compound in Library Factor = -579
+Hit 1  : <<Benzenepropanoic acid, 3,5-bis(1,1-dimethylethyl)-4-hydroxy-, octadecyl ester>>;<<C35H62O3>>; MF: 651; RMF: 775; Prob: 65.04; CAS:2082-79-3; Mw: 530; Lib: <<mainlib>>; Id: 266599; RI: 3603.
+Hit 2  : <<Gardenin, chlorodifluoroacetate>>;<<C23H21ClF2O10>>; MF: 589; RMF: 620; Prob: 11.11; CAS:0-00-0; Mw: 530; Lib: <<mainlib>>; Id: 263782; RI: 3563.
+Hit 3  : <<HU-210, bis(trimethylsilyl) ether>>;<<C31H54O3Si2>>; MF: 575; RMF: 600; Prob: 6.95; CAS:0-00-0; Mw: 530; Lib: <<mainlib>>; Id: 48535; RI: 2831.

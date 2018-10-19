@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist;
 import java.io.File;
 
 import org.eclipse.chemclipse.logging.support.Settings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.PathResolver;
 
 /**
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>
@@ -30,6 +29,8 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_NIST_SRCRESLT_1 = "testData/files/nist/SRCRESLT-1.TXT";
 	public static final String TESTFILE_NIST_SRCRESLT_2 = "testData/files/nist/SRCRESLT-2.TXT";
 	public static final String TESTFILE_NIST_SRCRESLT_3 = "testData/files/nist/SRCRESLT-3.TXT";
+	public static final String TESTFILE_NIST_SRCRESLT_4 = "testData/files/nist/SRCRESLT-4.TXT";
+	public static final String TESTFILE_NIST_SRCRESLT_5 = "testData/files/nist/SRCRESLT-5.TXT";
 	/*
 	 * WINDOWS
 	 */
