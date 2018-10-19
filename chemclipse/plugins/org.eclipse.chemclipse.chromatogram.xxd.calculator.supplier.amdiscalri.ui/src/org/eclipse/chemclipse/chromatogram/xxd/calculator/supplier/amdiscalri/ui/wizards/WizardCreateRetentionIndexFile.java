@@ -189,6 +189,7 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 			 */
 			String path = calibrationFile.getAbsolutePath();
 			File chromatogramFile = new File(path.substring(0, path.length() - CALIBRATION_FILE_EXTENSION.length()) + CHROMATOGRAM_FILE_EXTENSION);
+			@SuppressWarnings("rawtypes")
 			IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
 			if(wizardElements.isUseMassSpectrometryData()) {
 				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {

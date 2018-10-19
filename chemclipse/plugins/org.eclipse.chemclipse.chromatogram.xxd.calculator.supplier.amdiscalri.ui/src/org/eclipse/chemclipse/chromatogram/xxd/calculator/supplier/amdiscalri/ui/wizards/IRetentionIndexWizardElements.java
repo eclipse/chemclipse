@@ -54,8 +54,10 @@ public interface IRetentionIndexWizardElements extends IChromatogramWizardElemen
 
 	void setUseAlreadyDetectedPeaks(boolean useAlreadyDetectedPeaks);
 
+	@SuppressWarnings("rawtypes")
 	IChromatogramSelection getChromatogramSelection();
 
+	@SuppressWarnings("rawtypes")
 	void setChromatogramSelection(IChromatogramSelection chromatogramSelection);
 
 	ISeparationColumnIndices getSeparationColumnIndices();

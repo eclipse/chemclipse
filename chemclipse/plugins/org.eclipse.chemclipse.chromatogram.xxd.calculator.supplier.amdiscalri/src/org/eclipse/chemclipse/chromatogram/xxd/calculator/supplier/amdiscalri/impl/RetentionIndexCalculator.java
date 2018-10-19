@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RetentionIndexCalculator {
 
+	@SuppressWarnings("rawtypes")
 	public IProcessingInfo apply(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
@@ -61,11 +62,13 @@ public class RetentionIndexCalculator {
 		return processingInfo;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private ISeparationColumnIndices getChromatogramIndices(IChromatogramSelection chromatogramSelection) {
 
 		return chromatogramSelection.getChromatogram().getSeparationColumnIndices();
 	}
 
+	@SuppressWarnings("rawtypes")
 	private ISeparationColumnIndices getFileIndices(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings) {
 
 		/*
@@ -138,7 +141,7 @@ public class RetentionIndexCalculator {
 		return retentionIndex;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private void calculateIndex(IChromatogramSelection chromatogramSelection, ISeparationColumnIndices separationColumnIndices) {
 
 		if(separationColumnIndices != null) {

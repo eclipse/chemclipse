@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramCalculator extends AbstractChromatogramCalculator {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, IProgressMonitor monitor) {
 
@@ -36,6 +37,7 @@ public class ChromatogramCalculator extends AbstractChromatogramCalculator {
 		return calculator.apply(chromatogramSelection, supplierSettings, monitor);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 

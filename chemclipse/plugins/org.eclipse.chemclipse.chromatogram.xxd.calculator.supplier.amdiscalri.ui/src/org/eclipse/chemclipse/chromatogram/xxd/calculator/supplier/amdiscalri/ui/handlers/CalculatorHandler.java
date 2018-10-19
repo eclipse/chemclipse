@@ -32,6 +32,7 @@ import org.osgi.service.event.EventHandler;
 public class CalculatorHandler implements EventHandler {
 
 	private static final Logger logger = Logger.getLogger(CalculatorHandler.class);
+	@SuppressWarnings("rawtypes")
 	private static IChromatogramSelection chromatogramSelection;
 
 	@Execute

@@ -36,6 +36,7 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	private String stopIndexName;
 	private boolean useAlreadyDetectedPeaks;
 	//
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 	private ISeparationColumnIndices separationColumnIndices;
 	//
@@ -172,12 +173,14 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 		this.useAlreadyDetectedPeaks = useAlreadyDetectedPeaks;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IChromatogramSelection getChromatogramSelection() {
 
 		return chromatogramSelection;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void setChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
