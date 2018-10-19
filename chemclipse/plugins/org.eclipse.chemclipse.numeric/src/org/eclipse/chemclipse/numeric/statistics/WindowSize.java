@@ -15,9 +15,13 @@ package org.eclipse.chemclipse.numeric.statistics;
  * Determines the window size for the moving average calculation.
  */
 public enum WindowSize {
-	WIDTH_3(3), //
-	WIDTH_5(5), //
-	WIDTH_7(7), //
+	/*
+	 * SCANS was used before and might be used in the settings.
+	 * Find a way to safely handle old values.
+	 */
+	WIDTH_3(3), // SCANS_3
+	WIDTH_5(5), // SCANS_5
+	WIDTH_7(7), // SCANS_7
 	WIDTH_9(9), //
 	WIDTH_11(11), //
 	WIDTH_13(13), //
@@ -42,6 +46,27 @@ public enum WindowSize {
 
 	private WindowSize(int size) {
 		this.size = size;
+	}
+
+	/**
+	 * Some enum constants have been refactored.
+	 * Call this method to get the updated constant when using WindowSize.valueOf(...) and
+	 * you assume that an old setting was persisted already.
+	 * 
+	 * @param value
+	 * @return String
+	 */
+	public static String getAdjustedSetting(String value) {
+
+		if("SCANS_3".equals(value)) {
+			return "WIDTH_3";
+		} else if("SCANS_5".equals(value)) {
+			return "WIDTH_5";
+		} else if("SCANS_7".equals(value)) {
+			return "WIDTH_3";
+		} else {
+			return value;
+		}
 	}
 
 	public int getSize() {
