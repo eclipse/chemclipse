@@ -22,10 +22,6 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 	@JsonPropertyDescription(value = "This value should be false. If true, the complete background is included.")
 	private boolean includeBackground = false;
 
-	public PeakIntegrationSettings() {
-		super();
-	}
-
 	public boolean isIncludeBackground() {
 
 		return includeBackground;
