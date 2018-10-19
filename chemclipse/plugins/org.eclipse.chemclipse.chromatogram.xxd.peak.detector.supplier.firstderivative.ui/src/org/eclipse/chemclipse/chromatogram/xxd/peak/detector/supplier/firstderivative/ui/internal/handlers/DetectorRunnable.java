@@ -34,9 +34,11 @@ public class DetectorRunnable implements IRunnableWithProgress {
 	private static final String PEAK_DETECTOR_CSD_ID = "org.eclipse.chemclipse.chromatogram.csd.peak.detector.supplier.firstderivative";
 	private static final String PEAK_DETECTOR_WSD_ID = "org.eclipse.chemclipse.chromatogram.wsd.peak.detector.supplier.firstderivative";
 	//
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 	private int detectedPeaks;
 
+	@SuppressWarnings("rawtypes")
 	public DetectorRunnable(IChromatogramSelection chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}

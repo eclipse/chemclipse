@@ -118,7 +118,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD_MSD, DEF_THRESHOLD_MSD)));
 		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_MSD, DEF_INCLUDE_BACKGROUND_MSD));
 		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_MSD, DEF_MIN_SN_RATIO_MSD));
-		peakDetectorSettings.setMovingAverageWindowSize(WindowSize.valueOf(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_MSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD)));
+		peakDetectorSettings.setMovingAverageWindowSize(WindowSize.valueOf(WindowSize.getAdjustedSetting(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_MSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD))));
 		return peakDetectorSettings;
 	}
 
@@ -129,7 +129,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD_CSD, DEF_THRESHOLD_CSD)));
 		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_CSD, DEF_INCLUDE_BACKGROUND_CSD));
 		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_CSD, DEF_MIN_SN_RATIO_CSD));
-		peakDetectorSettings.setMovingAverageWindowSize(WindowSize.valueOf(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_CSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD)));
+		peakDetectorSettings.setMovingAverageWindowSize(WindowSize.valueOf(WindowSize.getAdjustedSetting(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_CSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD))));
 		return peakDetectorSettings;
 	}
 
@@ -140,7 +140,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD_WSD, DEF_THRESHOLD_WSD)));
 		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_WSD, DEF_INCLUDE_BACKGROUND_WSD));
 		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_WSD, DEF_MIN_SN_RATIO_WSD));
-		peakDetectorSettings.setMovingAverageWindowSize(WindowSize.valueOf(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_WSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD)));
+		peakDetectorSettings.setMovingAverageWindowSize(WindowSize.valueOf(WindowSize.getAdjustedSetting(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_WSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD))));
 		return peakDetectorSettings;
 	}
 }

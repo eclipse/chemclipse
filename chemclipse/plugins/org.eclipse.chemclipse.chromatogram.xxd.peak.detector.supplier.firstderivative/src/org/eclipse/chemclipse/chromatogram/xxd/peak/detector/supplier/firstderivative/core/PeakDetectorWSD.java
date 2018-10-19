@@ -60,6 +60,7 @@ public class PeakDetectorWSD extends AbstractPeakDetectorWSD {
 	//
 	private double threshold = 0.005d;
 	private boolean includeBackground = false;
+	@SuppressWarnings("unused")
 	private float minimumSignalToNoiseRatio = 0.0f;
 	private WindowSize movingAverageWindow = WindowSize.WIDTH_3;
 

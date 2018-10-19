@@ -32,6 +32,7 @@ import org.osgi.service.event.EventHandler;
 public class DetectorHandler implements EventHandler {
 
 	private static final Logger logger = Logger.getLogger(DetectorHandler.class);
+	@SuppressWarnings("rawtypes")
 	private static IChromatogramSelection chromatogramSelection;
 
 	@Execute
@@ -66,6 +67,7 @@ public class DetectorHandler implements EventHandler {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void handleEvent(Event event) {
 
