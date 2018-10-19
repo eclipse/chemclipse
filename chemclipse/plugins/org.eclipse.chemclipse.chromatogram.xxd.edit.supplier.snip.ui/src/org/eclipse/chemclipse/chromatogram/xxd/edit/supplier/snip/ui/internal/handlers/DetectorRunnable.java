@@ -27,10 +27,12 @@ public class DetectorRunnable extends AbstractChromatogramProcessor implements I
 	private static final String DESCRIPTION = "SNIP Baseline";
 	private static final String BASELINE_DETECTOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.snip";
 
+	@SuppressWarnings("rawtypes")
 	public DetectorRunnable(IChromatogramSelection chromatogramSelection) {
 		super(chromatogramSelection);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void execute(IProgressMonitor monitor) {
 

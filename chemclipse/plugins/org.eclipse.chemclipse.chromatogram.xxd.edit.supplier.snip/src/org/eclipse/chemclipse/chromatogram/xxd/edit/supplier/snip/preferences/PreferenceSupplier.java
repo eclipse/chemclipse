@@ -117,7 +117,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static WindowSize getWindowSize() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		String size = preferences.get(P_WINDOW_SIZE, DEF_WINDOW_SIZE);
+		String size = WindowSize.getAdjustedSetting(preferences.get(P_WINDOW_SIZE, DEF_WINDOW_SIZE));
 		return WindowSize.valueOf(size);
 	}
 
