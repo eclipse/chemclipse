@@ -123,7 +123,7 @@ public class Well implements IWell {
 	public boolean isPositiveMeasurement() {
 
 		for(IChannel channel : getChannels().values()) {
-			if(channel.getCrossingPoint() > 0.0d) {
+			if(channel.getCrossingPoint() != null) {
 				return true;
 			}
 		}

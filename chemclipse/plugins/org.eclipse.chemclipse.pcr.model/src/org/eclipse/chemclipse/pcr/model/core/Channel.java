@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.pcr.model.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.numeric.core.IPoint;
+
 public class Channel implements IChannel {
 
 	private int id = -1;
@@ -21,7 +23,7 @@ public class Channel implements IChannel {
 	private double temperature = 0.0d;
 	private boolean valid = false;
 	private List<Double> points = new ArrayList<>();
-	private double crossingPoint = 0.0d;
+	private IPoint crossingPoint = null;
 
 	@Override
 	public int getId() {
@@ -84,13 +86,13 @@ public class Channel implements IChannel {
 	}
 
 	@Override
-	public double getCrossingPoint() {
+	public IPoint getCrossingPoint() {
 
 		return crossingPoint;
 	}
 
 	@Override
-	public void setCrossingPoint(double crossingPoint) {
+	public void setCrossingPoint(IPoint crossingPoint) {
 
 		this.crossingPoint = crossingPoint;
 	}

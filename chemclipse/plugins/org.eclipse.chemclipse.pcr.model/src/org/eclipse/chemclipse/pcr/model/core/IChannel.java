@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.pcr.model.core;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.numeric.core.IPoint;
+
 public interface IChannel {
 
 	int getId();
@@ -35,7 +37,7 @@ public interface IChannel {
 
 	void setPoints(List<Double> points);
 
-	double getCrossingPoint();
+	IPoint getCrossingPoint();
 
-	void setCrossingPoint(double crossingPoint);
+	void setCrossingPoint(IPoint crossingPoint);
 }

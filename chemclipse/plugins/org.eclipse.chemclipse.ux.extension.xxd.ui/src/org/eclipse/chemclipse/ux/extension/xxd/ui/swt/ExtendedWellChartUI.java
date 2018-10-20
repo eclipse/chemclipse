@@ -18,6 +18,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -49,6 +50,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.swtchart.ILineSeries.PlotSymbolType;
 
 public class ExtendedWellChartUI {
 
@@ -269,21 +271,13 @@ public class ExtendedWellChartUI {
 			String channelSelection = comboChannels.getText().trim();
 			if(channelSelection.equals(ALL_CHANNELS)) {
 				for(IChannel channel : well.getChannels().values()) {
-					ILineSeriesData lineSeriesData = extractChannel(channel, colorScheme.getColor());
-					if(lineSeriesData != null) {
-						lineSeriesDataList.add(lineSeriesData);
-						colorScheme.incrementColor();
-					}
+					addChannelData(channel, colorScheme, lineSeriesDataList);
 				}
 			} else {
 				try {
 					int channelNumber = Integer.parseInt(channelSelection.replaceAll(CHANNEL, ""));
 					IChannel channel = well.getChannels().get(channelNumber);
-					ILineSeriesData lineSeriesData = extractChannel(channel, colorScheme.getColor());
-					if(lineSeriesData != null) {
-						lineSeriesDataList.add(lineSeriesData);
-						colorScheme.incrementColor();
-					}
+					addChannelData(channel, colorScheme, lineSeriesDataList);
 				} catch(NumberFormatException e) {
 					logger.warn(e);
 				}
@@ -293,7 +287,22 @@ public class ExtendedWellChartUI {
 		}
 	}
 
-	private ILineSeriesData extractChannel(IChannel channel, Color color) {
+	private void addChannelData(IChannel channel, IColorScheme colorScheme, List<ILineSeriesData> lineSeriesDataList) {
+
+		Color color = colorScheme.getColor();
+		ILineSeriesData channelCurve = getChannelCurve(channel, color);
+		if(channelCurve != null) {
+			lineSeriesDataList.add(channelCurve);
+			colorScheme.incrementColor();
+		}
+		//
+		ILineSeriesData crossingPoint = getCrossingPoint(channel, color);
+		if(crossingPoint != null) {
+			lineSeriesDataList.add(crossingPoint);
+		}
+	}
+
+	private ILineSeriesData getChannelCurve(IChannel channel, Color color) {
 
 		ILineSeriesData lineSeriesData = null;
 		if(channel != null) {
@@ -306,7 +315,30 @@ public class ExtendedWellChartUI {
 			lineSeriesData = new LineSeriesData(seriesData);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setLineColor(color);
+			lineSeriesSettings.setSymbolColor(color);
+			lineSeriesSettings.setSymbolSize(2);
+			lineSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
 			lineSeriesSettings.setEnableArea(false);
+		}
+		return lineSeriesData;
+	}
+
+	private ILineSeriesData getCrossingPoint(IChannel channel, Color color) {
+
+		ILineSeriesData lineSeriesData = null;
+		if(channel != null) {
+			IPoint crossingPoint = channel.getCrossingPoint();
+			if(crossingPoint != null) {
+				double[] xSeries = new double[]{crossingPoint.getX()};
+				double[] ySeries = new double[]{crossingPoint.getY()};
+				ISeriesData seriesData = new SeriesData(xSeries, ySeries, "Crossing Point " + channel.getId());
+				lineSeriesData = new LineSeriesData(seriesData);
+				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+				lineSeriesSettings.setSymbolColor(color);
+				lineSeriesSettings.setSymbolSize(8);
+				lineSeriesSettings.setSymbolType(PlotSymbolType.CROSS);
+				lineSeriesSettings.setEnableArea(false);
+			}
 		}
 		return lineSeriesData;
 	}
