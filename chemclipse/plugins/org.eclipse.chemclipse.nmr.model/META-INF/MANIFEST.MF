@@ -12,4 +12,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.thirdpartylibraries.apache.commons.math;bundle-version="3.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.chemclipse.nmr.model.core
+Export-Package: org.eclipse.chemclipse.nmr.model.core,
+ org.eclipse.chemclipse.nmr.model.support
