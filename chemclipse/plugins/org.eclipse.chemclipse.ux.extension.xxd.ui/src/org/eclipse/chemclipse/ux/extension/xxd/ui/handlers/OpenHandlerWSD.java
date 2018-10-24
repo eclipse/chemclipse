@@ -17,7 +17,8 @@ import java.util.List;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
-import org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
@@ -42,6 +43,7 @@ public class OpenHandlerWSD {
 		wizardDialog.create();
 		//
 		if(wizardDialog.open() == WizardDialog.OK) {
+			ISupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(org.eclipse.chemclipse.model.types.DataType.WSD);
 			IChromatogramWizardElements chromatogramWizardElements = inputWizard.getChromatogramWizardElements();
 			List<String> selectedChromatograms = chromatogramWizardElements.getSelectedChromatograms();
 			if(selectedChromatograms.size() > 0) {
@@ -50,7 +52,7 @@ public class OpenHandlerWSD {
 				 */
 				for(String chromatogram : selectedChromatograms) {
 					File file = new File(chromatogram);
-					ChromatogramSupport.getInstanceEditorSupport().openEditor(file);
+					supplierEditorSupport.openEditor(file, true);
 				}
 			}
 		}
