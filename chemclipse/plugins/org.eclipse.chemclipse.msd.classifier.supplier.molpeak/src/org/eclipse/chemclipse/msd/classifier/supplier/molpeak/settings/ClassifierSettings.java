@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.AbstractChromatogramClassifierSettings;
 
-public interface IBasePeakClassifierSettings extends IChromatogramClassifierSettings {
+public class ClassifierSettings extends AbstractChromatogramClassifierSettings {
 }

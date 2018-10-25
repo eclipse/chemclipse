@@ -32,6 +32,7 @@ public class ClassifierEvaluator extends AbstractChromatogramProcessor implement
 		super(chromatogramSelection);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void execute(IProgressMonitor monitor) {
 

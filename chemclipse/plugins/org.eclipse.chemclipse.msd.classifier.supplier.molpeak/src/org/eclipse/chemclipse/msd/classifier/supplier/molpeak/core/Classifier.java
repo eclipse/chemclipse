@@ -13,11 +13,8 @@
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.core.AbstractChromatogramClassifier;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.ChromatogramSelectionException;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.ClassifierSettingsException;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.classifier.BasePeakClassifier;
@@ -26,33 +23,26 @@ import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences.Prefer
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.results.BasePeakClassifierResult;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.results.IBasePeakClassifierResult;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.results.IChromatogramResultBasePeak;
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.ClassifierSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class Classifier extends AbstractChromatogramClassifier {
 
-	private static final Logger logger = Logger.getLogger(Classifier.class);
-
 	@Override
 	public IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		try {
-			validate(chromatogramSelection, chromatogramClassifierSettings);
-			BasePeakClassifier basePeakClassifier = new BasePeakClassifier();
-			ILigninRatios ligninRatios = basePeakClassifier.calculateLigninRatios(chromatogramSelection);
-			IBasePeakClassifierResult chromatogramClassifierResult = new BasePeakClassifierResult(ResultStatus.OK, "The chromatogram has been classified.", ligninRatios);
-			IMeasurementResult measurementResult = new MeasurementResult(IChromatogramResultBasePeak.NAME, IChromatogramResultBasePeak.IDENTIFIER, "This is ratio of lignins calculated by the base peak.", ligninRatios);
-			chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
-			processingInfo.setProcessingResult(chromatogramClassifierResult);
-		} catch(ChromatogramSelectionException e) {
-			logger.warn(e);
-			processingInfo.addErrorMessage(IChromatogramResultBasePeak.NAME, "The chromatogram selection was wrong.");
-		} catch(ClassifierSettingsException e) {
-			logger.warn(e);
-			processingInfo.addErrorMessage(IChromatogramResultBasePeak.NAME, "Settings were wrong.");
+		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramClassifierSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(chromatogramClassifierSettings instanceof ClassifierSettings) {
+				BasePeakClassifier basePeakClassifier = new BasePeakClassifier();
+				ILigninRatios ligninRatios = basePeakClassifier.calculateLigninRatios(chromatogramSelection);
+				IBasePeakClassifierResult chromatogramClassifierResult = new BasePeakClassifierResult(ResultStatus.OK, "The chromatogram has been classified.", ligninRatios);
+				IMeasurementResult measurementResult = new MeasurementResult(IChromatogramResultBasePeak.NAME, IChromatogramResultBasePeak.IDENTIFIER, "This is ratio of lignins calculated by the base peak.", ligninRatios);
+				chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
+				processingInfo.setProcessingResult(chromatogramClassifierResult);
+			}
 		}
 		return processingInfo;
 	}
@@ -60,7 +50,7 @@ public class Classifier extends AbstractChromatogramClassifier {
 	@Override
 	public IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogramClassifierSettings chromatogramClassifierSettings = PreferenceSupplier.getChromatogramClassifierSettings();
-		return applyClassifier(chromatogramSelection, chromatogramClassifierSettings, monitor);
+		ClassifierSettings classifierSettings = PreferenceSupplier.getChromatogramClassifierSettings();
+		return applyClassifier(chromatogramSelection, classifierSettings, monitor);
 	}
 }

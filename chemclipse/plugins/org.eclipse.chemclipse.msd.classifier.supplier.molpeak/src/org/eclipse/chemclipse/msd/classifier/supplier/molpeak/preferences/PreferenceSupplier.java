@@ -15,9 +15,8 @@ package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.Activator;
-import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.BasePeakClassifierSettings;
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.ClassifierSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IVendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IVendorPeakIdentifierSettings;
@@ -81,9 +80,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return settings;
 	}
 
-	public static IChromatogramClassifierSettings getChromatogramClassifierSettings() {
+	public static ClassifierSettings getChromatogramClassifierSettings() {
 
-		return new BasePeakClassifierSettings();
+		return new ClassifierSettings();
 	}
 
 	@Override

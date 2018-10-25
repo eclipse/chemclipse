@@ -34,6 +34,7 @@
       <ChromatogramClassifierSupplier
             classifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.Classifier"
             classifierName="BasePeak Classifier"
+            classifierSettings="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.ClassifierSettings"
             description="This classifier calculates the lignin ratio in a chromatogram."
             id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak">
       </ChromatogramClassifierSupplier>
