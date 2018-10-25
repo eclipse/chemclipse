@@ -6,6 +6,7 @@
       <ChromatogramClassifierSupplier
             classifier="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.core.Classifier"
             classifierName="Durbin-Watson Classifier"
+            classifierSettings="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.ClassifierSettings"
             description="This classifier tries to determine the best settings to smooth a chromatogram."
             id="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson">
       </ChromatogramClassifierSupplier>

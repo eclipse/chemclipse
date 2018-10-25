@@ -14,14 +14,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.ClassifierSettings;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.DurbinWatsonClassifierSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.IDurbinWatsonClassifierSettings;
-import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
@@ -60,9 +58,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IDurbinWatsonClassifierSettings getSettings() {
+	public static ClassifierSettings getSettings() {
 
-		IDurbinWatsonClassifierSettings settings = new DurbinWatsonClassifierSettings();
-		return settings;
+		return new ClassifierSettings();
 	}
 }

@@ -34,7 +34,6 @@ import org.eclipse.swt.widgets.Composite;
 
 public class DurbinWatsonResultsView extends AbstractChromatogramSelectionMSDView {
 
-	private static final String POPUP_MENU_ID = "org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.views.durbinWatsonResultsView.popup";
 	@Inject
 	private Composite parent;
 	private ExtendedTableViewer tableViewer;

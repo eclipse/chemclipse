@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson
 
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.IDurbinWatsonClassifierResult;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.SavitzkyGolayFilterRating;
-import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.IDurbinWatsonClassifierSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.ClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayProcessor;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
@@ -30,7 +30,8 @@ public class DurbinWatsonProcessor {
 
 	private static final Logger logger = Logger.getLogger(DurbinWatsonProcessor.class);
 
-	public void run(IChromatogramSelectionMSD chromatogramSelection, IDurbinWatsonClassifierSettings classifierSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public void run(IChromatogramSelectionMSD chromatogramSelection, ClassifierSettings classifierSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		try {
 			/*
@@ -46,7 +47,7 @@ public class DurbinWatsonProcessor {
 		}
 	}
 
-	public void durbinWatsonMain(double[] valuesOriginal, IDurbinWatsonClassifierSettings classifierSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	public void durbinWatsonMain(double[] valuesOriginal, ClassifierSettings classifierSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		SavitzkyGolayProcessor savitzkyGolayProcessor = new SavitzkyGolayProcessor();
 		/*

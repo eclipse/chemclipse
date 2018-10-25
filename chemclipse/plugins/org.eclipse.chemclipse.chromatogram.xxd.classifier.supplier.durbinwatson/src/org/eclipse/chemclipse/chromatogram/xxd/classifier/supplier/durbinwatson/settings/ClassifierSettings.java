@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.AbstractChromatogramClassifierSettings;
 
-public interface IDurbinWatsonClassifierSettings extends IChromatogramClassifierSettings {
+public class ClassifierSettings extends AbstractChromatogramClassifierSettings {
 }
