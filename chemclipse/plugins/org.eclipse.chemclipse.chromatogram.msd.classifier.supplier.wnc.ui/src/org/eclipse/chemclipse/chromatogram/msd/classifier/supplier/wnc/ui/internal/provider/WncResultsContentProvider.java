@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.result.IWncClassifierResult;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -24,8 +25,8 @@ public class WncResultsContentProvider implements IStructuredContentProvider {
 		if(inputElement instanceof IMeasurementResult) {
 			IMeasurementResult measurementResult = (IMeasurementResult)inputElement;
 			Object object = measurementResult.getResult();
-			if(object instanceof IWncIons) {
-				IWncIons wncIons = (IWncIons)object;
+			if(object instanceof IWncClassifierResult) {
+				IWncIons wncIons = ((IWncClassifierResult)object).getWNCIons();
 				return wncIons.toArray();
 			}
 		} else if(inputElement instanceof IWncIons) {

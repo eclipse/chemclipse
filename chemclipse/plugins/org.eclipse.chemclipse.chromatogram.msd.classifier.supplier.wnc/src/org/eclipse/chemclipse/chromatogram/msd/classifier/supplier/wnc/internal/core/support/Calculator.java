@@ -19,14 +19,16 @@ import java.util.Set;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.exceptions.ClassifierException;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.ClassifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 
 public class Calculator {
 
-	public IWncIons calculateIonPercentages(IChromatogramSelectionMSD chromatogramSelection, IWncIons wncIons) throws ClassifierException {
+	public IWncIons calculateIonPercentages(IChromatogramSelectionMSD chromatogramSelection, ClassifierSettings classifierSettings) throws ClassifierException {
 
+		IWncIons wncIons = classifierSettings.getWNCIons();
 		Map<Integer, Double> ionAbundanceValues = extractIonValues(chromatogramSelection);
 		double factorMax = calculateFactorMax(ionAbundanceValues);
 		double factorSum = calculateFactorSum(ionAbundanceValues);

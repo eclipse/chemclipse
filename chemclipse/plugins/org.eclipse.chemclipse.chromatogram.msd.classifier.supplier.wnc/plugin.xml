@@ -6,6 +6,7 @@
       <ChromatogramClassifierSupplier
             classifier="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.core.Classifier"
             classifierName="WNC Classifier"
+            classifierSettings="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.ClassifierSettings"
             description="This classifier detects the water, nitrogene and carbon dioxide ratios in a chromatogram."
             id="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc">
       </ChromatogramClassifierSupplier>

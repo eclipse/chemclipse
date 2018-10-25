@@ -17,20 +17,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.WncIons;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.WncIon;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.IWncClassifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.WncClassifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.WncIons;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.ClassifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
@@ -76,12 +73,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IChromatogramClassifierSettings getChromatogramClassifierSettings() {
+	public static ClassifierSettings getClassifierSettings() {
 
-		IWncClassifierSettings chromatogramClassifierSettings = new WncClassifierSettings();
+		ClassifierSettings classifierSettings = new ClassifierSettings();
 		IWncIons wncIons = getWNCIons();
-		chromatogramClassifierSettings.getWNCIons().add(wncIons);
-		return chromatogramClassifierSettings;
+		classifierSettings.getWNCIons().add(wncIons);
+		return classifierSettings;
 	}
 
 	/**

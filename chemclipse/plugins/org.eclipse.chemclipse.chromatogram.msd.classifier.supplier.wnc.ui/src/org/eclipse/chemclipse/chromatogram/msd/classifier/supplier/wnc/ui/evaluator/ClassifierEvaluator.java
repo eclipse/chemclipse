@@ -14,10 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.evalu
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.core.ChromatogramClassifier;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.IWncClassifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.WncClassifierSettings;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -35,21 +31,13 @@ public class ClassifierEvaluator extends AbstractChromatogramProcessor implement
 		super(chromatogramSelection);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void execute(IProgressMonitor monitor) {
 
 		final IChromatogramSelection chromatogramSelection = getChromatogramSelection();
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			/*
-			 * The classifier settings.
-			 */
-			IWncClassifierSettings chromatogramClassifierSettings = new WncClassifierSettings();
-			IWncIons wncIons = PreferenceSupplier.getWNCIons();
-			chromatogramClassifierSettings.getWNCIons().add(wncIons);
-			/*
-			 * Apply the classifier.
-			 */
-			final IProcessingInfo processingInfo = ChromatogramClassifier.applyClassifier((IChromatogramSelectionMSD)chromatogramSelection, chromatogramClassifierSettings, FILTER_ID, monitor);
+			final IProcessingInfo processingInfo = ChromatogramClassifier.applyClassifier((IChromatogramSelectionMSD)chromatogramSelection, FILTER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			chromatogramSelection.update(true);
 		}

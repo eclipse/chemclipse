@@ -15,24 +15,24 @@ import junit.framework.TestCase;
 
 public class WncClassifierSettings_1_Test extends TestCase {
 
-	private IWncClassifierSettings wncClassifierSettings;
+	private ClassifierSettings classifierSettings;
 
 	@Override
 	protected void setUp() throws Exception {
 
-		wncClassifierSettings = new WncClassifierSettings();
+		classifierSettings = new ClassifierSettings();
 		super.setUp();
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 
-		wncClassifierSettings = null;
+		classifierSettings = null;
 		super.tearDown();
 	}
 
 	public void testGetWncIons_1() {
 
-		assertNotNull(wncClassifierSettings.getWNCIons());
+		assertNotNull(classifierSettings.getWNCIons());
 	}
 }

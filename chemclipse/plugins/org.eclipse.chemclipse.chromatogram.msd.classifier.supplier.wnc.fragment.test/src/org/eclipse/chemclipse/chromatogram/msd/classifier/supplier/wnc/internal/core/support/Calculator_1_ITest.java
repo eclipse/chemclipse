@@ -12,9 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.internal.core.support;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.exceptions.ClassifierException;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.internal.core.support.Calculator;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.WncIons;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.ClassifierSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 
 public class Calculator_1_ITest extends ChromatogramTestCase {
@@ -36,10 +34,10 @@ public class Calculator_1_ITest extends ChromatogramTestCase {
 
 	public void testCalculator_1() {
 
-		IWncIons wncIons = new WncIons();
-		IChromatogramSelectionMSD chromatogramSelection = getChromatogramSelection();
 		try {
-			wncIons = calculator.calculateIonPercentages(chromatogramSelection, wncIons);
+			ClassifierSettings classifierSettings = new ClassifierSettings();
+			IChromatogramSelectionMSD chromatogramSelection = getChromatogramSelection();
+			calculator.calculateIonPercentages(chromatogramSelection, classifierSettings);
 		} catch(ClassifierException e) {
 			assertTrue("ClassifierException shouldn't be thrown here.", false);
 		}

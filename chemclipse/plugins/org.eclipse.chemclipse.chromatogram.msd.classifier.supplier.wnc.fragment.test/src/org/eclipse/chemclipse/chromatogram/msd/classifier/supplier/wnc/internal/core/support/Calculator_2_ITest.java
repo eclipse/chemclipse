@@ -11,11 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.internal.core.support;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.internal.core.support.Calculator;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.WncIon;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.WncIons;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.ClassifierSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 
 public class Calculator_2_ITest extends ChromatogramTestCase {
@@ -29,14 +28,15 @@ public class Calculator_2_ITest extends ChromatogramTestCase {
 
 		super.setUp();
 		calculator = new Calculator();
-		wncIons = new WncIons();
+		ClassifierSettings classifierSettings = new ClassifierSettings();
+		wncIons = classifierSettings.getWNCIons();
 		wncIons.add(new WncIon(18, "water"));
 		wncIons.add(new WncIon(28, "nitrogen"));
 		wncIons.add(new WncIon(32, "carbon dioxide"));
 		wncIons.add(new WncIon(84, "solvent tailing"));
 		wncIons.add(new WncIon(207, "column bleed"));
 		IChromatogramSelectionMSD chromatogramSelection = getChromatogramSelection();
-		wncIons = calculator.calculateIonPercentages(chromatogramSelection, wncIons);
+		wncIons = calculator.calculateIonPercentages(chromatogramSelection, classifierSettings);
 	}
 
 	@Override

@@ -11,10 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.AbstractChromatogramClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.WncIons;
 
-public interface IWncClassifierSettings extends IChromatogramClassifierSettings {
+public class ClassifierSettings extends AbstractChromatogramClassifierSettings {
 
-	IWncIons getWNCIons();
+	private IWncIons wncIons;
+
+	public ClassifierSettings() {
+		wncIons = new WncIons();
+	}
+
+	public IWncIons getWNCIons() {
+
+		return wncIons;
+	}
 }
