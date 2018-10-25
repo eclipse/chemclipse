@@ -141,10 +141,10 @@ public class PreferenceConstants {
 	public static final String DEF_LINE_STYLE_DISPLAY_SIC_OVERLAY = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_DISPLAY_TSC_OVERLAY = "lineStyleDisplayTSCOverlay";
 	public static final String DEF_LINE_STYLE_DISPLAY_TSC_OVERLAY = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_XWC_OVERLAY = "lineStyleDisplayXWCOverlay";
+	public static final String DEF_LINE_STYLE_DISPLAY_XWC_OVERLAY = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_DISPLAY_SWC_OVERLAY = "lineStyleDisplaySWCOverlay";
 	public static final String DEF_LINE_STYLE_DISPLAY_SWC_OVERLAY = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_AWC_OVERLAY = "lineStyleDisplayAWCOverlay";
-	public static final String DEF_LINE_STYLE_DISPLAY_AWC_OVERLAY = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = "lineStyleDisplayDefaultOverlay";
 	public static final String DEF_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = LineStyle.SOLID.toString();
 	//
@@ -152,6 +152,8 @@ public class PreferenceConstants {
 	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION = OverlayChartSupport.SELECTED_IONS_USERS_CHOICE;
 	public static final String P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE = "chromatogramOverlayIonsUsersChoice";
 	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE = "18 28 32 84 207";
+	public static final String P_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE = "chromatogramOverlayWavelengthsUsersChoice";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE = "237";
 	public static final String P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS = "chromatogramOverlayIonsHydrocarbons";
 	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS = "57 71 85";
 	public static final String P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS = "chromatogramOverlayIonsFattyAcids";
@@ -162,8 +164,6 @@ public class PreferenceConstants {
 	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING = "84";
 	public static final String P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "chromatogramOverlayIonsColumnBleed";
 	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "207";
-	public static final String P_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE = "chromatogramOverlayWavelengthsUsersChoice";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE = "237";
 	//
 	public static final String P_OVERLAY_SHIFT_X = "overlayShiftX";
 	public static final double DEF_OVERLAY_SHIFT_X = 0.0d;
@@ -184,6 +184,10 @@ public class PreferenceConstants {
 	//
 	public static final String P_OVERLAY_SHOW_AREA = "overlayShowArea";
 	public static final boolean DEF_OVERLAY_SHOW_AREA = false;
+	public static final String P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS = "overlayAutofocusProfileSettings";
+	public static final boolean DEF_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS = true;
+	public static final String P_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS = "overlayAutofocusShiftSettings";
+	public static final boolean DEF_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS = true;
 	/*
 	 * Scans
 	 */

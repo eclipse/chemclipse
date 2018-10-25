@@ -59,15 +59,35 @@ public class ChromatogramChartSupport {
 	/*
 	 * Overlay Type
 	 */
-	public static final String DISPLAY_TYPE_TIC = "TIC"; // Total Intensity Chromatogram
-	public static final String DISPLAY_TYPE_BPC = "BPC"; // Base Peak Chromatogram
-	public static final String DISPLAY_TYPE_XIC = "XIC"; // Extracted Ion Chromatogram
-	public static final String DISPLAY_TYPE_SIC = "SIC"; // Selected Ion Chromatogram
-	public static final String DISPLAY_TYPE_TSC = "TSC"; // Total Substracted Chromatogram
-	public static final String DISPLAY_TYPE_SRM = "SRM"; // Single Reaction Monitoring
-	public static final String DISPLAY_TYPE_MRM = "MRM"; // Single Reaction Monitoring
-	public static final String DISPLAY_TYPE_SWC = "SWC"; // Selected Wavelength Chromatogram
-	public static final String DISPLAY_TYPE_AWC = "AWC"; // Selected Wavelength Chromatogram
+	public static final String OVERLAY_TYPE_CONCATENATOR = "+";
+	//
+	public static final String DISPLAY_TYPE_TIC = "TIC";
+	public static final String DISPLAY_TYPE_BPC = "BPC";
+	public static final String DISPLAY_TYPE_XIC = "XIC";
+	public static final String DISPLAY_TYPE_SIC = "SIC";
+	public static final String DISPLAY_TYPE_XWC = "XWC";
+	public static final String DISPLAY_TYPE_SWC = "SWC";
+	public static final String DISPLAY_TYPE_TSC = "TSC";
+	public static final String DISPLAY_TYPE_SRM = "SRM";
+	public static final String DISPLAY_TYPE_MRM = "MRM";
+	public static final String DISPLAY_TYPE_TIC_BPC = DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + DISPLAY_TYPE_BPC;
+	public static final String DISPLAY_TYPE_TIC_XIC = DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + DISPLAY_TYPE_XIC;
+	public static final String DISPLAY_TYPE_TIC_SIC = DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + DISPLAY_TYPE_SIC;
+	public static final String DISPLAY_TYPE_TIC_TSC = DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + DISPLAY_TYPE_TSC;
+	//
+	public static final String DISPLAY_TYPE_TIC_DESCRIPTION = "Total Intensity Chromatogram";
+	public static final String DISPLAY_TYPE_BPC_DESCRIPTION = "Base Peak Chromatogram";
+	public static final String DISPLAY_TYPE_XIC_DESCRIPTION = "Extracted Ion Chromatogram";
+	public static final String DISPLAY_TYPE_SIC_DESCRIPTION = "Selected Ion Chromatogram";
+	public static final String DISPLAY_TYPE_XWC_DESCRIPTION = "Extracted Wavelength Chromatogram";
+	public static final String DISPLAY_TYPE_SWC_DESCRIPTION = "Selected Wavelength Chromatogram";
+	public static final String DISPLAY_TYPE_TSC_DESCRIPTION = "Total Subtracted Chromatogram";
+	public static final String DISPLAY_TYPE_SRM_DESCRIPTION = "Single Reaction Monitoring";
+	public static final String DISPLAY_TYPE_MRM_DESCRIPTION = "Multiple Reaction Monitoring";
+	public static final String DISPLAY_TYPE_TIC_BPC_DESCRIPTION = DISPLAY_TYPE_TIC_DESCRIPTION + OVERLAY_TYPE_CONCATENATOR + DISPLAY_TYPE_BPC_DESCRIPTION;
+	public static final String DISPLAY_TYPE_TIC_XIC_DESCRIPTION = DISPLAY_TYPE_TIC_DESCRIPTION + OVERLAY_TYPE_CONCATENATOR + DISPLAY_TYPE_XIC_DESCRIPTION;
+	public static final String DISPLAY_TYPE_TIC_SIC_DESCRIPTION = DISPLAY_TYPE_TIC_DESCRIPTION + OVERLAY_TYPE_CONCATENATOR + DISPLAY_TYPE_SIC_DESCRIPTION;
+	public static final String DISPLAY_TYPE_TIC_TSC_DESCRIPTION = DISPLAY_TYPE_TIC_DESCRIPTION + OVERLAY_TYPE_CONCATENATOR + DISPLAY_TYPE_TSC_DESCRIPTION;
 	//
 	public static final String DERIVATIVE_NONE = "--";
 	public static final String DERIVATIVE_FIRST = "1st";
@@ -93,7 +113,6 @@ public class ChromatogramChartSupport {
 	private boolean showArea = false;
 
 	public ChromatogramChartSupport() {
-
 		usedColorsNormal = new HashMap<String, Color>();
 		usedColorsSIC = new HashMap<String, Color>();
 		usedColorsSWC = new HashMap<String, Color>();
@@ -113,7 +132,7 @@ public class ChromatogramChartSupport {
 		lineStyleSIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC_OVERLAY));
 		lineStyleTSC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC_OVERLAY));
 		lineStyleSWC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC_OVERLAY));
-		lineStyleAWC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_AWC_OVERLAY));
+		lineStyleAWC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_XWC_OVERLAY));
 		lineStyleDefault = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY));
 		showArea = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_SHOW_AREA);
 		//
@@ -427,7 +446,7 @@ public class ChromatogramChartSupport {
 					}
 				}
 			}
-		} else if(overlayType.equals(DISPLAY_TYPE_SWC) | overlayType.equals(DISPLAY_TYPE_AWC)) {
+		} else if(overlayType.equals(DISPLAY_TYPE_SWC) | overlayType.equals(DISPLAY_TYPE_XWC)) {
 			/*
 			 * SWC
 			 */
@@ -462,7 +481,7 @@ public class ChromatogramChartSupport {
 			lineStyle = lineStyleTSC;
 		} else if(overlayType.equals(DISPLAY_TYPE_SWC)) {
 			lineStyle = lineStyleSWC;
-		} else if(overlayType.equals(DISPLAY_TYPE_AWC)) {
+		} else if(overlayType.equals(DISPLAY_TYPE_XWC)) {
 			lineStyle = lineStyleAWC;
 		} else {
 			lineStyle = lineStyleDefault;

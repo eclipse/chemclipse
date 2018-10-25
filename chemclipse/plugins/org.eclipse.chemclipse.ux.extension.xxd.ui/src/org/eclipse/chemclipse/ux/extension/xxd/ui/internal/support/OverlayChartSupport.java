@@ -11,13 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class OverlayChartSupport {
 
-	public static final String OVERLAY_TYPE_CONCATENATOR = "+";
 	public static final String ESCAPE_CONCATENATOR = "\\";
 	public static final String SELECTED_IONS_CONCATENATOR = " ";
 	public static final String SELECTED_WAVELENGTH_CONCATENATOR = " ";
@@ -45,19 +47,24 @@ public class OverlayChartSupport {
 	public static final String DISPLAY_MODUS_MIRRORED = "Mirrored";
 	//
 	private String[] overlayTypes;
+	private Map<String, String> overlayTypeTooltips;
 	private String[] derivativeTypes;
 	private String[] selectedIons;
 	private String[] displayModi;
 	//
 
 	public OverlayChartSupport() {
-
 		initialize();
 	}
 
 	public String[] getOverlayTypes() {
 
 		return overlayTypes;
+	}
+
+	public String getOverlayTypeTooltips(String overlayType) {
+
+		return overlayTypeTooltips.getOrDefault(overlayType, "");
 	}
 
 	public String[] getDerivativeTypes() {
@@ -82,13 +89,26 @@ public class OverlayChartSupport {
 				ChromatogramChartSupport.DISPLAY_TYPE_BPC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_XIC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_SIC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_TSC, //
+				ChromatogramChartSupport.DISPLAY_TYPE_XWC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_SWC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_AWC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + ChromatogramChartSupport.DISPLAY_TYPE_BPC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + ChromatogramChartSupport.DISPLAY_TYPE_XIC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + ChromatogramChartSupport.DISPLAY_TYPE_SIC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + ChromatogramChartSupport.DISPLAY_TYPE_TSC};
+				ChromatogramChartSupport.DISPLAY_TYPE_TSC, //
+				ChromatogramChartSupport.DISPLAY_TYPE_TIC_BPC, //
+				ChromatogramChartSupport.DISPLAY_TYPE_TIC_XIC, //
+				ChromatogramChartSupport.DISPLAY_TYPE_TIC_SIC, //
+				ChromatogramChartSupport.DISPLAY_TYPE_TIC_TSC};
+		//
+		overlayTypeTooltips = new HashMap<String, String>();
+		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TIC, ChromatogramChartSupport.DISPLAY_TYPE_TIC_DESCRIPTION);
+		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_BPC, ChromatogramChartSupport.DISPLAY_TYPE_BPC_DESCRIPTION);
+		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_XIC, ChromatogramChartSupport.DISPLAY_TYPE_XIC_DESCRIPTION);
+		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_SIC, ChromatogramChartSupport.DISPLAY_TYPE_SIC_DESCRIPTION);
+		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_XWC, ChromatogramChartSupport.DISPLAY_TYPE_XWC_DESCRIPTION);
+		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_SWC, ChromatogramChartSupport.DISPLAY_TYPE_SWC_DESCRIPTION);
+		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TSC, ChromatogramChartSupport.DISPLAY_TYPE_TSC_DESCRIPTION);
+		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TIC_BPC, ChromatogramChartSupport.DISPLAY_TYPE_TIC_BPC_DESCRIPTION);
+		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TIC_XIC, ChromatogramChartSupport.DISPLAY_TYPE_TIC_XIC_DESCRIPTION);
+		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TIC_SIC, ChromatogramChartSupport.DISPLAY_TYPE_TIC_SIC_DESCRIPTION);
+		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TIC_TSC, ChromatogramChartSupport.DISPLAY_TYPE_TIC_TSC_DESCRIPTION);
 		//
 		derivativeTypes = new String[]{//
 				ChromatogramChartSupport.DERIVATIVE_NONE, //

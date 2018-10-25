@@ -67,12 +67,13 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_XIC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_XIC_OVERLAY);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_SIC_OVERLAY);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_TSC_OVERLAY);
+		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_XWC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_XWC_OVERLAY);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_SWC_OVERLAY);
-		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_AWC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_AWC_OVERLAY);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY);
 		//
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FAME, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_FAME);
@@ -85,6 +86,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_INDEX_SHIFT_Y, PreferenceConstants.DEF_INDEX_SHIFT_Y);
 		//
 		store.setDefault(PreferenceConstants.P_OVERLAY_SHOW_AREA, PreferenceConstants.DEF_OVERLAY_SHOW_AREA);
+		store.setDefault(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS, PreferenceConstants.DEF_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS);
+		store.setDefault(PreferenceConstants.P_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS, PreferenceConstants.DEF_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS);
 		/*
 		 * Scans
 		 */

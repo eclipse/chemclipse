@@ -29,7 +29,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageOverlay extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageOverlay() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Overlay");
@@ -44,7 +43,9 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 		//
 		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY, "Display Color Scheme Normal", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS, "Show Referenced Chromatograms", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_SHOW_AREA, "Show Area", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_SHOW_AREA, "Overlay Show Area", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS, "Overlay Autofocus Profile Settings", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS, "Overlay Autofocus Shift Settings", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		//
@@ -55,14 +56,18 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_XIC_OVERLAY, "Line Style XIC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC_OVERLAY, "Line Style SIC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC_OVERLAY, "Line Style TSC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_XWC_OVERLAY, "Line Style XWC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC_OVERLAY, "Line Style SWC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_AWC_OVERLAY, "Line Style AWC:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY, "Line Style Default:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		//
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, "Selected Overlay:", OverlayChartSupport.SELECTED_IONS_CHOICES, getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE, "Overlay Ions User Choice:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE, "Wavelength User Choice:", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		//
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS, "Overlay Ions Hydrocarbons:", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS, "Overlay Ions Fatty Acids:", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FAME, "Overlay Ions FAME:", getFieldEditorParent()));
