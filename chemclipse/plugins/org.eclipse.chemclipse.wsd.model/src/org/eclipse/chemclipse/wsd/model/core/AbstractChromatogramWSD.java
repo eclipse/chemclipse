@@ -12,13 +12,18 @@
 package org.eclipse.chemclipse.wsd.model.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.model.baseline.BaselineModel;
+import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -31,10 +36,12 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	//
 	private Set<IChromatogramTargetWSD> targets;
 	private INoiseCalculator noiseCalculator;
+	private Map<Double, IBaselineModel> baselineModels;
 
 	public AbstractChromatogramWSD() {
 
 		targets = new HashSet<IChromatogramTargetWSD>();
+		baselineModels = new HashMap<>();
 		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
 		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
 		if(noiseCalculator != null) {
@@ -135,5 +142,30 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 			integratedArea += peak.getIntegratedArea();
 		}
 		return integratedArea;
+	}
+
+	@Override
+	public IBaselineModel getBaselineModel(double wavelength) {
+
+		baselineModels.putIfAbsent(wavelength, new BaselineModel(this));
+		return baselineModels.get(wavelength);
+	}
+
+	@Override
+	public void removeBaselineModel(double wavelength) {
+
+		baselineModels.remove(wavelength);
+	}
+
+	@Override
+	public Map<Double, IBaselineModel> getBaselineModels() {
+
+		return Collections.unmodifiableMap(baselineModels);
+	}
+
+	@Override
+	public boolean containsBaseline(double wavelength) {
+
+		return baselineModels.containsValue(wavelength);
 	}
 }
