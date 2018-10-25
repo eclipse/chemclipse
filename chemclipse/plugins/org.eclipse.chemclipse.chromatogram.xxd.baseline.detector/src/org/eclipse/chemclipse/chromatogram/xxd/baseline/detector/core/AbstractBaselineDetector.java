@@ -24,6 +24,7 @@ public abstract class AbstractBaselineDetector implements IBaselineDetector {
 
 	private static final String ERROR_DESCRIPTION = "Baseline Detector";
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
@@ -37,6 +38,37 @@ public abstract class AbstractBaselineDetector implements IBaselineDetector {
 				processingInfo.addMessage(processingMessage);
 			}
 		}
+		/*
+		 * Settings
+		 */
+		if(baselineDetectorSettings == null) {
+			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The baseline detector settings are invalid.");
+			processingInfo.addMessage(processingMessage);
+		}
+		return processingInfo;
+	}
+
+	@Override
+	@SuppressWarnings("rawtypes")
+	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
+		if(chromatogramSelection == null) {
+			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The chromatogram selection is invalid.");
+			processingInfo.addMessage(processingMessage);
+		} else {
+			if(chromatogramSelection.getChromatogram() == null) {
+				IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The chromatogram is invalid.");
+				processingInfo.addMessage(processingMessage);
+			}
+		}
+		return processingInfo;
+	}
+
+	@Override
+	public IProcessingInfo validate(IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		/*
 		 * Settings
 		 */
