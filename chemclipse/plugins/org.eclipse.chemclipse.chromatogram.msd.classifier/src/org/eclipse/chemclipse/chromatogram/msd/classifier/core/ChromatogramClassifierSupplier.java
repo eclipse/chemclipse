@@ -11,11 +11,33 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 
+import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
+
 public class ChromatogramClassifierSupplier implements IChromatogramClassifierSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String classifierName = "";
+	private Class<? extends IChromatogramClassifierSettings> settingsClass;
+
+	@Override
+	public String getId() {
+
+		return id;
+	}
+
+	/**
+	 * Sets the chromatogram classifier supplier id like
+	 * "org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.ionchecker".
+	 * 
+	 * @param id
+	 */
+	protected void setId(String id) {
+
+		if(id != null) {
+			this.id = id;
+		}
+	}
 
 	@Override
 	public String getDescription() {
@@ -54,22 +76,14 @@ public class ChromatogramClassifierSupplier implements IChromatogramClassifierSu
 	}
 
 	@Override
-	public String getId() {
+	public Class<? extends IChromatogramClassifierSettings> getSettingsClass() {
 
-		return id;
+		return this.settingsClass;
 	}
 
-	/**
-	 * Sets the chromatogram classifier supplier id like
-	 * "org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.ionchecker".
-	 * 
-	 * @param id
-	 */
-	protected void setId(String id) {
+	protected void setSettingsClass(Class<? extends IChromatogramClassifierSettings> settingsClass) {
 
-		if(id != null) {
-			this.id = id;
-		}
+		this.settingsClass = settingsClass;
 	}
 
 	// ------------------------------------hashCode, equals, toString

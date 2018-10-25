@@ -71,7 +71,7 @@ public class ExtendedMeasurementResultUI {
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	//
 	private String resultProviderId = "";
-	private List<IMeasurementResult> measurementResults = null;
+	private List<IMeasurementResult> measurementResults = new ArrayList<>();
 	private SelectionListener selectionListener = null;
 
 	@Inject
@@ -82,13 +82,14 @@ public class ExtendedMeasurementResultUI {
 	@Focus
 	public void setFocus() {
 
-		updateMeasurementResults(measurementResults);
+		updateMeasurementResults();
 	}
 
 	public void update(Object object) {
 
-		measurementResults = getMeasurementResult(object);
-		updateMeasurementResults(measurementResults);
+		updateMeasurementResults(object);
+		updateChromatogramInfo(object);
+		updateMeasurementResults();
 	}
 
 	private void initialize(Composite parent) {
@@ -233,31 +234,51 @@ public class ExtendedMeasurementResultUI {
 		return comboViewer;
 	}
 
-	private void updateMeasurementResults(List<IMeasurementResult> measurementResults) {
+	private void updateMeasurementResults() {
+
+		clearResults();
+		if(measurementResults.size() > 0) {
+			IMeasurementResult measurementResult = setComboMeasurementResultSelection();
+			if(measurementResult != null) {
+				labelMeasurementResultInfo.setText(measurementResult.getDescription());
+				updateMeasurementResult(measurementResult);
+			}
+		}
+	}
+
+	private void clearResults() {
 
 		labelMeasurementResultInfo.setText("");
-		comboMeasurementResults.setInput(measurementResults);
-		setComboMeasurementResultSelection(measurementResults);
-		IMeasurementResult measurementResult = getMeasurementResult(measurementResults);
-		updateMeasurementResult(measurementResult);
+		comboMeasurementResults.setInput(null);
+		if(extendedTableViewer.getContentProvider() != null) {
+			extendedTableViewer.setInput(null);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
-	private List<IMeasurementResult> getMeasurementResult(Object object) {
+	private void updateMeasurementResults(Object object) {
 
-		List<IMeasurementResult> measurementResults = null;
-		labelChromatogramInfo.setText("");
-		//
+		measurementResults.clear();
+		if(object instanceof IChromatogramSelection) {
+			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			measurementResults.addAll(chromatogram.getMeasurementResults());
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void updateChromatogramInfo(Object object) {
+
 		if(object instanceof IChromatogramSelection) {
 			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogram));
-			measurementResults = new ArrayList<>(chromatogram.getMeasurementResults());
+		} else {
+			labelChromatogramInfo.setText("");
 		}
-		return measurementResults;
 	}
 
-	private IMeasurementResult getMeasurementResult(List<IMeasurementResult> measurementResults) {
+	private IMeasurementResult getSelectedMeasurementResult() {
 
 		IMeasurementResult measurementResult = null;
 		int index = getMeasurementResultIndexInList(measurementResults);
@@ -268,12 +289,17 @@ public class ExtendedMeasurementResultUI {
 		return measurementResult;
 	}
 
-	private void setComboMeasurementResultSelection(List<IMeasurementResult> measurementResults) {
+	private IMeasurementResult setComboMeasurementResultSelection() {
 
+		IMeasurementResult measurementResult = null;
+		comboMeasurementResults.setInput(measurementResults);
 		int index = getMeasurementResultIndexInList(measurementResults);
 		if(index >= 0) {
+			measurementResult = getSelectedMeasurementResult();
 			comboMeasurementResults.getCombo().select(index);
 		}
+		//
+		return measurementResult;
 	}
 
 	private int getMeasurementResultIndexInList(List<IMeasurementResult> measurementResults) {
@@ -313,7 +339,6 @@ public class ExtendedMeasurementResultUI {
 			/*
 			 * Get the UI provider and display the results.
 			 */
-			labelMeasurementResultInfo.setText(measurementResult.getDescription());
 			if(!resultProviderId.equals(measurementResult.getIdentifier())) {
 				resultProviderId = measurementResult.getIdentifier();
 				IConfigurationElement configurationElement = getMeasurementResultVisualizationProvider(resultProviderId);
@@ -326,8 +351,8 @@ public class ExtendedMeasurementResultUI {
 						extendedTableViewer.setComparator(null);
 						if(table.getItemCount() > 0) {
 							extendedTableViewer.setInput(null);
+							extendedTableViewer.refresh();
 						}
-						table.clearAll();
 						//
 						setContentProvider(configurationElement, table);
 						setSelectionListener(configurationElement, table);
@@ -348,6 +373,7 @@ public class ExtendedMeasurementResultUI {
 		IStructuredContentProvider contentProvider = (IStructuredContentProvider)configurationElement.createExecutableExtension(ATTRIBUTE_CONTENT_PROVIDER);
 		ITableLabelProvider tableLabelProvider = (ITableLabelProvider)configurationElement.createExecutableExtension(ATTRIBUTE_LABEL_PROVIDER);
 		ViewerComparator viewerComparator = (ViewerComparator)configurationElement.createExecutableExtension(ATTRIBUTE_COMPARATOR);
+		//
 		extendedTableViewer.createColumns(titles.getTitles(), titles.getBounds());
 		extendedTableViewer.setLabelProvider(tableLabelProvider);
 		extendedTableViewer.setContentProvider(contentProvider);
@@ -360,19 +386,18 @@ public class ExtendedMeasurementResultUI {
 			/*
 			 * Remove an existing listener.
 			 */
-			if(this.selectionListener != null) {
+			if(selectionListener != null) {
 				table.removeSelectionListener(selectionListener);
+				selectionListener = null;
 			}
 			/*
 			 * Be aware, the selection listener is optional.
 			 */
-			SelectionListener selectionListener = null;
 			Object object = configurationElement.createExecutableExtension(ATTRIBUTE_SELECTION_LISTENER);
 			if(object instanceof SelectionListener) {
 				selectionListener = (SelectionListener)object;
 				table.addSelectionListener(selectionListener);
 			}
-			this.selectionListener = selectionListener;
 		} catch(CoreException e) {
 			logger.info(e);
 		}

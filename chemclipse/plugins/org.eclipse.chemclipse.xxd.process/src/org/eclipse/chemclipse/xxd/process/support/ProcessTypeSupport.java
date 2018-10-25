@@ -61,7 +61,7 @@ public class ProcessTypeSupport {
 		addProcessSupplier(new BaselineDetectorTypeSupplier()); // OK
 		addProcessSupplier(new ChromatogramIdentifierTypeSupplier());
 		addProcessSupplier(new ChromatogramIntegratorTypeSupplier()); // OK
-		addProcessSupplier(new ClassifierTypeSupplier());
+		addProcessSupplier(new ClassifierTypeSupplier()); // OK - Improve settings
 		addProcessSupplier(new CombinedIntegratorTypeSupplier());
 		addProcessSupplier(new ChromatogramFilterTypeSupplier()); // OK
 		addProcessSupplier(new ChromatogramFilterTypeSupplierMSD()); // OK

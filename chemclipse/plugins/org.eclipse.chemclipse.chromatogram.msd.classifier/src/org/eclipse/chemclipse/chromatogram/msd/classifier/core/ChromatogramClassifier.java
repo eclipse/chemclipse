@@ -36,6 +36,7 @@ public class ChromatogramClassifier {
 	private static final String DESCRIPTION = "description";
 	private static final String CLASSIFIER_NAME = "classifierName";
 	private static final String CLASSIFIER = "classifier";
+	private static final String CLASSIFIER_SETTINGS = "classifierSettings";
 	/*
 	 * Processing Info
 	 */
@@ -86,6 +87,16 @@ public class ChromatogramClassifier {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setClassifierName(element.getAttribute(CLASSIFIER_NAME));
+			if(element.getAttribute(CLASSIFIER_SETTINGS) != null) {
+				try {
+					IChromatogramClassifierSettings instance = (IChromatogramClassifierSettings)element.createExecutableExtension(CLASSIFIER_SETTINGS);
+					supplier.setSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setSettingsClass(null);
+				}
+			}
 			classifierSupport.add(supplier);
 		}
 		return classifierSupport;

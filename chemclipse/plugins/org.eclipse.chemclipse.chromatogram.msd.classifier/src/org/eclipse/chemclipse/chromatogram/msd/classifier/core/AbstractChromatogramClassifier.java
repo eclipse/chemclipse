@@ -11,51 +11,37 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.ChromatogramSelectionException;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.ClassifierSettingsException;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
-/**
- * @author eselmeister
- */
 public abstract class AbstractChromatogramClassifier implements IChromatogramClassifier {
 
-	public void validate(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings) throws ChromatogramSelectionException, ClassifierSettingsException {
+	private static final String CLASSIFIER = "Classifier";
 
-		validateChromatogramSelection(chromatogramSelection);
-		validateClassifierSettings(chromatogramClassifierSettings);
+	public IProcessingInfo validate(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
+		validateChromatogramSelection(chromatogramSelection, processingInfo);
+		validateClassifierSettings(chromatogramClassifierSettings, processingInfo);
+		return processingInfo;
 	}
 
-	// --------------------------------------------private methods
-	/**
-	 * Validates that chromatogram selection and the stored chromatogram are not
-	 * null.
-	 * 
-	 * @param chromatogramSelection
-	 * @throws ChromatogramSelectionException
-	 */
-	private void validateChromatogramSelection(IChromatogramSelectionMSD chromatogramSelection) throws ChromatogramSelectionException {
+	private void validateChromatogramSelection(IChromatogramSelectionMSD chromatogramSelection, IProcessingInfo processingInfo) {
 
 		if(chromatogramSelection == null) {
-			throw new ChromatogramSelectionException("The chromatogram selection must not be null.");
+			processingInfo.addErrorMessage(CLASSIFIER, "The chromatogram selection must not be null.");
 		}
 		if(chromatogramSelection.getChromatogram() == null) {
-			throw new ChromatogramSelectionException("The chromatogram must not be null.");
+			processingInfo.addErrorMessage(CLASSIFIER, "The chromatogram must not be null.");
 		}
 	}
 
-	/**
-	 * Validates that the classifier settings are not null.
-	 * 
-	 * @param chromatogramClassifierSettings
-	 * @throws ClassifierSettingsException
-	 */
-	private void validateClassifierSettings(IChromatogramClassifierSettings chromatogramClassifierSettings) throws ClassifierSettingsException {
+	private void validateClassifierSettings(IChromatogramClassifierSettings chromatogramClassifierSettings, IProcessingInfo processingInfo) {
 
 		if(chromatogramClassifierSettings == null) {
-			throw new ClassifierSettingsException("The classifier settings must not be null.");
+			processingInfo.addErrorMessage(CLASSIFIER, "The classifier settings must not be null.");
 		}
 	}
-	// --------------------------------------------private methods
 }

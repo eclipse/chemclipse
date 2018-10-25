@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.settings;
 
-public interface IChromatogramClassifierSettings {
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+
+public interface IChromatogramClassifierSettings extends IProcessSettings {
 }
