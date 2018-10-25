@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.baseline;
 
+import org.eclipse.chemclipse.model.exceptions.BaselineIsNotDefinedException;
+
 public interface IBaselineModel {
 
 	/*
@@ -39,7 +41,7 @@ public interface IBaselineModel {
 
 	/**
 	 * Remove the baseline between the given retention times.<br/>
-	 * * The method returns immediately if the start retention time is >= the
+	 * The method returns immediately if the start retention time is >= the
 	 * stop retention time.
 	 * 
 	 * @param startRetentionTime
@@ -58,10 +60,34 @@ public interface IBaselineModel {
 	 * If the given retention time is out of chromatogram borders, 0 will be
 	 * returned.
 	 * 
+	 * @deprecated - use method {@link #getBackground(int)}} or {@link #getBackground(int)}} instead
 	 * @param retentionTime
 	 * @return float
 	 */
+	@Deprecated
 	float getBackgroundAbundance(int retentionTime);
+
+	/**
+	 * Get the background abundance at a given retention time.<br/>
+	 * The retention time is given in milliseconds.<br/>
+	 * If the given retention time is out of defined baseline NAN value will be return
+	 * returned.
+	 * 
+	 * @param retentionTime
+	 * @return float
+	 */
+	float getBackground(int retentionTime, float defaultBackground);
+
+	/**
+	 * Get the background abundance at a given retention time.<br/>
+	 * The retention time is given in milliseconds.<br/>
+	 * If the given retention time is out of defined baseline throws BaselineIsNotDefinedException
+	 * 
+	 * @param retentionTime
+	 * @return float
+	 * @throws BaselineIsNotDefinedException
+	 */
+	float getBackground(int retentionTime) throws BaselineIsNotDefinedException;
 
 	/**
 	 * Returns a deep copy of the actual baseline model.
