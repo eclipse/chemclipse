@@ -33,7 +33,6 @@ public class BaselineSegment implements IBaselineSegment {
 	 * @param stopRetentionTime
 	 */
 	public BaselineSegment(int startRetentionTime, int stopRetentionTime) {
-
 		if(startRetentionTime > stopRetentionTime) {
 			int tmp = startRetentionTime;
 			startRetentionTime = stopRetentionTime;
@@ -70,7 +69,9 @@ public class BaselineSegment implements IBaselineSegment {
 	@Override
 	public void setStartBackgroundAbundance(float startBackgroundAbundance) {
 
-		this.startBackgroundAbundance = startBackgroundAbundance;
+		if(startBackgroundAbundance >= 0) {
+			this.startBackgroundAbundance = startBackgroundAbundance;
+		}
 	}
 
 	@Override
@@ -86,7 +87,9 @@ public class BaselineSegment implements IBaselineSegment {
 	@Override
 	public void setStopBackgroundAbundance(float stopBackgroundAbundance) {
 
-		this.stopBackgroundAbundance = stopBackgroundAbundance;
+		if(stopBackgroundAbundance >= 0) {
+			this.stopBackgroundAbundance = stopBackgroundAbundance;
+		}
 	}
 
 	@Override
