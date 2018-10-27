@@ -20,17 +20,21 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramProjectEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorXIR;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor;
 
 /*
  * TODO: Resolve why and when this happens! E.g. Chromatogram Overlay, after closing the preferences dialog.
  * Exception "Application does not have an active window"
  * is thrown here sometimes.
  */
+@SuppressWarnings("restriction")
 public class EditorUpdateSupport {
 
 	private static final Logger logger = Logger.getLogger(EditorUpdateSupport.class);
@@ -48,16 +52,23 @@ public class EditorUpdateSupport {
 					Object object = part.getObject();
 					if(object != null) {
 						/*
-						 * MSD/CSD/WSD
+						 * MSD/CSD/WSD or specialized Editor
 						 */
-						IChromatogramSelection selection = null;
 						if(object instanceof IChromatogramEditor) {
-							IChromatogramEditor editor = (IChromatogramEditor)object;
-							selection = editor.getChromatogramSelection();
-						}
-						//
-						if(selection != null) {
-							chromatogramSelections.add(selection);
+							addChromatogramSelection(chromatogramSelections, ((IChromatogramEditor)object).getChromatogramSelection());
+						} else if(object instanceof IChromatogramProjectEditor) {
+							addChromatogramSelections(chromatogramSelections, ((IChromatogramProjectEditor)object).getChromatogramSelections());
+						} else if(object instanceof CompatibilityEditor) {
+							/*
+							 * 3.x compatibility editor.
+							 */
+							CompatibilityEditor compatibilityEditor = (CompatibilityEditor)object;
+							IWorkbenchPart workbenchPart = compatibilityEditor.getPart();
+							if(workbenchPart instanceof IChromatogramEditor) {
+								addChromatogramSelection(chromatogramSelections, ((IChromatogramEditor)workbenchPart).getChromatogramSelection());
+							} else if(workbenchPart instanceof IChromatogramProjectEditor) {
+								addChromatogramSelections(chromatogramSelections, ((IChromatogramProjectEditor)workbenchPart).getChromatogramSelections());
+							}
 						}
 					}
 				}
@@ -70,6 +81,22 @@ public class EditorUpdateSupport {
 		 * contains 0 elements.
 		 */
 		return chromatogramSelections;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void addChromatogramSelection(List<IChromatogramSelection> chromatogramSelections, IChromatogramSelection selection) {
+
+		if(selection != null) {
+			chromatogramSelections.add(selection);
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void addChromatogramSelections(List<IChromatogramSelection> chromatogramSelections, List<IChromatogramSelection> selections) {
+
+		if(selections != null && selections.size() > 0) {
+			chromatogramSelections.addAll(selections);
+		}
 	}
 
 	public List<IScanXIR> getScanSelectionsXIR() {

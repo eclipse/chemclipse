@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.editors;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
-public interface IChromatogramEditor extends IChemClipseEditor {
+public interface IChromatogramProjectEditor extends IChemClipseEditor {
 
 	@SuppressWarnings("rawtypes")
-	IChromatogramSelection getChromatogramSelection();
+	List<IChromatogramSelection> getChromatogramSelections();
 }
