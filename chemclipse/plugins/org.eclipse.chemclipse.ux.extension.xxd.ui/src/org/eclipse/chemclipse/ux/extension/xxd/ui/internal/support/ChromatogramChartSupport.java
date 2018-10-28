@@ -114,6 +114,7 @@ public class ChromatogramChartSupport {
 	private boolean showArea = false;
 
 	public ChromatogramChartSupport() {
+
 		usedColorsNormal = new HashMap<String, Color>();
 		usedColorsSIC = new HashMap<String, Color>();
 		usedColorsSWC = new HashMap<String, Color>();
@@ -315,7 +316,7 @@ public class ChromatogramChartSupport {
 				int retentionTime = totalScanSignal.getRetentionTime();
 				xSeries[index] = retentionTime;
 				if(baseline) {
-					ySeries[index] = baselineModel.getBackground(retentionTime, Float.NaN);
+					ySeries[index] = baselineModel.getBackground(retentionTime);
 				} else {
 					ySeries[index] = totalScanSignal.getTotalSignal();
 				}
@@ -338,7 +339,7 @@ public class ChromatogramChartSupport {
 				int retentionTime = scan.getRetentionTime();
 				xSeries[index] = retentionTime;
 				if(baseline) {
-					ySeries[index] = baselineModel.getBackground(retentionTime, Float.NaN);
+					ySeries[index] = baselineModel.getBackground(retentionTime);
 				} else {
 					ySeries[index] = getIntensity(scan, overlayType, signals);
 				}

@@ -60,7 +60,7 @@ public interface IBaselineModel {
 	 * If the given retention time is out of chromatogram borders, 0 will be
 	 * returned.
 	 * 
-	 * @deprecated - use method {@link #getBackground(int)}} or {@link #getBackground(int)}} instead
+	 * @deprecated - use method {@link #getBackground(int)}} or {@link #getBackgroundNotNaN(int)}} instead
 	 * @param retentionTime
 	 * @return float
 	 */
@@ -70,13 +70,14 @@ public interface IBaselineModel {
 	/**
 	 * Get the background abundance at a given retention time.<br/>
 	 * The retention time is given in milliseconds.<br/>
-	 * If the given retention time is out of defined baseline NAN value will be return
+	 * If the given retention time is out of defined baseline default value will be return value will be return
+	 * (Can be NaN)
 	 * returned.
 	 * 
 	 * @param retentionTime
 	 * @return float
 	 */
-	float getBackground(int retentionTime, float defaultBackground);
+	float getBackground(int retentionTime);
 
 	/**
 	 * Get the background abundance at a given retention time.<br/>
@@ -87,7 +88,7 @@ public interface IBaselineModel {
 	 * @return float
 	 * @throws BaselineIsNotDefinedException
 	 */
-	float getBackground(int retentionTime) throws BaselineIsNotDefinedException;
+	float getBackgroundNotNaN(int retentionTime) throws BaselineIsNotDefinedException;
 
 	/**
 	 * Returns a deep copy of the actual baseline model.

@@ -35,12 +35,24 @@ public class BaselineModel implements IBaselineModel {
 	 * The start retention time is the key.
 	 */
 	private NavigableMap<Integer, IBaselineSegment> baselineSegments;
+	private float defaultBackgroundAbundance;
 
 	@SuppressWarnings("rawtypes")
+	@Deprecated
 	public BaselineModel(IChromatogram chromatogram) {
 
 		this.chromatogram = chromatogram;
 		this.baselineSegments = new TreeMap<Integer, IBaselineSegment>();
+		this.defaultBackgroundAbundance = 0f;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public BaselineModel(IChromatogram chromatogram, float defaultBackgroundAbundance) {
+
+		this.chromatogram = chromatogram;
+		this.baselineSegments = new TreeMap<Integer, IBaselineSegment>();
+		this.defaultBackgroundAbundance = 0f;
+		this.defaultBackgroundAbundance = defaultBackgroundAbundance;
 	}
 
 	// --------------------------------------------IBaselineModel
@@ -229,7 +241,12 @@ public class BaselineModel implements IBaselineModel {
 	}
 
 	@Override
-	public float getBackground(int retentionTime, float defaultAbudance) {
+	public float getBackground(int retentionTime) {
+
+		return getBackground(retentionTime, defaultBackgroundAbundance);
+	}
+
+	private float getBackground(int retentionTime, float defaultAbudance) {
 
 		if(baselineSegments.isEmpty() || retentionTime < baselineSegments.firstKey() || retentionTime > baselineSegments.lastEntry().getValue().getStopRetentionTime()) {
 			return defaultAbudance;
@@ -247,9 +264,9 @@ public class BaselineModel implements IBaselineModel {
 	}
 
 	@Override
-	public float getBackground(int retentionTime) throws BaselineIsNotDefinedException {
+	public float getBackgroundNotNaN(int retentionTime) throws BaselineIsNotDefinedException {
 
-		float background = getBackground(retentionTime, Float.NaN);
+		float background = getBackground(retentionTime);
 		if(background != Float.NaN) {
 			return background;
 		} else {

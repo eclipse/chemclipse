@@ -147,7 +147,7 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	@Override
 	public IBaselineModel getBaselineModel(double wavelength) {
 
-		baselineModels.putIfAbsent(wavelength, new BaselineModel(this));
+		baselineModels.putIfAbsent(wavelength, new BaselineModel(this, Float.NaN));
 		return baselineModels.get(wavelength);
 	}
 
