@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.model.baseline;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.chemclipse.numeric.equations.Equations;
 
 /**
  * This class implements a baseline segment used in {@link IChromatogramMSD} and {@link BaselineModel}.
@@ -139,4 +141,12 @@ public class BaselineSegment implements IBaselineSegment {
 		return builder.toString();
 	}
 	// ---------------------------------equals, hashCode, toString
+
+	@Override
+	public float getBackgroundAbundance(int retentionTime) {
+	
+		Point p1 = new Point(startRetentionTime, startBackgroundAbundance);
+		Point p2 = new Point(stopRetentionTime, startBackgroundAbundance);
+		return (float)Equations.createLinearEquation(p1, p2).calculateY(retentionTime);
+	}
 }
