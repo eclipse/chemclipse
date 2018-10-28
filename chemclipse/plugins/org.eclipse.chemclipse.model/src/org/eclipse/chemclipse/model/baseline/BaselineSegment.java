@@ -144,7 +144,7 @@ public class BaselineSegment implements IBaselineSegment {
 
 	@Override
 	public float getBackgroundAbundance(int retentionTime) {
-	
+
 		Point p1 = new Point(startRetentionTime, startBackgroundAbundance);
 		Point p2 = new Point(stopRetentionTime, startBackgroundAbundance);
 		return (float)Equations.createLinearEquation(p1, p2).calculateY(retentionTime);
