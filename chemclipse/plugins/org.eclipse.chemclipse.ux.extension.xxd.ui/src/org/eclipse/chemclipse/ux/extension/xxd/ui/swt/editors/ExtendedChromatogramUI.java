@@ -69,7 +69,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
 import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupport;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -92,7 +91,6 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -127,7 +125,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramActionUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeatmapUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
@@ -297,33 +294,6 @@ public class ExtendedChromatogramUI {
 					eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
 				}
 			});
-			//
-			final Map<String, Object> map = new HashMap<>();
-			map.put(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION, chromatogramSelection);
-			map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, true);
-			final String topic;
-			//
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION;
-			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-				topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION;
-			} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-				topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION;
-			} else {
-				topic = null;
-			}
-			//
-			if(topic != null) {
-				DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-
-						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-						eventBroker.post(topic, map);
-					}
-				});
-			}
 		}
 		return chromatogramSelection != null ? true : false;
 	}
@@ -346,33 +316,6 @@ public class ExtendedChromatogramUI {
 						eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
 					}
 				});
-				//
-				final Map<String, Object> map = new HashMap<>();
-				map.put(IChemClipseEvents.PROPERTY_PEAK_MSD, peak);
-				map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, true);
-				final String topic;
-				//
-				if(peak instanceof IPeakMSD) {
-					topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAK;
-				} else if(peak instanceof IPeakCSD) {
-					topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_PEAK;
-				} else if(peak instanceof IPeakWSD) {
-					topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_PEAK;
-				} else {
-					topic = null;
-				}
-				//
-				if(topic != null) {
-					DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-
-							IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-							eventBroker.post(topic, map);
-						}
-					});
-				}
 			}
 		}
 		return update;
@@ -503,14 +446,12 @@ public class ExtendedChromatogramUI {
 
 	protected void processChromatogram(IRunnableWithProgress runnable) {
 
-		/*
-		 * Excecute
-		 */
 		ProgressMonitorDialog monitor = new ProgressMonitorDialog(DisplayUtils.getShell());
 		try {
 			monitor.run(true, true, runnable);
 			updateChromatogram();
 			updateSelection();
+			fireUpdate();
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		}
