@@ -21,6 +21,8 @@ import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.BaselineIsNotDefinedException;
+import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.chemclipse.numeric.equations.Equations;
 
 /**
  * This class represents the baseline model of the current chromatogram.
@@ -36,6 +38,7 @@ public class BaselineModel implements IBaselineModel {
 	 */
 	private NavigableMap<Integer, IBaselineSegment> baselineSegments;
 	private float defaultBackgroundAbundance;
+	private boolean interpolate;
 
 	@SuppressWarnings("rawtypes")
 	@Deprecated
@@ -44,6 +47,7 @@ public class BaselineModel implements IBaselineModel {
 		this.chromatogram = chromatogram;
 		this.baselineSegments = new TreeMap<Integer, IBaselineSegment>();
 		this.defaultBackgroundAbundance = 0f;
+		this.interpolate = true;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -53,6 +57,7 @@ public class BaselineModel implements IBaselineModel {
 		this.baselineSegments = new TreeMap<Integer, IBaselineSegment>();
 		this.defaultBackgroundAbundance = 0f;
 		this.defaultBackgroundAbundance = defaultBackgroundAbundance;
+		this.interpolate = true;
 	}
 
 	// --------------------------------------------IBaselineModel
@@ -259,7 +264,14 @@ public class BaselineModel implements IBaselineModel {
 		if(retentionTime <= stopRetentionTime) {
 			return floorSegment.getBackgroundAbundance(retentionTime);
 		} else {
-			return defaultAbudance;
+			if(interpolate) {
+				IBaselineSegment ceilSegment = baselineSegments.ceilingEntry(retentionTime).getValue();
+				Point p1 = new Point(floorSegment.getStopRetentionTime(), floorSegment.getStopBackgroundAbundance());
+				Point p2 = new Point(ceilSegment.getStartRetentionTime(), ceilSegment.getStartBackgroundAbundance());
+				return (float)Equations.createLinearEquation(p1, p2).calculateY(retentionTime);
+			} else {
+				return defaultAbudance;
+			}
 		}
 	}
 
