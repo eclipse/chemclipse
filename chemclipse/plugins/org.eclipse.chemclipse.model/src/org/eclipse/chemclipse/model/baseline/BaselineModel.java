@@ -123,11 +123,10 @@ public class BaselineModel implements IBaselineModel {
 			int x1 = cuttingSegment.getStopRetentionTime();
 			if(startRetentionTime <= x0 && x0 <= stopRetentionTime && stopRetentionTime < x1) {
 				baselineSegments.remove(cuttingSegmentEntry.getKey());
-				int partSegmentStartRetentionTime = startRetentionTime + 1;
+				int partSegmentStartRetentionTime = stopRetentionTime + 1;
 				int partSegmentStopRetentionTime = x1;
 				float partSegmentStartAbundance = cuttingSegment.getBackgroundAbundance(partSegmentStartRetentionTime);
 				float partSegmentStopAbundance = cuttingSegment.getStopBackgroundAbundance();
-				addBaselineUnchecked(partSegmentStartRetentionTime, partSegmentStopRetentionTime, partSegmentStartAbundance, partSegmentStopAbundance);
 				/*
 				 * 
 				 */
@@ -157,7 +156,7 @@ public class BaselineModel implements IBaselineModel {
 				baselineSegments.remove(cuttingSegmentEntry.getKey());
 				int partSegmentStartRetentionTime = x0;
 				int partSegmentStopRetentionTime = startRetentionTime - 1;
-				float partSegmentStartAbundance = cuttingSegment.getStartRetentionTime();
+				float partSegmentStartAbundance = cuttingSegment.getStartBackgroundAbundance();
 				float partSegmentStopAbundance = cuttingSegment.getBackgroundAbundance(partSegmentStopRetentionTime);
 				/*
 				 * 
@@ -189,7 +188,7 @@ public class BaselineModel implements IBaselineModel {
 				 */
 				int firstPartSegmentStartRetentionTime = x0;
 				int firstPartSegmentStopRetentionTime = startRetentionTime - 1;
-				float firstPartSegmentStartAbundance = cuttingSegment.getStartRetentionTime();
+				float firstPartSegmentStartAbundance = cuttingSegment.getStartBackgroundAbundance();
 				float firstPartSegmentStopAbundance = cuttingSegment.getBackgroundAbundance(firstPartSegmentStopRetentionTime);
 				/*
 				 * 
