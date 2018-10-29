@@ -14,10 +14,11 @@ package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
@@ -44,10 +45,10 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 		if(e1 instanceof IPeakMSD && e2 instanceof IPeakMSD) {
 			IPeakMSD peak1 = (IPeakMSD)e1;
 			IPeakModelMSD peakModel1 = peak1.getPeakModel();
-			ILibraryInformation libraryInformation1 = getLibraryInformation(new ArrayList<>(peak1.getTargets()));
+			ILibraryInformation libraryInformation1 = getLibraryInformation(peak1.getTargets());
 			IPeakMSD peak2 = (IPeakMSD)e2;
 			IPeakModelMSD peakModel2 = peak2.getPeakModel();
-			ILibraryInformation libraryInformation2 = getLibraryInformation(new ArrayList<>(peak2.getTargets()));
+			ILibraryInformation libraryInformation2 = getLibraryInformation(peak2.getTargets());
 			//
 			switch(getPropertyIndex()) {
 				case 0:
@@ -113,13 +114,13 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 		return sortOrder;
 	}
 
-	private ILibraryInformation getLibraryInformation(List<IPeakTarget> targets) {
+	private ILibraryInformation getLibraryInformation(Set<IIdentificationTarget> targets) {
 
 		ILibraryInformation libraryInformation = null;
-		targets = new ArrayList<>(targets);
-		Collections.sort(targets, targetExtendedComparator);
-		if(targets.size() >= 1) {
-			libraryInformation = targets.get(0).getLibraryInformation();
+		List<IIdentificationTarget> targetsList = new ArrayList<>(targets);
+		Collections.sort(targetsList, targetExtendedComparator);
+		if(targetsList.size() >= 1) {
+			libraryInformation = targetsList.get(0).getLibraryInformation();
 		}
 		return libraryInformation;
 	}

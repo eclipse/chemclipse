@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -51,7 +50,7 @@ public class DeleteAllQuantitationsHandler implements EventHandler {
 					/*
 					 * Remove all chromatogram targets.
 					 */
-					chromatogram.removeAllTargets();
+					chromatogram.getTargets().clear();
 					/*
 					 * Remove all peak targets.
 					 */

@@ -11,14 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
-import java.util.List;
-
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.support.LibraryInformationSupport;
 import org.eclipse.chemclipse.model.targets.ITarget;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
@@ -27,7 +24,6 @@ public class PeakScanListFilter extends ViewerFilter {
 	private String searchText;
 	private boolean caseSensitive;
 	private LibraryInformationSupport libraryInformationSupport = new LibraryInformationSupport();
-	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
 
@@ -74,10 +70,8 @@ public class PeakScanListFilter extends ViewerFilter {
 
 	private boolean matchScan(IScan scan) {
 
-		List<? extends IIdentificationTarget> identificationTargets = scanDataSupport.getIdentificationTargets(scan);
-		for(IIdentificationTarget target : identificationTargets) {
-			IIdentificationTarget identificationTarget = (IIdentificationTarget)target;
-			if(libraryInformationSupport.matchSearchText(identificationTarget.getLibraryInformation(), searchText, caseSensitive)) {
+		for(IIdentificationTarget target : scan.getTargets()) {
+			if(libraryInformationSupport.matchSearchText(target.getLibraryInformation(), searchText, caseSensitive)) {
 				return true;
 			}
 		}

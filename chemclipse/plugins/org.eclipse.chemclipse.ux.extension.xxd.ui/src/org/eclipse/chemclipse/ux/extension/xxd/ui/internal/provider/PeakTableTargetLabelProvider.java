@@ -17,15 +17,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.core.ITargetSupplier;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -63,13 +62,10 @@ public class PeakTableTargetLabelProvider extends LabelProvider implements ITabl
 			IPeakModel peakModel = peak.getPeakModel();
 			IScan peakMaximum = peakModel.getPeakMaximum();
 			//
-			List<IPeakTarget> peakTargets = null;
-			if(peak instanceof IPeakMSD) {
-				IPeakMSD peakMSD = (IPeakMSD)peak;
-				peakTargets = new ArrayList<>(peakMSD.getTargets());
-			} else if(peak instanceof IPeakCSD) {
-				IPeakCSD peakCSD = (IPeakCSD)peak;
-				peakTargets = new ArrayList<>(peakCSD.getTargets());
+			List<IIdentificationTarget> peakTargets = new ArrayList<>();
+			if(peak instanceof ITargetSupplier) {
+				ITargetSupplier targetSupplier = (ITargetSupplier)peak;
+				peakTargets.addAll(targetSupplier.getTargets());
 			}
 			//
 			String peakTarget = "";

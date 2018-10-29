@@ -12,10 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -27,7 +24,6 @@ import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 
 public class ScanDataSupport {
 
@@ -166,33 +162,13 @@ public class ScanDataSupport {
 		return containsOptimizedScan;
 	}
 
-	public List<? extends IIdentificationTarget> getIdentificationTargets(IScan scan) {
-
-		List<? extends IIdentificationTarget> identificationTargets = new ArrayList<>();
-		//
-		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
-			identificationTargets = scanMSD.getTargets();
-		} else if(scan instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)scan;
-			identificationTargets = scanCSD.getTargets();
-		} else if(scan instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)scan;
-			identificationTargets = scanWSD.getTargets();
-		}
-		//
-		return identificationTargets;
-	}
-
 	public ILibraryInformation getBestLibraryInformation(IScan scan) {
 
-		List<? extends IIdentificationTarget> identificationTargets = getIdentificationTargets(scan);
-		return identificationDataSupport.getBestLibraryInformation(identificationTargets);
+		return identificationDataSupport.getBestLibraryInformation(scan.getTargets());
 	}
 
 	public IIdentificationTarget getBestScanTarget(IScan scan) {
 
-		List<? extends IIdentificationTarget> identificationTargets = getIdentificationTargets(scan);
-		return identificationDataSupport.getBestIdentificationTarget(identificationTargets);
+		return identificationDataSupport.getBestIdentificationTarget(scan.getTargets());
 	}
 }

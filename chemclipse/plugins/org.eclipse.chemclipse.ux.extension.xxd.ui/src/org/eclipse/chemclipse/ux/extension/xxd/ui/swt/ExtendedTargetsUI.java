@@ -21,27 +21,19 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
-import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogramTargetCSD;
-import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
-import org.eclipse.chemclipse.csd.model.implementation.ChromatogramTargetCSD;
-import org.eclipse.chemclipse.csd.model.implementation.ScanTargetCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.targets.ITarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
-import org.eclipse.chemclipse.msd.model.implementation.ChromatogramTargetMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -69,10 +61,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageList
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
-import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetWSD;
-import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetWSD;
-import org.eclipse.chemclipse.wsd.model.core.implementation.ChromatogramTargetWSD;
-import org.eclipse.chemclipse.wsd.model.core.implementation.ScanTargetWSD;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -322,7 +310,7 @@ public class ExtendedTargetsUI {
 
 				boolean editEnabled = !targetListUI.isEditEnabled();
 				targetListUI.setEditEnabled(editEnabled);
-				updateLabel();
+				updateInput();
 			}
 		});
 		//
@@ -709,7 +697,7 @@ public class ExtendedTargetsUI {
 
 	private void updateTargets() {
 
-		updateLabel();
+		updateInput();
 		updateWidgets();
 		//
 		targetListUI.sortTable();
@@ -732,12 +720,22 @@ public class ExtendedTargetsUI {
 		}
 	}
 
-	private void updateLabel() {
+	private void updateInput() {
 
+		if(object instanceof ITargetSupplier) {
+			ITargetSupplier targetSupplier = (ITargetSupplier)object;
+			targetListUI.setInput(targetSupplier); // TODO
+		} else {
+			labelInfo.setText("No target data has been selected yet.");
+			targetListUI.clear();
+		}
+		/*
+		 * TODO REMOVE
+		 */
 		if(object instanceof IScanMSD) {
 			IScanMSD scanMSD = (IScanMSD)object;
 			labelInfo.setText(scanDataSupport.getScanLabel(scanMSD));
-			targetListUI.setInput(scanMSD.getTargets());
+			// targetListUI.setInput(scanMSD.getTargets());
 		} else if(object instanceof IScanCSD) {
 			IScanCSD scanCSD = (IScanCSD)object;
 			labelInfo.setText(scanDataSupport.getScanLabel(scanCSD));
@@ -805,27 +803,9 @@ public class ExtendedTargetsUI {
 
 	private void deleteTarget(ITarget target) {
 
-		if(object instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)object;
-			scanMSD.removeTarget((IScanTargetMSD)target);
-		} else if(object instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)object;
-			scanCSD.removeTarget((IScanTargetCSD)target);
-		} else if(object instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)object;
-			scanWSD.removeTarget((IScanTargetWSD)target);
-		} else if(object instanceof IPeak) {
-			IPeak peak = (IPeak)object;
-			peak.removeTarget((IPeakTarget)target);
-		} else if(object instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)object;
-			chromatogramMSD.removeTarget((IChromatogramTargetMSD)target);
-		} else if(object instanceof IChromatogramCSD) {
-			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)object;
-			chromatogramCSD.removeTarget((IChromatogramTargetCSD)target);
-		} else if(object instanceof IChromatogramWSD) {
-			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
-			chromatogramWSD.removeTarget((IChromatogramTargetWSD)target);
+		if(object instanceof ITargetSupplier) {
+			ITargetSupplier targetSupplier = (ITargetSupplier)object;
+			targetSupplier.getTargets().remove(target);
 		}
 		/*
 		 * Don't do an table update here, cause this method could be called several times in a loop.
@@ -848,50 +828,18 @@ public class ExtendedTargetsUI {
 		 * Add a new entry.
 		 */
 		ILibraryInformation libraryInformation = new LibraryInformation();
-		//
 		libraryInformation.setName(targetValidator.getName());
 		libraryInformation.setCasNumber(targetValidator.getCasNumber());
 		libraryInformation.setComments(targetValidator.getComments());
 		libraryInformation.setContributor(targetValidator.getContributor());
 		libraryInformation.setReferenceIdentifier(targetValidator.getReferenceId());
-		//
 		IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+		IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
+		setIdentifier(identificationTarget);
 		//
-		if(object instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)object;
-			MassSpectrumTarget identificationTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
-			setIdentifier(identificationTarget);
-			scanMSD.addTarget(identificationTarget);
-		} else if(object instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)object;
-			ScanTargetCSD identificationTarget = new ScanTargetCSD(libraryInformation, comparisonResult);
-			setIdentifier(identificationTarget);
-			scanCSD.addTarget(identificationTarget);
-		} else if(object instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)object;
-			IScanTargetWSD identificationTarget = new ScanTargetWSD(libraryInformation, comparisonResult);
-			setIdentifier(identificationTarget);
-			scanWSD.addTarget(identificationTarget);
-		} else if(object instanceof IPeak) {
-			IPeak peak = (IPeak)object;
-			IPeakTarget identificationTarget = new PeakTarget(libraryInformation, comparisonResult);
-			setIdentifier(identificationTarget);
-			peak.addTarget(identificationTarget);
-		} else if(object instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)object;
-			IChromatogramTargetMSD identificationTarget = new ChromatogramTargetMSD(libraryInformation, comparisonResult);
-			setIdentifier(identificationTarget);
-			chromatogramMSD.addTarget(identificationTarget);
-		} else if(object instanceof IChromatogramCSD) {
-			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)object;
-			IChromatogramTargetCSD identificationTarget = new ChromatogramTargetCSD(libraryInformation, comparisonResult);
-			setIdentifier(identificationTarget);
-			chromatogramCSD.addTarget(identificationTarget);
-		} else if(object instanceof IChromatogramWSD) {
-			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
-			IChromatogramTargetWSD identificationTarget = new ChromatogramTargetWSD(libraryInformation, comparisonResult);
-			setIdentifier(identificationTarget);
-			chromatogramWSD.addTarget(identificationTarget);
+		if(object instanceof ITargetSupplier) {
+			ITargetSupplier targetSupplier = (ITargetSupplier)object;
+			targetSupplier.getTargets().add(identificationTarget);
 		}
 		//
 		comboTargetName.setText("");

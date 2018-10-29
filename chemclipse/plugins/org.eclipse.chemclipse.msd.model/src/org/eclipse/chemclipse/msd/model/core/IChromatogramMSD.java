@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.msd.model.core;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetsMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -21,7 +20,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Why does IChromatogram extends ({@link IChromatogramOverview})?<br/>
  * See the description in ({@link AbstractChromatogramMSD}).
  */
-public interface IChromatogramMSD extends IChromatogram<IChromatogramPeakMSD>, IChromatogramTargetsMSD {
+public interface IChromatogramMSD extends IChromatogram<IChromatogramPeakMSD> {
 
 	/**
 	 * Returns a new mass spectrum from the scan with the given scan number from

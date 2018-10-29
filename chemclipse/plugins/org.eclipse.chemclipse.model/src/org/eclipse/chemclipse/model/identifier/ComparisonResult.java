@@ -33,6 +33,10 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
 	}
 
+	public ComparisonResult(IComparisonResult comparisonResult) {
+		super(comparisonResult);
+	}
+
 	@Override
 	public ComparisonResult setMatch(boolean match) {
 

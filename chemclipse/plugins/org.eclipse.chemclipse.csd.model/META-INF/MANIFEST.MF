@@ -20,8 +20,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.csd.model.core,
  org.eclipse.chemclipse.csd.model.core.comparator,
- org.eclipse.chemclipse.csd.model.core.identifier.chromatogram,
- org.eclipse.chemclipse.csd.model.core.identifier.scan,
  org.eclipse.chemclipse.csd.model.core.selection,
  org.eclipse.chemclipse.csd.model.core.support,
  org.eclipse.chemclipse.csd.model.implementation,

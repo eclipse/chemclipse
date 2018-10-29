@@ -20,8 +20,8 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.internal.massspectrum.
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.purity.IMassSpectrumPurityResult;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.purity.MassSpectrumPurityResult;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
@@ -73,7 +73,7 @@ public class MassSpectrumComparator {
 	static {
 		comparatorCache = new ComparatorCache();
 		processingInfoComparisonSkip = new ProcessingInfo();
-		processingInfoComparisonSkip.setProcessingResult(new MassSpectrumComparisonResult(NO_MATCH, NO_MATCH, NO_MATCH, NO_MATCH));
+		processingInfoComparisonSkip.setProcessingResult(new ComparisonResult(NO_MATCH, NO_MATCH, NO_MATCH, NO_MATCH));
 	}
 
 	/**

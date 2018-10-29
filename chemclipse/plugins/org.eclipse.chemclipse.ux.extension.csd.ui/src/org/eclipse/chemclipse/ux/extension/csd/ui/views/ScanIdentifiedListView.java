@@ -16,10 +16,10 @@ import java.text.DecimalFormat;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
-import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -60,7 +60,7 @@ public class ScanIdentifiedListView extends AbstractChromatogramSelectionCSDView
 						 */
 						IScanCSD scanCSD = (IScanCSD)scan;
 						if(scanCSD.getTargets().size() > 0) {
-							for(IScanTargetCSD scanTargetCSD : scanCSD.getTargets()) {
+							for(IIdentificationTarget scanTargetCSD : scanCSD.getTargets()) {
 								builder.append(scanTargetCSD.getLibraryInformation().getName());
 								builder.append(" > ");
 								builder.append(scanTargetCSD.getComparisonResult().getMatchFactor());

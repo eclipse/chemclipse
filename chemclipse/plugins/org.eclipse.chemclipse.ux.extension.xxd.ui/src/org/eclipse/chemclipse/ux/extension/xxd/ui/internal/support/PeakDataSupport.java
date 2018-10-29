@@ -12,13 +12,12 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 import java.text.DecimalFormat;
-import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class PeakDataSupport {
@@ -46,12 +45,12 @@ public class PeakDataSupport {
 		return builder.toString();
 	}
 
-	public ILibraryInformation getBestLibraryInformation(List<IPeakTarget> targets) {
+	public ILibraryInformation getBestLibraryInformation(Set<IIdentificationTarget> targets) {
 
 		return identificationDataSupport.getBestLibraryInformation(targets);
 	}
 
-	public IIdentificationTarget getBestPeakTarget(List<IPeakTarget> targets) {
+	public IIdentificationTarget getBestPeakTarget(Set<IIdentificationTarget> targets) {
 
 		return identificationDataSupport.getBestIdentificationTarget(targets);
 	}

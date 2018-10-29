@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,13 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.model.core.identifier.massspectrum;
+package org.eclipse.chemclipse.model.core;
 
-public class MassSpectrumIdentificationResult extends AbstractMassSpectrumIdentificationResult implements IMassSpectrumIdentificationResult {
+import java.util.Set;
+
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+
+public interface ITargetSupplier {
+
+	Set<IIdentificationTarget> getTargets();
 }

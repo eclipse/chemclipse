@@ -12,10 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
@@ -26,7 +22,6 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
-import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
@@ -68,13 +63,11 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	//
 	public static int DEFAULT_SEGMENT_WIDTH = 10;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramMSD.class);
-	private List<IChromatogramTargetMSD> targets;
 	private IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
 	private ImmutableZeroIon immutableZeroIon;
 
 	public AbstractChromatogramMSD() {
-		targets = new ArrayList<IChromatogramTargetMSD>();
 		ionTransitionSettings = new IonTransitionSettings();
 		int segmentWidth = DEFAULT_SEGMENT_WIDTH;
 		try {
@@ -285,47 +278,12 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		return integratedArea;
 	}
 
-	// -----------------------------------------------IChromatogramPeaks
 	@Override
 	public IIonTransitionSettings getIonTransitionSettings() {
 
 		return ionTransitionSettings;
 	}
 
-	// -----------------------------------------------IChromatogramTargetsMSD
-	@Override
-	public void addTarget(IChromatogramTargetMSD chromatogramTarget) {
-
-		if(chromatogramTarget != null) {
-			targets.add(chromatogramTarget);
-		}
-	}
-
-	@Override
-	public void removeTarget(IChromatogramTargetMSD chromatogramTarget) {
-
-		targets.remove(chromatogramTarget);
-	}
-
-	@Override
-	public void removeTargets(List<IChromatogramTargetMSD> targetsToRemove) {
-
-		targets.removeAll(targetsToRemove);
-	}
-
-	@Override
-	public void removeAllTargets() {
-
-		targets.clear();
-	}
-
-	@Override
-	public List<IChromatogramTargetMSD> getTargets() {
-
-		return Collections.unmodifiableList(targets);
-	}
-
-	// -----------------------------------------------IChromatogramTargetsMSD
 	private boolean isZeroImmutableIon(IIon ion) {
 
 		if(immutableZeroIon.equals(ion)) {

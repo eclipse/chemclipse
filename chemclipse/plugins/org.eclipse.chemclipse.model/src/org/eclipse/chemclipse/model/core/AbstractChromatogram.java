@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -32,6 +33,7 @@ import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.TripleQuadMethod;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
 import org.eclipse.chemclipse.model.processor.IChromatogramProcessor;
@@ -111,6 +113,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 * specific peak types, which must extend from IPeak.
 	 */
 	private Set<T> peaks = new TreeSet<T>();
+	private Set<IIdentificationTarget> identificationTargets = new HashSet<>();
 
 	/**
 	 * Constructs a normal chromatogram.
@@ -868,7 +871,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 			 */
 			if(isDataModifying) {
 				removeAllPeaks();
-				removeAllTargets();
+				getTargets().clear();
 				removeAllMeasurementResults();
 				IBaselineModel baselineModel = getBaselineModel();
 				if(baselineModel != null) {
@@ -941,11 +944,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 				fireUpdate(chromatogramSelection);
 			}
 		}
-	}
-
-	@Override
-	public void removeAllTargets() {
-
 	}
 
 	@Override
@@ -1100,9 +1098,13 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		//
 		return selectedPeak;
 	}
-	// -----------------------------------------------IChromatogramPeaks
 
-	// ----------------------------hashCode, equals and toString
+	@Override
+	public Set<IIdentificationTarget> getTargets() {
+
+		return identificationTargets;
+	}
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object otherObject) {

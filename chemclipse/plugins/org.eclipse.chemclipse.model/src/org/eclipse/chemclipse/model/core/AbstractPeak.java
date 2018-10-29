@@ -20,19 +20,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.exceptions.PeakException;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
 import org.eclipse.chemclipse.model.support.IntegrationConstraints;
-import org.eclipse.chemclipse.model.targets.AbstractPeakTargets;
 
-public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak {
+public abstract class AbstractPeak implements IPeak {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = -491170278267735090L;
-	//
 	private static final String CLASSIFIER_DELIMITER = " ";
 	//
 	private String modelDescription = "";
@@ -342,6 +337,12 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 				this.classifier = this.classifier + CLASSIFIER_DELIMITER + classifier;
 			}
 		}
+	}
+
+	@Override
+	public Set<IIdentificationTarget> getTargets() {
+
+		return getPeakModel().getPeakMaximum().getTargets();
 	}
 
 	@Override

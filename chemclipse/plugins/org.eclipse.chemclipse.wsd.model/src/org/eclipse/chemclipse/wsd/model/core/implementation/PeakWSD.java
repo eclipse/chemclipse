@@ -17,11 +17,6 @@ import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 
 public class PeakWSD extends AbstractPeakWSD implements IPeakWSD {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = -4802647484605078392L;
-
 	public PeakWSD(IPeakModelWSD peakModel, String modelDescription) throws IllegalArgumentException {
 		super(peakModel, modelDescription);
 	}

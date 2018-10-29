@@ -16,14 +16,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.core.ITargetSupplier;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
@@ -49,13 +48,10 @@ public class PeakTableTargetComparator extends AbstractRecordTableComparator imp
 			IPeakModel peakModel1 = peak1.getPeakModel();
 			IScan peakMaximum1 = peakModel1.getPeakMaximum();
 			//
-			List<IPeakTarget> peakTargets1 = null;
-			if(peak1 instanceof IPeakMSD) {
-				IPeakMSD peakMSD = (IPeakMSD)peak1;
-				peakTargets1 = new ArrayList<>(peakMSD.getTargets());
-			} else if(peak1 instanceof IPeakCSD) {
-				IPeakCSD peakCSD = (IPeakCSD)peak1;
-				peakTargets1 = new ArrayList<>(peakCSD.getTargets());
+			List<IIdentificationTarget> peakTargets1 = new ArrayList<>();
+			if(peak1 instanceof ITargetSupplier) {
+				ITargetSupplier targetSupplier = (ITargetSupplier)peak1;
+				peakTargets1.addAll(targetSupplier.getTargets());
 			}
 			//
 			String peakTarget1 = "";
@@ -70,13 +66,10 @@ public class PeakTableTargetComparator extends AbstractRecordTableComparator imp
 			IPeakModel peakModel2 = peak2.getPeakModel();
 			IScan peakMaximum2 = peakModel2.getPeakMaximum();
 			//
-			List<IPeakTarget> peakTargets2 = null;
-			if(peak1 instanceof IPeakMSD) {
-				IPeakMSD peakMSD = (IPeakMSD)peak2;
-				peakTargets2 = new ArrayList<>(peakMSD.getTargets());
-			} else if(peak2 instanceof IPeakCSD) {
-				IPeakCSD peakCSD = (IPeakCSD)peak2;
-				peakTargets2 = new ArrayList<>(peakCSD.getTargets());
+			List<IIdentificationTarget> peakTargets2 = new ArrayList<>();
+			if(peak2 instanceof ITargetSupplier) {
+				ITargetSupplier targetSupplier = (ITargetSupplier)peak2;
+				peakTargets2.addAll(targetSupplier.getTargets());
 			}
 			//
 			String peakTarget2 = "";

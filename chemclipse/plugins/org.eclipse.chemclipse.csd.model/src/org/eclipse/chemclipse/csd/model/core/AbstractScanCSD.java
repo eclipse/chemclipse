@@ -11,12 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.model.core;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
 import org.eclipse.chemclipse.model.core.AbstractScan;
 
 public abstract class AbstractScanCSD extends AbstractScan implements IScanCSD {
@@ -26,42 +20,4 @@ public abstract class AbstractScanCSD extends AbstractScan implements IScanCSD {
 	 * methods.
 	 */
 	private static final long serialVersionUID = -864046180650106625L;
-	private Set<IScanTargetCSD> targets;
-
-	public AbstractScanCSD() {
-		targets = new HashSet<IScanTargetCSD>();
-	}
-
-	@Override
-	public void addTarget(IScanTargetCSD scanTarget) {
-
-		if(scanTarget != null) {
-			targets.add(scanTarget);
-		}
-	}
-
-	@Override
-	public void removeTarget(IScanTargetCSD scanTarget) {
-
-		targets.remove(scanTarget);
-	}
-
-	@Override
-	public void removeTargets(List<IScanTargetCSD> targetsToRemove) {
-
-		targets.removeAll(targetsToRemove);
-	}
-
-	@Override
-	public List<IScanTargetCSD> getTargets() {
-
-		List<IScanTargetCSD> targetList = new ArrayList<IScanTargetCSD>(targets);
-		return targetList;
-	}
-
-	@Override
-	public void removeAllTargets() {
-
-		targets.clear();
-	}
 }

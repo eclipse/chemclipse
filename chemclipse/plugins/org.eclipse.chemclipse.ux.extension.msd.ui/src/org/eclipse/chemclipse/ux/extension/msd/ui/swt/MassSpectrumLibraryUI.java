@@ -19,10 +19,10 @@ import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.LibraryModifySupportUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
@@ -378,7 +378,7 @@ public class MassSpectrumLibraryUI extends Composite {
 			libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			if(libraryInformation != null) {
 				try {
-					identificationTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
+					identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 				} catch(ReferenceMustNotBeNullException e) {
 					logger.warn(e);
 				}

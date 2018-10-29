@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +26,6 @@ import org.eclipse.chemclipse.model.core.AbstractScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonCombinedComparator;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonComparatorMode;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonIsNullException;
@@ -75,10 +73,6 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private float normalizationBase = 0.0f;
 	private List<IIon> ionsList;
 	private ImmutableZeroIon immutableZeroIon;
-	/*
-	 * Targets and referenced mass spectra.
-	 */
-	private Set<IScanTargetMSD> targets;
 	private IScanMSD optimizedMassSpectrum;
 
 	public AbstractScanMSD() {
@@ -100,7 +94,6 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		this.isNormalized = templateScan.isNormalized();
 		this.normalizationBase = templateScan.getNormalizationBase();
 		this.optimizedMassSpectrum = templateScan.getOptimizedMassSpectrum();
-		this.targets = new LinkedHashSet<>(templateScan.getTargets());
 		if(templateScan instanceof AbstractScanMSD) {
 			AbstractScanMSD templateScanAbstract = (AbstractScanMSD)templateScan;
 			this.immutableZeroIon = templateScanAbstract.immutableZeroIon;
@@ -117,7 +110,6 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		 * class.
 		 */
 		createNewIonList();
-		targets = new HashSet<IScanTargetMSD>();
 		try {
 			immutableZeroIon = new ImmutableZeroIon();
 			// TODO: in case of exception, immutableZeroIon will be null
@@ -588,46 +580,6 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			}
 		}
 		return massSpectrum;
-	}
-
-	// -----------------------------IMassSpectrum
-	// ------------------------------------------IMassSpectrumTargets
-	// TODO JUnit
-	@Override
-	public void addTarget(IScanTargetMSD massSpectrumTarget) {
-
-		if(massSpectrumTarget != null) {
-			enforceLoadScanProxy();
-			targets.add(massSpectrumTarget);
-		}
-	}
-
-	@Override
-	public void removeTarget(IScanTargetMSD massSpectrumTarget) {
-
-		enforceLoadScanProxy();
-		targets.remove(massSpectrumTarget);
-	}
-
-	@Override
-	public void removeTargets(List<IScanTargetMSD> targetsToDelete) {
-
-		targets.removeAll(targetsToDelete);
-	}
-
-	@Override
-	public void removeAllTargets() {
-
-		enforceLoadScanProxy();
-		targets.clear();
-	}
-
-	@Override
-	public List<IScanTargetMSD> getTargets() {
-
-		enforceLoadScanProxy();
-		List<IScanTargetMSD> targetList = new ArrayList<IScanTargetMSD>(targets);
-		return targetList;
 	}
 
 	@Override

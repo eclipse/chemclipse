@@ -19,8 +19,6 @@ import org.eclipse.chemclipse.wsd.model.core.IPeakModelWSD;
 
 public class ChromatogramPeakWSD extends AbstractChromatogramPeakWSD implements IChromatogramPeakWSD {
 
-	private static final long serialVersionUID = 5275418865419543099L;
-
 	public ChromatogramPeakWSD(IPeakModelWSD peakModel, IChromatogramWSD chromatogram, String modelDescription) throws IllegalArgumentException, PeakException {
 		super(peakModel, chromatogram, modelDescription);
 	}

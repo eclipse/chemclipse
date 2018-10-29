@@ -18,11 +18,10 @@ import java.util.List;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -249,7 +248,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 					 * cause printing the labels depends on the position
 					 * in the list.
 					 */
-					List<IPeakTarget> peakTargets = new ArrayList<>(peak.getTargets());
+					List<IIdentificationTarget> peakTargets = new ArrayList<>(peak.getTargets());
 					if(peakTargets.size() == 0) {
 						labels.add("");
 					} else {
@@ -257,7 +256,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 						 * Get retention time and abundance.
 						 */
 						Collections.sort(peakTargets, targetComparator);
-						IPeakTarget peakTarget = peakTargets.get(0);
+						IIdentificationTarget peakTarget = peakTargets.get(0);
 						String name = peakTarget.getLibraryInformation().getName();
 						labels.add(name);
 					}
@@ -283,7 +282,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 				 * cause printing the labels depends on the position
 				 * in the list.
 				 */
-				List<IScanTargetMSD> massSpectrumTargets = new ArrayList<>(scanMSD.getTargets());
+				List<IIdentificationTarget> massSpectrumTargets = new ArrayList<>(scanMSD.getTargets());
 				if(massSpectrumTargets.size() == 0) {
 					labels.add("");
 				} else {
@@ -291,7 +290,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 					 * Get retention time and abundance.
 					 */
 					Collections.sort(massSpectrumTargets, targetComparator);
-					IScanTargetMSD massSpectrumTarget = massSpectrumTargets.get(0);
+					IIdentificationTarget massSpectrumTarget = massSpectrumTargets.get(0);
 					String name = massSpectrumTarget.getLibraryInformation().getName();
 					labels.add(name);
 				}

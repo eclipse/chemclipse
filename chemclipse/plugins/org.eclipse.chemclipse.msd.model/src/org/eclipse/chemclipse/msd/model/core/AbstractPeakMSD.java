@@ -11,22 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-import java.util.List;
-
 import org.eclipse.chemclipse.model.core.AbstractPeak;
-import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 
 public abstract class AbstractPeakMSD extends AbstractPeak implements IPeakMSD {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = 4889978678251526852L;
-	//
-	final private IPeakModelMSD peakModel;
+	private final IPeakModelMSD peakModel;
 
 	public AbstractPeakMSD(IPeakModelMSD peakModel) throws IllegalArgumentException {
 		validatePeakModel(peakModel);
@@ -48,23 +37,6 @@ public abstract class AbstractPeakMSD extends AbstractPeak implements IPeakMSD {
 	public IPeakMassSpectrum getExtractedMassSpectrum() {
 
 		return peakModel.getPeakMassSpectrum();
-	}
-
-	@Override
-	public List<IPeakTarget> getTargets() {
-
-		IScan scan = getPeakModel().getPeakMaximum();
-		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
-			List<IScanTargetMSD> targets = scanMSD.getTargets();
-			if(targets.size() > 0) {
-				for(IScanTargetMSD target : targets) {
-					addTarget(new PeakTarget(target.getLibraryInformation(), target.getComparisonResult()));
-				}
-			}
-		}
-		//
-		return super.getTargets();
 	}
 
 	@Override

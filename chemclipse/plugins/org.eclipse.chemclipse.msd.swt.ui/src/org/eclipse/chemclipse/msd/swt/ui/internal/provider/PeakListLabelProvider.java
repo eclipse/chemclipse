@@ -16,14 +16,15 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
@@ -49,9 +50,9 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 
 		if(element instanceof IPeak) {
 			IPeak peak = (IPeak)element;
-			List<IPeakTarget> peakTargets = peak.getTargets();
-			for(IPeakTarget t : peakTargets) {
-				IComparisonResult cp = t.getComparisonResult();
+			Set<IIdentificationTarget> peakTargets = peak.getTargets();
+			for(IIdentificationTarget target : peakTargets) {
+				IComparisonResult cp = target.getComparisonResult();
 				if(cp instanceof IPeakComparisonResult) {
 					IPeakComparisonResult pcp = (IPeakComparisonResult)cp;
 					if(pcp.isMarkerPeak()) {
@@ -169,7 +170,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
 	}
 
-	private ILibraryInformation getLibraryInformation(List<IPeakTarget> targets) {
+	private ILibraryInformation getLibraryInformation(List<IIdentificationTarget> targets) {
 
 		ILibraryInformation libraryInformation = null;
 		targets = new ArrayList<>(targets);

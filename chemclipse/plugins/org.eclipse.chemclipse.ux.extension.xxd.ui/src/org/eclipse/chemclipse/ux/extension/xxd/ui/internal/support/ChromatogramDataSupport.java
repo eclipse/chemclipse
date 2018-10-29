@@ -16,20 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 
 @SuppressWarnings("rawtypes")
@@ -278,22 +275,9 @@ public class ChromatogramDataSupport {
 	private boolean scanContainsTargets(IScan scan) {
 
 		boolean scanContainsTargets = false;
-		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
-			List<? extends IIdentificationTarget> targets = scanMSD.getTargets();
-			if(targets != null && targets.size() > 0) {
-				scanContainsTargets = true;
-			}
-		} else if(scan instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)scan;
-			List<? extends IIdentificationTarget> targets = scanCSD.getTargets();
-			if(targets != null && targets.size() > 0) {
-				scanContainsTargets = true;
-			}
-		} else if(scan instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)scan;
-			List<? extends IIdentificationTarget> targets = scanWSD.getTargets();
-			if(targets != null && targets.size() > 0) {
+		if(scan instanceof ITargetSupplier) {
+			ITargetSupplier targetSupplier = (ITargetSupplier)scan;
+			if(targetSupplier.getTargets().size() > 0) {
 				scanContainsTargets = true;
 			}
 		}

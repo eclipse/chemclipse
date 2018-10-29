@@ -11,21 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.model.core;
 
-import java.util.List;
-
-import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
 import org.eclipse.chemclipse.model.core.AbstractPeak;
-import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
 
 public abstract class AbstractPeakCSD extends AbstractPeak implements IPeakCSD {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = -1459911842215911857L;
-	//
 	private IPeakModelCSD peakModel;
 
 	public AbstractPeakCSD(IPeakModelCSD peakModel) throws IllegalArgumentException {
@@ -42,22 +31,5 @@ public abstract class AbstractPeakCSD extends AbstractPeak implements IPeakCSD {
 	public IPeakModelCSD getPeakModel() {
 
 		return peakModel;
-	}
-
-	@Override
-	public List<IPeakTarget> getTargets() {
-
-		IScan scan = getPeakModel().getPeakMaximum();
-		if(scan instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)scan;
-			List<IScanTargetCSD> targets = scanCSD.getTargets();
-			if(targets.size() > 0) {
-				for(IScanTargetCSD target : targets) {
-					addTarget(new PeakTarget(target.getLibraryInformation(), target.getComparisonResult()));
-				}
-			}
-		}
-		//
-		return super.getTargets();
 	}
 }

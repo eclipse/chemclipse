@@ -14,15 +14,12 @@ package org.eclipse.chemclipse.wsd.model.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.AbstractScan;
 import org.eclipse.chemclipse.wsd.model.comparator.WavelengthCombinedComparator;
 import org.eclipse.chemclipse.wsd.model.comparator.WavelengthComparatorMode;
-import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.xwc.ExtractedSingleWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.ExtractedWavelengthSignal;
@@ -37,7 +34,6 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	 */
 	private static final long serialVersionUID = -8298107894544692691L;
 	private List<IScanSignalWSD> scanSignals = new ArrayList<IScanSignalWSD>();
-	private Set<IScanTargetWSD> targets = new HashSet<IScanTargetWSD>();
 
 	public AbstractScanWSD() {
 	}
@@ -207,38 +203,5 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public void addTarget(IScanTargetWSD scanTarget) {
-
-		if(scanTarget != null) {
-			targets.add(scanTarget);
-		}
-	}
-
-	@Override
-	public void removeTarget(IScanTargetWSD scanTarget) {
-
-		targets.remove(scanTarget);
-	}
-
-	@Override
-	public void removeTargets(List<IScanTargetWSD> targetsToRemove) {
-
-		targets.removeAll(targetsToRemove);
-	}
-
-	@Override
-	public List<IScanTargetWSD> getTargets() {
-
-		List<IScanTargetWSD> targetList = new ArrayList<IScanTargetWSD>(targets);
-		return targetList;
-	}
-
-	@Override
-	public void removeAllTargets() {
-
-		targets.clear();
 	}
 }

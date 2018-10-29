@@ -81,15 +81,14 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.implementation.ComparisonResult;
-import org.eclipse.chemclipse.model.implementation.LibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -1711,7 +1710,7 @@ public class ExtendedChromatogramUI {
 											IIdentificationTarget peakTarget = peakDataSupport.getBestPeakTarget(peakSource.getTargets());
 											transferPeakTarget(peakTarget, peakSink);
 										} else {
-											for(IPeakTarget peakTarget : peakSource.getTargets()) {
+											for(IIdentificationTarget peakTarget : peakSource.getTargets()) {
 												transferPeakTarget(peakTarget, peakSink);
 											}
 										}
@@ -1737,8 +1736,8 @@ public class ExtendedChromatogramUI {
 
 		ILibraryInformation libraryInformation = new LibraryInformation(identificationTargetSource.getLibraryInformation());
 		IComparisonResult comparisonResult = new ComparisonResult(identificationTargetSource.getComparisonResult());
-		IPeakTarget peakTargetSink = new PeakTarget(libraryInformation, comparisonResult);
-		peakSink.addTarget(peakTargetSink);
+		IIdentificationTarget peakTargetSink = new IdentificationTarget(libraryInformation, comparisonResult);
+		peakSink.getTargets().add(peakTargetSink);
 	}
 
 	private boolean isPeakInFocus(int retentionTimePeakSink, int retentionTimePeakSource, int retentionTimeDelta) {

@@ -12,8 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
@@ -21,9 +20,9 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -105,8 +104,8 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 
 		if(element instanceof IPeak) {
 			IPeak peak = (IPeak)element;
-			List<IPeakTarget> peakTargets = peak.getTargets();
-			for(IPeakTarget peakTarget : peakTargets) {
+			Set<IIdentificationTarget> peakTargets = peak.getTargets();
+			for(IIdentificationTarget peakTarget : peakTargets) {
 				IComparisonResult comparisonResult = peakTarget.getComparisonResult();
 				if(comparisonResult instanceof IPeakComparisonResult) {
 					IPeakComparisonResult peakComparisonResult = (IPeakComparisonResult)comparisonResult;
@@ -250,7 +249,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = Integer.toString(peak.getSuggestedNumberOfComponents());
 				break;
 			case 15:
-				ILibraryInformation libraryInformation = peakDataSupport.getBestLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
+				ILibraryInformation libraryInformation = peakDataSupport.getBestLibraryInformation(peak.getTargets());
 				if(libraryInformation != null) {
 					text = libraryInformation.getName();
 				}

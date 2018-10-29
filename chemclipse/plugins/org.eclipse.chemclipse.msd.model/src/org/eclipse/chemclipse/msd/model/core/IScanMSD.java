@@ -17,7 +17,6 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTargets;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -60,7 +59,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  * @author Alexander Kerner
  * @see AbstractChromatogramMSD
  */
-public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNormalizable, IMassSpectrumTargets, IIonProvider {
+public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNormalizable, IIonProvider {
 
 	/**
 	 * Returns the total ion current (TIC).<br/>

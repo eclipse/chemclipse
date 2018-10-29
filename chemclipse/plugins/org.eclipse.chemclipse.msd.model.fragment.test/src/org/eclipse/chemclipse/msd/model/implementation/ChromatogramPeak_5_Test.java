@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 
 /**
@@ -33,8 +33,8 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 public class ChromatogramPeak_5_Test extends ChromatogramPeakTestCase {
 
 	private IChromatogramPeakMSD peak;
-	private IPeakTarget entry1;
-	private IPeakTarget entry2;
+	private IIdentificationTarget entry1;
+	private IIdentificationTarget entry2;
 	private ILibraryInformation libraryInformation;
 	private IComparisonResult comparisonResult;
 
@@ -45,9 +45,9 @@ public class ChromatogramPeak_5_Test extends ChromatogramPeakTestCase {
 		peak = new ChromatogramPeakMSD(getPeakModel(), getChromatogram());
 		libraryInformation = new LibraryInformation();
 		comparisonResult = new ComparisonResult(0.8f, 0.95f, 0.0f, 0.0f);
-		entry1 = new PeakTarget(libraryInformation, comparisonResult);
+		entry1 = new IdentificationTarget(libraryInformation, comparisonResult);
 		entry1.setIdentifier("PBM");
-		entry2 = new PeakTarget(libraryInformation, comparisonResult);
+		entry2 = new IdentificationTarget(libraryInformation, comparisonResult);
 		entry2.setIdentifier("INCOS");
 	}
 
@@ -60,49 +60,49 @@ public class ChromatogramPeak_5_Test extends ChromatogramPeakTestCase {
 
 	public void testGetTargets_1() {
 
-		List<IPeakTarget> targets = peak.getTargets();
+		Set<IIdentificationTarget> targets = peak.getTargets();
 		assertNotNull("Targets", targets);
 	}
 
 	public void testGetTargets_2() {
 
-		List<IPeakTarget> targets = peak.getTargets();
+		Set<IIdentificationTarget> targets = peak.getTargets();
 		assertEquals("Size", 0, targets.size());
 	}
 
 	public void testTargets_1() {
 
-		peak.addTarget(entry1);
-		peak.addTarget(entry2);
-		List<IPeakTarget> targets = peak.getTargets();
+		peak.getTargets().add(entry1);
+		peak.getTargets().add(entry2);
+		Set<IIdentificationTarget> targets = peak.getTargets();
 		assertEquals("Size", 2, targets.size());
 	}
 
 	public void testTargets_2() {
 
-		peak.addTarget(entry1);
-		peak.addTarget(entry2);
-		peak.addTarget(entry1);
-		List<IPeakTarget> targets = peak.getTargets();
+		peak.getTargets().add(entry1);
+		peak.getTargets().add(entry2);
+		peak.getTargets().add(entry1);
+		Set<IIdentificationTarget> targets = peak.getTargets();
 		assertEquals("Size", 2, targets.size());
 	}
 
 	public void testTargets_3() {
 
-		peak.addTarget(entry1);
-		peak.addTarget(entry2);
-		peak.addTarget(entry1);
-		peak.removeTarget(entry1);
-		List<IPeakTarget> targets = peak.getTargets();
+		peak.getTargets().add(entry1);
+		peak.getTargets().add(entry2);
+		peak.getTargets().add(entry1);
+		peak.getTargets().remove(entry1);
+		Set<IIdentificationTarget> targets = peak.getTargets();
 		assertEquals("Size", 1, targets.size());
 	}
 
 	public void testTargets_4() {
 
-		peak.addTarget(entry1);
-		peak.addTarget(entry2);
-		peak.removeAllTargets();
-		List<IPeakTarget> targets = peak.getTargets();
+		peak.getTargets().add(entry1);
+		peak.getTargets().add(entry2);
+		peak.getTargets().clear();
+		Set<IIdentificationTarget> targets = peak.getTargets();
 		assertEquals("Size", 0, targets.size());
 	}
 }

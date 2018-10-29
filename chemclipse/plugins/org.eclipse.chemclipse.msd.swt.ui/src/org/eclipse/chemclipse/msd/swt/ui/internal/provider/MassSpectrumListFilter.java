@@ -11,14 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
-import java.util.List;
-
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.support.LibraryInformationSupport;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
@@ -65,17 +62,11 @@ public class MassSpectrumListFilter extends ViewerFilter {
 		} else if(element instanceof IScanMSD) {
 			//
 			IScanMSD massSpectrum = (IScanMSD)element;
-			List<IScanTargetMSD> massSpectrumTargets = massSpectrum.getTargets();
-			for(IScanTargetMSD massSpectrumTarget : massSpectrumTargets) {
-				/*
-				 * Check if the target is an identification entry.
-				 */
-				if(massSpectrumTarget instanceof IIdentificationTarget) {
-					IIdentificationTarget identificationEntry = (IIdentificationTarget)massSpectrumTarget;
-					ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
-					if(libraryInformationSupport.matchSearchText(libraryInformation, searchText, caseSensitive)) {
-						return true;
-					}
+			for(IIdentificationTarget massSpectrumTarget : massSpectrum.getTargets()) {
+				IIdentificationTarget identificationEntry = (IIdentificationTarget)massSpectrumTarget;
+				ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
+				if(libraryInformationSupport.matchSearchText(libraryInformation, searchText, caseSensitive)) {
+					return true;
 				}
 			}
 		}

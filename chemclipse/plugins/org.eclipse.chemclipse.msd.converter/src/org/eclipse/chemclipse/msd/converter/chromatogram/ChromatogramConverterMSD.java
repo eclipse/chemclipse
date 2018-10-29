@@ -28,14 +28,14 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.implementation.LibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.support.LibraryInformationSupport;
 import org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -316,8 +316,8 @@ public final class ChromatogramConverterMSD {
 										ILibraryInformation libraryInformation = new LibraryInformation();
 										libraryInformationSupport.extractNameAndReferenceIdentifier(target.getValue(), libraryInformation, referenceIdentifierMarker, referenceIdentifierPrefix);
 										IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
-										IScanTargetMSD scanTargetMSD = new MassSpectrumTarget(libraryInformation, comparisonResult);
-										scanMSD.addTarget(scanTargetMSD);
+										IIdentificationTarget scanTargetMSD = new IdentificationTarget(libraryInformation, comparisonResult);
+										scanMSD.getTargets().add(scanTargetMSD);
 									}
 								}
 							} catch(TypeCastException e) {

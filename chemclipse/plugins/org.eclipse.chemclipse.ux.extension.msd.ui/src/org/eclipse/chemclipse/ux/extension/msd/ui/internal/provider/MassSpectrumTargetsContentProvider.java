@@ -11,10 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider;
 
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 public class MassSpectrumTargetsContentProvider implements IStructuredContentProvider {
 

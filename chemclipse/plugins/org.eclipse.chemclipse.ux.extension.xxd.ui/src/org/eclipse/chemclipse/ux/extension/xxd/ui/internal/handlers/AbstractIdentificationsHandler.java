@@ -47,7 +47,7 @@ public abstract class AbstractIdentificationsHandler {
 					 * Chromatogram
 					 */
 					if(deleteChromatogramIdentifications) {
-						chromatogram.removeAllTargets();
+						chromatogram.getTargets().clear();
 					}
 					/*
 					 * Peaks
@@ -55,7 +55,7 @@ public abstract class AbstractIdentificationsHandler {
 					if(deletePeakIdentifications) {
 						List<? extends IPeak> peaks = chromatogramDataSupport.getPeaks(chromatogram);
 						for(IPeak peak : peaks) {
-							peak.removeAllTargets();
+							peak.getTargets().clear();
 						}
 					}
 					/*

@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
@@ -77,7 +76,7 @@ public class IdentificationLabelMarker extends LabelMarker {
 			//
 			PeakDataSupport peakDataSupport = new PeakDataSupport();
 			for(IPeak peak : peaks) {
-				ILibraryInformation libraryInformation = peakDataSupport.getBestLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
+				ILibraryInformation libraryInformation = peakDataSupport.getBestLibraryInformation(peak.getTargets());
 				String substance = "";
 				if(libraryInformation != null) {
 					substance = libraryInformation.getName();

@@ -13,8 +13,11 @@
 package org.eclipse.chemclipse.model.core;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.core.runtime.Platform;
 
 public abstract class AbstractScan extends AbstractSignal implements IScan {
@@ -44,6 +47,8 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	private int scanNumber = 0;
 	private int timeSegmentId = 1; // Default 1
 	private int cycleNumber = 1; // Default 1
+	//
+	private Set<IIdentificationTarget> identificationTargets = new HashSet<>();
 	/*
 	 * Do not persist (only for internal use)
 	 */
@@ -250,6 +255,12 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	public void setCycleNumber(int cycleNumber) {
 
 		this.cycleNumber = cycleNumber;
+	}
+
+	@Override
+	public Set<IIdentificationTarget> getTargets() {
+
+		return identificationTargets;
 	}
 
 	@Override

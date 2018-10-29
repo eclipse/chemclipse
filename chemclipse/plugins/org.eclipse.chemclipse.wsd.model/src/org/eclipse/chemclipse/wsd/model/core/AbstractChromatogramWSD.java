@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,20 +25,16 @@ import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 
 public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChromatogramPeakWSD> implements IChromatogramWSD {
 
 	private static final long serialVersionUID = -7048942996283330150L;
 	//
-	private Set<IChromatogramTargetWSD> targets;
 	private INoiseCalculator noiseCalculator;
 	private Map<Double, IBaselineModel> baselineModels;
 
 	public AbstractChromatogramWSD() {
-
-		targets = new HashSet<IChromatogramTargetWSD>();
 		baselineModels = new HashMap<>();
 		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
 		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
@@ -90,6 +84,7 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void fireUpdate(IChromatogramSelection chromatogramSelection) {
 
@@ -99,39 +94,6 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 		if(chromatogramSelection instanceof ChromatogramSelectionWSD) {
 			((ChromatogramSelectionWSD)chromatogramSelection).update(true);
 		}
-	}
-
-	@Override
-	public void addTarget(IChromatogramTargetWSD chromatogramTarget) {
-
-		if(chromatogramTarget != null) {
-			targets.add(chromatogramTarget);
-		}
-	}
-
-	@Override
-	public void removeTarget(IChromatogramTargetWSD chromatogramTarget) {
-
-		targets.remove(chromatogramTarget);
-	}
-
-	@Override
-	public void removeTargets(List<IChromatogramTargetWSD> targetsToRemove) {
-
-		targets.removeAll(targetsToRemove);
-	}
-
-	@Override
-	public void removeAllTargets() {
-
-		targets.clear();
-	}
-
-	@Override
-	public List<IChromatogramTargetWSD> getTargets() {
-
-		List<IChromatogramTargetWSD> targetList = new ArrayList<IChromatogramTargetWSD>(targets);
-		return targetList;
 	}
 
 	@Override

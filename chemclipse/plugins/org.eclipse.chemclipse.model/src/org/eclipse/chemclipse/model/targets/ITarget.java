@@ -26,8 +26,6 @@ import java.io.Serializable;
  * It can be identified by a summed mass spectrum like in F-Search, or it could
  * be identified by several of its components. Feel free, to implement something
  * :-).
- * 
- * @author eselmeister
  */
 public interface ITarget extends Serializable {
 }

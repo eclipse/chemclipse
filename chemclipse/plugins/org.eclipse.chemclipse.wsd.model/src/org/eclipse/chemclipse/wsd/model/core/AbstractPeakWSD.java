@@ -11,21 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core;
 
-import java.util.List;
-
 import org.eclipse.chemclipse.model.core.AbstractPeak;
-import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
-import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetWSD;
 
 public abstract class AbstractPeakWSD extends AbstractPeak implements IPeakWSD {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = 641004513534018519L;
-	//
 	private IPeakModelWSD peakModel;
 
 	public AbstractPeakWSD(IPeakModelWSD peakModel) throws IllegalArgumentException {
@@ -42,22 +31,5 @@ public abstract class AbstractPeakWSD extends AbstractPeak implements IPeakWSD {
 	public IPeakModelWSD getPeakModel() {
 
 		return peakModel;
-	}
-
-	@Override
-	public List<IPeakTarget> getTargets() {
-
-		IScan scan = getPeakModel().getPeakMaximum();
-		if(scan instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)scan;
-			List<IScanTargetWSD> targets = scanWSD.getTargets();
-			if(targets.size() > 0) {
-				for(IScanTargetWSD target : targets) {
-					addTarget(new PeakTarget(target.getLibraryInformation(), target.getComparisonResult()));
-				}
-			}
-		}
-		//
-		return super.getTargets();
 	}
 }

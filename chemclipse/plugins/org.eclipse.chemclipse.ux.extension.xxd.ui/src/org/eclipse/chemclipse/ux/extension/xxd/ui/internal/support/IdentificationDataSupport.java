@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -28,7 +29,7 @@ public class IdentificationDataSupport {
 		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 	}
 
-	public ILibraryInformation getBestLibraryInformation(List<? extends IIdentificationTarget> targets) {
+	public ILibraryInformation getBestLibraryInformation(Set<IIdentificationTarget> targets) {
 
 		ILibraryInformation libraryInformation = null;
 		IIdentificationTarget identificationTarget = getBestIdentificationTarget(targets);
@@ -38,13 +39,13 @@ public class IdentificationDataSupport {
 		return libraryInformation;
 	}
 
-	public IIdentificationTarget getBestIdentificationTarget(List<? extends IIdentificationTarget> targets) {
+	public IIdentificationTarget getBestIdentificationTarget(Set<IIdentificationTarget> targets) {
 
 		IIdentificationTarget identificationTarget = null;
-		targets = new ArrayList<IIdentificationTarget>(targets);
-		Collections.sort(targets, targetExtendedComparator);
-		if(targets.size() >= 1) {
-			identificationTarget = targets.get(0);
+		List<IIdentificationTarget> targetsList = new ArrayList<IIdentificationTarget>(targets);
+		Collections.sort(targetsList, targetExtendedComparator);
+		if(targetsList.size() >= 1) {
+			identificationTarget = targetsList.get(0);
 		}
 		return identificationTarget;
 	}

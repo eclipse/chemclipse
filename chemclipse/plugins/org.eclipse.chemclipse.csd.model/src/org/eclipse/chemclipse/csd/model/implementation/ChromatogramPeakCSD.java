@@ -19,11 +19,6 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 
 public class ChromatogramPeakCSD extends AbstractChromatogramPeakCSD implements IChromatogramPeakCSD {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = -906535899685583434L;
-
 	public ChromatogramPeakCSD(IPeakModelCSD peakModel, IChromatogramCSD chromatogram) throws IllegalArgumentException, PeakException {
 		super(peakModel, chromatogram);
 	}

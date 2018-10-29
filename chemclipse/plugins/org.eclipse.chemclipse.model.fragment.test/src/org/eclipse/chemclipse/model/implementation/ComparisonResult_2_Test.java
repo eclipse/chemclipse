@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.implementation;
 
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+
 import junit.framework.TestCase;
 
 public class ComparisonResult_2_Test extends TestCase {

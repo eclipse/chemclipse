@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.model.implementation;
 
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 
 import junit.framework.TestCase;
 

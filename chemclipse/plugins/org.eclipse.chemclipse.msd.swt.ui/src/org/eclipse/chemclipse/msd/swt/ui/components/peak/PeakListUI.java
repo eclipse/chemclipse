@@ -21,8 +21,8 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -353,13 +353,13 @@ public class PeakListUI {
 		}
 	}
 
-	private String getName(List<IPeakTarget> targets) {
+	private String getName(List<IIdentificationTarget> targets) {
 
 		String name = "peak is not identified yet";
-		targets = new ArrayList<>(targets);
-		Collections.sort(targets, targetExtendedComparator);
-		if(targets.size() >= 1) {
-			name = targets.get(0).getLibraryInformation().getName();
+		List<IIdentificationTarget> targetsList = new ArrayList<>(targets);
+		Collections.sort(targetsList, targetExtendedComparator);
+		if(targetsList.size() >= 1) {
+			name = targetsList.get(0).getLibraryInformation().getName();
 		}
 		return name;
 	}

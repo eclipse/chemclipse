@@ -11,15 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.model.core;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogramTargetCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -29,11 +23,9 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram<IChro
 
 	private static final long serialVersionUID = -1514838958855146167L;
 	//
-	private Set<IChromatogramTargetCSD> targets;
 	private INoiseCalculator noiseCalculator;
 
 	public AbstractChromatogramCSD() {
-		targets = new HashSet<IChromatogramTargetCSD>();
 		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
 		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
 		if(noiseCalculator != null) {
@@ -59,7 +51,6 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram<IChro
 		return 0;
 	}
 
-	// -----------------------------------------------------
 	@Override
 	public IScanCSD getSupplierScan(int scan) {
 
@@ -85,7 +76,6 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram<IChro
 		}
 	}
 
-	// -----------------------------------------------------------do, undo, redo
 	@Override
 	public double getPeakIntegratedArea() {
 
@@ -94,38 +84,5 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram<IChro
 			integratedArea += peak.getIntegratedArea();
 		}
 		return integratedArea;
-	}
-
-	@Override
-	public void addTarget(IChromatogramTargetCSD chromatogramTarget) {
-
-		if(chromatogramTarget != null) {
-			targets.add(chromatogramTarget);
-		}
-	}
-
-	@Override
-	public void removeTarget(IChromatogramTargetCSD chromatogramTarget) {
-
-		targets.remove(chromatogramTarget);
-	}
-
-	@Override
-	public void removeTargets(List<IChromatogramTargetCSD> targetsToRemove) {
-
-		targets.removeAll(targetsToRemove);
-	}
-
-	@Override
-	public void removeAllTargets() {
-
-		targets.clear();
-	}
-
-	@Override
-	public List<IChromatogramTargetCSD> getTargets() {
-
-		List<IChromatogramTargetCSD> targetList = new ArrayList<IChromatogramTargetCSD>(targets);
-		return targetList;
 	}
 }

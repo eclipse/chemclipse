@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ChromatogramPeakCSD;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 
 /**
  * Utility class for {@link IChromatogramCSD} related stuff.
@@ -31,7 +31,7 @@ public class ChromatogramCSDs {
 	 * </p>
 	 * Internally a {@link IChromatogramPeakCSD} is created, added to given chromatogram and finally returned.
 	 * <br>
-	 * {@link IIntegrationEntry integration entries} and {@link IPeakTarget peak targets} are copied from given peak.
+	 * {@link IIntegrationEntry integration entries} and {@link IIdentificationTarget peak targets} are copied from given peak.
 	 * </p>
 	 * 
 	 * @param chromatogram
@@ -44,7 +44,7 @@ public class ChromatogramCSDs {
 	 * @see IPeakCSD
 	 * @see IChromatogramCSD
 	 * @see IChromatogramPeakCSD
-	 * @see IPeakTarget
+	 * @see IIdentificationTarget
 	 * @see IIntegrationEntry
 	 */
 	public static ChromatogramPeakCSD addPeakToChromatogram(IChromatogramCSD chromatogram, IPeakCSD peak) {
@@ -52,7 +52,7 @@ public class ChromatogramCSDs {
 		// TODO: find common super type implementation (MSD, CSD, WSD). -> Generic ChromatogramPeak type is needed
 		ChromatogramPeakCSD chromatogramPeak = new ChromatogramPeakCSD(peak.getPeakModel(), chromatogram);
 		chromatogramPeak.addAllIntegrationEntries(peak.getIntegrationEntries());
-		chromatogramPeak.addAllTargets(peak.getTargets());
+		chromatogramPeak.getTargets().addAll(peak.getTargets());
 		chromatogram.addPeak(chromatogramPeak);
 		return chromatogramPeak;
 	}

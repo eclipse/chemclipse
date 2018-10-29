@@ -19,8 +19,5 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
  */
 public final class ChromatogramMSD extends AbstractChromatogramMSD implements IChromatogramMSD {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1949972436584767646L;
 }

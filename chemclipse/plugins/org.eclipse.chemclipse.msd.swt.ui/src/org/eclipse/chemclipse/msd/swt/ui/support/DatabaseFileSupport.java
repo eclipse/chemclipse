@@ -22,16 +22,15 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.swt.ui.Activator;
 import org.eclipse.chemclipse.msd.swt.ui.internal.support.DatabaseExportRunnable;
@@ -137,17 +136,17 @@ public class DatabaseFileSupport {
 				 */
 				IPeakMassSpectrum peakMassSpectrum = peak.getExtractedMassSpectrum();
 				IScanMSD massSpectrum = peakMassSpectrum.makeDeepCopy();
-				for(IPeakTarget peakTarget : peak.getTargets()) {
+				for(IIdentificationTarget peakTarget : peak.getTargets()) {
 					try {
 						/*
 						 * Transfer the targets.
 						 */
 						ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
 						IComparisonResult comparisonResult = peakTarget.getComparisonResult();
-						IScanTargetMSD massSpectrumTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
+						IIdentificationTarget massSpectrumTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 						massSpectrumTarget.setIdentifier(peakTarget.getIdentifier());
 						massSpectrumTarget.setManuallyVerified(peakTarget.isManuallyVerified());
-						massSpectrum.addTarget(massSpectrumTarget);
+						massSpectrum.getTargets().add(massSpectrumTarget);
 					} catch(ReferenceMustNotBeNullException e1) {
 						logger.warn(e1);
 					}

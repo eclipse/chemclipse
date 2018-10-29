@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.IAdaptable;
  * Or it could be a chromatogram containing subsequent scans too.
  * 
  */
-public interface IScan extends ISignal, IAdaptable, IScanSerializable {
+public interface IScan extends ISignal, IAdaptable, IScanSerializable, ITargetSupplier {
 
 	/**
 	 * Returns the chromatogram, where the mass spectrum is stored.<br/>
