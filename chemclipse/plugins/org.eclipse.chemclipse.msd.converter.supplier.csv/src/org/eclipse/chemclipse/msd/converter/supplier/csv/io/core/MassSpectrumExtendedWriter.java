@@ -16,10 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -98,7 +94,7 @@ public class MassSpectrumExtendedWriter implements IMassSpectraWriter {
 						IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
 						libraryInformation = libraryMassSpectrum.getLibraryInformation();
 					} else {
-						libraryInformation = getLibraryInformation(massSpectrum.getTargets());
+						libraryInformation = IIdentificationTarget.getBestLibraryInformation(massSpectrum.getTargets(), targetExtendedComparator);
 					}
 					/*
 					 * Try to make a deep copy and normalize.
@@ -148,16 +144,5 @@ public class MassSpectrumExtendedWriter implements IMassSpectraWriter {
 			}
 		}
 		return "";
-	}
-
-	private ILibraryInformation getLibraryInformation(Set<IIdentificationTarget> targets) {
-
-		ILibraryInformation libraryInformation = null;
-		List<IIdentificationTarget> targetsList = new ArrayList<>(targets);
-		Collections.sort(targetsList, targetExtendedComparator);
-		if(targetsList.size() >= 1) {
-			libraryInformation = targetsList.get(0).getLibraryInformation();
-		}
-		return libraryInformation;
 	}
 }
