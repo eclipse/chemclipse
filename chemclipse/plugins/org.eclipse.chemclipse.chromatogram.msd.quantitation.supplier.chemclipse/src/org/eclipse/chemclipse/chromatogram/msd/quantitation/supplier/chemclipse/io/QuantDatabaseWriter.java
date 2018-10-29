@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
@@ -37,7 +36,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
@@ -158,9 +156,9 @@ public class QuantDatabaseWriter {
 		/*
 		 * Identification Results
 		 */
-		List<IPeakTarget> peakTargets = peak.getTargets();
+		Set<IIdentificationTarget> peakTargets = peak.getTargets();
 		dataOutputStream.writeInt(peakTargets.size()); // Number Peak Targets
-		for(IPeakTarget peakTarget : peakTargets) {
+		for(IIdentificationTarget peakTarget : peakTargets) {
 			if(peakTarget instanceof IIdentificationTarget) {
 				IIdentificationTarget identificationEntry = peakTarget;
 				writeIdentificationEntry(dataOutputStream, identificationEntry);
@@ -234,13 +232,9 @@ public class QuantDatabaseWriter {
 		/*
 		 * Identification Results
 		 */
-		List<IScanTargetMSD> massSpectrumTargets = massSpectrum.getTargets();
-		dataOutputStream.writeInt(massSpectrumTargets.size()); // Number Mass Spectrum Targets
-		for(IScanTargetMSD massSpectrumTarget : massSpectrumTargets) {
-			if(massSpectrumTarget instanceof IIdentificationTarget) {
-				IIdentificationTarget identificationEntry = massSpectrumTarget;
-				writeIdentificationEntry(dataOutputStream, identificationEntry);
-			}
+		dataOutputStream.writeInt(massSpectrum.getTargets().size()); // Number Mass Spectrum Targets
+		for(IIdentificationTarget identificationTarget : massSpectrum.getTargets()) {
+			writeIdentificationEntry(dataOutputStream, identificationTarget);
 		}
 	}
 

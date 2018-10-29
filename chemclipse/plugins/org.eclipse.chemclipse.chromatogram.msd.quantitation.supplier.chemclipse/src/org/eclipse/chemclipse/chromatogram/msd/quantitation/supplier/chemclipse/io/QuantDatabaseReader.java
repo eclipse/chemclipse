@@ -30,10 +30,15 @@ import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
@@ -42,8 +47,6 @@ import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.model.quantitation.RetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.RetentionTimeWindow;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
@@ -52,11 +55,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumLibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumLibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.core.quantitation.ConcentrationResponseEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
@@ -374,7 +372,7 @@ public class QuantDatabaseReader {
 			float probability = dataInputStream.readFloat(); // Probability
 			boolean isMatch = dataInputStream.readBoolean();
 			//
-			IMassSpectrumLibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
+			ILibraryInformation libraryInformation = new LibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
 			libraryInformation.setReferenceIdentifier(referenceIdentifier);
@@ -388,14 +386,14 @@ public class QuantDatabaseReader {
 			libraryInformation.setInChI(inChI);
 			libraryInformation.setMolWeight(molWeight);
 			//
-			IComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+			IComparisonResult comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
 			comparisonResult.setMatch(isMatch);
 			//
 			try {
-				IScanTargetMSD identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
+				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
 				identificationEntry.setManuallyVerified(manuallyVerified);
-				massSpectrum.addTarget(identificationEntry);
+				massSpectrum.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}
@@ -464,10 +462,10 @@ public class QuantDatabaseReader {
 			comparisonResult.setMatch(isMatch);
 			//
 			try {
-				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
+				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
 				identificationEntry.setManuallyVerified(manuallyVerified);
-				peak.addTarget(identificationEntry);
+				peak.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}

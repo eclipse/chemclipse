@@ -15,11 +15,12 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationCompoundAlreadyExistsException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
@@ -186,14 +187,14 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 		List<String> peakTargetNames = new ArrayList<String>();
 		if(chromatogramPeakMSD != null) {
 			//
-			List<IPeakTarget> peakTargets = chromatogramPeakMSD.getTargets();
+			Set<IIdentificationTarget> peakTargets = chromatogramPeakMSD.getTargets();
 			if(peakTargets.size() > 0) {
 				/*
 				 * Get the name of the stored identification entry.
 				 */
-				for(IPeakTarget peakTarget : peakTargets) {
-					if(peakTarget instanceof IPeakTarget) {
-						IPeakTarget peakIdentificationEntry = (IPeakTarget)peakTarget;
+				for(IIdentificationTarget peakTarget : peakTargets) {
+					if(peakTarget instanceof IIdentificationTarget) {
+						IIdentificationTarget peakIdentificationEntry = (IIdentificationTarget)peakTarget;
 						String name = peakIdentificationEntry.getLibraryInformation().getName();
 						peakTargetNames.add(name);
 					}

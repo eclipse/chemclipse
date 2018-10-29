@@ -12,14 +12,15 @@
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.wizards;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationCompoundAlreadyExistsException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
@@ -131,14 +132,14 @@ public class AddAllPeaksWizard extends Wizard {
 		//
 		if(chromatogramPeakMSD != null) {
 			//
-			List<IPeakTarget> peakTargets = chromatogramPeakMSD.getTargets();
+			Set<IIdentificationTarget> peakTargets = chromatogramPeakMSD.getTargets();
 			if(peakTargets.size() > 0) {
 				/*
 				 * Get the name of the stored identification entry.
 				 */
-				for(IPeakTarget peakTarget : peakTargets) {
-					if(peakTarget instanceof IPeakTarget) {
-						IPeakTarget peakIdentificationEntry = (IPeakTarget)peakTarget;
+				for(IIdentificationTarget peakTarget : peakTargets) {
+					if(peakTarget instanceof IIdentificationTarget) {
+						IIdentificationTarget peakIdentificationEntry = (IIdentificationTarget)peakTarget;
 						float actualMatchFactor = peakIdentificationEntry.getComparisonResult().getMatchFactor();
 						if(actualMatchFactor > bestMatchFactor) {
 							/*
