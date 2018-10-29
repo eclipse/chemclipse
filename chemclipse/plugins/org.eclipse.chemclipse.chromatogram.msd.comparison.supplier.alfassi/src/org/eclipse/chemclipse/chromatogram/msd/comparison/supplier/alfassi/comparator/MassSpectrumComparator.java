@@ -15,10 +15,10 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.AbstractM
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.math.GeometricDistanceCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.math.IMatchCalculator;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.results.MassSpectrumComparisonResult;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
@@ -60,7 +60,7 @@ public class MassSpectrumComparator extends AbstractMassSpectrumComparator imple
 				/*
 				 * Result
 				 */
-				IMassSpectrumComparisonResult massSpectrumComparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
+				IComparisonResult massSpectrumComparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 				processingInfo.setProcessingResult(massSpectrumComparisonResult);
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
