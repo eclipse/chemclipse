@@ -11,15 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator;
 
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
 public class CosineMassSpectrumComparator_1_Test extends MassSpectrumSetTestCase {
 
 	private CosineMassSpectrumComparator comparator;
 	private IProcessingInfo processingInfo;
-	private IMassSpectrumComparisonResult result;
+	private IComparisonResult result;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -31,7 +31,7 @@ public class CosineMassSpectrumComparator_1_Test extends MassSpectrumSetTestCase
 		//
 		comparator = new CosineMassSpectrumComparator();
 		processingInfo = comparator.compare(unknown, reference);
-		result = processingInfo.getProcessingResult(IMassSpectrumComparisonResult.class);
+		result = processingInfo.getProcessingResult(IComparisonResult.class);
 	}
 
 	@Override
