@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -222,7 +223,7 @@ public class ChromatogramGson_1000 {
 		return peakMap;
 	}
 
-	private List<Map<String, Object>> getTargetList(List<? extends IIdentificationTarget> identificationTargets) {
+	private List<Map<String, Object>> getTargetList(Set<IIdentificationTarget> identificationTargets) {
 
 		List<Map<String, Object>> targetList = new ArrayList<Map<String, Object>>();
 		for(IIdentificationTarget identificationTarget : identificationTargets) {
