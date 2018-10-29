@@ -124,7 +124,7 @@ public class SubtractCalculator {
 			/*
 			 * Delete the peak area. It needs to be recalculated.
 			 */
-			peak.removeAllTargets();
+			peak.getTargets().clear();
 			peak.getIntegrationEntries().clear();
 			peak.getQuantitationEntries().clear();
 		}
