@@ -31,12 +31,9 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
@@ -86,8 +83,7 @@ public class FileIdentifier {
 		 * Add m/z list on demand if no match was found.
 		 */
 		for(IScanMSD unknown : massSpectra.getList()) {
-			List<IScanTargetMSD> massSpectrumTargets = unknown.getTargets();
-			if(massSpectrumTargets.size() == 0) {
+			if(unknown.getTargets().size() == 0) {
 				if(fileIdentifierSettings.isAddUnknownMzListTarget()) {
 					targetBuilder.setMassSpectrumTargetUnknown(unknown, identifier);
 				}
@@ -187,7 +183,7 @@ public class FileIdentifier {
 				return;
 			}
 			//
-			List<IScanTargetMSD> massSpectrumTargets = new ArrayList<IScanTargetMSD>();
+			List<IIdentificationTarget> massSpectrumTargets = new ArrayList<IIdentificationTarget>();
 			for(int index = 0; index < references.size(); index++) {
 				try {
 					/*
@@ -198,13 +194,13 @@ public class FileIdentifier {
 					//
 					IScanMSD reference = references.get(index);
 					IProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
-					IMassSpectrumComparisonResult comparisonResult = infoCompare.getProcessingResult(IMassSpectrumComparisonResult.class);
+					IComparisonResult comparisonResult = infoCompare.getProcessingResult(IComparisonResult.class);
 					applyPenaltyOnDemand(unknown, reference, comparisonResult, fileIdentifierSettings);
 					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
 						/*
 						 * Add the target.
 						 */
-						IScanTargetMSD massSpectrumTarget = targetBuilder.getMassSpectrumTarget(reference, comparisonResult, identifier, databaseName);
+						IIdentificationTarget massSpectrumTarget = targetBuilder.getMassSpectrumTarget(reference, comparisonResult, identifier, databaseName);
 						massSpectrumTargets.add(massSpectrumTarget);
 					}
 				} catch(TypeCastException e1) {
@@ -220,7 +216,7 @@ public class FileIdentifier {
 				int numberOfTargets = fileIdentifierSettings.getNumberOfTargets();
 				int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
 				for(int i = 0; i < size; i++) {
-					unknown.addTarget(massSpectrumTargets.get(i));
+					unknown.getTargets().add(massSpectrumTargets.get(i));
 				}
 			}
 			//
@@ -248,7 +244,7 @@ public class FileIdentifier {
 				return;
 			}
 			//
-			List<IPeakTarget> peakTargets = new ArrayList<IPeakTarget>();
+			List<IIdentificationTarget> peakTargets = new ArrayList<IIdentificationTarget>();
 			IScanMSD unknown = peakMSD.getPeakModel().getPeakMassSpectrum();
 			for(int index = 0; index < references.size(); index++) {
 				/*
@@ -258,13 +254,13 @@ public class FileIdentifier {
 					monitor.subTask("Compare " + countUnknown);
 					IScanMSD reference = references.get(index);
 					IProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
-					IMassSpectrumComparisonResult comparisonResult = infoCompare.getProcessingResult(IMassSpectrumComparisonResult.class);
+					IComparisonResult comparisonResult = infoCompare.getProcessingResult(IComparisonResult.class);
 					applyPenaltyOnDemand(unknown, reference, comparisonResult, fileIdentifierSettings);
 					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
 						/*
 						 * Add the target.
 						 */
-						IPeakTarget peakTarget = targetBuilder.getPeakTarget(reference, comparisonResult, identifier, databaseName);
+						IIdentificationTarget peakTarget = targetBuilder.getPeakTarget(reference, comparisonResult, identifier, databaseName);
 						peakTargets.add(peakTarget);
 					}
 				} catch(TypeCastException e1) {
@@ -279,7 +275,7 @@ public class FileIdentifier {
 				int numberOfTargets = fileIdentifierSettings.getNumberOfTargets();
 				int size = (numberOfTargets <= peakTargets.size()) ? numberOfTargets : peakTargets.size();
 				for(int i = 0; i < size; i++) {
-					peakMSD.addTarget(peakTargets.get(i));
+					peakMSD.getTargets().add(peakTargets.get(i));
 				}
 			}
 			//
