@@ -11,13 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IDataExtraction {
@@ -36,8 +37,8 @@ public interface IDataExtraction {
 			final Set<String> peakNames = new HashSet<>();
 			samples.getSampleList().stream().map(s -> s.getSampleData()).map(d -> d.get(j).getPeak()).forEach(peak -> {
 				if(peak.isPresent()) {
-					List<IPeakTarget> targets = peak.get().getTargets();
-					if(!targets.isEmpty()) {
+					List<IIdentificationTarget> targets = new ArrayList<>(peak.get().getTargets());
+					if(targets.size() > 0) {
 						peakNames.add(targets.get(0).getLibraryInformation().getName());
 					}
 				}

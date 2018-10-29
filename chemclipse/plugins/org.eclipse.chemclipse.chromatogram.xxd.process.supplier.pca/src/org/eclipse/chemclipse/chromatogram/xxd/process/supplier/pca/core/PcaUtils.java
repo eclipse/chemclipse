@@ -39,7 +39,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaria
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.factory.DecompositionFactory;
 import org.ejml.interfaces.decomposition.EigenDecomposition;
@@ -186,8 +186,8 @@ public class PcaUtils {
 					if(sample.isSelected() || !onlySelected) {
 						Optional<IPeak> peak = sample.getSampleData().get(j).getPeak();
 						if(peak.isPresent()) {
-							List<IPeakTarget> target = peak.get().getTargets();
-							if(!target.isEmpty()) {
+							List<IIdentificationTarget> target = new ArrayList<>(peak.get().getTargets());
+							if(target.size() > 0) {
 								map.get(j).add(target.get(0).getLibraryInformation().getName());
 							}
 						}
