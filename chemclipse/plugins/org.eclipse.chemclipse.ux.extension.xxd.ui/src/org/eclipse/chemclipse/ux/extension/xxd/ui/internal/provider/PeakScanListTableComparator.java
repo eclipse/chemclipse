@@ -12,22 +12,23 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.ITargetSupplier;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.jface.viewers.Viewer;
 
 public class PeakScanListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
-	private PeakDataSupport peakDataSupport = new PeakDataSupport();
-	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private double chromatogramPeakArea = 0.0d;
+	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 
 	public void setChromatogramPeakArea(double chromatogramPeakArea) {
 
@@ -311,10 +312,9 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private ILibraryInformation getLibraryInformation(Object object) {
 
-		if(object instanceof IPeak) {
-			return peakDataSupport.getBestLibraryInformation(((IPeak)object).getTargets());
-		} else {
-			return scanDataSupport.getBestLibraryInformation((IScan)object);
+		if(object instanceof ITargetSupplier) {
+			return IIdentificationTarget.getBestLibraryInformation(((ITargetSupplier)object).getTargets(), comparator);
 		}
+		return null;
 	}
 }

@@ -75,6 +75,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -111,7 +112,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.Chromatogra
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionTimeValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
@@ -254,12 +254,12 @@ public class ExtendedChromatogramUI {
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
-	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
 	private String displayType = DISPLAY_TYPE_TOTAL_SIGNAL;
 	//
 	private boolean suspendUpdate = false;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 
 	@Inject
 	public ExtendedChromatogramUI(Composite parent, int style) {
@@ -1707,7 +1707,7 @@ public class ExtendedChromatogramUI {
 										 * Best target or all?
 										 */
 										if(useBestTargetOnly) {
-											IIdentificationTarget peakTarget = peakDataSupport.getBestPeakTarget(peakSource.getTargets());
+											IIdentificationTarget peakTarget = IIdentificationTarget.getBestIdentificationTarget(peakSource.getTargets(), comparator);
 											transferPeakTarget(peakTarget, peakSink);
 										} else {
 											for(IIdentificationTarget peakTarget : peakSource.getTargets()) {

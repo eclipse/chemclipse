@@ -12,18 +12,14 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 import java.text.DecimalFormat;
-import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class PeakDataSupport {
 
 	private DecimalFormat decimalFormatRetentionTime = ValueFormat.getDecimalFormatEnglish("0.0##");
-	private IdentificationDataSupport identificationDataSupport = new IdentificationDataSupport();
 
 	public String getPeakLabel(IPeak peak) {
 
@@ -43,15 +39,5 @@ public class PeakDataSupport {
 			builder.append("No peak has been selected yet.");
 		}
 		return builder.toString();
-	}
-
-	public ILibraryInformation getBestLibraryInformation(Set<IIdentificationTarget> targets) {
-
-		return identificationDataSupport.getBestLibraryInformation(targets);
-	}
-
-	public IIdentificationTarget getBestPeakTarget(Set<IIdentificationTarget> targets) {
-
-		return identificationDataSupport.getBestIdentificationTarget(targets);
 	}
 }

@@ -14,18 +14,16 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.csd.model.core.IScanCSD;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.marker.LabelMarker;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -36,6 +34,7 @@ import org.eclipse.swt.graphics.Font;
 public class IdentificationLabelMarker extends LabelMarker {
 
 	private Font font = DisplayUtils.getDisplay().getSystemFont();
+	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 
 	/**
 	 * Peak or Scan can be null. If null, it won't be processed.
@@ -74,9 +73,8 @@ public class IdentificationLabelMarker extends LabelMarker {
 			int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
 			font = Fonts.getFont(name, height, style);
 			//
-			PeakDataSupport peakDataSupport = new PeakDataSupport();
 			for(IPeak peak : peaks) {
-				ILibraryInformation libraryInformation = peakDataSupport.getBestLibraryInformation(peak.getTargets());
+				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets(), comparator);
 				String substance = "";
 				if(libraryInformation != null) {
 					substance = libraryInformation.getName();
@@ -99,23 +97,11 @@ public class IdentificationLabelMarker extends LabelMarker {
 			int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);
 			font = Fonts.getFont(name, height, style);
 			//
-			ScanDataSupport scanDataSupport = new ScanDataSupport();
 			for(IScan scan : scans) {
 				/*
 				 * Get the best target.
 				 */
-				ILibraryInformation libraryInformation = null;
-				if(scan instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)scan;
-					libraryInformation = scanDataSupport.getBestLibraryInformation(scanMSD);
-				} else if(scan instanceof IScanCSD) {
-					IScanCSD scanCSD = (IScanCSD)scan;
-					libraryInformation = scanDataSupport.getBestLibraryInformation(scanCSD);
-				} else if(scan instanceof IScanWSD) {
-					IScanWSD scanWSD = (IScanWSD)scan;
-					libraryInformation = scanDataSupport.getBestLibraryInformation(scanWSD);
-				}
-				//
+				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(scan.getTargets(), comparator);
 				String substance = "";
 				if(libraryInformation != null) {
 					substance = libraryInformation.getName();

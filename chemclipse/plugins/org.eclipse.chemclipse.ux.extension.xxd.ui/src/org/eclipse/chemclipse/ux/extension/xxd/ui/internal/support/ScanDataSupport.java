@@ -15,7 +15,6 @@ import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
@@ -38,7 +37,6 @@ public class ScanDataSupport {
 	public static final String[] SIGNAL_TYPES_WSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
-	private IdentificationDataSupport identificationDataSupport = new IdentificationDataSupport();
 
 	public String getRetentionTime(IScan scan) {
 
@@ -160,15 +158,5 @@ public class ScanDataSupport {
 		}
 		//
 		return containsOptimizedScan;
-	}
-
-	public ILibraryInformation getBestLibraryInformation(IScan scan) {
-
-		return identificationDataSupport.getBestLibraryInformation(scan.getTargets());
-	}
-
-	public IIdentificationTarget getBestScanTarget(IScan scan) {
-
-		return identificationDataSupport.getBestIdentificationTarget(scan.getTargets());
 	}
 }

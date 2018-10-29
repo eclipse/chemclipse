@@ -14,15 +14,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -31,7 +27,6 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.targets.ITarget;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -52,15 +47,10 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
-import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -121,10 +111,6 @@ public class ExtendedTargetsUI {
 	private Map<String, Object> map;
 	//
 	private boolean showChromatogramTargets = false;
-	//
-	private PeakDataSupport peakDataSupport = new PeakDataSupport();
-	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
-	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private ListSupport listSupport = new ListSupport();
 
 	@Inject
@@ -393,12 +379,19 @@ public class ExtendedTargetsUI {
 		composite.setLayout(new GridLayout(columns, false));
 		//
 		labelInputErrors = createLabel(composite, columns);
-		//
 		comboTargetName = createComboTarget(composite);
 		buttonAddTarget = createButtonAdd(composite);
 		buttonDeleteTarget = createButtonDelete(composite);
 		//
 		return composite;
+	}
+
+	private void setEditWidgetStatus(boolean enabled) {
+
+		labelInputErrors.setEnabled(enabled);
+		comboTargetName.setEnabled(enabled);
+		buttonAddTarget.setEnabled(enabled);
+		buttonDeleteTarget.setEnabled(enabled);
 	}
 
 	private Label createLabel(Composite parent, int horizontalSpan) {
@@ -723,53 +716,17 @@ public class ExtendedTargetsUI {
 	private void updateInput() {
 
 		if(object instanceof ITargetSupplier) {
+			String editInformation = targetListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
+			labelInfo.setText("Targets - " + editInformation);
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
-			targetListUI.setInput(targetSupplier); // TODO
+			targetListUI.setInput(targetSupplier.getTargets());
+			setEditWidgetStatus(true);
 		} else {
 			labelInfo.setText("No target data has been selected yet.");
 			targetListUI.clear();
+			setEditWidgetStatus(false);
+			PartSupport.setCompositeVisibility(toolbarModify, false);
 		}
-		/*
-		 * TODO REMOVE
-		 */
-		if(object instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)object;
-			labelInfo.setText(scanDataSupport.getScanLabel(scanMSD));
-			// targetListUI.setInput(scanMSD.getTargets());
-		} else if(object instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)object;
-			labelInfo.setText(scanDataSupport.getScanLabel(scanCSD));
-			targetListUI.setInput(scanCSD.getTargets());
-		} else if(object instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)object;
-			labelInfo.setText(scanDataSupport.getScanLabel(scanWSD));
-			targetListUI.setInput(scanWSD.getTargets());
-		} else if(object instanceof IPeak) {
-			IPeak peak = (IPeak)object;
-			labelInfo.setText(peakDataSupport.getPeakLabel(peak));
-			targetListUI.setInput(peak.getTargets());
-		} else if(object instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)object;
-			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramMSD));
-			targetListUI.setInput(chromatogramMSD.getTargets());
-		} else if(object instanceof IChromatogramCSD) {
-			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)object;
-			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramCSD));
-			targetListUI.setInput(chromatogramCSD.getTargets());
-		} else if(object instanceof IChromatogramWSD) {
-			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
-			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramWSD));
-			targetListUI.setInput(chromatogramWSD.getTargets());
-		} else if(object instanceof List) {
-			labelInfo.setText("Idenitification Targets");
-			targetListUI.setInput(object);
-		} else {
-			labelInfo.setText("No target data has been selected yet.");
-			targetListUI.clear();
-		}
-		//
-		String editInformation = targetListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
-		labelInfo.setText(labelInfo.getText() + " - " + editInformation);
 	}
 
 	private void updateWidgets() {

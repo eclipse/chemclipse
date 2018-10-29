@@ -189,5 +189,5 @@ public interface IChemClipseEvents {
 	 */
 	String TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION = "identification/targets/update/selection";
 	String TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION = "identification/targets/unload/selection";
-	String PROPERTY_SELECTED_IDENTIFICATION_TARGETS = IEventBroker.DATA; // List<IIdentificationTarget>
+	String PROPERTY_SELECTED_IDENTIFICATION_TARGET_SUPPLIER = IEventBroker.DATA; // ITargetSupplier
 }

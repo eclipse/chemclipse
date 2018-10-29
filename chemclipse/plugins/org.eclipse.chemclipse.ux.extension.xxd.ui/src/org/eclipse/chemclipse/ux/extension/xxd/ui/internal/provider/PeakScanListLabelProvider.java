@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.util.Set;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -26,11 +27,10 @@ import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -47,8 +47,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String SCAN = "SCAN";
 	//
 	private double chromatogramPeakArea = 0.0d;
-	private PeakDataSupport peakDataSupport = new PeakDataSupport();
-	private ScanDataSupport scanDataSupport = new ScanDataSupport();
+	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 	//
 	public static final String[] TITLES = { //
 			ACTIVE_FOR_ANALYSIS, //
@@ -249,7 +248,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = Integer.toString(peak.getSuggestedNumberOfComponents());
 				break;
 			case 15:
-				ILibraryInformation libraryInformation = peakDataSupport.getBestLibraryInformation(peak.getTargets());
+				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets(), comparator);
 				if(libraryInformation != null) {
 					text = libraryInformation.getName();
 				}
@@ -317,7 +316,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = "--";
 				break;
 			case 15:
-				ILibraryInformation libraryInformation = scanDataSupport.getBestLibraryInformation(scan);
+				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(scan.getTargets(), comparator);
 				if(libraryInformation != null) {
 					text = libraryInformation.getName();
 				}

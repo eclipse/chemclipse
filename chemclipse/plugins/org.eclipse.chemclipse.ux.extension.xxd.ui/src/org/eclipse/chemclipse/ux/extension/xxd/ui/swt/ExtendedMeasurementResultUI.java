@@ -351,7 +351,6 @@ public class ExtendedMeasurementResultUI {
 						extendedTableViewer.setComparator(null);
 						if(table.getItemCount() > 0) {
 							extendedTableViewer.setInput(null);
-							extendedTableViewer.refresh();
 						}
 						//
 						setContentProvider(configurationElement, table);

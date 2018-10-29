@@ -12,10 +12,6 @@
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
@@ -63,7 +59,7 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 			 * Scan
 			 */
 			IScanMSD massSpectrum = (IScanMSD)element;
-			ILibraryInformation libraryInformation = getLibraryInformation(massSpectrum.getTargets());
+			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(massSpectrum.getTargets(), targetExtendedComparator);
 			if(massSpectrum.getOptimizedMassSpectrum() != null) {
 				massSpectrum = massSpectrum.getOptimizedMassSpectrum();
 			}
@@ -179,16 +175,5 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 				text = "n.v.";
 		}
 		return text;
-	}
-
-	private ILibraryInformation getLibraryInformation(Set<IIdentificationTarget> targets) {
-
-		ILibraryInformation libraryInformation = null;
-		List<IIdentificationTarget> targetsList = new ArrayList<>(targets);
-		Collections.sort(targetsList, targetExtendedComparator);
-		if(targetsList.size() >= 1) {
-			libraryInformation = targetsList.get(0).getLibraryInformation();
-		}
-		return libraryInformation;
 	}
 }

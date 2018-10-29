@@ -11,11 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -49,8 +44,8 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 			IScanMSD massSpectrum1 = (IScanMSD)e1;
 			IScanMSD massSpectrum2 = (IScanMSD)e2;
 			//
-			ILibraryInformation libraryInformation1 = getLibraryInformation(massSpectrum1.getTargets());
-			ILibraryInformation libraryInformation2 = getLibraryInformation(massSpectrum2.getTargets());
+			ILibraryInformation libraryInformation1 = IIdentificationTarget.getBestLibraryInformation(massSpectrum1.getTargets(), targetExtendedComparator);
+			ILibraryInformation libraryInformation2 = IIdentificationTarget.getBestLibraryInformation(massSpectrum2.getTargets(), targetExtendedComparator);
 			/*
 			 * Show the optimized mass spectrum if available.
 			 */
@@ -135,16 +130,5 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 				sortOrder = 0;
 		}
 		return sortOrder;
-	}
-
-	private ILibraryInformation getLibraryInformation(Set<IIdentificationTarget> targets) {
-
-		ILibraryInformation libraryInformation = null;
-		List<IIdentificationTarget> targetsList = new ArrayList<>(targets);
-		Collections.sort(targetsList, targetExtendedComparator);
-		if(targetsList.size() >= 1) {
-			libraryInformation = targetsList.get(0).getLibraryInformation();
-		}
-		return libraryInformation;
 	}
 }

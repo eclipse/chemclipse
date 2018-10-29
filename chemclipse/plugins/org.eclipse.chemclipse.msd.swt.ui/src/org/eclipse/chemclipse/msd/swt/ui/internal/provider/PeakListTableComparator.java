@@ -11,11 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -45,10 +40,10 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 		if(e1 instanceof IPeakMSD && e2 instanceof IPeakMSD) {
 			IPeakMSD peak1 = (IPeakMSD)e1;
 			IPeakModelMSD peakModel1 = peak1.getPeakModel();
-			ILibraryInformation libraryInformation1 = getLibraryInformation(peak1.getTargets());
+			ILibraryInformation libraryInformation1 = IIdentificationTarget.getBestLibraryInformation(peak1.getTargets(), targetExtendedComparator);
 			IPeakMSD peak2 = (IPeakMSD)e2;
 			IPeakModelMSD peakModel2 = peak2.getPeakModel();
-			ILibraryInformation libraryInformation2 = getLibraryInformation(peak2.getTargets());
+			ILibraryInformation libraryInformation2 = IIdentificationTarget.getBestLibraryInformation(peak2.getTargets(), targetExtendedComparator);
 			//
 			switch(getPropertyIndex()) {
 				case 0:
@@ -112,16 +107,5 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 			sortOrder = -sortOrder;
 		}
 		return sortOrder;
-	}
-
-	private ILibraryInformation getLibraryInformation(Set<IIdentificationTarget> targets) {
-
-		ILibraryInformation libraryInformation = null;
-		List<IIdentificationTarget> targetsList = new ArrayList<>(targets);
-		Collections.sort(targetsList, targetExtendedComparator);
-		if(targetsList.size() >= 1) {
-			libraryInformation = targetsList.get(0).getLibraryInformation();
-		}
-		return libraryInformation;
 	}
 }

@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.msd.swt.ui.components.peak;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -57,6 +58,7 @@ public class PeakListUI {
 
 	private static final Logger logger = Logger.getLogger(PeakListUI.class);
 	//
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 	//
 	private DecimalFormat decimalFormat;
@@ -78,6 +80,7 @@ public class PeakListUI {
 		initialize(parent);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;
@@ -107,7 +110,7 @@ public class PeakListUI {
 
 		if(selectedPeakMSD != null && selectedPeakMSD.getPeakModel() != null) {
 			IPeakModelMSD peakModel = selectedPeakMSD.getPeakModel();
-			String name = getName(new ArrayList<>(selectedPeakMSD.getTargets()));
+			String name = getName(selectedPeakMSD.getTargets());
 			labelSelectedPeak.setText("Selected Peak: " + decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + " min - Name: " + name);
 		} else {
 			labelSelectedPeak.setText("Selected Peak: none selected yet");
@@ -353,14 +356,13 @@ public class PeakListUI {
 		}
 	}
 
-	private String getName(List<IIdentificationTarget> targets) {
+	private String getName(Set<IIdentificationTarget> targets) {
 
-		String name = "peak is not identified yet";
-		List<IIdentificationTarget> targetsList = new ArrayList<>(targets);
-		Collections.sort(targetsList, targetExtendedComparator);
-		if(targetsList.size() >= 1) {
-			name = targetsList.get(0).getLibraryInformation().getName();
+		ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(targets, targetExtendedComparator);
+		if(libraryInformation != null) {
+			return libraryInformation.getName();
+		} else {
+			return "Peak is not identified yet.";
 		}
-		return name;
 	}
 }

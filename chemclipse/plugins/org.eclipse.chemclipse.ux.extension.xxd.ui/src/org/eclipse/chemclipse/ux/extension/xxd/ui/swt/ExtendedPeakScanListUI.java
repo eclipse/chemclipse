@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -36,6 +37,7 @@ import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
@@ -50,8 +52,6 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
@@ -99,9 +99,8 @@ public class ExtendedPeakScanListUI {
 	//
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ListSupport listSupport = new ListSupport();
-	private PeakDataSupport peakDataSupport = new PeakDataSupport();
-	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	//
+	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 	private Map<String, Object> map = new HashMap<String, Object>();
 
 	@Inject
@@ -411,7 +410,7 @@ public class ExtendedPeakScanListUI {
 				 */
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				IPeak peak = (IPeak)object;
-				IIdentificationTarget target = peakDataSupport.getBestPeakTarget(peak.getTargets());
+				IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
 				//
 				DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -455,7 +454,7 @@ public class ExtendedPeakScanListUI {
 				 */
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				IScan scan = (IScan)object;
-				IIdentificationTarget target = scanDataSupport.getBestScanTarget(scan);
+				IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), comparator);
 				//
 				DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
