@@ -11,17 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual.ui.internal.wizards;
 
-import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.jface.wizard.Wizard;
 
 public class IdentificationWizard extends Wizard {
@@ -77,23 +76,18 @@ public class IdentificationWizard extends Wizard {
 			 */
 			try {
 				IPeakComparisonResult comparisonResult = new PeakComparisonResult(FACTOR, FACTOR, FACTOR, FACTOR, FACTOR);
-				IPeakTarget peakTarget = new PeakTarget(libraryInformation, comparisonResult);
+				IIdentificationTarget peakTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 				peakTarget.setIdentifier("Manual Peak Identifier");
-				if(peak instanceof IChromatogramPeakMSD) {
-					((IChromatogramPeakMSD)peak).addTarget(peakTarget);
+				if(peak instanceof ITargetSupplier) {
+					((ITargetSupplier)peak).getTargets().add(peakTarget);
 					return true;
-				} else if(peak instanceof IChromatogramPeakCSD) {
-					((IChromatogramPeakCSD)peak).addTarget(peakTarget);
-					return true;
-				} else {
-					showErrorMessage("The peak is no instance of IChromatogramPeakMSD or IChromatogramPeakCSD.");
-					return false;
 				}
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 				return false;
 			}
 		}
+		return false;
 	}
 
 	private void showErrorMessage(String message) {
