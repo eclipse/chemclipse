@@ -69,6 +69,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
 import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupport;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -91,6 +92,7 @@ import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -124,6 +126,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramActionUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeatmapUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
@@ -283,6 +286,15 @@ public class ExtendedChromatogramUI {
 
 		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
 		if(chromatogramSelection != null) {
+			/*
+			 * Will be removed as soon as the topics
+			 * IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION
+			 * ...
+			 * are removed.
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_LEGACY_UPDATE_CHROMATOGRAM_MODUS)) {
+				fireUpdateChromatogramLegacy();
+			}
 			//
 			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -297,6 +309,36 @@ public class ExtendedChromatogramUI {
 		return chromatogramSelection != null ? true : false;
 	}
 
+	private void fireUpdateChromatogramLegacy() {
+
+		Map<String, Object> map = new HashMap<>();
+		map.put(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION, chromatogramSelection);
+		map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, true);
+		String topic;
+		//
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+			topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION;
+		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+			topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION;
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+			topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION;
+		} else {
+			topic = null;
+		}
+		//
+		if(topic != null) {
+			DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+					eventBroker.post(topic, map);
+				}
+			});
+		}
+	}
+
 	public boolean fireUpdatePeak() {
 
 		boolean update = false;
@@ -304,6 +346,15 @@ public class ExtendedChromatogramUI {
 		if(chromatogramSelection != null) {
 			final IPeak peak = chromatogramSelection.getSelectedPeak();
 			if(peak != null) {
+				/*
+				 * Will be removed as soon as the topics
+				 * IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAK
+				 * ...
+				 * are removed.
+				 */
+				if(preferenceStore.getBoolean(PreferenceConstants.P_LEGACY_UPDATE_PEAK_MODUS)) {
+					fireUpdatePeakLegacy(peak);
+				}
 				//
 				update = true;
 				DisplayUtils.getDisplay().asyncExec(new Runnable() {
@@ -318,6 +369,38 @@ public class ExtendedChromatogramUI {
 			}
 		}
 		return update;
+	}
+
+	private void fireUpdatePeakLegacy(IPeak peak) {
+
+		if(peak != null) {
+			Map<String, Object> map = new HashMap<>();
+			map.put(IChemClipseEvents.PROPERTY_PEAK_MSD, peak);
+			map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, true);
+			String topic;
+			//
+			if(peak instanceof IPeakMSD) {
+				topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAK;
+			} else if(peak instanceof IPeakCSD) {
+				topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_PEAK;
+			} else if(peak instanceof IPeakWSD) {
+				topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_PEAK;
+			} else {
+				topic = null;
+			}
+			//
+			if(topic != null) {
+				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+						eventBroker.post(topic, map);
+					}
+				});
+			}
+		}
 	}
 
 	public boolean fireUpdateScan() {

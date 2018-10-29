@@ -246,8 +246,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	@Override
 	public IChromatogramSelection getChromatogramSelection() {
 
-		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
-		return chromatogramSelection;
+		return extendedChromatogramUI.getChromatogramSelection();
 	}
 
 	private synchronized void initialize(Composite parent) {

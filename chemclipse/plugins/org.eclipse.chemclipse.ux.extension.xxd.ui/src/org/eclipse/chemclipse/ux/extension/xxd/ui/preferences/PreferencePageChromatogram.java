@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
@@ -32,6 +33,9 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 
 	public void createFieldEditors() {
 
+		addField(new BooleanFieldEditor(PreferenceConstants.P_LEGACY_UPDATE_CHROMATOGRAM_MODUS, "Legacy Chromatogram Update Modus", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_LEGACY_UPDATE_CHROMATOGRAM_MODUS, "Legacy Peak Update Modus", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS, "Display RI without decimals", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS, "Display Area without decimals", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE, "Compression Type:", PreferenceConstants.COMPRESSION_TYPES, getFieldEditorParent()));
