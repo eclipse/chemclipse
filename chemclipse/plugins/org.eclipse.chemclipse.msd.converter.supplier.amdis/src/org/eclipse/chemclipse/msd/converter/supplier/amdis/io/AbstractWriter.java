@@ -24,9 +24,9 @@ import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.IVendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
@@ -36,8 +36,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.RegularLibraryMassSpectrum;
@@ -185,7 +183,7 @@ public abstract class AbstractWriter {
 			 */
 			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
 			try {
-				identificationTarget = new MassSpectrumTarget(libraryMassSpectrum.getLibraryInformation(), ComparisonResult.createNoMatchComparisonResult());
+				identificationTarget = new IdentificationTarget(libraryMassSpectrum.getLibraryInformation(), ComparisonResult.createNoMatchComparisonResult());
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}
@@ -193,7 +191,7 @@ public abstract class AbstractWriter {
 			/*
 			 * Scan MS
 			 */
-			List<IScanTargetMSD> targets = new ArrayList<>(massSpectrum.getTargets());
+			List<IIdentificationTarget> targets = new ArrayList<IIdentificationTarget>(massSpectrum.getTargets());
 			Collections.sort(targets, targetExtendedComparator);
 			if(targets.size() >= 1) {
 				identificationTarget = targets.get(0);
@@ -205,7 +203,7 @@ public abstract class AbstractWriter {
 	protected IIdentificationTarget getPeakTarget(IPeak peak) {
 
 		IIdentificationTarget identificationTarget = null;
-		List<IPeakTarget> targets = new ArrayList<>(peak.getTargets());
+		List<IIdentificationTarget> targets = new ArrayList<>(peak.getTargets());
 		Collections.sort(targets, targetExtendedComparator);
 		if(targets.size() >= 1) {
 			identificationTarget = targets.get(0);
