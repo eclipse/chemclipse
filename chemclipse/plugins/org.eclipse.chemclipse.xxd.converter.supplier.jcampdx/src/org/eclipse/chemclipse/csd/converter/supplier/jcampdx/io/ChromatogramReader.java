@@ -25,16 +25,16 @@ import org.eclipse.chemclipse.csd.converter.supplier.jcampdx.model.IVendorScan;
 import org.eclipse.chemclipse.csd.converter.supplier.jcampdx.model.VendorChromatogram;
 import org.eclipse.chemclipse.csd.converter.supplier.jcampdx.model.VendorScan;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
-import org.eclipse.chemclipse.csd.model.implementation.ScanTargetCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support.IConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -158,9 +158,8 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 								ILibraryInformation libraryInformation = new LibraryInformation();
 								libraryInformation.setName(name);
 								IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor, 0.0f, 0.0f);
-								IScanTargetCSD scanTargetCSD = new ScanTargetCSD(libraryInformation, comparisonResult);
-								scanTargetCSD.setParentScan(scan);
-								scan.addTarget(scanTargetCSD);
+								IIdentificationTarget scanTargetCSD = new IdentificationTarget(libraryInformation, comparisonResult);
+								scan.getTargets().add(scanTargetCSD);
 							} catch(ReferenceMustNotBeNullException e) {
 								logger.warn(e);
 							}

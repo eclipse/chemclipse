@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.IVendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.IVendorIon;
@@ -37,7 +38,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support.IConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -165,7 +165,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 					libraryInformation.setComments("JCAMP-DX");
 					IComparisonResult comparisonResult = new ComparisonResult(IComparisonResult.MAX_MATCH_FACTOR, IComparisonResult.MAX_REVERSE_MATCH_FACTOR, 0.0f, 0.0f);
 					try {
-						massSpectrum.addTarget(new MassSpectrumTarget(libraryInformation, comparisonResult));
+						massSpectrum.getTargets().add(new IdentificationTarget(libraryInformation, comparisonResult));
 					} catch(ReferenceMustNotBeNullException e) {
 						logger.warn(e);
 					}
