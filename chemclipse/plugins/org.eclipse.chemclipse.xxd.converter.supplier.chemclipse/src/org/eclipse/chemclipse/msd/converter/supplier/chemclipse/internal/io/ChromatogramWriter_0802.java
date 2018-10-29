@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -28,7 +29,6 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IChromatogramMSDZipWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -40,7 +40,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
@@ -231,9 +230,9 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		//
-		List<IChromatogramTargetMSD> chromatogramTargets = chromatogram.getTargets();
+		Set<IIdentificationTarget> chromatogramTargets = chromatogram.getTargets();
 		dataOutputStream.writeInt(chromatogramTargets.size()); // Number of Targets
-		for(IChromatogramTargetMSD chromatogramTarget : chromatogramTargets) {
+		for(IIdentificationTarget chromatogramTarget : chromatogramTargets) {
 			if(chromatogramTarget instanceof IIdentificationTarget) {
 				IIdentificationTarget identificationEntry = chromatogramTarget;
 				writeIdentificationEntry(dataOutputStream, identificationEntry);
@@ -352,9 +351,9 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		/*
 		 * Identification Results
 		 */
-		List<IPeakTarget> peakTargets = peak.getTargets();
+		Set<IIdentificationTarget> peakTargets = peak.getTargets();
 		dataOutputStream.writeInt(peakTargets.size()); // Number Peak Targets
-		for(IPeakTarget peakTarget : peakTargets) {
+		for(IIdentificationTarget peakTarget : peakTargets) {
 			if(peakTarget instanceof IIdentificationTarget) {
 				IIdentificationTarget identificationEntry = peakTarget;
 				writeIdentificationEntry(dataOutputStream, identificationEntry);

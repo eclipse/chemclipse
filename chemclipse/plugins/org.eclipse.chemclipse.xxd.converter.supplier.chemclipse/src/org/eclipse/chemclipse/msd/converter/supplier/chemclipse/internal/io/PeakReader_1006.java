@@ -33,15 +33,17 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.VendorIon;
@@ -52,11 +54,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumLibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumLibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
@@ -271,7 +268,7 @@ public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
 			float probability = dataInputStream.readFloat(); // Probability
 			//
-			IMassSpectrumLibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
+			ILibraryInformation libraryInformation = new LibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
 			libraryInformation.setReferenceIdentifier(referenceIdentifier);
@@ -287,14 +284,14 @@ public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
 			if(isExtendedComparisonResult) {
 				comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, 0.0f, probability);
 			} else {
-				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
+				comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			}
 			//
 			try {
-				IScanTargetMSD identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
+				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
 				identificationEntry.setManuallyVerified(manuallyVerified);
-				massSpectrum.addTarget(identificationEntry);
+				massSpectrum.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}
@@ -402,10 +399,10 @@ public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
 			}
 			//
 			try {
-				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
+				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
 				identificationEntry.setManuallyVerified(manuallyVerified);
-				peak.addTarget(identificationEntry);
+				peak.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}

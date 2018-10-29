@@ -41,7 +41,6 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
@@ -56,8 +55,6 @@ import org.eclipse.chemclipse.wsd.model.core.IPeakModelWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
-import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetWSD;
-import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -247,9 +244,9 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 			/*
 			 * Identification Results
 			 */
-			List<IScanTargetWSD> scanTargets = scanWSD.getTargets();
+			Set<IIdentificationTarget> scanTargets = scanWSD.getTargets();
 			dataOutputStream.writeInt(scanTargets.size()); // Number Mass Spectrum Targets
-			for(IScanTargetWSD scanTarget : scanTargets) {
+			for(IIdentificationTarget scanTarget : scanTargets) {
 				if(scanTarget instanceof IIdentificationTarget) {
 					IIdentificationTarget identificationEntry = scanTarget;
 					writeIdentificationEntry(dataOutputStream, identificationEntry);
@@ -379,9 +376,9 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		/*
 		 * Identification Results
 		 */
-		List<IPeakTarget> peakTargets = peak.getTargets();
+		Set<IIdentificationTarget> peakTargets = peak.getTargets();
 		dataOutputStream.writeInt(peakTargets.size()); // Number Peak Targets
-		for(IPeakTarget peakTarget : peakTargets) {
+		for(IIdentificationTarget peakTarget : peakTargets) {
 			if(peakTarget instanceof IIdentificationTarget) {
 				IIdentificationTarget identificationEntry = peakTarget;
 				writeIdentificationEntry(dataOutputStream, identificationEntry);
@@ -455,9 +452,9 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		//
-		List<IChromatogramTargetWSD> chromatogramTargets = chromatogram.getTargets();
+		Set<IIdentificationTarget> chromatogramTargets = chromatogram.getTargets();
 		dataOutputStream.writeInt(chromatogramTargets.size()); // Number of Targets
-		for(IChromatogramTargetWSD chromatogramTarget : chromatogramTargets) {
+		for(IIdentificationTarget chromatogramTarget : chromatogramTargets) {
 			if(chromatogramTarget instanceof IIdentificationTarget) {
 				IIdentificationTarget identificationEntry = chromatogramTarget;
 				writeIdentificationEntry(dataOutputStream, identificationEntry);

@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.io;
 
-import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.TestPathHelper;
@@ -41,7 +41,7 @@ public class PeakReader_1_MSD_1007_ITest extends PeakReaderMSDTestCase {
 		assertEquals(1219140.1874049378d, peakMSD.getIntegratedArea());
 		assertEquals("Integrator Trapezoid: TIC", peakMSD.getIntegratorDescription());
 		assertEquals("", peakMSD.getQuantifierDescription());
-		List<IPeakTarget> peakTargets = peakMSD.getTargets();
+		Set<IIdentificationTarget> peakTargets = peakMSD.getTargets();
 		assertEquals(1, peakTargets.size());
 		IPeakMassSpectrum massSpectrum = peakMSD.getPeakModel().getPeakMassSpectrum();
 		assertEquals(47, massSpectrum.getNumberOfIons());

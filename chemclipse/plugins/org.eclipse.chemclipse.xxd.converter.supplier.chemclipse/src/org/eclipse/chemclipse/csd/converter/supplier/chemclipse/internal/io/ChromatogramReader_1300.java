@@ -37,13 +37,9 @@ import org.eclipse.chemclipse.csd.model.core.IIntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
-import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogramTargetCSD;
-import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.implementation.ChromatogramTargetCSD;
 import org.eclipse.chemclipse.csd.model.implementation.IntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.implementation.PeakModelCSD;
-import org.eclipse.chemclipse.csd.model.implementation.ScanTargetCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
@@ -63,18 +59,18 @@ import org.eclipse.chemclipse.model.identifier.ChromatogramLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IChromatogramLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramReaderMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
@@ -517,10 +513,10 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			comparisonResult.setMatch(isMatch);
 			//
 			try {
-				IChromatogramTargetCSD identificationEntry = new ChromatogramTargetCSD(libraryInformation, comparisonResult);
+				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
 				identificationEntry.setManuallyVerified(manuallyVerified);
-				chromatogram.addTarget(identificationEntry);
+				chromatogram.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}
@@ -697,10 +693,10 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			comparisonResult.setMatch(isMatch);
 			//
 			try {
-				IScanTargetCSD identificationEntry = new ScanTargetCSD(libraryInformation, comparisonResult);
+				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
 				identificationEntry.setManuallyVerified(manuallyVerified);
-				scanCSD.addTarget(identificationEntry);
+				scanCSD.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}
@@ -760,10 +756,10 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			comparisonResult.setMatch(isMatch);
 			//
 			try {
-				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
+				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
 				identificationEntry.setManuallyVerified(manuallyVerified);
-				peak.addTarget(identificationEntry);
+				peak.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}

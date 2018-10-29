@@ -21,6 +21,12 @@ import java.util.zip.ZipFile;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IReaderProxy;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
@@ -29,12 +35,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogr
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumLibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumLibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -150,7 +150,7 @@ public class ReaderProxy_1003 extends AbstractZipReader implements IReaderProxy 
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
 			float probability = dataInputStream.readFloat(); // Probability
 			//
-			IMassSpectrumLibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
+			ILibraryInformation libraryInformation = new LibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
 			libraryInformation.setMiscellaneous(miscellaneous);
@@ -158,11 +158,11 @@ public class ReaderProxy_1003 extends AbstractZipReader implements IReaderProxy 
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
 			libraryInformation.setMolWeight(molWeight);
-			IMassSpectrumComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
+			IComparisonResult comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			try {
-				IScanTargetMSD identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
+				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
-				massSpectrum.addTarget(identificationEntry);
+				massSpectrum.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}
