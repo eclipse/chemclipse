@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
+import org.apache.commons.math3.complex.Complex;
 import org.eclipse.chemclipse.model.core.AbstractSignal;
 
 public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<ISignalNMR> {
@@ -19,10 +20,53 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 	//
 	private double chemicalShift = 0.0d;
 	private double intensity = 0.0d;
+	private Complex fourierTransformedData;
+	private Complex phaseCorrectedData;
+	private Complex baselineCorrectedData;
 
+	@Deprecated
 	public SignalNMR(double chemicalShift, double intensity) {
+
 		this.chemicalShift = chemicalShift;
 		this.intensity = intensity;
+	}
+
+	public SignalNMR(double chemicalShift, Complex fourierTransformedData) {
+
+		this.chemicalShift = chemicalShift;
+		this.fourierTransformedData = fourierTransformedData;
+		this.phaseCorrectedData = fourierTransformedData;
+		this.baselineCorrectedData = fourierTransformedData;
+	}
+
+	public Complex getFourierTransformedData() {
+
+		return fourierTransformedData;
+	}
+
+	public void setFourierTransformedData(Complex fourierTransformedData) {
+
+		this.fourierTransformedData = fourierTransformedData;
+	}
+
+	public Complex getPhaseCorrectedData() {
+
+		return phaseCorrectedData;
+	}
+
+	public void setPhaseCorrectedData(Complex phaseCorrectedData) {
+
+		this.phaseCorrectedData = phaseCorrectedData;
+	}
+
+	public Complex getBaselineCorrectedData() {
+
+		return baselineCorrectedData;
+	}
+
+	public void setBaselineCorrectedData(Complex baselineCorrectedData) {
+
+		this.baselineCorrectedData = baselineCorrectedData;
 	}
 
 	@Override
