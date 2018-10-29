@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -78,7 +78,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 			//
 			for(IChromatogramPeakMSD chromatogramPeak : chromatogramPeaks) {
 				IPeakMassSpectrum peakMassSpectrum = chromatogramPeak.getExtractedMassSpectrum();
-				List<IPeakTarget> peakTargets = new ArrayList<>(chromatogramPeak.getTargets());
+				List<IIdentificationTarget> peakTargets = new ArrayList<>(chromatogramPeak.getTargets());
 				Collections.sort(peakTargets, targetExtendedComparator);
 				//
 				List<String> targetValues = new ArrayList<String>();
@@ -89,7 +89,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 				targetValues.add("#A70000"); // color
 				targetValues.add("0.75"); // opacity
 				if(peakTargets.size() > 0) {
-					IPeakTarget peakTarget = peakTargets.get(0);
+					IIdentificationTarget peakTarget = peakTargets.get(0);
 					targetValues.add(peakTarget.getLibraryInformation().getName()); // identification
 					targetValues.add(decimalFormat.format(peakTarget.getComparisonResult().getMatchFactor())); // matchFactor
 					targetValues.add(decimalFormat.format(peakTarget.getComparisonResult().getReverseMatchFactor())); // reverseMatchFactor
