@@ -56,7 +56,7 @@ public class PeakFilter extends AbstractPeakFilter {
 			IonSettingUtil settingIon = new IonSettingUtil();
 			IMarkedIons ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(ionRemoverPeakFilterSettings.getIonsToRemove())));
 			for(IPeakMSD peak : peaks) {
-				peak.removeAllTargets();
+				peak.getTargets().clear();
 				IPeakMassSpectrum peakMassSpectrum = peak.getPeakModel().getPeakMassSpectrum();
 				peakMassSpectrum.removeIons(ionsToRemove);
 			}
