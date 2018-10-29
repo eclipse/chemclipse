@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.identifier;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifier;
@@ -27,9 +28,10 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilder;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.PathResolver;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
@@ -37,9 +39,6 @@ import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
@@ -110,10 +109,10 @@ public class BasePeakIdentifier {
 			/*
 			 * Add the peak target
 			 */
-			IMassSpectrumComparisonResult comparisonResult = getComparisonResult();
-			IPeakTarget peakTarget = targetBuilder.getPeakTarget(massSpectrum, comparisonResult, IDENTIFIER);
+			IComparisonResult comparisonResult = getComparisonResult();
+			IIdentificationTarget peakTarget = targetBuilder.getPeakTarget(massSpectrum, comparisonResult, IDENTIFIER);
 			setLibraryInformationFields(peakTarget.getLibraryInformation(), name);
-			peak.addTarget(peakTarget);
+			peak.getTargets().add(peakTarget);
 			/*
 			 * Add the classifier field.
 			 */
@@ -135,11 +134,11 @@ public class BasePeakIdentifier {
 		peakIdentifier.identify(peaksNotFound, peakIdentifierSettings, monitor);
 		//
 		for(IPeakMSD peak : peaksNotFound) {
-			List<IPeakTarget> peakTargets = peak.getTargets();
+			Set<IIdentificationTarget> peakTargets = peak.getTargets();
 			if(containsMoreThanOneBasePeakIdentification(peakTargets)) {
-				IPeakTarget peakTargetToRemove = null;
+				IIdentificationTarget peakTargetToRemove = null;
 				exitloop:
-				for(IPeakTarget peakTarget : peakTargets) {
+				for(IIdentificationTarget peakTarget : peakTargets) {
 					ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
 					if(libraryInformation.getName().equals(NOTFOUND)) {
 						peakTargetToRemove = peakTarget;
@@ -148,7 +147,7 @@ public class BasePeakIdentifier {
 				}
 				//
 				if(peakTargetToRemove != null) {
-					peak.removeTarget(peakTargetToRemove);
+					peak.getTargets().remove(peakTargetToRemove);
 				}
 			}
 		}
@@ -162,11 +161,11 @@ public class BasePeakIdentifier {
 			IScanMSD massSpectrum = massSpectrumList.get(i);
 			// identify the scan
 			String name = getIdentification(massSpectrum, settings, i);
-			IMassSpectrumComparisonResult comparisonResult = getComparisonResult();
+			IComparisonResult comparisonResult = getComparisonResult();
 			// construct a new target object using targetBuilder and assign the data to it
-			IScanTargetMSD massSpectrumTarget = targetBuilder.getMassSpectrumTarget(massSpectrum, comparisonResult, IDENTIFIER);
+			IIdentificationTarget massSpectrumTarget = targetBuilder.getMassSpectrumTarget(massSpectrum, comparisonResult, IDENTIFIER);
 			setLibraryInformationFields(massSpectrumTarget.getLibraryInformation(), name);
-			massSpectrum.addTarget(massSpectrumTarget);
+			massSpectrum.getTargets().add(massSpectrumTarget);
 			/*
 			 * Grep all not identified scans.
 			 */
@@ -184,20 +183,19 @@ public class BasePeakIdentifier {
 		massSpectrumIdentifier.identify(scansNotFound, massSpectrumIdentifierSettings, monitor);
 		//
 		for(IScanMSD scan : scansNotFound) {
-			List<IScanTargetMSD> scanTargets = scan.getTargets();
-			if(containsMoreThanOneBasePeakIdentificationMassSpectrum(scanTargets)) {
-				IScanTargetMSD peakTargetToRemove = null;
+			if(containsMoreThanOneBasePeakIdentificationMassSpectrum(scan.getTargets())) {
+				IIdentificationTarget targetToRemove = null;
 				exitloop:
-				for(IScanTargetMSD scanTarget : scanTargets) {
-					ILibraryInformation libraryInformation = scanTarget.getLibraryInformation();
+				for(IIdentificationTarget target : scan.getTargets()) {
+					ILibraryInformation libraryInformation = target.getLibraryInformation();
 					if(libraryInformation.getName().equals(NOTFOUND)) {
-						peakTargetToRemove = scanTarget;
+						targetToRemove = target;
 						break exitloop;
 					}
 				}
 				//
-				if(peakTargetToRemove != null) {
-					scan.removeTarget(peakTargetToRemove);
+				if(targetToRemove != null) {
+					scan.getTargets().remove(targetToRemove);
 				}
 			}
 		}
@@ -302,9 +300,9 @@ public class BasePeakIdentifier {
 			return NOTFOUND;
 	}
 
-	private IMassSpectrumComparisonResult getComparisonResult() {
+	private IComparisonResult getComparisonResult() {
 
-		return new MassSpectrumComparisonResult(100.0f, 100.0f, 100.0f, 100.0f);
+		return new ComparisonResult(100.0f, 100.0f, 100.0f, 100.0f);
 	}
 
 	private void setIdentifierSettings(IIdentifierSettingsMSD identifierSettings) {
@@ -329,10 +327,10 @@ public class BasePeakIdentifier {
 		fileIdentifierSettings.setAlternateIdentifierId(IDENTIFIER);
 	}
 
-	private boolean containsMoreThanOneBasePeakIdentification(List<IPeakTarget> peakTargets) {
+	private boolean containsMoreThanOneBasePeakIdentification(Set<IIdentificationTarget> peakTargets) {
 
 		int counter = 0;
-		for(IPeakTarget peakTarget : peakTargets) {
+		for(IIdentificationTarget peakTarget : peakTargets) {
 			if(peakTarget.getIdentifier().equals(IDENTIFIER)) {
 				counter++;
 				if(counter > 1) {
@@ -343,11 +341,11 @@ public class BasePeakIdentifier {
 		return false;
 	}
 
-	private boolean containsMoreThanOneBasePeakIdentificationMassSpectrum(List<IScanTargetMSD> massSpectrumTargets) {
+	private boolean containsMoreThanOneBasePeakIdentificationMassSpectrum(Set<IIdentificationTarget> targets) {
 
 		int counter = 0;
-		for(IScanTargetMSD peakTarget : massSpectrumTargets) {
-			if(peakTarget.getIdentifier().equals(IDENTIFIER)) {
+		for(IIdentificationTarget target : targets) {
+			if(target.getIdentifier().equals(IDENTIFIER)) {
 				counter++;
 				if(counter > 1) {
 					return true;

@@ -15,7 +15,7 @@ package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.classifier;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.identifier.BasePeakIdentifier;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.ILigninRatios;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.LigninRatios;
@@ -37,7 +37,7 @@ public class BasePeakClassifier {
 		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogramMSD();
 		List<IChromatogramPeakMSD> peaks = chromatogramMSD.getPeaks();
 		for(IChromatogramPeakMSD peak : peaks) {
-			for(IPeakTarget peakTarget : peak.getTargets()) {
+			for(IIdentificationTarget peakTarget : peak.getTargets()) {
 				String name = peakTarget.getLibraryInformation().getName();
 				if(name.equals(BasePeakIdentifier.SYRINGYL)) {
 					counterS += peak.getIntegratedArea();
