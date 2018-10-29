@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -41,7 +42,6 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.PeakQuantitation;
 import org.eclipse.chemclipse.model.support.PeakQuantitations;
 import org.eclipse.chemclipse.model.support.PeakQuantitationsExtractor;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -52,8 +52,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
-import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -534,7 +532,7 @@ public class ReportWriter1 {
 		 */
 		int counter = 1;
 		for(IChromatogramPeakMSD peak : peaks) {
-			List<IPeakTarget> peakTargets = peak.getTargets();
+			Set<IIdentificationTarget> peakTargets = peak.getTargets();
 			if(peakTargets.size() > 0) {
 				printWriter.println(RESULTS_DELIMITER);
 				printTargetsData(printWriter, peakTargets, Integer.toString(counter), monitor);
@@ -555,10 +553,9 @@ public class ReportWriter1 {
 			 */
 			for(int i = 1; i <= chromatogram.getNumberOfScans(); i++) {
 				IVendorMassSpectrum massSpectrum = chromatogram.getSupplierScan(i);
-				List<IScanTargetMSD> massSpectrumTargets = massSpectrum.getTargets();
-				if(massSpectrumTargets.size() > 0) {
+				if(massSpectrum.getTargets().size() > 0) {
 					printWriter.println(RESULTS_DELIMITER);
-					printTargetsData(printWriter, massSpectrumTargets, Integer.toString(i), monitor);
+					printTargetsData(printWriter, massSpectrum.getTargets(), Integer.toString(i), monitor);
 				}
 			}
 		} else {
@@ -572,8 +569,7 @@ public class ReportWriter1 {
 		exitloop:
 		for(int i = 1; i <= chromatogram.getNumberOfScans(); i++) {
 			IVendorMassSpectrum massSpectrum = chromatogram.getSupplierScan(i);
-			List<IScanTargetMSD> massSpectrumTargets = massSpectrum.getTargets();
-			if(massSpectrumTargets.size() > 0) {
+			if(massSpectrum.getTargets().size() > 0) {
 				scanTargetAvailable = true;
 				break exitloop;
 			}
@@ -587,7 +583,7 @@ public class ReportWriter1 {
 		/*
 		 * Get the targets
 		 */
-		List<IChromatogramTargetMSD> chromatogramTargets = chromatogram.getTargets();
+		Set<IIdentificationTarget> chromatogramTargets = chromatogram.getTargets();
 		if(chromatogramTargets.size() > 0) {
 			printTargetsHeadline(printWriter, null, monitor);
 			printTargetsData(printWriter, chromatogramTargets, null, monitor);
@@ -637,49 +633,44 @@ public class ReportWriter1 {
 	 * @param prefix
 	 * @param monitor
 	 */
-	private void printTargetsData(PrintWriter printWriter, List<? extends ITarget> targets, String prefix, IProgressMonitor monitor) {
+	private void printTargetsData(PrintWriter printWriter, Set<IIdentificationTarget> targets, String prefix, IProgressMonitor monitor) {
 
 		/*
 		 * Iterate through all targets
 		 */
 		for(ITarget target : targets) {
+			IIdentificationTarget identificationEntry = (IIdentificationTarget)target;
+			ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
+			IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
 			/*
-			 * Test if it's an identification entry.
+			 * 
 			 */
-			if(target instanceof IIdentificationTarget) {
-				IIdentificationTarget identificationEntry = (IIdentificationTarget)target;
-				ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
-				IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
-				/*
-				 * 
-				 */
-				if(prefix != null) {
-					printWriter.print("[" + prefix + "]");
-					printWriter.print(DELIMITER);
-				}
-				printWriter.print(libraryInformation.getName());
+			if(prefix != null) {
+				printWriter.print("[" + prefix + "]");
 				printWriter.print(DELIMITER);
-				printWriter.print(libraryInformation.getCasNumber());
-				printWriter.print(DELIMITER);
-				printWriter.print(decimalFormat.format(comparisonResult.getMatchFactor()));
-				printWriter.print(DELIMITER);
-				printWriter.print(decimalFormat.format(comparisonResult.getReverseMatchFactor()));
-				printWriter.print(DELIMITER);
-				printWriter.print(libraryInformation.getFormula());
-				printWriter.print(DELIMITER);
-				printWriter.print(decimalFormat.format(libraryInformation.getMolWeight()));
-				printWriter.print(DELIMITER);
-				printWriter.print(decimalFormat.format(comparisonResult.getProbability()));
-				printWriter.print(DELIMITER);
-				printWriter.print(comparisonResult.getAdvise());
-				printWriter.print(DELIMITER);
-				printWriter.print(identificationEntry.getIdentifier());
-				printWriter.print(DELIMITER);
-				printWriter.print(libraryInformation.getMiscellaneous());
-				printWriter.print(DELIMITER);
-				printWriter.print(libraryInformation.getComments());
-				printWriter.println("");
 			}
+			printWriter.print(libraryInformation.getName());
+			printWriter.print(DELIMITER);
+			printWriter.print(libraryInformation.getCasNumber());
+			printWriter.print(DELIMITER);
+			printWriter.print(decimalFormat.format(comparisonResult.getMatchFactor()));
+			printWriter.print(DELIMITER);
+			printWriter.print(decimalFormat.format(comparisonResult.getReverseMatchFactor()));
+			printWriter.print(DELIMITER);
+			printWriter.print(libraryInformation.getFormula());
+			printWriter.print(DELIMITER);
+			printWriter.print(decimalFormat.format(libraryInformation.getMolWeight()));
+			printWriter.print(DELIMITER);
+			printWriter.print(decimalFormat.format(comparisonResult.getProbability()));
+			printWriter.print(DELIMITER);
+			printWriter.print(comparisonResult.getAdvise());
+			printWriter.print(DELIMITER);
+			printWriter.print(identificationEntry.getIdentifier());
+			printWriter.print(DELIMITER);
+			printWriter.print(libraryInformation.getMiscellaneous());
+			printWriter.print(DELIMITER);
+			printWriter.print(libraryInformation.getComments());
+			printWriter.println("");
 		}
 	}
 

@@ -20,6 +20,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
@@ -31,7 +32,6 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
@@ -118,7 +118,7 @@ public class ReportWriter2 {
 			//
 			IPeakModel peakModel = peak.getPeakModel();
 			int retentionTime = peakModel.getRetentionTimeAtPeakMaximum();
-			List<IPeakTarget> peakTargets = peak.getTargets();
+			Set<IIdentificationTarget> peakTargets = peak.getTargets();
 			ILibraryInformation libraryInformation = getBestLibraryInformation(peakTargets);
 			//
 			if(libraryInformation != null) {
@@ -261,7 +261,7 @@ public class ReportWriter2 {
 			for(IPeak referencedPeak : referencedChromatogram.getPeaks()) {
 				int retentionTime = referencedPeak.getPeakModel().getRetentionTimeAtPeakMaximum();
 				if(retentionTime >= minRetentionTime && retentionTime <= maxRetentionTime) {
-					List<IPeakTarget> peakTargets = referencedPeak.getTargets();
+					Set<IIdentificationTarget> peakTargets = referencedPeak.getTargets();
 					if(useBestMatch) {
 						/*
 						 * Best match
@@ -275,7 +275,7 @@ public class ReportWriter2 {
 						/*
 						 * Targets contains match.
 						 */
-						for(IPeakTarget peakTarget : peakTargets) {
+						for(IIdentificationTarget peakTarget : peakTargets) {
 							ILibraryInformation referencedLibraryInformation = peakTarget.getLibraryInformation();
 							if(isPeakTargetMatch(libraryInformation, referencedLibraryInformation)) {
 								peak = referencedPeak;
@@ -347,7 +347,7 @@ public class ReportWriter2 {
 		return retentionIndex;
 	}
 
-	private ILibraryInformation getBestLibraryInformation(List<IPeakTarget> targets) {
+	private ILibraryInformation getBestLibraryInformation(Set<IIdentificationTarget> targets) {
 
 		ILibraryInformation libraryInformation = null;
 		IIdentificationTarget identificationTarget = getBestIdentificationTarget(targets);
@@ -357,13 +357,13 @@ public class ReportWriter2 {
 		return libraryInformation;
 	}
 
-	private IIdentificationTarget getBestIdentificationTarget(List<? extends IIdentificationTarget> targets) {
+	private IIdentificationTarget getBestIdentificationTarget(Set<IIdentificationTarget> targets) {
 
 		IIdentificationTarget identificationTarget = null;
-		targets = new ArrayList<IIdentificationTarget>(targets);
-		Collections.sort(targets, targetExtendedComparator);
-		if(targets.size() >= 1) {
-			identificationTarget = targets.get(0);
+		List<IIdentificationTarget> targetsList = new ArrayList<IIdentificationTarget>(targets);
+		Collections.sort(targetsList, targetExtendedComparator);
+		if(targetsList.size() >= 1) {
+			identificationTarget = targetsList.get(0);
 		}
 		return identificationTarget;
 	}
