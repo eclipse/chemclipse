@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -119,7 +117,7 @@ public class ReportWriter2 {
 			IPeakModel peakModel = peak.getPeakModel();
 			int retentionTime = peakModel.getRetentionTimeAtPeakMaximum();
 			Set<IIdentificationTarget> peakTargets = peak.getTargets();
-			ILibraryInformation libraryInformation = getBestLibraryInformation(peakTargets);
+			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peakTargets, targetExtendedComparator);
 			//
 			if(libraryInformation != null) {
 				printWriter.print((libraryInformation != null) ? libraryInformation.getName() : "");
@@ -266,7 +264,7 @@ public class ReportWriter2 {
 						/*
 						 * Best match
 						 */
-						ILibraryInformation referencedLibraryInformation = getBestLibraryInformation(peakTargets);
+						ILibraryInformation referencedLibraryInformation = IIdentificationTarget.getBestLibraryInformation(peakTargets, targetExtendedComparator);
 						if(isPeakTargetMatch(libraryInformation, referencedLibraryInformation)) {
 							peak = referencedPeak;
 							break exitloop;
@@ -345,26 +343,5 @@ public class ReportWriter2 {
 		}
 		//
 		return retentionIndex;
-	}
-
-	private ILibraryInformation getBestLibraryInformation(Set<IIdentificationTarget> targets) {
-
-		ILibraryInformation libraryInformation = null;
-		IIdentificationTarget identificationTarget = getBestIdentificationTarget(targets);
-		if(identificationTarget != null) {
-			libraryInformation = identificationTarget.getLibraryInformation();
-		}
-		return libraryInformation;
-	}
-
-	private IIdentificationTarget getBestIdentificationTarget(Set<IIdentificationTarget> targets) {
-
-		IIdentificationTarget identificationTarget = null;
-		List<IIdentificationTarget> targetsList = new ArrayList<IIdentificationTarget>(targets);
-		Collections.sort(targetsList, targetExtendedComparator);
-		if(targetsList.size() >= 1) {
-			identificationTarget = targetsList.get(0);
-		}
-		return identificationTarget;
 	}
 }
