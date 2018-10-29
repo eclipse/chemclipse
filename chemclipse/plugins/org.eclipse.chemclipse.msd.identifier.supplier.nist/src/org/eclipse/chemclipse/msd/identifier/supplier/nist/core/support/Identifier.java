@@ -27,17 +27,23 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.TargetCombinedComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationResults;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResult;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
+import org.eclipse.chemclipse.model.implementation.IdentificationResult;
+import org.eclipse.chemclipse.model.implementation.IdentificationResults;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compounds;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompound;
@@ -55,14 +61,6 @@ import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorPeakI
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumIdentificationResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumIdentificationResults;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumIdentificationResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumIdentificationResults;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumLibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.model.implementation.PeakIdentificationResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -105,7 +103,7 @@ public class Identifier {
 	 */
 	public IMassSpectra runMassSpectrumIdentification(List<IScanMSD> massSpectrumList, IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
-		IMassSpectrumIdentificationResults identificationResults = new MassSpectrumIdentificationResults();
+		IIdentificationResults identificationResults = new IdentificationResults();
 		/*
 		 * Get the OS NIST support. Use Wine in a non MS-Windows system.
 		 */
@@ -610,7 +608,7 @@ public class Identifier {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		IPeakIdentificationResult identificationResult;
-		IPeakTarget identificationEntry;
+		IIdentificationTarget identificationEntry;
 		//
 		float minMatchFactor = PreferenceSupplier.getMinMatchFactor();
 		float minReverseMatchFactor = PreferenceSupplier.getMinReverseMatchFactor();
@@ -627,7 +625,7 @@ public class Identifier {
 				/*
 				 * Extract all hits and set the identification result.
 				 */
-				List<IPeakTarget> peakTargets = new ArrayList<IPeakTarget>();
+				List<IIdentificationTarget> peakTargets = new ArrayList<IIdentificationTarget>();
 				int maxIndex = compound.size();
 				identificationResult = new PeakIdentificationResult();
 				for(int index = 1; index <= maxIndex; index++) {
@@ -658,7 +656,7 @@ public class Identifier {
 				Collections.sort(peakTargets, targetCombinedComparator);
 				int size = (numberOfTargets <= peakTargets.size()) ? numberOfTargets : peakTargets.size();
 				for(int i = 0; i < size; i++) {
-					peak.addTarget(peakTargets.get(i));
+					peak.getTargets().add(peakTargets.get(i));
 				}
 				/*
 				 * Add the identification result to the results list.
@@ -697,11 +695,11 @@ public class Identifier {
 	 * @param index
 	 * @return {@link INistPeakIdentificationEntry}
 	 */
-	public IPeakTarget getPeakIdentificationEntry(ICompound compound, int index) {
+	public IIdentificationTarget getPeakIdentificationEntry(ICompound compound, int index) {
 
 		IHit hit = compound.getHit(index);
 		//
-		IPeakTarget identificationEntry = null;
+		IIdentificationTarget identificationEntry = null;
 		IPeakComparisonResult comparisonResult;
 		/*
 		 * Get the library information.
@@ -717,7 +715,7 @@ public class Identifier {
 		 */
 		comparisonResult = new PeakComparisonResult(hit.getMF(), hit.getRMF(), 0.0f, 0.0f, hit.getProb());
 		try {
-			identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
+			identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
 		}
@@ -741,7 +739,7 @@ public class Identifier {
 	 * @param monitor
 	 * @return INistMassSpectrumIdentificationResults
 	 */
-	private IMassSpectrumIdentificationResults assignMassSpectrumCompounds(List<ICompound> compounds, List<IScanMSD> massSpectra, IMassSpectrumIdentificationResults identificationResults, IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, Map<String, String> identifier, IProgressMonitor monitor) {
+	private IIdentificationResults assignMassSpectrumCompounds(List<ICompound> compounds, List<IScanMSD> massSpectra, IIdentificationResults identificationResults, IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, Map<String, String> identifier, IProgressMonitor monitor) {
 
 		/*
 		 * If the compounds and peaks are different, there must have gone
@@ -752,7 +750,7 @@ public class Identifier {
 		}
 		IScanMSD massSpectrum;
 		ICompound compound;
-		IMassSpectrumIdentificationResult identificationResult;
+		IIdentificationResult identificationResult;
 		monitor.subTask("Assign the identified mass spectra.");
 		/*
 		 * Add the targets to each mass spectrum and to the identification
@@ -782,18 +780,18 @@ public class Identifier {
 	 * @param massSpectrumIdentifierSettings
 	 * @return INistMassSpectrumIdentificationResult
 	 */
-	public IMassSpectrumIdentificationResult getMassSpectrumIdentificationResult(IScanMSD massSpectrum, ICompound compound, IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings) {
+	public IIdentificationResult getMassSpectrumIdentificationResult(IScanMSD massSpectrum, ICompound compound, IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings) {
 
 		int numberOfTargets = massSpectrumIdentifierSettings.getNumberOfTargets();
-		List<IScanTargetMSD> massSpectrumTargets = new ArrayList<IScanTargetMSD>();
-		IMassSpectrumIdentificationResult identificationResult = new MassSpectrumIdentificationResult();
+		List<IIdentificationTarget> massSpectrumTargets = new ArrayList<IIdentificationTarget>();
+		IIdentificationResult identificationResult = new IdentificationResult();
 		//
 		for(int index = 1; index <= compound.size(); index++) {
 			/*
 			 * The targets shall not be stored in the peak in all cases.
 			 */
 			IHit hit = compound.getHit(index);
-			IScanTargetMSD identificationEntry = getMassSpectrumIdentificationEntry(hit, compound);
+			IIdentificationTarget identificationEntry = getMassSpectrumIdentificationEntry(hit, compound);
 			identificationEntry.setIdentifier(IConstants.NIST_IDENTIFIER);
 			if(massSpectrumIdentifierSettings.getStoreTargets()) {
 				massSpectrumTargets.add(identificationEntry);
@@ -806,7 +804,7 @@ public class Identifier {
 		Collections.sort(massSpectrumTargets, targetCombinedComparator);
 		int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
 		for(int i = 0; i < size; i++) {
-			massSpectrum.addTarget(massSpectrumTargets.get(i));
+			massSpectrum.getTargets().add(massSpectrumTargets.get(i));
 		}
 		//
 		return identificationResult;
@@ -818,15 +816,15 @@ public class Identifier {
 	 * @param hit
 	 * @return INistMassSpectrumIdentificationEntry
 	 */
-	public IScanTargetMSD getMassSpectrumIdentificationEntry(IHit hit, ICompound compound) {
+	public IIdentificationTarget getMassSpectrumIdentificationEntry(IHit hit, ICompound compound) {
 
-		IScanTargetMSD identificationEntry = null;
+		IIdentificationTarget identificationEntry = null;
 		ILibraryInformation libraryInformation;
 		IComparisonResult comparisonResult;
 		/*
 		 * Get the library information.
 		 */
-		libraryInformation = new MassSpectrumLibraryInformation();
+		libraryInformation = new LibraryInformation();
 		libraryInformation.setName(getName(hit.getName()));
 		libraryInformation.setCasNumber(hit.getCAS());
 		libraryInformation.setMiscellaneous(COMPOUND_IN_LIB_FACTOR + compound.getCompoundInLibraryFactor());
@@ -835,9 +833,9 @@ public class Identifier {
 		/*
 		 * Get the match factor and reverse match factor values.
 		 */
-		comparisonResult = new MassSpectrumComparisonResult(hit.getMF(), hit.getRMF(), 0.0f, 0.0f, hit.getProb());
+		comparisonResult = new ComparisonResult(hit.getMF(), hit.getRMF(), 0.0f, 0.0f, hit.getProb());
 		try {
-			identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
+			identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
 		}
