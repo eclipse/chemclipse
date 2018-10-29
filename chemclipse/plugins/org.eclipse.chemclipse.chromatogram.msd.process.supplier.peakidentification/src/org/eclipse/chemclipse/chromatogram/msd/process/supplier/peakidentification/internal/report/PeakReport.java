@@ -16,8 +16,8 @@ import java.io.PrintWriter;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 
@@ -99,12 +99,12 @@ public class PeakReport {
 		printWriter.print("\t");
 		printWriter.print("Comments");
 		printWriter.println("");
-		for(IPeakTarget peakTarget : peak.getTargets()) {
+		for(IIdentificationTarget peakTarget : peak.getTargets()) {
 			/*
 			 * Get the hits.
 			 */
-			if(peakTarget instanceof IPeakTarget) {
-				IPeakTarget peakIdentificationEntry = (IPeakTarget)peakTarget;
+			if(peakTarget instanceof IIdentificationTarget) {
+				IIdentificationTarget peakIdentificationEntry = (IIdentificationTarget)peakTarget;
 				IComparisonResult comparisonResult = peakIdentificationEntry.getComparisonResult();
 				ILibraryInformation libraryInformation = peakIdentificationEntry.getLibraryInformation();
 				/*
