@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkaneIdentifier;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -21,13 +22,13 @@ import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
@@ -127,7 +128,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 				//
 				if(peaks.size() > 0) {
 					IPeak peak = peaks.get(0);
-					List<IPeakTarget> targets = peak.getTargets();
+					Set<IIdentificationTarget> targets = peak.getTargets();
 					targetsViewerUI.setInput(targets);
 					targetsViewerUI.getTable().setSelection(0);
 				}
@@ -335,7 +336,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		 * Delete all other targets.
 		 */
 		if(deleteOtherTargets) {
-			peak.removeAllTargets();
+			peak.getTargets().clear();
 		}
 		//
 		try {
@@ -344,9 +345,9 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 			libraryInformation.setName(name);
 			libraryInformation.setDatabase(databaseName); // Important, otherwise LibraryService fails.
 			IPeakComparisonResult comparisonResult = new PeakComparisonResult(FACTOR, FACTOR, FACTOR, FACTOR, FACTOR);
-			IPeakTarget peakTarget = new PeakTarget(libraryInformation, comparisonResult);
+			IIdentificationTarget peakTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 			peakTarget.setIdentifier(AlkaneIdentifier.IDENTIFIER);
-			peak.addTarget(peakTarget);
+			peak.getTargets().add(peakTarget);
 			targetsViewerUI.setInput(peak.getTargets());
 			/*
 			 * Go to the next index.
@@ -385,8 +386,8 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 						if(chromatogramPeakMSD != null) {
 							Table table = targetsViewerUI.getTable();
 							int[] indices = table.getSelectionIndices();
-							List<IPeakTarget> targetsToRemove = getPeakTargetList(table, indices);
-							chromatogramPeakMSD.removeTargets(targetsToRemove);
+							List<IIdentificationTarget> targetsToRemove = getPeakTargetList(table, indices);
+							chromatogramPeakMSD.getTargets().removeAll(targetsToRemove);
 							targetsViewerUI.setInput(chromatogramPeakMSD.getTargets());
 							validateSelection();
 						}
@@ -448,17 +449,17 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		textCurrentIndexName.setText(availableStandards[indexSelectedStandard]);
 	}
 
-	private List<IPeakTarget> getPeakTargetList(Table table, int[] indices) {
+	private List<IIdentificationTarget> getPeakTargetList(Table table, int[] indices) {
 
-		List<IPeakTarget> targetList = new ArrayList<IPeakTarget>();
+		List<IIdentificationTarget> targetList = new ArrayList<IIdentificationTarget>();
 		for(int index : indices) {
 			/*
 			 * Get the selected item.
 			 */
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
-			if(object instanceof IPeakTarget) {
-				IPeakTarget target = (IPeakTarget)object;
+			if(object instanceof IIdentificationTarget) {
+				IIdentificationTarget target = (IIdentificationTarget)object;
 				targetList.add(target);
 			}
 		}

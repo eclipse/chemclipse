@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
@@ -22,7 +23,7 @@ import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 
 public class RetentionIndexExtractor {
 
@@ -37,9 +38,9 @@ public class RetentionIndexExtractor {
 		//
 		List<? extends IPeak> peaks = getPeaks(chromatogram);
 		for(IPeak peak : peaks) {
-			List<IPeakTarget> peakTargets = peak.getTargets();
+			Set<IIdentificationTarget> peakTargets = peak.getTargets();
 			if(peakTargets.size() > 0) {
-				String name = peakTargets.get(0).getLibraryInformation().getName().trim();
+				String name = new ArrayList<>(peakTargets).get(0).getLibraryInformation().getName().trim();
 				if(nameIndexMap.containsKey(name)) {
 					int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
 					float retentionIndex = nameIndexMap.get(name);
