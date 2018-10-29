@@ -15,12 +15,12 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.AbstractM
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.math.GeometricDistanceCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.math.IMatchCalculator;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.results.MassSpectrumComparisonResult;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
@@ -61,7 +61,7 @@ public class MassSpectrumComparator extends AbstractMassSpectrumComparator imple
 			/*
 			 * Result
 			 */
-			IMassSpectrumComparisonResult massSpectrumComparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
+			IComparisonResult massSpectrumComparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 			processingInfo.setProcessingResult(massSpectrumComparisonResult);
 		}
 		return processingInfo;
