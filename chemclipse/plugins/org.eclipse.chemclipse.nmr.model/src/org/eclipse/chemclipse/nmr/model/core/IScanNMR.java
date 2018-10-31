@@ -29,6 +29,7 @@ public interface IScanNMR extends IMeasurementInfo {
 	 *
 	 * @return the fourier-transformed data
 	 */
+	@Deprecated
 	Complex[] getFourierTransformedData();
 
 	/**
@@ -37,18 +38,27 @@ public interface IScanNMR extends IMeasurementInfo {
 	 * @param modifiedSignals
 	 *            the fourier-transformed data
 	 */
+	@Deprecated
 	void setFourierTransformedData(Complex[] data);
 
+	@Deprecated
 	Complex[] getPhaseCorrectedData();
 
+	@Deprecated
 	void setPhaseCorrectedData(Complex[] data);
 
+	@Deprecated
 	Complex[] getBaselineCorrectedData();
 
+	@Deprecated
 	void setBaselineCorrectedData(Complex[] data);
 
 	TreeSet<ISignalNMR> getProcessedSignals();
-	
+
+	int getNumberOfFourierPoints();
+
+	void setNumberOfFourierPoints(int numberOfFourierPoints);
+
 	/*
 	 * processing parameters
 	 */
@@ -63,5 +73,4 @@ public interface IScanNMR extends IMeasurementInfo {
 	Map<String, Double> getprocessingParametersMap();
 
 	void removeProcessingParameters(String key) throws InvalidHeaderModificationException;
-
 }
