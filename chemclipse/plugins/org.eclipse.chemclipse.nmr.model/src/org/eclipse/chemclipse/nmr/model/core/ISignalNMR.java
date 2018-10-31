@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.nmr.model.core;
 
 import java.io.Serializable;
 
+import org.apache.commons.math3.complex.Complex;
 import org.eclipse.chemclipse.model.core.ISignal;
 
 public interface ISignalNMR extends ISignal, Serializable {
@@ -24,4 +25,22 @@ public interface ISignalNMR extends ISignal, Serializable {
 	double getIntensity();
 
 	void setIntensity(double intensity);
+
+	Complex getFourierTransformedData();
+
+	void setFourierTransformedData(Complex fourierTransformedData);
+
+	Complex getPhaseCorrectedData();
+
+	Complex getBaselineCorrectedData();
+
+	Complex getPhaseCorrection();
+
+	void setPhaseCorrection(Complex phaseCorrection);
+
+	Complex getBaselineCorrection();
+
+	void setBaselineCorrection(Complex baselineCorrection);
+
+	void resetIntesity();
 }

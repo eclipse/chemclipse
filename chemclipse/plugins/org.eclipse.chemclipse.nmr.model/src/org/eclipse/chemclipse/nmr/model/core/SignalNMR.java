@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
+import org.apache.commons.math3.complex.Complex;
 import org.eclipse.chemclipse.model.core.AbstractSignal;
 
 public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<ISignalNMR> {
@@ -19,10 +20,71 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 	//
 	private double chemicalShift = 0.0d;
 	private double intensity = 0.0d;
+	private Complex fourierTransformedData;
+	private Complex phaseCorrection;
+	private Complex baselineCorrection;
 
+	@Deprecated
 	public SignalNMR(double chemicalShift, double intensity) {
+
 		this.chemicalShift = chemicalShift;
 		this.intensity = intensity;
+	}
+
+	public SignalNMR(double chemicalShift, Complex fourierTransformedData) {
+
+		this.chemicalShift = chemicalShift;
+		this.fourierTransformedData = fourierTransformedData;
+		this.phaseCorrection = new Complex(1.0);
+		this.baselineCorrection = new Complex(0.0);
+	}
+
+	@Override
+	public Complex getFourierTransformedData() {
+
+		return fourierTransformedData;
+	}
+
+	@Override
+	public void setFourierTransformedData(Complex fourierTransformedData) {
+
+		this.fourierTransformedData = fourierTransformedData;
+	}
+
+	@Override
+	public Complex getPhaseCorrectedData() {
+
+		return getFourierTransformedData().multiply(phaseCorrection);
+	}
+
+	@Override
+	public Complex getBaselineCorrectedData() {
+
+		return getPhaseCorrectedData().subtract(baselineCorrection);
+	}
+
+	@Override
+	public Complex getPhaseCorrection() {
+
+		return phaseCorrection;
+	}
+
+	@Override
+	public void setPhaseCorrection(Complex phaseCorrection) {
+
+		this.phaseCorrection = phaseCorrection;
+	}
+
+	@Override
+	public Complex getBaselineCorrection() {
+
+		return baselineCorrection;
+	}
+
+	@Override
+	public void setBaselineCorrection(Complex baselineCorrection) {
+
+		this.baselineCorrection = baselineCorrection;
 	}
 
 	@Override
@@ -59,6 +121,12 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 	public void setIntensity(double intensity) {
 
 		this.intensity = intensity;
+	}
+
+	@Override
+	public void resetIntesity() {
+
+		this.intensity = getBaselineCorrectedData().getReal();
 	}
 
 	@Override
