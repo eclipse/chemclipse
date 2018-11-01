@@ -31,7 +31,7 @@ public class FirstDerivativePeakDetectorMSDSettings extends AbstractPeakDetector
 	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_SN_RATIO_MIN, maxValue = PreferenceSupplier.MIN_SN_RATIO_MAX)
 	private float minimumSignalToNoiseRatio;
-	@JsonProperty(value = "Window Size", defaultValue = "SCANS_5")
+	@JsonProperty(value = "Window Size", defaultValue = "WIDTH_5")
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
 	@EnumSelectionSettingProperty
 	private WindowSize windowSize = WindowSize.WIDTH_5;
