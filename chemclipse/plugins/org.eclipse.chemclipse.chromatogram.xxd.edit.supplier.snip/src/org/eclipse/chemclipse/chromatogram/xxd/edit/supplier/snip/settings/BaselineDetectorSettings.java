@@ -26,7 +26,7 @@ public class BaselineDetectorSettings extends AbstractBaselineDetectorSettings {
 	@JsonPropertyDescription(value = "The number of iterations to apply the SNIP filter.")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_ITERATIONS, maxValue = PreferenceSupplier.MAX_ITERATIONS)
 	private int iterations = PreferenceSupplier.DEF_ITERATIONS;
-	@JsonProperty(value = "Window Size", defaultValue = "SCANS_5")
+	@JsonProperty(value = "Window Size", defaultValue = "WIDTH_5")
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
 	@EnumSelectionSettingProperty
 	private WindowSize windowSize = WindowSize.WIDTH_5;
