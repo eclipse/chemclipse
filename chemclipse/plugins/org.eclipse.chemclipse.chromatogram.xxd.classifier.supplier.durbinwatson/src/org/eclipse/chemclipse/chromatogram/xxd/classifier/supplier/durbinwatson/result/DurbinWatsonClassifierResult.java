@@ -19,11 +19,10 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 
 public class DurbinWatsonClassifierResult extends AbstractChromatogramClassifierResult implements IDurbinWatsonClassifierResult {
 
-	private List<ISavitzkyGolayFilterRating> savitzkyGolayFilterRatings;
+	private List<ISavitzkyGolayFilterRating> savitzkyGolayFilterRatings = new ArrayList<ISavitzkyGolayFilterRating>();
 
 	public DurbinWatsonClassifierResult(ResultStatus resultStatus, String description) {
 		super(resultStatus, description);
-		savitzkyGolayFilterRatings = new ArrayList<ISavitzkyGolayFilterRating>();
 	}
 
 	@Override
