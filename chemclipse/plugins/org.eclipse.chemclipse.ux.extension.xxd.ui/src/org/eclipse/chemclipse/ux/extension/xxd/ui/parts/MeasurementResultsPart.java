@@ -42,9 +42,6 @@ public class MeasurementResultsPart extends AbstractDataUpdateSupport implements
 	@Override
 	public void registerEvents() {
 
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
 		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
 	}
@@ -56,11 +53,12 @@ public class MeasurementResultsPart extends AbstractDataUpdateSupport implements
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			Object object = null;
 			if(!isUnloadEvent(topic)) {
-				object = objects.get(0);
+				Object object = objects.get(0);
+				extendedMeasurementResultUI.update(object);
+			} else {
+				extendedMeasurementResultUI.clear();
 			}
-			extendedMeasurementResultUI.update(object);
 		}
 	}
 

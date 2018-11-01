@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -41,6 +42,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -73,6 +75,35 @@ public class ExtendedMeasurementResultUI {
 	private String resultProviderId = "";
 	private List<IMeasurementResult> measurementResults = new ArrayList<>();
 	private SelectionListener selectionListener = null;
+	//
+	private static final String[] DEFAULT_TITLES = {};
+	private static final int DEFAULT_BOUNDS[] = {};
+	private DefaultContentProvider defaultContentProvider = new DefaultContentProvider();
+	private DefaultLabelProvider defaultLabelProvider = new DefaultLabelProvider();
+
+	private class DefaultContentProvider implements IStructuredContentProvider {
+
+		@Override
+		public Object[] getElements(Object inputElement) {
+
+			return null;
+		}
+	}
+
+	private class DefaultLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
+
+		@Override
+		public Image getColumnImage(Object element, int columnIndex) {
+
+			return null;
+		}
+
+		@Override
+		public String getColumnText(Object element, int columnIndex) {
+
+			return "";
+		}
+	}
 
 	@Inject
 	public ExtendedMeasurementResultUI(Composite parent) {
@@ -85,9 +116,16 @@ public class ExtendedMeasurementResultUI {
 		updateMeasurementResults();
 	}
 
+	public void clear() {
+
+		labelMeasurementResultInfo.setText("");
+		resultProviderId = "";
+		clearTable();
+	}
+
 	public void update(Object object) {
 
-		updateMeasurementResults(object);
+		fetchMeasurementResults(object);
 		updateChromatogramInfo(object);
 		updateMeasurementResults();
 	}
@@ -236,27 +274,21 @@ public class ExtendedMeasurementResultUI {
 
 	private void updateMeasurementResults() {
 
-		clearResults();
 		if(measurementResults.size() > 0) {
-			IMeasurementResult measurementResult = setComboMeasurementResultSelection();
+			comboMeasurementResults.setInput(measurementResults);
+			IMeasurementResult measurementResult = getSelectedMeasurementResult();
 			if(measurementResult != null) {
 				labelMeasurementResultInfo.setText(measurementResult.getDescription());
 				updateMeasurementResult(measurementResult);
 			}
-		}
-	}
-
-	private void clearResults() {
-
-		labelMeasurementResultInfo.setText("");
-		comboMeasurementResults.setInput(null);
-		if(extendedTableViewer.getContentProvider() != null) {
-			extendedTableViewer.setInput(null);
+		} else {
+			comboMeasurementResults.setInput(null);
+			clearTable();
 		}
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void updateMeasurementResults(Object object) {
+	private void fetchMeasurementResults(Object object) {
 
 		measurementResults.clear();
 		if(object instanceof IChromatogramSelection) {
@@ -281,28 +313,15 @@ public class ExtendedMeasurementResultUI {
 	private IMeasurementResult getSelectedMeasurementResult() {
 
 		IMeasurementResult measurementResult = null;
-		int index = getMeasurementResultIndexInList(measurementResults);
+		int index = getMeasurementResultIndex();
 		if(index >= 0) {
 			measurementResult = measurementResults.get(index);
-		}
-		//
-		return measurementResult;
-	}
-
-	private IMeasurementResult setComboMeasurementResultSelection() {
-
-		IMeasurementResult measurementResult = null;
-		comboMeasurementResults.setInput(measurementResults);
-		int index = getMeasurementResultIndexInList(measurementResults);
-		if(index >= 0) {
-			measurementResult = getSelectedMeasurementResult();
 			comboMeasurementResults.getCombo().select(index);
 		}
-		//
 		return measurementResult;
 	}
 
-	private int getMeasurementResultIndexInList(List<IMeasurementResult> measurementResults) {
+	private int getMeasurementResultIndex() {
 
 		int index = -1;
 		if(measurementResults != null) {
@@ -344,17 +363,9 @@ public class ExtendedMeasurementResultUI {
 				IConfigurationElement configurationElement = getMeasurementResultVisualizationProvider(resultProviderId);
 				if(configurationElement != null) {
 					try {
-						/*
-						 * Clear / Initialize
-						 */
-						Table table = extendedTableViewer.getTable();
-						extendedTableViewer.setComparator(null);
-						if(table.getItemCount() > 0) {
-							extendedTableViewer.setInput(null);
-						}
-						//
-						setContentProvider(configurationElement, table);
-						setSelectionListener(configurationElement, table);
+						clearTable();
+						setContentProvider(configurationElement);
+						setSelectionListener(configurationElement);
 						isContentProviderSet = true;
 					} catch(CoreException e) {
 						logger.info(e);
@@ -366,7 +377,24 @@ public class ExtendedMeasurementResultUI {
 		return isContentProviderSet;
 	}
 
-	private void setContentProvider(IConfigurationElement configurationElement, Table table) throws CoreException {
+	private void clearTable() {
+
+		extendedTableViewer.setComparator(null);
+		//
+		if(extendedTableViewer.getContentProvider() == null) {
+			extendedTableViewer.createColumns(DEFAULT_TITLES, DEFAULT_BOUNDS);
+			extendedTableViewer.setLabelProvider(defaultLabelProvider);
+			extendedTableViewer.setContentProvider(defaultContentProvider);
+		} else {
+			extendedTableViewer.setInput(null);
+			extendedTableViewer.setContentProvider(defaultContentProvider);
+			extendedTableViewer.createColumns(DEFAULT_TITLES, DEFAULT_BOUNDS);
+			extendedTableViewer.setLabelProvider(defaultLabelProvider);
+			extendedTableViewer.setInput(null);
+		}
+	}
+
+	private void setContentProvider(IConfigurationElement configurationElement) throws CoreException {
 
 		IMeasurementResultTitles titles = (IMeasurementResultTitles)configurationElement.createExecutableExtension(ATTRIBUTE_TITLES);
 		IStructuredContentProvider contentProvider = (IStructuredContentProvider)configurationElement.createExecutableExtension(ATTRIBUTE_CONTENT_PROVIDER);
@@ -379,9 +407,10 @@ public class ExtendedMeasurementResultUI {
 		extendedTableViewer.setComparator(viewerComparator);
 	}
 
-	private void setSelectionListener(IConfigurationElement configurationElement, Table table) {
+	private void setSelectionListener(IConfigurationElement configurationElement) {
 
 		try {
+			Table table = extendedTableViewer.getTable();
 			/*
 			 * Remove an existing listener.
 			 */
