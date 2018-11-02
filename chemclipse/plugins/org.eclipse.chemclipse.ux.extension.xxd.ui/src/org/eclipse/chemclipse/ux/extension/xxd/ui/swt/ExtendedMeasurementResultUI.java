@@ -77,11 +77,11 @@ public class ExtendedMeasurementResultUI {
 	private SelectionListener selectionListener = null;
 	//
 	private static final String[] DEFAULT_TITLES = {};
-	private static final int DEFAULT_BOUNDS[] = {};
-	private DefaultContentProvider defaultContentProvider = new DefaultContentProvider();
-	private DefaultLabelProvider defaultLabelProvider = new DefaultLabelProvider();
+	private static final int[] DEFAULT_BOUNDS = {};
+	private static final DefaultContentProvider DEFAULT_CONTENT_PROVIDER = new DefaultContentProvider();
+	private static final DefaultLabelProvider DEFAULT_LABEL_PROVIDER = new DefaultLabelProvider();
 
-	private class DefaultContentProvider implements IStructuredContentProvider {
+	private static class DefaultContentProvider implements IStructuredContentProvider {
 
 		@Override
 		public Object[] getElements(Object inputElement) {
@@ -90,7 +90,7 @@ public class ExtendedMeasurementResultUI {
 		}
 	}
 
-	private class DefaultLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
+	private static class DefaultLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -118,6 +118,7 @@ public class ExtendedMeasurementResultUI {
 
 	public void clear() {
 
+		labelChromatogramInfo.setText("");
 		labelMeasurementResultInfo.setText("");
 		resultProviderId = "";
 		clearTable();
@@ -127,6 +128,7 @@ public class ExtendedMeasurementResultUI {
 
 		fetchMeasurementResults(object);
 		updateChromatogramInfo(object);
+		resultProviderId = "";
 		updateMeasurementResults();
 	}
 
@@ -276,10 +278,14 @@ public class ExtendedMeasurementResultUI {
 
 		if(measurementResults.size() > 0) {
 			comboMeasurementResults.setInput(measurementResults);
-			IMeasurementResult measurementResult = getSelectedMeasurementResult();
-			if(measurementResult != null) {
-				labelMeasurementResultInfo.setText(measurementResult.getDescription());
-				updateMeasurementResult(measurementResult);
+			int index = getMeasurementResultIndex();
+			if(index >= 0) {
+				IMeasurementResult measurementResult = measurementResults.get(index);
+				comboMeasurementResults.getCombo().select(index);
+				if(measurementResult != null) {
+					labelMeasurementResultInfo.setText(measurementResult.getDescription());
+					updateMeasurementResult(measurementResult);
+				}
 			}
 		} else {
 			comboMeasurementResults.setInput(null);
@@ -308,17 +314,6 @@ public class ExtendedMeasurementResultUI {
 		} else {
 			labelChromatogramInfo.setText("");
 		}
-	}
-
-	private IMeasurementResult getSelectedMeasurementResult() {
-
-		IMeasurementResult measurementResult = null;
-		int index = getMeasurementResultIndex();
-		if(index >= 0) {
-			measurementResult = measurementResults.get(index);
-			comboMeasurementResults.getCombo().select(index);
-		}
-		return measurementResult;
 	}
 
 	private int getMeasurementResultIndex() {
@@ -383,14 +378,13 @@ public class ExtendedMeasurementResultUI {
 		//
 		if(extendedTableViewer.getContentProvider() == null) {
 			extendedTableViewer.createColumns(DEFAULT_TITLES, DEFAULT_BOUNDS);
-			extendedTableViewer.setLabelProvider(defaultLabelProvider);
-			extendedTableViewer.setContentProvider(defaultContentProvider);
+			extendedTableViewer.setLabelProvider(DEFAULT_LABEL_PROVIDER);
+			extendedTableViewer.setContentProvider(DEFAULT_CONTENT_PROVIDER);
 		} else {
 			extendedTableViewer.setInput(null);
-			extendedTableViewer.setContentProvider(defaultContentProvider);
+			extendedTableViewer.setContentProvider(DEFAULT_CONTENT_PROVIDER);
 			extendedTableViewer.createColumns(DEFAULT_TITLES, DEFAULT_BOUNDS);
-			extendedTableViewer.setLabelProvider(defaultLabelProvider);
-			extendedTableViewer.setInput(null);
+			extendedTableViewer.setLabelProvider(DEFAULT_LABEL_PROVIDER);
 		}
 	}
 

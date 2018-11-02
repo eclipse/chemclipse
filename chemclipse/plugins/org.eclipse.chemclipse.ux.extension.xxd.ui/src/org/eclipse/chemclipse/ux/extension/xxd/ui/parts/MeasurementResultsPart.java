@@ -52,13 +52,15 @@ public class MeasurementResultsPart extends AbstractDataUpdateSupport implements
 		/*
 		 * 0 => because only one property was used to register the event.
 		 */
-		if(objects.size() == 1) {
-			if(!isUnloadEvent(topic)) {
+		if(!isUnloadEvent(topic)) {
+			if(objects.size() == 1) {
 				Object object = objects.get(0);
 				extendedMeasurementResultUI.update(object);
 			} else {
 				extendedMeasurementResultUI.clear();
 			}
+		} else {
+			extendedMeasurementResultUI.clear();
 		}
 	}
 
