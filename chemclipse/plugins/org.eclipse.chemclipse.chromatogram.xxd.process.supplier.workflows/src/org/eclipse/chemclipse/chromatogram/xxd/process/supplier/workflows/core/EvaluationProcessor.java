@@ -32,8 +32,8 @@ import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplierMSD;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -104,10 +104,10 @@ public class EvaluationProcessor {
 		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(ChromatogramFilterTypeSupplierMSD.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_CHROMATOGRAM_MSD_FILTER, PreferenceSupplier.DEF_EVALUATION_CHROMATOGRAM_MSD_FILTER)));
 		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(ChromatogramFilterTypeSupplier.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_CHROMATOGRAM_FILTER, PreferenceSupplier.DEF_EVALUATION_CHROMATOGRAM_FILTER)));
 		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(BaselineDetectorTypeSupplier.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_BASELINE_DETECTOR, PreferenceSupplier.DEF_EVALUATION_BASELINE_DETECTOR)));
-		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(PeakDetectorTypeSupplier.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_PEAK_DETECTOR, PreferenceSupplier.DEF_EVALUATION_PEAK_DETECTOR)));
+		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(PeakDetectorTypeSupplierMSD.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_PEAK_DETECTOR, PreferenceSupplier.DEF_EVALUATION_PEAK_DETECTOR)));
 		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(PeakIntegratorTypeSupplier.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_PEAK_INTEGRATOR, PreferenceSupplier.DEF_EVALUATION_PEAK_INTEGRATOR)));
 		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(ChromatogramCalculatorTypeSupplier.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_CHROMATOGRAM_CALCULATOR, PreferenceSupplier.DEF_EVALUATION_CHROMATOGRAM_CALCULATOR)));
-		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(PeakIdentifierTypeSupplier.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_PEAK_IDENTIFIER, PreferenceSupplier.DEF_EVALUATION_PEAK_IDENTIFIER)));
+		chromatogramProcessingEntries.add(new ChromatogramProcessEntry(PeakIdentifierTypeSupplierMSD.CATEGORY, preferences.get(PreferenceSupplier.P_EVALUATION_PEAK_IDENTIFIER, PreferenceSupplier.DEF_EVALUATION_PEAK_IDENTIFIER)));
 		//
 		processChromatogram(chromatogramSelectionMSD, chromatogramProcessingEntries, monitor);
 	}

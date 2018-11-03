@@ -19,8 +19,8 @@ import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplierMSD;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -200,7 +200,7 @@ public class PageProcessing extends AbstractExtendedWizardPage {
 
 	private void createPeakDetectorSection(Composite parent) {
 
-		String category = PeakDetectorTypeSupplier.CATEGORY;
+		String category = PeakDetectorTypeSupplierMSD.CATEGORY;
 		GridData gridData;
 		/*
 		 * Analysis system.
@@ -299,7 +299,7 @@ public class PageProcessing extends AbstractExtendedWizardPage {
 
 	private void createPeakIdentifierSection(Composite parent) {
 
-		String category = PeakIdentifierTypeSupplier.CATEGORY;
+		String category = PeakIdentifierTypeSupplierMSD.CATEGORY;
 		GridData gridData;
 		/*
 		 * Analysis system.
@@ -341,7 +341,7 @@ public class PageProcessing extends AbstractExtendedWizardPage {
 			message = validateComboSelection(BaselineDetectorTypeSupplier.CATEGORY, comboBaselineDetector.getText().trim());
 		}
 		if(message == null) {
-			message = validateComboSelection(PeakDetectorTypeSupplier.CATEGORY, comboPeakDetector.getText().trim());
+			message = validateComboSelection(PeakDetectorTypeSupplierMSD.CATEGORY, comboPeakDetector.getText().trim());
 		}
 		if(message == null) {
 			message = validateComboSelection(PeakIntegratorTypeSupplier.CATEGORY, comboPeakIntegrator.getText().trim());
@@ -350,7 +350,7 @@ public class PageProcessing extends AbstractExtendedWizardPage {
 			message = validateComboSelection(ChromatogramCalculatorTypeSupplier.CATEGORY, comboChromatogramCalculator.getText().trim());
 		}
 		if(message == null) {
-			message = validateComboSelection(PeakIdentifierTypeSupplier.CATEGORY, comboPeakIdentifier.getText().trim());
+			message = validateComboSelection(PeakIdentifierTypeSupplierMSD.CATEGORY, comboPeakIdentifier.getText().trim());
 		}
 		/*
 		 * Updates the status

@@ -44,8 +44,8 @@ import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplierMSD;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -59,13 +59,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_EVALUATION_CHROMATOGRAM_FILTER = "";
 	public static final String P_EVALUATION_BASELINE_DETECTOR = BaselineDetectorTypeSupplier.CATEGORY;
 	public static final String DEF_EVALUATION_BASELINE_DETECTOR = "";
-	public static final String P_EVALUATION_PEAK_DETECTOR = PeakDetectorTypeSupplier.CATEGORY;
+	public static final String P_EVALUATION_PEAK_DETECTOR = PeakDetectorTypeSupplierMSD.CATEGORY;
 	public static final String DEF_EVALUATION_PEAK_DETECTOR = "";
 	public static final String P_EVALUATION_PEAK_INTEGRATOR = PeakIntegratorTypeSupplier.CATEGORY;
 	public static final String DEF_EVALUATION_PEAK_INTEGRATOR = "";
 	public static final String P_EVALUATION_CHROMATOGRAM_CALCULATOR = ChromatogramCalculatorTypeSupplier.CATEGORY;
 	public static final String DEF_EVALUATION_CHROMATOGRAM_CALCULATOR = "";
-	public static final String P_EVALUATION_PEAK_IDENTIFIER = PeakIdentifierTypeSupplier.CATEGORY;
+	public static final String P_EVALUATION_PEAK_IDENTIFIER = PeakIdentifierTypeSupplierMSD.CATEGORY;
 	public static final String DEF_EVALUATION_PEAK_IDENTIFIER = "";
 	//
 	public static final String P_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM = "samplequantFilterPathChromatogram";
