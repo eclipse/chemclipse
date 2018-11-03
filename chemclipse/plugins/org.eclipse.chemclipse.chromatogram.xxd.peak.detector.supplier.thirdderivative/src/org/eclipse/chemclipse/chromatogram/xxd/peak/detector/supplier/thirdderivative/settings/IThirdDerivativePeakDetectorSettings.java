@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 
-public interface IThirdDerivativePeakDetectorSettings extends IPeakDetectorMSDSettings {
+public interface IThirdDerivativePeakDetectorSettings extends IPeakDetectorSettingsMSD {
 
 	/*
 	 * Initial Area Reject Initial Peak Width Shoulder Detection Area Reject
