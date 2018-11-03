@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
-public interface IFirstDerivativePeakDetectorMSDSettings extends IPeakDetectorMSDSettings {
+public interface IFirstDerivativePeakDetectorMSDSettings extends IPeakDetectorSettingsMSD {
 
 	Threshold getThreshold();
 

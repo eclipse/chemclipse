@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.AbstractPeakDetectorMSD;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IDetectorSlope;
@@ -71,7 +71,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	private WindowSize movingAverageWindow = WindowSize.WIDTH_3;
 
 	@Override
-	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorMSDSettings peakDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Check whether the chromatogram selection is null or not.
@@ -91,14 +91,14 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 		return processingInfo;
 	}
 
-	private IPeakDetectorMSDSettings peakDetectorSettings;
+	private IPeakDetectorSettingsMSD peakDetectorSettings;
 
-	public IPeakDetectorMSDSettings getPeakDetectorSettings() {
+	public IPeakDetectorSettingsMSD getPeakDetectorSettings() {
 
 		return peakDetectorSettings;
 	}
 
-	public PeakDetectorMSD setPeakDetectorSettings(IPeakDetectorMSDSettings peakDetectorSettings) {
+	public PeakDetectorMSD setPeakDetectorSettings(IPeakDetectorSettingsMSD peakDetectorSettings) {
 
 		this.peakDetectorSettings = peakDetectorSettings;
 		return this;
