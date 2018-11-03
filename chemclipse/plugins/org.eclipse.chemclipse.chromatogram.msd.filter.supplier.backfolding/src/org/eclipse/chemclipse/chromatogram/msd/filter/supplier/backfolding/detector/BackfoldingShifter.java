@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.setti
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingPeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.Threshold;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.support.IBackfoldingDetectorSlopes;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -331,7 +331,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	 * 
 	 * @return List<IRawPeak>
 	 */
-	private List<IRawPeak> getRawPeaks(ITotalScanSignals totalIonSignals, IPeakDetectorMSDSettings peakDetectorSettings) {
+	private List<IRawPeak> getRawPeaks(ITotalScanSignals totalIonSignals, IPeakDetectorSettingsMSD peakDetectorSettings) {
 
 		IBackfoldingDetectorSlopes slopes;
 		slopes = BackfoldingPeakDetectorSupport.getBackfoldingSlopes(totalIonSignals, peakDetectorSettings);

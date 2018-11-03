@@ -12,12 +12,12 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingSettings;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 
 /**
  * @author eselmeister
  */
-public interface IBackfoldingPeakDetectorSettings extends IPeakDetectorMSDSettings {
+public interface IBackfoldingPeakDetectorSettings extends IPeakDetectorSettingsMSD {
 
 	Threshold INITIAL_THRESHOLD = Threshold.MEDIUM;
 

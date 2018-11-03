@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.suppo
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.support.IBackfoldingDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.support.IBackfoldingDetectorSlopes;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
@@ -53,7 +53,7 @@ public class BackfoldingPeakDetectorSupport {
 	 * @param peakDetectorSettings
 	 * @return {@link IBackfoldingDetectorSlopes}
 	 */
-	public static IBackfoldingDetectorSlopes getBackfoldingSlopes(ITotalScanSignals totalIonSignals, IPeakDetectorMSDSettings peakDetectorSettings) {
+	public static IBackfoldingDetectorSlopes getBackfoldingSlopes(ITotalScanSignals totalIonSignals, IPeakDetectorSettingsMSD peakDetectorSettings) {
 
 		setDetectorSettings(peakDetectorSettings);
 		return getBackfoldingSlopes(totalIonSignals);
@@ -66,7 +66,7 @@ public class BackfoldingPeakDetectorSupport {
 	 * @param peakDetectorSettings
 	 * @return List<IRawPeak>
 	 */
-	public static List<IRawPeak> getRawPeaks(IBackfoldingDetectorSlopes slopes, IPeakDetectorMSDSettings peakDetectorSettings) {
+	public static List<IRawPeak> getRawPeaks(IBackfoldingDetectorSlopes slopes, IPeakDetectorSettingsMSD peakDetectorSettings) {
 
 		setDetectorSettings(peakDetectorSettings);
 		return getRawPeaks(slopes);
@@ -76,7 +76,7 @@ public class BackfoldingPeakDetectorSupport {
 	/**
 	 * Sets the appropriate threshold value for this extension point.
 	 */
-	private static void setDetectorSettings(IPeakDetectorMSDSettings peakDetectorSettings) {
+	private static void setDetectorSettings(IPeakDetectorSettingsMSD peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IBackfoldingPeakDetectorSettings) {
 			IBackfoldingPeakDetectorSettings backfoldingPeakDetectorSettings = (IBackfoldingPeakDetectorSettings)peakDetectorSettings;
