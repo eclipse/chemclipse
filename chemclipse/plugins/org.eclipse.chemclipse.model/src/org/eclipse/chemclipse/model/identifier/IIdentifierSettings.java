@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-public interface IIdentifierSettings {
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+
+public interface IIdentifierSettings extends IProcessSettings {
 
 	String PENALTY_CALCULATION_NONE = "NONE";
 	String PENALTY_CALCULATION_RETENTION_INDEX = "RI";

@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
-import java.util.List;
-
-import org.eclipse.chemclipse.chromatogram.csd.identifier.peak.PeakIdentifierCSD;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupplierMSD;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupportMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.model.identifier.core.ISupplier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -26,32 +26,25 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+public class PeakIdentifierTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	public static final String CATEGORY = "Peak Identifier";
+	public static final String CATEGORY = "Peak Identifier [MSD]";
+	private static final Logger logger = Logger.getLogger(PeakIdentifierTypeSupplierMSD.class);
 
-	public PeakIdentifierTypeSupplier() {
-		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD});
-	}
-
-	@Override
-	public String getProcessorName(String processorId) throws Exception {
-
-		ISupplier peakIdentifierSupplier = PeakIdentifierMSD.getPeakIdentifierSupport().getIdentifierSupplier(processorId);
-		return peakIdentifierSupplier.getIdentifierName();
-	}
-
-	@Override
-	public String getProcessorDescription(String processorId) throws Exception {
-
-		ISupplier peakIdentifierSupplier = PeakIdentifierMSD.getPeakIdentifierSupport().getIdentifierSupplier(processorId);
-		return peakIdentifierSupplier.getDescription();
-	}
-
-	@Override
-	public List<String> getProcessorIds() throws Exception {
-
-		return PeakIdentifierMSD.getPeakIdentifierSupport().getAvailableIdentifierIds();
+	public PeakIdentifierTypeSupplierMSD() {
+		super(CATEGORY, new DataType[]{DataType.MSD});
+		try {
+			IPeakIdentifierSupportMSD support = PeakIdentifierMSD.getPeakIdentifierSupport();
+			for(String processorId : support.getAvailableIdentifierIds()) {
+				IPeakIdentifierSupplierMSD supplier = support.getIdentifierSupplier(processorId);
+				addProcessorId(processorId);
+				// addProcessorSettingsClass(processorId, supplier.getSettingsClass()); // TODO
+				addProcessorName(processorId, supplier.getIdentifierName());
+				addProcessorDescription(processorId, supplier.getDescription());
+			}
+		} catch(NoIdentifierAvailableException e) {
+			logger.warn(e);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -61,10 +54,12 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 		IProcessingInfo processingInfo;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-			processingInfo = PeakIdentifierMSD.identify(chromatogramSelectionMSD, processorId, monitor);
-		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-			IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
-			processingInfo = PeakIdentifierCSD.identify(chromatogramSelectionCSD, processorId, monitor);
+			if(processSettings instanceof IPeakIdentifierSettingsMSD) {
+				processingInfo = new ProcessingInfo(); // TODO REMOVE
+				// processingInfo = PeakIdentifierMSD.identify(chromatogramSelectionMSD, (IPeakIdentifierSettingsMSD)processSettings, processorId, monitor); // TODO
+			} else {
+				processingInfo = PeakIdentifierMSD.identify(chromatogramSelectionMSD, processorId, monitor);
+			}
 		} else {
 			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage(processorId, "The data is not supported by the processor.");

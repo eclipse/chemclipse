@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.settings;
 
-public interface IPeakQuantifierSettings {
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+
+public interface IPeakQuantifierSettings extends IProcessSettings {
 }

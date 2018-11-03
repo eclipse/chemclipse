@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.core;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupplier;
 
 public interface IPeakDetectorMSDSupplier extends IPeakDetectorSupplier {
 
 	@Override
-	Class<? extends IPeakDetectorMSDSettings> getPeakDetectorSettingsClass();
+	Class<? extends IPeakDetectorSettingsMSD> getPeakDetectorSettingsClass();
 }

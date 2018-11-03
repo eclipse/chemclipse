@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.settings;
 
-public interface IChromatogramCalculatorSettings {
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+
+public interface IChromatogramCalculatorSettings extends IProcessSettings {
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,32 +11,32 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram.ChromatogramIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram.IChromatogramIdentifierSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram.IChromatogramIdentifierSupport;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IChromatogramIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.csd.identifier.peak.IPeakIdentifierSupplierCSD;
+import org.eclipse.chemclipse.chromatogram.csd.identifier.peak.IPeakIdentifierSupportCSD;
+import org.eclipse.chemclipse.chromatogram.csd.identifier.peak.PeakIdentifierCSD;
+import org.eclipse.chemclipse.chromatogram.csd.identifier.settings.IPeakIdentifierSettingsCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+public class PeakIdentifierTypeSupplierCSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	public static final String CATEGORY = "Chromatogram Identifier [MSD]";
-	private static final Logger logger = Logger.getLogger(ChromatogramIdentifierTypeSupplier.class);
+	public static final String CATEGORY = "Peak Identifier [CSD]";
+	private static final Logger logger = Logger.getLogger(PeakIdentifierTypeSupplierCSD.class);
 
-	public ChromatogramIdentifierTypeSupplier() {
-		super(CATEGORY, new DataType[]{DataType.MSD});
+	public PeakIdentifierTypeSupplierCSD() {
+		super(CATEGORY, new DataType[]{DataType.CSD});
 		try {
-			IChromatogramIdentifierSupport support = ChromatogramIdentifier.getChromatogramIdentifierSupport();
+			IPeakIdentifierSupportCSD support = PeakIdentifierCSD.getPeakIdentifierSupport();
 			for(String processorId : support.getAvailableIdentifierIds()) {
-				IChromatogramIdentifierSupplier supplier = support.getIdentifierSupplier(processorId);
+				IPeakIdentifierSupplierCSD supplier = support.getIdentifierSupplier(processorId);
 				addProcessorId(processorId);
 				// addProcessorSettingsClass(processorId, supplier.getSettingsClass()); // TODO
 				addProcessorName(processorId, supplier.getIdentifierName());
@@ -52,12 +52,13 @@ public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSuppl
 	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
-		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-			if(processSettings instanceof IChromatogramIdentifierSettings) {
-				processingInfo = ChromatogramIdentifier.identify(chromatogramSelectionMSD, (IChromatogramIdentifierSettings)processSettings, processorId, monitor);
+		if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+			IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
+			if(processSettings instanceof IPeakIdentifierSettingsCSD) {
+				processingInfo = new ProcessingInfo(); // TODO REMOVE
+				// processingInfo = PeakIdentifierCSD.identify(chromatogramSelectionCSD, (IPeakIdentifierSettingsCSD)processSettings, processorId, monitor); // TODO
 			} else {
-				processingInfo = ChromatogramIdentifier.identify(chromatogramSelectionMSD, processorId, monitor);
+				processingInfo = PeakIdentifierCSD.identify(chromatogramSelectionCSD, processorId, monitor);
 			}
 		} else {
 			processingInfo = new ProcessingInfo();

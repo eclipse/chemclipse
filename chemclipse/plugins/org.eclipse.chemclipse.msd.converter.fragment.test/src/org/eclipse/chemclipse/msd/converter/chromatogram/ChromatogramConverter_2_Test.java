@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.chromatogram;
 
-import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+
 import junit.framework.TestCase;
 
 /**
@@ -24,7 +24,7 @@ import junit.framework.TestCase;
  */
 public class ChromatogramConverter_2_Test extends TestCase {
 
-	private ChromatogramConverterSupport support;
+	private IChromatogramConverterSupport support;
 
 	@Override
 	protected void setUp() throws Exception {

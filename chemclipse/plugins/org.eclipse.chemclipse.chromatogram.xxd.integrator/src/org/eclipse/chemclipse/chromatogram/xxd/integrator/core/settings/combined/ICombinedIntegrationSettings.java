@@ -13,8 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combine
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 
-public interface ICombinedIntegrationSettings {
+public interface ICombinedIntegrationSettings extends IProcessSettings {
 
 	IChromatogramIntegrationSettings getChromatogramIntegrationSettings();
 

@@ -14,7 +14,11 @@ package org.eclipse.chemclipse.xxd.process.supplier;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.IPeakQuantifierSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.IPeakQuantifierSupport;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.PeakQuantifier;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.exceptions.NoPeakQuantifierAvailableException;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
@@ -26,29 +30,22 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
 	public static final String CATEGORY = "Peak Quantifier";
+	private static final Logger logger = Logger.getLogger(PeakQuantitationTypeSupplier.class);
 
 	public PeakQuantitationTypeSupplier() {
 		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD});
-	}
-
-	@Override
-	public String getProcessorName(String processorId) throws Exception {
-
-		IPeakQuantifierSupplier quantifierSupplier = PeakQuantifier.getPeakQuantifierSupport().getPeakQuantifierSupplier(processorId);
-		return quantifierSupplier.getPeakQuantifierName();
-	}
-
-	@Override
-	public String getProcessorDescription(String processorId) throws Exception {
-
-		IPeakQuantifierSupplier quantifierSupplier = PeakQuantifier.getPeakQuantifierSupport().getPeakQuantifierSupplier(processorId);
-		return quantifierSupplier.getDescription();
-	}
-
-	@Override
-	public List<String> getProcessorIds() throws Exception {
-
-		return PeakQuantifier.getPeakQuantifierSupport().getAvailablePeakQuantifierIds();
+		try {
+			IPeakQuantifierSupport support = PeakQuantifier.getPeakQuantifierSupport();
+			for(String processorId : support.getAvailablePeakQuantifierIds()) {
+				IPeakQuantifierSupplier supplier = support.getPeakQuantifierSupplier(processorId);
+				addProcessorId(processorId);
+				// addProcessorSettingsClass(processorId, supplier.getSettingsClass()); // TODO
+				addProcessorName(processorId, supplier.getPeakQuantifierName());
+				addProcessorDescription(processorId, supplier.getDescription());
+			}
+		} catch(NoPeakQuantifierAvailableException e) {
+			logger.warn(e);
+		}
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -56,6 +53,10 @@ public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier im
 	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		List<IPeak> peaks = chromatogramSelection.getChromatogram().getPeaks();
-		return PeakQuantifier.quantify(peaks, processorId, monitor);
+		if(processSettings instanceof IPeakQuantifierSettings) {
+			return PeakQuantifier.quantify(peaks, (IPeakQuantifierSettings)processSettings, processorId, monitor);
+		} else {
+			return PeakQuantifier.quantify(peaks, processorId, monitor);
+		}
 	}
 }

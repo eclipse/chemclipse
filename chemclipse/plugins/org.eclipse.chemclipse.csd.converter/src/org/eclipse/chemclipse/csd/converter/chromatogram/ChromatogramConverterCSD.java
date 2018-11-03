@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramSupplier;
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.core.Converter;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
@@ -100,7 +101,7 @@ public class ChromatogramConverterCSD {
 	private static IProcessingInfo getChromatogram(final File file, boolean overview, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
-		ChromatogramConverterSupport converterSupport = getChromatogramConverterSupport();
+		IChromatogramConverterSupport converterSupport = getChromatogramConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
 			for(String converterId : availableConverterIds) {
@@ -309,7 +310,7 @@ public class ChromatogramConverterCSD {
 	 * 
 	 * @return ChromatogramConverterSupport
 	 */
-	public static ChromatogramConverterSupport getChromatogramConverterSupport() {
+	public static IChromatogramConverterSupport getChromatogramConverterSupport() {
 
 		ChromatogramSupplier supplier;
 		ChromatogramConverterSupport chromatogramConverterSupport = new ChromatogramConverterSupport();

@@ -15,7 +15,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
@@ -55,7 +55,7 @@ public class ChromatogramFileSupport {
 		dialog.setText("Save Chromatogram As...");
 		dialog.setOverwrite(true);
 		//
-		ChromatogramConverterSupport chromatogramConverterSupport = getChromatogramConvertSupport(dataType);
+		IChromatogramConverterSupport chromatogramConverterSupport = getChromatogramConvertSupport(dataType);
 		if(chromatogramConverterSupport != null) {
 			/*
 			 * Set the filters that allow an export of chromatographic data.
@@ -81,9 +81,9 @@ public class ChromatogramFileSupport {
 		}
 	}
 
-	private static ChromatogramConverterSupport getChromatogramConvertSupport(DataType dataType) {
+	private static IChromatogramConverterSupport getChromatogramConvertSupport(DataType dataType) {
 
-		ChromatogramConverterSupport converterSupport = null;
+		IChromatogramConverterSupport converterSupport = null;
 		switch(dataType) {
 			case MSD_NOMINAL:
 			case MSD_TANDEM:
@@ -126,7 +126,7 @@ public class ChromatogramFileSupport {
 		}
 	}
 
-	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, ChromatogramConverterSupport converterSupport, IChromatogram chromatogram, DataType dataType) {
+	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, IChromatogramConverterSupport converterSupport, IChromatogram chromatogram, DataType dataType) {
 
 		File chromatogramFolder = null;
 		boolean overwrite = dialog.getOverwrite();

@@ -16,5 +16,5 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings;
  * 
  * @author eselmeister
  */
-public class TestPeakDetectorSettings extends AbstractPeakDetectorMSDSettings implements IPeakDetectorMSDSettings {
+public class TestPeakDetectorSettings extends AbstractPeakDetectorMSDSettings implements IPeakDetectorSettingsMSD {
 }

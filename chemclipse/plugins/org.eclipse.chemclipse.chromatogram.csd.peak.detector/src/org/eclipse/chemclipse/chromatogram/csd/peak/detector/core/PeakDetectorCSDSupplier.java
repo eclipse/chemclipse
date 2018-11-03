@@ -11,17 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.peak.detector.core;
 
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorCSDSettings;
+import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorSettingsCSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.AbstractPeakDetectorSupplier;
 
-public class PeakDetectorCSDSupplier extends AbstractPeakDetectorSupplier<IPeakDetectorCSDSettings> implements IPeakDetectorCSDSupplier {
+public class PeakDetectorCSDSupplier extends AbstractPeakDetectorSupplier<IPeakDetectorSettingsCSD> implements IPeakDetectorCSDSupplier {
 
 	public PeakDetectorCSDSupplier(String id, String description, String peakDetectorName) {
 		super(id, description, peakDetectorName);
 	}
 
 	@Override
-	public Class<? extends IPeakDetectorCSDSettings> getPeakDetectorSettingsClass() {
+	public Class<? extends IPeakDetectorSettingsCSD> getPeakDetectorSettingsClass() {
 
 		return getSettingsClass();
 	}

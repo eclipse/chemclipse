@@ -15,7 +15,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -63,7 +63,7 @@ public class ChromatogramFileSupport {
 		dialog.setFileName(chromatogram.getName());
 		dialog.setText("Save Chromatogram As");
 		dialog.setOverwrite(true);
-		ChromatogramConverterSupport converterSupport = ChromatogramConverterMSD.getChromatogramConverterSupport();
+		IChromatogramConverterSupport converterSupport = ChromatogramConverterMSD.getChromatogramConverterSupport();
 		/*
 		 * Set the filters that allow an export of chromatographic data.
 		 */
@@ -132,7 +132,7 @@ public class ChromatogramFileSupport {
 	 * @param converterSupport
 	 * @param chromatogram
 	 */
-	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, ChromatogramConverterSupport converterSupport, IChromatogramMSD chromatogram) {
+	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, IChromatogramConverterSupport converterSupport, IChromatogramMSD chromatogram) {
 
 		File chromatogramFolder = null;
 		boolean overwrite = dialog.getOverwrite();

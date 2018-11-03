@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.wizards;
 
-import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.model.ChromatogramOutputEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
@@ -34,7 +34,7 @@ public class ChromatogramOutputEntriesWizardPage extends WizardPage {
 
 	private Combo chromatogramConverterComboBox;
 	private Text chromatogramOutputFolderTextBox;
-	private ChromatogramConverterSupport converterSupport;
+	private IChromatogramConverterSupport converterSupport;
 
 	/**
 	 * @param pageName

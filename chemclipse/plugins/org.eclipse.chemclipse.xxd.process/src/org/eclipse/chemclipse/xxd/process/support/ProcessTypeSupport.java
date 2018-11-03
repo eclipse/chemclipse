@@ -29,15 +29,21 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramExportTypeSupplierCSD;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramExportTypeSupplierMSD;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramExportTypeSupplierWSD;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramIdentifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramIntegratorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramReportTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ClassifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.CombinedIntegratorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakFilterTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplierCSD;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplierMSD;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakFilterTypeSupplierMSD;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplierCSD;
+import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakQuantitationTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -59,20 +65,24 @@ public class ProcessTypeSupport {
 		 * Add all available process supplier here.
 		 */
 		addProcessSupplier(new BaselineDetectorTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramIdentifierTypeSupplier());
+		addProcessSupplier(new ChromatogramIdentifierTypeSupplier()); // TODO
 		addProcessSupplier(new ChromatogramIntegratorTypeSupplier()); // OK
 		addProcessSupplier(new ClassifierTypeSupplier()); // OK - Improve settings
-		addProcessSupplier(new CombinedIntegratorTypeSupplier());
+		addProcessSupplier(new CombinedIntegratorTypeSupplier()); // TODO
 		addProcessSupplier(new ChromatogramFilterTypeSupplier()); // OK
 		addProcessSupplier(new ChromatogramFilterTypeSupplierMSD()); // OK
-		addProcessSupplier(new PeakFilterTypeSupplier());
-		addProcessSupplier(new PeakDetectorTypeSupplier());
-		addProcessSupplier(new PeakIdentifierTypeSupplier());
+		addProcessSupplier(new PeakFilterTypeSupplierMSD()); // TODO
+		addProcessSupplier(new PeakDetectorTypeSupplierMSD()); // TODO
+		addProcessSupplier(new PeakIdentifierTypeSupplierMSD()); // TODO
+		addProcessSupplier(new PeakDetectorTypeSupplierCSD()); // TODO
+		addProcessSupplier(new PeakIdentifierTypeSupplierCSD()); // TODO
 		addProcessSupplier(new PeakIntegratorTypeSupplier()); // OK - Improve settings
-		addProcessSupplier(new PeakQuantitationTypeSupplier());
-		addProcessSupplier(new ChromatogramCalculatorTypeSupplier());
-		// File Export
-		// Report
+		addProcessSupplier(new PeakQuantitationTypeSupplier()); // TODO
+		addProcessSupplier(new ChromatogramCalculatorTypeSupplier()); // TODO
+		addProcessSupplier(new ChromatogramReportTypeSupplier()); // TODO
+		addProcessSupplier(new ChromatogramExportTypeSupplierMSD()); // TODO
+		addProcessSupplier(new ChromatogramExportTypeSupplierCSD()); // TODO
+		addProcessSupplier(new ChromatogramExportTypeSupplierWSD()); // TODO
 	}
 
 	private void addProcessSupplier(IProcessTypeSupplier processTypeSupplier) {

@@ -77,4 +77,6 @@ public interface IChromatogramReportSupport {
 	 * @return supplier
 	 */
 	IChromatogramReportSupplier getReportSupplier(String id) throws NoReportSupplierAvailableException;
+
+	List<String> getAvailableProcessorIds() throws NoReportSupplierAvailableException;
 }

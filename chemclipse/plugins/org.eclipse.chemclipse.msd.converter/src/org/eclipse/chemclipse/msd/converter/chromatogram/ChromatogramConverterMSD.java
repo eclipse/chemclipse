@@ -19,6 +19,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.io.MassLibConverter;
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramSupplier;
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.core.Converter;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
@@ -162,7 +163,7 @@ public final class ChromatogramConverterMSD {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		List<IProcessingMessage> processingMessagesError = new ArrayList<IProcessingMessage>();
-		ChromatogramConverterSupport converterSupport = getChromatogramConverterSupport();
+		IChromatogramConverterSupport converterSupport = getChromatogramConverterSupport();
 		//
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
@@ -481,7 +482,7 @@ public final class ChromatogramConverterMSD {
 	 * 
 	 * @return ChromatogramConverterSupport
 	 */
-	public static ChromatogramConverterSupport getChromatogramConverterSupport() {
+	public static IChromatogramConverterSupport getChromatogramConverterSupport() {
 
 		ChromatogramSupplier supplier;
 		ChromatogramConverterSupport chromatogramConverterSupport = new ChromatogramConverterSupport();

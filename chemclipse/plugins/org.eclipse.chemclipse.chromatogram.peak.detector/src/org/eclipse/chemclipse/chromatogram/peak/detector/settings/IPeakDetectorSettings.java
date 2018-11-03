@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.settings;
 
-public interface IPeakDetectorSettings {
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+
+public interface IPeakDetectorSettings extends IProcessSettings {
 }

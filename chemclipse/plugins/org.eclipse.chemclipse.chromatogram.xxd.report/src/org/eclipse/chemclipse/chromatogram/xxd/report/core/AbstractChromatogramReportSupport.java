@@ -138,6 +138,20 @@ public abstract class AbstractChromatogramReportSupport implements IChromatogram
 		return instance;
 	}
 
+	@Override
+	public List<String> getAvailableProcessorIds() throws NoReportSupplierAvailableException {
+
+		/*
+		 * Test if the suppliers ArrayList is empty.
+		 */
+		areReportSuppliersStored();
+		List<String> availableProcessors = new ArrayList<String>();
+		for(IChromatogramReportSupplier supplier : suppliers) {
+			availableProcessors.add(supplier.getId());
+		}
+		return availableProcessors;
+	}
+
 	/**
 	 * Check if there are report generators stored in the
 	 * ArrayList<IChromatogramReportSupplier>.

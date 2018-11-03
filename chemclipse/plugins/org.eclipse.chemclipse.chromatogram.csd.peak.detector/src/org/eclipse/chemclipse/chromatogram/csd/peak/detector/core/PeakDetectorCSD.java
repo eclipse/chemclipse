@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.peak.detector.core;
 
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorCSDSettings;
+import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorSettingsCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -57,7 +57,7 @@ public class PeakDetectorCSD {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorCSDSettings peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorSettingsCSD peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		IPeakDetectorCSD peakDetector = getPeakDetector(peakDetectorId);
@@ -108,7 +108,7 @@ public class PeakDetectorCSD {
 			supplier = new PeakDetectorCSDSupplier(id, description, peakDetectorName);
 			if(element.getAttribute(PEAK_DETECTOR_SETTINGS) != null) {
 				try {
-					IPeakDetectorCSDSettings instance = (IPeakDetectorCSDSettings)element.createExecutableExtension(PEAK_DETECTOR_SETTINGS);
+					IPeakDetectorSettingsCSD instance = (IPeakDetectorSettingsCSD)element.createExecutableExtension(PEAK_DETECTOR_SETTINGS);
 					supplier.setPeakDetectorSettingsClass(instance.getClass());
 				} catch(CoreException e) {
 					logger.error(e.getLocalizedMessage(), e);

@@ -44,6 +44,7 @@ public class CombinedIntegrator {
 	private CombinedIntegrator() {
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings, String integratorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -56,11 +57,13 @@ public class CombinedIntegrator {
 		return processingInfo;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, String integratorId, IProgressMonitor monitor) {
 
 		return integrate(chromatogramSelection, getCombinedIntegrator(integratorId), monitor);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrator integrator, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -72,7 +75,6 @@ public class CombinedIntegrator {
 		return processingInfo;
 	}
 
-	// ---------------------------------------------------
 	public static ICombinedIntegratorSupport getCombinedIntegratorSupport() {
 
 		CombinedIntegratorSupplier supplier;
@@ -93,7 +95,6 @@ public class CombinedIntegrator {
 		return integratorSupport;
 	}
 
-	// --------------------------------------------private methods
 	private static ICombinedIntegrator getCombinedIntegrator(final String integratorId) {
 
 		IConfigurationElement element;
@@ -130,7 +131,6 @@ public class CombinedIntegrator {
 		return null;
 	}
 
-	// --------------------------------------------private methods
 	private static IProcessingInfo getNoIntegratorAvailableProcessingInfo() {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
