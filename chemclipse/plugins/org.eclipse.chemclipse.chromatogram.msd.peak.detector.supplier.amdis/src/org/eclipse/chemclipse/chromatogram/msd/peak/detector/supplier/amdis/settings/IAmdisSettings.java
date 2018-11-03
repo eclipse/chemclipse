@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 
-public interface IAmdisSettings extends IPeakDetectorMSDSettings {
+public interface IAmdisSettings extends IPeakDetectorSettingsMSD {
 
 	IOnsiteSettings getOnsiteSettings();
 

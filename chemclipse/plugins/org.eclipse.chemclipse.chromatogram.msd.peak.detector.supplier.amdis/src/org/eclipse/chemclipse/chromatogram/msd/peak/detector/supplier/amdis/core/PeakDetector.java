@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.AbstractPeakDetectorMSD;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.internal.identifier.AmdisIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IAmdisSettings;
@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class PeakDetector extends AbstractPeakDetectorMSD {
 
 	@Override
-	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorMSDSettings peakDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Validate
@@ -58,7 +58,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	@Override
 	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		IPeakDetectorMSDSettings peakDetectorSettings = PreferenceSupplier.getAmdisSettings();
+		IPeakDetectorSettingsMSD peakDetectorSettings = PreferenceSupplier.getAmdisSettings();
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);
 	}
 }
