@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
@@ -51,7 +51,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 		 * All chromatogram file extensions.
 		 */
 		chromatogramFileExtensions = new ArrayList<String>();
-		ChromatogramConverterSupport support = ChromatogramConverterMSD.getChromatogramConverterSupport();
+		IChromatogramConverterSupport support = ChromatogramConverterMSD.getChromatogramConverterSupport();
 		for(ISupplier supplier : support.getSupplier()) {
 			chromatogramFileExtensions.add(supplier.getFileExtension());
 		}
