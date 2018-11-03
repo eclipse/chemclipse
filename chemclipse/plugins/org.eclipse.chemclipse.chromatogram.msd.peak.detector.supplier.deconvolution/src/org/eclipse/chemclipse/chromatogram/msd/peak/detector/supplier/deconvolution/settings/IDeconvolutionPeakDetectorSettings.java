@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 
-public interface IDeconvolutionPeakDetectorSettings extends IPeakDetectorMSDSettings {
+public interface IDeconvolutionPeakDetectorSettings extends IPeakDetectorSettingsMSD {
 
 	Sensitivity INITIAL_SENSITIVITY = Sensitivity.MEDIUM;
 
