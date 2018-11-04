@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -58,9 +59,10 @@ public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier 
 		boolean append = false;
 		//
 		if(processSettings != null && processSettings instanceof IChromatogramReportSettings) {
-			return ChromatogramReports.generate(file, append, chromatogram, (IChromatogramReportSettings)processSettings, processorId, monitor);
+			// return ChromatogramReports.generate(file, append, chromatogram, (IChromatogramReportSettings)processSettings, processorId, monitor);
 		} else {
-			return ChromatogramReports.generate(file, append, chromatogram, processorId, monitor);
+			// return ChromatogramReports.generate(file, append, chromatogram, processorId, monitor);
 		}
+		return new ProcessingInfo(); // TODO
 	}
 }
