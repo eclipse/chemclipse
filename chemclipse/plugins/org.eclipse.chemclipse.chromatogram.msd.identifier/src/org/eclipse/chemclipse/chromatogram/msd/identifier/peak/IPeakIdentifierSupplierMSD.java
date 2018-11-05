@@ -18,5 +18,5 @@ import org.eclipse.chemclipse.model.identifier.core.ISupplier;
 public interface IPeakIdentifierSupplierMSD extends ISupplier {
 
 	@Override
-	Class<? extends IPeakIdentifierSettingsMSD> getIdentifierSettingsClass();
+	Class<? extends IPeakIdentifierSettingsMSD> getSettingsClass();
 }

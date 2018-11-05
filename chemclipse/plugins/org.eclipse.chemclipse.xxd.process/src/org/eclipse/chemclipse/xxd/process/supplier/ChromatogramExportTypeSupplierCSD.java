@@ -22,11 +22,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramExportTypeSupplierCSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	public static final String CATEGORY = "Chromatogram Export";
+	public static final String CATEGORY = "Chromatogram Export [CSD]";
 	private static final Logger logger = Logger.getLogger(ChromatogramExportTypeSupplierCSD.class);
 
 	public ChromatogramExportTypeSupplierCSD() {
-		super(CATEGORY, new DataType[]{DataType.MSD});
+		super(CATEGORY, new DataType[]{DataType.CSD});
 		// IChromatogramConverterSupport support = ChromatogramConverterCSD.getChromatogramConverterSupport(); // TODO
 	}
 

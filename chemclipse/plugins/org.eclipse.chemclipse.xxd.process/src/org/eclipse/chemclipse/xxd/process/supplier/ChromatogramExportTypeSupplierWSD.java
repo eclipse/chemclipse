@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramExportTypeSupplierWSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	public static final String CATEGORY = "Chromatogram Export";
+	public static final String CATEGORY = "Chromatogram Export [WSD]";
 	private static final Logger logger = Logger.getLogger(ChromatogramExportTypeSupplierWSD.class);
 
 	public ChromatogramExportTypeSupplierWSD() {
-		super(CATEGORY, new DataType[]{DataType.MSD});
+		super(CATEGORY, new DataType[]{DataType.WSD});
 		IChromatogramConverterSupport support = ChromatogramConverterWSD.getChromatogramConverterSupport(); // TODO
 	}
 

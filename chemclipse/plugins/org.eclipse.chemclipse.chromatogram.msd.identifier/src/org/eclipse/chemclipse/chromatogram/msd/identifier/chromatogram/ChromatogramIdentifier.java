@@ -105,6 +105,16 @@ public class ChromatogramIdentifier {
 			supplier.setId(element.getAttribute(Identifier.ID));
 			supplier.setDescription(element.getAttribute(Identifier.DESCRIPTION));
 			supplier.setIdentifierName(element.getAttribute(Identifier.IDENTIFIER_NAME));
+			if(element.getAttribute(Identifier.IDENTIFIER_SETTINGS) != null) {
+				try {
+					IChromatogramIdentifierSettings instance = (IChromatogramIdentifierSettings)element.createExecutableExtension(Identifier.IDENTIFIER_SETTINGS);
+					supplier.setIdentifierSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setIdentifierSettingsClass(null);
+				}
+			}
 			identifierSupport.add(supplier);
 		}
 		return identifierSupport;

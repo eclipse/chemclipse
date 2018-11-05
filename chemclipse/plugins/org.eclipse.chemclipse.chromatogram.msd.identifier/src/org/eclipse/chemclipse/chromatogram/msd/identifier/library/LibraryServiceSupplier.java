@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.model.identifier.core.AbstractSupplier;
 public class LibraryServiceSupplier extends AbstractSupplier<ILibraryServiceSettings> implements ILibraryServiceSupplier {
 
 	@Override
-	public Class<? extends ILibraryServiceSettings> getIdentifierSettingsClass() {
+	public Class<? extends ILibraryServiceSettings> getSettingsClass() {
 
 		return getSpecificIdentifierSettingsClass();
 	}

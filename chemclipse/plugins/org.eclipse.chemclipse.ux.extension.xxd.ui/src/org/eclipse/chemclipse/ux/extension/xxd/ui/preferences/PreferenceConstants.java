@@ -456,6 +456,12 @@ public class PreferenceConstants {
 	public static final String DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER = "";
 	public static final String P_SELECTED_METHOD_NAME = "selectedMethodName";
 	public static final String DEF_SELECTED_METHOD_NAME = "";
+	public static final String P_METHOD_PROCESSOR_SELECTION_CSD = "methodProcessorSelectionCSD";
+	public static final boolean DEF_METHOD_PROCESSOR_SELECTION_CSD = true;
+	public static final String P_METHOD_PROCESSOR_SELECTION_MSD = "methodProcessorSelectionMSD";
+	public static final boolean DEF_METHOD_PROCESSOR_SELECTION_MSD = true;
+	public static final String P_METHOD_PROCESSOR_SELECTION_WSD = "methodProcessorSelectionWSD";
+	public static final boolean DEF_METHOD_PROCESSOR_SELECTION_WSD = true;
 	/*
 	 * Quanititation
 	 */

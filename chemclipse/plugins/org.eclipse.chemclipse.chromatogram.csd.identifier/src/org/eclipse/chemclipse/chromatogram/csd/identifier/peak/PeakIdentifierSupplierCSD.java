@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.model.identifier.core.AbstractSupplier;
 public class PeakIdentifierSupplierCSD extends AbstractSupplier<IPeakIdentifierSettingsCSD> implements IPeakIdentifierSupplierCSD {
 
 	@Override
-	public Class<? extends IPeakIdentifierSettingsCSD> getIdentifierSettingsClass() {
+	public Class<? extends IPeakIdentifierSettingsCSD> getSettingsClass() {
 
 		return getSpecificIdentifierSettingsClass();
 	}

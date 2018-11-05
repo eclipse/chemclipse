@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakDetectorTypeSupplierCSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	public static final String CATEGORY = "Peak Detector";
+	public static final String CATEGORY = "Peak Detector [CSD]";
 	private static final Logger logger = Logger.getLogger(PeakDetectorTypeSupplierCSD.class);
 
 	public PeakDetectorTypeSupplierCSD() {

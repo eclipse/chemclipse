@@ -42,5 +42,5 @@ public interface ISupplier {
 	 * 
 	 * @return
 	 */
-	Class<? extends IIdentifierSettings> getIdentifierSettingsClass();
+	Class<? extends IIdentifierSettings> getSettingsClass();
 }

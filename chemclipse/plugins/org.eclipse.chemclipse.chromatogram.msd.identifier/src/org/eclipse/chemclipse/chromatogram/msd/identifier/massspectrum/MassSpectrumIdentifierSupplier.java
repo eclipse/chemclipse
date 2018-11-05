@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.model.identifier.core.AbstractSupplier;
 public class MassSpectrumIdentifierSupplier extends AbstractSupplier<IMassSpectrumIdentifierSettings> implements IMassSpectrumIdentifierSupplier {
 
 	@Override
-	public Class<? extends IMassSpectrumIdentifierSettings> getIdentifierSettingsClass() {
+	public Class<? extends IMassSpectrumIdentifierSettings> getSettingsClass() {
 
 		return getSpecificIdentifierSettingsClass();
 	}

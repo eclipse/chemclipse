@@ -21,9 +21,9 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodListUI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -126,8 +126,8 @@ public class ExtendedMethodUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePageSWT();
-				preferencePage.setTitle("Settings (SWT)");
+				IPreferencePage preferencePage = new PreferencePageMethods();
+				preferencePage.setTitle("Methods");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));

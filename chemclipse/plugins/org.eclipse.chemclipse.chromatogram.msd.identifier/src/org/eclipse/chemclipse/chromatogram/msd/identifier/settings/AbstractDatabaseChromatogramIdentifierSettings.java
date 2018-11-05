@@ -11,11 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public abstract class AbstractDatabaseChromatogramIdentifierSettings extends AbstractDatabaseIdentifierSettings implements IDatabaseChromatogramIdentifierSettings {
 
 	/*
 	 * Identification
 	 */
+	@JsonProperty(value = "Min S/N ratio (Identification)", defaultValue = "10")
+	@JsonPropertyDescription(value = "The minimum signal to noise ratio for identification.")
 	private float minSignalToNoiseRatioForIdentification;
 	private float minTailingForIdentification;
 	private float maxTailingForIdentification;

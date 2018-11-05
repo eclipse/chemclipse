@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakDetectorTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	public static final String CATEGORY = "Peak Detector";
+	public static final String CATEGORY = "Peak Detector [MSD]";
 	private static final Logger logger = Logger.getLogger(PeakDetectorTypeSupplierMSD.class);
 
 	public PeakDetectorTypeSupplierMSD() {

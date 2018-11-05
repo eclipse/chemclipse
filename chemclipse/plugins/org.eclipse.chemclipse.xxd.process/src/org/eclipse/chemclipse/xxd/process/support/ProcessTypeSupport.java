@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -65,7 +66,7 @@ public class ProcessTypeSupport {
 		 * Add all available process supplier here.
 		 */
 		addProcessSupplier(new BaselineDetectorTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramIdentifierTypeSupplier()); // TODO
+		addProcessSupplier(new ChromatogramIdentifierTypeSupplier()); // TODO - Identifier Settings!
 		addProcessSupplier(new ChromatogramIntegratorTypeSupplier()); // OK
 		addProcessSupplier(new ClassifierTypeSupplier()); // OK - Improve settings
 		addProcessSupplier(new CombinedIntegratorTypeSupplier()); // TODO
@@ -165,6 +166,21 @@ public class ProcessTypeSupport {
 	public List<IProcessTypeSupplier> getProcessorTypeSuppliers() {
 
 		return Collections.unmodifiableList(processTypeSuppliers);
+	}
+
+	public List<IProcessTypeSupplier> getProcessorTypeSuppliers(List<DataType> dataTypes) {
+
+		List<IProcessTypeSupplier> supplier = new ArrayList<>();
+		for(IProcessTypeSupplier processTypeSupplier : processTypeSuppliers) {
+			exitloop:
+			for(DataType dataType : dataTypes) {
+				if(processTypeSupplier.getSupportedDataTypes().contains(dataType)) {
+					supplier.add(processTypeSupplier);
+					break exitloop;
+				}
+			}
+		}
+		return supplier;
 	}
 
 	public String[] getProcessorCategories() {

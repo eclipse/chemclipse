@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.model.identifier.core.AbstractSupplier;
 public class ChromatogramIdentifierSupplier extends AbstractSupplier<IChromatogramIdentifierSettings> implements IChromatogramIdentifierSupplier {
 
 	@Override
-	public Class<? extends IChromatogramIdentifierSettings> getIdentifierSettingsClass() {
+	public Class<? extends IChromatogramIdentifierSettings> getSettingsClass() {
 
 		return getSpecificIdentifierSettingsClass();
 	}

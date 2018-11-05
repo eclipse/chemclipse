@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramExportTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	public static final String CATEGORY = "Chromatogram Export";
+	public static final String CATEGORY = "Chromatogram Export [MSD]";
 	private static final Logger logger = Logger.getLogger(ChromatogramExportTypeSupplierMSD.class);
 
 	public ChromatogramExportTypeSupplierMSD() {

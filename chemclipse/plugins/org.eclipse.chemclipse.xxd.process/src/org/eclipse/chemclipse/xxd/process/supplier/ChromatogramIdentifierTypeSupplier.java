@@ -38,7 +38,7 @@ public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSuppl
 			for(String processorId : support.getAvailableIdentifierIds()) {
 				IChromatogramIdentifierSupplier supplier = support.getIdentifierSupplier(processorId);
 				addProcessorId(processorId);
-				// addProcessorSettingsClass(processorId, supplier.getSettingsClass()); // TODO
+				addProcessorSettingsClass(processorId, supplier.getSettingsClass());
 				addProcessorName(processorId, supplier.getIdentifierName());
 				addProcessorDescription(processorId, supplier.getDescription());
 			}

@@ -14,8 +14,24 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.model.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
 public abstract class AbstractChromatogramIdentifier implements IChromatogramIdentifier {
+
+	private static final String DESCRIPTION = "ChromatogramIdentifier";
+
+	public IProcessingInfo validate(IChromatogramSelectionMSD chromatogramSelection, IIdentifierSettingsMSD identifierSettings) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
+		try {
+			validateChromatogramSelection(chromatogramSelection);
+			validateSettings(identifierSettings);
+		} catch(ValueMustNotBeNullException e) {
+			processingInfo.addErrorMessage(DESCRIPTION, e.getMessage());
+		}
+		return processingInfo;
+	}
 
 	/**
 	 * Tests if the chromatogram selection is a valid instance.

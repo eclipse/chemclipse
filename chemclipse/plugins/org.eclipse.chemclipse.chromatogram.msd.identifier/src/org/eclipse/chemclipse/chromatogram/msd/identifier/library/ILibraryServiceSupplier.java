@@ -18,5 +18,5 @@ import org.eclipse.chemclipse.model.identifier.core.ISupplier;
 public interface ILibraryServiceSupplier extends ISupplier {
 
 	@Override
-	Class<? extends ILibraryServiceSettings> getIdentifierSettingsClass();
+	Class<? extends ILibraryServiceSettings> getSettingsClass();
 }
