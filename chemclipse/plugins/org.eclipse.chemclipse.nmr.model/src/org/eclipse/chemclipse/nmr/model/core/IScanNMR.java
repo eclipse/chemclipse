@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.nmr.model.core;
 
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 
 import org.apache.commons.math3.complex.Complex;
@@ -20,8 +21,10 @@ import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationExceptio
 
 public interface IScanNMR extends IMeasurementInfo {
 
+	@Deprecated
 	double[] getRawSignals();
 
+	@Deprecated
 	void setRawSignals(double[] rawSignals);
 
 	/**
@@ -53,7 +56,24 @@ public interface IScanNMR extends IMeasurementInfo {
 	@Deprecated
 	void setBaselineCorrectedData(Complex[] data);
 
+	@Deprecated
 	TreeSet<ISignalNMR> getProcessedSignals();
+
+	NavigableSet<ISignalNMR> getSignalsNMR();
+
+	NavigableSet<ISignalFID> getSignalsFID();
+
+	void addSignalNMR(ISignalNMR signalNMR);
+
+	void addSignalFID(ISignalFID signalFID);
+
+	void removeSignalNMR(ISignalNMR signalNMR);
+
+	void removeSignalFID(ISignalFID signalFID);
+
+	void removeAllSignalsFID();
+
+	void removeAllSignalsNMR();
 
 	int getNumberOfFourierPoints();
 

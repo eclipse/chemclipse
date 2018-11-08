@@ -29,11 +29,15 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 
 		this.chemicalShift = chemicalShift;
 		this.intensity = intensity;
+		this.phaseCorrection = new Complex(1.0);
+		this.baselineCorrection = new Complex(0.0);
+		this.fourierTransformedData = new Complex(intensity);
 	}
 
 	public SignalNMR(double chemicalShift, Complex fourierTransformedData) {
 
 		this.chemicalShift = chemicalShift;
+		this.intensity = fourierTransformedData.getReal();
 		this.fourierTransformedData = fourierTransformedData;
 		this.phaseCorrection = new Complex(1.0);
 		this.baselineCorrection = new Complex(0.0);

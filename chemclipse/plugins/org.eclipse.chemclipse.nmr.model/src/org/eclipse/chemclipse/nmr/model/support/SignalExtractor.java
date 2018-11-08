@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.support;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.math3.complex.Complex;
@@ -30,65 +29,64 @@ public class SignalExtractor implements ISignalExtractor {
 
 	public double[] extractSignalIntesity() {
 
-		return scanNMR.getProcessedSignals().stream().mapToDouble(ISignalNMR::getIntensity).toArray();
+		return scanNMR.getSignalsNMR().stream().mapToDouble(ISignalNMR::getIntensity).toArray();
 	}
 
 	@Override
 	public Complex[] extractFourierTransformedData() {
 
-		return scanNMR.getProcessedSignals().stream().map(ISignalNMR::getFourierTransformedData).toArray(Complex[]::new);
+		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getFourierTransformedData).toArray(Complex[]::new);
 	}
 
 	@Override
 	public Complex[] extractPhaseCorrectedData() {
 
-		return scanNMR.getProcessedSignals().stream().map(ISignalNMR::getPhaseCorrectedData).toArray(Complex[]::new);
+		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getPhaseCorrectedData).toArray(Complex[]::new);
 	}
 
 	@Override
 	public Complex[] extractBaselineCorrectedData() {
 
-		return scanNMR.getProcessedSignals().stream().map(ISignalNMR::getBaselineCorrectedData).toArray(Complex[]::new);
+		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getBaselineCorrectedData).toArray(Complex[]::new);
 	}
 
 	@Override
 	public double[] extractFourierTransformedDataRealPart() {
 
-		return scanNMR.getProcessedSignals().stream().map(ISignalNMR::getFourierTransformedData).mapToDouble(Complex::getReal).toArray();
+		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getFourierTransformedData).mapToDouble(Complex::getReal).toArray();
 	}
 
 	@Override
 	public double[] extractPhaseCorrectedDataRealPart() {
 
-		return scanNMR.getProcessedSignals().stream().map(ISignalNMR::getPhaseCorrectedData).mapToDouble(Complex::getReal).toArray();
+		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getPhaseCorrectedData).mapToDouble(Complex::getReal).toArray();
 	}
 
 	@Override
 	public double[] extractBaselineCorrectedDataRealPart() {
 
-		return scanNMR.getProcessedSignals().stream().map(ISignalNMR::getBaselineCorrectedData).mapToDouble(Complex::getReal).toArray();
+		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getBaselineCorrectedData).mapToDouble(Complex::getReal).toArray();
 	}
 
 	@Override
 	public double[] extractChemicalShift() {
 
-		return scanNMR.getProcessedSignals().stream().mapToDouble(ISignalNMR::getChemicalShift).toArray();
+		return scanNMR.getSignalsNMR().stream().mapToDouble(ISignalNMR::getChemicalShift).toArray();
 	}
 
 	@Override
 	public void createScans(Complex[] fourierTransformedData, double[] chemicalShift) {
 
-		Collection<ISignalNMR> signals = scanNMR.getProcessedSignals();
-		signals.clear();
+		scanNMR.removeAllSignalsNMR();
 		for(int i = 0; i < fourierTransformedData.length; i++) {
-			signals.add(new SignalNMR(chemicalShift[i], fourierTransformedData[i]));
+			scanNMR.addSignalNMR(new SignalNMR(chemicalShift[i], fourierTransformedData[i]));
 		}
 	}
 
 	@Override
 	public void setIntesity(double[] intensities) {
 
-		Iterator<ISignalNMR> signals = scanNMR.getProcessedSignals().iterator();
+		Iterator<ISignalNMR> signals = scanNMR.getSignalsNMR().iterator();
 		int i = 0;
 		while(signals.hasNext()) {
 			ISignalNMR signal = signals.next();
@@ -101,7 +99,7 @@ public class SignalExtractor implements ISignalExtractor {
 	@Override
 	public void setIntesity(Complex[] intensities) {
 
-		Iterator<ISignalNMR> signals = scanNMR.getProcessedSignals().iterator();
+		Iterator<ISignalNMR> signals = scanNMR.getSignalsNMR().iterator();
 		int i = 0;
 		while(signals.hasNext()) {
 			ISignalNMR signal = signals.next();
@@ -114,7 +112,7 @@ public class SignalExtractor implements ISignalExtractor {
 	@Override
 	public void setPhaseCorrection(Complex[] phaseCorrection, boolean resetIntesityValues) {
 
-		Iterator<ISignalNMR> signals = scanNMR.getProcessedSignals().iterator();
+		Iterator<ISignalNMR> signals = scanNMR.getSignalsNMR().iterator();
 		int i = 0;
 		while(signals.hasNext()) {
 			ISignalNMR signal = signals.next();
@@ -130,7 +128,7 @@ public class SignalExtractor implements ISignalExtractor {
 	@Override
 	public void setBaselineCorrection(Complex[] baseleniCorrection, boolean resetIntensityValue) {
 
-		Iterator<ISignalNMR> signals = scanNMR.getProcessedSignals().iterator();
+		Iterator<ISignalNMR> signals = scanNMR.getSignalsNMR().iterator();
 		int i = 0;
 		while(signals.hasNext()) {
 			ISignalNMR signal = signals.next();
@@ -145,6 +143,6 @@ public class SignalExtractor implements ISignalExtractor {
 
 	private void resertValues() {
 
-		scanNMR.getProcessedSignals().forEach(signal -> signal.resetIntesity());
+		scanNMR.getSignalsNMR().forEach(signal -> signal.resetIntesity());
 	}
 }

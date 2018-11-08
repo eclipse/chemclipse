@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -32,15 +33,18 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	private Complex[] phaseCorrectedData = new Complex[0];
 	private Complex[] baselineCorrectedData = new Complex[0];
 	private final TreeSet<ISignalNMR> processedSignals = new TreeSet<>();
+	private final TreeSet<ISignalFID> signalsFID = new TreeSet<>();
 	private Map<String, Double> processingParametersMap = new LinkedHashMap<String, Double>();
 	private Set<String> protectKeys = new LinkedHashSet<String>(processingParametersMap.keySet());
 	private int numberOfFourierPoints;
 
+	@Override
 	public int getNumberOfFourierPoints() {
 
 		return numberOfFourierPoints;
 	}
 
+	@Override
 	public void setNumberOfFourierPoints(int numberOfFourierPoints) {
 
 		this.numberOfFourierPoints = numberOfFourierPoints;
@@ -75,12 +79,14 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	}
 
 	@Override
+	@Deprecated
 	public double[] getRawSignals() {
 
 		return rawSignals;
 	}
 
 	@Override
+	@Deprecated
 	public void setRawSignals(final double[] rawSignals) {
 
 		this.rawSignals = rawSignals;
@@ -178,5 +184,53 @@ public class ScanNMR extends AbstractMeasurementInfo implements IScanNMR {
 	public Map<String, Double> getprocessingParametersMap() {
 
 		return Collections.unmodifiableMap(processingParametersMap);
+	}
+
+	@Override
+	public NavigableSet<ISignalFID> getSignalsFID() {
+
+		return Collections.unmodifiableNavigableSet(signalsFID);
+	}
+
+	@Override
+	public NavigableSet<ISignalNMR> getSignalsNMR() {
+
+		return Collections.unmodifiableNavigableSet(processedSignals);
+	}
+
+	@Override
+	public void addSignalNMR(ISignalNMR signalNMR) {
+
+		processedSignals.add(signalNMR);
+	}
+
+	@Override
+	public void addSignalFID(ISignalFID signalFID) {
+
+		signalsFID.add(signalFID);
+	}
+
+	@Override
+	public void removeSignalNMR(ISignalNMR signalNMR) {
+
+		processedSignals.remove(signalNMR);
+	}
+
+	@Override
+	public void removeSignalFID(ISignalFID signalFID) {
+
+		signalsFID.remove(signalFID);
+	}
+
+	@Override
+	public void removeAllSignalsFID() {
+
+		signalsFID.clear();
+	}
+
+	@Override
+	public void removeAllSignalsNMR() {
+
+		processedSignals.clear();
 	}
 }
