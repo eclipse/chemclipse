@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class BaselineDetectorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
@@ -35,10 +36,12 @@ public class BaselineDetectorTypeSupplier extends AbstractProcessTypeSupplier im
 			IBaselineDetectorSupport support = BaselineDetector.getBaselineDetectorSupport();
 			for(String processorId : support.getAvailableDetectorIds()) {
 				IBaselineDetectorSupplier supplier = support.getBaselineDetectorSupplier(processorId);
-				addProcessorId(processorId);
-				addProcessorSettingsClass(processorId, supplier.getSettingsClass());
-				addProcessorName(processorId, supplier.getDetectorName());
-				addProcessorDescription(processorId, supplier.getDescription());
+				//
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				processorSupplier.setName(supplier.getDetectorName());
+				processorSupplier.setDescription(supplier.getDescription());
+				processorSupplier.setSettingsClass(supplier.getSettingsClass());
+				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoBaselineDetectorAvailableException e) {
 			logger.warn(e);

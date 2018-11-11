@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,9 +9,15 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.quantitation.settings;
+package org.eclipse.chemclipse.xxd.process.support;
 
-import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
+import java.util.Comparator;
 
-public abstract class AbstractPeakQuantifierSettings extends AbstractProcessSettings implements IPeakQuantifierSettings {
+public class NameComparator implements Comparator<ProcessorSupplier> {
+
+	@Override
+	public int compare(ProcessorSupplier supplier1, ProcessorSupplier supplier2) {
+
+		return supplier1.getName().compareTo(supplier2.getName());
+	}
 }

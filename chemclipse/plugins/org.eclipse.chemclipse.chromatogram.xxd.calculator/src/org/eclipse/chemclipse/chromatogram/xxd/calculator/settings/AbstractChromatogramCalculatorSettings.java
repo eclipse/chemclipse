@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.settings;
 
-public abstract class AbstractChromatogramCalculatorSettings implements IChromatogramCalculatorSettings {
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
+
+public abstract class AbstractChromatogramCalculatorSettings extends AbstractProcessSettings implements IChromatogramCalculatorSettings {
 }

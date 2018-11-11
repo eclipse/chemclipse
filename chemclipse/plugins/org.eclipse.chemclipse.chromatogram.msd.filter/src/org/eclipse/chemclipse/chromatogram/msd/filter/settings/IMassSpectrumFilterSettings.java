@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.settings;
 
-public interface IMassSpectrumFilterSettings {
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+
+public interface IMassSpectrumFilterSettings extends IProcessSettings {
 }

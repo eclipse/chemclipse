@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.peak;
 
+import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
+
 public class PeakFilterSupplier implements IPeakFilterSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String filterName = "";
+	private Class<? extends IPeakFilterSettings> settingsClass;
 
 	@Override
 	public String getDescription() {
@@ -72,7 +75,17 @@ public class PeakFilterSupplier implements IPeakFilterSupplier {
 		}
 	}
 
-	// ------------------------------------hashCode, equals, toString
+	@Override
+	public Class<? extends IPeakFilterSettings> getSettingsClass() {
+
+		return this.settingsClass;
+	}
+
+	protected void setSettingsClass(Class<? extends IPeakFilterSettings> settingsClass) {
+
+		this.settingsClass = settingsClass;
+	}
+
 	@Override
 	public boolean equals(Object other) {
 
@@ -109,5 +122,4 @@ public class PeakFilterSupplier implements IPeakFilterSupplier {
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------------hashCode, equals, toString
 }

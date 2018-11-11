@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
@@ -38,10 +39,12 @@ public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier im
 			IPeakQuantifierSupport support = PeakQuantifier.getPeakQuantifierSupport();
 			for(String processorId : support.getAvailablePeakQuantifierIds()) {
 				IPeakQuantifierSupplier supplier = support.getPeakQuantifierSupplier(processorId);
-				addProcessorId(processorId);
-				// addProcessorSettingsClass(processorId, supplier.getSettingsClass()); // TODO
-				addProcessorName(processorId, supplier.getPeakQuantifierName());
-				addProcessorDescription(processorId, supplier.getDescription());
+				//
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				processorSupplier.setName(supplier.getPeakQuantifierName());
+				processorSupplier.setDescription(supplier.getDescription());
+				// processorSupplier.setSettingsClass(supplier.getSettingsClass()); // TODO
+				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoPeakQuantifierAvailableException e) {
 			logger.warn(e);

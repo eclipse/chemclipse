@@ -27,11 +27,8 @@ public abstract class AbstractCombinedIntegrator implements ICombinedIntegrator 
 		if(chromatogramSelection == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The given chromatogram selection must not be null.");
 		}
-		if(combinedIntegrationSettings.getChromatogramIntegrationSettings() == null) {
-			processingInfo.addErrorMessage(DESCRIPTION, "The given chromatogram integration settings must not be null");
-		}
-		if(combinedIntegrationSettings.getPeakIntegrationSettings() == null) {
-			processingInfo.addErrorMessage(DESCRIPTION, "The given peak integration settings must not be null");
+		if(combinedIntegrationSettings == null) {
+			processingInfo.addErrorMessage(DESCRIPTION, "The given integration settings must not be null");
 		}
 		return processingInfo;
 	}

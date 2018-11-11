@@ -110,11 +110,11 @@ public class ChromatogramFilterMSD {
 			if(element.getAttribute(FILTER_SETTINGS) != null) {
 				try {
 					IChromatogramFilterSettings instance = (IChromatogramFilterSettings)element.createExecutableExtension(FILTER_SETTINGS);
-					supplier.setFilterSettingsClass(instance.getClass());
+					supplier.setSettingsClass(instance.getClass());
 				} catch(CoreException e) {
 					logger.warn(e);
 					// settings class is optional, set null instead
-					supplier.setFilterSettingsClass(null);
+					supplier.setSettingsClass(null);
 				}
 			}
 			filterSupport.add(supplier);

@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -30,8 +31,11 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -304,14 +308,28 @@ public class MethodSupportUI extends Composite {
 	private void runMethod(File file) {
 
 		if(methodListener != null && file != null) {
-			IProcessingInfo processingInfo = MethodConverter.convert(file, new NullProgressMonitor());
-			if(!processingInfo.hasErrorMessages()) {
-				try {
-					ProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
-					methodListener.execute(processMethod);
-				} catch(Exception e) {
-					logger.warn(e);
-				}
+			try {
+				ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+				dialog.run(false, false, new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						IProcessingInfo processingInfo = MethodConverter.convert(file, monitor);
+						if(!processingInfo.hasErrorMessages()) {
+							try {
+								ProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
+								methodListener.execute(processMethod, monitor);
+							} catch(Exception e) {
+								logger.warn(e);
+							}
+						}
+					}
+				});
+			} catch(InvocationTargetException e) {
+				logger.warn(e);
+			} catch(InterruptedException e) {
+				logger.warn(e);
 			}
 		}
 	}

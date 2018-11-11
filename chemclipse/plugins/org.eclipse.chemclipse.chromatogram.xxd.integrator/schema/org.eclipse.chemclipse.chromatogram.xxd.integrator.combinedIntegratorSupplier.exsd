@@ -80,6 +80,16 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="integratorSettings" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

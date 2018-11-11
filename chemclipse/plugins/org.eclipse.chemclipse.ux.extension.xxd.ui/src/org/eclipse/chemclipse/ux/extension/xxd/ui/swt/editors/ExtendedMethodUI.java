@@ -369,6 +369,8 @@ public class ExtendedMethodUI {
 							} catch(IOException e1) {
 								logger.warn(e1);
 							}
+						} else {
+							logger.warn("Settings class is null: " + processEntry);
 						}
 					}
 				}
@@ -393,7 +395,7 @@ public class ExtendedMethodUI {
 					for(Object object : listUI.getStructuredSelection().toArray()) {
 						if(object instanceof IProcessEntry) {
 							IProcessEntry processEntry = (IProcessEntry)object;
-							processEntry.setJsonSettings(SettingsSupport.EMPTY_JSON_SETTINGS);
+							processEntry.setJsonSettings(IProcessEntry.EMPTY_JSON_SETTINGS);
 						}
 					}
 					updateProcessMethod();

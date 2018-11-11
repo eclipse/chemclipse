@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.settings;
 
-public abstract class AbstractPeakDetectorSettings implements IPeakDetectorSettings {
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
+
+public abstract class AbstractPeakDetectorSettings extends AbstractProcessSettings implements IPeakDetectorSettings {
 }

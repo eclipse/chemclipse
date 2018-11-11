@@ -22,8 +22,8 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
@@ -37,10 +37,12 @@ public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSuppl
 			IChromatogramIdentifierSupport support = ChromatogramIdentifier.getChromatogramIdentifierSupport();
 			for(String processorId : support.getAvailableIdentifierIds()) {
 				IChromatogramIdentifierSupplier supplier = support.getIdentifierSupplier(processorId);
-				addProcessorId(processorId);
-				addProcessorSettingsClass(processorId, supplier.getSettingsClass());
-				addProcessorName(processorId, supplier.getIdentifierName());
-				addProcessorDescription(processorId, supplier.getDescription());
+				//
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				processorSupplier.setName(supplier.getIdentifierName());
+				processorSupplier.setDescription(supplier.getDescription());
+				processorSupplier.setSettingsClass(supplier.getSettingsClass());
+				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoIdentifierAvailableException e) {
 			logger.warn(e);
@@ -51,18 +53,15 @@ public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSuppl
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			if(processSettings instanceof IChromatogramIdentifierSettings) {
-				processingInfo = ChromatogramIdentifier.identify(chromatogramSelectionMSD, (IChromatogramIdentifierSettings)processSettings, processorId, monitor);
+				return ChromatogramIdentifier.identify(chromatogramSelectionMSD, (IChromatogramIdentifierSettings)processSettings, processorId, monitor);
 			} else {
-				processingInfo = ChromatogramIdentifier.identify(chromatogramSelectionMSD, processorId, monitor);
+				return ChromatogramIdentifier.identify(chromatogramSelectionMSD, processorId, monitor);
 			}
 		} else {
-			processingInfo = new ProcessingInfo();
-			processingInfo.addErrorMessage(processorId, "The data is not supported by the processor.");
+			return getProcessingInfoError(processorId);
 		}
-		return processingInfo;
 	}
 }

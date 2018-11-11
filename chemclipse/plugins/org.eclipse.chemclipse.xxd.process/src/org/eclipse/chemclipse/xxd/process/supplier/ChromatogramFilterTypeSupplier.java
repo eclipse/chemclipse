@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilterTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
@@ -35,10 +36,12 @@ public class ChromatogramFilterTypeSupplier extends AbstractProcessTypeSupplier 
 			IChromatogramFilterSupport support = ChromatogramFilter.getChromatogramFilterSupport();
 			for(String processorId : support.getAvailableFilterIds()) {
 				IChromatogramFilterSupplier supplier = support.getFilterSupplier(processorId);
-				addProcessorId(processorId);
-				addProcessorSettingsClass(processorId, supplier.getSettingsClass());
-				addProcessorName(processorId, supplier.getFilterName());
-				addProcessorDescription(processorId, supplier.getDescription());
+				//
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				processorSupplier.setName(supplier.getFilterName());
+				processorSupplier.setDescription(supplier.getDescription());
+				processorSupplier.setSettingsClass(supplier.getSettingsClass());
+				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoChromatogramFilterSupplierAvailableException e) {
 			logger.warn(e);

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.peak;
 
+import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
+
 public interface IPeakFilterSupplier {
 
 	/**
@@ -34,4 +36,11 @@ public interface IPeakFilterSupplier {
 	 * @return String
 	 */
 	String getFilterName();
+
+	/**
+	 * TODO: either returns a bean-like class or with annotations ..., with a public default constructor, ... or returns <code>null</code> if no filter settings are associated
+	 * 
+	 * @return
+	 */
+	Class<? extends IPeakFilterSettings> getSettingsClass();
 }

@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramIntegratorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
@@ -35,10 +36,12 @@ public class ChromatogramIntegratorTypeSupplier extends AbstractProcessTypeSuppl
 			IChromatogramIntegratorSupport support = ChromatogramIntegrator.getChromatogramIntegratorSupport();
 			for(String processorId : support.getAvailableIntegratorIds()) {
 				IChromatogramIntegratorSupplier supplier = support.getIntegratorSupplier(processorId);
-				addProcessorId(processorId);
-				addProcessorSettingsClass(processorId, supplier.getSettingsClass());
-				addProcessorName(processorId, supplier.getIntegratorName());
-				addProcessorDescription(processorId, supplier.getDescription());
+				//
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				processorSupplier.setName(supplier.getIntegratorName());
+				processorSupplier.setDescription(supplier.getDescription());
+				processorSupplier.setSettingsClass(supplier.getSettingsClass());
+				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoIntegratorAvailableException e) {
 			logger.warn(e);

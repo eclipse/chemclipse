@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class AbstractIdentifierSettings implements IIdentifierSettings {
+public class AbstractIdentifierSettings extends AbstractProcessSettings implements IIdentifierSettings {
 
 	@JsonIgnore
 	private boolean setResultAutomatically;

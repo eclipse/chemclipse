@@ -114,12 +114,10 @@ public class CombinedIntegratorSupport implements ICombinedIntegratorSupport {
 		return integratorNames.toArray(new String[integratorNames.size()]);
 	}
 
-	// -------------------------------------private methods
 	private void arePeakIntegratorsStored() throws NoIntegratorAvailableException {
 
 		if(suppliers.size() < 1) {
 			throw new NoIntegratorAvailableException();
 		}
 	}
-	// -------------------------------------private methods
 }

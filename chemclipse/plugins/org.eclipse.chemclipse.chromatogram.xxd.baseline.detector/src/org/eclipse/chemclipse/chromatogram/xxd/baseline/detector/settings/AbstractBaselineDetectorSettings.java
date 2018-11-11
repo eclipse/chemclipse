@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings;
 
-public abstract class AbstractBaselineDetectorSettings implements IBaselineDetectorSettings {
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
+
+public abstract class AbstractBaselineDetectorSettings extends AbstractProcessSettings implements IBaselineDetectorSettings {
 }

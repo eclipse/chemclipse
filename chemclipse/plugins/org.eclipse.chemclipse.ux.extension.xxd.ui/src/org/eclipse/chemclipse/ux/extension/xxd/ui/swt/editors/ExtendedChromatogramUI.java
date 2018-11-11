@@ -132,8 +132,8 @@ import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToScanNumberConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -1336,10 +1336,11 @@ public class ExtendedChromatogramUI {
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
 			@Override
-			public void execute(ProcessMethod processMethod) {
+			public void execute(ProcessMethod processMethod, IProgressMonitor monitor) {
 
 				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
-				processTypeSupport.applyProcessor(chromatogramSelection, processMethod, new NullProgressMonitor());
+				processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+				chromatogramSelection.update(false);
 			}
 		});
 		//

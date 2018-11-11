@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.settings;
 
-public abstract class AbstractChromatogramFilterSettings implements IChromatogramFilterSettings {
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
+
+public abstract class AbstractChromatogramFilterSettings extends AbstractProcessSettings implements IChromatogramFilterSettings {
 }

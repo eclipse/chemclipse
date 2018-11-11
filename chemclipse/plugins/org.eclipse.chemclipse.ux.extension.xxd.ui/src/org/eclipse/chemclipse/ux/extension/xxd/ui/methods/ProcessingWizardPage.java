@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -21,8 +22,11 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.xxd.process.support.CategoryComparator;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.NameComparator;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -49,6 +53,8 @@ public class ProcessingWizardPage extends WizardPage {
 	private ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 	private IProcessTypeSupplier processTypeSupplier = null;
 	//
+	private CategoryComparator categoryComparator = new CategoryComparator();
+	private NameComparator nameComparator = new NameComparator();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	protected ProcessingWizardPage() {
@@ -80,20 +86,15 @@ public class ProcessingWizardPage extends WizardPage {
 		IProcessEntry processEntry = null;
 		if(processTypeSupplier != null) {
 			Object object = comboViewerProcessor.getStructuredSelection().getFirstElement();
-			if(object instanceof String) {
+			if(object instanceof ProcessorSupplier) {
 				try {
-					/*
-					 * Get the process method.
-					 */
-					int index = comboViewerProcessor.getCombo().getSelectionIndex();
-					String processorId = processTypeSupplier.getProcessorIds().get(index);
-					//
+					ProcessorSupplier processorSupplier = (ProcessorSupplier)object;
 					processEntry = new ProcessEntry();
-					processEntry.setProcessorId(processorId);
-					processEntry.setName(object.toString());
-					processEntry.setDescription(processTypeSupplier.getProcessorDescription(processorId));
+					processEntry.setProcessorId(processorSupplier.getId());
+					processEntry.setName(processorSupplier.getName());
+					processEntry.setDescription(processorSupplier.getDescription());
 					processEntry.getSupportedDataTypes().addAll(processTypeSupplier.getSupportedDataTypes());
-					processEntry.setProcessSettingsClass(processTypeSupplier.getProcessSettingsClass(processorId));
+					processEntry.setProcessSettingsClass(processorSupplier.getSettingsClass());
 				} catch(Exception e) {
 					logger.warn(e);
 				}
@@ -140,7 +141,9 @@ public class ProcessingWizardPage extends WizardPage {
 		addSelectedTypeAndPersist(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD, checkboxMSD, dataTypes, DataType.MSD);
 		addSelectedTypeAndPersist(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD, checkboxWSD, dataTypes, DataType.WSD);
 		//
-		comboViewerCategory.setInput(processTypeSupport.getProcessorTypeSuppliers(dataTypes));
+		List<IProcessTypeSupplier> processTypeSuppliers = processTypeSupport.getProcessorTypeSuppliers(dataTypes);
+		Collections.sort(processTypeSuppliers, categoryComparator);
+		comboViewerCategory.setInput(processTypeSuppliers);
 	}
 
 	private void addSelectedTypeAndPersist(String name, Button checkbox, List<DataType> dataTypes, DataType dataType) {
@@ -181,11 +184,9 @@ public class ProcessingWizardPage extends WizardPage {
 				if(object instanceof IProcessTypeSupplier) {
 					try {
 						processTypeSupplier = (IProcessTypeSupplier)object;
-						List<String> names = new ArrayList<>();
-						for(String processorId : processTypeSupplier.getProcessorIds()) {
-							names.add(processTypeSupplier.getProcessorName(processorId));
-						}
-						comboViewerProcessor.setInput(names);
+						List<ProcessorSupplier> processSuppliers = new ArrayList<>(processTypeSupplier.getProcessorSuppliers());
+						Collections.sort(processSuppliers, nameComparator);
+						comboViewerProcessor.setInput(processSuppliers);
 					} catch(Exception e1) {
 						logger.warn(e1);
 					}
@@ -206,9 +207,9 @@ public class ProcessingWizardPage extends WizardPage {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof String) {
-					String value = (String)element;
-					return value;
+				if(element instanceof ProcessorSupplier) {
+					ProcessorSupplier processorSupplier = (ProcessorSupplier)element;
+					return processorSupplier.getName();
 				}
 				return null;
 			}

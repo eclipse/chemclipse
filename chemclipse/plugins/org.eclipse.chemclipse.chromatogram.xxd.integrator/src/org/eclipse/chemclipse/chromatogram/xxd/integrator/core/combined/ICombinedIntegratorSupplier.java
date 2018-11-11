@@ -11,9 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined;
 
-/**
- * @author eselmeister
- */
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
+
 public interface ICombinedIntegratorSupplier {
 
 	/**
@@ -37,4 +36,11 @@ public interface ICombinedIntegratorSupplier {
 	 * @return String
 	 */
 	String getIntegratorName();
+
+	/**
+	 * TODO: either returns a bean-like class or with annotations ..., with a public default constructor, ... or returns <code>null</code> if no filter settings are associated
+	 * 
+	 * @return
+	 */
+	Class<? extends ICombinedIntegrationSettings> getSettingsClass();
 }

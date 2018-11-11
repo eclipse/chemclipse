@@ -37,6 +37,7 @@ public class PeakFilter {
 	private static final String DESCRIPTION = "description";
 	private static final String FILTER_NAME = "filterName";
 	private static final String FILTER = "filter";
+	private static final String FILTER_SETTINGS = "filterSettings";
 	//
 	private static final String PROCESSING_DESCRIPTION = "Peak Filter";
 	private static final String NO_PEAK_FILTER_AVAILABLE = "There is no peak filter available.";
@@ -204,12 +205,21 @@ public class PeakFilter {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setFilterName(element.getAttribute(FILTER_NAME));
+			if(element.getAttribute(FILTER_SETTINGS) != null) {
+				try {
+					IPeakFilterSettings instance = (IPeakFilterSettings)element.createExecutableExtension(FILTER_SETTINGS);
+					supplier.setSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setSettingsClass(null);
+				}
+			}
 			filterSupport.add(supplier);
 		}
 		return filterSupport;
 	}
 
-	// --------------------------------------------private methods
 	/**
 	 * Returns a {@link IPeakFilter} instance given by the filterId or
 	 * null, if none is available.
@@ -250,5 +260,4 @@ public class PeakFilter {
 		}
 		return null;
 	}
-	// --------------------------------------------private methods
 }

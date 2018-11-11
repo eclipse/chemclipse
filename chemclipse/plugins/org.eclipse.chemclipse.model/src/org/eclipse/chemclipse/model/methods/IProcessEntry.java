@@ -18,6 +18,8 @@ import org.eclipse.chemclipse.model.types.DataType;
 
 public interface IProcessEntry {
 
+	String EMPTY_JSON_SETTINGS = "{}";
+
 	String getProcessorId();
 
 	void setProcessorId(String processorId);

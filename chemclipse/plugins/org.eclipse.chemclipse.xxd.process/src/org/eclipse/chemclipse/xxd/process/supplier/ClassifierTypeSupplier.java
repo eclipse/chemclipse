@@ -22,8 +22,8 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ClassifierTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
@@ -37,10 +37,12 @@ public class ClassifierTypeSupplier extends AbstractProcessTypeSupplier implemen
 			IChromatogramClassifierSupport support = ChromatogramClassifier.getChromatogramClassifierSupport();
 			for(String processorId : support.getAvailableClassifierIds()) {
 				IChromatogramClassifierSupplier supplier = support.getClassifierSupplier(processorId);
-				addProcessorId(processorId);
-				addProcessorSettingsClass(processorId, supplier.getSettingsClass());
-				addProcessorName(processorId, supplier.getClassifierName());
-				addProcessorDescription(processorId, supplier.getDescription());
+				//
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				processorSupplier.setName(supplier.getClassifierName());
+				processorSupplier.setDescription(supplier.getDescription());
+				processorSupplier.setSettingsClass(supplier.getSettingsClass());
+				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoChromatogramClassifierSupplierAvailableException e) {
 			logger.warn(e);
@@ -60,8 +62,7 @@ public class ClassifierTypeSupplier extends AbstractProcessTypeSupplier implemen
 				processingInfo = ChromatogramClassifier.applyClassifier(chromatogramSelectionMSD, processorId, monitor);
 			}
 		} else {
-			processingInfo = new ProcessingInfo();
-			processingInfo.addErrorMessage(processorId, "The data is not supported by the processor.");
+			processingInfo = getProcessingInfoError(processorId);
 		}
 		return processingInfo;
 	}

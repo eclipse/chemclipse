@@ -17,10 +17,17 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.model.reports.ISequence;
 import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
+import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -32,14 +39,16 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.EditorSupportFactory;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.SequenceListUI;
+import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -165,7 +174,7 @@ public class ExtendedSequenceListUI {
 
 			@SuppressWarnings("rawtypes")
 			@Override
-			public void execute(ProcessMethod processMethod) {
+			public void execute(ProcessMethod processMethod, IProgressMonitor monitor) {
 
 				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 				TableItem[] tableItems = sequenceListUI.getTable().getItems();
@@ -179,15 +188,14 @@ public class ExtendedSequenceListUI {
 						File file = new File(sequence.getDataPath() + File.separator + sequenceRecord.getDataFile());
 						DataType dataType = detectDataType(file);
 						if(dataType != null) {
-							ProgressMonitorDialog dialog = new ProgressMonitorDialog(parent.getShell());
-							ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(file, dataType);
-							try {
-								dialog.run(false, false, runnable);
-								IChromatogramSelection chromatogramSelection = runnable.getChromatogramSelection();
-								processTypeSupport.applyProcessor(chromatogramSelection, processMethod, dialog.getProgressMonitor());
-							} catch(Exception e) {
-								logger.error(e.getLocalizedMessage(), e);
+							IChromatogramSelection chromatogramSelection = getChromatogramSelection(file, dataType, monitor);
+							if(chromatogramSelection != null) {
+								processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+							} else {
+								logger.warn("Chromatogram Selection is null: " + file + " " + dataType);
 							}
+						} else {
+							logger.warn("Could not detect data type of file: " + file);
 						}
 					}
 				}
@@ -195,6 +203,38 @@ public class ExtendedSequenceListUI {
 		});
 		//
 		return methodSupportUI;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private IChromatogramSelection getChromatogramSelection(File file, DataType dataType, IProgressMonitor monitor) {
+
+		IChromatogramSelection chromatogramSelection = null;
+		boolean fireUpdate = false;
+		//
+		switch(dataType) {
+			case MSD_NOMINAL:
+			case MSD_TANDEM:
+			case MSD_HIGHRES:
+			case MSD:
+				IProcessingInfo processingInfoMSD = ChromatogramConverterMSD.convert(file, monitor);
+				IChromatogramMSD chromatogramMSD = processingInfoMSD.getProcessingResult(IChromatogramMSD.class);
+				chromatogramSelection = new ChromatogramSelectionMSD(chromatogramMSD, fireUpdate);
+				break;
+			case CSD:
+				IProcessingInfo processingInfoCSD = ChromatogramConverterCSD.convert(file, monitor);
+				IChromatogramCSD chromatogramCSD = processingInfoCSD.getProcessingResult(IChromatogramCSD.class);
+				chromatogramSelection = new ChromatogramSelectionCSD(chromatogramCSD, fireUpdate);
+				break;
+			case WSD:
+				IProcessingInfo processingInfoWSD = ChromatogramConverterWSD.convert(file, monitor);
+				IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult(IChromatogramWSD.class);
+				chromatogramSelection = new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate);
+				break;
+			default:
+				// No action
+		}
+		//
+		return chromatogramSelection;
 	}
 
 	private void createDataPathLabel(Composite parent) {

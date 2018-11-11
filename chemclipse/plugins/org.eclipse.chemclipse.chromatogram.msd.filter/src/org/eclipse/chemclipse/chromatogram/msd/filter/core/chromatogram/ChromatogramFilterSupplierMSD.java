@@ -81,7 +81,7 @@ public class ChromatogramFilterSupplierMSD implements IChromatogramFilterSupplie
 		return this.settingsClass;
 	}
 
-	protected void setFilterSettingsClass(Class<? extends IChromatogramFilterSettings> settingsClass) {
+	protected void setSettingsClass(Class<? extends IChromatogramFilterSettings> settingsClass) {
 
 		this.settingsClass = settingsClass;
 	}

@@ -36,6 +36,8 @@ public class CombinedIntegrator {
 	private static final String DESCRIPTION = "description";
 	private static final String INTEGRATOR_NAME = "integratorName";
 	private static final String INTEGRATOR = "integrator";
+	private static final String INTEGRATOR_SETTINGS = "integratorSettings";
+	//
 	private static final String NO_INTEGRATOR_AVAILABLE = "There is no combined integrator available.";
 
 	/**
@@ -90,6 +92,16 @@ public class CombinedIntegrator {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setIntegratorName(element.getAttribute(INTEGRATOR_NAME));
+			if(element.getAttribute(INTEGRATOR_SETTINGS) != null) {
+				try {
+					ICombinedIntegrationSettings instance = (ICombinedIntegrationSettings)element.createExecutableExtension(INTEGRATOR_SETTINGS);
+					supplier.setSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setSettingsClass(null);
+				}
+			}
 			integratorSupport.add(supplier);
 		}
 		return integratorSupport;

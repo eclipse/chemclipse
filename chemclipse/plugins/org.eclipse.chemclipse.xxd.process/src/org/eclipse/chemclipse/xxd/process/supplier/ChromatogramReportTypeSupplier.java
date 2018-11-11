@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
@@ -40,10 +41,12 @@ public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier 
 			IChromatogramReportSupport support = ChromatogramReports.getChromatogramReportSupplierSupport();
 			for(String processorId : support.getAvailableProcessorIds()) {
 				IChromatogramReportSupplier supplier = support.getReportSupplier(processorId);
-				addProcessorId(processorId);
-				// addProcessorSettingsClass(processorId, supplier.getSettingsClass()); // TODO
-				addProcessorName(processorId, supplier.getReportName());
-				addProcessorDescription(processorId, supplier.getDescription());
+				//
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				processorSupplier.setName(supplier.getReportName());
+				processorSupplier.setDescription(supplier.getDescription());
+				// processorSupplier.setSettingsClass(supplier.getSettingsClass()); // TODO
+				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoReportSupplierAvailableException e) {
 			logger.warn(e);

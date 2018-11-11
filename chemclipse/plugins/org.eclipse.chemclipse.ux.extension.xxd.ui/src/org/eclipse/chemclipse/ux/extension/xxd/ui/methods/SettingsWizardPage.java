@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -143,7 +144,7 @@ public class SettingsWizardPage extends WizardPage {
 
 	private String getJsonSettings() {
 
-		String settings = SettingsSupport.EMPTY_JSON_SETTINGS;
+		String settings = IProcessEntry.EMPTY_JSON_SETTINGS;
 		try {
 			Map<String, Object> values = new HashMap<>();
 			for(WidgetItem widgetItem : widgetItems) {

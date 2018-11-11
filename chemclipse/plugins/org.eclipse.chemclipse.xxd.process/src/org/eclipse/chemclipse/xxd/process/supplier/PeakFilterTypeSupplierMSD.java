@@ -22,8 +22,8 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakFilterTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
@@ -37,10 +37,12 @@ public class PeakFilterTypeSupplierMSD extends AbstractProcessTypeSupplier imple
 			IPeakFilterSupport support = PeakFilter.getPeakFilterSupport();
 			for(String processorId : support.getAvailableFilterIds()) {
 				IPeakFilterSupplier supplier = support.getFilterSupplier(processorId);
-				addProcessorId(processorId);
-				// addProcessorSettingsClass(processorId, supplier.getSettingsClass()); // TODO
-				addProcessorName(processorId, supplier.getFilterName());
-				addProcessorDescription(processorId, supplier.getDescription());
+				//
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				processorSupplier.setName(supplier.getFilterName());
+				processorSupplier.setDescription(supplier.getDescription());
+				processorSupplier.setSettingsClass(supplier.getSettingsClass());
+				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoPeakFilterSupplierAvailableException e) {
 			logger.warn(e);
@@ -60,8 +62,7 @@ public class PeakFilterTypeSupplierMSD extends AbstractProcessTypeSupplier imple
 				processingInfo = PeakFilter.applyFilter(chromatogramSelectionMSD, processorId, monitor);
 			}
 		} else {
-			processingInfo = new ProcessingInfo();
-			processingInfo.addErrorMessage(processorId, "The data is not supported by the processor.");
+			processingInfo = getProcessingInfoError(processorId);
 		}
 		return processingInfo;
 	}

@@ -48,6 +48,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplierMSD
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakQuantitationTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -66,13 +67,13 @@ public class ProcessTypeSupport {
 		 * Add all available process supplier here.
 		 */
 		addProcessSupplier(new BaselineDetectorTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramIdentifierTypeSupplier()); // TODO - Identifier Settings!
+		addProcessSupplier(new ChromatogramIdentifierTypeSupplier()); // OK - Improve settings
 		addProcessSupplier(new ChromatogramIntegratorTypeSupplier()); // OK
 		addProcessSupplier(new ClassifierTypeSupplier()); // OK - Improve settings
-		addProcessSupplier(new CombinedIntegratorTypeSupplier()); // TODO
+		addProcessSupplier(new CombinedIntegratorTypeSupplier()); // OK - Nested Settings
 		addProcessSupplier(new ChromatogramFilterTypeSupplier()); // OK
 		addProcessSupplier(new ChromatogramFilterTypeSupplierMSD()); // OK
-		addProcessSupplier(new PeakFilterTypeSupplierMSD()); // TODO
+		addProcessSupplier(new PeakFilterTypeSupplierMSD()); // OK
 		addProcessSupplier(new PeakDetectorTypeSupplierMSD()); // TODO
 		addProcessSupplier(new PeakIdentifierTypeSupplierMSD()); // TODO
 		addProcessSupplier(new PeakDetectorTypeSupplierCSD()); // TODO
@@ -251,6 +252,12 @@ public class ProcessTypeSupport {
 				String processorId = processEntry.getProcessorId();
 				IProcessTypeSupplier processTypeSupplier = processSupplierMap.get(processorId);
 				if(processTypeSupplier != null) {
+					/*
+					 * If processEntry.getJsonSettings() == {} (IProcessEntry.EMPTY_JSON_SETTINGS),
+					 * the processSettings class will be null.
+					 * The applyProcessor method manages how to handle this situation.
+					 * By default, the system settings of the plugin shall be used instead.
+					 */
 					IProcessSettings processSettings = getProcessSettings(processEntry);
 					processTypeSupplier.applyProcessor(chromatogramSelection, processorId, processSettings, monitor);
 				}
@@ -262,23 +269,47 @@ public class ProcessTypeSupport {
 	public IProcessSettings getProcessSettings(IProcessEntry processEntry) {
 
 		IProcessSettings processSettings = null;
-		Class<? extends IProcessSettings> clazz = processEntry.getProcessSettingsClass();
-		//
-		if(clazz != null) {
-			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-			try {
-				String content = processEntry.getJsonSettings();
-				processSettings = objectMapper.readValue(content, clazz);
-			} catch(JsonParseException e) {
-				logger.warn(e);
-			} catch(JsonMappingException e) {
-				logger.warn(e);
-			} catch(IOException e) {
-				logger.warn(e);
+		if(processEntry != null) {
+			Class<? extends IProcessSettings> clazz = processEntry.getProcessSettingsClass();
+			if(clazz != null) {
+				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+				try {
+					String content = processEntry.getJsonSettings();
+					processSettings = objectMapper.readValue(content, clazz);
+				} catch(JsonParseException e) {
+					logger.warn(e);
+				} catch(JsonMappingException e) {
+					logger.warn(e);
+				} catch(IOException e) {
+					logger.warn(e);
+				}
 			}
 		}
 		//
 		return processSettings;
+	}
+
+	public int validate(IProcessEntry processEntry) {
+
+		if(processEntry != null) {
+			if(processSupplierMap.containsKey(processEntry.getProcessorId())) {
+				if(processEntry.getJsonSettings().equals(IProcessEntry.EMPTY_JSON_SETTINGS)) {
+					return IStatus.INFO;
+				} else {
+					if(processEntry.getProcessSettingsClass() == null) {
+						return IStatus.WARNING;
+					} else {
+						return IStatus.OK;
+					}
+				}
+			} else {
+				return IStatus.ERROR;
+			}
+		}
+		/*
+		 * Error if other checks failed.
+		 */
+		return IStatus.ERROR;
 	}
 }

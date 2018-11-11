@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakDetectorTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
@@ -37,10 +38,12 @@ public class PeakDetectorTypeSupplierMSD extends AbstractProcessTypeSupplier imp
 			IPeakDetectorSupport support = PeakDetectorMSD.getPeakDetectorSupport();
 			for(String processorId : support.getAvailablePeakDetectorIds()) {
 				IPeakDetectorSupplier supplier = support.getPeakDetectorSupplier(processorId);
-				addProcessorId(processorId);
-				// addProcessorSettingsClass(processorId, supplier.getSettingsClass()); // TODO
-				addProcessorName(processorId, supplier.getPeakDetectorName());
-				addProcessorDescription(processorId, supplier.getDescription());
+				//
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				processorSupplier.setName(supplier.getPeakDetectorName());
+				processorSupplier.setDescription(supplier.getDescription());
+				// processorSupplier.setSettingsClass(supplier.getSettingsClass()); // TODO
+				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoPeakDetectorAvailableException e) {
 			logger.warn(e);
@@ -61,8 +64,7 @@ public class PeakDetectorTypeSupplierMSD extends AbstractProcessTypeSupplier imp
 				processingInfo = PeakDetectorMSD.detect(chromatogramSelectionMSD, processorId, monitor);
 			}
 		} else {
-			processingInfo = new ProcessingInfo();
-			processingInfo.addErrorMessage(processorId, "The data is not supported by the processor.");
+			processingInfo = getProcessingInfoError(processorId);
 		}
 		return processingInfo;
 	}

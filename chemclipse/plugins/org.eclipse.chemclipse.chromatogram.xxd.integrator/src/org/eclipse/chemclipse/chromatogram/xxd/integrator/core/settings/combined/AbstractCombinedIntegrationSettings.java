@@ -11,28 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined;
 
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
 
-public abstract class AbstractCombinedIntegrationSettings implements ICombinedIntegrationSettings {
-
-	private IChromatogramIntegrationSettings chromatogramIntegrationSettings;
-	private IPeakIntegrationSettings peakIntegrationSettings;
-
-	public AbstractCombinedIntegrationSettings(IChromatogramIntegrationSettings chromatogramIntegrationSettings, IPeakIntegrationSettings peakIntegrationSettings) {
-		this.chromatogramIntegrationSettings = chromatogramIntegrationSettings;
-		this.peakIntegrationSettings = peakIntegrationSettings;
-	}
-
-	@Override
-	public IChromatogramIntegrationSettings getChromatogramIntegrationSettings() {
-
-		return chromatogramIntegrationSettings;
-	}
-
-	@Override
-	public IPeakIntegrationSettings getPeakIntegrationSettings() {
-
-		return peakIntegrationSettings;
-	}
+public abstract class AbstractCombinedIntegrationSettings extends AbstractProcessSettings implements ICombinedIntegrationSettings {
 }

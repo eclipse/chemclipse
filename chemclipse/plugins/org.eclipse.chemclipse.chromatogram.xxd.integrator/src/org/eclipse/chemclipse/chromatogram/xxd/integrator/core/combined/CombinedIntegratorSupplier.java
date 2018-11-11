@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined;
 
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
+
 public class CombinedIntegratorSupplier implements ICombinedIntegratorSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String integratorName = "";
+	private Class<? extends ICombinedIntegrationSettings> settingsClass;
 
 	@Override
 	public String getId() {
@@ -72,7 +75,17 @@ public class CombinedIntegratorSupplier implements ICombinedIntegratorSupplier {
 		}
 	}
 
-	// ------------------------------------hashCode, equals, toString
+	@Override
+	public Class<? extends ICombinedIntegrationSettings> getSettingsClass() {
+
+		return this.settingsClass;
+	}
+
+	protected void setSettingsClass(Class<? extends ICombinedIntegrationSettings> settingsClass) {
+
+		this.settingsClass = settingsClass;
+	}
+
 	@Override
 	public boolean equals(Object other) {
 
@@ -109,5 +122,4 @@ public class CombinedIntegratorSupplier implements ICombinedIntegratorSupplier {
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------------hashCode, equals, toString
 }

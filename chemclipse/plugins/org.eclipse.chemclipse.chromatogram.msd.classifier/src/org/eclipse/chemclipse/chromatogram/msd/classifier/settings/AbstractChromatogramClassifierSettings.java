@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.settings;
 
-public abstract class AbstractChromatogramClassifierSettings implements IChromatogramClassifierSettings {
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
+
+public abstract class AbstractChromatogramClassifierSettings extends AbstractProcessSettings implements IChromatogramClassifierSettings {
 }

@@ -27,7 +27,7 @@ public class ProcessEntry implements IProcessEntry {
 	private String processorId = "";
 	private String name = "";
 	private String description = "";
-	private String jsonSettings = "{}";
+	private String jsonSettings = EMPTY_JSON_SETTINGS;
 	private List<DataType> supportedDataTypes = new ArrayList<>();
 	private Class<? extends IProcessSettings> processSettingsClass = null;
 

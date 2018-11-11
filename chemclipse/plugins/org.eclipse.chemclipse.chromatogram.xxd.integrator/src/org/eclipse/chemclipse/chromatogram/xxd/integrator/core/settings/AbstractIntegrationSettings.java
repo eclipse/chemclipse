@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings;
 
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public abstract class AbstractIntegrationSettings implements IIntegrationSettings {
+public abstract class AbstractIntegrationSettings extends AbstractProcessSettings implements IIntegrationSettings {
 
 	@JsonIgnore
 	private IBaselineSupport baselineSupport;

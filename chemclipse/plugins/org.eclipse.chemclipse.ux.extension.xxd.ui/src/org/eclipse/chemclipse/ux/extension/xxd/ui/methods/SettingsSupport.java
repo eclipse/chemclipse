@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
@@ -38,8 +39,6 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 
 public class SettingsSupport {
-
-	public static final String EMPTY_JSON_SETTINGS = "{}";
 
 	public <T extends IProcessSettings> T getSettings(String content, Class<T> clazz, Shell shell) throws JsonParseException, JsonMappingException, IOException {
 
@@ -63,7 +62,7 @@ public class SettingsSupport {
 			/*
 			 * Cancel pressed
 			 */
-			return (content == null) ? EMPTY_JSON_SETTINGS : content;
+			return (content == null) ? IProcessEntry.EMPTY_JSON_SETTINGS : content;
 		}
 	}
 

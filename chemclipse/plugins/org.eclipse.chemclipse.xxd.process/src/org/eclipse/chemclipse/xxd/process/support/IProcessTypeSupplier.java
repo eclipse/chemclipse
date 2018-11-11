@@ -27,6 +27,8 @@ public interface IProcessTypeSupplier {
 
 	List<DataType> getSupportedDataTypes();
 
+	List<ProcessorSupplier> getProcessorSuppliers();
+
 	Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception;
 
 	String getProcessorName(String processorId) throws Exception;

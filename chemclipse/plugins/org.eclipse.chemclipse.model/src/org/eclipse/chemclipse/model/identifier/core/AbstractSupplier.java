@@ -21,7 +21,6 @@ public abstract class AbstractSupplier<S extends IIdentifierSettings> implements
 	private String identifierName = "";
 	private Class<? extends S> identifierSettingsClass;
 
-	// -----------------------------------------------equals, hashCode, toString
 	@Override
 	public boolean equals(final Object otherObject) {
 
@@ -110,5 +109,4 @@ public abstract class AbstractSupplier<S extends IIdentifierSettings> implements
 		builder.append("]");
 		return builder.toString();
 	}
-	// -----------------------------------------------equals, hashCode, toString
 }

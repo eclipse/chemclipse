@@ -12,16 +12,22 @@
 package org.eclipse.chemclipse.xxd.process.supplier;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 
 public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
+	private List<ProcessorSupplier> processorSuppliers = new ArrayList<>();
+	//
 	private String category = "";
 	private List<DataType> supportedDataTypes = new ArrayList<>();
 	private Map<String, Class<? extends IProcessSettings>> settingsClassMap = new HashMap<>();
@@ -49,6 +55,12 @@ public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplie
 	}
 
 	@Override
+	public List<ProcessorSupplier> getProcessorSuppliers() {
+
+		return Collections.unmodifiableList(processorSuppliers);
+	}
+
+	@Override
 	public Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception {
 
 		return settingsClassMap.get(processorId);
@@ -72,23 +84,21 @@ public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplie
 		return processorIds;
 	}
 
-	protected void addProcessorSettingsClass(String processorId, Class<? extends IProcessSettings> settingsClass) {
+	protected void addProcessorSupplier(ProcessorSupplier processorSupplier) {
 
-		settingsClassMap.put(processorId, settingsClass);
-	}
-
-	protected void addProcessorName(String processorId, String name) {
-
-		nameMap.put(processorId, name);
-	}
-
-	protected void addProcessorDescription(String processorId, String description) {
-
-		descriptionMap.put(processorId, description);
-	}
-
-	protected void addProcessorId(String processorId) {
-
+		processorSuppliers.add(processorSupplier);
+		//
+		String processorId = processorSupplier.getId();
 		processorIds.add(processorId);
+		nameMap.put(processorId, processorSupplier.getName());
+		descriptionMap.put(processorId, processorSupplier.getDescription());
+		settingsClassMap.put(processorId, processorSupplier.getSettingsClass());
+	}
+
+	protected IProcessingInfo getProcessingInfoError(String processorId) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
+		processingInfo.addErrorMessage(processorId, "The data is not supported by the processor.");
+		return processingInfo;
 	}
 }

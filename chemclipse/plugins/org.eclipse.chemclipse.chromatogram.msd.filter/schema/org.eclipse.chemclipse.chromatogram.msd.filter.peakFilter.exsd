@@ -80,6 +80,16 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="filterSettings" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings"/>
+               </appInfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
