@@ -17,6 +17,7 @@
             description="This is a SNIP Peak MS optimization filter."
             filter="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core.PeakFilter"
             filterName="SNIP Peak Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.PeakFilterSettings"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.snip.peak">
       </PeakFilterSupplier>
    </extension>
