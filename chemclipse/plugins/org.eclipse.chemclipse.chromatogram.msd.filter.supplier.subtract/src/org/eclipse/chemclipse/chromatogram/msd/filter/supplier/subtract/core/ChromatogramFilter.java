@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.internal.calculator.SubtractCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -34,15 +34,15 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(chromatogramFilterSettings instanceof FilterSettings) {
-				FilterSettings filterSettings = (FilterSettings)chromatogramFilterSettings;
+			if(chromatogramFilterSettings instanceof ChromatogramFilterSettings) {
+				ChromatogramFilterSettings filterSettings = (ChromatogramFilterSettings)chromatogramFilterSettings;
 				SubtractCalculator subtractCalculator = new SubtractCalculator();
 				subtractCalculator.subtractPeakMassSpectraFromChromatogramSelection(chromatogramSelection, filterSettings);
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been subtracted successfully from the chromatogram selection."));
 				IChromatogramFilterResult chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The subtract filter has been applied successfully.");
 				processingInfo.setProcessingResult(chromatogramFilterResult);
 			} else {
-				processingInfo.addErrorMessage(DESCRIPTION, "The filter settings instance is not a type of:" + FilterSettings.class);
+				processingInfo.addErrorMessage(DESCRIPTION, "The filter settings instance is not a type of:" + ChromatogramFilterSettings.class);
 			}
 		}
 		return processingInfo;
@@ -51,7 +51,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		FilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
+		ChromatogramFilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 }

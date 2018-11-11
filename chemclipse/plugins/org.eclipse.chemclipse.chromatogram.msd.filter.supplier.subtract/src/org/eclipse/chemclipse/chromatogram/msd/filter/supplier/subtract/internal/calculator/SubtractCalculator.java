@@ -16,9 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsMassSpectrum;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsPeak;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.PeakFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -43,7 +43,7 @@ public class SubtractCalculator {
 	 * @param filterSettings
 	 */
 	@SuppressWarnings("rawtypes")
-	public void subtractPeakMassSpectraFromChromatogramSelection(IChromatogramSelectionMSD chromatogramSelection, FilterSettings filterSettings) {
+	public void subtractPeakMassSpectraFromChromatogramSelection(IChromatogramSelectionMSD chromatogramSelection, ChromatogramFilterSettings filterSettings) {
 
 		/*
 		 * Test if null.
@@ -94,26 +94,26 @@ public class SubtractCalculator {
 	 * Subtracts the mass spectrum stored in the filter settings from each peak.
 	 * 
 	 * @param chromatogramSelection
-	 * @param subtractFilterSettings
+	 * @param peakFilterSettings
 	 */
-	public void subtractPeakMassSpectra(List<IPeakMSD> peaks, ISubtractFilterSettingsPeak subtractFilterSettings) {
+	public void subtractPeakMassSpectra(List<IPeakMSD> peaks, PeakFilterSettings peakFilterSettings) {
 
 		/*
 		 * Test if null.
 		 */
-		if(peaks == null || peaks.size() == 0 || subtractFilterSettings == null) {
+		if(peaks == null || peaks.size() == 0 || peakFilterSettings == null) {
 			return;
 		}
 		/*
 		 * The mass spectrum must be not null.
 		 */
-		IScanMSD massSpectrum = subtractFilterSettings.getSubtractMassSpectrum();
+		IScanMSD massSpectrum = peakFilterSettings.getSubtractMassSpectrum();
 		if(massSpectrum == null) {
 			logger.warn("The mass spectrum must be not null.");
 			return;
 		}
-		boolean useNominalMasses = subtractFilterSettings.isUseNominalMasses();
-		boolean useNormalize = subtractFilterSettings.isNormalize();
+		boolean useNominalMasses = peakFilterSettings.isUseNominalMasses();
+		boolean useNormalize = peakFilterSettings.isNormalize();
 		Map<Double, Float> subtractMassSpectrumMap = getMassSpectrumMap(massSpectrum, useNominalMasses, useNormalize);
 		/*
 		 * Subtract the mass spectrum from each peak.

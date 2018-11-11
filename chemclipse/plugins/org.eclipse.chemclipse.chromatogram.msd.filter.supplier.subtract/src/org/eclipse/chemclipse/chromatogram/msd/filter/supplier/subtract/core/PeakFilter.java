@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.AbstractPeakFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.internal.calculator.SubtractCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsPeak;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.PeakFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -38,27 +38,19 @@ public class PeakFilter extends AbstractPeakFilter {
 
 	// ----------------------------------------------------MASTER METHOD
 	@Override
-	public IProcessingInfo applyFilter(List<IPeakMSD> peaks, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(List<IPeakMSD> peaks, IPeakFilterSettings filterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(peaks, peakFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
+		IProcessingInfo processingInfo = validate(peaks, filterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(filterSettings instanceof PeakFilterSettings) {
+				PeakFilterSettings peakFilterSettings = (PeakFilterSettings)filterSettings;
+				SubtractCalculator subtractCalculator = new SubtractCalculator();
+				subtractCalculator.subtractPeakMassSpectra(peaks, peakFilterSettings);
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been subtracted successfully from the peak selection."));
+				IPeakFilterResult peakFilterResult = new PeakFilterResult(ResultStatus.OK, "The subtract filter has been applied successfully.");
+				processingInfo.setProcessingResult(peakFilterResult);
+			}
 		}
-		/*
-		 * Subtract the mass spectrum.
-		 */
-		if(peakFilterSettings instanceof ISubtractFilterSettingsPeak) {
-			ISubtractFilterSettingsPeak subtractFilterSettings = (ISubtractFilterSettingsPeak)peakFilterSettings;
-			SubtractCalculator subtractCalculator = new SubtractCalculator();
-			subtractCalculator.subtractPeakMassSpectra(peaks, subtractFilterSettings);
-			processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been subtracted successfully from the peak selection."));
-		} else {
-			processingInfo.addErrorMessage(DESCRIPTION, "The filter settings instance is not a type of: " + ISubtractFilterSettingsPeak.class);
-		}
-		//
-		IPeakFilterResult peakFilterResult = new PeakFilterResult(ResultStatus.OK, "The subtract filter has been applied successfully.");
-		processingInfo.setProcessingResult(peakFilterResult);
 		return processingInfo;
 	}
 
@@ -76,14 +68,14 @@ public class PeakFilter extends AbstractPeakFilter {
 
 		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
 		peaks.add(peak);
-		IPeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
+		PeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
 		return applyFilter(peaks, peakFilterSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo applyFilter(List<IPeakMSD> peaks, IProgressMonitor monitor) {
 
-		IPeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
+		PeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
 		return applyFilter(peaks, peakFilterSettings, monitor);
 	}
 
@@ -116,7 +108,7 @@ public class PeakFilter extends AbstractPeakFilter {
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		IPeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
+		PeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
 		return applyFilter(chromatogramSelection, peakFilterSettings, monitor);
 	}
 }

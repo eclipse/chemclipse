@@ -15,11 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsMassSpectrum;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsPeak;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.PeakFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.SubtractFilterSettingsMassSpectrum;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.SubtractFilterSettingsPeak;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -68,9 +67,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static FilterSettings getFilterSettings() {
+	public static ChromatogramFilterSettings getFilterSettings() {
 
-		FilterSettings subtractFilterSettingsChromatogram = new FilterSettings();
+		ChromatogramFilterSettings subtractFilterSettingsChromatogram = new ChromatogramFilterSettings();
 		subtractFilterSettingsChromatogram.setSubtractMassSpectrum(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.getSessionSubtractMassSpectrumAsString());
 		subtractFilterSettingsChromatogram.setUseNominalMasses(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNominalMZ());
 		subtractFilterSettingsChromatogram.setUseNormalize(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan());
@@ -83,18 +82,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * 
 	 * @return {@link ISupplierFilterSettings}
 	 */
-	public static ISubtractFilterSettingsPeak getPeakFilterSettings() {
+	public static PeakFilterSettings getPeakFilterSettings() {
 
-		ISubtractFilterSettingsPeak subtractFilterSettingsPeak = new SubtractFilterSettingsPeak();
-		/*
-		 * The session mass spectrum is used.
-		 * It can be edited by the user.
-		 */
-		subtractFilterSettingsPeak.setSubtractMassSpectrum(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.getSessionSubtractMassSpectrum());
-		subtractFilterSettingsPeak.setUseNominalMasses(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNominalMZ());
-		subtractFilterSettingsPeak.setUseNormalize(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan());
+		PeakFilterSettings peakFilterSettings = new PeakFilterSettings();
+		peakFilterSettings.setSubtractMassSpectrum(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.getSessionSubtractMassSpectrumAsString());
+		peakFilterSettings.setUseNominalMasses(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNominalMZ());
+		peakFilterSettings.setUseNormalize(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan());
 		//
-		return subtractFilterSettingsPeak;
+		return peakFilterSettings;
 	}
 
 	public static ISubtractFilterSettingsMassSpectrum getMassSpectrumFilterSettings() {

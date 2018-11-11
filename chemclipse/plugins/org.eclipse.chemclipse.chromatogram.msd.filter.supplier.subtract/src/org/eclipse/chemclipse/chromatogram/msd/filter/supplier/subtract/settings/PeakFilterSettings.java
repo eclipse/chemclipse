@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractPeakFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class FilterSettings extends AbstractChromatogramFilterSettings {
+public class PeakFilterSettings extends AbstractPeakFilterSettings {
 
 	@JsonProperty(value = "Subtract Mass Spectrum", defaultValue = "18:200;28:1000;32:500")
 	@JsonPropertyDescription(value = "This is the mass spectrum used for subtraction.")
@@ -49,7 +49,7 @@ public class FilterSettings extends AbstractChromatogramFilterSettings {
 		this.useNominalMasses = useNominalMasses;
 	}
 
-	public boolean isUseNormalize() {
+	public boolean isNormalize() {
 
 		return useNormalize;
 	}

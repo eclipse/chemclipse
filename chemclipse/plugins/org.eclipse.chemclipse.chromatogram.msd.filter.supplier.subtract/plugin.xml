@@ -7,7 +7,7 @@
             description="This filter applies the Subtract filter to a chromatogram."
             filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.core.ChromatogramFilter"
             filterName="Subtract Filter"
-            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.FilterSettings"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ChromatogramFilterSettings"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.chromatogram">
       </ChromatogramFilterSupplier>
    </extension>
@@ -17,6 +17,7 @@
             description="This filter applies the Subtract filter to a list of peaks."
             filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.core.PeakFilter"
             filterName="Subtract Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.PeakFilterSettings"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.peak">
       </PeakFilterSupplier>
    </extension>
