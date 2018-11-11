@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.AbstractPeakFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IIonRemoverPeakFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.PeakFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -40,34 +40,24 @@ public class PeakFilter extends AbstractPeakFilter {
 	private static final String DESCRIPTION = "Ion Remover Peak Filter";
 
 	@Override
-	public IProcessingInfo applyFilter(List<IPeakMSD> peaks, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(List<IPeakMSD> peaks, IPeakFilterSettings filterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(peaks, peakFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
-		}
-		/*
-		 * Apply the ion remover filter to the mass spectrum.
-		 */
-		if(peakFilterSettings instanceof IIonRemoverPeakFilterSettings) {
-			//
-			IIonRemoverPeakFilterSettings ionRemoverPeakFilterSettings = (IIonRemoverPeakFilterSettings)peakFilterSettings;
-			IonSettingUtil settingIon = new IonSettingUtil();
-			IMarkedIons ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(ionRemoverPeakFilterSettings.getIonsToRemove())));
-			for(IPeakMSD peak : peaks) {
-				peak.getTargets().clear();
-				IPeakMassSpectrum peakMassSpectrum = peak.getPeakModel().getPeakMassSpectrum();
-				peakMassSpectrum.removeIons(ionsToRemove);
+		IProcessingInfo processingInfo = validate(peaks, filterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(filterSettings instanceof PeakFilterSettings) {
+				PeakFilterSettings peakFilterSettings = (PeakFilterSettings)filterSettings;
+				IonSettingUtil settingIon = new IonSettingUtil();
+				IMarkedIons ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(peakFilterSettings.getIonsToRemove())));
+				for(IPeakMSD peak : peaks) {
+					peak.getTargets().clear();
+					IPeakMassSpectrum peakMassSpectrum = peak.getPeakModel().getPeakMassSpectrum();
+					peakMassSpectrum.removeIons(ionsToRemove);
+				}
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been optimized successfully."));
+				IPeakFilterResult peakFilterResult = new PeakFilterResult(ResultStatus.OK, "The ion remover filter has been applied successfully.");
+				processingInfo.setProcessingResult(peakFilterResult);
 			}
-			//
-			processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been optimized successfully."));
-		} else {
-			processingInfo.addErrorMessage(DESCRIPTION, "The filter settings instance is not a type of: " + IIonRemoverPeakFilterSettings.class);
 		}
-		//
-		IPeakFilterResult peakFilterResult = new PeakFilterResult(ResultStatus.OK, "The ion remover filter has been applied successfully.");
-		processingInfo.setProcessingResult(peakFilterResult);
 		return processingInfo;
 	}
 
@@ -85,7 +75,7 @@ public class PeakFilter extends AbstractPeakFilter {
 
 		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
 		peaks.add(peak);
-		IPeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
+		PeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
 		return applyFilter(peaks, peakFilterSettings, monitor);
 	}
 
@@ -125,7 +115,7 @@ public class PeakFilter extends AbstractPeakFilter {
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		IPeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
+		PeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
 		return applyFilter(chromatogramSelection, peakFilterSettings, monitor);
 	}
 }

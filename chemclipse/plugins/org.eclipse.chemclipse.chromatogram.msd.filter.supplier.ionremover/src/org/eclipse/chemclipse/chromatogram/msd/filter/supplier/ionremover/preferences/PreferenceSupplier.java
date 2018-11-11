@@ -14,14 +14,12 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.prefe
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IIonRemoverMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IIonRemoverPeakFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IonRemoverMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IonRemoverPeakFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.PeakFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -68,17 +66,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static FilterSettings getFilterSettings() {
+	public static ChromatogramFilterSettings getFilterSettings() {
 
-		FilterSettings filterSettings = new FilterSettings();
+		ChromatogramFilterSettings filterSettings = new ChromatogramFilterSettings();
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		filterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
 		return filterSettings;
 	}
 
-	public static IPeakFilterSettings getPeakFilterSettings() {
+	public static PeakFilterSettings getPeakFilterSettings() {
 
-		IIonRemoverPeakFilterSettings peakFilterSettings = new IonRemoverPeakFilterSettings();
+		PeakFilterSettings peakFilterSettings = new PeakFilterSettings();
 		/*
 		 * Set the ions that shall be removed in every case.
 		 */

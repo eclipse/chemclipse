@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -34,9 +34,9 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(chromatogramFilterSettings instanceof FilterSettings) {
+			if(chromatogramFilterSettings instanceof ChromatogramFilterSettings) {
 				try {
-					FilterSettings filterSettings = (FilterSettings)chromatogramFilterSettings;
+					ChromatogramFilterSettings filterSettings = (ChromatogramFilterSettings)chromatogramFilterSettings;
 					IonSettingUtil ionSettingUtil = new IonSettingUtil();
 					IMarkedIons ionsToRemove = new MarkedIons(ionSettingUtil.extractIons(ionSettingUtil.deserialize(filterSettings.getIonsToRemove())));
 					applyIonRemoverFilter(chromatogramSelection, ionsToRemove, monitor);
@@ -53,7 +53,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		FilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
+		ChromatogramFilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 

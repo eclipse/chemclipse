@@ -7,7 +7,7 @@
             description="This filter removes all specified ions from a chromatogram."
             filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core.ChromatogramFilter"
             filterName="Ion Remover Filter"
-            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.chromatogram">
       </ChromatogramFilterSupplier>
    </extension>
@@ -17,6 +17,7 @@
             description="This filter removes all specified ions from a peak mass spectrum."
             filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core.PeakFilter"
             filterName="Ion Remover Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.PeakFilterSettings"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.peak">
       </PeakFilterSupplier>
    </extension>

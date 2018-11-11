@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core;
 import java.io.File;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
@@ -34,7 +34,7 @@ public class Show_IonRemoverFilter extends ChromatogramImporterTestCase {
 	protected IChromatogramMSD chromatogram;
 	protected IChromatogramSelectionMSD chromatogramSelection;
 	private IChromatogramFilterMSD chromatogramFilter;
-	private FilterSettings chromatogramFilterSettings;
+	private ChromatogramFilterSettings chromatogramFilterSettings;
 	private IMarkedIons excludedIons;
 	private File fileImport;
 	private File fileExport;
@@ -53,7 +53,7 @@ public class Show_IonRemoverFilter extends ChromatogramImporterTestCase {
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		chromatogramFilter = new ChromatogramFilter();
-		chromatogramFilterSettings = new FilterSettings();
+		chromatogramFilterSettings = new ChromatogramFilterSettings();
 		IonSettingUtil settingIon = new IonSettingUtil();
 		excludedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(chromatogramFilterSettings.getIonsToRemove())));
 		excludedIons.add(new MarkedIon(28));
