@@ -14,12 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined.CombinedIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.CombinedIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ICombinedIntegrationResult;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.notifier.IntegrationResultUpdateNotifier;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -50,15 +45,9 @@ public class CombinedIntegratorRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Integrator Trapezoid", IProgressMonitor.UNKNOWN);
 			/*
-			 * Chromatogram / Peak Settings
-			 */
-			ChromatogramIntegrationSettings chromatogramIntegrationSettings = new ChromatogramIntegrationSettings();
-			PeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
-			ICombinedIntegrationSettings combinedIntegrationSettings = new CombinedIntegrationSettings(chromatogramIntegrationSettings, peakIntegrationSettings);
-			/*
 			 * Show the processing view if error messages occurred.
 			 */
-			IProcessingInfo processingInfo = CombinedIntegrator.integrate(chromatogramSelection, combinedIntegrationSettings, COMBINED_INTEGRATOR_ID, monitor);
+			IProcessingInfo processingInfo = CombinedIntegrator.integrate(chromatogramSelection, COMBINED_INTEGRATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			/*
 			 * Try to set the results.
@@ -75,7 +64,6 @@ public class CombinedIntegratorRunnable implements IRunnableWithProgress {
 		}
 	}
 
-	// ---------------------------------------------------------private methods
 	/*
 	 * Updates the selection using the GUI thread.
 	 */
@@ -94,5 +82,4 @@ public class CombinedIntegratorRunnable implements IRunnableWithProgress {
 			}
 		});
 	}
-	// ---------------------------------------------------------private methods
 }

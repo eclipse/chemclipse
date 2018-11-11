@@ -14,14 +14,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.pr
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.CombinedIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IAreaSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IIntegrationSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.CombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -88,8 +85,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static ChromatogramIntegrationSettings getChromatogramIntegrationSettings() {
 
-		ChromatogramIntegrationSettings settings = new ChromatogramIntegrationSettings();
-		return settings;
+		return new ChromatogramIntegrationSettings();
 	}
 
 	public static PeakIntegrationSettings getPeakIntegrationSettings() {
@@ -116,12 +112,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return integrationSettings;
 	}
 
-	public static ICombinedIntegrationSettings getCombinedIntegrationSettings() {
+	public static CombinedIntegrationSettings getCombinedIntegrationSettings() {
 
-		IChromatogramIntegrationSettings chromatogramIntegrationSettings = getChromatogramIntegrationSettings();
-		IPeakIntegrationSettings peakIntegrationSettings = getPeakIntegrationSettings();
-		ICombinedIntegrationSettings combinedIntegrationSettings = new CombinedIntegrationSettings(chromatogramIntegrationSettings, peakIntegrationSettings);
-		return combinedIntegrationSettings;
+		return new CombinedIntegrationSettings(getChromatogramIntegrationSettings(), getPeakIntegrationSettings());
 	}
 
 	public static int getMinimumPeakWidth() {
