@@ -65,7 +65,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.ClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.calculator.SnipCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayProcessor;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -149,7 +149,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validate(chromatogramSelection, peakDetectorSettings, monitor));
 		if(!processingInfo.hasErrorMessages()) {
-			FilterSettings filterSettings = new FilterSettings();
+			ChromatogramFilterSettings filterSettings = new ChromatogramFilterSettings();
 			IDurbinWatsonClassifierResult durbinWatsonClassifierResult = new DurbinWatsonClassifierResult(ResultStatus.OK, "Test");
 			setMinimumSignalToNoise(peakDetectorSettings);
 			setMinimumPeakWidth(peakDetectorSettings);
@@ -217,7 +217,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void deconv(IChromatogramSelectionMSD chromatogramSelection, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, FilterSettings filterSettings, IProgressMonitor monitor) {
+	private void deconv(IChromatogramSelectionMSD chromatogramSelection, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		chromatogram = chromatogramSelection.getChromatogramMSD();
 		try {
@@ -337,7 +337,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private IPeakRanges getPeakRangesTicSignal(IAllIonSignals allIonSignals, FilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	private IPeakRanges getPeakRangesTicSignal(IAllIonSignals allIonSignals, ChromatogramFilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		IPeakRanges peakRanges = new PeakRanges(allIonSignals);
 		double[] yChromatogram = allIonSignals.getIonSignals(0).getIonSignals();
@@ -390,7 +390,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void setPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges, FilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	private void setPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges, ChromatogramFilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		boolean doingAll = false;
 		boolean foundPeakModel = false;
@@ -546,7 +546,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	/*
 	 * Testing different peak models
 	 */
-	private IPeakRanges getPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges, FilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	private IPeakRanges getPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges, ChromatogramFilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		List<IChromatogramPeakMSD> peakList = chromatogram.getPeaks();
 		IChromatogramPeakMSD peak, peak2, peak3, peak4, peak5, peak6 = null;
@@ -1000,7 +1000,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	 * @param monitor
 	 * @return
 	 */
-	private IDerivativesAndNoise setDerivatives(double[] yChromatogram, FilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	private IDerivativesAndNoise setDerivatives(double[] yChromatogram, ChromatogramFilterSettings filterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		/*
 		 * Savitzky Golay max second Derivative
@@ -1651,7 +1651,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	 * @param monitor
 	 * @return
 	 */
-	private double[] savitzkyGolaySmooth(int whichDerivative, double[] ticValues, FilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	private double[] savitzkyGolaySmooth(int whichDerivative, double[] ticValues, ChromatogramFilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		supplierFilterSettings.setDerivative(whichDerivative);
 		supplierFilterSettings = DurbinWatsonSetBestValuesForSavitzkyGolay(durbinWatsonClassifierResult, supplierFilterSettings, whichDerivative);
@@ -1680,7 +1680,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	 * @param filterSettings
 	 * @return supplierFilterSettings
 	 */
-	private FilterSettings DurbinWatsonSetBestValuesForSavitzkyGolay(IDurbinWatsonClassifierResult durbinWatsonClassifierResult, FilterSettings filterSettings, int whichderivative) {
+	private ChromatogramFilterSettings DurbinWatsonSetBestValuesForSavitzkyGolay(IDurbinWatsonClassifierResult durbinWatsonClassifierResult, ChromatogramFilterSettings filterSettings, int whichderivative) {
 
 		if(durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings() != null) {
 			int sizeRating = durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().size() - 1;
