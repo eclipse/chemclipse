@@ -76,7 +76,7 @@ public class ProcessTypeSupport {
 		addProcessSupplier(new PeakFilterTypeSupplierMSD()); // OK
 		addProcessSupplier(new PeakDetectorTypeSupplierMSD()); // OK
 		addProcessSupplier(new PeakIdentifierTypeSupplierMSD()); // TODO
-		addProcessSupplier(new PeakDetectorTypeSupplierCSD()); // TODO
+		addProcessSupplier(new PeakDetectorTypeSupplierCSD()); // OK
 		addProcessSupplier(new PeakIdentifierTypeSupplierCSD()); // TODO
 		addProcessSupplier(new PeakIntegratorTypeSupplier()); // OK - Improve settings
 		addProcessSupplier(new PeakQuantitationTypeSupplier()); // TODO
