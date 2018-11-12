@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result;
 
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings;
 
 public class SavitzkyGolayFilterRating implements ISavitzkyGolayFilterRating {
 
 	private double rating;
-	private FilterSettings filterSettings;
+	private ChromatogramFilterSettings filterSettings;
 
-	public SavitzkyGolayFilterRating(double rating, FilterSettings filterSettings) {
+	public SavitzkyGolayFilterRating(double rating, ChromatogramFilterSettings filterSettings) {
 		this.rating = rating;
 		this.filterSettings = filterSettings;
 	}
@@ -30,7 +30,7 @@ public class SavitzkyGolayFilterRating implements ISavitzkyGolayFilterRating {
 	}
 
 	@Override
-	public FilterSettings getFilterSettings() {
+	public ChromatogramFilterSettings getFilterSettings() {
 
 		return filterSettings;
 	}

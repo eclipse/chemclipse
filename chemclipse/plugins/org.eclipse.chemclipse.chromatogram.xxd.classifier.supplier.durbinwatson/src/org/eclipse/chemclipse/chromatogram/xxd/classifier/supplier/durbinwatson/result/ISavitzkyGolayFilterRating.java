@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result;
 
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings;
 
 public interface ISavitzkyGolayFilterRating {
 
 	double getRating();
 
-	FilterSettings getFilterSettings();
+	ChromatogramFilterSettings getFilterSettings();
 }

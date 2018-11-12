@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.ClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayProcessor;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -71,7 +71,7 @@ public class DurbinWatsonProcessor {
 					 * Width must be odd.
 					 */
 					if(width % 2 == 1) {
-						FilterSettings filterSettings = new FilterSettings();
+						ChromatogramFilterSettings filterSettings = new ChromatogramFilterSettings();
 						filterSettings.setDerivative(derivative);
 						filterSettings.setOrder(order);
 						filterSettings.setWidth(width);
