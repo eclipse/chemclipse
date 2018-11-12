@@ -49,7 +49,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolut
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges.PeakRanges;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges.PeaksDeconv;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.notifier.DeconvNotifier;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.IDeconvolutionPeakDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.PeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support.ArrayView;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support.ArraysViewDeconv;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support.DeconvHelper;
@@ -171,48 +171,48 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 
 	private void setMinimumSignalToNoise(IPeakDetectorSettings peakDetectorSettings) {
 
-		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
-			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
+		if(peakDetectorSettings instanceof PeakDetectorSettings) {
+			PeakDetectorSettings deconvolutionPeakDetectorSettings = (PeakDetectorSettings)peakDetectorSettings;
 			this.minSignalToNoiseRatio = deconvolutionPeakDetectorSettings.getMinimumSignalToNoiseRatio();
 		}
 	}
 
 	private void setSensitivityOfDeconvolution(IPeakDetectorSettings peakDetectorSettings) {
 
-		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
-			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
+		if(peakDetectorSettings instanceof PeakDetectorSettings) {
+			PeakDetectorSettings deconvolutionPeakDetectorSettings = (PeakDetectorSettings)peakDetectorSettings;
 			this.sensitivityOfDeconvolution = deconvolutionPeakDetectorSettings.getSensitivityOfDeconvolution();
 		}
 	}
 
 	private void setMinimumPeakWidth(IPeakDetectorSettings peakDetectorSettings) {
 
-		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
-			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
+		if(peakDetectorSettings instanceof PeakDetectorSettings) {
+			PeakDetectorSettings deconvolutionPeakDetectorSettings = (PeakDetectorSettings)peakDetectorSettings;
 			this.minPeakWidth = deconvolutionPeakDetectorSettings.getMinimumPeakWidth();
 		}
 	}
 
 	private void setMinimumPeakRising(IPeakDetectorSettings peakDetectorSettings) {
 
-		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
-			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
+		if(peakDetectorSettings instanceof PeakDetectorSettings) {
+			PeakDetectorSettings deconvolutionPeakDetectorSettings = (PeakDetectorSettings)peakDetectorSettings;
 			this.minPeakRising = deconvolutionPeakDetectorSettings.getMinimumPeakRising();
 		}
 	}
 
 	private void setBaselineIterations(IPeakDetectorSettings peakDetectorSettings) {
 
-		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
-			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
+		if(peakDetectorSettings instanceof PeakDetectorSettings) {
+			PeakDetectorSettings deconvolutionPeakDetectorSettings = (PeakDetectorSettings)peakDetectorSettings;
 			this.baselineIterations = deconvolutionPeakDetectorSettings.getBaselineIterations();
 		}
 	}
 
 	private void setQuantityNoiseSegments(IPeakDetectorSettings peakDetectorSettings) {
 
-		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
-			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
+		if(peakDetectorSettings instanceof PeakDetectorSettings) {
+			PeakDetectorSettings deconvolutionPeakDetectorSettings = (PeakDetectorSettings)peakDetectorSettings;
 			this.quantityNoiseSegments = deconvolutionPeakDetectorSettings.getQuantityNoiseSegments();
 		}
 	}

@@ -16,8 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.DeconvolutionPeakDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.IDeconvolutionPeakDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.PeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.Sensitivity;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -84,10 +83,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IDeconvolutionPeakDetectorSettings getPeakDetectorSettings() {
+	public static PeakDetectorSettings getPeakDetectorSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		IDeconvolutionPeakDetectorSettings peakDetectorSettings = new DeconvolutionPeakDetectorSettings();
+		PeakDetectorSettings peakDetectorSettings = new PeakDetectorSettings();
 		peakDetectorSettings.setSensitivity(Sensitivity.valueOf(preferences.get(P_SENSITIVITY, DEF_SENSITIVITY)));
 		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getDouble(P_MIN_SNR, DEF_MIN_SNR));
 		peakDetectorSettings.setMinimumPeakWidth(preferences.getInt(P_MIN_PEAKWIDTH, DEF_MIN_PEAKWIDTH));

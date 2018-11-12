@@ -12,11 +12,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 
-public class DeconvolutionPeakDetectorSettings extends AbstractPeakDetectorMSDSettings implements IDeconvolutionPeakDetectorSettings {
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-	private Sensitivity sensitivity = INITIAL_SENSITIVITY;
+public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
+
+	@JsonIgnore
+	private Sensitivity sensitivity = Sensitivity.MEDIUM;
 	private double minimumSignalToNoiseRatio;
 	private int minPeakRising; // between 1,4
 	private int minimalPeakWidth;
@@ -24,13 +27,11 @@ public class DeconvolutionPeakDetectorSettings extends AbstractPeakDetectorMSDSe
 	private int quantityNoiseSegments;
 	private int sensitivityOfDeconvolution;
 
-	@Override
 	public Sensitivity getSensitivity() {
 
 		return sensitivity;
 	}
 
-	@Override
 	public void setSensitivity(Sensitivity sensitivity) {
 
 		if(sensitivity != null) {

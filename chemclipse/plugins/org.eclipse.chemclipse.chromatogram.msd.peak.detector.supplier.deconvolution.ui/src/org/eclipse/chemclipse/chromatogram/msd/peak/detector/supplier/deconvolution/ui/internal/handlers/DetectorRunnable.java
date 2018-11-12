@@ -16,8 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.DeconvolutionPeakDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.IDeconvolutionPeakDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.PeakDetectorSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -50,7 +49,7 @@ public class DetectorRunnable implements IRunnableWithProgress {
 			/*
 			 * Detect Peaks in current chromatogram selection.
 			 */
-			IDeconvolutionPeakDetectorSettings peakDetectorSettings = new DeconvolutionPeakDetectorSettings();
+			PeakDetectorSettings peakDetectorSettings = new PeakDetectorSettings();
 			peakDetectorSettings.setSensitivity(PreferenceSupplier.getSensitivity());
 			peakDetectorSettings.setMinimumSignalToNoiseRatio(PreferenceSupplier.getMinimumSignalToNoiseRatio());
 			peakDetectorSettings.setMinimumPeakWidth(PreferenceSupplier.getMinimumPeakWidth());
@@ -66,7 +65,6 @@ public class DetectorRunnable implements IRunnableWithProgress {
 		}
 	}
 
-	// ---------------------------------------------------------private methods
 	/*
 	 * Updates the selection using the GUI thread.
 	 */
@@ -86,5 +84,4 @@ public class DetectorRunnable implements IRunnableWithProgress {
 			}
 		});
 	}
-	// ---------------------------------------------------------private methods
 }
