@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -58,8 +57,7 @@ public class PeakIdentifierTypeSupplierCSD extends AbstractProcessTypeSupplier i
 		if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
 			IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
 			if(processSettings instanceof IPeakIdentifierSettingsCSD) {
-				processingInfo = new ProcessingInfo(); // TODO REMOVE
-				// processingInfo = PeakIdentifierCSD.identify(chromatogramSelectionCSD, (IPeakIdentifierSettingsCSD)processSettings, processorId, monitor); // TODO
+				processingInfo = PeakIdentifierCSD.identify(chromatogramSelectionCSD, (IPeakIdentifierSettingsCSD)processSettings, processorId, monitor);
 			} else {
 				processingInfo = PeakIdentifierCSD.identify(chromatogramSelectionCSD, processorId, monitor);
 			}
