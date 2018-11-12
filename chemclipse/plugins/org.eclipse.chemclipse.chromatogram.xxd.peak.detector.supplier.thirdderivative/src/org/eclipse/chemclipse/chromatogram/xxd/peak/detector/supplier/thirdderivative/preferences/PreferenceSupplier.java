@@ -14,14 +14,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderi
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.settings.PeakDetectorSettings;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.settings.IThirdDerivativePeakDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.settings.ThirdDerivativePeakDetectorSettings;
-import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
@@ -68,10 +66,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IThirdDerivativePeakDetectorSettings getPeakDetectorSettings() {
+	public static PeakDetectorSettings getPeakDetectorSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		IThirdDerivativePeakDetectorSettings peakDetectorSettings = new ThirdDerivativePeakDetectorSettings();
+		PeakDetectorSettings peakDetectorSettings = new PeakDetectorSettings();
 		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND, DEF_INCLUDE_BACKGROUND));
 		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
 		return peakDetectorSettings;

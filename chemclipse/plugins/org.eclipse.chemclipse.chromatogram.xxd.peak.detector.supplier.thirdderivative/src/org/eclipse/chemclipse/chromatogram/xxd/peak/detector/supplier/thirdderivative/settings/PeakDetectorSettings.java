@@ -11,32 +11,32 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 
-public class ThirdDerivativePeakDetectorSettings extends AbstractPeakDetectorMSDSettings implements IThirdDerivativePeakDetectorSettings {
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
+
+	@JsonIgnore
 	private boolean includeBackground = false;
+	@JsonIgnore
 	private float minimumSignalToNoiseRatio;
 
-	@Override
 	public boolean isIncludeBackground() {
 
 		return includeBackground;
 	}
 
-	@Override
 	public void setIncludeBackground(boolean includeBackground) {
 
 		this.includeBackground = includeBackground;
 	}
 
-	@Override
 	public float getMinimumSignalToNoiseRatio() {
 
 		return minimumSignalToNoiseRatio;
 	}
 
-	@Override
 	public void setMinimumSignalToNoiseRatio(float minimumSignalToNoiseRatio) {
 
 		this.minimumSignalToNoiseRatio = minimumSignalToNoiseRatio;
