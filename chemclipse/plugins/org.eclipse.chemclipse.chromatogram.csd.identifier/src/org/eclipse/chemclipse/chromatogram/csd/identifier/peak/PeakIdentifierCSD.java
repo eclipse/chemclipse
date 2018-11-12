@@ -222,6 +222,18 @@ public class PeakIdentifierCSD {
 		return processingInfo;
 	}
 
+	public static IProcessingInfo identify(IChromatogramSelectionCSD chromatogramSelectionCSD, IPeakIdentifierSettingsCSD peakIdentifierSettingsCSD, String identifierId, IProgressMonitor monitor) {
+
+		IProcessingInfo processingInfo;
+		IPeakIdentifierCSD peakIdentifier = getPeakIdentifier(identifierId);
+		if(peakIdentifier != null) {
+			processingInfo = peakIdentifier.identify(chromatogramSelectionCSD, peakIdentifierSettingsCSD, monitor);
+		} else {
+			processingInfo = getNoIdentifierAvailableProcessingInfo();
+		}
+		return processingInfo;
+	}
+
 	/**
 	 * This class should have only static methods.
 	 */

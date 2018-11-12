@@ -64,25 +64,32 @@ public class PeakIdentifierRemoveUnidentified extends AbstractPeakIdentifierCSD 
 	@Override
 	public IProcessingInfo identify(IPeakCSD peak, IProgressMonitor monitor) {
 
-		IPeakIdentifierSettingsCSD peakIdentifierSettings = new PeakIdentifierSettingsCSD();
+		PeakIdentifierSettingsCSD peakIdentifierSettings = new PeakIdentifierSettingsCSD();
 		return identify(peak, peakIdentifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo identify(List<IPeakCSD> peaks, IProgressMonitor monitor) {
 
-		IPeakIdentifierSettingsCSD peakIdentifierSettings = new PeakIdentifierSettingsCSD();
+		PeakIdentifierSettingsCSD peakIdentifierSettings = new PeakIdentifierSettingsCSD();
 		return identify(peaks, peakIdentifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo identify(IChromatogramSelectionCSD chromatogramSelectionCSD, IProgressMonitor monitor) {
 
+		PeakIdentifierSettingsCSD peakIdentifierSettings = new PeakIdentifierSettingsCSD();
+		return identify(chromatogramSelectionCSD, peakIdentifierSettings, monitor);
+	}
+
+	@Override
+	public IProcessingInfo identify(IChromatogramSelectionCSD chromatogramSelectionCSD, IPeakIdentifierSettingsCSD peakIdentifierSettings, IProgressMonitor monitor) {
+
 		IChromatogramCSD chromatogramCSD = chromatogramSelectionCSD.getChromatogramCSD();
 		List<IPeakCSD> peaks = new ArrayList<IPeakCSD>();
 		for(IChromatogramPeakCSD chromatogramPeakCSD : chromatogramCSD.getPeaks(chromatogramSelectionCSD)) {
 			peaks.add(chromatogramPeakCSD);
 		}
-		return identify(peaks, monitor);
+		return identify(peaks, peakIdentifierSettings, monitor);
 	}
 }

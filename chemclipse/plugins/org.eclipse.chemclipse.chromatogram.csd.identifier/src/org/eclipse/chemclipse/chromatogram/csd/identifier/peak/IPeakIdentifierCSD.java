@@ -60,4 +60,6 @@ public interface IPeakIdentifierCSD {
 	IProcessingInfo identify(List<IPeakCSD> peaks, IProgressMonitor monitor);
 
 	IProcessingInfo identify(IChromatogramSelectionCSD chromatogramSelectionCSD, IProgressMonitor monitor);
+
+	IProcessingInfo identify(IChromatogramSelectionCSD chromatogramSelectionCSD, IPeakIdentifierSettingsCSD peakIdentifierSettings, IProgressMonitor monitor);
 }
