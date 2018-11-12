@@ -21,10 +21,10 @@ public class FilterSettings extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Backfolding Runs", defaultValue = "3")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_BACKFOLDING_RUNS, maxValue = PreferenceSupplier.MAX_BACKFOLDING_RUNS)
-	private int numberOfBackfoldingRuns;
+	private int numberOfBackfoldingRuns = 3;
 	@JsonProperty(value = "Max Retention Time Shift (Milliseconds)", defaultValue = "5000")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_RETENTION_TIME_SHIFT, maxValue = PreferenceSupplier.MAX_RETENTION_TIME_SHIFT)
-	private int maximumRetentionTimeShift;
+	private int maximumRetentionTimeShift = 5000;
 
 	public int getNumberOfBackfoldingRuns() {
 
