@@ -85,6 +85,7 @@ public class ProcessTypeSupport {
 		addProcessSupplier(new ChromatogramExportTypeSupplierMSD()); // TODO
 		addProcessSupplier(new ChromatogramExportTypeSupplierCSD()); // TODO
 		addProcessSupplier(new ChromatogramExportTypeSupplierWSD()); // TODO
+		// MassSpectrumFilter?
 	}
 
 	private void addProcessSupplier(IProcessTypeSupplier processTypeSupplier) {
