@@ -16,34 +16,30 @@ import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class XPassMassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettings implements IXPassMassSpectrumFilterSettings {
+public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettings {
 
 	@JsonProperty(value = "Number Highes", defaultValue = "5")
 	@IntSettingsProperty(minValue = 2, maxValue = 50)
-	private int numberHighest;
+	private int numberHighest = 5;
 	@JsonProperty(value = "Number Lowest", defaultValue = "5")
 	@IntSettingsProperty(minValue = 2, maxValue = 50)
-	private int numberLowest;
+	private int numberLowest = 5;
 
-	@Override
 	public int getNumberHighest() {
 
 		return numberHighest;
 	}
 
-	@Override
 	public void setNumberHighest(int numberHighest) {
 
 		this.numberHighest = numberHighest;
 	}
 
-	@Override
 	public int getNumberLowest() {
 
 		return numberLowest;
 	}
 
-	@Override
 	public void setNumberLowest(int numberLowest) {
 
 		this.numberLowest = numberLowest;

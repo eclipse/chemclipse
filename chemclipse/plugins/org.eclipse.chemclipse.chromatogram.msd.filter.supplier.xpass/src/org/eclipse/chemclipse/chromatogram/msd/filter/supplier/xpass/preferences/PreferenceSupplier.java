@@ -14,14 +14,12 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.preference
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.Activator;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.MassSpectrumFilterSettings;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.IXPassMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.XPassMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
@@ -72,9 +70,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IXPassMassSpectrumFilterSettings getMassSpectrumFilterSettings() {
+	public static MassSpectrumFilterSettings getMassSpectrumFilterSettings() {
 
-		IXPassMassSpectrumFilterSettings settings = new XPassMassSpectrumFilterSettings();
+		MassSpectrumFilterSettings settings = new MassSpectrumFilterSettings();
 		settings.setNumberHighest(getNumberHighest());
 		settings.setNumberLowest(getNumberLowest());
 		return settings;
