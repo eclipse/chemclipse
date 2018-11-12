@@ -11,82 +11,80 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 
-public class AmdisSettings extends AbstractPeakDetectorMSDSettings implements IAmdisSettings {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
+
+	@JsonIgnore
 	private IOnsiteSettings onsiteSettings;
-	private float minSignalToNoiseRatio;
-	private float minLeading;
-	private float maxLeading;
-	private float minTailing;
-	private float maxTailing;
+	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0.0")
+	private float minSignalToNoiseRatio = 0.0f;
+	@JsonProperty(value = "Min Leading", defaultValue = "0.1")
+	private float minLeading = 0.1f;
+	@JsonProperty(value = "Max Leading", defaultValue = "2.0")
+	private float maxLeading = 2.0f;
+	@JsonProperty(value = "Min Tailing", defaultValue = "0.1")
+	private float minTailing = 0.1f;
+	@JsonProperty(value = "Max Tailing", defaultValue = "2.0")
+	private float maxTailing = 2.0f;
 
-	public AmdisSettings() {
+	public PeakDetectorSettings() {
 		onsiteSettings = new OnsiteSettings();
 	}
 
-	@Override
 	public IOnsiteSettings getOnsiteSettings() {
 
 		return onsiteSettings;
 	}
 
-	@Override
 	public float getMinSignalToNoiseRatio() {
 
 		return minSignalToNoiseRatio;
 	}
 
-	@Override
 	public void setMinSignalToNoiseRatio(float minSignalToNoiseRatio) {
 
 		this.minSignalToNoiseRatio = minSignalToNoiseRatio;
 	}
 
-	@Override
 	public float getMinLeading() {
 
 		return minLeading;
 	}
 
-	@Override
 	public void setMinLeading(float minLeading) {
 
 		this.minLeading = minLeading;
 	}
 
-	@Override
 	public float getMaxLeading() {
 
 		return maxLeading;
 	}
 
-	@Override
 	public void setMaxLeading(float maxLeading) {
 
 		this.maxLeading = maxLeading;
 	}
 
-	@Override
 	public float getMinTailing() {
 
 		return minTailing;
 	}
 
-	@Override
 	public void setMinTailing(float minTailing) {
 
 		this.minTailing = minTailing;
 	}
 
-	@Override
 	public float getMaxTailing() {
 
 		return maxTailing;
 	}
 
-	@Override
 	public void setMaxTailing(float maxTailing) {
 
 		this.maxTailing = maxTailing;

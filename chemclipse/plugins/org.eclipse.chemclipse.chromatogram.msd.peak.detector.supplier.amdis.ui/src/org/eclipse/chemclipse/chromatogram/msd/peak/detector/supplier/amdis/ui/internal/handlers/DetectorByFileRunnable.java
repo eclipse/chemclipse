@@ -15,7 +15,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IAmdisSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.PeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.support.PeakProcessorSupport;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -39,8 +39,8 @@ public class DetectorByFileRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Deconvolution (AMDIS) - Read ELU", IProgressMonitor.UNKNOWN);
 			PeakProcessorSupport peakProcessorSupport = new PeakProcessorSupport();
-			IAmdisSettings amdisSettings = PreferenceSupplier.getAmdisSettings();
-			peakProcessorSupport.extractEluFileAndSetPeaks(chromatogramSelection, file, amdisSettings, monitor);
+			PeakDetectorSettings peakDetectorSettings = PreferenceSupplier.getPeakDetectorSettings();
+			peakProcessorSupport.extractEluFileAndSetPeaks(chromatogramSelection, file, peakDetectorSettings, monitor);
 			updateSelection();
 		} finally {
 			monitor.done();

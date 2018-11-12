@@ -18,8 +18,8 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runtime.IExtendedRuntimeSupport;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runtime.RuntimeSupportFactory;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IAmdisSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IOnsiteSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.PeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.support.PeakProcessorSupport;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -37,13 +37,13 @@ public class AmdisIdentifier {
 	 */
 	private static final String CONVERTER_ID = "net.openchrom.msd.converter.supplier.cdf";
 
-	public void calulateAndSetDeconvolutedPeaks(IChromatogramSelectionMSD chromatogramSelection, IAmdisSettings amdisSettings, IProgressMonitor monitor) {
+	public void calulateAndSetDeconvolutedPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Settings
 		 */
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
-		IOnsiteSettings onsiteSettings = amdisSettings.getOnsiteSettings();
+		IOnsiteSettings onsiteSettings = peakDetectorSettings.getOnsiteSettings();
 		/*
 		 * amdisTmpPath, e.g.:
 		 * E.g.: /home/openchrom/.wine/drive_c/tmp
@@ -81,7 +81,7 @@ public class AmdisIdentifier {
 				 * Wait until the ELU file is written.
 				 * Why is the file name sometimes upper case.
 				 */
-				parseELUFile(fileChromatogram, runtimeSupport, chromatogramSelection, amdisSettings, monitor);
+				parseELUFile(fileChromatogram, runtimeSupport, chromatogramSelection, peakDetectorSettings, monitor);
 				//
 			} catch(Exception e) {
 				logger.warn(e);
@@ -100,7 +100,7 @@ public class AmdisIdentifier {
 		}
 	}
 
-	private void parseELUFile(File fileChromatogram, IExtendedRuntimeSupport runtimeSupport, IChromatogramSelectionMSD chromatogramSelection, IAmdisSettings amdisSettings, IProgressMonitor monitor) {
+	private void parseELUFile(File fileChromatogram, IExtendedRuntimeSupport runtimeSupport, IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
 		try {
 			File eluFile = getEluFileName(fileChromatogram);
@@ -127,7 +127,7 @@ public class AmdisIdentifier {
 				 * Import the peaks.
 				 */
 				PeakProcessorSupport peakProcessorSupport = new PeakProcessorSupport();
-				peakProcessorSupport.extractEluFileAndSetPeaks(chromatogramSelection, eluFile, amdisSettings, monitor);
+				peakProcessorSupport.extractEluFileAndSetPeaks(chromatogramSelection, eluFile, peakDetectorSettings, monitor);
 			} else {
 				logger.warn("The ELU file couldn't be parsed.");
 			}

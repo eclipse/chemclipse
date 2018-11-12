@@ -15,9 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.AmdisSettings;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IAmdisSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IOnsiteSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.PeakDetectorSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -176,17 +175,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IAmdisSettings getAmdisSettings() {
+	public static PeakDetectorSettings getPeakDetectorSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		IAmdisSettings amdisSettings = new AmdisSettings();
-		amdisSettings.setMinSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
-		amdisSettings.setMinLeading(preferences.getFloat(P_MIN_LEADING, DEF_MIN_LEADING));
-		amdisSettings.setMaxLeading(preferences.getFloat(P_MAX_LEADING, DEF_MAX_LEADING));
-		amdisSettings.setMinTailing(preferences.getFloat(P_MIN_TAILING, DEF_MIN_TAILING));
-		amdisSettings.setMaxTailing(preferences.getFloat(P_MAX_TAILING, DEF_MAX_TAILING));
+		PeakDetectorSettings peakDetectorSettings = new PeakDetectorSettings();
+		peakDetectorSettings.setMinSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
+		peakDetectorSettings.setMinLeading(preferences.getFloat(P_MIN_LEADING, DEF_MIN_LEADING));
+		peakDetectorSettings.setMaxLeading(preferences.getFloat(P_MAX_LEADING, DEF_MAX_LEADING));
+		peakDetectorSettings.setMinTailing(preferences.getFloat(P_MIN_TAILING, DEF_MIN_TAILING));
+		peakDetectorSettings.setMaxTailing(preferences.getFloat(P_MAX_TAILING, DEF_MAX_TAILING));
 		//
-		IOnsiteSettings onsiteSettings = amdisSettings.getOnsiteSettings();
+		IOnsiteSettings onsiteSettings = peakDetectorSettings.getOnsiteSettings();
 		onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, (preferences.getBoolean(P_LOW_MZ_AUTO, DEF_LOW_MZ_AUTO)) ? IOnsiteSettings.VALUE_YES : IOnsiteSettings.VALUE_NO);
 		onsiteSettings.setValue(IOnsiteSettings.KEY_START_MZ, Integer.toString(preferences.getInt(P_START_MZ, DEF_START_MZ)));
 		onsiteSettings.setValue(IOnsiteSettings.KEY_HIGH_MZ_AUTO, (preferences.getBoolean(P_HIGH_MZ_AUTO, DEF_HIGH_MZ_AUTO)) ? IOnsiteSettings.VALUE_YES : IOnsiteSettings.VALUE_NO);
@@ -206,7 +205,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		onsiteSettings.setValue(IOnsiteSettings.KEY_SENSITIVITY, preferences.get(P_SENSITIVITY, DEF_SENSITIVITY));
 		onsiteSettings.setValue(IOnsiteSettings.KEY_SHAPE_REQUIREMENTS, preferences.get(P_SHAPE_REQUIREMENTS, DEF_SHAPE_REQUIREMENTS));
 		//
-		return amdisSettings;
+		return peakDetectorSettings;
 	}
 
 	public static String getMacWineBinary() {

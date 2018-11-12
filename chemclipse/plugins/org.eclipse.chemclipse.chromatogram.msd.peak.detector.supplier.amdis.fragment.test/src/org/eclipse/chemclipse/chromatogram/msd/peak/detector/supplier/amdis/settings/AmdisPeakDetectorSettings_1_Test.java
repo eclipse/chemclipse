@@ -11,20 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.AmdisSettings;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IAmdisSettings;
-
 import junit.framework.TestCase;
 
 public class AmdisPeakDetectorSettings_1_Test extends TestCase {
 
-	private IAmdisSettings settings;
+	private PeakDetectorSettings settings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		settings = new AmdisSettings();
+		settings = new PeakDetectorSettings();
 	}
 
 	@Override
