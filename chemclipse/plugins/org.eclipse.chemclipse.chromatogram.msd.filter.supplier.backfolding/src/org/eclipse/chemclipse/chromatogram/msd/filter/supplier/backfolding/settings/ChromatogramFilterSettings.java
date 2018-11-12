@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FilterSettings extends AbstractChromatogramFilterSettings {
+public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Backfolding Runs", defaultValue = "3")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_BACKFOLDING_RUNS, maxValue = PreferenceSupplier.MAX_BACKFOLDING_RUNS)

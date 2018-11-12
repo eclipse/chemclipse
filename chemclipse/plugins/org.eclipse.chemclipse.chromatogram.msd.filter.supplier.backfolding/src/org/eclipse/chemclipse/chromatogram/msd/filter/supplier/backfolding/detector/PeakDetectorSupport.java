@@ -14,26 +14,26 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.dete
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
-import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
-import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingPeakDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.PeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.support.BackfoldingDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.support.BackfoldingDetectorSlopes;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.support.IBackfoldingDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.support.IBackfoldingDetectorSlopes;
-import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
+import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
+import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 // TODO JUnit
-public class BackfoldingPeakDetectorSupport {
+public class PeakDetectorSupport {
 
 	private static float NORMALIZATION_BASE = 100000.0f;
 	private static int CONSECUTIVE_SCAN_STEPS = 3;
@@ -43,7 +43,7 @@ public class BackfoldingPeakDetectorSupport {
 	/**
 	 * This class has only static methods.
 	 */
-	private BackfoldingPeakDetectorSupport() {
+	private PeakDetectorSupport() {
 	}
 
 	/**
@@ -78,8 +78,8 @@ public class BackfoldingPeakDetectorSupport {
 	 */
 	private static void setDetectorSettings(IPeakDetectorSettingsMSD peakDetectorSettings) {
 
-		if(peakDetectorSettings instanceof IBackfoldingPeakDetectorSettings) {
-			IBackfoldingPeakDetectorSettings backfoldingPeakDetectorSettings = (IBackfoldingPeakDetectorSettings)peakDetectorSettings;
+		if(peakDetectorSettings instanceof PeakDetectorSettings) {
+			PeakDetectorSettings backfoldingPeakDetectorSettings = (PeakDetectorSettings)peakDetectorSettings;
 			/*
 			 * The threshold value depends on the actual calculation.<br/> The
 			 * threshold defines the slope sensitivity.

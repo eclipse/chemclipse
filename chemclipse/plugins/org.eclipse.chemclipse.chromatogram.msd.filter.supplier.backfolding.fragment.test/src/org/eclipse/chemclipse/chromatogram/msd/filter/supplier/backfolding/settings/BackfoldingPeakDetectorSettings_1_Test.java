@@ -11,19 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingSettings;
-
 import junit.framework.TestCase;
 
 public class BackfoldingPeakDetectorSettings_1_Test extends TestCase {
 
-	private IBackfoldingPeakDetectorSettings settings;
+	private PeakDetectorSettings settings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		settings = new BackfoldingPeakDetectorSettings();
+		settings = new PeakDetectorSettings();
 	}
 
 	@Override

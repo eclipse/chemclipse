@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.Abstract
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.detector.BackfoldingShifter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -35,9 +35,9 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(chromatogramFilterSettings instanceof FilterSettings) {
+			if(chromatogramFilterSettings instanceof ChromatogramFilterSettings) {
 				try {
-					FilterSettings filterSettings = (FilterSettings)chromatogramFilterSettings;
+					ChromatogramFilterSettings filterSettings = (ChromatogramFilterSettings)chromatogramFilterSettings;
 					applyBackfoldingFilter(chromatogramSelection, filterSettings, monitor);
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection has been successfully backfolded."));
 				} catch(FilterException e) {
@@ -52,11 +52,11 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		FilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
+		ChromatogramFilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void applyBackfoldingFilter(IChromatogramSelectionMSD chromatogramSelection, FilterSettings filterSettings, IProgressMonitor monitor) throws FilterException {
+	private void applyBackfoldingFilter(IChromatogramSelectionMSD chromatogramSelection, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) throws FilterException {
 
 		/*
 		 * The chromatogram has already been checked by

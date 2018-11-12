@@ -11,37 +11,31 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.BackfoldingSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingSettings;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 
-/**
- * @author eselmeister
- */
-public class BackfoldingPeakDetectorSettings extends AbstractPeakDetectorMSDSettings implements IBackfoldingPeakDetectorSettings {
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
+
+	@JsonIgnore
 	private IBackfoldingSettings backfoldingSettings;
-	private Threshold threshold = IBackfoldingPeakDetectorSettings.INITIAL_THRESHOLD;
+	@JsonIgnore
+	private Threshold threshold = Threshold.MEDIUM;
 
-	public BackfoldingPeakDetectorSettings() {
+	public PeakDetectorSettings() {
 		backfoldingSettings = new BackfoldingSettings();
 	}
 
-	// ------------------------------------------------------IBackfoldingSettings
-	@Override
 	public IBackfoldingSettings getBackfoldingSettings() {
 
 		return backfoldingSettings;
 	}
 
-	// ------------------------------------------------------IBackfoldingSettings
-	@Override
 	public Threshold getThreshold() {
 
 		return threshold;
 	}
 
-	@Override
 	public void setThreshold(Threshold threshold) {
 
 		if(threshold != null) {

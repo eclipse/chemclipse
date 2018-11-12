@@ -17,9 +17,8 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.BackfoldingPeakDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.FilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.IBackfoldingPeakDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.PeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.Threshold;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.support.IBackfoldingDetectorSlopes;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
@@ -59,7 +58,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 
 	// ---------------------------------------------------IBackfoldingShifter
 	@Override
-	public IExtractedIonSignals shiftIons(IChromatogramSelectionMSD chromatogramSelection, FilterSettings filterSettings, IProgressMonitor monitor) {
+	public IExtractedIonSignals shiftIons(IChromatogramSelectionMSD chromatogramSelection, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Get the extracted ion signals in the range of the chromatogram
@@ -95,7 +94,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	 * @param IExtractedIonSignals
 	 * @return {@link IExtractedIonSignals}
 	 */
-	private IExtractedIonSignals calculateExtractedIonSignals(IExtractedIonSignals extractedIonSignals, String taskDescription, FilterSettings filterSettings, IProgressMonitor monitor) {
+	private IExtractedIonSignals calculateExtractedIonSignals(IExtractedIonSignals extractedIonSignals, String taskDescription, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		ITotalScanSignals totalIonSignals;
 		/*
@@ -131,7 +130,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	 * @param totalIonSignals
 	 * @param extractedIonSignalsShifted
 	 */
-	private void adjustIon(int ion, ITotalScanSignals totalIonSignals, IExtractedIonSignals extractedIonSignalsShifted, FilterSettings filterSettings) {
+	private void adjustIon(int ion, ITotalScanSignals totalIonSignals, IExtractedIonSignals extractedIonSignalsShifted, ChromatogramFilterSettings filterSettings) {
 
 		int startScan = extractedIonSignalsShifted.getStartScan();
 		int stopScan = extractedIonSignalsShifted.getStopScan();
@@ -210,7 +209,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	 * @param totalIonSignalsShifted
 	 * @param extractedIonSignalsShifted
 	 */
-	private void addShiftedIonSignalsToExtractedIonSignals(int ion, ITotalScanSignals totalIonSignalsShifted, IExtractedIonSignals extractedIonSignalsShifted, FilterSettings filterSettings) {
+	private void addShiftedIonSignalsToExtractedIonSignals(int ion, ITotalScanSignals totalIonSignalsShifted, IExtractedIonSignals extractedIonSignalsShifted, ChromatogramFilterSettings filterSettings) {
 
 		ITotalScanSignal totalIonSignal;
 		/*
@@ -259,7 +258,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	 * @param totalIonSignalsShifted
 	 * @return int
 	 */
-	private int calculateDeltaRetentionTimeShift(ITotalScanSignals totalIonSignalsShifted, FilterSettings filterSettings) {
+	private int calculateDeltaRetentionTimeShift(ITotalScanSignals totalIonSignalsShifted, ChromatogramFilterSettings filterSettings) {
 
 		ITotalScanSignals totalIonSignalsNegative = getTotalIonSignalsNegative(totalIonSignalsShifted);
 		ITotalScanSignals totalIonSignalsPositive = getTotalIonSignalsPositive(totalIonSignalsShifted);
@@ -270,7 +269,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 		 * able to use another settings?<br/> I my opinion, i think no.
 		 * eselmeister<br/> But if it will be needed, it could be implemented.
 		 */
-		IBackfoldingPeakDetectorSettings peakDetectorSettings = new BackfoldingPeakDetectorSettings();
+		PeakDetectorSettings peakDetectorSettings = new PeakDetectorSettings();
 		peakDetectorSettings.setThreshold(Threshold.OFF);
 		List<IRawPeak> rawPeaksNegative = getRawPeaks(totalIonSignalsNegative, peakDetectorSettings);
 		List<IRawPeak> rawPeaksPositive = getRawPeaks(totalIonSignalsPositive, peakDetectorSettings);
@@ -334,8 +333,8 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	private List<IRawPeak> getRawPeaks(ITotalScanSignals totalIonSignals, IPeakDetectorSettingsMSD peakDetectorSettings) {
 
 		IBackfoldingDetectorSlopes slopes;
-		slopes = BackfoldingPeakDetectorSupport.getBackfoldingSlopes(totalIonSignals, peakDetectorSettings);
-		List<IRawPeak> rawPeaks = BackfoldingPeakDetectorSupport.getRawPeaks(slopes, peakDetectorSettings);
+		slopes = PeakDetectorSupport.getBackfoldingSlopes(totalIonSignals, peakDetectorSettings);
+		List<IRawPeak> rawPeaks = PeakDetectorSupport.getRawPeaks(slopes, peakDetectorSettings);
 		return rawPeaks;
 	}
 
@@ -365,7 +364,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 	 * @param positiveTreeMap
 	 * @return int[]
 	 */
-	private int[] calculateDeltaPeakDistances(int peaks, List<IRawPeak> rawPeaksNegative, NavigableMap<Integer, Integer> positiveTreeMap, FilterSettings filterSettings) {
+	private int[] calculateDeltaPeakDistances(int peaks, List<IRawPeak> rawPeaksNegative, NavigableMap<Integer, Integer> positiveTreeMap, ChromatogramFilterSettings filterSettings) {
 
 		IRawPeak negativeRawPeak;
 		int deltaDistance = 0;

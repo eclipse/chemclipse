@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -69,10 +69,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static FilterSettings getFilterSettings() {
+	public static ChromatogramFilterSettings getFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		FilterSettings filterSettings = new FilterSettings();
+		ChromatogramFilterSettings filterSettings = new ChromatogramFilterSettings();
 		filterSettings.setMaximumRetentionTimeShift(preferences.getInt(P_MAX_RETENTION_TIME_SHIFT, DEF_RETENTION_TIME_SHIFT));
 		filterSettings.setNumberOfBackfoldingRuns(preferences.getInt(P_BACKFOLDING_RUNS, DEF_BACKFOLDING_RUNS));
 		return filterSettings;
