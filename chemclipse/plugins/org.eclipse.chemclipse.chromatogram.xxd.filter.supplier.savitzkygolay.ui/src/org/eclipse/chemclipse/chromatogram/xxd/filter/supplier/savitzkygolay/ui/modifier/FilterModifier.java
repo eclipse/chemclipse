@@ -26,10 +26,12 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	private static final String DESCRIPTION = "Savitzky-Golay Smoothing";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay";
 
+	@SuppressWarnings("rawtypes")
 	public FilterModifier(IChromatogramSelection chromatogramSelection) {
 		super(chromatogramSelection);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void execute(IProgressMonitor monitor) {
 

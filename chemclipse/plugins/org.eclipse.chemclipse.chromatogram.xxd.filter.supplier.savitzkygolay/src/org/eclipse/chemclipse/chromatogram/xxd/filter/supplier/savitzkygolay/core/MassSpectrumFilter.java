@@ -22,11 +22,10 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.result.MassSpectrumFilterR
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.calculator.FilterSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISavitzkyGolayMassSpectrumFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -35,30 +34,26 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 	private static final String DESCRIPTION = "Savitzky-Golay Mass Spectra Smoother";
 
 	@Override
-	public IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings filterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(massSpectra, massSpectrumFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
-		}
-		if(massSpectrumFilterSettings instanceof ISavitzkyGolayMassSpectrumFilterSettings) {
-			//
-			ISavitzkyGolayMassSpectrumFilterSettings savitzkyGolayMassSpectrumFilterSettings = (ISavitzkyGolayMassSpectrumFilterSettings)massSpectrumFilterSettings;
-			FilterSupplier filterSupplier = new FilterSupplier();
-			//
-			int derivative = savitzkyGolayMassSpectrumFilterSettings.getDerivative();
-			int order = savitzkyGolayMassSpectrumFilterSettings.getOrder();
-			int width = savitzkyGolayMassSpectrumFilterSettings.getWidth();
-			filterSupplier.applySavitzkyGolayFilter(massSpectra, derivative, order, width, monitor);
-			//
-			processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been successfully smoothed."));
-		} else {
-			processingInfo.addErrorMessage(DESCRIPTION, "The filter settings instance is not of type: " + ISavitzkyGolayMassSpectrumFilterSettings.class);
+		IProcessingInfo processingInfo = validate(massSpectra, filterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(filterSettings instanceof MassSpectrumFilterSettings) {
+				MassSpectrumFilterSettings savitzkyGolayMassSpectrumFilterSettings = (MassSpectrumFilterSettings)filterSettings;
+				FilterSupplier filterSupplier = new FilterSupplier();
+				int derivative = savitzkyGolayMassSpectrumFilterSettings.getDerivative();
+				int order = savitzkyGolayMassSpectrumFilterSettings.getOrder();
+				int width = savitzkyGolayMassSpectrumFilterSettings.getWidth();
+				filterSupplier.applySavitzkyGolayFilter(massSpectra, derivative, order, width, monitor);
+				//
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been successfully smoothed."));
+				IMassSpectrumFilterResult massSpectrumFilterResult = new MassSpectrumFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
+				processingInfo.setProcessingResult(massSpectrumFilterResult);
+			} else {
+				processingInfo.addErrorMessage(DESCRIPTION, "The filter settings instance is not of type: " + MassSpectrumFilterSettings.class);
+			}
 		}
 		//
-		IMassSpectrumFilterResult massSpectrumFilterResult = new MassSpectrumFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
-		processingInfo.setProcessingResult(massSpectrumFilterResult);
 		return processingInfo;
 	}
 
@@ -74,14 +69,14 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 	@Override
 	public IProcessingInfo applyFilter(IScanMSD massSpectrum, IProgressMonitor monitor) {
 
-		IMassSpectrumFilterSettings massSpectrumFilterSettings = PreferenceSupplier.getMassSpectrumFilterSettings();
+		MassSpectrumFilterSettings massSpectrumFilterSettings = PreferenceSupplier.getMassSpectrumFilterSettings();
 		return applyFilter(massSpectrum, massSpectrumFilterSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
 
-		IMassSpectrumFilterSettings massSpectrumFilterSEttings = PreferenceSupplier.getMassSpectrumFilterSettings();
+		MassSpectrumFilterSettings massSpectrumFilterSEttings = PreferenceSupplier.getMassSpectrumFilterSettings();
 		return applyFilter(massSpectra, massSpectrumFilterSEttings, monitor);
 	}
 }

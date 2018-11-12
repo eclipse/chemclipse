@@ -18,16 +18,16 @@ import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FilterSettings extends AbstractChromatogramFilterSettings {
+public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettings {
 
-	private static final Logger logger = Logger.getLogger(FilterSettings.class);
+	private static final Logger logger = Logger.getLogger(ChromatogramFilterSettings.class);
 	//
 	@JsonProperty(value = "Order", defaultValue = "2")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_ORDER, maxValue = PreferenceSupplier.MAX_ORDER)
-	private int order;
+	private int order = 2;
 	@JsonProperty(value = "Width", defaultValue = "5")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
-	private int width;
+	private int width = 5;
 
 	public int getDerivative() {
 

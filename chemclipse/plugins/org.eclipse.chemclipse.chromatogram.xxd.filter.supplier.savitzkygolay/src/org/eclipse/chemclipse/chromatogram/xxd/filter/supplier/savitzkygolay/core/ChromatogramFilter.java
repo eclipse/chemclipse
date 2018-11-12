@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResu
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayProcessor;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -26,13 +26,13 @@ public class ChromatogramFilter extends AbstractChromatogramSignalFilter {
 	protected IChromatogramFilterResult applyFilter(ITotalScanSignals totalSignals, IChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
-		return processor.apply(totalSignals, (FilterSettings)filterSettings, monitor);
+		return processor.apply(totalSignals, (ChromatogramFilterSettings)filterSettings, monitor);
 	}
 
 	@Override
 	protected IChromatogramFilterResult applyFilter(ITotalScanSignals totalSignals, IProgressMonitor monitor) {
 
-		FilterSettings chromatogramFilterSettings = PreferenceSupplier.getFilterSettings();
+		ChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getFilterSettings();
 		return applyFilter(totalSignals, chromatogramFilterSettings, monitor);
 	}
 }

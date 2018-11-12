@@ -10,48 +10,53 @@
  * Dr. Philip Wenig - initial API and implementation
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.AbstractMassSpectrumFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
-public class SavitzkyGolayMassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettings implements ISavitzkyGolayMassSpectrumFilterSettings {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-	private int derivative;
-	private int order;
-	private int width;
+public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettings {
 
-	@Override
+	private static final Logger logger = Logger.getLogger(MassSpectrumFilterSettings.class);
+	//
+	@JsonProperty(value = "Order", defaultValue = "2")
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_ORDER, maxValue = PreferenceSupplier.MAX_ORDER)
+	private int order = 2;
+	@JsonProperty(value = "Width", defaultValue = "5")
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
+	private int width = 5;
+
 	public int getDerivative() {
 
-		return derivative;
+		return 0;
 	}
 
-	@Override
 	public void setDerivative(int derivative) {
 
-		this.derivative = derivative;
+		if(derivative != 0) {
+			logger.debug("Derivative is not supported");
+		}
 	}
 
-	@Override
 	public int getOrder() {
 
 		return order;
 	}
 
-	@Override
 	public void setOrder(int order) {
 
 		this.order = order;
 	}
 
-	@Override
 	public int getWidth() {
 
 		return width;
 	}
 
-	@Override
 	public void setWidth(int width) {
 
 		this.width = width;

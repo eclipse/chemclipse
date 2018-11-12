@@ -15,9 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.FilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISavitzkyGolayMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SavitzkyGolayMassSpectrumFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -81,19 +80,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static FilterSettings getFilterSettings() {
+	public static ChromatogramFilterSettings getFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		FilterSettings filterSettings = new FilterSettings();
+		ChromatogramFilterSettings filterSettings = new ChromatogramFilterSettings();
 		filterSettings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
 		filterSettings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
 		return filterSettings;
 	}
 
-	public static ISavitzkyGolayMassSpectrumFilterSettings getMassSpectrumFilterSettings() {
+	public static MassSpectrumFilterSettings getMassSpectrumFilterSettings() {
 
-		ISavitzkyGolayMassSpectrumFilterSettings settings = new SavitzkyGolayMassSpectrumFilterSettings();
-		settings.setDerivative(getDerivative());
+		MassSpectrumFilterSettings settings = new MassSpectrumFilterSettings();
 		settings.setOrder(getOrder());
 		settings.setWidth(getWidth());
 		return settings;

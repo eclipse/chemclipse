@@ -15,13 +15,13 @@ import junit.framework.TestCase;
 
 public class SupplierFilterSettings_1_Test extends TestCase {
 
-	private FilterSettings settings;
+	private ChromatogramFilterSettings settings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		settings = new FilterSettings();
+		settings = new ChromatogramFilterSettings();
 	}
 
 	@Override
@@ -37,11 +37,11 @@ public class SupplierFilterSettings_1_Test extends TestCase {
 
 	public void test2() {
 
-		assertEquals(0, settings.getOrder());
+		assertEquals(2, settings.getOrder());
 	}
 
 	public void test3() {
 
-		assertEquals(0, settings.getWidth());
+		assertEquals(5, settings.getWidth());
 	}
 }
