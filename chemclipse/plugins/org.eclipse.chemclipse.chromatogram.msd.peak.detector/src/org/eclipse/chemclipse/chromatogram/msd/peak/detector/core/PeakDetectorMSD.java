@@ -127,11 +127,11 @@ public class PeakDetectorMSD {
 			if(element.getAttribute(PEAK_DETECTOR_SETTINGS) != null) {
 				try {
 					IPeakDetectorSettingsMSD instance = (IPeakDetectorSettingsMSD)element.createExecutableExtension(PEAK_DETECTOR_SETTINGS);
-					supplier.setPeakDetectorSettingsClass(instance.getClass());
+					supplier.setSettingsClass(instance.getClass());
 				} catch(CoreException e) {
 					logger.error(e.getLocalizedMessage(), e);
 					// settings class is optional, set null instead
-					supplier.setPeakDetectorSettingsClass(null);
+					supplier.setSettingsClass(null);
 				}
 			}
 			peakDetectorSupport.add(supplier);

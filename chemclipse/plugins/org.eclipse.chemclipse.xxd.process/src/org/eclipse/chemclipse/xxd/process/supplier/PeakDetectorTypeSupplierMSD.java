@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -42,7 +41,7 @@ public class PeakDetectorTypeSupplierMSD extends AbstractProcessTypeSupplier imp
 				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
 				processorSupplier.setName(supplier.getPeakDetectorName());
 				processorSupplier.setDescription(supplier.getDescription());
-				// processorSupplier.setSettingsClass(supplier.getSettingsClass()); // TODO
+				processorSupplier.setSettingsClass(supplier.getSettingsClass());
 				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoPeakDetectorAvailableException e) {
@@ -58,8 +57,7 @@ public class PeakDetectorTypeSupplierMSD extends AbstractProcessTypeSupplier imp
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			if(processSettings instanceof IPeakDetectorSettingsMSD) {
-				processingInfo = new ProcessingInfo(); // TODO REMOVE
-				// processingInfo = PeakDetectorMSD.detect(chromatogramSelectionMSD, (IPeakDetectorSettingsMSD)processSettings, processorId, monitor); // TODO
+				processingInfo = PeakDetectorMSD.detect(chromatogramSelectionMSD, (IPeakDetectorSettingsMSD)processSettings, processorId, monitor);
 			} else {
 				processingInfo = PeakDetectorMSD.detect(chromatogramSelectionMSD, processorId, monitor);
 			}

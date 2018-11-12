@@ -42,5 +42,5 @@ public interface IPeakDetectorSupplier {
 	 * 
 	 * @return
 	 */
-	Class<? extends IPeakDetectorSettings> getPeakDetectorSettingsClass();
+	Class<? extends IPeakDetectorSettings> getSettingsClass();
 }

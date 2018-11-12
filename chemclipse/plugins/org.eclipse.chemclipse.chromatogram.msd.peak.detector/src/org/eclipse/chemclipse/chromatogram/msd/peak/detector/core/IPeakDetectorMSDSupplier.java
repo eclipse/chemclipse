@@ -17,5 +17,5 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSuppl
 public interface IPeakDetectorMSDSupplier extends IPeakDetectorSupplier {
 
 	@Override
-	Class<? extends IPeakDetectorSettingsMSD> getPeakDetectorSettingsClass();
+	Class<? extends IPeakDetectorSettingsMSD> getSettingsClass();
 }

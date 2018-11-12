@@ -21,8 +21,8 @@ public class PeakDetectorCSDSupplier extends AbstractPeakDetectorSupplier<IPeakD
 	}
 
 	@Override
-	public Class<? extends IPeakDetectorSettingsCSD> getPeakDetectorSettingsClass() {
+	public Class<? extends IPeakDetectorSettingsCSD> getSettingsClass() {
 
-		return getSettingsClass();
+		return super.getSettingsClass();
 	}
 }

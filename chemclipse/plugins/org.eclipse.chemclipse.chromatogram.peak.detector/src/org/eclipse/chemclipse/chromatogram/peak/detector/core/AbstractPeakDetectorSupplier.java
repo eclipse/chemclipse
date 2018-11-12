@@ -19,7 +19,7 @@ public abstract class AbstractPeakDetectorSupplier<S extends IPeakDetectorSettin
 	private String id = "";
 	private String description = "";
 	private String peakDetectorName = "";
-	private Class<? extends S> peakDetectorSettingsClass;
+	private Class<? extends S> settingsClass;
 
 	public AbstractPeakDetectorSupplier(String id, String description, String peakDetectorName) {
 		setId(id);
@@ -82,17 +82,16 @@ public abstract class AbstractPeakDetectorSupplier<S extends IPeakDetectorSettin
 		}
 	}
 
-	protected Class<? extends S> getSettingsClass() {
+	public Class<? extends S> getSettingsClass() {
 
-		return this.peakDetectorSettingsClass;
+		return this.settingsClass;
 	}
 
-	public void setPeakDetectorSettingsClass(Class<? extends S> peakDetectorSettingsClass) {
+	public void setSettingsClass(Class<? extends S> settingsClass) {
 
-		this.peakDetectorSettingsClass = peakDetectorSettingsClass;
+		this.settingsClass = settingsClass;
 	}
 
-	// ------------------------------------hashCode, equals, toString
 	@Override
 	public boolean equals(Object other) {
 
@@ -129,5 +128,4 @@ public abstract class AbstractPeakDetectorSupplier<S extends IPeakDetectorSettin
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------------hashCode, equals, toString
 }

@@ -17,5 +17,5 @@ import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetec
 public interface IPeakDetectorWSDSupplier extends IPeakDetectorSupplier {
 
 	@Override
-	Class<? extends IPeakDetectorWSDSettings> getPeakDetectorSettingsClass();
+	Class<? extends IPeakDetectorWSDSettings> getSettingsClass();
 }
