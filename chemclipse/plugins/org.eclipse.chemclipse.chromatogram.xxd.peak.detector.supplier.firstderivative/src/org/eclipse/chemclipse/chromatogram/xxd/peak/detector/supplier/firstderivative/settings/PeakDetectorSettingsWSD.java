@@ -14,24 +14,22 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.AbstractPeakDetectorWSDSettings;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
-public class FirstDerivativePeakDetectorWSDSettings extends AbstractPeakDetectorWSDSettings implements IFirstDerivativePeakDetectorWSDSettings {
+public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 
-	private Threshold threshold = IFirstDerivativePeakDetectorWSDSettings.INITIAL_THRESHOLD;
+	private Threshold threshold = Threshold.MEDIUM;
 	private boolean includeBackground = false;
 	private float minimumSignalToNoiseRatio;
 	private WindowSize windowSize;
 
-	public FirstDerivativePeakDetectorWSDSettings() {
+	public PeakDetectorSettingsWSD() {
 		windowSize = WindowSize.WIDTH_5;
 	}
 
-	@Override
 	public Threshold getThreshold() {
 
 		return threshold;
 	}
 
-	@Override
 	public void setThreshold(Threshold threshold) {
 
 		if(threshold != null) {
@@ -39,37 +37,31 @@ public class FirstDerivativePeakDetectorWSDSettings extends AbstractPeakDetector
 		}
 	}
 
-	@Override
 	public boolean isIncludeBackground() {
 
 		return includeBackground;
 	}
 
-	@Override
 	public void setIncludeBackground(boolean includeBackground) {
 
 		this.includeBackground = includeBackground;
 	}
 
-	@Override
 	public float getMinimumSignalToNoiseRatio() {
 
 		return minimumSignalToNoiseRatio;
 	}
 
-	@Override
 	public void setMinimumSignalToNoiseRatio(float minimumSignalToNoiseRatio) {
 
 		this.minimumSignalToNoiseRatio = minimumSignalToNoiseRatio;
 	}
 
-	@Override
 	public WindowSize getMovingAverageWindowSize() {
 
 		return windowSize;
 	}
 
-	@Override
 	public void setMovingAverageWindowSize(WindowSize windowSize) {
 
 		this.windowSize = windowSize;
