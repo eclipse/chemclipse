@@ -49,6 +49,8 @@ public class PeakFilter extends AbstractPeakFilter {
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been subtracted successfully from the peak selection."));
 				IPeakFilterResult peakFilterResult = new PeakFilterResult(ResultStatus.OK, "The subtract filter has been applied successfully.");
 				processingInfo.setProcessingResult(peakFilterResult);
+			} else {
+				processingInfo.addErrorMessage(DESCRIPTION, "The filter settings instance is not a type of: " + PeakFilterSettings.class);
 			}
 		}
 		return processingInfo;

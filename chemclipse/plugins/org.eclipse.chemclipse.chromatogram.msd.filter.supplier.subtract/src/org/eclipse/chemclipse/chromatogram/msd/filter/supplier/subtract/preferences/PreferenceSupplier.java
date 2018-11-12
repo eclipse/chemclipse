@@ -16,9 +16,8 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsMassSpectrum;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.PeakFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.SubtractFilterSettingsMassSpectrum;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -77,11 +76,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return subtractFilterSettingsChromatogram;
 	}
 
-	/**
-	 * Returns the default peak filter settings.
-	 * 
-	 * @return {@link ISupplierFilterSettings}
-	 */
 	public static PeakFilterSettings getPeakFilterSettings() {
 
 		PeakFilterSettings peakFilterSettings = new PeakFilterSettings();
@@ -92,17 +86,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return peakFilterSettings;
 	}
 
-	public static ISubtractFilterSettingsMassSpectrum getMassSpectrumFilterSettings() {
+	public static MassSpectrumFilterSettings getMassSpectrumFilterSettings() {
 
-		ISubtractFilterSettingsMassSpectrum subtractFilterSettingsMassSpectrum = new SubtractFilterSettingsMassSpectrum();
-		/*
-		 * The session mass spectrum is used.
-		 * It can be edited by the user.
-		 */
-		subtractFilterSettingsMassSpectrum.setSubtractMassSpectrum(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.getSessionSubtractMassSpectrum());
-		subtractFilterSettingsMassSpectrum.setUseNominalMasses(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNominalMZ());
-		subtractFilterSettingsMassSpectrum.setUseNormalize(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan());
+		MassSpectrumFilterSettings massSpectrumFilterSettings = new MassSpectrumFilterSettings();
+		massSpectrumFilterSettings.setSubtractMassSpectrum(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.getSessionSubtractMassSpectrumAsString());
+		massSpectrumFilterSettings.setUseNominalMasses(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNominalMZ());
+		massSpectrumFilterSettings.setUseNormalize(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan());
 		//
-		return subtractFilterSettingsMassSpectrum;
+		return massSpectrumFilterSettings;
 	}
 }

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsMassSpectrum;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.PeakFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -130,24 +130,24 @@ public class SubtractCalculator {
 		}
 	}
 
-	public void subtractMassSpectra(List<IScanMSD> massSpectra, ISubtractFilterSettingsMassSpectrum subtractFilterSettings) {
+	public void subtractMassSpectra(List<IScanMSD> massSpectra, MassSpectrumFilterSettings massSpectrumFilterSettings) {
 
 		/*
 		 * Test if null.
 		 */
-		if(massSpectra == null || massSpectra.size() == 0 || subtractFilterSettings == null) {
+		if(massSpectra == null || massSpectra.size() == 0 || massSpectrumFilterSettings == null) {
 			return;
 		}
 		/*
 		 * The mass spectrum must be not null.
 		 */
-		IScanMSD massSpectrum = subtractFilterSettings.getSubtractMassSpectrum();
+		IScanMSD massSpectrum = massSpectrumFilterSettings.getSubtractMassSpectrum();
 		if(massSpectrum == null) {
 			logger.warn("The mass spectrum must be not null.");
 			return;
 		}
-		boolean useNominalMasses = subtractFilterSettings.isUseNominalMasses();
-		boolean useNormalize = subtractFilterSettings.isNormalize();
+		boolean useNominalMasses = massSpectrumFilterSettings.isUseNominalMasses();
+		boolean useNormalize = massSpectrumFilterSettings.isNormalize();
 		Map<Double, Float> subtractMassSpectrumMap = getMassSpectrumMap(massSpectrum, useNominalMasses, useNormalize);
 		/*
 		 * Subtract the mass spectrum from each peak.

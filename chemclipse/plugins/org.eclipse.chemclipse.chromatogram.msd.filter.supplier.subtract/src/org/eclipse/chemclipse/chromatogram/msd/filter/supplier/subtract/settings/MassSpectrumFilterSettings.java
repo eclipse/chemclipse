@@ -14,43 +14,46 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.setting
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.AbstractMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
-public class SubtractFilterSettingsMassSpectrum extends AbstractMassSpectrumFilterSettings implements ISubtractFilterSettingsMassSpectrum {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-	private IScanMSD massSpectrum;
-	private boolean useNominalMasses;
-	private boolean useNormalize;
+public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettings {
 
-	@Override
+	@JsonProperty(value = "Subtract Mass Spectrum", defaultValue = "18:200;28:1000;32:500")
+	@JsonPropertyDescription(value = "This is the mass spectrum used for subtraction.")
+	private String subtractMassSpectrum = "18:200;28:1000;32:500";
+	@JsonProperty(value = "Use Nominal Mass", defaultValue = "true")
+	@JsonPropertyDescription(value = "Use the nominal mass schema.")
+	private boolean useNominalMasses = true;
+	@JsonProperty(value = "Normalize Data", defaultValue = "true")
+	@JsonPropertyDescription(value = "Normalize the intensities.")
+	private boolean useNormalize = true;
+
+	public void setSubtractMassSpectrum(String subtractMassSpectrum) {
+
+		this.subtractMassSpectrum = subtractMassSpectrum;
+	}
+
 	public IScanMSD getSubtractMassSpectrum() {
 
-		return massSpectrum;
+		return org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.getMassSpectrum(subtractMassSpectrum);
 	}
 
-	@Override
-	public void setSubtractMassSpectrum(IScanMSD massSpectrum) {
-
-		this.massSpectrum = massSpectrum;
-	}
-
-	@Override
 	public boolean isUseNominalMasses() {
 
 		return useNominalMasses;
 	}
 
-	@Override
 	public void setUseNominalMasses(boolean useNominalMasses) {
 
 		this.useNominalMasses = useNominalMasses;
 	}
 
-	@Override
 	public boolean isNormalize() {
 
 		return useNormalize;
 	}
 
-	@Override
 	public void setUseNormalize(boolean useNormalize) {
 
 		this.useNormalize = useNormalize;
