@@ -78,11 +78,18 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD {
 	@Override
 	public IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IProgressMonitor monitor) {
 
+		IPeakIdentifierSettingsMSD peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
+		return identify(chromatogramSelectionMSD, peakIdentifierSettings, monitor);
+	}
+
+	@Override
+	public IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IPeakIdentifierSettingsMSD peakIdentifierSettings, IProgressMonitor monitor) {
+
 		IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
 		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
 		for(IChromatogramPeakMSD chromatogramPeakMSD : chromatogramMSD.getPeaks(chromatogramSelectionMSD)) {
 			peaks.add(chromatogramPeakMSD);
 		}
-		return identify(peaks, monitor);
+		return identify(peaks, peakIdentifierSettings, monitor);
 	}
 }
