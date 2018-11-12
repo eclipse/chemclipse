@@ -16,6 +16,7 @@ import java.util.Iterator;
 import org.apache.commons.math3.complex.Complex;
 import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
 import org.eclipse.chemclipse.nmr.model.core.ISignalNMR;
+import org.eclipse.chemclipse.nmr.model.core.SignalFID;
 import org.eclipse.chemclipse.nmr.model.core.SignalNMR;
 
 public class SignalExtractor implements ISignalExtractor {
@@ -69,6 +70,30 @@ public class SignalExtractor implements ISignalExtractor {
 	}
 
 	@Override
+	public Complex[] extractRawIntesityFID() {
+
+		return scanNMR.getSignalsFID().stream().map(s -> s.getIntensityFID()).toArray(Complex[]::new);
+	}
+
+	@Override
+	public double[] extractRawIntesityFIDReal() {
+
+		return scanNMR.getSignalsFID().stream().mapToDouble(s -> s.getIntensityFID().getReal()).toArray();
+	}
+
+	@Override
+	public Complex[] extractIntesityFID() {
+
+		return scanNMR.getSignalsFID().stream().map(s -> s.getIntensity()).toArray(Complex[]::new);
+	}
+
+	@Override
+	public double[] extractIntesityFIDReal() {
+
+		return scanNMR.getSignalsFID().stream().mapToDouble(s -> s.getIntensity().getReal()).toArray();
+	}
+
+	@Override
 	public double[] extractChemicalShift() {
 
 		return scanNMR.getSignalsNMR().stream().mapToDouble(ISignalNMR::getChemicalShift).toArray();
@@ -80,6 +105,15 @@ public class SignalExtractor implements ISignalExtractor {
 		scanNMR.removeAllSignalsNMR();
 		for(int i = 0; i < fourierTransformedData.length; i++) {
 			scanNMR.addSignalNMR(new SignalNMR(chemicalShift[i], fourierTransformedData[i]));
+		}
+	}
+
+	@Override
+	public void createScansFID(Complex[] complexFID, int[] time) {
+
+		scanNMR.removeAllSignalsFID();
+		for(int i = 0; i < complexFID.length; i++) {
+			scanNMR.addSignalFID(new SignalFID(time[i], complexFID[i]));
 		}
 	}
 
