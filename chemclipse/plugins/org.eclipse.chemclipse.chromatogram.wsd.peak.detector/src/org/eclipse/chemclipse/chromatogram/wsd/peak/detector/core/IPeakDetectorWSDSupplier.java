@@ -12,10 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupplier;
-import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetectorWSDSettings;
+import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetectorSettingsWSD;
 
 public interface IPeakDetectorWSDSupplier extends IPeakDetectorSupplier {
 
 	@Override
-	Class<? extends IPeakDetectorWSDSettings> getSettingsClass();
+	Class<? extends IPeakDetectorSettingsWSD> getSettingsClass();
 }

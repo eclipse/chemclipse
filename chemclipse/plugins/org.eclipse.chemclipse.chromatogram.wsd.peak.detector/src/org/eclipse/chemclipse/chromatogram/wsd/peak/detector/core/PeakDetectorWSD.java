@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core;
 
-import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetectorWSDSettings;
+import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetectorSettingsWSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -56,7 +56,7 @@ public class PeakDetectorWSD {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorWSDSettings peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorSettingsWSD peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		IPeakDetectorWSD peakDetector = getPeakDetector(peakDetectorId);

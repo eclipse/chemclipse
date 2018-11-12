@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetector;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
-import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetectorWSDSettings;
+import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetectorSettingsWSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -28,7 +28,7 @@ public interface IPeakDetectorWSD extends IPeakDetector {
 	 * @param monitor
 	 * @throws ValueMustNotBeNullException
 	 */
-	IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorWSDSettings peakDetectorSettings, IProgressMonitor monitor);
+	IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorSettingsWSD peakDetectorSettings, IProgressMonitor monitor);
 
 	/**
 	 * The same as the other method but without settings.

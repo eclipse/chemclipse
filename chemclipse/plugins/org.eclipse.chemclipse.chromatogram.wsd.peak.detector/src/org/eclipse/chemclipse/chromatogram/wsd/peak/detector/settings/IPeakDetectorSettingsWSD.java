@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
 
-public interface IPeakDetectorWSDSettings extends IPeakDetectorSettings {
+public interface IPeakDetectorSettingsWSD extends IPeakDetectorSettings {
 }
