@@ -17,8 +17,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IIonRemoverMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IonRemoverMassSpectrumFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.PeakFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -87,10 +86,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static IMassSpectrumFilterSettings getMassSpectrumFilterSettings() {
 
-		IIonRemoverMassSpectrumFilterSettings massSpectrumFilterSettings = new IonRemoverMassSpectrumFilterSettings();
-		/*
-		 * Set the ions that shall be removed in every case.
-		 */
+		MassSpectrumFilterSettings massSpectrumFilterSettings = new MassSpectrumFilterSettings();
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		massSpectrumFilterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
 		return massSpectrumFilterSettings;

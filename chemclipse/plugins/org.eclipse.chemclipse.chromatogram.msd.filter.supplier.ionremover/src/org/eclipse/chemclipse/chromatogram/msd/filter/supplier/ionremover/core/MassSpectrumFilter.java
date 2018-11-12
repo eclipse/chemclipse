@@ -20,13 +20,12 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.result.IMassSpectrumFilter
 import org.eclipse.chemclipse.chromatogram.msd.filter.result.MassSpectrumFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IIonRemoverMassSpectrumFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,33 +35,26 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 	private static final String DESCRIPTION = "Ion Remover Mass Spectrum Filter";
 
 	@Override
-	public IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings filterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(massSpectra, massSpectrumFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
-		}
-		/*
-		 * Apply the ion remover filter to the mass spectrum.
-		 */
-		if(massSpectrumFilterSettings instanceof IIonRemoverMassSpectrumFilterSettings) {
-			//
-			IIonRemoverMassSpectrumFilterSettings ionRemoverPeakFilterSettings = (IIonRemoverMassSpectrumFilterSettings)massSpectrumFilterSettings;
-			IonSettingUtil settingIon = new IonSettingUtil();
-			IMarkedIons markedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(ionRemoverPeakFilterSettings.getIonsToRemove())));
-			for(IScanMSD massSpectrum : massSpectra) {
-				massSpectrum.getTargets().clear();
-				massSpectrum.removeIons(markedIons);
+		IProcessingInfo processingInfo = validate(massSpectra, filterSettings);
+		if(!processingInfo.hasErrorMessages()) {
+			if(filterSettings instanceof MassSpectrumFilterSettings) {
+				MassSpectrumFilterSettings massSpectrumFilterSettings = (MassSpectrumFilterSettings)filterSettings;
+				IonSettingUtil settingIon = new IonSettingUtil();
+				IMarkedIons markedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(massSpectrumFilterSettings.getIonsToRemove())));
+				for(IScanMSD massSpectrum : massSpectra) {
+					massSpectrum.getTargets().clear();
+					massSpectrum.removeIons(markedIons);
+				}
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been optimized successfully."));
+				IMassSpectrumFilterResult massSpectrumFilterResult = new MassSpectrumFilterResult(ResultStatus.OK, "The ion remover filter has been applied successfully.");
+				processingInfo.setProcessingResult(massSpectrumFilterResult);
+			} else {
+				processingInfo.addErrorMessage(DESCRIPTION, "The filter settings instance is not a type of: " + MassSpectrumFilterSettings.class);
 			}
-			//
-			processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been optimized successfully."));
-		} else {
-			processingInfo.addErrorMessage(DESCRIPTION, "The filter settings instance is not a type of: " + IIonRemoverMassSpectrumFilterSettings.class);
 		}
 		//
-		IMassSpectrumFilterResult massSpectrumFilterResult = new MassSpectrumFilterResult(ResultStatus.OK, "The ion remover filter has been applied successfully.");
-		processingInfo.setProcessingResult(massSpectrumFilterResult);
 		return processingInfo;
 	}
 
