@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.AbstractM
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.identifier.BasePeakIdentifier;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -28,19 +28,16 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 
 	@Override
-	public IProcessingInfo identify(List<IScanMSD> massSpectrumList, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo identify(List<IScanMSD> massSpectrumList, IMassSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		//
-		BasePeakIdentifier basePeakIdentifier = new BasePeakIdentifier();
-		IBasePeakSettings settings;
-		if(massSpectrumIdentifierSettings instanceof IBasePeakSettings) {
-			settings = (IBasePeakSettings)massSpectrumIdentifierSettings;
-		} else {
-			settings = PreferenceSupplier.getPeakIdentifierSettings();
+		if(identifierSettings instanceof MassSpectrumIdentifierSettings) {
+			MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = (MassSpectrumIdentifierSettings)identifierSettings;
+			BasePeakIdentifier basePeakIdentifier = new BasePeakIdentifier();
+			basePeakIdentifier.identifyMassSpectra(massSpectrumList, massSpectrumIdentifierSettings, monitor);
+			processingInfo.addInfoMessage("BasePeakIdentifier", "Everything is supi.");
 		}
-		basePeakIdentifier.identifyMassSpectra(massSpectrumList, settings, monitor);
-		processingInfo.addInfoMessage("BasePeakIdentifier", "Everything is supi.");
 		//
 		return processingInfo;
 	}
@@ -56,14 +53,14 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 	@Override
 	public IProcessingInfo identify(IScanMSD massSpectrum, IProgressMonitor monitor) {
 
-		IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
+		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
 		return identify(massSpectrum, massSpectrumIdentifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo identify(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
 
-		IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
+		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
 		return identify(massSpectra, massSpectrumIdentifierSettings, monitor);
 	}
 }

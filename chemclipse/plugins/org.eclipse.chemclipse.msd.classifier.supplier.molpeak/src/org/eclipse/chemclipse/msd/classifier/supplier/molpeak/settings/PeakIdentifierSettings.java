@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD implements IVendorPeakIdentifierSettings {
+public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD implements IBasePeakSettings {
 
 	@JsonProperty(value = "Match Sensitivity", defaultValue = "80.0")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MATCH_SENSITIVITY, maxValue = PreferenceSupplier.MAX_MATCH_SENSITIVITY)

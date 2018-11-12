@@ -18,10 +18,8 @@ import java.util.Map;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.Activator;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.ClassifierSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
-import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IVendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IVendorPeakIdentifierSettings;
-import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.VendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.VendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.MassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -66,16 +64,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return defaultValues;
 	}
 
-	public static IVendorMassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
+	public static MassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
 
-		IVendorMassSpectrumIdentifierSettings settings = new VendorMassSpectrumIdentifierSettings();
+		MassSpectrumIdentifierSettings settings = new MassSpectrumIdentifierSettings();
 		setBasePeakSettings(settings);
 		return settings;
 	}
 
-	public static IVendorPeakIdentifierSettings getPeakIdentifierSettings() {
+	public static PeakIdentifierSettings getPeakIdentifierSettings() {
 
-		IVendorPeakIdentifierSettings settings = new VendorPeakIdentifierSettings();
+		PeakIdentifierSettings settings = new PeakIdentifierSettings();
 		setBasePeakSettings(settings);
 		return settings;
 	}

@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.AbstractPeakIdent
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.identifier.BasePeakIdentifier;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -31,19 +31,16 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class PeakIdentifier extends AbstractPeakIdentifierMSD {
 
 	@Override
-	public IProcessingInfo identify(List<IPeakMSD> peaks, IPeakIdentifierSettingsMSD peakIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo identify(List<IPeakMSD> peaks, IPeakIdentifierSettingsMSD identifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		//
-		BasePeakIdentifier basePeakIdentifier = new BasePeakIdentifier();
-		IBasePeakSettings settings;
-		if(peakIdentifierSettings instanceof IBasePeakSettings) {
-			settings = (IBasePeakSettings)peakIdentifierSettings;
-		} else {
-			settings = PreferenceSupplier.getPeakIdentifierSettings();
+		if(identifierSettings instanceof PeakIdentifierSettings) {
+			PeakIdentifierSettings peakIdentifierSettings = (PeakIdentifierSettings)identifierSettings;
+			BasePeakIdentifier basePeakIdentifier = new BasePeakIdentifier();
+			basePeakIdentifier.identifyPeaks(peaks, peakIdentifierSettings, monitor);
+			processingInfo.addInfoMessage("BasePeakIdentifier", "Everything is supi.");
 		}
-		basePeakIdentifier.identifyPeaks(peaks, settings, monitor);
-		processingInfo.addInfoMessage("BasePeakIdentifier", "Everything is supi.");
 		//
 		return processingInfo;
 	}
@@ -59,14 +56,14 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD {
 	@Override
 	public IProcessingInfo identify(List<IPeakMSD> peaks, IProgressMonitor monitor) {
 
-		IPeakIdentifierSettingsMSD peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
+		PeakIdentifierSettings peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 		return identify(peaks, peakIdentifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo identify(IPeakMSD peak, IProgressMonitor monitor) {
 
-		IPeakIdentifierSettingsMSD peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
+		PeakIdentifierSettings peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 		return identify(peak, peakIdentifierSettings, monitor);
 	}
 

@@ -13,9 +13,15 @@
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractMassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 
-public class VendorMassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifierSettings implements IVendorMassSpectrumIdentifierSettings {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+public class MassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifierSettings implements IBasePeakSettings {
+
+	@JsonProperty(value = "Match Sensitivity", defaultValue = "80.0")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MATCH_SENSITIVITY, maxValue = PreferenceSupplier.MAX_MATCH_SENSITIVITY)
 	private float matchSensitivity;
 
 	@Override
