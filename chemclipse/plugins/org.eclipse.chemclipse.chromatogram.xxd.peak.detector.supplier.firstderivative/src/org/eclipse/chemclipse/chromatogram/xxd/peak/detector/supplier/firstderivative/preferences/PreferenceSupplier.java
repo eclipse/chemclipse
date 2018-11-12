@@ -15,10 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorCSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorWSDSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorCSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorWSDSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.Threshold;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
@@ -121,10 +120,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return peakDetectorSettings;
 	}
 
-	public static IFirstDerivativePeakDetectorCSDSettings getPeakDetectorCSDSettings() {
+	public static PeakDetectorSettingsCSD getPeakDetectorSettingsCSD() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		IFirstDerivativePeakDetectorCSDSettings peakDetectorSettings = new FirstDerivativePeakDetectorCSDSettings();
+		PeakDetectorSettingsCSD peakDetectorSettings = new PeakDetectorSettingsCSD();
 		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD_CSD, DEF_THRESHOLD_CSD)));
 		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_CSD, DEF_INCLUDE_BACKGROUND_CSD));
 		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_CSD, DEF_MIN_SN_RATIO_CSD));

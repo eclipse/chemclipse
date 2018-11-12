@@ -18,7 +18,7 @@
             id="org.eclipse.chemclipse.chromatogram.csd.peak.detector.supplier.firstderivative"
             peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorCSD"
             peakDetectorName="Peak Detector First Derivative (CSD)"
-            peakDetectorSettings="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorCSDSettings">
+            peakDetectorSettings="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsCSD">
       </PeakDetector>
    </extension>
    <extension
