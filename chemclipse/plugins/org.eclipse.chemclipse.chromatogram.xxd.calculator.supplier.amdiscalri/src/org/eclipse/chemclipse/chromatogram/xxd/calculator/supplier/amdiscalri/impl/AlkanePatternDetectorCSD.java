@@ -23,8 +23,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.II
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core.PeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorCSD;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorCSDSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorCSDSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.Threshold;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -58,7 +57,7 @@ public class AlkanePatternDetectorCSD {
 				 * Peak detector.
 				 */
 				PeakDetectorCSD peakDetectorCSD = new PeakDetectorCSD();
-				IFirstDerivativePeakDetectorCSDSettings peakDetectorSettings = new FirstDerivativePeakDetectorCSDSettings();
+				PeakDetectorSettingsCSD peakDetectorSettings = new PeakDetectorSettingsCSD();
 				peakDetectorSettings.setThreshold(Threshold.LOW);
 				peakDetectorSettings.setIncludeBackground(false);
 				peakDetectorSettings.setMinimumSignalToNoiseRatio(50.0f);
