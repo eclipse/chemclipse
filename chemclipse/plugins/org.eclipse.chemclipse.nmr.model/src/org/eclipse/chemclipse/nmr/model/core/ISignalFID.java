@@ -11,12 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
+import org.apache.commons.math3.complex.Complex;
 import org.eclipse.chemclipse.model.core.ISignal;
 
 /**
  * An NMR FID signal.
  * </p>
- * A singal's magnitude is the 'raw intensity'.
+ * A singalFID is the 'raw intensity'.
  *
  * @author Jan Holy
  *
@@ -26,16 +27,16 @@ public interface ISignalFID extends ISignal {
 	/**
 	 * Returns the intensity of the signal.
 	 *
-	 * @see #getMagnitude()
+	 * @see #getIntensityFID()
 	 * @return the intensity of the signal
 	 */
-	double getIntensity();
+	Complex getIntensity();
 
 	/**
 	 *
 	 * @param intensity
 	 */
-	void setIntensity(double intensity);
+	void setIntensity(Complex intensity);
 
 	/**
 	 *
@@ -46,15 +47,15 @@ public interface ISignalFID extends ISignal {
 	 *
 	 * @param magnitude
 	 */
-	void setMagnitude(double magnitude);
+	void setIntensityFID(Complex magnitude);
 
 	/**
-	 * Returns the magnitude of the signal.
+	 * Returns the intensity of the signal. (Signal is not process)
 	 *
 	 * @see #getIntensity()
-	 * @return the magnitude of the signal
+	 * @return the intensity of the signal
 	 */
-	double getMagnitude();
+	Complex getIntensityFID();
 
 	/**
 	 *
