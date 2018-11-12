@@ -16,9 +16,8 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.BaselineDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.ISnipMassSpectrumFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.PeakFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.SnipMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -98,9 +97,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return settings;
 	}
 
-	public static ISnipMassSpectrumFilterSettings getMassSpectrumFilterSettings() {
+	public static MassSpectrumFilterSettings getMassSpectrumFilterSettings() {
 
-		ISnipMassSpectrumFilterSettings settings = new SnipMassSpectrumFilterSettings();
+		MassSpectrumFilterSettings settings = new MassSpectrumFilterSettings();
 		settings.setIterations(getIterations());
 		settings.setMagnificationFactor(getMagnificationFactor());
 		settings.setTransitions(getTransitions());

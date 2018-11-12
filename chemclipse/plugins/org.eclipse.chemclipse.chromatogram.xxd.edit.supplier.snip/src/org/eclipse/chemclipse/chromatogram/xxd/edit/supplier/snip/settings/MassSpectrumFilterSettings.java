@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractPeakFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.settings.AbstractMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class PeakFilterSettings extends AbstractPeakFilterSettings {
+public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettings {
 
 	@JsonProperty(value = "Iterations", defaultValue = "1")
 	@JsonPropertyDescription(value = "The number of iterations to run the filter.")
