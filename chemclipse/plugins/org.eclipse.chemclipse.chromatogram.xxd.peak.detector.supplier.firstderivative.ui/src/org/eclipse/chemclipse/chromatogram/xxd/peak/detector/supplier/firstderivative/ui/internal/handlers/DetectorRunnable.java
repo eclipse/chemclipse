@@ -18,8 +18,8 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMS
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core.PeakDetectorWSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorCSDSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorMSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorWSDSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
@@ -64,7 +64,7 @@ public class DetectorRunnable implements IRunnableWithProgress {
 				 * MSD
 				 */
 				ChromatogramSelectionMSD chromatogramSelectionMSD = (ChromatogramSelectionMSD)chromatogramSelection;
-				IFirstDerivativePeakDetectorMSDSettings peakDetectorSettings = PreferenceSupplier.getPeakDetectorMSDSettings();
+				PeakDetectorSettingsMSD peakDetectorSettings = PreferenceSupplier.getPeakDetectorMSDSettings();
 				PeakDetectorMSD.detect(chromatogramSelectionMSD, peakDetectorSettings, PEAK_DETECTOR_MSD_ID, monitor);
 				detectedPeaks = chromatogramSelectionMSD.getChromatogramMSD().getNumberOfPeaks();
 				Display.getDefault().asyncExec(new Runnable() {

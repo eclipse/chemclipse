@@ -15,8 +15,7 @@ import java.io.File;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.TestPathHelper;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorMSDSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.Threshold;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -33,7 +32,7 @@ public class FirstDerivativePeakDetector_1_ITest extends TestCase {
 	private File file;
 	private IChromatogramMSD chromatogram;
 	private PeakDetectorMSD peakDetector;
-	private IFirstDerivativePeakDetectorMSDSettings peakDetectorSettings;
+	private PeakDetectorSettingsMSD peakDetectorSettings;
 	private IChromatogramSelectionMSD chromatogramSelection;
 
 	@Override
@@ -45,7 +44,7 @@ public class FirstDerivativePeakDetector_1_ITest extends TestCase {
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		peakDetector = new PeakDetectorMSD();
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
-		peakDetectorSettings = new FirstDerivativePeakDetectorMSDSettings();
+		peakDetectorSettings = new PeakDetectorSettingsMSD();
 	}
 
 	@Override

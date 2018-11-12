@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
@@ -58,9 +57,9 @@ public class FirstDerivativePeakDetector_2_Test extends FirstDerivativeSlopesTes
 	public void testDetectPeakStart_1() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 
 		Integer result;
-		method = firstDerivativePeakDetectorClass.getDeclaredMethod("detectPeakStart", new Class[]{IFirstDerivativeDetectorSlopes.class, Integer.TYPE, Integer.TYPE});
+		method = firstDerivativePeakDetectorClass.getDeclaredMethod("detectPeakStart", new Class[]{IFirstDerivativeDetectorSlopes.class, Integer.TYPE, Integer.TYPE, Double.TYPE});
 		method.setAccessible(true);
-		result = (Integer)method.invoke(firstDerivativePeakDetector, new Object[]{slopes, 1, 0});
+		result = (Integer)method.invoke(firstDerivativePeakDetector, new Object[]{slopes, 1, 0, 0.05d});
 		/*
 		 * The peak starts at scan 4 and has a scan offset of 0 (means starts at
 		 * scan 1).

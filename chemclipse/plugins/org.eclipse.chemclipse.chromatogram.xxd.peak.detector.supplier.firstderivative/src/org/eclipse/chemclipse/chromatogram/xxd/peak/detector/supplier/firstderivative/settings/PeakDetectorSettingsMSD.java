@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class FirstDerivativePeakDetectorMSDSettings extends AbstractPeakDetectorMSDSettings implements IFirstDerivativePeakDetectorMSDSettings {
+public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 
 	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
 	@EnumSelectionRadioButtonsSettingProperty
@@ -36,49 +36,41 @@ public class FirstDerivativePeakDetectorMSDSettings extends AbstractPeakDetector
 	@EnumSelectionSettingProperty
 	private WindowSize windowSize = WindowSize.WIDTH_5;
 
-	@Override
 	public Threshold getThreshold() {
 
 		return threshold;
 	}
 
-	@Override
 	public void setThreshold(Threshold threshold) {
 
 		this.threshold = threshold;
 	}
 
-	@Override
 	public boolean isIncludeBackground() {
 
 		return includeBackground;
 	}
 
-	@Override
 	public void setIncludeBackground(boolean includeBackground) {
 
 		this.includeBackground = includeBackground;
 	}
 
-	@Override
 	public float getMinimumSignalToNoiseRatio() {
 
 		return minimumSignalToNoiseRatio;
 	}
 
-	@Override
 	public void setMinimumSignalToNoiseRatio(float minimumSignalToNoiseRatio) {
 
 		this.minimumSignalToNoiseRatio = minimumSignalToNoiseRatio;
 	}
 
-	@Override
 	public WindowSize getMovingAverageWindowSize() {
 
 		return windowSize;
 	}
 
-	@Override
 	public void setMovingAverageWindowSize(WindowSize windowSize) {
 
 		this.windowSize = windowSize;

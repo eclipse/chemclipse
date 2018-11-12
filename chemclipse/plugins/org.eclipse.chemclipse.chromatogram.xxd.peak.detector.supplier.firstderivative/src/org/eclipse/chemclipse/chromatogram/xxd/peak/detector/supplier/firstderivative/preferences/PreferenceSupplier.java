@@ -16,11 +16,10 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorCSDSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorMSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorWSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorCSDSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorMSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorWSDSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.Threshold;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -111,10 +110,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IFirstDerivativePeakDetectorMSDSettings getPeakDetectorMSDSettings() {
+	public static PeakDetectorSettingsMSD getPeakDetectorMSDSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		IFirstDerivativePeakDetectorMSDSettings peakDetectorSettings = new FirstDerivativePeakDetectorMSDSettings();
+		PeakDetectorSettingsMSD peakDetectorSettings = new PeakDetectorSettingsMSD();
 		peakDetectorSettings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD_MSD, DEF_THRESHOLD_MSD)));
 		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_MSD, DEF_INCLUDE_BACKGROUND_MSD));
 		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_MSD, DEF_MIN_SN_RATIO_MSD));

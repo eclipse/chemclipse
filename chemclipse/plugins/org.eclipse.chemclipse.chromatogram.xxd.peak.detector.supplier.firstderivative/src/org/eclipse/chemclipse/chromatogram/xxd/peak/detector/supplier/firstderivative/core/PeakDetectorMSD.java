@@ -18,12 +18,11 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.AbstractPeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
-import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlope;
@@ -46,47 +45,32 @@ import org.eclipse.chemclipse.msd.model.xic.TotalIonSignalExtractor;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-/**
- * This is the peak detector extension point entry.
- * 
- * @author eselmeister
- */
 public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 
 	private static final Logger logger = Logger.getLogger(PeakDetectorMSD.class);
-	private static float NORMALIZATION_BASE = 100000.0f;
-	private static int CONSECUTIVE_SCAN_STEPS = 3;
+	//
 	private static final String DETECTOR_DESCRIPTION = "Peak Detector First Derivative";
 	//
-	private double threshold = 0.005d;
-	private boolean includeBackground = false;
-	private float minimumSignalToNoiseRatio = 0.0f;
-	private WindowSize movingAverageWindow = WindowSize.WIDTH_3;
+	private static float NORMALIZATION_BASE = 100000.0f;
+	private static int CONSECUTIVE_SCAN_STEPS = 3;
 
 	@Override
-	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD detectorSettings, IProgressMonitor monitor) {
 
-		/*
-		 * Check whether the chromatogram selection is null or not.
-		 */
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(chromatogramSelection, peakDetectorSettings, monitor));
-		//
+		IProcessingInfo processingInfo = validate(chromatogramSelection, detectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
-			setThresholdValue(peakDetectorSettings);
-			setIncludeBackground(peakDetectorSettings);
-			setMinimumSignalToNoiseRatio(peakDetectorSettings);
-			setMovingAverageWindowSize(peakDetectorSettings);
-			//
-			detectPeaks(chromatogramSelection, monitor);
-			processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Peak Detector First Derivative", "Peaks have been detected successfully."));
+			if(detectorSettings instanceof PeakDetectorSettingsMSD) {
+				PeakDetectorSettingsMSD peakDetectorSettings = (PeakDetectorSettingsMSD)detectorSettings;
+				detectPeaks(chromatogramSelection, peakDetectorSettings, monitor);
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Peak Detector First Derivative", "Peaks have been detected successfully."));
+			} else {
+				logger.warn("Settings is not of type: " + PeakDetectorSettingsMSD.class);
+			}
 		}
 		return processingInfo;
 	}
@@ -113,73 +97,17 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);
 	}
 
-	// --------------------------------private methods
-	/**
-	 * Sets the appropriate threshold value for this extension point.
-	 */
-	private void setThresholdValue(IPeakDetectorSettings peakDetectorSettings) {
-
-		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorMSDSettings) {
-			IFirstDerivativePeakDetectorMSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorMSDSettings)peakDetectorSettings;
-			/*
-			 * The threshold value depends on the actual calculation.<br/> The
-			 * threshold defines the slope sensitivity.
-			 */
-			switch(firstDerivativePeakDetectorSettings.getThreshold()) {
-				case OFF:
-					this.threshold = 0.0005d;
-					break;
-				case LOW:
-					this.threshold = 0.005d;
-					break;
-				case MEDIUM:
-					this.threshold = 0.05d;
-					break;
-				case HIGH:
-					this.threshold = 0.5d;
-					break;
-				default:
-					this.threshold = 0.005d;
-					break;
-			}
-		}
-	}
-
-	private void setIncludeBackground(IPeakDetectorSettings peakDetectorSettings) {
-
-		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorMSDSettings) {
-			IFirstDerivativePeakDetectorMSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorMSDSettings)peakDetectorSettings;
-			this.includeBackground = firstDerivativePeakDetectorSettings.isIncludeBackground();
-		}
-	}
-
-	private void setMinimumSignalToNoiseRatio(IPeakDetectorSettings peakDetectorSettings) {
-
-		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorMSDSettings) {
-			IFirstDerivativePeakDetectorMSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorMSDSettings)peakDetectorSettings;
-			this.minimumSignalToNoiseRatio = firstDerivativePeakDetectorSettings.getMinimumSignalToNoiseRatio();
-		}
-	}
-
-	private void setMovingAverageWindowSize(IPeakDetectorSettings peakDetectorSettings) {
-
-		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorMSDSettings) {
-			IFirstDerivativePeakDetectorMSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorMSDSettings)peakDetectorSettings;
-			this.movingAverageWindow = firstDerivativePeakDetectorSettings.getMovingAverageWindowSize();
-		}
-	}
-
 	/**
 	 * Detect the peaks in the selection and add them to the chromatogram.
 	 * 
 	 * @param chromatogramSelection
 	 * @throws ValueMustNotBeNullException
 	 */
-	private void detectPeaks(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	private void detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
-		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection);
-		List<IRawPeak> rawPeaks = getRawPeaks(slopes, monitor);
-		buildAndStorePeaks(rawPeaks, chromatogramSelection.getChromatogramMSD());
+		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings);
+		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings, monitor);
+		buildAndStorePeaks(rawPeaks, chromatogramSelection.getChromatogramMSD(), peakDetectorSettings);
 	}
 
 	/**
@@ -189,7 +117,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 * @param rawPeaks
 	 * @param chromatogram
 	 */
-	private void buildAndStorePeaks(List<IRawPeak> rawPeaks, IChromatogramMSD chromatogram) {
+	private void buildAndStorePeaks(List<IRawPeak> rawPeaks, IChromatogramMSD chromatogram, PeakDetectorSettingsMSD peakDetectorSettings) {
 
 		IChromatogramPeakMSD peak = null;
 		IScanRange scanRange = null;
@@ -204,7 +132,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 				 * false: BV or VB
 				 * true: VV
 				 */
-				peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, includeBackground);
+				peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, peakDetectorSettings.isIncludeBackground());
 				/*
 				 * TODO Resolve, why this peak does throw an exception. When
 				 * detecting peaks in the chromatogram OP17760.D/DATA.MS a
@@ -214,7 +142,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 				 * The first scan is the peak maximum, as it seems, so no
 				 * inflection point equation could be calculated.
 				 */
-				if(isValidPeak(peak)) {
+				if(isValidPeak(peak, peakDetectorSettings)) {
 					/*
 					 * Add the detector description. Add the peak to the
 					 * chromatogram.
@@ -236,7 +164,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 * @param chromatogramSelection
 	 * @return {@link IFirstDerivativeDetectorSlopes}
 	 */
-	private IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection) {
+	private IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings) {
 
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
 		try {
@@ -262,7 +190,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 					slopes.add(slope);
 				}
 			}
-			slopes.calculateMovingAverage(movingAverageWindow);
+			slopes.calculateMovingAverage(peakDetectorSettings.getMovingAverageWindowSize());
 			return slopes;
 		} catch(ChromatogramIsNullException e) {
 			logger.warn(e);
@@ -275,8 +203,26 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 * 
 	 * @param slopeList
 	 */
-	private List<IRawPeak> getRawPeaks(IFirstDerivativeDetectorSlopes slopes, IProgressMonitor monitor) {
+	private List<IRawPeak> getRawPeaks(IFirstDerivativeDetectorSlopes slopes, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
+		double threshold;
+		switch(peakDetectorSettings.getThreshold()) {
+			case OFF:
+				threshold = 0.0005d;
+				break;
+			case LOW:
+				threshold = 0.005d;
+				break;
+			case MEDIUM:
+				threshold = 0.05d;
+				break;
+			case HIGH:
+				threshold = 0.5d;
+				break;
+			default:
+				threshold = 0.005d;
+				break;
+		}
 		/*
 		 * It should be also possible to detect peaks in a selected retention
 		 * time area of the chromatogram.<br/> The value for scan in the for
@@ -295,7 +241,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 			 * Get the scan numbers without offset.<br/> Why? To not get out of
 			 * borders of the slopes list.
 			 */
-			int peakStart = detectPeakStart(slopes, i, scanOffset);
+			int peakStart = detectPeakStart(slopes, i, scanOffset, threshold);
 			int peakMaximum = detectPeakMaximum(slopes, peakStart, scanOffset);
 			int peakStop = detectPeakStop(slopes, peakMaximum, scanOffset);
 			/*
@@ -345,9 +291,9 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 * @param peak
 	 * @return boolean
 	 */
-	private boolean isValidPeak(IChromatogramPeakMSD peak) {
+	private boolean isValidPeak(IChromatogramPeakMSD peak, PeakDetectorSettingsMSD peakDetectorSettings) {
 
-		if(peak != null && peak.getSignalToNoiseRatio() >= minimumSignalToNoiseRatio) {
+		if(peak != null && peak.getSignalToNoiseRatio() >= peakDetectorSettings.getMinimumSignalToNoiseRatio()) {
 			return true;
 		}
 		return false;
@@ -361,7 +307,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 * @param scanOffset
 	 * @return int
 	 */
-	private int detectPeakStart(IFirstDerivativeDetectorSlopes slopes, int startScan, int scanOffset) {
+	private int detectPeakStart(IFirstDerivativeDetectorSlopes slopes, int startScan, int scanOffset, double threshold) {
 
 		int size = slopes.size();
 		int peakStart = size - 1;
@@ -434,5 +380,4 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 		}
 		return peakStop;
 	}
-	// --------------------------------private methods
 }
