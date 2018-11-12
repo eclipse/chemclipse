@@ -13,18 +13,20 @@ package org.eclipse.chemclipse.nmr.model.core;
 
 import java.util.Objects;
 
+import org.apache.commons.math3.complex.Complex;
+
 public class SignalFID implements ISignalFID {
 
 	private int time;
-	private double magnitude;
-	private double intensity;
+	private Complex intesityFID;
+	private Complex intensity;
 
-	public SignalFID(int time, double magnitude) {
+	public SignalFID(int time, Complex intesityFID) {
 
 		super();
 		this.time = time;
-		this.magnitude = magnitude;
-		this.intensity = magnitude;
+		this.intesityFID = intesityFID;
+		this.intensity = intesityFID;
 	}
 
 	@Override
@@ -36,17 +38,17 @@ public class SignalFID implements ISignalFID {
 	@Override
 	public double getY() {
 
+		return intensity.getReal();
+	}
+
+	@Override
+	public Complex getIntensity() {
+
 		return intensity;
 	}
 
 	@Override
-	public double getIntensity() {
-
-		return intensity;
-	}
-
-	@Override
-	public void setIntensity(double intensity) {
+	public void setIntensity(Complex intensity) {
 
 		this.intensity = intensity;
 	}
@@ -54,19 +56,19 @@ public class SignalFID implements ISignalFID {
 	@Override
 	public void resetIntensity() {
 
-		intensity = magnitude;
+		intensity = intesityFID;
 	}
 
 	@Override
-	public void setMagnitude(double magnitude) {
+	public void setIntensityFID(Complex magnitude) {
 
-		this.magnitude = magnitude;
+		this.intesityFID = magnitude;
 	}
 
 	@Override
-	public double getMagnitude() {
+	public Complex getIntensityFID() {
 
-		return magnitude;
+		return intesityFID;
 	}
 
 	@Override
