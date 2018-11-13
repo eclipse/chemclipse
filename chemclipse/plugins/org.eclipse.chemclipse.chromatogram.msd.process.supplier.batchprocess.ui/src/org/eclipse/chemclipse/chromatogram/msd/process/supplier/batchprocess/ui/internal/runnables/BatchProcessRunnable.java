@@ -27,10 +27,6 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
 public class BatchProcessRunnable implements IRunnableWithProgress {
 
 	private static final Logger logger = Logger.getLogger(BatchProcessRunnable.class);

@@ -20,10 +20,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.converter;bundle-version="0.8.0",
  org.eclipse.chemclipse.model;bundle-version="0.8.0",
  org.apache.commons.cli;bundle-version="1.2.0",
- org.eclipse.chemclipse.rcp.app;bundle-version="0.8.0"
+ org.eclipse.chemclipse.rcp.app;bundle-version="0.8.0",
+ org.eclipse.chemclipse.support;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.core,
  org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io,
- org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model
+ org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model,
+ org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.preferences
 Bundle-ActivationPolicy: lazy

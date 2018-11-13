@@ -11,5 +11,10 @@
             processor="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.cli.Processor">
       </CommandLineProcessor>
    </extension>
-
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>
