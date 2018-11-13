@@ -15,8 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.VendorMassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
@@ -43,11 +42,7 @@ public class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 			/*
 			 * Identify Peaks in actual chromatogram selection.
 			 */
-			IVendorMassSpectrumIdentifierSettings identifierSettings = new VendorMassSpectrumIdentifierSettings();
-			identifierSettings.setNistApplication(PreferenceSupplier.getNistApplication());
-			identifierSettings.setNumberOfTargets(PreferenceSupplier.getNumberOfTargets());
-			identifierSettings.setStoreTargets(PreferenceSupplier.getStoreTargets());
-			identifierSettings.setTimeoutInMinutes(PreferenceSupplier.getTimeoutInMinutes());
+			MassSpectrumIdentifierSettings identifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
 			IScanMSD massSpectrum = chromatogramSelection.getSelectedScan();
 			IProcessingInfo processingInfo = MassSpectrumIdentifier.identify(massSpectrum, identifierSettings, IDENTIFIER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);

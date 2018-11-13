@@ -15,10 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.Activator;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorPeakIdentifierSettings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.VendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.VendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.MassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -127,14 +125,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * 
 	 * @return IPeakIdentifierSettings
 	 */
-	public static IVendorPeakIdentifierSettings getPeakIdentifierSettings() {
+	public static PeakIdentifierSettings getPeakIdentifierSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		IVendorPeakIdentifierSettings peakIdentifierSettings = new VendorPeakIdentifierSettings();
-		/*
-		 * Get the actual preference. If it's not available, a default value
-		 * will be returned.
-		 */
+		PeakIdentifierSettings peakIdentifierSettings = new PeakIdentifierSettings();
 		if(OperatingSystemUtils.isWindows()) {
 			peakIdentifierSettings.setNistApplication(preferences.get(P_NIST_APPLICATION, DEF_NIST_APPLICATION_WINDOWS));
 		} else {
@@ -146,14 +140,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return peakIdentifierSettings;
 	}
 
-	public static IVendorMassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
+	public static MassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings = new VendorMassSpectrumIdentifierSettings();
-		/*
-		 * Get the actual preference. If it's not available, a default value
-		 * will be returned.
-		 */
+		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = new MassSpectrumIdentifierSettings();
 		if(OperatingSystemUtils.isWindows()) {
 			massSpectrumIdentifierSettings.setNistApplication(preferences.get(P_NIST_APPLICATION, DEF_NIST_APPLICATION_WINDOWS));
 		} else {

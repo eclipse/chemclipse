@@ -7,7 +7,8 @@
             description="This plugin uses the NIST library to identify peaks."
             id="org.eclipse.chemclipse.msd.identifier.supplier.nist.peak"
             identifier="org.eclipse.chemclipse.msd.identifier.supplier.nist.core.PeakIdentifier"
-            identifierName="NIST Peak Identifier">
+            identifierName="NIST Peak Identifier"
+            identifierSettings="org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings">
       </PeakIdentificationSupplier>
    </extension>
    <extension

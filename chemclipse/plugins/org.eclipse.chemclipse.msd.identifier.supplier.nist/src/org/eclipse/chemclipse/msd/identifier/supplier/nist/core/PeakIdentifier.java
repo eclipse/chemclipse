@@ -20,34 +20,34 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifi
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support.Identifier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakIdentifier extends AbstractPeakIdentifierMSD {
 
+	private static final String DESCRIPTION = "NIST-DB Identifier";
+
 	@Override
-	public IProcessingInfo identify(List<IPeakMSD> peaks, IPeakIdentifierSettingsMSD peakIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo identify(List<IPeakMSD> peaks, IPeakIdentifierSettingsMSD identifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		/*
-		 * Run the identifier.
-		 */
-		Identifier identifier = new Identifier();
-		try {
-			IPeakIdentificationResults peakIdentificationResults = identifier.runPeakIdentification(peaks, (IVendorPeakIdentifierSettings)peakIdentifierSettings, processingInfo, monitor);
-			processingInfo.setProcessingResult(peakIdentificationResults);
-		} catch(FileNotFoundException e) {
-			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "NIST-DB Identifier", "Something has gone wrong.");
-			processingInfo.addMessage(processingMessage);
+		if(identifierSettings instanceof PeakIdentifierSettings) {
+			try {
+				PeakIdentifierSettings peakIdentifierSettings = (PeakIdentifierSettings)identifierSettings;
+				Identifier identifier = new Identifier();
+				IPeakIdentificationResults peakIdentificationResults = identifier.runPeakIdentification(peaks, peakIdentifierSettings, processingInfo, monitor);
+				processingInfo.setProcessingResult(peakIdentificationResults);
+			} catch(FileNotFoundException e) {
+				processingInfo.addErrorMessage(DESCRIPTION, "An I/O error ocurred.");
+			}
+		} else {
+			processingInfo.addErrorMessage(DESCRIPTION, "The settings are not of type: " + PeakIdentifierSettings.class);
 		}
 		return processingInfo;
 	}
@@ -64,21 +64,21 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD {
 	@Override
 	public IProcessingInfo identify(List<IPeakMSD> peaks, IProgressMonitor monitor) {
 
-		IPeakIdentifierSettingsMSD peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
+		PeakIdentifierSettings peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 		return identify(peaks, peakIdentifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo identify(IPeakMSD peak, IProgressMonitor monitor) {
 
-		IPeakIdentifierSettingsMSD peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
+		PeakIdentifierSettings peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 		return identify(peak, peakIdentifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IProgressMonitor monitor) {
 
-		IPeakIdentifierSettingsMSD peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
+		PeakIdentifierSettings peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 		return identify(chromatogramSelectionMSD, peakIdentifierSettings, monitor);
 	}
 

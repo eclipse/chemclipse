@@ -19,8 +19,7 @@ import java.util.List;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support.Identifier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorPeakIdentifierSettings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.VendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -45,14 +44,8 @@ public class PeakIdentifierGUIRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask(DESCRIPTION, IProgressMonitor.UNKNOWN);
-			/*
-			 * Identify Peaks in actual chromatogram selection.
-			 */
-			IVendorPeakIdentifierSettings identifierSettings = new VendorPeakIdentifierSettings();
-			identifierSettings.setNistApplication(PreferenceSupplier.getNistApplication());
-			identifierSettings.setNumberOfTargets(PreferenceSupplier.getNumberOfTargets());
-			identifierSettings.setStoreTargets(PreferenceSupplier.getStoreTargets());
-			identifierSettings.setTimeoutInMinutes(PreferenceSupplier.getTimeoutInMinutes());
+			//
+			PeakIdentifierSettings peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 			IChromatogramPeakMSD peak = chromatogramSelection.getSelectedPeak();
 			List<IPeakMSD> peakList = new ArrayList<IPeakMSD>();
 			peakList.add(peak);
@@ -61,7 +54,7 @@ public class PeakIdentifierGUIRunnable implements IRunnableWithProgress {
 			 */
 			try {
 				Identifier identifier = new Identifier();
-				identifier.openNistForPeakIdentification(peakList, identifierSettings, monitor);
+				identifier.openNistForPeakIdentification(peakList, peakIdentifierSettings, monitor);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
 			}

@@ -13,15 +13,31 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
-public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD implements IVendorPeakIdentifierSettings {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-	private String nistApplication;
+public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD implements INistSettings {
+
+	@JsonProperty(value = "Path nistms$.exe", defaultValue = "nistms$.exe")
+	@JsonPropertyDescription(value = "The path of the NIST executable.")
+	@StringSettingsProperty
+	private String nistApplication = "";
+	@JsonProperty(value = "Number of Targets", defaultValue = "3")
+	@JsonPropertyDescription(value = "The number of iterations to targets to store.")
+	@IntSettingsProperty
 	private int numberOfTargets = PreferenceSupplier.DEF_NUMBER_OF_TARGETS;
-	private boolean storeTargets;
-	private int timeoutInMinutes;
+	@JsonProperty(value = "Store Targets", defaultValue = "true")
+	@JsonPropertyDescription(value = "Shall the targets be stored.")
+	private boolean storeTargets = true;
+	@JsonProperty(value = "Timeout (Minutes)", defaultValue = "20")
+	@JsonPropertyDescription(value = "The timeout in minutes to stop the action if something goes wrong.")
+	@IntSettingsProperty
+	private int timeoutInMinutes = 20;
 
-	public VendorPeakIdentifierSettings() {
+	public PeakIdentifierSettings() {
 		nistApplication = "";
 	}
 

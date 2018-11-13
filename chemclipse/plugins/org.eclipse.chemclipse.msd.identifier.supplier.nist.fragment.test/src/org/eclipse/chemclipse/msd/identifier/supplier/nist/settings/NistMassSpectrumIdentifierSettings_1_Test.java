@@ -11,20 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.settings;
 
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.VendorMassSpectrumIdentifierSettings;
-
 import junit.framework.TestCase;
 
 public class NistMassSpectrumIdentifierSettings_1_Test extends TestCase {
 
-	IVendorMassSpectrumIdentifierSettings settings;
+	private MassSpectrumIdentifierSettings settings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		settings = new VendorMassSpectrumIdentifierSettings();
+		settings = new MassSpectrumIdentifierSettings();
 	}
 
 	@Override

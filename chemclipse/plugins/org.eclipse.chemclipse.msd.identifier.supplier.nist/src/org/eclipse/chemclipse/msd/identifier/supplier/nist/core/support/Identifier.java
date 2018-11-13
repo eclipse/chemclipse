@@ -56,8 +56,8 @@ import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.IExtendedRunt
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.RuntimeSupportFactory;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.INistSettings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.MassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -101,7 +101,7 @@ public class Identifier {
 	 * @return IMassSpectrumIdentificationResults
 	 * @throws FileNotFoundException
 	 */
-	public IMassSpectra runMassSpectrumIdentification(List<IScanMSD> massSpectrumList, IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
+	public IMassSpectra runMassSpectrumIdentification(List<IScanMSD> massSpectrumList, MassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
 		IIdentificationResults identificationResults = new IdentificationResults();
 		/*
@@ -169,7 +169,7 @@ public class Identifier {
 	 * @return IPeakIdentificationResults
 	 * @throws FileNotFoundException
 	 */
-	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, IVendorPeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
+	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		/*
@@ -585,7 +585,7 @@ public class Identifier {
 	/**
 	 * Assign the compounds to the peaks.
 	 */
-	private IPeakIdentificationResults assignPeakCompounds(ICompounds compounds, List<IPeakMSD> peaks, IPeakIdentificationResults identificationResults, IVendorPeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo, IProgressMonitor monitor) {
+	private IPeakIdentificationResults assignPeakCompounds(ICompounds compounds, List<IPeakMSD> peaks, IPeakIdentificationResults identificationResults, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo, IProgressMonitor monitor) {
 
 		monitor.subTask("Assign the identified peaks.");
 		/*
@@ -604,7 +604,7 @@ public class Identifier {
 	 * @param peakIdentifierSettings
 	 * @return {@link INistPeakIdentificationResults}
 	 */
-	public IPeakIdentificationResults getPeakIdentificationResults(ICompounds compounds, List<IPeakMSD> peaks, IVendorPeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo) {
+	public IPeakIdentificationResults getPeakIdentificationResults(ICompounds compounds, List<IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo) {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		IPeakIdentificationResult identificationResult;
@@ -739,7 +739,7 @@ public class Identifier {
 	 * @param monitor
 	 * @return INistMassSpectrumIdentificationResults
 	 */
-	private IIdentificationResults assignMassSpectrumCompounds(List<ICompound> compounds, List<IScanMSD> massSpectra, IIdentificationResults identificationResults, IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, Map<String, String> identifier, IProgressMonitor monitor) {
+	private IIdentificationResults assignMassSpectrumCompounds(List<ICompound> compounds, List<IScanMSD> massSpectra, IIdentificationResults identificationResults, MassSpectrumIdentifierSettings massSpectrumIdentifierSettings, Map<String, String> identifier, IProgressMonitor monitor) {
 
 		/*
 		 * If the compounds and peaks are different, there must have gone
@@ -780,7 +780,7 @@ public class Identifier {
 	 * @param massSpectrumIdentifierSettings
 	 * @return INistMassSpectrumIdentificationResult
 	 */
-	public IIdentificationResult getMassSpectrumIdentificationResult(IScanMSD massSpectrum, ICompound compound, IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings) {
+	public IIdentificationResult getMassSpectrumIdentificationResult(IScanMSD massSpectrum, ICompound compound, MassSpectrumIdentifierSettings massSpectrumIdentifierSettings) {
 
 		int numberOfTargets = massSpectrumIdentifierSettings.getNumberOfTargets();
 		List<IIdentificationTarget> massSpectrumTargets = new ArrayList<IIdentificationTarget>();

@@ -16,9 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorPeakIdentifierSettings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.VendorPeakIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -50,11 +47,6 @@ public class PeakListIdentifierRunnable implements IRunnableWithProgress {
 			/*
 			 * Identify Peaks in actual chromatogram selection.
 			 */
-			IVendorPeakIdentifierSettings identifierSettings = new VendorPeakIdentifierSettings();
-			identifierSettings.setNistApplication(PreferenceSupplier.getNistApplication());
-			identifierSettings.setNumberOfTargets(PreferenceSupplier.getNumberOfTargets());
-			identifierSettings.setStoreTargets(PreferenceSupplier.getStoreTargets());
-			identifierSettings.setTimeoutInMinutes(PreferenceSupplier.getTimeoutInMinutes());
 			IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
 			if(chromatogram != null) {
 				List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks(chromatogramSelection);
@@ -66,7 +58,7 @@ public class PeakListIdentifierRunnable implements IRunnableWithProgress {
 				for(IChromatogramPeakMSD chromatogramPeak : peaks) {
 					peakList.add(chromatogramPeak);
 				}
-				IProcessingInfo processingInfo = PeakIdentifierMSD.identify(peakList, identifierSettings, IDENTIFIER_ID, monitor);
+				IProcessingInfo processingInfo = PeakIdentifierMSD.identify(peakList, IDENTIFIER_ID, monitor);
 				/*
 				 * Update the chromatogram selection.
 				 */

@@ -11,20 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.settings;
 
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.IVendorPeakIdentifierSettings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.VendorPeakIdentifierSettings;
-
 import junit.framework.TestCase;
 
 public class NistPeakIdentifierSettings_1_Test extends TestCase {
 
-	IVendorPeakIdentifierSettings settings;
+	private PeakIdentifierSettings settings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		settings = new VendorPeakIdentifierSettings();
+		settings = new PeakIdentifierSettings();
 	}
 
 	@Override
