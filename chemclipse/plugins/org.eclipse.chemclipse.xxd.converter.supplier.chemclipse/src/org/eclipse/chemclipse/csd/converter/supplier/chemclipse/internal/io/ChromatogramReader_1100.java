@@ -152,7 +152,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 			//
 			setAdditionalInformation(file, chromatogram, monitor);
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 		//
 		return chromatogram;

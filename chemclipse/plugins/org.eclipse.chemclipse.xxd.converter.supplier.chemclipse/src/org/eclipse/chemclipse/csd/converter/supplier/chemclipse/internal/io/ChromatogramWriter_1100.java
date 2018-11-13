@@ -119,7 +119,7 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 			writeChromatogramArea(zipOutputStream, directoryPrefix, chromatogram, monitor);
 			subMonitor.worked(20);
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 	}
 

@@ -212,7 +212,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				logger.info(e);
 			}
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 		//
 		return chromatogram;

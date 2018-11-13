@@ -197,7 +197,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_MSD), closeStream, chromatogram, subMonitor.split(10));
 			setAdditionalInformation(file, chromatogram, subMonitor.split(10));
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 		//
 		return chromatogram;
@@ -306,7 +306,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 			//
 			dataInputStream.close();
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 	}
 
@@ -331,19 +331,20 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 				dataInputStream.close();
 			}
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 	}
 
 	private void readBaseline(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
+		int scans = dataInputStream.readInt(); // Number of Scans
+		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
+		SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_BASELINE, scans * 2);
+		//
 		try {
 			/*
 			 * Get the Baseline
 			 */
-			int scans = dataInputStream.readInt(); // Number of Scans
-			List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
-			SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_BASELINE, scans * 2);
 			for(int scan = 1; scan <= scans; scan++) {
 				int retentionTime = dataInputStream.readInt(); // Retention Time
 				float backgroundAbundance = dataInputStream.readFloat(); // Background Abundance
@@ -378,15 +379,15 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 				dataInputStream.close();
 			}
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 	}
 
 	private void readPeaks(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
+		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
+		SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_PEAK, numberOfPeaks);
 		try {
-			int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
-			SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_PEAK, numberOfPeaks);
 			for(int i = 1; i <= numberOfPeaks; i++) {
 				try {
 					IChromatogramPeakMSD peak = readPeak(dataInputStream, chromatogram, subMonitor.split(1));
@@ -402,7 +403,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 				dataInputStream.close();
 			}
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 	}
 
@@ -470,7 +471,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 			//
 			return peak;
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 	}
 
@@ -673,9 +674,9 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 
 	private void readIdentification(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
+		int numberOfTargets = dataInputStream.readInt(); // Number of Targets
+		SubMonitor subMonitor = SubMonitor.convert(monitor, numberOfTargets);
 		try {
-			int numberOfTargets = dataInputStream.readInt(); // Number of Targets
-			SubMonitor subMonitor = SubMonitor.convert(monitor, numberOfTargets);
 			for(int i = 1; i <= numberOfTargets; i++) {
 				//
 				String identifier = readString(dataInputStream); // Identifier
@@ -736,16 +737,16 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 				dataInputStream.close();
 			}
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 	}
 
 	private void readHistory(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
+		IEditHistory editHistory = chromatogram.getEditHistory();
+		int numberOfEntries = dataInputStream.readInt(); // Number of entries
+		SubMonitor subMonitor = SubMonitor.convert(monitor, numberOfEntries);
 		try {
-			IEditHistory editHistory = chromatogram.getEditHistory();
-			int numberOfEntries = dataInputStream.readInt(); // Number of entries
-			SubMonitor subMonitor = SubMonitor.convert(monitor, numberOfEntries);
 			for(int i = 1; i <= numberOfEntries; i++) {
 				long time = dataInputStream.readLong(); // Date
 				String description = readString(dataInputStream); // Description
@@ -760,7 +761,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 				dataInputStream.close();
 			}
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 	}
 

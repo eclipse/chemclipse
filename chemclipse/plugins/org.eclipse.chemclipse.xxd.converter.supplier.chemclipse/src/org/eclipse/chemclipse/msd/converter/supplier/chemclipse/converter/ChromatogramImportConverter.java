@@ -55,7 +55,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramMSDImportCo
 			}
 			return processingInfo;
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 	}
 

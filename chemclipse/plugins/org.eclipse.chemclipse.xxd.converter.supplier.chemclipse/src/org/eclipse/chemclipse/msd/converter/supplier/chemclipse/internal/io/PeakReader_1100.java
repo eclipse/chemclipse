@@ -112,7 +112,7 @@ public class PeakReader_1100 extends AbstractZipReader implements IPeakReader {
 				}
 			}
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 		dataInputStream.close();
 		/*

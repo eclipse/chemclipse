@@ -185,7 +185,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 			writeSeparationColumn(zipOutputStream, directoryPrefix, chromatogram);
 			subMonitor.worked(20);
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 	}
 
@@ -743,7 +743,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 				zipOutputStream.closeEntry();
 			}
 		} finally {
-			SubMonitor.done(monitor);
+			SubMonitor.done(subMonitor);
 		}
 	}
 
