@@ -8,7 +8,7 @@
             id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.peak"
             identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifier"
             identifierName="File MS Identifier"
-            identifierSettings="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorPeakIdentifierSettings">
+            identifierSettings="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings">
       </PeakIdentificationSupplier>
    </extension>
    <extension

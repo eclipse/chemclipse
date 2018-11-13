@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 @GeneratedIdentifierSettings
-public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD implements IVendorPeakIdentifierSettings {
+public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD implements IFileIdentifierSettings {
 
 	@JsonProperty(value = "Mass Spectra Files", defaultValue = "")
 	@JsonPropertyDescription(value = "Use a semicolon to separate the path of several files.") // see FileListUtil()

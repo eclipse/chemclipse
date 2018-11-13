@@ -20,8 +20,8 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.DatabasesCache;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.PenaltyCalculationSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilder;
@@ -57,7 +57,7 @@ public class FileIdentifier {
 		databasesCache = new DatabasesCache(PreferenceSupplier.getMassSpectraFiles());
 	}
 
-	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, IVendorMassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
+	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, MassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		massSpectra.addMassSpectra(massSpectraList);
@@ -103,7 +103,7 @@ public class FileIdentifier {
 	 * @return {@link IPeakIdentificationResults}
 	 * @throws FileNotFoundException
 	 */
-	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, IVendorPeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
+	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
 		/*
 		 * The alternate identifier is used, when another plugin tries to use this file identification process.
@@ -163,7 +163,7 @@ public class FileIdentifier {
 		return massSpectra;
 	}
 
-	private void compareMassSpectraAgainstDatabase(IMassSpectra massSpectra, IVendorMassSpectrumIdentifierSettings fileIdentifierSettings, String identifier, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
+	private void compareMassSpectraAgainstDatabase(IMassSpectra massSpectra, MassSpectrumIdentifierSettings fileIdentifierSettings, String identifier, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
 
 		/*
 		 * Run the identification.
@@ -224,7 +224,7 @@ public class FileIdentifier {
 		}
 	}
 
-	private void comparePeaksAgainstDatabase(IVendorPeakIdentifierSettings fileIdentifierSettings, List<IPeakMSD> peaks, String identifier, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
+	private void comparePeaksAgainstDatabase(PeakIdentifierSettings fileIdentifierSettings, List<IPeakMSD> peaks, String identifier, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
 
 		/*
 		 * Run the identification.

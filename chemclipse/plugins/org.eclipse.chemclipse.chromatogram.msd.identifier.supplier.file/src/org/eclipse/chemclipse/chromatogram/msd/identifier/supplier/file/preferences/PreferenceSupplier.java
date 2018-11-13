@@ -17,10 +17,8 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -130,10 +128,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IVendorMassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
+	public static MassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		IVendorMassSpectrumIdentifierSettings settings = new VendorMassSpectrumIdentifierSettings();
+		MassSpectrumIdentifierSettings settings = new MassSpectrumIdentifierSettings();
 		settings.setMassSpectraFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES));
 		settings.setUsePreOptimization(preferences.getBoolean(P_USE_PRE_OPTIMIZATION, DEF_USE_PRE_OPTIMIZATION));
 		settings.setThresholdPreOptimization(preferences.getDouble(P_THRESHOLD_PRE_OPTIMIZATION, DEF_THRESHOLD_PRE_OPTIMIZATION));
@@ -152,10 +150,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return settings;
 	}
 
-	public static IVendorPeakIdentifierSettings getPeakIdentifierSettings() {
+	public static PeakIdentifierSettings getPeakIdentifierSettings() {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		IVendorPeakIdentifierSettings settings = new VendorPeakIdentifierSettings();
+		PeakIdentifierSettings settings = new PeakIdentifierSettings();
 		settings.setMassSpectraFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES));
 		settings.setUsePreOptimization(preferences.getBoolean(P_USE_PRE_OPTIMIZATION, DEF_USE_PRE_OPTIMIZATION));
 		settings.setThresholdPreOptimization(preferences.getDouble(P_THRESHOLD_PRE_OPTIMIZATION, DEF_THRESHOLD_PRE_OPTIMIZATION));

@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierMS
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.internal.identifier.FileIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -33,26 +33,21 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class PeakIdentifier extends AbstractPeakIdentifierMSD implements IPeakIdentifierMSD {
 
 	@Override
-	public IProcessingInfo identify(List<IPeakMSD> peaks, IPeakIdentifierSettingsMSD peakIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo identify(List<IPeakMSD> peaks, IPeakIdentifierSettingsMSD identifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		/*
-		 * Run the identifier.
-		 */
-		try {
-			FileIdentifier fileIdentifier = new FileIdentifier();
-			IVendorPeakIdentifierSettings filePeakIdentifierSettings;
-			if(peakIdentifierSettings instanceof IVendorPeakIdentifierSettings) {
-				filePeakIdentifierSettings = (IVendorPeakIdentifierSettings)peakIdentifierSettings;
-			} else {
-				filePeakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
+		if(identifierSettings instanceof PeakIdentifierSettings) {
+			try {
+				PeakIdentifierSettings peakIdentifierSettings = (PeakIdentifierSettings)identifierSettings;
+				FileIdentifier fileIdentifier = new FileIdentifier();
+				IPeakIdentificationResults peakIdentificationResults = fileIdentifier.runPeakIdentification(peaks, peakIdentifierSettings, processingInfo, monitor);
+				processingInfo.setProcessingResult(peakIdentificationResults);
+				processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Done - peaks have been identified.");
+			} catch(FileNotFoundException e) {
+				processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "An I/O error ocurred.");
 			}
-			//
-			IPeakIdentificationResults peakIdentificationResults = fileIdentifier.runPeakIdentification(peaks, filePeakIdentifierSettings, processingInfo, monitor);
-			processingInfo.setProcessingResult(peakIdentificationResults);
-			processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Done - peaks have been identified.");
-		} catch(FileNotFoundException e) {
-			processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "Something has gone wrong.");
+		} else {
+			processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "The settings are not of type: " + PeakIdentifierSettings.class);
 		}
 		return processingInfo;
 	}
@@ -68,21 +63,21 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD implements IPeakId
 	@Override
 	public IProcessingInfo identify(IPeakMSD peak, IProgressMonitor monitor) {
 
-		IPeakIdentifierSettingsMSD peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
+		PeakIdentifierSettings peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 		return identify(peak, peakIdentifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo identify(List<IPeakMSD> peaks, IProgressMonitor monitor) {
 
-		IPeakIdentifierSettingsMSD peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
+		PeakIdentifierSettings peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 		return identify(peaks, peakIdentifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IProgressMonitor monitor) {
 
-		IPeakIdentifierSettingsMSD peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
+		PeakIdentifierSettings peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 		return identify(chromatogramSelectionMSD, peakIdentifierSettings, monitor);
 	}
 
