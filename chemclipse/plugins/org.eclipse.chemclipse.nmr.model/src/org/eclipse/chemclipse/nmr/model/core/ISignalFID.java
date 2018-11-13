@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.model.core.ISignal;
  * @author Jan Holy
  *
  */
-public interface ISignalFID extends ISignal {
+public interface ISignalFID extends ISignal, Comparable<ISignalFID> {
 
 	/**
 	 * Returns the intensity of the signal.
