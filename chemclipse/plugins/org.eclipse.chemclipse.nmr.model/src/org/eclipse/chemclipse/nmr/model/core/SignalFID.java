@@ -84,6 +84,16 @@ public class SignalFID implements ISignalFID {
 	}
 
 	@Override
+	public int compareTo(ISignalFID o) {
+
+		if(o != null) {
+			return Integer.compare(time, o.getTime());
+		} else {
+			return 0;
+		}
+	}
+
+	@Override
 	public int hashCode() {
 
 		return Objects.hash(time);
