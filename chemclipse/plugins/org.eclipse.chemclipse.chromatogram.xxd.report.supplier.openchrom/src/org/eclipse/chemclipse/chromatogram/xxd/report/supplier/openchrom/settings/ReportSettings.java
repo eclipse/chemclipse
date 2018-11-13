@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settin
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.AbstractChromatogramReportSettings;
 
-public class ReportSettings extends AbstractChromatogramReportSettings implements IReportSettings {
+public class ReportSettings extends AbstractChromatogramReportSettings {
 }

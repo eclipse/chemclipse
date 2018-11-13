@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
@@ -53,7 +53,7 @@ public class ReportWriter2 {
 		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 	}
 
-	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IReportSettings chromatogramReportSettings, IProgressMonitor monitor) throws IOException {
+	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, ReportSettings reportSettings, IProgressMonitor monitor) throws IOException {
 
 		FileWriter fileWriter = new FileWriter(file, append);
 		PrintWriter printWriter = new PrintWriter(fileWriter);

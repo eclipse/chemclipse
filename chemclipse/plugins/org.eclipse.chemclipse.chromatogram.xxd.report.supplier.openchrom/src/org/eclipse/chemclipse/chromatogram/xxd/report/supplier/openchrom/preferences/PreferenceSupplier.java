@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -72,12 +71,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IReportSettings getChromatogramReportSettings() {
+	public static ReportSettings getReportSettings() {
 
-		IReportSettings settings = new ReportSettings();
-		/*
-		 * Set specific settings.
-		 */
+		ReportSettings settings = new ReportSettings();
 		return settings;
 	}
 

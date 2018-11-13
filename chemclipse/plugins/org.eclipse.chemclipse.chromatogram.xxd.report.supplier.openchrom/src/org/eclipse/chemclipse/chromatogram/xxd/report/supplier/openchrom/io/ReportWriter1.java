@@ -22,9 +22,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
@@ -82,7 +83,7 @@ public class ReportWriter1 {
 		chromatogramPeakCSDComparator = new ChromatogramPeakCSDComparator(SortOrder.ASC);
 	}
 
-	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IReportSettings chromatogramReportSettings, IProgressMonitor monitor) throws IOException {
+	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, ReportSettings reportSettings, IProgressMonitor monitor) throws IOException {
 
 		FileWriter fileWriter = new FileWriter(file, append);
 		PrintWriter printWriter = new PrintWriter(fileWriter);
@@ -138,6 +139,12 @@ public class ReportWriter1 {
 		printHeaderLine(printWriter, "Start RT (min)", decimalFormat.format(chromatogramOverview.getStartRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 		printHeaderLine(printWriter, "Stop RT (min)", decimalFormat.format(chromatogramOverview.getStopRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 		printHeaderLine(printWriter, "Barcode", chromatogramOverview.getBarcode());
+		printWriter.println("");
+		printWriter.println(">>>");
+		printWriter.println("");
+		for(Map.Entry<String, String> entry : chromatogramOverview.getHeaderDataMap().entrySet()) {
+			printHeaderLine(printWriter, entry.getKey(), entry.getValue());
+		}
 		printWriter.println("------------------------------");
 	}
 

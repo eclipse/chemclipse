@@ -18,7 +18,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.report.chromatogram.AbstractChromatogramReportGenerator;
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractReport extends AbstractChromatogramReportGenerator {
 
-	public IProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
+	public IProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings settings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("ChemClipse Chromatogram Report", "Please override this method");
@@ -35,10 +35,9 @@ public abstract class AbstractReport extends AbstractChromatogramReportGenerator
 	}
 
 	@Override
-	public IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
+	public IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings settings, IProgressMonitor monitor) {
 
 		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
-		IReportSettings settings = getSettings(chromatogramReportSettings);
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
@@ -46,21 +45,20 @@ public abstract class AbstractReport extends AbstractChromatogramReportGenerator
 	public IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
 		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
-		IReportSettings settings = getSettings(null);
+		ReportSettings settings = PreferenceSupplier.getReportSettings();
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
 	@Override
-	public IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
+	public IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings settings, IProgressMonitor monitor) {
 
-		IReportSettings settings = getSettings(chromatogramReportSettings);
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IProgressMonitor monitor) {
 
-		IReportSettings settings = getSettings(null);
+		ReportSettings settings = PreferenceSupplier.getReportSettings();
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
@@ -69,17 +67,5 @@ public abstract class AbstractReport extends AbstractChromatogramReportGenerator
 		List<IChromatogram<? extends IPeak>> chromatograms = new ArrayList<IChromatogram<? extends IPeak>>();
 		chromatograms.add(chromatogram);
 		return chromatograms;
-	}
-
-	private IReportSettings getSettings(IChromatogramReportSettings chromatogramReportSettings) {
-
-		if(chromatogramReportSettings == null) {
-			return PreferenceSupplier.getChromatogramReportSettings();
-		}
-		if(chromatogramReportSettings instanceof IReportSettings) {
-			return (IReportSettings)chromatogramReportSettings;
-		} else {
-			return PreferenceSupplier.getChromatogramReportSettings();
-		}
 	}
 }
