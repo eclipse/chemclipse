@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?><target name="chemclipse.neon.targetplatform" sequenceNumber="-1"/>
+<locations>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.python.pydev.feature.feature.group" version="0.0.0"/>
+<repository location="https://dl.bintray.com/fabioz/pydev/6.3.1"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.apache.log4j" version="0.0.0"/>
+<unit id="ch.qos.logback.core" version="0.0.0"/>
+<unit id="org.slf4j.api" version="0.0.0"/>
+<unit id="ch.qos.logback.classic" version="0.0.0"/>
+<unit id="org.apache.commons.httpclient" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpclient" version="0.0.0"/>
+<unit id="org.easymock" version="0.0.0"/>
+<unit id="org.apache.batik.svggen" version="0.0.0"/>
+<unit id="org.apache.batik.dom" version="0.0.0"/>
+<unit id="org.apache.batik.ext.awt" version="0.0.0"/>
+<unit id="org.dom4j" version="0.0.0"/>
+<unit id="org.apache.xerces" version="0.0.0"/>
+<unit id="org.apache.poi.ooxml.schemas" version="0.0.0"/>
+<unit id="org.apache.poi.ooxml" version="0.0.0"/>
+<unit id="org.apache.poi" version="0.0.0"/>
+<unit id="org.apache.commons.io" version="0.0.0"/>
+<unit id="org.apache.commons.cli" version="0.0.0"/>
+<unit id="org.apache.commons.lang" version="0.0.0"/>
+<unit id="org.codehaus.jackson.core" version="0.0.0"/>
+<unit id="org.codehaus.jackson.mapper" version="0.0.0"/>
+<unit id="org.codehaus.jackson.jaxrs" version="0.0.0"/>
+<unit id="com.sun.jersey" version="0.0.0"/>
+<unit id="javax.ws.rs" version="0.0.0"/>
+<unit id="com.google.gson" version="0.0.0"/>
+<unit id="org.objectweb.asm" version="0.0.0"/>
+<unit id="org.apache.derby" version="0.0.0"/>
+<unit id="com.google.guava" version="0.0.0"/>
+<unit id="javassist" version="0.0.0"/>
+<unit id="ca.odell.glazedlists" version="0.0.0"/>
+<unit id="org.json" version="0.0.0"/>
+<unit id="com.sun.jersey" version="0.0.0"/>
+<unit id="javax.ws.rs" version="0.0.0"/>
+<unit id="org.swtchart" version="0.0.0"/>
+<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.e4.rcp.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.sdk.ide" version="0.0.0"/>
+<unit id="org.eclipse.rcp.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.rcp.sdk.id" version="0.0.0"/>
+<unit id="org.eclipse.epp.mpc.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.gef.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.jgit.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.platform.sdk" version="0.0.0"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.equinox.serverside.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.team.svn.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.birt.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.birt.doc.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.birt.chart.cshelp.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.birt.cshelp.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.jpt.jpa.eclipselink.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.discovery.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.filetransfer.httpclient4.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/releases/neon"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.nebula.widgets.nattable.extension.glazedlists.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/nattable/releases/1.5.0/repository"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.fx.ide.converter.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.css.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.pde.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.fxml.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.fxgraph.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.rrobot.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.l10n.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.ldef.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.basic.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/efxclipse/updates-released/2.4.0/site"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.ease.python.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.ui.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.modules.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/ease/update/release"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.knime.features.base.filehandling.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.xml.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.itemset.feature.group" version="0.0.0"/>
+<unit id="com.knime.features.enterprise.server.rest.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.jep.feature.group" version="0.0.0"/>
+<unit id="com.knime.features.explorer.serverspace.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.chem.types.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.util.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.exttool.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.jfreechart.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.jython.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.r.bin.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.spotfire.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.dsread.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.rengine.r2.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.mongodb.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.r.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.osm.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.sdk.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.poi.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.js.views.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.chem.tools.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.datageneration.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.network.distmatrix.feature.group" version="0.0.0"/>
+<unit id="com.knime.features.enterprise.server.ws.client.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.js.quickforms.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.socialmedia.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.python.feature.group" version="0.0.0"/>
+<unit id="com.knime.features.reporting.designer.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.parso.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.svg.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.dbdrivers.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.exttool.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.core.streaming.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.weka.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.wizard.feature.group" version="0.0.0"/>
+<unit id="com.knime.features.enterprise.client.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.neighborgram.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.network.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.chem.cdk.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.webservice.client.ppilot.feature.group" version="0.0.0"/>
+<unit id="com.knime.features.reporting.runtime.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.weka_3.6.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.libsvm.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.stats2.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.activelearning.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.textprocessing.feature.group" version="0.0.0"/>
+<unit id="com.knime.features.enterprise.client.exampleserver.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.md.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ensembles.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.base.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.webanalytics.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.json.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.virtual.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.r.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.optimization.feature.group" version="0.0.0"/>
+<unit id="com.knime.features.licenses.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.perl.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.webservice.client.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.weka_3.7.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.distmatrix.feature.group" version="0.0.0"/>
+<unit id="com.knime.features.enterprise.slave.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.birt.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.ext.lucene.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.arima.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.testingapplication.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.base.pmml.translation.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.base.pmml.feature.group" version="0.0.0"/>
+<unit id="org.knime.features.jpmml.feature.group" version="0.0.0"/>
+<unit id="org.knime.product.desktop.feature.group" version="0.0.0"/>
+<repository location="http://update.knime.org/analytics-platform/3.3/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/nebula/releases/1.4.0"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.e4.tools.bundle.spy.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.context.spy.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.css.spy.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.css.spy.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.event.spy.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.event.spy.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.model.spy.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.preference.spy.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.spies.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/e4/snapshots/org.eclipse.e4.tools/latest"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.persistence.sdk.feature.group" version="2.7.1.v20171221-bd47e8f"/>
+<repository location="http://download.eclipse.org/rt/eclipselink/updates/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.gemini.jpa.feature.feature.group" version="1.2.0.M1"/>
+<repository location="http://download.eclipse.org/gemini/jpa/updates"/>
+</location>
+</locations>
+</target>
