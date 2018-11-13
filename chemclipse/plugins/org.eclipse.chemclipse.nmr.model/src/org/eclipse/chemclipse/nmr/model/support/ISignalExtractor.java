@@ -48,4 +48,6 @@ public interface ISignalExtractor {
 	void setPhaseCorrection(Complex[] phaseCorrection, boolean resetIntesityValue);
 
 	void setBaselineCorrection(Complex[] baseleniCorrection, boolean resetIntensityValue);
+
+	void setScansFIDCorrection(double[] correction, boolean reset);
 }

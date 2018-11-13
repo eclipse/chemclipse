@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import org.apache.commons.math3.complex.Complex;
 import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
+import org.eclipse.chemclipse.nmr.model.core.ISignalFID;
 import org.eclipse.chemclipse.nmr.model.core.ISignalNMR;
 import org.eclipse.chemclipse.nmr.model.core.SignalFID;
 import org.eclipse.chemclipse.nmr.model.core.SignalNMR;
@@ -178,5 +179,21 @@ public class SignalExtractor implements ISignalExtractor {
 	private void resertValues() {
 
 		scanNMR.getSignalsNMR().forEach(signal -> signal.resetIntesity());
+	}
+
+	@Override
+	public void setScansFIDCorrection(double[] correction, boolean reset) {
+
+		if(reset) {
+			scanNMR.getSignalsFID().forEach(ISignalFID::resetIntensity);
+		}
+		Iterator<ISignalFID> it = scanNMR.getSignalsFID().iterator();
+		int i = 0;
+		while(it.hasNext()) {
+			ISignalFID iSignalFID = it.next();
+			Complex intensity = iSignalFID.getIntensity().multiply(correction[i]);
+			iSignalFID.setIntensity(intensity);
+			i++;
+		}
 	}
 }
