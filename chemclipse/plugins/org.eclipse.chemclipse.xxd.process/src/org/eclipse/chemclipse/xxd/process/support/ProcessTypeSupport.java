@@ -75,17 +75,18 @@ public class ProcessTypeSupport {
 		addProcessSupplier(new ChromatogramFilterTypeSupplierMSD()); // OK
 		addProcessSupplier(new PeakFilterTypeSupplierMSD()); // OK
 		addProcessSupplier(new PeakDetectorTypeSupplierMSD()); // OK
-		addProcessSupplier(new PeakIdentifierTypeSupplierMSD()); // TODO
+		addProcessSupplier(new PeakIdentifierTypeSupplierMSD()); // OK
 		addProcessSupplier(new PeakDetectorTypeSupplierCSD()); // OK
 		addProcessSupplier(new PeakIdentifierTypeSupplierCSD()); // OK
 		addProcessSupplier(new PeakIntegratorTypeSupplier()); // OK - Improve settings
-		addProcessSupplier(new PeakQuantitationTypeSupplier()); // TODO
-		addProcessSupplier(new ChromatogramCalculatorTypeSupplier()); // TODO
+		addProcessSupplier(new PeakQuantitationTypeSupplier()); // OK
+		addProcessSupplier(new ChromatogramCalculatorTypeSupplier()); // OK
 		addProcessSupplier(new ChromatogramReportTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramExportTypeSupplierMSD()); // OK
-		addProcessSupplier(new ChromatogramExportTypeSupplierCSD()); // OK
-		addProcessSupplier(new ChromatogramExportTypeSupplierWSD()); // OK
+		addProcessSupplier(new ChromatogramExportTypeSupplierMSD()); // OK - Improve settings
+		addProcessSupplier(new ChromatogramExportTypeSupplierCSD()); // OK - Improve settings
+		addProcessSupplier(new ChromatogramExportTypeSupplierWSD()); // OK - Improve settings
 		// MassSpectrumFilter?
+		// NoiseCalculator?
 	}
 
 	private void addProcessSupplier(IProcessTypeSupplier processTypeSupplier) {

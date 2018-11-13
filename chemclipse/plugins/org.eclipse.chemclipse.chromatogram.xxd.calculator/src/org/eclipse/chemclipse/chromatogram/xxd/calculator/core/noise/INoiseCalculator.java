@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 
 public interface INoiseCalculator {
 
+	@SuppressWarnings("rawtypes")
 	void setChromatogram(IChromatogram chromatogram, int segmentWidth);
 
 	void recalculate();

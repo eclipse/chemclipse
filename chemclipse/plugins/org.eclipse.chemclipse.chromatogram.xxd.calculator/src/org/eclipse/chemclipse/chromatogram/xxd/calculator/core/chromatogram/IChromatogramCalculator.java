@@ -30,6 +30,7 @@ public interface IChromatogramCalculator {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, IProgressMonitor monitor);
 
 	/**
@@ -41,6 +42,7 @@ public interface IChromatogramCalculator {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
 
 	/**
@@ -50,5 +52,6 @@ public interface IChromatogramCalculator {
 	 * @param chromatogramCalculatorSettings
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings);
 }

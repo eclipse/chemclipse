@@ -33,6 +33,7 @@ public class ChromatogramCalculator {
 	private static final String DESCRIPTION = "description";
 	private static final String CALCULATOR_NAME = "calculatorName";
 	private static final String CALCULATOR = "calculator";
+	private static final String CALCULATOR_SETTINGS = "calculatorSettings";
 	//
 	private static final String PROCESSING_DESCRIPTION = "Chromatogram Calculator";
 	private static final String NO_CHROMATOGRAM_CALCULATOR_AVAILABLE = "There is no chromatogram calculator available.";
@@ -55,6 +56,7 @@ public class ChromatogramCalculator {
 	 * @param filterId
 	 * @return {@link IChromatogramCalculatorProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, String filterId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -78,6 +80,7 @@ public class ChromatogramCalculator {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, String calculatorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -106,12 +109,21 @@ public class ChromatogramCalculator {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setCalculatorName(element.getAttribute(CALCULATOR_NAME));
+			if(element.getAttribute(CALCULATOR_SETTINGS) != null) {
+				try {
+					IChromatogramCalculatorSettings instance = (IChromatogramCalculatorSettings)element.createExecutableExtension(CALCULATOR_SETTINGS);
+					supplier.setSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setSettingsClass(null);
+				}
+			}
 			calculatorSupport.add(supplier);
 		}
 		return calculatorSupport;
 	}
 
-	// --------------------------------------------private methods
 	/**
 	 * Returns a {@link IChromatogramCalculator} instance given by the filterId or
 	 * null, if none is available.
@@ -152,5 +164,4 @@ public class ChromatogramCalculator {
 		}
 		return null;
 	}
-	// --------------------------------------------private methods
 }

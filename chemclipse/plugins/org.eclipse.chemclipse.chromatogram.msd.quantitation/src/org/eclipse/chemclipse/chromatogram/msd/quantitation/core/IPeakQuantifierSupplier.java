@@ -42,7 +42,7 @@ public interface IPeakQuantifierSupplier {
 	 * 
 	 * @return setting class or null, default method return null
 	 */
-	default Class<? extends IPeakQuantifierSettings> getQuantifierSettingsClass() {
+	default Class<? extends IPeakQuantifierSettings> getSettingsClass() {
 
 		return null;
 	}

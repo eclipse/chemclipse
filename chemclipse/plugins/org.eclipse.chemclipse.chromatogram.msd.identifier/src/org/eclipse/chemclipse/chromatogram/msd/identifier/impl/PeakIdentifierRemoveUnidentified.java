@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.AbstractPeakIdentifierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.PeakIdentifierSettingsMSD;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -64,21 +64,21 @@ public class PeakIdentifierRemoveUnidentified extends AbstractPeakIdentifierMSD 
 	@Override
 	public IProcessingInfo identify(IPeakMSD peak, IProgressMonitor monitor) {
 
-		IPeakIdentifierSettingsMSD peakIdentifierSettings = new PeakIdentifierSettingsMSD();
+		IPeakIdentifierSettingsMSD peakIdentifierSettings = new PeakIdentifierSettings();
 		return identify(peak, peakIdentifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo identify(List<IPeakMSD> peaks, IProgressMonitor monitor) {
 
-		PeakIdentifierSettingsMSD peakIdentifierSettings = new PeakIdentifierSettingsMSD();
+		PeakIdentifierSettings peakIdentifierSettings = new PeakIdentifierSettings();
 		return identify(peaks, peakIdentifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IProgressMonitor monitor) {
 
-		PeakIdentifierSettingsMSD peakIdentifierSettings = new PeakIdentifierSettingsMSD();
+		PeakIdentifierSettings peakIdentifierSettings = new PeakIdentifierSettings();
 		return identify(chromatogramSelectionMSD, peakIdentifierSettings, monitor);
 	}
 

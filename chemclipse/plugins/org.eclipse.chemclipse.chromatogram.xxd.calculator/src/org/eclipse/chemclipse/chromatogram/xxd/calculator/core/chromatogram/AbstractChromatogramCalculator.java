@@ -20,6 +20,7 @@ public abstract class AbstractChromatogramCalculator implements IChromatogramCal
 
 	private static final String DESCRIPTION = "Chromatogram Calculator";
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings) {
 
@@ -36,6 +37,7 @@ public abstract class AbstractChromatogramCalculator implements IChromatogramCal
 	 * @param chromatogramSelection
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("rawtypes")
 	private IProcessingInfo validateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();

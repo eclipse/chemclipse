@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.IChromatogramCalculatorSettings;
+
 public interface IChromatogramCalculatorSupplier {
 
 	/**
@@ -33,4 +35,11 @@ public interface IChromatogramCalculatorSupplier {
 	 * @return String
 	 */
 	String getCalculatorName();
+
+	/**
+	 * TODO: either returns a bean-like class or with annotations ..., with a public default constructor, ... or returns <code>null</code> if no filter settings are associated
+	 * 
+	 * @return
+	 */
+	Class<? extends IChromatogramCalculatorSettings> getSettingsClass();
 }

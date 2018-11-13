@@ -150,11 +150,11 @@ public class PeakQuantifier {
 			if(element.getAttribute(PEAK_QUANTIFIER_SETTINGS) != null) {
 				try {
 					IPeakQuantifierSettings instance = (IPeakQuantifierSettings)element.createExecutableExtension(PEAK_QUANTIFIER_SETTINGS);
-					supplier.setQuantifierSettingsClass(instance.getClass());
+					supplier.setSettingsClass(instance.getClass());
 				} catch(CoreException e) {
 					logger.warn(e);
 					// settings class is optional, set null instead
-					supplier.setQuantifierSettingsClass(null);
+					supplier.setSettingsClass(null);
 				}
 			}
 			baselineDetectorSupport.add(supplier);

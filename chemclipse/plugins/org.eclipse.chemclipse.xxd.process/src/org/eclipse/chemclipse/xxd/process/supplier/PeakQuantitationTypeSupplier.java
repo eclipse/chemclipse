@@ -43,7 +43,7 @@ public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier im
 				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
 				processorSupplier.setName(supplier.getPeakQuantifierName());
 				processorSupplier.setDescription(supplier.getDescription());
-				// processorSupplier.setSettingsClass(supplier.getSettingsClass()); // TODO
+				processorSupplier.setSettingsClass(supplier.getSettingsClass());
 				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoPeakQuantifierAvailableException e) {

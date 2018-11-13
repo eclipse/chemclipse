@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.IChromatogramCalculatorSettings;
+
 public class ChromatogramCalculatorSupplier implements IChromatogramCalculatorSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String calculatorName = "";
+	private Class<? extends IChromatogramCalculatorSettings> settingsClass;
 
 	@Override
 	public String getDescription() {
@@ -72,7 +75,17 @@ public class ChromatogramCalculatorSupplier implements IChromatogramCalculatorSu
 		}
 	}
 
-	// ------------------------------------hashCode, equals, toString
+	@Override
+	public Class<? extends IChromatogramCalculatorSettings> getSettingsClass() {
+
+		return this.settingsClass;
+	}
+
+	protected void setSettingsClass(Class<? extends IChromatogramCalculatorSettings> settingsClass) {
+
+		this.settingsClass = settingsClass;
+	}
+
 	@Override
 	public boolean equals(Object other) {
 
@@ -109,5 +122,4 @@ public class ChromatogramCalculatorSupplier implements IChromatogramCalculatorSu
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------------hashCode, equals, toString
 }

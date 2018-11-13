@@ -20,15 +20,15 @@ public class PeakQuantifierSupplier implements IPeakQuantifierSupplier {
 	private String peakQuantifierName = "";
 	private Class<? extends IPeakQuantifierSettings> settingsClass;
 
-	protected void setQuantifierSettingsClass(Class<? extends IPeakQuantifierSettings> settingsClass) {
-
-		this.settingsClass = settingsClass;
-	}
-
 	@Override
-	public Class<? extends IPeakQuantifierSettings> getQuantifierSettingsClass() {
+	public Class<? extends IPeakQuantifierSettings> getSettingsClass() {
 
 		return settingsClass;
+	}
+
+	protected void setSettingsClass(Class<? extends IPeakQuantifierSettings> settingsClass) {
+
+		this.settingsClass = settingsClass;
 	}
 
 	@Override
@@ -86,7 +86,6 @@ public class PeakQuantifierSupplier implements IPeakQuantifierSupplier {
 		}
 	}
 
-	// ------------------------------------hashCode, equals, toString
 	@Override
 	public boolean equals(Object other) {
 
@@ -123,5 +122,4 @@ public class PeakQuantifierSupplier implements IPeakQuantifierSupplier {
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------------hashCode, equals, toString
 }

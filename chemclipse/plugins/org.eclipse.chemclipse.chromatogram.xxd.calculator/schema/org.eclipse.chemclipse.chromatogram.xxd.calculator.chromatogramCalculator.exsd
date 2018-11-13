@@ -80,6 +80,16 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="calculatorSettings" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.IChromatogramCalculatorSettings"/>
+               </appInfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

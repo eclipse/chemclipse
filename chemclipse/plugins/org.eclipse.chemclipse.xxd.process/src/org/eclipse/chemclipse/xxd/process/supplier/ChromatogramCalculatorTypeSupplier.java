@@ -40,7 +40,7 @@ public class ChromatogramCalculatorTypeSupplier extends AbstractProcessTypeSuppl
 				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
 				processorSupplier.setName(supplier.getCalculatorName());
 				processorSupplier.setDescription(supplier.getDescription());
-				// processorSupplier.setSettingsClass(supplier.getSettingsClass()); // TODO
+				processorSupplier.setSettingsClass(supplier.getSettingsClass());
 				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoChromatogramCalculatorSupplierAvailableException e) {
