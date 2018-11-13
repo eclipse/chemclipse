@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.IPeakQuantifier
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.core.PeakQuantitationCalculatorESTD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.IChemClipsePeakQuantifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.PeakQuantifierSettings;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -47,14 +47,14 @@ public class PeakQuantifierESTD extends AbstractPeakQuantifier implements IPeakQ
 
 		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
-		IChemClipsePeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSetting();
+		PeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSetting();
 		return quantify(peaks, peakQuantifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo quantify(List<IPeak> peaks, IProgressMonitor monitor) {
 
-		IChemClipsePeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSetting();
+		PeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSetting();
 		return quantify(peaks, peakQuantifierSettings, monitor);
 	}
 }

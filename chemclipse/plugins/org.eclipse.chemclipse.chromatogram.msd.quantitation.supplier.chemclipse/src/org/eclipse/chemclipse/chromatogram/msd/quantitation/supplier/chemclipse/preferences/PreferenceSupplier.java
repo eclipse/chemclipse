@@ -16,8 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.ChemClipsePeakQuantifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.IChemClipsePeakQuantifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.PeakQuantifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -86,9 +85,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		}
 	}
 
-	public static IChemClipsePeakQuantifierSettings getPeakQuantifierSetting() {
+	public static PeakQuantifierSettings getPeakQuantifierSetting() {
 
-		IChemClipsePeakQuantifierSettings peakQuantifierSettings = new ChemClipsePeakQuantifierSettings();
+		PeakQuantifierSettings peakQuantifierSettings = new PeakQuantifierSettings();
 		return peakQuantifierSettings;
 	}
 }

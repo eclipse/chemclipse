@@ -7,13 +7,15 @@
             description="This quantifier handles to execute a peak quantitation via external standards."
             id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak.estd"
             peakQuantifier="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.core.PeakQuantifierESTD"
-            peakQuantifierName="Peak Quantifier (ESTD)">
+            peakQuantifierName="Peak Quantifier (ESTD)"
+            peakQuantifierSettings="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.PeakQuantifierSettings">
       </PeakQuantifierSupplier>
       <PeakQuantifierSupplier
             description="This quantifier handles to execute a peak quantitation via internal standards."
             id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak.istd"
             peakQuantifier="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.core.PeakQuantifierISTD"
-            peakQuantifierName="Peak Quantifier (ISTD)">
+            peakQuantifierName="Peak Quantifier (ISTD)"
+            peakQuantifierSettings="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.PeakQuantifierSettings">
       </PeakQuantifierSupplier>           
    </extension>
    <extension

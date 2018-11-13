@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.AbstractPeakQuantifierSettings;
 
-public interface IChemClipsePeakQuantifierSettings extends IPeakQuantifierSettings {
+public class PeakQuantifierSettings extends AbstractPeakQuantifierSettings {
 }
