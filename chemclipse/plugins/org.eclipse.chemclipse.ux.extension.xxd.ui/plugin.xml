@@ -195,6 +195,17 @@
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.editors.chromatogramEditor3x"
             name="Chromatogram">
       </editor>      
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.ux.extension.xxd.ui.chromatogramEditorActionSupplier">
+      <ChromatogramEditorActionSupplier
+            CSD="true"
+            MSD="true"
+            WSD="true"
+            actionExecutable="org.eclipse.chemclipse.ux.extension.xxd.ui.handlers.ChromatogramEditorAction"
+            description="This action applies the selected method on the chromatogram."
+            label="Method Editor Action">
+      </ChromatogramEditorActionSupplier>
    </extension>   
 
 </plugin>

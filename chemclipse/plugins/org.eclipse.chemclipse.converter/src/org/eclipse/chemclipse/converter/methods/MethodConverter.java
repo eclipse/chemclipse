@@ -28,6 +28,10 @@ import org.eclipse.core.runtime.Platform;
 
 public class MethodConverter {
 
+	/*
+	 * Keep in sync with:
+	 * org.eclipse.chemclipse.xxd.converter.supplier.chemclipse
+	 */
 	public static final String DEFAULT_MÉTHOD_CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.processMethodSupplier";
 	public static final String DEFAULT_METHOD_FILE_NAME = "ProcessMethod.ocm";
 	public static final String[] DEFAULT_METHOD_FILE_EXTENSIONS = new String[]{"*.ocm"};

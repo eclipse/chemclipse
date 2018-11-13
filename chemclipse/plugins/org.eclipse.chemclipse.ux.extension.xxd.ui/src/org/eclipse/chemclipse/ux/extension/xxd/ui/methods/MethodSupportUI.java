@@ -13,7 +13,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
@@ -23,6 +26,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -42,7 +46,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -54,7 +57,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 
 public class MethodSupportUI extends Composite {
 
@@ -102,7 +107,7 @@ public class MethodSupportUI extends Composite {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
-		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setContentProvider(new ListContentProvider());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
 			@Override
@@ -147,34 +152,62 @@ public class MethodSupportUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
-				fileDialog.setOverwrite(true);
-				fileDialog.setText("Process Method");
-				fileDialog.setFileName(MethodConverter.DEFAULT_METHOD_FILE_NAME);
-				fileDialog.setFilterExtensions(MethodConverter.DEFAULT_METHOD_FILE_EXTENSIONS);
-				fileDialog.setFilterNames(MethodConverter.DEFAULT_METHOD_FILE_NAMES);
-				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER));
-				String filePath = fileDialog.open();
-				if(filePath != null && !filePath.equals("")) {
-					/*
-					 * New process method file.
-					 */
-					File file = new File(filePath);
-					ProcessMethod processMethod = new ProcessMethod();
-					processMethod.setOperator(UserManagement.getCurrentUser());
-					processMethod.setDescription("This is an empty process method. Please modify.");
-					//
-					IProcessingInfo processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_MÉTHOD_CONVERTER_ID, new NullProgressMonitor());
-					if(!processingInfo.hasErrorMessages()) {
-						preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
-						computeMethodComboItems();
-						supplierEditorSupport.openEditor(file);
+				Shell shell = e.widget.getDisplay().getActiveShell();
+				String directoryPath = preferenceStore.getString(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER);
+				File directory = new File(directoryPath);
+				if(directory.exists()) {
+					createNewMethod(shell);
+				} else {
+					if(selectMethodDirectory(shell)) {
+						createNewMethod(shell);
+					} else {
+						MessageDialog.openError(shell, "Method Editor", "Please select a directory via the settings where your methods are located.");
 					}
 				}
 			}
 		});
 		//
 		return button;
+	}
+
+	private boolean selectMethodDirectory(Shell shell) {
+
+		DirectoryDialog directoryDialog = new DirectoryDialog(shell);
+		directoryDialog.setText("Method Directory");
+		//
+		String directoryPath = directoryDialog.open();
+		if(directoryPath != null && !directoryPath.equals("")) {
+			preferenceStore.putValue(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, directoryPath);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private void createNewMethod(Shell shell) {
+
+		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+		fileDialog.setOverwrite(true);
+		fileDialog.setText("Process Method");
+		fileDialog.setFileName(MethodConverter.DEFAULT_METHOD_FILE_NAME);
+		fileDialog.setFilterExtensions(MethodConverter.DEFAULT_METHOD_FILE_EXTENSIONS);
+		fileDialog.setFilterNames(MethodConverter.DEFAULT_METHOD_FILE_NAMES);
+		fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER));
+		//
+		String filePath = fileDialog.open();
+		if(filePath != null && !filePath.equals("")) {
+			File file = new File(filePath);
+			ProcessMethod processMethod = new ProcessMethod();
+			processMethod.setOperator(UserManagement.getCurrentUser());
+			processMethod.setDescription("This is an empty process method. Please modify.");
+			//
+			IProcessingInfo processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_MÉTHOD_CONVERTER_ID, new NullProgressMonitor());
+			if(!processingInfo.hasErrorMessages()) {
+				preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
+				computeMethodComboItems();
+				supplierEditorSupport.openEditor(file);
+			}
+		}
 	}
 
 	private Button createButtonEditMethod(Composite parent) {
@@ -268,31 +301,58 @@ public class MethodSupportUI extends Composite {
 	private void computeMethodComboItems() {
 
 		String methodRootFolder = preferenceStore.getString(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER);
-		String selectedMethodName = preferenceStore.getString(PreferenceConstants.P_SELECTED_METHOD_NAME);
 		//
 		File directory = new File(methodRootFolder);
 		if(directory.exists() && directory.isDirectory()) {
-			comboViewerMethods.setInput(directory.listFiles());
-			Combo combo = comboViewerMethods.getCombo();
-			if(combo.getItemCount() > 0) {
-				exitloop:
-				for(int i = 0; i < combo.getItemCount(); i++) {
-					if(combo.getItem(i).equals(selectedMethodName)) {
-						combo.select(i);
-						break exitloop;
-					}
-				}
-				//
-				if(combo.getSelectionIndex() == -1) {
-					combo.select(0);
-					preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, combo.getItem(0));
-				}
+			comboViewerMethods.setInput(getMethodFiles(directory));
+			if(comboViewerMethods.getCombo().getItemCount() > 0) {
+				setSelectedMethod();
 			}
 		} else {
 			comboViewerMethods.setInput(null);
 		}
 		//
 		enableMethodEditButton();
+	}
+
+	private List<File> getMethodFiles(File directory) {
+
+		List<File> methodFiles = new ArrayList<>();
+		try {
+			String[] extensions = MethodConverter.getMethodConverterSupport().getFilterExtensions();
+			for(File file : directory.listFiles()) {
+				for(String extension : extensions) {
+					if(file.getName().endsWith(extension)) {
+						if(!methodFiles.contains(file)) {
+							methodFiles.add(file);
+						}
+					}
+				}
+			}
+		} catch(NoConverterAvailableException e) {
+			logger.warn(e);
+		}
+		//
+		return methodFiles;
+	}
+
+	private void setSelectedMethod() {
+
+		String selectedMethodName = preferenceStore.getString(PreferenceConstants.P_SELECTED_METHOD_NAME);
+		Combo combo = comboViewerMethods.getCombo();
+		//
+		exitloop:
+		for(int i = 0; i < combo.getItemCount(); i++) {
+			if(combo.getItem(i).equals(selectedMethodName)) {
+				combo.select(i);
+				break exitloop;
+			}
+		}
+		//
+		if(combo.getSelectionIndex() == -1) {
+			combo.select(0);
+			preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, combo.getItem(0));
+		}
 	}
 
 	private void enableMethodEditButton() {
