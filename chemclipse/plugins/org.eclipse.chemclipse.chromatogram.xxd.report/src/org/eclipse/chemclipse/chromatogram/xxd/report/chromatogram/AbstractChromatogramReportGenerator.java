@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
 public abstract class AbstractChromatogramReportGenerator implements IChromatogramReportGenerator {
 
-	// TODO merge with chromatogram converter
 	@Override
 	public IProcessingInfo validate(File file) {
 

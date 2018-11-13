@@ -57,5 +57,5 @@ public interface IChromatogramReportSupplier {
 	 * 
 	 * @return
 	 */
-	Class<? extends IChromatogramReportSettings> getChromatogramReportSettingsClass();
+	Class<? extends IChromatogramReportSettings> getSettingsClass();
 }

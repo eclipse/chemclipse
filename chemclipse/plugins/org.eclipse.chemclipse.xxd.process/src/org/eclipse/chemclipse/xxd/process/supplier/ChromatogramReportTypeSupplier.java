@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.xxd.process.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -45,7 +46,7 @@ public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier 
 				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
 				processorSupplier.setName(supplier.getReportName());
 				processorSupplier.setDescription(supplier.getDescription());
-				// processorSupplier.setSettingsClass(supplier.getSettingsClass()); // TODO
+				processorSupplier.setSettingsClass(supplier.getSettingsClass());
 				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoReportSupplierAvailableException e) {
@@ -57,15 +58,32 @@ public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier 
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
-		IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
-		File file = null; // TODO
-		boolean append = false;
+		IProcessingInfo processInfo = null;
 		//
-		if(processSettings != null && processSettings instanceof IChromatogramReportSettings) {
-			// return ChromatogramReports.generate(file, append, chromatogram, (IChromatogramReportSettings)processSettings, processorId, monitor);
-		} else {
-			// return ChromatogramReports.generate(file, append, chromatogram, processorId, monitor);
+		if(chromatogramSelection != null) {
+			String reportExportFolder = PreferenceSupplier.getReportExportFolder();
+			File exportFolder = new File(reportExportFolder);
+			if(exportFolder.exists()) {
+				/*
+				 * TODO
+				 */
+				IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
+				File file = new File(reportExportFolder + File.separator + chromatogram.getName());
+				boolean append = false;
+				//
+				if(processSettings != null && processSettings instanceof IChromatogramReportSettings) {
+					processInfo = ChromatogramReports.generate(file, append, chromatogram, (IChromatogramReportSettings)processSettings, processorId, monitor);
+				} else {
+					processInfo = ChromatogramReports.generate(file, append, chromatogram, processorId, monitor);
+				}
+			}
 		}
-		return new ProcessingInfo(); // TODO
+		//
+		if(processInfo == null) {
+			processInfo = new ProcessingInfo();
+			processInfo.addErrorMessage(CATEGORY, "Something went wrong to report the chromatogram: " + processorId + " " + chromatogramSelection);
+		}
+		//
+		return processInfo;
 	}
 }

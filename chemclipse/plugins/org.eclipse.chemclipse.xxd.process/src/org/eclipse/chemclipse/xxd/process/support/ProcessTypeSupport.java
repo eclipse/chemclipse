@@ -81,10 +81,10 @@ public class ProcessTypeSupport {
 		addProcessSupplier(new PeakIntegratorTypeSupplier()); // OK - Improve settings
 		addProcessSupplier(new PeakQuantitationTypeSupplier()); // TODO
 		addProcessSupplier(new ChromatogramCalculatorTypeSupplier()); // TODO
-		addProcessSupplier(new ChromatogramReportTypeSupplier()); // TODO
-		addProcessSupplier(new ChromatogramExportTypeSupplierMSD()); // TODO
-		addProcessSupplier(new ChromatogramExportTypeSupplierCSD()); // TODO
-		addProcessSupplier(new ChromatogramExportTypeSupplierWSD()); // TODO
+		addProcessSupplier(new ChromatogramReportTypeSupplier()); // OK
+		addProcessSupplier(new ChromatogramExportTypeSupplierMSD()); // OK
+		addProcessSupplier(new ChromatogramExportTypeSupplierCSD()); // OK
+		addProcessSupplier(new ChromatogramExportTypeSupplierWSD()); // OK
 		// MassSpectrumFilter?
 	}
 

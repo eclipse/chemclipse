@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.settings;
 
-public interface IChromatogramReportSettings {
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+
+public interface IChromatogramReportSettings extends IProcessSettings {
 }

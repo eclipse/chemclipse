@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.ui.preferences;
 
+import org.eclipse.chemclipse.xxd.process.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.process.ui.Activator;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -31,6 +33,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_REPORT_EXPORT_FOLDER, "Report Export Folder", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_EXPORT_FOLDER, "Chromatogram Export Folder", getFieldEditorParent()));
 	}
 
 	/*

@@ -135,11 +135,11 @@ public class ChromatogramReports {
 				if(element.getAttribute(REPORT_SETTINGS) != null) {
 					try {
 						IChromatogramReportSettings instance = (IChromatogramReportSettings)element.createExecutableExtension(REPORT_SETTINGS);
-						supplier.setChromatogramReportSettingsClass(instance.getClass());
+						supplier.setSettingsClass(instance.getClass());
 					} catch(CoreException e) {
 						logger.warn(e);
 						// settings class is optional, set null instead
-						supplier.setChromatogramReportSettingsClass(null);
+						supplier.setSettingsClass(null);
 					}
 				}
 				chromatogramReportSupport.add(supplier);

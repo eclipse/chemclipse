@@ -11,8 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.ui;
 
-import org.osgi.framework.BundleContext;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
+import org.eclipse.chemclipse.xxd.process.preferences.PreferenceSupplier;
+import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -32,6 +33,7 @@ public class Activator extends AbstractActivatorUI {
 
 		super.start(context);
 		plugin = this;
+		initializePreferenceStore(PreferenceSupplier.INSTANCE());
 	}
 
 	/*

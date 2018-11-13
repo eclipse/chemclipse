@@ -20,7 +20,7 @@ public class AbstractChromatogramReportSupplier implements IChromatogramReportSu
 	private String filterName = "";
 	private String fileExtension = "";
 	private String fileName = "";
-	private Class<? extends IChromatogramReportSettings> chromatogramReportSettingsClass;
+	private Class<? extends IChromatogramReportSettings> settingsClass;
 
 	@Override
 	public String getId() {
@@ -96,17 +96,16 @@ public class AbstractChromatogramReportSupplier implements IChromatogramReportSu
 	}
 
 	@Override
-	public Class<? extends IChromatogramReportSettings> getChromatogramReportSettingsClass() {
+	public Class<? extends IChromatogramReportSettings> getSettingsClass() {
 
-		return this.chromatogramReportSettingsClass;
+		return this.settingsClass;
 	}
 
-	protected void setChromatogramReportSettingsClass(Class<? extends IChromatogramReportSettings> chromatogramReportSettingsClass) {
+	protected void setSettingsClass(Class<? extends IChromatogramReportSettings> settingsClass) {
 
-		this.chromatogramReportSettingsClass = chromatogramReportSettingsClass;
+		this.settingsClass = settingsClass;
 	}
 
-	// -----------------------------------------------equals, hashCode, toString
 	@Override
 	public boolean equals(final Object otherObject) {
 
@@ -143,5 +142,4 @@ public class AbstractChromatogramReportSupplier implements IChromatogramReportSu
 		builder.append("]");
 		return builder.toString();
 	}
-	// -----------------------------------------------equals, hashCode, toString
 }

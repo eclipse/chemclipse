@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCS
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -28,6 +29,8 @@ import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMS
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -74,6 +77,8 @@ import org.eclipse.swt.widgets.Text;
 public class ExtendedSequenceListUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedSequenceListUI.class);
+	//
+	private static final String DESCRIPTION = "Sequence Editor";
 	//
 	private Text dataPath;
 	private Composite toolbarSearch;
@@ -176,8 +181,11 @@ public class ExtendedSequenceListUI {
 			@Override
 			public void execute(ProcessMethod processMethod, IProgressMonitor monitor) {
 
+				IProcessingInfo processingInfo = new ProcessingInfo();
+				//
 				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 				TableItem[] tableItems = sequenceListUI.getTable().getItems();
+				//
 				for(TableItem tableItem : tableItems) {
 					Object object = tableItem.getData();
 					if(object instanceof ISequenceRecord) {
@@ -190,19 +198,43 @@ public class ExtendedSequenceListUI {
 						if(dataType != null) {
 							IChromatogramSelection chromatogramSelection = getChromatogramSelection(file, dataType, monitor);
 							if(chromatogramSelection != null) {
-								processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+								addSequenceRecordInformation(sequenceRecord, chromatogramSelection.getChromatogram());
+								IProcessingInfo processorInfo = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+								if(processorInfo.hasErrorMessages()) {
+									processingInfo.addMessages(processorInfo);
+								} else {
+									processingInfo.addInfoMessage(DESCRIPTION, "Success processing file: " + file);
+								}
 							} else {
-								logger.warn("Chromatogram Selection is null: " + file + " " + dataType);
+								String message = "Chromatogram Selection is null: " + file + " " + dataType;
+								processingInfo.addErrorMessage(DESCRIPTION, message);
+								logger.warn(message);
 							}
 						} else {
-							logger.warn("Could not detect data type of file: " + file);
+							String message = "Could not detect data type of file: " + file;
+							processingInfo.addErrorMessage(DESCRIPTION, message);
+							logger.warn(message);
 						}
 					}
 				}
+				//
+				ProcessingInfoViewSupport.updateProcessingInfo(methodSupportUI.getDisplay(), processingInfo, true);
 			}
 		});
 		//
 		return methodSupportUI;
+	}
+
+	private void addSequenceRecordInformation(ISequenceRecord sequenceRecord, IMeasurement measurement) {
+
+		if(sequenceRecord != null && measurement != null) {
+			measurement.putHeaderData("Sequence Description", sequenceRecord.getDescription());
+			measurement.putHeaderData("Sequence Method", sequenceRecord.getMethod());
+			measurement.putHeaderData("Sequence Sample Name", sequenceRecord.getSampleName());
+			measurement.putHeaderData("Sequence Substance", sequenceRecord.getSubstance());
+			measurement.putHeaderData("Sequence Multiplier", Double.toString(sequenceRecord.getMultiplier()));
+			measurement.putHeaderData("Sequence Vial", Integer.toString(sequenceRecord.getVial()));
+		}
 	}
 
 	@SuppressWarnings("rawtypes")

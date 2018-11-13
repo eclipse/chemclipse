@@ -45,10 +45,12 @@ public class ProcessingInfoViewSupport {
 	 */
 	public static void updateProcessingInfo(final IProcessingInfo processingInfo, final boolean focusProcessingInfoView) {
 
-		/*
-		 * Info error message.
-		 */
 		Display display = DisplayUtils.getDisplay();
+		updateProcessingInfo(display, processingInfo, focusProcessingInfoView);
+	}
+
+	public static void updateProcessingInfo(final Display display, final IProcessingInfo processingInfo, final boolean focusProcessingInfoView) {
+
 		display.asyncExec(new Runnable() {
 
 			@Override
