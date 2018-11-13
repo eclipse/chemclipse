@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.SupplierCalculatorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
@@ -108,11 +107,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static ISupplierCalculatorSettings getChromatogramCalculatorSettings() {
+	public static CalculatorSettings getChromatogramCalculatorSettings() {
 
-		ISupplierCalculatorSettings chromatogramCalculatorSettings = new SupplierCalculatorSettings();
-		chromatogramCalculatorSettings.setRetentionIndexFiles(getRetentionIndexFiles());
-		return chromatogramCalculatorSettings;
+		CalculatorSettings calculatorSettings = new CalculatorSettings();
+		calculatorSettings.setRetentionIndexFiles(getRetentionIndexFiles());
+		return calculatorSettings;
 	}
 
 	public static boolean isUseAutoDetectIndices() {

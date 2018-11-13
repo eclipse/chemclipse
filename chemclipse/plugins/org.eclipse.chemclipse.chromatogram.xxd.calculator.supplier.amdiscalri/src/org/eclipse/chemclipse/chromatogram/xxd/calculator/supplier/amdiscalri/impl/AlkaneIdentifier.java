@@ -15,13 +15,12 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.DatabasesCache;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.PathResolver;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
@@ -70,7 +69,7 @@ public class AlkaneIdentifier {
 		/*
 		 * Create the file identifier settings.
 		 */
-		IVendorPeakIdentifierSettings peakIdentifierSettings = new VendorPeakIdentifierSettings();
+		PeakIdentifierSettings peakIdentifierSettings = new PeakIdentifierSettings();
 		setIdentifierSettings(peakIdentifierSettings);
 		setFileIdentifierSettings(peakIdentifierSettings);
 		/*
@@ -80,12 +79,12 @@ public class AlkaneIdentifier {
 		return peakIdentifier.identify(peaks, peakIdentifierSettings, monitor);
 	}
 
-	public IProcessingInfo runIdentification(List<IScanMSD> massSpectraList, IVendorMassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
+	public IProcessingInfo runIdentification(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
 		/*
 		 * Create the file identifier settings.
 		 */
-		IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings = new VendorMassSpectrumIdentifierSettings();
+		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = new MassSpectrumIdentifierSettings();
 		setIdentifierSettings(massSpectrumIdentifierSettings);
 		setFileIdentifierSettings(massSpectrumIdentifierSettings);
 		/*

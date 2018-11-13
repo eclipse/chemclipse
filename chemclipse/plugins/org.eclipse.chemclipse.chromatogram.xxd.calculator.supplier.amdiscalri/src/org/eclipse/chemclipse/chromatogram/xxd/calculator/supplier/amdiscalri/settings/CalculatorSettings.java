@@ -13,10 +13,15 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.s
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.AbstractChromatogramCalculatorSettings;
 
-public class SupplierCalculatorSettings extends AbstractChromatogramFilterSettings implements ISupplierCalculatorSettings {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+public class CalculatorSettings extends AbstractChromatogramCalculatorSettings implements IRetentionIndexFilterSettings {
+
+	@JsonProperty(value = "Retention Index Files", defaultValue = "")
+	@JsonPropertyDescription("This is the list of RI files.")
 	private List<String> retentionIndexFiles;
 
 	@Override

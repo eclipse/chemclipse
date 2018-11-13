@@ -34,7 +34,7 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 		AlkaneIdentifier alkaneIdentifier = new AlkaneIdentifier();
 		try {
 			//
-			processingInfo = alkaneIdentifier.runIdentification(massSpectraList, null, monitor);
+			processingInfo = alkaneIdentifier.runIdentification(massSpectraList, massSpectrumIdentifierSettings, monitor);
 		} catch(Exception e) {
 			logger.warn(e);
 			processingInfo = new ProcessingInfo();

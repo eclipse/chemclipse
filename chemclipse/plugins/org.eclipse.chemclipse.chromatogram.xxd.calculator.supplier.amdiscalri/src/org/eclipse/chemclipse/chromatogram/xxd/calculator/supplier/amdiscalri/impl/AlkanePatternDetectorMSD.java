@@ -17,8 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.PeakIdentifier;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.SupplierCalculatorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.AreaSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IAreaSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IIntegrationSupport;
@@ -94,11 +93,11 @@ public class AlkanePatternDetectorMSD {
 			 */
 			if(!"".equals(pathRetentionIndexFile)) {
 				RetentionIndexCalculator retentionIndexCalculator = new RetentionIndexCalculator();
-				ISupplierCalculatorSettings supplierCalculatorSettings = new SupplierCalculatorSettings();
+				CalculatorSettings calculatorSettings = new CalculatorSettings();
 				List<String> retentionIndexFiles = new ArrayList<String>();
 				retentionIndexFiles.add(pathRetentionIndexFile);
-				supplierCalculatorSettings.setRetentionIndexFiles(retentionIndexFiles);
-				retentionIndexCalculator.apply(chromatogramSelectionMSD, supplierCalculatorSettings, monitor);
+				calculatorSettings.setRetentionIndexFiles(retentionIndexFiles);
+				retentionIndexCalculator.apply(chromatogramSelectionMSD, calculatorSettings, monitor);
 			}
 			/*
 			 * Peak identifier

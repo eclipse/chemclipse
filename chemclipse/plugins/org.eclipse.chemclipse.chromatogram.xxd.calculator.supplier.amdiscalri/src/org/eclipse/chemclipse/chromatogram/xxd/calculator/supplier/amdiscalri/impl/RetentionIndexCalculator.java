@@ -18,7 +18,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileReader;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class RetentionIndexCalculator {
 
 	@SuppressWarnings("rawtypes")
-	public IProcessingInfo apply(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo apply(IChromatogramSelection chromatogramSelection, CalculatorSettings supplierCalculatorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		ISeparationColumnIndices separationColumnIndices = null;
@@ -69,12 +69,12 @@ public class RetentionIndexCalculator {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private ISeparationColumnIndices getFileIndices(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings) {
+	private ISeparationColumnIndices getFileIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings) {
 
 		/*
 		 * Prepare the index map.
 		 */
-		List<String> retentionIndexFiles = supplierCalculatorSettings.getRetentionIndexFiles();
+		List<String> retentionIndexFiles = calculatorSettings.getRetentionIndexFiles();
 		CalibrationFileReader calibrationFileReader = new CalibrationFileReader();
 		Map<String, ISeparationColumnIndices> calibrationMap = new HashMap<String, ISeparationColumnIndices>();
 		for(String retentionIndexFile : retentionIndexFiles) {

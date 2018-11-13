@@ -15,8 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.SupplierCalculatorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.AreaSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IAreaSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IIntegrationSupport;
@@ -82,11 +81,11 @@ public class AlkanePatternDetectorCSD {
 			 */
 			if(!"".equals(pathRetentionIndexFile)) {
 				RetentionIndexCalculator retentionIndexCalculator = new RetentionIndexCalculator();
-				ISupplierCalculatorSettings supplierCalculatorSettings = new SupplierCalculatorSettings();
+				CalculatorSettings calculatorSettings = new CalculatorSettings();
 				List<String> retentionIndexFiles = new ArrayList<String>();
 				retentionIndexFiles.add(pathRetentionIndexFile);
-				supplierCalculatorSettings.setRetentionIndexFiles(retentionIndexFiles);
-				retentionIndexCalculator.apply(chromatogramSelectionCSD, supplierCalculatorSettings, monitor);
+				calculatorSettings.setRetentionIndexFiles(retentionIndexFiles);
+				retentionIndexCalculator.apply(chromatogramSelectionCSD, calculatorSettings, monitor);
 			}
 		} catch(Exception e) {
 			logger.warn(e);

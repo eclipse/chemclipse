@@ -12,11 +12,11 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettingsMSD;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileIdentifierSettings;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD implements IVendorPeakIdentifierSettings {
+public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD implements IFileIdentifierSettings {
 
 	private String massSpectraFiles = ""; // Don't modify. The value will be set by the plugin.
 	private boolean usePreOptimization = false; // Don't modify. The value will be set by the plugin.
