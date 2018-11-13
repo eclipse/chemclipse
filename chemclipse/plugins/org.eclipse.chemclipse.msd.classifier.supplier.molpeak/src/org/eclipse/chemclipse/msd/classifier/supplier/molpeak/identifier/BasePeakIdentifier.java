@@ -21,10 +21,8 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSe
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilder;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
@@ -127,7 +125,7 @@ public class BasePeakIdentifier {
 		/*
 		 * Post identify NOTFOUND peaks.
 		 */
-		IVendorPeakIdentifierSettings peakIdentifierSettings = new VendorPeakIdentifierSettings();
+		PeakIdentifierSettings peakIdentifierSettings = new PeakIdentifierSettings();
 		setIdentifierSettings(peakIdentifierSettings);
 		setFileIdentifierSettings(peakIdentifierSettings);
 		PeakIdentifier peakIdentifier = new PeakIdentifier();
@@ -176,7 +174,7 @@ public class BasePeakIdentifier {
 		/*
 		 * Post identify NOTFOUND peaks.
 		 */
-		IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings = new VendorMassSpectrumIdentifierSettings();
+		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = new MassSpectrumIdentifierSettings();
 		setIdentifierSettings(massSpectrumIdentifierSettings);
 		setFileIdentifierSettings(massSpectrumIdentifierSettings);
 		MassSpectrumIdentifier massSpectrumIdentifier = new MassSpectrumIdentifier();
