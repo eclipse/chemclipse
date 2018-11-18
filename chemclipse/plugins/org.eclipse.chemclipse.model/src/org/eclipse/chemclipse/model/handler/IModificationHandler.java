@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
+package org.eclipse.chemclipse.model.handler;
 
 public interface IModificationHandler {
 

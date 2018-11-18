@@ -17,17 +17,10 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.model.reports.ISequence;
 import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
-import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
@@ -37,18 +30,13 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramTypeSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.SequenceListUI;
-import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -68,7 +56,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -90,14 +77,9 @@ public class ExtendedSequenceListUI {
 	//
 	private String initialDataPath = "";
 	private ISequence<? extends ISequenceRecord> sequence;
-	//
-	private List<ISupplierEditorSupport> supplierEditorSupportList;
+	private ChromatogramTypeSupport chromatogramTypeSupport = new ChromatogramTypeSupport();
 
 	public ExtendedSequenceListUI(Composite parent) {
-		supplierEditorSupportList = new ArrayList<>();
-		supplierEditorSupportList.add(new EditorSupportFactory(DataType.MSD).getInstanceEditorSupport());
-		supplierEditorSupportList.add(new EditorSupportFactory(DataType.CSD).getInstanceEditorSupport());
-		supplierEditorSupportList.add(new EditorSupportFactory(DataType.WSD).getInstanceEditorSupport());
 		initialize(parent);
 	}
 
@@ -193,27 +175,19 @@ public class ExtendedSequenceListUI {
 						 * Get the file.
 						 */
 						ISequenceRecord sequenceRecord = (ISequenceRecord)object;
-						File file = new File(sequence.getDataPath() + File.separator + sequenceRecord.getDataFile());
-						DataType dataType = detectDataType(file);
-						if(dataType != null) {
-							IChromatogramSelection chromatogramSelection = getChromatogramSelection(file, dataType, monitor);
-							if(chromatogramSelection != null) {
-								addSequenceRecordInformation(sequenceRecord, chromatogramSelection.getChromatogram());
-								IProcessingInfo processorInfo = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
-								if(processorInfo.hasErrorMessages()) {
-									processingInfo.addMessages(processorInfo);
-								} else {
-									processingInfo.addInfoMessage(DESCRIPTION, "Success processing file: " + file);
-								}
+						String pathChromatogram = sequence.getDataPath() + File.separator + sequenceRecord.getDataFile();
+						IProcessingInfo processingInfoChromatogram = chromatogramTypeSupport.getChromatogramSelection(pathChromatogram, monitor);
+						if(!processingInfoChromatogram.hasErrorMessages()) {
+							IChromatogramSelection chromatogramSelection = processingInfoChromatogram.getProcessingResult(IChromatogramSelection.class);
+							addSequenceRecordInformation(sequenceRecord, chromatogramSelection.getChromatogram());
+							IProcessingInfo processorInfo = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+							if(processorInfo.hasErrorMessages()) {
+								processingInfo.addMessages(processorInfo);
 							} else {
-								String message = "Chromatogram Selection is null: " + file + " " + dataType;
-								processingInfo.addErrorMessage(DESCRIPTION, message);
-								logger.warn(message);
+								processingInfo.addInfoMessage(DESCRIPTION, "Success processing file: " + pathChromatogram);
 							}
 						} else {
-							String message = "Could not detect data type of file: " + file;
-							processingInfo.addErrorMessage(DESCRIPTION, message);
-							logger.warn(message);
+							processingInfo.addErrorMessage(DESCRIPTION, "Failed to process the file: " + pathChromatogram);
 						}
 					}
 				}
@@ -235,38 +209,6 @@ public class ExtendedSequenceListUI {
 			measurement.putHeaderData("Sequence Multiplier", Double.toString(sequenceRecord.getMultiplier()));
 			measurement.putHeaderData("Sequence Vial", Integer.toString(sequenceRecord.getVial()));
 		}
-	}
-
-	@SuppressWarnings("rawtypes")
-	private IChromatogramSelection getChromatogramSelection(File file, DataType dataType, IProgressMonitor monitor) {
-
-		IChromatogramSelection chromatogramSelection = null;
-		boolean fireUpdate = false;
-		//
-		switch(dataType) {
-			case MSD_NOMINAL:
-			case MSD_TANDEM:
-			case MSD_HIGHRES:
-			case MSD:
-				IProcessingInfo processingInfoMSD = ChromatogramConverterMSD.convert(file, monitor);
-				IChromatogramMSD chromatogramMSD = processingInfoMSD.getProcessingResult(IChromatogramMSD.class);
-				chromatogramSelection = new ChromatogramSelectionMSD(chromatogramMSD, fireUpdate);
-				break;
-			case CSD:
-				IProcessingInfo processingInfoCSD = ChromatogramConverterCSD.convert(file, monitor);
-				IChromatogramCSD chromatogramCSD = processingInfoCSD.getProcessingResult(IChromatogramCSD.class);
-				chromatogramSelection = new ChromatogramSelectionCSD(chromatogramCSD, fireUpdate);
-				break;
-			case WSD:
-				IProcessingInfo processingInfoWSD = ChromatogramConverterWSD.convert(file, monitor);
-				IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult(IChromatogramWSD.class);
-				chromatogramSelection = new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate);
-				break;
-			default:
-				// No action
-		}
-		//
-		return chromatogramSelection;
 	}
 
 	private void createDataPathLabel(Composite parent) {
@@ -431,7 +373,7 @@ public class ExtendedSequenceListUI {
 				}
 				//
 				try {
-					openFiles(files);
+					chromatogramTypeSupport.openFiles(files);
 				} catch(Exception e1) {
 					showDataPathWarningMessage();
 					logger.warn(e1);
@@ -519,7 +461,7 @@ public class ExtendedSequenceListUI {
 					List<File> files = new ArrayList<>();
 					files.add(new File(sequence.getDataPath() + File.separator + sequenceRecord.getDataFile()));
 					try {
-						openFiles(files);
+						chromatogramTypeSupport.openFiles(files);
 					} catch(Exception e1) {
 						showDataPathWarningMessage();
 						logger.warn(e1);
@@ -527,20 +469,6 @@ public class ExtendedSequenceListUI {
 				}
 			}
 		});
-	}
-
-	private boolean isSupplierFile(ISupplierEditorSupport supplierEditorSupport, File file) {
-
-		if(file.isDirectory()) {
-			if(supplierEditorSupport.isSupplierFileDirectory(file)) {
-				return true;
-			}
-		} else {
-			if(supplierEditorSupport.isSupplierFile(file)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private void updateDataSequenceData() {
@@ -551,66 +479,6 @@ public class ExtendedSequenceListUI {
 		} else {
 			dataPath.setText("");
 			sequenceListUI.setInput(null);
-		}
-	}
-
-	private DataType detectDataType(File file) {
-
-		String type = "";
-		if(file.exists()) {
-			exitloop:
-			for(ISupplierEditorSupport supplierEditorSupport : supplierEditorSupportList) {
-				if(isSupplierFile(supplierEditorSupport, file)) {
-					type = supplierEditorSupport.getType();
-					break exitloop;
-				}
-			}
-		}
-		//
-		DataType dataType;
-		switch(type) {
-			case ISupplierFileIdentifier.TYPE_MSD:
-				dataType = DataType.MSD;
-				break;
-			case ISupplierFileIdentifier.TYPE_CSD:
-				dataType = DataType.CSD;
-				break;
-			case ISupplierFileIdentifier.TYPE_WSD:
-				dataType = DataType.WSD;
-				break;
-			default:
-				dataType = null;
-				break;
-		}
-		//
-		return dataType;
-	}
-
-	private void openFiles(List<File> files) throws Exception {
-
-		Display display = DisplayUtils.getDisplay();
-		//
-		if(display != null) {
-			for(File file : files) {
-				if(file.exists()) {
-					exitloop:
-					for(ISupplierEditorSupport supplierEditorSupport : supplierEditorSupportList) {
-						if(isSupplierFile(supplierEditorSupport, file)) {
-							display.asyncExec(new Runnable() {
-
-								@Override
-								public void run() {
-
-									supplierEditorSupport.openEditor(file);
-								}
-							});
-							break exitloop;
-						}
-					}
-				} else {
-					throw new Exception();
-				}
-			}
 		}
 	}
 

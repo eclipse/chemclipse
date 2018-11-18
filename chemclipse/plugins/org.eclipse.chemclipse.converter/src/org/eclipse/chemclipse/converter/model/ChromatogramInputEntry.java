@@ -13,12 +13,9 @@ package org.eclipse.chemclipse.converter.model;
 
 import java.io.File;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
 public class ChromatogramInputEntry implements IChromatogramInputEntry {
 
+	private String name = "";
 	private String inputFile = "";
 
 	/**
@@ -29,6 +26,15 @@ public class ChromatogramInputEntry implements IChromatogramInputEntry {
 	public ChromatogramInputEntry(String inputFile) {
 		if(inputFile != null) {
 			this.inputFile = inputFile;
+			File file = new File(inputFile);
+			if(file.exists()) {
+				this.name = file.getName();
+			} else {
+				this.name = "File doesn't exist.";
+			}
+		} else {
+			this.name = "";
+			this.inputFile = "";
 		}
 	}
 
@@ -38,11 +44,9 @@ public class ChromatogramInputEntry implements IChromatogramInputEntry {
 		return inputFile;
 	}
 
-	// TODO JUnit Windows/Linux/Mac
 	@Override
 	public String getName() {
 
-		File file = new File(inputFile);
-		return file.getName();
+		return name;
 	}
 }

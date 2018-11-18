@@ -21,6 +21,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
@@ -30,7 +31,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.MethodImpor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.IModificationHandler;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -40,6 +40,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
@@ -142,7 +143,7 @@ public class ProcessMethodEditor extends AbstractDataUpdateSupport implements ID
 
 	private void createPage(Composite parent) {
 
-		extendedMethodUI = new ExtendedMethodUI(parent);
+		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE);
 		extendedMethodUI.setModificationHandler(new IModificationHandler() {
 
 			@Override

@@ -15,12 +15,14 @@ import java.io.IOException;
 import java.util.Collections;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
@@ -37,6 +39,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -48,13 +51,15 @@ import org.eclipse.swt.widgets.Text;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-public class ExtendedMethodUI {
+public class ExtendedMethodUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(ExtendedMethodUI.class);
 	//
+	private Composite toolbarHeader;
 	private Label labelDataInfo;
 	private Text textOperator;
 	private Text textDescription;
+	private Button buttonAdd;
 	private Button buttonRemove;
 	private Button buttonMoveUp;
 	private Button buttonMoveDown;
@@ -66,8 +71,9 @@ public class ExtendedMethodUI {
 	//
 	private IModificationHandler modificationHandler = null;
 
-	public ExtendedMethodUI(Composite parent) {
-		initialize(parent);
+	public ExtendedMethodUI(Composite parent, int style) {
+		super(parent, style);
+		createControl();
 	}
 
 	public void update(ProcessMethod processMethod) {
@@ -81,16 +87,19 @@ public class ExtendedMethodUI {
 		this.modificationHandler = modificationHandler;
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(2, false));
+		setLayout(new FillLayout());
 		//
-		createToolbarMain(parent);
-		textOperator = createOperatorSection(parent);
-		textDescription = createDescriptionSection(parent);
-		createTable(parent);
-		createToolbarBottom(parent);
+		Composite composite = new Composite(this, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
 		//
+		createToolbarMain(composite);
+		toolbarHeader = createToolbarHeader(composite);
+		createTable(composite);
+		createToolbarBottom(composite);
+		//
+		PartSupport.setCompositeVisibility(toolbarHeader, false);
 		enableTableButtons();
 	}
 
@@ -98,11 +107,11 @@ public class ExtendedMethodUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 		//
 		createDataInfoLabel(composite);
+		createButtonToggleToolbarHeader(composite);
 		createSettingsButton(composite);
 	}
 
@@ -113,6 +122,29 @@ public class ExtendedMethodUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		labelDataInfo.setLayoutData(gridData);
+	}
+
+	private Button createButtonToggleToolbarHeader(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the header toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarHeader);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
 	}
 
 	private void createSettingsButton(Composite parent) {
@@ -199,12 +231,24 @@ public class ExtendedMethodUI {
 		return text;
 	}
 
+	private Composite createToolbarHeader(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(2, false));
+		//
+		textOperator = createOperatorSection(composite);
+		textDescription = createDescriptionSection(composite);
+		//
+		return composite;
+	}
+
 	private void createTable(Composite parent) {
 
 		listUI = new MethodListUI(parent, SWT.BORDER | SWT.MULTI);
 		Table table = listUI.getTable();
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = 2;
 		table.setLayoutData(gridData);
 		table.addSelectionListener(new SelectionAdapter() {
 
@@ -221,11 +265,10 @@ public class ExtendedMethodUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		gridData.horizontalSpan = 2;
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(6, false));
 		//
-		createAddButton(composite);
+		buttonAdd = createAddButton(composite);
 		buttonRemove = createRemoveButton(composite);
 		buttonMoveUp = createMoveUpButton(composite);
 		buttonMoveDown = createMoveDownButton(composite);
@@ -233,7 +276,7 @@ public class ExtendedMethodUI {
 		buttonResetSettings = createResetSettingsButton(composite);
 	}
 
-	private void createAddButton(Composite parent) {
+	private Button createAddButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Add a process method.");
@@ -260,6 +303,8 @@ public class ExtendedMethodUI {
 				}
 			}
 		});
+		//
+		return button;
 	}
 
 	private Button createRemoveButton(Composite parent) {
@@ -423,6 +468,8 @@ public class ExtendedMethodUI {
 
 	private void enableTableButtons() {
 
+		buttonAdd.setEnabled(processMethod != null);
+		//
 		boolean enabled = (listUI.getTable().getSelectionIndex() > -1) ? true : false;
 		buttonRemove.setEnabled(enabled);
 		buttonMoveUp.setEnabled(enabled);

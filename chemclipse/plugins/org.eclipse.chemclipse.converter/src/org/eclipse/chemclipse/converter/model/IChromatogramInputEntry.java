@@ -11,10 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.model;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
 public interface IChromatogramInputEntry {
 
 	/**
