@@ -14,41 +14,11 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.mo
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
-import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
-import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
 public interface IBatchProcessJob {
 
-	/**
-	 * Returns the list of chromatogram input entries.
-	 * 
-	 * @return List<ChromatogramInputEntry>
-	 */
 	List<IChromatogramInputEntry> getChromatogramInputEntries();
 
-	/**
-	 * Returns the list of all entries to process each chromatogram.
-	 * 
-	 * @return List<IChromatogramProcessEntry>
-	 */
-	List<IChromatogramProcessEntry> getChromatogramProcessEntries();
-
-	/**
-	 * Returns the chromatogram output entries.
-	 * 
-	 * @return List<IChromatogramOutputEntry>
-	 */
-	List<IChromatogramOutputEntry> getChromatogramOutputEntries();
-
-	/**
-	 * Returns the chromatogram report entries.
-	 * 
-	 * @return List<IChromatogramReportEntry>
-	 */
-	List<IChromatogramReportSupplierEntry> getChromatogramReportEntries();
+	ProcessMethod getProcessMethod();
 }

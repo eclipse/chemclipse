@@ -40,16 +40,4 @@ public interface IBatchProcessJobTags {
 	String CHROMATOGRAM_PROCESS_ENTRY = "ProcessEntry";
 	String PROCESSOR_TYPE = "processorType";
 	String PROCESSOR_ID = "processorId";
-	/*
-	 * Chromatogram Output Entries
-	 */
-	String CHROMATOGRAM_OUTPUT_ENTRIES = "OutputEntries";
-	String CHROMATOGRAM_OUTPUT_ENTRY = "OutputEntry";
-	String CHROMATOGRAM_CONVERTER_ID = "converterId";
-	/*
-	 * Chromatogram Report Entries
-	 */
-	String CHROMATOGRAM_REPORT_ENTRIES = "ReportEntries";
-	String CHROMATOGRAM_REPORT_ENTRY = "ReportEntry";
-	String CHROMATOGRAM_REPORT_SUPPLIER_ID = "reportSupplierId";
 }

@@ -22,29 +22,21 @@ import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
-import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
-import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
-import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.internal.support.IBatchProcessJobTags;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
-import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
+import org.eclipse.chemclipse.model.methods.IProcessEntry;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
-public class BatchProcessJobWriter implements IBatchProcessJobWriter {
+public class BatchProcessJobWriter {
 
-	@Override
 	public void writeBatchProcessJob(File file, IBatchProcessJob batchProcessJob, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException, XMLStreamException {
 
 		XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
@@ -63,12 +55,8 @@ public class BatchProcessJobWriter implements IBatchProcessJobWriter {
 		writeBatchProcessJobHeader(eventWriter, eventFactory, batchProcessJob);
 		writeComment(eventWriter, eventFactory, "Load the following chromatograms.");
 		writeChromatogramInputEntries(eventWriter, eventFactory, batchProcessJob.getChromatogramInputEntries());
-		writeComment(eventWriter, eventFactory, "Process each chromatogram with the listed methods.");
-		writeChromatogramProcessEntries(eventWriter, eventFactory, batchProcessJob.getChromatogramProcessEntries());
-		writeComment(eventWriter, eventFactory, "Write each processed chromatogram to the given output formats.");
-		writeChromatogramOutputEntries(eventWriter, eventFactory, batchProcessJob.getChromatogramOutputEntries());
-		writeComment(eventWriter, eventFactory, "Process each chromatogram with the listed report suppliers.");
-		writeChromatogramReportEntries(eventWriter, eventFactory, batchProcessJob.getChromatogramReportEntries());
+		writeComment(eventWriter, eventFactory, "Process each chromatogram with the listed method entries.");
+		writeChromatogramProcessEntries(eventWriter, eventFactory, batchProcessJob.getProcessMethod());
 		/*
 		 * Close the document
 		 */
@@ -182,7 +170,7 @@ public class BatchProcessJobWriter implements IBatchProcessJobWriter {
 	 * @param processEntries
 	 * @throws XMLStreamException
 	 */
-	private void writeChromatogramProcessEntries(XMLEventWriter eventWriter, XMLEventFactory eventFactory, List<IChromatogramProcessEntry> processEntries) throws XMLStreamException {
+	private void writeChromatogramProcessEntries(XMLEventWriter eventWriter, XMLEventFactory eventFactory, ProcessMethod processMethod) throws XMLStreamException {
 
 		/*
 		 * Element and content definition.
@@ -193,7 +181,7 @@ public class BatchProcessJobWriter implements IBatchProcessJobWriter {
 		 * Write the elements.
 		 */
 		eventWriter.add(entriesStart);
-		for(IChromatogramProcessEntry processEntry : processEntries) {
+		for(IProcessEntry processEntry : processMethod) {
 			writeChromatogramProcessEntry(eventWriter, eventFactory, processEntry);
 		}
 		eventWriter.add(entriesEnd);
@@ -207,7 +195,7 @@ public class BatchProcessJobWriter implements IBatchProcessJobWriter {
 	 * @param processEntry
 	 * @throws XMLStreamException
 	 */
-	private void writeChromatogramProcessEntry(XMLEventWriter eventWriter, XMLEventFactory eventFactory, IChromatogramProcessEntry processEntry) throws XMLStreamException {
+	private void writeChromatogramProcessEntry(XMLEventWriter eventWriter, XMLEventFactory eventFactory, IProcessEntry processEntry) throws XMLStreamException {
 
 		/*
 		 * Element and content definition.
@@ -217,122 +205,17 @@ public class BatchProcessJobWriter implements IBatchProcessJobWriter {
 		/*
 		 * Attributes and values.
 		 */
-		Attribute processorType = eventFactory.createAttribute(IBatchProcessJobTags.PROCESSOR_TYPE, processEntry.getProcessCategory());
-		Attribute processorId = eventFactory.createAttribute(IBatchProcessJobTags.PROCESSOR_ID, processEntry.getProcessorId());
+		// processEntry.getDescription();
+		// processEntry.getJsonSettings();
+		// processEntry.getName();
+		// processEntry.getProcessorId();
+		// processEntry.getProcessSettingsClass();
+		// processEntry.getSupportedDataTypes();
 		/*
 		 * Write the elements.
 		 */
 		eventWriter.add(entryStart);
-		eventWriter.add(processorType);
-		eventWriter.add(processorId);
-		eventWriter.add(entryEnd);
-	}
-
-	/**
-	 * Writes the chromatogram output entries.
-	 * 
-	 * @param eventWriter
-	 * @param eventFactory
-	 * @param inputEntries
-	 * @throws XMLStreamException
-	 */
-	private void writeChromatogramOutputEntries(XMLEventWriter eventWriter, XMLEventFactory eventFactory, List<IChromatogramOutputEntry> outputEntries) throws XMLStreamException {
-
-		/*
-		 * Element and content definition.
-		 */
-		StartElement entriesStart = eventFactory.createStartElement("", "", IBatchProcessJobTags.CHROMATOGRAM_OUTPUT_ENTRIES);
-		EndElement entriesEnd = eventFactory.createEndElement("", "", IBatchProcessJobTags.CHROMATOGRAM_OUTPUT_ENTRIES);
-		/*
-		 * Write the elements.
-		 */
-		eventWriter.add(entriesStart);
-		for(IChromatogramOutputEntry outputEntry : outputEntries) {
-			writeChromatogramOutputEntry(eventWriter, eventFactory, outputEntry);
-		}
-		eventWriter.add(entriesEnd);
-	}
-
-	/**
-	 * Writes the chromatogram output entry.
-	 * 
-	 * @param eventWriter
-	 * @param eventFactory
-	 * @param inputEntry
-	 * @throws XMLStreamException
-	 */
-	private void writeChromatogramOutputEntry(XMLEventWriter eventWriter, XMLEventFactory eventFactory, IChromatogramOutputEntry outputEntry) throws XMLStreamException {
-
-		/*
-		 * Element and content definition.
-		 */
-		StartElement entryStart = eventFactory.createStartElement("", "", IBatchProcessJobTags.CHROMATOGRAM_OUTPUT_ENTRY);
-		EndElement entryEnd = eventFactory.createEndElement("", "", IBatchProcessJobTags.CHROMATOGRAM_OUTPUT_ENTRY);
-		/*
-		 * Attributes and Values.
-		 */
-		Attribute converterId = eventFactory.createAttribute(IBatchProcessJobTags.CHROMATOGRAM_CONVERTER_ID, outputEntry.getConverterId());
-		Characters outputFolder = eventFactory.createCData(outputEntry.getOutputFolder());
-		/*
-		 * Write the elements.
-		 */
-		eventWriter.add(entryStart);
-		eventWriter.add(converterId);
-		eventWriter.add(outputFolder);
-		eventWriter.add(entryEnd);
-	}
-
-	/**
-	 * Writes the chromatogram report entries.
-	 * 
-	 * @param eventWriter
-	 * @param eventFactory
-	 * @param inputEntries
-	 * @throws XMLStreamException
-	 */
-	private void writeChromatogramReportEntries(XMLEventWriter eventWriter, XMLEventFactory eventFactory, List<IChromatogramReportSupplierEntry> reportEntries) throws XMLStreamException {
-
-		/*
-		 * Element and content definition.
-		 */
-		StartElement entriesStart = eventFactory.createStartElement("", "", IBatchProcessJobTags.CHROMATOGRAM_REPORT_ENTRIES);
-		EndElement entriesEnd = eventFactory.createEndElement("", "", IBatchProcessJobTags.CHROMATOGRAM_REPORT_ENTRIES);
-		/*
-		 * Write the elements.
-		 */
-		eventWriter.add(entriesStart);
-		for(IChromatogramReportSupplierEntry reportEntry : reportEntries) {
-			writeChromatogramReportEntry(eventWriter, eventFactory, reportEntry);
-		}
-		eventWriter.add(entriesEnd);
-	}
-
-	/**
-	 * Writes the chromatogram report entry.
-	 * 
-	 * @param eventWriter
-	 * @param eventFactory
-	 * @param inputEntry
-	 * @throws XMLStreamException
-	 */
-	private void writeChromatogramReportEntry(XMLEventWriter eventWriter, XMLEventFactory eventFactory, IChromatogramReportSupplierEntry reportEntry) throws XMLStreamException {
-
-		/*
-		 * Element and content definition.
-		 */
-		StartElement entryStart = eventFactory.createStartElement("", "", IBatchProcessJobTags.CHROMATOGRAM_REPORT_ENTRY);
-		EndElement entryEnd = eventFactory.createEndElement("", "", IBatchProcessJobTags.CHROMATOGRAM_REPORT_ENTRY);
-		/*
-		 * Attributes and Values.
-		 */
-		Attribute converterId = eventFactory.createAttribute(IBatchProcessJobTags.CHROMATOGRAM_REPORT_SUPPLIER_ID, reportEntry.getReportSupplierId());
-		Characters reportFolderOrFile = eventFactory.createCData(reportEntry.getReportFolderOrFile());
-		/*
-		 * Write the elements.
-		 */
-		eventWriter.add(entryStart);
-		eventWriter.add(converterId);
-		eventWriter.add(reportFolderOrFile);
+		eventWriter.add(eventFactory.createAttribute(IBatchProcessJobTags.PROCESSOR_ID, processEntry.getProcessorId()));
 		eventWriter.add(entryEnd);
 	}
 }

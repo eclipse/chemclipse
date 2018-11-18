@@ -27,30 +27,20 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
-import org.eclipse.chemclipse.converter.model.ChromatogramOutputEntry;
-import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
-import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
-import org.eclipse.chemclipse.xxd.process.model.ChromatogramProcessEntry;
-import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.internal.filter.BatchProcessJobEventFilter;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.internal.support.IBatchProcessJobTags;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
-import org.eclipse.chemclipse.chromatogram.xxd.report.model.ChromatogramReportSupplierEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
+import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
+import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
+import org.eclipse.chemclipse.model.methods.IProcessEntry;
+import org.eclipse.chemclipse.model.methods.ProcessEntry;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
-public class BatchProcessJobReader implements IBatchProcessJobReader {
+public class BatchProcessJobReader {
 
-	@Override
 	public IBatchProcessJob read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		IBatchProcessJob batchProcessJob = new BatchProcessJob();
@@ -58,8 +48,6 @@ public class BatchProcessJobReader implements IBatchProcessJobReader {
 			readHeader(file, batchProcessJob);
 			readChromatogramInputEntries(file, batchProcessJob, monitor);
 			readChromatogramProcessEntries(file, batchProcessJob, monitor);
-			readChromatogramOutputEntries(file, batchProcessJob, monitor);
-			readChromatogramReportEntries(file, batchProcessJob, monitor);
 		} catch(XMLStreamException e) {
 			throw new IOException(e);
 		}
@@ -157,8 +145,7 @@ public class BatchProcessJobReader implements IBatchProcessJobReader {
 	@SuppressWarnings("unchecked")
 	private void readChromatogramProcessEntries(File file, IBatchProcessJob batchProcessJob, IProgressMonitor monitor) throws XMLStreamException, IOException {
 
-		IChromatogramProcessEntry processEntry;
-		String processCategory = null;
+		IProcessEntry processEntry;
 		String processorId = "";
 		XMLEvent event;
 		Attribute attribute;
@@ -186,134 +173,14 @@ public class BatchProcessJobReader implements IBatchProcessJobReader {
 			while(attributes.hasNext()) {
 				attribute = attributes.next();
 				attributeName = attribute.getName().getLocalPart();
-				// Process type
-				if(attributeName.equals(IBatchProcessJobTags.PROCESSOR_TYPE)) {
-					processCategory = attribute.getValue();
-				}
 				// Processor id
 				if(attributeName.equals(IBatchProcessJobTags.PROCESSOR_ID)) {
 					processorId = attribute.getValue();
 				}
 			}
-			processEntry = new ChromatogramProcessEntry(processCategory, processorId);
-			batchProcessJob.getChromatogramProcessEntries().add(processEntry);
-		}
-		/*
-		 * Close the streams.
-		 */
-		eventReader.close();
-		bufferedInputStream.close();
-	}
-
-	/**
-	 * Reads the chromatogram output entries.
-	 * 
-	 * @param file
-	 * @param batchProcessJob
-	 * @param monitor
-	 * @throws XMLStreamException
-	 * @throws IOException
-	 */
-	@SuppressWarnings("unchecked")
-	private void readChromatogramOutputEntries(File file, IBatchProcessJob batchProcessJob, IProgressMonitor monitor) throws XMLStreamException, IOException {
-
-		IChromatogramOutputEntry outputEntry;
-		String outputFolder;
-		String converterId = "";
-		XMLEvent event;
-		Attribute attribute;
-		String attributeName;
-		/*
-		 * Open the streams.
-		 */
-		XMLEventReader eventReader;
-		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-		BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-		eventReader = inputFactory.createXMLEventReader(bufferedInputStream, IBatchProcessJobTags.UTF8);
-		/*
-		 * Use event filters.
-		 */
-		List<String> acceptedElements = new ArrayList<String>();
-		acceptedElements.add(IBatchProcessJobTags.CHROMATOGRAM_OUTPUT_ENTRY);
-		EventFilter eventFilter = new BatchProcessJobEventFilter(acceptedElements);
-		XMLEventReader filteredEventReader = inputFactory.createFilteredReader(eventReader, eventFilter);
-		/*
-		 * Read all entries.
-		 */
-		while(filteredEventReader.hasNext()) {
-			event = filteredEventReader.nextEvent();
-			Iterator<? extends Attribute> attributes = event.asStartElement().getAttributes();
-			while(attributes.hasNext()) {
-				attribute = attributes.next();
-				attributeName = attribute.getName().getLocalPart();
-				// Get the converter id.
-				if(attributeName.equals(IBatchProcessJobTags.CHROMATOGRAM_CONVERTER_ID)) {
-					converterId = attribute.getValue();
-				}
-			}
-			// Get the output file.
-			event = eventReader.nextEvent();
-			outputFolder = event.asCharacters().getData();
-			outputEntry = new ChromatogramOutputEntry(outputFolder, converterId);
-			batchProcessJob.getChromatogramOutputEntries().add(outputEntry);
-		}
-		/*
-		 * Close the streams.
-		 */
-		eventReader.close();
-		bufferedInputStream.close();
-	}
-
-	/**
-	 * Reads the chromatogram report entries.
-	 * 
-	 * @param file
-	 * @param batchProcessJob
-	 * @param monitor
-	 * @throws XMLStreamException
-	 * @throws IOException
-	 */
-	@SuppressWarnings("unchecked")
-	private void readChromatogramReportEntries(File file, IBatchProcessJob batchProcessJob, IProgressMonitor monitor) throws XMLStreamException, IOException {
-
-		IChromatogramReportSupplierEntry reportEntry;
-		String reportSupplierId = "";
-		XMLEvent event;
-		Attribute attribute;
-		String attributeName;
-		/*
-		 * Open the streams.
-		 */
-		XMLEventReader eventReader;
-		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-		BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-		eventReader = inputFactory.createXMLEventReader(bufferedInputStream, IBatchProcessJobTags.UTF8);
-		/*
-		 * Use event filters.
-		 */
-		List<String> acceptedElements = new ArrayList<String>();
-		acceptedElements.add(IBatchProcessJobTags.CHROMATOGRAM_REPORT_ENTRY);
-		EventFilter eventFilter = new BatchProcessJobEventFilter(acceptedElements);
-		XMLEventReader filteredEventReader = inputFactory.createFilteredReader(eventReader, eventFilter);
-		/*
-		 * Read all entries.
-		 */
-		while(filteredEventReader.hasNext()) {
-			event = filteredEventReader.nextEvent();
-			Iterator<? extends Attribute> attributes = event.asStartElement().getAttributes();
-			while(attributes.hasNext()) {
-				attribute = attributes.next();
-				attributeName = attribute.getName().getLocalPart();
-				// Get the report supplier id.
-				if(attributeName.equals(IBatchProcessJobTags.CHROMATOGRAM_REPORT_SUPPLIER_ID)) {
-					reportSupplierId = attribute.getValue();
-				}
-			}
-			// Get the report folder.
-			event = eventReader.nextEvent();
-			String reportFolderOrFile = event.asCharacters().getData();
-			reportEntry = new ChromatogramReportSupplierEntry(reportFolderOrFile, reportSupplierId);
-			batchProcessJob.getChromatogramReportEntries().add(reportEntry);
+			processEntry = new ProcessEntry();
+			processEntry.setProcessorId(processorId);
+			batchProcessJob.getProcessMethod().add(processEntry);
 		}
 		/*
 		 * Close the streams.

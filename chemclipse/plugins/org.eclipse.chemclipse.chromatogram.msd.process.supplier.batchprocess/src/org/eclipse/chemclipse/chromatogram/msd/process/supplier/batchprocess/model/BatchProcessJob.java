@@ -15,34 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
-import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
-import org.eclipse.chemclipse.xxd.process.model.IChromatogramProcessEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
 public class BatchProcessJob implements IBatchProcessJob {
 
-	private List<IChromatogramInputEntry> chromatogramInputEntries;
-	private List<IChromatogramProcessEntry> chromatogramProcessEntries;
-	private List<IChromatogramOutputEntry> chromatogramOutputEntries;
-	private List<IChromatogramReportSupplierEntry> chromatogramReportEntries;
-
-	/**
-	 * Creates a new batch process job.
-	 */
-	public BatchProcessJob() {
-		/*
-		 * Why are ArrayLists used here?
-		 * The entries shall be processed in the order the user has chosen them.
-		 */
-		chromatogramInputEntries = new ArrayList<IChromatogramInputEntry>();
-		chromatogramProcessEntries = new ArrayList<IChromatogramProcessEntry>();
-		chromatogramOutputEntries = new ArrayList<IChromatogramOutputEntry>();
-		chromatogramReportEntries = new ArrayList<IChromatogramReportSupplierEntry>();
-	}
+	private List<IChromatogramInputEntry> chromatogramInputEntries = new ArrayList<IChromatogramInputEntry>();
+	private ProcessMethod processMethod = new ProcessMethod();
 
 	@Override
 	public List<IChromatogramInputEntry> getChromatogramInputEntries() {
@@ -51,20 +29,8 @@ public class BatchProcessJob implements IBatchProcessJob {
 	}
 
 	@Override
-	public List<IChromatogramProcessEntry> getChromatogramProcessEntries() {
+	public ProcessMethod getProcessMethod() {
 
-		return chromatogramProcessEntries;
-	}
-
-	@Override
-	public List<IChromatogramOutputEntry> getChromatogramOutputEntries() {
-
-		return chromatogramOutputEntries;
-	}
-
-	@Override
-	public List<IChromatogramReportSupplierEntry> getChromatogramReportEntries() {
-
-		return chromatogramReportEntries;
+		return processMethod;
 	}
 }

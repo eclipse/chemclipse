@@ -11,22 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.swt;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.provider.FileListLabelProvider;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.provider.ChromatogramListLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.swt.widgets.Composite;
 
-public class FileListUI extends ExtendedTableViewer {
+public class ChromatogramListUI extends ExtendedTableViewer {
 
-	public FileListUI(Composite parent, int style) {
+	public ChromatogramListUI(Composite parent, int style) {
 		super(parent, style);
 		createColumns();
 	}
 
 	private void createColumns() {
 
-		createColumns(FileListLabelProvider.TITLES, FileListLabelProvider.BOUNDS);
-		setLabelProvider(new FileListLabelProvider());
+		createColumns(ChromatogramListLabelProvider.TITLES, ChromatogramListLabelProvider.BOUNDS);
+		setLabelProvider(new ChromatogramListLabelProvider());
 		setContentProvider(new ListContentProvider());
 	}
 }

@@ -11,14 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.provider;
 
-import java.io.File;
-
+import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-public class FileListLabelProvider extends AbstractChemClipseLabelProvider {
+public class ChromatogramListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String NAME = "Name";
 	public static final String PATH = "Path";
@@ -46,15 +45,15 @@ public class FileListLabelProvider extends AbstractChemClipseLabelProvider {
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof File) {
-			File file = (File)element;
+		if(element instanceof IChromatogramInputEntry) {
+			IChromatogramInputEntry entry = (IChromatogramInputEntry)element;
 			//
 			switch(columnIndex) {
 				case 0:
-					text = file.getName();
+					text = entry.getName();
 					break;
-				case 2:
-					text = file.getAbsolutePath();
+				case 1:
+					text = entry.getInputFile();
 					break;
 			}
 		}

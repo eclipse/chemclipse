@@ -24,13 +24,14 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.swt.BatchJobUI;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
@@ -43,23 +44,7 @@ public class BatchJobEditor extends EditorPart {
 	private BatchJobUI batchJobUI;
 	private IBatchProcessJob batchProcessJob = null;
 	private File file;
-	//
-	private MDirtyable dirtyable = new MDirtyable() {
-
-		private boolean value = false;
-
-		@Override
-		public void setDirty(boolean value) {
-
-			this.value = value;
-		}
-
-		@Override
-		public boolean isDirty() {
-
-			return value;
-		}
-	};
+	private boolean isDirty = false;
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
@@ -68,7 +53,7 @@ public class BatchJobEditor extends EditorPart {
 			BatchProcessJobWriter writer = new BatchProcessJobWriter();
 			try {
 				writer.writeBatchProcessJob(file, batchProcessJob, monitor);
-				dirtyable.setDirty(false);
+				updateDirtyStatus(false);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
 			} catch(FileIsNotWriteableException e) {
@@ -118,7 +103,16 @@ public class BatchJobEditor extends EditorPart {
 	@Override
 	public boolean isDirty() {
 
-		return dirtyable.isDirty();
+		return isDirty;
+	}
+
+	/**
+	 * Sets the editor dirty.
+	 */
+	protected void updateDirtyStatus(boolean dirty) {
+
+		this.isDirty = dirty;
+		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
 	@Override
@@ -132,6 +126,14 @@ public class BatchJobEditor extends EditorPart {
 
 		parent.setLayout(new FillLayout());
 		batchJobUI = new BatchJobUI(parent, SWT.NONE);
+		batchJobUI.setModificationHandler(new IModificationHandler() {
+
+			@Override
+			public void setDirty(boolean dirty) {
+
+				updateDirtyStatus(dirty);
+			}
+		});
 	}
 
 	@Override
