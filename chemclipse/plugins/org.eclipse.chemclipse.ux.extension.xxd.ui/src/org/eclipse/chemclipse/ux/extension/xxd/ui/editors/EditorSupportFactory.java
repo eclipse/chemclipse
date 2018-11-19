@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.SupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
 
 public class EditorSupportFactory {
 

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.support;
 
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 
 public class PeakSupport {
 

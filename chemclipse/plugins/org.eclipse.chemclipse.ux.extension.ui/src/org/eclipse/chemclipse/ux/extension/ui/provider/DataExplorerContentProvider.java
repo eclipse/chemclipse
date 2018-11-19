@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+
 public class DataExplorerContentProvider extends FileExplorerContentProvider {
 
 	private List<? extends ISupplierFileIdentifier> supplierFileIdentifierList;

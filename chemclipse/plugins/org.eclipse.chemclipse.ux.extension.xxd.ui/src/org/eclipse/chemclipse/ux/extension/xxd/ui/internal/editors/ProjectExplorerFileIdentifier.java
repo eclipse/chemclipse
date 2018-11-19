@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileIdentifier;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.xxd.process.files.AbstractSupplierFileIdentifier;
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 
 public class ProjectExplorerFileIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 

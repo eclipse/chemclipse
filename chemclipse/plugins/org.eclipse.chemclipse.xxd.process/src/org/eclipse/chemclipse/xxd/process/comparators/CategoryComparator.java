@@ -9,9 +9,11 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.process.support;
+package org.eclipse.chemclipse.xxd.process.comparators;
 
 import java.util.Comparator;
+
+import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 
 public class CategoryComparator implements Comparator<IProcessTypeSupplier> {
 

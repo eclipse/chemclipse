@@ -31,10 +31,17 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.csd.converter;bundle-version="0.8.0",
  org.eclipse.chemclipse.wsd.converter;bundle-version="0.8.0",
  org.eclipse.chemclipse.converter;bundle-version="0.8.0",
- org.eclipse.chemclipse.wsd.model;bundle-version="0.8.0"
+ org.eclipse.chemclipse.wsd.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.xir.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.xir.converter;bundle-version="0.8.0",
+ org.eclipse.chemclipse.nmr.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.nmr.converter;bundle-version="0.8.0",
+ org.eclipse.chemclipse.pcr.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.pcr.converter;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.chemclipse.xxd.process.model,
+Export-Package: org.eclipse.chemclipse.xxd.process.comparators,
+ org.eclipse.chemclipse.xxd.process.files,
  org.eclipse.chemclipse.xxd.process.preferences,
  org.eclipse.chemclipse.xxd.process.supplier,
  org.eclipse.chemclipse.xxd.process.support

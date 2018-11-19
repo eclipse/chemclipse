@@ -29,7 +29,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
-@SuppressWarnings("rawtypes")
 public class PCRFileSupport {
 
 	private static final Logger logger = Logger.getLogger(PCRFileSupport.class);

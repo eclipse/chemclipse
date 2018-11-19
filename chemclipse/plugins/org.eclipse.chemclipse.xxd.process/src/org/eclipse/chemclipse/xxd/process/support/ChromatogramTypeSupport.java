@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
+package org.eclipse.chemclipse.xxd.process.support;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,27 +26,24 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.swt.widgets.Display;
 
 public class ChromatogramTypeSupport {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramTypeSupport.class);
 	private static final String DESCRIPTION = "Chromatogram Type Support";
 	//
-	private List<ISupplierEditorSupport> supplierEditorSupportList = new ArrayList<>();
+	private List<ISupplierFileIdentifier> supplierEditorSupportList = new ArrayList<>();
 
 	public ChromatogramTypeSupport() {
-		supplierEditorSupportList.add(new EditorSupportFactory(DataType.MSD).getInstanceEditorSupport());
-		supplierEditorSupportList.add(new EditorSupportFactory(DataType.CSD).getInstanceEditorSupport());
-		supplierEditorSupportList.add(new EditorSupportFactory(DataType.WSD).getInstanceEditorSupport());
+		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.MSD));
+		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.CSD));
+		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.WSD));
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -98,42 +95,14 @@ public class ChromatogramTypeSupport {
 		return processingInfo;
 	}
 
-	public void openFiles(List<File> files) throws Exception {
-
-		Display display = DisplayUtils.getDisplay();
-		//
-		if(display != null) {
-			for(File file : files) {
-				if(file.exists()) {
-					exitloop:
-					for(ISupplierEditorSupport supplierEditorSupport : supplierEditorSupportList) {
-						if(isSupplierFile(supplierEditorSupport, file)) {
-							display.asyncExec(new Runnable() {
-
-								@Override
-								public void run() {
-
-									supplierEditorSupport.openEditor(file);
-								}
-							});
-							break exitloop;
-						}
-					}
-				} else {
-					throw new Exception();
-				}
-			}
-		}
-	}
-
-	private DataType detectDataType(File file) {
+	public DataType detectDataType(File file) {
 
 		String type = "";
 		if(file.exists()) {
 			exitloop:
-			for(ISupplierEditorSupport supplierEditorSupport : supplierEditorSupportList) {
-				if(isSupplierFile(supplierEditorSupport, file)) {
-					type = supplierEditorSupport.getType();
+			for(ISupplierFileIdentifier supplierFileIdentifier : supplierEditorSupportList) {
+				if(isSupplierFile(supplierFileIdentifier, file)) {
+					type = supplierFileIdentifier.getType();
 					break exitloop;
 				}
 			}
@@ -158,14 +127,14 @@ public class ChromatogramTypeSupport {
 		return dataType;
 	}
 
-	private boolean isSupplierFile(ISupplierEditorSupport supplierEditorSupport, File file) {
+	public boolean isSupplierFile(ISupplierFileIdentifier supplierFileIdentifier, File file) {
 
 		if(file.isDirectory()) {
-			if(supplierEditorSupport.isSupplierFileDirectory(file)) {
+			if(supplierFileIdentifier.isSupplierFileDirectory(file)) {
 				return true;
 			}
 		} else {
-			if(supplierEditorSupport.isSupplierFile(file)) {
+			if(supplierFileIdentifier.isSupplierFile(file)) {
 				return true;
 			}
 		}

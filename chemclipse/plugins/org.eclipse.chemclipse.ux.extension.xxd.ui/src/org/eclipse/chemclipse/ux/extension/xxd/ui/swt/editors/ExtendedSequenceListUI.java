@@ -35,7 +35,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramTypeSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramTypeSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.SequenceListUI;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -77,7 +77,7 @@ public class ExtendedSequenceListUI {
 	//
 	private String initialDataPath = "";
 	private ISequence<? extends ISequenceRecord> sequence;
-	private ChromatogramTypeSupport chromatogramTypeSupport = new ChromatogramTypeSupport();
+	private ChromatogramTypeSupportUI chromatogramTypeSupport = new ChromatogramTypeSupportUI();
 
 	public ExtendedSequenceListUI(Composite parent) {
 		initialize(parent);

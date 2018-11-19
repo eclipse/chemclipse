@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+
 public class ExplorerListSupport {
 
 	/**

@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.xxd.process.files.AbstractSupplierFileIdentifier;
 
 public abstract class AbstractSupplierFileEditorSupport extends AbstractSupplierFileIdentifier implements ISupplierFileEditorSupport {
 

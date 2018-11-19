@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 
 public interface ISupplierEditorSupport extends ISupplierFileEditorSupport, ISupplierFileIdentifier {
 

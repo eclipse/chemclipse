@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.ui.provider;
+package org.eclipse.chemclipse.xxd.process.files;
 
 import java.io.File;
 import java.util.HashMap;
