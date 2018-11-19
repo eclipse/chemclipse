@@ -15,59 +15,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupplier;
-import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupport;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupplierMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupportMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpectrumIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupportMSD;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSD;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMSD;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupplier;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetector;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineDetectorSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineDetectorSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.ChromatogramCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.IChromatogramCalculatorSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.IChromatogramCalculatorSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.IPeakIntegratorSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.IPeakIntegratorSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.Activator;
 import org.eclipse.chemclipse.model.identifier.core.ISupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplierMSD;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplierMSD;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplierMSD;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String P_EVALUATION_CHROMATOGRAM_MSD_FILTER = ChromatogramFilterTypeSupplierMSD.CATEGORY;
-	public static final String DEF_EVALUATION_CHROMATOGRAM_MSD_FILTER = "";
-	public static final String P_EVALUATION_CHROMATOGRAM_FILTER = ChromatogramFilterTypeSupplier.CATEGORY;
-	public static final String DEF_EVALUATION_CHROMATOGRAM_FILTER = "";
-	public static final String P_EVALUATION_BASELINE_DETECTOR = BaselineDetectorTypeSupplier.CATEGORY;
-	public static final String DEF_EVALUATION_BASELINE_DETECTOR = "";
-	public static final String P_EVALUATION_PEAK_DETECTOR = PeakDetectorTypeSupplierMSD.CATEGORY;
-	public static final String DEF_EVALUATION_PEAK_DETECTOR = "";
-	public static final String P_EVALUATION_PEAK_INTEGRATOR = PeakIntegratorTypeSupplier.CATEGORY;
-	public static final String DEF_EVALUATION_PEAK_INTEGRATOR = "";
-	public static final String P_EVALUATION_CHROMATOGRAM_CALCULATOR = ChromatogramCalculatorTypeSupplier.CATEGORY;
-	public static final String DEF_EVALUATION_CHROMATOGRAM_CALCULATOR = "";
-	public static final String P_EVALUATION_PEAK_IDENTIFIER = PeakIdentifierTypeSupplierMSD.CATEGORY;
-	public static final String DEF_EVALUATION_PEAK_IDENTIFIER = "";
-	//
 	public static final String P_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM = "samplequantFilterPathChromatogram";
 	public static final String DEF_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM = "";
 	public static final String P_SAMPLEQUANT_FILTER_PATH_RTERES = "samplequantFilterPathRteres";
@@ -112,13 +70,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_EVALUATION_CHROMATOGRAM_MSD_FILTER, DEF_EVALUATION_CHROMATOGRAM_MSD_FILTER);
-		defaultValues.put(P_EVALUATION_CHROMATOGRAM_FILTER, DEF_EVALUATION_CHROMATOGRAM_FILTER);
-		defaultValues.put(P_EVALUATION_BASELINE_DETECTOR, DEF_EVALUATION_BASELINE_DETECTOR);
-		defaultValues.put(P_EVALUATION_PEAK_DETECTOR, DEF_EVALUATION_PEAK_DETECTOR);
-		defaultValues.put(P_EVALUATION_PEAK_INTEGRATOR, DEF_EVALUATION_PEAK_INTEGRATOR);
-		defaultValues.put(P_EVALUATION_CHROMATOGRAM_CALCULATOR, DEF_EVALUATION_CHROMATOGRAM_CALCULATOR);
-		defaultValues.put(P_EVALUATION_PEAK_IDENTIFIER, DEF_EVALUATION_PEAK_IDENTIFIER);
 		//
 		defaultValues.put(P_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM, DEF_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM);
 		defaultValues.put(P_SAMPLEQUANT_FILTER_PATH_RTERES, DEF_SAMPLEQUANT_FILTER_PATH_RTERES);
@@ -157,174 +108,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		} catch(Exception e) {
 			//
 			return new String[][]{{"No Mass Spectrum Identifier Available", ""}};
-		}
-	}
-
-	public static String[][] getPeakIdentifier() {
-
-		try {
-			IPeakIdentifierSupportMSD support = PeakIdentifierMSD.getPeakIdentifierSupport();
-			List<String> ids = support.getAvailableIdentifierIds();
-			//
-			String[][] elements = new String[ids.size() + 1][2];
-			for(int i = 0; i < ids.size(); i++) {
-				String id = ids.get(i);
-				ISupplier supplier = support.getIdentifierSupplier(id);
-				elements[i][0] = supplier.getIdentifierName();
-				elements[i][1] = supplier.getId();
-			}
-			//
-			elements[ids.size()][0] = "";
-			elements[ids.size()][1] = "";
-			//
-			return elements;
-		} catch(Exception e) {
-			//
-			return new String[][]{{"No Peak Identifier Available", ""}};
-		}
-	}
-
-	public static String[][] getChromatogramFilterMSD() {
-
-		try {
-			IChromatogramFilterSupportMSD support = ChromatogramFilterMSD.getChromatogramFilterSupport();
-			List<String> ids = support.getAvailableFilterIds();
-			//
-			String[][] elements = new String[ids.size() + 1][2];
-			for(int i = 0; i < ids.size(); i++) {
-				String id = ids.get(i);
-				IChromatogramFilterSupplierMSD supplier = support.getFilterSupplier(id);
-				elements[i][0] = supplier.getFilterName();
-				elements[i][1] = supplier.getId();
-			}
-			//
-			elements[ids.size()][0] = "";
-			elements[ids.size()][1] = "";
-			//
-			return elements;
-		} catch(Exception e) {
-			//
-			return new String[][]{{"No Filter MSD Available", ""}};
-		}
-	}
-
-	public static String[][] getChromatogramFilter() {
-
-		try {
-			IChromatogramFilterSupport support = ChromatogramFilter.getChromatogramFilterSupport();
-			List<String> ids = support.getAvailableFilterIds();
-			//
-			String[][] elements = new String[ids.size() + 1][2];
-			for(int i = 0; i < ids.size(); i++) {
-				String id = ids.get(i);
-				IChromatogramFilterSupplier supplier = support.getFilterSupplier(id);
-				elements[i][0] = supplier.getFilterName();
-				elements[i][1] = supplier.getId();
-			}
-			//
-			elements[ids.size()][0] = "";
-			elements[ids.size()][1] = "";
-			//
-			return elements;
-		} catch(Exception e) {
-			//
-			return new String[][]{{"No Filter Available", ""}};
-		}
-	}
-
-	public static String[][] getBaselineDetectors() {
-
-		try {
-			IBaselineDetectorSupport support = BaselineDetector.getBaselineDetectorSupport();
-			List<String> ids = support.getAvailableDetectorIds();
-			//
-			String[][] elements = new String[ids.size() + 1][2];
-			for(int i = 0; i < ids.size(); i++) {
-				String id = ids.get(i);
-				IBaselineDetectorSupplier supplier = support.getBaselineDetectorSupplier(id);
-				elements[i][0] = supplier.getDetectorName();
-				elements[i][1] = supplier.getId();
-			}
-			//
-			elements[ids.size()][0] = "";
-			elements[ids.size()][1] = "";
-			//
-			return elements;
-		} catch(Exception e) {
-			//
-			return new String[][]{{"No Baseline Detector Available", ""}};
-		}
-	}
-
-	public static String[][] getPeakDetectors() {
-
-		try {
-			IPeakDetectorSupport support = PeakDetectorMSD.getPeakDetectorSupport();
-			List<String> ids = support.getAvailablePeakDetectorIds();
-			//
-			String[][] elements = new String[ids.size() + 1][2];
-			for(int i = 0; i < ids.size(); i++) {
-				String id = ids.get(i);
-				IPeakDetectorSupplier supplier = support.getPeakDetectorSupplier(id);
-				elements[i][0] = supplier.getPeakDetectorName();
-				elements[i][1] = supplier.getId();
-			}
-			//
-			elements[ids.size()][0] = "";
-			elements[ids.size()][1] = "";
-			//
-			return elements;
-		} catch(Exception e) {
-			//
-			return new String[][]{{"No Peak Detector Available", ""}};
-		}
-	}
-
-	public static String[][] getPeakIntegrators() {
-
-		try {
-			IPeakIntegratorSupport support = PeakIntegrator.getPeakIntegratorSupport();
-			List<String> ids = support.getAvailableIntegratorIds();
-			//
-			String[][] elements = new String[ids.size() + 1][2];
-			for(int i = 0; i < ids.size(); i++) {
-				String id = ids.get(i);
-				IPeakIntegratorSupplier supplier = support.getIntegratorSupplier(id);
-				elements[i][0] = supplier.getIntegratorName();
-				elements[i][1] = supplier.getId();
-			}
-			//
-			elements[ids.size()][0] = "";
-			elements[ids.size()][1] = "";
-			//
-			return elements;
-		} catch(Exception e) {
-			//
-			return new String[][]{{"No Peak Integrator Available", ""}};
-		}
-	}
-
-	public static String[][] getChromatogramCalculators() {
-
-		try {
-			IChromatogramCalculatorSupport support = ChromatogramCalculator.getChromatogramCalculatorSupport();
-			List<String> ids = support.getAvailableCalculatorIds();
-			//
-			String[][] elements = new String[ids.size() + 1][2];
-			for(int i = 0; i < ids.size(); i++) {
-				String id = ids.get(i);
-				IChromatogramCalculatorSupplier supplier = support.getCalculatorSupplier(id);
-				elements[i][0] = supplier.getCalculatorName();
-				elements[i][1] = supplier.getId();
-			}
-			//
-			elements[ids.size()][0] = "";
-			elements[ids.size()][1] = "";
-			//
-			return elements;
-		} catch(Exception e) {
-			//
-			return new String[][]{{"No Chromatogram Calculator Available", ""}};
 		}
 	}
 }

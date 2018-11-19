@@ -11,13 +11,6 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.editors.EditorChromatogramEvaluation"
-            extensions="scr"
-            icon="icons/16x16/report.gif"
-            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.editors.editorChromatogramEvaluation"
-            name="Single Chromatogram Evaluation">
-      </editor>
-      <editor
             class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.editors.EditorSampleQuant"
             extensions="sqr"
             icon="icons/16x16/report.gif"
@@ -38,13 +31,7 @@
             class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.PreferencePageSampleQuant"
             id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePageSampleQuant"
             name="Sample Quant">
-      </page>    
-      <page
-      		category="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePage"
-            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.PreferencePageEvaluation"
-            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePageEvaluation"
-            name="Single Chromatogram Evaluation">
-      </page>               
+      </page>           
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
@@ -60,30 +47,4 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.samplequant.WizardSampleQuant">
       </wizard>
    </extension>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            name="Processors"
-            id="org.eclipse.chemclipse.processors">
-      </category>
-      <wizard
-            name="Chromatogram Evaluation"
-            icon="icons/16x16/chromatogram.gif"
-            category="org.eclipse.chemclipse.processors"
-            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.evaluation.WizardEvaluation"
-            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.evaluation.WizardEvaluation">
-      </wizard>
-   </extension>
-   <extension
-         point="org.eclipse.chemclipse.ux.extension.xxd.ui.chromatogramEditorActionSupplier">
-      <ChromatogramEditorActionSupplier
-            label="Single Chromatogram Evaluation"
-            description="This applies the single chromatogram evaluation process workflow."
-            actionExecutable="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handlers.ChromatogramEditorAction"
-            CSD="false"
-            MSD="true"
-            WSD="false">
-      </ChromatogramEditorActionSupplier>
-   </extension>             
-    
 </plugin>
