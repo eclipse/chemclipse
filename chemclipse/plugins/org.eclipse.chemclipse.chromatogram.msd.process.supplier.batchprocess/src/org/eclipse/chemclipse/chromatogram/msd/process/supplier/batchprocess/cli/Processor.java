@@ -16,8 +16,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.core.BatchProcess;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.BatchProcessJobReader;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.JobReader;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -36,13 +36,13 @@ public class Processor extends AbstractCommandLineProcessor implements ICommandL
 		/*
 		 * Import the batch process job and execute it.
 		 */
-		BatchProcessJobReader reader = new BatchProcessJobReader();
+		JobReader reader = new JobReader();
 		String filePath = args[0].trim();
 		File file = new File(filePath);
 		try {
 			IProgressMonitor monitor = new NullProgressMonitor();
 			logger.info("Read batch process");
-			IBatchProcessJob batchProcessJob = reader.read(file, monitor);
+			BatchProcessJob batchProcessJob = reader.read(file, monitor);
 			logger.info("Execute batch process");
 			BatchProcess bp = new BatchProcess();
 			bp.execute(batchProcessJob, monitor);

@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io
 import java.io.File;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.TestPathHelper;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
@@ -25,15 +25,15 @@ import junit.framework.TestCase;
  */
 public class BatchProcessJobReader_1_ITest extends TestCase {
 
-	private IBatchProcessJob batchProcessJob;
-	private BatchProcessJobReader reader;
+	private BatchProcessJob batchProcessJob;
+	private JobReader reader;
 	private File file;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		reader = new BatchProcessJobReader();
+		reader = new JobReader();
 		file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_BATCH_PROCESS_JOB));
 		batchProcessJob = reader.read(file, new NullProgressMonitor());
 	}

@@ -18,23 +18,18 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.JobWriter;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.BatchProcessJobWriter;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
-
-/**
- * @author Dr. Philip Wenig
- * 
- */
-public class BatchProcessExportRunnable implements IRunnableWithProgress {
+public class ExportRunnable implements IRunnableWithProgress {
 
 	private File file;
-	private IBatchProcessJob batchProcessJob;
+	private BatchProcessJob batchProcessJob;
 
-	public BatchProcessExportRunnable(File file, IBatchProcessJob batchProcessJob) {
+	public ExportRunnable(File file, BatchProcessJob batchProcessJob) {
 		this.file = file;
 		this.batchProcessJob = batchProcessJob;
 	}
@@ -42,8 +37,8 @@ public class BatchProcessExportRunnable implements IRunnableWithProgress {
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		BatchProcessJobWriter writer = new BatchProcessJobWriter();
 		try {
+			JobWriter writer = new JobWriter();
 			writer.writeBatchProcessJob(file, batchProcessJob, monitor);
 		} catch(FileNotFoundException e) {
 			throw new InterruptedException("The file " + file.getPath() + " couldn't be found.");

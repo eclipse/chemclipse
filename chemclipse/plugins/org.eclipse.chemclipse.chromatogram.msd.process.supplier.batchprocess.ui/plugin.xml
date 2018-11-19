@@ -39,5 +39,13 @@
             file="toc_plugin.xml">
       </toc>
    </extension>   
-
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.preferences.preferencePage"
+            name="Batch Process">
+      </page>
+   </extension>
 </plugin>

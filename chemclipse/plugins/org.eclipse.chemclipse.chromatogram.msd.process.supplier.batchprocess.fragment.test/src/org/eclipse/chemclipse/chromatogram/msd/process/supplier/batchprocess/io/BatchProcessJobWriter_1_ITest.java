@@ -19,7 +19,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -32,14 +31,14 @@ import junit.framework.TestCase;
  */
 public class BatchProcessJobWriter_1_ITest extends TestCase {
 
-	private IBatchProcessJob batchProcessJob;
-	private BatchProcessJobWriter writer;
+	private BatchProcessJob batchProcessJob;
+	private JobWriter writer;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		writer = new BatchProcessJobWriter();
+		writer = new JobWriter();
 		batchProcessJob = new BatchProcessJob();
 		String inputChromatogram = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_TEST);
 		String outputChromatogram = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_TEST);

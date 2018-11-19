@@ -13,16 +13,24 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui
 
 import java.io.File;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -34,19 +42,19 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
-public class ExtendedChromatogramUI extends Composite {
+public class ExtendedChromatogramListUI extends Composite {
 
 	private ChromatogramListUI chromatogramListUI;
 	//
 	private IModificationHandler modificationHandler = null;
-	private IBatchProcessJob batchProcessJob;
+	private BatchProcessJob batchProcessJob;
 
-	public ExtendedChromatogramUI(Composite parent, int style) {
+	public ExtendedChromatogramListUI(Composite parent, int style) {
 		super(parent, style);
 		createControl();
 	}
 
-	public void update(IBatchProcessJob batchProcessJob) {
+	public void update(BatchProcessJob batchProcessJob) {
 
 		this.batchProcessJob = batchProcessJob;
 		setProcessFiles();
@@ -64,8 +72,51 @@ public class ExtendedChromatogramUI extends Composite {
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
 		//
+		createToolbarMain(composite);
 		createChromatogramList(composite);
 		createButtons(composite);
+	}
+
+	private void createToolbarMain(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, false));
+		//
+		createSettingsButton(composite);
+	}
+
+	private void createSettingsButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Open the Settings");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IPreferencePage preferencePage = new PreferencePage();
+				preferencePage.setTitle("Batch Process");
+				//
+				PreferenceManager preferenceManager = new PreferenceManager();
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
+				//
+				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				preferenceDialog.create();
+				preferenceDialog.setMessage("Settings");
+				if(preferenceDialog.open() == Window.OK) {
+					try {
+						//
+					} catch(Exception e1) {
+						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+					}
+				}
+			}
+		});
 	}
 
 	private void createChromatogramList(Composite parent) {

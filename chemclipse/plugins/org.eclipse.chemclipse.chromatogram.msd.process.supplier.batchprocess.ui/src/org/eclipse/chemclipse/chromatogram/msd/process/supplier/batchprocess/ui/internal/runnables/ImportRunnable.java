@@ -16,24 +16,19 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.JobReader;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
+import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.BatchProcessJobReader;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
-
-/**
- * @author Dr. Philip Wenig
- * 
- */
-public class BatchProcessImportRunnable implements IRunnableWithProgress {
+public class ImportRunnable implements IRunnableWithProgress {
 
 	private File file;
-	private IBatchProcessJob batchProcessJob = null;
+	private BatchProcessJob batchProcessJob = null;
 
-	public BatchProcessImportRunnable(File file) {
+	public ImportRunnable(File file) {
 		this.file = file;
 	}
 
@@ -43,7 +38,7 @@ public class BatchProcessImportRunnable implements IRunnableWithProgress {
 	 * 
 	 * @return {@link IBatchProcessJob}
 	 */
-	public IBatchProcessJob getBatchProcessJob() {
+	public BatchProcessJob getBatchProcessJob() {
 
 		return batchProcessJob;
 	}
@@ -51,8 +46,8 @@ public class BatchProcessImportRunnable implements IRunnableWithProgress {
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		BatchProcessJobReader reader = new BatchProcessJobReader();
 		try {
+			JobReader reader = new JobReader();
 			batchProcessJob = reader.read(file, monitor);
 		} catch(FileNotFoundException e) {
 			throw new InterruptedException("The file " + file.getPath() + " couldn't be found.");

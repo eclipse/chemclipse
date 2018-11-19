@@ -11,11 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.swt;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.runnables.BatchProcessRunnable;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -28,18 +35,23 @@ import org.eclipse.swt.widgets.MessageBox;
 
 public class BatchJobUI extends Composite {
 
+	private static final Logger logger = Logger.getLogger(BatchJobUI.class);
+	//
 	private IModificationHandler modificationHandler = null;
-	private ExtendedChromatogramUI extendedChromatogramUI;
+	private ExtendedChromatogramListUI extendedChromatogramListUI;
 	private ExtendedMethodUI extendedMethodUI;
+	private BatchProcessJob batchProcessJob;
 
 	public BatchJobUI(Composite parent, int style) {
 		super(parent, style);
 		createControl();
 	}
 
-	public void update(IBatchProcessJob batchProcessJob) {
+	public void update(BatchProcessJob batchProcessJob) {
 
-		extendedChromatogramUI.update(batchProcessJob);
+		this.batchProcessJob = batchProcessJob;
+		extendedChromatogramListUI.update(batchProcessJob);
+		//
 		if(batchProcessJob != null) {
 			extendedMethodUI.update(batchProcessJob.getProcessMethod());
 		} else {
@@ -66,7 +78,7 @@ public class BatchJobUI extends Composite {
 	private void createMainComposite(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout((new GridLayout(1, true)));
+		composite.setLayout((new GridLayout(2, true)));
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		createExtendedChromatogramUI(composite);
 		createExtendedMethodUI(composite);
@@ -74,9 +86,9 @@ public class BatchJobUI extends Composite {
 
 	private void createExtendedChromatogramUI(Composite parent) {
 
-		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.NONE);
-		extendedChromatogramUI.setLayoutData(new GridData(GridData.FILL_BOTH));
-		extendedChromatogramUI.setModificationHandler(new IModificationHandler() {
+		extendedChromatogramListUI = new ExtendedChromatogramListUI(parent, SWT.NONE);
+		extendedChromatogramListUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+		extendedChromatogramListUI.setModificationHandler(new IModificationHandler() {
 
 			@Override
 			public void setDirty(boolean dirty) {
@@ -130,7 +142,17 @@ public class BatchJobUI extends Composite {
 				messageBox.setMessage("Would you like to execute the batch job?");
 				int decision = messageBox.open();
 				if(SWT.YES == decision) {
-					// ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+					BatchProcessRunnable runnable = new BatchProcessRunnable(batchProcessJob);
+					ProgressMonitorDialog monitor = new ProgressMonitorDialog(button.getShell());
+					try {
+						monitor.run(false, true, runnable);
+						IProcessingInfo processingInfo = runnable.getProcessingInfo();
+						ProcessingInfoViewSupport.updateProcessingInfo(button.getDisplay(), processingInfo, true);
+					} catch(InvocationTargetException e1) {
+						logger.warn(e1);
+					} catch(InterruptedException e1) {
+						logger.warn(e1);
+					}
 				}
 			}
 		});

@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.stream.XMLEventFactory;
@@ -27,27 +28,30 @@ import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.internal.support.IBatchProcessJobTags;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.internal.support.JobTags;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.osgi.framework.FrameworkUtil;
 
-public class BatchProcessJobWriter {
+public class JobWriter {
 
-	public void writeBatchProcessJob(File file, IBatchProcessJob batchProcessJob, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException, XMLStreamException {
+	public void writeBatchProcessJob(File file, BatchProcessJob batchProcessJob, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException, XMLStreamException {
 
 		XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
 		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
-		XMLEventWriter eventWriter = xmlOutputFactory.createXMLEventWriter(bufferedOutputStream, IBatchProcessJobTags.UTF8);
+		XMLEventWriter eventWriter = xmlOutputFactory.createXMLEventWriter(bufferedOutputStream, JobTags.UTF8);
 		XMLEventFactory eventFactory = XMLEventFactory.newInstance();
 		/*
 		 * Document
 		 */
 		eventWriter.add(eventFactory.createStartDocument());
-		StartElement chromatogramStart = eventFactory.createStartElement("", "", IBatchProcessJobTags.BATCH_PROCESS_JOB);
+		StartElement chromatogramStart = eventFactory.createStartElement("", "", JobTags.BATCH_PROCESS_JOB);
 		eventWriter.add(chromatogramStart);
 		/*
 		 * Write the header and the list informations.
@@ -60,7 +64,7 @@ public class BatchProcessJobWriter {
 		/*
 		 * Close the document
 		 */
-		EndElement chromatogramEnd = eventFactory.createEndElement("", "", IBatchProcessJobTags.BATCH_PROCESS_JOB);
+		EndElement chromatogramEnd = eventFactory.createEndElement("", "", JobTags.BATCH_PROCESS_JOB);
 		eventWriter.add(chromatogramEnd);
 		eventWriter.add(eventFactory.createEndDocument());
 		/*
@@ -96,13 +100,13 @@ public class BatchProcessJobWriter {
 	 * @param batchProcessJob
 	 * @throws XMLStreamException
 	 */
-	private void writeBatchProcessJobHeader(XMLEventWriter eventWriter, XMLEventFactory eventFactory, IBatchProcessJob batchProcessJob) throws XMLStreamException {
+	private void writeBatchProcessJobHeader(XMLEventWriter eventWriter, XMLEventFactory eventFactory, BatchProcessJob batchProcessJob) throws XMLStreamException {
 
 		/*
 		 * Element and content definition.
 		 */
-		StartElement headerStart = eventFactory.createStartElement("", "", IBatchProcessJobTags.HEADER);
-		EndElement headerEnd = eventFactory.createEndElement("", "", IBatchProcessJobTags.HEADER);
+		StartElement headerStart = eventFactory.createStartElement("", "", JobTags.HEADER);
+		EndElement headerEnd = eventFactory.createEndElement("", "", JobTags.HEADER);
 		/*
 		 * Write the elements.
 		 */
@@ -123,8 +127,8 @@ public class BatchProcessJobWriter {
 		/*
 		 * Element and content definition.
 		 */
-		StartElement entriesStart = eventFactory.createStartElement("", "", IBatchProcessJobTags.CHROMATOGRAM_INPUT_ENTRIES);
-		EndElement entriesEnd = eventFactory.createEndElement("", "", IBatchProcessJobTags.CHROMATOGRAM_INPUT_ENTRIES);
+		StartElement entriesStart = eventFactory.createStartElement("", "", JobTags.CHROMATOGRAM_INPUT_ENTRIES);
+		EndElement entriesEnd = eventFactory.createEndElement("", "", JobTags.CHROMATOGRAM_INPUT_ENTRIES);
 		/*
 		 * Write the elements.
 		 */
@@ -148,8 +152,8 @@ public class BatchProcessJobWriter {
 		/*
 		 * Element and content definition.
 		 */
-		StartElement entryStart = eventFactory.createStartElement("", "", IBatchProcessJobTags.CHROMATOGRAM_INPUT_ENTRY);
-		EndElement entryEnd = eventFactory.createEndElement("", "", IBatchProcessJobTags.CHROMATOGRAM_INPUT_ENTRY);
+		StartElement entryStart = eventFactory.createStartElement("", "", JobTags.CHROMATOGRAM_INPUT_ENTRY);
+		EndElement entryEnd = eventFactory.createEndElement("", "", JobTags.CHROMATOGRAM_INPUT_ENTRY);
 		/*
 		 * Values.
 		 */
@@ -172,14 +176,9 @@ public class BatchProcessJobWriter {
 	 */
 	private void writeChromatogramProcessEntries(XMLEventWriter eventWriter, XMLEventFactory eventFactory, ProcessMethod processMethod) throws XMLStreamException {
 
-		/*
-		 * Element and content definition.
-		 */
-		StartElement entriesStart = eventFactory.createStartElement("", "", IBatchProcessJobTags.CHROMATOGRAM_PROCESS_ENTRIES);
-		EndElement entriesEnd = eventFactory.createEndElement("", "", IBatchProcessJobTags.CHROMATOGRAM_PROCESS_ENTRIES);
-		/*
-		 * Write the elements.
-		 */
+		StartElement entriesStart = eventFactory.createStartElement("", "", JobTags.CHROMATOGRAM_PROCESS_ENTRIES);
+		EndElement entriesEnd = eventFactory.createEndElement("", "", JobTags.CHROMATOGRAM_PROCESS_ENTRIES);
+		//
 		eventWriter.add(entriesStart);
 		for(IProcessEntry processEntry : processMethod) {
 			writeChromatogramProcessEntry(eventWriter, eventFactory, processEntry);
@@ -197,25 +196,40 @@ public class BatchProcessJobWriter {
 	 */
 	private void writeChromatogramProcessEntry(XMLEventWriter eventWriter, XMLEventFactory eventFactory, IProcessEntry processEntry) throws XMLStreamException {
 
-		/*
-		 * Element and content definition.
-		 */
-		StartElement entryStart = eventFactory.createStartElement("", "", IBatchProcessJobTags.CHROMATOGRAM_PROCESS_ENTRY);
-		EndElement entryEnd = eventFactory.createEndElement("", "", IBatchProcessJobTags.CHROMATOGRAM_PROCESS_ENTRY);
-		/*
-		 * Attributes and values.
-		 */
-		// processEntry.getDescription();
-		// processEntry.getJsonSettings();
-		// processEntry.getName();
-		// processEntry.getProcessorId();
-		// processEntry.getProcessSettingsClass();
-		// processEntry.getSupportedDataTypes();
-		/*
-		 * Write the elements.
-		 */
+		StartElement entryStart = eventFactory.createStartElement("", "", JobTags.CHROMATOGRAM_PROCESS_ENTRY);
+		EndElement entryEnd = eventFactory.createEndElement("", "", JobTags.CHROMATOGRAM_PROCESS_ENTRY);
+		//
 		eventWriter.add(entryStart);
-		eventWriter.add(eventFactory.createAttribute(IBatchProcessJobTags.PROCESSOR_ID, processEntry.getProcessorId()));
+		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_ID, processEntry.getProcessorId()));
+		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_NAME, processEntry.getName()));
+		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_DESCRIPTION, processEntry.getDescription()));
+		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_JSON_SETTINGS, processEntry.getJsonSettings()));
+		Class<? extends IProcessSettings> clazz = processEntry.getProcessSettingsClass();
+		if(clazz != null) {
+			String symbolicName = FrameworkUtil.getBundle(clazz).getSymbolicName();
+			String className = clazz.getName();
+			eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_SYMBOLIC_NAME, symbolicName));
+			eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_CLASS_NAME, className));
+		} else {
+			eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_SYMBOLIC_NAME, ""));
+			eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_CLASS_NAME, ""));
+		}
+		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_DATA_TYPES, getDataTypes(processEntry.getSupportedDataTypes())));
 		eventWriter.add(entryEnd);
+	}
+
+	private String getDataTypes(List<DataType> dataTypes) {
+
+		StringBuilder builder = new StringBuilder();
+		Iterator<DataType> iterator = dataTypes.iterator();
+		while(iterator.hasNext()) {
+			DataType dataType = iterator.next();
+			builder.append(dataType.toString());
+			if(iterator.hasNext()) {
+				builder.append(JobTags.DELIMITER_DATA_TYPE);
+			}
+		}
+		//
+		return builder.toString();
 	}
 }

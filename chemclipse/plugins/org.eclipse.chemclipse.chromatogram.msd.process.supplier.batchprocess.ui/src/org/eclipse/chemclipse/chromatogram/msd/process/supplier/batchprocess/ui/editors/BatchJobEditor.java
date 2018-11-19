@@ -18,9 +18,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.BatchProcessJobWriter;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.runnables.BatchProcessImportRunnable;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.JobWriter;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.runnables.ImportRunnable;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.swt.BatchJobUI;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -42,7 +42,7 @@ public class BatchJobEditor extends EditorPart {
 	private static final Logger logger = Logger.getLogger(BatchJobEditor.class);
 	//
 	private BatchJobUI batchJobUI;
-	private IBatchProcessJob batchProcessJob = null;
+	private BatchProcessJob batchProcessJob = null;
 	private File file;
 	private boolean isDirty = false;
 
@@ -50,7 +50,7 @@ public class BatchJobEditor extends EditorPart {
 	public void doSave(IProgressMonitor monitor) {
 
 		if(file != null) {
-			BatchProcessJobWriter writer = new BatchProcessJobWriter();
+			JobWriter writer = new JobWriter();
 			try {
 				writer.writeBatchProcessJob(file, batchProcessJob, monitor);
 				updateDirtyStatus(false);
@@ -85,7 +85,7 @@ public class BatchJobEditor extends EditorPart {
 			IFileEditorInput fileEditorInput = (IFileEditorInput)input;
 			file = fileEditorInput.getFile().getLocation().toFile();
 			//
-			BatchProcessImportRunnable runnable = new BatchProcessImportRunnable(file);
+			ImportRunnable runnable = new ImportRunnable(file);
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(site.getShell());
 			try {
 				monitor.run(false, true, runnable);

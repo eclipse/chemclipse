@@ -11,11 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.internal.support;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
-public interface IBatchProcessJobTags {
+public interface JobTags {
 
 	String UTF8 = "UTF-8";
 	/*
@@ -34,10 +30,18 @@ public interface IBatchProcessJobTags {
 	String CHROMATOGRAM_INPUT_ENTRIES = "InputEntries";
 	String CHROMATOGRAM_INPUT_ENTRY = "InputEntry";
 	/*
-	 * Chromatogram Process Entries
+	 * Process Method
 	 */
 	String CHROMATOGRAM_PROCESS_ENTRIES = "ProcessEntries";
 	String CHROMATOGRAM_PROCESS_ENTRY = "ProcessEntry";
-	String PROCESSOR_TYPE = "processorType";
-	String PROCESSOR_ID = "processorId";
+	//
+	String PROCESSOR_ID = "id";
+	String PROCESSOR_NAME = "name";
+	String PROCESSOR_DESCRIPTION = "description";
+	String PROCESSOR_JSON_SETTINGS = "jsonSettings";
+	String PROCESSOR_SYMBOLIC_NAME = "symbolicName";
+	String PROCESSOR_CLASS_NAME = "className";
+	String PROCESSOR_DATA_TYPES = "dataTypes";
+	//
+	String DELIMITER_DATA_TYPE = ",";
 }

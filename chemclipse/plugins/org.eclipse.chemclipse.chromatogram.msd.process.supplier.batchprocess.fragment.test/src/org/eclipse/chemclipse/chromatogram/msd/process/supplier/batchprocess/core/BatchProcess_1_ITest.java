@@ -15,7 +15,6 @@ import java.io.File;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
 import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -27,7 +26,7 @@ import junit.framework.TestCase;
  */
 public class BatchProcess_1_ITest extends TestCase {
 
-	private IBatchProcessJob batchProcessJob;
+	private BatchProcessJob batchProcessJob;
 
 	@Override
 	protected void setUp() throws Exception {

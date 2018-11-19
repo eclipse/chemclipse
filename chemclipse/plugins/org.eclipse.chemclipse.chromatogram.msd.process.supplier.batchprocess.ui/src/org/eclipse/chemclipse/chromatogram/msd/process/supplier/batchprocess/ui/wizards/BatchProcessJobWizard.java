@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.BatchProcessJobWriter;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.JobWriter;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -36,14 +36,11 @@ public class BatchProcessJobWizard extends AbstractFileWizard {
 	@Override
 	public void doFinish(IProgressMonitor monitor) throws CoreException {
 
-		monitor.beginTask("Create Batch Job", IProgressMonitor.UNKNOWN);
 		final IFile file = super.prepareProject(monitor);
-		/*
-		 * Initialize a simple batch process job.
-		 */
+		//
 		try {
 			BatchProcessJob batchProcessJob = new BatchProcessJob();
-			BatchProcessJobWriter batchProcessJobWriter = new BatchProcessJobWriter();
+			JobWriter batchProcessJobWriter = new JobWriter();
 			batchProcessJobWriter.writeBatchProcessJob(file.getLocation().toFile(), batchProcessJob, monitor);
 		} catch(FileNotFoundException e1) {
 			logger.warn(e1);

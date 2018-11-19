@@ -17,18 +17,16 @@ import java.util.List;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 
-public class BatchProcessJob implements IBatchProcessJob {
+public class BatchProcessJob {
 
 	private List<IChromatogramInputEntry> chromatogramInputEntries = new ArrayList<IChromatogramInputEntry>();
 	private ProcessMethod processMethod = new ProcessMethod();
 
-	@Override
 	public List<IChromatogramInputEntry> getChromatogramInputEntries() {
 
 		return chromatogramInputEntries;
 	}
 
-	@Override
 	public ProcessMethod getProcessMethod() {
 
 		return processMethod;
