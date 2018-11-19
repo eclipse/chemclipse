@@ -11,37 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
-import java.util.List;
+import java.util.Map;
 
-import org.eclipse.chemclipse.numeric.core.IPoint;
+import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
 
-public interface IChannel {
+public interface IDataModel {
 
-	int getId();
+	void addProtectedKey(String key);
 
-	void setId(int id);
+	Map<String, String> getData();
 
-	String getName();
+	String getData(String key, String defaultValue);
 
-	void setName(String name);
+	void setData(String key, String value);
 
-	int getTime();
-
-	void setTime(int time);
-
-	double getTemperature();
-
-	void setTemperature(double temperature);
-
-	boolean isValid();
-
-	void setValid(boolean valid);
-
-	List<Double> getPoints();
-
-	void setPoints(List<Double> points);
-
-	IPoint getCrossingPoint();
-
-	void setCrossingPoint(IPoint crossingPoint);
+	void removeData(String key) throws InvalidHeaderModificationException;
 }

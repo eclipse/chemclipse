@@ -13,35 +13,13 @@ package org.eclipse.chemclipse.pcr.model.core;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.numeric.core.IPoint;
+public interface IDetectionFormat extends IDataModel {
 
-public interface IChannel {
+	String NAME = "name";
 
-	int getId();
+	List<IChannelSpecification> getChannelSpecifications();
 
-	void setId(int id);
+	List<Integer> getEmissionWavlengths();
 
-	String getName();
-
-	void setName(String name);
-
-	int getTime();
-
-	void setTime(int time);
-
-	double getTemperature();
-
-	void setTemperature(double temperature);
-
-	boolean isValid();
-
-	void setValid(boolean valid);
-
-	List<Double> getPoints();
-
-	void setPoints(List<Double> points);
-
-	IPoint getCrossingPoint();
-
-	void setCrossingPoint(IPoint crossingPoint);
+	List<Integer> getExcitationWavlengths();
 }

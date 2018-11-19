@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.model.core.AbstractMeasurementInfo;
@@ -18,7 +20,15 @@ import org.eclipse.chemclipse.model.core.AbstractMeasurementInfo;
 public class Plate extends AbstractMeasurementInfo implements IPlate {
 
 	private static final long serialVersionUID = -7209280707411376156L;
+	//
+	private Set<DetectionFormat> detectionFormats = new HashSet<>();
 	private TreeSet<IWell> wells = new TreeSet<IWell>();
+
+	@Override
+	public Set<DetectionFormat> getDetectionFormats() {
+
+		return detectionFormats;
+	}
 
 	@Override
 	public TreeSet<IWell> getWells() {

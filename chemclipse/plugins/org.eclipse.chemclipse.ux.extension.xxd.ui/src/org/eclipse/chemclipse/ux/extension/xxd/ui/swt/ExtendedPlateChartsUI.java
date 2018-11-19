@@ -277,9 +277,9 @@ public class ExtendedPlateChartsUI {
 				} catch(NumberFormatException e) {
 					logger.warn(e);
 				}
-				//
-				chartPCR.addSeriesData(lineSeriesDataList);
 			}
+			//
+			chartPCR.addSeriesData(lineSeriesDataList);
 		}
 	}
 

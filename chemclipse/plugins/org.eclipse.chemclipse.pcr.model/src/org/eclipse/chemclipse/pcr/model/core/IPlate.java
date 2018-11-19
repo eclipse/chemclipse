@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
@@ -21,6 +22,8 @@ public interface IPlate extends IMeasurementInfo {
 	String DATE = "Date";
 	String NOISEBAND = "Noiseband";
 	String THRESHOLD = "Threshold";
+
+	Set<DetectionFormat> getDetectionFormats();
 
 	TreeSet<IWell> getWells();
 

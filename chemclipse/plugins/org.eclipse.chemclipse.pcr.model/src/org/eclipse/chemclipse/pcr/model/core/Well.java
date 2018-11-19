@@ -11,29 +11,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
 
-public class Well implements IWell {
+public class Well extends AbstractDataModel implements IWell {
 
 	private static final Logger logger = Logger.getLogger(Well.class);
 	//
 	private Position position = new Position();
 	private Map<Integer, IChannel> channels = new HashMap<>();
-	private Map<String, String> data = new HashMap<>();
-	private Set<String> protectKeys = new HashSet<>();
 
 	public Well() {
-		protectKeys.add(SAMPLE_ID);
-		protectKeys.add(TARGET_NAME);
-		protectKeys.add(CROSSING_POINT);
-		protectKeys.add(SAMPLE_SUBSET);
+		addProtectedKey(SAMPLE_ID);
+		addProtectedKey(TARGET_NAME);
+		addProtectedKey(CROSSING_POINT);
+		addProtectedKey(SAMPLE_SUBSET);
 	}
 
 	@Override
@@ -46,36 +40,6 @@ public class Well implements IWell {
 	public Map<Integer, IChannel> getChannels() {
 
 		return channels;
-	}
-
-	@Override
-	public Map<String, String> getData() {
-
-		return Collections.unmodifiableMap(data);
-	}
-
-	@Override
-	public String getData(String key, String defaultValue) {
-
-		return data.getOrDefault(key, defaultValue);
-	}
-
-	@Override
-	public void setData(String key, String value) {
-
-		if(key != null && value != null) {
-			data.put(key, value);
-		}
-	}
-
-	@Override
-	public void removeData(String key) throws InvalidHeaderModificationException {
-
-		if(protectKeys.contains(key)) {
-			throw new InvalidHeaderModificationException("It's not possible to remove the following key: " + key);
-		} else {
-			data.remove(key);
-		}
 	}
 
 	@Override

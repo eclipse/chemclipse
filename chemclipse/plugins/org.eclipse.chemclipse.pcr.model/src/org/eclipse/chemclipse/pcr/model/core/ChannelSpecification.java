@@ -11,37 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
-import java.util.List;
+public class ChannelSpecification extends AbstractDataModel implements IChannelSpecification {
 
-import org.eclipse.chemclipse.numeric.core.IPoint;
-
-public interface IChannel {
-
-	int getId();
-
-	void setId(int id);
-
-	String getName();
-
-	void setName(String name);
-
-	int getTime();
-
-	void setTime(int time);
-
-	double getTemperature();
-
-	void setTemperature(double temperature);
-
-	boolean isValid();
-
-	void setValid(boolean valid);
-
-	List<Double> getPoints();
-
-	void setPoints(List<Double> points);
-
-	IPoint getCrossingPoint();
-
-	void setCrossingPoint(IPoint crossingPoint);
+	public ChannelSpecification() {
+		addProtectedKey(NAME);
+	}
 }

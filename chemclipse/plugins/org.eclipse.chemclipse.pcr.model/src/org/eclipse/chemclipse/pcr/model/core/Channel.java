@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.numeric.core.IPoint;
 public class Channel implements IChannel {
 
 	private int id = -1;
+	private String name = "";
 	private int time = 0;
 	private double temperature = 0.0d;
 	private boolean valid = false;
@@ -35,6 +36,18 @@ public class Channel implements IChannel {
 	public void setId(int id) {
 
 		this.id = id;
+	}
+
+	@Override
+	public String getName() {
+
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+
+		this.name = name;
 	}
 
 	@Override
