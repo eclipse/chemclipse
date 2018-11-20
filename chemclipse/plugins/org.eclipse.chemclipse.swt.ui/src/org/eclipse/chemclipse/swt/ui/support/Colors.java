@@ -223,6 +223,18 @@ public class Colors {
 		return getColor(rgb, alpha);
 	}
 
+	public static String getColor(Color color) {
+
+		if(color != null) {
+			return color.getRed() + "," + color.getGreen() + "," + color.getBlue();
+		} else {
+			return "255,255,255"; // White
+		}
+	}
+
+	/*
+	 * rgb: 255,0,0
+	 */
 	public static Color getColor(String rgb) {
 
 		return getColor(rgb, ALPHA_OPAQUE);

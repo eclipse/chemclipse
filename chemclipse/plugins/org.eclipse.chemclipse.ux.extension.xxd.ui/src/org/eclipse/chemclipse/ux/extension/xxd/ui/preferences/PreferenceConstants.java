@@ -70,6 +70,9 @@ public class PreferenceConstants {
 			{".", LineStyle.DOT.toString()}, //
 			{"Solid", LineStyle.SOLID.toString()}//
 	};
+	//
+	public static final String P_COLOR_CODES = "colorCodes";
+	public static final String DEF_COLOR_CODES = "";
 	/*
 	 * General / Task Quick Access
 	 */
