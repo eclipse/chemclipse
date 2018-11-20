@@ -35,7 +35,6 @@ public class PreferencePageChromatogramScans extends FieldEditorPreferencePage i
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN, "Color Chromatogram Selected Scan:", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE, "Chromatogram Selected Scan Marker Size:", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE, "Chromatogram Selected Scan Marker Type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_AXIS, "Show Chromatogram Scan Axis", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS, "Show Chromatogram Scan Labels", getFieldEditorParent()));
 		addField(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE, "Chromatogram Scan Label Symbol Size:", PreferenceConstants.MIN_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE, PreferenceConstants.MAX_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME, "Chromatogram Scan Label Name:", getFieldEditorParent()));

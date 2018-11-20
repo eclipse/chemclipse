@@ -99,7 +99,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -137,6 +136,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToScanNumberConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
+import org.eclipse.eavp.service.swtchart.core.IAxisSettings;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.IExtendedChart;
 import org.eclipse.eavp.service.swtchart.core.ISecondaryAxisSettings;
@@ -944,7 +944,6 @@ public class ExtendedChromatogramUI {
 		if(chromatogramSelection != null) {
 			addjustChromatogramChart();
 			addChromatogramSeriesData();
-			addScanNumberSecondaryAxisX();
 			adjustChromatogramSelectionRange();
 		}
 	}
@@ -2326,35 +2325,6 @@ public class ExtendedChromatogramUI {
 		chromatogramChart.applySettings(chartSettings);
 	}
 
-	private void addScanNumberSecondaryAxisX() {
-
-		boolean showChromatogramScanAxis = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_AXIS);
-		//
-		try {
-			deleteScanNumberSecondaryAxisX();
-			IChartSettings chartSettings = chromatogramChart.getChartSettings();
-			if(chromatogramSelection != null && showChromatogramScanAxis) {
-				//
-				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-				int scanDelay = chromatogram.getScanDelay();
-				int scanInterval = chromatogram.getScanInterval();
-				//
-				ISecondaryAxisSettings secondaryAxisSettings = new SecondaryAxisSettings(LABEL_SCAN_NUMBER, new MillisecondsToScanNumberConverter(scanDelay, scanInterval));
-				secondaryAxisSettings.setPosition(Position.Secondary);
-				secondaryAxisSettings.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0"));
-				secondaryAxisSettings.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-				secondaryAxisSettings.setExtraSpaceTitle(0);
-				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettings);
-			}
-			//
-			chromatogramChart.applySettings(chartSettings);
-			chromatogramChart.adjustRange(true);
-			chromatogramChart.redraw();
-		} catch(Exception e) {
-			logger.warn(e);
-		}
-	}
-
 	private void adjustChromatogramSelectionRange() {
 
 		if(chromatogramSelection != null) {
@@ -2387,7 +2357,7 @@ public class ExtendedChromatogramUI {
 
 	private void adjustAxisSettings() {
 
-		chromatogramChart.modifyAxisSet(false);
+		chromatogramChart.modifyAxisSet(true);
 		/*
 		 * Scan Axis
 		 */
@@ -2397,21 +2367,18 @@ public class ExtendedChromatogramUI {
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
 				ISecondaryAxisSettings axisSettings = chromatogramChart.getSecondaryAxisSettingsX(TITLE_X_AXIS_SCANS);
 				if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SCANS)) {
-					Position position = Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SCANS));
 					if(axisSettings == null) {
 						try {
 							int scanDelay = chromatogram.getScanDelay();
 							int scanInterval = chromatogram.getScanInterval();
 							ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_SCANS, new MillisecondsToScanNumberConverter(scanDelay, scanInterval));
-							secondaryAxisSettingsX.setPosition(position);
-							secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-							secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+							setScanAxisSettings(secondaryAxisSettingsX);
 							chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 						} catch(Exception e) {
 							logger.warn(e);
 						}
 					} else {
-						axisSettings.setPosition(Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SCANS)));
+						setScanAxisSettings(axisSettings);
 					}
 				} else {
 					/*
@@ -2424,5 +2391,14 @@ public class ExtendedChromatogramUI {
 				chromatogramChart.applySettings(chartSettings);
 			}
 		}
+	}
+
+	private void setScanAxisSettings(IAxisSettings axisSettings) {
+
+		Position position = Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SCANS));
+		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_X_AXIS_SCANS));
+		LineStyle gridLineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SCANS));
+		Color gridColor = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SCANS));
+		chromatogramChart.setAxisSettings(axisSettings, position, "0", color, gridLineStyle, gridColor);
 	}
 }

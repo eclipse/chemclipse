@@ -61,6 +61,15 @@ public class PreferenceConstants {
 			{"Primary", Position.Primary.toString()}, //
 			{"Secondary", Position.Secondary.toString()}//
 	};
+	//
+	public static String[][] LINE_STYLES = new String[][]{//
+			{"None", LineStyle.NONE.toString()}, //
+			{"-", LineStyle.DASH.toString()}, //
+			{"-.", LineStyle.DASHDOT.toString()}, //
+			{"-..", LineStyle.DASHDOTDOT.toString()}, //
+			{".", LineStyle.DOT.toString()}, //
+			{"Solid", LineStyle.SOLID.toString()}//
+	};
 	/*
 	 * General / Task Quick Access
 	 */
@@ -313,8 +322,6 @@ public class PreferenceConstants {
 	public static final int MIN_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE = 1;
 	public static final int MAX_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE = 72;
 	public static final int DEF_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE = 5;
-	public static final String P_SHOW_CHROMATOGRAM_SCAN_AXIS = "showChromatogramScanAxis";
-	public static final boolean DEF_SHOW_CHROMATOGRAM_SCAN_AXIS = false;
 	public static final String P_SHOW_CHROMATOGRAM_SCAN_LABELS = "showChromatogramScanLabels";
 	public static final boolean DEF_SHOW_CHROMATOGRAM_SCAN_LABELS = true;
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = "chromatogramScanLabelSymbolSize";
@@ -361,30 +368,73 @@ public class PreferenceConstants {
 	public static final boolean DEF_CHROMATOGRAM_X_ZOOM_ONLY = false;
 	public static final String P_CHROMATOGRAM_Y_ZOOM_ONLY = "chromatogramYZoomOnly";
 	public static final boolean DEF_CHROMATOGRAM_Y_ZOOM_ONLY = false;
+	//
 	public static final String P_SHOW_X_AXIS_MILLISECONDS = "showXAxisMilliseconds";
 	public static final boolean DEF_SHOW_X_AXIS_MILLISECONDS = false;
 	public static final String P_POSITION_X_AXIS_MILLISECONDS = "positionXAxisMilliseconds";
 	public static final String DEF_POSITION_X_AXIS_MILLISECONDS = Position.Secondary.toString();
+	public static final String P_COLOR_X_AXIS_MILLISECONDS = "colorXAxisMilliseconds";
+	public static final String DEF_COLOR_X_AXIS_MILLISECONDS = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS = "gridlineStyleXAxisMilliseconds";
+	public static final String DEF_GRIDLINE_STYLE_X_AXIS_MILLISECONDS = LineStyle.NONE.toString();
+	public static final String P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS = "gridlineColorXAxisMilliseconds";
+	public static final String DEF_GRIDLINE_COLOR_X_AXIS_MILLISECONDS = "192,192,192";
+	//
 	public static final String P_SHOW_X_AXIS_SECONDS = "showXAxisSeconds";
 	public static final boolean DEF_SHOW_X_AXIS_SECONDS = false;
 	public static final String P_POSITION_X_AXIS_SECONDS = "positionXAxisSeconds";
 	public static final String DEF_POSITION_X_AXIS_SECONDS = Position.Primary.toString();
+	public static final String P_COLOR_X_AXIS_SECONDS = "colorXAxisSeconds";
+	public static final String DEF_COLOR_X_AXIS_SECONDS = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_X_AXIS_SECONDS = "gridlineStyleXAxisSeconds";
+	public static final String DEF_GRIDLINE_STYLE_X_AXIS_SECONDS = LineStyle.NONE.toString();
+	public static final String P_GRIDLINE_COLOR_X_AXIS_SECONDS = "gridlineColorXAxisSeconds";
+	public static final String DEF_GRIDLINE_COLOR_X_AXIS_SECONDS = "192,192,192";
+	//
 	public static final String P_SHOW_X_AXIS_MINUTES = "showXAxisMinutes";
 	public static final boolean DEF_SHOW_X_AXIS_MINUTES = true;
 	public static final String P_POSITION_X_AXIS_MINUTES = "positionXAxisMinutes";
 	public static final String DEF_POSITION_X_AXIS_MINUTES = Position.Primary.toString();
+	public static final String P_COLOR_X_AXIS_MINUTES = "colorXAxisMinutes";
+	public static final String DEF_COLOR_X_AXIS_MINUTES = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_X_AXIS_MINUTES = "gridlineStyleXAxisMinutes";
+	public static final String DEF_GRIDLINE_STYLE_X_AXIS_MINUTES = LineStyle.DOT.toString();
+	public static final String P_GRIDLINE_COLOR_X_AXIS_MINUTES = "gridlineColorXAxisMinutes";
+	public static final String DEF_GRIDLINE_COLOR_X_AXIS_MINUTES = "192,192,192";
+	//
 	public static final String P_SHOW_X_AXIS_SCANS = "showXAxisScans";
 	public static final boolean DEF_SHOW_X_AXIS_SCANS = false;
 	public static final String P_POSITION_X_AXIS_SCANS = "positionXAxisScans";
 	public static final String DEF_POSITION_X_AXIS_SCANS = Position.Primary.toString();
+	public static final String P_COLOR_X_AXIS_SCANS = "colorXAxisScans";
+	public static final String DEF_COLOR_X_AXIS_SCANS = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_X_AXIS_SCANS = "gridlineStyleXAxisScans";
+	public static final String DEF_GRIDLINE_STYLE_X_AXIS_SCANS = LineStyle.NONE.toString();
+	public static final String P_GRIDLINE_COLOR_X_AXIS_SCANS = "gridlineColorXAxisScans";
+	public static final String DEF_GRIDLINE_COLOR_X_AXIS_SCANS = "192,192,192";
+	//
 	public static final String P_SHOW_Y_AXIS_INTENSITY = "showYAxisIntensity";
 	public static final boolean DEF_SHOW_Y_AXIS_INTENSITY = true;
 	public static final String P_POSITION_Y_AXIS_INTENSITY = "positionYAxisIntensity";
 	public static final String DEF_POSITION_Y_AXIS_INTENSITY = Position.Primary.toString();
+	public static final String P_COLOR_Y_AXIS_INTENSITY = "colorYAxisIntensity";
+	public static final String DEF_COLOR_Y_AXIS_INTENSITY = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_Y_AXIS_INTENSITY = "gridlineStyleYAxisIntensity";
+	public static final String DEF_GRIDLINE_STYLE_Y_AXIS_INTENSITY = LineStyle.NONE.toString();
+	public static final String P_GRIDLINE_COLOR_Y_AXIS_INTENSITY = "gridlineColorYAxisIntensity";
+	public static final String DEF_GRIDLINE_COLOR_Y_AXIS_INTENSITY = "192,192,192";
+	//
 	public static final String P_SHOW_Y_AXIS_RELATIVE_INTENSITY = "showYAxisRelativeIntensity";
 	public static final boolean DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY = true;
 	public static final String P_POSITION_Y_AXIS_RELATIVE_INTENSITY = "positionYAxisRelativeIntensity";
 	public static final String DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY = Position.Secondary.toString();
+	public static final String P_COLOR_Y_AXIS_RELATIVE_INTENSITY = "colorYAxisRelativeIntensity";
+	public static final String DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY = "gridlineStyleYAxisRelativeIntensity";
+	public static final String DEF_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY = LineStyle.DOT.toString();
+	public static final String P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY = "gridlineColorYAxisRelativeIntensity";
+	public static final String DEF_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY = "192,192,192";
+	//
 	public static final String P_CHROMATOGRAM_SELECTED_ACTION_ID = "chromatogramSelectedActionId";
 	public static final String DEF_CHROMATOGRAM_SELECTED_ACTION_ID = "";
 	/*

@@ -54,18 +54,50 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(new DoubleFieldEditor(PreferenceConstants.P_CHROMATOGRAM_EXTEND_X, "Extend X (1.0 = 100%)", PreferenceConstants.MIN_CHROMATOGRAM_EXTEND_X, PreferenceConstants.MAX_CHROMATOGRAM_EXTEND_X, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_X_ZOOM_ONLY, "X Zoom Only", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_Y_ZOOM_ONLY, "Y Zoom Only", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, "Show Milliseconds X Axis", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, "Position Milliseconds X Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_SECONDS, "Show Seconds X Axis", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_SECONDS, "Position Seconds X Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MINUTES, "Show Minutes X Axis", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MINUTES, "Position Minutes X Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_SCANS, "Show Scans X Axis", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_SCANS, "Position Scans X Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY, "Show Intensity Y Axis", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY, "Position Intensity Y Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, "Show Relative Intensity Y Axis", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, "Position Relative Intensity Y Axis:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, "Show X Axis (Milliseconds)", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, "Position X Axis (Milliseconds):", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS, "Color X Axis (Milliseconds):", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS, "GridLine Style X Axis (Milliseconds):", PreferenceConstants.LINE_STYLES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS, "GridLine Color X Axis (Milliseconds):", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_SECONDS, "Show X Axis (Seconds)", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_SECONDS, "Position X Axis (Seconds):", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_SECONDS, "Color X Axis (Seconds):", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SECONDS, "GridLine Style X Axis (Seconds):", PreferenceConstants.LINE_STYLES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SECONDS, "GridLine Color X Axis (Seconds):", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MINUTES, "Show X Axis (Minutes)", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MINUTES, "Position X Axis (Minutes):", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MINUTES, "Color X Axis (Minutes):", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES, "GridLine Style X Axis (Minutes):", PreferenceConstants.LINE_STYLES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES, "GridLine Color X Axis (Minutes):", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_SCANS, "Show X Axis (Scans)", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_SCANS, "Position X Axis (Scans):", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_SCANS, "Color X Axis (Scans):", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SCANS, "GridLine Style X Axis (Scans):", PreferenceConstants.LINE_STYLES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SCANS, "GridLine Color X Axis (Scans):", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY, "Show Y Axis (Intensity)", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY, "Position Y Axis (Intensity):", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY, "Color Y Axis (Intensity):", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY, "GridLine Style Y Axis (Intensity):", PreferenceConstants.LINE_STYLES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY, "GridLine Color Y Axis (Intensity):", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, "Show Y Axis (Intensity %)", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, "Position Y Axis (Intensity %):", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY, "Color Y Axis (Intensity %):", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY, "GridLine Style Y Axis (Intensity %):", PreferenceConstants.LINE_STYLES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY, "GridLine Color Y Axis (Intensity %):", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID, "Chromatogram Selected Action Id:", getFieldEditorParent()));
 	}
 

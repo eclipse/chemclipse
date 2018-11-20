@@ -152,7 +152,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_COLOR_CHROMATOGRAM_BASELINE, PreferenceConstants.DEF_COLOR_CHROMATOGRAM_BASELINE);
 		store.setDefault(PreferenceConstants.P_ENABLE_BASELINE_AREA, PreferenceConstants.DEF_ENABLE_BASELINE_AREA);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE, PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
-		store.setDefault(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_AXIS, PreferenceConstants.DEF_SHOW_CHROMATOGRAM_SCAN_AXIS);
 		store.setDefault(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS, PreferenceConstants.DEF_SHOW_CHROMATOGRAM_SCAN_LABELS);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE, PreferenceConstants.DEF_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME, PreferenceConstants.DEF_CHROMATOGRAM_SCAN_LABEL_FONT_NAME);
@@ -170,18 +169,44 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_EXTEND_X, PreferenceConstants.DEF_CHROMATOGRAM_EXTEND_X);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_X_ZOOM_ONLY, PreferenceConstants.DEF_CHROMATOGRAM_X_ZOOM_ONLY);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_Y_ZOOM_ONLY, PreferenceConstants.DEF_CHROMATOGRAM_Y_ZOOM_ONLY);
+		//
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_MILLISECONDS);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_POSITION_X_AXIS_MILLISECONDS);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_COLOR_X_AXIS_MILLISECONDS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_MILLISECONDS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_MILLISECONDS);
+		//
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_SECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_SECONDS);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_SECONDS, PreferenceConstants.DEF_POSITION_X_AXIS_SECONDS);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_SECONDS, PreferenceConstants.DEF_COLOR_X_AXIS_SECONDS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SECONDS, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_SECONDS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SECONDS, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_SECONDS);
+		//
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_MINUTES, PreferenceConstants.DEF_SHOW_X_AXIS_MINUTES);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_MINUTES, PreferenceConstants.DEF_POSITION_X_AXIS_MINUTES);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_MINUTES, PreferenceConstants.DEF_COLOR_X_AXIS_MINUTES);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_MINUTES);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_MINUTES);
+		//
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_SCANS, PreferenceConstants.DEF_SHOW_X_AXIS_SCANS);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_SCANS, PreferenceConstants.DEF_POSITION_X_AXIS_SCANS);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_SCANS, PreferenceConstants.DEF_COLOR_X_AXIS_SCANS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SCANS, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_SCANS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SCANS, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_SCANS);
+		//
 		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_INTENSITY);
 		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY, PreferenceConstants.DEF_POSITION_Y_AXIS_INTENSITY);
+		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY, PreferenceConstants.DEF_COLOR_Y_AXIS_INTENSITY);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_INTENSITY);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_INTENSITY);
+		//
 		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY);
 		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY);
+		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY);
+		//
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID, PreferenceConstants.DEF_CHROMATOGRAM_SELECTED_ACTION_ID);
 		/*
 		 * File Explorer
 		 */
