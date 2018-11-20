@@ -19,20 +19,20 @@ import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPlateChartsUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPlateDataUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class PlateChartsPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class PlateDataPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private ExtendedPlateChartsUI extendedPlateChartsUI;
+	private ExtendedPlateDataUI extendedPlateDataUI;
 
 	@Inject
-	public PlateChartsPart(Composite parent, MPart part) {
+	public PlateDataPart(Composite parent, MPart part) {
 		super(part);
-		extendedPlateChartsUI = new ExtendedPlateChartsUI(parent);
+		extendedPlateDataUI = new ExtendedPlateDataUI(parent);
 	}
 
 	@Focus
@@ -56,13 +56,13 @@ public class PlateChartsPart extends AbstractDataUpdateSupport implements IDataU
 		 */
 		if(objects.size() == 1) {
 			if(topic.equals(IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION)) {
-				extendedPlateChartsUI.update(null);
+				extendedPlateDataUI.update(null);
 			} else {
 				Object object = objects.get(0);
 				if(object instanceof IPlate) {
-					extendedPlateChartsUI.update((IPlate)object);
+					extendedPlateDataUI.update((IPlate)object);
 				} else {
-					extendedPlateChartsUI.update(null);
+					extendedPlateDataUI.update(null);
 				}
 			}
 		}

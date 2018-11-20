@@ -17,6 +17,8 @@ public interface IDetectionFormat extends IDataModel {
 
 	String NAME = "name";
 
+	String getName();
+
 	List<IChannelSpecification> getChannelSpecifications();
 
 	List<Integer> getEmissionWavlengths();

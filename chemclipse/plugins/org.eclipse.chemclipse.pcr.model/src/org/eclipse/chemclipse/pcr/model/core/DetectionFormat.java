@@ -25,6 +25,12 @@ public class DetectionFormat extends AbstractDataModel implements IDetectionForm
 	}
 
 	@Override
+	public String getName() {
+
+		return getData(NAME, "");
+	}
+
+	@Override
 	public List<IChannelSpecification> getChannelSpecifications() {
 
 		return channelSpecifications;
@@ -47,7 +53,7 @@ public class DetectionFormat extends AbstractDataModel implements IDetectionForm
 
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((getData(NAME, "") == null) ? 0 : getData(NAME, "").hashCode());
+		result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
 		return result;
 	}
 
@@ -61,10 +67,10 @@ public class DetectionFormat extends AbstractDataModel implements IDetectionForm
 		if(getClass() != obj.getClass())
 			return false;
 		DetectionFormat other = (DetectionFormat)obj;
-		if(getData(NAME, "") == null) {
-			if(other.getData(NAME, "") != null)
+		if(getName() == null) {
+			if(other.getName() != null)
 				return false;
-		} else if(!getData(NAME, "").equals(other.getData(NAME, "")))
+		} else if(!getName().equals(other.getName()))
 			return false;
 		return true;
 	}
@@ -72,6 +78,6 @@ public class DetectionFormat extends AbstractDataModel implements IDetectionForm
 	@Override
 	public String toString() {
 
-		return "DetectionFormat [name=" + getData(NAME, "") + "]";
+		return "DetectionFormat [name=" + getName() + "]";
 	}
 }
