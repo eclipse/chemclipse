@@ -11,30 +11,27 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.util.List;
-
-import org.eclipse.chemclipse.pcr.model.core.IWell;
+import org.eclipse.chemclipse.pcr.model.core.IChannelSpecification;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ChannelSpecificationLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ChannelSpecificationListFilter;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ChannelSpecificationTableComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.HeaderDataTableComparator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.WellDataEditingSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.WellDataLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.WellDataListFilter;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.WellDataTableComparator;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
-public class WellDataListUI extends ExtendedTableViewer {
+public class ChannelSpecificationListUI extends ExtendedTableViewer {
 
-	private WellDataTableComparator tableComparator = new WellDataTableComparator();
-	private WellDataListFilter listFilter = new WellDataListFilter();
-	private WellDataLabelProvider labelProvider = new WellDataLabelProvider();
-	private String[] titles = WellDataLabelProvider.TITLES;
-	private int[] bounds = WellDataLabelProvider.BOUNDS;
-	private IWell well = null;
+	private ChannelSpecificationTableComparator tableComparator = new ChannelSpecificationTableComparator();
+	private ChannelSpecificationListFilter listFilter = new ChannelSpecificationListFilter();
+	private ChannelSpecificationLabelProvider labelProvider = new ChannelSpecificationLabelProvider();
+	private String[] titles = ChannelSpecificationLabelProvider.TITLES;
+	private int[] bounds = ChannelSpecificationLabelProvider.BOUNDS;
+	//
+	private IChannelSpecification channelSpecification = null;
 
-	public WellDataListUI(Composite parent, int style) {
+	public ChannelSpecificationListUI(Composite parent, int style) {
 		super(parent, style);
 		createColumns();
 	}
@@ -45,11 +42,11 @@ public class WellDataListUI extends ExtendedTableViewer {
 		refresh();
 	}
 
-	public void setInput(IWell well) {
+	public void setInput(IChannelSpecification channelSpecification) {
 
-		this.well = well;
-		if(well != null) {
-			super.setInput(well.getData());
+		this.channelSpecification = channelSpecification;
+		if(channelSpecification != null) {
+			super.setInput(channelSpecification.getData());
 		} else {
 			clear();
 		}
@@ -58,6 +55,11 @@ public class WellDataListUI extends ExtendedTableViewer {
 	public void clear() {
 
 		super.setInput(null);
+	}
+
+	public IChannelSpecification getChannelSpecification() {
+
+		return channelSpecification;
 	}
 
 	public void sortTable() {
@@ -70,11 +72,6 @@ public class WellDataListUI extends ExtendedTableViewer {
 		refresh();
 	}
 
-	public IWell getWell() {
-
-		return well;
-	}
-
 	private void createColumns() {
 
 		createColumns(titles, bounds);
@@ -82,18 +79,5 @@ public class WellDataListUI extends ExtendedTableViewer {
 		setContentProvider(new ListContentProvider());
 		setComparator(tableComparator);
 		setFilters(new ViewerFilter[]{listFilter});
-		setEditingSupport();
-	}
-
-	private void setEditingSupport() {
-
-		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
-		for(int i = 0; i < tableViewerColumns.size(); i++) {
-			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
-			String label = tableViewerColumn.getColumn().getText();
-			if(label.equals(WellDataLabelProvider.VALUE)) {
-				tableViewerColumn.setEditingSupport(new WellDataEditingSupport(this, label));
-			}
-		}
 	}
 }

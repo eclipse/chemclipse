@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -92,5 +95,25 @@ public class Well extends AbstractDataModel implements IWell {
 			}
 		}
 		return false;
+	}
+
+	public void applyDetectionFormat(IDetectionFormat detectionFormat) {
+
+		List<Integer> keys = new ArrayList<>(channels.keySet());
+		Collections.sort(keys);
+		//
+		for(Integer key : keys) {
+			IChannel channel = channels.get(key);
+			String detectionName = IChannel.CHANNEL + " " + key; // Default
+			//
+			if(detectionFormat != null) {
+				if(key >= 0 && key < detectionFormat.getChannelSpecifications().size()) {
+					IChannelSpecification channelSpecification = detectionFormat.getChannelSpecifications().get(key);
+					detectionName = channelSpecification.getName();
+				}
+			}
+			//
+			channel.setDetectionName(detectionName);
+		}
 	}
 }

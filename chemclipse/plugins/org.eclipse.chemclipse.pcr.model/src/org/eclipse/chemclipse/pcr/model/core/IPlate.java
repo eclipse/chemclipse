@@ -23,9 +23,9 @@ public interface IPlate extends IMeasurementInfo {
 	String NOISEBAND = "Noiseband";
 	String THRESHOLD = "Threshold";
 
-	IDetectionFormat getSelectedDetectionFormat();
+	IDetectionFormat getDetectionFormat();
 
-	void setSelectedDetectionFormat(IDetectionFormat detectionFormat);
+	void setDetectionFormat(IDetectionFormat detectionFormat);
 
 	Set<IDetectionFormat> getDetectionFormats();
 

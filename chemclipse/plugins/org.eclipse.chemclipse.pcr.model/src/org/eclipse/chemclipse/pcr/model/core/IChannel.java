@@ -17,6 +17,8 @@ import org.eclipse.chemclipse.numeric.core.IPoint;
 
 public interface IChannel {
 
+	String CHANNEL = "Channel";
+
 	int getId();
 
 	void setId(int id);
@@ -44,4 +46,8 @@ public interface IChannel {
 	IPoint getCrossingPoint();
 
 	void setCrossingPoint(IPoint crossingPoint);
+
+	String getDetectionName();
+
+	void setDetectionName(String detectionName);
 }

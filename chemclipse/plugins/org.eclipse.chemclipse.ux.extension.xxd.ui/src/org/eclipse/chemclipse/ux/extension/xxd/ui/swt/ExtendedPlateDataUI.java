@@ -11,8 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.pcr.model.comparators.DetectionFormatComparator;
+import org.eclipse.chemclipse.pcr.model.core.IChannelSpecification;
 import org.eclipse.chemclipse.pcr.model.core.IDetectionFormat;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -44,6 +50,10 @@ public class ExtendedPlateDataUI {
 	private Label labelInfo;
 	private Composite toolbarInfo;
 	private ComboViewer comboDetectionFormats;
+	private ComboViewer comboChannelSpecifications;
+	private ChannelSpecificationListUI channelSpecificationListUI;
+	//
+	private DetectionFormatComparator detectionFormatComparator = new DetectionFormatComparator();
 	private IPlate plate = null;
 
 	@Inject
@@ -55,12 +65,12 @@ public class ExtendedPlateDataUI {
 
 		this.plate = plate;
 		if(plate != null) {
-			comboDetectionFormats.setInput(plate.getDetectionFormats());
 			labelInfo.setText("Plate: " + plate.getName());
 		} else {
-			comboDetectionFormats.setInput(null);
 			labelInfo.setText("No plate data available.");
 		}
+		//
+		updateDetectionFormats(plate);
 	}
 
 	private void initialize(Composite parent) {
@@ -70,6 +80,8 @@ public class ExtendedPlateDataUI {
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
 		comboDetectionFormats = createComboDetectionFormats(parent);
+		comboChannelSpecifications = createComboChannelSpecifications(parent);
+		channelSpecificationListUI = createChannelSpecificationTable(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 	}
@@ -122,7 +134,8 @@ public class ExtendedPlateDataUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(plate != null) {
-					plate.setSelectedDetectionFormat(null);
+					plate.setDetectionFormat(null);
+					updateDetectionFormats(plate);
 				}
 			}
 		});
@@ -191,7 +204,7 @@ public class ExtendedPlateDataUI {
 				return null;
 			}
 		});
-		combo.setToolTipText("Select a process method.");
+		combo.setToolTipText("Select a detection format and apply it.");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
@@ -204,12 +217,95 @@ public class ExtendedPlateDataUI {
 					Object object = comboViewer.getStructuredSelection().getFirstElement();
 					if(object instanceof IDetectionFormat) {
 						IDetectionFormat detectionFormat = (IDetectionFormat)object;
-						plate.setSelectedDetectionFormat(detectionFormat);
+						plate.setDetectionFormat(detectionFormat);
+						updateChannelSpecification(detectionFormat);
 					}
 				}
 			}
 		});
 		//
 		return comboViewer;
+	}
+
+	private ComboViewer createComboChannelSpecifications(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(new ListContentProvider());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof IChannelSpecification) {
+					IChannelSpecification channelSpecification = (IChannelSpecification)element;
+					return channelSpecification.getName();
+				}
+				return null;
+			}
+		});
+		combo.setToolTipText("Select a channel specification.");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(plate != null) {
+					Object object = comboViewer.getStructuredSelection().getFirstElement();
+					if(object instanceof IChannelSpecification) {
+						IChannelSpecification channelSpecification = (IChannelSpecification)object;
+						channelSpecificationListUI.setInput(channelSpecification);
+					}
+				}
+			}
+		});
+		//
+		return comboViewer;
+	}
+
+	private ChannelSpecificationListUI createChannelSpecificationTable(Composite parent) {
+
+		ChannelSpecificationListUI listUI = new ChannelSpecificationListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		listUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		return listUI;
+	}
+
+	private void updateDetectionFormats(IPlate plate) {
+
+		IDetectionFormat detectionFormat;
+		//
+		if(plate != null) {
+			List<IDetectionFormat> detectionFormats = new ArrayList<>(plate.getDetectionFormats());
+			Collections.sort(detectionFormats, detectionFormatComparator);
+			comboDetectionFormats.setInput(detectionFormats);
+			detectionFormat = plate.getDetectionFormat();
+		} else {
+			comboDetectionFormats.setInput(null);
+			detectionFormat = null;
+		}
+		//
+		if(detectionFormat != null) {
+			comboDetectionFormats.getCombo().setText(detectionFormat.getName());
+		}
+		updateChannelSpecification(detectionFormat);
+	}
+
+	private void updateChannelSpecification(IDetectionFormat detectionFormat) {
+
+		IChannelSpecification channelSpecification = null;
+		//
+		if(detectionFormat != null) {
+			List<IChannelSpecification> channelSpecifications = detectionFormat.getChannelSpecifications();
+			comboChannelSpecifications.setInput(channelSpecifications);
+			if(channelSpecifications.size() > 0) {
+				comboChannelSpecifications.getCombo().select(0);
+				channelSpecification = channelSpecifications.get(0);
+			}
+		}
+		//
+		channelSpecificationListUI.setInput(channelSpecification);
 	}
 }

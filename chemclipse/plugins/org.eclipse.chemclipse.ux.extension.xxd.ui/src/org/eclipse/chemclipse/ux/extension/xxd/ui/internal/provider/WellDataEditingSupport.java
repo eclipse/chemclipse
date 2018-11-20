@@ -28,7 +28,7 @@ public class WellDataEditingSupport extends EditingSupport {
 	public WellDataEditingSupport(WellDataListUI tableViewer, String column) {
 		super(tableViewer);
 		this.column = column;
-		if(column.equals(HeaderDataLabelProvider.VALUE)) {
+		if(column.equals(WellDataLabelProvider.VALUE)) {
 			this.cellEditor = new TextCellEditor(tableViewer.getTable());
 		}
 		this.tableViewer = tableViewer;
@@ -43,7 +43,7 @@ public class WellDataEditingSupport extends EditingSupport {
 	@Override
 	protected boolean canEdit(Object element) {
 
-		if(column == HeaderDataLabelProvider.VALUE) {
+		if(column == WellDataLabelProvider.VALUE) {
 			return tableViewer.isEditEnabled();
 		} else {
 			return false;
@@ -57,7 +57,7 @@ public class WellDataEditingSupport extends EditingSupport {
 		if(element instanceof Map.Entry) {
 			Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
 			switch(column) {
-				case HeaderDataLabelProvider.VALUE:
+				case WellDataLabelProvider.VALUE:
 					return entry.getValue();
 			}
 		}

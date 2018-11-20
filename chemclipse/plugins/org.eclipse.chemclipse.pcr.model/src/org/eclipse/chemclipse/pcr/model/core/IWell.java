@@ -33,4 +33,6 @@ public interface IWell extends Comparable<IWell>, IDataModel {
 	boolean isEmptyMeasurement();
 
 	boolean isPositiveMeasurement();
+
+	void applyDetectionFormat(IDetectionFormat detectionFormat);
 }

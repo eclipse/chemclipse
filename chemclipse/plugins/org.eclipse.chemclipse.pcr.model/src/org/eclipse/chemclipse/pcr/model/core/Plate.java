@@ -21,18 +21,21 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 
 	private static final long serialVersionUID = -7209280707411376156L;
 	//
-	private IDetectionFormat selectedDetectionFormat = null;
+	private IDetectionFormat detectionFormat = null;
 	private Set<IDetectionFormat> detectionFormats = new HashSet<>();
 	private TreeSet<IWell> wells = new TreeSet<IWell>();
 
-	public IDetectionFormat getSelectedDetectionFormat() {
+	public IDetectionFormat getDetectionFormat() {
 
-		return selectedDetectionFormat;
+		return detectionFormat;
 	}
 
-	public void setSelectedDetectionFormat(IDetectionFormat detectionFormat) {
+	public void setDetectionFormat(IDetectionFormat detectionFormat) {
 
-		this.selectedDetectionFormat = detectionFormat;
+		this.detectionFormat = detectionFormat;
+		for(IWell well : wells) {
+			well.applyDetectionFormat(detectionFormat);
+		}
 	}
 
 	@Override

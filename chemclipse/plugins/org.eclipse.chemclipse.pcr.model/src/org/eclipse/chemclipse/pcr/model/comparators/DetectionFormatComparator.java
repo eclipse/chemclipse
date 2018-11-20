@@ -9,11 +9,17 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.pcr.model.core;
+package org.eclipse.chemclipse.pcr.model.comparators;
 
-public interface IChannelSpecification extends IDataModel {
+import java.util.Comparator;
 
-	String NAME = "name";
+import org.eclipse.chemclipse.pcr.model.core.IDetectionFormat;
 
-	String getName();
+public class DetectionFormatComparator implements Comparator<IDetectionFormat> {
+
+	@Override
+	public int compare(IDetectionFormat detectionFormat1, IDetectionFormat detectionFormat2) {
+
+		return detectionFormat1.getName().compareTo(detectionFormat2.getName());
+	}
 }

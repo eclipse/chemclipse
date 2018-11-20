@@ -16,4 +16,10 @@ public class ChannelSpecification extends AbstractDataModel implements IChannelS
 	public ChannelSpecification() {
 		addProtectedKey(NAME);
 	}
+
+	@Override
+	public String getName() {
+
+		return getData(NAME, "");
+	}
 }

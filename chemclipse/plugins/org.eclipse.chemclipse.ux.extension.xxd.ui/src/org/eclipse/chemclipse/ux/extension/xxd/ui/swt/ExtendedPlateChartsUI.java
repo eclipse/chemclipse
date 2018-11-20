@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -55,8 +54,6 @@ public class ExtendedPlateChartsUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPlateChartsUI.class);
 	//
-	private static final String CHANNEL = "Channel ";
-	//
 	private Label labelInfo;
 	private Composite toolbarInfo;
 	private Combo comboChannels;
@@ -73,15 +70,19 @@ public class ExtendedPlateChartsUI {
 
 		this.plate = plate;
 		if(plate != null) {
-			if(plateRef != plate) {
-				this.plateRef = plate;
-				IWell well = plate.getWells().first();
+			//
+			IWell well = plate.getWells().first();
+			if(well != null) {
 				comboChannels.setItems(getComboItems(well));
 				if(plate.getWells().size() > 0) {
 					comboChannels.select(0);
 				}
-				updateChart();
+			}
+			//
+			if(plateRef != plate) {
+				this.plateRef = plate;
 				labelInfo.setText("Plate: " + plate.getName());
+				updateChart();
 			}
 		} else {
 			comboChannels.setItems(getComboItems(null));
@@ -93,12 +94,9 @@ public class ExtendedPlateChartsUI {
 	private String[] getComboItems(IWell well) {
 
 		if(well != null) {
-			List<Integer> channels = new ArrayList<>(well.getChannels().keySet());
-			Collections.sort(channels);
-			//
 			List<String> items = new ArrayList<>();
-			for(int channel : channels) {
-				items.add(CHANNEL + channel);
+			for(IChannel channel : well.getChannels().values()) {
+				items.add(channel.getDetectionName());
 			}
 			return items.toArray(new String[items.size()]);
 		} else {
@@ -266,8 +264,7 @@ public class ExtendedPlateChartsUI {
 			//
 			for(IWell well : plate.getWells()) {
 				try {
-					String channelSelection = comboChannels.getText().trim();
-					int channelNumber = Integer.parseInt(channelSelection.replaceAll(CHANNEL, ""));
+					int channelNumber = comboChannels.getSelectionIndex();
 					IChannel channel = well.getChannels().get(channelNumber);
 					ILineSeriesData lineSeriesData = extractChannel(channel, Integer.toString(well.getPosition().getId() + 1), colorScheme.getColor());
 					if(lineSeriesData != null) {

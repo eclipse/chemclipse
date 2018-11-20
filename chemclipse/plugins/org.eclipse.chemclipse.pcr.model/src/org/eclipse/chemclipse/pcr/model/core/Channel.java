@@ -25,6 +25,7 @@ public class Channel implements IChannel {
 	private boolean valid = false;
 	private List<Double> points = new ArrayList<>();
 	private IPoint crossingPoint = null;
+	private String detectionName = "";
 
 	@Override
 	public int getId() {
@@ -108,5 +109,17 @@ public class Channel implements IChannel {
 	public void setCrossingPoint(IPoint crossingPoint) {
 
 		this.crossingPoint = crossingPoint;
+	}
+
+	@Override
+	public String getDetectionName() {
+
+		return detectionName;
+	}
+
+	@Override
+	public void setDetectionName(String detectionName) {
+
+		this.detectionName = detectionName;
 	}
 }

@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -57,7 +56,6 @@ public class ExtendedWellChartUI {
 	private static final Logger logger = Logger.getLogger(ExtendedWellChartUI.class);
 	//
 	private static final String ALL_CHANNELS = "Show all Channels";
-	private static final String CHANNEL = "Channel ";
 	//
 	private Label labelInfo;
 	private Composite toolbarInfo;
@@ -95,13 +93,10 @@ public class ExtendedWellChartUI {
 	private String[] getComboItems(IWell well) {
 
 		if(well != null) {
-			List<Integer> channels = new ArrayList<>(well.getChannels().keySet());
-			Collections.sort(channels);
-			//
 			List<String> items = new ArrayList<>();
 			items.add(ALL_CHANNELS);
-			for(int channel : channels) {
-				items.add(CHANNEL + channel);
+			for(IChannel channel : well.getChannels().values()) {
+				items.add(channel.getDetectionName());
 			}
 			return items.toArray(new String[items.size()]);
 		} else {
@@ -268,15 +263,14 @@ public class ExtendedWellChartUI {
 			 * Extract the channels.
 			 */
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			String channelSelection = comboChannels.getText().trim();
-			if(channelSelection.equals(ALL_CHANNELS)) {
+			int index = comboChannels.getSelectionIndex();
+			if(index == 0) {
 				for(IChannel channel : well.getChannels().values()) {
 					addChannelData(channel, colorScheme, lineSeriesDataList);
 				}
 			} else {
 				try {
-					int channelNumber = Integer.parseInt(channelSelection.replaceAll(CHANNEL, ""));
-					IChannel channel = well.getChannels().get(channelNumber);
+					IChannel channel = well.getChannels().get(index - 1);
 					addChannelData(channel, colorScheme, lineSeriesDataList);
 				} catch(NumberFormatException e) {
 					logger.warn(e);
