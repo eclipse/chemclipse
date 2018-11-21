@@ -37,7 +37,7 @@ public interface ISignalExtractor {
 
 	double[] extractIntesityFIDReal();
 
-	double[] extractTimeFID();
+	int[] extractTimeFID();
 
 	void createScansFID(Complex[] complexFID, int[] time);
 
