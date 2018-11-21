@@ -62,6 +62,12 @@ public class Well extends AbstractDataModel implements IWell {
 	}
 
 	@Override
+	public String getSampleSubset() {
+
+		return getData(SAMPLE_SUBSET, "").trim();
+	}
+
+	@Override
 	public String getTargetName() {
 
 		return getData(TARGET_NAME, "").trim();

@@ -24,9 +24,11 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartPCR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCodes;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
@@ -35,6 +37,7 @@ import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -63,6 +66,7 @@ public class ExtendedWellChartUI {
 	private ChartPCR chartPCR;
 	//
 	private IWell well = null;
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	@Inject
 	public ExtendedWellChartUI(Composite parent) {
@@ -255,23 +259,29 @@ public class ExtendedWellChartUI {
 
 	private void updateChart() {
 
+		/*
+		 * Clear the chart and reset.
+		 */
 		chartPCR.deleteSeries();
-		IColorScheme colorScheme = Colors.getColorScheme(Colors.COLOR_SCHEME_PRINT);
 		//
 		if(well != null) {
 			/*
 			 * Extract the channels.
 			 */
+			ColorCodes colorCodes = new ColorCodes();
+			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_COLOR_CODES));
+			Color color = getWellColor(well, colorCodes);
+			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			int index = comboChannels.getSelectionIndex();
 			if(index == 0) {
 				for(IChannel channel : well.getChannels().values()) {
-					addChannelData(channel, colorScheme, lineSeriesDataList);
+					addChannelData(channel, lineSeriesDataList, color);
 				}
 			} else {
 				try {
 					IChannel channel = well.getChannels().get(index - 1);
-					addChannelData(channel, colorScheme, lineSeriesDataList);
+					addChannelData(channel, lineSeriesDataList, color);
 				} catch(NumberFormatException e) {
 					logger.warn(e);
 				}
@@ -281,13 +291,24 @@ public class ExtendedWellChartUI {
 		}
 	}
 
-	private void addChannelData(IChannel channel, IColorScheme colorScheme, List<ILineSeriesData> lineSeriesDataList) {
+	private Color getWellColor(IWell well, ColorCodes colorCodes) {
 
-		Color color = colorScheme.getColor();
+		String sampleSubset = well.getSampleSubset();
+		String targetName = well.getTargetName();
+		if(colorCodes.containsKey(sampleSubset)) {
+			return colorCodes.get(sampleSubset).getColor();
+		} else if(colorCodes.containsKey(targetName)) {
+			return colorCodes.get(targetName).getColor();
+		} else {
+			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_PCR_DEFAULT_COLOR));
+		}
+	}
+
+	private void addChannelData(IChannel channel, List<ILineSeriesData> lineSeriesDataList, Color color) {
+
 		ILineSeriesData channelCurve = getChannelCurve(channel, color);
 		if(channelCurve != null) {
 			lineSeriesDataList.add(channelCurve);
-			colorScheme.incrementColor();
 		}
 		//
 		ILineSeriesData crossingPoint = getCrossingPoint(channel, color);

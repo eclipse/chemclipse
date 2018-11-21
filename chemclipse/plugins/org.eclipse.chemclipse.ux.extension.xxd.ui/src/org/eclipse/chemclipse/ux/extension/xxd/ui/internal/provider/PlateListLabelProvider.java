@@ -65,14 +65,27 @@ public class PlateListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = "Position " + (well.getPosition().getId() + 1);
 			} else {
 				StringBuilder builder = new StringBuilder();
+				/*
+				 * Sample ID
+				 */
 				builder.append(well.getSampleId());
-				if(!"".equals(well.getTargetName())) {
-					builder.append("\n");
-					builder.append(well.getTargetName());
-				}
+				/*
+				 * Sample Subset / Target Name
+				 */
+				String sampleSubset = well.getSampleSubset();
+				String targetName = well.getTargetName();
+				builder.append("\n");
+				builder.append(sampleSubset.equals("") ? "--" : sampleSubset);
+				builder.append(" | ");
+				builder.append(targetName.equals("") ? "--" : targetName);
+				/*
+				 * Crossing Point (System)
+				 */
 				builder.append("\n");
 				builder.append(decimalFormat.format(well.getCrossingPoint()));
-				//
+				/*
+				 * Crossing Points (Calculated)
+				 */
 				builder.append(" [");
 				Iterator<IChannel> iterator = well.getChannels().values().iterator();
 				while(iterator.hasNext()) {
@@ -89,6 +102,7 @@ public class PlateListLabelProvider extends AbstractChemClipseLabelProvider {
 					}
 				}
 				builder.append("]");
+				//
 				text = builder.toString();
 			}
 		} else {

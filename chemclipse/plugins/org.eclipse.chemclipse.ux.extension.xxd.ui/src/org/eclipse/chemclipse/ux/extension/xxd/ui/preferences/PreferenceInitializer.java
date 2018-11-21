@@ -21,8 +21,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		//
-		store.setDefault(PreferenceConstants.P_COLOR_CODES, PreferenceConstants.DEF_COLOR_CODES);
 		/*
 		 * General
 		 */
@@ -262,5 +260,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		/*
 		 * PCR
 		 */
+		store.setDefault(PreferenceConstants.P_PCR_DEFAULT_COLOR, PreferenceConstants.DEF_PCR_DEFAULT_COLOR);
+		store.setDefault(PreferenceConstants.P_PCR_COLOR_CODES, PreferenceConstants.DEF_PCR_COLOR_CODES);
 	}
 }

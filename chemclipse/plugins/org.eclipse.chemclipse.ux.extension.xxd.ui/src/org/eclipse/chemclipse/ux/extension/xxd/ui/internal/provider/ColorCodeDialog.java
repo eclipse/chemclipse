@@ -9,10 +9,12 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCode;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCodes;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
@@ -37,7 +39,7 @@ public class ColorCodeDialog extends TitleAreaDialog {
 	private static final Logger logger = Logger.getLogger(ColorCodeDialog.class);
 	//
 	private Text textName;
-	private Label colorLabel;
+	private Label colorWidget;
 	//
 	private ColorCode colorCode;
 
@@ -88,9 +90,13 @@ public class ColorCodeDialog extends TitleAreaDialog {
 		//
 		Composite compositeMain = new Composite(composite, SWT.FILL);
 		compositeMain.setLayout(new GridLayout(3, false));
+		GridData gridData = new GridData(GridData.GRAB_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.widthHint = 550;
+		composite.setLayoutData(gridData);
 		//
 		createTextElement(compositeMain);
-		createColorLabelElement(compositeMain);
+		createColorDisplayElement(compositeMain);
 		createColorButtonElement(compositeMain);
 		//
 		return composite;
@@ -101,7 +107,10 @@ public class ColorCodeDialog extends TitleAreaDialog {
 		textName = new Text(parent, SWT.BORDER);
 		textName.setText((colorCode != null) ? colorCode.getName() : "");
 		textName.setToolTipText("This is the field for the color code name.");
-		textName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.widthHint = 300;
+		textName.setLayoutData(gridData);
 		textName.addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -112,13 +121,16 @@ public class ColorCodeDialog extends TitleAreaDialog {
 		});
 	}
 
-	private void createColorLabelElement(Composite parent) {
+	private void createColorDisplayElement(Composite parent) {
 
-		colorLabel = new Label(parent, SWT.NONE);
-		colorLabel.setText("");
-		colorLabel.setToolTipText("This color is used.");
-		colorLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		colorLabel.setBackground((colorCode != null) ? colorCode.getColor() : Colors.BLACK);
+		colorWidget = new Label(parent, SWT.BORDER);
+		colorWidget.setText("");
+		colorWidget.setToolTipText("This color is used.");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.widthHint = 150;
+		colorWidget.setLayoutData(gridData);
+		colorWidget.setBackground((colorCode != null) ? colorCode.getColor() : Colors.BLACK);
 	}
 
 	private void createColorButtonElement(Composite parent) {
@@ -131,12 +143,12 @@ public class ColorCodeDialog extends TitleAreaDialog {
 			public void widgetSelected(SelectionEvent event) {
 
 				ColorDialog colorDialog = new ColorDialog(button.getShell());
-				colorDialog.setRGB(colorLabel.getBackground().getRGB());
+				colorDialog.setRGB(colorWidget.getBackground().getRGB());
 				colorDialog.setText("Select a color.");
 				RGB rgb = colorDialog.open();
 				if(rgb != null) {
 					Color color = Colors.getColor(rgb);
-					colorLabel.setBackground(color);
+					colorWidget.setBackground(color);
 				}
 			}
 		});
@@ -153,10 +165,18 @@ public class ColorCodeDialog extends TitleAreaDialog {
 		setErrorMessage(null);
 		getButton(OK).setEnabled(true);
 		//
-		String target = getName();
-		if(target.equals("")) {
+		String name = getName();
+		if(name.equals("")) {
 			setErrorMessage("A name must be specified.");
 			getButton(OK).setEnabled(false);
+		} else {
+			if(name.contains(ColorCodes.VALUE_DELIMITER)) {
+				setErrorMessage("The name must not contain: '" + ColorCodes.VALUE_DELIMITER + "'");
+				getButton(OK).setEnabled(false);
+			} else if(name.contains(ColorCodes.ENTRY_DELIMITER)) {
+				setErrorMessage("The name must not contain: '" + ColorCodes.ENTRY_DELIMITER + "'");
+				getButton(OK).setEnabled(false);
+			}
 		}
 	}
 
@@ -167,6 +187,6 @@ public class ColorCodeDialog extends TitleAreaDialog {
 
 	private Color getColor() {
 
-		return colorLabel.getBackground();
+		return colorWidget.getBackground();
 	}
 }

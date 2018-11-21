@@ -70,9 +70,6 @@ public class PreferenceConstants {
 			{".", LineStyle.DOT.toString()}, //
 			{"Solid", LineStyle.SOLID.toString()}//
 	};
-	//
-	public static final String P_COLOR_CODES = "colorCodes";
-	public static final String DEF_COLOR_CODES = "";
 	/*
 	 * General / Task Quick Access
 	 */
@@ -130,6 +127,14 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_CHROMATOGRAM_HEATMAP = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES = "stackPositionPeakQuantitationReferences";
 	public static final String DEF_STACK_POSITION_PEAK_QUANTITATION_REFERENCES = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String P_STACK_POSITION_PLATE_CHARTS = "stackPositionPlateCharts";
+	public static final String DEF_STACK_POSITION_PLATE_CHARTS = PartSupport.PARTSTACK_BOTTOM_LEFT;
+	public static final String P_STACK_POSITION_WELL_DATA = "stackPositionWellData";
+	public static final String DEF_STACK_POSITION_WELL_DATA = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String P_STACK_POSITION_WELL_CHART = "stackPositionWellChart";
+	public static final String DEF_STACK_POSITION_WELL_CHART = PartSupport.PARTSTACK_BOTTOM_CENTER;
+	public static final String P_STACK_POSITION_PLATE_DATA = "stackPositionPlateData";
+	public static final String DEF_STACK_POSITION_PLATE_DATA = PartSupport.PARTSTACK_RIGHT_TOP;
 	/*
 	 * Overlay
 	 */
@@ -525,12 +530,8 @@ public class PreferenceConstants {
 	/*
 	 * PCR
 	 */
-	public static final String P_STACK_POSITION_PLATE_CHARTS = "stackPositionPlateCharts";
-	public static final String DEF_STACK_POSITION_PLATE_CHARTS = PartSupport.PARTSTACK_BOTTOM_LEFT;
-	public static final String P_STACK_POSITION_WELL_DATA = "stackPositionWellData";
-	public static final String DEF_STACK_POSITION_WELL_DATA = PartSupport.PARTSTACK_BOTTOM_RIGHT;
-	public static final String P_STACK_POSITION_WELL_CHART = "stackPositionWellChart";
-	public static final String DEF_STACK_POSITION_WELL_CHART = PartSupport.PARTSTACK_BOTTOM_CENTER;
-	public static final String P_STACK_POSITION_PLATE_DATA = "stackPositionPlateData";
-	public static final String DEF_STACK_POSITION_PLATE_DATA = PartSupport.PARTSTACK_RIGHT_TOP;
+	public static final String P_PCR_DEFAULT_COLOR = "pcrDefaultColor";
+	public static final String DEF_PCR_DEFAULT_COLOR = "192,192,192";
+	public static final String P_PCR_COLOR_CODES = "pcrColorCodes";
+	public static final String DEF_PCR_COLOR_CODES = "";
 }

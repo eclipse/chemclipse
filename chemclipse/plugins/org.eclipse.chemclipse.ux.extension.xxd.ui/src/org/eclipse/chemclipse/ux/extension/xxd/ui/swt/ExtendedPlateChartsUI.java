@@ -24,9 +24,11 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartPCR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCodes;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
@@ -35,6 +37,7 @@ import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -58,8 +61,9 @@ public class ExtendedPlateChartsUI {
 	private Composite toolbarInfo;
 	private Combo comboChannels;
 	private ChartPCR chartPCR;
-	private IPlate plateRef = null; // Reference
 	private IPlate plate = null;
+	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	@Inject
 	public ExtendedPlateChartsUI(Composite parent) {
@@ -70,7 +74,6 @@ public class ExtendedPlateChartsUI {
 
 		this.plate = plate;
 		if(plate != null) {
-			//
 			IWell well = plate.getWells().first();
 			if(well != null) {
 				comboChannels.setItems(getComboItems(well));
@@ -78,12 +81,8 @@ public class ExtendedPlateChartsUI {
 					comboChannels.select(0);
 				}
 			}
-			//
-			if(plateRef != plate) {
-				this.plateRef = plate;
-				labelInfo.setText("Plate: " + plate.getName());
-				updateChart();
-			}
+			labelInfo.setText("Plate: " + plate.getName());
+			updateChart();
 		} else {
 			comboChannels.setItems(getComboItems(null));
 			chartPCR.deleteSeries();
@@ -257,19 +256,24 @@ public class ExtendedPlateChartsUI {
 
 	private void updateChart() {
 
+		/*
+		 * Clear the chart and reset.
+		 */
+		chartPCR.deleteSeries();
+		//
 		if(plate != null) {
-			chartPCR.deleteSeries();
-			IColorScheme colorScheme = Colors.getColorScheme(Colors.COLOR_SCHEME_PRINT);
+			ColorCodes colorCodes = new ColorCodes();
+			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_COLOR_CODES));
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			//
 			for(IWell well : plate.getWells()) {
 				try {
 					int channelNumber = comboChannels.getSelectionIndex();
 					IChannel channel = well.getChannels().get(channelNumber);
-					ILineSeriesData lineSeriesData = extractChannel(channel, Integer.toString(well.getPosition().getId() + 1), colorScheme.getColor());
+					Color color = getWellColor(well, colorCodes);
+					ILineSeriesData lineSeriesData = extractChannel(channel, Integer.toString(well.getPosition().getId() + 1), color);
 					if(lineSeriesData != null) {
 						lineSeriesDataList.add(lineSeriesData);
-						colorScheme.incrementColor();
 					}
 				} catch(NumberFormatException e) {
 					logger.warn(e);
@@ -277,6 +281,19 @@ public class ExtendedPlateChartsUI {
 			}
 			//
 			chartPCR.addSeriesData(lineSeriesDataList);
+		}
+	}
+
+	private Color getWellColor(IWell well, ColorCodes colorCodes) {
+
+		String sampleSubset = well.getSampleSubset();
+		String targetName = well.getTargetName();
+		if(colorCodes.containsKey(sampleSubset)) {
+			return colorCodes.get(sampleSubset).getColor();
+		} else if(colorCodes.containsKey(targetName)) {
+			return colorCodes.get(targetName).getColor();
+		} else {
+			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_PCR_DEFAULT_COLOR));
 		}
 	}
 
@@ -289,6 +306,7 @@ public class ExtendedPlateChartsUI {
 			for(int index = 0; index < pointList.size(); index++) {
 				points[index] = pointList.get(index);
 			}
+			//
 			ISeriesData seriesData = new SeriesData(points, "Position: " + position + " | Channel: " + channel.getId());
 			lineSeriesData = new LineSeriesData(seriesData);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();

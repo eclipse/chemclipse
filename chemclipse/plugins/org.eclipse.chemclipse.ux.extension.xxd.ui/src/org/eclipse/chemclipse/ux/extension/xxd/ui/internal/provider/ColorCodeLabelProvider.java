@@ -14,10 +14,24 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.ColorCode;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCode;
 import org.eclipse.swt.graphics.Image;
 
 public class ColorCodeLabelProvider extends AbstractChemClipseLabelProvider {
+
+	public static final String NAME = "Name";
+	public static final String COLOR = "Color";
+	//
+	public static final int INDEX_COLOR = 1;
+	//
+	public static final String[] TITLES = { //
+			NAME, //
+			COLOR//
+	};
+	public static final int[] BOUNDS = { //
+			150, //
+			100 //
+	};
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {

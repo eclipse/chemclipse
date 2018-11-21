@@ -26,6 +26,8 @@ public interface IWell extends Comparable<IWell>, IDataModel {
 
 	String getSampleId();
 
+	String getSampleSubset();
+
 	String getTargetName();
 
 	double getCrossingPoint();

@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.model;
 
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.graphics.Color;

@@ -9,25 +9,22 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.model;
 
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 
 public class ColorCodes extends HashMap<String, ColorCode> {
 
-	private static final long serialVersionUID = 5166193750159157107L;
-	private static final Logger logger = Logger.getLogger(ColorCodes.class);
 	public static final String ENTRY_DELIMITER = ";";
 	public static final String VALUE_DELIMITER = ":";
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	//
+	private static final long serialVersionUID = 5166193750159157107L;
+	private static final Logger logger = Logger.getLogger(ColorCodes.class);
 
 	public void add(ColorCode colorCode) {
 
@@ -36,9 +33,32 @@ public class ColorCodes extends HashMap<String, ColorCode> {
 		}
 	}
 
-	public void load() {
+	public void load(String codes) {
 
-		String codes = preferenceStore.getString(PreferenceConstants.DEF_COLOR_CODES);
+		loadSettings(codes);
+	}
+
+	public void loadDefault(String codes) {
+
+		loadSettings(codes);
+	}
+
+	public String save() {
+
+		StringBuilder builder = new StringBuilder();
+		if(size() >= 1) {
+			for(ColorCode colorCode : values()) {
+				builder.append(colorCode.getName());
+				builder.append(VALUE_DELIMITER);
+				builder.append(Colors.getColor(colorCode.getColor()));
+				builder.append(ENTRY_DELIMITER);
+			}
+		}
+		return builder.toString().trim();
+	}
+
+	private void loadSettings(String codes) {
+
 		if(!"".equals(codes)) {
 			String[] items = parseString(codes);
 			if(items.length > 0) {
@@ -59,34 +79,22 @@ public class ColorCodes extends HashMap<String, ColorCode> {
 		}
 	}
 
-	public boolean save() {
+	private static String[] parseString(String string) {
 
-		StringBuilder builder = new StringBuilder();
-		if(size() >= 1) {
-			for(ColorCode colorCode : values()) {
-				builder.append(colorCode.getName());
-				builder.append(VALUE_DELIMITER);
-				builder.append(Colors.getColor(colorCode.getColor()));
-				builder.append(ENTRY_DELIMITER);
-			}
-		}
-		preferenceStore.putValue(PreferenceConstants.DEF_COLOR_CODES, builder.toString());
-		return true;
-	}
-
-	private static String[] parseString(String stringList) {
-
-		String[] decodedArray;
-		if(stringList.contains(ENTRY_DELIMITER)) {
-			StringTokenizer stringTokenizer = new StringTokenizer(stringList, ENTRY_DELIMITER);
+		String[] decodedArray = new String[0];
+		//
+		if(string.contains(ENTRY_DELIMITER)) {
+			StringTokenizer stringTokenizer = new StringTokenizer(string, ENTRY_DELIMITER);
 			int arraySize = stringTokenizer.countTokens();
 			decodedArray = new String[arraySize];
 			for(int i = 0; i < arraySize; i++) {
 				decodedArray[i] = stringTokenizer.nextToken(ENTRY_DELIMITER);
 			}
 		} else {
-			decodedArray = new String[1];
-			decodedArray[0] = stringList;
+			if(string.contains(VALUE_DELIMITER)) {
+				decodedArray = new String[1];
+				decodedArray[0] = string;
+			}
 		}
 		return decodedArray;
 	}
