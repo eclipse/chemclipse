@@ -108,8 +108,10 @@ public class ProcessTypeSupport {
 			exitloop:
 			for(DataType dataType : dataTypes) {
 				if(processTypeSupplier.getSupportedDataTypes().contains(dataType)) {
-					supplier.add(processTypeSupplier);
-					break exitloop;
+					if(!supplier.contains(processTypeSupplier)) {
+						supplier.add(processTypeSupplier);
+						break exitloop;
+					}
 				}
 			}
 		}
