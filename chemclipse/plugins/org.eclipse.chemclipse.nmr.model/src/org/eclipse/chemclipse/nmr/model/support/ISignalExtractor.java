@@ -37,9 +37,9 @@ public interface ISignalExtractor {
 
 	double[] extractIntesityFIDReal();
 
-	int[] extractTimeFID();
+	long[] extractTimeFID();
 
-	void createScansFID(Complex[] complexFID, int[] time);
+	void createScansFID(Complex[] complexFID, long[] time);
 
 	void createScans(Complex[] fourierTransformedData, double[] chemicalShift);
 

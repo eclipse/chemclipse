@@ -61,12 +61,12 @@ public interface ISignalFID extends ISignal, Comparable<ISignalFID> {
 	 *
 	 * @return time in milliseconds
 	 */
-	int getTime();
+	long getTime();
 
 	/**
 	 * set time in milliseconds
 	 *
 	 * @param millisecond
 	 */
-	void setTime(int milliseconds);
+	void setTime(long nanoseconds);
 }
