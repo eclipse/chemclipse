@@ -17,11 +17,11 @@ import org.apache.commons.math3.complex.Complex;
 
 public class SignalFID implements ISignalFID {
 
-	private int time;
+	private long time;
 	private Complex intesityFID;
 	private Complex intensity;
 
-	public SignalFID(int time, Complex intesityFID) {
+	public SignalFID(long time, Complex intesityFID) {
 
 		super();
 		this.time = time;
@@ -72,22 +72,22 @@ public class SignalFID implements ISignalFID {
 	}
 
 	@Override
-	public int getTime() {
+	public long getTime() {
 
 		return time;
 	}
 
 	@Override
-	public void setTime(int milliseconds) {
+	public void setTime(long nanoseconds) {
 
-		this.time = milliseconds;
+		this.time = nanoseconds;
 	}
 
 	@Override
 	public int compareTo(ISignalFID o) {
 
 		if(o != null) {
-			return Integer.compare(time, o.getTime());
+			return Long.compare(time, o.getTime());
 		} else {
 			return 0;
 		}

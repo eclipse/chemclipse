@@ -95,9 +95,9 @@ public class SignalExtractor implements ISignalExtractor {
 	}
 
 	@Override
-	public double[] extractTimeFID() {
+	public long[] extractTimeFID() {
 
-		return scanNMR.getSignalsFID().stream().mapToDouble(ISignalFID::getTime).toArray();
+		return scanNMR.getSignalsFID().stream().mapToLong(ISignalFID::getTime).toArray();
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class SignalExtractor implements ISignalExtractor {
 	}
 
 	@Override
-	public void createScansFID(Complex[] complexFID, int[] time) {
+	public void createScansFID(Complex[] complexFID, long[] time) {
 
 		scanNMR.removeAllSignalsFID();
 		for(int i = 0; i < complexFID.length; i++) {
