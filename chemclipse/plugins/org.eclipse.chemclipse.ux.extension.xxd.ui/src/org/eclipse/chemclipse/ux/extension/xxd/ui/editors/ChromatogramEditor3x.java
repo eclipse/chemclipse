@@ -15,9 +15,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
@@ -34,7 +36,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
-public class ChromatogramEditor3x extends EditorPart {
+public class ChromatogramEditor3x extends EditorPart implements IChromatogramEditor {
 
 	/*
 	 * This is the editor id from the plugin.xml "org.eclipse.ui.editors" extension point.
@@ -172,5 +174,22 @@ public class ChromatogramEditor3x extends EditorPart {
 			}
 		}
 		return isMatch;
+	}
+
+	@Override
+	public boolean saveAs() {
+
+		return false;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public IChromatogramSelection getChromatogramSelection() {
+
+		if(chromatogramEditor != null) {
+			return chromatogramEditor.getChromatogramSelection();
+		} else {
+			return null;
+		}
 	}
 }
