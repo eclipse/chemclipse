@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
+import java.io.Serializable;
+
 import org.apache.commons.math3.complex.Complex;
 import org.eclipse.chemclipse.model.core.ISignal;
 
@@ -22,7 +24,7 @@ import org.eclipse.chemclipse.model.core.ISignal;
  * @author Jan Holy
  *
  */
-public interface ISignalFID extends ISignal, Comparable<ISignalFID> {
+public interface ISignalFID extends Serializable, ISignal, Comparable<ISignalFID> {
 
 	/**
 	 * Returns the intensity of the signal.

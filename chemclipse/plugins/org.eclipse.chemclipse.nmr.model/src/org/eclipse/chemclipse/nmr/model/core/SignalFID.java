@@ -17,13 +17,22 @@ import org.apache.commons.math3.complex.Complex;
 
 public class SignalFID implements ISignalFID {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2563457000126174921L;
 	private long time;
 	private Complex intesityFID;
 	private Complex intensity;
 
-	public SignalFID(long time, Complex intesityFID) {
+	public SignalFID() {
 
 		super();
+	}
+
+	public SignalFID(long time, Complex intesityFID) {
+
+		this();
 		this.time = time;
 		this.intesityFID = intesityFID;
 		this.intensity = intesityFID;
