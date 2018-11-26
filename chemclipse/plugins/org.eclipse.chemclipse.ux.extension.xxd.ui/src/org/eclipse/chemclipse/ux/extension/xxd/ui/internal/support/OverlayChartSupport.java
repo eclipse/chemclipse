@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class OverlayChartSupport {
