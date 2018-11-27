@@ -81,7 +81,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
 @SuppressWarnings("rawtypes")
-public class ExtendedPeakScanListUI {
+public class ExtendedPeakScanListUI implements ToolbarUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakScanListUI.class);
 	//
@@ -102,6 +102,8 @@ public class ExtendedPeakScanListUI {
 	//
 	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 	private Map<String, Object> map = new HashMap<String, Object>();
+	private Composite toolbarMain;
+	private Composite toolbarLabel;
 
 	@Inject
 	public ExtendedPeakScanListUI(Composite parent) {
@@ -153,32 +155,32 @@ public class ExtendedPeakScanListUI {
 
 	private void createToolbarMain(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
+		toolbarMain = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(6, false));
+		toolbarMain.setLayoutData(gridData);
+		toolbarMain.setLayout(new GridLayout(6, false));
 		//
-		createButtonToggleToolbarInfo(composite);
-		createButtonToggleToolbarSearch(composite);
-		createButtonToggleEditModus(composite);
-		createResetButton(composite);
-		buttonSave = createSaveButton(composite);
-		createSettingsButton(composite);
+		createButtonToggleToolbarInfo(toolbarMain);
+		createButtonToggleToolbarSearch(toolbarMain);
+		createButtonToggleEditModus(toolbarMain);
+		createResetButton(toolbarMain);
+		buttonSave = createSaveButton(toolbarMain);
+		createSettingsButton(toolbarMain);
 	}
 
 	private Composite createToolbarInfoTop(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
+		toolbarLabel = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		toolbarLabel.setLayoutData(gridData);
+		toolbarLabel.setLayout(new GridLayout(1, false));
 		//
-		labelChromatogramName = new Label(composite, SWT.NONE);
+		labelChromatogramName = new Label(toolbarLabel, SWT.NONE);
 		labelChromatogramName.setText("");
 		labelChromatogramName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		return composite;
+		return toolbarLabel;
 	}
 
 	private Composite createToolbarSearch(Composite parent) {
@@ -577,6 +579,12 @@ public class ExtendedPeakScanListUI {
 		return button;
 	}
 
+	public void setEditEnabled(boolean editEnabled) {
+
+		peakScanListUI.setEditEnabled(editEnabled);
+		updateLabel();
+	}
+
 	private void createResetButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -760,5 +768,12 @@ public class ExtendedPeakScanListUI {
 			}
 		}
 		return scanList;
+	}
+
+	@Override
+	public void setToolbarVisible(boolean visible) {
+
+		PartSupport.setCompositeVisibility(toolbarMain, visible);
+		PartSupport.setCompositeVisibility(toolbarLabel, visible);
 	}
 }

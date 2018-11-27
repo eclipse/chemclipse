@@ -124,6 +124,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramCha
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramActionUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeatmapUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.RetentionIndexTableViewerUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
@@ -183,7 +184,7 @@ import org.swtchart.IPlotArea;
 import org.swtchart.LineStyle;
 
 @SuppressWarnings("rawtypes")
-public class ExtendedChromatogramUI {
+public class ExtendedChromatogramUI implements ToolbarUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
 	//

@@ -307,3 +307,6 @@ chemclipse/plugins/org.eclipse.chemclipse.rcp.app.test/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.filter.fragment.test/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.filter.ui/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.filter/bin/
+bin/
+target/
+
