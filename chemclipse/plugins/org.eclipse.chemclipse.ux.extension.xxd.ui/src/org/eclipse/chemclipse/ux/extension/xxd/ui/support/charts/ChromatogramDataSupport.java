@@ -13,18 +13,23 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
+import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.selection.MoveDirection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
@@ -33,6 +38,7 @@ import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD
 public class ChromatogramDataSupport {
 
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
+	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 
 	public String getChromatogramType(IChromatogramSelection chromatogramSelection) {
 
@@ -261,6 +267,33 @@ public class ChromatogramDataSupport {
 		}
 		//
 		return scans;
+	}
+
+	public void adjustChromatogramSelection(IPeak peak, IChromatogramSelection chromatogramSelection) {
+
+		if(chromatogramSelection != null) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			List<? extends IPeak> peaks = getPeaks(chromatogram);
+			List<? extends IPeak> peaksSelection = new ArrayList<>(getPeaks(chromatogram, chromatogramSelection));
+			Collections.sort(peaks, peakRetentionTimeComparator);
+			Collections.sort(peaksSelection, peakRetentionTimeComparator);
+			//
+			if(peaks.get(0).equals(peak) || peaks.get(peaks.size() - 1).equals(peak)) {
+				/*
+				 * Don't move if it is the first or last peak of the chromatogram.
+				 */
+			} else {
+				/*
+				 * First peak of the selection: move left
+				 * Last peak of the selection: move right
+				 */
+				if(peaksSelection.get(0).equals(peak)) {
+					ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.LEFT, 5);
+				} else if(peaksSelection.get(peaksSelection.size() - 1).equals(peak)) {
+					ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.RIGHT, 5);
+				}
+			}
+		}
 	}
 
 	private boolean scanIsInSelectedRange(IScan scan, int startRetentionTime, int stopRetentionTime) {

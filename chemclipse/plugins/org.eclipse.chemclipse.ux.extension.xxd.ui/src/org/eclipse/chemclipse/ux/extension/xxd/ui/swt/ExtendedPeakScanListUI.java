@@ -99,8 +99,9 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 	//
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ListSupport listSupport = new ListSupport();
-	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
+	//
 	private Map<String, Object> map = new HashMap<String, Object>();
 	private Composite toolbarMain;
 	private Composite toolbarLabel;
@@ -413,6 +414,10 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				IPeak peak = (IPeak)object;
 				IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
+				boolean moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
+				if(moveRetentionTimeOnPeakSelection) {
+					chromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
+				}
 				//
 				DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
