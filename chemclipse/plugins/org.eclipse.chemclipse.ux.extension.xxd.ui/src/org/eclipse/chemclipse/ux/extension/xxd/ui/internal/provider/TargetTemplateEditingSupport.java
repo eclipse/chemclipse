@@ -52,8 +52,8 @@ public class TargetTemplateEditingSupport extends EditingSupport {
 				// return targetTemplate.getName();
 				case TargetTemplateLabelProvider.CAS:
 					return targetTemplate.getCasNumber();
-				case TargetTemplateLabelProvider.COMMENT:
-					return targetTemplate.getComment();
+				case TargetTemplateLabelProvider.COMMENTS:
+					return targetTemplate.getComments();
 				case TargetTemplateLabelProvider.CONTRIBUTOR:
 					return targetTemplate.getContributor();
 				case TargetTemplateLabelProvider.REFERENCE_ID:
@@ -75,8 +75,8 @@ public class TargetTemplateEditingSupport extends EditingSupport {
 				case TargetTemplateLabelProvider.CAS:
 					targetTemplate.setCasNumber((String)value);
 					break;
-				case TargetTemplateLabelProvider.COMMENT:
-					targetTemplate.setComment((String)value);
+				case TargetTemplateLabelProvider.COMMENTS:
+					targetTemplate.setComments((String)value);
 					break;
 				case TargetTemplateLabelProvider.CONTRIBUTOR:
 					targetTemplate.setContributor((String)value);

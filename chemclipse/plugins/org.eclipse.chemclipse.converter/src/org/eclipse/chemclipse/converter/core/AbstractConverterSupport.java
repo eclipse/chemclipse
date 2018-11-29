@@ -113,11 +113,19 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 		 * stored in a directory, the directory extension will be listed.<br/>
 		 * Otherwise the fileExtension will be listed.
 		 */
-		String extension;
 		ArrayList<String> extensions = new ArrayList<String>();
 		for(ISupplier supplier : suppliers) {
-			extension = (supplier.getDirectoryExtension().equals("")) ? supplier.getFileExtension() : supplier.getDirectoryExtension();
-			extensions.add(extension);
+			if(supplier.getDirectoryExtension().equals("")) {
+				FileExtensionCompiler fileExtensionCompiler = new FileExtensionCompiler(supplier.getFileExtension(), true);
+				extensions.add(fileExtensionCompiler.getCompiledFileExtension());
+			} else {
+				/*
+				 * DirectoryExtension: Directory extension will return "*."
+				 * otherwise directory could not be identified under
+				 * Windows.
+				 */
+				extensions.add("*.");
+			}
 		}
 		return extensions.toArray(new String[extensions.size()]);
 	}

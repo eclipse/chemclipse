@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.swt.ui.components;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -64,7 +63,6 @@ public class SearchSupportUI extends Composite {
 		setLayout(new FillLayout());
 		//
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
 		GridLayout gridLayout = new GridLayout(4, false);
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
@@ -135,7 +133,6 @@ public class SearchSupportUI extends Composite {
 	private void createCheckBoxCaseSensitive(Composite parent) {
 
 		checkbox = new Button(parent, SWT.CHECK);
-		checkbox.setBackground(Colors.WHITE);
 		checkbox.setText("Case sensitive");
 		checkbox.setSelection(PreferenceSupplier.isSearchCaseSensitive());
 		checkbox.addSelectionListener(new SelectionAdapter() {

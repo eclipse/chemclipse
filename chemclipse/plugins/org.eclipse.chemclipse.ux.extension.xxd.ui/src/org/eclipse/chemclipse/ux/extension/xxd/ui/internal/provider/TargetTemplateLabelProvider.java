@@ -21,14 +21,14 @@ public class TargetTemplateLabelProvider extends AbstractChemClipseLabelProvider
 
 	public static final String NAME = "Name";
 	public static final String CAS = "CAS";
-	public static final String COMMENT = "Comment";
+	public static final String COMMENTS = "Comments";
 	public static final String CONTRIBUTOR = "Contributor";
 	public static final String REFERENCE_ID = "Reference ID";
 	//
 	public static final String[] TITLES = { //
 			NAME, //
 			CAS, //
-			COMMENT, //
+			COMMENTS, //
 			CONTRIBUTOR, //
 			REFERENCE_ID//
 	};
@@ -63,7 +63,7 @@ public class TargetTemplateLabelProvider extends AbstractChemClipseLabelProvider
 					text = targetTemplate.getCasNumber();
 					break;
 				case 2:
-					text = targetTemplate.getComment();
+					text = targetTemplate.getComments();
 					break;
 				case 3:
 					text = targetTemplate.getContributor();

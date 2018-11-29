@@ -40,7 +40,7 @@ public class TargetTemplateFilter extends ViewerFilter {
 			ITargetTemplate targetTemplate = (ITargetTemplate)element;
 			String name = targetTemplate.getName();
 			String casNumber = targetTemplate.getCasNumber();
-			String comment = targetTemplate.getComment();
+			String comment = targetTemplate.getComments();
 			String contributor = targetTemplate.getContributor();
 			String referenceId = targetTemplate.getReferenceId();
 			//

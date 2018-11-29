@@ -35,7 +35,7 @@ public class TargetTemplateComparator extends AbstractRecordTableComparator impl
 					sortOrder = targetTemplate2.getCasNumber().compareTo(targetTemplate1.getCasNumber());
 					break;
 				case 2:
-					sortOrder = targetTemplate2.getComment().compareTo(targetTemplate1.getComment());
+					sortOrder = targetTemplate2.getComments().compareTo(targetTemplate1.getComments());
 					break;
 				case 3:
 					sortOrder = targetTemplate2.getContributor().compareTo(targetTemplate1.getContributor());

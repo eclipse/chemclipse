@@ -11,18 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.model;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.chemclipse.model.identifier.ITargetTemplate;
 import org.eclipse.chemclipse.model.identifier.TargetTemplate;
 import org.eclipse.chemclipse.support.util.TargetListUtil;
 
-public class TargetTemplates extends ArrayList<ITargetTemplate> {
+public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 
 	private static final long serialVersionUID = -439374805911311705L;
 	private TargetListUtil targetListUtil = new TargetListUtil();
+
+	public void add(ITargetTemplate targetTemplate) {
+
+		if(targetTemplate != null) {
+			put(targetTemplate.getName(), targetTemplate);
+		}
+	}
 
 	public void load(String targetTemplates) {
 
@@ -37,7 +43,7 @@ public class TargetTemplates extends ArrayList<ITargetTemplate> {
 	public String save() {
 
 		StringBuilder builder = new StringBuilder();
-		Iterator<ITargetTemplate> iterator = iterator();
+		Iterator<ITargetTemplate> iterator = values().iterator();
 		while(iterator.hasNext()) {
 			ITargetTemplate targetTemplate = iterator.next();
 			extractTargetTemplate(targetTemplate, builder);
@@ -79,22 +85,12 @@ public class TargetTemplates extends ArrayList<ITargetTemplate> {
 			targetTemplate = new TargetTemplate();
 			targetTemplate.setName((values.length > 0) ? values[0].trim() : "");
 			targetTemplate.setCasNumber((values.length > 1) ? values[1].trim() : "");
-			targetTemplate.setComment((values.length > 2) ? values[2].trim() : "");
+			targetTemplate.setComments((values.length > 2) ? values[2].trim() : "");
 			targetTemplate.setContributor((values.length > 3) ? values[3].trim() : "");
 			targetTemplate.setReferenceId((values.length > 4) ? values[4].trim() : "");
 		}
 		//
 		return targetTemplate;
-	}
-
-	public String[] getNameList() {
-
-		List<String> names = new ArrayList<>();
-		for(ITargetTemplate targetTemplate : this) {
-			names.add(targetTemplate.getName());
-		}
-		//
-		return names.toArray(new String[names.size()]);
 	}
 
 	private void extractTargetTemplate(ITargetTemplate targetTemplate, StringBuilder builder) {
@@ -107,7 +103,7 @@ public class TargetTemplates extends ArrayList<ITargetTemplate> {
 		builder.append(" ");
 		builder.append(TargetListUtil.SEPARATOR_ENTRY);
 		builder.append(" ");
-		builder.append(targetTemplate.getComment());
+		builder.append(targetTemplate.getComments());
 		builder.append(" ");
 		builder.append(TargetListUtil.SEPARATOR_ENTRY);
 		builder.append(" ");

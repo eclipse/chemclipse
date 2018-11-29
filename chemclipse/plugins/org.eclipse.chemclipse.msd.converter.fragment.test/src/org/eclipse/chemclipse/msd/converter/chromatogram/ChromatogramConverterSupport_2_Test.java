@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.converter.chromatogram;
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramSupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+
 import junit.framework.TestCase;
 
 /**
@@ -99,9 +100,9 @@ public class ChromatogramConverterSupport_2_Test extends TestCase {
 		String[] ids;
 		try {
 			ids = support.getFilterExtensions();
-			assertEquals("FilterExtension #0", ".D", ids[0]);
-			assertEquals("FilterExtension #1", ".netCDF", ids[1]);
-			assertEquals("FilterExtension #2", ".chrom", ids[2]);
+			assertEquals("FilterExtension #0", "*.", ids[0]);
+			assertEquals("FilterExtension #1", "*.netCDF;*.netcdf;*.NETCDF", ids[1]);
+			assertEquals("FilterExtension #2", "*.chrom;*.CHROM", ids[2]);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(false);
 		}

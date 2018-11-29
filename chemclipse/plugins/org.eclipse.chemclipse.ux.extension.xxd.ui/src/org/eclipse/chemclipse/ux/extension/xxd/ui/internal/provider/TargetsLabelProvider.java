@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -190,7 +191,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 					text = libraryInformation.getReferenceIdentifier();
 					break;
 				case 20:
-					text = decimalFormat.format(libraryInformation.getRetentionTime());
+					text = decimalFormat.format(libraryInformation.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 21:
 					text = decimalFormat.format(libraryInformation.getRetentionIndex());

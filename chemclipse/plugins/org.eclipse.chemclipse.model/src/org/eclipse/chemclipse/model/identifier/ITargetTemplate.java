@@ -21,9 +21,9 @@ public interface ITargetTemplate {
 
 	void setCasNumber(String casNumber);
 
-	String getComment();
+	String getComments();
 
-	void setComment(String comment);
+	void setComments(String comments);
 
 	String getContributor();
 

@@ -98,9 +98,9 @@ public class MassSpectrumConverterSupport_2_Test extends TestCase {
 		String[] ids;
 		try {
 			ids = support.getFilterExtensions();
-			assertEquals("FilterExtension #0", ".TXT", ids[0]);
-			assertEquals("FilterExtension #1", ".msl", ids[1]);
-			assertEquals("FilterExtension #2", ".jdx", ids[2]);
+			assertEquals("FilterExtension #0", "*.", ids[0]);
+			assertEquals("FilterExtension #1", "*.msl;*.MSL", ids[1]);
+			assertEquals("FilterExtension #2", "*.jdx;*.JDX", ids[2]);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(false);
 		}

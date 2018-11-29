@@ -11,19 +11,33 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.fieldeditors;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.ITargetTemplate;
-import org.eclipse.chemclipse.support.ui.preferences.editors.TargetInputValidator;
+import org.eclipse.chemclipse.model.identifier.TargetTemplate;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
+import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.DatabaseImportRunnable;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TargetTemplateInputValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TargetTemplates;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.TargetTemplateListUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.FieldEditor;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,12 +47,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 
 public class TargetFieldEditor extends FieldEditor {
 
+	private static final Logger logger = Logger.getLogger(TargetFieldEditor.class);
 	private static final int NUMBER_COLUMNS = 2;
 	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private TargetTemplates targetTemplates = new TargetTemplates();
 	private TargetTemplateListUI targetTemplateListUI;
 
@@ -122,6 +139,7 @@ public class TargetFieldEditor extends FieldEditor {
 		setButtonLayoutData(createButtonImport(composite));
 		setButtonLayoutData(createButtonEdit(composite));
 		setButtonLayoutData(createButtonRemove(composite));
+		setButtonLayoutData(createButtonRemoveAll(composite));
 	}
 
 	private Button createButtonAdd(Composite parent) {
@@ -133,7 +151,7 @@ public class TargetFieldEditor extends FieldEditor {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				InputDialog dialog = new InputDialog(button.getShell(), "Target", "You can create a new target here.", "Styrene | 100-42-5 | comment | contributor | referenceId", new TargetInputValidator(targetTemplates.getNameList()));
+				InputDialog dialog = new InputDialog(button.getShell(), "Target", "You can create a new target here.", "Styrene | 100-42-5 | comment | contributor | referenceId", new TargetTemplateInputValidator(targetTemplates.keySet()));
 				if(IDialogConstants.OK_ID == dialog.open()) {
 					String item = dialog.getValue();
 					ITargetTemplate targetTemplate = targetTemplates.extractTargetTemplate(item);
@@ -157,12 +175,70 @@ public class TargetFieldEditor extends FieldEditor {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				// TODO
-				System.out.println("Implement the import function.");
+				try {
+					DatabaseConverterSupport databaseConverterSupport = DatabaseConverter.getDatabaseConverterSupport();
+					FileDialog fileDialog = new FileDialog(button.getShell(), SWT.READ_ONLY);
+					fileDialog.setText("Select a library to import");
+					fileDialog.setFilterExtensions(databaseConverterSupport.getFilterExtensions());
+					fileDialog.setFilterNames(databaseConverterSupport.getFilterNames());
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_PATH));
+					String pathname = fileDialog.open();
+					if(pathname != null) {
+						//
+						File file = new File(pathname);
+						preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_PATH, file.getParentFile().getAbsolutePath());
+						//
+						ProgressMonitorDialog dialog = new ProgressMonitorDialog(button.getShell());
+						DatabaseImportRunnable databaseImportRunnable = new DatabaseImportRunnable(file);
+						try {
+							dialog.run(false, false, databaseImportRunnable);
+							IMassSpectra massSpectra = databaseImportRunnable.getMassSpectra();
+							if(massSpectra.size() > 500) {
+								if(MessageDialog.openQuestion(button.getShell(), "Import", "Do you really want to import " + massSpectra.size() + " target entries?")) {
+									addTargetTemplates(massSpectra);
+								}
+							} else {
+								addTargetTemplates(massSpectra);
+							}
+							setTableViewerInput();
+						} catch(InvocationTargetException e1) {
+							logger.warn(e1);
+						} catch(InterruptedException e1) {
+							logger.warn(e1);
+						}
+					}
+				} catch(NoConverterAvailableException e1) {
+					logger.warn(e1);
+				}
 			}
 		});
 		//
 		return button;
+	}
+
+	private void addTargetTemplates(IMassSpectra massSpectra) {
+
+		for(IScanMSD scanMSD : massSpectra.getList()) {
+			if(scanMSD instanceof ILibraryMassSpectrum) {
+				/*
+				 * Get the library
+				 */
+				ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)scanMSD;
+				ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
+				/*
+				 * Transfer the target
+				 */
+				ITargetTemplate targetTemplate = new TargetTemplate();
+				targetTemplate.setName(libraryInformation.getName());
+				targetTemplate.setCasNumber(libraryInformation.getCasNumber());
+				targetTemplate.setComments(libraryInformation.getComments());
+				targetTemplate.setContributor(libraryInformation.getContributor());
+				targetTemplate.setReferenceId(libraryInformation.getReferenceIdentifier());
+				//
+				targetTemplates.add(targetTemplate);
+			}
+		}
+		setTableViewerInput();
 	}
 
 	private Button createButtonEdit(Composite parent) {
@@ -178,14 +254,14 @@ public class TargetFieldEditor extends FieldEditor {
 				Object object = structuredSelection.getFirstElement();
 				if(object instanceof ITargetTemplate) {
 					ITargetTemplate targetTemplate = (ITargetTemplate)object;
-					InputDialog dialog = new InputDialog(button.getShell(), "Target", "Edit the target.", targetTemplates.extractTargetTemplate(targetTemplate), new TargetInputValidator(targetTemplates.getNameList()));
+					InputDialog dialog = new InputDialog(button.getShell(), "Target", "Edit the target.", targetTemplates.extractTargetTemplate(targetTemplate), new TargetTemplateInputValidator(targetTemplates.keySet()));
 					if(IDialogConstants.OK_ID == dialog.open()) {
 						String item = dialog.getValue();
 						ITargetTemplate targetTemplateNew = targetTemplates.extractTargetTemplate(item);
 						if(targetTemplateNew != null) {
 							targetTemplate.setName(targetTemplateNew.getName());
 							targetTemplate.setCasNumber(targetTemplateNew.getCasNumber());
-							targetTemplate.setComment(targetTemplateNew.getComment());
+							targetTemplate.setComments(targetTemplateNew.getComments());
 							targetTemplate.setContributor(targetTemplateNew.getContributor());
 							targetTemplate.setReferenceId(targetTemplateNew.getReferenceId());
 							setTableViewerInput();
@@ -208,14 +284,31 @@ public class TargetFieldEditor extends FieldEditor {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(MessageDialog.openQuestion(button.getShell(), "Target Template(s)", "Do you want to delete the selected target template(s)?")) {
-					List<ITargetTemplate> removeItems = new ArrayList<>();
 					IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {
 						if(object instanceof ITargetTemplate) {
-							removeItems.add((ITargetTemplate)object);
+							targetTemplates.remove(((ITargetTemplate)object).getName());
 						}
 					}
-					targetTemplates.removeAll(removeItems);
+					setTableViewerInput();
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonRemoveAll(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("Remove All");
+		button.setToolTipText("Remove all target template(s).");
+		button.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+
+				if(MessageDialog.openQuestion(button.getShell(), "Target Template(s)", "Do you want to delete all target template(s)?")) {
+					targetTemplates.clear();
 					setTableViewerInput();
 				}
 			}
@@ -226,7 +319,7 @@ public class TargetFieldEditor extends FieldEditor {
 
 	private void setTableViewerInput() {
 
-		targetTemplateListUI.setInput(targetTemplates);
+		targetTemplateListUI.setInput(targetTemplates.values());
 	}
 
 	@Override

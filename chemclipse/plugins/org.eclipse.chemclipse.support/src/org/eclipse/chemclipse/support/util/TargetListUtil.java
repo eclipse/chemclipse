@@ -36,7 +36,7 @@ public class TargetListUtil {
 		if(stringList.contains(SEPARATOR_TOKEN)) {
 			decodedArray = stringList.split(SEPARATOR_TOKEN);
 		} else {
-			decodedArray = new String[0];
+			decodedArray = new String[]{stringList};
 		}
 		return decodedArray;
 	}

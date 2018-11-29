@@ -15,7 +15,7 @@ public class TargetTemplate implements ITargetTemplate {
 
 	private String name = "";
 	private String casNumber = "";
-	private String comment = "";
+	private String comments = "";
 	private String contributor = "";
 	private String referenceId = "";
 
@@ -44,15 +44,15 @@ public class TargetTemplate implements ITargetTemplate {
 	}
 
 	@Override
-	public String getComment() {
+	public String getComments() {
 
-		return comment;
+		return comments;
 	}
 
 	@Override
-	public void setComment(String comment) {
+	public void setComments(String comments) {
 
-		this.comment = comment;
+		this.comments = comments;
 	}
 
 	@Override
@@ -109,6 +109,6 @@ public class TargetTemplate implements ITargetTemplate {
 	@Override
 	public String toString() {
 
-		return "TargetTemplate [name=" + name + ", casNumber=" + casNumber + ", comment=" + comment + ", contributor=" + contributor + ", referenceId=" + referenceId + "]";
+		return "TargetTemplate [name=" + name + ", casNumber=" + casNumber + ", comments=" + comments + ", contributor=" + contributor + ", referenceId=" + referenceId + "]";
 	}
 }

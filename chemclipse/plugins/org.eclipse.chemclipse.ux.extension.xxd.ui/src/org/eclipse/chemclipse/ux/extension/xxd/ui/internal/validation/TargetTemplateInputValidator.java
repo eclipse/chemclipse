@@ -9,22 +9,23 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.ui.preferences.editors;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.chemclipse.support.validators.TargetValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IInputValidator;
 
-public class TargetInputValidator implements IInputValidator {
+public class TargetTemplateInputValidator implements IInputValidator {
 
-	private String[] items = new String[]{};
 	private TargetValidator targetValidator = new TargetValidator();
+	private Set<String> names = new HashSet<>();
 
-	public TargetInputValidator(String[] list) {
-		if(list != null) {
-			items = list;
-		} else {
-			items = new String[]{};
+	public TargetTemplateInputValidator(Set<String> names) {
+		if(names != null) {
+			this.names = names;
 		}
 	}
 
@@ -33,10 +34,9 @@ public class TargetInputValidator implements IInputValidator {
 
 		IStatus status = targetValidator.validate(target);
 		if(status.isOK()) {
-			for(String item : items) {
-				if(item.equals(target)) {
-					return "The target already exists.";
-				}
+			String name = targetValidator.getName();
+			if(names.contains(name)) {
+				return "The target templates already exists.";
 			}
 		} else {
 			return status.getMessage();
