@@ -13,7 +13,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.core.ISupplier;
@@ -45,40 +49,117 @@ public class ChromatogramFileSupport {
 		if(chromatogram == null || shell == null) {
 			return false;
 		}
-		//
-		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialog.
 		 */
-		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
-		dialog.setFileName(chromatogram.getName());
-		dialog.setText("Save Chromatogram As...");
-		dialog.setOverwrite(true);
+		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+		fileDialog.setFilterPath(Activator.getDefault().getSettingsPath());
+		fileDialog.setFileName(chromatogram.getName());
+		fileDialog.setText("Save Chromatogram As...");
+		fileDialog.setOverwrite(true);
 		//
 		IChromatogramConverterSupport chromatogramConverterSupport = getChromatogramConvertSupport(dataType);
 		if(chromatogramConverterSupport != null) {
-			/*
-			 * Set the filters that allow an export of chromatographic data.
-			 */
-			String[] filterExtensions = chromatogramConverterSupport.getExportableFilterExtensions();
-			dialog.setFilterExtensions(filterExtensions);
-			String[] filterNames = chromatogramConverterSupport.getExportableFilterNames();
-			dialog.setFilterNames(filterNames);
 			/*
 			 * Opens the dialog.<br/> Use converterSupport.getExportSupplier()
 			 * instead of converterSupport.getSupplier() otherwise a wrong supplier
 			 * will be taken.
 			 */
-			String filename = dialog.open();
+			Map<Integer, ISupplier> exportSupplierMap = setExportConverter(chromatogramConverterSupport, fileDialog);
+			String filename = fileDialog.open();
 			if(filename != null) {
-				validateFile(dialog, chromatogramConverterSupport.getExportSupplier(), shell, chromatogramConverterSupport, chromatogram, dataType);
-				return true;
-			} else {
-				return false;
+				int key = fileDialog.getFilterIndex();
+				if(exportSupplierMap.containsKey(key)) {
+					ISupplier selectedSupplier = exportSupplierMap.get(key);
+					String filePath = fileDialog.getFilterPath() + File.separator + fileDialog.getFileName();
+					boolean overwrite = fileDialog.getOverwrite();
+					validateAndExportFile(shell, chromatogram, dataType, filePath, overwrite, selectedSupplier);
+					return true;
+				}
 			}
-		} else {
-			return false;
 		}
+		/*
+		 * False: It was not possible to export the data.
+		 */
+		return false;
+	}
+
+	private static Map<Integer, ISupplier> setExportConverter(IChromatogramConverterSupport chromatogramConverterSupport, FileDialog fileDialog) throws NoConverterAvailableException {
+
+		Map<Integer, ISupplier> exportSupplierMap = new HashMap<>();
+		/*
+		 * Get the names and extensions.
+		 */
+		String[] names = chromatogramConverterSupport.getExportableFilterNames();
+		String[] extensions = chromatogramConverterSupport.getExportableFilterExtensions();
+		List<ISupplier> suppliers = chromatogramConverterSupport.getExportSupplier();
+		if(extensions.length != names.length) {
+			throw new NoConverterAvailableException("The size of extensions and names is unequal.");
+		}
+		/*
+		 * Collect all converter and select the ChemClipse *.ocb format
+		 * as the default converter.
+		 */
+		String promotedName = null;
+		String promotedExtension = null;
+		Map<String, String> exportFilter = new HashMap<>();
+		for(int i = 0; i < names.length; i++) {
+			String name = names[i];
+			String extension = extensions[i];
+			if(extension.contains(".ocb")) {
+				promotedName = name;
+				promotedExtension = extension;
+			} else {
+				exportFilter.put(name, extension);
+			}
+		}
+		/*
+		 * Sort the converter names.
+		 */
+		List<String> keys = new ArrayList<>(exportFilter.keySet());
+		Collections.sort(keys);
+		boolean promotionAvailable = promotedName != null;
+		int size = keys.size() + ((promotionAvailable) ? 1 : 0);
+		String[] extensionsSorted = new String[size];
+		String[] namesSorted = new String[size];
+		/*
+		 * Set the ChemClipse *.ocb converter as the
+		 * first element if available.
+		 */
+		int offset = 0;
+		if(promotionAvailable) {
+			namesSorted[offset] = promotedName;
+			extensionsSorted[offset] = promotedExtension;
+			exportSupplierMap.put(offset, getSupplier(promotedName, suppliers));
+			offset++;
+		}
+		/*
+		 * Set all other sorted converter.
+		 */
+		for(int i = 0; i < keys.size(); i++) {
+			String key = keys.get(i);
+			int index = i + offset;
+			namesSorted[index] = key;
+			extensionsSorted[index] = exportFilter.get(key);
+			exportSupplierMap.put(index, getSupplier(key, suppliers));
+		}
+		/*
+		 * Set the FileDialog sorted names and file extensions.
+		 */
+		fileDialog.setFilterNames(namesSorted);
+		fileDialog.setFilterExtensions(extensionsSorted);
+		//
+		return exportSupplierMap;
+	}
+
+	private static ISupplier getSupplier(String filterName, List<ISupplier> suppliers) {
+
+		for(ISupplier supplier : suppliers) {
+			if(supplier.isExportable() && supplier.getFilterName().equals(filterName)) {
+				return supplier;
+			}
+		}
+		return null;
 	}
 
 	private static IChromatogramConverterSupport getChromatogramConvertSupport(DataType dataType) {
@@ -126,25 +207,15 @@ public class ChromatogramFileSupport {
 		}
 	}
 
-	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, IChromatogramConverterSupport converterSupport, IChromatogram chromatogram, DataType dataType) {
+	private static void validateAndExportFile(Shell shell, IChromatogram chromatogram, DataType dataType, String filePath, boolean overwrite, ISupplier selectedSupplier) {
 
 		File chromatogramFolder = null;
-		boolean overwrite = dialog.getOverwrite();
 		boolean folderExists = false;
 		boolean isDirectory = false;
 		/*
-		 * Check if the selected supplier exists.<br/> If some super brain tries
-		 * to edit the suppliers list.
-		 */
-		ISupplier selectedSupplier = supplier.get(dialog.getFilterIndex());
-		if(selectedSupplier == null) {
-			MessageDialog.openInformation(shell, "Chromatogram Converter", "The requested chromatogram converter does not exists.");
-			return;
-		}
-		/*
 		 * Get the file or directory name.
 		 */
-		String filename = dialog.getFilterPath() + File.separator + dialog.getFileName();
+		String filename = filePath;
 		if(selectedSupplier != null) {
 			/*
 			 * If the chromatogram file is stored in a directory create an
@@ -185,7 +256,7 @@ public class ChromatogramFileSupport {
 				filename = removeFileExtensions(filename, selectedSupplier);
 				filename = filename.concat(selectedSupplier.getFileExtension());
 				//
-				String filenameDialog = dialog.getFilterPath() + File.separator + dialog.getFileName();
+				String filenameDialog = filePath;
 				if(!filename.equals(filenameDialog)) {
 					/*
 					 * The file name has been modified. Ask for override if it
@@ -231,6 +302,8 @@ public class ChromatogramFileSupport {
 				 */
 				writeFile(shell, new File(filename), chromatogram, selectedSupplier, dataType);
 			}
+		} else {
+			MessageDialog.openInformation(shell, "Chromatogram Converter", "The requested chromatogram converter does not exists.");
 		}
 	}
 
