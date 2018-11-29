@@ -59,19 +59,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		try {
 			String[] extensions = databaseConverterSupport.getFilterExtensions();
 			String[] names = databaseConverterSupport.getFilterNames();
-			if(extensions.length == names.length) {
-				String[] filterExtensions = new String[extensions.length + 1];
-				String[] filterNames = new String[extensions.length + 1];
-				//
-				filterExtensions[0] = "*.*";
-				filterNames[0] = "All files";
-				//
-				for(int i = 0; i < extensions.length; i++) {
-					filterExtensions[i + 1] = extensions[i].replace(".", "*.");
-					filterNames[i + 1] = names[i];
-				}
-				fileListEditor.setFilterExtensionsAndNames(filterExtensions, filterNames);
-			}
+			fileListEditor.setFilterExtensionsAndNames(extensions, names);
 		} catch(NoConverterAvailableException e) {
 			logger.warn(e);
 		}
