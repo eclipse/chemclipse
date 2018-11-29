@@ -16,21 +16,23 @@ import java.util.List;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetListFilter;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsComparator;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class TargetsListUI extends ExtendedTableViewer {
 
-	private TargetsComparator targetsTableComparator;
-	private TargetListFilter targetListFilter;
+	private static final String[] TITLES = TargetsLabelProvider.TITLES;
+	private static final int[] BOUNDS = TargetsLabelProvider.BOUNDS;
+	private TargetsLabelProvider labelProvider = new TargetsLabelProvider();
+	private TargetsComparator targetsTableComparator = new TargetsComparator();
+	private TargetListFilter targetListFilter = new TargetListFilter();
 
 	public TargetsListUI(Composite parent, int style) {
 		super(parent, style);
-		targetsTableComparator = new TargetsComparator();
 		createColumns();
 	}
 
@@ -59,11 +61,10 @@ public class TargetsListUI extends ExtendedTableViewer {
 
 	private void createColumns() {
 
-		createColumns(TargetsLabelProvider.TITLES, TargetsLabelProvider.BOUNDS);
-		setLabelProvider(new TargetsLabelProvider());
+		createColumns(TITLES, BOUNDS);
+		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(targetsTableComparator);
-		targetListFilter = new TargetListFilter();
 		setFilters(new ViewerFilter[]{targetListFilter});
 		setEditingSupport();
 	}

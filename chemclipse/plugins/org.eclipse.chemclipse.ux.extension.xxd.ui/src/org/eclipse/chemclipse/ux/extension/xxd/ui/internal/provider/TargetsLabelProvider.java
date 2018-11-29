@@ -48,11 +48,15 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			COMMENTS, //
 			"Database", //
 			"Contributor", //
-			"Reference ID"//
+			"Reference ID", //
+			"Retention Time", //
+			"Retention Index"//
 	};
 	public static final int[] BOUNDS = { //
 			30, //
 			30, //
+			100, //
+			100, //
 			100, //
 			100, //
 			100, //
@@ -184,6 +188,12 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 					break;
 				case 19:
 					text = libraryInformation.getReferenceIdentifier();
+					break;
+				case 20:
+					text = decimalFormat.format(libraryInformation.getRetentionTime());
+					break;
+				case 21:
+					text = decimalFormat.format(libraryInformation.getRetentionIndex());
 					break;
 				default:
 					text = "n.v.";

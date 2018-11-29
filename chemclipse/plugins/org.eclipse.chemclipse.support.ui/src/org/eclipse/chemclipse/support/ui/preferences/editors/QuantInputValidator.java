@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,16 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.editors;
 
-import org.eclipse.chemclipse.support.validators.TargetValidator;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IInputValidator;
 
-public class TargetInputValidator implements IInputValidator {
+public class QuantInputValidator implements IInputValidator {
 
 	private String[] items = new String[]{};
-	private TargetValidator targetValidator = new TargetValidator();
 
-	public TargetInputValidator(String[] list) {
+	public QuantInputValidator(String[] list) {
 		if(list != null) {
 			items = list;
 		} else {
@@ -31,16 +28,7 @@ public class TargetInputValidator implements IInputValidator {
 	@Override
 	public String isValid(String target) {
 
-		IStatus status = targetValidator.validate(target);
-		if(status.isOK()) {
-			for(String item : items) {
-				if(item.equals(target)) {
-					return "The target already exists.";
-				}
-			}
-		} else {
-			return status.getMessage();
-		}
+		// TODO
 		return null;
 	}
 }

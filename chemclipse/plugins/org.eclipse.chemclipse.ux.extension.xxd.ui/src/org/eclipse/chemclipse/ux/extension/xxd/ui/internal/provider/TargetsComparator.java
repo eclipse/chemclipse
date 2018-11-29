@@ -104,6 +104,12 @@ public class TargetsComparator extends AbstractRecordTableComparator implements 
 				case 19:
 					sortOrder = libraryInformation2.getReferenceIdentifier().compareTo(libraryInformation1.getReferenceIdentifier());
 					break;
+				case 20:
+					sortOrder = Integer.compare(libraryInformation2.getRetentionTime(), libraryInformation1.getRetentionTime());
+					break;
+				case 21:
+					sortOrder = Float.compare(libraryInformation2.getRetentionIndex(), libraryInformation1.getRetentionIndex());
+					break;
 				default:
 					sortOrder = 0;
 			}

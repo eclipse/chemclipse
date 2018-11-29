@@ -14,11 +14,14 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.fieldeditors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ColorCodeDialog;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCode;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCodes;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ColorCodeTableUI;
+import org.eclipse.chemclipse.model.identifier.ITargetTemplate;
+import org.eclipse.chemclipse.support.ui.preferences.editors.TargetInputValidator;
+import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
+import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TargetTemplates;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.TargetTemplateListUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -32,14 +35,14 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class ColorCodesFieldEditor extends FieldEditor {
+public class TargetFieldEditor extends FieldEditor {
 
 	private static final int NUMBER_COLUMNS = 2;
 	//
-	private ColorCodes colorCodes = new ColorCodes();
-	private ColorCodeTableUI colorCodeTableUI;
+	private TargetTemplates targetTemplates = new TargetTemplates();
+	private TargetTemplateListUI targetTemplateListUI;
 
-	public ColorCodesFieldEditor(String name, String labelText, Composite parent) {
+	public TargetFieldEditor(String name, String labelText, Composite parent) {
 		init(name, labelText);
 		createControl(parent);
 	}
@@ -58,14 +61,32 @@ public class ColorCodesFieldEditor extends FieldEditor {
 		composite.setLayoutData(gridData);
 		//
 		createLabelSection(composite);
+		createSearchSection(composite);
 		createTableSection(composite);
 		createButtonGroup(composite);
+	}
+
+	private void createSearchSection(Composite parent) {
+
+		SearchSupportUI searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.horizontalSpan = NUMBER_COLUMNS;
+		searchSupportUI.setLayoutData(gridData);
+		searchSupportUI.setSearchListener(new ISearchListener() {
+
+			@Override
+			public void performSearch(String searchText, boolean caseSensitive) {
+
+				targetTemplateListUI.setSearchText(searchText, caseSensitive);
+			}
+		});
 	}
 
 	private void createLabelSection(Composite parent) {
 
 		Label label = new Label(parent, SWT.LEFT);
-		label.setText("Add/Remove Color Codes");
+		label.setText("");
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.horizontalSpan = NUMBER_COLUMNS;
@@ -81,7 +102,7 @@ public class ColorCodesFieldEditor extends FieldEditor {
 		gridData.grabExcessVerticalSpace = true;
 		composite.setLayoutData(gridData);
 		//
-		colorCodeTableUI = new ColorCodeTableUI(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+		targetTemplateListUI = new TargetTemplateListUI(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		setTableViewerInput();
 	}
 
@@ -98,6 +119,7 @@ public class ColorCodesFieldEditor extends FieldEditor {
 		composite.setLayoutData(gridData);
 		//
 		setButtonLayoutData(createButtonAdd(composite));
+		setButtonLayoutData(createButtonImport(composite));
 		setButtonLayoutData(createButtonEdit(composite));
 		setButtonLayoutData(createButtonRemove(composite));
 	}
@@ -106,19 +128,37 @@ public class ColorCodesFieldEditor extends FieldEditor {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Add");
-		button.setToolTipText("Add a color code.");
+		button.setToolTipText("Add a target template.");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				ColorCodeDialog dialog = new ColorCodeDialog(button.getShell());
+				InputDialog dialog = new InputDialog(button.getShell(), "Target", "You can create a new target here.", "Styrene | 100-42-5 | comment | contributor | referenceId", new TargetInputValidator(targetTemplates.getNameList()));
 				if(IDialogConstants.OK_ID == dialog.open()) {
-					ColorCode colorCode = dialog.getColorCode();
-					if(colorCode != null) {
-						colorCodes.add(colorCode);
+					String item = dialog.getValue();
+					ITargetTemplate targetTemplate = targetTemplates.extractTargetTemplate(item);
+					if(targetTemplate != null) {
+						targetTemplates.add(targetTemplate);
 						setTableViewerInput();
 					}
 				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonImport(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("Import");
+		button.setToolTipText("Import a target template(s) from a library.");
+		button.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+
+				// TODO
+				System.out.println("Implement the import function.");
 			}
 		});
 		//
@@ -129,20 +169,25 @@ public class ColorCodesFieldEditor extends FieldEditor {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Edit");
-		button.setToolTipText("Edit the selected color code.");
+		button.setToolTipText("Edit the selected target template.");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				IStructuredSelection structuredSelection = (IStructuredSelection)colorCodeTableUI.getSelection();
+				IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListUI.getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof ColorCode) {
-					ColorCode colorCode = (ColorCode)object;
-					ColorCodeDialog dialog = new ColorCodeDialog(button.getShell(), colorCode);
+				if(object instanceof ITargetTemplate) {
+					ITargetTemplate targetTemplate = (ITargetTemplate)object;
+					InputDialog dialog = new InputDialog(button.getShell(), "Target", "Edit the target.", targetTemplates.extractTargetTemplate(targetTemplate), new TargetInputValidator(targetTemplates.getNameList()));
 					if(IDialogConstants.OK_ID == dialog.open()) {
-						colorCode = dialog.getColorCode();
-						if(colorCode != null) {
-							colorCodes.add(colorCode);
+						String item = dialog.getValue();
+						ITargetTemplate targetTemplateNew = targetTemplates.extractTargetTemplate(item);
+						if(targetTemplateNew != null) {
+							targetTemplate.setName(targetTemplateNew.getName());
+							targetTemplate.setCasNumber(targetTemplateNew.getCasNumber());
+							targetTemplate.setComment(targetTemplateNew.getComment());
+							targetTemplate.setContributor(targetTemplateNew.getContributor());
+							targetTemplate.setReferenceId(targetTemplateNew.getReferenceId());
 							setTableViewerInput();
 						}
 					}
@@ -157,26 +202,20 @@ public class ColorCodesFieldEditor extends FieldEditor {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Remove");
-		button.setToolTipText("Remove the selected color code(s).");
+		button.setToolTipText("Remove the selected target template(s).");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(button.getShell(), "Color Code(s)", "Do you want to delete the selected color code(s)?")) {
-					List<String> removeKeys = new ArrayList<>();
-					IStructuredSelection structuredSelection = (IStructuredSelection)colorCodeTableUI.getSelection();
+				if(MessageDialog.openQuestion(button.getShell(), "Target Template(s)", "Do you want to delete the selected target template(s)?")) {
+					List<ITargetTemplate> removeItems = new ArrayList<>();
+					IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {
-						if(object instanceof ColorCode) {
-							ColorCode colorCode = (ColorCode)object;
-							removeKeys.add(colorCode.getName());
+						if(object instanceof ITargetTemplate) {
+							removeItems.add((ITargetTemplate)object);
 						}
 					}
-					/*
-					 * Remove the objects.
-					 */
-					for(String key : removeKeys) {
-						colorCodes.remove(key);
-					}
+					targetTemplates.removeAll(removeItems);
 					setTableViewerInput();
 				}
 			}
@@ -187,29 +226,29 @@ public class ColorCodesFieldEditor extends FieldEditor {
 
 	private void setTableViewerInput() {
 
-		colorCodeTableUI.setInput(colorCodes.values());
+		targetTemplateListUI.setInput(targetTemplates);
 	}
 
 	@Override
 	protected void doLoad() {
 
-		String codes = getPreferenceStore().getString(getPreferenceName());
-		colorCodes.load(codes);
+		String entries = getPreferenceStore().getString(getPreferenceName());
+		targetTemplates.load(entries);
 		setTableViewerInput();
 	}
 
 	@Override
 	protected void doLoadDefault() {
 
-		String codes = getPreferenceStore().getDefaultString(getPreferenceName());
-		colorCodes.loadDefault(codes);
+		String entries = getPreferenceStore().getDefaultString(getPreferenceName());
+		targetTemplates.loadDefault(entries);
 		setTableViewerInput();
 	}
 
 	@Override
 	protected void doStore() {
 
-		getPreferenceStore().setValue(getPreferenceName(), colorCodes.save());
+		getPreferenceStore().setValue(getPreferenceName(), targetTemplates.save());
 	}
 
 	@Override
