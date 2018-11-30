@@ -42,13 +42,24 @@ public class ChromatogramDataSupport {
 
 	public String getChromatogramType(IChromatogramSelection chromatogramSelection) {
 
-		String type = "";
-		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			type = " [MSD]";
-		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-			type = " [CSD]";
-		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-			type = " [WSD]";
+		if(chromatogramSelection != null) {
+			return getChromatogramType(chromatogramSelection.getChromatogram());
+		} else {
+			return "";
+		}
+	}
+
+	public String getChromatogramType(IChromatogram chromatogram) {
+
+		String type;
+		if(chromatogram instanceof IChromatogramMSD) {
+			type = "[MSD]";
+		} else if(chromatogram instanceof IChromatogramCSD) {
+			type = "[CSD]";
+		} else if(chromatogram instanceof IChromatogramWSD) {
+			type = "[WSD]";
+		} else {
+			type = "";
 		}
 		//
 		return type;

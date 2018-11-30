@@ -50,6 +50,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.Chromatogra
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -283,16 +284,8 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		//
 		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			String type = "";
-			if(chromatogram instanceof IChromatogramMSD) {
-				type = " [MSD]";
-			} else if(chromatogram instanceof IChromatogramCSD) {
-				type = " [CSD]";
-			} else if(chromatogram instanceof IChromatogramWSD) {
-				type = " [WSD]";
-			}
-			//
-			part.setLabel(chromatogram.getName() + type);
+			ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
+			part.setLabel(chromatogram.getName() + " " + chromatogramDataSupport.getChromatogramType(chromatogramSelection));
 			dirtyable.setDirty(true);
 			chromatogramSelection.update(true);
 		}
