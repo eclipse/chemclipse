@@ -76,7 +76,6 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		// monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
 		/*
 		 * ZIP
 		 */
@@ -148,7 +147,6 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeInt(scans); // Number of Scans
 		// Retention Times - Total Signals
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_SCAN + scan);
 			dataOutputStream.writeInt(chromatogram.getScan(scan).getRetentionTime()); // Retention Time
 			dataOutputStream.writeFloat(chromatogram.getScan(scan).getTotalSignal()); // Total Signal
 		}
@@ -172,7 +170,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 			 */
 			writeChromatogramMethod(zipOutputStream, directoryPrefix, chromatogram);
 			subMonitor.worked(20);
-			writeChromatogramScans(zipOutputStream, directoryPrefix, chromatogram);
+			writeChromatogramScans(zipOutputStream, directoryPrefix, chromatogram, subMonitor);
 			writeChromatogramBaseline(zipOutputStream, directoryPrefix, chromatogram);
 			subMonitor.worked(20);
 			writeChromatogramPeaks(zipOutputStream, directoryPrefix, chromatogram);
@@ -214,7 +212,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramScans(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramMSD chromatogram) throws IOException {
+	private void writeChromatogramScans(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -228,36 +226,42 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		int scans = chromatogram.getNumberOfScans();
 		dataOutputStream.writeInt(scans); // Number of Scans
 		//
-		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_SCAN + scan);
-			IVendorMassSpectrum massSpectrum = chromatogram.getSupplierScan(scan);
-			/*
-			 * Write separate scan proxy values.
-			 */
-			int offset = dataOutputStream.size();
-			int retentionTime = massSpectrum.getRetentionTime();
-			int numberOfIons = massSpectrum.getNumberOfIons();
-			float totalSignal = massSpectrum.getTotalSignal();
-			float retentionIndex = massSpectrum.getRetentionIndex();
-			int timeSegmentId = massSpectrum.getTimeSegmentId();
-			int cycleNumber = massSpectrum.getCycleNumber();
-			//
-			IScanProxy scanProxy = new ScanProxy(offset, retentionTime, numberOfIons, totalSignal, retentionIndex, timeSegmentId, cycleNumber);
-			scanProxies.add(scanProxy);
-			/*
-			 * Write the mass spectrum.
-			 * There could be an additionally optimized mass spectrum.
-			 * This is available, when the user has identified the
-			 * mass spectrum manually.
-			 */
-			writeMassSpectrum(dataOutputStream, massSpectrum);
-			IScanMSD optimizedMassSpectrum = massSpectrum.getOptimizedMassSpectrum();
-			if(optimizedMassSpectrum == null) {
-				dataOutputStream.writeBoolean(false);
-			} else {
-				dataOutputStream.writeBoolean(true);
-				writeNormalMassSpectrum(dataOutputStream, optimizedMassSpectrum);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Scans", scans);
+		try {
+			for(int scan = 1; scan <= scans; scan++) {
+				/*
+				 * Write separate scan proxy values.
+				 */
+				IVendorMassSpectrum massSpectrum = chromatogram.getSupplierScan(scan);
+				int offset = dataOutputStream.size();
+				int retentionTime = massSpectrum.getRetentionTime();
+				int numberOfIons = massSpectrum.getNumberOfIons();
+				float totalSignal = massSpectrum.getTotalSignal();
+				float retentionIndex = massSpectrum.getRetentionIndex();
+				int timeSegmentId = massSpectrum.getTimeSegmentId();
+				int cycleNumber = massSpectrum.getCycleNumber();
+				//
+				IScanProxy scanProxy = new ScanProxy(offset, retentionTime, numberOfIons, totalSignal, retentionIndex, timeSegmentId, cycleNumber);
+				scanProxies.add(scanProxy);
+				/*
+				 * Write the mass spectrum.
+				 * There could be an additionally optimized mass spectrum.
+				 * This is available, when the user has identified the
+				 * mass spectrum manually.
+				 */
+				writeMassSpectrum(dataOutputStream, massSpectrum);
+				IScanMSD optimizedMassSpectrum = massSpectrum.getOptimizedMassSpectrum();
+				if(optimizedMassSpectrum == null) {
+					dataOutputStream.writeBoolean(false);
+				} else {
+					dataOutputStream.writeBoolean(true);
+					writeNormalMassSpectrum(dataOutputStream, optimizedMassSpectrum);
+				}
+				//
+				subMonitor.worked(1);
 			}
+		} finally {
+			SubMonitor.done(subMonitor);
 		}
 		//
 		dataOutputStream.flush();
@@ -311,7 +315,6 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		IBaselineModel baselineModel = chromatogram.getBaselineModel();
 		// Scans
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_BASELINE + scan);
 			int retentionTime = chromatogram.getSupplierScan(scan).getRetentionTime();
 			float backgroundAbundance = baselineModel.getBackgroundAbundance(retentionTime);
 			dataOutputStream.writeInt(retentionTime); // Retention Time

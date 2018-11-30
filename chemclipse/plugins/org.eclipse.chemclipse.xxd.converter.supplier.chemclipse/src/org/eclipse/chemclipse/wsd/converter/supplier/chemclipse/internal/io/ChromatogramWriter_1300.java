@@ -65,7 +65,6 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 	@Override
 	public void writeChromatogram(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		// monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
 		/*
 		 * ZIP
 		 */
@@ -161,7 +160,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 			 */
 			writeChromatogramMethod(zipOutputStream, directoryPrefix, chromatogram);
 			subMonitor.worked(20);
-			writeChromatogramScans(zipOutputStream, directoryPrefix, chromatogram);
+			writeChromatogramScans(zipOutputStream, directoryPrefix, chromatogram, subMonitor);
 			subMonitor.worked(20);
 			writeChromatogramBaseline(zipOutputStream, directoryPrefix, chromatogram);
 			writeChromatogramPeaks(zipOutputStream, directoryPrefix, chromatogram);
@@ -203,7 +202,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramScans(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram) throws IOException {
+	private void writeChromatogramScans(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -212,46 +211,53 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		int scans = chromatogram.getNumberOfScans();
 		dataOutputStream.writeInt(scans);
-		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_SCANS + scan);
-			IScanWSD scanWSD = chromatogram.getSupplierScan(scan);
-			int scanSignalTotal = scanWSD.getScanSignals().size();
-			dataOutputStream.writeInt(scanSignalTotal);
-			for(int signal = 0; signal < scanSignalTotal; signal++) {
-				IScanSignalWSD scanSignal = scanWSD.getScanSignal(signal);
-				double wavelength = scanSignal.getWavelength();
-				float abundance = scanSignal.getAbundance();
-				dataOutputStream.writeDouble(wavelength);
-				dataOutputStream.writeFloat(abundance);
-			}
-			dataOutputStream.writeInt(scanWSD.getRetentionTime()); // Retention Time
-			dataOutputStream.writeInt(scanWSD.getRelativeRetentionTime());
-			dataOutputStream.writeInt(scanWSD.getRetentionTimeColumn1());
-			dataOutputStream.writeInt(scanWSD.getRetentionTimeColumn2());
-			dataOutputStream.writeFloat(scanWSD.getRetentionIndex()); // Retention Index
-			dataOutputStream.writeBoolean(scanWSD.hasAdditionalRetentionIndices());
-			if(scanWSD.hasAdditionalRetentionIndices()) {
-				Map<RetentionIndexType, Float> retentionIndicesTyped = scanWSD.getRetentionIndicesTyped();
-				dataOutputStream.writeInt(retentionIndicesTyped.size());
-				for(Map.Entry<RetentionIndexType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
-					writeString(dataOutputStream, retentionIndexTyped.getKey().toString());
-					dataOutputStream.writeFloat(retentionIndexTyped.getValue());
+		//
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Scans", scans);
+		try {
+			for(int scan = 1; scan <= scans; scan++) {
+				IScanWSD scanWSD = chromatogram.getSupplierScan(scan);
+				int scanSignalTotal = scanWSD.getScanSignals().size();
+				dataOutputStream.writeInt(scanSignalTotal);
+				for(int signal = 0; signal < scanSignalTotal; signal++) {
+					IScanSignalWSD scanSignal = scanWSD.getScanSignal(signal);
+					double wavelength = scanSignal.getWavelength();
+					float abundance = scanSignal.getAbundance();
+					dataOutputStream.writeDouble(wavelength);
+					dataOutputStream.writeFloat(abundance);
 				}
-			}
-			dataOutputStream.writeFloat(scanWSD.getTotalSignal()); // Total Signal
-			dataOutputStream.writeInt(scanWSD.getTimeSegmentId()); // Time Segment Id
-			dataOutputStream.writeInt(scanWSD.getCycleNumber()); // Cycle Number
-			/*
-			 * Identification Results
-			 */
-			Set<IIdentificationTarget> scanTargets = scanWSD.getTargets();
-			dataOutputStream.writeInt(scanTargets.size()); // Number Mass Spectrum Targets
-			for(IIdentificationTarget scanTarget : scanTargets) {
-				if(scanTarget instanceof IIdentificationTarget) {
-					IIdentificationTarget identificationEntry = scanTarget;
-					writeIdentificationEntry(dataOutputStream, identificationEntry);
+				dataOutputStream.writeInt(scanWSD.getRetentionTime()); // Retention Time
+				dataOutputStream.writeInt(scanWSD.getRelativeRetentionTime());
+				dataOutputStream.writeInt(scanWSD.getRetentionTimeColumn1());
+				dataOutputStream.writeInt(scanWSD.getRetentionTimeColumn2());
+				dataOutputStream.writeFloat(scanWSD.getRetentionIndex()); // Retention Index
+				dataOutputStream.writeBoolean(scanWSD.hasAdditionalRetentionIndices());
+				if(scanWSD.hasAdditionalRetentionIndices()) {
+					Map<RetentionIndexType, Float> retentionIndicesTyped = scanWSD.getRetentionIndicesTyped();
+					dataOutputStream.writeInt(retentionIndicesTyped.size());
+					for(Map.Entry<RetentionIndexType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
+						writeString(dataOutputStream, retentionIndexTyped.getKey().toString());
+						dataOutputStream.writeFloat(retentionIndexTyped.getValue());
+					}
 				}
+				dataOutputStream.writeFloat(scanWSD.getTotalSignal()); // Total Signal
+				dataOutputStream.writeInt(scanWSD.getTimeSegmentId()); // Time Segment Id
+				dataOutputStream.writeInt(scanWSD.getCycleNumber()); // Cycle Number
+				/*
+				 * Identification Results
+				 */
+				Set<IIdentificationTarget> scanTargets = scanWSD.getTargets();
+				dataOutputStream.writeInt(scanTargets.size()); // Number Mass Spectrum Targets
+				for(IIdentificationTarget scanTarget : scanTargets) {
+					if(scanTarget instanceof IIdentificationTarget) {
+						IIdentificationTarget identificationEntry = scanTarget;
+						writeIdentificationEntry(dataOutputStream, identificationEntry);
+					}
+				}
+				//
+				subMonitor.worked(1);
 			}
+		} finally {
+			SubMonitor.done(subMonitor);
 		}
 		//
 		dataOutputStream.flush();
@@ -274,7 +280,6 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		IBaselineModel baselineModel = chromatogram.getBaselineModel();
 		// Scans
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_BASELINE + scan);
 			int retentionTime = chromatogram.getSupplierScan(scan).getRetentionTime();
 			float backgroundAbundance = baselineModel.getBackgroundAbundance(retentionTime);
 			dataOutputStream.writeInt(retentionTime); // Retention Time
