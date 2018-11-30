@@ -6,11 +6,18 @@
          point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
       <ChromatogramFilterSupplier
             description="This filter selects the chromatogram range."
-            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ChromatogramFilter"
+            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ChromatogramFilterSelection"
             filterName="Set Chromatogram Selection"
-            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettings"
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSelection"
             id="org.eclipse.chemclipse.chromatogram.filter.setChromatogramSelection">
       </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter transfers identification targets to peaks."
+            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ChromatogramFilterTargetTransfer"
+            filterName="Scan Target to Peak Transfer"
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsTargetTransfer"
+            id="org.eclipse.chemclipse.chromatogram.filter.targetTransferChromatogramSelection">
+      </ChromatogramFilterSupplier>      
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

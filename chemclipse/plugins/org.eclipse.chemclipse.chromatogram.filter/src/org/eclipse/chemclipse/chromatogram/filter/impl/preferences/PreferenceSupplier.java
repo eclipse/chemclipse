@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.filter.Activator;
-import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSelection;
+import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsTargetTransfer;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -30,6 +31,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final double DEF_START_RETENTION_TIME_MINUTES = 1;
 	public static final String P_STOP_RETENTION_TIME_MINUTES = "stopRetentionTimeMinutes";
 	public static final double DEF_STOP_RETENTION_TIME_MINUTES = 10;
+	//
+	public static final String P_TRANSFER_CLOSEST_SCAN = "transferClosestScan";
+	public static final boolean DEF_TRANSFER_CLOSEST_SCAN = false;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -59,6 +63,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_START_RETENTION_TIME_MINUTES, Double.toString(DEF_START_RETENTION_TIME_MINUTES));
 		defaultValues.put(P_STOP_RETENTION_TIME_MINUTES, Double.toString(DEF_STOP_RETENTION_TIME_MINUTES));
+		defaultValues.put(P_TRANSFER_CLOSEST_SCAN, Boolean.toString(DEF_TRANSFER_CLOSEST_SCAN));
 		return defaultValues;
 	}
 
@@ -68,12 +73,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static FilterSettings getFilterSettings() {
+	public static FilterSettingsSelection getFilterSettingsSelection() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		FilterSettings filterSettings = new FilterSettings();
+		FilterSettingsSelection filterSettings = new FilterSettingsSelection();
 		filterSettings.setStartRetentionTimeMinutes(preferences.getDouble(P_START_RETENTION_TIME_MINUTES, DEF_START_RETENTION_TIME_MINUTES));
 		filterSettings.setStopRetentionTimeMinutes(preferences.getDouble(P_STOP_RETENTION_TIME_MINUTES, DEF_STOP_RETENTION_TIME_MINUTES));
+		return filterSettings;
+	}
+
+	public static FilterSettingsTargetTransfer getFilterSettingsTargetTransfer() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		FilterSettingsTargetTransfer filterSettings = new FilterSettingsTargetTransfer();
+		filterSettings.setTransferClosestScan(preferences.getBoolean(P_TRANSFER_CLOSEST_SCAN, DEF_TRANSFER_CLOSEST_SCAN));
 		return filterSettings;
 	}
 }

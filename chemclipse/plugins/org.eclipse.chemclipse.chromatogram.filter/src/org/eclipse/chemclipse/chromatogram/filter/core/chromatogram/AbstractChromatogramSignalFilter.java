@@ -55,6 +55,7 @@ public abstract class AbstractChromatogramSignalFilter extends AbstractChromatog
 		return processingInfo;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 

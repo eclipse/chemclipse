@@ -15,6 +15,8 @@ import org.eclipse.chemclipse.chromatogram.filter.impl.preferences.PreferenceSup
 import org.eclipse.chemclipse.chromatogram.filter.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -34,9 +36,13 @@ public class FilterPreferencePage extends FieldEditorPreferencePage implements I
 	 */
 	public void createFieldEditors() {
 
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Chromatogram Selection Filter", getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceSupplier.P_START_RETENTION_TIME_MINUTES, "Start Retention Time (Minutes)", PreferenceSupplier.MIN_RETENTION_TIME_MINUTES, PreferenceSupplier.MAX_RETENTION_TIME_MINUTES, getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceSupplier.P_STOP_RETENTION_TIME_MINUTES, "Stop Retention Time (Minutes)", PreferenceSupplier.MIN_RETENTION_TIME_MINUTES, PreferenceSupplier.MAX_RETENTION_TIME_MINUTES, getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Scan -> Peak Target Transfer", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_TRANSFER_CLOSEST_SCAN, "Transfer closest scan", getFieldEditorParent()));
 	}
 
 	/*

@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.filter.impl;
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.impl.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSelection;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 @SuppressWarnings("rawtypes")
-public class ChromatogramFilter extends AbstractChromatogramFilter implements IChromatogramFilter {
+public class ChromatogramFilterSelection extends AbstractChromatogramFilter implements IChromatogramFilter {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -32,8 +32,8 @@ public class ChromatogramFilter extends AbstractChromatogramFilter implements IC
 
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(chromatogramFilterSettings instanceof FilterSettings) {
-				FilterSettings filterSettings = (FilterSettings)chromatogramFilterSettings;
+			if(chromatogramFilterSettings instanceof FilterSettingsSelection) {
+				FilterSettingsSelection filterSettings = (FilterSettingsSelection)chromatogramFilterSettings;
 				int startRetentionTime = (int)(filterSettings.getStartRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 				int stopRetentionTime = (int)(filterSettings.getStopRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 				chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime);
@@ -47,7 +47,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter implements IC
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		FilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
+		FilterSettingsSelection filterSettings = PreferenceSupplier.getFilterSettingsSelection();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 }
