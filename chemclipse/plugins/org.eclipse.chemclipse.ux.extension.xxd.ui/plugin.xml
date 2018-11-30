@@ -148,7 +148,13 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
             name="Chromatogram Settings">
-      </page>  
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramAxes"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.referencePageChromatogramAxes"
+            name="Chromatogram Axes">
+      </page>       
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks"
