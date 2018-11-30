@@ -36,6 +36,7 @@ public class ColorCodesFieldEditor extends FieldEditor {
 
 	private static final int NUMBER_COLUMNS = 2;
 	//
+	private Composite composite;
 	private ColorCodes colorCodes = new ColorCodes();
 	private ColorCodeTableUI colorCodeTableUI;
 
@@ -49,7 +50,7 @@ public class ColorCodesFieldEditor extends FieldEditor {
 
 		getLabelControl(parent);
 		//
-		Composite composite = new Composite(parent, SWT.NONE);
+		composite = new Composite(parent, SWT.NONE);
 		GridLayout gridLayout = new GridLayout(NUMBER_COLUMNS, false);
 		gridLayout.marginWidth = 0;
 		gridLayout.marginHeight = 0;
@@ -221,5 +222,8 @@ public class ColorCodesFieldEditor extends FieldEditor {
 	@Override
 	protected void adjustForNumColumns(int numColumns) {
 
+		GridData gridData = (GridData)composite.getLayoutData();
+		gridData.horizontalSpan = numColumns - 1;
+		gridData.grabExcessHorizontalSpace = gridData.horizontalSpan == 1;
 	}
 }

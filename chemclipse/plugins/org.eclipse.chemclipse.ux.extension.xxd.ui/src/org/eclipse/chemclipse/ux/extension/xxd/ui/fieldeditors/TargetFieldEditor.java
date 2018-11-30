@@ -53,8 +53,11 @@ import org.eclipse.swt.widgets.Label;
 public class TargetFieldEditor extends FieldEditor {
 
 	private static final Logger logger = Logger.getLogger(TargetFieldEditor.class);
-	private static final int NUMBER_COLUMNS = 2;
 	//
+	private static final int NUMBER_COLUMNS = 2;
+	private static final int WARN_NUMBER_IMPORT_ENTRIES = 500;
+	//
+	private Composite composite;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private TargetTemplates targetTemplates = new TargetTemplates();
 	private TargetTemplateListUI targetTemplateListUI;
@@ -69,7 +72,7 @@ public class TargetFieldEditor extends FieldEditor {
 
 		getLabelControl(parent);
 		//
-		Composite composite = new Composite(parent, SWT.NONE);
+		composite = new Composite(parent, SWT.NONE);
 		GridLayout gridLayout = new GridLayout(NUMBER_COLUMNS, false);
 		gridLayout.marginWidth = 0;
 		gridLayout.marginHeight = 0;
@@ -181,19 +184,20 @@ public class TargetFieldEditor extends FieldEditor {
 					fileDialog.setText("Select a library to import");
 					fileDialog.setFilterExtensions(databaseConverterSupport.getFilterExtensions());
 					fileDialog.setFilterNames(databaseConverterSupport.getFilterNames());
-					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_PATH));
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER));
 					String pathname = fileDialog.open();
 					if(pathname != null) {
 						//
 						File file = new File(pathname);
-						preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_PATH, file.getParentFile().getAbsolutePath());
+						String path = file.getParentFile().getAbsolutePath();
+						preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
 						//
 						ProgressMonitorDialog dialog = new ProgressMonitorDialog(button.getShell());
 						DatabaseImportRunnable databaseImportRunnable = new DatabaseImportRunnable(file);
 						try {
 							dialog.run(false, false, databaseImportRunnable);
 							IMassSpectra massSpectra = databaseImportRunnable.getMassSpectra();
-							if(massSpectra.size() > 500) {
+							if(massSpectra.size() > WARN_NUMBER_IMPORT_ENTRIES) {
 								if(MessageDialog.openQuestion(button.getShell(), "Import", "Do you really want to import " + massSpectra.size() + " target entries?")) {
 									addTargetTemplates(massSpectra);
 								}
@@ -353,5 +357,8 @@ public class TargetFieldEditor extends FieldEditor {
 	@Override
 	protected void adjustForNumColumns(int numColumns) {
 
+		GridData gridData = (GridData)composite.getLayoutData();
+		gridData.horizontalSpan = numColumns - 1;
+		gridData.grabExcessHorizontalSpace = gridData.horizontalSpan == 1;
 	}
 }

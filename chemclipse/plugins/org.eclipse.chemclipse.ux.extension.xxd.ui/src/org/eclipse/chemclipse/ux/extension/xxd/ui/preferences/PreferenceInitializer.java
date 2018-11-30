@@ -129,7 +129,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_USE_TARGET_LIST, PreferenceConstants.DEF_USE_TARGET_LIST);
 		store.setDefault(PreferenceConstants.P_TARGET_LIST, PreferenceConstants.DEF_TARGET_LIST);
 		store.setDefault(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE, PreferenceConstants.DEF_PROPAGATE_TARGET_ON_UPDATE);
-		store.setDefault(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_PATH, PreferenceConstants.DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_PATH);
+		store.setDefault(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, PreferenceConstants.DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER);
 		/*
 		 * Chromatogram
 		 */

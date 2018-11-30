@@ -280,8 +280,8 @@ public class PreferenceConstants {
 	public static final String DEF_TARGET_LIST = "";
 	public static final String P_PROPAGATE_TARGET_ON_UPDATE = "propagateTargetOnUpdate";
 	public static final boolean DEF_PROPAGATE_TARGET_ON_UPDATE = false;
-	public static final String P_TARGET_TEMPLATE_LIBRARY_IMPORT_PATH = "targetTemplateLibraryImportPath";
-	public static final String DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_PATH = "";
+	public static final String P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "targetTemplateLibraryImportFolder";
+	public static final String DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "";
 	/*
 	 * Chromatogram
 	 */
