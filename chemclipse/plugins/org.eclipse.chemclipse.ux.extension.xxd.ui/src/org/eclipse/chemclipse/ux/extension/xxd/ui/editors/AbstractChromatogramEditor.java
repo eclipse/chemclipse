@@ -39,14 +39,17 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -62,6 +65,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -85,6 +89,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	private File chromatogramFile = null;
 	private ExtendedChromatogramUI extendedChromatogramUI;
 	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private Shell shell;
 
 	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
@@ -234,7 +239,11 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
 		if(chromatogramSelection != null) {
 			try {
-				saveSuccessful = ChromatogramFileSupport.saveChromatogram(shell, chromatogramSelection.getChromatogram(), dataType);
+				/*
+				 * Get the path of the loaded data file.
+				 */
+				String filterPath = getFilterPath();
+				saveSuccessful = ChromatogramFileSupport.saveChromatogram(shell, chromatogramSelection.getChromatogram(), dataType, filterPath);
 				dirtyable.setDirty(!saveSuccessful);
 			} catch(Exception e) {
 				logger.warn(e);
@@ -247,6 +256,23 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	public IChromatogramSelection getChromatogramSelection() {
 
 		return extendedChromatogramUI.getChromatogramSelection();
+	}
+
+	private String getFilterPath() {
+
+		String filterPath = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SAVE_AS_FOLDER);
+		if("".equals(filterPath)) {
+			if(chromatogramFile != null) {
+				if(chromatogramFile.isDirectory()) {
+					filterPath = chromatogramFile.getAbsolutePath();
+				} else {
+					filterPath = chromatogramFile.getParentFile().getAbsolutePath();
+				}
+			} else {
+				filterPath = UserManagement.getUserHome();
+			}
+		}
+		return filterPath;
 	}
 
 	private synchronized void initialize(Composite parent) {

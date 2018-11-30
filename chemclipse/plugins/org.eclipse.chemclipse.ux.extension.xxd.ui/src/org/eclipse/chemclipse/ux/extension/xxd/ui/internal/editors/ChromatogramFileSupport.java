@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramExportRunnable;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -46,6 +46,11 @@ public class ChromatogramFileSupport {
 
 	public static boolean saveChromatogram(Shell shell, IChromatogram chromatogram, DataType dataType) throws NoConverterAvailableException {
 
+		return saveChromatogram(shell, chromatogram, dataType, UserManagement.getUserHome());
+	}
+
+	public static boolean saveChromatogram(Shell shell, IChromatogram chromatogram, DataType dataType, String filterPath) throws NoConverterAvailableException {
+
 		if(chromatogram == null || shell == null) {
 			return false;
 		}
@@ -53,7 +58,7 @@ public class ChromatogramFileSupport {
 		 * Create the dialog.
 		 */
 		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
-		fileDialog.setFilterPath(Activator.getDefault().getSettingsPath());
+		fileDialog.setFilterPath(filterPath);
 		fileDialog.setFileName(chromatogram.getName());
 		fileDialog.setText("Save Chromatogram As...");
 		fileDialog.setOverwrite(true);

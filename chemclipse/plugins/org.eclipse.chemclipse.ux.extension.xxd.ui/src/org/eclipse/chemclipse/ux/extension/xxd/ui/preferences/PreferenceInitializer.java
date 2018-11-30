@@ -209,6 +209,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY);
 		//
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID, PreferenceConstants.DEF_CHROMATOGRAM_SELECTED_ACTION_ID);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SAVE_AS_FOLDER, PreferenceConstants.DEF_CHROMATOGRAM_SAVE_AS_FOLDER);
 		/*
 		 * File Explorer
 		 */

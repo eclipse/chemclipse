@@ -447,6 +447,8 @@ public class PreferenceConstants {
 	//
 	public static final String P_CHROMATOGRAM_SELECTED_ACTION_ID = "chromatogramSelectedActionId";
 	public static final String DEF_CHROMATOGRAM_SELECTED_ACTION_ID = "";
+	public static final String P_CHROMATOGRAM_SAVE_AS_FOLDER = "chromatogramSaveAsFolder";
+	public static final String DEF_CHROMATOGRAM_SAVE_AS_FOLDER = "";
 	/*
 	 * File Explorer
 	 */
