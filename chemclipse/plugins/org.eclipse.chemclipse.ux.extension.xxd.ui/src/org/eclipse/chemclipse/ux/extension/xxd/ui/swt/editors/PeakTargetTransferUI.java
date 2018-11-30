@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -63,7 +64,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class PeakTargetTransferUI extends Composite {
+public class PeakTargetTransferUI extends Composite implements IChromatogramSelectionUpdateListener {
 
 	private static final Logger logger = Logger.getLogger(PeakTargetTransferUI.class);
 	//
@@ -91,6 +92,7 @@ public class PeakTargetTransferUI extends Composite {
 		createControl();
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void update(IChromatogramSelection chromatogramSelectionSource) {
 
