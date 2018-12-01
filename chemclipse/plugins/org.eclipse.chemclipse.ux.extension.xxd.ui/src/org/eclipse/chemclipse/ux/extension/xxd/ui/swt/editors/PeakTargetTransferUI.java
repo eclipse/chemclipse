@@ -11,11 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
@@ -29,7 +26,6 @@ import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -41,7 +37,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionT
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
-import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramSourceCombo;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -69,14 +65,11 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 	private static final Logger logger = Logger.getLogger(PeakTargetTransferUI.class);
 	//
 	private static final String DESCRIPTION = "Transfer Peak Target(s)";
-	private static final String SOURCE_REFERENCES = "Referenced Chromatograms";
-	private static final String SOURCE_EDITORS = "Editor Chromatograms";
 	//
-	private ComboViewer comboViewerSource;
+	private ChromatogramSourceCombo chromatogramSourceCombo;
 	private ComboViewer comboViewerSink;
 	private Button buttonExecute;
 	//
-	private List<String> sources = new ArrayList<String>();
 	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelectionSource;
 	//
@@ -87,8 +80,6 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 
 	public PeakTargetTransferUI(Composite parent, int style) {
 		super(parent, style);
-		sources.add(SOURCE_REFERENCES);
-		sources.add(SOURCE_EDITORS);
 		createControl();
 	}
 
@@ -111,36 +102,21 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
 		//
-		comboViewerSource = createComboViewerSource(composite);
+		chromatogramSourceCombo = createChromatogramSourceCombo(composite);
 		comboViewerSink = createComboViewerSink(composite);
 		createTextTargetDelta(composite);
 		createCheckBoxTransferTargets(composite);
 		buttonExecute = createButtonExecute(composite);
 		//
-		comboViewerSource.setInput(sources);
 		updateComboViewerItems();
 	}
 
-	private ComboViewer createComboViewerSource(Composite parent) {
+	private ChromatogramSourceCombo createChromatogramSourceCombo(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
-		Combo combo = comboViewer.getCombo();
-		comboViewer.setContentProvider(new ListContentProvider());
-		comboViewer.setLabelProvider(new AbstractLabelProvider() {
-
-			@Override
-			public String getText(Object element) {
-
-				if(element instanceof String) {
-					return (String)element;
-				}
-				return null;
-			}
-		});
-		combo.setToolTipText("Select the sink source.");
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.widthHint = 150;
-		combo.setLayoutData(gridData);
+		ChromatogramSourceCombo chromatogramSourceCombo = new ChromatogramSourceCombo(parent, SWT.NONE);
+		chromatogramSourceCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		Combo combo = chromatogramSourceCombo.getCombo();
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -150,7 +126,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 			}
 		});
 		//
-		return comboViewer;
+		return chromatogramSourceCombo;
 	}
 
 	private ComboViewer createComboViewerSink(Composite parent) {
@@ -281,12 +257,11 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 
 	private void updateComboViewerItems() {
 
-		comboViewerSource.getCombo().setEnabled(chromatogramSelectionSource != null);
+		chromatogramSourceCombo.setEnabled(chromatogramSelectionSource != null);
 		//
-		String source = comboViewerSource.getCombo().getText();
-		if(SOURCE_REFERENCES.equals(source) && chromatogramSelectionSource != null) {
+		if(chromatogramSourceCombo.isSourceReferences() && chromatogramSelectionSource != null) {
 			comboViewerSink.setInput(chromatogramSelectionSource.getChromatogram().getReferencedChromatograms());
-		} else if(SOURCE_EDITORS.equals(source)) {
+		} else if(chromatogramSourceCombo.isSourceEditors()) {
 			comboViewerSink.setInput(editorUpdateSupport.getChromatogramSelections());
 		} else {
 			comboViewerSink.setInput(null);
@@ -325,7 +300,8 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 	private void transferPeakTargets(Shell shell) {
 
 		if(chromatogramSelectionSource != null) {
-			IChromatogramSelection chromatogramSelectionSink = getChromatogramSelectionSink();
+			Object object = comboViewerSink.getStructuredSelection().getFirstElement();
+			IChromatogramSelection chromatogramSelectionSink = chromatogramDataSupport.getChromatogramSelection(object);
 			if(chromatogramSelectionSink != null && chromatogramSelectionSink != chromatogramSelectionSource) {
 				/*
 				 * Question
@@ -389,23 +365,6 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 
 		logger.warn(message);
 		MessageDialog.openWarning(shell, DESCRIPTION, message);
-	}
-
-	@SuppressWarnings("rawtypes")
-	private IChromatogramSelection getChromatogramSelectionSink() {
-
-		Object object = comboViewerSink.getStructuredSelection().getFirstElement();
-		if(object instanceof IChromatogramSelection) {
-			return ((IChromatogramSelection)object);
-		} else if(object instanceof IChromatogramCSD) {
-			return new ChromatogramSelectionCSD((IChromatogramCSD)object);
-		} else if(object instanceof IChromatogramMSD) {
-			return new ChromatogramSelectionCSD((IChromatogramMSD)object);
-		} else if(object instanceof IChromatogramWSD) {
-			return new ChromatogramSelectionCSD((IChromatogramWSD)object);
-		}
-		//
-		return null;
 	}
 
 	private boolean isPeakInFocus(int retentionTimePeakSink, int retentionTimePeakSource, int retentionTimeDelta) {

@@ -21,12 +21,13 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramLengthModifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramSourceCombo;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -38,9 +39,11 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 public class ChromatogramAlignmentUI extends Composite implements IChromatogramSelectionUpdateListener {
 
@@ -51,11 +54,13 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 	private static final String MODIFY_LENGTH_LONGEST = "MODIFY_LENGTH_LONGEST";
 	private static final String MODIFY_LENGTH_ADJUST = "MODIFY_LENGTH_ADJUST";
 	//
+	private ChromatogramSourceCombo chromatogramSourceCombo;
 	private List<Button> buttons = new ArrayList<>();
 	//
 	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelectionSource;
 	//
+	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
@@ -83,22 +88,32 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
 		//
-		// TODO Option Box references, editors
-		createLabel(composite, "Use this methods to shrink/expand the editor chromatograms:");
+		chromatogramSourceCombo = createChromatogramSourceCombo(composite);
+		createVerticalSeparator(composite);
 		buttons.add(createButtonShrinkChromatograms(composite));
 		buttons.add(createButtonAlignChromatograms(composite));
 		buttons.add(createButtonStretchChromatograms(composite));
 		buttons.add(createButtonAdjustChromatograms(composite));
 		createVerticalSeparator(composite);
-		createLabel(composite, "Set selected Range:");
 		buttons.add(createButtonSetRanges(composite));
 	}
 
-	private void createLabel(Composite parent, String message) {
+	private ChromatogramSourceCombo createChromatogramSourceCombo(Composite parent) {
 
-		Label label = new Label(parent, SWT.NONE);
-		label.setText(message);
-		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		ChromatogramSourceCombo chromatogramSourceCombo = new ChromatogramSourceCombo(parent, SWT.NONE);
+		chromatogramSourceCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		Combo combo = chromatogramSourceCombo.getCombo();
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				enableButtons();
+			}
+		});
+		//
+		return chromatogramSourceCombo;
 	}
 
 	private Button createButtonShrinkChromatograms(Composite parent) {
@@ -112,7 +127,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifyChromatogramLength(MODIFY_LENGTH_SHORTEST);
+				modifyChromatogramLength(button.getShell(), MODIFY_LENGTH_SHORTEST);
 			}
 		});
 		//
@@ -130,7 +145,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifyChromatogramLength(MODIFY_LENGTH_SELECTED);
+				modifyChromatogramLength(button.getShell(), MODIFY_LENGTH_SELECTED);
 			}
 		});
 		//
@@ -148,7 +163,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifyChromatogramLength(MODIFY_LENGTH_LONGEST);
+				modifyChromatogramLength(button.getShell(), MODIFY_LENGTH_LONGEST);
 			}
 		});
 		//
@@ -166,7 +181,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifyChromatogramLength(MODIFY_LENGTH_ADJUST);
+				modifyChromatogramLength(button.getShell(), MODIFY_LENGTH_ADJUST);
 			}
 		});
 		//
@@ -195,7 +210,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 
 	private void enableButtons() {
 
-		boolean enabled = chromatogramSelectionSource != null;
+		boolean enabled = chromatogramSelectionSource != null && (chromatogramSourceCombo.isSourceReferences() || chromatogramSourceCombo.isSourceEditors());
 		for(Button button : buttons) {
 			button.setEnabled(enabled);
 		}
@@ -243,9 +258,9 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void modifyChromatogramLength(String modifyLengthType) {
+	private void modifyChromatogramLength(Shell shell, String modifyLengthType) {
 
-		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Modify Chromatogram Length");
 		messageBox.setMessage("Would you like to modify the length of all opened chromatograms? Peaks will be deleted.");
 		if(messageBox.open() == SWT.YES) {
@@ -271,7 +286,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 				for(IChromatogramSelection chromatogramSelection : getTargetChromatogramSelections()) {
 					if(realignChromatogram(modifyLengthType, chromatogramSelection, chromatogram)) {
 						IRunnableWithProgress runnable = new ChromatogramLengthModifier(chromatogramSelection, scanDelay, chromatogramLength);
-						ProgressMonitorDialog monitor = new ProgressMonitorDialog(DisplayUtils.getShell());
+						ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 						try {
 							monitor.run(true, true, runnable);
 						} catch(InvocationTargetException e) {
@@ -371,15 +386,27 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 		return chromatogram;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private List<IChromatogramSelection> getTargetChromatogramSelections() {
 
 		List<IChromatogramSelection> selections = new ArrayList<>();
-		boolean useReferencedChromatograms = false;
-		if(useReferencedChromatograms && chromatogramSelectionSource != null) {
-			//
-		} else {
-			selections.addAll(editorUpdateSupport.getChromatogramSelections());
+		if(chromatogramSelectionSource != null) {
+			if(chromatogramSourceCombo.isSourceReferences()) {
+				/*
+				 * Get the chromatogram and its referenced chromatograms.
+				 */
+				selections.add(chromatogramSelectionSource);
+				List<IChromatogram> referencedChromatograms = chromatogramSelectionSource.getChromatogram().getReferencedChromatograms();
+				for(IChromatogram referencedChromatogram : referencedChromatograms) {
+					IChromatogramSelection chromatogramSelectionSink = chromatogramDataSupport.getChromatogramSelection(referencedChromatogram);
+					selections.add(chromatogramSelectionSink);
+				}
+			} else if(chromatogramSourceCombo.isSourceEditors()) {
+				/*
+				 * Get the editor chromatograms.
+				 */
+				selections.addAll(editorUpdateSupport.getChromatogramSelections());
+			}
 		}
 		//
 		return selections;

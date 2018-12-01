@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -63,6 +64,28 @@ public class ChromatogramDataSupport {
 		}
 		//
 		return type;
+	}
+
+	/**
+	 * Object could be IChromatogramSelection... or IChromatogram... instance.
+	 * In case of no match, null will be returned.
+	 * 
+	 * @param object
+	 * @return IChromatogramSelection
+	 */
+	public IChromatogramSelection getChromatogramSelection(Object object) {
+
+		if(object instanceof IChromatogramSelection) {
+			return ((IChromatogramSelection)object);
+		} else if(object instanceof IChromatogramCSD) {
+			return new ChromatogramSelectionCSD((IChromatogramCSD)object);
+		} else if(object instanceof IChromatogramMSD) {
+			return new ChromatogramSelectionCSD((IChromatogramMSD)object);
+		} else if(object instanceof IChromatogramWSD) {
+			return new ChromatogramSelectionCSD((IChromatogramWSD)object);
+		} else {
+			return null;
+		}
 	}
 
 	public String getChromatogramLabel(IChromatogram chromatogram) {
