@@ -110,6 +110,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSuppor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramActionUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramReferencesUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeatmapUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IChromatogramReferencesListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarUI;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
@@ -1217,11 +1218,11 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		//
 		toolbarMain = createToolbarMain(parent);
 		toolbars.put(TOOLBAR_INFO, createToolbarInfo(parent));
-		toolbars.put(TOOLBAR_RETENTION_INDICES, createToolbarRetentionIndices(parent));
-		toolbars.put(TOOLBAR_METHOD, createToolbarMethod(parent));
+		toolbars.put(TOOLBAR_EDIT, createToolbarEdit(parent));
 		toolbars.put(TOOLBAR_PEAK_TARGET_TRANSFER, createPeakTargetTransferUI(parent));
 		toolbars.put(TOOLBAR_CHROMATOGRAM_ALIGNMENT, createChromatogramAlignmentUI(parent));
-		toolbars.put(TOOLBAR_EDIT, createToolbarEdit(parent));
+		toolbars.put(TOOLBAR_METHOD, createToolbarMethod(parent));
+		toolbars.put(TOOLBAR_RETENTION_INDICES, createToolbarRetentionIndices(parent));
 		//
 		SashForm chartsArea = new SashForm(parent, SWT.HORIZONTAL);
 		chartsArea.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -1232,11 +1233,11 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		//
 		PartSupport.setCompositeVisibility(toolbarMain, true);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_INFO), false);
-		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_RETENTION_INDICES), false);
-		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_METHOD), false);
+		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_EDIT), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_PEAK_TARGET_TRANSFER), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_CHROMATOGRAM_ALIGNMENT), false);
-		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_EDIT), false);
+		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_METHOD), false);
+		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_RETENTION_INDICES), false);
 		PartSupport.setCompositeVisibility(heatmapArea, false);
 		//
 		chromatogramActionUI.setChromatogramActionMenu(chromatogramSelection);
@@ -1248,10 +1249,11 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(9, false));
+		composite.setLayout(new GridLayout(10, false));
 		//
 		createToggleToolbarButton(composite, "Toggle the info toolbar.", IApplicationImage.IMAGE_INFO, TOOLBAR_INFO);
 		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
+		createChromatogramReferencesUI(composite);
 		createToggleToolbarButton(composite, "Toggle the edit toolbar.", IApplicationImage.IMAGE_EDIT, TOOLBAR_EDIT);
 		createToggleToolbarButton(composite, "Toggle the peak targets transfer toolbar.", IApplicationImage.IMAGE_TARGETS, TOOLBAR_PEAK_TARGET_TRANSFER);
 		createToggleToolbarButton(composite, "Toggle the chromatogram alignment toolbar.", IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, TOOLBAR_CHROMATOGRAM_ALIGNMENT);
@@ -1261,6 +1263,21 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		createSettingsButton(composite);
 		//
 		return composite;
+	}
+
+	private void createChromatogramReferencesUI(Composite parent) {
+
+		chromatogramReferencesUI = new ChromatogramReferencesUI(parent, SWT.NONE);
+		chromatogramReferencesUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		chromatogramReferencesUI.setChromatogramReferencesListener(new IChromatogramReferencesListener() {
+
+			@Override
+			public void update(IChromatogramSelection chromatogramSelection) {
+
+				updateChromatogramSelection(chromatogramSelection);
+				fireUpdate();
+			}
+		});
 	}
 
 	private Composite createToolbarInfo(Composite parent) {
@@ -1366,11 +1383,8 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(9, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
-		chromatogramReferencesUI = new ChromatogramReferencesUI(composite, SWT.NONE);
-		chromatogramReferencesUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		createVerticalSeparator(composite);
 		createToggleToolbarButton(composite, "Toggle the retention index toolbar.", IApplicationImage.IMAGE_RETENION_INDEX, TOOLBAR_RETENTION_INDICES);
 		createVerticalSeparator(composite);
 		createToggleChartSeriesLegendButton(composite);

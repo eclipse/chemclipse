@@ -273,6 +273,13 @@ public class PartSupport {
 		}
 	}
 
+	public static boolean toggleControlVisibility(Control control) {
+
+		boolean visible = !control.isVisible();
+		setControlVisibility(control, visible);
+		return visible;
+	}
+
 	public static void setControlVisibility(Control control, boolean visible) {
 
 		control.setVisible(visible);
