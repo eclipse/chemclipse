@@ -16,8 +16,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
 import org.eclipse.chemclipse.nmr.model.core.ISignalNMR;
+import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -56,18 +56,19 @@ public class ExtendedNMROverlayUI {
 	//
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 	//
-	private List<IScanNMR> scanSelections = new ArrayList<>();
+	private List<IDataNMRSelection> dataNMRSelections = new ArrayList<>();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private IColorScheme colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY));
 
 	@Inject
 	public ExtendedNMROverlayUI(Composite parent) {
+
 		initialize(parent);
 	}
 
 	public void update() {
 
-		scanSelections = editorUpdateSupport.getScanSelectionsNMR();
+		dataNMRSelections = editorUpdateSupport.getDataNMRSelections();
 		refreshUpdateOverlayChart();
 	}
 
@@ -168,17 +169,17 @@ public class ExtendedNMROverlayUI {
 	private void refreshUpdateOverlayChart() {
 
 		chartNMR.deleteSeries();
-		if(scanSelections.size() > 0) {
+		if(dataNMRSelections.size() > 0) {
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			int i = 1;
 			Color color = colorSchemeNormal.getColor();
 			//
-			for(IScanNMR scanNMR : scanSelections) {
+			for(IDataNMRSelection dataNMRSelection : dataNMRSelections) {
 				/*
 				 * Get the data.
 				 */
-				ILineSeriesData lineSeriesData = getLineSeriesData(scanNMR, "NMR_" + i++);
+				ILineSeriesData lineSeriesData = getLineSeriesData(dataNMRSelection, "NMR_" + i++);
 				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 				lineSeriesSettings.setLineColor(color);
 				lineSeriesSettings.setEnableArea(false);
@@ -191,24 +192,24 @@ public class ExtendedNMROverlayUI {
 		}
 	}
 
-	private ILineSeriesData getLineSeriesData(IScanNMR scanNMR, String id) {
+	private ILineSeriesData getLineSeriesData(IDataNMRSelection dataNMRSelection, String id) {
 
-		ISeriesData seriesData = getSeriesDataProcessed(scanNMR, id);
+		ISeriesData seriesData = getSeriesDataProcessed(dataNMRSelection, id);
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 		return lineSeriesData;
 	}
 
-	private ISeriesData getSeriesDataProcessed(IScanNMR scanNMR, String id) {
+	private ISeriesData getSeriesDataProcessed(IDataNMRSelection dataNMRSelection, String id) {
 
 		double[] xSeries;
 		double[] ySeries;
 		//
-		if(scanNMR != null) {
-			int size = scanNMR.getProcessedSignals().size();
+		if(dataNMRSelection != null) {
+			int size = dataNMRSelection.getMeasurmentNMR().getScanMNR().getNumberOfFourierPoints();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalNMR scanSignal : scanNMR.getProcessedSignals()) {
+			for(ISignalNMR scanSignal : dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR()) {
 				xSeries[index] = scanSignal.getChemicalShift();
 				ySeries[index] = scanSignal.getIntensity();
 				index++;

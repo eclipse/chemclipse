@@ -7,19 +7,23 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Jan Holy - initial API and implementation
+ * jan - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.nmr.model.support;
+package org.eclipse.chemclipse.nmr.model.core;
 
-import java.io.IOException;
-import java.io.ObjectInput;
+import java.util.Optional;
 
-import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
+public interface IScanNMRInfo {
 
-public class StreamObjectReader {
+	Optional<Double> getIrradiationCarrierFrequency();
 
-	public static IDataNMRSelection readObject(ObjectInput objectInput) throws ClassNotFoundException, IOException {
+	void setIrradiationCarrierFrequency(double frequency);
 
-		return (IDataNMRSelection)objectInput.readObject();
-	}
+	double getSweepWidth();
+
+	double getFirstDataPointOffset();
+
+	Optional<ISpectralReference> getSpectralRefence();
+
+	void setSpectralReference(ISpectralReference spectral_reference);
 }

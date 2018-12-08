@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.processor.core;
 
-import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
+import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.nmr.processor.settings.IProcessorSettings;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IScanProcessor {
 
-	IProcessingInfo process(IScanNMR scanNMR, IProcessorSettings processorSettings, IProgressMonitor monitor);
+	IProcessingInfo process(IDataNMRSelection scanNMR, IProcessorSettings processorSettings, IProgressMonitor monitor);
 }

@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
+import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramProjectEditor;
@@ -101,7 +101,7 @@ public class EditorUpdateSupport {
 
 	public List<IScanXIR> getScanSelectionsXIR() {
 
-		List<IScanXIR> scanSelections = new ArrayList<IScanXIR>();
+		List<IScanXIR> dataNMRSelections = new ArrayList<IScanXIR>();
 		if(partService != null) {
 			/*
 			 * TODO: see message
@@ -121,7 +121,7 @@ public class EditorUpdateSupport {
 						}
 						//
 						if(selection != null) {
-							scanSelections.add(selection);
+							dataNMRSelections.add(selection);
 						}
 					}
 				}
@@ -133,12 +133,12 @@ public class EditorUpdateSupport {
 		 * If the window was null and there was no open editor, the list will
 		 * contains 0 elements.
 		 */
-		return scanSelections;
+		return dataNMRSelections;
 	}
 
-	public List<IScanNMR> getScanSelectionsNMR() {
+	public List<IDataNMRSelection> getDataNMRSelections() {
 
-		List<IScanNMR> scanSelections = new ArrayList<IScanNMR>();
+		List<IDataNMRSelection> scanSelections = new ArrayList<IDataNMRSelection>();
 		if(partService != null) {
 			/*
 			 * TODO: see message
@@ -151,7 +151,7 @@ public class EditorUpdateSupport {
 						/*
 						 * NMR
 						 */
-						IScanNMR selection = null;
+						IDataNMRSelection selection = null;
 						if(object instanceof IScanEditorNMR) {
 							IScanEditorNMR editor = (IScanEditorNMR)object;
 							selection = editor.getScanSelection();

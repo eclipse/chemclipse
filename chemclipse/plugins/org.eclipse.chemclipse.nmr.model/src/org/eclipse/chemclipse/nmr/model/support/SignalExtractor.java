@@ -14,120 +14,127 @@ package org.eclipse.chemclipse.nmr.model.support;
 import java.util.Iterator;
 
 import org.apache.commons.math3.complex.Complex;
-import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
+import org.eclipse.chemclipse.nmr.model.core.IMeasurementNMR;
 import org.eclipse.chemclipse.nmr.model.core.ISignalFID;
 import org.eclipse.chemclipse.nmr.model.core.ISignalNMR;
 import org.eclipse.chemclipse.nmr.model.core.SignalFID;
 import org.eclipse.chemclipse.nmr.model.core.SignalNMR;
+import org.eclipse.chemclipse.nmr.model.selection.DataNMRSelection;
+import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 
 public class SignalExtractor implements ISignalExtractor {
 
-	private IScanNMR scanNMR;
+	private IDataNMRSelection dataNMRSelection;
 
-	public SignalExtractor(IScanNMR scanNMR) {
+	public SignalExtractor(IDataNMRSelection scanNMR) {
 
-		this.scanNMR = scanNMR;
+		this.dataNMRSelection = scanNMR;
+	}
+
+	public SignalExtractor(IMeasurementNMR scanNMR) {
+
+		this.dataNMRSelection = new DataNMRSelection(scanNMR);
 	}
 
 	public double[] extractSignalIntesity() {
 
-		return scanNMR.getSignalsNMR().stream().mapToDouble(ISignalNMR::getIntensity).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().stream().mapToDouble(ISignalNMR::getIntensity).toArray();
 	}
 
 	@Override
 	public Complex[] extractFourierTransformedData() {
 
-		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getFourierTransformedData).toArray(Complex[]::new);
+		return dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().stream().map(ISignalNMR::getFourierTransformedData).toArray(Complex[]::new);
 	}
 
 	@Override
 	public Complex[] extractPhaseCorrectedData() {
 
-		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getPhaseCorrectedData).toArray(Complex[]::new);
+		return dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().stream().map(ISignalNMR::getPhaseCorrectedData).toArray(Complex[]::new);
 	}
 
 	@Override
 	public Complex[] extractBaselineCorrectedData() {
 
-		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getBaselineCorrectedData).toArray(Complex[]::new);
+		return dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().stream().map(ISignalNMR::getBaselineCorrectedData).toArray(Complex[]::new);
 	}
 
 	@Override
 	public double[] extractFourierTransformedDataRealPart() {
 
-		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getFourierTransformedData).mapToDouble(Complex::getReal).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().stream().map(ISignalNMR::getFourierTransformedData).mapToDouble(Complex::getReal).toArray();
 	}
 
 	@Override
 	public double[] extractPhaseCorrectedDataRealPart() {
 
-		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getPhaseCorrectedData).mapToDouble(Complex::getReal).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().stream().map(ISignalNMR::getPhaseCorrectedData).mapToDouble(Complex::getReal).toArray();
 	}
 
 	@Override
 	public double[] extractBaselineCorrectedDataRealPart() {
 
-		return scanNMR.getSignalsNMR().stream().map(ISignalNMR::getBaselineCorrectedData).mapToDouble(Complex::getReal).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().stream().map(ISignalNMR::getBaselineCorrectedData).mapToDouble(Complex::getReal).toArray();
 	}
 
 	@Override
 	public Complex[] extractRawIntesityFID() {
 
-		return scanNMR.getSignalsFID().stream().map(s -> s.getIntensityFID()).toArray(Complex[]::new);
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().map(s -> s.getIntensityFID()).toArray(Complex[]::new);
 	}
 
 	@Override
 	public double[] extractRawIntesityFIDReal() {
 
-		return scanNMR.getSignalsFID().stream().mapToDouble(s -> s.getIntensityFID().getReal()).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().mapToDouble(s -> s.getIntensityFID().getReal()).toArray();
 	}
 
 	@Override
 	public Complex[] extractIntesityFID() {
 
-		return scanNMR.getSignalsFID().stream().map(s -> s.getIntensity()).toArray(Complex[]::new);
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().map(s -> s.getIntensity()).toArray(Complex[]::new);
 	}
 
 	@Override
 	public double[] extractIntesityFIDReal() {
 
-		return scanNMR.getSignalsFID().stream().mapToDouble(s -> s.getIntensity().getReal()).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().mapToDouble(s -> s.getIntensity().getReal()).toArray();
 	}
 
 	@Override
 	public long[] extractTimeFID() {
 
-		return scanNMR.getSignalsFID().stream().mapToLong(ISignalFID::getTime).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().mapToLong(ISignalFID::getTime).toArray();
 	}
 
 	@Override
 	public double[] extractChemicalShift() {
 
-		return scanNMR.getSignalsNMR().stream().mapToDouble(ISignalNMR::getChemicalShift).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().stream().mapToDouble(ISignalNMR::getChemicalShift).toArray();
 	}
 
 	@Override
 	public void createScans(Complex[] fourierTransformedData, double[] chemicalShift) {
 
-		scanNMR.removeAllSignalsNMR();
+		dataNMRSelection.getMeasurmentNMR().getScanMNR().removeAllSignalsNMR();
 		for(int i = 0; i < fourierTransformedData.length; i++) {
-			scanNMR.addSignalNMR(new SignalNMR(chemicalShift[i], fourierTransformedData[i]));
+			dataNMRSelection.getMeasurmentNMR().getScanMNR().addSignalNMR(new SignalNMR(chemicalShift[i], fourierTransformedData[i]));
 		}
 	}
 
 	@Override
 	public void createScansFID(Complex[] complexFID, long[] time) {
 
-		scanNMR.removeAllSignalsFID();
+		dataNMRSelection.getMeasurmentNMR().getScanFID().removeAllSignalsFID();
 		for(int i = 0; i < complexFID.length; i++) {
-			scanNMR.addSignalFID(new SignalFID(time[i], complexFID[i]));
+			dataNMRSelection.getMeasurmentNMR().getScanFID().addSignalFID(new SignalFID(time[i], complexFID[i]));
 		}
 	}
 
 	@Override
 	public void setIntesity(double[] intensities) {
 
-		Iterator<ISignalNMR> signals = scanNMR.getSignalsNMR().iterator();
+		Iterator<ISignalNMR> signals = dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().iterator();
 		int i = 0;
 		while(signals.hasNext()) {
 			ISignalNMR signal = signals.next();
@@ -140,7 +147,7 @@ public class SignalExtractor implements ISignalExtractor {
 	@Override
 	public void setIntesity(Complex[] intensities) {
 
-		Iterator<ISignalNMR> signals = scanNMR.getSignalsNMR().iterator();
+		Iterator<ISignalNMR> signals = dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().iterator();
 		int i = 0;
 		while(signals.hasNext()) {
 			ISignalNMR signal = signals.next();
@@ -153,7 +160,7 @@ public class SignalExtractor implements ISignalExtractor {
 	@Override
 	public void setPhaseCorrection(Complex[] phaseCorrection, boolean resetIntesityValues) {
 
-		Iterator<ISignalNMR> signals = scanNMR.getSignalsNMR().iterator();
+		Iterator<ISignalNMR> signals = dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().iterator();
 		int i = 0;
 		while(signals.hasNext()) {
 			ISignalNMR signal = signals.next();
@@ -169,7 +176,7 @@ public class SignalExtractor implements ISignalExtractor {
 	@Override
 	public void setBaselineCorrection(Complex[] baseleniCorrection, boolean resetIntensityValue) {
 
-		Iterator<ISignalNMR> signals = scanNMR.getSignalsNMR().iterator();
+		Iterator<ISignalNMR> signals = dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().iterator();
 		int i = 0;
 		while(signals.hasNext()) {
 			ISignalNMR signal = signals.next();
@@ -184,16 +191,16 @@ public class SignalExtractor implements ISignalExtractor {
 
 	private void resertValues() {
 
-		scanNMR.getSignalsNMR().forEach(signal -> signal.resetIntesity());
+		dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().forEach(signal -> signal.resetIntesity());
 	}
 
 	@Override
 	public void setScansFIDCorrection(double[] correction, boolean reset) {
 
 		if(reset) {
-			scanNMR.getSignalsFID().forEach(ISignalFID::resetIntensity);
+			dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().forEach(ISignalFID::resetIntensity);
 		}
-		Iterator<ISignalFID> it = scanNMR.getSignalsFID().iterator();
+		Iterator<ISignalFID> it = dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().iterator();
 		int i = 0;
 		while(it.hasNext()) {
 			ISignalFID iSignalFID = it.next();

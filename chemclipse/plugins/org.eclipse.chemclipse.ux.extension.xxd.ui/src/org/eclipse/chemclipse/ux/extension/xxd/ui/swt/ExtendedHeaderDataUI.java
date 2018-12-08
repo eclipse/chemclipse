@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
-import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
+import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -70,6 +70,7 @@ public class ExtendedHeaderDataUI {
 
 	@Inject
 	public ExtendedHeaderDataUI(Composite parent) {
+
 		initialize(parent);
 	}
 
@@ -92,7 +93,7 @@ public class ExtendedHeaderDataUI {
 			return true;
 		} else if(measurementInfo instanceof IScanXIR) {
 			return true;
-		} else if(measurementInfo instanceof IScanNMR) {
+		} else if(measurementInfo instanceof IDataNMRSelection) {
 			return true;
 		} else if(measurementInfo instanceof IPlate) {
 			return true;

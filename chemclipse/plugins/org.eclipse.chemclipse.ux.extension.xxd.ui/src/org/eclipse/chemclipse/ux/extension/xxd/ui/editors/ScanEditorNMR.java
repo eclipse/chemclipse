@@ -20,7 +20,8 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
+import org.eclipse.chemclipse.nmr.model.selection.DataNMRSelection;
+import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
@@ -60,12 +61,13 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 	private File scanFile;
 	private ExtendedNMRScanUI extendedNMRScanUI;
 	//
-	private IScanNMR scanNMR = null;
+	private IDataNMRSelection dataNMRSelection = null;
 	//
 	private Shell shell;
 
 	@Inject
 	public ScanEditorNMR(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
+
 		super(part);
 		//
 		this.part = part;
@@ -139,21 +141,21 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 	}
 
 	@Override
-	public IScanNMR getScanSelection() {
+	public IDataNMRSelection getScanSelection() {
 
-		return scanNMR;
+		return dataNMRSelection;
 	}
 
 	private void initialize(Composite parent) {
 
-		scanNMR = loadScan();
+		dataNMRSelection = loadScan();
 		createEditorPages(parent);
-		extendedNMRScanUI.update(scanNMR);
+		extendedNMRScanUI.update(dataNMRSelection);
 	}
 
-	private synchronized IScanNMR loadScan() {
+	private synchronized IDataNMRSelection loadScan() {
 
-		IScanNMR scanNMR = null;
+		IDataNMRSelection dataNMRSelection = null;
 		try {
 			Object object = part.getObject();
 			if(object instanceof Map) {
@@ -164,16 +166,16 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 				Map<String, Object> map = (Map<String, Object>)object;
 				File file = new File((String)map.get(EditorSupport.MAP_FILE));
 				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
-				scanNMR = loadScan(file, batch);
+				dataNMRSelection = loadScan(file, batch);
 			}
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		}
 		//
-		return scanNMR;
+		return dataNMRSelection;
 	}
 
-	private IScanNMR loadScan(File file, boolean batch) {
+	private IDataNMRSelection loadScan(File file, boolean batch) {
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		ScanNMRImportRunnable runnable = new ScanNMRImportRunnable(file);
@@ -190,7 +192,7 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 		}
 		//
 		scanFile = file;
-		return runnable.getScanNMR();
+		return new DataNMRSelection(runnable.getScanNMR());
 	}
 
 	private void createEditorPages(Composite parent) {

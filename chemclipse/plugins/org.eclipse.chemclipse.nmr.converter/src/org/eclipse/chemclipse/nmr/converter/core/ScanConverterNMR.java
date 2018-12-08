@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.converter.scan.IScanConverterSupport;
 import org.eclipse.chemclipse.converter.scan.ScanConverterSupport;
 import org.eclipse.chemclipse.converter.scan.ScanSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
+import org.eclipse.chemclipse.nmr.model.core.IMeasurementNMR;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
@@ -39,6 +39,7 @@ public class ScanConverterNMR {
 	 * This class has only static methods.
 	 */
 	private ScanConverterNMR() {
+
 	}
 
 	public static IProcessingInfo convert(final File file, final String converterId, final IProgressMonitor monitor) {
@@ -86,7 +87,7 @@ public class ScanConverterNMR {
 					processingInfo = importConverter.convert(file, monitor);
 					if(!processingInfo.hasErrorMessages()) {
 						Object object = processingInfo.getProcessingResult();
-						if(object instanceof IScanNMR) {
+						if(object instanceof IMeasurementNMR) {
 							return processingInfo;
 						}
 					}
@@ -98,7 +99,7 @@ public class ScanConverterNMR {
 		return getProcessingError(file);
 	}
 
-	public static IProcessingInfo convert(final File file, final IScanNMR scan, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo convert(final File file, final IMeasurementNMR scan, final String converterId, final IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		/*
