@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.nmr.processor.core;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
+import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.nmr.processor.settings.IProcessorSettings;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -37,12 +37,12 @@ public class ScanProcessorNMR {
 
 	}
 
-	public static IProcessingInfo process(IScanNMR scanNMR, IProcessorSettings processorSettings, String processorId, IProgressMonitor monitor) {
+	public static IProcessingInfo process(IDataNMRSelection dataNMRSelection, IProcessorSettings processorSettings, String processorId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		IScanProcessor scanProcessor = getScanProcessor(processorId);
 		if(scanProcessor != null) {
-			processingInfo = scanProcessor.process(scanNMR, processorSettings, monitor);
+			processingInfo = scanProcessor.process(dataNMRSelection, processorSettings, monitor);
 		} else {
 			processingInfo = getProcessingError(processorId);
 		}

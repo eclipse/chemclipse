@@ -24,7 +24,6 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 	private Complex phaseCorrection;
 	private Complex baselineCorrection;
 
-	@Deprecated
 	public SignalNMR(double chemicalShift, double intensity) {
 
 		this.chemicalShift = chemicalShift;

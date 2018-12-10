@@ -9,17 +9,11 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.nmr.model.support;
+package org.eclipse.chemclipse.nmr.model.selection;
 
-import java.io.IOException;
-import java.io.ObjectInput;
+import org.eclipse.chemclipse.nmr.model.core.IMeasurementNMR;
 
-import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
+public interface IDataNMRSelection {
 
-public class StreamObjectReader {
-
-	public static IDataNMRSelection readObject(ObjectInput objectInput) throws ClassNotFoundException, IOException {
-
-		return (IDataNMRSelection)objectInput.readObject();
-	}
+	IMeasurementNMR getMeasurmentNMR();
 }

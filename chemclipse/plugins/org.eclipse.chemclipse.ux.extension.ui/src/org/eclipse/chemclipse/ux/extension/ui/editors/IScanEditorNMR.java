@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.editors;
 
-import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
+import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 
 public interface IScanEditorNMR extends IChemClipseEditor {
 
-	IScanNMR getScanSelection();
+	IDataNMRSelection getScanSelection();
 }

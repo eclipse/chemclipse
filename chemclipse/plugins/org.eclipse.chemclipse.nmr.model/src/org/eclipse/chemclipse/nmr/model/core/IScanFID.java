@@ -5,9 +5,9 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Jan Holy - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
@@ -15,27 +15,21 @@ import java.util.NavigableSet;
 
 import org.eclipse.chemclipse.model.core.IScanSerializable;
 
-public interface IScanNMR extends IScanSerializable {
+public interface IScanFID extends IScanNMRInfo, IScanSerializable {
 
-	NavigableSet<ISignalNMR> getSignalsNMR();
+	void removeSignalFID(ISignalFID signalFID);
 
-	void addSignalNMR(ISignalNMR signalNMR);
+	NavigableSet<ISignalFID> getSignalsFID();
 
-	void removeSignalNMR(ISignalNMR signalNMR);
+	void addSignalFID(ISignalFID signalFID);
 
-	void removeAllSignalsNMR();
+	void removeAllSignalsFID();
 
-	int getNumberOfFourierPoints();
+	long getAcqusitionTime();
 
-	double getSweepWidth();
+	int getNumberOfSignalsFid();
 
-	double getSweepOffset();
+	void setSweepWidth(double sweepWidth);
 
-	double getFirstOrderPhaseCorrection();
-
-	void setFirstOrderPhaseCorrection(double firstOrderPhaseCorrection);
-
-	double getZeroOrderPhaseCorrection();
-
-	void setZeroOrderPhaseCorrection(double zeroOrderPhaseCorrection);
+	void setFirstDataPointOffset(double firstDataPointOffset);
 }

@@ -14,8 +14,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.nmr.model.core.IScanFID;
 import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
+import org.eclipse.chemclipse.nmr.model.core.ISignalFID;
 import org.eclipse.chemclipse.nmr.model.core.ISignalNMR;
+import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -47,21 +50,22 @@ import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 public class ExtendedNMRScanUI {
 
 	private ChartNMR chartNMR;
-	private IScanNMR scanNMR;
+	private IDataNMRSelection dataNMRSelection;
 	//
 	private Label labelDataInfo;
 	private boolean showRawData = false;
 	//
 
 	public ExtendedNMRScanUI(Composite parent) {
+
 		initialize(parent);
 	}
 
-	public void update(IScanNMR scanNMR) {
+	public void update(IDataNMRSelection scanNMR) {
 
-		this.scanNMR = scanNMR;
+		this.dataNMRSelection = scanNMR;
 		if(scanNMR != null) {
-			showRawData = (scanNMR.getProcessedSignals().size() > 0) ? false : true;
+			showRawData = (scanNMR.getMeasurmentNMR().getScanMNR().getNumberOfFourierPoints() > 0) ? false : true;
 		}
 		chartNMR.modifyChart(showRawData);
 		updateScan();
@@ -72,12 +76,12 @@ public class ExtendedNMRScanUI {
 		chartNMR.deleteSeries();
 		labelDataInfo.setText(showRawData ? "Raw Data" : "Processed Data");
 		//
-		if(scanNMR != null) {
+		if(dataNMRSelection != null) {
 			/*
 			 * Get the data.
 			 */
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			ILineSeriesData lineSeriesData = getLineSeriesData(scanNMR, "NMR", showRawData);
+			ILineSeriesData lineSeriesData = getLineSeriesData(dataNMRSelection, "NMR", showRawData);
 			//
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setLineColor(Colors.RED);
@@ -92,30 +96,31 @@ public class ExtendedNMRScanUI {
 		}
 	}
 
-	private ILineSeriesData getLineSeriesData(IScanNMR scanNMR, String id, boolean raw) {
+	private ILineSeriesData getLineSeriesData(IDataNMRSelection dataNMRSelection, String id, boolean raw) {
 
 		ISeriesData seriesData;
 		if(raw) {
-			seriesData = getSeriesDataRaw(scanNMR, id);
+			seriesData = getSeriesDataRaw(dataNMRSelection, id);
 		} else {
-			seriesData = getSeriesDataProcessed(scanNMR, id);
+			seriesData = getSeriesDataProcessed(dataNMRSelection, id);
 		}
 		//
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 		return lineSeriesData;
 	}
 
-	private ISeriesData getSeriesDataProcessed(IScanNMR scanNMR, String id) {
+	private ISeriesData getSeriesDataProcessed(IDataNMRSelection dataNMRSelection, String id) {
 
 		double[] xSeries;
 		double[] ySeries;
 		//
-		if(scanNMR != null) {
-			int size = scanNMR.getProcessedSignals().size();
+		if(dataNMRSelection != null) {
+			IScanNMR scanNMR = dataNMRSelection.getMeasurmentNMR().getScanMNR();
+			int size = scanNMR.getNumberOfFourierPoints();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalNMR scanSignal : scanNMR.getProcessedSignals()) {
+			for(ISignalNMR scanSignal : scanNMR.getSignalsNMR()) {
 				xSeries[index] = scanSignal.getChemicalShift();
 				ySeries[index] = scanSignal.getIntensity();
 				index++;
@@ -128,17 +133,28 @@ public class ExtendedNMRScanUI {
 		return new SeriesData(xSeries, ySeries, id);
 	}
 
-	private ISeriesData getSeriesDataRaw(IScanNMR scanNMR, String id) {
+	private ISeriesData getSeriesDataRaw(IDataNMRSelection dataNMRSelection, String id) {
 
+		double[] xSeries;
 		double[] ySeries;
 		//
-		if(scanNMR != null) {
-			ySeries = scanNMR.getRawSignals().clone();
+		if(dataNMRSelection != null) {
+			IScanFID scanFID = dataNMRSelection.getMeasurmentNMR().getScanFID();
+			int size = scanFID.getNumberOfSignalsFid();
+			xSeries = new double[size];
+			ySeries = new double[size];
+			int index = 0;
+			for(ISignalFID scanSignal : scanFID.getSignalsFID()) {
+				xSeries[index] = scanSignal.getTime();
+				ySeries[index] = scanSignal.getIntensity().getReal();
+				index++;
+			}
 		} else {
+			xSeries = new double[0];
 			ySeries = new double[0];
 		}
 		//
-		return new SeriesData(ySeries, id);
+		return new SeriesData(xSeries, ySeries, id);
 	}
 
 	private void initialize(Composite parent) {
