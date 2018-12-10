@@ -24,11 +24,11 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
-import org.eclipse.eavp.service.swtchart.menu.AbstractChartMenuEntry;
-import org.eclipse.eavp.service.swtchart.menu.IChartMenuEntry;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swtchart.extensions.core.ScrollableChart;
+import org.eclipse.swtchart.extensions.menu.AbstractChartMenuEntry;
+import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
 public class FilterMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
 

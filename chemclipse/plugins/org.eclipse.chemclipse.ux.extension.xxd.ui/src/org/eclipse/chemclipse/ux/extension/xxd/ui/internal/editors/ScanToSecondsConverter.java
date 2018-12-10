@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors;
 
-import org.eclipse.eavp.service.swtchart.core.AbstractAxisScaleConverter;
-import org.eclipse.eavp.service.swtchart.core.IAxisScaleConverter;
+import org.eclipse.swtchart.extensions.core.AbstractAxisScaleConverter;
+import org.eclipse.swtchart.extensions.core.IAxisScaleConverter;
 
 public class ScanToSecondsConverter extends AbstractAxisScaleConverter implements IAxisScaleConverter {
 

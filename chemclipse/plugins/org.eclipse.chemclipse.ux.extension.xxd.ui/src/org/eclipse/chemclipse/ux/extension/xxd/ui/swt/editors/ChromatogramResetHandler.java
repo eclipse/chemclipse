@@ -12,9 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
-import org.eclipse.eavp.service.swtchart.menu.ResetChartHandler;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swtchart.extensions.core.ScrollableChart;
+import org.eclipse.swtchart.extensions.menu.ResetChartHandler;
 
 public class ChromatogramResetHandler extends ResetChartHandler {
 

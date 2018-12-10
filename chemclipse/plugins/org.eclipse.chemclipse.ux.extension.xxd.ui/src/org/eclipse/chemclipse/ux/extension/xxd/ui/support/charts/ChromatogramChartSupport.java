@@ -42,14 +42,14 @@ import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
-import org.eclipse.eavp.service.swtchart.core.ISeriesData;
-import org.eclipse.eavp.service.swtchart.core.SeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
-import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
-import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swtchart.extensions.core.ISeriesData;
+import org.eclipse.swtchart.extensions.core.SeriesData;
+import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
+import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
+import org.eclipse.swtchart.extensions.linecharts.LineChart;
+import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 import org.swtchart.LineStyle;
 
 public class ChromatogramChartSupport {

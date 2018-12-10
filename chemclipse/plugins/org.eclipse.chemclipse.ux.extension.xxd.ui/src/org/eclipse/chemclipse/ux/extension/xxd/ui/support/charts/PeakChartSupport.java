@@ -21,12 +21,12 @@ import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.exceptions.SolverException;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.eavp.service.swtchart.core.ISeriesData;
-import org.eclipse.eavp.service.swtchart.core.SeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
-import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swtchart.extensions.core.ISeriesData;
+import org.eclipse.swtchart.extensions.core.SeriesData;
+import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
+import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
+import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
 public class PeakChartSupport {
 

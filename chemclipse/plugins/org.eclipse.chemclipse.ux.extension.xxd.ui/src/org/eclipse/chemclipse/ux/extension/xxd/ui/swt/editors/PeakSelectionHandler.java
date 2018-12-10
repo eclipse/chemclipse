@@ -23,13 +23,13 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.eavp.service.swtchart.core.BaseChart;
-import org.eclipse.eavp.service.swtchart.core.IExtendedChart;
-import org.eclipse.eavp.service.swtchart.events.AbstractHandledEventProcessor;
-import org.eclipse.eavp.service.swtchart.events.IHandledEventProcessor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.core.IExtendedChart;
+import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
+import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 
 public class PeakSelectionHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 

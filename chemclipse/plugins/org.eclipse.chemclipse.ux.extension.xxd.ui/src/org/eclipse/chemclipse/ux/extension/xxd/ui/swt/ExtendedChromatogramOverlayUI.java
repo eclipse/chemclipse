@@ -46,13 +46,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
-import org.eclipse.eavp.service.swtchart.core.BaseChart;
-import org.eclipse.eavp.service.swtchart.core.IAxisScaleConverter;
-import org.eclipse.eavp.service.swtchart.core.IChartSettings;
-import org.eclipse.eavp.service.swtchart.core.IExtendedChart;
-import org.eclipse.eavp.service.swtchart.core.ISeriesModificationListener;
-import org.eclipse.eavp.service.swtchart.core.SeriesStatusAdapter;
-import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
@@ -75,6 +68,13 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.core.IAxisScaleConverter;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.core.IExtendedChart;
+import org.eclipse.swtchart.extensions.core.ISeriesModificationListener;
+import org.eclipse.swtchart.extensions.core.SeriesStatusAdapter;
+import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.swtchart.ISeries;
 
 public class ExtendedChromatogramOverlayUI {

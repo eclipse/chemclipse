@@ -23,12 +23,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
-import org.eclipse.eavp.service.swtchart.core.IChartSettings;
-import org.eclipse.eavp.service.swtchart.core.ISeriesData;
-import org.eclipse.eavp.service.swtchart.core.SeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
-import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -43,6 +37,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.core.ISeriesData;
+import org.eclipse.swtchart.extensions.core.SeriesData;
+import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
+import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
+import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
 public class ExtendedXIRScanUI {
 

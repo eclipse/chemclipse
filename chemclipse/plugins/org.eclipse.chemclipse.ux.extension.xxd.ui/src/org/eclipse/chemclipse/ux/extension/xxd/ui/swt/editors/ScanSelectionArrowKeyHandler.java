@@ -18,11 +18,11 @@ import org.eclipse.chemclipse.model.selection.MoveDirection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.eavp.service.swtchart.core.BaseChart;
-import org.eclipse.eavp.service.swtchart.events.AbstractHandledEventProcessor;
-import org.eclipse.eavp.service.swtchart.events.IHandledEventProcessor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
+import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 
 public class ScanSelectionArrowKeyHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 

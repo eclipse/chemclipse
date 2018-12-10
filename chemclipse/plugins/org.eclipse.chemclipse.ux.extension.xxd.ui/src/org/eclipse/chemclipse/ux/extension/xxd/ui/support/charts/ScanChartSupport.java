@@ -28,12 +28,12 @@ import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
-import org.eclipse.eavp.service.swtchart.barcharts.BarSeriesData;
-import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesData;
-import org.eclipse.eavp.service.swtchart.core.ISeriesData;
-import org.eclipse.eavp.service.swtchart.core.SeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
+import org.eclipse.swtchart.extensions.barcharts.BarSeriesData;
+import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
+import org.eclipse.swtchart.extensions.core.ISeriesData;
+import org.eclipse.swtchart.extensions.core.SeriesData;
+import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
+import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
 public class ScanChartSupport {
 

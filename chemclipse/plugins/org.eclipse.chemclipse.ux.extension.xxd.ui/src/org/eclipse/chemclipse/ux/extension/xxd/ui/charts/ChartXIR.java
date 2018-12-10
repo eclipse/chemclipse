@@ -16,14 +16,14 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.eavp.service.swtchart.axisconverter.RelativeIntensityConverter;
-import org.eclipse.eavp.service.swtchart.core.IChartSettings;
-import org.eclipse.eavp.service.swtchart.core.IPrimaryAxisSettings;
-import org.eclipse.eavp.service.swtchart.core.ISecondaryAxisSettings;
-import org.eclipse.eavp.service.swtchart.core.SecondaryAxisSettings;
-import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swtchart.extensions.axisconverter.RelativeIntensityConverter;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
+import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
+import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
+import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.swtchart.IAxis.Position;
 import org.swtchart.LineStyle;
 

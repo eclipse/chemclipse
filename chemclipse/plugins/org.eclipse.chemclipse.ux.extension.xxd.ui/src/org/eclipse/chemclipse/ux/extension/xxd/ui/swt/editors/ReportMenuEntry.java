@@ -20,13 +20,13 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
-import org.eclipse.eavp.service.swtchart.menu.AbstractChartMenuEntry;
-import org.eclipse.eavp.service.swtchart.menu.IChartMenuEntry;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swtchart.extensions.core.ScrollableChart;
+import org.eclipse.swtchart.extensions.menu.AbstractChartMenuEntry;
+import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
 @SuppressWarnings("rawtypes")
 public class ReportMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
