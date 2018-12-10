@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferen
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
-import org.eclipse.eavp.service.swtchart.preferences.PreferenceSupport;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.swtchart.extensions.preferences.PreferenceSupport;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 

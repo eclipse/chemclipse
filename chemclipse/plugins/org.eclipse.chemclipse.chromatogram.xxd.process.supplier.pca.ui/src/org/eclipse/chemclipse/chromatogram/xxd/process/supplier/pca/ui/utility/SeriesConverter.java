@@ -24,15 +24,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableExtractedVisalization;
-import org.eclipse.eavp.service.swtchart.core.ISeriesData;
-import org.eclipse.eavp.service.swtchart.core.SeriesData;
-import org.eclipse.eavp.service.swtchart.scattercharts.IScatterSeriesData;
-import org.eclipse.eavp.service.swtchart.scattercharts.IScatterSeriesSettings;
-import org.eclipse.eavp.service.swtchart.scattercharts.ScatterSeriesData;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtchart.extensions.core.ISeriesData;
+import org.eclipse.swtchart.extensions.core.SeriesData;
+import org.eclipse.swtchart.extensions.scattercharts.IScatterSeriesData;
+import org.eclipse.swtchart.extensions.scattercharts.IScatterSeriesSettings;
+import org.eclipse.swtchart.extensions.scattercharts.ScatterSeriesData;
 import org.swtchart.ILineSeries.PlotSymbolType;
 
 public class SeriesConverter {

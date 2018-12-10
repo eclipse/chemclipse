@@ -17,19 +17,19 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.eclipse.eavp.service.swtchart.axisconverter.PassThroughConverter;
-import org.eclipse.eavp.service.swtchart.core.IChartSettings;
-import org.eclipse.eavp.service.swtchart.core.IPrimaryAxisSettings;
-import org.eclipse.eavp.service.swtchart.core.ISecondaryAxisSettings;
-import org.eclipse.eavp.service.swtchart.core.RangeRestriction;
-import org.eclipse.eavp.service.swtchart.core.SecondaryAxisSettings;
-import org.eclipse.eavp.service.swtchart.scattercharts.ScatterChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtchart.extensions.axisconverter.PassThroughConverter;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
+import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
+import org.eclipse.swtchart.extensions.core.RangeRestriction;
+import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
+import org.eclipse.swtchart.extensions.scattercharts.ScatterChart;
 import org.swtchart.IAxis.Position;
 
 public abstract class PCA2DPlot extends ScatterChart {

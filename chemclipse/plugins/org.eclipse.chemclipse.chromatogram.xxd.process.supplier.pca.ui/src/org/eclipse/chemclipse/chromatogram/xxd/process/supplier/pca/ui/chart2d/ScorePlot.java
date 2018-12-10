@@ -20,21 +20,21 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.SeriesConverter;
-import org.eclipse.eavp.service.swtchart.core.BaseChart;
-import org.eclipse.eavp.service.swtchart.core.IChartSettings;
-import org.eclipse.eavp.service.swtchart.events.AbstractHandledEventProcessor;
-import org.eclipse.eavp.service.swtchart.events.IHandledEventProcessor;
-import org.eclipse.eavp.service.swtchart.events.MouseDownEvent;
-import org.eclipse.eavp.service.swtchart.events.MouseMoveCursorEvent;
-import org.eclipse.eavp.service.swtchart.events.MouseMoveSelectionEvent;
-import org.eclipse.eavp.service.swtchart.events.MouseMoveShiftEvent;
-import org.eclipse.eavp.service.swtchart.events.MouseUpEvent;
-import org.eclipse.eavp.service.swtchart.events.ResetSeriesEvent;
-import org.eclipse.eavp.service.swtchart.events.UndoRedoEvent;
-import org.eclipse.eavp.service.swtchart.events.ZoomEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
+import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
+import org.eclipse.swtchart.extensions.events.MouseDownEvent;
+import org.eclipse.swtchart.extensions.events.MouseMoveCursorEvent;
+import org.eclipse.swtchart.extensions.events.MouseMoveSelectionEvent;
+import org.eclipse.swtchart.extensions.events.MouseMoveShiftEvent;
+import org.eclipse.swtchart.extensions.events.MouseUpEvent;
+import org.eclipse.swtchart.extensions.events.ResetSeriesEvent;
+import org.eclipse.swtchart.extensions.events.UndoRedoEvent;
+import org.eclipse.swtchart.extensions.events.ZoomEvent;
 
 import javafx.collections.ObservableList;
 
