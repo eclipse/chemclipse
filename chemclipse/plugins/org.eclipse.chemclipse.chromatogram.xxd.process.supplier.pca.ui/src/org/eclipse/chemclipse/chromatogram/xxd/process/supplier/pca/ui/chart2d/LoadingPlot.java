@@ -40,7 +40,7 @@ import org.eclipse.swtchart.extensions.events.SelectDataPointEvent;
 import org.eclipse.swtchart.extensions.events.UndoRedoEvent;
 import org.eclipse.swtchart.extensions.events.ZoomEvent;
 import org.eclipse.swtchart.extensions.scattercharts.IScatterSeriesData;
-import org.swtchart.ISeries;
+import org.eclipse.swtchart.ISeries;
 
 public class LoadingPlot extends PCA2DPlot {
 

@@ -33,7 +33,7 @@ import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.scattercharts.IScatterSeriesData;
 import org.eclipse.swtchart.extensions.scattercharts.IScatterSeriesSettings;
 import org.eclipse.swtchart.extensions.scattercharts.ScatterSeriesData;
-import org.swtchart.ILineSeries.PlotSymbolType;
+import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 
 public class SeriesConverter {
 

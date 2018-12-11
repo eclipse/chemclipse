@@ -30,7 +30,7 @@ import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.scattercharts.ScatterChart;
-import org.swtchart.IAxis.Position;
+import org.eclipse.swtchart.IAxis.Position;
 
 public abstract class PCA2DPlot extends ScatterChart {
 

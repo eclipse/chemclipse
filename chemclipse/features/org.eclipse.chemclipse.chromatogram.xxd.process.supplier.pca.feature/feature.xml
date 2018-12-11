@@ -23,7 +23,6 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <requires>
       <import feature="org.eclipse.chemclipse.thirdpartylibraries.ejml.feature" version="0.24.0.qualifier"/>
-      <import feature="org.eclipse.chemclipse.thirdpartylibraries.swtchart.feature" version="0.8.0.qualifier"/>
    </requires>
 
    <plugin
