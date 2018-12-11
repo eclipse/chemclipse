@@ -21,10 +21,6 @@ v1.0 which accompanies this distribution, and is available at
 http://www.eclipse.org/legal/epl-v10.html
    </license>
 
-   <requires>
-      <import feature="org.eclipse.chemclipse.thirdpartylibraries.swtchart.feature" version="0.8.0.qualifier"/>
-   </requires>
-
    <plugin
          id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract"
          download-size="0"

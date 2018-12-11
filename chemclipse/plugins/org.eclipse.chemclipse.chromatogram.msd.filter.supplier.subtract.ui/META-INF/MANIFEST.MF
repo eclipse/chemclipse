@@ -30,14 +30,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.ui.di;bundle-version="1.0.0",
  javax.annotation;bundle-version="1.1.0",
  org.eclipse.core.expressions,
- org.eclipse.chemclipse.thirdpartylibraries.swtchart;bundle-version="0.9.0",
  org.eclipse.chemclipse.chromatogram.filter;bundle-version="0.8.0",
  org.eclipse.chemclipse.chromatogram.msd.identifier;bundle-version="0.8.0",
  org.eclipse.chemclipse.rcp.app.ui;bundle-version="0.8.0",
  org.eclipse.chemclipse.rcp.ui.icons;bundle-version="0.8.0",
  org.eclipse.chemclipse.converter;bundle-version="0.8.0",
  org.eclipse.chemclipse.support.ui;bundle-version="0.8.0",
- org.swtchart;bundle-version="0.10.0"
+ org.eclipse.swtchart;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="1.1.0",
