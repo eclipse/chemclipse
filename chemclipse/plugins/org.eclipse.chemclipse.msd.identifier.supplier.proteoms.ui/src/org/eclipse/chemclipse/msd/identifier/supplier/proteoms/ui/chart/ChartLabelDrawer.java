@@ -19,10 +19,10 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.swtchart.Chart;
-import org.swtchart.IAxis;
-import org.swtchart.IAxisSet;
-import org.swtchart.ISeries;
+import org.eclipse.swtchart.Chart;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IAxisSet;
+import org.eclipse.swtchart.ISeries;
 
 public class ChartLabelDrawer implements PaintListener, DisposeListener {
 

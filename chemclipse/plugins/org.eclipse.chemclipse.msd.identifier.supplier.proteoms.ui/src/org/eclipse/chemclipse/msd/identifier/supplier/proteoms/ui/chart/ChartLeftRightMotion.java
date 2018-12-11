@@ -16,8 +16,8 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.swtchart.Chart;
-import org.swtchart.IAxis;
+import org.eclipse.swtchart.Chart;
+import org.eclipse.swtchart.IAxis;
 
 public class ChartLeftRightMotion implements DisposeListener, KeyListener {
 

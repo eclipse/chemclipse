@@ -22,12 +22,12 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.Chart;
-import org.swtchart.IAxis;
-import org.swtchart.IAxisSet;
-import org.swtchart.IBarSeries;
-import org.swtchart.IBarSeries.BarWidthStyle;
-import org.swtchart.ISeries.SeriesType;
+import org.eclipse.swtchart.Chart;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IAxisSet;
+import org.eclipse.swtchart.IBarSeries;
+import org.eclipse.swtchart.IBarSeries.BarWidthStyle;
+import org.eclipse.swtchart.ISeries.SeriesType;
 
 public class ProteomsChart implements DisposeListener {
 
