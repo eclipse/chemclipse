@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.IEquation;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
+import org.eclipse.chemclipse.swt.ui.base.InteractiveChartExtended;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
@@ -34,20 +35,19 @@ import org.eclipse.chemclipse.swt.ui.series.Series;
 import org.eclipse.chemclipse.swt.ui.support.ChartUtil;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
-import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.IAxis;
-import org.swtchart.IAxis.Position;
-import org.swtchart.IAxisSet;
-import org.swtchart.ILineSeries;
-import org.swtchart.ILineSeries.PlotSymbolType;
-import org.swtchart.ISeries.SeriesType;
-import org.swtchart.LineStyle;
-import org.swtchart.Range;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IAxis.Position;
+import org.eclipse.swtchart.IAxisSet;
+import org.eclipse.swtchart.ILineSeries;
+import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
+import org.eclipse.swtchart.ISeries.SeriesType;
+import org.eclipse.swtchart.LineStyle;
+import org.eclipse.swtchart.Range;
 
 public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartExtended implements ISeriesSetter, IQuantitationCompoundUpdater, KeyListener, MouseListener {
 
@@ -494,12 +494,12 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 	protected void deleteAllCurrentSeries() {
 
 		multipleLineSeries.removeAll();
-		org.swtchart.ISeries[] series = getSeriesSet().getSeries();
+		org.eclipse.swtchart.ISeries[] series = getSeriesSet().getSeries();
 		List<String> ids = new ArrayList<String>();
 		/*
 		 * Get the ids.
 		 */
-		for(org.swtchart.ISeries serie : series) {
+		for(org.eclipse.swtchart.ISeries serie : series) {
 			ids.add(serie.getId());
 		}
 		/*
