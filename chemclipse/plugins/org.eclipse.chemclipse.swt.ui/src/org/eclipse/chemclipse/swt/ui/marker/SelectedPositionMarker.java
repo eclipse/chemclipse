@@ -19,7 +19,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
-import org.swtchart.ICustomPaintListener;
+import org.eclipse.swtchart.ICustomPaintListener;
 
 public class SelectedPositionMarker implements ICustomPaintListener, ISelectedPositionMarker {
 

@@ -21,13 +21,13 @@ import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.Chart;
-import org.swtchart.IAxis;
-import org.swtchart.IAxisSet;
-import org.swtchart.IAxisTick;
-import org.swtchart.ILineSeries;
-import org.swtchart.ILineSeries.PlotSymbolType;
-import org.swtchart.ISeries.SeriesType;
+import org.eclipse.swtchart.Chart;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IAxisSet;
+import org.eclipse.swtchart.IAxisTick;
+import org.eclipse.swtchart.ILineSeries;
+import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
+import org.eclipse.swtchart.ISeries.SeriesType;
 
 /**
  * Draws the chromatogram overview. It's a simple view and will not show any
@@ -134,12 +134,12 @@ public class ChromatogramOverviewUI extends Chart {
 	 */
 	private void deleteAllCurrentSeries() {
 
-		org.swtchart.ISeries[] series = getSeriesSet().getSeries();
+		org.eclipse.swtchart.ISeries[] series = getSeriesSet().getSeries();
 		List<String> ids = new ArrayList<String>();
 		/*
 		 * Get the ids.
 		 */
-		for(org.swtchart.ISeries serie : series) {
+		for(org.eclipse.swtchart.ISeries serie : series) {
 			ids.add(serie.getId());
 		}
 		/*

@@ -19,9 +19,9 @@ import org.eclipse.chemclipse.wsd.model.notifier.IChromatogramSelectionWSDUpdate
 import org.eclipse.chemclipse.wsd.swt.ui.converter.SeriesConverterWSD;
 
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.IBarSeries;
-import org.swtchart.IBarSeries.BarWidthStyle;
-import org.swtchart.ISeries.SeriesType;
+import org.eclipse.swtchart.IBarSeries;
+import org.eclipse.swtchart.IBarSeries.BarWidthStyle;
+import org.eclipse.swtchart.ISeries.SeriesType;
 
 public class CentroidScanUI extends AbstractExtendedScan implements IChromatogramSelectionWSDUpdateNotifier {
 

@@ -25,8 +25,8 @@ import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
-import org.swtchart.IAxis.Position;
-import org.swtchart.LineStyle;
+import org.eclipse.swtchart.IAxis.Position;
+import org.eclipse.swtchart.LineStyle;
 
 public class OverviewChartUI extends LineChart {
 

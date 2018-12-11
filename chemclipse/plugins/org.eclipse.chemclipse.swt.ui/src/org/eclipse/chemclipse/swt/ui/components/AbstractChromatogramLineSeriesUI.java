@@ -34,7 +34,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.Range;
+import org.eclipse.swtchart.Range;
 
 /**
  * This class offers a solution to draw chromatographic data like chromatograms,

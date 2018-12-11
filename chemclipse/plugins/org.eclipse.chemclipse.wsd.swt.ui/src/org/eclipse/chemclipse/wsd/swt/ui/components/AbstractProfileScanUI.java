@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD
 import org.eclipse.chemclipse.wsd.model.notifier.IChromatogramSelectionWSDUpdateNotifier;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.Range;
+import org.eclipse.swtchart.Range;
 
 public abstract class AbstractProfileScanUI extends AbstractLineSeriesUI implements IChromatogramSelectionWSDUpdateNotifier {
 

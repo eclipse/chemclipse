@@ -75,7 +75,7 @@ import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.core.ISeriesModificationListener;
 import org.eclipse.swtchart.extensions.core.SeriesStatusAdapter;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
-import org.swtchart.ISeries;
+import org.eclipse.swtchart.ISeries;
 
 public class ExtendedChromatogramOverlayUI {
 

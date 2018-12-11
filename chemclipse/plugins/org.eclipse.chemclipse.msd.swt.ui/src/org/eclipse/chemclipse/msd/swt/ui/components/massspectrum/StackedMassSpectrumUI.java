@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.Range;
+import org.eclipse.swtchart.Range;
 
 public class StackedMassSpectrumUI extends SimpleMassSpectrumUI {
 

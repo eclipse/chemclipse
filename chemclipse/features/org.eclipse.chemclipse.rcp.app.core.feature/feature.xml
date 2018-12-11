@@ -22,10 +22,6 @@ http://www.eclipse.org/legal/epl-v10.html
    </license>
 
    <includes
-         id="org.eclipse.chemclipse.thirdpartylibraries.swtchart.feature"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.chemclipse.thirdpartylibraries.apache.commons.csv.feature"
          version="0.0.0"/>
 
@@ -107,6 +103,10 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <includes
          id="org.eclipse.platform"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.swtchart.feature"
          version="0.0.0"/>
 
    <plugin
@@ -1581,13 +1581,6 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <plugin
          id="org.eclipse.osgi.util"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.swtchart"
          download-size="0"
          install-size="0"
          version="0.0.0"

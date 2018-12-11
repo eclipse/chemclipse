@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.series;
 
-import org.swtchart.Range;
+import org.eclipse.swtchart.Range;
 
 import junit.framework.TestCase;
 

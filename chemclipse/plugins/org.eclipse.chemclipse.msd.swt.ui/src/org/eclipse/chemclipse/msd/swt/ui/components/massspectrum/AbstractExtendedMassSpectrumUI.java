@@ -42,9 +42,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.swtchart.IBarSeries;
-import org.swtchart.ICustomPaintListener;
-import org.swtchart.IPlotArea;
+import org.eclipse.swtchart.IBarSeries;
+import org.eclipse.swtchart.ICustomPaintListener;
+import org.eclipse.swtchart.IPlotArea;
 
 public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpectrumUI {
 

@@ -14,24 +14,24 @@ package org.eclipse.chemclipse.wsd.swt.ui.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.swt.ui.base.InteractiveChartExtended;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeriesSetter;
 import org.eclipse.chemclipse.swt.ui.series.MultipleSeries;
 import org.eclipse.chemclipse.swt.ui.support.ChartUtil;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
-
+import org.eclipse.chemclipse.wsd.model.notifier.IChromatogramSelectionWSDUpdateNotifier;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.IAxis;
-import org.swtchart.IAxisSet;
-import org.swtchart.Range;
-import org.swtchart.IAxis.Position;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IAxis.Position;
+import org.eclipse.swtchart.IAxisSet;
+import org.eclipse.swtchart.Range;
 
 public abstract class AbstractBarSeriesUI extends InteractiveChartExtended implements ISeriesSetter, KeyListener, MouseListener {
 
@@ -436,12 +436,12 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 	private void deleteAllCurrentSeries() {
 
 		multipleLineSeries.removeAll();
-		org.swtchart.ISeries[] series = getSeriesSet().getSeries();
+		org.eclipse.swtchart.ISeries[] series = getSeriesSet().getSeries();
 		List<String> ids = new ArrayList<String>();
 		/*
 		 * Get the ids.
 		 */
-		for(org.swtchart.ISeries serie : series) {
+		for(org.eclipse.swtchart.ISeries serie : series) {
 			ids.add(serie.getId());
 		}
 		/*

@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.swt.ui.support;
 
 import org.eclipse.swt.graphics.Color;
-import org.swtchart.IAxis;
-import org.swtchart.Range;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.Range;
 
 /**
  * This class offers some utility methods to draw charts.

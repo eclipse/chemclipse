@@ -19,9 +19,9 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.IBarSeries;
-import org.swtchart.IBarSeries.BarWidthStyle;
-import org.swtchart.ISeries.SeriesType;
+import org.eclipse.swtchart.IBarSeries;
+import org.eclipse.swtchart.IBarSeries.BarWidthStyle;
+import org.eclipse.swtchart.ISeries.SeriesType;
 
 public class ScanMassSpectrumUI extends AbstractExtendedMassSpectrumUI implements IChromatogramSelectionMSDUpdateNotifier {
 

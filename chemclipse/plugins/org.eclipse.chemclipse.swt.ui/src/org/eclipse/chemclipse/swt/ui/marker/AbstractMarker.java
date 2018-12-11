@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.swt.ui.marker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
-import org.swtchart.ICustomPaintListener;
+import org.eclipse.swtchart.ICustomPaintListener;
 
 /**
  * @author Dr. Philip Wenig

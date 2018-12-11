@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.ICustomSelectionHandler;
-import org.swtchart.Range;
+import org.eclipse.swtchart.Range;
 
 public class ChromatogramSelectionHandler implements ICustomSelectionHandler {
 

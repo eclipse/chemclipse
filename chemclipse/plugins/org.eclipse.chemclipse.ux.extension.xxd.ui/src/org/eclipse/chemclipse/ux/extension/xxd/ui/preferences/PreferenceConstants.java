@@ -16,9 +16,9 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
-import org.swtchart.IAxis.Position;
-import org.swtchart.ILineSeries.PlotSymbolType;
-import org.swtchart.LineStyle;
+import org.eclipse.swtchart.IAxis.Position;
+import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
+import org.eclipse.swtchart.LineStyle;
 
 public class PreferenceConstants {
 

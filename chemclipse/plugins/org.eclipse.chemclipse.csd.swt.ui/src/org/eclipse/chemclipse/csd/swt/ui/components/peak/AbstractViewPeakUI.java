@@ -12,9 +12,9 @@
 package org.eclipse.chemclipse.csd.swt.ui.components.peak;
 
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.ILineSeries;
-import org.swtchart.ILineSeries.PlotSymbolType;
-import org.swtchart.ISeries.SeriesType;
+import org.eclipse.swtchart.ILineSeries;
+import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
+import org.eclipse.swtchart.ISeries.SeriesType;
 
 import org.eclipse.chemclipse.csd.swt.ui.components.AbstractPeakLineSeriesUI;
 import org.eclipse.chemclipse.csd.swt.ui.converter.SeriesConverterCSD;

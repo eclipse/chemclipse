@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.base.InteractiveChartExtended;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISelectedRangeInfo;
@@ -26,17 +27,16 @@ import org.eclipse.chemclipse.swt.ui.series.MultipleSeries;
 import org.eclipse.chemclipse.swt.ui.support.ChartUtil;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IAxisTitles;
-import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.IAxis;
-import org.swtchart.IAxis.Position;
-import org.swtchart.IAxisSet;
-import org.swtchart.ICustomPaintListener;
-import org.swtchart.IPlotArea;
-import org.swtchart.Range;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IAxis.Position;
+import org.eclipse.swtchart.IAxisSet;
+import org.eclipse.swtchart.ICustomPaintListener;
+import org.eclipse.swtchart.IPlotArea;
+import org.eclipse.swtchart.Range;
 
 /**
  * This class offers a solution to draw chromatographic data like chromatograms,
@@ -371,12 +371,12 @@ public abstract class AbstractLineSeriesUI extends InteractiveChartExtended impl
 	protected void deleteAllCurrentSeries() {
 
 		multipleLineSeries.removeAll();
-		org.swtchart.ISeries[] series = getSeriesSet().getSeries();
+		org.eclipse.swtchart.ISeries[] series = getSeriesSet().getSeries();
 		List<String> ids = new ArrayList<String>();
 		/*
 		 * Get the ids.
 		 */
-		for(org.swtchart.ISeries serie : series) {
+		for(org.eclipse.swtchart.ISeries serie : series) {
 			ids.add(serie.getId());
 		}
 		/*

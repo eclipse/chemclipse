@@ -52,7 +52,7 @@ import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
-import org.swtchart.ILineSeries.PlotSymbolType;
+import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 
 public class ExtendedWellChartUI {
 

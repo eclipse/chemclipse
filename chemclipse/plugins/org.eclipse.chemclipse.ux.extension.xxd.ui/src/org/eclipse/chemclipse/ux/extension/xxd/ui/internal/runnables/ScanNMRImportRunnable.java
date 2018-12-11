@@ -29,7 +29,6 @@ public class ScanNMRImportRunnable implements IRunnableWithProgress {
 	private IMeasurementNMR measurementNMR = null;
 
 	public ScanNMRImportRunnable(File file) {
-
 		this.file = file;
 	}
 
@@ -44,7 +43,7 @@ public class ScanNMRImportRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Import Scan", IProgressMonitor.UNKNOWN);
 			IProcessingInfo processingInfo = ScanConverterNMR.convert(file, monitor);
-			measurementNMR = (IMeasurementNMR)processingInfo.getProcessingResult();
+			measurementNMR = processingInfo.getProcessingResult(IMeasurementNMR.class);
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		} finally {

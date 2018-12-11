@@ -50,7 +50,7 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
-import org.swtchart.LineStyle;
+import org.eclipse.swtchart.LineStyle;
 
 public class ChromatogramChartSupport {
 

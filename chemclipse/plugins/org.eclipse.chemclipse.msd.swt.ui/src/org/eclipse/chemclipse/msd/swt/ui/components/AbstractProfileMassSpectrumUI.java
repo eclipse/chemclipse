@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.support.ChartUtil;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.Range;
+import org.eclipse.swtchart.Range;
 
 public abstract class AbstractProfileMassSpectrumUI extends AbstractLineSeriesUI implements IChromatogramSelectionMSDUpdateNotifier {
 

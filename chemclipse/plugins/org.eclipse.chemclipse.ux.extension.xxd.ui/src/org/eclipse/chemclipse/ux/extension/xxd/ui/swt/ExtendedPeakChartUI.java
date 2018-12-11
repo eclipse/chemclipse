@@ -54,9 +54,9 @@ import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
-import org.swtchart.IAxis;
-import org.swtchart.IPlotArea;
-import org.swtchart.Range;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IPlotArea;
+import org.eclipse.swtchart.Range;
 
 @SuppressWarnings("rawtypes")
 public class ExtendedPeakChartUI {

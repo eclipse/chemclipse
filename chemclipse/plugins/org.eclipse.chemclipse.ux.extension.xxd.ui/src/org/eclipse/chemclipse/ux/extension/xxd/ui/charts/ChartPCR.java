@@ -24,7 +24,7 @@ import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
-import org.swtchart.IAxis.Position;
+import org.eclipse.swtchart.IAxis.Position;
 
 public class ChartPCR extends LineChart {
 

@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
-import org.swtchart.ICustomPaintListener;
+import org.eclipse.swtchart.ICustomPaintListener;
 
 public class BaselineSelectionPaintListener implements ICustomPaintListener {
 
