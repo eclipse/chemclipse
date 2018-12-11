@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Pattern;
-import org.swtchart.ICustomPaintListener;
+import org.eclipse.swtchart.ICustomPaintListener;
 
 public class ScanSelectionPaintListener implements ICustomPaintListener {
 
