@@ -13,13 +13,13 @@ package org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
-import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDImportConverter;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramPeakImportConverter extends AbstractChromatogramMSDImportConverter implements IChromatogramImportConverter {
+public class ChromatogramPeakImportConverter extends AbstractChromatogramImportConverter implements IChromatogramImportConverter {
 
 	private static final String DESCRIPTION = "Matlab Parafac Chromatogram Import Converter";
 	private static final String MESSAGE = "It's only possible to import peaks using the chromatogram peak import converter.";
