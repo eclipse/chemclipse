@@ -116,7 +116,7 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.wsd.converter.chromatogram.AbstractChromatogramImportConverter:org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter:org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter"/>
                </appinfo>
             </annotation>
          </attribute>

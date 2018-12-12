@@ -33,4 +33,19 @@ public interface IChromatogramImportConverter extends IImportConverter {
 	 * @return {@link IProcessingInfo}
 	 */
 	IProcessingInfo convertOverview(File file, IProgressMonitor monitor);
+
+	/**
+	 * All implementing classes must return an IChromatogram instance.<br/>
+	 * If no suitable converter is available, null will be returned.<br/>
+	 * <br/>
+	 * AbstractChromatogramImportConverter implements
+	 * IChromatogramImportConverter. When extending from
+	 * AbstractChromatogramImportConverter => super.validate(chromatogram) can
+	 * be used.
+	 * 
+	 * @param chromatogram
+	 * @param monitor
+	 * @return {@link IProcessingInfo}
+	 */
+	IProcessingInfo convert(File file, IProgressMonitor monitor);
 }

@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.msd.converter.chromatogram;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -23,7 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * 
  * @author eselmeister
  */
-public class TestChromatogramImportConverter extends AbstractChromatogramMSDImportConverter {
+public class TestChromatogramImportConverter extends AbstractChromatogramImportConverter implements IChromatogramImportConverter {
 
 	@Override
 	public IProcessingInfo convert(File chromatogram, IProgressMonitor monitor) {
