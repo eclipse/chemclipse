@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.converter.chromatogram;
 import java.io.File;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.io.AMDISConverter;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.io.MassLibConverter;
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverter;
@@ -55,71 +56,118 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 	@Override
 	public void postProcessChromatogram(IProcessingInfo processingInfo, IProgressMonitor monitor) {
 
+		/*
+		 * TODO: Create an extension point for the post processing supplier!
+		 */
 		if(processingInfo != null && processingInfo.getProcessingResult() instanceof IChromatogramMSD) {
-			String referenceIdentifierMarker = PreferenceSupplier.getReferenceIdentifierMarker();
-			String referenceIdentifierPrefix = PreferenceSupplier.getReferenceIdentifierPrefix();
-			//
-			LibraryInformationSupport libraryInformationSupport = new LibraryInformationSupport();
 			IChromatogramMSD chromatogramMSD = processingInfo.getProcessingResult(IChromatogramMSD.class);
-			MassLibConverter massLibConverter = new MassLibConverter();
-			String chromatogramName = chromatogramMSD.getName();
-			File chromatogramFile = chromatogramMSD.getFile();
-			/*
-			 * MassLib *.inf Data
-			 */
-			if(chromatogramFile != null) {
-				//
-				File directory = chromatogramFile;
-				if(chromatogramFile.isFile()) {
-					directory = chromatogramFile.getParentFile();
+			File file = chromatogramMSD.getFile();
+			File directory = getDirectory(file);
+			if(directory != null && directory.exists()) {
+				parseCalibrationMassLib(chromatogramMSD, directory);
+				parseTargetMassLib(chromatogramMSD, directory);
+				parseCalibrationAMDIS(chromatogramMSD, directory);
+			}
+		}
+	}
+
+	private File getDirectory(File file) {
+
+		File directory = null;
+		if(file != null) {
+			if(file.isFile()) {
+				directory = file.getParentFile();
+			} else {
+				directory = file;
+			}
+		}
+		//
+		return directory;
+	}
+
+	private File getFile(File directory, String fileName, String fileExtension) {
+
+		if(directory.exists()) {
+			for(File file : directory.listFiles()) {
+				if(file.isFile()) {
+					String name = file.getName().toLowerCase();
+					if(name.endsWith(fileExtension.toLowerCase()) && name.startsWith(fileName.toLowerCase())) {
+						return file;
+					}
 				}
+			}
+		}
+		//
+		return null;
+	}
+
+	private void parseCalibrationMassLib(IChromatogramMSD chromatogramMSD, File directory) {
+
+		if(PreferenceSupplier.isParseRetentionIndexDataMassLib()) {
+			String fileName = PreferenceSupplier.isUseChromatogramNameMassLib() ? chromatogramMSD.getName() : PreferenceSupplier.getDefaultNameMassLib();
+			File file = getFile(directory, fileName, ".inf");
+			//
+			if(file != null) {
+				MassLibConverter massLibConverter = new MassLibConverter();
+				try {
+					IProcessingInfo processingInfo = massLibConverter.parseRetentionIndices(file);
+					ISeparationColumnIndices separationColumnIndices = processingInfo.getProcessingResult(ISeparationColumnIndices.class);
+					chromatogramMSD.getSeparationColumnIndices().putAll(separationColumnIndices);
+				} catch(TypeCastException e) {
+					logger.warn(e);
+				}
+			}
+		}
+	}
+
+	private void parseTargetMassLib(IChromatogramMSD chromatogramMSD, File directory) {
+
+		if(PreferenceSupplier.isParseTargetDataMassLib()) {
+			String fileName = PreferenceSupplier.isUseChromatogramNameMassLib() ? chromatogramMSD.getName() : PreferenceSupplier.getDefaultNameMassLib();
+			File file = getFile(directory, fileName, ".inf");
+			//
+			if(file != null) {
+				MassLibConverter massLibConverter = new MassLibConverter();
+				LibraryInformationSupport libraryInformationSupport = new LibraryInformationSupport();
+				String referenceIdentifierMarker = PreferenceSupplier.getReferenceIdentifierMarker();
+				String referenceIdentifierPrefix = PreferenceSupplier.getReferenceIdentifierPrefix();
 				//
-				if(directory.exists()) {
-					exitloop:
-					for(File filex : directory.listFiles()) {
-						String xName = filex.getName();
-						if(filex.isFile() && xName.endsWith(".inf")) {
-							if(xName.startsWith(chromatogramName)) {
-								/*
-								 * RI
-								 */
-								if(PreferenceSupplier.isParseMassLibRetentionIndexData()) {
-									try {
-										IProcessingInfo processingInfoIndices = massLibConverter.parseRetentionIndices(filex);
-										ISeparationColumnIndices separationColumnIndices = processingInfoIndices.getProcessingResult(ISeparationColumnIndices.class);
-										chromatogramMSD.setSeparationColumnIndices(separationColumnIndices);
-									} catch(TypeCastException e) {
-										logger.warn(e);
-									}
-								}
-								/*
-								 * Scan Targets
-								 */
-								if(PreferenceSupplier.isParseMassLibTargetData()) {
-									try {
-										IProcessingInfo processingInfoTargets = massLibConverter.parseTargets(filex);
-										@SuppressWarnings("unchecked")
-										Map<Integer, String> targets = (Map<Integer, String>)processingInfoTargets.getProcessingResult(Map.class);
-										for(Map.Entry<Integer, String> target : targets.entrySet()) {
-											IScan scan = chromatogramMSD.getScan(target.getKey());
-											if(scan != null && scan instanceof IScanMSD) {
-												IScanMSD scanMSD = (IScanMSD)scan;
-												ILibraryInformation libraryInformation = new LibraryInformation();
-												libraryInformationSupport.extractNameAndReferenceIdentifier(target.getValue(), libraryInformation, referenceIdentifierMarker, referenceIdentifierPrefix);
-												IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
-												IIdentificationTarget scanTargetMSD = new IdentificationTarget(libraryInformation, comparisonResult);
-												scanMSD.getTargets().add(scanTargetMSD);
-											}
-										}
-									} catch(TypeCastException e) {
-										logger.warn(e);
-									}
-								}
-								//
-								break exitloop;
-							}
+				try {
+					IProcessingInfo processingInfo = massLibConverter.parseTargets(file);
+					@SuppressWarnings("unchecked")
+					Map<Integer, String> targets = (Map<Integer, String>)processingInfo.getProcessingResult(Map.class);
+					for(Map.Entry<Integer, String> target : targets.entrySet()) {
+						IScan scan = chromatogramMSD.getScan(target.getKey());
+						if(scan != null && scan instanceof IScanMSD) {
+							IScanMSD scanMSD = (IScanMSD)scan;
+							ILibraryInformation libraryInformation = new LibraryInformation();
+							libraryInformationSupport.extractNameAndReferenceIdentifier(target.getValue(), libraryInformation, referenceIdentifierMarker, referenceIdentifierPrefix);
+							IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+							IIdentificationTarget scanTargetMSD = new IdentificationTarget(libraryInformation, comparisonResult);
+							scanMSD.getTargets().add(scanTargetMSD);
 						}
 					}
+				} catch(TypeCastException e) {
+					logger.warn(e);
+				}
+			}
+		}
+	}
+
+	private void parseCalibrationAMDIS(IChromatogramMSD chromatogramMSD, File directory) {
+
+		if(PreferenceSupplier.isParseRetentionIndexDataAMDIS()) {
+			String fileName = PreferenceSupplier.isUseChromatogramNameAMDIS() ? chromatogramMSD.getName() : PreferenceSupplier.getDefaultNameAMDIS();
+			File file = getFile(directory, fileName, ".cal");
+			//
+			if(file != null) {
+				AMDISConverter amdisConverter = new AMDISConverter();
+				try {
+					IProcessingInfo processingInfo = amdisConverter.parseRetentionIndices(file);
+					ISeparationColumnIndices separationColumnIndices = processingInfo.getProcessingResult(ISeparationColumnIndices.class);
+					chromatogramMSD.getSeparationColumnIndices().putAll(separationColumnIndices);
+				} catch(TypeCastException e) {
+					logger.warn(e);
 				}
 			}
 		}
