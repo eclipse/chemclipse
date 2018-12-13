@@ -40,7 +40,7 @@ public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 
 		File destinationDirectory = PathHelper.getStoragePathExport();
 		File destinationFile = new File(destinationDirectory.getAbsolutePath() + File.separator + chromatogram.getName());
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(destinationFile, chromatogram, IConstants.CONVERTER_ID, monitor);
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(destinationFile, chromatogram, IConstants.CONVERTER_ID, monitor);
 		try {
 			File export = processingInfo.getProcessingResult(File.class);
 			monitor.subTask("Compress the chromatogram");

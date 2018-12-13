@@ -51,7 +51,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 		 * All chromatogram file extensions.
 		 */
 		chromatogramFileExtensions = new ArrayList<String>();
-		IChromatogramConverterSupport support = ChromatogramConverterMSD.getChromatogramConverterSupport();
+		IChromatogramConverterSupport support = ChromatogramConverterMSD.getInstance().getChromatogramConverterSupport();
 		for(ISupplier supplier : support.getSupplier()) {
 			chromatogramFileExtensions.add(supplier.getFileExtension());
 		}
@@ -70,7 +70,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		File fileChromatogram = extractChromatogramFile(file, monitor);
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileChromatogram, monitor);
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileChromatogram, monitor);
 		try {
 			return processingInfo.getProcessingResult(IChromatogramMSD.class);
 		} catch(TypeCastException e) {
@@ -82,7 +82,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		File fileChromatogram = extractChromatogramFile(file, monitor);
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convertOverview(fileChromatogram, monitor);
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convertOverview(fileChromatogram, monitor);
 		try {
 			return processingInfo.getProcessingResult(IChromatogramOverview.class);
 		} catch(TypeCastException e) {
