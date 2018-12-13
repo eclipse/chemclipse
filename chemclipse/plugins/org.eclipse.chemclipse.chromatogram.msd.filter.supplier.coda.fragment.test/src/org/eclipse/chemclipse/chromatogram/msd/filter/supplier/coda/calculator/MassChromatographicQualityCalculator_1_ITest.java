@@ -40,7 +40,7 @@ public class MassChromatographicQualityCalculator_1_ITest extends TestCase {
 
 		super.setUp();
 		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1));
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(importFile, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(importFile, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		codaThreshold = 0.7f;
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
