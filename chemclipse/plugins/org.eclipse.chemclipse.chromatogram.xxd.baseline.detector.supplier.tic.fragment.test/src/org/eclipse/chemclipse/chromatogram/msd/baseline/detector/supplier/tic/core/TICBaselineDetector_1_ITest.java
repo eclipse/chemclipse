@@ -42,7 +42,7 @@ public class TICBaselineDetector_1_ITest extends TestCase {
 		super.setUp();
 		pathImport = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1);
 		fileImport = new File(this.pathImport);
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, CHROMATOGRAM_CONVERTER_ID, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, CHROMATOGRAM_CONVERTER_ID, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(ChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		settings = new DetectorSettings();
