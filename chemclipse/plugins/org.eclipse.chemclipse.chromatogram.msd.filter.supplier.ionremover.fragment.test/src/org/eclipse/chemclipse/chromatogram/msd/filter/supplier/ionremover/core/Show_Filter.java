@@ -58,7 +58,7 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		 * Import
 		 */
 		fileImport = new File("E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705.D\\DATA.MS");
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 	}
@@ -139,7 +139,7 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		// ChromatogramFilter.applyFilter(chromatogramSelection,
 		// nFilterSettings, FILTER_NORMALIZE);
 		fileExport = new File("E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705-N.D\\DATA.MS");
-		ChromatogramConverterMSD.convert(fileExport, chromatogram, EXTENSION_POINT_ID, new NullProgressMonitor());
+		ChromatogramConverterMSD.getInstance().convert(fileExport, chromatogram, EXTENSION_POINT_ID, new NullProgressMonitor());
 		/**
 		 * Filter Background
 		 */
@@ -152,13 +152,13 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		excludedIons.add(new MarkedIon(281));
 		ChromatogramFilterMSD.applyFilter(chromatogramSelection, rFilterSettings, FILTER_BACKGROUND, new NullProgressMonitor());
 		fileExport = new File("E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705-NB.D\\DATA.MS");
-		ChromatogramConverterMSD.convert(fileExport, chromatogram, EXTENSION_POINT_ID, new NullProgressMonitor());
+		ChromatogramConverterMSD.getInstance().convert(fileExport, chromatogram, EXTENSION_POINT_ID, new NullProgressMonitor());
 		/**
 		 * Normalize
 		 */
 		// ChromatogramFilter.applyFilter(chromatogramSelection,
 		// nFilterSettings, FILTER_NORMALIZE);
 		fileExport = new File("E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705-NBMN.D\\DATA.MS");
-		ChromatogramConverterMSD.convert(fileExport, chromatogram, EXTENSION_POINT_ID, new NullProgressMonitor());
+		ChromatogramConverterMSD.getInstance().convert(fileExport, chromatogram, EXTENSION_POINT_ID, new NullProgressMonitor());
 	}
 }
