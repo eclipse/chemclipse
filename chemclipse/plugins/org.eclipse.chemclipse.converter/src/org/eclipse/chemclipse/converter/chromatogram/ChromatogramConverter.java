@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -35,12 +36,58 @@ public class ChromatogramConverter<T extends IChromatogram> {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramConverter.class);
 	//
-	private Class<T> type;
+	private static final String DESCRIPTION_IMPORT = "Chromatogram Import Converter";
+	private static final String DESCRIPTION_EXPORT = "Chromatogram Export Converter";
+	//
 	private String extensionPoint = "";
+	private Class<T> type;
 
 	public ChromatogramConverter(String extensionPoint, Class<T> type) {
-		this.type = type;
 		this.extensionPoint = extensionPoint;
+		this.type = type;
+	}
+
+	/**
+	 * This methods returns an {@link IChromatogramConverterSupport} instance.<br/>
+	 * The {@link ChromatogramConverterSupport} instance stores descriptions
+	 * about all valid and registered chromatogram converters.<br/>
+	 * It can be used to get more information about the registered converters
+	 * such like filter names, file extensions.
+	 * 
+	 * @return ChromatogramConverterSupport
+	 */
+	public IChromatogramConverterSupport getChromatogramConverterSupport() {
+
+		ChromatogramConverterSupport chromatogramConverterSupport = new ChromatogramConverterSupport();
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IConfigurationElement[] extensions = registry.getConfigurationElementsFor(extensionPoint);
+		for(IConfigurationElement element : extensions) {
+			/*
+			 * Set the values to the ChromatogramSupplier instance first before
+			 * validating them.<br/> Why? Because the return value of
+			 * element.getAttribute(...) could be null. If the element is null
+			 * and stored in a ChromatogramSupplier instance it will be at least
+			 * "".
+			 */
+			ChromatogramSupplier supplier = new ChromatogramSupplier();
+			supplier.setFileExtension(element.getAttribute(Converter.FILE_EXTENSION));
+			supplier.setFileName(element.getAttribute(Converter.FILE_NAME));
+			supplier.setDirectoryExtension(element.getAttribute(Converter.DIRECTORY_EXTENSION));
+			/*
+			 * Check if these values contain not allowed characters. If yes than
+			 * do not add the supplier to the supported converter list.
+			 */
+			if(Converter.isValid(supplier.getFileExtension()) && Converter.isValid(supplier.getFileName()) && Converter.isValid(supplier.getDirectoryExtension())) {
+				supplier.setId(element.getAttribute(Converter.ID));
+				supplier.setDescription(element.getAttribute(Converter.DESCRIPTION));
+				supplier.setFilterName(element.getAttribute(Converter.FILTER_NAME));
+				supplier.setImportable(isImportable(element));
+				supplier.setExportable(isExportable(element));
+				supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
+				chromatogramConverterSupport.add(supplier);
+			}
+		}
+		return chromatogramConverterSupport;
 	}
 
 	/**
@@ -89,49 +136,6 @@ public class ChromatogramConverter<T extends IChromatogram> {
 			processingInfo = getNoImportConverterAvailableProcessingInfo(file);
 		}
 		return processingInfo;
-	}
-
-	/**
-	 * This methods returns an {@link IChromatogramConverterSupport} instance.<br/>
-	 * The {@link ChromatogramConverterSupport} instance stores descriptions
-	 * about all valid and registered chromatogram converters.<br/>
-	 * It can be used to get more information about the registered converters
-	 * such like filter names, file extensions.
-	 * 
-	 * @return ChromatogramConverterSupport
-	 */
-	public IChromatogramConverterSupport getChromatogramConverterSupport() {
-
-		ChromatogramConverterSupport chromatogramConverterSupport = new ChromatogramConverterSupport();
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] extensions = registry.getConfigurationElementsFor(extensionPoint);
-		for(IConfigurationElement element : extensions) {
-			/*
-			 * Set the values to the ChromatogramSupplier instance first before
-			 * validating them.<br/> Why? Because the return value of
-			 * element.getAttribute(...) could be null. If the element is null
-			 * and stored in a ChromatogramSupplier instance it will be at least
-			 * "".
-			 */
-			ChromatogramSupplier supplier = new ChromatogramSupplier();
-			supplier.setFileExtension(element.getAttribute(Converter.FILE_EXTENSION));
-			supplier.setFileName(element.getAttribute(Converter.FILE_NAME));
-			supplier.setDirectoryExtension(element.getAttribute(Converter.DIRECTORY_EXTENSION));
-			/*
-			 * Check if these values contain not allowed characters. If yes than
-			 * do not add the supplier to the supported converter list.
-			 */
-			if(Converter.isValid(supplier.getFileExtension()) && Converter.isValid(supplier.getFileName()) && Converter.isValid(supplier.getDirectoryExtension())) {
-				supplier.setId(element.getAttribute(Converter.ID));
-				supplier.setDescription(element.getAttribute(Converter.DESCRIPTION));
-				supplier.setFilterName(element.getAttribute(Converter.FILTER_NAME));
-				supplier.setExportable(Boolean.valueOf(element.getAttribute(Converter.IS_EXPORTABLE)));
-				supplier.setImportable(Boolean.valueOf(element.getAttribute(Converter.IS_IMPORTABLE)));
-				supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
-				chromatogramConverterSupport.add(supplier);
-			}
-		}
-		return chromatogramConverterSupport;
 	}
 
 	/**
@@ -231,38 +235,69 @@ public class ChromatogramConverter<T extends IChromatogram> {
 			}
 		} catch(NoConverterAvailableException e) {
 			logger.info(e);
-			// getNoImportConverterAvailableProcessingInfo(file);
-			processingInfo.addErrorMessage("Chromatogram Converter", "There is no suitable converter available to load the chromatogram file: " + file.getAbsolutePath());
+			processingInfo.addErrorMessage(DESCRIPTION_IMPORT, "There is no suitable converter available to load the chromatogram file: " + getFileName(file));
 		}
-		//
-		if(processingInfo.getProcessingResult() == null) {
-			/*
-			 * Error
-			 */
+		/*
+		 * Post process or collect the errors.
+		 */
+		if(type.isInstance(processingInfo.getProcessingResult())) {
+			postProcessChromatogram(processingInfo);
+		} else {
 			for(IProcessingMessage processingMessage : processingMessagesError) {
 				processingInfo.addMessage(processingMessage);
 			}
-		} else {
-			/*
-			 * Post processing
-			 */
-			postProcessChromatogram(processingInfo);
 		}
-		/*
-		 * If this point is reached, there was by sure no suitable converter.
-		 */
+		//
 		return processingInfo;
 	}
 
+	/**
+	 * Maybe override to add your own methods.
+	 * 
+	 * @param processingInfo
+	 */
 	public void postProcessChromatogram(IProcessingInfo processingInfo) {
 
-		System.out.println("TODO");
 	}
 
-	// TODO private
-	public Object getChromatogramConverter(String converterId, String attribute) {
+	public IProcessingInfo convert(File file, IChromatogram<? extends IPeak> chromatogram, String converterId, IProgressMonitor monitor) {
+
+		IProcessingInfo processingInfo;
+		Object converter = getChromatogramConverter(converterId, Converter.EXPORT_CONVERTER);
+		if(converter instanceof IChromatogramExportConverter) {
+			processingInfo = ((IChromatogramExportConverter)converter).convert(file, chromatogram, monitor);
+		} else {
+			processingInfo = getNoExportConverterAvailableProcessingInfo(file);
+		}
+		return processingInfo;
+	}
+
+	private boolean isImportable(IConfigurationElement element) {
+
+		boolean result = false;
+		if(element != null) {
+			result = Boolean.valueOf(element.getAttribute(Converter.IS_IMPORTABLE)) && (getChromatogramConverter(element, Converter.IMPORT_CONVERTER) instanceof IChromatogramImportConverter);
+		}
+		return result;
+	}
+
+	private boolean isExportable(IConfigurationElement element) {
+
+		boolean result = false;
+		if(element != null) {
+			result = Boolean.valueOf(element.getAttribute(Converter.IS_EXPORTABLE)) && (getChromatogramConverter(element, Converter.EXPORT_CONVERTER) instanceof IChromatogramExportConverter);
+		}
+		return result;
+	}
+
+	private Object getChromatogramConverter(String converterId, String attribute) {
 
 		IConfigurationElement element = getConfigurationElement(converterId);
+		return getChromatogramConverter(element, attribute);
+	}
+
+	private Object getChromatogramConverter(IConfigurationElement element, String attribute) {
+
 		Object instance = null;
 		if(element != null) {
 			try {
@@ -274,25 +309,24 @@ public class ChromatogramConverter<T extends IChromatogram> {
 		return instance;
 	}
 
-	// TODO private
-	public IProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
+	private IProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addErrorMessage("Chromatogram Export Converter", "There is no suitable converter available to save the chromatogram to the file: " + getFileName(file));
+		processingInfo.addErrorMessage(DESCRIPTION_EXPORT, "There is no suitable converter available to save the chromatogram to the file: " + getFileName(file));
 		return processingInfo;
 	}
 
 	private IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addErrorMessage("Chromatogram Import Converter", "There is no suitable converter available to load the chromatogram from the file: " + getFileName(file));
+		processingInfo.addErrorMessage(DESCRIPTION_IMPORT, "There is no suitable converter available to load the chromatogram from the file: " + getFileName(file));
 		return processingInfo;
 	}
 
 	private IProcessingInfo getNoOverviewImportConverterAvailableProcessingInfo(File file) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addErrorMessage("ChromatogramOverview Import Converter", "There is no suitable converter available to load the chromatogram overview from the file: " + getFileName(file));
+		processingInfo.addErrorMessage(DESCRIPTION_IMPORT, "There is no suitable converter available to load the chromatogram overview from the file: " + getFileName(file));
 		return processingInfo;
 	}
 

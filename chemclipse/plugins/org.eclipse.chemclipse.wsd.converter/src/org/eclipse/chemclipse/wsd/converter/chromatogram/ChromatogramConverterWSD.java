@@ -15,14 +15,13 @@ import java.io.File;
 
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
-import org.eclipse.chemclipse.converter.core.Converter;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramConverterWSD {
 
-	private static ChromatogramConverter<IChromatogramWSD> CHROMATOGRAM_CONVERTER = new ChromatogramConverter<>("org.eclipse.chemclipse.wsd.converter.chromatogramSupplier", IChromatogramWSD.class);
+	private static ChromatogramConverter<IChromatogramWSD> chromatogramConverter = new ChromatogramConverter<>("org.eclipse.chemclipse.wsd.converter.chromatogramSupplier", IChromatogramWSD.class);
 
 	/**
 	 * This class has only static methods.
@@ -32,38 +31,31 @@ public class ChromatogramConverterWSD {
 
 	public static IProcessingInfo convert(final File file, final String converterId, final IProgressMonitor monitor) {
 
-		return CHROMATOGRAM_CONVERTER.convert(file, converterId, monitor);
+		return chromatogramConverter.convert(file, converterId, monitor);
 	}
 
 	public static IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		return CHROMATOGRAM_CONVERTER.getChromatogram(file, false, monitor);
+		return chromatogramConverter.getChromatogram(file, false, monitor);
 	}
 
 	public static IProcessingInfo convertOverview(File file, String converterId, IProgressMonitor monitor) {
 
-		return CHROMATOGRAM_CONVERTER.convertOverview(file, converterId, monitor);
+		return chromatogramConverter.convertOverview(file, converterId, monitor);
 	}
 
 	public static IProcessingInfo convertOverview(File file, IProgressMonitor monitor) {
 
-		return CHROMATOGRAM_CONVERTER.getChromatogram(file, true, monitor);
+		return chromatogramConverter.getChromatogram(file, true, monitor);
 	}
 
-	public static IProcessingInfo convert(final File file, final IChromatogramWSD chromatogram, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo convert(File file, IChromatogramWSD chromatogram, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		Object converter = CHROMATOGRAM_CONVERTER.getChromatogramConverter(converterId, Converter.EXPORT_CONVERTER);
-		if(converter instanceof IChromatogramWSDExportConverter) {
-			processingInfo = ((IChromatogramWSDExportConverter)converter).convert(file, chromatogram, monitor);
-		} else {
-			processingInfo = CHROMATOGRAM_CONVERTER.getNoExportConverterAvailableProcessingInfo(file);
-		}
-		return processingInfo;
+		return chromatogramConverter.convert(file, chromatogram, converterId, monitor);
 	}
 
 	public static IChromatogramConverterSupport getChromatogramConverterSupport() {
 
-		return CHROMATOGRAM_CONVERTER.getChromatogramConverterSupport();
+		return chromatogramConverter.getChromatogramConverterSupport();
 	}
 }

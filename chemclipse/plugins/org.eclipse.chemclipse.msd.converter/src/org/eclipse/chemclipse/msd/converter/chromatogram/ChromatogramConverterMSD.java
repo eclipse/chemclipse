@@ -17,7 +17,6 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.io.MassLibConverter;
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
-import org.eclipse.chemclipse.converter.core.Converter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -84,7 +83,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public final class ChromatogramConverterMSD {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramConverterMSD.class);
-	private static ChromatogramConverter<IChromatogramMSD> CHROMATOGRAM_CONVERTER = new ChromatogramConverter<>("org.eclipse.chemclipse.msd.converter.chromatogramSupplier", IChromatogramMSD.class);
+	private static ChromatogramConverter<IChromatogramMSD> chromatogramConverter = new ChromatogramConverter<>("org.eclipse.chemclipse.msd.converter.chromatogramSupplier", IChromatogramMSD.class);
 
 	/**
 	 * This class has only static methods.
@@ -94,43 +93,36 @@ public final class ChromatogramConverterMSD {
 
 	public static IProcessingInfo convert(final File file, final String converterId, final IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = CHROMATOGRAM_CONVERTER.convert(file, converterId, monitor);
+		IProcessingInfo processingInfo = chromatogramConverter.convert(file, converterId, monitor);
 		postProcessChromatogram(processingInfo);
 		return processingInfo;
 	}
 
 	public static IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = CHROMATOGRAM_CONVERTER.getChromatogram(file, false, monitor);
+		IProcessingInfo processingInfo = chromatogramConverter.getChromatogram(file, false, monitor);
 		postProcessChromatogram(processingInfo);
 		return processingInfo;
 	}
 
 	public static IProcessingInfo convertOverview(File file, String converterId, IProgressMonitor monitor) {
 
-		return CHROMATOGRAM_CONVERTER.convertOverview(file, converterId, monitor);
+		return chromatogramConverter.convertOverview(file, converterId, monitor);
 	}
 
 	public static IProcessingInfo convertOverview(File file, IProgressMonitor monitor) {
 
-		return CHROMATOGRAM_CONVERTER.getChromatogram(file, true, monitor);
+		return chromatogramConverter.getChromatogram(file, true, monitor);
 	}
 
-	public static IProcessingInfo convert(final File file, final IChromatogramMSD chromatogram, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo convert(File file, IChromatogramMSD chromatogram, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		Object converter = CHROMATOGRAM_CONVERTER.getChromatogramConverter(converterId, Converter.EXPORT_CONVERTER);
-		if(converter instanceof IChromatogramMSDExportConverter) {
-			processingInfo = ((IChromatogramMSDExportConverter)converter).convert(file, chromatogram, monitor);
-		} else {
-			processingInfo = CHROMATOGRAM_CONVERTER.getNoExportConverterAvailableProcessingInfo(file);
-		}
-		return processingInfo;
+		return chromatogramConverter.convert(file, chromatogram, converterId, monitor);
 	}
 
 	public static IChromatogramConverterSupport getChromatogramConverterSupport() {
 
-		return CHROMATOGRAM_CONVERTER.getChromatogramConverterSupport();
+		return chromatogramConverter.getChromatogramConverterSupport();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -153,51 +145,54 @@ public final class ChromatogramConverterMSD {
 			 */
 			if(chromatogramFile != null) {
 				//
+				File directory = chromatogramFile;
 				if(chromatogramFile.isFile()) {
-					chromatogramFile = chromatogramFile.getParentFile();
+					directory = chromatogramFile.getParentFile();
 				}
 				//
-				exitloop:
-				for(File filex : chromatogramFile.listFiles()) {
-					String xName = filex.getName();
-					if(filex.isFile() && xName.endsWith(".inf")) {
-						if(xName.startsWith(chromatogramName)) {
-							/*
-							 * RI
-							 */
-							if(PreferenceSupplier.isParseMassLibRetentionIndexData()) {
-								try {
-									IProcessingInfo processingInfoIndices = massLibConverter.parseRetentionIndices(filex);
-									ISeparationColumnIndices separationColumnIndices = processingInfoIndices.getProcessingResult(ISeparationColumnIndices.class);
-									chromatogramMSD.setSeparationColumnIndices(separationColumnIndices);
-								} catch(TypeCastException e) {
-									logger.warn(e);
-								}
-							}
-							/*
-							 * Scan Targets
-							 */
-							if(PreferenceSupplier.isParseMassLibTargetData()) {
-								try {
-									IProcessingInfo processingInfoTargets = massLibConverter.parseTargets(filex);
-									Map<Integer, String> targets = (Map<Integer, String>)processingInfoTargets.getProcessingResult(Map.class);
-									for(Map.Entry<Integer, String> target : targets.entrySet()) {
-										IScan scan = chromatogramMSD.getScan(target.getKey());
-										if(scan != null && scan instanceof IScanMSD) {
-											IScanMSD scanMSD = (IScanMSD)scan;
-											ILibraryInformation libraryInformation = new LibraryInformation();
-											libraryInformationSupport.extractNameAndReferenceIdentifier(target.getValue(), libraryInformation, referenceIdentifierMarker, referenceIdentifierPrefix);
-											IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
-											IIdentificationTarget scanTargetMSD = new IdentificationTarget(libraryInformation, comparisonResult);
-											scanMSD.getTargets().add(scanTargetMSD);
-										}
+				if(directory.exists()) {
+					exitloop:
+					for(File filex : directory.listFiles()) {
+						String xName = filex.getName();
+						if(filex.isFile() && xName.endsWith(".inf")) {
+							if(xName.startsWith(chromatogramName)) {
+								/*
+								 * RI
+								 */
+								if(PreferenceSupplier.isParseMassLibRetentionIndexData()) {
+									try {
+										IProcessingInfo processingInfoIndices = massLibConverter.parseRetentionIndices(filex);
+										ISeparationColumnIndices separationColumnIndices = processingInfoIndices.getProcessingResult(ISeparationColumnIndices.class);
+										chromatogramMSD.setSeparationColumnIndices(separationColumnIndices);
+									} catch(TypeCastException e) {
+										logger.warn(e);
 									}
-								} catch(TypeCastException e) {
-									logger.warn(e);
 								}
+								/*
+								 * Scan Targets
+								 */
+								if(PreferenceSupplier.isParseMassLibTargetData()) {
+									try {
+										IProcessingInfo processingInfoTargets = massLibConverter.parseTargets(filex);
+										Map<Integer, String> targets = (Map<Integer, String>)processingInfoTargets.getProcessingResult(Map.class);
+										for(Map.Entry<Integer, String> target : targets.entrySet()) {
+											IScan scan = chromatogramMSD.getScan(target.getKey());
+											if(scan != null && scan instanceof IScanMSD) {
+												IScanMSD scanMSD = (IScanMSD)scan;
+												ILibraryInformation libraryInformation = new LibraryInformation();
+												libraryInformationSupport.extractNameAndReferenceIdentifier(target.getValue(), libraryInformation, referenceIdentifierMarker, referenceIdentifierPrefix);
+												IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+												IIdentificationTarget scanTargetMSD = new IdentificationTarget(libraryInformation, comparisonResult);
+												scanMSD.getTargets().add(scanTargetMSD);
+											}
+										}
+									} catch(TypeCastException e) {
+										logger.warn(e);
+									}
+								}
+								//
+								break exitloop;
 							}
-							//
-							break exitloop;
 						}
 					}
 				}
