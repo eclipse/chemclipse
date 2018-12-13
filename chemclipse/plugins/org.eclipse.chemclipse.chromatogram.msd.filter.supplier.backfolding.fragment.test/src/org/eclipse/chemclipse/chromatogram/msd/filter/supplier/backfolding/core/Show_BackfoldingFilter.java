@@ -43,7 +43,7 @@ public class Show_BackfoldingFilter extends ChromatogramImporterTestCase {
 		// fileImport = new
 		// File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_OP21705));
 		fileImport = new File("E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705.D\\DATA.MS");
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		chromatogramFilter = new ChromatogramFilter();
@@ -68,6 +68,6 @@ public class Show_BackfoldingFilter extends ChromatogramImporterTestCase {
 		// fileExport = new File("/home/eselmeister/tmp/OPTest.D/DATA.MS");
 		fileExport = new File("E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705-BACK.D\\DATA.MS");
 		@SuppressWarnings("unused")
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileExport, chromatogram, EXTENSION_POINT_ID, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileExport, chromatogram, EXTENSION_POINT_ID, new NullProgressMonitor());
 	}
 }
