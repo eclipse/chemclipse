@@ -34,7 +34,7 @@ public class ChromatogramImportOCBTestCase extends TestCase {
 
 		super.setUp();
 		File fileImport = new File(TestPathHelper.getAbsolutePath(chromatogramRelativePath));
-		org.eclipse.chemclipse.processing.core.IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, converterId, new NullProgressMonitor());
+		org.eclipse.chemclipse.processing.core.IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, converterId, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 	}
