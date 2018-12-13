@@ -36,7 +36,7 @@ public class ChromatogramReaderTestCase extends TestCase {
 
 		super.setUp();
 		fileImport = new File(this.pathImport);
-		org.eclipse.chemclipse.processing.core.IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		org.eclipse.chemclipse.processing.core.IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 	}
 
