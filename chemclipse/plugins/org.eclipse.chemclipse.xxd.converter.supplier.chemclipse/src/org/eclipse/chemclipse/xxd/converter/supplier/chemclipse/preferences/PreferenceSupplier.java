@@ -26,14 +26,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MIN_COMPRESSION_LEVEL = 0;
 	public static final int MAX_COMPRESSION_LEVEL = 9;
 	//
-	public static final String P_CHROMATOGRAM_VERSION_SAVE = "chromaotgramVersionSave";
+	public static final String P_CHROMATOGRAM_VERSION_SAVE = "chromatogramVersionSave";
 	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = IFormat.CHROMATOGRAM_VERSION_LATEST;
 	public static final String P_CHROMATOGRAM_COMPRESSION_LEVEL = "chromatogramCompressionLevel";
 	public static final int DEF_CHROMATOGRAM_COMPRESSION_LEVEL = IFormat.CHROMATOGRAM_COMPRESSION_LEVEL;
 	//
-	public static final String P_METHOD_VERSION_SAVE = "chromaotgramVersionSave";
+	public static final String P_METHOD_VERSION_SAVE = "methodVersionSave";
 	public static final String DEF_METHOD_VERSION_SAVE = IFormat.METHOD_VERSION_LATEST;
-	public static final String P_METHOD_COMPRESSION_LEVEL = "chromatogramCompressionLevel";
+	public static final String P_METHOD_COMPRESSION_LEVEL = "methodCompressionLevel";
 	public static final int DEF_METHOD_COMPRESSION_LEVEL = IFormat.METHOD_COMPRESSION_LEVEL;
 	//
 	public static final String P_FORCE_LOAD_ALTERNATE_DETECTOR = "forceLoadAlternateDetector";
