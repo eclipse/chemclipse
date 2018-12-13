@@ -5,7 +5,7 @@
          point="org.eclipse.chemclipse.csd.converter.chromatogramSupplier">
       <ChromatogramSupplier
             description="Reads Arw FID Chromatograms."
-            exportConverter="org.eclipse.chemclipse.csd.converter.supplier.arw.core.ChromatogramExportConverter"
+            exportConverter="org.eclipse.chemclipse.converter.chromatogram.DefaultExportConverter"
             fileExtension=".arw"
             filterName="ARW Chromatogram (*.arw)"
             id="org.eclipse.chemclipse.csd.converter.supplier.arw"
