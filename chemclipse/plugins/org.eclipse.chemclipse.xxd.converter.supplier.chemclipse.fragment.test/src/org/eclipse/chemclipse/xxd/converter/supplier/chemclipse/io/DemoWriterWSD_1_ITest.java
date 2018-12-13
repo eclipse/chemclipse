@@ -63,10 +63,10 @@ public class DemoWriterWSD_1_ITest extends TestCase {
 			retentionTime += scanInterval;
 		}
 		//
-		ChromatogramConverterWSD.convert(file, chromatogram, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
+		ChromatogramConverterWSD.getInstance().convert(file, chromatogram, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
 		//
-		IProcessingInfo processingInfo = ChromatogramConverterWSD.convert(file, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
-		IProcessingInfo processingInfo_overview = ChromatogramConverterWSD.convertOverview(file, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterWSD.getInstance().convert(file, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
+		IProcessingInfo processingInfo_overview = ChromatogramConverterWSD.getInstance().convertOverview(file, "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse", new NullProgressMonitor());
 		//
 		IVendorChromatogram read_chromatogram = (VendorChromatogram)processingInfo.getProcessingResult(IChromatogramWSD.class);
 		//

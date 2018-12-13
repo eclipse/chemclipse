@@ -33,7 +33,7 @@ public class ChromatogramReaderFIDTestCase extends TestCase {
 
 		super.setUp();
 		fileImport = new File(this.pathImport);
-		IProcessingInfo processingInfo = ChromatogramConverterCSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterCSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		try {
 			chromatogram = processingInfo.getProcessingResult(IChromatogramCSD.class);
 		} catch(TypeCastException e) {
