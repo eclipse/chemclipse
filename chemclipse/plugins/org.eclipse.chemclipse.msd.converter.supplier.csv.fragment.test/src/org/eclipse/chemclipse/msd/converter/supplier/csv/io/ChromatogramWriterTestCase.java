@@ -39,19 +39,19 @@ public class ChromatogramWriterTestCase extends TestCase {
 		 * Import the chromatogram.
 		 */
 		fileImport = new File(this.pathImport);
-		IProcessingInfo processingInfoImport = ChromatogramConverterMSD.convert(fileImport, this.extensionPointImport, new NullProgressMonitor());
+		IProcessingInfo processingInfoImport = ChromatogramConverterMSD.getInstance().convert(fileImport, this.extensionPointImport, new NullProgressMonitor());
 		chromatogramImport = processingInfoImport.getProcessingResult(IChromatogramMSD.class);
 		/*
 		 * Export the chromatogram.
 		 */
 		fileExport = new File(this.pathExport);
-		IProcessingInfo processingInfoExport = ChromatogramConverterMSD.convert(fileExport, chromatogramImport, this.extensionPointExportReimport, new NullProgressMonitor());
+		IProcessingInfo processingInfoExport = ChromatogramConverterMSD.getInstance().convert(fileExport, chromatogramImport, this.extensionPointExportReimport, new NullProgressMonitor());
 		fileExport = processingInfoExport.getProcessingResult(File.class);
 		/*
 		 * Reimport the exported chromatogram.
 		 */
 		chromatogramImport = null;
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(fileExport, this.extensionPointExportReimport, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileExport, this.extensionPointExportReimport, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 	}
 
