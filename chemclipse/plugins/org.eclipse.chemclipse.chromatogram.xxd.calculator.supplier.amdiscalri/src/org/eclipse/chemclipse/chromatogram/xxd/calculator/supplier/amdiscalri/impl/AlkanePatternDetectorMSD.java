@@ -49,7 +49,7 @@ public class AlkanePatternDetectorMSD {
 			 * Import the chromatogram.
 			 */
 			File file = new File(chromatogramPath);
-			IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, monitor);
+			IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(file, monitor);
 			chromatogramMSD = processingInfo.getProcessingResult(IChromatogramMSD.class);
 			/*
 			 * Create a selection

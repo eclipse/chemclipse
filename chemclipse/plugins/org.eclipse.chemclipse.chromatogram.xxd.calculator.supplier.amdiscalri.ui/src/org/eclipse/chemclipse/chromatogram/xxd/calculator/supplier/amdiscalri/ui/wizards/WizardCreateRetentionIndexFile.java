@@ -194,12 +194,12 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 			if(wizardElements.isUseMassSpectrometryData()) {
 				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 					IChromatogramMSD chromatogramMSD = ((IChromatogramSelectionMSD)chromatogramSelection).getChromatogramMSD();
-					ChromatogramConverterMSD.convert(chromatogramFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+					ChromatogramConverterMSD.getInstance().convert(chromatogramFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
 				}
 			} else {
 				if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
 					IChromatogramCSD chromatogramCSD = ((IChromatogramSelectionCSD)chromatogramSelection).getChromatogramCSD();
-					ChromatogramConverterCSD.convert(chromatogramFile, chromatogramCSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+					ChromatogramConverterCSD.getInstance().convert(chromatogramFile, chromatogramCSD, CHROMATOGRAM_CONVERTER_ID, monitor);
 				}
 			}
 		} catch(Exception e) {
