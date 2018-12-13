@@ -5,7 +5,6 @@
          point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
       <ChromatogramSupplier
             description="Reads mzML Chromatograms"
-            exportConverter="org.eclipse.chemclipse.converter.chromatogram.DefaultExportConverter"
             fileExtension=".mzML"
             filterName="mzML Chromatogram (*.mzML)"
             id="org.eclipse.chemclipse.msd.converter.supplier.mzml"
