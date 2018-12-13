@@ -30,7 +30,7 @@ public class ChromatogramConverter_2_Test extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		support = ChromatogramConverterMSD.getChromatogramConverterSupport();
+		support = ChromatogramConverterMSD.getInstance().getChromatogramConverterSupport();
 	}
 
 	@Override

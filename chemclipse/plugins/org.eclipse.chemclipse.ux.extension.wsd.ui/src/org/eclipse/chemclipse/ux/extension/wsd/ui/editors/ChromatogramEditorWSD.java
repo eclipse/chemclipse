@@ -285,7 +285,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 				 * Try to save the chromatogram.
 				 */
 				monitor.subTask("Save Chromatogram");
-				IProcessingInfo processingInfo = ChromatogramConverterWSD.convert(chromatogramFile, chromatogram, converterId, monitor);
+				IProcessingInfo processingInfo = ChromatogramConverterWSD.getInstance().convert(chromatogramFile, chromatogram, converterId, monitor);
 				try {
 					/*
 					 * If no failures have occurred, set the dirty status to

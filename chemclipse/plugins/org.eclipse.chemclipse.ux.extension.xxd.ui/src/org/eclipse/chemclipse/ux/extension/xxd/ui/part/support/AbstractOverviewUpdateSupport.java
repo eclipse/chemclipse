@@ -151,13 +151,13 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 		IProcessingInfo processingInfo = null;
 		switch(topic) {
 			case IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE:
-				processingInfo = ChromatogramConverterMSD.convertOverview(file, new NullProgressMonitor());
+				processingInfo = ChromatogramConverterMSD.getInstance().convertOverview(file, new NullProgressMonitor());
 				break;
 			case IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE:
-				processingInfo = ChromatogramConverterCSD.convertOverview(file, new NullProgressMonitor());
+				processingInfo = ChromatogramConverterCSD.getInstance().convertOverview(file, new NullProgressMonitor());
 				break;
 			case IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE:
-				processingInfo = ChromatogramConverterWSD.convertOverview(file, new NullProgressMonitor());
+				processingInfo = ChromatogramConverterWSD.getInstance().convertOverview(file, new NullProgressMonitor());
 				break;
 		}
 		//

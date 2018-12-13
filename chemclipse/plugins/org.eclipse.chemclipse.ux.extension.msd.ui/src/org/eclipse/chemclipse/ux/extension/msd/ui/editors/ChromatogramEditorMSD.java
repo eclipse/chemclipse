@@ -311,7 +311,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 				 * Try to save the chromatogram.
 				 */
 				monitor.subTask("Save Chromatogram");
-				IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, chromatogram, converterId, monitor);
+				IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(chromatogramFile, chromatogram, converterId, monitor);
 				try {
 					/*
 					 * If no failures have occurred, set the dirty status to

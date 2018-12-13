@@ -43,7 +43,7 @@ public class ChromatogramOutputEntriesWizardPage extends WizardPage {
 		super(pageName);
 		setTitle("Chromatogram Output Formats");
 		setDescription("This wizard lets you select several output chromatogram formats.");
-		converterSupport = ChromatogramConverterMSD.getChromatogramConverterSupport();
+		converterSupport = ChromatogramConverterMSD.getInstance().getChromatogramConverterSupport();
 	}
 
 	/**

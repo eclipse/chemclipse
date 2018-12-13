@@ -22,6 +22,7 @@ import javax.annotation.PreDestroy;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
+import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
@@ -30,6 +31,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -55,6 +57,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogr
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -281,13 +284,46 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		IChromatogramSelection chromatogramSelection = loadChromatogram();
 		createEditorPages(parent);
 		extendedChromatogramUI.updateChromatogramSelection(chromatogramSelection);
+		processChromatogram(chromatogramSelection);
 		//
 		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 			part.setLabel(chromatogram.getName() + " " + chromatogramDataSupport.getChromatogramType(chromatogramSelection));
 			dirtyable.setDirty(true);
+			//
 			chromatogramSelection.update(true);
+		}
+	}
+
+	private void processChromatogram(IChromatogramSelection chromatogramSelection) {
+
+		File file = new File(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_LOAD_PROCESS_METHOD));
+		if(chromatogramSelection != null && file != null) {
+			try {
+				ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+				dialog.run(false, false, new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						IProcessingInfo processingInfo = MethodConverter.convert(file, monitor);
+						if(!processingInfo.hasErrorMessages()) {
+							try {
+								ProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
+								ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
+								processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+							} catch(Exception e) {
+								logger.warn(e);
+							}
+						}
+					}
+				});
+			} catch(InvocationTargetException e) {
+				logger.warn(e);
+			} catch(InterruptedException e) {
+				logger.warn(e);
+			}
 		}
 	}
 
@@ -360,13 +396,13 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 				IProcessingInfo processingInfo = null;
 				if(chromatogram instanceof IChromatogramMSD) {
 					IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-					processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, chromatogramMSD, converterId, monitor);
+					processingInfo = ChromatogramConverterMSD.getInstance().convert(chromatogramFile, chromatogramMSD, converterId, monitor);
 				} else if(chromatogram instanceof IChromatogramCSD) {
 					IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-					processingInfo = ChromatogramConverterCSD.convert(chromatogramFile, chromatogramCSD, converterId, monitor);
+					processingInfo = ChromatogramConverterCSD.getInstance().convert(chromatogramFile, chromatogramCSD, converterId, monitor);
 				} else if(chromatogram instanceof IChromatogramWSD) {
 					IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
-					processingInfo = ChromatogramConverterWSD.convert(chromatogramFile, chromatogramWSD, converterId, monitor);
+					processingInfo = ChromatogramConverterWSD.getInstance().convert(chromatogramFile, chromatogramWSD, converterId, monitor);
 				}
 				//
 				if(processingInfo != null) {

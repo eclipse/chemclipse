@@ -33,7 +33,7 @@ public class ChromatogramExportTypeSupplierWSD extends AbstractProcessTypeSuppli
 
 	public ChromatogramExportTypeSupplierWSD() {
 		super(CATEGORY, new DataType[]{DataType.WSD});
-		IChromatogramConverterSupport support = ChromatogramConverterWSD.getChromatogramConverterSupport();
+		IChromatogramConverterSupport support = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport();
 		for(ISupplier supplier : support.getExportSupplier()) {
 			ProcessorSupplier processorSupplier = new ProcessorSupplier(supplier.getId());
 			processorSupplier.setName(supplier.getFilterName());
@@ -55,7 +55,7 @@ public class ChromatogramExportTypeSupplierWSD extends AbstractProcessTypeSuppli
 			if(exportFolder.exists()) {
 				IChromatogramWSD chromatogramWSD = chromatogramSelectionWSD.getChromatogramWSD();
 				File file = new File(chromatogramExportFolder + File.separator + chromatogramWSD.getName());
-				processingInfo = ChromatogramConverterWSD.convert(file, chromatogramWSD, processorId, monitor);
+				processingInfo = ChromatogramConverterWSD.getInstance().convert(file, chromatogramWSD, processorId, monitor);
 			}
 		}
 		//

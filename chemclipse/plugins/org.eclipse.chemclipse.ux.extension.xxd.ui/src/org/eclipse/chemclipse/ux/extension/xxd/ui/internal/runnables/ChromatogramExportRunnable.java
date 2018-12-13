@@ -64,19 +64,19 @@ public class ChromatogramExportRunnable implements IRunnableWithProgress {
 				case MSD:
 					if(chromatogram instanceof IChromatogramMSD) {
 						IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-						processingInfo = ChromatogramConverterMSD.convert(file, chromatogramMSD, supplier.getId(), monitor);
+						processingInfo = ChromatogramConverterMSD.getInstance().convert(file, chromatogramMSD, supplier.getId(), monitor);
 					}
 					break;
 				case CSD:
 					if(chromatogram instanceof IChromatogramCSD) {
 						IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-						processingInfo = ChromatogramConverterCSD.convert(file, chromatogramCSD, supplier.getId(), monitor);
+						processingInfo = ChromatogramConverterCSD.getInstance().convert(file, chromatogramCSD, supplier.getId(), monitor);
 					}
 					break;
 				case WSD:
 					if(chromatogram instanceof IChromatogramWSD) {
 						IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
-						processingInfo = ChromatogramConverterWSD.convert(file, chromatogramWSD, supplier.getId(), monitor);
+						processingInfo = ChromatogramConverterWSD.getInstance().convert(file, chromatogramWSD, supplier.getId(), monitor);
 					}
 					break;
 				default:

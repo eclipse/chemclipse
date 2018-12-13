@@ -15,10 +15,10 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.swt.SWT;
-import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.LineStyle;
+import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
 public class PreferenceConstants {
 
@@ -449,6 +449,8 @@ public class PreferenceConstants {
 	public static final String DEF_CHROMATOGRAM_SELECTED_ACTION_ID = "";
 	public static final String P_CHROMATOGRAM_SAVE_AS_FOLDER = "chromatogramSaveAsFolder";
 	public static final String DEF_CHROMATOGRAM_SAVE_AS_FOLDER = "";
+	public static final String P_CHROMATOGRAM_LOAD_PROCESS_METHOD = "chromatogramLoadProcessMethod";
+	public static final String DEF_CHROMATOGRAM_LOAD_PROCESS_METHOD = "";
 	/*
 	 * File Explorer
 	 */

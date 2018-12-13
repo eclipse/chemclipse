@@ -49,7 +49,7 @@ public class ChromatogramExportRunnable implements IRunnableWithProgress {
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, chromatogram, supplier.getId(), monitor);
+			IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(file, chromatogram, supplier.getId(), monitor);
 			try {
 				data = processingInfo.getProcessingResult(File.class);
 			} catch(TypeCastException e) {

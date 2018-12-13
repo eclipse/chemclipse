@@ -11,51 +11,31 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.chromatogram;
 
-import java.io.File;
-
-import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverter;
-import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
+import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramConverter;
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverter;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramConverterCSD {
+public class ChromatogramConverterCSD extends AbstractChromatogramConverter<IChromatogramCSD> implements IChromatogramConverter<IChromatogramCSD> {
 
-	private static ChromatogramConverter<IChromatogramCSD> chromatogramConverter = new ChromatogramConverter<>("org.eclipse.chemclipse.csd.converter.chromatogramSupplier", IChromatogramCSD.class);
+	private static IChromatogramConverter<IChromatogramCSD> instance = null;
 
-	/**
-	 * This class has only static methods.
-	 */
-	private ChromatogramConverterCSD() {
+	public ChromatogramConverterCSD() {
+		super("org.eclipse.chemclipse.csd.converter.chromatogramSupplier", IChromatogramCSD.class);
 	}
 
-	public static IProcessingInfo convert(final File file, final String converterId, final IProgressMonitor monitor) {
+	public static IChromatogramConverter<IChromatogramCSD> getInstance() {
 
-		return chromatogramConverter.convert(file, converterId, monitor);
+		if(instance == null) {
+			instance = new ChromatogramConverterCSD();
+		}
+		//
+		return instance;
 	}
 
-	public static IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	@Override
+	public void postProcessChromatogram(IProcessingInfo processingInfo, IProgressMonitor monitor) {
 
-		return chromatogramConverter.getChromatogram(file, false, monitor);
-	}
-
-	public static IProcessingInfo convertOverview(File file, String converterId, IProgressMonitor monitor) {
-
-		return chromatogramConverter.convertOverview(file, converterId, monitor);
-	}
-
-	public static IProcessingInfo convertOverview(File file, IProgressMonitor monitor) {
-
-		return chromatogramConverter.getChromatogram(file, true, monitor);
-	}
-
-	public static IProcessingInfo convert(File file, IChromatogramCSD chromatogram, String converterId, IProgressMonitor monitor) {
-
-		return chromatogramConverter.convert(file, chromatogram, converterId, monitor);
-	}
-
-	public static IChromatogramConverterSupport getChromatogramConverterSupport() {
-
-		return chromatogramConverter.getChromatogramConverterSupport();
 	}
 }

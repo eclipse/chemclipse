@@ -27,7 +27,7 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierEditorSupport {
 
 	public ChromatogramEditorSupport() {
-		super(ChromatogramConverterWSD.getChromatogramConverterSupport().getSupplier());
+		super(ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport().getSupplier());
 	}
 
 	@Override

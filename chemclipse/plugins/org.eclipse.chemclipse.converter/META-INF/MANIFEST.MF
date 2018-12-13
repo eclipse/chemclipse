@@ -27,3 +27,4 @@ Export-Package: org.eclipse.chemclipse.converter.chromatogram,
  org.eclipse.chemclipse.converter.scan,
  org.eclipse.chemclipse.converter.sequence,
  org.eclipse.chemclipse.converter.support
+

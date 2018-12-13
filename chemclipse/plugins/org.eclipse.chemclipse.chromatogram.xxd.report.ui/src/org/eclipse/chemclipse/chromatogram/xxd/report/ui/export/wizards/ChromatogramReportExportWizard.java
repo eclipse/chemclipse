@@ -87,7 +87,7 @@ public class ChromatogramReportExportWizard extends Wizard implements IExportWiz
 							 * Load each chromatogram
 							 */
 							File chromatogramFile = new File(inputFile);
-							IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, CONVERTER_ID, monitor);
+							IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(chromatogramFile, CONVERTER_ID, monitor);
 							try {
 								IChromatogramMSD chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 								if(chromatogram != null) {

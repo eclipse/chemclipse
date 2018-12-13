@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 public class ChromatogramIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
 	public ChromatogramIdentifier() {
-		super(ChromatogramConverterCSD.getChromatogramConverterSupport().getSupplier());
+		super(ChromatogramConverterCSD.getInstance().getChromatogramConverterSupport().getSupplier());
 	}
 
 	@Override

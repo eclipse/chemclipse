@@ -42,13 +42,13 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 			case MSD_TANDEM:
 			case MSD_HIGHRES:
 			case MSD:
-				supplier = ChromatogramConverterMSD.getChromatogramConverterSupport().getSupplier();
+				supplier = ChromatogramConverterMSD.getInstance().getChromatogramConverterSupport().getSupplier();
 				break;
 			case CSD:
-				supplier = ChromatogramConverterCSD.getChromatogramConverterSupport().getSupplier();
+				supplier = ChromatogramConverterCSD.getInstance().getChromatogramConverterSupport().getSupplier();
 				break;
 			case WSD:
-				supplier = ChromatogramConverterWSD.getChromatogramConverterSupport().getSupplier();
+				supplier = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport().getSupplier();
 				break;
 			case XIR:
 				supplier = ScanConverterXIR.getScanConverterSupport().getSupplier();

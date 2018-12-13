@@ -282,7 +282,7 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 				 * Try to save the chromatogram.
 				 */
 				monitor.subTask("Save Chromatogram");
-				IProcessingInfo processingInfo = ChromatogramConverterCSD.convert(chromatogramFile, chromatogram, converterId, monitor);
+				IProcessingInfo processingInfo = ChromatogramConverterCSD.getInstance().convert(chromatogramFile, chromatogram, converterId, monitor);
 				try {
 					/*
 					 * If no failures have occurred, set the dirty status to

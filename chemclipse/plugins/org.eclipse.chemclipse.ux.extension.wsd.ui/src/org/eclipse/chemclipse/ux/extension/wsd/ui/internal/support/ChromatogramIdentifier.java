@@ -39,7 +39,7 @@ public class ChromatogramIdentifier {
 			return false;
 		}
 		if(suppliers == null) {
-			suppliers = ChromatogramConverterWSD.getChromatogramConverterSupport().getSupplier();
+			suppliers = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport().getSupplier();
 		} else {
 			for(ISupplier supplier : suppliers) {
 				supplierExtension = supplier.getFileExtension().toLowerCase();
@@ -73,7 +73,7 @@ public class ChromatogramIdentifier {
 			return false;
 		}
 		if(suppliers == null) {
-			suppliers = ChromatogramConverterWSD.getChromatogramConverterSupport().getSupplier();
+			suppliers = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport().getSupplier();
 		} else {
 			for(ISupplier supplier : suppliers) {
 				directoryExtension = supplier.getDirectoryExtension().toUpperCase();

@@ -175,13 +175,13 @@ public class ChromatogramFileSupport {
 			case MSD_TANDEM:
 			case MSD_HIGHRES:
 			case MSD:
-				converterSupport = ChromatogramConverterMSD.getChromatogramConverterSupport();
+				converterSupport = ChromatogramConverterMSD.getInstance().getChromatogramConverterSupport();
 				break;
 			case CSD:
-				converterSupport = ChromatogramConverterCSD.getChromatogramConverterSupport();
+				converterSupport = ChromatogramConverterCSD.getInstance().getChromatogramConverterSupport();
 				break;
 			case WSD:
-				converterSupport = ChromatogramConverterWSD.getChromatogramConverterSupport();
+				converterSupport = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport();
 				break;
 			default:
 				// Do nothing

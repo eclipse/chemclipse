@@ -63,7 +63,7 @@ public class ChromatogramFileSupport {
 		dialog.setFileName(chromatogram.getName());
 		dialog.setText("Save Chromatogram As");
 		dialog.setOverwrite(true);
-		IChromatogramConverterSupport converterSupport = ChromatogramConverterCSD.getChromatogramConverterSupport();
+		IChromatogramConverterSupport converterSupport = ChromatogramConverterCSD.getInstance().getChromatogramConverterSupport();
 		/*
 		 * Set the filters that allow an export of chromatographic data.
 		 */

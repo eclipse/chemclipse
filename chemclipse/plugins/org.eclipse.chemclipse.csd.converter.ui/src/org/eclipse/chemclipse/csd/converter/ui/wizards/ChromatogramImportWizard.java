@@ -102,7 +102,7 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 						/*
 						 * Import
 						 */
-						IProcessingInfo processingInfo = ChromatogramConverterCSD.convert(inputFile, monitor);
+						IProcessingInfo processingInfo = ChromatogramConverterCSD.getInstance().convert(inputFile, monitor);
 						IChromatogramCSD chromatogram = processingInfo.getProcessingResult(IChromatogramCSD.class);
 						//
 						String directory = importDirectory;
@@ -113,7 +113,7 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 						 * Export
 						 */
 						File outputFile = new File(directory + chromatogram.getName());
-						ChromatogramConverterCSD.convert(outputFile, chromatogram, converterId, monitor);
+						ChromatogramConverterCSD.getInstance().convert(outputFile, chromatogram, converterId, monitor);
 					} catch(TypeCastException e) {
 						logger.warn(e);
 					}

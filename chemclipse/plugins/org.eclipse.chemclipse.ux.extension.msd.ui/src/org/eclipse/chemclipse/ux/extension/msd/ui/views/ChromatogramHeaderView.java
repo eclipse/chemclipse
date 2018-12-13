@@ -163,7 +163,7 @@ public class ChromatogramHeaderView {
 			/*
 			 * Load the chromatogram overview.
 			 */
-			IProcessingInfo processingInfo = ChromatogramConverterMSD.convertOverview(file, new NullProgressMonitor());
+			IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convertOverview(file, new NullProgressMonitor());
 			try {
 				IChromatogramOverview chromatogramOverview = processingInfo.getProcessingResult(IChromatogramOverview.class);
 				if(chromatogramOverview != null) {

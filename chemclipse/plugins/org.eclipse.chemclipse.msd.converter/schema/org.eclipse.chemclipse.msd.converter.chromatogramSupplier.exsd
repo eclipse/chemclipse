@@ -100,7 +100,7 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="exportConverter" type="string" use="required">
+         <attribute name="exportConverter" type="string">
             <annotation>
                <documentation>
                   
@@ -110,7 +110,7 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
                </appInfo>
             </annotation>
          </attribute>
-         <attribute name="importConverter" type="string" use="required">
+         <attribute name="importConverter" type="string">
             <annotation>
                <documentation>
                   

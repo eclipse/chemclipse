@@ -61,17 +61,17 @@ public class ChromatogramTypeSupport {
 				case MSD_TANDEM:
 				case MSD_HIGHRES:
 				case MSD:
-					IProcessingInfo processingInfoMSD = ChromatogramConverterMSD.convert(file, monitor);
+					IProcessingInfo processingInfoMSD = ChromatogramConverterMSD.getInstance().convert(file, monitor);
 					IChromatogramMSD chromatogramMSD = processingInfoMSD.getProcessingResult(IChromatogramMSD.class);
 					chromatogramSelection = new ChromatogramSelectionMSD(chromatogramMSD, fireUpdate);
 					break;
 				case CSD:
-					IProcessingInfo processingInfoCSD = ChromatogramConverterCSD.convert(file, monitor);
+					IProcessingInfo processingInfoCSD = ChromatogramConverterCSD.getInstance().convert(file, monitor);
 					IChromatogramCSD chromatogramCSD = processingInfoCSD.getProcessingResult(IChromatogramCSD.class);
 					chromatogramSelection = new ChromatogramSelectionCSD(chromatogramCSD, fireUpdate);
 					break;
 				case WSD:
-					IProcessingInfo processingInfoWSD = ChromatogramConverterWSD.convert(file, monitor);
+					IProcessingInfo processingInfoWSD = ChromatogramConverterWSD.getInstance().convert(file, monitor);
 					IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult(IChromatogramWSD.class);
 					chromatogramSelection = new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate);
 					break;

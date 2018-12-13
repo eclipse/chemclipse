@@ -32,9 +32,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 
 @SuppressWarnings("rawtypes")
-public class ChromatogramConverter<T extends IChromatogram> {
+public abstract class AbstractChromatogramConverter<T extends IChromatogram> implements IChromatogramConverter<T> {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramConverter.class);
+	private static final Logger logger = Logger.getLogger(AbstractChromatogramConverter.class);
 	//
 	private static final String DESCRIPTION_IMPORT = "Chromatogram Import Converter";
 	private static final String DESCRIPTION_EXPORT = "Chromatogram Export Converter";
@@ -42,7 +42,7 @@ public class ChromatogramConverter<T extends IChromatogram> {
 	private String extensionPoint = "";
 	private Class<T> type;
 
-	public ChromatogramConverter(String extensionPoint, Class<T> type) {
+	public AbstractChromatogramConverter(String extensionPoint, Class<T> type) {
 		this.extensionPoint = extensionPoint;
 		this.type = type;
 	}
@@ -56,6 +56,7 @@ public class ChromatogramConverter<T extends IChromatogram> {
 	 * 
 	 * @return ChromatogramConverterSupport
 	 */
+	@Override
 	public IChromatogramConverterSupport getChromatogramConverterSupport() {
 
 		ChromatogramConverterSupport chromatogramConverterSupport = new ChromatogramConverterSupport();
@@ -90,6 +91,12 @@ public class ChromatogramConverter<T extends IChromatogram> {
 		return chromatogramConverterSupport;
 	}
 
+	@Override
+	public IProcessingInfo convertOverview(File file, IProgressMonitor monitor) {
+
+		return getChromatogram(file, true, monitor);
+	}
+
 	/**
 	 * Returns an IChromatogramOverview instance if the given converter is
 	 * available.<br/>
@@ -101,6 +108,7 @@ public class ChromatogramConverter<T extends IChromatogram> {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@Override
 	public IProcessingInfo convertOverview(File file, String converterId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -111,6 +119,12 @@ public class ChromatogramConverter<T extends IChromatogram> {
 			processingInfo = getNoOverviewImportConverterAvailableProcessingInfo(file);
 		}
 		return processingInfo;
+	}
+
+	@Override
+	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
+
+		return getChromatogram(file, false, monitor);
 	}
 
 	/**
@@ -126,6 +140,7 @@ public class ChromatogramConverter<T extends IChromatogram> {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@Override
 	public IProcessingInfo convert(File file, String converterId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
@@ -146,6 +161,7 @@ public class ChromatogramConverter<T extends IChromatogram> {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@Override
 	public IProcessingInfo getChromatogram(File file, boolean overview, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
@@ -241,7 +257,7 @@ public class ChromatogramConverter<T extends IChromatogram> {
 		 * Post process or collect the errors.
 		 */
 		if(type.isInstance(processingInfo.getProcessingResult())) {
-			postProcessChromatogram(processingInfo);
+			postProcessChromatogram(processingInfo, monitor);
 		} else {
 			for(IProcessingMessage processingMessage : processingMessagesError) {
 				processingInfo.addMessage(processingMessage);
@@ -251,15 +267,7 @@ public class ChromatogramConverter<T extends IChromatogram> {
 		return processingInfo;
 	}
 
-	/**
-	 * Maybe override to add your own methods.
-	 * 
-	 * @param processingInfo
-	 */
-	public void postProcessChromatogram(IProcessingInfo processingInfo) {
-
-	}
-
+	@Override
 	public IProcessingInfo convert(File file, IChromatogram<? extends IPeak> chromatogram, String converterId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;

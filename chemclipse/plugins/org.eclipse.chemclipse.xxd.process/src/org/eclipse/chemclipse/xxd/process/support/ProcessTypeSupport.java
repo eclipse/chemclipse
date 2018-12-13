@@ -122,7 +122,9 @@ public class ProcessTypeSupport {
 	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, ProcessMethod processMethod, IProgressMonitor monitor) {
 
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
-		chromatogramSelections.add(chromatogramSelection);
+		if(chromatogramSelection != null) {
+			chromatogramSelections.add(chromatogramSelection);
+		}
 		return applyProcessor(chromatogramSelections, processMethod, monitor);
 	}
 
@@ -131,6 +133,13 @@ public class ProcessTypeSupport {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+			/*
+			 * Process references also?
+			 * Same method?
+			 */
+			// for(IChromatogram chromatogram : chromatogramSelection.getChromatogram().getReferencedChromatograms()) {
+			// processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+			// }
 			for(IProcessEntry processEntry : processMethod) {
 				String processorId = processEntry.getProcessorId();
 				IProcessTypeSupplier processTypeSupplier = processSupplierMap.get(processorId);

@@ -27,7 +27,7 @@ public class ConverterTypeSupportWSD {
 
 		String converterName = NOT_AVAILABLE;
 		try {
-			ISupplier converterSupplier = ChromatogramConverterWSD.getChromatogramConverterSupport().getSupplier(entry.getConverterId());
+			ISupplier converterSupplier = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport().getSupplier(entry.getConverterId());
 			converterName = converterSupplier.getFilterName();
 		} catch(NoConverterAvailableException e) {
 			logger.warn(e);

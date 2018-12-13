@@ -42,7 +42,7 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Import Chromatogram", IProgressMonitor.UNKNOWN);
-			IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, monitor);
+			IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(file, monitor);
 			IChromatogramMSD chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 			chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		} catch(Exception e) {

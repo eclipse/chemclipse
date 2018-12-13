@@ -46,7 +46,7 @@ public class ChromatogramOverviewImportRunnable implements IRunnableWithProgress
 
 		try {
 			monitor.beginTask("Import Chromatogram Overview", IProgressMonitor.UNKNOWN);
-			IProcessingInfo processingInfo = ChromatogramConverterMSD.convertOverview(chromatogram, monitor);
+			IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convertOverview(chromatogram, monitor);
 			chromatogramOverview = processingInfo.getProcessingResult(IChromatogramOverview.class);
 		} catch(Exception e) {
 			/*
