@@ -62,7 +62,7 @@ public class SampleQuantProcessor {
 			 */
 			sampleQuantReport.setPathChromatogramOriginal(pathChromatogramOriginal);
 			File chromatogramImportFile = new File(pathChromatogramOriginal);
-			IProcessingInfo processingInfoImport = ChromatogramConverterMSD.convert(chromatogramImportFile, monitor);
+			IProcessingInfo processingInfoImport = ChromatogramConverterMSD.getInstance().convert(chromatogramImportFile, monitor);
 			IChromatogramMSD chromatogramMSD = processingInfoImport.getProcessingResult(IChromatogramMSD.class);
 			//
 			sampleQuantReport.setName(chromatogramMSD.getName());
@@ -89,7 +89,7 @@ public class SampleQuantProcessor {
 			 * Export the chromatogram
 			 */
 			File chromatogramExportFile = new File(sampleQuantReportFile.getAbsolutePath().replace(REPORT_FILE_EXTENSION, CHROMATOGRAM_FILE_EXTENSION));
-			IProcessingInfo processingInfoExport = ChromatogramConverterMSD.convert(chromatogramExportFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+			IProcessingInfo processingInfoExport = ChromatogramConverterMSD.getInstance().convert(chromatogramExportFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
 			sampleQuantReport.setPathChromatogramEdited(processingInfoExport.getProcessingResult(File.class).getAbsolutePath());
 			/*
 			 * Write sample quant report

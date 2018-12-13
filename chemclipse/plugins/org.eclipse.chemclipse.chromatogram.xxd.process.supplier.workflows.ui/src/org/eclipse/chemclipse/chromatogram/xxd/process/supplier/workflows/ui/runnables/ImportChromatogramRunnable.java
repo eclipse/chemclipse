@@ -34,7 +34,7 @@ public class ImportChromatogramRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		File chromatogramImportFile = new File(pathChromatogram);
-		org.eclipse.chemclipse.processing.core.IProcessingInfo processingInfoImport = ChromatogramConverterMSD.convert(chromatogramImportFile, monitor);
+		org.eclipse.chemclipse.processing.core.IProcessingInfo processingInfoImport = ChromatogramConverterMSD.getInstance().convert(chromatogramImportFile, monitor);
 		chromatogramMSD = processingInfoImport.getProcessingResult(IChromatogramMSD.class);
 	}
 }
