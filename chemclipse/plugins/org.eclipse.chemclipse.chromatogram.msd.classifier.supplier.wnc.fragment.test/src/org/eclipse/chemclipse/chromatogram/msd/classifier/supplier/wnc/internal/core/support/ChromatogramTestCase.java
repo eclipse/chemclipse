@@ -58,7 +58,7 @@ public class ChromatogramTestCase extends TestCase {
 		/*
 		 * Read the chromatogram
 		 */
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(chromatogramFile, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 	}
