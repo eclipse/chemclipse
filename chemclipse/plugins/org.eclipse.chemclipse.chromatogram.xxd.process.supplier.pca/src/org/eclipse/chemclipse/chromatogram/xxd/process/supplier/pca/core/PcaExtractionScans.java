@@ -64,7 +64,7 @@ public class PcaExtractionScans implements IDataExtraction {
 		Map<String, TreeMap<Integer, Float>> scanMap = new HashMap<>();
 		boolean firstChromatogram = true;
 		for(IDataInputEntry input : inputFiles) {
-			IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(new File(input.getInputFile()), monitor);
+			IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(new File(input.getInputFile()), monitor);
 			IChromatogramMSD chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 			String name = input.getName();
 			TreeMap<Integer, Float> extractScans = new TreeMap<>();
