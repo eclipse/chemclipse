@@ -34,7 +34,7 @@ public class ChromatogramExportConverter_1_ITest extends TestCase {
 
 		super.setUp();
 		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1_AGILENT));
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(importFile, new NullProgressMonitor());
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(importFile, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogram.setMiscInfo("Hello Test Misc Info");
 		chromatogram.getEditHistory().add(new EditInformation("I have done </Chromatogram> something"));
