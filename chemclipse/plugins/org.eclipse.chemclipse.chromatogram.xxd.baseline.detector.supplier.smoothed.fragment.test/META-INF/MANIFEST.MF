@@ -6,5 +6,6 @@ Bundle-Version: 0.8.0.qualifier
 Fragment-Host: org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.11.0",
- org.eclipse.chemclipse.msd.converter;bundle-version="0.8.0"
+ org.eclipse.chemclipse.msd.converter;bundle-version="0.8.0",
+ org.eclipse.chemclipse.converter;bundle-version="0.8.0"
 Bundle-Vendor: ChemClipse
