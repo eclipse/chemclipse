@@ -43,7 +43,7 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 				processingInfo.setProcessingResult(file);
 			} catch(Exception e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
+				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file);
 			}
 		}
 		return processingInfo;
