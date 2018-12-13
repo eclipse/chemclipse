@@ -50,7 +50,7 @@ public class AmdisIdentifier {
 		 */
 		String amdisTmpPath = PreferenceSupplier.getAmdisTmpPath();
 		File file = new File(amdisTmpPath + File.separator + chromatogram.getName());
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.convert(file, chromatogram, CONVERTER_ID, monitor);
+		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(file, chromatogram, CONVERTER_ID, monitor);
 		/*
 		 * There are no messages if the chromatogram has been converted correctly.
 		 */
