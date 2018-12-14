@@ -22,8 +22,9 @@ public class SignalFID implements ISignalFID {
 	 */
 	private static final long serialVersionUID = 2563457000126174921L;
 	private long time;
-	private Complex intesityFID;
-	private Complex intensity;
+	private Complex intensityUnprocessedFID;
+	private Complex intensityProcessedFID;
+	private Complex intensityPreprocessedFID;
 
 	public SignalFID() {
 
@@ -34,8 +35,9 @@ public class SignalFID implements ISignalFID {
 
 		this();
 		this.time = time;
-		this.intesityFID = intesityFID;
-		this.intensity = intesityFID;
+		this.intensityUnprocessedFID = intesityFID;
+		this.intensityProcessedFID = intesityFID;
+		this.intensityPreprocessedFID = intesityFID;
 	}
 
 	@Override
@@ -47,47 +49,47 @@ public class SignalFID implements ISignalFID {
 	@Override
 	public double getY() {
 
-		return intensity.getReal();
+		return intensityProcessedFID.getReal();
 	}
 
 	@Override
-	public Complex getIntensity() {
+	public Complex getIntensityProcessedFID() {
 
-		return intensity;
+		return intensityProcessedFID;
 	}
 
 	@Override
-	public void setIntensity(Complex intensity) {
+	public void setIntensityProcessedFID(Complex processedIntensity) {
 
-		this.intensity = intensity;
+		this.intensityProcessedFID = processedIntensity;
 	}
 
 	@Override
-	public void resetIntensity() {
+	public void resetIntensityProcessedFID() {
 
-		intensity = intesityFID;
+		intensityProcessedFID = intensityPreprocessedFID;
 	}
 
 	@Override
-	public void setIntensityFID(Complex magnitude) {
+	public void setIntensityUnprocessedFID(Complex unprocessedIntensity) {
 
-		this.intesityFID = magnitude;
+		this.intensityUnprocessedFID = unprocessedIntensity;
 	}
 
 	@Override
-	public Complex getIntensityFID() {
+	public Complex getIntensityUnprocessedFID() {
 
-		return intesityFID;
+		return intensityUnprocessedFID;
 	}
 
 	@Override
-	public long getTime() {
+	public long getAcquisitionTime() {
 
 		return time;
 	}
 
 	@Override
-	public void setTime(long nanoseconds) {
+	public void setAcquisitionTime(long nanoseconds) {
 
 		this.time = nanoseconds;
 	}
@@ -96,7 +98,7 @@ public class SignalFID implements ISignalFID {
 	public int compareTo(ISignalFID o) {
 
 		if(o != null) {
-			return Long.compare(time, o.getTime());
+			return Long.compare(time, o.getAcquisitionTime());
 		} else {
 			return 0;
 		}
@@ -106,5 +108,17 @@ public class SignalFID implements ISignalFID {
 	public int hashCode() {
 
 		return Objects.hash(time);
+	}
+
+	@Override
+	public Complex getIntensityPreprocessedFID() {
+
+		return intensityPreprocessedFID;
+	}
+
+	@Override
+	public void setIntensityPreprocessedFID(Complex processedIntensity) {
+
+		this.intensityPreprocessedFID = processedIntensity;
 	}
 }

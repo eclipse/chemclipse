@@ -29,8 +29,6 @@ public interface IScanNMR extends IScanSerializable {
 
 	double getSweepWidth();
 
-	double getSweepOffset();
-
 	double getFirstOrderPhaseCorrection();
 
 	void setFirstOrderPhaseCorrection(double firstOrderPhaseCorrection);

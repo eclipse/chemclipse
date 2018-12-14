@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -20,12 +20,12 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 	//
 	private double chemicalShift = 0.0d;
 	private double intensity = 0.0d;
+	private double intensityScalingFactor;
 	private Complex fourierTransformedData;
 	private Complex phaseCorrection;
 	private Complex baselineCorrection;
 
 	public SignalNMR(double chemicalShift, double intensity) {
-
 		this.chemicalShift = chemicalShift;
 		this.intensity = intensity;
 		this.phaseCorrection = new Complex(1.0);
@@ -34,7 +34,6 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 	}
 
 	public SignalNMR(double chemicalShift, Complex fourierTransformedData) {
-
 		this.chemicalShift = chemicalShift;
 		this.intensity = fourierTransformedData.getReal();
 		this.fourierTransformedData = fourierTransformedData;
@@ -115,19 +114,19 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 	}
 
 	@Override
-	public double getIntensity() {
+	public double getIntensityOfSpectrum() {
 
 		return intensity;
 	}
 
 	@Override
-	public void setIntensity(double intensity) {
+	public void setIntensityOfSpectrum(double intensity) {
 
 		this.intensity = intensity;
 	}
 
 	@Override
-	public void resetIntesity() {
+	public void resetIntensityOfSpectrum() {
 
 		this.intensity = getBaselineCorrectedData().getReal();
 	}
@@ -146,15 +145,19 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj)
+		if(this == obj) {
 			return true;
-		if(obj == null)
+		}
+		if(obj == null) {
 			return false;
-		if(getClass() != obj.getClass())
+		}
+		if(getClass() != obj.getClass()) {
 			return false;
+		}
 		SignalNMR other = (SignalNMR)obj;
-		if(Double.doubleToLongBits(chemicalShift) != Double.doubleToLongBits(other.chemicalShift))
+		if(Double.doubleToLongBits(chemicalShift) != Double.doubleToLongBits(other.chemicalShift)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -172,5 +175,17 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 		} else {
 			return 0;
 		}
+	}
+
+	@Override
+	public double getIntensityScalingFactor() {
+
+		return intensityScalingFactor;
+	}
+
+	@Override
+	public void setIntensityScalingFactor(double intensityScalingFactor) {
+
+		this.intensityScalingFactor = intensityScalingFactor;
 	}
 }
