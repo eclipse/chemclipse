@@ -80,6 +80,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final float MIN_RETENTION_INDEX_WINDOW = 10.0f;
 	public static final float MAX_RETENTION_INDEX_WINDOW = 20.0f;
 	//
+	public static final String P_FILTER_PATH_IDENTIFIER_FILES = "filterPathIdentifierFiles";
+	public static final String DEF_FILTER_PATH_IDENTIFIER_FILES = "";
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -119,6 +122,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_MAX_PENALTY, Float.toString(IComparisonResult.DEF_MAX_PENALTY));
 		defaultValues.put(P_RETENTION_TIME_WINDOW, Integer.toString(DEF_RETENTION_TIME_WINDOW));
 		defaultValues.put(P_RETENTION_INDEX_WINDOW, Float.toString(DEF_RETENTION_INDEX_WINDOW));
+		defaultValues.put(P_FILTER_PATH_IDENTIFIER_FILES, DEF_FILTER_PATH_IDENTIFIER_FILES);
 		return defaultValues;
 	}
 
@@ -187,6 +191,33 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 			String items[] = massSpectraFiles.toArray(new String[massSpectraFiles.size()]);
 			preferences.put(P_MASS_SPECTRA_FILES, fileListUtil.createList(items));
 			preferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
+	}
+
+	public static String getFilterPathIdentifierFiles() {
+
+		return getFilterPath(P_FILTER_PATH_IDENTIFIER_FILES, DEF_FILTER_PATH_IDENTIFIER_FILES);
+	}
+
+	public static void setFilterPathIdentifierFiles(String filterPath) {
+
+		setFilterPath(P_FILTER_PATH_IDENTIFIER_FILES, filterPath);
+	}
+
+	private static String getFilterPath(String key, String def) {
+
+		IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
+		return eclipsePreferences.get(key, def);
+	}
+
+	private static void setFilterPath(String key, String filterPath) {
+
+		try {
+			IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
+			eclipsePreferences.put(key, filterPath);
+			eclipsePreferences.flush();
 		} catch(BackingStoreException e) {
 			logger.warn(e);
 		}

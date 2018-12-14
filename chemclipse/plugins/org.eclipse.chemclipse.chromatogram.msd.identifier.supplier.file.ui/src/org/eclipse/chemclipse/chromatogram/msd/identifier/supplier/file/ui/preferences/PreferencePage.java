@@ -15,18 +15,20 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpect
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.editors.IdentifierTableEditor;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
-import org.eclipse.chemclipse.support.ui.preferences.editors.FileListEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.RetentionTimeMinutesFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
@@ -54,17 +56,19 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		/*
 		 * Display all available import converter.
 		 */
-		FileListEditor fileListEditor = new FileListEditor(PreferenceSupplier.P_MASS_SPECTRA_FILES, "Load mass spectrum libraries", getFieldEditorParent());
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		IdentifierTableEditor identifierTableEditor = new IdentifierTableEditor(PreferenceSupplier.P_MASS_SPECTRA_FILES, "Load mass spectrum libraries", getFieldEditorParent());
 		DatabaseConverterSupport databaseConverterSupport = DatabaseConverter.getDatabaseConverterSupport();
 		try {
 			String[] extensions = databaseConverterSupport.getFilterExtensions();
 			String[] names = databaseConverterSupport.getFilterNames();
-			fileListEditor.setFilterExtensionsAndNames(extensions, names);
+			identifierTableEditor.setFilterExtensionsAndNames(extensions, names);
 		} catch(NoConverterAvailableException e) {
 			logger.warn(e);
 		}
-		addField(fileListEditor);
+		addField(identifierTableEditor);
 		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_PRE_OPTIMIZATION, "Use search pre-optimization", getFieldEditorParent()));
 		String labelTextThreshold = getDescription("Threshold pre-optimization", PreferenceSupplier.MIN_THRESHOLD_PRE_OPTIMIZATION, PreferenceSupplier.MAX_THRESHOLD_PRE_OPTIMIZATION);
 		addField(new DoubleFieldEditor(PreferenceSupplier.P_THRESHOLD_PRE_OPTIMIZATION, labelTextThreshold, PreferenceSupplier.MIN_THRESHOLD_PRE_OPTIMIZATION, PreferenceSupplier.MAX_THRESHOLD_PRE_OPTIMIZATION, getFieldEditorParent()));
@@ -86,6 +90,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new FloatFieldEditor(PreferenceSupplier.P_PENALTY_CALCULATION_LEVEL_FACTOR, "Penalty Calculation Level Factor", IIdentifierSettingsMSD.MIN_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettingsMSD.MAX_PENALTY_CALCULATION_LEVEL_FACTOR, getFieldEditorParent()));
 		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_RETENTION_TIME_WINDOW, "Retention Time Window (minutes)", PreferenceSupplier.MIN_RETENTION_TIME_WINDOW, PreferenceSupplier.MAX_RETENTION_TIME_WINDOW, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_RETENTION_INDEX_WINDOW, "Retention Index Window", PreferenceSupplier.MIN_RETENTION_INDEX_WINDOW, PreferenceSupplier.MAX_RETENTION_INDEX_WINDOW, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Used locations for library files", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_IDENTIFIER_FILES, "Path Identifier Files:", getFieldEditorParent()));
 	}
 
 	/*
