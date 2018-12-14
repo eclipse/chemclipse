@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
@@ -16,43 +16,30 @@ import java.io.Serializable;
 public final class SPECTRAL_REFERENCE implements ISpectralReference, Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	//
-	private String nucleonName;
-	private double referenceFrequency;
+	private double frequency;
+	private String nucleus;
 
 	public SPECTRAL_REFERENCE() {
-
 	}
 
-	public SPECTRAL_REFERENCE(String nucleonName, double referenceFrequency) {
-
-		this.nucleonName = nucleonName;
-		this.referenceFrequency = referenceFrequency;
-	}
-
-	@Override
-	public String getNucleonName() {
-
-		return nucleonName;
+	public SPECTRAL_REFERENCE(String nucleus, double frequency) {
+		this.nucleus = nucleus;
+		this.frequency = frequency;
 	}
 
 	@Override
-	public double getReferenceFrequency() {
+	public double getFrequency() {
 
-		return referenceFrequency;
+		return frequency;
 	}
 
-	public void setNucleonName(String nucleonName) {
+	public void setFrequency(double frequency) {
 
-		this.nucleonName = nucleonName;
-	}
-
-	public void setReferenceFrequency(double referenceFrequency) {
-
-		this.referenceFrequency = referenceFrequency;
+		this.frequency = frequency;
 	}
 
 	@Override
@@ -60,8 +47,19 @@ public final class SPECTRAL_REFERENCE implements ISpectralReference, Serializabl
 
 		if(this.getClass().equals(obj.getClass())) {
 			SPECTRAL_REFERENCE spectral_reference = (SPECTRAL_REFERENCE)obj;
-			return spectral_reference.referenceFrequency == referenceFrequency;
+			return spectral_reference.frequency == frequency;
 		}
 		return false;
+	}
+
+	@Override
+	public String getNucleus() {
+
+		return nucleus;
+	}
+
+	public void setNucleus(String nucleusOfFrequencyChannelF1) {
+
+		this.nucleus = nucleusOfFrequencyChannelF1;
 	}
 }

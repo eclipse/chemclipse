@@ -29,19 +29,19 @@ public interface ISignalExtractor {
 
 	double[] extractChemicalShift();
 
-	Complex[] extractRawIntesityFID();
+	Complex[] extractIntesityPreprocessedFID();
 
-	double[] extractRawIntesityFIDReal();
+	double[] extractIntesityPreprocessedFIDReal();
 
-	Complex[] extractIntesityFID();
+	Complex[] extractIntesityProcessedFID();
 
-	double[] extractIntesityFIDReal();
+	double[] extractIntesityProcessedFIDReal();
 
-	long[] extractTimeFID();
+	long[] extractAcquisitionTimeFID();
 
-	void createScansFID(Complex[] complexFID, long[] time);
+	void storeTimeDomainSignal(Complex[] complexFID, long[] time);
 
-	void createScans(Complex[] fourierTransformedData, double[] chemicalShift);
+	void storeFrequencyDomainSpectrum(Complex[] fourierTransformedData, double[] chemicalShift);
 
 	void setIntesity(double[] intensities);
 
@@ -52,4 +52,10 @@ public interface ISignalExtractor {
 	void setBaselineCorrection(Complex[] baseleniCorrection, boolean resetIntensityValue);
 
 	void setScansFIDCorrection(double[] correction, boolean reset);
+
+	double[] extractIntesityUnprocessedFIDReal();
+
+	Complex[] extractIntesityUnprocessedFID();
+
+	void setPreprocessFID(Complex[] preprocessedSignal);
 }

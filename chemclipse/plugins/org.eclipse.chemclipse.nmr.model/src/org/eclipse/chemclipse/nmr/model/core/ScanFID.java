@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
@@ -18,15 +18,15 @@ import java.util.TreeSet;
 public class ScanFID extends AbstractScanNMRInfo implements IScanFID {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 4636733448738115239L;
 	private final TreeSet<ISignalFID> signalsFID = new TreeSet<>();
 	private double sweepWidth;
 	private double firstDataPointOffset;
+	private double firstFIDDataPointMultiplicationFactor;
 
 	public ScanFID() {
-
 	}
 
 	@Override
@@ -59,11 +59,11 @@ public class ScanFID extends AbstractScanNMRInfo implements IScanFID {
 		if(signalsFID.isEmpty()) {
 			return 0;
 		}
-		return signalsFID.last().getTime();
+		return signalsFID.last().getAcquisitionTime();
 	}
 
 	@Override
-	public int getNumberOfSignalsFid() {
+	public int getSignalsFidSize() {
 
 		return signalsFID.size();
 	}
@@ -72,6 +72,12 @@ public class ScanFID extends AbstractScanNMRInfo implements IScanFID {
 	public double getSweepWidth() {
 
 		return sweepWidth;
+	}
+
+	@Override
+	public void setSweepWidth(double sweepWidth) {
+
+		this.sweepWidth = sweepWidth;
 	}
 
 	@Override
@@ -87,8 +93,14 @@ public class ScanFID extends AbstractScanNMRInfo implements IScanFID {
 	}
 
 	@Override
-	public void setSweepWidth(double sweepWidth) {
+	public void setFirstFIDDataPointMultiplicationFactor(double firstFIDDataPointMultiplicationFactor) {
 
-		this.sweepWidth = sweepWidth;
+		this.firstFIDDataPointMultiplicationFactor = firstFIDDataPointMultiplicationFactor;
+	}
+
+	@Override
+	public double getFirstFIDDataPointMultiplicationFactor() {
+
+		return firstFIDDataPointMultiplicationFactor;
 	}
 }

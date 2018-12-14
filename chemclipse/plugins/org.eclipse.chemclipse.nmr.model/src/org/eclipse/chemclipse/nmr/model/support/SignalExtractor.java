@@ -38,7 +38,7 @@ public class SignalExtractor implements ISignalExtractor {
 
 	public double[] extractSignalIntesity() {
 
-		return dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().stream().mapToDouble(ISignalNMR::getIntensity).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().stream().mapToDouble(ISignalNMR::getIntensityOfSpectrum).toArray();
 	}
 
 	@Override
@@ -78,33 +78,45 @@ public class SignalExtractor implements ISignalExtractor {
 	}
 
 	@Override
-	public Complex[] extractRawIntesityFID() {
+	public Complex[] extractIntesityPreprocessedFID() {
 
-		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().map(s -> s.getIntensityFID()).toArray(Complex[]::new);
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().map(s -> s.getIntensityPreprocessedFID()).toArray(Complex[]::new);
 	}
 
 	@Override
-	public double[] extractRawIntesityFIDReal() {
+	public double[] extractIntesityPreprocessedFIDReal() {
 
-		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().mapToDouble(s -> s.getIntensityFID().getReal()).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().mapToDouble(s -> s.getIntensityPreprocessedFID().getReal()).toArray();
 	}
 
 	@Override
-	public Complex[] extractIntesityFID() {
+	public Complex[] extractIntesityUnprocessedFID() {
 
-		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().map(s -> s.getIntensity()).toArray(Complex[]::new);
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().map(s -> s.getIntensityUnprocessedFID()).toArray(Complex[]::new);
 	}
 
 	@Override
-	public double[] extractIntesityFIDReal() {
+	public double[] extractIntesityUnprocessedFIDReal() {
 
-		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().mapToDouble(s -> s.getIntensity().getReal()).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().mapToDouble(s -> s.getIntensityUnprocessedFID().getReal()).toArray();
 	}
 
 	@Override
-	public long[] extractTimeFID() {
+	public Complex[] extractIntesityProcessedFID() {
 
-		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().mapToLong(ISignalFID::getTime).toArray();
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().map(s -> s.getIntensityProcessedFID()).toArray(Complex[]::new);
+	}
+
+	@Override
+	public double[] extractIntesityProcessedFIDReal() {
+
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().mapToDouble(s -> s.getIntensityProcessedFID().getReal()).toArray();
+	}
+
+	@Override
+	public long[] extractAcquisitionTimeFID() {
+
+		return dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().stream().mapToLong(ISignalFID::getAcquisitionTime).toArray();
 	}
 
 	@Override
@@ -114,7 +126,7 @@ public class SignalExtractor implements ISignalExtractor {
 	}
 
 	@Override
-	public void createScans(Complex[] fourierTransformedData, double[] chemicalShift) {
+	public void storeFrequencyDomainSpectrum(Complex[] fourierTransformedData, double[] chemicalShift) {
 
 		dataNMRSelection.getMeasurmentNMR().getScanMNR().removeAllSignalsNMR();
 		for(int i = 0; i < fourierTransformedData.length; i++) {
@@ -123,7 +135,7 @@ public class SignalExtractor implements ISignalExtractor {
 	}
 
 	@Override
-	public void createScansFID(Complex[] complexFID, long[] time) {
+	public void storeTimeDomainSignal(Complex[] complexFID, long[] time) {
 
 		dataNMRSelection.getMeasurmentNMR().getScanFID().removeAllSignalsFID();
 		for(int i = 0; i < complexFID.length; i++) {
@@ -139,7 +151,7 @@ public class SignalExtractor implements ISignalExtractor {
 		while(signals.hasNext()) {
 			ISignalNMR signal = signals.next();
 			double intensity = intensities[i];
-			signal.setIntensity(intensity);
+			signal.setIntensityOfSpectrum(intensity);
 			i++;
 		}
 	}
@@ -152,7 +164,7 @@ public class SignalExtractor implements ISignalExtractor {
 		while(signals.hasNext()) {
 			ISignalNMR signal = signals.next();
 			Complex intensity = intensities[i];
-			signal.setIntensity(intensity.getReal());
+			signal.setIntensityOfSpectrum(intensity.getReal());
 			i++;
 		}
 	}
@@ -191,21 +203,33 @@ public class SignalExtractor implements ISignalExtractor {
 
 	private void resertValues() {
 
-		dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().forEach(signal -> signal.resetIntesity());
+		dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR().forEach(signal -> signal.resetIntensityOfSpectrum());
 	}
 
 	@Override
 	public void setScansFIDCorrection(double[] correction, boolean reset) {
 
 		if(reset) {
-			dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().forEach(ISignalFID::resetIntensity);
+			dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().forEach(ISignalFID::resetIntensityProcessedFID);
 		}
 		Iterator<ISignalFID> it = dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().iterator();
 		int i = 0;
 		while(it.hasNext()) {
 			ISignalFID iSignalFID = it.next();
-			Complex intensity = iSignalFID.getIntensity().multiply(correction[i]);
-			iSignalFID.setIntensity(intensity);
+			Complex intensity = iSignalFID.getIntensityProcessedFID().multiply(correction[i]);
+			iSignalFID.setIntensityProcessedFID(intensity);
+			i++;
+		}
+	}
+
+	public void setPreprocessFID(Complex[] preprocessedSignal) {
+
+		Iterator<ISignalFID> it = dataNMRSelection.getMeasurmentNMR().getScanFID().getSignalsFID().iterator();
+		int i = 0;
+		while(it.hasNext()) {
+			ISignalFID iSignalFID = it.next();
+			iSignalFID.setIntensityPreprocessedFID(preprocessedSignal[i]);
+			iSignalFID.resetIntensityProcessedFID();
 			i++;
 		}
 	}

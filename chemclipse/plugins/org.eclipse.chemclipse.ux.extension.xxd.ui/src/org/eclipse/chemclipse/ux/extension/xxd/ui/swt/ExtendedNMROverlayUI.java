@@ -211,7 +211,7 @@ public class ExtendedNMROverlayUI {
 			int index = 0;
 			for(ISignalNMR scanSignal : dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR()) {
 				xSeries[index] = scanSignal.getChemicalShift();
-				ySeries[index] = scanSignal.getIntensity();
+				ySeries[index] = scanSignal.getIntensityOfSpectrum();
 				index++;
 			}
 		} else {

@@ -17,58 +17,83 @@ import org.apache.commons.math3.complex.Complex;
 import org.eclipse.chemclipse.model.core.ISignal;
 
 /**
- * An NMR FID signal.
+ * A NMR FID signal.
  * </p>
- * A singalFID is the 'raw intensity'.
+ * The signalFID contains the digitized time-domain signal of the acquired data.
  *
- * @author Jan Holy
+ * @author Jan Holy, Alexander Stark
  *
  */
 public interface ISignalFID extends Serializable, ISignal, Comparable<ISignalFID> {
 
 	/**
-	 * Returns the intensity of the signal.
+	 * Returns the intensity of the processed FID,
+	 * e.g. after apodization.
 	 *
-	 * @see #getIntensityFID()
-	 * @return the intensity of the signal
+	 * @see #getIntensityUnprocessedFID()
+	 * @return the intensity of the processed FID
 	 */
-	Complex getIntensity();
+	Complex getIntensityProcessedFID();
 
 	/**
+	 * Sets the intensity of the processed FID.
 	 *
-	 * @param intensity
+	 * @param processedIntensity
 	 */
-	void setIntensity(Complex intensity);
+	void setIntensityProcessedFID(Complex processedIntensity);
 
 	/**
+	 * Returns the intensity of the processed FID,
+	 * e.g. after digital filter
 	 *
+	 * @see #getIntensityUnprocessedFID()
+	 * @return the intensity of the processed FID
 	 */
-	void resetIntensity();
+	Complex getIntensityPreprocessedFID();
 
 	/**
+	 * Sets the intensity of the processed FID.
 	 *
-	 * @param magnitude
+	 * @param preprocessedFID
 	 */
-	void setIntensityFID(Complex magnitude);
+	void setIntensityPreprocessedFID(Complex preprocessedFID);
 
 	/**
-	 * Returns the intensity of the signal. (Signal is not process)
+	 * Resets the intensity of the processed FID.
 	 *
-	 * @see #getIntensity()
-	 * @return the intensity of the signal
+	 * @return the reseted intensity of the processed FID
 	 */
-	Complex getIntensityFID();
+	void resetIntensityProcessedFID();
 
 	/**
+	 * Sets the intensity of the unprocessed FID.
 	 *
-	 * @return time in milliseconds
+	 * @param unprocessedIntensity
 	 */
-	long getTime();
+	void setIntensityUnprocessedFID(Complex unprocessedIntensity);
 
 	/**
-	 * set time in milliseconds
+	 * Returns the intensity of the unprocessed FID.
+	 * </p>
+	 * This FID represents the analog version of the acquired
+	 * digital FID without a possible digital filter.
 	 *
-	 * @param millisecond
+	 * @see #getIntensityProcessedFID()
+	 * @return the intensity of the unprocessed FID
 	 */
-	void setTime(long nanoseconds);
+	Complex getIntensityUnprocessedFID();
+
+	/**
+	 * Returns the acquisition time of the FID.
+	 *
+	 * @return time in nanoseconds
+	 */
+	long getAcquisitionTime();
+
+	/**
+	 * Sets the acquisition time of the FID.
+	 *
+	 * @param nanoseconds
+	 */
+	void setAcquisitionTime(long nanoseconds);
 }

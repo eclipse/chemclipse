@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -22,9 +22,9 @@ public interface ISignalNMR extends ISignal, Serializable {
 
 	void setChemicalShift(double chemicalShift);
 
-	double getIntensity();
+	double getIntensityOfSpectrum();
 
-	void setIntensity(double intensity);
+	void setIntensityOfSpectrum(double intensity);
 
 	Complex getFourierTransformedData();
 
@@ -42,5 +42,9 @@ public interface ISignalNMR extends ISignal, Serializable {
 
 	void setBaselineCorrection(Complex baselineCorrection);
 
-	void resetIntesity();
+	void resetIntensityOfSpectrum();
+
+	double getIntensityScalingFactor();
+
+	void setIntensityScalingFactor(double intensityScalingFactor);
 }

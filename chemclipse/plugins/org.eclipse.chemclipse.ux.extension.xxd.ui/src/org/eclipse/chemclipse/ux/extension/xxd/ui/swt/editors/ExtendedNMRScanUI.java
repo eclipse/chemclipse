@@ -122,7 +122,7 @@ public class ExtendedNMRScanUI {
 			int index = 0;
 			for(ISignalNMR scanSignal : scanNMR.getSignalsNMR()) {
 				xSeries[index] = scanSignal.getChemicalShift();
-				ySeries[index] = scanSignal.getIntensity();
+				ySeries[index] = scanSignal.getIntensityOfSpectrum();
 				index++;
 			}
 		} else {
@@ -140,13 +140,13 @@ public class ExtendedNMRScanUI {
 		//
 		if(dataNMRSelection != null) {
 			IScanFID scanFID = dataNMRSelection.getMeasurmentNMR().getScanFID();
-			int size = scanFID.getNumberOfSignalsFid();
+			int size = scanFID.getSignalsFidSize();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
 			for(ISignalFID scanSignal : scanFID.getSignalsFID()) {
-				xSeries[index] = scanSignal.getTime();
-				ySeries[index] = scanSignal.getIntensity().getReal();
+				xSeries[index] = scanSignal.getAcquisitionTime();
+				ySeries[index] = scanSignal.getIntensityProcessedFID().getReal();
 				index++;
 			}
 		} else {
