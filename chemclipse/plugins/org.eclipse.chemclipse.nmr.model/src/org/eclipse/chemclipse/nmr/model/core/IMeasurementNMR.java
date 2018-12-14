@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
@@ -21,9 +21,9 @@ public interface IMeasurementNMR extends IMeasurementInfo {
 
 	IScanNMR getScanMNR();
 
-	IScanFID getScanFID();
-
 	void setScanMMR(IScanNMR scanNMR);
+
+	IScanFID getScanFID();
 
 	void setScanFID(IScanFID scanFID);
 }

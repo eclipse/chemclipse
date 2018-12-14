@@ -59,16 +59,7 @@ public class ScanNMR extends AbstractScanNMRInfo implements IScanNMR {
 		if(processedSignals.isEmpty()) {
 			return 0;
 		}
-		return processedSignals.first().getChemicalShift() - processedSignals.last().getChemicalShift();
-	}
-
-	@Override
-	public double getSweepOffset() {
-
-		if(processedSignals.isEmpty()) {
-			return 0;
-		}
-		return processedSignals.first().getChemicalShift();
+		return processedSignals.last().getChemicalShift() - processedSignals.first().getChemicalShift();
 	}
 
 	@Override

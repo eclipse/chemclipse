@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
@@ -27,9 +27,13 @@ public interface IScanFID extends IScanNMRInfo, IScanSerializable {
 
 	long getAcqusitionTime();
 
-	int getNumberOfSignalsFid();
+	int getSignalsFidSize();
 
 	void setSweepWidth(double sweepWidth);
 
 	void setFirstDataPointOffset(double firstDataPointOffset);
+
+	void setFirstFIDDataPointMultiplicationFactor(double firstFIDDataPointMultiplicationFactor);
+
+	double getFirstFIDDataPointMultiplicationFactor();
 }
