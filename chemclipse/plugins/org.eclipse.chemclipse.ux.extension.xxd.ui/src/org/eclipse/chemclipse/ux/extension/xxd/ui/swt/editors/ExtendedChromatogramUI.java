@@ -95,6 +95,7 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
@@ -111,7 +112,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramActionUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramReferencesUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeatmapUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IChromatogramReferencesListener;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarUI;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
@@ -143,6 +143,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swtchart.IAxis.Position;
+import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
+import org.eclipse.swtchart.IPlotArea;
+import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToScanNumberConverter;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IAxisSettings;
@@ -155,10 +159,6 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 import org.eclipse.swtchart.extensions.menu.ResetChartHandler;
-import org.eclipse.swtchart.IAxis.Position;
-import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
-import org.eclipse.swtchart.IPlotArea;
-import org.eclipse.swtchart.LineStyle;
 
 @SuppressWarnings("rawtypes")
 public class ExtendedChromatogramUI implements ToolbarUI {
@@ -203,7 +203,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 	private Composite toolbarMain;
 	private Label labelChromatogramInfo;
 	private ChromatogramReferencesUI chromatogramReferencesUI;
-	private RetentionIndexTableViewerUI retentionIndexTableViewerUI;
+	private RetentionIndexUI retentionIndexUI;
 	private ChromatogramChart chromatogramChart;
 	private ComboViewer comboViewerSeparationColumn;
 	private ChromatogramActionUI chromatogramActionUI;
@@ -417,10 +417,10 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 			updateChromatogram();
 			setSeparationColumnSelection();
 			chromatogramReferencesUI.updateChromatogramSelection(chromatogramSelection);
-			retentionIndexTableViewerUI.setInput(chromatogramSelection.getChromatogram().getSeparationColumnIndices());
+			retentionIndexUI.setInput(chromatogramSelection.getChromatogram().getSeparationColumnIndices());
 		} else {
 			chromatogramReferencesUI.clear();
-			retentionIndexTableViewerUI.setInput(null);
+			retentionIndexUI.setInput(null);
 			updateChromatogram();
 		}
 	}
@@ -1222,7 +1222,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		toolbars.put(TOOLBAR_PEAK_TARGET_TRANSFER, createPeakTargetTransferUI(parent));
 		toolbars.put(TOOLBAR_CHROMATOGRAM_ALIGNMENT, createChromatogramAlignmentUI(parent));
 		toolbars.put(TOOLBAR_METHOD, createToolbarMethod(parent));
-		toolbars.put(TOOLBAR_RETENTION_INDICES, createToolbarRetentionIndices(parent));
+		toolbars.put(TOOLBAR_RETENTION_INDICES, retentionIndexUI = createToolbarRetentionIndexUI(parent));
 		//
 		SashForm chartsArea = new SashForm(parent, SWT.HORIZONTAL);
 		chartsArea.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -1294,17 +1294,13 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		return composite;
 	}
 
-	private Composite createToolbarRetentionIndices(Composite parent) {
+	private RetentionIndexUI createToolbarRetentionIndexUI(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		RetentionIndexUI retentionIndexUI = new RetentionIndexUI(parent, SWT.NONE);
+		retentionIndexUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+		retentionIndexUI.setSearchVisibility(false);
 		//
-		retentionIndexTableViewerUI = new RetentionIndexTableViewerUI(composite, SWT.BORDER);
-		retentionIndexTableViewerUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-		//
-		return composite;
+		return retentionIndexUI;
 	}
 
 	private Composite createToolbarMethod(Composite parent) {

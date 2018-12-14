@@ -134,12 +134,11 @@ public class ProcessTypeSupport {
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
 			/*
-			 * Process references also?
-			 * Same method?
+			 * Process referenced chromatograms?
+			 * Will make things more complex. Discussion needed.
+			 * Think of RI calculation. Are the RIs of the master taken or the RIs of the selected reference?
+			 * What about the column?
 			 */
-			// for(IChromatogram chromatogram : chromatogramSelection.getChromatogram().getReferencedChromatograms()) {
-			// processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
-			// }
 			for(IProcessEntry processEntry : processMethod) {
 				String processorId = processEntry.getProcessorId();
 				IProcessTypeSupplier processTypeSupplier = processSupplierMap.get(processorId);
