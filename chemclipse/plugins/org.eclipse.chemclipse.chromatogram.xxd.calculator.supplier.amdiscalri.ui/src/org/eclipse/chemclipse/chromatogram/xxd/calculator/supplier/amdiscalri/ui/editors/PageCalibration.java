@@ -15,7 +15,7 @@ import java.io.File;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedRetentionIndexListUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.ExtendedRetentionIndexListUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -48,6 +48,6 @@ public class PageCalibration {
 		control.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		//
 		extendedTableViewer = new ExtendedRetentionIndexListUI(control, SWT.NONE);
-		extendedTableViewer.setDefaultRetentionIndexEntries(new StandardsReader().getStandardsList());
+		extendedTableViewer.addRetentionIndexEntries(new StandardsReader().getStandardsList());
 	}
 }
