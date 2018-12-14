@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.editors.CalibrationTableEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
@@ -38,16 +39,21 @@ public class PreferencePageCalculator extends FieldEditorPreferencePage implemen
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		//
 		CalibrationTableEditor calibrationTableEditor = new CalibrationTableEditor(PreferenceSupplier.P_RETENTION_INDEX_FILES, "Retention Index Files:", getFieldEditorParent());
 		calibrationTableEditor.setFilterExtensionsAndNames(new String[]{"*.CAL", "*.cal"}, new String[]{"AMDIS Calibration *.CAL", "AMDIS Calibration *.cal"});
 		addField(calibrationTableEditor);
 		//
-		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_USE_AUTO_DETECT_INDICES, "Retention Index Strategy", 1, PreferenceSupplier.AUTO_DETECT_OPTIONS, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_DEFAULT_IF_COLUMN_IS_NA, "Use default if column is not available (Use File Option)", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Calculator Options", getFieldEditorParent()));
+		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_DETECTION_STRATEGY, "Detection Strategy", 1, PreferenceSupplier.DETECTION_OPTIONS, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_DEFAULT_COLUMN, "Use Default Column (in case of no match)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_PROCESS_REFERENCED_CHROMATOGRAMS, "Process Referenced Chromatograms", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Used locations for *.cal files", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_INDEX_FILES, "Path Index Files:", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_MSD, "Path MSD Files:", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_CSD, "Path CSD Files:", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_MSD, "Path MSD Index Files:", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_CSD, "Path CSD Index Files:", getFieldEditorParent()));
 	}
 
 	/*

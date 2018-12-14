@@ -19,6 +19,8 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileReader;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
@@ -27,45 +29,89 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RetentionIndexCalculator {
 
 	@SuppressWarnings("rawtypes")
-	public IProcessingInfo apply(IChromatogramSelection chromatogramSelection, CalculatorSettings supplierCalculatorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo apply(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		ISeparationColumnIndices separationColumnIndices = null;
-		//
-		if(PreferenceSupplier.isUseAutoDetectIndices()) {
-			separationColumnIndices = getChromatogramIndices(chromatogramSelection);
-			if(separationColumnIndices == null) {
-				separationColumnIndices = getFileIndices(chromatogramSelection, supplierCalculatorSettings);
-			} else {
-				if(separationColumnIndices.size() == 0) {
-					separationColumnIndices = getFileIndices(chromatogramSelection, supplierCalculatorSettings);
+		if(chromatogramSelection != null) {
+			ISeparationColumnIndices separationColumnIndices = getSeparationColumnIndices(chromatogramSelection, calculatorSettings);
+			if(separationColumnIndices != null) {
+				/*
+				 * Master
+				 */
+				calculateIndex(chromatogramSelection, separationColumnIndices);
+				if(PreferenceSupplier.isProcessReferencedChromatograms()) {
+					/*
+					 * References
+					 */
+					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+					for(Object object : chromatogram.getReferencedChromatograms()) {
+						IChromatogramSelection chromatogramSelectionReference = getChromatogramSelection(object);
+						if(chromatogramSelectionReference != null) {
+							calculateIndex(chromatogramSelection, separationColumnIndices);
+						}
+					}
 				}
 			}
-		} else {
-			separationColumnIndices = getFileIndices(chromatogramSelection, supplierCalculatorSettings);
-		}
-		/*
-		 * Calculate
-		 */
-		if(separationColumnIndices != null) {
-			calculateIndex(chromatogramSelection, separationColumnIndices);
 		}
 		//
 		return processingInfo;
 	}
 
 	@SuppressWarnings("rawtypes")
+	private ISeparationColumnIndices getSeparationColumnIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings) {
+
+		ISeparationColumnIndices separationColumnIndices;
+		switch(PreferenceSupplier.getDetectionStrategy()) {
+			case PreferenceSupplier.DETECTION_STRATEGY_AUTO:
+				separationColumnIndices = getAutoIndices(chromatogramSelection, calculatorSettings);
+				break;
+			case PreferenceSupplier.DETECTION_STRATEGY_CHROMATOGRAM:
+				separationColumnIndices = getChromatogramIndices(chromatogramSelection);
+				break;
+			case PreferenceSupplier.DETECTION_STRATEGY_FILES:
+				separationColumnIndices = getFileIndices(chromatogramSelection, calculatorSettings);
+				break;
+			default:
+				separationColumnIndices = null;
+				break;
+		}
+		return separationColumnIndices;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private ISeparationColumnIndices getAutoIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings) {
+
+		ISeparationColumnIndices separationColumnIndices = getChromatogramIndices(chromatogramSelection);
+		if(separationColumnIndices == null) {
+			separationColumnIndices = getFileIndices(chromatogramSelection, calculatorSettings);
+		} else {
+			if(separationColumnIndices.size() == 0) {
+				separationColumnIndices = getFileIndices(chromatogramSelection, calculatorSettings);
+			}
+		}
+		//
+		return separationColumnIndices;
+	}
+
+	@SuppressWarnings("rawtypes")
 	private ISeparationColumnIndices getChromatogramIndices(IChromatogramSelection chromatogramSelection) {
 
-		return chromatogramSelection.getChromatogram().getSeparationColumnIndices();
+		if(chromatogramSelection != null) {
+			return chromatogramSelection.getChromatogram().getSeparationColumnIndices();
+		} else {
+			return null;
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -181,6 +227,22 @@ public class RetentionIndexCalculator {
 					scan.setRetentionIndex(retentionIndex);
 				}
 			}
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	public IChromatogramSelection getChromatogramSelection(Object object) {
+
+		if(object instanceof IChromatogramSelection) {
+			return ((IChromatogramSelection)object);
+		} else if(object instanceof IChromatogramCSD) {
+			return new ChromatogramSelectionCSD((IChromatogramCSD)object);
+		} else if(object instanceof IChromatogramMSD) {
+			return new ChromatogramSelectionCSD((IChromatogramMSD)object);
+		} else if(object instanceof IChromatogramWSD) {
+			return new ChromatogramSelectionWSD((IChromatogramWSD)object);
+		} else {
+			return null;
 		}
 	}
 }
