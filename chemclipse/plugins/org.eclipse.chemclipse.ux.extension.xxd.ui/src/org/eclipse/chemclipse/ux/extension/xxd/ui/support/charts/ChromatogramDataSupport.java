@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 
 @SuppressWarnings("rawtypes")
@@ -82,7 +83,7 @@ public class ChromatogramDataSupport {
 		} else if(object instanceof IChromatogramMSD) {
 			return new ChromatogramSelectionCSD((IChromatogramMSD)object);
 		} else if(object instanceof IChromatogramWSD) {
-			return new ChromatogramSelectionCSD((IChromatogramWSD)object);
+			return new ChromatogramSelectionWSD((IChromatogramWSD)object);
 		} else {
 			return null;
 		}
