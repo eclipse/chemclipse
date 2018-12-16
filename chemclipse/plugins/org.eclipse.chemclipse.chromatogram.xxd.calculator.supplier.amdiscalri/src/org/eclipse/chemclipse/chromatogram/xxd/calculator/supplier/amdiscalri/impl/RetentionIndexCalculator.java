@@ -58,7 +58,7 @@ public class RetentionIndexCalculator {
 					for(Object object : chromatogram.getReferencedChromatograms()) {
 						IChromatogramSelection chromatogramSelectionReference = getChromatogramSelection(object);
 						if(chromatogramSelectionReference != null) {
-							calculateIndex(chromatogramSelection, separationColumnIndices);
+							calculateIndex(chromatogramSelectionReference, separationColumnIndices);
 						}
 					}
 				}
