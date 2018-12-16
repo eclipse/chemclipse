@@ -40,7 +40,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_DETECTION_STRATEGY = "detectionStrategy";
 	public static final String DEF_DETECTION_STRATEGY = DETECTION_STRATEGY_FILES;
 	public static final String[][] DETECTION_OPTIONS = new String[][]{{"First Chromatogram - Then File(s)", DETECTION_STRATEGY_AUTO}, {"Chromatogram Only", DETECTION_STRATEGY_CHROMATOGRAM}, {"File(s) Only", DETECTION_STRATEGY_FILES}};
-	public static final String P_USE_DEFAULT_COLUMN = "useDefaultIfColumnIsNA";
+	public static final String P_USE_DEFAULT_COLUMN = "useDefaultColumn";
 	public static final boolean DEF_USE_DEFAULT_COLUMN = true;
 	public static final String P_PROCESS_REFERENCED_CHROMATOGRAMS = "processReferencedChromatograms";
 	public static final boolean DEF_PROCESS_REFERENCED_CHROMATOGRAMS = true;
