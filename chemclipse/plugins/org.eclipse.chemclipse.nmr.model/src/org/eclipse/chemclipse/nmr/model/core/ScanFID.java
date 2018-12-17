@@ -27,6 +27,7 @@ public class ScanFID extends AbstractScanNMRInfo implements IScanFID {
 	private double firstFIDDataPointMultiplicationFactor;
 
 	public ScanFID() {
+
 	}
 
 	@Override
@@ -54,12 +55,21 @@ public class ScanFID extends AbstractScanNMRInfo implements IScanFID {
 	}
 
 	@Override
-	public long getAcqusitionTime() {
+	public long getStopAcqusitionTime() {
 
 		if(signalsFID.isEmpty()) {
 			return 0;
 		}
 		return signalsFID.last().getAcquisitionTime();
+	}
+
+	@Override
+	public long getStartAcqusitionTime() {
+
+		if(signalsFID.isEmpty()) {
+			return 0;
+		}
+		return signalsFID.first().getAcquisitionTime();
 	}
 
 	@Override
