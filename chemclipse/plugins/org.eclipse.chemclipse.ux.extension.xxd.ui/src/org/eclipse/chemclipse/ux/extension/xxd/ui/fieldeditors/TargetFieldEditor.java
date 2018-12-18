@@ -122,7 +122,7 @@ public class TargetFieldEditor extends FieldEditor {
 		gridData.grabExcessVerticalSpace = true;
 		composite.setLayoutData(gridData);
 		//
-		targetTemplateListUI = new TargetTemplateListUI(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+		targetTemplateListUI = new TargetTemplateListUI(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		setTableViewerInput();
 	}
 
@@ -357,8 +357,10 @@ public class TargetFieldEditor extends FieldEditor {
 	@Override
 	protected void adjustForNumColumns(int numColumns) {
 
-		GridData gridData = (GridData)composite.getLayoutData();
-		gridData.horizontalSpan = numColumns - 1;
-		gridData.grabExcessHorizontalSpace = gridData.horizontalSpan == 1;
+		if(numColumns >= 2) {
+			GridData gridData = (GridData)composite.getLayoutData();
+			gridData.horizontalSpan = numColumns - 1;
+			gridData.grabExcessHorizontalSpace = true;
+		}
 	}
 }
