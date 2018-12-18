@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -40,6 +41,11 @@ public class ScanMSD extends AbstractScanMSD implements IScanMSD {
 		super();
 	}
 
+	public ScanMSD(final Collection<? extends IIon> ions) {
+
+		super(ions);
+	}
+	
 	/**
 	 * Creates a new instance of {@code ScanMSD} by creating a
 	 * shallow copy of provided {@code templateScan}.

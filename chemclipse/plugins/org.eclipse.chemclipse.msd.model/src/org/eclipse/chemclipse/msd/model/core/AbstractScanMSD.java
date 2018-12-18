@@ -79,6 +79,13 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		super();
 		init();
 	}
+	
+	public AbstractScanMSD(final Collection<? extends IIon> ions) {
+
+		super();
+		init();
+		this.ionsList = new ArrayList<>(ions);
+	}
 
 	/**
 	 * Creates a new instance of {@code AbstractScanMSD} by creating a
@@ -114,6 +121,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			immutableZeroIon = new ImmutableZeroIon();
 			// TODO: in case of exception, immutableZeroIon will be null
 		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
+			// TODO: Exception never thrown from default constructor
 			logger.warn(e);
 		}
 	}

@@ -25,7 +25,7 @@ public interface IScanFID extends IScanNMRInfo, IScanSerializable {
 
 	void removeAllSignalsFID();
 
-	long getAcqusitionTime();
+	long getStopAcqusitionTime();
 
 	int getSignalsFidSize();
 
@@ -36,4 +36,6 @@ public interface IScanFID extends IScanNMRInfo, IScanSerializable {
 	void setFirstFIDDataPointMultiplicationFactor(double firstFIDDataPointMultiplicationFactor);
 
 	double getFirstFIDDataPointMultiplicationFactor();
+
+	long getStartAcqusitionTime();
 }
