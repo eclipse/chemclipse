@@ -17,8 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -68,6 +66,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swtchart.ISeries;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IAxisScaleConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
@@ -75,9 +74,8 @@ import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.core.ISeriesModificationListener;
 import org.eclipse.swtchart.extensions.core.SeriesStatusAdapter;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
-import org.eclipse.swtchart.ISeries;
 
-public class ExtendedChromatogramOverlayUI {
+public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramOverlayUI.class);
 	/*
@@ -116,9 +114,15 @@ public class ExtendedChromatogramOverlayUI {
 	//
 	@SuppressWarnings("rawtypes")
 	private List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
+	private Composite toolbarMain;
+	private int style;
 
-	@Inject
 	public ExtendedChromatogramOverlayUI(Composite parent) {
+		this(parent, SWT.BORDER);
+	}
+
+	public ExtendedChromatogramOverlayUI(Composite parent, int style) {
+		this.style = style;
 		initialize(parent);
 	}
 
@@ -150,23 +154,23 @@ public class ExtendedChromatogramOverlayUI {
 
 	private void createToolbarMain(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
+		toolbarMain = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(11, false));
+		toolbarMain.setLayoutData(gridData);
+		toolbarMain.setLayout(new GridLayout(11, false));
 		//
-		createDataStatusLabel(composite);
-		comboOverlayType = createOverlayTypeCombo(composite);
-		createDerivativeTypeCombo(composite);
-		createButtonToggleToolbarShift(composite);
-		createToggleChartLegendButton(composite);
-		createButtonAutoMirror(composite);
-		createButtonShiftY(composite);
-		createButtonShiftXY(composite);
-		createResetButton(composite);
-		createNewOverlayPartButton(composite);
-		createSettingsButton(composite);
+		createDataStatusLabel(toolbarMain);
+		comboOverlayType = createOverlayTypeCombo(toolbarMain);
+		createDerivativeTypeCombo(toolbarMain);
+		createButtonToggleToolbarShift(toolbarMain);
+		createToggleChartLegendButton(toolbarMain);
+		createButtonAutoMirror(toolbarMain);
+		createButtonShiftY(toolbarMain);
+		createButtonShiftXY(toolbarMain);
+		createResetButton(toolbarMain);
+		createNewOverlayPartButton(toolbarMain);
+		createSettingsButton(toolbarMain);
 	}
 
 	private Composite createToolbarProfile(Composite parent) {
@@ -896,7 +900,7 @@ public class ExtendedChromatogramOverlayUI {
 
 	private void createOverlayChart(Composite parent) {
 
-		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
+		chromatogramChart = new ChromatogramChart(parent, style);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings
@@ -1346,5 +1350,11 @@ public class ExtendedChromatogramOverlayUI {
 
 		overlayChartSupport.setOverlayShiftY(getTextValue(textShiftY));
 		overlayChartSupport.setIndexShiftY(comboScaleY.getSelectionIndex());
+	}
+
+	@Override
+	public void setToolbarVisible(boolean visible) {
+
+		PartSupport.setCompositeVisibility(toolbarMain, visible);
 	}
 }
