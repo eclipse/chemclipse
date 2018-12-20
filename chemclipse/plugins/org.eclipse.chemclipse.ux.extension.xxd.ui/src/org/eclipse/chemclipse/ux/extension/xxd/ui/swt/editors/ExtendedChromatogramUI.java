@@ -237,6 +237,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 
 	@Inject
 	public ExtendedChromatogramUI(Composite parent, int style) {
+
 		initialize(parent, style);
 	}
 
@@ -1196,7 +1197,15 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_BASELINE));
 			boolean enableBaselineArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_BASELINE_AREA);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogram, SERIES_ID_BASELINE, color);
+			ILineSeriesData lineSeriesData = null;
+			if(displayType.equals(DISPLAY_TYPE_TOTAL_SIGNAL)) {
+				lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogram, SERIES_ID_BASELINE, color);
+			} else {
+				if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+					IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+					lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogram, SERIES_ID_BASELINE, ChromatogramChartSupport.DISPLAY_TYPE_SWC, color, chromatogramSelectionWSD.getSelectedWavelengths());
+				}
+			}
 			lineSeriesData.getLineSeriesSettings().setEnableArea(enableBaselineArea);
 			lineSeriesDataList.add(lineSeriesData);
 		}
@@ -1418,8 +1427,6 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 				update();
 			} else if(displayType.equals(DISPLAY_TYPE_TOTAL_SIGNAL)) {
 				displayType = DISPLAY_TYPE_SELECTED_SIGNAL;
-				if(chromatogramSelection != null) {
-				}
 				update();
 			}
 		}

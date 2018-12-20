@@ -11,16 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.baseline;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
+import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.exceptions.BaselineIsNotDefinedException;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.Equations;
-import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 
 /**
  * This class represents the baseline model of the current chromatogram.
@@ -34,12 +36,28 @@ public class BaselineModel implements IBaselineModel {
 	/*
 	 * The start retention time is the key.
 	 */
-	private NavigableMap<Integer, IBaselineSegment> baselineSegments = null;
+	private NavigableMap<Integer, IBaselineSegment> baselineSegments;
+	private float defaultBackgroundAbundance;
+	private boolean interpolate;
 
 	@SuppressWarnings("rawtypes")
+	@Deprecated
 	public BaselineModel(IChromatogram chromatogram) {
+
 		this.chromatogram = chromatogram;
-		clearBaseline();
+		this.baselineSegments = new TreeMap<Integer, IBaselineSegment>();
+		this.defaultBackgroundAbundance = 0f;
+		this.interpolate = true;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public BaselineModel(IChromatogram chromatogram, float defaultBackgroundAbundance) {
+
+		this.chromatogram = chromatogram;
+		this.baselineSegments = new TreeMap<Integer, IBaselineSegment>();
+		this.defaultBackgroundAbundance = 0f;
+		this.defaultBackgroundAbundance = defaultBackgroundAbundance;
+		this.interpolate = true;
 	}
 
 	// --------------------------------------------IBaselineModel
@@ -53,18 +71,152 @@ public class BaselineModel implements IBaselineModel {
 		}
 	}
 
-	@Override
-	public void removeBaseline(int startRetentionTime, int stopRetentionTime) {
+	private void removeBaseline(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) {
 
-		if(startRetentionTime >= stopRetentionTime) {
-			return;
-		}
+		removeMiddleSegments(startRetentionTime, stopRetentionTime);
 		/*
-		 * Adds a new baseline segment with the abundance 0, which means, that
-		 * the actual baseline between the start and stop retention time will be
-		 * removed.
+		 * part which should be remove lie in interval one segment
 		 */
-		addBaseline(startRetentionTime, stopRetentionTime, 0.0f, 0.0f, true);
+		cutSegmentInTwoParts(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance);
+		/*
+		 * 
+		 */
+		cutSegmentBeginningPart(startRetentionTime, stopRetentionTime, stopBackgroundAbundance);
+		/*
+		 * 
+		 */
+		cutSegmentEndingPart(startRetentionTime, stopRetentionTime, startBackgroundAbundance);
+	}
+
+	/**
+	 * remove middle segments
+	 * 
+	 */
+	private void removeMiddleSegments(int startRetentionTime, int stopRetentionTime) {
+
+		SortedMap<Integer, IBaselineSegment> sortedMap = baselineSegments.subMap(startRetentionTime, stopRetentionTime);
+		Set<Integer> keyToRemove = new HashSet<>();
+		//
+		for(Entry<Integer, IBaselineSegment> entry : sortedMap.entrySet()) {
+			int stopRetentionTimeRemoveSegment = entry.getValue().getStopRetentionTime();
+			if(stopRetentionTimeRemoveSegment <= stopRetentionTime) {
+				keyToRemove.add(entry.getKey());
+			}
+		}
+		/**
+		 * remove key
+		 */
+		keyToRemove.forEach(k -> baselineSegments.remove(k));
+	}
+
+	/**
+	 * Cut the beginning part of an existing segment.
+	 * 
+	 */
+	private void cutSegmentBeginningPart(int startRetentionTime, int stopRetentionTime, float stopBackgroundAbundance) {
+
+		Map.Entry<Integer, IBaselineSegment> cuttingSegmentEntry = baselineSegments.floorEntry(startRetentionTime);
+		cuttingSegmentEntry = baselineSegments.floorEntry(stopRetentionTime);
+		if(cuttingSegmentEntry != null) {
+			IBaselineSegment cuttingSegment = cuttingSegmentEntry.getValue();
+			int x0 = cuttingSegment.getStartRetentionTime();
+			int x1 = cuttingSegment.getStopRetentionTime();
+			if(startRetentionTime <= x0 && x0 <= stopRetentionTime && stopRetentionTime < x1) {
+				baselineSegments.remove(cuttingSegmentEntry.getKey());
+				int partSegmentStartRetentionTime = stopRetentionTime + 1;
+				int partSegmentStopRetentionTime = x1;
+				float partSegmentStartAbundance = cuttingSegment.getBackgroundAbundance(partSegmentStartRetentionTime);
+				float partSegmentStopAbundance = cuttingSegment.getStopBackgroundAbundance();
+				/*
+				 * 
+				 */
+				if(partSegmentStartRetentionTime != partSegmentStopRetentionTime) {
+					addBaselineUnchecked(partSegmentStartRetentionTime, partSegmentStopRetentionTime, partSegmentStartAbundance, partSegmentStopAbundance);
+				} else if(!Float.isNaN(stopBackgroundAbundance)) {
+					partSegmentStartRetentionTime -= 1;
+					addBaselineUnchecked(partSegmentStartRetentionTime, partSegmentStopRetentionTime, stopBackgroundAbundance, partSegmentStopAbundance);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Cut the ending part of an existing segment.
+	 * 
+	 */
+	private void cutSegmentEndingPart(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance) {
+
+		Map.Entry<Integer, IBaselineSegment> cuttingSegmentEntry = baselineSegments.floorEntry(startRetentionTime);
+		cuttingSegmentEntry = baselineSegments.floorEntry(startRetentionTime);
+		if(cuttingSegmentEntry != null) {
+			IBaselineSegment cuttingSegment = cuttingSegmentEntry.getValue();
+			int x0 = cuttingSegment.getStartRetentionTime();
+			int x1 = cuttingSegment.getStopRetentionTime();
+			if(x0 < startRetentionTime && startRetentionTime <= x1 && x1 <= stopRetentionTime) {
+				baselineSegments.remove(cuttingSegmentEntry.getKey());
+				int partSegmentStartRetentionTime = x0;
+				int partSegmentStopRetentionTime = startRetentionTime - 1;
+				float partSegmentStartAbundance = cuttingSegment.getStartBackgroundAbundance();
+				float partSegmentStopAbundance = cuttingSegment.getBackgroundAbundance(partSegmentStopRetentionTime);
+				/*
+				 * 
+				 */
+				if(partSegmentStartRetentionTime != partSegmentStopRetentionTime) {
+					addBaselineUnchecked(partSegmentStartRetentionTime, partSegmentStopRetentionTime, partSegmentStartAbundance, partSegmentStopAbundance);
+				} else if(!Float.isNaN(startBackgroundAbundance)) {
+					partSegmentStopRetentionTime += 1;
+					addBaselineUnchecked(partSegmentStartRetentionTime, partSegmentStopRetentionTime, partSegmentStartAbundance, startBackgroundAbundance);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Cut an existing segment into two peaces.
+	 */
+	private void cutSegmentInTwoParts(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) {
+
+		Map.Entry<Integer, IBaselineSegment> cuttingSegmentEntry = baselineSegments.floorEntry(startRetentionTime);
+		if(cuttingSegmentEntry != null) {
+			IBaselineSegment cuttingSegment = cuttingSegmentEntry.getValue();
+			int x0 = cuttingSegment.getStartRetentionTime();
+			int x1 = cuttingSegment.getStopRetentionTime();
+			if(x0 < startRetentionTime && stopRetentionTime < x1) {
+				baselineSegments.remove(cuttingSegmentEntry.getKey());
+				/*
+				 * add first segment
+				 */
+				int firstPartSegmentStartRetentionTime = x0;
+				int firstPartSegmentStopRetentionTime = startRetentionTime - 1;
+				float firstPartSegmentStartAbundance = cuttingSegment.getStartBackgroundAbundance();
+				float firstPartSegmentStopAbundance = cuttingSegment.getBackgroundAbundance(firstPartSegmentStopRetentionTime);
+				/*
+				 * 
+				 */
+				if(firstPartSegmentStartRetentionTime != firstPartSegmentStopRetentionTime) {
+					addBaselineUnchecked(firstPartSegmentStartRetentionTime, firstPartSegmentStopRetentionTime, firstPartSegmentStartAbundance, firstPartSegmentStopAbundance);
+				} else if(!Float.isNaN(startBackgroundAbundance)) {
+					firstPartSegmentStopRetentionTime += 1;
+					addBaselineUnchecked(firstPartSegmentStartRetentionTime, firstPartSegmentStopRetentionTime, firstPartSegmentStartAbundance, startBackgroundAbundance);
+				}
+				/*
+				 * add second segment
+				 */
+				int secondPartSegmentStartRetentionTime = stopRetentionTime + 1;
+				int secondPartSegmentStopRetentionTime = x1;
+				float secondPartSegmentStartAbundance = cuttingSegment.getBackgroundAbundance(secondPartSegmentStartRetentionTime);
+				float secondPartSegmentStopAbundance = cuttingSegment.getStopBackgroundAbundance();
+				/*
+				 * 
+				 */
+				if(firstPartSegmentStartRetentionTime != firstPartSegmentStopRetentionTime) {
+					addBaselineUnchecked(secondPartSegmentStartRetentionTime, secondPartSegmentStopRetentionTime, secondPartSegmentStartAbundance, secondPartSegmentStopAbundance);
+				} else if(!Float.isNaN(stopBackgroundAbundance)) {
+					secondPartSegmentStartRetentionTime = stopRetentionTime - 1;
+					addBaselineUnchecked(secondPartSegmentStartRetentionTime, secondPartSegmentStopRetentionTime, stopBackgroundAbundance, secondPartSegmentStopAbundance);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -74,6 +226,7 @@ public class BaselineModel implements IBaselineModel {
 	}
 
 	@Override
+	@Deprecated
 	public float getBackgroundAbundance(int retentionTime) {
 
 		if(retentionTime < chromatogram.getStartRetentionTime() || retentionTime > chromatogram.getStopRetentionTime()) {
@@ -87,10 +240,48 @@ public class BaselineModel implements IBaselineModel {
 			return 0.0f;
 		} else {
 			IBaselineSegment segment = entry.getValue();
-			Point p1 = new Point(segment.getStartRetentionTime(), segment.getStartBackgroundAbundance());
-			Point p2 = new Point(segment.getStopRetentionTime(), segment.getStopBackgroundAbundance());
-			LinearEquation eq = Equations.createLinearEquation(p1, p2);
-			return (float)eq.calculateY(retentionTime);
+			return segment.getBackgroundAbundance(retentionTime);
+		}
+	}
+
+	@Override
+	public float getBackground(int retentionTime) {
+
+		return getBackground(retentionTime, defaultBackgroundAbundance);
+	}
+
+	private float getBackground(int retentionTime, float defaultAbudance) {
+
+		if(baselineSegments.isEmpty() || retentionTime < baselineSegments.firstKey() || retentionTime > baselineSegments.lastEntry().getValue().getStopRetentionTime()) {
+			return defaultAbudance;
+		}
+		/*
+		 * Get the correct baseline segment and calculate the abundance.
+		 */
+		IBaselineSegment floorSegment = baselineSegments.floorEntry(retentionTime).getValue();
+		int stopRetentionTime = floorSegment.getStopRetentionTime();
+		if(retentionTime <= stopRetentionTime) {
+			return floorSegment.getBackgroundAbundance(retentionTime);
+		} else {
+			if(interpolate) {
+				IBaselineSegment ceilSegment = baselineSegments.ceilingEntry(retentionTime).getValue();
+				Point p1 = new Point(floorSegment.getStopRetentionTime(), floorSegment.getStopBackgroundAbundance());
+				Point p2 = new Point(ceilSegment.getStartRetentionTime(), ceilSegment.getStartBackgroundAbundance());
+				return (float)Equations.createLinearEquation(p1, p2).calculateY(retentionTime);
+			} else {
+				return defaultAbudance;
+			}
+		}
+	}
+
+	@Override
+	public float getBackgroundNotNaN(int retentionTime) throws BaselineIsNotDefinedException {
+
+		float background = getBackground(retentionTime);
+		if(background != Float.NaN) {
+			return background;
+		} else {
+			throw new BaselineIsNotDefinedException();
 		}
 	}
 
@@ -127,163 +318,8 @@ public class BaselineModel implements IBaselineModel {
 		if(startRetentionTime >= stopRetentionTime) {
 			return;
 		}
-		IBaselineSegment segment;
-		/*
-		 * Use lists to store the segments that will be added or removed.
-		 */
-		List<IBaselineSegment> addSegments = new ArrayList<IBaselineSegment>();
-		List<Integer> removeSegments = new ArrayList<Integer>();
-		/*
-		 * Start and stop retention times of the segment that should be added to
-		 * the model.
-		 */
-		int start = startRetentionTime;
-		int stop = stopRetentionTime;
-		/*
-		 * That is the new segment, that will be added to the model.
-		 */
-		segment = new BaselineSegment(start, stop);
-		segment.setStartBackgroundAbundance(startBackgroundAbundance);
-		segment.setStopBackgroundAbundance(stopBackgroundAbundance);
-		addSegments.add(segment);
-		/*
-		 * Iterate through all existing segments and add, modify or mark
-		 * segments to be deleted if necessary.<br/> The code is not optimal but
-		 * it works correctly.<br/> Further modifications may help to optimize
-		 * this class.
-		 */
-		for(Integer key : baselineSegments.keySet()) {
-			segment = baselineSegments.get(key);
-			int x0 = segment.getStartRetentionTime();
-			int x1 = segment.getStopRetentionTime();
-			/*
-			 * Do nothing if the segment does not overlap the segment to be
-			 * included.
-			 */
-			if((start < x0 && stop < x0) || (start > x1 && stop > x1)) {
-				continue;
-			}
-			/*
-			 * If the segment is totally hidden by the segment to be inserted,
-			 * remove it.
-			 */
-			if(start < x0 && stop > x1) {
-				removeSegments.add(key);
-				continue;
-			}
-			/*
-			 * Cut the beginning part of an existing segment.
-			 */
-			if(stop > x0 && stop < x1 && start < x0) {
-				cutSegmentsBeginningPart(stop, segment, removeSegments, addSegments, key);
-			}
-			/*
-			 * Cut the ending part of an existing segment.
-			 */
-			if(start < x1 && stop >= x1) {
-				cutSegmentsEndingPart(start, segment, removeSegments, key);
-			}
-			/*
-			 * Cut an existing segment into two peaces.
-			 */
-			if((start > x0 && start < x1) && (stop > x0 && stop < x1)) {
-				cutExistingSegmentInTwoParts(start, stop, segment, removeSegments, addSegments, key);
-			}
-		}
-		/*
-		 * Remove the no longer used segments.
-		 */
-		for(Integer key : removeSegments) {
-			baselineSegments.remove(key);
-		}
-		/*
-		 * Add the new segments.
-		 */
-		for(IBaselineSegment addSegment : addSegments) {
-			baselineSegments.put(addSegment.getStartRetentionTime(), addSegment);
-		}
-	}
-
-	/*
-	 * Cut the beginning part of an existing segment.
-	 */
-	private void cutSegmentsBeginningPart(int stop, IBaselineSegment segment, List<Integer> removeSegments, List<IBaselineSegment> addSegments, int key) {
-
-		/*
-		 * Adjust the abundance and the start retention time. Use (startRT =
-		 * stop -1) so that the segments will not overlap.
-		 */
-		int startRT = stop + 1;
-		if(startRT == 0) {
-			removeSegments.add(key);
-		} else {
-			/*
-			 * Remove the actual segment, because the mapping (start retention
-			 * time, segment) is not valid any more.
-			 */
-			removeSegments.add(key);
-			/*
-			 * Adjust the segment and add it to the list.
-			 */
-			segment.setStartBackgroundAbundance(getBackgroundAbundance(startRT));
-			segment.setStartRetentionTime(startRT);
-			addSegments.add(segment);
-		}
-	}
-
-	/*
-	 * Cut the ending part of an existing segment.
-	 */
-	private void cutSegmentsEndingPart(int start, IBaselineSegment segment, List<Integer> removeSegments, int key) {
-
-		/*
-		 * Adjust the abundance and the start retention time.<br/> Use (stopRT =
-		 * start -1) so that the segments will not overlap.
-		 */
-		int stopRT = start - 1;
-		if(stopRT == 0) {
-			removeSegments.add(key);
-		} else {
-			segment.setStopBackgroundAbundance(getBackgroundAbundance(stopRT));
-			segment.setStopRetentionTime(stopRT);
-		}
-	}
-
-	/*
-	 * Cut an existing segment into two peaces.
-	 */
-	private void cutExistingSegmentInTwoParts(int start, int stop, IBaselineSegment segment, List<Integer> removeSegments, List<IBaselineSegment> addSegments, int key) {
-
-		/*
-		 * Adjust the abundance and the start retention time of the segment
-		 * divided in two pieces.<br/> Use (startRT = stop +1) so that the
-		 * segments will not overlap.
-		 */
-		int startRT = stop + 1;
-		if(startRT == chromatogram.getStopRetentionTime()) {
-			removeSegments.add(key);
-		} else {
-			IBaselineSegment segmentII = new BaselineSegment(startRT, segment.getStopRetentionTime());
-			segmentII.setStartBackgroundAbundance(getBackgroundAbundance(startRT));
-			segmentII.setStopBackgroundAbundance(segment.getStopBackgroundAbundance());
-			addSegments.add(segmentII);
-		}
-		/*
-		 * The adjustment of the first part needs to be done after adding the
-		 * second, freshly created segment as you need the correct
-		 * abundance.<br/> Adjust the abundance and the start retention
-		 * time.<br/> Use (stopRT = start -1) so that the segments will not
-		 * overlap.
-		 */
-		int stopRT = start - 1;
-		if(stopRT == 0) {
-			removeSegments.add(key);
-		} else {
-			removeSegments.add(key);
-			segment.setStopBackgroundAbundance(getBackgroundAbundance(stopRT));
-			segment.setStopRetentionTime(stopRT);
-			addSegments.add(segment);
-		}
+		removeBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance);
+		addBaselineUnchecked(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance);
 	}
 
 	/**
@@ -291,13 +327,15 @@ public class BaselineModel implements IBaselineModel {
 	 */
 	private void clearBaseline() {
 
-		/*
-		 * Clear the tree map if not null and create a new one.
-		 */
-		if(baselineSegments != null && baselineSegments.size() > 0) {
+		if(baselineSegments != null) {
 			baselineSegments.clear();
 		}
-		baselineSegments = new TreeMap<Integer, IBaselineSegment>();
 	}
 	// ------------------------------------------private methods
+
+	@Override
+	public void removeBaseline(int startRetentionTime, int stopRetentionTime) {
+
+		removeBaseline(startRetentionTime, stopRetentionTime, Float.NaN, Float.NaN);
+	}
 }
