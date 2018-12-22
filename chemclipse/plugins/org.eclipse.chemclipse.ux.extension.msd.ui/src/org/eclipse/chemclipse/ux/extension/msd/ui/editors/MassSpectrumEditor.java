@@ -38,10 +38,6 @@ import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.AbstractExtendedMassSpectrumUI;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleContinuousMassSpectrumUI;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
@@ -51,6 +47,9 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.msd.ui.swt.IMassSpectrumChart;
+import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumChartCentroid;
+import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumChartProfile;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -68,8 +67,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -101,12 +98,8 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	private IMassSpectra massSpectra;
 	private IScanMSD massSpectrum;
 	private ArrayList<EventHandler> registeredEventHandler;
-	private AbstractExtendedMassSpectrumUI massSpectrumUI;
+	private IMassSpectrumChart massSpectrumChart;
 	private List<Object> objects = new ArrayList<Object>();
-	/*
-	 * Showing additional info in tabs.
-	 */
-	private TabFolder tabFolder;
 
 	@PostConstruct
 	private void createControl(Composite parent) {
@@ -290,21 +283,17 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	private void createPages(Composite parent) {
 
 		if(massSpectra != null && massSpectra.getMassSpectrum(1) != null) {
-			tabFolder = new TabFolder(parent, SWT.BOTTOM);
-			createMassSpectrumPage();
+			createMassSpectrumPage(parent);
 		} else {
 			createErrorMessagePage(parent);
 		}
 	}
 
-	private void createMassSpectrumPage() {
+	private void createMassSpectrumPage(Composite parent) {
 
 		/*
 		 * Create the mass spectrum UI.
 		 */
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Mass Spectrum");
-		//
 		String name = ("".equals(massSpectra.getName())) ? "NoName" : massSpectra.getName();
 		massSpectrum = massSpectra.getMassSpectrum(1);
 		if(massSpectrum instanceof IVendorMassSpectrum) {
@@ -316,22 +305,24 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 			}
 		}
 		part.setLabel(name);
-		//
+		/*
+		 * Centroid / Profile
+		 */
 		boolean isProfile;
-		// auto detect from file type if possible
 		if(massSpectrum instanceof IRegularMassSpectrum) {
 			isProfile = ((IRegularMassSpectrum)massSpectrum).getMassSpectrumType() == 1;
-		} else // backfall to preference
-		{
+		} else {
 			isProfile = PreferenceSupplier.useProfileMassSpectrumView();
 		}
+		/*
+		 * Create and update the chart.
+		 */
 		if(isProfile) {
-			massSpectrumUI = new SimpleContinuousMassSpectrumUI(tabFolder, SWT.NONE, MassValueDisplayPrecision.EXACT);
+			massSpectrumChart = new MassSpectrumChartProfile(parent, SWT.NONE);
 		} else {
-			massSpectrumUI = new SimpleMassSpectrumUI(tabFolder, SWT.NONE, MassValueDisplayPrecision.EXACT);
+			massSpectrumChart = new MassSpectrumChartCentroid(parent, SWT.NONE);
 		}
-		massSpectrumUI.update(massSpectrum, true);
-		tabItem.setControl(massSpectrumUI);
+		massSpectrumChart.update(massSpectrum);
 	}
 
 	private void createErrorMessagePage(Composite parent) {
@@ -378,7 +369,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 
 	private void update(String topic) {
 
-		if(massSpectrumUI.isVisible()) {
+		if(massSpectrumChart.isVisible()) {
 			updateObjects(objects, topic);
 		}
 	}
@@ -392,9 +383,9 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IScanMSD) {
+			if(object instanceof IScanMSD && object != massSpectrum) {
 				IScanMSD massSpectrum = (IScanMSD)object;
-				massSpectrumUI.update(massSpectrum, true);
+				massSpectrumChart.update(massSpectrum);
 			}
 		}
 	}

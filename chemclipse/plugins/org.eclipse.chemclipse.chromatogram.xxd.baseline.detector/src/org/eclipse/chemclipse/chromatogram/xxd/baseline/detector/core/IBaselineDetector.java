@@ -56,4 +56,23 @@ public interface IBaselineDetector {
 	 */
 	@SuppressWarnings("rawtypes")
 	IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
+
+	/**
+	 * Validates the parameters.
+	 * 
+	 * @param baselineDetectorSettings
+	 * @param monitor
+	 * @return {@link IProcessingInfo}
+	 */
+	IProcessingInfo validate(IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
+
+	/**
+	 * Validates the parameters.
+	 * 
+	 * @param chromatogramSelection
+	 * @param monitor
+	 * @return {@link IProcessingInfo}
+	 */
+	@SuppressWarnings("rawtypes")
+	IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
 }

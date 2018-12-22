@@ -54,4 +54,6 @@ public interface IBaselineSegment {
 	 * @param stopBackgroundAbundance
 	 */
 	void setStopBackgroundAbundance(float stopBackgroundAbundance);
+
+	float getBackgroundAbundance(int retentionTime);
 }

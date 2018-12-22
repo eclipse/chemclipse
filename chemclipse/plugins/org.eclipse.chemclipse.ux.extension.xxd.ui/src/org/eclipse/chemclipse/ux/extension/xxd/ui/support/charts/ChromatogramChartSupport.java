@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
@@ -113,6 +114,7 @@ public class ChromatogramChartSupport {
 	private boolean showArea = false;
 
 	public ChromatogramChartSupport() {
+
 		usedColorsNormal = new HashMap<String, Color>();
 		usedColorsSIC = new HashMap<String, Color>();
 		usedColorsSWC = new HashMap<String, Color>();
@@ -209,6 +211,13 @@ public class ChromatogramChartSupport {
 	}
 
 	@SuppressWarnings("rawtypes")
+	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram chromatogram, String seriesId, String overlayType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
+
+		String derivativeType = DERIVATIVE_NONE;
+		return getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, signals, true);
+	}
+
+	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
 
 		return getLineSeriesData(chromatogram, seriesId, overlayType, DERIVATIVE_NONE, color, signals, false);
@@ -266,7 +275,21 @@ public class ChromatogramChartSupport {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, String overlayType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
-		IBaselineModel baselineModel = chromatogram.getBaselineModel();
+		IBaselineModel baselineModel = null;
+		if(baseline) {
+			if(overlayType.equals(DISPLAY_TYPE_TIC)) {
+				baselineModel = chromatogram.getBaselineModel();
+			} else if(overlayType.equals(DISPLAY_TYPE_SWC)) {
+				if(chromatogram instanceof IChromatogramWSD && signals instanceof IMarkedWavelengths) {
+					IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+					IMarkedWavelengths markedWavelengths = (IMarkedWavelengths)signals;
+					if(!markedWavelengths.isEmpty()) {
+						double wavelength = markedWavelengths.iterator().next().getWavelength();
+						baselineModel = chromatogramWSD.getBaselineModel(wavelength);
+					}
+				}
+			}
+		}
 		LineStyle lineStyle = getLineStyle(overlayType);
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		boolean condenseCycleNumberScans = preferenceStore.getBoolean(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS);
@@ -293,7 +316,7 @@ public class ChromatogramChartSupport {
 				int retentionTime = totalScanSignal.getRetentionTime();
 				xSeries[index] = retentionTime;
 				if(baseline) {
-					ySeries[index] = baselineModel.getBackgroundAbundance(retentionTime);
+					ySeries[index] = baselineModel.getBackground(retentionTime);
 				} else {
 					ySeries[index] = totalScanSignal.getTotalSignal();
 				}
@@ -316,7 +339,7 @@ public class ChromatogramChartSupport {
 				int retentionTime = scan.getRetentionTime();
 				xSeries[index] = retentionTime;
 				if(baseline) {
-					ySeries[index] = baselineModel.getBackgroundAbundance(retentionTime);
+					ySeries[index] = baselineModel.getBackground(retentionTime);
 				} else {
 					ySeries[index] = getIntensity(scan, overlayType, signals);
 				}
