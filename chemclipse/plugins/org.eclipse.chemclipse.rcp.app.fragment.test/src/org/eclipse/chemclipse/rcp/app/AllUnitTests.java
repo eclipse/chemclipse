@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.rcp.app.test.TestAssembler;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class UnitTests {
+public class AllUnitTests {
 
 	public static Test suite() {
 
