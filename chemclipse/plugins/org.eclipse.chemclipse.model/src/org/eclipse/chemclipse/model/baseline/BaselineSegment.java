@@ -35,6 +35,7 @@ public class BaselineSegment implements IBaselineSegment {
 	 * @param stopRetentionTime
 	 */
 	public BaselineSegment(int startRetentionTime, int stopRetentionTime) {
+
 		if(startRetentionTime > stopRetentionTime) {
 			int tmp = startRetentionTime;
 			startRetentionTime = stopRetentionTime;
@@ -149,7 +150,7 @@ public class BaselineSegment implements IBaselineSegment {
 	public float getBackgroundAbundance(int retentionTime) {
 
 		Point p1 = new Point(startRetentionTime, startBackgroundAbundance);
-		Point p2 = new Point(stopRetentionTime, startBackgroundAbundance);
+		Point p2 = new Point(stopRetentionTime, stopBackgroundAbundance);
 		return (float)Equations.createLinearEquation(p1, p2).calculateY(retentionTime);
 	}
 }
