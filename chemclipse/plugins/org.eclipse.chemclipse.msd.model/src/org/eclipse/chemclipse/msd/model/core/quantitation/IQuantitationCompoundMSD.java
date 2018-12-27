@@ -15,6 +15,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 
@@ -87,28 +89,28 @@ public interface IQuantitationCompoundMSD extends Serializable {
 	 * 
 	 * @return IQuantitationSignalsMSD
 	 */
-	IQuantitationSignalsMSD getQuantitationSignalsMSD();
+	IQuantitationSignals getQuantitationSignalsMSD();
 
 	/**
 	 * Updates the existing signals by the given list.
 	 * 
 	 * @param quantitationSignalsMSD
 	 */
-	void updateQuantitationSignalsMSD(IQuantitationSignalsMSD quantitationSignalsMSD);
+	void updateQuantitationSignalsMSD(IQuantitationSignals quantitationSignalsMSD);
 
 	/**
 	 * Returns the concentration / response entries.
 	 * 
-	 * @return {@link IConcentrationResponseEntriesMSD}
+	 * @return {@link IConcentrationResponseEntries}
 	 */
-	IConcentrationResponseEntriesMSD getConcentrationResponseEntriesMSD();
+	IConcentrationResponseEntries getConcentrationResponseEntriesMSD();
 
 	/**
 	 * Updates the concentration response entries.
 	 * 
 	 * @param concentrationResponseEntriesMSD
 	 */
-	void updateConcentrationResponseEntries(IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD);
+	void updateConcentrationResponseEntries(IConcentrationResponseEntries concentrationResponseEntriesMSD);
 
 	/**
 	 * Linear, ...

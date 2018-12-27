@@ -14,8 +14,10 @@ package org.eclipse.chemclipse.msd.model.core.quantitation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
@@ -23,8 +25,8 @@ import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 public class QuantitationCompoundMSD_3_Test extends ReferencePeakMSDTestCase {
 
 	private IQuantitationCompoundMSD quantitationCompound;
-	private IQuantitationSignalsMSD quantitationSignals;
-	private IConcentrationResponseEntriesMSD concentrationResponseEntries;
+	private IQuantitationSignals quantitationSignals;
+	private IConcentrationResponseEntries concentrationResponseEntries;
 
 	@Override
 	protected void setUp() throws Exception {

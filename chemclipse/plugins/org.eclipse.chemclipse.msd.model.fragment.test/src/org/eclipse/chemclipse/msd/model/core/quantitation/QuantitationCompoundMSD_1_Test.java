@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
@@ -54,7 +56,7 @@ public class QuantitationCompoundMSD_1_Test extends TestCase {
 
 	public void testGetConcentrationResponseEntries_2() {
 
-		IConcentrationResponseEntriesMSD entries = quantitationCompound.getConcentrationResponseEntriesMSD();
+		IConcentrationResponseEntries entries = quantitationCompound.getConcentrationResponseEntriesMSD();
 		assertEquals(0, entries.size());
 	}
 
@@ -75,7 +77,7 @@ public class QuantitationCompoundMSD_1_Test extends TestCase {
 
 	public void testGetQuantitationSignals_2() {
 
-		IQuantitationSignalsMSD entries = quantitationCompound.getQuantitationSignalsMSD();
+		IQuantitationSignals entries = quantitationCompound.getQuantitationSignalsMSD();
 		assertEquals(0, entries.size());
 	}
 

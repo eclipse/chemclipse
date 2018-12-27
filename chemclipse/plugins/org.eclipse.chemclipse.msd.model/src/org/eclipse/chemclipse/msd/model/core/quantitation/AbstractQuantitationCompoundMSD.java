@@ -15,12 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntries;
 import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.QuantitationSignals;
 import org.eclipse.chemclipse.model.quantitation.RetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.RetentionTimeWindow;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
@@ -40,8 +44,8 @@ public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCo
 	private IRetentionTimeWindow retentionTimeWindow;
 	private IRetentionIndexWindow retentionIndexWindow;
 	private String concentrationUnit;
-	private IQuantitationSignalsMSD quantitationSignalsMSD;
-	private IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD;
+	private IQuantitationSignals quantitationSignalsMSD;
+	private IConcentrationResponseEntries concentrationResponseEntriesMSD;
 	private boolean useTIC;
 	private CalibrationMethod calibrationMethod;
 	private boolean useCrossZero;
@@ -67,8 +71,8 @@ public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCo
 		retentionTimeWindow = new RetentionTimeWindow();
 		retentionTimeWindow.setRetentionTime(retentionTime);
 		retentionIndexWindow = new RetentionIndexWindow();
-		quantitationSignalsMSD = new QuantitationSignalsMSD();
-		concentrationResponseEntriesMSD = new ConcentrationResponseEntriesMSD();
+		quantitationSignalsMSD = new QuantitationSignals();
+		concentrationResponseEntriesMSD = new ConcentrationResponseEntries();
 		useTIC = true;
 		calibrationMethod = CalibrationMethod.LINEAR;
 		useCrossZero = true;
@@ -131,13 +135,13 @@ public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCo
 	}
 
 	@Override
-	public IQuantitationSignalsMSD getQuantitationSignalsMSD() {
+	public IQuantitationSignals getQuantitationSignalsMSD() {
 
 		return quantitationSignalsMSD;
 	}
 
 	@Override
-	public void updateQuantitationSignalsMSD(IQuantitationSignalsMSD quantitationSignalsMSD) {
+	public void updateQuantitationSignalsMSD(IQuantitationSignals quantitationSignalsMSD) {
 
 		if(quantitationSignalsMSD != null) {
 			this.quantitationSignalsMSD = quantitationSignalsMSD;
@@ -145,13 +149,13 @@ public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCo
 	}
 
 	@Override
-	public IConcentrationResponseEntriesMSD getConcentrationResponseEntriesMSD() {
+	public IConcentrationResponseEntries getConcentrationResponseEntriesMSD() {
 
 		return concentrationResponseEntriesMSD;
 	}
 
 	@Override
-	public void updateConcentrationResponseEntries(IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD) {
+	public void updateConcentrationResponseEntries(IConcentrationResponseEntries concentrationResponseEntriesMSD) {
 
 		if(concentrationResponseEntriesMSD != null) {
 			this.concentrationResponseEntriesMSD = concentrationResponseEntriesMSD;
