@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
+import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
@@ -26,11 +27,10 @@ import org.eclipse.chemclipse.model.support.IBackgroundAbundanceRange;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
-import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
@@ -402,19 +402,14 @@ public class PeakBuilderMSD {
 	 */
 	protected static IPeakMassSpectrum getPeakMassSpectrum(IExtractedIonSignals extractedIonSignals, IChromatogramMSD chromatogram, ITotalScanSignals totalIonSignals, LinearEquation backgroundEquation, IMarkedIons excludedIons) throws PeakException {
 
-		assert (extractedIonSignals != null) : "The extracted ion signals instance must not be null.";
-		assert (chromatogram != null) : "The chromatogram must not be null.";
-		assert (totalIonSignals != null) : "The total ion signals must not be null.";
-		assert (backgroundEquation != null) : "The background equation must not be null.";
 		if(extractedIonSignals == null || chromatogram == null || totalIonSignals == null || backgroundEquation == null) {
 			throw new PeakException("The extractedIonSignals, chromatogram, totalIonSignals or backgroundEquation must not be null.");
 		}
-		ITotalScanSignal totalIonSignal;
 		/*
 		 * Get the peak mass spectrum and subtract the background.
 		 */
 		IPeakMassSpectrum peakMassSpectrum = null;
-		totalIonSignal = totalIonSignals.getMaxTotalScanSignal();
+		ITotalScanSignal totalIonSignal = totalIonSignals.getMaxTotalScanSignal();
 		IScanMSD massSpectrum;
 		if(totalIonSignal != null) {
 			int scan = chromatogram.getScanNumber(totalIonSignal.getRetentionTime());
@@ -450,10 +445,6 @@ public class PeakBuilderMSD {
 	 */
 	protected static IPeakMassSpectrum getPeakMassSpectrum(IChromatogramMSD chromatogram, ITotalScanSignals totalIonSignals, LinearEquation backgroundEquation, IMarkedIons excludedIons) throws PeakException {
 
-		assert (chromatogram != null) : "The chromatogram must not be null.";
-		assert (totalIonSignals != null) : "The total ion signals must not be null.";
-		assert (backgroundEquation != null) : "The background equation must not be null.";
-		ITotalScanSignal totalIonSignal;
 		if(chromatogram == null || totalIonSignals == null || backgroundEquation == null) {
 			throw new PeakException("The chromatogram, totalIonSignals or backgroundEquation must not be null.");
 		}
@@ -461,7 +452,7 @@ public class PeakBuilderMSD {
 		 * Get the peak mass spectrum and subtract the background.
 		 */
 		IPeakMassSpectrum peakMassSpectrum = null;
-		totalIonSignal = totalIonSignals.getMaxTotalScanSignal();
+		ITotalScanSignal totalIonSignal = totalIonSignals.getMaxTotalScanSignal();
 		IScanMSD massSpectrum;
 		if(totalIonSignal != null) {
 			int scan = chromatogram.getScanNumber(totalIonSignal.getRetentionTime());
@@ -494,7 +485,6 @@ public class PeakBuilderMSD {
 	 */
 	protected static IPeakIntensityValues getPeakIntensityValues(ITotalScanSignals peakIntensityTotalIonSignals) throws PeakException {
 
-		assert (peakIntensityTotalIonSignals != null) : "The peak intensity total ion signals must not be null.";
 		if(peakIntensityTotalIonSignals == null) {
 			throw new PeakException("The peakIntensityTotalIonSignals must not be null.");
 		}
@@ -525,12 +515,9 @@ public class PeakBuilderMSD {
 	 */
 	protected static ITotalScanSignals adjustTotalIonSignals(ITotalScanSignals totalIonSignals, LinearEquation backgroundEquation) throws PeakException {
 
-		assert (totalIonSignals != null) : "The total ion signals must not be null.";
-		assert (backgroundEquation != null) : "The background equation must not be null.";
 		if(totalIonSignals == null || backgroundEquation == null) {
 			throw new PeakException("The given totalIonSignals or backgroundEquation must not be null.");
 		}
-		ITotalScanSignal totalIonSignal;
 		/*
 		 * Make a deep copy of totalIonSignals, normalize the values to
 		 * IPeakIntensityValues.MAX_INTENSITY.
@@ -540,7 +527,7 @@ public class PeakBuilderMSD {
 		int stop = peakIntensityTotalIonSignals.getStopScan();
 		float adjustedSignal;
 		for(int scan = start; scan <= stop; scan++) {
-			totalIonSignal = peakIntensityTotalIonSignals.getTotalScanSignal(scan);
+			ITotalScanSignal totalIonSignal = peakIntensityTotalIonSignals.getTotalScanSignal(scan);
 			adjustedSignal = (float)(totalIonSignal.getTotalSignal() - backgroundEquation.calculateY(totalIonSignal.getRetentionTime()));
 			/*
 			 * Check, that the total ion signal is >= 0!
@@ -565,9 +552,6 @@ public class PeakBuilderMSD {
 	 */
 	protected static LinearEquation getBackgroundEquation(ITotalScanSignals totalIonSignals, IScanRange scanRange, IBackgroundAbundanceRange backgroundAbundanceRange) throws PeakException {
 
-		assert (totalIonSignals != null) : "The total ion signals must not be null.";
-		assert (scanRange != null) : "The scan range must not be null.";
-		assert (backgroundAbundanceRange != null) : "The background abundance range must not be null.";
 		if(totalIonSignals == null || scanRange == null || backgroundAbundanceRange == null) {
 			throw new PeakException("The given totalIonSignals, scanRange or backgroundAbundanceRange must not be null.");
 		}
@@ -597,9 +581,6 @@ public class PeakBuilderMSD {
 	 */
 	protected static ITotalScanSignals getTotalIonSignals(IChromatogramMSD chromatogram, IScanRange scanRange, IMarkedIons excludedIons) throws PeakException {
 
-		assert (chromatogram != null) : "The chromatogram must not be null.";
-		assert (scanRange != null) : "The scan range must not be null.";
-		assert (excludedIons != null) : "The excluded ions must not be null.";
 		if(chromatogram == null || scanRange == null || excludedIons == null) {
 			throw new PeakException("The given values must not be null.");
 		}
@@ -625,8 +606,6 @@ public class PeakBuilderMSD {
 	 */
 	protected static ITotalScanSignals getTotalIonSignals(IChromatogramMSD chromatogram, IScanRange scanRange) throws PeakException {
 
-		assert (chromatogram != null) : "The chromatogram must not be null.";
-		assert (scanRange != null) : "The scan range must not be null.";
 		if(chromatogram == null || scanRange == null) {
 			throw new PeakException("The given values must not be null.");
 		}
