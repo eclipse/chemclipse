@@ -167,7 +167,11 @@ public class ProcessTypeSupport {
 				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 				try {
 					String content = processEntry.getJsonSettings();
-					processSettings = objectMapper.readValue(content, clazz);
+					if(IProcessEntry.EMPTY_JSON_SETTINGS.equals(content)) {
+						logger.info("Process settings are empty. Default system settings are used instead.");
+					} else {
+						processSettings = objectMapper.readValue(content, clazz);
+					}
 				} catch(JsonParseException e) {
 					logger.warn(e);
 				} catch(JsonMappingException e) {
