@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.msd.model.core.quantitation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+
 public abstract class AbstractQuantitationSignalsMSD implements IQuantitationSignalsMSD {
 
 	/**
@@ -21,32 +23,32 @@ public abstract class AbstractQuantitationSignalsMSD implements IQuantitationSig
 	 */
 	private static final long serialVersionUID = 2941156198167427720L;
 	//
-	private List<IQuantitationSignalMSD> quantitationSignals;
+	private List<IQuantitationSignal> quantitationSignals;
 
 	public AbstractQuantitationSignalsMSD() {
-		quantitationSignals = new ArrayList<IQuantitationSignalMSD>();
+		quantitationSignals = new ArrayList<IQuantitationSignal>();
 	}
 
 	@Override
-	public void add(IQuantitationSignalMSD quantitationSignalMSD) {
+	public void add(IQuantitationSignal quantitationSignalMSD) {
 
 		quantitationSignals.add(quantitationSignalMSD);
 	}
 
 	@Override
-	public void addAll(List<IQuantitationSignalMSD> quantitationSignals) {
+	public void addAll(List<IQuantitationSignal> quantitationSignals) {
 
 		this.quantitationSignals.addAll(quantitationSignals);
 	}
 
 	@Override
-	public void remove(IQuantitationSignalMSD quantitationSignalMSD) {
+	public void remove(IQuantitationSignal quantitationSignalMSD) {
 
 		quantitationSignals.remove(quantitationSignalMSD);
 	}
 
 	@Override
-	public void removeAll(List<IQuantitationSignalMSD> quantitationSignalsMSD) {
+	public void removeAll(List<IQuantitationSignal> quantitationSignalsMSD) {
 
 		quantitationSignals.removeAll(quantitationSignalsMSD);
 	}
@@ -55,12 +57,12 @@ public abstract class AbstractQuantitationSignalsMSD implements IQuantitationSig
 	public List<Double> getSelectedIons() {
 
 		List<Double> ions = new ArrayList<Double>();
-		for(IQuantitationSignalMSD quantitationSignal : quantitationSignals) {
+		for(IQuantitationSignal quantitationSignal : quantitationSignals) {
 			/*
 			 * Only selected ions shall be returned.
 			 */
 			if(quantitationSignal.isUse()) {
-				ions.add(quantitationSignal.getIon());
+				ions.add(quantitationSignal.getSignal());
 			}
 		}
 		return ions;
@@ -79,13 +81,13 @@ public abstract class AbstractQuantitationSignalsMSD implements IQuantitationSig
 	}
 
 	@Override
-	public IQuantitationSignalMSD get(int index) {
+	public IQuantitationSignal get(int index) {
 
 		return quantitationSignals.get(index);
 	}
 
 	@Override
-	public List<IQuantitationSignalMSD> getList() {
+	public List<IQuantitationSignal> getList() {
 
 		return quantitationSignals;
 	}
@@ -104,7 +106,7 @@ public abstract class AbstractQuantitationSignalsMSD implements IQuantitationSig
 
 	private void setSignalsUse(boolean use) {
 
-		for(IQuantitationSignalMSD quantitationSignal : quantitationSignals) {
+		for(IQuantitationSignal quantitationSignal : quantitationSignals) {
 			quantitationSignal.setUse(use);
 		}
 	}
@@ -116,8 +118,8 @@ public abstract class AbstractQuantitationSignalsMSD implements IQuantitationSig
 		 * The list isn't that big. But a hash map would be better.
 		 * The action will be performed not very often, hence it's ok.
 		 */
-		for(IQuantitationSignalMSD quantitationSignal : quantitationSignals) {
-			if(quantitationSignal.getIon() == ion) {
+		for(IQuantitationSignal quantitationSignal : quantitationSignals) {
+			if(quantitationSignal.getSignal() == ion) {
 				quantitationSignal.setUse(true);
 			}
 		}

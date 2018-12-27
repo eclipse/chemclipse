@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.Equations;
@@ -29,32 +30,32 @@ public abstract class AbstractConcentrationResponseEntriesMSD implements IConcen
 	 */
 	private static final long serialVersionUID = 163932807502826445L;
 	//
-	private List<IConcentrationResponseEntryMSD> concentrationResponseEntries;
+	private List<IConcentrationResponseEntry> concentrationResponseEntries;
 
 	public AbstractConcentrationResponseEntriesMSD() {
-		concentrationResponseEntries = new ArrayList<IConcentrationResponseEntryMSD>();
+		concentrationResponseEntries = new ArrayList<IConcentrationResponseEntry>();
 	}
 
 	@Override
-	public void add(IConcentrationResponseEntryMSD concentrationResponseEntry) {
+	public void add(IConcentrationResponseEntry concentrationResponseEntry) {
 
 		concentrationResponseEntries.add(concentrationResponseEntry);
 	}
 
 	@Override
-	public void addAll(List<IConcentrationResponseEntryMSD> concentrationResponseEntries) {
+	public void addAll(List<IConcentrationResponseEntry> concentrationResponseEntries) {
 
 		this.concentrationResponseEntries.addAll(concentrationResponseEntries);
 	}
 
 	@Override
-	public void remove(IConcentrationResponseEntryMSD concentrationResponseEntry) {
+	public void remove(IConcentrationResponseEntry concentrationResponseEntry) {
 
 		concentrationResponseEntries.remove(concentrationResponseEntry);
 	}
 
 	@Override
-	public void removeAll(List<IConcentrationResponseEntryMSD> concentrationResponseEntriesMSD) {
+	public void removeAll(List<IConcentrationResponseEntry> concentrationResponseEntriesMSD) {
 
 		concentrationResponseEntries.removeAll(concentrationResponseEntriesMSD);
 	}
@@ -72,13 +73,13 @@ public abstract class AbstractConcentrationResponseEntriesMSD implements IConcen
 	}
 
 	@Override
-	public IConcentrationResponseEntryMSD get(int index) {
+	public IConcentrationResponseEntry get(int index) {
 
 		return concentrationResponseEntries.get(index);
 	}
 
 	@Override
-	public List<IConcentrationResponseEntryMSD> getList() {
+	public List<IConcentrationResponseEntry> getList() {
 
 		return concentrationResponseEntries;
 	}
@@ -148,11 +149,11 @@ public abstract class AbstractConcentrationResponseEntriesMSD implements IConcen
 		/*
 		 * Parse all entries and extract those who are needed.
 		 */
-		for(IConcentrationResponseEntryMSD entry : concentrationResponseEntries) {
+		for(IConcentrationResponseEntry entry : concentrationResponseEntries) {
 			/*
 			 * Check the ion.
 			 */
-			if(ion == entry.getIon()) {
+			if(ion == entry.getSignal()) {
 				points.add(new Point(entry.getConcentration(), entry.getResponse()));
 			}
 		}
@@ -163,7 +164,7 @@ public abstract class AbstractConcentrationResponseEntriesMSD implements IConcen
 	public double getMaxResponseValue() {
 
 		double maxResponse = 0;
-		for(IConcentrationResponseEntryMSD entry : concentrationResponseEntries) {
+		for(IConcentrationResponseEntry entry : concentrationResponseEntries) {
 			double response = entry.getResponse();
 			if(response > maxResponse) {
 				maxResponse = response;
@@ -176,18 +177,18 @@ public abstract class AbstractConcentrationResponseEntriesMSD implements IConcen
 	public Set<Double> getIonSet() {
 
 		Set<Double> ionSet = new HashSet<Double>();
-		for(IConcentrationResponseEntryMSD entry : concentrationResponseEntries) {
-			ionSet.add(entry.getIon());
+		for(IConcentrationResponseEntry entry : concentrationResponseEntries) {
+			ionSet.add(entry.getSignal());
 		}
 		return ionSet;
 	}
 
 	@Override
-	public List<IConcentrationResponseEntryMSD> getList(double ion) {
+	public List<IConcentrationResponseEntry> getList(double ion) {
 
-		List<IConcentrationResponseEntryMSD> entries = new ArrayList<IConcentrationResponseEntryMSD>();
-		for(IConcentrationResponseEntryMSD entry : concentrationResponseEntries) {
-			if(entry.getIon() == ion) {
+		List<IConcentrationResponseEntry> entries = new ArrayList<IConcentrationResponseEntry>();
+		for(IConcentrationResponseEntry entry : concentrationResponseEntries) {
+			if(entry.getSignal() == ion) {
 				entries.add(entry);
 			}
 		}

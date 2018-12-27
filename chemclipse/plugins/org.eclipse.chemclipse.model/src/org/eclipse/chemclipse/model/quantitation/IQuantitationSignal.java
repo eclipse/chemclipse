@@ -9,30 +9,36 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.model.core.quantitation;
+package org.eclipse.chemclipse.model.quantitation;
 
-import java.io.Serializable;
+public interface IQuantitationSignal {
 
-public interface IConcentrationResponseEntryMSD extends Serializable {
+	float ABSOLUTE_RESPONSE = 100.0f; // 100 is used for the TIC signal.
 
 	/**
-	 * E.g. 104 for styrene.
+	 * E.g. 104 for styrene
 	 * 
 	 * @return double
 	 */
-	double getIon();
+	double getSignal();
 
 	/**
-	 * Concentration for the given response.
+	 * E.g. 100
+	 * 
+	 * @return float
+	 */
+	float getRelativeResponse();
+
+	/**
+	 * E.g. 0.02 for a uncertainty of 0.02 %.
 	 * 
 	 * @return double
 	 */
-	double getConcentration();
+	double getUncertainty();
 
-	/**
-	 * The response value.
-	 * 
-	 * @return double
-	 */
-	double getResponse();
+	void setUncertainty(double uncertainty);
+
+	boolean isUse();
+
+	void setUse(boolean use);
 }

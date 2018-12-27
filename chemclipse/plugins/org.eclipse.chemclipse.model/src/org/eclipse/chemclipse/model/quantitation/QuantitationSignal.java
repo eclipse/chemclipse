@@ -11,13 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
-public enum CalibrationMethod {
-	/*
-	 * ISTD is used for internal standards only.
-	 * All other are used for external calibration.
-	 */
-	LINEAR, //
-	QUADRATIC, //
-	AVERAGE, //
-	ISTD;
+public class QuantitationSignal extends AbstractQuantitationSignal implements IQuantitationSignal {
+
+	public QuantitationSignal(double signal, float relativeResponse) {
+		super(signal, relativeResponse);
+	}
+
+	public QuantitationSignal(double signal, float relativeResponse, double uncertainty) {
+		super(signal, relativeResponse, uncertainty);
+	}
+
+	public QuantitationSignal(double signal, float relativeResponse, double uncertainty, boolean use) {
+		super(signal, relativeResponse, uncertainty, use);
+	}
 }

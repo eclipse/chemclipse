@@ -312,11 +312,11 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				// PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_CHART));
 			}
 		});
 		//
-		// PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, button, imageActive, imageDefault);
 	}
 
 	private void createSubtractScanTask(Composite parent) {

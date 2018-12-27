@@ -11,20 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.QuantitationSignalMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
 
 import junit.framework.TestCase;
 
 public class QuantitationSignalMSD_1_Test extends TestCase {
 
-	private IQuantitationSignalMSD quantitationSignal;
+	private IQuantitationSignal quantitationSignal;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		quantitationSignal = new QuantitationSignalMSD(56.2d, 78.5f);
+		quantitationSignal = new QuantitationSignal(56.2d, 78.5f);
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class QuantitationSignalMSD_1_Test extends TestCase {
 
 	public void testGetIon_1() {
 
-		assertEquals(56.2d, quantitationSignal.getIon());
+		assertEquals(56.2d, quantitationSignal.getSignal());
 	}
 
 	public void testGetRelativeResponse_1() {

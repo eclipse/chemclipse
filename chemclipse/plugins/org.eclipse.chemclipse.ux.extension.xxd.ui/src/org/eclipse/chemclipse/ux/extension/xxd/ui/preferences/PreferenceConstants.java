@@ -135,6 +135,8 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_WELL_CHART = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_PLATE_DATA = "stackPositionPlateData";
 	public static final String DEF_STACK_POSITION_PLATE_DATA = PartSupport.PARTSTACK_RIGHT_TOP;
+	public static final String P_STACK_POSITION_QUANT_RESPONSE_CHART = "stackPositionQuantResponseChart";
+	public static final String DEF_STACK_POSITION_QUANT_RESPONSE_CHART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	/*
 	 * Overlay
 	 */

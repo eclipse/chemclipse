@@ -11,22 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
-import org.eclipse.chemclipse.msd.model.core.quantitation.ConcentrationResponseEntryMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
+import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 
 import junit.framework.TestCase;
 
 public class ConcentrationResponseEntryMSD_2_Test extends TestCase {
 
-	private IConcentrationResponseEntryMSD concentrationResponseEntry1;
-	private IConcentrationResponseEntryMSD concentrationResponseEntry2;
+	private IConcentrationResponseEntry concentrationResponseEntry1;
+	private IConcentrationResponseEntry concentrationResponseEntry2;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		concentrationResponseEntry1 = new ConcentrationResponseEntryMSD(76.2d, 0.7d, 47875);
-		concentrationResponseEntry2 = new ConcentrationResponseEntryMSD(76.2d, 0.7d, 47875);
+		concentrationResponseEntry1 = new ConcentrationResponseEntry(76.2d, 0.7d, 47875);
+		concentrationResponseEntry2 = new ConcentrationResponseEntry(76.2d, 0.7d, 47875);
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,16 +9,15 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.model.core.quantitation;
+package org.eclipse.chemclipse.model.quantitation;
 
-public class ConcentrationResponseEntryMSD extends AbstractConcentrationResponseEntry implements IConcentrationResponseEntryMSD {
+import java.io.Serializable;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 602913566986867408L;
+public interface IConcentrationResponseEntry extends Serializable {
 
-	public ConcentrationResponseEntryMSD(double ion, double concentration, double response) {
-		super(ion, concentration, response);
-	}
+	double getSignal();
+
+	double getConcentration();
+
+	double getResponse();
 }

@@ -70,7 +70,19 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskQuantitation"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskQuantitation"
             name="Quantitation">
-      </page>  
+      </page> 
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskISTD"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskISTD"
+            name="Internal Standards (ISTD)">
+      </page>      
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskESTD"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskESTD"
+            name="External Standards (ESTD)">
+      </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskSubtract"
@@ -172,21 +184,7 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageQuantitation"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageQuantitation"
             name="Quantitation">
-      </page>
-      
-      <page
-            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageISTD"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageISTD"
-            name="Internal Standards (ISTD)">
       </page>      
-      <page
-            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageESTD"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageESTD"
-            name="External Standards (ESTD)">
-      </page>      
-      
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR"

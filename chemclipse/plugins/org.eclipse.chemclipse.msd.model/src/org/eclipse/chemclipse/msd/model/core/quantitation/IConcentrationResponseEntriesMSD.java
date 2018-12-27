@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.equations.QuadraticEquation;
 
@@ -25,23 +26,23 @@ public interface IConcentrationResponseEntriesMSD extends Serializable {
 	 * 
 	 * @param concentrationResponseEntry
 	 */
-	void add(IConcentrationResponseEntryMSD concentrationResponseEntry);
+	void add(IConcentrationResponseEntry concentrationResponseEntry);
 
-	void addAll(List<IConcentrationResponseEntryMSD> concentrationResponseEntries);
+	void addAll(List<IConcentrationResponseEntry> concentrationResponseEntries);
 
 	/**
 	 * Removes the concentration response entry.
 	 * 
 	 * @param concentrationResponseEntry
 	 */
-	void remove(IConcentrationResponseEntryMSD concentrationResponseEntry);
+	void remove(IConcentrationResponseEntry concentrationResponseEntry);
 
 	/**
 	 * Removes all listed entries.
 	 * 
 	 * @param concentrationResponseEntriesMSD
 	 */
-	void removeAll(List<IConcentrationResponseEntryMSD> concentrationResponseEntriesMSD);
+	void removeAll(List<IConcentrationResponseEntry> concentrationResponseEntriesMSD);
 
 	/**
 	 * Clears the list.
@@ -62,14 +63,14 @@ public interface IConcentrationResponseEntriesMSD extends Serializable {
 	 * @param index
 	 * @return IConcentrationResponseEntryMSD
 	 */
-	IConcentrationResponseEntryMSD get(int index);
+	IConcentrationResponseEntry get(int index);
 
 	/**
 	 * Returns the list of response entries.
 	 * 
 	 * @return List<IConcentrationResponseEntryMSD>
 	 */
-	List<IConcentrationResponseEntryMSD> getList();
+	List<IConcentrationResponseEntry> getList();
 
 	/**
 	 * Returns the linear equation.
@@ -125,5 +126,5 @@ public interface IConcentrationResponseEntriesMSD extends Serializable {
 	 * @param ion
 	 * @return
 	 */
-	List<IConcentrationResponseEntryMSD> getList(double ion);
+	List<IConcentrationResponseEntry> getList(double ion);
 }

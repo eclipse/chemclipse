@@ -14,11 +14,9 @@ package org.eclipse.chemclipse.msd.model.core.quantitation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 
@@ -64,9 +62,9 @@ public class QuantitationCompoundMSD_3_Test extends ReferencePeakMSDTestCase {
 
 	public void testGetQuantitationSignals_3() {
 
-		IQuantitationSignalMSD quantitationSignal = quantitationSignals.get(0);
-		assertEquals(AbstractIon.TIC_ION, quantitationSignal.getIon());
-		assertEquals(IQuantitationSignalMSD.ABSOLUTE_RESPONSE, quantitationSignal.getRelativeResponse());
+		IQuantitationSignal quantitationSignal = quantitationSignals.get(0);
+		assertEquals(AbstractIon.TIC_ION, quantitationSignal.getSignal());
+		assertEquals(IQuantitationSignal.ABSOLUTE_RESPONSE, quantitationSignal.getRelativeResponse());
 		assertEquals(0.0d, quantitationSignal.getUncertainty());
 		assertTrue(quantitationSignal.isUse());
 	}
@@ -83,8 +81,8 @@ public class QuantitationCompoundMSD_3_Test extends ReferencePeakMSDTestCase {
 
 	public void testGetConcentrationResponseEntries_3() {
 
-		IConcentrationResponseEntryMSD concentrationResponseEntry = concentrationResponseEntries.get(0);
-		assertEquals(AbstractIon.TIC_ION, concentrationResponseEntry.getIon());
+		IConcentrationResponseEntry concentrationResponseEntry = concentrationResponseEntries.get(0);
+		assertEquals(AbstractIon.TIC_ION, concentrationResponseEntry.getSignal());
 		assertEquals(0.1d, concentrationResponseEntry.getConcentration());
 		assertEquals(750220.0d, concentrationResponseEntry.getResponse());
 	}

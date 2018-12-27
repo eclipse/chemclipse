@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.msd.model.core.quantitation;
 import java.io.Serializable;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+
 public interface IQuantitationSignalsMSD extends Serializable {
 
 	/**
@@ -21,23 +23,23 @@ public interface IQuantitationSignalsMSD extends Serializable {
 	 * 
 	 * @param quantitationSignal
 	 */
-	void add(IQuantitationSignalMSD quantitationSignalMSD);
+	void add(IQuantitationSignal quantitationSignalMSD);
 
-	void addAll(List<IQuantitationSignalMSD> quantitationSignals);
+	void addAll(List<IQuantitationSignal> quantitationSignals);
 
 	/**
 	 * Removes the quantitation signal.
 	 * 
 	 * @param quantitationSignal
 	 */
-	void remove(IQuantitationSignalMSD quantitationSignalMSD);
+	void remove(IQuantitationSignal quantitationSignalMSD);
 
 	/**
 	 * Removes the quantitation signals.
 	 * 
 	 * @param quantitationSignal
 	 */
-	void removeAll(List<IQuantitationSignalMSD> quantitationSignalsMSD);
+	void removeAll(List<IQuantitationSignal> quantitationSignalsMSD);
 
 	/**
 	 * Returns the list of selected signals.
@@ -65,14 +67,14 @@ public interface IQuantitationSignalsMSD extends Serializable {
 	 * @param index
 	 * @return IQuantitationSignalMSD
 	 */
-	IQuantitationSignalMSD get(int index);
+	IQuantitationSignal get(int index);
 
 	/**
 	 * Returns the list of all quantitation signals.
 	 * 
 	 * @return List<IQuantitationSignalMSD>
 	 */
-	List<IQuantitationSignalMSD> getList();
+	List<IQuantitationSignal> getList();
 
 	/**
 	 * Set isUse = false to all stored signals.

@@ -15,8 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
+import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.RetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.RetentionTimeWindow;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
@@ -198,11 +202,11 @@ public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCo
 				double response = integrationQuantitationSupport.getIntegrationArea(ion);
 				//
 				if(firstPeak) {
-					IQuantitationSignalMSD quantitationSignal = new QuantitationSignalMSD(ion, IQuantitationSignalMSD.ABSOLUTE_RESPONSE);
+					IQuantitationSignal quantitationSignal = new QuantitationSignal(ion, IQuantitationSignal.ABSOLUTE_RESPONSE);
 					quantitationSignalsMSD.add(quantitationSignal);
 				}
 				//
-				IConcentrationResponseEntryMSD concentrationResponseEntry = new ConcentrationResponseEntryMSD(ion, concentration, response);
+				IConcentrationResponseEntry concentrationResponseEntry = new ConcentrationResponseEntry(ion, concentration, response);
 				concentrationResponseEntriesMSD.add(concentrationResponseEntry);
 				/*
 				 * The first peak has been evaluated.
@@ -251,24 +255,24 @@ public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCo
 					 * Each peak has a mass spectrum. Only the first mass spectrum will be used.
 					 */
 					if(firstPeak) {
-						IQuantitationSignalMSD quantitationSignal = new QuantitationSignalMSD(ion, percentageIonAbundance);
+						IQuantitationSignal quantitationSignal = new QuantitationSignal(ion, percentageIonAbundance);
 						quantitationSignalsMSD.add(quantitationSignal);
 					}
 					/*
 					 * The real response is calculated by the total response and the percentage of the ion abundance.
 					 */
 					double response = integrationQuantitationSupport.getIntegrationArea(ion);
-					IConcentrationResponseEntryMSD concentrationResponseEntry;
+					IConcentrationResponseEntry concentrationResponseEntry;
 					if(integrationQuantitationSupport.isTheTotalSignalIntegrated()) {
 						/*
 						 * TIC
 						 */
-						concentrationResponseEntry = new ConcentrationResponseEntryMSD(ion, concentration, response * percentageIonAbundance);
+						concentrationResponseEntry = new ConcentrationResponseEntry(ion, concentration, response * percentageIonAbundance);
 					} else {
 						/*
 						 * XIC
 						 */
-						concentrationResponseEntry = new ConcentrationResponseEntryMSD(ion, concentration, response);
+						concentrationResponseEntry = new ConcentrationResponseEntry(ion, concentration, response);
 					}
 					concentrationResponseEntriesMSD.add(concentrationResponseEntry);
 				}
