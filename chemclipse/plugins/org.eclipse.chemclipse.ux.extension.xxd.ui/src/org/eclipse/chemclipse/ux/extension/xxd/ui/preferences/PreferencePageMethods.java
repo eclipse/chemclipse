@@ -24,7 +24,8 @@ public class PreferencePageMethods extends FieldEditorPreferencePage implements 
 	public PreferencePageMethods() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Methods");
+		setTitle("Methods");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

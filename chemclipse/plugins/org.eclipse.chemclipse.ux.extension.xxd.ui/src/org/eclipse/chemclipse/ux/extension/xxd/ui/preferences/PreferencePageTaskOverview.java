@@ -22,7 +22,8 @@ public class PreferencePageTaskOverview extends FieldEditorPreferencePage implem
 	public PreferencePageTaskOverview() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Quick Access");
+		setTitle("Quick Access");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

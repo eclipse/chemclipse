@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,7 +27,9 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSuppor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskCombined;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskComparison;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskESTD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskHeatmaps;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskISTD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskOverlay;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskOverview;
@@ -107,6 +110,8 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 		createPeaksTask(parent);
 		createListTask(parent);
 		createQuantitationTask(parent);
+		createInternalStandardsTask(parent);
+		createExternalStandardsTask(parent);
 		createSubtractScanTask(parent);
 		createCombinedScanTask(parent);
 		createComparisonScanTask(parent);
@@ -239,12 +244,10 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			public void widgetSelected(SelectionEvent e) {
 
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_SCAN_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_SCAN_LIST));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_LIST));
 			}
 		});
 		//
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_PEAK_SCAN_LIST, button, imageActive, imageDefault);
-		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_LIST, button, imageActive, imageDefault);
 	}
 
 	private void createQuantitationTask(Composite parent) {
@@ -261,17 +264,59 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_LIST));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANTITATION, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANTITATION));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA));
+			}
+		});
+		//
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_LIST, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANTITATION, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, button, imageActive, imageDefault);
+	}
+
+	private void createInternalStandardsTask(Composite parent) {
+
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INTERNAL_STANDARDS_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INTERNAL_STANDARDS_DEFAULT, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the internal standards modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_REFERENCES, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES));
 			}
 		});
 		//
-		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANTITATION, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, button, imageActive, imageDefault);
-		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_REFERENCES, button, imageActive, imageDefault);
+	}
+
+	private void createExternalStandardsTask(Composite parent) {
+
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXTERNAL_STANDARDS_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXTERNAL_STANDARDS_DEFAULT, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the external standards modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				// PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS));
+			}
+		});
+		//
+		// PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, button, imageActive, imageDefault);
 	}
 
 	private void createSubtractScanTask(Composite parent) {
@@ -419,47 +464,28 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageTasks = new PreferencePageTasks();
-				preferencePageTasks.setTitle("Task Bar (Quick Access)");
-				IPreferencePage preferencePageTaskOverview = new PreferencePageTaskOverview();
-				preferencePageTaskOverview.setTitle("Overview");
-				IPreferencePage preferencePageTaskOverlay = new PreferencePageTaskOverlay();
-				preferencePageTaskOverlay.setTitle("Overlay");
-				IPreferencePage preferencePageTaskScans = new PreferencePageTaskScans();
-				preferencePageTaskScans.setTitle("Scans");
-				IPreferencePage preferencePageTaskPeaks = new PreferencePageTaskPeaks();
-				preferencePageTaskPeaks.setTitle("Peaks");
-				IPreferencePage preferencePageTaskLists = new PreferencePageTaskLists();
-				preferencePageTaskLists.setTitle("Lists");
-				IPreferencePage preferencePageTaskQuantitation = new PreferencePageTaskQuantitation();
-				preferencePageTaskQuantitation.setTitle("Quantitation");
-				IPreferencePage preferencePageTaskSubtract = new PreferencePageTaskSubtract();
-				preferencePageTaskSubtract.setTitle("Subtract");
-				IPreferencePage preferencePageTaskCombined = new PreferencePageTaskCombined();
-				preferencePageTaskCombined.setTitle("Combined");
-				IPreferencePage preferencePageTaskComparison = new PreferencePageTaskComparison();
-				preferencePageTaskComparison.setTitle("Comparison");
-				IPreferencePage preferencePageTaskResults = new PreferencePageTaskResults();
-				preferencePageTaskResults.setTitle("Results");
-				IPreferencePage preferencePageTaskHeatmaps = new PreferencePageTaskHeatmaps();
-				preferencePageTaskHeatmaps.setTitle("Heatmaps");
-				IPreferencePage preferencePageTaskPcr = new PreferencePageTaskPCR();
-				preferencePageTaskPcr.setTitle("PCR");
+				List<IPreferencePage> preferencePages = new ArrayList<>();
+				preferencePages.add(new PreferencePageTasks());
+				preferencePages.add(new PreferencePageTaskOverview());
+				preferencePages.add(new PreferencePageTaskOverlay());
+				preferencePages.add(new PreferencePageTaskScans());
+				preferencePages.add(new PreferencePageTaskPeaks());
+				preferencePages.add(new PreferencePageTaskLists());
+				preferencePages.add(new PreferencePageTaskQuantitation());
+				preferencePages.add(new PreferencePageTaskISTD());
+				preferencePages.add(new PreferencePageTaskESTD());
+				preferencePages.add(new PreferencePageTaskSubtract());
+				preferencePages.add(new PreferencePageTaskCombined());
+				preferencePages.add(new PreferencePageTaskComparison());
+				preferencePages.add(new PreferencePageTaskResults());
+				preferencePages.add(new PreferencePageTaskHeatmaps());
+				preferencePages.add(new PreferencePageTaskPCR());
 				//
+				int i = 1;
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageTasks));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageTaskOverview));
-				preferenceManager.addToRoot(new PreferenceNode("3", preferencePageTaskOverlay));
-				preferenceManager.addToRoot(new PreferenceNode("4", preferencePageTaskScans));
-				preferenceManager.addToRoot(new PreferenceNode("5", preferencePageTaskPeaks));
-				preferenceManager.addToRoot(new PreferenceNode("6", preferencePageTaskLists));
-				preferenceManager.addToRoot(new PreferenceNode("7", preferencePageTaskQuantitation));
-				preferenceManager.addToRoot(new PreferenceNode("8", preferencePageTaskSubtract));
-				preferenceManager.addToRoot(new PreferenceNode("9", preferencePageTaskCombined));
-				preferenceManager.addToRoot(new PreferenceNode("10", preferencePageTaskComparison));
-				preferenceManager.addToRoot(new PreferenceNode("11", preferencePageTaskResults));
-				preferenceManager.addToRoot(new PreferenceNode("12", preferencePageTaskHeatmaps));
-				preferenceManager.addToRoot(new PreferenceNode("12", preferencePageTaskPcr));
+				for(IPreferencePage preferencePage : preferencePages) {
+					preferenceManager.addToRoot(new PreferenceNode(Integer.toString(i++), preferencePage));
+				}
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
 				preferenceDialog.create();

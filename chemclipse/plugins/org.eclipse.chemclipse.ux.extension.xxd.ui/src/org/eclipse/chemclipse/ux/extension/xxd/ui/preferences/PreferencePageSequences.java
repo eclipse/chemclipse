@@ -23,7 +23,8 @@ public class PreferencePageSequences extends FieldEditorPreferencePage implement
 	public PreferencePageSequences() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Sequences");
+		setTitle("Sequences");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

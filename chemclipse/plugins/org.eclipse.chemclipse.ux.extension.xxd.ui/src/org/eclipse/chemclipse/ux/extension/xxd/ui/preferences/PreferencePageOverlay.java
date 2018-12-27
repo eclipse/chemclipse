@@ -31,7 +31,8 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 	public PreferencePageOverlay() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Overlay");
+		setTitle("Overlay");
+		setDescription("");
 	}
 
 	@Override

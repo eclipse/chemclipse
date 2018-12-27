@@ -23,7 +23,8 @@ public class PreferencePagePCR extends FieldEditorPreferencePage implements IWor
 	public PreferencePagePCR() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("PCR");
+		setTitle("PCR");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

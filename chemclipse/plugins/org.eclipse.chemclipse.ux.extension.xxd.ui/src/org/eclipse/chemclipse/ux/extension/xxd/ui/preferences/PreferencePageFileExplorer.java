@@ -22,7 +22,8 @@ public class PreferencePageFileExplorer extends FieldEditorPreferencePage implem
 	public PreferencePageFileExplorer() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("File Explorer");
+		setTitle("File Explorer");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

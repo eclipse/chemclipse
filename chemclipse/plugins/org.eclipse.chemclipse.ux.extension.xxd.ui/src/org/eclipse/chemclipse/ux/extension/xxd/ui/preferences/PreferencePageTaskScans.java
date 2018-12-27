@@ -22,7 +22,8 @@ public class PreferencePageTaskScans extends FieldEditorPreferencePage implement
 	public PreferencePageTaskScans() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Scans");
+		setTitle("Scans");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

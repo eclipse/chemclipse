@@ -22,7 +22,8 @@ public class PreferencePageTaskHeatmaps extends FieldEditorPreferencePage implem
 	public PreferencePageTaskHeatmaps() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Heatmaps");
+		setTitle("Heatmaps");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

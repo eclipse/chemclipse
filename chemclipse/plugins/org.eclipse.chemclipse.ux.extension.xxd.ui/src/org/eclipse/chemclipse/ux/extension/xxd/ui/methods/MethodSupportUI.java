@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
@@ -333,6 +334,7 @@ public class MethodSupportUI extends Composite {
 			logger.warn(e);
 		}
 		//
+		Collections.sort(methodFiles);
 		return methodFiles;
 	}
 

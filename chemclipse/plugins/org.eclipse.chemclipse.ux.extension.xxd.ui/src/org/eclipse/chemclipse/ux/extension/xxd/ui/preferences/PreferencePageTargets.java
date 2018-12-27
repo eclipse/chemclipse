@@ -24,7 +24,8 @@ public class PreferencePageTargets extends FieldEditorPreferencePage implements 
 	public PreferencePageTargets() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Targets");
+		setTitle("Targets");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

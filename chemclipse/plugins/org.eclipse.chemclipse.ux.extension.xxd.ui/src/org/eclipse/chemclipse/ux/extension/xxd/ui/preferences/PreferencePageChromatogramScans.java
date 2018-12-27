@@ -27,7 +27,8 @@ public class PreferencePageChromatogramScans extends FieldEditorPreferencePage i
 	public PreferencePageChromatogramScans() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Chromatogram Scans");
+		setTitle("Chromatogram Scans");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

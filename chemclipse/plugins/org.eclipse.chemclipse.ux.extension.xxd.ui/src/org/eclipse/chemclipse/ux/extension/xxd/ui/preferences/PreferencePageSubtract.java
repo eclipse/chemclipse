@@ -24,7 +24,8 @@ public class PreferencePageSubtract extends FieldEditorPreferencePage implements
 	public PreferencePageSubtract() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStoreSubtract());
-		setDescription("Subtract");
+		setTitle("Subtract");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

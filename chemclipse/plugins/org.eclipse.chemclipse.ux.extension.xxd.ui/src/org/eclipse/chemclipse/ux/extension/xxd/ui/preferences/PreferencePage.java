@@ -21,7 +21,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Settings");
+		setTitle("Settings");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

@@ -22,7 +22,8 @@ public class PreferencePageTaskOverlay extends FieldEditorPreferencePage impleme
 	public PreferencePageTaskOverlay() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Overlay");
+		setTitle("Overlay");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

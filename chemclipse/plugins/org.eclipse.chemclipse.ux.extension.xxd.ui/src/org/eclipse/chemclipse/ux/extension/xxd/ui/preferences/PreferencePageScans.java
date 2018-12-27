@@ -27,7 +27,8 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 	public PreferencePageScans() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Scans");
+		setTitle("Scans");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

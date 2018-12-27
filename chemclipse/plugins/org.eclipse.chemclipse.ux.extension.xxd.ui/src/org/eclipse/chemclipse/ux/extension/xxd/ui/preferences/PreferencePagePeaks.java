@@ -26,7 +26,8 @@ public class PreferencePagePeaks extends FieldEditorPreferencePage implements IW
 	public PreferencePagePeaks() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Peaks");
+		setTitle("Peaks");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

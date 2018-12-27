@@ -22,7 +22,8 @@ public class PreferencePageTaskPCR extends FieldEditorPreferencePage implements 
 	public PreferencePageTaskPCR() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("PCR");
+		setTitle("PCR");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

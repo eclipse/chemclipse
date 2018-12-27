@@ -173,6 +173,20 @@
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageQuantitation"
             name="Quantitation">
       </page>
+      
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageISTD"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageISTD"
+            name="Internal Standards (ISTD)">
+      </page>      
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageESTD"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageESTD"
+            name="External Standards (ESTD)">
+      </page>      
+      
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR"

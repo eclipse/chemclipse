@@ -30,7 +30,8 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 	public PreferencePageChromatogram() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Chromatogram");
+		setTitle("Chromatogram");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

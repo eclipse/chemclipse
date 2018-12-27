@@ -23,7 +23,8 @@ public class PreferencePageQuantitation extends FieldEditorPreferencePage implem
 	public PreferencePageQuantitation() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Quantitation");
+		setTitle("Quantitation");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

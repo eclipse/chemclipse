@@ -26,7 +26,8 @@ public class PreferencePageChromatogramAxes extends FieldEditorPreferencePage im
 	public PreferencePageChromatogramAxes() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Chromatogram Axes");
+		setTitle("Chromatogram Axes");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

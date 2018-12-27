@@ -22,7 +22,8 @@ public class PreferencePageTaskResults extends FieldEditorPreferencePage impleme
 	public PreferencePageTaskResults() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Results");
+		setTitle("Results");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

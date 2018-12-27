@@ -22,7 +22,8 @@ public class PreferencePageTaskCombined extends FieldEditorPreferencePage implem
 	public PreferencePageTaskCombined() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Combined Scans");
+		setTitle("Combined Scans");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

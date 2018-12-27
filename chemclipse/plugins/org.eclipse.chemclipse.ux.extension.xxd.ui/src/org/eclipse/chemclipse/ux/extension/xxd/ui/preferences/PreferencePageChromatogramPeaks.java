@@ -27,7 +27,8 @@ public class PreferencePageChromatogramPeaks extends FieldEditorPreferencePage i
 	public PreferencePageChromatogramPeaks() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Chromatogram Peaks");
+		setTitle("Chromatogram Peaks");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

@@ -25,7 +25,8 @@ public class PreferencePageLists extends FieldEditorPreferencePage implements IW
 	public PreferencePageLists() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Lists Column Order (do not edit)");
+		setTitle("Lists Column Order (do not edit)");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

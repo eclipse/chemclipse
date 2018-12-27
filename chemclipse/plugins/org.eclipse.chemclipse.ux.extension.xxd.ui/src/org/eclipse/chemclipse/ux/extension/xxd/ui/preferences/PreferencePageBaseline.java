@@ -23,7 +23,8 @@ public class PreferencePageBaseline extends FieldEditorPreferencePage implements
 	public PreferencePageBaseline() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Baseline");
+		setTitle("Baseline");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

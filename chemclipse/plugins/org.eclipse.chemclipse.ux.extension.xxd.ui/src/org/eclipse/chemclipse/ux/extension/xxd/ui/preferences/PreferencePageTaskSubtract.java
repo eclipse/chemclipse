@@ -22,7 +22,8 @@ public class PreferencePageTaskSubtract extends FieldEditorPreferencePage implem
 	public PreferencePageTaskSubtract() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Subtract Scan");
+		setTitle("Subtract Scan");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

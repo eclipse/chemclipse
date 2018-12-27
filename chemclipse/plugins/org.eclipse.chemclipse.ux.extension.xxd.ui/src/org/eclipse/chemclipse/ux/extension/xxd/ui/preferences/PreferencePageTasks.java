@@ -22,7 +22,8 @@ public class PreferencePageTasks extends FieldEditorPreferencePage implements IW
 	public PreferencePageTasks() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Task Bar (Quick Access)");
+		setTitle("Task Bar (Quick Access)");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {

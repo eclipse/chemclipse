@@ -106,7 +106,7 @@ public class PreferenceConstants {
 	public static final String P_STACK_POSITION_PEAK_SCAN_LIST = "stackPositionPeakScanList";
 	public static final String DEF_STACK_POSITION_PEAK_SCAN_LIST = PartSupport.PARTSTACK_LEFT_TOP;
 	public static final String P_STACK_POSITION_PEAK_QUANTITATION_LIST = "stackPositionPeakQuantitationList";
-	public static final String DEF_STACK_POSITION_PEAK_QUANTITATION_LIST = PartSupport.PARTSTACK_NONE;
+	public static final String DEF_STACK_POSITION_PEAK_QUANTITATION_LIST = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_SUBTRACT_SCAN_PART = "stackPositionSubtractScanPart";
 	public static final String DEF_STACK_POSITION_SUBTRACT_SCAN_PART = PartSupport.PARTSTACK_RIGHT_TOP;
 	public static final String P_STACK_POSITION_COMBINED_SCAN_PART = "stackPositionCombinedScanPart";
@@ -116,11 +116,11 @@ public class PreferenceConstants {
 	public static final String P_STACK_POSITION_MS_LIBRARY_STACK = "stackPositionMSLibraryStack";
 	public static final String DEF_STACK_POSITION_MS_LIBRARY_STACK = PartSupport.PARTSTACK_NONE;
 	public static final String P_STACK_POSITION_QUANTITATION = "stackPositionQuantitation";
-	public static final String DEF_STACK_POSITION_QUANTITATION = PartSupport.PARTSTACK_RIGHT_TOP;
+	public static final String DEF_STACK_POSITION_QUANTITATION = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_INTEGRATION_AREA = "stackPositionIntegrationArea";
 	public static final String DEF_STACK_POSITION_INTEGRATION_AREA = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_INTERNAL_STANDARDS = "stackPositionInternalStandards";
-	public static final String DEF_STACK_POSITION_INTERNAL_STANDARDS = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String DEF_STACK_POSITION_INTERNAL_STANDARDS = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_MEASUREMENT_RESULTS = "stackPositionMeasurementResults";
 	public static final String DEF_STACK_POSITION_MEASUREMENT_RESULTS = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_CHROMATOGRAM_HEATMAP = "stackPositionChromatogramHeatmap";

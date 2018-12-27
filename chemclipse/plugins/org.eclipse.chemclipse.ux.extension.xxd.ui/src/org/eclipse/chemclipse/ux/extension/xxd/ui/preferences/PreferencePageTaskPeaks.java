@@ -22,7 +22,8 @@ public class PreferencePageTaskPeaks extends FieldEditorPreferencePage implement
 	public PreferencePageTaskPeaks() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Peaks");
+		setTitle("Peaks");
+		setDescription("");
 	}
 
 	public void createFieldEditors() {
