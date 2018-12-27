@@ -11,23 +11,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller;
 
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 
 public class ConcentrationResponseEntryEdit {
 
-	private IConcentrationResponseEntryMSD concentrationResponseEntryMSD;
+	private IConcentrationResponseEntry concentrationResponseEntryMSD;
 	private String concentrationUnit;
 
 	public ConcentrationResponseEntryEdit(String concentrationUnit) {
 		this.concentrationUnit = concentrationUnit;
 	}
 
-	public IConcentrationResponseEntryMSD getConcentrationResponseEntryMSD() {
+	public IConcentrationResponseEntry getConcentrationResponseEntryMSD() {
 
 		return concentrationResponseEntryMSD;
 	}
 
-	public void setConcentrationResponseEntryMSD(IConcentrationResponseEntryMSD concentrationResponseEntryMSD) {
+	public void setConcentrationResponseEntryMSD(IConcentrationResponseEntry concentrationResponseEntryMSD) {
 
 		this.concentrationResponseEntryMSD = concentrationResponseEntryMSD;
 	}

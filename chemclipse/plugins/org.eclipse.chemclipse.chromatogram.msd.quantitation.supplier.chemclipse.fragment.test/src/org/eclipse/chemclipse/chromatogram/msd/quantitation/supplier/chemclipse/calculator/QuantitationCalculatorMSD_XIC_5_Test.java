@@ -11,15 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.calculator;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.IQuantitationCalculatorMSD;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.msd.model.core.quantitation.ConcentrationResponseEntryMSD;
+import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.QuantitationSignalMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.EvaluationException;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.IQuantitationCalculatorMSD;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 
 public class QuantitationCalculatorMSD_XIC_5_Test extends QuantitationCalculator_XIC_TestCase {
 
@@ -59,8 +59,8 @@ public class QuantitationCalculatorMSD_XIC_5_Test extends QuantitationCalculator
 
 	public void testCalculateConcentration_1() {
 
-		quantitationSignals.add(new QuantitationSignalMSD(108.0d, 0.25f));
-		concentrationResponseEntries.add(new ConcentrationResponseEntryMSD(180.0d, 0.3d, 59600.0d));
+		quantitationSignals.add(new QuantitationSignal(108.0d, 0.25f));
+		concentrationResponseEntries.add(new ConcentrationResponseEntry(180.0d, 0.3d, 59600.0d));
 		quantitationCompound.setUseCrossZero(false);
 		try {
 			calculator.calculateQuantitationResults(getReferencePeakMSD_XIC_X(), quantitationCompound);

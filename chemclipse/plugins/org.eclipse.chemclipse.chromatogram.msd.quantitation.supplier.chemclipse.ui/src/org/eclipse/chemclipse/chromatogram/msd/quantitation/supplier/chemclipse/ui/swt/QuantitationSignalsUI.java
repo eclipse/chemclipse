@@ -20,8 +20,8 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationSignalsLabelProvider;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationSignalsTableComparator;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs.QuantitationSignalEntryEditDialog;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -124,7 +124,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 						/*
 						 * Save the response entry.
 						 */
-						IQuantitationSignalMSD quantitationSignalMSD = quantitationSignalEntryEdit.getQuantitationSignalMSD();
+						IQuantitationSignal quantitationSignalMSD = quantitationSignalEntryEdit.getQuantitationSignalMSD();
 						if(quantitationSignalMSD != null) {
 							quantitationCompoundDocument.getQuantitationSignalsMSD().add(quantitationSignalMSD);
 							setTableViewerInput();
@@ -154,7 +154,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 					/*
 					 * Try to edit a new response entry.
 					 */
-					IQuantitationSignalMSD quantitationSignalOld = getSelectedQuantitationSignalMSD();
+					IQuantitationSignal quantitationSignalOld = getSelectedQuantitationSignalMSD();
 					if(quantitationSignalOld != null) {
 						/*
 						 * Edit
@@ -167,7 +167,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 							/*
 							 * Save the edited response entry.
 							 */
-							IQuantitationSignalMSD quantitationSignalNew = quantitationSignalEntryEdit.getQuantitationSignalMSD();
+							IQuantitationSignal quantitationSignalNew = quantitationSignalEntryEdit.getQuantitationSignalMSD();
 							if(quantitationSignalOld != null) {
 								IQuantitationSignalsMSD quantitationSignalsMSD = quantitationCompoundDocument.getQuantitationSignalsMSD();
 								quantitationSignalsMSD.remove(quantitationSignalOld);
@@ -196,7 +196,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				List<IQuantitationSignalMSD> quantitationSignalsMSD = getSelectedQuantitationSignalsMSD();
+				List<IQuantitationSignal> quantitationSignalsMSD = getSelectedQuantitationSignalsMSD();
 				if(quantitationSignalsMSD.size() > 0) {
 					/*
 					 * Remove the selected entries
@@ -240,12 +240,12 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 	 * 
 	 * @return
 	 */
-	private IQuantitationSignalMSD getSelectedQuantitationSignalMSD() {
+	private IQuantitationSignal getSelectedQuantitationSignalMSD() {
 
-		IQuantitationSignalMSD quantitationSignalMSD = null;
+		IQuantitationSignal quantitationSignalMSD = null;
 		Object element = getSelectedTableItem();
-		if(element instanceof IQuantitationSignalMSD) {
-			quantitationSignalMSD = (IQuantitationSignalMSD)element;
+		if(element instanceof IQuantitationSignal) {
+			quantitationSignalMSD = (IQuantitationSignal)element;
 		}
 		return quantitationSignalMSD;
 	}
@@ -255,13 +255,13 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 	 * 
 	 * @return
 	 */
-	private List<IQuantitationSignalMSD> getSelectedQuantitationSignalsMSD() {
+	private List<IQuantitationSignal> getSelectedQuantitationSignalsMSD() {
 
-		List<IQuantitationSignalMSD> quantitationSignalsMSD = new ArrayList<IQuantitationSignalMSD>();
+		List<IQuantitationSignal> quantitationSignalsMSD = new ArrayList<IQuantitationSignal>();
 		List<Object> elements = getSelectedTableItems();
 		for(Object element : elements) {
-			if(element instanceof IQuantitationSignalMSD) {
-				IQuantitationSignalMSD quantitationSignalMSD = (IQuantitationSignalMSD)element;
+			if(element instanceof IQuantitationSignal) {
+				IQuantitationSignal quantitationSignalMSD = (IQuantitationSignal)element;
 				quantitationSignalsMSD.add(quantitationSignalMSD);
 			}
 		}

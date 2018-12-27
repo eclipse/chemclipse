@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider;
 
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -22,13 +22,13 @@ public class QuantitationSignalsTableComparator extends AbstractRecordTableCompa
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IQuantitationSignalMSD && e2 instanceof IQuantitationSignalMSD) {
-			IQuantitationSignalMSD entry1 = (IQuantitationSignalMSD)e1;
-			IQuantitationSignalMSD entry2 = (IQuantitationSignalMSD)e2;
+		if(e1 instanceof IQuantitationSignal && e2 instanceof IQuantitationSignal) {
+			IQuantitationSignal entry1 = (IQuantitationSignal)e1;
+			IQuantitationSignal entry2 = (IQuantitationSignal)e2;
 			//
 			switch(getPropertyIndex()) {
 				case 0: // Ion
-					sortOrder = Double.compare(entry2.getIon(), entry1.getIon());
+					sortOrder = Double.compare(entry2.getSignal(), entry1.getSignal());
 					break;
 				case 1: // Relative Response
 					sortOrder = Float.compare(entry2.getRelativeResponse(), entry1.getRelativeResponse());

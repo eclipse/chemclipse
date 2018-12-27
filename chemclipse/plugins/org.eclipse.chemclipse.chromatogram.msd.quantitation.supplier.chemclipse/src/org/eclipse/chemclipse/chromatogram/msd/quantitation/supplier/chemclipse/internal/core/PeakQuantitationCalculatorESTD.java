@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PeakQuantitationCalculatorESTD {
+public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalculator {
 
 	private static final Logger logger = Logger.getLogger(PeakQuantitationCalculatorESTD.class);
 
@@ -68,7 +68,7 @@ public class PeakQuantitationCalculatorESTD {
 		return processingInfo;
 	}
 
-	private List<IQuantitationCompoundMSD> getQuantitationEntries(List<IQuantitationCompoundMSD> quantitationCompounds, IPeak peak) {
+	private List<IQuantitationCompoundMSD> getQuantitationEntries(List<IQuantitationCompoundMSD> quantitationCompounds, IPeak peakToQuantify) {
 
 		List<IQuantitationCompoundMSD> quantitationCompoundsMSD = new ArrayList<IQuantitationCompoundMSD>();
 		for(IQuantitationCompoundMSD quantitationCompound : quantitationCompounds) {
@@ -76,10 +76,12 @@ public class PeakQuantitationCalculatorESTD {
 			 * Add the compound if it matches certain conditions:
 			 * Retention Time Window
 			 */
-			int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
+			int retentionTime = peakToQuantify.getPeakModel().getRetentionTimeAtPeakMaximum();
 			IRetentionTimeWindow retentionTimeWindow = quantitationCompound.getRetentionTimeWindow();
 			if(retentionTimeWindow.isRetentionTimeInWindow(retentionTime)) {
-				quantitationCompoundsMSD.add(quantitationCompound);
+				if(doQuantify(peakToQuantify, quantitationCompound.getName())) {
+					quantitationCompoundsMSD.add(quantitationCompound);
+				}
 			}
 		}
 		return quantitationCompoundsMSD;

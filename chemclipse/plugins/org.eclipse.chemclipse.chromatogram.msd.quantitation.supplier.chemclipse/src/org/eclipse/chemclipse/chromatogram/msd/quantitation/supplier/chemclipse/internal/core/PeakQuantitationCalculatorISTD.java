@@ -36,7 +36,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PeakQuantitationCalculatorISTD {
+public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalculator {
 
 	@SuppressWarnings("rawtypes")
 	public IProcessingInfo quantifySelectedPeak(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
@@ -69,13 +69,18 @@ public class PeakQuantitationCalculatorISTD {
 	public IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		//
+		/*
+		 * Collect the internal standards.
+		 */
 		List<IPeak> internalStandardPeaks = new ArrayList<>();
 		for(IPeak peak : peaks) {
 			if(peak.getInternalStandards().size() > 0) {
 				internalStandardPeaks.add(peak);
 			}
 		}
+		/*
+		 * Quantify the peaks.
+		 */
 		for(IPeak peakToQuantify : peaks) {
 			quantifyPeak(internalStandardPeaks, peakToQuantify);
 		}
@@ -86,30 +91,18 @@ public class PeakQuantitationCalculatorISTD {
 	private void quantifyPeak(List<? extends IPeak> internalStandardPeaks, IPeak peakToQuantify) {
 
 		for(IPeak peakISTD : internalStandardPeaks) {
-			double peakAreaISTD = peakISTD.getIntegratedArea();
-			if(peakAreaISTD > 0) {
-				/*
-				 * Area must be > 0.
-				 */
+			if(isAreaValid(peakToQuantify, peakISTD)) {
 				for(IInternalStandard internalStandard : peakISTD.getInternalStandards()) {
-					/*
-					 * ISTD
-					 */
-					String name = internalStandard.getName();
-					boolean doIntegrate = false;
-					List<String> quantitationReferences = peakToQuantify.getQuantitationReferences();
-					if(quantitationReferences.size() == 0 || quantitationReferences.contains(name)) {
-						doIntegrate = true;
-					}
-					/*
-					 * Only integrate if
-					 */
-					if(doIntegrate) {
+					String nameOfStandard = internalStandard.getName();
+					if(doQuantify(peakToQuantify, nameOfStandard)) {
+						/*
+						 * ISTD - PEAK
+						 */
+						double peakAreaISTD = peakISTD.getIntegratedArea();
 						double concentration = internalStandard.getConcentration();
 						String concentrationUnit = internalStandard.getConcentrationUnit();
 						double responseFactor = internalStandard.getResponseFactor();
 						String chemicalClass = internalStandard.getChemicalClass();
-						//
 						double integratedArea = peakToQuantify.getIntegratedArea();
 						double concentrationCalculated = ((concentration / peakAreaISTD) * integratedArea) * responseFactor;
 						//
@@ -117,7 +110,7 @@ public class PeakQuantitationCalculatorISTD {
 							/*
 							 * MSD
 							 */
-							IQuantitationEntryMSD quantitationEntryMSD = new QuantitationEntryMSD(name, concentrationCalculated, concentrationUnit, integratedArea, IIon.TIC_ION);
+							IQuantitationEntryMSD quantitationEntryMSD = new QuantitationEntryMSD(nameOfStandard, concentrationCalculated, concentrationUnit, integratedArea, IIon.TIC_ION);
 							quantitationEntryMSD.setCalibrationMethod(CalibrationMethod.ISTD.toString());
 							quantitationEntryMSD.setUsedCrossZero(false);
 							quantitationEntryMSD.setChemicalClass(chemicalClass);
@@ -126,7 +119,7 @@ public class PeakQuantitationCalculatorISTD {
 							/*
 							 * CSD/WSD
 							 */
-							IQuantitationEntry quantitationEntry = new QuantitationEntry(name, concentrationCalculated, concentrationUnit, integratedArea);
+							IQuantitationEntry quantitationEntry = new QuantitationEntry(nameOfStandard, concentrationCalculated, concentrationUnit, integratedArea);
 							quantitationEntry.setCalibrationMethod(CalibrationMethod.ISTD.toString());
 							quantitationEntry.setUsedCrossZero(false);
 							quantitationEntry.setChemicalClass(chemicalClass);

@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.QuantitationCompoundEntryEdit;
@@ -181,12 +183,14 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 	private String[] getCalibrationMethodItems() {
 
 		CalibrationMethod[] calibrationMethods = CalibrationMethod.values();
-		String[] items = new String[calibrationMethods.length];
-		int counter = 0;
+		List<String> items = new ArrayList<>();
+		//
 		for(CalibrationMethod calibrationMethod : calibrationMethods) {
-			items[counter++] = calibrationMethod.toString();
+			if(!calibrationMethod.equals(CalibrationMethod.ISTD)) {
+				items.add(calibrationMethod.toString());
+			}
 		}
-		return items;
+		return items.toArray(new String[items.size()]);
 	}
 
 	protected boolean validateInput() {

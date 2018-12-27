@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider;
 
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -22,13 +22,13 @@ public class ConcentrationResponseTableComparator extends AbstractRecordTableCom
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IConcentrationResponseEntryMSD && e2 instanceof IConcentrationResponseEntryMSD) {
-			IConcentrationResponseEntryMSD entry1 = (IConcentrationResponseEntryMSD)e1;
-			IConcentrationResponseEntryMSD entry2 = (IConcentrationResponseEntryMSD)e2;
+		if(e1 instanceof IConcentrationResponseEntry && e2 instanceof IConcentrationResponseEntry) {
+			IConcentrationResponseEntry entry1 = (IConcentrationResponseEntry)e1;
+			IConcentrationResponseEntry entry2 = (IConcentrationResponseEntry)e2;
 			//
 			switch(getPropertyIndex()) {
 				case 0: // Ion
-					sortOrder = Double.compare(entry2.getIon(), entry1.getIon());
+					sortOrder = Double.compare(entry2.getSignal(), entry1.getSignal());
 					break;
 				case 1: // Concentration
 					sortOrder = Double.compare(entry2.getConcentration(), entry1.getConcentration());

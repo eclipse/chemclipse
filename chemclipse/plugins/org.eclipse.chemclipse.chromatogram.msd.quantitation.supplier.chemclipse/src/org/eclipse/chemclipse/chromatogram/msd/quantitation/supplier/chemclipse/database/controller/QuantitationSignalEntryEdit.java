@@ -11,18 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller;
 
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 
 public class QuantitationSignalEntryEdit {
 
-	private IQuantitationSignalMSD quantitationSignalMSD;
+	private IQuantitationSignal quantitationSignalMSD;
 
-	public IQuantitationSignalMSD getQuantitationSignalMSD() {
+	public IQuantitationSignal getQuantitationSignalMSD() {
 
 		return quantitationSignalMSD;
 	}
 
-	public void setQuantitationSignalMSD(IQuantitationSignalMSD quantitationSignalMSD) {
+	public void setQuantitationSignalMSD(IQuantitationSignal quantitationSignalMSD) {
 
 		this.quantitationSignalMSD = quantitationSignalMSD;
 	}

@@ -13,13 +13,12 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import java.text.DecimalFormat;
 
-import org.eclipse.swt.graphics.Image;
-
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.swt.graphics.Image;
 
 public class ConcentrationResponseLabelProvider extends AbstractChemClipseLabelProvider {
 
@@ -38,12 +37,12 @@ public class ConcentrationResponseLabelProvider extends AbstractChemClipseLabelP
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IConcentrationResponseEntryMSD) {
-			IConcentrationResponseEntryMSD entry = (IConcentrationResponseEntryMSD)element;
+		if(element instanceof IConcentrationResponseEntry) {
+			IConcentrationResponseEntry entry = (IConcentrationResponseEntry)element;
 			//
 			switch(columnIndex) {
 				case 0: // Ion
-					double ion = entry.getIon();
+					double ion = entry.getSignal();
 					if(ion == AbstractIon.TIC_ION) {
 						text = AbstractIon.TIC_DESCRIPTION;
 					} else {

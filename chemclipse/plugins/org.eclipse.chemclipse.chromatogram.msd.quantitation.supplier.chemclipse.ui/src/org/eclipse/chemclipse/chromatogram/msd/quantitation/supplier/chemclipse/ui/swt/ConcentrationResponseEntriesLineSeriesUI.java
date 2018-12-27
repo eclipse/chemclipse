@@ -16,10 +16,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
@@ -51,6 +52,8 @@ import org.eclipse.swtchart.Range;
 
 public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartExtended implements ISeriesSetter, IQuantitationCompoundUpdater, KeyListener, MouseListener {
 
+	private static final Logger logger = Logger.getLogger(ConcentrationResponseEntriesLineSeriesUI.class);
+	//
 	private IMultipleSeries multipleLineSeries;
 	private IAxis yAxisLeft; // e.g.: abundance
 	private IAxis xAxisBottom; // e.g.: concentration
@@ -191,13 +194,13 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 			/*
 			 * Get the corresponding response entries.
 			 */
-			List<IConcentrationResponseEntryMSD> list = concentrationResponseEntriesMSD.getList(ion);
+			List<IConcentrationResponseEntry> list = concentrationResponseEntriesMSD.getList(ion);
 			double[] xSeries = new double[list.size()];
 			double[] ySeries = new double[list.size()];
 			int x = 0;
 			int y = 0;
 			//
-			for(IConcentrationResponseEntryMSD concentrationResponseEntry : list) {
+			for(IConcentrationResponseEntry concentrationResponseEntry : list) {
 				/*
 				 * Retrieve the x and y signals.
 				 */
@@ -269,11 +272,14 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 					//
 					label += " avg";
 					try {
-						List<IConcentrationResponseEntryMSD> entries = concentrationResponseEntriesMSD.getList(ion);
+						List<IConcentrationResponseEntry> entries = concentrationResponseEntriesMSD.getList(ion);
 						series = calculateAverageSeries(entries, label);
 					} catch(Exception e) {
 						series = getErrorEquationSeries(label);
 					}
+					break;
+				case ISTD:
+					logger.warn("ISTD shouldn't be used here.");
 					break;
 			}
 			//
@@ -378,7 +384,7 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 	/*
 	 * Returns the center position.
 	 */
-	private Series calculateAverageSeries(List<IConcentrationResponseEntryMSD> entries, String label) {
+	private Series calculateAverageSeries(List<IConcentrationResponseEntry> entries, String label) {
 
 		double x = 0.0d;
 		double y = 0.0d;
@@ -389,7 +395,7 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 		/*
 		 * Calculate the center.
 		 */
-		for(IConcentrationResponseEntryMSD entry : entries) {
+		for(IConcentrationResponseEntry entry : entries) {
 			x += entry.getConcentration();
 			y += entry.getResponse();
 		}

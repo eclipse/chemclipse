@@ -16,8 +16,8 @@ import java.text.ParseException;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.ConcentrationResponseEntryEdit;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.model.core.quantitation.ConcentrationResponseEntryMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
+import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.layout.GridData;
@@ -57,7 +57,7 @@ public class ConcentrationResponseEntryEditDialog extends AbstractEntryEditDialo
 				double ion = decimalFormat.parse(getWidgetInput(KEY_ION)).doubleValue();
 				double concentration = decimalFormat.parse(getWidgetInput(KEY_CONCENTRATION)).doubleValue();
 				double response = decimalFormat.parse(getWidgetInput(KEY_RESPONSE)).doubleValue();
-				IConcentrationResponseEntryMSD concentrationResponseEntryMSD = new ConcentrationResponseEntryMSD(ion, concentration, response);
+				IConcentrationResponseEntry concentrationResponseEntryMSD = new ConcentrationResponseEntry(ion, concentration, response);
 				concentrationResponseEntryEdit.setConcentrationResponseEntryMSD(concentrationResponseEntryMSD);
 			} catch(ParseException e) {
 				setErrorMessage("A value can't be parsed.");
@@ -81,9 +81,9 @@ public class ConcentrationResponseEntryEditDialog extends AbstractEntryEditDialo
 		String concentration = "";
 		String response = "";
 		//
-		IConcentrationResponseEntryMSD concentrationResponseEntryMSD = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
+		IConcentrationResponseEntry concentrationResponseEntryMSD = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
 		if(concentrationResponseEntryMSD != null) {
-			ion = decimalFormat.format(concentrationResponseEntryMSD.getIon());
+			ion = decimalFormat.format(concentrationResponseEntryMSD.getSignal());
 			concentration = decimalFormat.format(concentrationResponseEntryMSD.getConcentration());
 			response = decimalFormat.format(concentrationResponseEntryMSD.getResponse());
 		}

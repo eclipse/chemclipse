@@ -25,7 +25,9 @@ import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
@@ -37,11 +39,9 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
 
 public class QuantDatabaseWriter {
@@ -94,9 +94,9 @@ public class QuantDatabaseWriter {
 	private static void writeConcentrationResponseEntries(DataOutputStream dataOutputStream, IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD) throws Exception {
 
 		dataOutputStream.writeInt(concentrationResponseEntriesMSD.size());
-		for(IConcentrationResponseEntryMSD concentrationResponseEntryMSD : concentrationResponseEntriesMSD.getList()) {
+		for(IConcentrationResponseEntry concentrationResponseEntryMSD : concentrationResponseEntriesMSD.getList()) {
 			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getConcentration());
-			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getIon());
+			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getSignal());
 			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getResponse());
 		}
 	}
@@ -104,8 +104,8 @@ public class QuantDatabaseWriter {
 	private static void writeQuantitationSignals(DataOutputStream dataOutputStream, IQuantitationSignalsMSD quantitationSignalsMSD) throws Exception {
 
 		dataOutputStream.writeInt(quantitationSignalsMSD.size());
-		for(IQuantitationSignalMSD quantitationSignalMSD : quantitationSignalsMSD.getList()) {
-			dataOutputStream.writeDouble(quantitationSignalMSD.getIon());
+		for(IQuantitationSignal quantitationSignalMSD : quantitationSignalsMSD.getList()) {
+			dataOutputStream.writeDouble(quantitationSignalMSD.getSignal());
 			dataOutputStream.writeFloat(quantitationSignalMSD.getRelativeResponse());
 			dataOutputStream.writeDouble(quantitationSignalMSD.getUncertainty());
 			dataOutputStream.writeBoolean(quantitationSignalMSD.isUse());

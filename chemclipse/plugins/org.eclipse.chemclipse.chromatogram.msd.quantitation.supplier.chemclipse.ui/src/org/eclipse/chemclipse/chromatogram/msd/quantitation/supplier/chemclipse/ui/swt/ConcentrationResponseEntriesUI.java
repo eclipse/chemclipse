@@ -23,8 +23,8 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.ConcentrationResponseLabelProvider;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.ConcentrationResponseTableComparator;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs.ConcentrationResponseEntryEditDialog;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -142,7 +142,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 						/*
 						 * Save the response entry.
 						 */
-						IConcentrationResponseEntryMSD concentrationResponseEntryMSD = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
+						IConcentrationResponseEntry concentrationResponseEntryMSD = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
 						if(concentrationResponseEntryMSD != null) {
 							quantitationCompoundMSD.getConcentrationResponseEntriesMSD().add(concentrationResponseEntryMSD);
 							setTableViewerInput();
@@ -179,7 +179,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 					/*
 					 * Try to edit a new response entry.
 					 */
-					IConcentrationResponseEntryMSD concentrationResponseEntryOld = getSelectedConcentrationResponseEntryMSD();
+					IConcentrationResponseEntry concentrationResponseEntryOld = getSelectedConcentrationResponseEntryMSD();
 					if(concentrationResponseEntryOld != null) {
 						/*
 						 * Edit
@@ -193,7 +193,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 							/*
 							 * Save the edited response entry.
 							 */
-							IConcentrationResponseEntryMSD concentrationResponseEntryNew = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
+							IConcentrationResponseEntry concentrationResponseEntryNew = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
 							if(concentrationResponseEntryOld != null) {
 								IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD = quantitationCompoundMSD.getConcentrationResponseEntriesMSD();
 								concentrationResponseEntriesMSD.remove(concentrationResponseEntryOld);
@@ -229,7 +229,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				List<IConcentrationResponseEntryMSD> concentrationResponseEntriesMSD = getSelectedConcentrationResponseEntriesMSD();
+				List<IConcentrationResponseEntry> concentrationResponseEntriesMSD = getSelectedConcentrationResponseEntriesMSD();
 				if(concentrationResponseEntriesMSD.size() > 0) {
 					/*
 					 * Remove the selected entries
@@ -295,12 +295,12 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 	 * 
 	 * @return
 	 */
-	private IConcentrationResponseEntryMSD getSelectedConcentrationResponseEntryMSD() {
+	private IConcentrationResponseEntry getSelectedConcentrationResponseEntryMSD() {
 
-		IConcentrationResponseEntryMSD concentrationResponseEntryMSD = null;
+		IConcentrationResponseEntry concentrationResponseEntryMSD = null;
 		Object element = getSelectedTableItem();
-		if(element instanceof IConcentrationResponseEntryMSD) {
-			concentrationResponseEntryMSD = (IConcentrationResponseEntryMSD)element;
+		if(element instanceof IConcentrationResponseEntry) {
+			concentrationResponseEntryMSD = (IConcentrationResponseEntry)element;
 		}
 		return concentrationResponseEntryMSD;
 	}
@@ -310,13 +310,13 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 	 * 
 	 * @return
 	 */
-	private List<IConcentrationResponseEntryMSD> getSelectedConcentrationResponseEntriesMSD() {
+	private List<IConcentrationResponseEntry> getSelectedConcentrationResponseEntriesMSD() {
 
-		List<IConcentrationResponseEntryMSD> concentrationResponseEntriesMSD = new ArrayList<IConcentrationResponseEntryMSD>();
+		List<IConcentrationResponseEntry> concentrationResponseEntriesMSD = new ArrayList<IConcentrationResponseEntry>();
 		List<Object> elements = getSelectedTableItems();
 		for(Object element : elements) {
-			if(element instanceof IConcentrationResponseEntryMSD) {
-				IConcentrationResponseEntryMSD concentrationResponseEntryMSD = (IConcentrationResponseEntryMSD)element;
+			if(element instanceof IConcentrationResponseEntry) {
+				IConcentrationResponseEntry concentrationResponseEntryMSD = (IConcentrationResponseEntry)element;
 				concentrationResponseEntriesMSD.add(concentrationResponseEntryMSD);
 			}
 		}

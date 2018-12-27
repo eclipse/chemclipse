@@ -16,8 +16,8 @@ import java.text.ParseException;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.QuantitationSignalEntryEdit;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.QuantitationSignalMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.layout.GridData;
@@ -60,7 +60,7 @@ public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 				double uncertainty = decimalFormat.parse(getWidgetInput(KEY_UNCERTAINTY)).doubleValue();
 				boolean use = Boolean.parseBoolean(getWidgetInput(KEY_USE));
 				//
-				IQuantitationSignalMSD quantitationSignalMSD = new QuantitationSignalMSD(ion, relativeResponse, uncertainty, use);
+				IQuantitationSignal quantitationSignalMSD = new QuantitationSignal(ion, relativeResponse, uncertainty, use);
 				quantitationSignalEntryEdit.setQuantitationSignalMSD(quantitationSignalMSD);
 			} catch(ParseException e) {
 				setErrorMessage("A value can't be parsed.");
@@ -85,9 +85,9 @@ public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 		String uncertainty = "";
 		boolean use = true;
 		//
-		IQuantitationSignalMSD quantitationSignalMSD = quantitationSignalEntryEdit.getQuantitationSignalMSD();
+		IQuantitationSignal quantitationSignalMSD = quantitationSignalEntryEdit.getQuantitationSignalMSD();
 		if(quantitationSignalMSD != null) {
-			ion = decimalFormat.format(quantitationSignalMSD.getIon());
+			ion = decimalFormat.format(quantitationSignalMSD.getSignal());
 			relativeResponse = decimalFormat.format(quantitationSignalMSD.getRelativeResponse());
 			uncertainty = decimalFormat.format(quantitationSignalMSD.getUncertainty());
 			use = quantitationSignalMSD.isUse();
@@ -96,7 +96,7 @@ public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 		 * Text fields, ...
 		 */
 		createTextInput(composite, layoutData, KEY_ION, "TIC = 0", ion, true);
-		createTextInput(composite, layoutData, KEY_RELATIVE_RESPONSE, "Max = TIC (" + IQuantitationSignalMSD.ABSOLUTE_RESPONSE + ")", relativeResponse, true);
+		createTextInput(composite, layoutData, KEY_RELATIVE_RESPONSE, "Max = TIC (" + IQuantitationSignal.ABSOLUTE_RESPONSE + ")", relativeResponse, true);
 		createTextInput(composite, layoutData, KEY_UNCERTAINTY, "", uncertainty, true);
 		createCheckInput(composite, layoutData, KEY_USE, "", use);
 		validateInput();
@@ -129,8 +129,8 @@ public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 			 */
 			try {
 				float value = decimalFormat.parse(getWidgetInput(KEY_RELATIVE_RESPONSE)).floatValue();
-				if(value <= 0 || value > IQuantitationSignalMSD.ABSOLUTE_RESPONSE) {
-					setErrorMessage("Select a relative response >= 0 and <= " + IQuantitationSignalMSD.ABSOLUTE_RESPONSE + ".");
+				if(value <= 0 || value > IQuantitationSignal.ABSOLUTE_RESPONSE) {
+					setErrorMessage("Select a relative response >= 0 and <= " + IQuantitationSignal.ABSOLUTE_RESPONSE + ".");
 					return false;
 				}
 			} catch(ParseException e) {

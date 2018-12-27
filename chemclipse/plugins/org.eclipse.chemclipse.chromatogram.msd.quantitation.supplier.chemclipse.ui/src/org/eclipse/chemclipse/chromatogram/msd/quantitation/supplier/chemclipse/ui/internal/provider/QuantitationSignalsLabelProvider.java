@@ -14,9 +14,8 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.text.DecimalFormat;
 
 import org.eclipse.swt.graphics.Image;
-
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -38,12 +37,12 @@ public class QuantitationSignalsLabelProvider extends AbstractChemClipseLabelPro
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IQuantitationSignalMSD) {
-			IQuantitationSignalMSD entry = (IQuantitationSignalMSD)element;
+		if(element instanceof IQuantitationSignal) {
+			IQuantitationSignal entry = (IQuantitationSignal)element;
 			//
 			switch(columnIndex) {
 				case 0: // Ion
-					double ion = entry.getIon();
+					double ion = entry.getSignal();
 					if(ion == AbstractIon.TIC_ION) {
 						text = AbstractIon.TIC_DESCRIPTION;
 					} else {
