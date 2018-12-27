@@ -14,10 +14,10 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
 public class QuantitationCalculatorMSD_XIC_6_Test extends QuantitationCalculator_XIC_TestCase {
@@ -28,8 +28,8 @@ public class QuantitationCalculatorMSD_XIC_6_Test extends QuantitationCalculator
 	 * isZeroCrossing: false
 	 */
 	private IQuantitationCompoundMSD quantitationCompound;
-	private IQuantitationSignalsMSD quantitationSignals;
-	private IConcentrationResponseEntriesMSD concentrationResponseEntries;
+	private IQuantitationSignals quantitationSignals;
+	private IConcentrationResponseEntries concentrationResponseEntries;
 
 	@Override
 	protected void setUp() throws Exception {

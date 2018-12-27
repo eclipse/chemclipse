@@ -35,7 +35,7 @@ public class QuantitationSignalsContentProvider implements IStructuredContentPro
 		 */
 		if(inputElement instanceof IQuantitationCompoundMSD) {
 			IQuantitationCompoundMSD document = (IQuantitationCompoundMSD)inputElement;
-			Object[] elements = document.getQuantitationSignalsMSD().getList().toArray();
+			Object[] elements = document.getQuantitationSignalsMSD().toArray();
 			return elements;
 		}
 		return null;

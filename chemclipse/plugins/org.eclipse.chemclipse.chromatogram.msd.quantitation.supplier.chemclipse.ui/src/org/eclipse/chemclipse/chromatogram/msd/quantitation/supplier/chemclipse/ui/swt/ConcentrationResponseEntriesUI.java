@@ -23,8 +23,8 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.ConcentrationResponseLabelProvider;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.ConcentrationResponseTableComparator;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs.ConcentrationResponseEntryEditDialog;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -195,7 +195,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 							 */
 							IConcentrationResponseEntry concentrationResponseEntryNew = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
 							if(concentrationResponseEntryOld != null) {
-								IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD = quantitationCompoundMSD.getConcentrationResponseEntriesMSD();
+								IConcentrationResponseEntries concentrationResponseEntriesMSD = quantitationCompoundMSD.getConcentrationResponseEntriesMSD();
 								concentrationResponseEntriesMSD.remove(concentrationResponseEntryOld);
 								concentrationResponseEntriesMSD.add(concentrationResponseEntryNew);
 								quantitationCompoundMSD.updateConcentrationResponseEntries(concentrationResponseEntriesMSD);

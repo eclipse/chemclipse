@@ -14,10 +14,10 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.IQuantitationCalculatorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 
@@ -45,7 +45,7 @@ public class QuantitationCalculatorMSD_XIC_3_Test extends QuantitationCalculator
 		quantitationCompound.setCalibrationMethod(CalibrationMethod.LINEAR);
 		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries(quantitationPeaks);
 		//
-		IQuantitationSignalsMSD quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
+		IQuantitationSignals quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
 		quantitationSignals.deselectAllSignals();
 		quantitationSignals.selectSignal(104.0d);
 		quantitationSignals.selectSignal(103.0d);

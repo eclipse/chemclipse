@@ -32,7 +32,7 @@ public class ConcentrationResponseContentProvider implements IStructuredContentP
 
 		if(inputElement instanceof IQuantitationCompoundMSD) {
 			IQuantitationCompoundMSD document = (IQuantitationCompoundMSD)inputElement;
-			Object[] elements = document.getConcentrationResponseEntriesMSD().getList().toArray();
+			Object[] elements = document.getConcentrationResponseEntriesMSD().toArray();
 			return elements;
 		}
 		return null;

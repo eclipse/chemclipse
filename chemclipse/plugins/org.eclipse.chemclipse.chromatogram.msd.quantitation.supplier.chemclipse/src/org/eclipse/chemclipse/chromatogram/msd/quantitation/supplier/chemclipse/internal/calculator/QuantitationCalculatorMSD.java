@@ -17,12 +17,12 @@ import java.util.List;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IntegrationQuantitationSupport;
 import org.eclipse.chemclipse.msd.model.exceptions.EvaluationException;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
@@ -84,8 +84,8 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 			/*
 			 * XIC
 			 */
-			IQuantitationSignalsMSD quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
-			List<Double> selectedQuantitationIons = quantitationSignals.getSelectedIons();
+			IQuantitationSignals quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
+			List<Double> selectedQuantitationIons = quantitationSignals.getSelectedSignals();
 			if(integrationQuantitationSupport.validateXIC(selectedQuantitationIons)) {
 				if(peak instanceof IPeakMSD) {
 					IPeakMSD peakMSD = (IPeakMSD)peak;

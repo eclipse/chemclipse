@@ -18,9 +18,9 @@ import java.util.Set;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
@@ -91,7 +91,7 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 			deleteAllCurrentSeries();
 			setConcentrationLabel(quantitationCompoundMSD.getConcentrationUnit());
 			//
-			IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD = quantitationCompoundMSD.getConcentrationResponseEntriesMSD();
+			IConcentrationResponseEntries concentrationResponseEntriesMSD = quantitationCompoundMSD.getConcentrationResponseEntriesMSD();
 			maxSignal = concentrationResponseEntriesMSD.getMaxResponseValue();
 			CalibrationMethod calibrationMethod = quantitationCompoundMSD.getCalibrationMethod();
 			boolean useCrossZero = quantitationCompoundMSD.isCrossZero();
@@ -183,10 +183,10 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 	 * @param concentrationResponseEntriesMSD
 	 * @return IMultipleSeries
 	 */
-	private IMultipleSeries getSeries(IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD) {
+	private IMultipleSeries getSeries(IConcentrationResponseEntries concentrationResponseEntriesMSD) {
 
 		IMultipleSeries concentrationResponseSeries = new MultipleSeries();
-		Set<Double> ions = concentrationResponseEntriesMSD.getIonSet();
+		Set<Double> ions = concentrationResponseEntriesMSD.getSignalSet();
 		/*
 		 * Parse all ions.
 		 */
@@ -225,10 +225,10 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 	 * @param yMax
 	 * @return IMultipleSeries
 	 */
-	private IMultipleSeries getSeriesByEquation(IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD, CalibrationMethod calibrationMethod, boolean useCrossZero, Point pointMin, Point pointMax) {
+	private IMultipleSeries getSeriesByEquation(IConcentrationResponseEntries concentrationResponseEntriesMSD, CalibrationMethod calibrationMethod, boolean useCrossZero, Point pointMin, Point pointMax) {
 
 		IMultipleSeries equationSeries = new MultipleSeries();
-		Set<Double> ions = concentrationResponseEntriesMSD.getIonSet();
+		Set<Double> ions = concentrationResponseEntriesMSD.getSignalSet();
 		/*
 		 * Parse all ions.
 		 */

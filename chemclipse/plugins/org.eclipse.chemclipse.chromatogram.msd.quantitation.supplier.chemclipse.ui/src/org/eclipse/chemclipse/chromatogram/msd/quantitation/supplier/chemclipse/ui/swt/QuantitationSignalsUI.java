@@ -21,8 +21,8 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationSignalsTableComparator;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs.QuantitationSignalEntryEditDialog;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -169,7 +169,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 							 */
 							IQuantitationSignal quantitationSignalNew = quantitationSignalEntryEdit.getQuantitationSignalMSD();
 							if(quantitationSignalOld != null) {
-								IQuantitationSignalsMSD quantitationSignalsMSD = quantitationCompoundDocument.getQuantitationSignalsMSD();
+								IQuantitationSignals quantitationSignalsMSD = quantitationCompoundDocument.getQuantitationSignalsMSD();
 								quantitationSignalsMSD.remove(quantitationSignalOld);
 								quantitationSignalsMSD.add(quantitationSignalNew);
 								quantitationCompoundDocument.updateQuantitationSignalsMSD(quantitationSignalsMSD);

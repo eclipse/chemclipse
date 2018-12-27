@@ -15,10 +15,10 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.EvaluationException;
 
 public class QuantitationCalculatorMSD_XIC_5_Test extends QuantitationCalculator_XIC_TestCase {
@@ -30,8 +30,8 @@ public class QuantitationCalculatorMSD_XIC_5_Test extends QuantitationCalculator
 	 */
 	private IQuantitationCalculatorMSD calculator;
 	private IQuantitationCompoundMSD quantitationCompound;
-	private IQuantitationSignalsMSD quantitationSignals;
-	private IConcentrationResponseEntriesMSD concentrationResponseEntries;
+	private IQuantitationSignals quantitationSignals;
+	private IConcentrationResponseEntries concentrationResponseEntries;
 
 	@Override
 	protected void setUp() throws Exception {
