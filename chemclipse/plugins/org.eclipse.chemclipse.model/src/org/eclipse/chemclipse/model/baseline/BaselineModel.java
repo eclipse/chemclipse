@@ -41,13 +41,12 @@ public class BaselineModel implements IBaselineModel {
 	private boolean interpolate;
 
 	@SuppressWarnings("rawtypes")
-	@Deprecated
 	public BaselineModel(IChromatogram chromatogram) {
 
 		this.chromatogram = chromatogram;
 		this.baselineSegments = new TreeMap<Integer, IBaselineSegment>();
 		this.defaultBackgroundAbundance = 0f;
-		this.interpolate = true;
+		this.interpolate = false;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -55,9 +54,12 @@ public class BaselineModel implements IBaselineModel {
 
 		this.chromatogram = chromatogram;
 		this.baselineSegments = new TreeMap<Integer, IBaselineSegment>();
-		this.defaultBackgroundAbundance = 0f;
 		this.defaultBackgroundAbundance = defaultBackgroundAbundance;
-		this.interpolate = true;
+		if(Double.isNaN(defaultBackgroundAbundance)) {
+			this.interpolate = true;
+		} else {
+			this.interpolate = false;
+		}
 	}
 
 	// --------------------------------------------IBaselineModel
@@ -236,7 +238,7 @@ public class BaselineModel implements IBaselineModel {
 		 * Get the correct baseline segment and calculate the abundance.
 		 */
 		Map.Entry<Integer, IBaselineSegment> entry = baselineSegments.floorEntry(retentionTime);
-		if(entry == null) {
+		if(entry == null || entry.getValue().getStopRetentionTime() < retentionTime) {
 			return 0.0f;
 		} else {
 			IBaselineSegment segment = entry.getValue();
@@ -260,6 +262,9 @@ public class BaselineModel implements IBaselineModel {
 		 */
 		IBaselineSegment floorSegment = baselineSegments.floorEntry(retentionTime).getValue();
 		int stopRetentionTime = floorSegment.getStopRetentionTime();
+		if(floorSegment.getStopRetentionTime() < retentionTime) {
+			return defaultAbudance;
+		}
 		if(retentionTime <= stopRetentionTime) {
 			return floorSegment.getBackgroundAbundance(retentionTime);
 		} else {
@@ -288,7 +293,7 @@ public class BaselineModel implements IBaselineModel {
 	@Override
 	public IBaselineModel makeDeepCopy() {
 
-		IBaselineModel baselineModelCopy = new BaselineModel(chromatogram);
+		IBaselineModel baselineModelCopy = new BaselineModel(chromatogram, defaultBackgroundAbundance);
 		int startRT;
 		int stopRT;
 		float startAB;
@@ -298,7 +303,7 @@ public class BaselineModel implements IBaselineModel {
 			stopRT = segment.getStopRetentionTime();
 			startAB = segment.getStartBackgroundAbundance();
 			stopAB = segment.getStopBackgroundAbundance();
-			baselineModelCopy.addBaseline(startRT, stopRT, startAB, stopAB, true);
+			baselineModelCopy.addBaseline(startRT, stopRT, startAB, stopAB, false);
 		}
 		return baselineModelCopy;
 	}
@@ -336,6 +341,9 @@ public class BaselineModel implements IBaselineModel {
 	@Override
 	public void removeBaseline(int startRetentionTime, int stopRetentionTime) {
 
+		if(startRetentionTime >= stopRetentionTime) {
+			return;
+		}
 		removeBaseline(startRetentionTime, stopRetentionTime, Float.NaN, Float.NaN);
 	}
 }

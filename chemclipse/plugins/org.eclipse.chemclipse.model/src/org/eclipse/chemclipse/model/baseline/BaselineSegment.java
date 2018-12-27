@@ -72,9 +72,7 @@ public class BaselineSegment implements IBaselineSegment {
 	@Override
 	public void setStartBackgroundAbundance(float startBackgroundAbundance) {
 
-		if(startBackgroundAbundance >= 0) {
-			this.startBackgroundAbundance = startBackgroundAbundance;
-		}
+		this.startBackgroundAbundance = startBackgroundAbundance;
 	}
 
 	@Override
@@ -90,9 +88,7 @@ public class BaselineSegment implements IBaselineSegment {
 	@Override
 	public void setStopBackgroundAbundance(float stopBackgroundAbundance) {
 
-		if(stopBackgroundAbundance >= 0) {
-			this.stopBackgroundAbundance = stopBackgroundAbundance;
-		}
+		this.stopBackgroundAbundance = stopBackgroundAbundance;
 	}
 
 	@Override
