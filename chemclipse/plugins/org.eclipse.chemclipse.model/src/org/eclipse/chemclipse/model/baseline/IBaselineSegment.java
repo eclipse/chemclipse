@@ -26,6 +26,7 @@ public interface IBaselineSegment {
 	 * 
 	 * @param startRetentionTime
 	 */
+	@Deprecated
 	void setStartRetentionTime(int startRetentionTime);
 
 	float getStartBackgroundAbundance();
@@ -44,6 +45,7 @@ public interface IBaselineSegment {
 	 * 
 	 * @param stopRetentionTime
 	 */
+	@Deprecated
 	void setStopRetentionTime(int stopRetentionTime);
 
 	float getStopBackgroundAbundance();
