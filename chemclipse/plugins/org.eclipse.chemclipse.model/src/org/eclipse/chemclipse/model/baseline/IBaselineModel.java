@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.model.baseline;
 
 import org.eclipse.chemclipse.model.exceptions.BaselineIsNotDefinedException;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 
 public interface IBaselineModel {
 
@@ -25,7 +26,7 @@ public interface IBaselineModel {
 	 * Adds a baseline to the corresponding chromatogram.<br/>
 	 * Set the start and end retention time and respectively the start and
 	 * background abundance.<br/>
-	 * The method returns immediately if the start retention time is > the stop
+	 * The method returns immediately if the start retention time is >= the stop
 	 * retention time.
 	 * If validate is yes, further checks and constraints are performed. If it's no,
 	 * the caller must be sure that the baseline segment is in no conflict with other
@@ -40,8 +41,14 @@ public interface IBaselineModel {
 	void addBaseline(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance, float stopBackgroundAbundance, boolean validate);
 
 	/**
+	 * 
+	 * @param totalIonSignals
+	 */
+	void addBaseline(ITotalScanSignals totalIonSignals);
+
+	/**
 	 * Remove the baseline between the given retention times.<br/>
-	 * The method returns immediately if the start retention time is > the
+	 * The method returns immediately if the start retention time is >= the
 	 * stop retention time.
 	 * 
 	 * @param startRetentionTime

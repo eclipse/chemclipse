@@ -14,6 +14,9 @@ package org.eclipse.chemclipse.msd.model.core.support;
 import org.easymock.EasyMock;
 import org.eclipse.chemclipse.model.baseline.BaselineModel;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
+import org.eclipse.chemclipse.model.signals.TotalScanSignal;
+import org.eclipse.chemclipse.model.signals.TotalScanSignals;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 
 import junit.framework.TestCase;
@@ -143,14 +146,11 @@ public class BaselineModel_7_Test extends TestCase {
 		// baselineModel.addBaseline(5000, 50000, 100, 10000, true);
 		baselineModel.removeBaseline(5001, 49999);
 		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(4999));
-		assertEquals("BackgroundAbundance", 100f, baselineModel.getBackground(5000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(5000));
 		assertEquals("BackgroundAbundance", 0.0f, baselineModel.getBackground(5001));
 		assertEquals("BackgroundAbundance", 0.0f, baselineModel.getBackground(49999));
-		assertEquals("BackgroundAbundance", 10000f, baselineModel.getBackground(50000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(50000));
 		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(50001));
-		baselineModel.removeBaseline(5000, 49999);
-		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(5000));
-		assertEquals("BackgroundAbundance", 10000f, baselineModel.getBackground(50000));
 	}
 
 	public void testBaseline_8() {
@@ -161,16 +161,20 @@ public class BaselineModel_7_Test extends TestCase {
 		// baselineModel.addBaseline(5000, 50000, 100, 10000, true);
 		baselineModel.removeBaseline(5001, 49999);
 		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(4999));
-		assertEquals("BackgroundAbundance", 100f, baselineModel.getBackground(5000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(5000));
 		assertEquals("BackgroundAbundance", 0.0f, baselineModel.getBackground(5001));
 		assertEquals("BackgroundAbundance", 0.0f, baselineModel.getBackground(49999));
-		assertEquals("BackgroundAbundance", 10000f, baselineModel.getBackground(50000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(50000));
 		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(50001));
 		baselineModel.addBaseline(5000, 5000, 1f, 1f, true);
-		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(5000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(5000));
 		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(4999));
 		assertEquals("BackgroundAbundance", 0.0f, baselineModel.getBackground(5001));
-		assertEquals("BackgroundAbundance", 10000f, baselineModel.getBackground(50000));
+		baselineModel.addBaseline(5000, 5001, 1f, 1f, true);
+		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(5000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(4999));
+		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(5001));
+		assertEquals("BackgroundAbundance", 0.0f, baselineModel.getBackground(5002));
 	}
 
 	public void testBaseline_9() {
@@ -181,16 +185,16 @@ public class BaselineModel_7_Test extends TestCase {
 		// baselineModel.addBaseline(5000, 50000, 100, 10000, true);
 		baselineModel.removeBaseline(5001, 49999);
 		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(4999));
-		assertEquals("BackgroundAbundance", 100f, baselineModel.getBackground(5000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(5000));
 		assertEquals("BackgroundAbundance", 0.0f, baselineModel.getBackground(5001));
 		assertEquals("BackgroundAbundance", 0.0f, baselineModel.getBackground(49999));
-		assertEquals("BackgroundAbundance", 10000f, baselineModel.getBackground(50000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(50000));
 		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(50001));
 		baselineModel.addBaseline(2000, 49999, 1f, 1f, true);
 		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(4999));
 		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(5000));
 		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(49999));
-		assertEquals("BackgroundAbundance", 10000f, baselineModel.getBackground(50000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(50000));
 	}
 
 	public void testBaseline_10() {
@@ -201,17 +205,17 @@ public class BaselineModel_7_Test extends TestCase {
 		// baselineModel.addBaseline(5000, 50000, 100, 10000, true);
 		baselineModel.removeBaseline(5001, 49999);
 		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(4999));
-		assertEquals("BackgroundAbundance", 100f, baselineModel.getBackground(5000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(5000));
 		assertEquals("BackgroundAbundance", 0.0f, baselineModel.getBackground(5001));
 		assertEquals("BackgroundAbundance", 0.0f, baselineModel.getBackground(49999));
-		assertEquals("BackgroundAbundance", 10000f, baselineModel.getBackground(50000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(50000));
 		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(50001));
 		baselineModel.addBaseline(2000, 49999, 1f, 1f, true);
 		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(2000));
 		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(4999));
 		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(5000));
 		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(49999));
-		assertEquals("BackgroundAbundance", 10000f, baselineModel.getBackground(50000));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(50000));
 		baselineModel.addBaseline(4000, 60000, 2f, 2f, true);
 		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(2000));
 		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(3999));
@@ -220,5 +224,38 @@ public class BaselineModel_7_Test extends TestCase {
 		assertEquals("BackgroundAbundance", 2f, baselineModel.getBackground(50000));
 		assertEquals("BackgroundAbundance", 2f, baselineModel.getBackground(50001));
 		assertEquals("BackgroundAbundance", 2f, baselineModel.getBackground(60000));
+	}
+
+	public void testBaseline_11() {
+
+		/*
+		 * Cut an existing segment into two peaces.
+		 */
+		// baselineModel.addBaseline(5000, 50000, 100, 10000, true);
+		ITotalScanSignals totalScanSignals = new TotalScanSignals(1, 2);
+		totalScanSignals.add(new TotalScanSignal(5001, 1f, 1f));
+		totalScanSignals.add(new TotalScanSignal(5002, 1f, 1f));
+		baselineModel.addBaseline(totalScanSignals);
+		assertEquals("BackgroundAbundance", 100f, baselineModel.getBackground(5000));
+		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(5001));
+		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(5002));
+		assertEquals("BackgroundAbundance", 100.66f, baselineModel.getBackground(5003));
+	}
+
+	public void testBaseline_12() {
+
+		/*
+		 * Cut an existing segment into two peaces.
+		 */
+		// baselineModel.addBaseline(5000, 50000, 100, 10000, true);
+		baselineModel.removeBaseline(5001, 49999);
+		ITotalScanSignals totalScanSignals = new TotalScanSignals(1, 2);
+		totalScanSignals.add(new TotalScanSignal(5004, 1f, 1f));
+		totalScanSignals.add(new TotalScanSignal(5005, 1f, 1f));
+		baselineModel.addBaseline(totalScanSignals);
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(5003));
+		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(5004));
+		assertEquals("BackgroundAbundance", 1f, baselineModel.getBackground(5005));
+		assertEquals("BackgroundAbundance", 0f, baselineModel.getBackground(5006));
 	}
 }

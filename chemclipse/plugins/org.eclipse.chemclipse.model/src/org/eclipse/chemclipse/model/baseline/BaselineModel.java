@@ -21,6 +21,8 @@ import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.BaselineIsNotDefinedException;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.Equations;
 
@@ -66,7 +68,7 @@ public class BaselineModel implements IBaselineModel {
 	@Override
 	public void addBaseline(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance, float stopBackgroundAbundance, boolean validate) {
 
-		if(startRetentionTime > stopRetentionTime) {
+		if(startRetentionTime >= stopRetentionTime) {
 			return;
 		}
 		if(validate) {
@@ -76,21 +78,55 @@ public class BaselineModel implements IBaselineModel {
 		}
 	}
 
-	private void removeBaselineSegments(int startRetentionTime, int stopRetentionTime) {
+	@Override
+	public void addBaseline(ITotalScanSignals totalIonSignals) {
+
+		if(totalIonSignals.size() == 0) {
+			return;
+		}
+		/*
+		 * remove old baseline
+		 */
+		ITotalScanSignal firstTotalSignal = totalIonSignals.getFirstTotalScanSignal();
+		ITotalScanSignal lastTotalSignal = totalIonSignals.getLastTotalScanSignal();
+		removeBaselineSegments(firstTotalSignal.getRetentionTime(), lastTotalSignal.getRetentionTime(), firstTotalSignal.getTotalSignal(), lastTotalSignal.getTotalSignal());
+		/*
+		 * Why scan < numberOfScans instead of scan <= numberOfScans? Because of
+		 * .getNextTotalIonSignal();
+		 */
+		for(int scan = totalIonSignals.getStartScan(); scan < totalIonSignals.getStopScan(); scan++) {
+			ITotalScanSignal actualTotalIonSignal = totalIonSignals.getTotalScanSignal(scan);
+			ITotalScanSignal nextTotalIonSignal = totalIonSignals.getNextTotalScanSignal(scan);
+			/*
+			 * Retention times and background abundances.
+			 */
+			int startRetentionTime = actualTotalIonSignal.getRetentionTime();
+			float startBackgroundAbundance = actualTotalIonSignal.getTotalSignal();
+			int stopRetentionTime = nextTotalIonSignal.getRetentionTime();
+			float stopBackgroundAbundance = nextTotalIonSignal.getTotalSignal();
+			/*
+			 * Set the baseline.
+			 * It is validate == false, cause we know that the segments are calculated without overlap.
+			 */
+			addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
+		}
+	}
+
+	private void removeBaselineSegments(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) {
 
 		removeMiddleSegments(startRetentionTime, stopRetentionTime);
 		/*
 		 * part which should be remove lie in interval one segment
 		 */
-		cutSegmentInTwoParts(startRetentionTime, stopRetentionTime);
+		cutSegmentInTwoParts(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance);
 		/*
 		 * 
 		 */
-		cutSegmentBeginningPart(startRetentionTime, stopRetentionTime);
+		cutSegmentBeginningPart(startRetentionTime, stopRetentionTime, stopBackgroundAbundance);
 		/*
 		 * 
 		 */
-		cutSegmentEndingPart(startRetentionTime, stopRetentionTime);
+		cutSegmentEndingPart(startRetentionTime, stopRetentionTime, startBackgroundAbundance);
 	}
 
 	/**
@@ -118,7 +154,7 @@ public class BaselineModel implements IBaselineModel {
 	 * Cut the beginning part of an existing segment.
 	 * 
 	 */
-	private void cutSegmentBeginningPart(int startRetentionTime, int stopRetentionTime) {
+	private void cutSegmentBeginningPart(int startRetentionTime, int stopRetentionTime, float stopBackgroundAbundance) {
 
 		Map.Entry<Integer, IBaselineSegment> cuttingSegmentEntry = baselineSegments.floorEntry(startRetentionTime);
 		cuttingSegmentEntry = baselineSegments.floorEntry(stopRetentionTime);
@@ -135,7 +171,12 @@ public class BaselineModel implements IBaselineModel {
 				/*
 				 * 
 				 */
-				addBaselineUnchecked(partSegmentStartRetentionTime, partSegmentStopRetentionTime, partSegmentStartAbundance, partSegmentStopAbundance);
+				if(partSegmentStartRetentionTime != partSegmentStopRetentionTime) {
+					addBaselineUnchecked(partSegmentStartRetentionTime, partSegmentStopRetentionTime, partSegmentStartAbundance, partSegmentStopAbundance);
+				} else if(!Float.isNaN(stopBackgroundAbundance)) {
+					partSegmentStartRetentionTime -= 1;
+					addBaselineUnchecked(partSegmentStartRetentionTime, partSegmentStopRetentionTime, stopBackgroundAbundance, partSegmentStopAbundance);
+				}
 			}
 		}
 	}
@@ -144,7 +185,7 @@ public class BaselineModel implements IBaselineModel {
 	 * Cut the ending part of an existing segment.
 	 * 
 	 */
-	private void cutSegmentEndingPart(int startRetentionTime, int stopRetentionTime) {
+	private void cutSegmentEndingPart(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance) {
 
 		Map.Entry<Integer, IBaselineSegment> cuttingSegmentEntry = baselineSegments.floorEntry(startRetentionTime);
 		cuttingSegmentEntry = baselineSegments.floorEntry(startRetentionTime);
@@ -161,7 +202,12 @@ public class BaselineModel implements IBaselineModel {
 				/*
 				 * 
 				 */
-				addBaselineUnchecked(partSegmentStartRetentionTime, partSegmentStopRetentionTime, partSegmentStartAbundance, partSegmentStopAbundance);
+				if(partSegmentStartRetentionTime != partSegmentStopRetentionTime) {
+					addBaselineUnchecked(partSegmentStartRetentionTime, partSegmentStopRetentionTime, partSegmentStartAbundance, partSegmentStopAbundance);
+				} else if(!Float.isNaN(startBackgroundAbundance)) {
+					partSegmentStopRetentionTime += 1;
+					addBaselineUnchecked(partSegmentStartRetentionTime, partSegmentStopRetentionTime, partSegmentStartAbundance, startBackgroundAbundance);
+				}
 			}
 		}
 	}
@@ -169,7 +215,7 @@ public class BaselineModel implements IBaselineModel {
 	/**
 	 * Cut an existing segment into two peaces.
 	 */
-	private void cutSegmentInTwoParts(int startRetentionTime, int stopRetentionTime) {
+	private void cutSegmentInTwoParts(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) {
 
 		Map.Entry<Integer, IBaselineSegment> cuttingSegmentEntry = baselineSegments.floorEntry(startRetentionTime);
 		if(cuttingSegmentEntry != null) {
@@ -188,7 +234,12 @@ public class BaselineModel implements IBaselineModel {
 				/*
 				 * 
 				 */
-				addBaselineUnchecked(firstPartSegmentStartRetentionTime, firstPartSegmentStopRetentionTime, firstPartSegmentStartAbundance, firstPartSegmentStopAbundance);
+				if(firstPartSegmentStartRetentionTime != firstPartSegmentStopRetentionTime) {
+					addBaselineUnchecked(firstPartSegmentStartRetentionTime, firstPartSegmentStopRetentionTime, firstPartSegmentStartAbundance, firstPartSegmentStopAbundance);
+				} else if(!Float.isNaN(startBackgroundAbundance)) {
+					firstPartSegmentStopRetentionTime += 1;
+					addBaselineUnchecked(firstPartSegmentStartRetentionTime, firstPartSegmentStopRetentionTime, firstPartSegmentStartAbundance, startBackgroundAbundance);
+				}
 				/*
 				 * add second segment
 				 */
@@ -199,7 +250,12 @@ public class BaselineModel implements IBaselineModel {
 				/*
 				 * 
 				 */
-				addBaselineUnchecked(secondPartSegmentStartRetentionTime, secondPartSegmentStopRetentionTime, secondPartSegmentStartAbundance, secondPartSegmentStopAbundance);
+				if(firstPartSegmentStartRetentionTime != firstPartSegmentStopRetentionTime) {
+					addBaselineUnchecked(secondPartSegmentStartRetentionTime, secondPartSegmentStopRetentionTime, secondPartSegmentStartAbundance, secondPartSegmentStopAbundance);
+				} else if(!Float.isNaN(stopBackgroundAbundance)) {
+					secondPartSegmentStartRetentionTime = stopRetentionTime - 1;
+					addBaselineUnchecked(secondPartSegmentStartRetentionTime, secondPartSegmentStopRetentionTime, stopBackgroundAbundance, secondPartSegmentStopAbundance);
+				}
 			}
 		}
 	}
@@ -285,20 +341,15 @@ public class BaselineModel implements IBaselineModel {
 	private void addBaselineUnchecked(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) {
 
 		IBaselineSegment segment;
-		if(startRetentionTime == stopRetentionTime) {
-			segment = new BaselinePoint(startRetentionTime);
-			segment.setStartBackgroundAbundance(startBackgroundAbundance);
-		} else {
-			segment = new BaselineSegment(startRetentionTime, stopRetentionTime);
-			segment.setStartBackgroundAbundance(startBackgroundAbundance);
-			segment.setStopBackgroundAbundance(stopBackgroundAbundance);
-		}
+		segment = new BaselineSegment(startRetentionTime, stopRetentionTime);
+		segment.setStartBackgroundAbundance(startBackgroundAbundance);
+		segment.setStopBackgroundAbundance(stopBackgroundAbundance);
 		baselineSegments.put(segment.getStartRetentionTime(), segment);
 	}
 
 	private void addBaselineChecked(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) {
 
-		removeBaselineSegments(startRetentionTime, stopRetentionTime);
+		removeBaselineSegments(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance);
 		addBaselineUnchecked(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance);
 	}
 
@@ -316,9 +367,9 @@ public class BaselineModel implements IBaselineModel {
 	@Override
 	public void removeBaseline(int startRetentionTime, int stopRetentionTime) {
 
-		if(startRetentionTime > stopRetentionTime) {
+		if(startRetentionTime >= stopRetentionTime) {
 			return;
 		}
-		removeBaselineSegments(startRetentionTime, stopRetentionTime);
+		removeBaselineSegments(startRetentionTime, stopRetentionTime, Float.NaN, Float.NaN);
 	}
 }
