@@ -21,9 +21,9 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -93,7 +93,7 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 				float allowedNegativeDeviationRI = decimalFormat.parse(getWidgetInput(KEY_RI_NEGATIVE)).floatValue();
 				float allowedPositiveDeviationRI = decimalFormat.parse(getWidgetInput(KEY_RI_POSITIVE)).floatValue();
 				//
-				IQuantitationCompoundMSD quantitationCompoundMSD = new QuantitationCompoundMSD(name, concentrationUnit, retentionTime);
+				IQuantitationCompound quantitationCompoundMSD = new QuantitationCompoundMSD(name, concentrationUnit, retentionTime);
 				quantitationCompoundMSD.setUseTIC(useTIC);
 				quantitationCompoundMSD.setCalibrationMethod(calibrationMethod);
 				quantitationCompoundMSD.setUseCrossZero(useCrossZero);
@@ -143,7 +143,7 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 		String allowedNegativeDeviationRI = decimalFormat.format(5);
 		String allowedPositiveDeviationRI = decimalFormat.format(5);
 		//
-		IQuantitationCompoundMSD quantitationCompoundMSD = quantitationCompoundEntryEdit.getQuantitationCompoundMSD();
+		IQuantitationCompound quantitationCompoundMSD = quantitationCompoundEntryEdit.getQuantitationCompoundMSD();
 		if(quantitationCompoundMSD != null) {
 			name = quantitationCompoundMSD.getName();
 			chemicalClass = quantitationCompoundMSD.getChemicalClass();

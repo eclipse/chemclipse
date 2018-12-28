@@ -13,14 +13,14 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.swt.IQuantitationCompoundUpdater;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.ux.extension.ui.explorer.ISelectionView;
 
 public interface IQuantitationCompoundSelectionView extends ISelectionView, IQuantitationCompoundUpdater {
 
-	IQuantitationCompoundMSD getQuantitationCompoundDocument();
+	IQuantitationCompound getQuantitationCompoundDocument();
 
-	void setQuantitationCompoundDocument(IQuantitationCompoundMSD quantitationCompound);
+	void setQuantitationCompoundDocument(IQuantitationCompound quantitationCompound);
 
 	IQuantDatabase getDatabase();
 

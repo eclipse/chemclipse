@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller;
 
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 
 public interface IDatabaseController {
 
-	void addQuantitationCompound(IQuantitationCompoundMSD quantitationCompound);
+	void addQuantitationCompound(IQuantitationCompound quantitationCompound);
 }

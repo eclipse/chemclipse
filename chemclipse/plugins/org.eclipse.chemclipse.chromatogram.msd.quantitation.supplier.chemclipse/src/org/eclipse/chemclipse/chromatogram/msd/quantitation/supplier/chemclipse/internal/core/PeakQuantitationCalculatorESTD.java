@@ -21,8 +21,8 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -48,14 +48,14 @@ public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalc
 			database = QuantDatabases.getQuantDatabase();
 			//
 			QuantitationCalculatorMSD calculator = new QuantitationCalculatorMSD();
-			List<IQuantitationCompoundMSD> quantitationCompounds = database.getQuantitationCompounds();
+			List<IQuantitationCompound> quantitationCompounds = database.getQuantitationCompounds();
 			//
 			for(IPeak peakMSD : peaks) {
 				/*
 				 * Try to quantify the selected peak.
 				 * The results will be added to the peak.
 				 */
-				List<IQuantitationCompoundMSD> quantitationCompoundsMSD = getQuantitationEntries(quantitationCompounds, peakMSD);
+				List<IQuantitationCompound> quantitationCompoundsMSD = getQuantitationEntries(quantitationCompounds, peakMSD);
 				List<IQuantitationEntryMSD> entries = calculator.calculateQuantitationResults(peakMSD, quantitationCompoundsMSD, processingInfo);
 				for(IQuantitationEntryMSD quantitationEntry : entries) {
 					peakMSD.addQuantitationEntry(quantitationEntry);
@@ -68,10 +68,10 @@ public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalc
 		return processingInfo;
 	}
 
-	private List<IQuantitationCompoundMSD> getQuantitationEntries(List<IQuantitationCompoundMSD> quantitationCompounds, IPeak peakToQuantify) {
+	private List<IQuantitationCompound> getQuantitationEntries(List<IQuantitationCompound> quantitationCompounds, IPeak peakToQuantify) {
 
-		List<IQuantitationCompoundMSD> quantitationCompoundsMSD = new ArrayList<IQuantitationCompoundMSD>();
-		for(IQuantitationCompoundMSD quantitationCompound : quantitationCompounds) {
+		List<IQuantitationCompound> quantitationCompoundsMSD = new ArrayList<IQuantitationCompound>();
+		for(IQuantitationCompound quantitationCompound : quantitationCompounds) {
 			/*
 			 * Add the compound if it matches certain conditions:
 			 * Retention Time Window

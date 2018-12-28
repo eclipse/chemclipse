@@ -19,9 +19,10 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.peak.StackedPeakUI;
 import org.eclipse.chemclipse.swt.ui.support.AxisTitlesMassScale;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -61,26 +62,32 @@ public class QuantitationPeaksView extends AbstractQuantitationCompoundSelection
 	}
 
 	@Override
-	public void update(IQuantitationCompoundMSD quantitationCompoundMSD, IQuantDatabase database) {
+	public void update(IQuantitationCompound quantitationCompoundMSD, IQuantDatabase database) {
 
 		if(doUpdate()) {
 			if(quantitationCompoundMSD != null && database != null) {
 				/*
 				 * Extract and display the compound peaks stacked.
 				 */
-				List<IQuantitationPeakMSD> quantitationPeaks = database.getQuantitationPeaks(quantitationCompoundMSD);
-				List<IPeakMSD> peakListMSD = getPeakList(quantitationPeaks);
+				List<IQuantitationPeak> quantitationPeaks = database.getQuantitationPeaks(quantitationCompoundMSD);
+				List<IPeak> peakList = getPeakList(quantitationPeaks);
+				List<IPeakMSD> peakListMSD = new ArrayList<>();
+				for(IPeak peak : peakList) {
+					if(peak instanceof IPeakMSD) {
+						peakListMSD.add((IPeakMSD)peak);
+					}
+				}
 				stackedPeakUI.update(peakListMSD, true);
 			}
 		}
 	}
 
-	private List<IPeakMSD> getPeakList(List<IQuantitationPeakMSD> quantitationPeaks) {
+	private List<IPeak> getPeakList(List<IQuantitationPeak> quantitationPeaks) {
 
 		assert quantitationPeaks != null : "The peak documents list must be not null.";
-		List<IPeakMSD> peakListMSD = new ArrayList<IPeakMSD>();
-		for(IQuantitationPeakMSD quantitationPeakDocument : quantitationPeaks) {
-			peakListMSD.add(quantitationPeakDocument.getReferencePeakMSD());
+		List<IPeak> peakListMSD = new ArrayList<IPeak>();
+		for(IQuantitationPeak quantitationPeakDocument : quantitationPeaks) {
+			peakListMSD.add(quantitationPeakDocument.getReferencePeak());
 		}
 		return peakListMSD;
 	}

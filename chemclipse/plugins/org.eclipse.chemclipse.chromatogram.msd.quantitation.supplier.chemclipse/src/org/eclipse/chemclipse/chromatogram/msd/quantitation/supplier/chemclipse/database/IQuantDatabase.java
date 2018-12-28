@@ -16,16 +16,16 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationCompoundAlreadyExistsException;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 
 public interface IQuantDatabase extends Serializable {
 
-	IQuantitationCompoundMSD getQuantitationCompound(String name);
+	IQuantitationCompound getQuantitationCompound(String name);
 
-	void addQuantitationCompound(IQuantitationCompoundMSD quantitationCompound) throws QuantitationCompoundAlreadyExistsException;
+	void addQuantitationCompound(IQuantitationCompound quantitationCompound) throws QuantitationCompoundAlreadyExistsException;
 
-	List<IQuantitationCompoundMSD> getQuantitationCompounds();
+	List<IQuantitationCompound> getQuantitationCompounds();
 
 	List<String> getQuantitationCompoundNames();
 
@@ -35,15 +35,15 @@ public interface IQuantDatabase extends Serializable {
 
 	boolean isQuantitationCompoundAlreadyAvailable(String name);
 
-	void deleteQuantitationCompound(IQuantitationCompoundMSD quantitationCompound);
+	void deleteQuantitationCompound(IQuantitationCompound quantitationCompound);
 
-	void deleteQuantitationCompound(List<IQuantitationCompoundMSD> quantitationCompounds);
+	void deleteQuantitationCompound(List<IQuantitationCompound> quantitationCompounds);
 
 	void deleteAllQuantitationCompounds();
 
-	List<IQuantitationPeakMSD> getQuantitationPeaks(IQuantitationCompoundMSD quantitationCompound);
+	List<IQuantitationPeak> getQuantitationPeaks(IQuantitationCompound quantitationCompound);
 
-	void deleteQuantitationPeakDocument(IQuantitationCompoundMSD quantitationCompound, IQuantitationPeakMSD quantitationPeak);
+	void deleteQuantitationPeakDocument(IQuantitationCompound quantitationCompound, IQuantitationPeak quantitationPeak);
 
-	void deleteQuantitationPeakDocuments(IQuantitationCompoundMSD quantitationCompound, Set<IQuantitationPeakMSD> quantitationPeaks);
+	void deleteQuantitationPeakDocuments(IQuantitationCompound quantitationCompound, Set<IQuantitationPeak> quantitationPeaks);
 }

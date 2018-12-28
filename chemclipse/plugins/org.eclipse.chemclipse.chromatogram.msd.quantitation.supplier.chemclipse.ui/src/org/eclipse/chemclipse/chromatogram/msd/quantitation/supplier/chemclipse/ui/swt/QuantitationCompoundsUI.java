@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationCompoundTableComparator;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs.QuantitationCompoundEditDialog;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -128,7 +128,7 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 	private void setTableViewerInput() {
 
 		if(database != null) {
-			List<IQuantitationCompoundMSD> documents = database.getQuantitationCompounds();
+			List<IQuantitationCompound> documents = database.getQuantitationCompounds();
 			if(documents.size() > 0) {
 				/*
 				 * Display the elements.
@@ -184,7 +184,7 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 					QuantitationCompoundEditDialog dialog = new QuantitationCompoundEditDialog(shell, quantitationCompoundEntryEdit, "Create a new quantitation compound.", database, true);
 					if(dialog.open() == IDialogConstants.OK_ID) {
 						try {
-							IQuantitationCompoundMSD quantitationCompoundMSD = quantitationCompoundEntryEdit.getQuantitationCompoundMSD();
+							IQuantitationCompound quantitationCompoundMSD = quantitationCompoundEntryEdit.getQuantitationCompoundMSD();
 							database.addQuantitationCompound(quantitationCompoundMSD);
 							setTableViewerInput();
 						} catch(QuantitationCompoundAlreadyExistsException e1) {
@@ -215,7 +215,7 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IQuantitationCompoundMSD quantitationCompoundMSD = getSelectedQuantitationCompoundMSD();
+				IQuantitationCompound quantitationCompoundMSD = getSelectedQuantitationCompoundMSD();
 				if(quantitationCompoundMSD != null) {
 					if(database != null) {
 						/*
@@ -223,7 +223,7 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 						 */
 						Shell shell = Display.getCurrent().getActiveShell();
 						QuantitationCompoundEntryEdit quantitationCompoundEntryEdit = new QuantitationCompoundEntryEdit();
-						IQuantitationCompoundMSD quantitationCompoundOld = quantitationCompoundMSD;
+						IQuantitationCompound quantitationCompoundOld = quantitationCompoundMSD;
 						quantitationCompoundEntryEdit.setQuantitationCompoundMSD(quantitationCompoundOld);
 						QuantitationCompoundEditDialog dialog = new QuantitationCompoundEditDialog(shell, quantitationCompoundEntryEdit, "Edit the quantitation compound.", database, false);
 						/*
@@ -234,9 +234,9 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 							 * Get the edited compound and set the quantitation
 							 * signals and concentration response entries.
 							 */
-							IQuantitationCompoundMSD quantitationCompoundNew = quantitationCompoundEntryEdit.getQuantitationCompoundMSD();
-							quantitationCompoundNew.updateQuantitationSignalsMSD(quantitationCompoundOld.getQuantitationSignalsMSD());
-							quantitationCompoundNew.updateConcentrationResponseEntries(quantitationCompoundOld.getConcentrationResponseEntriesMSD());
+							IQuantitationCompound quantitationCompoundNew = quantitationCompoundEntryEdit.getQuantitationCompoundMSD();
+							quantitationCompoundNew.updateQuantitationSignals(quantitationCompoundOld.getQuantitationSignals());
+							quantitationCompoundNew.updateConcentrationResponseEntries(quantitationCompoundOld.getConcentrationResponseEntries());
 							/*
 							 * Update the quantitation compound document
 							 */
@@ -269,7 +269,7 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				List<IQuantitationCompoundMSD> quantitationCompoundsMSD = getSelectedQuantitationCompoundsMSD();
+				List<IQuantitationCompound> quantitationCompoundsMSD = getSelectedQuantitationCompoundsMSD();
 				if(quantitationCompoundsMSD.size() > 0) {
 					/*
 					 * Try to delete the selected documents.
@@ -320,23 +320,23 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 	 * 
 	 * @return
 	 */
-	private IQuantitationCompoundMSD getSelectedQuantitationCompoundMSD() {
+	private IQuantitationCompound getSelectedQuantitationCompoundMSD() {
 
-		IQuantitationCompoundMSD quantitationCompoundDocument = null;
+		IQuantitationCompound quantitationCompoundDocument = null;
 		Object element = getSelectedTableItem();
-		if(element instanceof IQuantitationCompoundMSD) {
-			quantitationCompoundDocument = (IQuantitationCompoundMSD)element;
+		if(element instanceof IQuantitationCompound) {
+			quantitationCompoundDocument = (IQuantitationCompound)element;
 		}
 		return quantitationCompoundDocument;
 	}
 
-	private List<IQuantitationCompoundMSD> getSelectedQuantitationCompoundsMSD() {
+	private List<IQuantitationCompound> getSelectedQuantitationCompoundsMSD() {
 
-		List<IQuantitationCompoundMSD> quantitationCompoundDocuments = new ArrayList<IQuantitationCompoundMSD>();
+		List<IQuantitationCompound> quantitationCompoundDocuments = new ArrayList<IQuantitationCompound>();
 		List<Object> elements = getSelectedTableItems();
 		for(Object element : elements) {
-			if(element instanceof IQuantitationCompoundMSD) {
-				IQuantitationCompoundMSD quantitationCompoundDocument = (IQuantitationCompoundMSD)element;
+			if(element instanceof IQuantitationCompound) {
+				IQuantitationCompound quantitationCompoundDocument = (IQuantitationCompound)element;
 				quantitationCompoundDocuments.add(quantitationCompoundDocument);
 			}
 		}

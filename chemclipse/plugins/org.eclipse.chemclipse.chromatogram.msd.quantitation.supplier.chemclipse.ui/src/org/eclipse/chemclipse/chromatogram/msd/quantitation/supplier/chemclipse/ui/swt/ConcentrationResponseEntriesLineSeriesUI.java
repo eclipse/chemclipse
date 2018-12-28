@@ -20,8 +20,8 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.IEquation;
@@ -62,7 +62,7 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 	//
 	private double maxSignal = 0.0d;
 	//
-	private IQuantitationCompoundMSD quantitationCompoundMSD;
+	private IQuantitationCompound quantitationCompoundMSD;
 
 	public ConcentrationResponseEntriesLineSeriesUI(Composite parent, int style) {
 		super(parent, style);
@@ -70,7 +70,7 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 	}
 
 	@Override
-	public void update(IQuantitationCompoundMSD quantitationCompoundMSD, IQuantDatabase database) {
+	public void update(IQuantitationCompound quantitationCompoundMSD, IQuantDatabase database) {
 
 		if(quantitationCompoundMSD == null || database == null) {
 			setConcentrationLabel("");
@@ -91,7 +91,7 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 			deleteAllCurrentSeries();
 			setConcentrationLabel(quantitationCompoundMSD.getConcentrationUnit());
 			//
-			IConcentrationResponseEntries concentrationResponseEntriesMSD = quantitationCompoundMSD.getConcentrationResponseEntriesMSD();
+			IConcentrationResponseEntries concentrationResponseEntriesMSD = quantitationCompoundMSD.getConcentrationResponseEntries();
 			maxSignal = concentrationResponseEntriesMSD.getMaxResponseValue();
 			CalibrationMethod calibrationMethod = quantitationCompoundMSD.getCalibrationMethod();
 			boolean useCrossZero = quantitationCompoundMSD.isCrossZero();

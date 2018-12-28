@@ -14,9 +14,9 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -39,8 +39,8 @@ public class QuantitationCompoundLabelProvider extends AbstractChemClipseLabelPr
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IQuantitationCompoundMSD) {
-			IQuantitationCompoundMSD compound = (IQuantitationCompoundMSD)element;
+		if(element instanceof IQuantitationCompound) {
+			IQuantitationCompound compound = (IQuantitationCompound)element;
 			IRetentionTimeWindow retentionTimeWindow = compound.getRetentionTimeWindow();
 			IRetentionIndexWindow retentionIndexWindow = compound.getRetentionIndexWindow();
 			//

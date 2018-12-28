@@ -44,7 +44,9 @@ import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntry;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
@@ -59,8 +61,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
@@ -95,13 +95,13 @@ public class QuantDatabaseReader {
 			boolean crossZero = dataInputStream.readBoolean();
 			boolean useTIC = dataInputStream.readBoolean();
 			//
-			List<IQuantitationPeakMSD> quantitationPeaks = readQuantitationPeaks(dataInputStream);
+			List<IQuantitationPeak> quantitationPeaks = readQuantitationPeaks(dataInputStream);
 			List<IConcentrationResponseEntry> concentrationResponseEntriesMSD = readConcentrationResponseEntries(dataInputStream);
 			List<IQuantitationSignal> quantitationSignalsMSD = readQuantitationSignals(dataInputStream);
 			IRetentionIndexWindow retentionIndexWindow = readRetentionIndexWindow(dataInputStream);
 			IRetentionTimeWindow retentionTimeWindow = readRetentionTimeWindow(dataInputStream);
 			//
-			IQuantitationCompoundMSD quantitationCompound = new QuantitationCompoundMSD(name, concentrationUnit, retentionTimeWindow.getRetentionTime());
+			IQuantitationCompound quantitationCompound = new QuantitationCompoundMSD(name, concentrationUnit, retentionTimeWindow.getRetentionTime());
 			quantitationCompound.setCalibrationMethod(calibrationMethod);
 			quantitationCompound.setChemicalClass(chemicalClass);
 			quantitationCompound.setUseCrossZero(crossZero);
@@ -114,8 +114,8 @@ public class QuantDatabaseReader {
 			quantitationCompound.getRetentionTimeWindow().setAllowedNegativeDeviation(retentionTimeWindow.getAllowedNegativeDeviation());
 			quantitationCompound.getRetentionTimeWindow().setAllowedPositiveDeviation(retentionTimeWindow.getAllowedPositiveDeviation());
 			//
-			quantitationCompound.getConcentrationResponseEntriesMSD().addAll(concentrationResponseEntriesMSD);
-			quantitationCompound.getQuantitationSignalsMSD().addAll(quantitationSignalsMSD);
+			quantitationCompound.getConcentrationResponseEntries().addAll(concentrationResponseEntriesMSD);
+			quantitationCompound.getQuantitationSignals().addAll(quantitationSignalsMSD);
 			//
 			quantDatabase.addQuantitationCompound(quantitationCompound);
 			quantDatabase.getQuantitationPeaks(quantitationCompound).addAll(quantitationPeaks);
@@ -124,9 +124,9 @@ public class QuantDatabaseReader {
 		return quantDatabase;
 	}
 
-	private static List<IQuantitationPeakMSD> readQuantitationPeaks(DataInputStream dataInputStream) throws Exception {
+	private static List<IQuantitationPeak> readQuantitationPeaks(DataInputStream dataInputStream) throws Exception {
 
-		List<IQuantitationPeakMSD> quantitationPeaks = new ArrayList<IQuantitationPeakMSD>();
+		List<IQuantitationPeak> quantitationPeaks = new ArrayList<IQuantitationPeak>();
 		IonTransitionSettings ionTransitionSettings = new IonTransitionSettings();
 		//
 		int size = dataInputStream.readInt();
@@ -135,7 +135,7 @@ public class QuantDatabaseReader {
 			String concentrationUnit = readString(dataInputStream);
 			IPeakMSD referencePeakMSD = readPeak(dataInputStream, ionTransitionSettings);
 			//
-			IQuantitationPeakMSD quantitationPeak = new QuantitationPeakMSD(referencePeakMSD, concentration, concentrationUnit);
+			IQuantitationPeak quantitationPeak = new QuantitationPeakMSD(referencePeakMSD, concentration, concentrationUnit);
 			quantitationPeaks.add(quantitationPeak);
 		}
 		//

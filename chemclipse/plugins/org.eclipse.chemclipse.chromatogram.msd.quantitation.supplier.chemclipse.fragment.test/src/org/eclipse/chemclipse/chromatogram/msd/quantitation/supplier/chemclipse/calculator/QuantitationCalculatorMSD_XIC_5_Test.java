@@ -16,9 +16,9 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntry;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.EvaluationException;
 
 public class QuantitationCalculatorMSD_XIC_5_Test extends QuantitationCalculator_XIC_TestCase {
@@ -29,7 +29,7 @@ public class QuantitationCalculatorMSD_XIC_5_Test extends QuantitationCalculator
 	 * isZeroCrossing: true
 	 */
 	private IQuantitationCalculatorMSD calculator;
-	private IQuantitationCompoundMSD quantitationCompound;
+	private IQuantitationCompound quantitationCompound;
 	private IQuantitationSignals quantitationSignals;
 	private IConcentrationResponseEntries concentrationResponseEntries;
 
@@ -41,8 +41,8 @@ public class QuantitationCalculatorMSD_XIC_5_Test extends QuantitationCalculator
 		quantitationCompound = getQuantitationCompound();
 		quantitationCompound.setUseTIC(false);
 		quantitationCompound.setCalibrationMethod(CalibrationMethod.LINEAR);
-		quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
-		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntriesMSD();
+		quantitationSignals = quantitationCompound.getQuantitationSignals();
+		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntries();
 		//
 		calculator = new QuantitationCalculatorMSD();
 	}

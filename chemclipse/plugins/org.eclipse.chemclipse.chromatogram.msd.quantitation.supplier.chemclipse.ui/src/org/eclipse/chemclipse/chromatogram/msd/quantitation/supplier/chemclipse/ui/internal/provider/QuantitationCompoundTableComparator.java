@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider;
 
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -24,12 +24,12 @@ public class QuantitationCompoundTableComparator extends AbstractRecordTableComp
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IQuantitationCompoundMSD && e2 instanceof IQuantitationCompoundMSD) {
-			IQuantitationCompoundMSD compound1 = (IQuantitationCompoundMSD)e1;
+		if(e1 instanceof IQuantitationCompound && e2 instanceof IQuantitationCompound) {
+			IQuantitationCompound compound1 = (IQuantitationCompound)e1;
 			IRetentionTimeWindow retentionTimeWindow1 = compound1.getRetentionTimeWindow();
 			IRetentionIndexWindow retentionIndexWindow1 = compound1.getRetentionIndexWindow();
 			//
-			IQuantitationCompoundMSD compound2 = (IQuantitationCompoundMSD)e2;
+			IQuantitationCompound compound2 = (IQuantitationCompound)e2;
 			IRetentionTimeWindow retentionTimeWindow2 = compound2.getRetentionTimeWindow();
 			IRetentionIndexWindow retentionIndexWindow2 = compound2.getRetentionIndexWindow();
 			//

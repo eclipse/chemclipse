@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationCompoundAlreadyExistsException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 
 public class DatabaseController implements IDatabaseController {
 
@@ -26,7 +26,7 @@ public class DatabaseController implements IDatabaseController {
 	}
 
 	@Override
-	public void addQuantitationCompound(IQuantitationCompoundMSD quantitationCompound) {
+	public void addQuantitationCompound(IQuantitationCompound quantitationCompound) {
 
 		try {
 			database.addQuantitationCompound(quantitationCompound);

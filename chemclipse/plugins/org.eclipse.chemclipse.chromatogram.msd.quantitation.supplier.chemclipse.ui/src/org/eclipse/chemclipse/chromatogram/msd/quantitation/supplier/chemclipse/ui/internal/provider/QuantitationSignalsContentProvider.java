@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider;
 
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -33,9 +33,9 @@ public class QuantitationSignalsContentProvider implements IStructuredContentPro
 		/*
 		 * Hit results
 		 */
-		if(inputElement instanceof IQuantitationCompoundMSD) {
-			IQuantitationCompoundMSD document = (IQuantitationCompoundMSD)inputElement;
-			Object[] elements = document.getQuantitationSignalsMSD().toArray();
+		if(inputElement instanceof IQuantitationCompound) {
+			IQuantitationCompound document = (IQuantitationCompound)inputElement;
+			Object[] elements = document.getQuantitationSignals().toArray();
 			return elements;
 		}
 		return null;

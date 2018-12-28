@@ -21,13 +21,16 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
@@ -40,9 +43,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 
 public class QuantDatabaseWriter {
 
@@ -50,9 +51,9 @@ public class QuantDatabaseWriter {
 
 		DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file));
 		//
-		List<IQuantitationCompoundMSD> quantitationCompounds = quantDatabase.getQuantitationCompounds();
+		List<IQuantitationCompound> quantitationCompounds = quantDatabase.getQuantitationCompounds();
 		dataOutputStream.writeInt(quantitationCompounds.size());
-		for(IQuantitationCompoundMSD quantitationCompound : quantitationCompounds) {
+		for(IQuantitationCompound quantitationCompound : quantitationCompounds) {
 			/*
 			 * Write the data.
 			 */
@@ -63,13 +64,13 @@ public class QuantDatabaseWriter {
 			dataOutputStream.writeBoolean(quantitationCompound.isCrossZero());
 			dataOutputStream.writeBoolean(quantitationCompound.isUseTIC());
 			//
-			List<IQuantitationPeakMSD> quantitationPeaks = quantDatabase.getQuantitationPeaks(quantitationCompound);
+			List<IQuantitationPeak> quantitationPeaks = quantDatabase.getQuantitationPeaks(quantitationCompound);
 			writeQuantitationPeaks(dataOutputStream, quantitationPeaks);
 			//
-			IConcentrationResponseEntries concentrationResponseEntriesMSD = quantitationCompound.getConcentrationResponseEntriesMSD();
+			IConcentrationResponseEntries concentrationResponseEntriesMSD = quantitationCompound.getConcentrationResponseEntries();
 			writeConcentrationResponseEntries(dataOutputStream, concentrationResponseEntriesMSD);
 			//
-			IQuantitationSignals quantitationSignalsMSD = quantitationCompound.getQuantitationSignalsMSD();
+			IQuantitationSignals quantitationSignalsMSD = quantitationCompound.getQuantitationSignals();
 			writeQuantitationSignals(dataOutputStream, quantitationSignalsMSD);
 			//
 			IRetentionIndexWindow retentionIndexWindow = quantitationCompound.getRetentionIndexWindow();
@@ -80,14 +81,14 @@ public class QuantDatabaseWriter {
 		}
 	}
 
-	private static void writeQuantitationPeaks(DataOutputStream dataOutputStream, List<IQuantitationPeakMSD> quantitationPeaks) throws Exception {
+	private static void writeQuantitationPeaks(DataOutputStream dataOutputStream, List<IQuantitationPeak> quantitationPeaks) throws Exception {
 
 		dataOutputStream.writeInt(quantitationPeaks.size());
-		for(IQuantitationPeakMSD quantitationPeak : quantitationPeaks) {
+		for(IQuantitationPeak quantitationPeak : quantitationPeaks) {
 			dataOutputStream.writeDouble(quantitationPeak.getConcentration());
 			writeString(dataOutputStream, quantitationPeak.getConcentrationUnit());
-			IPeakMSD peakMSD = quantitationPeak.getReferencePeakMSD();
-			writePeak(dataOutputStream, peakMSD);
+			IPeak peak = quantitationPeak.getReferencePeak();
+			writePeak(dataOutputStream, peak);
 		}
 	}
 
@@ -126,78 +127,81 @@ public class QuantDatabaseWriter {
 		dataOutputStream.writeInt(retentionTimeWindow.getRetentionTime());
 	}
 
-	private static void writePeak(DataOutputStream dataOutputStream, IPeakMSD peak) throws IOException {
+	private static void writePeak(DataOutputStream dataOutputStream, IPeak peak) throws IOException {
 
-		IPeakModelMSD peakModel = peak.getPeakModel();
-		//
-		writeString(dataOutputStream, peak.getDetectorDescription()); // Detector Description
-		writeString(dataOutputStream, peak.getQuantifierDescription());
-		dataOutputStream.writeBoolean(peak.isActiveForAnalysis());
-		writeString(dataOutputStream, peak.getIntegratorDescription()); // Integrator Description
-		writeString(dataOutputStream, peak.getModelDescription()); // Model Description
-		writeString(dataOutputStream, peak.getPeakType().toString()); // Peak Type
-		dataOutputStream.writeInt(peak.getSuggestedNumberOfComponents()); // Suggest Number Of Components
-		//
-		dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStartRetentionTime())); // Start Background Abundance
-		dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStopRetentionTime())); // Stop Background Abundance
-		//
-		IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
-		writeMassSpectrum(dataOutputStream, massSpectrum); // Mass Spectrum
-		//
-		List<Integer> retentionTimes = peakModel.getRetentionTimes();
-		dataOutputStream.writeInt(retentionTimes.size()); // Number Retention Times
-		for(int retentionTime : retentionTimes) {
-			dataOutputStream.writeInt(retentionTime); // Retention Time
-			dataOutputStream.writeFloat(peakModel.getPeakAbundance(retentionTime)); // Intensity
-		}
-		//
-		List<IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
-		writeIntegrationEntries(dataOutputStream, integrationEntries);
-		/*
-		 * Identification Results
-		 */
-		Set<IIdentificationTarget> peakTargets = peak.getTargets();
-		dataOutputStream.writeInt(peakTargets.size()); // Number Peak Targets
-		for(IIdentificationTarget peakTarget : peakTargets) {
-			if(peakTarget instanceof IIdentificationTarget) {
-				IIdentificationTarget identificationEntry = peakTarget;
-				writeIdentificationEntry(dataOutputStream, identificationEntry);
+		if(peak instanceof IPeakMSD) {
+			IPeakMSD peakMSD = (IPeakMSD)peak;
+			IPeakModelMSD peakModel = peakMSD.getPeakModel();
+			//
+			writeString(dataOutputStream, peak.getDetectorDescription()); // Detector Description
+			writeString(dataOutputStream, peak.getQuantifierDescription());
+			dataOutputStream.writeBoolean(peak.isActiveForAnalysis());
+			writeString(dataOutputStream, peak.getIntegratorDescription()); // Integrator Description
+			writeString(dataOutputStream, peak.getModelDescription()); // Model Description
+			writeString(dataOutputStream, peak.getPeakType().toString()); // Peak Type
+			dataOutputStream.writeInt(peak.getSuggestedNumberOfComponents()); // Suggest Number Of Components
+			//
+			dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStartRetentionTime())); // Start Background Abundance
+			dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStopRetentionTime())); // Stop Background Abundance
+			//
+			IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
+			writeMassSpectrum(dataOutputStream, massSpectrum); // Mass Spectrum
+			//
+			List<Integer> retentionTimes = peakModel.getRetentionTimes();
+			dataOutputStream.writeInt(retentionTimes.size()); // Number Retention Times
+			for(int retentionTime : retentionTimes) {
+				dataOutputStream.writeInt(retentionTime); // Retention Time
+				dataOutputStream.writeFloat(peakModel.getPeakAbundance(retentionTime)); // Intensity
 			}
-		}
-		/*
-		 * Quantitation Results
-		 */
-		List<IQuantitationEntry> quantitationEntries = peak.getQuantitationEntries();
-		dataOutputStream.writeInt(quantitationEntries.size()); // Number Quantitation Entries
-		for(IQuantitationEntry quantitationEntry : quantitationEntries) {
-			writeString(dataOutputStream, quantitationEntry.getName()); // Name
-			writeString(dataOutputStream, quantitationEntry.getChemicalClass()); // Chemical Class
-			dataOutputStream.writeDouble(quantitationEntry.getConcentration()); // Concentration
-			writeString(dataOutputStream, quantitationEntry.getConcentrationUnit()); // Concentration Unit
-			dataOutputStream.writeDouble(quantitationEntry.getArea()); // Area
-			writeString(dataOutputStream, quantitationEntry.getCalibrationMethod()); // Calibration Method
-			dataOutputStream.writeBoolean(quantitationEntry.getUsedCrossZero()); // Used Cross Zero
-			writeString(dataOutputStream, quantitationEntry.getDescription()); // Description
+			//
+			List<IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
+			writeIntegrationEntries(dataOutputStream, integrationEntries);
 			/*
-			 * Only MSD stores an ion.
+			 * Identification Results
 			 */
-			if(quantitationEntry instanceof IQuantitationEntryMSD) {
-				dataOutputStream.writeBoolean(true); // Ion value is stored.
-				IQuantitationEntryMSD quantitationEntryMSD = (IQuantitationEntryMSD)quantitationEntry;
-				dataOutputStream.writeDouble(quantitationEntryMSD.getIon()); // Ion
-			} else {
-				dataOutputStream.writeBoolean(false); // No ion values is stored.
+			Set<IIdentificationTarget> peakTargets = peak.getTargets();
+			dataOutputStream.writeInt(peakTargets.size()); // Number Peak Targets
+			for(IIdentificationTarget peakTarget : peakTargets) {
+				if(peakTarget instanceof IIdentificationTarget) {
+					IIdentificationTarget identificationEntry = peakTarget;
+					writeIdentificationEntry(dataOutputStream, identificationEntry);
+				}
 			}
-		}
-		/*
-		 * Optimized Mass Spectrum
-		 */
-		IScanMSD optimizedMassSpectrum = massSpectrum.getOptimizedMassSpectrum();
-		if(optimizedMassSpectrum == null) {
-			dataOutputStream.writeBoolean(false);
-		} else {
-			dataOutputStream.writeBoolean(true);
-			writeNormalMassSpectrum(dataOutputStream, optimizedMassSpectrum);
+			/*
+			 * Quantitation Results
+			 */
+			List<IQuantitationEntry> quantitationEntries = peak.getQuantitationEntries();
+			dataOutputStream.writeInt(quantitationEntries.size()); // Number Quantitation Entries
+			for(IQuantitationEntry quantitationEntry : quantitationEntries) {
+				writeString(dataOutputStream, quantitationEntry.getName()); // Name
+				writeString(dataOutputStream, quantitationEntry.getChemicalClass()); // Chemical Class
+				dataOutputStream.writeDouble(quantitationEntry.getConcentration()); // Concentration
+				writeString(dataOutputStream, quantitationEntry.getConcentrationUnit()); // Concentration Unit
+				dataOutputStream.writeDouble(quantitationEntry.getArea()); // Area
+				writeString(dataOutputStream, quantitationEntry.getCalibrationMethod()); // Calibration Method
+				dataOutputStream.writeBoolean(quantitationEntry.getUsedCrossZero()); // Used Cross Zero
+				writeString(dataOutputStream, quantitationEntry.getDescription()); // Description
+				/*
+				 * Only MSD stores an ion.
+				 */
+				if(quantitationEntry instanceof IQuantitationEntryMSD) {
+					dataOutputStream.writeBoolean(true); // Ion value is stored.
+					IQuantitationEntryMSD quantitationEntryMSD = (IQuantitationEntryMSD)quantitationEntry;
+					dataOutputStream.writeDouble(quantitationEntryMSD.getIon()); // Ion
+				} else {
+					dataOutputStream.writeBoolean(false); // No ion values is stored.
+				}
+			}
+			/*
+			 * Optimized Mass Spectrum
+			 */
+			IScanMSD optimizedMassSpectrum = massSpectrum.getOptimizedMassSpectrum();
+			if(optimizedMassSpectrum == null) {
+				dataOutputStream.writeBoolean(false);
+			} else {
+				dataOutputStream.writeBoolean(true);
+				writeNormalMassSpectrum(dataOutputStream, optimizedMassSpectrum);
+			}
 		}
 	}
 

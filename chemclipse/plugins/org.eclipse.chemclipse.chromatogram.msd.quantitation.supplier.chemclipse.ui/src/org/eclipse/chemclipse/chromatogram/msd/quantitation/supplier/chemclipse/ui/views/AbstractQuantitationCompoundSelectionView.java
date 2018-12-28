@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.events.IChemClipseQuantitationEvents;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -23,7 +23,7 @@ import org.osgi.service.event.EventHandler;
 
 public abstract class AbstractQuantitationCompoundSelectionView extends AbstractSelectionView implements IQuantitationCompoundSelectionView {
 
-	private IQuantitationCompoundMSD quantitationCompoundMSD;
+	private IQuantitationCompound quantitationCompoundMSD;
 	private IQuantDatabase database;
 	private IEventBroker eventBroker;
 	private EventHandler eventHandler;
@@ -35,13 +35,13 @@ public abstract class AbstractQuantitationCompoundSelectionView extends Abstract
 	}
 
 	@Override
-	public IQuantitationCompoundMSD getQuantitationCompoundDocument() {
+	public IQuantitationCompound getQuantitationCompoundDocument() {
 
 		return quantitationCompoundMSD;
 	}
 
 	@Override
-	public void setQuantitationCompoundDocument(IQuantitationCompoundMSD quantitationCompoundMSD) {
+	public void setQuantitationCompoundDocument(IQuantitationCompound quantitationCompoundMSD) {
 
 		this.quantitationCompoundMSD = quantitationCompoundMSD;
 	}
@@ -82,11 +82,11 @@ public abstract class AbstractQuantitationCompoundSelectionView extends Abstract
 
 					Object objectDocument = event.getProperty(IChemClipseQuantitationEvents.PROPERTY_QUANTITATION_COMPOUND_DOCUMENT);
 					Object objectDatabase = event.getProperty(IChemClipseQuantitationEvents.PROPERTY_DATABASE);
-					if(objectDocument instanceof IQuantitationCompoundMSD && objectDatabase instanceof IQuantDatabase) {
+					if(objectDocument instanceof IQuantitationCompound && objectDatabase instanceof IQuantDatabase) {
 						/*
 						 * Ensures that the objects are valid.
 						 */
-						quantitationCompoundMSD = (IQuantitationCompoundMSD)objectDocument;
+						quantitationCompoundMSD = (IQuantitationCompound)objectDocument;
 						database = (IQuantDatabase)objectDatabase;
 						update(quantitationCompoundMSD, database);
 					} else {

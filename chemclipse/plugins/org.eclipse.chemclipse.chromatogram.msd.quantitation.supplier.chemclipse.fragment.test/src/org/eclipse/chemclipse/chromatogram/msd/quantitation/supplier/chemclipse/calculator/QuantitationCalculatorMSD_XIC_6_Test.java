@@ -13,21 +13,23 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import java.util.List;
 
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
 public class QuantitationCalculatorMSD_XIC_6_Test extends QuantitationCalculator_XIC_TestCase {
 
 	/*
-	 * UseTIC: false (-> m/z 180) -> does not exist
+	 * UseTIC: false (-> m/z 108) -> does not exist
 	 * CalibrationMethod: LINEAR
 	 * isZeroCrossing: false
 	 */
-	private IQuantitationCompoundMSD quantitationCompound;
+	private IQuantitationCompound quantitationCompound;
 	private IQuantitationSignals quantitationSignals;
 	private IConcentrationResponseEntries concentrationResponseEntries;
 
@@ -37,17 +39,21 @@ public class QuantitationCalculatorMSD_XIC_6_Test extends QuantitationCalculator
 		super.setUp();
 		//
 		quantitationCompound = getQuantitationCompound();
-		List<IQuantitationPeakMSD> quantitationPeaks = getQuantitationPeaks();
-		for(IQuantitationPeakMSD peak : quantitationPeaks) {
-			peak.getReferencePeakMSD().getPeakModel().getPeakMassSpectrum().addIon(new Ion(108.0, 54903.5f));
+		List<IQuantitationPeak> quantitationPeaks = getQuantitationPeaks();
+		for(IQuantitationPeak peak : quantitationPeaks) {
+			IPeakModel peakModel = peak.getReferencePeak().getPeakModel();
+			if(peakModel instanceof IPeakModelMSD) {
+				IPeakModelMSD peakModelMSD = (IPeakModelMSD)peakModel;
+				peakModelMSD.getPeakMassSpectrum().addIon(new Ion(108.0, 54903.5f));
+			}
 		}
 		//
 		quantitationCompound.setUseTIC(false);
 		quantitationCompound.setCalibrationMethod(CalibrationMethod.LINEAR);
 		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries(quantitationPeaks);
 		//
-		quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
-		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntriesMSD();
+		quantitationSignals = quantitationCompound.getQuantitationSignals();
+		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntries();
 	}
 
 	@Override

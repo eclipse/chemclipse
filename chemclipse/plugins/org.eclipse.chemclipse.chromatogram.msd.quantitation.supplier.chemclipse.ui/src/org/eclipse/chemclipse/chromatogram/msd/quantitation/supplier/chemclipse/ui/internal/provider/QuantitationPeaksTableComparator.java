@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider;
 
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -22,9 +22,9 @@ public class QuantitationPeaksTableComparator extends AbstractRecordTableCompara
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IQuantitationPeakMSD && e2 instanceof IQuantitationPeakMSD) {
-			IQuantitationPeakMSD entry1 = (IQuantitationPeakMSD)e1;
-			IQuantitationPeakMSD entry2 = (IQuantitationPeakMSD)e2;
+		if(e1 instanceof IQuantitationPeak && e2 instanceof IQuantitationPeak) {
+			IQuantitationPeak entry1 = (IQuantitationPeak)e1;
+			IQuantitationPeak entry2 = (IQuantitationPeak)e2;
 			//
 			switch(getPropertyIndex()) {
 				case 0: // Concentration

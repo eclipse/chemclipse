@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.swt.ConcentrationResponseEntriesLineSeriesUI;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -55,7 +55,7 @@ public class ConcentrationResponseEntriesChartView extends AbstractQuantitationC
 	}
 
 	@Override
-	public void update(IQuantitationCompoundMSD quantitationCompoundMSD, IQuantDatabase database) {
+	public void update(IQuantitationCompound quantitationCompoundMSD, IQuantDatabase database) {
 
 		if(doUpdate()) {
 			concentrationResponseEntriesLineSeriesUI.update(quantitationCompoundMSD, database);

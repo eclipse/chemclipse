@@ -17,11 +17,11 @@ import java.util.List;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IntegrationQuantitationSupport;
 import org.eclipse.chemclipse.msd.model.exceptions.EvaluationException;
@@ -38,10 +38,10 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	private static final Logger logger = Logger.getLogger(QuantitationCalculatorMSD.class);
 
 	@Override
-	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, List<IQuantitationCompoundMSD> quantitationCompounds, IProcessingInfo processingInfo) {
+	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, List<IQuantitationCompound> quantitationCompounds, IProcessingInfo processingInfo) {
 
 		List<IQuantitationEntryMSD> quantitationEntries = new ArrayList<IQuantitationEntryMSD>();
-		for(IQuantitationCompoundMSD quantitationCompound : quantitationCompounds) {
+		for(IQuantitationCompound quantitationCompound : quantitationCompounds) {
 			try {
 				List<IQuantitationEntryMSD> quantitationEntriesPeak = calculateQuantitationResults(peak, quantitationCompound);
 				quantitationEntries.addAll(quantitationEntriesPeak);
@@ -54,7 +54,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	}
 
 	@Override
-	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, IQuantitationCompoundMSD quantitationCompound) throws EvaluationException {
+	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, IQuantitationCompound quantitationCompound) throws EvaluationException {
 
 		if(peak == null || quantitationCompound == null) {
 			throw new EvaluationException("Peak and QuantitationCompound must be not null.");
@@ -84,7 +84,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 			/*
 			 * XIC
 			 */
-			IQuantitationSignals quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
+			IQuantitationSignals quantitationSignals = quantitationCompound.getQuantitationSignals();
 			List<Double> selectedQuantitationIons = quantitationSignals.getSelectedSignals();
 			if(integrationQuantitationSupport.validateXIC(selectedQuantitationIons)) {
 				if(peak instanceof IPeakMSD) {
@@ -107,7 +107,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	 * @param isZeroCrossing
 	 * @return List<IQuantitationEntryMSD>
 	 */
-	private List<IQuantitationEntryMSD> getQuantitationEntriesTIC(IQuantitationCompoundMSD quantitationCompound, IPeak peak) {
+	private List<IQuantitationEntryMSD> getQuantitationEntriesTIC(IQuantitationCompound quantitationCompound, IPeak peak) {
 
 		List<IQuantitationEntryMSD> quantitationEntries = new ArrayList<IQuantitationEntryMSD>();
 		double integratedArea = peak.getIntegratedArea();
@@ -129,7 +129,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	 * @param isZeroCrossing
 	 * @return List<IQuantitationEntryMSD>
 	 */
-	private List<IQuantitationEntryMSD> getQuantitationEntriesXIC(IQuantitationCompoundMSD quantitationCompound, IPeakMSD peak, List<Double> selectedQuantitationIons, IntegrationQuantitationSupport integrationQuantitationSupport) {
+	private List<IQuantitationEntryMSD> getQuantitationEntriesXIC(IQuantitationCompound quantitationCompound, IPeakMSD peak, List<Double> selectedQuantitationIons, IntegrationQuantitationSupport integrationQuantitationSupport) {
 
 		List<IQuantitationEntryMSD> quantitationEntries = new ArrayList<IQuantitationEntryMSD>();
 		//
@@ -149,7 +149,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 			/*
 			 * It makes a difference if the TIC or the XIC signal is integrated.
 			 */
-			if(integrationQuantitationSupport.isTheTotalSignalIntegrated()) {
+			if(integrationQuantitationSupport.isTotalSignalIntegrated()) {
 				/*
 				 * If the TIC was used, the m/z value has only a percentage area of the integrated TIC area.
 				 */
@@ -176,7 +176,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	 * @param isZeroCrossing
 	 * @return IQuantitationEntryMSD
 	 */
-	private IQuantitationEntryMSD getQuantitationEntry(double ion, IQuantitationCompoundMSD quantitationCompound, double integratedArea) {
+	private IQuantitationEntryMSD getQuantitationEntry(double ion, IQuantitationCompound quantitationCompound, double integratedArea) {
 
 		String name = quantitationCompound.getName();
 		String chemicalClass = quantitationCompound.getChemicalClass();
@@ -187,7 +187,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 		CalibrationMethod calibrationMethod = quantitationCompound.getCalibrationMethod();
 		switch(calibrationMethod) {
 			case LINEAR:
-				LinearEquation linearEquation = quantitationCompound.getConcentrationResponseEntriesMSD().getLinearEquation(ion, isCrossZero);
+				LinearEquation linearEquation = quantitationCompound.getConcentrationResponseEntries().getLinearEquation(ion, isCrossZero);
 				concentration = linearEquation.calculateX(integratedArea);
 				break;
 			case QUADRATIC:
@@ -195,10 +195,10 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 				 * The quadratic equation could lead to two results.
 				 * Select the result that is closer to the average value.
 				 */
-				double factorAverage = quantitationCompound.getConcentrationResponseEntriesMSD().getAverageFactor(ion, isCrossZero);
+				double factorAverage = quantitationCompound.getConcentrationResponseEntries().getAverageFactor(ion, isCrossZero);
 				double concentrationAverage = factorAverage * integratedArea;
 				//
-				QuadraticEquation quadraticEquation = quantitationCompound.getConcentrationResponseEntriesMSD().getQuadraticEquation(ion, isCrossZero);
+				QuadraticEquation quadraticEquation = quantitationCompound.getConcentrationResponseEntries().getQuadraticEquation(ion, isCrossZero);
 				double concentration1 = quadraticEquation.calculateX(integratedArea, true);
 				double concentration2 = quadraticEquation.calculateX(integratedArea, false);
 				double delta1 = Math.abs(concentration1 - concentrationAverage);
@@ -207,7 +207,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 				concentration = (delta1 < delta2) ? concentration1 : concentration2;
 				break;
 			case AVERAGE:
-				double factor = quantitationCompound.getConcentrationResponseEntriesMSD().getAverageFactor(ion, isCrossZero);
+				double factor = quantitationCompound.getConcentrationResponseEntries().getAverageFactor(ion, isCrossZero);
 				concentration = factor * integratedArea;
 				break;
 			case ISTD:

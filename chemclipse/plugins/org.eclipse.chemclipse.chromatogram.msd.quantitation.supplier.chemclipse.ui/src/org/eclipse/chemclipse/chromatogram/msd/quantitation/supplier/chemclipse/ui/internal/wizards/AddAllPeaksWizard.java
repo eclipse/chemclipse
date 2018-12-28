@@ -21,9 +21,9 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 import org.eclipse.jface.wizard.Wizard;
@@ -81,9 +81,9 @@ public class AddAllPeaksWizard extends Wizard {
 							/*
 							 * Merge the quantitation peak
 							 */
-							IQuantitationCompoundMSD quantitationCompoundMSD = database.getQuantitationCompound(name);
+							IQuantitationCompound quantitationCompoundMSD = database.getQuantitationCompound(name);
 							if(quantitationCompoundMSD != null) {
-								IQuantitationPeakMSD quantitationPeakMSD = new QuantitationPeakMSD(peak, concentration, quantitationCompoundMSD.getConcentrationUnit());
+								IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD(peak, concentration, quantitationCompoundMSD.getConcentrationUnit());
 								database.getQuantitationPeaks(quantitationCompoundMSD).add(quantitationPeakMSD);
 							}
 						} else {
@@ -94,12 +94,12 @@ public class AddAllPeaksWizard extends Wizard {
 								int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
 								String chemicalClass = page.getChemicalClass();
 								//
-								IQuantitationCompoundMSD quantitationCompoundMSD = new QuantitationCompoundMSD(name, concentrationUnit, retentionTime);
+								IQuantitationCompound quantitationCompoundMSD = new QuantitationCompoundMSD(name, concentrationUnit, retentionTime);
 								quantitationCompoundMSD.setChemicalClass(chemicalClass);
 								quantitationCompoundMSD.getRetentionTimeWindow().setAllowedNegativeDeviation(1500); // Default
 								quantitationCompoundMSD.getRetentionTimeWindow().setAllowedPositiveDeviation(1500); // Default
 								//
-								IQuantitationPeakMSD quantitationPeakMSD = new QuantitationPeakMSD(peak, concentration, concentrationUnit);
+								IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD(peak, concentration, concentrationUnit);
 								//
 								database.addQuantitationCompound(quantitationCompoundMSD);
 								database.getQuantitationPeaks(quantitationCompoundMSD).add(quantitationPeakMSD);

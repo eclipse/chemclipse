@@ -20,9 +20,9 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationSignalsLabelProvider;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationSignalsTableComparator;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs.QuantitationSignalEntryEditDialog;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -40,7 +40,7 @@ import org.eclipse.swt.widgets.Shell;
 public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQuantitationCompoundUpdater {
 
 	private static final String MESSAGE_BOX_TEXT = "Quantitation Signal";
-	private IQuantitationCompoundMSD quantitationCompoundDocument;
+	private IQuantitationCompound quantitationCompoundDocument;
 
 	public QuantitationSignalsUI(Composite parent, int style) {
 		parent.setLayout(new FillLayout());
@@ -52,7 +52,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 	}
 
 	@Override
-	public void update(IQuantitationCompoundMSD quantitationCompoundDocument, IQuantDatabase database) {
+	public void update(IQuantitationCompound quantitationCompoundDocument, IQuantDatabase database) {
 
 		this.quantitationCompoundDocument = quantitationCompoundDocument;
 		//
@@ -126,7 +126,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 						 */
 						IQuantitationSignal quantitationSignalMSD = quantitationSignalEntryEdit.getQuantitationSignalMSD();
 						if(quantitationSignalMSD != null) {
-							quantitationCompoundDocument.getQuantitationSignalsMSD().add(quantitationSignalMSD);
+							quantitationCompoundDocument.getQuantitationSignals().add(quantitationSignalMSD);
 							setTableViewerInput();
 						}
 					}
@@ -169,10 +169,10 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 							 */
 							IQuantitationSignal quantitationSignalNew = quantitationSignalEntryEdit.getQuantitationSignalMSD();
 							if(quantitationSignalOld != null) {
-								IQuantitationSignals quantitationSignalsMSD = quantitationCompoundDocument.getQuantitationSignalsMSD();
+								IQuantitationSignals quantitationSignalsMSD = quantitationCompoundDocument.getQuantitationSignals();
 								quantitationSignalsMSD.remove(quantitationSignalOld);
 								quantitationSignalsMSD.add(quantitationSignalNew);
-								quantitationCompoundDocument.updateQuantitationSignalsMSD(quantitationSignalsMSD);
+								quantitationCompoundDocument.updateQuantitationSignals(quantitationSignalsMSD);
 								setTableViewerInput();
 							}
 						}
@@ -203,7 +203,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 					 */
 					int decision = showQuestion(MESSAGE_BOX_TEXT, "Would you like to delete the selected quantitation signals?");
 					if(decision == SWT.YES) {
-						quantitationCompoundDocument.getQuantitationSignalsMSD().removeAll(quantitationSignalsMSD);
+						quantitationCompoundDocument.getQuantitationSignals().removeAll(quantitationSignalsMSD);
 						setTableViewerInput();
 					}
 				} else {
@@ -228,7 +228,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 				 */
 				int decision = showQuestion(MESSAGE_BOX_TEXT, "Would you like to delete all response entry?");
 				if(decision == SWT.YES) {
-					quantitationCompoundDocument.getQuantitationSignalsMSD().clear();
+					quantitationCompoundDocument.getQuantitationSignals().clear();
 					setTableViewerInput();
 				}
 			}

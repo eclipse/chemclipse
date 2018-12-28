@@ -18,8 +18,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationCompoundAlreadyExistsException;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 
 public class QuantDatabase implements IQuantDatabase {
 
@@ -28,18 +28,18 @@ public class QuantDatabase implements IQuantDatabase {
 	 */
 	private static final long serialVersionUID = 6356089588484376410L;
 	//
-	private List<IQuantitationCompoundMSD> quantitationCompounds;
-	private Map<IQuantitationCompoundMSD, List<IQuantitationPeakMSD>> quantitationCompoundPeaks;
+	private List<IQuantitationCompound> quantitationCompounds;
+	private Map<IQuantitationCompound, List<IQuantitationPeak>> quantitationCompoundPeaks;
 
 	public QuantDatabase() {
-		quantitationCompounds = new ArrayList<IQuantitationCompoundMSD>();
-		quantitationCompoundPeaks = new HashMap<IQuantitationCompoundMSD, List<IQuantitationPeakMSD>>();
+		quantitationCompounds = new ArrayList<IQuantitationCompound>();
+		quantitationCompoundPeaks = new HashMap<IQuantitationCompound, List<IQuantitationPeak>>();
 	}
 
 	@Override
-	public IQuantitationCompoundMSD getQuantitationCompound(String name) {
+	public IQuantitationCompound getQuantitationCompound(String name) {
 
-		for(IQuantitationCompoundMSD quantitationCompound : quantitationCompounds) {
+		for(IQuantitationCompound quantitationCompound : quantitationCompounds) {
 			if(quantitationCompound.getName().equals(name)) {
 				return quantitationCompound;
 			}
@@ -48,7 +48,7 @@ public class QuantDatabase implements IQuantDatabase {
 	}
 
 	@Override
-	public void addQuantitationCompound(IQuantitationCompoundMSD quantitationCompound) throws QuantitationCompoundAlreadyExistsException {
+	public void addQuantitationCompound(IQuantitationCompound quantitationCompound) throws QuantitationCompoundAlreadyExistsException {
 
 		String name = quantitationCompound.getName();
 		if(getQuantitationCompound(name) == null) {
@@ -59,7 +59,7 @@ public class QuantDatabase implements IQuantDatabase {
 	}
 
 	@Override
-	public List<IQuantitationCompoundMSD> getQuantitationCompounds() {
+	public List<IQuantitationCompound> getQuantitationCompounds() {
 
 		return quantitationCompounds;
 	}
@@ -68,7 +68,7 @@ public class QuantDatabase implements IQuantDatabase {
 	public List<String> getQuantitationCompoundNames() {
 
 		List<String> names = new ArrayList<String>();
-		for(IQuantitationCompoundMSD quantitationCompound : quantitationCompounds) {
+		for(IQuantitationCompound quantitationCompound : quantitationCompounds) {
 			names.add(quantitationCompound.getName());
 		}
 		return names;
@@ -77,7 +77,7 @@ public class QuantDatabase implements IQuantDatabase {
 	@Override
 	public String getQuantitationCompoundConcentrationUnit(String name) {
 
-		IQuantitationCompoundMSD quantitationCompoundMSD = getQuantitationCompound(name);
+		IQuantitationCompound quantitationCompoundMSD = getQuantitationCompound(name);
 		if(quantitationCompoundMSD != null) {
 			return quantitationCompoundMSD.getConcentrationUnit();
 		} else {
@@ -94,7 +94,7 @@ public class QuantDatabase implements IQuantDatabase {
 	@Override
 	public boolean isQuantitationCompoundAlreadyAvailable(String name) {
 
-		IQuantitationCompoundMSD quantitationCompoundMSD = getQuantitationCompound(name);
+		IQuantitationCompound quantitationCompoundMSD = getQuantitationCompound(name);
 		if(quantitationCompoundMSD != null) {
 			return true;
 		} else {
@@ -103,13 +103,13 @@ public class QuantDatabase implements IQuantDatabase {
 	}
 
 	@Override
-	public void deleteQuantitationCompound(IQuantitationCompoundMSD quantitationCompound) {
+	public void deleteQuantitationCompound(IQuantitationCompound quantitationCompound) {
 
 		quantitationCompounds.remove(quantitationCompound);
 	}
 
 	@Override
-	public void deleteQuantitationCompound(List<IQuantitationCompoundMSD> quantitationCompounds) {
+	public void deleteQuantitationCompound(List<IQuantitationCompound> quantitationCompounds) {
 
 		this.quantitationCompounds.removeAll(quantitationCompounds);
 	}
@@ -121,29 +121,29 @@ public class QuantDatabase implements IQuantDatabase {
 	}
 
 	@Override
-	public List<IQuantitationPeakMSD> getQuantitationPeaks(IQuantitationCompoundMSD quantitationCompound) {
+	public List<IQuantitationPeak> getQuantitationPeaks(IQuantitationCompound quantitationCompound) {
 
-		List<IQuantitationPeakMSD> quantitationPeaks = quantitationCompoundPeaks.get(quantitationCompound);
+		List<IQuantitationPeak> quantitationPeaks = quantitationCompoundPeaks.get(quantitationCompound);
 		if(quantitationPeaks == null) {
-			quantitationPeaks = new ArrayList<IQuantitationPeakMSD>();
+			quantitationPeaks = new ArrayList<IQuantitationPeak>();
 			quantitationCompoundPeaks.put(quantitationCompound, quantitationPeaks);
 		}
 		return quantitationPeaks;
 	}
 
 	@Override
-	public void deleteQuantitationPeakDocument(IQuantitationCompoundMSD quantitationCompound, IQuantitationPeakMSD quantitationPeak) {
+	public void deleteQuantitationPeakDocument(IQuantitationCompound quantitationCompound, IQuantitationPeak quantitationPeak) {
 
-		List<IQuantitationPeakMSD> quantitationPeakList = quantitationCompoundPeaks.get(quantitationCompound);
+		List<IQuantitationPeak> quantitationPeakList = quantitationCompoundPeaks.get(quantitationCompound);
 		if(quantitationPeakList != null) {
 			quantitationPeakList.remove(quantitationPeak);
 		}
 	}
 
 	@Override
-	public void deleteQuantitationPeakDocuments(IQuantitationCompoundMSD quantitationCompound, Set<IQuantitationPeakMSD> quantitationPeaks) {
+	public void deleteQuantitationPeakDocuments(IQuantitationCompound quantitationCompound, Set<IQuantitationPeak> quantitationPeaks) {
 
-		List<IQuantitationPeakMSD> quantitationPeakList = quantitationCompoundPeaks.get(quantitationCompound);
+		List<IQuantitationPeak> quantitationPeakList = quantitationCompoundPeaks.get(quantitationCompound);
 		if(quantitationPeakList != null) {
 			quantitationPeakList.removeAll(quantitationPeaks);
 		}
