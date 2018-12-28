@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 
 public class QuantitationPeakMSD_1_Test extends ReferencePeakMSDTestCase {
 
-	private IQuantitationPeakMSD quantitationPeakMSD;
+	private IQuantitationPeak quantitationPeakMSD;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -44,6 +44,6 @@ public class QuantitationPeakMSD_1_Test extends ReferencePeakMSDTestCase {
 
 	public void testGetReferencePeakMSD_1() {
 
-		assertNotNull(quantitationPeakMSD.getReferencePeakMSD());
+		assertNotNull(quantitationPeakMSD.getReferencePeak());
 	}
 }

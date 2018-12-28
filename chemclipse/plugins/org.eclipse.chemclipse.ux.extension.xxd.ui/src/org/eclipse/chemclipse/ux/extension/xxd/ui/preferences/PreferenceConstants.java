@@ -454,6 +454,41 @@ public class PreferenceConstants {
 	public static final String P_CHROMATOGRAM_LOAD_PROCESS_METHOD = "chromatogramLoadProcessMethod";
 	public static final String DEF_CHROMATOGRAM_LOAD_PROCESS_METHOD = "";
 	/*
+	 * Calibration Chart
+	 */
+	public static final String P_SHOW_X_AXIS_CONCENTRATION_CALIBRATION = "showXAxisConcentrationCalibration";
+	public static final boolean DEF_SHOW_X_AXIS_CONCENTRATION_CALIBRATION = true;
+	public static final String P_POSITION_X_AXIS_CONCENTRATION_CALIBRATION = "positionXAxisConcentrationCalibration";
+	public static final String DEF_POSITION_X_AXIS_CONCENTRATION_CALIBRATION = Position.Primary.toString();
+	public static final String P_COLOR_X_AXIS_CONCENTRATION_CALIBRATION = "colorXAxisConcentrationCalibration";
+	public static final String DEF_COLOR_X_AXIS_CONCENTRATION_CALIBRATION = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_X_AXIS_CONCENTRATION_CALIBRATION = "gridlineStyleXAxisConcentrationCalibration";
+	public static final String DEF_GRIDLINE_STYLE_X_AXIS_CONCENTRATION_CALIBRATION = LineStyle.DOT.toString();
+	public static final String P_GRIDLINE_COLOR_X_AXIS_CONCENTRATION_CALIBRATION = "gridlineColorXAxisConcentrationCalibration";
+	public static final String DEF_GRIDLINE_COLOR_X_AXIS_CONCENTRATION_CALIBRATION = "192,192,192";
+	//
+	public static final String P_SHOW_Y_AXIS_RESPONSE_CALIBRATION = "showYAxisResponseCalibration";
+	public static final boolean DEF_SHOW_Y_AXIS_RESPONSE_CALIBRATION = true;
+	public static final String P_POSITION_Y_AXIS_RESPONSE_CALIBRATION = "positionYAxisResponseCalibration";
+	public static final String DEF_POSITION_Y_AXIS_RESPONSE_CALIBRATION = Position.Primary.toString();
+	public static final String P_COLOR_Y_AXIS_RESPONSE_CALIBRATION = "colorYAxisResponseCalibration";
+	public static final String DEF_COLOR_Y_AXIS_RESPONSE_CALIBRATION = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_Y_AXIS_RESPONSE_CALIBRATION = "gridlineStyleYAxisResponseCalibration";
+	public static final String DEF_GRIDLINE_STYLE_Y_AXIS_RESPONSE_CALIBRATION = LineStyle.NONE.toString();
+	public static final String P_GRIDLINE_COLOR_Y_AXIS_RESPONSE_CALIBRATION = "gridlineColorYAxisResponseCalibration";
+	public static final String DEF_GRIDLINE_COLOR_Y_AXIS_RESPONSE_CALIBRATION = "192,192,192";
+	//
+	public static final String P_SHOW_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION = "showYAxisRelativeResponseCalibration";
+	public static final boolean DEF_SHOW_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION = true;
+	public static final String P_POSITION_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION = "positionYAxisRelativeResponseCalibration";
+	public static final String DEF_POSITION_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION = Position.Secondary.toString();
+	public static final String P_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION = "colorYAxisRelativeResponseCalibration";
+	public static final String DEF_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION = "gridlineStyleYAxisRelativeResponseCalibration";
+	public static final String DEF_GRIDLINE_STYLE_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION = LineStyle.DOT.toString();
+	public static final String P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION = "gridlineColorYAxisRelativeResponseCalibration";
+	public static final String DEF_GRIDLINE_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION = "192,192,192";
+	/*
 	 * File Explorer
 	 */
 	public static final String P_SHOW_DATA_MSD = "showDataMSD";

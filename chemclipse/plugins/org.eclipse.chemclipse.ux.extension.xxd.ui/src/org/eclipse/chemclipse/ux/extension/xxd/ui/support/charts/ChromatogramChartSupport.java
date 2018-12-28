@@ -45,13 +45,13 @@ import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
-import org.eclipse.swtchart.LineStyle;
 
 public class ChromatogramChartSupport {
 
@@ -114,7 +114,6 @@ public class ChromatogramChartSupport {
 	private boolean showArea = false;
 
 	public ChromatogramChartSupport() {
-
 		usedColorsNormal = new HashMap<String, Color>();
 		usedColorsSIC = new HashMap<String, Color>();
 		usedColorsSWC = new HashMap<String, Color>();

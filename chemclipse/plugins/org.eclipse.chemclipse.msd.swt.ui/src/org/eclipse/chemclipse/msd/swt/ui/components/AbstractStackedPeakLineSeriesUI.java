@@ -13,12 +13,6 @@ package org.eclipse.chemclipse.msd.swt.ui.components;
 
 import java.util.List;
 
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swtchart.Range;
-
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
@@ -27,6 +21,11 @@ import org.eclipse.chemclipse.swt.ui.components.AbstractLineSeriesUI;
 import org.eclipse.chemclipse.swt.ui.series.ISeriesSetter;
 import org.eclipse.chemclipse.swt.ui.support.ChartUtil;
 import org.eclipse.chemclipse.swt.ui.support.IAxisTitles;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swtchart.Range;
 
 /**
  * This class offers a solution to draw chromatographic data like chromatograms,

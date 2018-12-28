@@ -25,14 +25,14 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 
-public class GaussianPeakMSDFactory {
+public class GaussianPeakFactoryMSD {
 
 	private static final float RATIO_OF_RETENTION_TIME_TO_CONSIDER = 0.005f;
 	private static final double NORMALIZATION_VALUE = 1000d;
 	private static final double ION_VALUE = 18d;
 	private static final String INTEGRATOR_DESCRIPTION = "Gaussian Peak generator";
 
-	private GaussianPeakMSDFactory() {
+	private GaussianPeakFactoryMSD() {
 	}
 
 	public static IPeakMSD createGaussianPeakMSD(IChromatogramMSD chromatogramMSD, float height, int retentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {

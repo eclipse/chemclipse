@@ -36,7 +36,7 @@ public class IntegrationQuantitationSupport_1_Test extends QuantitationCalculato
 
 	public void testIsTheTotalSignalIntegrated_1() {
 
-		assertTrue(support.isTheTotalSignalIntegrated());
+		assertTrue(support.isTotalSignalIntegrated());
 	}
 
 	public void testValidateTIC_1() {

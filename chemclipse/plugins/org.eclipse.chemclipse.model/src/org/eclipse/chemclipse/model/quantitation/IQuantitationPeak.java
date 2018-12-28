@@ -11,35 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
-public interface IQuantitationSignal {
+import java.io.Serializable;
 
-	double TIC_SIGNAL = 0.0d;
-	float ABSOLUTE_RESPONSE = 100.0f; // 100 is used for the TIC signal.
+import org.eclipse.chemclipse.model.core.IPeak;
 
-	/**
-	 * E.g. 104 for styrene
-	 * 
-	 * @return double
-	 */
-	double getSignal();
+public interface IQuantitationPeak<T extends IPeak> extends Serializable {
 
-	/**
-	 * E.g. 100
-	 * 
-	 * @return float
-	 */
-	float getRelativeResponse();
+	double getConcentration();
 
-	/**
-	 * E.g. 0.02 for a uncertainty of 0.02 %.
-	 * 
-	 * @return double
-	 */
-	double getUncertainty();
+	void setConcentration(double concentration);
 
-	void setUncertainty(double uncertainty);
+	String getConcentrationUnit();
 
-	boolean isUse();
-
-	void setUse(boolean use);
+	T getReferencePeak();
 }

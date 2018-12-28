@@ -9,19 +9,10 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.model.core.quantitation;
+package org.eclipse.chemclipse.model.quantitation;
 
-import java.io.Serializable;
+import java.util.List;
 
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-
-public interface IQuantitationPeakMSD extends Serializable {
-
-	double getConcentration();
-
-	void setConcentration(double concentration);
-
-	String getConcentrationUnit();
-
-	IPeakMSD getReferencePeakMSD();
+@SuppressWarnings("rawtypes")
+public interface IQuantitationPeaks extends List<IQuantitationPeak> {
 }

@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
@@ -24,7 +26,7 @@ import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 
 public class QuantitationCompoundMSD_3_Test extends ReferencePeakMSDTestCase {
 
-	private IQuantitationCompoundMSD quantitationCompound;
+	private IQuantitationCompound quantitationCompound;
 	private IQuantitationSignals quantitationSignals;
 	private IConcentrationResponseEntries concentrationResponseEntries;
 
@@ -34,15 +36,15 @@ public class QuantitationCompoundMSD_3_Test extends ReferencePeakMSDTestCase {
 		super.setUp();
 		quantitationCompound = new QuantitationCompoundMSD("Styrene", "mg/ml", 5500);
 		//
-		List<IQuantitationPeakMSD> quantitationPeaks = new ArrayList<IQuantitationPeakMSD>();
-		IQuantitationPeakMSD quantitationPeak = new QuantitationPeakMSD(getReferencePeakMSD_TIC_1(), 0.1d, "mg/ml");
+		List<IQuantitationPeak> quantitationPeaks = new ArrayList<IQuantitationPeak>();
+		IQuantitationPeak quantitationPeak = new QuantitationPeakMSD(getReferencePeakMSD_TIC_1(), 0.1d, "mg/ml");
 		quantitationPeaks.add(quantitationPeak);
 		//
 		quantitationCompound.setUseTIC(true);
 		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries(quantitationPeaks);
 		//
-		quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
-		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntriesMSD();
+		quantitationSignals = quantitationCompound.getQuantitationSignals();
+		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntries();
 	}
 
 	@Override

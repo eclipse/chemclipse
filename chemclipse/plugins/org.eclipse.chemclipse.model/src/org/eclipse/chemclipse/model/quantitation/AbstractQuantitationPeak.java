@@ -9,23 +9,20 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.model.core.quantitation;
+package org.eclipse.chemclipse.model.quantitation;
 
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.model.core.IPeak;
 
-public abstract class AbstractQuantitationPeakMSD implements IQuantitationPeakMSD {
+public abstract class AbstractQuantitationPeak<T extends IPeak> implements IQuantitationPeak<T> {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = -3649217581379583706L;
+	private static final long serialVersionUID = 195271455326109557L;
 	//
 	private double concentration;
 	private String concentrationUnit;
-	private IPeakMSD referencePeakMSD;
+	private T referencePeak;
 
-	public AbstractQuantitationPeakMSD(IPeakMSD referencePeakMSD, double concentration, String concentrationUnit) {
-		this.referencePeakMSD = referencePeakMSD;
+	public AbstractQuantitationPeak(T referencePeak, double concentration, String concentrationUnit) {
+		this.referencePeak = referencePeak;
 		this.concentration = concentration;
 		this.concentrationUnit = concentrationUnit;
 	}
@@ -49,8 +46,8 @@ public abstract class AbstractQuantitationPeakMSD implements IQuantitationPeakMS
 	}
 
 	@Override
-	public IPeakMSD getReferencePeakMSD() {
+	public T getReferencePeak() {
 
-		return referencePeakMSD;
+		return referencePeak;
 	}
 }

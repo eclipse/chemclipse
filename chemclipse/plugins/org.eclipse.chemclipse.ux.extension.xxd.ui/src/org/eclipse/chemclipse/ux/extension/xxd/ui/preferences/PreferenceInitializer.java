@@ -213,6 +213,26 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SAVE_AS_FOLDER, PreferenceConstants.DEF_CHROMATOGRAM_SAVE_AS_FOLDER);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_LOAD_PROCESS_METHOD, PreferenceConstants.DEF_CHROMATOGRAM_LOAD_PROCESS_METHOD);
 		/*
+		 * Calibration Chart
+		 */
+		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_SHOW_X_AXIS_CONCENTRATION_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_POSITION_X_AXIS_CONCENTRATION_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_COLOR_X_AXIS_CONCENTRATION_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_CONCENTRATION_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_CONCENTRATION_CALIBRATION);
+		//
+		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_SHOW_Y_AXIS_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_POSITION_Y_AXIS_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_COLOR_Y_AXIS_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_RESPONSE_CALIBRATION);
+		//
+		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_SHOW_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_POSITION_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
+		/*
 		 * File Explorer
 		 */
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_MSD, PreferenceConstants.DEF_SHOW_DATA_MSD);

@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import org.eclipse.chemclipse.model.quantitation.AbstractQuantitationPeak;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.AbstractQuantitationPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 
-public class QuantitationPeakMSD extends AbstractQuantitationPeakMSD implements IQuantitationPeakMSD {
+public class QuantitationPeakMSD extends AbstractQuantitationPeak implements IQuantitationPeak {
 
 	/**
 	 * Renew the UUID on change.

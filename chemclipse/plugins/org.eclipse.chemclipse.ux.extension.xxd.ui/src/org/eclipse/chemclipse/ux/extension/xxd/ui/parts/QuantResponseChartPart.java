@@ -15,6 +15,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.QuantResponseChartUI;
@@ -42,8 +43,11 @@ public class QuantResponseChartPart extends AbstractDataUpdateSupport implements
 	@Override
 	public void registerEvents() {
 
+		System.out.println("Change TOPIC and PROPERTY");
+		registerEvent("quantitation/msd/update/supplier/chemclipse/quantitationcompounddocument", "QuantitationCompoundDocument");
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateObjects(List<Object> objects, String topic) {
 
@@ -51,7 +55,12 @@ public class QuantResponseChartPart extends AbstractDataUpdateSupport implements
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			quantResponseChartUI.setFocus();
+			Object object = objects.get(0);
+			if(object instanceof IQuantitationCompound) {
+				quantResponseChartUI.update((IQuantitationCompound)object);
+			} else {
+				quantResponseChartUI.update(null);
+			}
 		}
 	}
 }

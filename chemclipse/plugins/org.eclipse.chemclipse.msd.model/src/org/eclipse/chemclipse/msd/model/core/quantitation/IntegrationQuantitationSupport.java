@@ -18,18 +18,20 @@ import java.util.Map;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 
 public class IntegrationQuantitationSupport {
 
 	private static final Logger logger = Logger.getLogger(IntegrationQuantitationSupport.class);
+	//
 	private IPeak peak;
-	private Map<Double, Double> integratedIons;
+	private Map<Double, Double> integratedSignals;
 
 	public IntegrationQuantitationSupport(IPeak peak) {
 		this.peak = peak;
-		integratedIons = getListOfIntegratedIons();
+		integratedSignals = calculateIntegratedSignals();
 	}
 
 	/**
@@ -43,10 +45,11 @@ public class IntegrationQuantitationSupport {
 		 * In case of TIC, there is only one integration entry.
 		 * AbstractIon.TIC_ION
 		 */
-		if(isTheTotalSignalIntegrated()) {
+		if(isTotalSignalIntegrated()) {
 			return true;
 		} else {
-			logger.warn("Quantitation: The peak integration entry doesn't match: " + peak);
+			String info = (peak != null) ? peak.toString() : "--";
+			logger.warn("Quantitation: The peak integration entry doesn't match: " + info);
 		}
 		return false;
 	}
@@ -54,26 +57,26 @@ public class IntegrationQuantitationSupport {
 	/**
 	 * Validates if the integration entries (XIC) of the peak matches the quantitation entries (XIC).
 	 * 
-	 * @param selectedQuantitationIons
+	 * @param selectedSignals
 	 * @return boolean
 	 */
-	public boolean validateXIC(List<Double> selectedQuantitationIons) {
+	public boolean validateXIC(List<Double> selectedSignals) {
 
 		/*
 		 * If it's a TIC integration, its ok too.
 		 */
-		if(isTheTotalSignalIntegrated()) {
+		if(isTotalSignalIntegrated()) {
 			return true;
-		} else if(integratedIons.keySet().containsAll(selectedQuantitationIons)) {
+		} else if(integratedSignals.keySet().containsAll(selectedSignals)) {
 			return true;
 		} else {
 			StringBuilder builder = new StringBuilder();
 			builder.append("Quantitation: The peak integration entries do not match quantitation entries: ");
-			builder.append(peak);
-			builder.append(" Integrated Ions: ");
-			builder.append(integratedIons);
-			builder.append(" Selected Quantitation Ions: ");
-			builder.append(selectedQuantitationIons);
+			builder.append((peak != null) ? peak : "--");
+			builder.append(" Integrated Signals: ");
+			builder.append(integratedSignals);
+			builder.append(" Selected Quantitation Signals: ");
+			builder.append(selectedSignals);
 			logger.warn(builder.toString());
 		}
 		return false;
@@ -84,9 +87,9 @@ public class IntegrationQuantitationSupport {
 	 * 
 	 * @return boolean
 	 */
-	public boolean isTheTotalSignalIntegrated() {
+	public boolean isTotalSignalIntegrated() {
 
-		if(integratedIons.size() == 1 && integratedIons.containsKey(AbstractIon.TIC_ION)) {
+		if(integratedSignals.size() == 1 && integratedSignals.containsKey(IQuantitationSignal.TIC_SIGNAL)) {
 			return true;
 		}
 		return false;
@@ -96,16 +99,16 @@ public class IntegrationQuantitationSupport {
 	 * If only the total signal is integrated, the TIC value will be returned.
 	 * Else, the integration ion value will be returned.
 	 * 
-	 * @param ion
+	 * @param signal
 	 * @return double
 	 */
-	public double getIntegrationArea(double ion) {
+	public double getIntegrationArea(double signal) {
 
 		Double value;
-		if(isTheTotalSignalIntegrated()) {
-			value = integratedIons.get(AbstractIon.TIC_ION);
+		if(isTotalSignalIntegrated()) {
+			value = integratedSignals.get(AbstractIon.TIC_ION);
 		} else {
-			value = integratedIons.get(ion);
+			value = integratedSignals.get(signal);
 		}
 		/*
 		 * Check null values.
@@ -117,21 +120,27 @@ public class IntegrationQuantitationSupport {
 	 * Check the integrated ions to avoid problems with
 	 * wrong integrated area and percentage m/z values.
 	 */
-	private Map<Double, Double> getListOfIntegratedIons() {
+	private Map<Double, Double> calculateIntegratedSignals() {
 
 		Map<Double, Double> integratedIons = new HashMap<Double, Double>();
-		for(IIntegrationEntry entry : peak.getIntegrationEntries()) {
-			if(entry instanceof IIntegrationEntryMSD) {
-				IIntegrationEntryMSD integrationEntry = (IIntegrationEntryMSD)entry;
+		if(peak != null) {
+			for(IIntegrationEntry integrationEntry : peak.getIntegrationEntries()) {
 				/*
-				 * KEY = Ion
+				 * KEY = Signal
 				 * VALUE = Integrated Area
 				 */
-				double key = integrationEntry.getIon();
+				double key = 0;
 				double value = integrationEntry.getIntegratedArea();
+				//
+				if(integrationEntry instanceof IIntegrationEntryMSD) {
+					IIntegrationEntryMSD integrationEntryMSD = (IIntegrationEntryMSD)integrationEntry;
+					key = integrationEntryMSD.getIon();
+				}
+				//
 				integratedIons.put(key, value);
 			}
 		}
+		//
 		return integratedIons;
 	}
 }

@@ -9,18 +9,14 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.model.core.quantitation;
+package org.eclipse.chemclipse.model.quantitation;
 
 import java.io.Serializable;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
-import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
-import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
+import org.eclipse.chemclipse.model.core.IPeak;
 
-public interface IQuantitationCompoundMSD extends Serializable {
+public interface IQuantitationCompound<T extends IPeak> extends Serializable {
 
 	/**
 	 * Levoglucosan
@@ -82,35 +78,35 @@ public interface IQuantitationCompoundMSD extends Serializable {
 	 * The list of quantitation signals and concentration entries
 	 * will be calculated by using the stored quantitation peaks.
 	 */
-	void calculateQuantitationSignalsAndConcentrationResponseEntries(List<IQuantitationPeakMSD> quantitationPeaks);
+	void calculateQuantitationSignalsAndConcentrationResponseEntries(List<IQuantitationPeak<T>> quantitationPeaks);
 
 	/**
 	 * Returns the quantitation signals.
 	 * 
-	 * @return IQuantitationSignalsMSD
+	 * @return IQuantitationSignals
 	 */
-	IQuantitationSignals getQuantitationSignalsMSD();
+	IQuantitationSignals getQuantitationSignals();
 
 	/**
 	 * Updates the existing signals by the given list.
 	 * 
-	 * @param quantitationSignalsMSD
+	 * @param quantitationSignals
 	 */
-	void updateQuantitationSignalsMSD(IQuantitationSignals quantitationSignalsMSD);
+	void updateQuantitationSignals(IQuantitationSignals quantitationSignals);
 
 	/**
 	 * Returns the concentration / response entries.
 	 * 
 	 * @return {@link IConcentrationResponseEntries}
 	 */
-	IConcentrationResponseEntries getConcentrationResponseEntriesMSD();
+	IConcentrationResponseEntries getConcentrationResponseEntries();
 
 	/**
 	 * Updates the concentration response entries.
 	 * 
-	 * @param concentrationResponseEntriesMSD
+	 * @param concentrationResponseEntries
 	 */
-	void updateConcentrationResponseEntries(IConcentrationResponseEntries concentrationResponseEntriesMSD);
+	void updateConcentrationResponseEntries(IConcentrationResponseEntries concentrationResponseEntries);
 
 	/**
 	 * Linear, ...
@@ -140,5 +136,9 @@ public interface IQuantitationCompoundMSD extends Serializable {
 	 */
 	void setUseCrossZero(boolean useCrossZero);
 
-	void updateQuantitationCompound(IQuantitationCompoundMSD quantitationCompoundMSD);
+	void updateQuantitationCompound(IQuantitationCompound<T> quantitationCompound);
+
+	void createSignalTablesTIC(List<IQuantitationPeak<T>> quantitationPeaks);
+
+	void createSignalTablesXIC(List<IQuantitationPeak<T>> quantitationPeaks);
 }

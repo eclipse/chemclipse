@@ -12,14 +12,14 @@
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 
 import junit.framework.TestCase;
 
 public class QuantitationCompoundMSD_2_Test extends TestCase {
 
-	private IQuantitationCompoundMSD quantitationCompound;
+	private IQuantitationCompound quantitationCompound;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -47,7 +47,7 @@ public class QuantitationCompoundMSD_2_Test extends TestCase {
 
 	public void testGetConcentrationResponseEntries_1() {
 
-		assertNotNull(quantitationCompound.getConcentrationResponseEntriesMSD());
+		assertNotNull(quantitationCompound.getConcentrationResponseEntries());
 	}
 
 	public void testGetConcentrationUnit_1() {
@@ -62,7 +62,7 @@ public class QuantitationCompoundMSD_2_Test extends TestCase {
 
 	public void testGetQuantitationSignals_1() {
 
-		assertNotNull(quantitationCompound.getQuantitationSignalsMSD());
+		assertNotNull(quantitationCompound.getQuantitationSignals());
 	}
 
 	public void testGetRetentionIndexWindow_1() {

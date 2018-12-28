@@ -11,22 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 
-import java.util.List;
-
-import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swtchart.IAxis.Position;
-import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToSecondsConverter;
 import org.eclipse.swtchart.extensions.axisconverter.RelativeIntensityConverter;
-import org.eclipse.swtchart.extensions.core.IAxisSettings;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
@@ -41,7 +31,7 @@ public class ChromatogramChart extends LineChart {
 	private static final String TITLE_Y_AXIS_INTENSITY = "Intensity";
 	private static final String TITLE_Y_AXIS_RELATIVE_INTENSITY = "Relative Intensity [%]";
 	//
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private ChartSupport chartSupport = new ChartSupport();
 
 	public ChromatogramChart() {
 		super();
@@ -56,13 +46,13 @@ public class ChromatogramChart extends LineChart {
 	/**
 	 * Modifies the x and y axis set given in accordance to the given settings.
 	 */
-	public void modifyAxisSet(boolean applySettings) {
+	public void modifyAxes(boolean applySettings) {
 
-		modifyMillisecondsXAxis();
-		modifyIntensityYAxis();
-		modifySecondsXAxis();
-		modifyMinutesXAxis();
-		modifyRelativeIntensityYAxis();
+		modifyXAxisMilliseconds();
+		modifyYAxisIntensity();
+		modifyXAxisSeconds();
+		modifyXAxisMinutes();
+		modifyYAxisRelativeIntensity();
 		//
 		if(applySettings) {
 			IChartSettings chartSettings = getChartSettings();
@@ -70,70 +60,84 @@ public class ChromatogramChart extends LineChart {
 		}
 	}
 
-	public void setAxisSettings(IAxisSettings axisSettings, Position position, String decimalPattern, Color color, LineStyle gridLineStyle, Color gridColor) {
-
-		if(axisSettings != null) {
-			axisSettings.setPosition(position);
-			axisSettings.setDecimalFormat(ValueFormat.getDecimalFormatEnglish(decimalPattern));
-			axisSettings.setColor(color);
-			axisSettings.setGridColor(gridColor);
-			axisSettings.setGridLineStyle(gridLineStyle);
-		}
-	}
-
 	public ISecondaryAxisSettings getSecondaryAxisSettingsX(String title) {
 
 		IChartSettings chartSettings = getChartSettings();
-		return getSecondaryAxisSettings(chartSettings.getSecondaryAxisSettingsListX(), title);
+		return chartSupport.getSecondaryAxisSettings(chartSettings.getSecondaryAxisSettingsListX(), title);
 	}
 
 	public ISecondaryAxisSettings getSecondaryAxisSettingsY(String title) {
 
 		IChartSettings chartSettings = getChartSettings();
-		return getSecondaryAxisSettings(chartSettings.getSecondaryAxisSettingsListY(), title);
+		return chartSupport.getSecondaryAxisSettings(chartSettings.getSecondaryAxisSettingsListY(), title);
 	}
 
 	private void initialize() {
 
 		IChartSettings chartSettings = getChartSettings();
+		//
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(true);
 		chartSettings.setVerticalSliderVisible(false);
 		chartSettings.getRangeRestriction().setZeroX(true);
 		chartSettings.getRangeRestriction().setZeroY(true);
 		//
-		modifyAxisSet(true);
+		modifyAxes(true);
 	}
 
-	private void modifyMillisecondsXAxis() {
+	private void modifyXAxisMilliseconds() {
 
 		IChartSettings chartSettings = getChartSettings();
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle(TITLE_X_AXIS_MILLISECONDS);
-		setAxisSettings(primaryAxisSettingsX, PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, "0.0##", PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS, PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS, PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS);
-		primaryAxisSettingsX.setVisible(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS));
+		//
+		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS;
+		String pattern = "0.0##";
+		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS;
+		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS;
+		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS;
+		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS);
+		//
+		chartSupport.setAxisSettings(primaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+		primaryAxisSettingsX.setVisible(isShowAxis);
 	}
 
-	private void modifyIntensityYAxis() {
+	private void modifyYAxisIntensity() {
 
 		IChartSettings chartSettings = getChartSettings();
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle(TITLE_Y_AXIS_INTENSITY);
-		setAxisSettings(primaryAxisSettingsY, PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY, "0.0#E0", PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY, PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY, PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY);
-		primaryAxisSettingsY.setVisible(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY));
+		//
+		String positionNode = PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY;
+		String pattern = "0.0#E0";
+		String colorNode = PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY;
+		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY;
+		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY;
+		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY);
+		//
+		chartSupport.setAxisSettings(primaryAxisSettingsY, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+		primaryAxisSettingsY.setVisible(isShowAxis);
 	}
 
-	private void modifyRelativeIntensityYAxis() {
+	private void modifyYAxisRelativeIntensity() {
 
 		IChartSettings chartSettings = getChartSettings();
 		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsY(TITLE_Y_AXIS_RELATIVE_INTENSITY);
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY)) {
+		//
+		String positionNode = PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY;
+		String pattern = "0.00";
+		String colorNode = PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY;
+		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY;
+		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY;
+		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY);
+		//
+		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(TITLE_Y_AXIS_RELATIVE_INTENSITY, new RelativeIntensityConverter(SWT.VERTICAL, true));
-				setAxisSettings(secondaryAxisSettingsY, PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, "0.00", PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY);
+				chartSupport.setAxisSettings(secondaryAxisSettingsY, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 				chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 			} else {
-				setAxisSettings(axisSettings, PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, "0.00", PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY);
+				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 				axisSettings.setVisible(true);
 			}
 		} else {
@@ -143,17 +147,25 @@ public class ChromatogramChart extends LineChart {
 		}
 	}
 
-	private void modifySecondsXAxis() {
+	private void modifyXAxisSeconds() {
 
 		IChartSettings chartSettings = getChartSettings();
 		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsX(TITLE_X_AXIS_SECONDS);
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SECONDS)) {
+		//
+		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_SECONDS;
+		String pattern = "0.00";
+		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_SECONDS;
+		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SECONDS;
+		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SECONDS;
+		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_X_AXIS_SECONDS);
+		//
+		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_SECONDS, new MillisecondsToSecondsConverter());
-				setAxisSettings(secondaryAxisSettingsX, PreferenceConstants.P_POSITION_X_AXIS_SECONDS, "0.00", PreferenceConstants.P_COLOR_X_AXIS_SECONDS, PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SECONDS, PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SECONDS);
+				chartSupport.setAxisSettings(secondaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 			} else {
-				setAxisSettings(axisSettings, PreferenceConstants.P_POSITION_X_AXIS_SECONDS, "0.00", PreferenceConstants.P_COLOR_X_AXIS_SECONDS, PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SECONDS, PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SECONDS);
+				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 				axisSettings.setVisible(true);
 			}
 		} else {
@@ -163,17 +175,25 @@ public class ChromatogramChart extends LineChart {
 		}
 	}
 
-	private void modifyMinutesXAxis() {
+	private void modifyXAxisMinutes() {
 
 		IChartSettings chartSettings = getChartSettings();
 		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsX(TITLE_X_AXIS_MINUTES);
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MINUTES)) {
+		//
+		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_MINUTES;
+		String pattern = "0.00";
+		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_MINUTES;
+		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES;
+		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES;
+		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_X_AXIS_MINUTES);
+		//
+		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_MINUTES, new MillisecondsToMinuteConverter());
-				setAxisSettings(secondaryAxisSettingsX, PreferenceConstants.P_POSITION_X_AXIS_MINUTES, "0.00", PreferenceConstants.P_COLOR_X_AXIS_MINUTES, PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES, PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES);
+				chartSupport.setAxisSettings(secondaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 			} else {
-				setAxisSettings(axisSettings, PreferenceConstants.P_POSITION_X_AXIS_MINUTES, "0.00", PreferenceConstants.P_COLOR_X_AXIS_MINUTES, PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES, PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES);
+				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 				axisSettings.setVisible(true);
 			}
 		} else {
@@ -181,27 +201,5 @@ public class ChromatogramChart extends LineChart {
 				axisSettings.setVisible(false);
 			}
 		}
-	}
-
-	private ISecondaryAxisSettings getSecondaryAxisSettings(List<ISecondaryAxisSettings> secondaryAxisSettingsList, String title) {
-
-		ISecondaryAxisSettings secondaryAxisSettings = null;
-		//
-		for(ISecondaryAxisSettings secondaryAxisSetting : secondaryAxisSettingsList) {
-			if(title.equals(secondaryAxisSetting.getTitle())) {
-				secondaryAxisSettings = secondaryAxisSetting;
-			}
-		}
-		//
-		return secondaryAxisSettings;
-	}
-
-	public void setAxisSettings(IAxisSettings axisSettings, String positionNode, String pattern, String colorNode, String gridLineStyleNode, String gridColorNode) {
-
-		Position position = Position.valueOf(preferenceStore.getString(positionNode));
-		Color color = Colors.getColor(preferenceStore.getString(colorNode));
-		LineStyle gridLineStyle = LineStyle.valueOf(preferenceStore.getString(gridLineStyleNode));
-		Color gridColor = Colors.getColor(preferenceStore.getString(gridColorNode));
-		setAxisSettings(axisSettings, position, pattern, color, gridLineStyle, gridColor);
 	}
 }

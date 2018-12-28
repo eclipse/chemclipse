@@ -13,17 +13,17 @@ package org.eclipse.chemclipse.msd.model.core.quantitation;
 
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 
 import junit.framework.TestCase;
 
 public class QuantitationCompoundMSD_1_Test extends TestCase {
 
-	private IQuantitationCompoundMSD quantitationCompound;
+	private IQuantitationCompound quantitationCompound;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -51,12 +51,12 @@ public class QuantitationCompoundMSD_1_Test extends TestCase {
 
 	public void testGetConcentrationResponseEntries_1() {
 
-		assertNotNull(quantitationCompound.getConcentrationResponseEntriesMSD());
+		assertNotNull(quantitationCompound.getConcentrationResponseEntries());
 	}
 
 	public void testGetConcentrationResponseEntries_2() {
 
-		IConcentrationResponseEntries entries = quantitationCompound.getConcentrationResponseEntriesMSD();
+		IConcentrationResponseEntries entries = quantitationCompound.getConcentrationResponseEntries();
 		assertEquals(0, entries.size());
 	}
 
@@ -72,12 +72,12 @@ public class QuantitationCompoundMSD_1_Test extends TestCase {
 
 	public void testGetQuantitationSignals_1() {
 
-		assertNotNull(quantitationCompound.getQuantitationSignalsMSD());
+		assertNotNull(quantitationCompound.getQuantitationSignals());
 	}
 
 	public void testGetQuantitationSignals_2() {
 
-		IQuantitationSignals entries = quantitationCompound.getQuantitationSignalsMSD();
+		IQuantitationSignals entries = quantitationCompound.getQuantitationSignals();
 		assertEquals(0, entries.size());
 	}
 

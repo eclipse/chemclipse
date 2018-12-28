@@ -96,6 +96,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
@@ -237,7 +238,6 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 
 	@Inject
 	public ExtendedChromatogramUI(Composite parent, int style) {
-
 		initialize(parent, style);
 	}
 
@@ -983,6 +983,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		addSelectedScanData(lineSeriesDataList);
 		addSelectedIdentifiedScanData(lineSeriesDataList);
 		addBaselineData(lineSeriesDataList);
+		//
 		addLineSeriesData(lineSeriesDataList);
 	}
 
@@ -1692,7 +1693,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 
 	private void adjustAxisSettings() {
 
-		chromatogramChart.modifyAxisSet(true);
+		chromatogramChart.modifyAxes(true);
 		/*
 		 * Scan Axis
 		 */
@@ -1730,11 +1731,12 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 
 	private void setScanAxisSettings(IAxisSettings axisSettings) {
 
+		ChartSupport chartSupport = new ChartSupport();
 		Position position = Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SCANS));
 		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_X_AXIS_SCANS));
 		LineStyle gridLineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SCANS));
 		Color gridColor = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SCANS));
-		chromatogramChart.setAxisSettings(axisSettings, position, "0", color, gridLineStyle, gridColor);
+		chartSupport.setAxisSettings(axisSettings, position, "0", color, gridLineStyle, gridColor);
 	}
 
 	private void updateToolbar(Composite composite, IChromatogramSelection chromatogramSelection) {
