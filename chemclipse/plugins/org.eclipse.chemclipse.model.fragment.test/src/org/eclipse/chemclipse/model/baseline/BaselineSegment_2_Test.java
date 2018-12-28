@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.baseline;
 
-import org.eclipse.chemclipse.model.baseline.BaselineSegment;
-import org.eclipse.chemclipse.model.baseline.IBaselineSegment;
-
 import junit.framework.TestCase;
 
 public class BaselineSegment_2_Test extends TestCase {
@@ -56,11 +53,11 @@ public class BaselineSegment_2_Test extends TestCase {
 
 	public void testGetStartBackgroundAbundance_1() {
 
-		assertEquals("StartBackgroundAbundance", 0.0f, segment.getStartBackgroundAbundance());
+		assertEquals("StartBackgroundAbundance", -1.0f, segment.getStartBackgroundAbundance());
 	}
 
 	public void testGetStopBackgroundAbundance_1() {
 
-		assertEquals("StopBackgroundAbundance", 0.0f, segment.getStopBackgroundAbundance());
+		assertEquals("StopBackgroundAbundance", -1.0f, segment.getStopBackgroundAbundance());
 	}
 }
