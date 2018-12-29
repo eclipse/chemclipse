@@ -197,7 +197,7 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 									quantitationPeaks.add(quantitationPeakMSD);
 								}
 							}
-							quantitationCompoundMSD.calculateQuantitationSignalsAndConcentrationResponseEntries(quantitationPeaks);
+							quantitationCompoundMSD.calculateQuantitationSignalsAndConcentrationResponseEntries();
 							triggerCompoundDocumentUpdateEvent();
 						}
 					} else {

@@ -13,13 +13,12 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.IQuantitationCalculatorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
+import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 
 public class QuantitationCalculatorMSD_TIC_2_Test extends QuantitationCalculator_TIC_TestCase {
 
@@ -38,11 +37,11 @@ public class QuantitationCalculatorMSD_TIC_2_Test extends QuantitationCalculator
 		super.setUp();
 		//
 		IQuantitationCompound quantitationCompound = getQuantitationCompound();
-		List<IQuantitationPeak> quantitationPeaks = getQuantitationPeaks();
+		quantitationCompound.getQuantitationPeaks().addAll(getQuantitationPeaks());
 		//
 		quantitationCompound.setUseTIC(true);
 		quantitationCompound.setCalibrationMethod(CalibrationMethod.LINEAR);
-		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries(quantitationPeaks);
+		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries();
 		//
 		calculator = new QuantitationCalculatorMSD();
 		quantitationCompound.setUseCrossZero(false);

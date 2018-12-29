@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.Viewer;
 public class QuantitationPeaksTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
@@ -27,10 +28,10 @@ public class QuantitationPeaksTableComparator extends AbstractRecordTableCompara
 			IQuantitationPeak entry2 = (IQuantitationPeak)e2;
 			//
 			switch(getPropertyIndex()) {
-				case 0: // Concentration
+				case 0:
 					sortOrder = Double.compare(entry2.getConcentration(), entry1.getConcentration());
 					break;
-				case 1: // Concentration Unit
+				case 1:
 					sortOrder = (entry2.getConcentrationUnit().compareTo(entry1.getConcentrationUnit()));
 					break;
 				default:
