@@ -12,10 +12,15 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.dialogs.QuantitationSignalEntryEdit;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.dialogs.QuantitationSignalEntryEditDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaksAxes;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -87,15 +92,15 @@ public class ExtendedQuantSignalsListUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(quantitationCompound != null) {
-					// QuantitationSignalEntryEdit quantitationSignalEntryEdit = new QuantitationSignalEntryEdit();
-					// QuantitationSignalEntryEditDialog dialog = new QuantitationSignalEntryEditDialog(shell, quantitationSignalEntryEdit, "Create a new quantitation signal.");
-					// if(dialog.open() == IDialogConstants.OK_ID) {
-					// IQuantitationSignal quantitationSignalMSD = quantitationSignalEntryEdit.getQuantitationSignalMSD();
-					// if(quantitationSignalMSD != null) {
-					// quantitationCompoundDocument.getQuantitationSignals().add(quantitationSignalMSD);
-					// setTableViewerInput();
-					// }
-					// }
+					QuantitationSignalEntryEdit quantitationSignalEntryEdit = new QuantitationSignalEntryEdit();
+					QuantitationSignalEntryEditDialog dialog = new QuantitationSignalEntryEditDialog(e.widget.getDisplay().getActiveShell(), quantitationSignalEntryEdit, "Create a new quantitation signal.");
+					if(dialog.open() == IDialogConstants.OK_ID) {
+						IQuantitationSignal quantitationSignal = quantitationSignalEntryEdit.getQuantitationSignal();
+						if(quantitationSignal != null) {
+							quantitationCompound.getQuantitationSignals().add(quantitationSignal);
+							setQuantitationCompound();
+						}
+					}
 				} else {
 					MessageDialog.openError(e.widget.getDisplay().getActiveShell(), DESCRIPTION, "Please ...");
 				}
@@ -116,15 +121,27 @@ public class ExtendedQuantSignalsListUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(quantitationCompound != null) {
-					// QuantitationSignalEntryEdit quantitationSignalEntryEdit = new QuantitationSignalEntryEdit();
-					// QuantitationSignalEntryEditDialog dialog = new QuantitationSignalEntryEditDialog(shell, quantitationSignalEntryEdit, "Create a new quantitation signal.");
-					// if(dialog.open() == IDialogConstants.OK_ID) {
-					// IQuantitationSignal quantitationSignalMSD = quantitationSignalEntryEdit.getQuantitationSignalMSD();
-					// if(quantitationSignalMSD != null) {
-					// quantitationCompoundDocument.getQuantitationSignals().add(quantitationSignalMSD);
-					// setTableViewerInput();
-					// }
-					// }
+					IQuantitationSignal quantitationSignalOld = getSelectedQuantitationSignal();
+					if(quantitationSignalOld != null) {
+						QuantitationSignalEntryEdit quantitationSignalEntryEdit = new QuantitationSignalEntryEdit();
+						quantitationSignalEntryEdit.setQuantitationSignal(quantitationSignalOld);
+						QuantitationSignalEntryEditDialog dialog = new QuantitationSignalEntryEditDialog(e.widget.getDisplay().getActiveShell(), quantitationSignalEntryEdit, "Edit the quantitation signal.");
+						if(dialog.open() == IDialogConstants.OK_ID) {
+							/*
+							 * Save the edited response entry.
+							 */
+							IQuantitationSignal quantitationSignalNew = quantitationSignalEntryEdit.getQuantitationSignal();
+							if(quantitationSignalOld != null) {
+								IQuantitationSignals quantitationSignals = quantitationCompound.getQuantitationSignals();
+								quantitationSignals.remove(quantitationSignalOld);
+								quantitationSignals.add(quantitationSignalNew);
+								quantitationCompound.updateQuantitationSignals(quantitationSignals); // TODO
+								setQuantitationCompound();
+							}
+						}
+					} else {
+						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), DESCRIPTION, "Please select a quantitation signal.");
+					}
 				} else {
 					MessageDialog.openError(e.widget.getDisplay().getActiveShell(), DESCRIPTION, "Please ...");
 				}
@@ -178,5 +195,15 @@ public class ExtendedQuantSignalsListUI extends Composite {
 		} else {
 			quantSignalsListUI.clear();
 		}
+	}
+
+	private IQuantitationSignal getSelectedQuantitationSignal() {
+
+		IQuantitationSignal quantitationSignal = null;
+		Object element = quantSignalsListUI.getStructuredSelection().getFirstElement();
+		if(element instanceof IQuantitationSignal) {
+			quantitationSignal = (IQuantitationSignal)element;
+		}
+		return quantitationSignal;
 	}
 }
