@@ -18,7 +18,7 @@ import java.util.Locale;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swtchart.extensions.axisconverter.RelativeIntensityConverter;
+import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
@@ -89,7 +89,7 @@ public class ChartXIR extends LineChart {
 		/*
 		 * Y
 		 */
-		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter(SWT.VERTICAL, true));
+		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new PercentageConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
@@ -134,7 +134,7 @@ public class ChartXIR extends LineChart {
 		/*
 		 * Y
 		 */
-		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter(SWT.VERTICAL, true));
+		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new PercentageConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));

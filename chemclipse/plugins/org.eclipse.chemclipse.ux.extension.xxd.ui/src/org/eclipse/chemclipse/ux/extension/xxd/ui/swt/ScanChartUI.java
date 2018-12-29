@@ -46,7 +46,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToMinuteConverter;
-import org.eclipse.swtchart.extensions.axisconverter.RelativeIntensityConverter;
+import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesSettings;
 import org.eclipse.swtchart.extensions.core.BaseChart;
@@ -606,7 +606,7 @@ public class ScanChartUI extends ScrollableChart {
 
 	private void addSecondaryAxisY(IChartSettings chartSettings, String yAxisTitle) {
 
-		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(yAxisTitle, new RelativeIntensityConverter(SWT.VERTICAL, true));
+		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(yAxisTitle, new PercentageConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));

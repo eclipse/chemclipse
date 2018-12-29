@@ -138,7 +138,9 @@ public interface IQuantitationCompound<T extends IPeak> extends Serializable {
 
 	void updateQuantitationCompound(IQuantitationCompound<T> quantitationCompound);
 
-	void createSignalTablesTIC(List<IQuantitationPeak<T>> quantitationPeaks);
+	List<IQuantitationPeak<T>> getQuantitationPeaks();
 
-	void createSignalTablesXIC(List<IQuantitationPeak<T>> quantitationPeaks);
+	void createSignalTablesTIC(List<IQuantitationPeak<T>> quantitationPeaks); // TODO
+
+	void createSignalTablesXIC(List<IQuantitationPeak<T>> quantitationPeaks); // TODO
 }

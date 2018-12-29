@@ -33,7 +33,7 @@ import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.ISeries;
-import org.eclipse.swtchart.extensions.axisconverter.RelativeIntensityConverter;
+import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.barcharts.BarChart;
 import org.eclipse.swtchart.extensions.barcharts.BarSeriesData;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
@@ -141,7 +141,7 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 
 	private void addSecondaryAxisSet(IChartSettings chartSettings) {
 
-		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter(SWT.VERTICAL, true));
+		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new PercentageConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		secondaryAxisSettingsY.setColor(getDisplay().getSystemColor(SWT.COLOR_BLACK));

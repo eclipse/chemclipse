@@ -16,7 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToSecondsConverter;
-import org.eclipse.swtchart.extensions.axisconverter.RelativeIntensityConverter;
+import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
@@ -133,7 +133,7 @@ public class ChromatogramChart extends LineChart {
 		//
 		if(isShowAxis) {
 			if(axisSettings == null) {
-				ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(TITLE_Y_AXIS_RELATIVE_INTENSITY, new RelativeIntensityConverter(SWT.VERTICAL, true));
+				ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(TITLE_Y_AXIS_RELATIVE_INTENSITY, new PercentageConverter(SWT.VERTICAL, true));
 				chartSupport.setAxisSettings(secondaryAxisSettingsY, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 				chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 			} else {

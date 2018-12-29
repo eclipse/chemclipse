@@ -139,6 +139,12 @@
       </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaksAxes"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePagePeaksAxes"
+            name="Peaks Axes">
+      </page>      
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTargets"
             name="Targets">
@@ -184,7 +190,13 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageQuantitation"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageQuantitation"
             name="Quantitation">
-      </page>      
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageQuantitationAxes"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageQuantitationAxes"
+            name="Quantitation Axes">
+      </page>              
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR"

@@ -56,6 +56,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_WELL_CHART, PreferenceConstants.DEF_STACK_POSITION_WELL_CHART);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PLATE_DATA, PreferenceConstants.DEF_STACK_POSITION_PLATE_DATA);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_CHART, PreferenceConstants.DEF_STACK_POSITION_QUANT_RESPONSE_CHART);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_CHART, PreferenceConstants.DEF_STACK_POSITION_QUANT_PEAKS_CHART);
 		/*
 		 * Overlay
 		 */
@@ -124,6 +125,29 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_SIZE, PreferenceConstants.DEF_PEAK_DETECTOR_SCAN_MARKER_SIZE);
 		store.setDefault(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_COLOR, PreferenceConstants.DEF_PEAK_DETECTOR_SCAN_MARKER_COLOR);
 		store.setDefault(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_TYPE, PreferenceConstants.DEF_PEAK_DETECTOR_SCAN_MARKER_TYPE);
+		/*
+		 * Peak(s) Chart
+		 */
+		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_PEAKS, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_PEAKS);
+		store.setDefault(PreferenceConstants.P_SHOW_AREA_DISPLAY_PEAKS, PreferenceConstants.DEF_SHOW_AREA_DISPLAY_PEAKS);
+		//
+		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_RETENTION_TIME_PEAKS, PreferenceConstants.DEF_SHOW_X_AXIS_RETENTION_TIME_PEAKS);
+		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_RETENTION_TIME_PEAKS, PreferenceConstants.DEF_POSITION_X_AXIS_RETENTION_TIME_PEAKS);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_RETENTION_TIME_PEAKS, PreferenceConstants.DEF_COLOR_X_AXIS_RETENTION_TIME_PEAKS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_RETENTION_TIME_PEAKS, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_RETENTION_TIME_PEAKS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_RETENTION_TIME_PEAKS, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_RETENTION_TIME_PEAKS);
+		//
+		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY_PEAKS, PreferenceConstants.DEF_SHOW_Y_AXIS_INTENSITY_PEAKS);
+		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY_PEAKS, PreferenceConstants.DEF_POSITION_Y_AXIS_INTENSITY_PEAKS);
+		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY_PEAKS, PreferenceConstants.DEF_COLOR_Y_AXIS_INTENSITY_PEAKS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY_PEAKS, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_INTENSITY_PEAKS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY_PEAKS, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_INTENSITY_PEAKS);
+		//
+		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY_PEAKS, PreferenceConstants.DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY_PEAKS);
+		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY_PEAKS, PreferenceConstants.DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY_PEAKS);
+		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS, PreferenceConstants.DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY_PEAKS, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY_PEAKS);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS);
 		/*
 		 * Targets
 		 */
@@ -215,6 +239,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		/*
 		 * Calibration Chart
 		 */
+		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_CALIBRATION, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_CALIBRATION);
+		//
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_SHOW_X_AXIS_CONCENTRATION_CALIBRATION);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_POSITION_X_AXIS_CONCENTRATION_CALIBRATION);
 		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_COLOR_X_AXIS_CONCENTRATION_CALIBRATION);

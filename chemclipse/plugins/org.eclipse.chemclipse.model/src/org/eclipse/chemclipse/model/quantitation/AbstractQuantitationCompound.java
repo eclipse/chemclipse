@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -29,6 +30,7 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 	private boolean useTIC = true;
 	private CalibrationMethod calibrationMethod = CalibrationMethod.LINEAR;
 	private boolean useCrossZero = true;
+	private List<IQuantitationPeak<T>> quantitationPeaks = new ArrayList<>();
 
 	/**
 	 * Name, e.g. Styrene<br/>
@@ -193,5 +195,11 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 			this.calibrationMethod = quantitationCompoundMSD.getCalibrationMethod();
 			this.useCrossZero = quantitationCompoundMSD.isCrossZero();
 		}
+	}
+
+	@Override
+	public List<IQuantitationPeak<T>> getQuantitationPeaks() {
+
+		return quantitationPeaks;
 	}
 }

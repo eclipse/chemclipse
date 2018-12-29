@@ -137,6 +137,8 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_PLATE_DATA = PartSupport.PARTSTACK_RIGHT_TOP;
 	public static final String P_STACK_POSITION_QUANT_RESPONSE_CHART = "stackPositionQuantResponseChart";
 	public static final String DEF_STACK_POSITION_QUANT_RESPONSE_CHART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String P_STACK_POSITION_QUANT_PEAKS_CHART = "stackPositionQuantPeaksChart";
+	public static final String DEF_STACK_POSITION_QUANT_PEAKS_CHART = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	/*
 	 * Overlay
 	 */
@@ -273,6 +275,46 @@ public class PreferenceConstants {
 	public static final String DEF_PEAK_DETECTOR_SCAN_MARKER_COLOR = "255,0,0";
 	public static final String P_PEAK_DETECTOR_SCAN_MARKER_TYPE = "showPeakDetectorScanMarkerType";
 	public static final String DEF_PEAK_DETECTOR_SCAN_MARKER_TYPE = PlotSymbolType.NONE.toString();
+	/*
+	 * Peak(s) Chart
+	 */
+	public static final String P_COLOR_SCHEME_DISPLAY_PEAKS = "colorSchemeDisplayPeaks";
+	public static final String DEF_COLOR_SCHEME_DISPLAY_PEAKS = Colors.COLOR_SCHEME_PRINT;
+	public static final String P_SHOW_AREA_DISPLAY_PEAKS = "showAreaDisplayPeaks";
+	public static final boolean DEF_SHOW_AREA_DISPLAY_PEAKS = false;
+	//
+	public static final String P_SHOW_X_AXIS_RETENTION_TIME_PEAKS = "showXAxisRetentionTimePeaks";
+	public static final boolean DEF_SHOW_X_AXIS_RETENTION_TIME_PEAKS = true;
+	public static final String P_POSITION_X_AXIS_RETENTION_TIME_PEAKS = "positionXAxisRetentionTimePeaks";
+	public static final String DEF_POSITION_X_AXIS_RETENTION_TIME_PEAKS = Position.Primary.toString();
+	public static final String P_COLOR_X_AXIS_RETENTION_TIME_PEAKS = "colorXAxisRetentionTimePeaks";
+	public static final String DEF_COLOR_X_AXIS_RETENTION_TIME_PEAKS = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_X_AXIS_RETENTION_TIME_PEAKS = "gridlineStyleXAxisRetentionTimePeaks";
+	public static final String DEF_GRIDLINE_STYLE_X_AXIS_RETENTION_TIME_PEAKS = LineStyle.DOT.toString();
+	public static final String P_GRIDLINE_COLOR_X_AXIS_RETENTION_TIME_PEAKS = "gridlineColorXAxisRetentionTimePeaks";
+	public static final String DEF_GRIDLINE_COLOR_X_AXIS_RETENTION_TIME_PEAKS = "192,192,192";
+	//
+	public static final String P_SHOW_Y_AXIS_INTENSITY_PEAKS = "showYAxisIntensityPeaks";
+	public static final boolean DEF_SHOW_Y_AXIS_INTENSITY_PEAKS = true;
+	public static final String P_POSITION_Y_AXIS_INTENSITY_PEAKS = "positionYAxisIntensityPeaks";
+	public static final String DEF_POSITION_Y_AXIS_INTENSITY_PEAKS = Position.Primary.toString();
+	public static final String P_COLOR_Y_AXIS_INTENSITY_PEAKS = "colorYAxisIntensityPeaks";
+	public static final String DEF_COLOR_Y_AXIS_INTENSITY_PEAKS = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_Y_AXIS_INTENSITY_PEAKS = "gridlineStyleYAxisIntensityPeaks";
+	public static final String DEF_GRIDLINE_STYLE_Y_AXIS_INTENSITY_PEAKS = LineStyle.NONE.toString();
+	public static final String P_GRIDLINE_COLOR_Y_AXIS_INTENSITY_PEAKS = "gridlineColorYAxisIntensityPeaks";
+	public static final String DEF_GRIDLINE_COLOR_Y_AXIS_INTENSITY_PEAKS = "192,192,192";
+	//
+	public static final String P_SHOW_Y_AXIS_RELATIVE_INTENSITY_PEAKS = "showYAxisRelativeIntensityPeaks";
+	public static final boolean DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY_PEAKS = true;
+	public static final String P_POSITION_Y_AXIS_RELATIVE_INTENSITY_PEAKS = "positionYAxisRelativeIntensityPeaks";
+	public static final String DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY_PEAKS = Position.Secondary.toString();
+	public static final String P_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS = "colorYAxisRelativeIntensityPeaks";
+	public static final String DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY_PEAKS = "gridlineStyleYAxisRelativeIntensityPeaks";
+	public static final String DEF_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY_PEAKS = LineStyle.DOT.toString();
+	public static final String P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS = "gridlineColorYAxisRelativeIntensityPeaks";
+	public static final String DEF_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS = "192,192,192";
 	/*
 	 * Targets
 	 */
@@ -456,6 +498,9 @@ public class PreferenceConstants {
 	/*
 	 * Calibration Chart
 	 */
+	public static final String P_COLOR_SCHEME_DISPLAY_CALIBRATION = "colorSchemeDisplayCalibration";
+	public static final String DEF_COLOR_SCHEME_DISPLAY_CALIBRATION = Colors.COLOR_SCHEME_PRINT;
+	//
 	public static final String P_SHOW_X_AXIS_CONCENTRATION_CALIBRATION = "showXAxisConcentrationCalibration";
 	public static final boolean DEF_SHOW_X_AXIS_CONCENTRATION_CALIBRATION = true;
 	public static final String P_POSITION_X_AXIS_CONCENTRATION_CALIBRATION = "positionXAxisConcentrationCalibration";
