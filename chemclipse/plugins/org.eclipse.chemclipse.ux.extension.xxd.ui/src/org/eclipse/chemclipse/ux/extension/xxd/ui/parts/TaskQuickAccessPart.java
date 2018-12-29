@@ -313,12 +313,18 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			public void widgetSelected(SelectionEvent e) {
 
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_CHART));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_LIST));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_CHART));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_LIST));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_SIGNALS_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_SIGNALS_LIST));
 			}
 		});
 		//
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_LIST, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_CHART, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_LIST, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_SIGNALS_LIST, button, imageActive, imageDefault);
 	}
 
 	private void createSubtractScanTask(Composite parent) {

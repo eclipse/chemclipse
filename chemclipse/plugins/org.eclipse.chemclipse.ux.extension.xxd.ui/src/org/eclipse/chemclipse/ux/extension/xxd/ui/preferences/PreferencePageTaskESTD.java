@@ -29,7 +29,10 @@ public class PreferencePageTaskESTD extends FieldEditorPreferencePage implements
 	public void createFieldEditors() {
 
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_CHART, "Quantitation Response Chart:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_LIST, "Quantitation Response List:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_CHART, "Quantitation Peaks Chart:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_LIST, "Quantitation Peaks List:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_QUANT_SIGNALS_LIST, "Quantitation Signals List:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

@@ -39,9 +39,10 @@ public class QuantitationCompoundMSD_3_Test extends ReferencePeakMSDTestCase {
 		List<IQuantitationPeak> quantitationPeaks = new ArrayList<IQuantitationPeak>();
 		IQuantitationPeak quantitationPeak = new QuantitationPeakMSD(getReferencePeakMSD_TIC_1(), 0.1d, "mg/ml");
 		quantitationPeaks.add(quantitationPeak);
+		quantitationCompound.getQuantitationPeaks().addAll(quantitationPeaks);
 		//
 		quantitationCompound.setUseTIC(true);
-		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries(quantitationPeaks);
+		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries();
 		//
 		quantitationSignals = quantitationCompound.getQuantitationSignals();
 		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntries();

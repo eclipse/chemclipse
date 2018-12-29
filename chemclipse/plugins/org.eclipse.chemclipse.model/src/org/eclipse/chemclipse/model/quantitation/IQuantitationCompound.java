@@ -78,7 +78,7 @@ public interface IQuantitationCompound<T extends IPeak> extends Serializable {
 	 * The list of quantitation signals and concentration entries
 	 * will be calculated by using the stored quantitation peaks.
 	 */
-	void calculateQuantitationSignalsAndConcentrationResponseEntries(List<IQuantitationPeak<T>> quantitationPeaks);
+	void calculateQuantitationSignalsAndConcentrationResponseEntries();
 
 	/**
 	 * Returns the quantitation signals.

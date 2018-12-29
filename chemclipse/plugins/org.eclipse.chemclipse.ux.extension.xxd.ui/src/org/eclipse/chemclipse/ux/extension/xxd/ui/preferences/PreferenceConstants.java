@@ -137,8 +137,14 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_PLATE_DATA = PartSupport.PARTSTACK_RIGHT_TOP;
 	public static final String P_STACK_POSITION_QUANT_RESPONSE_CHART = "stackPositionQuantResponseChart";
 	public static final String DEF_STACK_POSITION_QUANT_RESPONSE_CHART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String P_STACK_POSITION_QUANT_RESPONSE_LIST = "stackPositionQuantResponseList";
+	public static final String DEF_STACK_POSITION_QUANT_RESPONSE_LIST = PartSupport.PARTSTACK_RIGHT_TOP;
 	public static final String P_STACK_POSITION_QUANT_PEAKS_CHART = "stackPositionQuantPeaksChart";
 	public static final String DEF_STACK_POSITION_QUANT_PEAKS_CHART = PartSupport.PARTSTACK_BOTTOM_CENTER;
+	public static final String P_STACK_POSITION_QUANT_PEAKS_LIST = "stackPositionQuantPeaksList";
+	public static final String DEF_STACK_POSITION_QUANT_PEAKS_LIST = PartSupport.PARTSTACK_BOTTOM_LEFT;
+	public static final String P_STACK_POSITION_QUANT_SIGNALS_LIST = "stackPositionQuantSignalsList";
+	public static final String DEF_STACK_POSITION_QUANT_SIGNALS_LIST = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	/*
 	 * Overlay
 	 */

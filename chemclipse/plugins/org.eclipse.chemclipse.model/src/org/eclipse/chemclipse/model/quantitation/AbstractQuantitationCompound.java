@@ -130,15 +130,16 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 	}
 
 	@Override
-	public void updateConcentrationResponseEntries(IConcentrationResponseEntries concentrationResponseEntriesMSD) {
+	public void updateConcentrationResponseEntries(IConcentrationResponseEntries concentrationResponseEntries) {
 
-		if(concentrationResponseEntriesMSD != null) {
-			this.concentrationResponseEntries = concentrationResponseEntriesMSD;
+		if(concentrationResponseEntries != null) {
+			this.concentrationResponseEntries.clear();
+			this.concentrationResponseEntries.addAll(concentrationResponseEntries);
 		}
 	}
 
 	@Override
-	public void calculateQuantitationSignalsAndConcentrationResponseEntries(List<IQuantitationPeak<T>> quantitationPeaks) {
+	public void calculateQuantitationSignalsAndConcentrationResponseEntries() {
 
 		/*
 		 * Create a new table only, if there is at least 1 peak stored.

@@ -11,26 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.PeaksChart;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaksAxes;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -43,21 +29,16 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
-import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
-import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
-public class QuantPeaksChartUI extends Composite {
+public class ExtendedQuantPeaksListUI extends Composite {
 
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private PeakChartSupport peakChartSupport = new PeakChartSupport();
-	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
+	private static final String DESCRIPTION = "Quantitation Peaks";
 	//
-	private PeaksChart peaksChart;
 	@SuppressWarnings("rawtypes")
 	private IQuantitationCompound quantitationCompound;
+	private QuantPeakListUI quantPeakListUI;
 
-	public QuantPeaksChartUI(Composite parent, int style) {
+	public ExtendedQuantPeaksListUI(Composite parent, int style) {
 		super(parent, style);
 		createControl();
 	}
@@ -77,7 +58,7 @@ public class QuantPeaksChartUI extends Composite {
 		composite.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(composite);
-		createPeaksChart(composite);
+		createTable(composite);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -86,40 +67,33 @@ public class QuantPeaksChartUI extends Composite {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(2, false));
 		//
-		createToggleChartSeriesLegendButton(composite);
-		createResetButton(composite);
+		createResponseTableButton(composite);
 		createSettingsButton(composite);
 	}
 
-	private void createToggleChartSeriesLegendButton(Composite parent) {
+	private void createResponseTableButton(Composite parent) {
 
+		//
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the chart series legend.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				peaksChart.toggleSeriesLegendVisibility();
-			}
-		});
-	}
-
-	private void createResetButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Reset the chart");
+		button.setToolTipText("Create Response Table");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CALCULATE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				reset();
+				if(quantitationCompound != null) {
+					if(quantitationCompound.getQuantitationPeaks().size() > 0) {
+						if(MessageDialog.openQuestion(e.widget.getDisplay().getActiveShell(), DESCRIPTION, "Would you like to create new concentration response and signal tables?")) {
+							quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries();
+						}
+					} else {
+						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), DESCRIPTION, "There are no quantitation peaks stored.");
+					}
+				}
 			}
 		});
 	}
@@ -152,47 +126,23 @@ public class QuantPeaksChartUI extends Composite {
 		});
 	}
 
-	private void createPeaksChart(Composite parent) {
+	private void createTable(Composite parent) {
 
-		peaksChart = new PeaksChart(parent, SWT.NONE);
-		peaksChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		quantPeakListUI = new QuantPeakListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		quantPeakListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	private void applySettings() {
-
-		peaksChart.modifyAxes(true);
-		setQuantitationCompound();
-	}
-
-	private void reset() {
 
 		setQuantitationCompound();
 	}
 
 	private void setQuantitationCompound() {
 
-		peaksChart.deleteSeries();
 		if(quantitationCompound != null) {
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			//
-			IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_PEAKS));
-			boolean enableArea = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_AREA_DISPLAY_PEAKS);
-			//
-			for(Object object : quantitationCompound.getQuantitationPeaks()) {
-				if(object instanceof IQuantitationPeak) {
-					@SuppressWarnings("rawtypes")
-					IQuantitationPeak quantitationPeak = (IQuantitationPeak)object;
-					String label = decimalFormat.format(quantitationPeak.getConcentration()) + " " + quantitationPeak.getConcentrationUnit();
-					IPeak peak = quantitationPeak.getReferencePeak();
-					ILineSeriesData lineSeriesData = peakChartSupport.getPeak(peak, false, false, colors.getColor(), label);
-					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-					lineSeriesSettings.setEnableArea(enableArea);
-					lineSeriesDataList.add(lineSeriesData);
-					colors.incrementColor();
-				}
-			}
-			//
-			peaksChart.addSeriesData(lineSeriesDataList, LineChart.NO_COMPRESSION);
+			quantPeakListUI.setInput(quantitationCompound.getQuantitationPeaks());
+		} else {
+			quantPeakListUI.clear();
 		}
 	}
 }

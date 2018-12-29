@@ -76,7 +76,7 @@ public class QuantResponseChartUI extends Composite {
 	public void update(IQuantitationCompound quantitationCompound) {
 
 		this.quantitationCompound = quantitationCompound;
-		setQuantitationCompoundSeries();
+		setQuantitationCompound();
 	}
 
 	private void createControl() {
@@ -171,15 +171,15 @@ public class QuantResponseChartUI extends Composite {
 	private void applySettings() {
 
 		calibrationChart.modifyAxes(true);
-		setQuantitationCompoundSeries();
+		setQuantitationCompound();
 	}
 
 	private void reset() {
 
-		setQuantitationCompoundSeries();
+		setQuantitationCompound();
 	}
 
-	private void setQuantitationCompoundSeries() {
+	private void setQuantitationCompound() {
 
 		calibrationChart.deleteSeries();
 		if(quantitationCompound != null) {
