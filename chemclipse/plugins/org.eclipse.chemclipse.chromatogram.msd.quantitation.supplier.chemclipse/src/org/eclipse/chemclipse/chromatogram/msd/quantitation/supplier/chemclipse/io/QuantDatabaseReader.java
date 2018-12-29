@@ -94,13 +94,17 @@ public class QuantDatabaseReader {
 			String chemicalClass = readString(dataInputStream);
 			boolean crossZero = dataInputStream.readBoolean();
 			boolean useTIC = dataInputStream.readBoolean();
-			//
+			/*
+			 * Quantitation Peaks
+			 */
 			List<IQuantitationPeak> quantitationPeaks = readQuantitationPeaks(dataInputStream);
 			List<IConcentrationResponseEntry> concentrationResponseEntriesMSD = readConcentrationResponseEntries(dataInputStream);
 			List<IQuantitationSignal> quantitationSignalsMSD = readQuantitationSignals(dataInputStream);
 			IRetentionIndexWindow retentionIndexWindow = readRetentionIndexWindow(dataInputStream);
 			IRetentionTimeWindow retentionTimeWindow = readRetentionTimeWindow(dataInputStream);
-			//
+			/*
+			 * Quantitation Compund
+			 */
 			IQuantitationCompound quantitationCompound = new QuantitationCompoundMSD(name, concentrationUnit, retentionTimeWindow.getRetentionTime());
 			quantitationCompound.setCalibrationMethod(calibrationMethod);
 			quantitationCompound.setChemicalClass(chemicalClass);
@@ -117,8 +121,12 @@ public class QuantDatabaseReader {
 			quantitationCompound.getConcentrationResponseEntries().addAll(concentrationResponseEntriesMSD);
 			quantitationCompound.getQuantitationSignals().addAll(quantitationSignalsMSD);
 			//
+			quantitationCompound.getQuantitationPeaks().addAll(quantitationPeaks);
+			/*
+			 * DB
+			 */
 			quantDatabase.addQuantitationCompound(quantitationCompound);
-			quantDatabase.getQuantitationPeaks(quantitationCompound).addAll(quantitationPeaks);
+			quantDatabase.getQuantitationPeaks(quantitationCompound).addAll(quantitationPeaks); // REMOVE
 		}
 		//
 		return quantDatabase;
