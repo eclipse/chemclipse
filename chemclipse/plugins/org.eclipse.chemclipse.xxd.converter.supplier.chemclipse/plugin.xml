@@ -76,4 +76,18 @@
             isImportable="true">
       </ProcessMethodSupplier>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.converter.quantitationDatabaseSupplier">
+      <QuantitationDatabaseSupplier
+            description="Reads and writes quantitation databases."
+            exportConverter="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.quantitation.DatabaseExportConverter"
+            fileExtension=".ocq"
+            filterName="Quantitation Database (*.ocq)"
+            id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.quantitationDatabaseSupplier"
+            importConverter="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.quantitation.DatabaseImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.quantitation.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="true">
+      </QuantitationDatabaseSupplier>
+   </extension>
 </plugin>

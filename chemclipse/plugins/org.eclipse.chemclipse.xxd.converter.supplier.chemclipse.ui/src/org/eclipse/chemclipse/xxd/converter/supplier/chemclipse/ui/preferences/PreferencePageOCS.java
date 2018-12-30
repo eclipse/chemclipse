@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,18 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences;
 
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.Activator;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageOCS extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePage() {
+	public PreferencePageOCS() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("OpenChrom Converter");
+		setTitle("Sequence Data (*.ocs)");
 		setDescription("");
 	}
 
@@ -33,7 +32,6 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
-		addField(new LabelFieldEditor("See subpages for specific data types.", getFieldEditorParent()));
 	}
 
 	/*

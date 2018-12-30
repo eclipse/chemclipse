@@ -25,16 +25,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final int MIN_COMPRESSION_LEVEL = 0;
 	public static final int MAX_COMPRESSION_LEVEL = 9;
-	//
+	/*
+	 * *.ocb
+	 */
 	public static final String P_CHROMATOGRAM_VERSION_SAVE = "chromatogramVersionSave";
 	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = IFormat.CHROMATOGRAM_VERSION_LATEST;
 	public static final String P_CHROMATOGRAM_COMPRESSION_LEVEL = "chromatogramCompressionLevel";
 	public static final int DEF_CHROMATOGRAM_COMPRESSION_LEVEL = IFormat.CHROMATOGRAM_COMPRESSION_LEVEL;
-	//
-	public static final String P_METHOD_VERSION_SAVE = "methodVersionSave";
-	public static final String DEF_METHOD_VERSION_SAVE = IFormat.METHOD_VERSION_LATEST;
-	public static final String P_METHOD_COMPRESSION_LEVEL = "methodCompressionLevel";
-	public static final int DEF_METHOD_COMPRESSION_LEVEL = IFormat.METHOD_COMPRESSION_LEVEL;
 	//
 	public static final String P_FORCE_LOAD_ALTERNATE_DETECTOR = "forceLoadAlternateDetector";
 	public static final boolean DEF_FORCE_LOAD_ALTERNATE_DETECTOR = false;
@@ -45,6 +42,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND = false; // This could lead java.util.ConcurrentModificationException if true
 	public static final String P_MIN_BYTES_TO_LOAD_IN_BACKGROUND = "minBytesToLoadInBackground";
 	public static final int DEF_MIN_BYTES_TO_LOAD_IN_BACKGROUND = 2000000; // 2 MB
+	/*
+	 * *.ocm
+	 */
+	public static final String P_METHOD_VERSION_SAVE = "methodVersionSave";
+	public static final String DEF_METHOD_VERSION_SAVE = IFormat.METHOD_VERSION_LATEST;
+	public static final String P_METHOD_COMPRESSION_LEVEL = "methodCompressionLevel";
+	public static final int DEF_METHOD_COMPRESSION_LEVEL = IFormat.METHOD_COMPRESSION_LEVEL;
+	/*
+	 * *.ocq
+	 */
+	public static final String P_QUANTITATION_DB_VERSION_SAVE = "quantitationDatabaseVersionSave";
+	public static final String DEF_QUANTITATION_DB_VERSION_SAVE = IFormat.QUANTITATION_DB_VERSION_LATEST;
+	public static final String P_QUANTITATION_DB_COMPRESSION_LEVEL = "quantitationDatabaseCompressionLevel";
+	public static final int DEF_QUANTITATION_DB_COMPRESSION_LEVEL = IFormat.QUANTITATION_DB_COMPRESSION_LEVEL;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -72,14 +83,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
+		//
 		defaultValues.put(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
 		defaultValues.put(P_CHROMATOGRAM_COMPRESSION_LEVEL, Integer.toString(DEF_CHROMATOGRAM_COMPRESSION_LEVEL));
-		defaultValues.put(P_METHOD_VERSION_SAVE, DEF_METHOD_VERSION_SAVE);
-		defaultValues.put(P_METHOD_COMPRESSION_LEVEL, Integer.toString(DEF_METHOD_COMPRESSION_LEVEL));
 		defaultValues.put(P_FORCE_LOAD_ALTERNATE_DETECTOR, Boolean.toString(DEF_FORCE_LOAD_ALTERNATE_DETECTOR));
 		defaultValues.put(P_USE_SCAN_PROXIES, Boolean.toString(DEF_USE_SCAN_PROXIES));
 		defaultValues.put(P_LOAD_SCAN_PROXIES_IN_BACKGROUND, Boolean.toString(DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND));
 		defaultValues.put(P_MIN_BYTES_TO_LOAD_IN_BACKGROUND, Integer.toString(DEF_MIN_BYTES_TO_LOAD_IN_BACKGROUND));
+		//
+		defaultValues.put(P_METHOD_VERSION_SAVE, DEF_METHOD_VERSION_SAVE);
+		defaultValues.put(P_METHOD_COMPRESSION_LEVEL, Integer.toString(DEF_METHOD_COMPRESSION_LEVEL));
+		//
+		defaultValues.put(P_QUANTITATION_DB_VERSION_SAVE, DEF_QUANTITATION_DB_VERSION_SAVE);
+		defaultValues.put(P_QUANTITATION_DB_COMPRESSION_LEVEL, Integer.toString(DEF_QUANTITATION_DB_COMPRESSION_LEVEL));
+		//
 		return defaultValues;
 	}
 

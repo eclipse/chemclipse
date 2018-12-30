@@ -22,7 +22,7 @@ public interface IFormat {
 	 */
 	String FILE_VERSION = "VERSION";
 	/*
-	 * Chromatogram
+	 * Chromatogram (*.ocb)
 	 */
 	int CHROMATOGRAM_COMPRESSION_LEVEL = 0; // 0 - 9 => 0 no compression
 	int CHROMATOGRAM_COMPRESSION_TYPE = ZipOutputStream.DEFLATED;
@@ -45,13 +45,21 @@ public interface IFormat {
 	String CHROMATOGRAM_VERSION_1300 = "1.3.0.0"; // Version 1.3.0, Release 1 (Dalton)
 	String CHROMATOGRAM_VERSION_LATEST = CHROMATOGRAM_VERSION_1300;
 	/*
-	 * Method
+	 * Method (*.ocm)
 	 */
 	int METHOD_COMPRESSION_LEVEL = 0; // 0 - 9 => 0 no compression
 	int METHOD_COMPRESSION_TYPE = ZipOutputStream.DEFLATED;
 	//
 	String METHOD_VERSION_0001 = "0.0.0.1";
 	String METHOD_VERSION_LATEST = METHOD_VERSION_0001;
+	/*
+	 * Quantitation DB (*.ocq)
+	 */
+	int QUANTITATION_DB_COMPRESSION_LEVEL = 0; // 0 - 9 => 0 no compression
+	int QUANTITATION_DB_COMPRESSION_TYPE = ZipOutputStream.DEFLATED;
+	//
+	String QUANTITATION_DB_VERSION_0001 = "0.0.0.1";
+	String QUANTITATION_DB_VERSION_LATEST = QUANTITATION_DB_VERSION_0001;
 	//
 	String DIR_SEPARATOR = "/";
 	String WSD = "WSD";

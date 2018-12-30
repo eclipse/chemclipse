@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,18 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences;
 
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.Activator;
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageOCQ extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePage() {
+	public PreferencePageOCQ() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("OpenChrom Converter");
+		setTitle("Quantitation Data (*.ocq)");
 		setDescription("");
 	}
 
@@ -33,7 +35,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
-		addField(new LabelFieldEditor("See subpages for specific data types.", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_QUANTITATION_DB_VERSION_SAVE, "Save (*.ocq) as version:", PreferenceSupplier.getMethodVersions(), getFieldEditorParent()));
+		IntegerFieldEditor compressionLevelEditor = new IntegerFieldEditor(PreferenceSupplier.P_QUANTITATION_DB_COMPRESSION_LEVEL, "Compression 0 = off, 9 = best", getFieldEditorParent());
+		compressionLevelEditor.setValidRange(PreferenceSupplier.MIN_COMPRESSION_LEVEL, PreferenceSupplier.MAX_COMPRESSION_LEVEL);
+		addField(compressionLevelEditor);
 	}
 
 	/*
