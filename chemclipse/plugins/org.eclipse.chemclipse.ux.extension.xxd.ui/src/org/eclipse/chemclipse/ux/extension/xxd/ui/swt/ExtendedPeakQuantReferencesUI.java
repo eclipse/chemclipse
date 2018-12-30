@@ -186,7 +186,7 @@ public class ExtendedPeakQuantReferencesUI {
 
 				validate(validator, controlDecoration, combo);
 				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
-					addReference(e.widget.getDisplay().getActiveShell());
+					addReference(e.display.getActiveShell());
 				}
 			}
 		});
@@ -205,7 +205,7 @@ public class ExtendedPeakQuantReferencesUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				addReference(e.widget.getDisplay().getActiveShell());
+				addReference(e.display.getActiveShell());
 			}
 		});
 		return button;
@@ -312,14 +312,14 @@ public class ExtendedPeakQuantReferencesUI {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}

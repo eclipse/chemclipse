@@ -275,6 +275,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_PCR, PreferenceConstants.DEF_SHOW_DATA_PCR);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_SEQUENCE, PreferenceConstants.DEF_SHOW_DATA_SEQUENCE);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_METHOD, PreferenceConstants.DEF_SHOW_DATA_METHOD);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_QUANT_DB, PreferenceConstants.DEF_SHOW_DATA_QUANT_DB);
 		/*
 		 * Lists
 		 */

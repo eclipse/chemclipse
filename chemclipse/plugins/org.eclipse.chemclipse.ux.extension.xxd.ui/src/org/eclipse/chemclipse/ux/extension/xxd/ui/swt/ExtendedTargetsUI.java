@@ -326,14 +326,14 @@ public class ExtendedTargetsUI {
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
 				preferenceManager.addToRoot(new PreferenceNode("3", preferencePageLists));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}
@@ -422,7 +422,7 @@ public class ExtendedTargetsUI {
 
 				validate(targetValidator, targetControlDecoration, combo);
 				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
-					addTarget(e.widget.getDisplay().getActiveShell());
+					addTarget(e.display.getActiveShell());
 				}
 			}
 		});
@@ -441,7 +441,7 @@ public class ExtendedTargetsUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				addTarget(e.widget.getDisplay().getActiveShell());
+				addTarget(e.display.getActiveShell());
 			}
 		});
 		return button;

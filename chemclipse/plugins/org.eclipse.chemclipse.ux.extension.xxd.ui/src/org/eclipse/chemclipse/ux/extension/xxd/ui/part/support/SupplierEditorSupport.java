@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
+import org.eclipse.chemclipse.converter.quantitation.QuantDBConverter;
 import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.model.core.IMeasurement;
@@ -34,6 +35,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PlateEditorPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.QuantitationDatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor;
@@ -87,6 +89,9 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case MTH:
 				supplier = MethodConverter.getMethodConverterSupport().getSupplier();
+				break;
+			case QDB:
+				supplier = QuantDBConverter.getQuantDBConverterSupport().getSupplier();
 				break;
 			default:
 				// No action
@@ -172,6 +177,15 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				tooltip = ProcessMethodEditor.TOOLTIP;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_METHOD_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_METHOD_UPDATE_OVERVIEW;
+				break;
+			case QDB:
+				type = TYPE_QDB;
+				elementId = QuantitationDatabaseEditor.ID;
+				contributionURI = QuantitationDatabaseEditor.CONTRIBUTION_URI;
+				iconURI = QuantitationDatabaseEditor.ICON_URI;
+				tooltip = QuantitationDatabaseEditor.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_QUANTIATION_DATABASE_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_QUANTIATION_DATABASE_UPDATE_OVERVIEW;
 				break;
 			default:
 				type = "";

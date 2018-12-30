@@ -93,7 +93,7 @@ public class ExtendedQuantSignalsListUI extends Composite {
 
 				if(quantitationCompound != null) {
 					QuantitationSignalEntryEdit quantitationSignalEntryEdit = new QuantitationSignalEntryEdit();
-					QuantitationSignalEntryEditDialog dialog = new QuantitationSignalEntryEditDialog(e.widget.getDisplay().getActiveShell(), quantitationSignalEntryEdit, "Create a new quantitation signal.");
+					QuantitationSignalEntryEditDialog dialog = new QuantitationSignalEntryEditDialog(e.display.getActiveShell(), quantitationSignalEntryEdit, "Create a new quantitation signal.");
 					if(dialog.open() == IDialogConstants.OK_ID) {
 						IQuantitationSignal quantitationSignal = quantitationSignalEntryEdit.getQuantitationSignal();
 						if(quantitationSignal != null) {
@@ -102,7 +102,7 @@ public class ExtendedQuantSignalsListUI extends Composite {
 						}
 					}
 				} else {
-					MessageDialog.openError(e.widget.getDisplay().getActiveShell(), DESCRIPTION, "Please ...");
+					MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "Please ...");
 				}
 			}
 		});
@@ -125,7 +125,7 @@ public class ExtendedQuantSignalsListUI extends Composite {
 					if(quantitationSignalOld != null) {
 						QuantitationSignalEntryEdit quantitationSignalEntryEdit = new QuantitationSignalEntryEdit();
 						quantitationSignalEntryEdit.setQuantitationSignal(quantitationSignalOld);
-						QuantitationSignalEntryEditDialog dialog = new QuantitationSignalEntryEditDialog(e.widget.getDisplay().getActiveShell(), quantitationSignalEntryEdit, "Edit the quantitation signal.");
+						QuantitationSignalEntryEditDialog dialog = new QuantitationSignalEntryEditDialog(e.display.getActiveShell(), quantitationSignalEntryEdit, "Edit the quantitation signal.");
 						if(dialog.open() == IDialogConstants.OK_ID) {
 							/*
 							 * Save the edited response entry.
@@ -140,10 +140,10 @@ public class ExtendedQuantSignalsListUI extends Composite {
 							}
 						}
 					} else {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), DESCRIPTION, "Please select a quantitation signal.");
+						MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "Please select a quantitation signal.");
 					}
 				} else {
-					MessageDialog.openError(e.widget.getDisplay().getActiveShell(), DESCRIPTION, "Please ...");
+					MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "Please ...");
 				}
 			}
 		});
@@ -163,14 +163,14 @@ public class ExtendedQuantSignalsListUI extends Composite {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePagePeaksAxes()));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}

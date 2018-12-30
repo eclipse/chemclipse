@@ -24,5 +24,6 @@ public enum DataType {
 	CAL, // Retention Index Calibration
 	PCR, // Polymerase Chain Reaction
 	SEQ, // Sequences
-	MTH // Methods
+	MTH, // Methods
+	QDB // Quantitation Databases
 }

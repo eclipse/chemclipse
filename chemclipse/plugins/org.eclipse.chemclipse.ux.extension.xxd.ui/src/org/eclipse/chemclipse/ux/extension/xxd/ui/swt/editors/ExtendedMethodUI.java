@@ -169,14 +169,14 @@ public class ExtendedMethodUI extends Composite {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageProcessing));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageMethods));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}
@@ -294,7 +294,7 @@ public class ExtendedMethodUI extends Composite {
 
 				if(processMethod != null) {
 					ProcessingWizard wizard = new ProcessingWizard();
-					WizardDialog wizardDialog = new WizardDialog(e.widget.getDisplay().getActiveShell(), wizard);
+					WizardDialog wizardDialog = new WizardDialog(e.display.getActiveShell(), wizard);
 					wizardDialog.setMinimumPageSize(ProcessingWizard.DEFAULT_WIDTH, ProcessingWizard.DEFAULT_HEIGHT);
 					wizardDialog.create();
 					//
@@ -324,7 +324,7 @@ public class ExtendedMethodUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(processMethod != null) {
-					if(MessageDialog.openQuestion(e.widget.getDisplay().getActiveShell(), "Delete Process Method(s)", "Would you like to delete the selected processor(s)?")) {
+					if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Process Method(s)", "Would you like to delete the selected processor(s)?")) {
 						for(Object object : listUI.getStructuredSelection().toArray()) {
 							if(object instanceof IProcessEntry) {
 								IProcessEntry processEntry = (IProcessEntry)object;
@@ -409,7 +409,7 @@ public class ExtendedMethodUI extends Composite {
 						if(processSettingsClass != null) {
 							try {
 								SettingsSupport settingsSupport = new SettingsSupport();
-								String content = settingsSupport.getSettingsAsJson(processEntry.getJsonSettings(), processSettingsClass, e.widget.getDisplay().getActiveShell());
+								String content = settingsSupport.getSettingsAsJson(processEntry.getJsonSettings(), processSettingsClass, e.display.getActiveShell());
 								processEntry.setJsonSettings(content);
 								updateProcessMethod();
 							} catch(JsonParseException e1) {

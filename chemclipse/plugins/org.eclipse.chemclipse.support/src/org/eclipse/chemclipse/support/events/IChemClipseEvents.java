@@ -63,6 +63,8 @@ public interface IChemClipseEvents {
 	String PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN = "MassSpectrumUnknown";
 	String PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_LIBRARY = "MassSpectrumLibrary";
 	String PROPERTY_IDENTIFICATION_TARGET_ENTRY = "IdentificationTarget";
+	//
+	String PROPERTY_QUANT_DB_COMPOUND = IEventBroker.DATA; // IQuantitationCompound
 	/*
 	 * Topics
 	 */
@@ -79,6 +81,7 @@ public interface IChemClipseEvents {
 	String TOPIC_PLATE_PCR_UPDATE_RAWFILE = "plate/pcr/update/rawfile";
 	String TOPIC_SEQUENCE_UPDATE_RAWFILE = "sequence/update/rawfile";
 	String TOPIC_METHOD_UPDATE_RAWFILE = "method/update/rawfile";
+	String TOPIC_QUANTIATION_DATABASE_UPDATE_RAWFILE = "quantitation/database/update/rawfile";
 	/*
 	 * UNLOAD
 	 * Close the chromatogram editor.
@@ -148,11 +151,17 @@ public interface IChemClipseEvents {
 	String TOPIC_SCAN_NMR_UNLOAD_SELECTION = "scan/nmr/unload/selection";
 	String TOPIC_SEQUENCE_UPDATE_OVERVIEW = "sequence/update/overview";
 	String TOPIC_METHOD_UPDATE_OVERVIEW = "method/update/overview";
+	String TOPIC_QUANTIATION_DATABASE_UPDATE_OVERVIEW = "quantitation/database/update/overview";
 	String TOPIC_PLATE_PCR_UPDATE_OVERVIEW = "plate/pcr/update/overview";
 	String TOPIC_PLATE_PCR_UPDATE_SELECTION = "plate/pcr/update/selection";
 	String TOPIC_PLATE_PCR_UNLOAD_SELECTION = "plate/pcr/unload/selection";
 	String TOPIC_WELL_PCR_UPDATE_SELECTION = "well/pcr/update/selection";
 	String TOPIC_WELL_PCR_UNLOAD_SELECTION = "well/pcr/unload/selection";
+	/*
+	 * QUANTITATION DATABASE
+	 */
+	String TOPIC_QUANT_DB_COMPOUND_UPDATE = "quantitation/database/compound/update";
+	String TOPIC_QUANT_DB_COMPOUND_UNLOAD = "quantitation/database/compound/unload";
 	/*
 	 * Converter
 	 */

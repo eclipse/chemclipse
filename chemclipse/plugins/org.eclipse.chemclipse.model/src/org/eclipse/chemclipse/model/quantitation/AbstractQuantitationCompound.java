@@ -203,4 +203,38 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 
 		return quantitationPeaks;
 	}
+
+	@Override
+	public int hashCode() {
+
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public boolean equals(Object obj) {
+
+		if(this == obj)
+			return true;
+		if(obj == null)
+			return false;
+		if(getClass() != obj.getClass())
+			return false;
+		AbstractQuantitationCompound other = (AbstractQuantitationCompound)obj;
+		if(name == null) {
+			if(other.name != null)
+				return false;
+		} else if(!name.equals(other.name))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+
+		return "AbstractQuantitationCompound [name=" + name + ", chemicalClass=" + chemicalClass + ", concentrationUnit=" + concentrationUnit + ", useTIC=" + useTIC + ", calibrationMethod=" + calibrationMethod + ", useCrossZero=" + useCrossZero + "]";
+	}
 }

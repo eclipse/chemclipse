@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageFileExplorer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DataExplorerUI;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -102,24 +101,18 @@ public class DataExplorerPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage1 = new PreferencePageFileExplorer();
-				preferencePage1.setTitle("File Explorer Settings");
-				//
-				IPreferencePage preferencePage2 = new PreferencePage();
-				preferencePage2.setTitle("Data Settings");
-				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage1));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePage2));
+				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageFileExplorer()));
+				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePage()));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						setSupplierFileEditorSupport();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}
@@ -205,6 +198,12 @@ public class DataExplorerPart {
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_METHOD)) {
 			editorSupportList.add(new EditorSupportFactory(DataType.MTH).getInstanceEditorSupport());
+		}
+		/*
+		 * QDB
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_QUANT_DB)) {
+			editorSupportList.add(new EditorSupportFactory(DataType.QDB).getInstanceEditorSupport());
 		}
 		//
 		dataExplorerUI.setSupplierFileEditorSupportList(editorSupportList);

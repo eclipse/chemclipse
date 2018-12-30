@@ -4,5 +4,6 @@
    <extension-point id="org.eclipse.chemclipse.converter.processMethodSupplier" name="Method Converter Supplier" schema="schema/org.eclipse.chemclipse.converter.processMethodSupplier.exsd"/>
    <extension-point id="org.eclipse.chemclipse.converter.reportImportSupplier" name="Report Import Supplier" schema="schema/org.eclipse.chemclipse.converter.reportImportSupplier.exsd"/>
    <extension-point id="org.eclipse.chemclipse.converter.sequenceImportSupplier" name="Sequence Import Supplier" schema="schema/org.eclipse.chemclipse.converter.sequenceImportSupplier.exsd"/>
+   <extension-point id="org.eclipse.chemclipse.converter.quantitationDatabaseSupplier" name="Quantitation Database Supplier" schema="schema/org.eclipse.chemclipse.converter.quantitationDatabaseSupplier.exsd"/>
 
 </plugin>

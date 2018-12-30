@@ -39,6 +39,7 @@ public class PreferencePageFileExplorer extends FieldEditorPreferencePage implem
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_PCR, "PCR", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_SEQUENCE, "SEQ (Sequences)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_METHOD, "MTH (Methods)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_QUANT_DB, "QDB (Quantitation Databases)", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

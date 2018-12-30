@@ -295,7 +295,7 @@ public class ExtendedHeaderDataUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				addHeaderEntry(e.widget.getDisplay().getActiveShell());
+				addHeaderEntry(e.display.getActiveShell());
 			}
 		});
 		return button;

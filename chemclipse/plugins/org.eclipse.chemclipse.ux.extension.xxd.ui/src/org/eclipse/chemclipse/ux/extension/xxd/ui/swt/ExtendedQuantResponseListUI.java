@@ -11,11 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
+import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.dialogs.ConcentrationResponseEntryEdit;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.dialogs.ConcentrationResponseEntryEditDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaksAxes;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -76,7 +81,6 @@ public class ExtendedQuantResponseListUI extends Composite {
 
 	private void createAddButton(Composite parent) {
 
-		//
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Add a new response entry.");
 		button.setText("");
@@ -88,16 +92,17 @@ public class ExtendedQuantResponseListUI extends Composite {
 
 				if(quantitationCompound != null) {
 					String concentrationUnit = quantitationCompound.getConcentrationUnit();
-					// ConcentrationResponseEntryEdit concentrationResponseEntryEdit = new ConcentrationResponseEntryEdit(concentrationUnit);
-					// ConcentrationResponseEntryEditDialog dialog = new ConcentrationResponseEntryEditDialog(shell, concentrationResponseEntryEdit, "Create a new concentration response entry.");
-					// if(dialog.open() == IDialogConstants.OK_ID) {
-					// IConcentrationResponseEntry concentrationResponseEntryMSD = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
-					// if(concentrationResponseEntryMSD != null) {
-					// quantitationCompound.getConcentrationResponseEntries().add(concentrationResponseEntryMSD);
-					// }
-					// }
+					ConcentrationResponseEntryEdit concentrationResponseEntryEdit = new ConcentrationResponseEntryEdit(concentrationUnit);
+					ConcentrationResponseEntryEditDialog dialog = new ConcentrationResponseEntryEditDialog(e.display.getActiveShell(), concentrationResponseEntryEdit, "Create a new concentration response entry.");
+					if(dialog.open() == IDialogConstants.OK_ID) {
+						IConcentrationResponseEntry concentrationResponseEntry = concentrationResponseEntryEdit.getConcentrationResponseEntry();
+						if(concentrationResponseEntry != null) {
+							quantitationCompound.getConcentrationResponseEntries().add(concentrationResponseEntry);
+							setQuantitationCompound();
+						}
+					}
 				} else {
-					MessageDialog.openError(e.widget.getDisplay().getActiveShell(), DESCRIPTION, "Please select a quantitation compound.");
+					MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "Please select a quantitation compound.");
 				}
 			}
 		});
@@ -105,7 +110,6 @@ public class ExtendedQuantResponseListUI extends Composite {
 
 	private void createEditButton(Composite parent) {
 
-		//
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Edit a response entry.");
 		button.setText("");
@@ -115,34 +119,32 @@ public class ExtendedQuantResponseListUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				// if(quantitationCompoundMSD != null) {
-				// IConcentrationResponseEntry concentrationResponseEntryOld = getSelectedConcentrationResponseEntryMSD();
-				// if(concentrationResponseEntryOld != null) {
-				// Shell shell = Display.getCurrent().getActiveShell();
-				// String concentrationUnit = quantitationCompoundMSD.getConcentrationUnit();
-				// ConcentrationResponseEntryEdit concentrationResponseEntryEdit = new ConcentrationResponseEntryEdit(concentrationUnit);
-				// concentrationResponseEntryEdit.setConcentrationResponseEntryMSD(concentrationResponseEntryOld);
-				// ConcentrationResponseEntryEditDialog dialog = new ConcentrationResponseEntryEditDialog(shell, concentrationResponseEntryEdit, "Edit the concentration response entry.");
-				// if(dialog.open() == IDialogConstants.OK_ID) {
-				// /*
-				// * Save the edited response entry.
-				// */
-				// IConcentrationResponseEntry concentrationResponseEntryNew = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
-				// if(concentrationResponseEntryOld != null) {
-				// IConcentrationResponseEntries concentrationResponseEntriesMSD = quantitationCompoundMSD.getConcentrationResponseEntries();
-				// concentrationResponseEntriesMSD.remove(concentrationResponseEntryOld);
-				// concentrationResponseEntriesMSD.add(concentrationResponseEntryNew);
-				// quantitationCompoundMSD.updateConcentrationResponseEntries(concentrationResponseEntriesMSD);
-				// setTableViewerInput();
-				// triggerCompoundDocumentUpdateEvent();
-				// }
-				// }
-				// } else {
-				// showMessage(MESSAGE_BOX_TEXT, "Please select a concentration response entry.");
-				// }
-				// } else {
-				// showMessage(MESSAGE_BOX_TEXT, "Please select a quantitation compound previously.");
-				// }
+				if(quantitationCompound != null) {
+					IConcentrationResponseEntry concentrationResponseEntryOld = getSelectedConcentrationResponseEntry();
+					if(concentrationResponseEntryOld != null) {
+						String concentrationUnit = quantitationCompound.getConcentrationUnit();
+						ConcentrationResponseEntryEdit concentrationResponseEntryEdit = new ConcentrationResponseEntryEdit(concentrationUnit);
+						concentrationResponseEntryEdit.setConcentrationResponseEntryMSD(concentrationResponseEntryOld);
+						ConcentrationResponseEntryEditDialog dialog = new ConcentrationResponseEntryEditDialog(e.display.getActiveShell(), concentrationResponseEntryEdit, "Edit the concentration response entry.");
+						if(dialog.open() == IDialogConstants.OK_ID) {
+							/*
+							 * Save the edited response entry.
+							 */
+							IConcentrationResponseEntry concentrationResponseEntryNew = concentrationResponseEntryEdit.getConcentrationResponseEntry();
+							if(concentrationResponseEntryOld != null) {
+								IConcentrationResponseEntries concentrationResponseEntriesMSD = quantitationCompound.getConcentrationResponseEntries();
+								concentrationResponseEntriesMSD.remove(concentrationResponseEntryOld);
+								concentrationResponseEntriesMSD.add(concentrationResponseEntryNew);
+								quantitationCompound.updateConcentrationResponseEntries(concentrationResponseEntriesMSD);
+								setQuantitationCompound();
+							}
+						}
+					} else {
+						MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "Please select a concentration response entry.");
+					}
+				} else {
+					MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "Please select a quantitation compound previously.");
+				}
 			}
 		});
 	}
@@ -161,14 +163,14 @@ public class ExtendedQuantResponseListUI extends Composite {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePagePeaksAxes()));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}
@@ -193,5 +195,15 @@ public class ExtendedQuantResponseListUI extends Composite {
 		} else {
 			quantResponseListUI.clear();
 		}
+	}
+
+	private IConcentrationResponseEntry getSelectedConcentrationResponseEntry() {
+
+		IConcentrationResponseEntry quantitationSignal = null;
+		Object element = quantResponseListUI.getStructuredSelection().getFirstElement();
+		if(element instanceof IConcentrationResponseEntry) {
+			quantitationSignal = (IConcentrationResponseEntry)element;
+		}
+		return quantitationSignal;
 	}
 }

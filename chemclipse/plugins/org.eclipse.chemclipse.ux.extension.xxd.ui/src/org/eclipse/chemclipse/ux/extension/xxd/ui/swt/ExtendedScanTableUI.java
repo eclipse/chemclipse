@@ -490,14 +490,14 @@ public class ExtendedScanTableUI {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}
@@ -593,9 +593,9 @@ public class ExtendedScanTableUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(object != null) {
-					addSignal(e.widget.getDisplay().getActiveShell());
+					addSignal(e.display.getActiveShell());
 				} else {
-					MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Add Signal", "Please load a scan first.");
+					MessageDialog.openError(e.display.getActiveShell(), "Add Signal", "Please load a scan first.");
 				}
 			}
 		});

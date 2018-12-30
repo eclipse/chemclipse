@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
+import org.eclipse.chemclipse.converter.quantitation.QuantDBConverter;
 import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -64,6 +65,8 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case MTH:
 				supplier = MethodConverter.getMethodConverterSupport().getSupplier();
+			case QDB:
+				supplier = QuantDBConverter.getQuantDBConverterSupport().getSupplier();
 			default:
 				// No action
 		}
@@ -100,6 +103,9 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case MTH:
 				type = TYPE_MTH;
+				break;
+			case QDB:
+				type = TYPE_QDB;
 				break;
 			default:
 				type = "";

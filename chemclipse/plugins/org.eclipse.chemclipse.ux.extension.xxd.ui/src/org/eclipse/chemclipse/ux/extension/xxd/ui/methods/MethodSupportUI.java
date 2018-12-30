@@ -153,7 +153,7 @@ public class MethodSupportUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Shell shell = e.widget.getDisplay().getActiveShell();
+				Shell shell = e.display.getActiveShell();
 				String directoryPath = preferenceStore.getString(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER);
 				File directory = new File(directoryPath);
 				if(directory.exists()) {
@@ -278,14 +278,14 @@ public class MethodSupportUI extends Composite {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageProcessing));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageMethods));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}

@@ -87,11 +87,11 @@ public class ExtendedQuantPeaksListUI extends Composite {
 
 				if(quantitationCompound != null) {
 					if(quantitationCompound.getQuantitationPeaks().size() > 0) {
-						if(MessageDialog.openQuestion(e.widget.getDisplay().getActiveShell(), DESCRIPTION, "Would you like to create new concentration response and signal tables?")) {
+						if(MessageDialog.openQuestion(e.display.getActiveShell(), DESCRIPTION, "Would you like to create new concentration response and signal tables?")) {
 							quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries();
 						}
 					} else {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), DESCRIPTION, "There are no quantitation peaks stored.");
+						MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "There are no quantitation peaks stored.");
 					}
 				}
 			}
@@ -112,14 +112,14 @@ public class ExtendedQuantPeaksListUI extends Composite {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePagePeaksAxes()));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}

@@ -43,7 +43,7 @@ public class MethodImportRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Import Process Method", IProgressMonitor.UNKNOWN);
 			IProcessingInfo processingInfo = MethodConverter.convert(file, monitor);
-			processMethod = (ProcessMethod)processingInfo.getProcessingResult();
+			processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		} finally {

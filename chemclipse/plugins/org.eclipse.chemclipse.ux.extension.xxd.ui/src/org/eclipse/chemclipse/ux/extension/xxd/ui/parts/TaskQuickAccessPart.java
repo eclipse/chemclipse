@@ -495,7 +495,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 					preferenceManager.addToRoot(new PreferenceNode(Integer.toString(i++), preferencePage));
 				}
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				preferenceDialog.open();

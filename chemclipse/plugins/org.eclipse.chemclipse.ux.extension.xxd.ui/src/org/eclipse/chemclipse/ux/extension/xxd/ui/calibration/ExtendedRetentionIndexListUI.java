@@ -300,7 +300,7 @@ public class ExtendedRetentionIndexListUI extends Composite {
 
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS, retentionIndexFile);
-				MessageDialog.openConfirm(e.widget.getDisplay().getActiveShell(), "RI Calculator", "The RI library has been added.");
+				MessageDialog.openConfirm(e.display.getActiveShell(), "RI Calculator", "The RI library has been added.");
 			}
 		});
 		//
@@ -320,7 +320,7 @@ public class ExtendedRetentionIndexListUI extends Composite {
 
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS, retentionIndexFile);
-				MessageDialog.openConfirm(e.widget.getDisplay().getActiveShell(), "RI Calculator", "The RI library has been removed.");
+				MessageDialog.openConfirm(e.display.getActiveShell(), "RI Calculator", "The RI library has been removed.");
 			}
 		});
 		//
@@ -347,14 +347,14 @@ public class ExtendedRetentionIndexListUI extends Composite {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageMSD));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.widget.getDisplay().getActiveShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}

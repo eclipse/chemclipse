@@ -564,6 +564,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_DATA_SEQUENCE = true;
 	public static final String P_SHOW_DATA_METHOD = "showDataMethod";
 	public static final boolean DEF_SHOW_DATA_METHOD = true;
+	public static final String P_SHOW_DATA_QUANT_DB = "showDataQuantDB";
+	public static final boolean DEF_SHOW_DATA_QUANT_DB = true;
 	/*
 	 * Lists
 	 */

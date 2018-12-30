@@ -16,6 +16,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.QuantPeaksChartUI;
@@ -43,8 +44,7 @@ public class QuantPeaksChartPart extends AbstractDataUpdateSupport implements ID
 	@Override
 	public void registerEvents() {
 
-		System.out.println("Change TOPIC and PROPERTY");
-		registerEvent("quantitation/msd/update/supplier/chemclipse/quantitationcompounddocument", "QuantitationCompoundDocument");
+		registerEvent(IChemClipseEvents.TOPIC_QUANT_DB_COMPOUND_UPDATE, IChemClipseEvents.PROPERTY_QUANT_DB_COMPOUND);
 	}
 
 	@SuppressWarnings("rawtypes")

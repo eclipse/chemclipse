@@ -34,13 +34,14 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramTypeSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.SequenceListUI;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -57,6 +58,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
@@ -375,7 +377,7 @@ public class ExtendedSequenceListUI {
 				try {
 					chromatogramTypeSupport.openFiles(files);
 				} catch(Exception e1) {
-					showDataPathWarningMessage();
+					showDataPathWarningMessage(e.display.getActiveShell());
 					logger.warn(e1);
 				}
 			}
@@ -409,19 +411,19 @@ public class ExtendedSequenceListUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageSequences = new PreferencePageSequences();
-				preferencePageSequences.setTitle("Sequences Settings ");
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSequences));
+				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageSequences()));
+				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageMethods()));
+				preferenceManager.addToRoot(new PreferenceNode("3", new PreferencePageChromatogram()));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.widget.getDisplay().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}
@@ -463,7 +465,7 @@ public class ExtendedSequenceListUI {
 					try {
 						chromatogramTypeSupport.openFiles(files);
 					} catch(Exception e1) {
-						showDataPathWarningMessage();
+						showDataPathWarningMessage(e.display.getActiveShell());
 						logger.warn(e1);
 					}
 				}
@@ -482,8 +484,8 @@ public class ExtendedSequenceListUI {
 		}
 	}
 
-	private void showDataPathWarningMessage() {
+	private void showDataPathWarningMessage(Shell shell) {
 
-		MessageDialog.openWarning(DisplayUtils.getShell(), "Open Chromatogram", "The file doesn't exist. Please check that the data path is set correctly.");
+		MessageDialog.openWarning(shell, "Open Chromatogram", "The file doesn't exist. Please check that the data path is set correctly.");
 	}
 }
