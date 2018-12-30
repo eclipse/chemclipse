@@ -44,7 +44,7 @@ import org.eclipse.swt.widgets.Composite;
 public class WelcomeView {
 
 	public static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
-	private static final String PERSPECTIVE_QUANTITATION = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.perspective";
+	private static final String PERSPECTIVE_PCA = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	private static final String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
 	//
 	// private static final String CSS_ID = "org-eclipse-chemclipse-ux-extension-ui-views-welcomeview-background";
@@ -81,7 +81,6 @@ public class WelcomeView {
 		}
 	}
 
-
 	@Inject
 	public WelcomeView(Composite parent) {
 		welcomeTiles = new ArrayList<TaskTile>();
@@ -117,7 +116,7 @@ public class WelcomeView {
 		 */
 		Image imageDataAnalysis = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_DATA_ANALYSIS, IApplicationImage.SIZE_128x128);
 		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 2, 2, new Component(PERSPECTIVE_DATA_ANALYSIS), imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.");
-		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_QUANTITATION), null, "Quantitation", "Used for ISTD and ESTD quantitation");
+		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_PCA), null, "PCA", "Used for principal component analysis");
 		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_LOGGING), null, "Logging", "Have a look at the log files.");
 		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 2, 1, new DemoWelcomeTile(this), null, "Demo", "Load a demo chromatogram.");
 		/*
@@ -179,9 +178,9 @@ public class WelcomeView {
 			}
 		}
 	}
-	
+
 	MPart createChromatogramPart() {
-		
+
 		/*
 		 * Create the input part and prepare it.
 		 */
@@ -192,8 +191,9 @@ public class WelcomeView {
 		part.setCloseable(true);
 		return part;
 	}
-	
+
 	void showEditorPart(MPart part) {
+
 		/*
 		 * Get the editor part stack.
 		 */
