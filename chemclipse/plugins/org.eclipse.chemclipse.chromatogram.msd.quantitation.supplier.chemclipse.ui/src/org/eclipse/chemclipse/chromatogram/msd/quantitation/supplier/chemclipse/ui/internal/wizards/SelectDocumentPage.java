@@ -13,7 +13,8 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -29,7 +30,7 @@ import org.eclipse.swt.widgets.Text;
 public class SelectDocumentPage extends WizardPage {
 
 	private List<String> peakTargetNames;
-	private IQuantDatabase database;
+	private IQuantitationDatabase quantitationDatabase;
 	//
 	protected Button buttonMerge;
 	protected Combo comboQuantitationCompoundNames;
@@ -45,12 +46,12 @@ public class SelectDocumentPage extends WizardPage {
 	private Label label2;
 	private Label label3;
 
-	protected SelectDocumentPage(String pageName, List<String> peakTargetNames, IQuantDatabase database) {
+	protected SelectDocumentPage(String pageName, List<String> peakTargetNames, IQuantitationDatabase quantitationDatabase) {
 		super(pageName);
 		setTitle("Quantitation Support");
 		setDescription("Create a quantitation document.");
 		this.peakTargetNames = peakTargetNames;
-		this.database = database;
+		this.quantitationDatabase = quantitationDatabase;
 	}
 
 	@Override
@@ -96,8 +97,8 @@ public class SelectDocumentPage extends WizardPage {
 		});
 		//
 		comboQuantitationCompoundNames = new Combo(parent, SWT.NONE);
-		if(database != null) {
-			List<String> quantitationCompoundNames = database.getQuantitationCompoundNames();
+		if(quantitationDatabase != null) {
+			List<String> quantitationCompoundNames = quantitationDatabase.getCompoundNames();
 			comboQuantitationCompoundNames.setItems(quantitationCompoundNames.toArray(new String[quantitationCompoundNames.size()]));
 		}
 		comboQuantitationCompoundNames.setLayoutData(gridData);
@@ -109,10 +110,13 @@ public class SelectDocumentPage extends WizardPage {
 				/*
 				 * Set the concentration unit label.
 				 */
-				if(database != null) {
+				if(quantitationDatabase != null) {
 					String name = comboQuantitationCompoundNames.getText();
-					String concentrationUnit = database.getQuantitationCompoundConcentrationUnit(name); // TODO
-					labelConcentrationUnitMerge.setText(concentrationUnit);
+					IQuantitationCompound quantitationCompound = quantitationDatabase.getQuantitationCompound(name);
+					if(quantitationCompound != null) {
+						String concentrationUnit = quantitationCompound.getConcentrationUnit();
+						labelConcentrationUnitMerge.setText(concentrationUnit);
+					}
 				}
 			}
 		});

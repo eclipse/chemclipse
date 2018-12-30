@@ -17,11 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationCompoundAlreadyExistsException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
@@ -33,14 +32,14 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 
 	private static final Logger logger = Logger.getLogger(AddPeakToQuantitationTableWizard.class);
 	private SelectDocumentPage documentPage;
-	private IQuantDatabase database;
+	private IQuantitationDatabase quantitationDatabase;
 	private IChromatogramPeakMSD chromatogramPeakMSD;
 	private DecimalFormat decimalFormat;
 
-	public AddPeakToQuantitationTableWizard(IQuantDatabase database, IChromatogramPeakMSD chromatogramPeakMSD) {
+	public AddPeakToQuantitationTableWizard(IQuantitationDatabase quantitationDatabase, IChromatogramPeakMSD chromatogramPeakMSD) {
 		setNeedsProgressMonitor(true);
 		setWindowTitle("Add Peak to Quantitation Table");
-		this.database = database;
+		this.quantitationDatabase = quantitationDatabase;
 		this.chromatogramPeakMSD = chromatogramPeakMSD;
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
@@ -49,7 +48,7 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 	public void addPages() {
 
 		List<String> peakTargetNames = getPeakTargetNames(chromatogramPeakMSD);
-		documentPage = new SelectDocumentPage("CreateDoc", peakTargetNames, database);
+		documentPage = new SelectDocumentPage("CreateDoc", peakTargetNames, quantitationDatabase);
 		addPage(documentPage);
 	}
 
@@ -57,7 +56,7 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 	public boolean performFinish() {
 
 		removeErrorMessage();
-		if(database == null) {
+		if(quantitationDatabase == null) {
 			showErrorMessage("Please select a valid database.");
 			return false;
 		} else {
@@ -78,14 +77,14 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 		 * Merge the peak with the existing quantitation document.
 		 */
 		String name = documentPage.comboQuantitationCompoundNames.getText().trim();
-		IQuantitationCompound quantitationCompoundMSD = database.getQuantitationCompound(name);
+		IQuantitationCompound quantitationCompoundMSD = quantitationDatabase.getQuantitationCompound(name);
 		if(quantitationCompoundMSD != null) {
 			try {
 				double concentration = decimalFormat.parse(documentPage.textConcentrationMerge.getText().trim()).doubleValue();
 				if(concentration > 0) {
 					String concentrationUnit = quantitationCompoundMSD.getConcentrationUnit();
 					IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD(chromatogramPeakMSD, concentration, concentrationUnit);
-					database.getQuantitationPeaks(quantitationCompoundMSD).add(quantitationPeakMSD);
+					quantitationCompoundMSD.getQuantitationPeaks().add(quantitationPeakMSD);
 					/*
 					 * Return true, cause all checks are valid.
 					 */
@@ -116,7 +115,7 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 			/*
 			 * Selected document
 			 */
-			boolean documentStillExists = database.isQuantitationCompoundAlreadyAvailable(name);
+			boolean documentStillExists = quantitationDatabase.containsQuantitationCompund(name);
 			if(documentStillExists) {
 				showErrorMessage("The quantitation compound still exists in the database.");
 			} else {
@@ -142,13 +141,9 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 							quantitationCompoundMSD.getRetentionIndexWindow().setAllowedPositiveDeviation(1500);
 							quantitationCompoundMSD.setUseTIC(true);
 							//
-							try {
-								IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD(chromatogramPeakMSD, concentration, concentrationUnit);
-								database.addQuantitationCompound(quantitationCompoundMSD);
-								database.getQuantitationPeaks(quantitationCompoundMSD).add(quantitationPeakMSD);
-							} catch(QuantitationCompoundAlreadyExistsException e) {
-								logger.warn(e);
-							}
+							IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD(chromatogramPeakMSD, concentration, concentrationUnit);
+							quantitationCompoundMSD.getQuantitationPeaks().add(quantitationPeakMSD);
+							quantitationDatabase.add(quantitationCompoundMSD);
 							/*
 							 * Return true, cause all checks are valid.
 							 */

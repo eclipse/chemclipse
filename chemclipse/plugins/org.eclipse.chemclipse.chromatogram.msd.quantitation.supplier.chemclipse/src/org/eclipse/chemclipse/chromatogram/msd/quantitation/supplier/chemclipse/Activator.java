@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -39,7 +38,6 @@ public class Activator implements BundleActivator {
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
 
-		QuantDatabases.persistDatabases();
 		Activator.context = null;
 	}
 }

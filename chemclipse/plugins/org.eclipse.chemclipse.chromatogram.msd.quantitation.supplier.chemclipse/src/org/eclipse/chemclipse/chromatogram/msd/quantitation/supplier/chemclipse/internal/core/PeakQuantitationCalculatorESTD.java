@@ -15,14 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
+import org.eclipse.chemclipse.model.quantitation.QuantitationDatabase;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -43,27 +42,23 @@ public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalc
 	public IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		IQuantDatabase database;
-		try {
-			database = QuantDatabases.getQuantDatabase();
-			//
+		System.out.println("Load Selected QuantDB");
+		IQuantitationDatabase quantitationDatabase = new QuantitationDatabase(); // TODO Load
+		if(quantitationDatabase != null && quantitationDatabase.size() > 0) {
 			QuantitationCalculatorMSD calculator = new QuantitationCalculatorMSD();
-			List<IQuantitationCompound> quantitationCompounds = database.getQuantitationCompounds();
-			//
 			for(IPeak peakMSD : peaks) {
 				/*
 				 * Try to quantify the selected peak.
 				 * The results will be added to the peak.
 				 */
-				List<IQuantitationCompound> quantitationCompoundsMSD = getQuantitationEntries(quantitationCompounds, peakMSD);
+				List<IQuantitationCompound> quantitationCompoundsMSD = getQuantitationEntries(quantitationDatabase, peakMSD);
 				List<IQuantitationEntryMSD> entries = calculator.calculateQuantitationResults(peakMSD, quantitationCompoundsMSD, processingInfo);
 				for(IQuantitationEntryMSD quantitationEntry : entries) {
 					peakMSD.addQuantitationEntry(quantitationEntry);
 				}
 			}
-		} catch(NoQuantitationTableAvailableException e) {
+		} else {
 			processingInfo.addErrorMessage("ChemClipse Quantitation", "Please select a quantitation table.");
-			logger.warn(e);
 		}
 		return processingInfo;
 	}

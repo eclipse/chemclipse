@@ -14,15 +14,13 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationCompoundAlreadyExistsException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
+import org.eclipse.chemclipse.model.quantitation.QuantitationDatabase;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
@@ -66,8 +64,10 @@ public class AddAllPeaksWizard extends Wizard {
 			/*
 			 * Library Info
 			 */
-			try {
-				IQuantDatabase database = QuantDatabases.getQuantDatabase();
+			System.out.println("Load QuantDB");
+			IQuantitationDatabase quantitationDatabase = new QuantitationDatabase();
+			if(quantitationDatabase != null && quantitationDatabase.size() > 0) {
+				//
 				for(IChromatogramPeakMSD peak : peaks) {
 					//
 					String name = getPeakTargetName(peak);
@@ -77,42 +77,35 @@ public class AddAllPeaksWizard extends Wizard {
 						/*
 						 * Name is not null.
 						 */
-						if(database.isQuantitationCompoundAlreadyAvailable(name)) {
+						if(quantitationDatabase.containsQuantitationCompund(name)) {
 							/*
 							 * Merge the quantitation peak
 							 */
-							IQuantitationCompound quantitationCompoundMSD = database.getQuantitationCompound(name);
+							IQuantitationCompound quantitationCompoundMSD = quantitationDatabase.getQuantitationCompound(name);
 							if(quantitationCompoundMSD != null) {
 								IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD(peak, concentration, quantitationCompoundMSD.getConcentrationUnit());
-								database.getQuantitationPeaks(quantitationCompoundMSD).add(quantitationPeakMSD);
+								quantitationCompoundMSD.getQuantitationPeaks().add(quantitationPeakMSD);
 							}
 						} else {
 							/*
 							 * Add a new peak
 							 */
-							try {
-								int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
-								String chemicalClass = page.getChemicalClass();
-								//
-								IQuantitationCompound quantitationCompoundMSD = new QuantitationCompoundMSD(name, concentrationUnit, retentionTime);
-								quantitationCompoundMSD.setChemicalClass(chemicalClass);
-								quantitationCompoundMSD.getRetentionTimeWindow().setAllowedNegativeDeviation(1500); // Default
-								quantitationCompoundMSD.getRetentionTimeWindow().setAllowedPositiveDeviation(1500); // Default
-								//
-								IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD(peak, concentration, concentrationUnit);
-								//
-								database.addQuantitationCompound(quantitationCompoundMSD);
-								database.getQuantitationPeaks(quantitationCompoundMSD).add(quantitationPeakMSD);
-								//
-							} catch(QuantitationCompoundAlreadyExistsException e) {
-								logger.warn(e);
-							}
+							int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
+							String chemicalClass = page.getChemicalClass();
+							//
+							IQuantitationCompound quantitationCompoundMSD = new QuantitationCompoundMSD(name, concentrationUnit, retentionTime);
+							quantitationCompoundMSD.setChemicalClass(chemicalClass);
+							quantitationCompoundMSD.getRetentionTimeWindow().setAllowedNegativeDeviation(1500); // Default
+							quantitationCompoundMSD.getRetentionTimeWindow().setAllowedPositiveDeviation(1500); // Default
+							//
+							IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD(peak, concentration, concentrationUnit);
+							//
+							quantitationDatabase.add(quantitationCompoundMSD);
 						}
 					}
 				}
 				return true;
-			} catch(NoQuantitationTableAvailableException e1) {
-				logger.warn(e1);
+			} else {
 				showErrorMessage("Please select a quantitation table previously.");
 				return false;
 			}

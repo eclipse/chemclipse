@@ -14,13 +14,10 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.events.IChemClipseQuantitationEvents;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.wizards.AddPeakToQuantitationTableWizard;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
+import org.eclipse.chemclipse.model.quantitation.QuantitationDatabase;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.progress.core.InfoType;
@@ -53,24 +50,17 @@ public class AddSelectedPeakToQuantitationTableHandler implements EventHandler {
 				/*
 				 * Open a wizard to get relevant information.
 				 */
-				try {
-					IQuantDatabase database = QuantDatabases.getQuantDatabase();
-					AddPeakToQuantitationTableWizard wizard = new AddPeakToQuantitationTableWizard(database, chromatogramPeakMSD);
+				System.out.println("Load QuantDB");
+				IQuantitationDatabase quantitationDatabase = new QuantitationDatabase(); // TODO Load
+				if(quantitationDatabase != null && quantitationDatabase.size() > 0) {
+					AddPeakToQuantitationTableWizard wizard = new AddPeakToQuantitationTableWizard(quantitationDatabase, chromatogramPeakMSD);
 					WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 					if(dialog.open() == Dialog.OK) {
-						/*
-						 * Send a message to inform e.g. the QuantitationCompoundsUI.
-						 */
-						if(eventBroker != null) {
-							eventBroker.send(IChemClipseQuantitationEvents.TOPIC_QUANTITATION_TABLE_UPDATE, PreferenceSupplier.getSelectedQuantitationTable());
-						}
-						//
 						StatusLineLogger.setInfo(InfoType.MESSAGE, "Done: The peak has been successfully added to the quantitation table.");
 					}
-				} catch(NoQuantitationTableAvailableException e) {
+				} else {
 					MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Quantitation", "Please select a quantitation table previously.");
 					StatusLineLogger.setInfo(InfoType.MESSAGE, "There is no quantitation table available.");
-					logger.warn(e);
 				}
 			}
 		}

@@ -30,6 +30,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	public static final String P_SELECTED_QUANTITATION_TABLE = "selectedQuantitationTable";
 	public static final String DEF_SELECTED_QUANTITATION_TABLE = "";
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {

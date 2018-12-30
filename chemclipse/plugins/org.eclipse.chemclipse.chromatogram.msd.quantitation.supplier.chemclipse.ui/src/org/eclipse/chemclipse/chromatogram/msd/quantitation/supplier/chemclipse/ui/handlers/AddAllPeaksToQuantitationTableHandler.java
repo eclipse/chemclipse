@@ -16,8 +16,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.events.IChemClipseQuantitationEvents;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.wizards.AddAllPeaksWizard;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -53,12 +51,6 @@ public class AddAllPeaksToQuantitationTableHandler implements EventHandler {
 					WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 					if(dialog.open() == Dialog.OK) {
 						StatusLineLogger.setInfo(InfoType.MESSAGE, "Done: The peaks have been added to the quantitation table.");
-						/*
-						 * Send a message to inform e.g. the QuantitationCompoundsUI.
-						 */
-						if(eventBroker != null) {
-							eventBroker.send(IChemClipseQuantitationEvents.TOPIC_QUANTITATION_TABLE_UPDATE, PreferenceSupplier.getSelectedQuantitationTable());
-						}
 					}
 				}
 			}
