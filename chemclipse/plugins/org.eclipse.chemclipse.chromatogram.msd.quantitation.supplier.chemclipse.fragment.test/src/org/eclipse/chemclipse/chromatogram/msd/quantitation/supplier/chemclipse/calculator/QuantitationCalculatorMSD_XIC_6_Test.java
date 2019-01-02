@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
@@ -31,7 +31,7 @@ public class QuantitationCalculatorMSD_XIC_6_Test extends QuantitationCalculator
 	 */
 	private IQuantitationCompound quantitationCompound;
 	private IQuantitationSignals quantitationSignals;
-	private IConcentrationResponseEntries concentrationResponseEntries;
+	private IResponseSignals concentrationResponseEntries;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -50,10 +50,10 @@ public class QuantitationCalculatorMSD_XIC_6_Test extends QuantitationCalculator
 		//
 		quantitationCompound.setUseTIC(false);
 		quantitationCompound.setCalibrationMethod(CalibrationMethod.LINEAR);
-		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries();
+		quantitationCompound.calculateSignalTablesFromPeaks();
 		//
 		quantitationSignals = quantitationCompound.getQuantitationSignals();
-		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntries();
+		concentrationResponseEntries = quantitationCompound.getResponseSignals();
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class QuantitationCalculatorMSD_XIC_6_Test extends QuantitationCalculator
 
 	public void testSize_1() {
 
-		assertEquals(0, quantitationSignals.size());
+		assertEquals(1, quantitationSignals.size()); // Default TIC, 100
 	}
 
 	public void testSize_2() {

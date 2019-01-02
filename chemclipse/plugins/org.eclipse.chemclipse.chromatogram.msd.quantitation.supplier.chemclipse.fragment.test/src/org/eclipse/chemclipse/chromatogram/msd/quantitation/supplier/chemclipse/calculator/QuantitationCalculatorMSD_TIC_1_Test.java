@@ -41,7 +41,7 @@ public class QuantitationCalculatorMSD_TIC_1_Test extends QuantitationCalculator
 		//
 		quantitationCompound.setUseTIC(true);
 		quantitationCompound.setCalibrationMethod(CalibrationMethod.LINEAR);
-		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries();
+		quantitationCompound.calculateSignalTablesFromPeaks();
 		quantitationCompound.setUseCrossZero(true);
 		//
 		calculator = new QuantitationCalculatorMSD();

@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.IQuantitationCalculatorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntry;
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
+import org.eclipse.chemclipse.model.quantitation.ResponseSignal;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
@@ -31,7 +31,7 @@ public class QuantitationCalculatorMSD_XIC_5_Test extends QuantitationCalculator
 	private IQuantitationCalculatorMSD calculator;
 	private IQuantitationCompound quantitationCompound;
 	private IQuantitationSignals quantitationSignals;
-	private IConcentrationResponseEntries concentrationResponseEntries;
+	private IResponseSignals concentrationResponseEntries;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -42,7 +42,7 @@ public class QuantitationCalculatorMSD_XIC_5_Test extends QuantitationCalculator
 		quantitationCompound.setUseTIC(false);
 		quantitationCompound.setCalibrationMethod(CalibrationMethod.LINEAR);
 		quantitationSignals = quantitationCompound.getQuantitationSignals();
-		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntries();
+		concentrationResponseEntries = quantitationCompound.getResponseSignals();
 		//
 		calculator = new QuantitationCalculatorMSD();
 	}
@@ -60,7 +60,7 @@ public class QuantitationCalculatorMSD_XIC_5_Test extends QuantitationCalculator
 	public void testCalculateConcentration_1() {
 
 		quantitationSignals.add(new QuantitationSignal(108.0d, 0.25f));
-		concentrationResponseEntries.add(new ConcentrationResponseEntry(180.0d, 0.3d, 59600.0d));
+		concentrationResponseEntries.add(new ResponseSignal(180.0d, 0.3d, 59600.0d));
 		quantitationCompound.setUseCrossZero(false);
 		try {
 			calculator.calculateQuantitationResults(getReferencePeakMSD_XIC_X(), quantitationCompound);
