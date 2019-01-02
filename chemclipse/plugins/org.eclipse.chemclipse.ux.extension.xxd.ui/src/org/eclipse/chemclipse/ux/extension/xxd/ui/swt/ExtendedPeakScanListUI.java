@@ -124,7 +124,7 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 		updateChromatogramSelection();
 	}
 
-	private void updateChromatogramSelection() {
+	public void updateChromatogramSelection() {
 
 		updateLabel();
 		buttonSave.setEnabled(false);
@@ -132,12 +132,23 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 		if(chromatogramSelection == null) {
 			peakScanListUI.clear();
 		} else {
-			peakScanListUI.setInput(chromatogramSelection);
+			updateUI(peakScanListUI, chromatogramSelection);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				buttonSave.setEnabled(true);
 			}
 		}
+	}
+
+	/**
+	 * THis methods is reserved for subclasses that wish to intercept the setting of the selection, the superclass simply calls {@link PeakScanListUI#setInput(IChromatogramSelection)}
+	 * 
+	 * @param ui
+	 * @param selection
+	 */
+	protected void updateUI(PeakScanListUI ui, IChromatogramSelection selection) {
+
+		ui.setInput(selection);
 	}
 
 	private void initialize(Composite parent) {
@@ -606,6 +617,11 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 				reset();
 			}
 		});
+	}
+
+	public PeakScanListUI getPeakScanListUI() {
+
+		return peakScanListUI;
 	}
 
 	private Button createSaveButton(Composite parent) {
