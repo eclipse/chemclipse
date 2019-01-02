@@ -25,14 +25,14 @@ import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
@@ -68,7 +68,7 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 			List<IQuantitationPeak> quantitationPeaks = quantitationCompound.getQuantitationPeaks();
 			writeQuantitationPeaks(dataOutputStream, quantitationPeaks);
 			//
-			IConcentrationResponseEntries concentrationResponseEntriesMSD = quantitationCompound.getConcentrationResponseEntries();
+			IResponseSignals concentrationResponseEntriesMSD = quantitationCompound.getResponseSignals();
 			writeConcentrationResponseEntries(dataOutputStream, concentrationResponseEntriesMSD);
 			//
 			IQuantitationSignals quantitationSignalsMSD = quantitationCompound.getQuantitationSignals();
@@ -93,10 +93,10 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 		}
 	}
 
-	private static void writeConcentrationResponseEntries(DataOutputStream dataOutputStream, IConcentrationResponseEntries concentrationResponseEntriesMSD) throws IOException {
+	private static void writeConcentrationResponseEntries(DataOutputStream dataOutputStream, IResponseSignals concentrationResponseEntriesMSD) throws IOException {
 
 		dataOutputStream.writeInt(concentrationResponseEntriesMSD.size());
-		for(IConcentrationResponseEntry concentrationResponseEntryMSD : concentrationResponseEntriesMSD) {
+		for(IResponseSignal concentrationResponseEntryMSD : concentrationResponseEntriesMSD) {
 			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getConcentration());
 			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getSignal());
 			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getResponse());
@@ -108,7 +108,7 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 		dataOutputStream.writeInt(quantitationSignalsMSD.size());
 		for(IQuantitationSignal quantitationSignalMSD : quantitationSignalsMSD) {
 			dataOutputStream.writeDouble(quantitationSignalMSD.getSignal());
-			dataOutputStream.writeFloat(quantitationSignalMSD.getRelativeResponse());
+			dataOutputStream.writeFloat((float)quantitationSignalMSD.getRelativeResponse());
 			dataOutputStream.writeDouble(quantitationSignalMSD.getUncertainty());
 			dataOutputStream.writeBoolean(quantitationSignalMSD.isUse());
 		}

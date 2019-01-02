@@ -40,8 +40,8 @@ import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntry;
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.ResponseSignal;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
@@ -100,7 +100,7 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 			 * Quantitation Peaks
 			 */
 			List<IQuantitationPeak> quantitationPeaks = readQuantitationPeaks(dataInputStream);
-			List<IConcentrationResponseEntry> concentrationResponseEntriesMSD = readConcentrationResponseEntries(dataInputStream);
+			List<IResponseSignal> concentrationResponseEntriesMSD = readConcentrationResponseEntries(dataInputStream);
 			List<IQuantitationSignal> quantitationSignalsMSD = readQuantitationSignals(dataInputStream);
 			IRetentionIndexWindow retentionIndexWindow = readRetentionIndexWindow(dataInputStream);
 			IRetentionTimeWindow retentionTimeWindow = readRetentionTimeWindow(dataInputStream);
@@ -120,7 +120,7 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 			quantitationCompound.getRetentionTimeWindow().setAllowedNegativeDeviation(retentionTimeWindow.getAllowedNegativeDeviation());
 			quantitationCompound.getRetentionTimeWindow().setAllowedPositiveDeviation(retentionTimeWindow.getAllowedPositiveDeviation());
 			//
-			quantitationCompound.getConcentrationResponseEntries().addAll(concentrationResponseEntriesMSD);
+			quantitationCompound.getResponseSignals().addAll(concentrationResponseEntriesMSD);
 			quantitationCompound.getQuantitationSignals().addAll(quantitationSignalsMSD);
 			//
 			quantitationCompound.getQuantitationPeaks().addAll(quantitationPeaks);
@@ -151,15 +151,15 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		return quantitationPeaks;
 	}
 
-	private static List<IConcentrationResponseEntry> readConcentrationResponseEntries(DataInputStream dataInputStream) throws IOException {
+	private static List<IResponseSignal> readConcentrationResponseEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IConcentrationResponseEntry> concentrationResponseEntriesMSD = new ArrayList<IConcentrationResponseEntry>();
+		List<IResponseSignal> concentrationResponseEntriesMSD = new ArrayList<IResponseSignal>();
 		int size = dataInputStream.readInt();
 		for(int i = 0; i < size; i++) {
 			double ion = dataInputStream.readDouble();
 			double concentration = dataInputStream.readDouble();
 			double response = dataInputStream.readDouble();
-			IConcentrationResponseEntry concentrationResponseEntryMSD = new ConcentrationResponseEntry(ion, concentration, response);
+			IResponseSignal concentrationResponseEntryMSD = new ResponseSignal(ion, concentration, response);
 			concentrationResponseEntriesMSD.add(concentrationResponseEntryMSD);
 		}
 		return concentrationResponseEntriesMSD;
