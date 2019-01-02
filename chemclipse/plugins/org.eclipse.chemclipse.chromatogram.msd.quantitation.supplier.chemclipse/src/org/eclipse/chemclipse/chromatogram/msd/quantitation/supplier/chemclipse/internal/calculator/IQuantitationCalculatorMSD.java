@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
@@ -38,5 +39,5 @@ public interface IQuantitationCalculatorMSD {
 	 * @param quantitationCompounds
 	 * @return List<IQuantitationEntryMSD>
 	 */
-	List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, List<IQuantitationCompound> quantitationCompounds, IProcessingInfo processingInfo);
+	List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, Set<IQuantitationCompound> quantitationCompounds, IProcessingInfo processingInfo);
 }

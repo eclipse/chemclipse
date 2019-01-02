@@ -11,8 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.core;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
@@ -51,7 +52,7 @@ public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalc
 				 * Try to quantify the selected peak.
 				 * The results will be added to the peak.
 				 */
-				List<IQuantitationCompound> quantitationCompoundsMSD = getQuantitationEntries(quantitationDatabase, peakMSD);
+				Set<IQuantitationCompound> quantitationCompoundsMSD = getQuantitationEntries(quantitationDatabase, peakMSD);
 				List<IQuantitationEntryMSD> entries = calculator.calculateQuantitationResults(peakMSD, quantitationCompoundsMSD, processingInfo);
 				for(IQuantitationEntryMSD quantitationEntry : entries) {
 					peakMSD.addQuantitationEntry(quantitationEntry);
@@ -63,9 +64,9 @@ public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalc
 		return processingInfo;
 	}
 
-	private List<IQuantitationCompound> getQuantitationEntries(List<IQuantitationCompound> quantitationCompounds, IPeak peakToQuantify) {
+	private Set<IQuantitationCompound> getQuantitationEntries(Set<IQuantitationCompound> quantitationCompounds, IPeak peakToQuantify) {
 
-		List<IQuantitationCompound> quantitationCompoundsMSD = new ArrayList<IQuantitationCompound>();
+		Set<IQuantitationCompound> quantitationCompoundsMSD = new HashSet<IQuantitationCompound>();
 		for(IQuantitationCompound quantitationCompound : quantitationCompounds) {
 			/*
 			 * Add the compound if it matches certain conditions:

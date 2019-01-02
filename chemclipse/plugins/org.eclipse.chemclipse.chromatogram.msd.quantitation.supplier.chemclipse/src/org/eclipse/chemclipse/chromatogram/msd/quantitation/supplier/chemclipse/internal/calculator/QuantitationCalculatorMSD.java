@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -38,7 +39,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	private static final Logger logger = Logger.getLogger(QuantitationCalculatorMSD.class);
 
 	@Override
-	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, List<IQuantitationCompound> quantitationCompounds, IProcessingInfo processingInfo) {
+	public List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, Set<IQuantitationCompound> quantitationCompounds, IProcessingInfo processingInfo) {
 
 		List<IQuantitationEntryMSD> quantitationEntries = new ArrayList<IQuantitationEntryMSD>();
 		for(IQuantitationCompound quantitationCompound : quantitationCompounds) {
@@ -212,7 +213,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 				break;
 			case ISTD:
 				/*
-				 * Handles separately.
+				 * Handled separately.
 				 */
 				break;
 			default:
