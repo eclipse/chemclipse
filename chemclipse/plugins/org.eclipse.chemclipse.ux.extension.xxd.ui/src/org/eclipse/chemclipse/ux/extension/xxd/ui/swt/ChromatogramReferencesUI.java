@@ -200,7 +200,7 @@ public class ChromatogramReferencesUI extends Composite {
 				if(masterSelection != null) {
 					int index = comboChromatograms.getSelectionIndex();
 					if(index > 0) {
-						if(MessageDialog.openQuestion(button.getShell(), "Delete Reference", "Do you want to delete the chromatogram reference: " + index)) {
+						if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Reference", "Do you want to delete the chromatogram reference: " + index)) {
 							IChromatogram chromatogram = masterSelection.getChromatogram();
 							chromatogram.getReferencedChromatograms().remove(index - 1);
 							reloadReferencedChromatograms(masterSelection, 0);
@@ -226,7 +226,7 @@ public class ChromatogramReferencesUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				ChromatogramReferenceDialog dialog = new ChromatogramReferenceDialog(button.getShell());
+				ChromatogramReferenceDialog dialog = new ChromatogramReferenceDialog(e.display.getActiveShell());
 				if(IDialogConstants.OK_ID == dialog.open()) {
 					IChromatogramSelection chromatogramSelection = dialog.getChromatogramSelection();
 					if(chromatogramSelection != null) {
@@ -237,7 +237,7 @@ public class ChromatogramReferencesUI extends Composite {
 								referencedChromatograms.add(chromatogramSelection.getChromatogram());
 								reloadReferencedChromatograms(masterSelection, referencedChromatograms.size());
 							} else {
-								MessageDialog.openWarning(button.getShell(), "Add Reference", "You can't add the selected chromatogram as a reference.");
+								MessageDialog.openWarning(e.display.getActiveShell(), "Add Reference", "You can't add the selected chromatogram as a reference.");
 							}
 						}
 					}

@@ -21,27 +21,33 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 	private static final long serialVersionUID = 1901297052527290065L;
 	//
 	private String name = ""; // Styrene
-	private String chemicalClass = ""; // SB (Styrene-Butadiene)
+	private String chemicalClass = ""; // Styrene-Butadiene
 	private IRetentionTimeWindow retentionTimeWindow = new RetentionTimeWindow();
 	private IRetentionIndexWindow retentionIndexWindow = new RetentionIndexWindow();
-	private String concentrationUnit = "";
-	private IQuantitationSignals quantitationSignals = new QuantitationSignals();
-	private IConcentrationResponseEntries concentrationResponseEntries = new ConcentrationResponseEntries();
+	private String concentrationUnit = ""; // mg/kg
 	private boolean useTIC = true;
 	private CalibrationMethod calibrationMethod = CalibrationMethod.LINEAR;
 	private boolean useCrossZero = true;
+	//
+	private IQuantitationSignals quantitationSignals = new QuantitationSignals();
+	private IResponseSignals concentrationResponseEntries = new ResponseSignals();
 	private List<IQuantitationPeak<T>> quantitationPeaks = new ArrayList<>();
 
 	/**
-	 * Name, e.g. Styrene<br/>
-	 * <br/>
-	 * Concentration unit, e.g.:<br/>
-	 * "ng/ml"<br/>
-	 * "µg/ml"<br/>
-	 * "ppm"<br/>
-	 * "mg/ml"<br/>
-	 * <br/>
-	 * Retention Time in milliseconds
+	 * Name, e.g.: Styrene<br/>
+	 * ConcentrationUnit, e.g.: mg/kg<br/>
+	 * 
+	 * @param name
+	 * @param concentrationUnit
+	 */
+	public AbstractQuantitationCompound(String name, String concentrationUnit) {
+		this(name, concentrationUnit, 0);
+	}
+
+	/**
+	 * Name, e.g.: Styrene<br/>
+	 * ConcentrationUnit, e.g.: mg/kg<br/>
+	 * RetentionTime: in milliseconds
 	 * 
 	 * @param name
 	 * @param concentrationUnit
@@ -51,6 +57,7 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 		this.name = name;
 		this.concentrationUnit = concentrationUnit;
 		retentionTimeWindow.setRetentionTime(retentionTime);
+		quantitationSignals.add(new QuantitationSignal(IQuantitationSignal.TIC_SIGNAL, IQuantitationSignal.ABSOLUTE_RELATIVE_RESPONSE, 0.0, true));
 	}
 
 	@Override
@@ -110,58 +117,6 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 	}
 
 	@Override
-	public IQuantitationSignals getQuantitationSignals() {
-
-		return quantitationSignals;
-	}
-
-	@Override
-	public void updateQuantitationSignals(IQuantitationSignals quantitationSignalsMSD) {
-
-		if(quantitationSignalsMSD != null) {
-			this.quantitationSignals = quantitationSignalsMSD;
-		}
-	}
-
-	@Override
-	public IConcentrationResponseEntries getConcentrationResponseEntries() {
-
-		return concentrationResponseEntries;
-	}
-
-	@Override
-	public void updateConcentrationResponseEntries(IConcentrationResponseEntries concentrationResponseEntries) {
-
-		if(concentrationResponseEntries != null) {
-			this.concentrationResponseEntries.clear();
-			this.concentrationResponseEntries.addAll(concentrationResponseEntries);
-		}
-	}
-
-	@Override
-	public void calculateQuantitationSignalsAndConcentrationResponseEntries() {
-
-		/*
-		 * Create a new table only, if there is at least 1 peak stored.
-		 */
-		if(quantitationPeaks.size() > 0) {
-			/*
-			 * Delete the current lists.
-			 */
-			quantitationSignals.clear();
-			concentrationResponseEntries.clear();
-			/*
-			 * Extract the values for the lists.
-			 */
-			if(isUseTIC()) {
-				createSignalTablesTIC(quantitationPeaks);
-			} else {
-				createSignalTablesXIC(quantitationPeaks);
-			}
-		}
-	}
-
-	@Override
 	public CalibrationMethod getCalibrationMethod() {
 
 		return calibrationMethod;
@@ -186,16 +141,15 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 	}
 
 	@Override
-	public void updateQuantitationCompound(IQuantitationCompound<T> quantitationCompoundMSD) {
+	public IQuantitationSignals getQuantitationSignals() {
 
-		if(quantitationCompoundMSD != null) {
-			this.name = quantitationCompoundMSD.getName();
-			this.chemicalClass = quantitationCompoundMSD.getChemicalClass();
-			this.concentrationUnit = quantitationCompoundMSD.getConcentrationUnit();
-			this.useTIC = quantitationCompoundMSD.isUseTIC();
-			this.calibrationMethod = quantitationCompoundMSD.getCalibrationMethod();
-			this.useCrossZero = quantitationCompoundMSD.isCrossZero();
-		}
+		return quantitationSignals;
+	}
+
+	@Override
+	public IResponseSignals getResponseSignals() {
+
+		return concentrationResponseEntries;
 	}
 
 	@Override

@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -22,10 +22,14 @@ import org.eclipse.swt.graphics.Image;
 
 public class QuantResponseLabelProvider extends AbstractChemClipseLabelProvider {
 
+	public static final String SIGNAL = "Signal";
+	public static final String CONCENTRATION = "Concentration";
+	public static final String RESPONSE = "Response";
+	//
 	public static final String[] TITLES = { //
-			"Signal", //
-			"Concentration", //
-			"Response" //
+			SIGNAL, //
+			CONCENTRATION, //
+			RESPONSE//
 	};
 	//
 	public static final int[] BOUNDS = { //
@@ -49,8 +53,8 @@ public class QuantResponseLabelProvider extends AbstractChemClipseLabelProvider 
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IConcentrationResponseEntry) {
-			IConcentrationResponseEntry entry = (IConcentrationResponseEntry)element;
+		if(element instanceof IResponseSignal) {
+			IResponseSignal entry = (IResponseSignal)element;
 			//
 			switch(columnIndex) {
 				case 0:

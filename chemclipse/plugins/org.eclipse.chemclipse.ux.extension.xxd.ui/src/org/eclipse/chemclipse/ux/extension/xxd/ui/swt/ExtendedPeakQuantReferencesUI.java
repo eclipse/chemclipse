@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.util.QuantReferencesListUtil;
 import org.eclipse.chemclipse.support.validators.QuantReferenceValidator;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -222,7 +221,7 @@ public class ExtendedPeakQuantReferencesUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				deleteReferences();
+				deleteReferences(e.display.getActiveShell());
 			}
 		});
 		return button;
@@ -359,9 +358,9 @@ public class ExtendedPeakQuantReferencesUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void deleteReferences() {
+	private void deleteReferences(Shell shell) {
 
-		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Quantitation Reference(s)");
 		messageBox.setMessage("Would you like to delete the selected quantitation(s)?");
 		if(messageBox.open() == SWT.YES) {

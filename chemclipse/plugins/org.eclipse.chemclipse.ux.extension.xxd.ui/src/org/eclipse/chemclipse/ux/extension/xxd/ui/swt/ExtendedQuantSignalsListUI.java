@@ -11,22 +11,32 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.Iterator;
+
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.dialogs.QuantitationSignalEntryEdit;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.dialogs.QuantitationSignalEntryEditDialog;
+import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.QuantitationSignalValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaksAxes;
-import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -34,14 +44,29 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 public class ExtendedQuantSignalsListUI extends Composite {
 
-	private static final String DESCRIPTION = "Quantitation Signals";
+	private static final String MENU_CATEGORY = "Signals";
 	//
 	@SuppressWarnings("rawtypes")
 	private IQuantitationCompound quantitationCompound;
+	//
+	private Composite toolbarInfo;
+	private Label labelInfo;
+	private Composite toolbarModify;
+	private Label labelInputErrors;
+	private Text textSignal;
+	private Button buttonAdd;
+	private Button buttonDelete;
 	private QuantSignalsListUI quantSignalsListUI;
+	//
+	private QuantitationSignalValidator validator = new QuantitationSignalValidator();
+	private ControlDecoration controlDecoration;
 
 	public ExtendedQuantSignalsListUI(Composite parent, int style) {
 		super(parent, style);
@@ -52,7 +77,8 @@ public class ExtendedQuantSignalsListUI extends Composite {
 	public void update(IQuantitationCompound quantitationCompound) {
 
 		this.quantitationCompound = quantitationCompound;
-		setQuantitationCompound();
+		updateInput();
+		updateWidgets();
 	}
 
 	private void createControl() {
@@ -63,7 +89,15 @@ public class ExtendedQuantSignalsListUI extends Composite {
 		composite.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(composite);
-		createTable(composite);
+		toolbarInfo = createToolbarInfo(composite);
+		toolbarModify = createToolbarModify(composite);
+		quantSignalsListUI = createTable(composite);
+		//
+		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		PartSupport.setCompositeVisibility(toolbarModify, false);
+		//
+		quantSignalsListUI.setEditEnabled(false);
+		clearLabelInputErrors();
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -74,45 +108,15 @@ public class ExtendedQuantSignalsListUI extends Composite {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		createAddButton(composite);
-		createEditButton(composite);
+		createButtonToggleToolbarModify(composite);
+		createButtonToggleEditModus(composite);
 		createSettingsButton(composite);
 	}
 
-	private void createAddButton(Composite parent) {
+	private Button createButtonToggleToolbarModify(Composite parent) {
 
-		//
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Add a new quantitation signal.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				if(quantitationCompound != null) {
-					QuantitationSignalEntryEdit quantitationSignalEntryEdit = new QuantitationSignalEntryEdit();
-					QuantitationSignalEntryEditDialog dialog = new QuantitationSignalEntryEditDialog(e.display.getActiveShell(), quantitationSignalEntryEdit, "Create a new quantitation signal.");
-					if(dialog.open() == IDialogConstants.OK_ID) {
-						IQuantitationSignal quantitationSignal = quantitationSignalEntryEdit.getQuantitationSignal();
-						if(quantitationSignal != null) {
-							quantitationCompound.getQuantitationSignals().add(quantitationSignal);
-							setQuantitationCompound();
-						}
-					}
-				} else {
-					MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "Please ...");
-				}
-			}
-		});
-	}
-
-	private void createEditButton(Composite parent) {
-
-		//
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Edit a response entry.");
+		button.setToolTipText("Toggle modify toolbar.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -120,33 +124,36 @@ public class ExtendedQuantSignalsListUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(quantitationCompound != null) {
-					IQuantitationSignal quantitationSignalOld = getSelectedQuantitationSignal();
-					if(quantitationSignalOld != null) {
-						QuantitationSignalEntryEdit quantitationSignalEntryEdit = new QuantitationSignalEntryEdit();
-						quantitationSignalEntryEdit.setQuantitationSignal(quantitationSignalOld);
-						QuantitationSignalEntryEditDialog dialog = new QuantitationSignalEntryEditDialog(e.display.getActiveShell(), quantitationSignalEntryEdit, "Edit the quantitation signal.");
-						if(dialog.open() == IDialogConstants.OK_ID) {
-							/*
-							 * Save the edited response entry.
-							 */
-							IQuantitationSignal quantitationSignalNew = quantitationSignalEntryEdit.getQuantitationSignal();
-							if(quantitationSignalOld != null) {
-								IQuantitationSignals quantitationSignals = quantitationCompound.getQuantitationSignals();
-								quantitationSignals.remove(quantitationSignalOld);
-								quantitationSignals.add(quantitationSignalNew);
-								quantitationCompound.updateQuantitationSignals(quantitationSignals); // TODO
-								setQuantitationCompound();
-							}
-						}
-					} else {
-						MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "Please select a quantitation signal.");
-					}
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarModify);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				} else {
-					MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "Please ...");
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleEditModus(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Enable/disable to edit the table.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean editEnabled = !quantSignalsListUI.isEditEnabled();
+				quantSignalsListUI.setEditEnabled(editEnabled);
+				updateInput();
+			}
+		});
+		//
+		return button;
 	}
 
 	private void createSettingsButton(Composite parent) {
@@ -177,33 +184,254 @@ public class ExtendedQuantSignalsListUI extends Composite {
 		});
 	}
 
-	private void createTable(Composite parent) {
+	private Composite createToolbarInfo(Composite parent) {
 
-		quantSignalsListUI = new QuantSignalsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		quantSignalsListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, false));
+		//
+		labelInfo = new Label(composite, SWT.NONE);
+		labelInfo.setText("");
+		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return composite;
+	}
+
+	private Composite createToolbarModify(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		int columns = 3;
+		composite.setLayout(new GridLayout(columns, false));
+		//
+		labelInputErrors = createLabel(composite, columns);
+		//
+		textSignal = createTextSignal(composite);
+		buttonAdd = createButtonAdd(composite);
+		buttonDelete = createButtonDelete(composite);
+		//
+		return composite;
+	}
+
+	private Label createLabel(Composite parent, int horizontalSpan) {
+
+		Label label = new Label(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = horizontalSpan;
+		gridData.grabExcessHorizontalSpace = true;
+		label.setLayoutData(gridData);
+		//
+		return label;
+	}
+
+	private Text createTextSignal(Composite parent) {
+
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");
+		text.setToolTipText("Type in a new signal.");
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
+		text.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				validate(validator, controlDecoration, text);
+				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+					addSignal(e.display.getActiveShell());
+				}
+			}
+		});
+		//
+		return text;
+	}
+
+	private Button createButtonAdd(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Add a new signal.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				addSignal(e.display.getActiveShell());
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonDelete(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Delete the selected signal(s).");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				deleteSignals(e.display.getActiveShell());
+			}
+		});
+		//
+		return button;
+	}
+
+	private QuantSignalsListUI createTable(Composite parent) {
+
+		QuantSignalsListUI listUI = new QuantSignalsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		listUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		/*
+		 * Add the delete support.
+		 */
+		Shell shell = listUI.getTable().getShell();
+		ITableSettings tableSettings = listUI.getTableSettings();
+		addDeleteMenuEntry(shell, tableSettings);
+		addKeyEventProcessors(shell, tableSettings);
+		listUI.applySettings(tableSettings);
+		//
+		return listUI;
+	}
+
+	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Delete Signal(s)";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return MENU_CATEGORY;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				deleteSignals(shell);
+			}
+		});
+	}
+
+	private void addKeyEventProcessors(Shell shell, ITableSettings tableSettings) {
+
+		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
+
+			@Override
+			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
+
+				if(e.keyCode == SWT.DEL) {
+					deleteSignals(shell);
+				}
+			}
+		});
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void deleteSignals(Shell shell) {
+
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Delete Signal(s)");
+		messageBox.setMessage("Would you like to delete the selected signal(s)?");
+		if(messageBox.open() == SWT.YES) {
+			/*
+			 * Delete
+			 */
+			Iterator iterator = quantSignalsListUI.getStructuredSelection().iterator();
+			while(iterator.hasNext()) {
+				Object object = iterator.next();
+				if(object instanceof IQuantitationSignal) {
+					quantitationCompound.getQuantitationSignals().remove((IQuantitationSignal)object);
+				}
+			}
+			updateInput();
+		}
+	}
+
+	private void addSignal(Shell shell) {
+
+		boolean isInputValid = validate(validator, controlDecoration, textSignal);
+		if(isInputValid) {
+			setSignal(validator);
+		} else {
+			MessageDialog.openError(shell, "Add Signal", "The given signal is invalid.");
+		}
+	}
+
+	private void setSignal(QuantitationSignalValidator validator) {
+
+		if(quantitationCompound != null) {
+			IQuantitationSignal quantitationSignal = validator.getQuantitationSignal();
+			if(quantitationSignal != null) {
+				quantitationCompound.getQuantitationSignals().add(quantitationSignal);
+				textSignal.setText("");
+				updateInput();
+			}
+		}
 	}
 
 	private void applySettings() {
 
-		setQuantitationCompound();
+		updateInput();
 	}
 
-	private void setQuantitationCompound() {
+	private void updateInput() {
 
 		if(quantitationCompound != null) {
+			String editInformation = quantSignalsListUI.isEditEnabled() ? "(Edit is enabled)" : "(Edit is disabled)";
+			labelInfo.setText("Quantitation Compound: " + quantitationCompound.getName() + " " + editInformation);
 			quantSignalsListUI.setInput(quantitationCompound.getQuantitationSignals());
 		} else {
+			labelInfo.setText("");
 			quantSignalsListUI.clear();
 		}
 	}
 
-	private IQuantitationSignal getSelectedQuantitationSignal() {
+	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
 
-		IQuantitationSignal quantitationSignal = null;
-		Object element = quantSignalsListUI.getStructuredSelection().getFirstElement();
-		if(element instanceof IQuantitationSignal) {
-			quantitationSignal = (IQuantitationSignal)element;
+		IStatus status = validator.validate(text.getText());
+		if(status.isOK()) {
+			controlDecoration.hide();
+			clearLabelInputErrors();
+			return true;
+		} else {
+			setLabelInputError(status.getMessage());
+			controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
+			controlDecoration.showHoverText("Input Error");
+			controlDecoration.show();
+			return false;
 		}
-		return quantitationSignal;
+	}
+
+	private void clearLabelInputErrors() {
+
+		labelInputErrors.setText("Example: " + QuantitationSignalValidator.DEMO);
+		labelInputErrors.setBackground(null);
+	}
+
+	private void setLabelInputError(String message) {
+
+		labelInputErrors.setText(message);
+		labelInputErrors.setBackground(Colors.YELLOW);
+	}
+
+	private void updateWidgets() {
+
+		boolean enabled = (quantitationCompound == null) ? false : true;
+		textSignal.setEnabled(enabled);
+		buttonAdd.setEnabled(enabled);
+		buttonDelete.setEnabled(enabled);
 	}
 }

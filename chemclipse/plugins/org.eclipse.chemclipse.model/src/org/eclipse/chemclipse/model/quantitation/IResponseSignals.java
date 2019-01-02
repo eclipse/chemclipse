@@ -18,7 +18,7 @@ import java.util.Set;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.equations.QuadraticEquation;
 
-public interface IConcentrationResponseEntries extends List<IConcentrationResponseEntry>, Serializable {
+public interface IResponseSignals extends List<IResponseSignal>, Serializable {
 
 	/**
 	 * Returns the linear equation.
@@ -74,5 +74,5 @@ public interface IConcentrationResponseEntries extends List<IConcentrationRespon
 	 * @param signal
 	 * @return
 	 */
-	List<IConcentrationResponseEntry> getList(double signal);
+	List<IResponseSignal> getList(double signal);
 }

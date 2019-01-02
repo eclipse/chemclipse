@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaksAxes;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -88,7 +87,7 @@ public class ExtendedQuantPeaksListUI extends Composite {
 				if(quantitationCompound != null) {
 					if(quantitationCompound.getQuantitationPeaks().size() > 0) {
 						if(MessageDialog.openQuestion(e.display.getActiveShell(), DESCRIPTION, "Would you like to create new concentration response and signal tables?")) {
-							quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries();
+							quantitationCompound.calculateSignalTablesFromPeaks();
 						}
 					} else {
 						MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "There are no quantitation peaks stored.");

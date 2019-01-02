@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
@@ -51,12 +51,12 @@ public class QuantitationCompoundMSD_1_Test extends TestCase {
 
 	public void testGetConcentrationResponseEntries_1() {
 
-		assertNotNull(quantitationCompound.getConcentrationResponseEntries());
+		assertNotNull(quantitationCompound.getResponseSignals());
 	}
 
 	public void testGetConcentrationResponseEntries_2() {
 
-		IConcentrationResponseEntries entries = quantitationCompound.getConcentrationResponseEntries();
+		IResponseSignals entries = quantitationCompound.getResponseSignals();
 		assertEquals(0, entries.size());
 	}
 
@@ -78,7 +78,7 @@ public class QuantitationCompoundMSD_1_Test extends TestCase {
 	public void testGetQuantitationSignals_2() {
 
 		IQuantitationSignals entries = quantitationCompound.getQuantitationSignals();
-		assertEquals(0, entries.size());
+		assertEquals(1, entries.size()); // Default TIC, 100
 	}
 
 	public void testGetRetentionIndexWindow_1() {

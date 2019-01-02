@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.msd.model.core.quantitation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
@@ -28,7 +28,7 @@ public class QuantitationCompoundMSD_3_Test extends ReferencePeakMSDTestCase {
 
 	private IQuantitationCompound quantitationCompound;
 	private IQuantitationSignals quantitationSignals;
-	private IConcentrationResponseEntries concentrationResponseEntries;
+	private IResponseSignals concentrationResponseEntries;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -42,10 +42,10 @@ public class QuantitationCompoundMSD_3_Test extends ReferencePeakMSDTestCase {
 		quantitationCompound.getQuantitationPeaks().addAll(quantitationPeaks);
 		//
 		quantitationCompound.setUseTIC(true);
-		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries();
+		quantitationCompound.calculateSignalTablesFromPeaks();
 		//
 		quantitationSignals = quantitationCompound.getQuantitationSignals();
-		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntries();
+		concentrationResponseEntries = quantitationCompound.getResponseSignals();
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class QuantitationCompoundMSD_3_Test extends ReferencePeakMSDTestCase {
 
 		IQuantitationSignal quantitationSignal = quantitationSignals.get(0);
 		assertEquals(AbstractIon.TIC_ION, quantitationSignal.getSignal());
-		assertEquals(IQuantitationSignal.ABSOLUTE_RESPONSE, quantitationSignal.getRelativeResponse());
+		assertEquals(IQuantitationSignal.ABSOLUTE_RELATIVE_RESPONSE, quantitationSignal.getRelativeResponse());
 		assertEquals(0.0d, quantitationSignal.getUncertainty());
 		assertTrue(quantitationSignal.isUse());
 	}
@@ -86,7 +86,7 @@ public class QuantitationCompoundMSD_3_Test extends ReferencePeakMSDTestCase {
 
 	public void testGetConcentrationResponseEntries_3() {
 
-		IConcentrationResponseEntry concentrationResponseEntry = concentrationResponseEntries.get(0);
+		IResponseSignal concentrationResponseEntry = concentrationResponseEntries.get(0);
 		assertEquals(AbstractIon.TIC_ION, concentrationResponseEntry.getSignal());
 		assertEquals(0.1d, concentrationResponseEntry.getConcentration());
 		assertEquals(750220.0d, concentrationResponseEntry.getResponse());

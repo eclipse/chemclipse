@@ -11,15 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
-public class ConcentrationResponseEntry implements IConcentrationResponseEntry {
+public class ResponseSignal implements IResponseSignal {
 
 	private static final long serialVersionUID = -4768367983343261439L;
 	//
-	private double signal = 0.0d; // 0 = TIC (AbstractIon.TIC_ION)
+	private double signal = IQuantitationSignal.TIC_SIGNAL;
 	private double concentration = 0.0d;
 	private double response = 0.0d;
 
-	public ConcentrationResponseEntry(double signal, double concentration, double response) {
+	public ResponseSignal(double signal, double concentration, double response) {
 		this.signal = signal;
 		this.concentration = concentration;
 		this.response = response;
@@ -44,6 +44,12 @@ public class ConcentrationResponseEntry implements IConcentrationResponseEntry {
 	}
 
 	@Override
+	public void setResponse(double response) {
+
+		this.response = response;
+	}
+
+	@Override
 	public int hashCode() {
 
 		final int prime = 31;
@@ -65,7 +71,7 @@ public class ConcentrationResponseEntry implements IConcentrationResponseEntry {
 			return false;
 		if(getClass() != obj.getClass())
 			return false;
-		ConcentrationResponseEntry other = (ConcentrationResponseEntry)obj;
+		ResponseSignal other = (ResponseSignal)obj;
 		if(Double.doubleToLongBits(concentration) != Double.doubleToLongBits(other.concentration))
 			return false;
 		if(Double.doubleToLongBits(signal) != Double.doubleToLongBits(other.signal))

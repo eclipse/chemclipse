@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -22,9 +22,9 @@ public class QuantResponseTableComparator extends AbstractRecordTableComparator 
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IConcentrationResponseEntry && e2 instanceof IConcentrationResponseEntry) {
-			IConcentrationResponseEntry entry1 = (IConcentrationResponseEntry)e1;
-			IConcentrationResponseEntry entry2 = (IConcentrationResponseEntry)e2;
+		if(e1 instanceof IResponseSignal && e2 instanceof IResponseSignal) {
+			IResponseSignal entry1 = (IResponseSignal)e1;
+			IResponseSignal entry2 = (IResponseSignal)e2;
 			//
 			switch(getPropertyIndex()) {
 				case 0:

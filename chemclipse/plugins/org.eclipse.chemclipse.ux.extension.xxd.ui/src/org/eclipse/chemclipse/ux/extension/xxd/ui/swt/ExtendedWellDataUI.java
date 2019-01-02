@@ -351,7 +351,7 @@ public class ExtendedWellDataUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				deleteHeaderEntries();
+				deleteHeaderEntries(e.display.getActiveShell());
 			}
 		});
 		return button;
@@ -364,14 +364,15 @@ public class ExtendedWellDataUI {
 		/*
 		 * Add the delete targets support.
 		 */
+		Shell shell = listUI.getTable().getShell();
 		ITableSettings tableSettings = listUI.getTableSettings();
-		addDeleteMenuEntry(tableSettings);
+		addDeleteMenuEntry(shell, tableSettings);
 		listUI.applySettings(tableSettings);
 		//
 		return listUI;
 	}
 
-	private void addDeleteMenuEntry(ITableSettings tableSettings) {
+	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
 
 		tableSettings.addMenuEntry(new ITableMenuEntry() {
 
@@ -390,7 +391,7 @@ public class ExtendedWellDataUI {
 			@Override
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
-				deleteHeaderEntries();
+				deleteHeaderEntries(shell);
 			}
 		});
 	}
@@ -417,9 +418,9 @@ public class ExtendedWellDataUI {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void deleteHeaderEntries() {
+	private void deleteHeaderEntries(Shell shell) {
 
-		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Data Entrie(s)");
 		messageBox.setMessage("Would you like to delete the selected data entrie(s)?");
 		if(messageBox.open() == SWT.YES) {

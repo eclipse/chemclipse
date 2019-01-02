@@ -18,20 +18,10 @@ import org.eclipse.chemclipse.model.core.IPeak;
 
 public interface IQuantitationCompound<T extends IPeak> extends Serializable {
 
-	/**
-	 * Levoglucosan
-	 * 
-	 * @return String
-	 */
 	String getName();
 
 	void setName(String name);
 
-	/**
-	 * Cellulose
-	 * 
-	 * @return String
-	 */
 	String getChemicalClass();
 
 	void setChemicalClass(String chemicalClass);
@@ -57,28 +47,9 @@ public interface IQuantitationCompound<T extends IPeak> extends Serializable {
 	 */
 	String getConcentrationUnit();
 
-	/**
-	 * Use TIC or XIC
-	 * 
-	 * @return boolean
-	 */
 	boolean isUseTIC();
 
-	/**
-	 * Set use TIC or XIC.
-	 * 
-	 * @param boolean
-	 */
 	void setUseTIC(boolean useTIC);
-
-	/**
-	 * This method will override the quantitation signal and
-	 * concentration response entry list if quantitation peaks
-	 * are stored.
-	 * The list of quantitation signals and concentration entries
-	 * will be calculated by using the stored quantitation peaks.
-	 */
-	void calculateQuantitationSignalsAndConcentrationResponseEntries();
 
 	/**
 	 * Returns the quantitation signals.
@@ -88,25 +59,11 @@ public interface IQuantitationCompound<T extends IPeak> extends Serializable {
 	IQuantitationSignals getQuantitationSignals();
 
 	/**
-	 * Updates the existing signals by the given list.
-	 * 
-	 * @param quantitationSignals
-	 */
-	void updateQuantitationSignals(IQuantitationSignals quantitationSignals);
-
-	/**
 	 * Returns the concentration / response entries.
 	 * 
-	 * @return {@link IConcentrationResponseEntries}
+	 * @return {@link IResponseSignals}
 	 */
-	IConcentrationResponseEntries getConcentrationResponseEntries();
-
-	/**
-	 * Updates the concentration response entries.
-	 * 
-	 * @param concentrationResponseEntries
-	 */
-	void updateConcentrationResponseEntries(IConcentrationResponseEntries concentrationResponseEntries);
+	IResponseSignals getResponseSignals();
 
 	/**
 	 * Linear, ...
@@ -136,11 +93,13 @@ public interface IQuantitationCompound<T extends IPeak> extends Serializable {
 	 */
 	void setUseCrossZero(boolean useCrossZero);
 
-	void updateQuantitationCompound(IQuantitationCompound<T> quantitationCompound);
-
 	List<IQuantitationPeak<T>> getQuantitationPeaks();
 
-	void createSignalTablesTIC(List<IQuantitationPeak<T>> quantitationPeaks); // TODO
-
-	void createSignalTablesXIC(List<IQuantitationPeak<T>> quantitationPeaks); // TODO
+	/**
+	 * IQuantitationSignals and IConcentrationResponseEntries
+	 * are automatically calculated using the stored QuantitationPeaks.
+	 * TIC or XIC values are calculated depending on the compound setting (isUseTIC).
+	 * 
+	 */
+	void calculateSignalTablesFromPeaks();
 }

@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.ConcentrationValidator;
@@ -48,6 +47,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
@@ -241,7 +241,7 @@ public class ExtendedInternalStandardsUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				deleteInternalStandards();
+				deleteInternalStandards(e.display.getActiveShell());
 			}
 		});
 		return button;
@@ -351,7 +351,7 @@ public class ExtendedInternalStandardsUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				addInternalStandard();
+				addInternalStandard(e.display.getActiveShell());
 			}
 		});
 		//
@@ -447,13 +447,14 @@ public class ExtendedInternalStandardsUI {
 		/*
 		 * Add the delete targets support.
 		 */
+		Shell shell = internalStandardsListUI.getTable().getShell();
 		ITableSettings tableSettings = internalStandardsListUI.getTableSettings();
-		addDeleteMenuEntry(tableSettings);
-		addKeyEventProcessors(tableSettings);
+		addDeleteMenuEntry(shell, tableSettings);
+		addKeyEventProcessors(shell, tableSettings);
 		internalStandardsListUI.applySettings(tableSettings);
 	}
 
-	private void addDeleteMenuEntry(ITableSettings tableSettings) {
+	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
 
 		tableSettings.addMenuEntry(new ITableMenuEntry() {
 
@@ -472,12 +473,12 @@ public class ExtendedInternalStandardsUI {
 			@Override
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
-				deleteInternalStandards();
+				deleteInternalStandards(shell);
 			}
 		});
 	}
 
-	private void addKeyEventProcessors(ITableSettings tableSettings) {
+	private void addKeyEventProcessors(Shell shell, ITableSettings tableSettings) {
 
 		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
 
@@ -488,17 +489,17 @@ public class ExtendedInternalStandardsUI {
 					/*
 					 * DEL
 					 */
-					deleteInternalStandards();
+					deleteInternalStandards(shell);
 				}
 			}
 		});
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void deleteInternalStandards() {
+	private void deleteInternalStandards(Shell shell) {
 
 		if(peak != null) {
-			MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+			MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 			messageBox.setText("Delete Internal Standard(s)");
 			messageBox.setMessage("Would you like to delete the selected internal standard(s)?");
 			if(messageBox.open() == SWT.YES) {
@@ -525,10 +526,10 @@ public class ExtendedInternalStandardsUI {
 		}
 	}
 
-	private void addInternalStandard() {
+	private void addInternalStandard(Shell shell) {
 
 		if(peak == null) {
-			MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_WARNING | SWT.OK);
+			MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
 			messageBox.setText("Add Internal Standard (ISTD)");
 			messageBox.setMessage("No peak has been selected.");
 			messageBox.open();
@@ -562,7 +563,7 @@ public class ExtendedInternalStandardsUI {
 					internalStandard.setChemicalClass(chemicalClass);
 					//
 					if(peak.getInternalStandards().contains(internalStandard)) {
-						MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
 						messageBox.setText("Add Internal Standard (ISTD)");
 						messageBox.setMessage("The Internal Standard (ISTD) exists already.");
 						messageBox.open();
@@ -577,7 +578,7 @@ public class ExtendedInternalStandardsUI {
 				}
 			} catch(Exception e1) {
 				logger.warn(e1);
-				MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_WARNING | SWT.OK);
+				MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
 				messageBox.setText("Add Internal Standard (ISTD)");
 				messageBox.setMessage("Please check the content, response factor and unit values.");
 				messageBox.open();

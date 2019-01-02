@@ -76,6 +76,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.BaseChart;
@@ -231,17 +232,18 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 		/*
 		 * Add the delete targets support.
 		 */
+		Shell shell = listUI.getTable().getShell();
 		ITableSettings tableSettings = listUI.getTableSettings();
-		addDeleteMenuEntry(tableSettings);
+		addDeleteMenuEntry(shell, tableSettings);
 		addVerifyTargetsMenuEntry(tableSettings);
 		addUnverifyTargetsMenuEntry(tableSettings);
-		addKeyEventProcessors(tableSettings);
+		addKeyEventProcessors(shell, tableSettings);
 		listUI.applySettings(tableSettings);
 		//
 		return listUI;
 	}
 
-	private void addDeleteMenuEntry(ITableSettings tableSettings) {
+	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
 
 		tableSettings.addMenuEntry(new ITableMenuEntry() {
 
@@ -260,7 +262,7 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 			@Override
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
-				deletePeaksOrIdentifications();
+				deletePeaksOrIdentifications(shell);
 			}
 		});
 	}
@@ -313,7 +315,7 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 		});
 	}
 
-	private void addKeyEventProcessors(ITableSettings tableSettings) {
+	private void addKeyEventProcessors(Shell shell, ITableSettings tableSettings) {
 
 		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
 
@@ -324,7 +326,7 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 					/*
 					 * DEL
 					 */
-					deletePeaksOrIdentifications();
+					deletePeaksOrIdentifications(shell);
 				} else if(e.keyCode == BaseChart.KEY_CODE_i && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
 					if((e.stateMask & SWT.ALT) == SWT.ALT) {
 						/*
@@ -344,9 +346,9 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 		});
 	}
 
-	private void deletePeaksOrIdentifications() {
+	private void deletePeaksOrIdentifications(Shell shell) {
 
-		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Peak(s)/Scan Identification(s)");
 		messageBox.setMessage("Would you like to delete the selected peak(s)/scan identification(s)?");
 		if(messageBox.open() == SWT.YES) {

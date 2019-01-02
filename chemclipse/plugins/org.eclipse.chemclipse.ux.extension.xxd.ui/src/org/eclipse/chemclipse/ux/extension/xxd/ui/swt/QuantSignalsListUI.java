@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.QuantSignalsEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.QuantSignalsLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.QuantSignalsTableComparator;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.widgets.Composite;
 
@@ -42,5 +46,22 @@ public class QuantSignalsListUI extends ExtendedTableViewer {
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(tableComparator);
+		setEditingSupport();
+	}
+
+	private void setEditingSupport() {
+
+		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
+		for(int i = 0; i < tableViewerColumns.size(); i++) {
+			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
+			String label = tableViewerColumn.getColumn().getText();
+			if(label.equals(QuantSignalsLabelProvider.RELATIVE_RESPONSE)) {
+				tableViewerColumn.setEditingSupport(new QuantSignalsEditingSupport(this, label));
+			} else if(label.equals(QuantSignalsLabelProvider.UNCERTAINTY)) {
+				tableViewerColumn.setEditingSupport(new QuantSignalsEditingSupport(this, label));
+			} else if(label.equals(QuantSignalsLabelProvider.USE)) {
+				tableViewerColumn.setEditingSupport(new QuantSignalsEditingSupport(this, label));
+			}
+		}
 	}
 }

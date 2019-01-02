@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.AbstractQuantitationCompound;
-import org.eclipse.chemclipse.model.quantitation.ConcentrationResponseEntry;
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.ResponseSignal;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
@@ -38,7 +38,26 @@ public class QuantitationCompoundMSD extends AbstractQuantitationCompound<IPeakM
 	}
 
 	@Override
-	public void createSignalTablesTIC(List<IQuantitationPeak<IPeakMSD>> quantitationPeaks) {
+	public void calculateSignalTablesFromPeaks() {
+
+		List<IQuantitationPeak<IPeakMSD>> quantitationPeaks = getQuantitationPeaks();
+		if(quantitationPeaks.size() > 0) {
+			/*
+			 * Extract the signals and response values
+			 * from the stored peaks.
+			 */
+			getQuantitationSignals().clear();
+			getResponseSignals().clear();
+			//
+			if(isUseTIC()) {
+				createTablesTIC(quantitationPeaks);
+			} else {
+				createTablesXIC(quantitationPeaks);
+			}
+		}
+	}
+
+	private void createTablesTIC(List<IQuantitationPeak<IPeakMSD>> quantitationPeaks) {
 
 		boolean firstPeak = true;
 		for(IQuantitationPeak<IPeakMSD> quantitationPeakMSD : quantitationPeaks) {
@@ -54,12 +73,12 @@ public class QuantitationCompoundMSD extends AbstractQuantitationCompound<IPeakM
 				double response = integrationQuantitationSupport.getIntegrationArea(ion);
 				//
 				if(firstPeak) {
-					IQuantitationSignal quantitationSignal = new QuantitationSignal(ion, IQuantitationSignal.ABSOLUTE_RESPONSE);
+					IQuantitationSignal quantitationSignal = new QuantitationSignal(ion, IQuantitationSignal.ABSOLUTE_RELATIVE_RESPONSE);
 					getQuantitationSignals().add(quantitationSignal);
 				}
 				//
-				IConcentrationResponseEntry concentrationResponseEntry = new ConcentrationResponseEntry(ion, concentration, response);
-				getConcentrationResponseEntries().add(concentrationResponseEntry);
+				IResponseSignal concentrationResponseEntry = new ResponseSignal(ion, concentration, response);
+				getResponseSignals().add(concentrationResponseEntry);
 				/*
 				 * The first peak has been evaluated.
 				 */
@@ -68,8 +87,7 @@ public class QuantitationCompoundMSD extends AbstractQuantitationCompound<IPeakM
 		}
 	}
 
-	@Override
-	public void createSignalTablesXIC(List<IQuantitationPeak<IPeakMSD>> quantitationPeaks) {
+	private void createTablesXIC(List<IQuantitationPeak<IPeakMSD>> quantitationPeaks) {
 
 		boolean firstPeak = true;
 		for(IQuantitationPeak<IPeakMSD> quantitationPeakMSD : quantitationPeaks) {
@@ -110,20 +128,20 @@ public class QuantitationCompoundMSD extends AbstractQuantitationCompound<IPeakM
 					 * The real response is calculated by the total response and the percentage of the ion abundance.
 					 */
 					double response = integrationQuantitationSupport.getIntegrationArea(ion);
-					IConcentrationResponseEntry concentrationResponseEntry;
+					IResponseSignal concentrationResponseEntry;
 					if(integrationQuantitationSupport.isTotalSignalIntegrated()) {
 						/*
 						 * TIC
 						 */
-						concentrationResponseEntry = new ConcentrationResponseEntry(ion, concentration, response * percentageIonAbundance);
+						concentrationResponseEntry = new ResponseSignal(ion, concentration, response * percentageIonAbundance);
 					} else {
 						/*
 						 * XIC
 						 */
-						concentrationResponseEntry = new ConcentrationResponseEntry(ion, concentration, response);
+						concentrationResponseEntry = new ResponseSignal(ion, concentration, response);
 					}
 					//
-					getConcentrationResponseEntries().add(concentrationResponseEntry);
+					getResponseSignals().add(concentrationResponseEntry);
 				}
 				/*
 				 * The first peak has been evaluated.

@@ -142,7 +142,7 @@ public class ColorCodeDialog extends TitleAreaDialog {
 
 			public void widgetSelected(SelectionEvent event) {
 
-				ColorDialog colorDialog = new ColorDialog(button.getShell());
+				ColorDialog colorDialog = new ColorDialog(event.display.getActiveShell());
 				colorDialog.setRGB(colorWidget.getBackground().getRGB());
 				colorDialog.setText("Select a color.");
 				RGB rgb = colorDialog.open();

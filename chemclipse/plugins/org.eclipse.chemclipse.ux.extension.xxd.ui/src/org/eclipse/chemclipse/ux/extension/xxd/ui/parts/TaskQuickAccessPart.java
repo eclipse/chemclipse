@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
@@ -312,19 +311,19 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_CHART));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_LIST));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_CHART));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_LIST));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_CHART));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_SIGNALS_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_SIGNALS_LIST));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_LIST));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_CHART));
 			}
 		});
 		//
-		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, button, imageActive, imageDefault);
-		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_LIST, button, imageActive, imageDefault);
-		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_CHART, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_LIST, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_CHART, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_SIGNALS_LIST, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_LIST, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, button, imageActive, imageDefault);
 	}
 
 	private void createSubtractScanTask(Composite parent) {

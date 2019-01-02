@@ -21,11 +21,16 @@ import org.eclipse.swt.graphics.Image;
 
 public class QuantSignalsLabelProvider extends AbstractChemClipseLabelProvider {
 
+	public static final String SIGNAL = "Signal";
+	public static final String RELATIVE_RESPONSE = "Relative Response";
+	public static final String UNCERTAINTY = "Uncertainty";
+	public static final String USE = "Use";
+	//
 	public static final String[] TITLES = { //
-			"Signal", //
-			"Relative Response", //
-			"Uncertainty", //
-			"Use" //
+			SIGNAL, //
+			RELATIVE_RESPONSE, //
+			UNCERTAINTY, //
+			USE //
 	};
 	//
 	public static final int[] BOUNDS = { //
@@ -40,9 +45,15 @@ public class QuantSignalsLabelProvider extends AbstractChemClipseLabelProvider {
 
 		if(columnIndex == 0) {
 			return getImage(element);
-		} else {
-			return null;
+		} else if(columnIndex == 3) {
+			if(element instanceof IQuantitationSignal) {
+				IQuantitationSignal signal = (IQuantitationSignal)element;
+				String fileName = (signal.isUse()) ? IApplicationImage.IMAGE_SELECTED : IApplicationImage.IMAGE_DESELECTED;
+				return ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImage.SIZE_16x16);
+			}
 		}
+		//
+		return null;
 	}
 
 	@Override
@@ -69,7 +80,7 @@ public class QuantSignalsLabelProvider extends AbstractChemClipseLabelProvider {
 					text = decimalFormat.format(entry.getUncertainty());
 					break;
 				case 3:
-					text = Boolean.toString(entry.isUse());
+					text = ""; // Icon
 					break;
 				default:
 					text = "n.v.";

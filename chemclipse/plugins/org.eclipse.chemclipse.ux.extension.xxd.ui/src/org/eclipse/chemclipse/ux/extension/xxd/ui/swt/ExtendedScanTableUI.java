@@ -120,7 +120,7 @@ public class ExtendedScanTableUI {
 		@Override
 		public void execute(ExtendedTableViewer extendedTableViewer) {
 
-			deleteSignals();
+			deleteSignals(extendedTableViewer.getTable().getShell());
 		}
 	}
 
@@ -133,7 +133,7 @@ public class ExtendedScanTableUI {
 				/*
 				 * DEL
 				 */
-				deleteSignals();
+				deleteSignals(e.display.getActiveShell());
 			}
 		}
 	}
@@ -612,7 +612,7 @@ public class ExtendedScanTableUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				deleteSignals();
+				deleteSignals(e.display.getActiveShell());
 			}
 		});
 	}
@@ -634,9 +634,9 @@ public class ExtendedScanTableUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void deleteSignals() {
+	private void deleteSignals(Shell shell) {
 
-		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Signal(s)");
 		messageBox.setMessage("Would you like to delete the selected signal(s)?");
 		if(messageBox.open() == SWT.YES) {

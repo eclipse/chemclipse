@@ -70,7 +70,6 @@ public class ExtendedHeaderDataUI {
 
 	@Inject
 	public ExtendedHeaderDataUI(Composite parent) {
-
 		initialize(parent);
 	}
 
@@ -312,7 +311,7 @@ public class ExtendedHeaderDataUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				deleteHeaderEntries();
+				deleteHeaderEntries(e.display.getActiveShell());
 			}
 		});
 		return button;
@@ -325,14 +324,15 @@ public class ExtendedHeaderDataUI {
 		/*
 		 * Add the delete support.
 		 */
+		Shell shell = measuremntListUI.getTable().getShell();
 		ITableSettings tableSettings = measuremntListUI.getTableSettings();
-		addDeleteMenuEntry(tableSettings);
+		addDeleteMenuEntry(shell, tableSettings);
 		measuremntListUI.applySettings(tableSettings);
 		//
 		return measuremntListUI;
 	}
 
-	private void addDeleteMenuEntry(ITableSettings tableSettings) {
+	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
 
 		tableSettings.addMenuEntry(new ITableMenuEntry() {
 
@@ -351,7 +351,7 @@ public class ExtendedHeaderDataUI {
 			@Override
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
-				deleteHeaderEntries();
+				deleteHeaderEntries(shell);
 			}
 		});
 	}
@@ -378,9 +378,9 @@ public class ExtendedHeaderDataUI {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void deleteHeaderEntries() {
+	private void deleteHeaderEntries(Shell shell) {
 
-		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Header Entrie(s)");
 		messageBox.setMessage("Would you like to delete the selected header entrie(s)?");
 		if(messageBox.open() == SWT.YES) {

@@ -18,6 +18,12 @@ public interface IQuantitationDatabase extends List<IQuantitationCompound> {
 
 	List<String> getCompoundNames();
 
+	/**
+	 * This method could return null.
+	 * 
+	 * @param name
+	 * @return IQuantitationCompound
+	 */
 	IQuantitationCompound getQuantitationCompound(String name);
 
 	boolean containsQuantitationCompund(String name);

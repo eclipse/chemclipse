@@ -154,7 +154,7 @@ public class TargetFieldEditor extends FieldEditor {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				InputDialog dialog = new InputDialog(button.getShell(), "Target", "You can create a new target here.", "Styrene | 100-42-5 | comment | contributor | referenceId", new TargetTemplateInputValidator(targetTemplates.keySet()));
+				InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Target", "You can create a new target here.", "Styrene | 100-42-5 | comment | contributor | referenceId", new TargetTemplateInputValidator(targetTemplates.keySet()));
 				if(IDialogConstants.OK_ID == dialog.open()) {
 					String item = dialog.getValue();
 					ITargetTemplate targetTemplate = targetTemplates.extractTargetTemplate(item);
@@ -180,7 +180,7 @@ public class TargetFieldEditor extends FieldEditor {
 
 				try {
 					DatabaseConverterSupport databaseConverterSupport = DatabaseConverter.getDatabaseConverterSupport();
-					FileDialog fileDialog = new FileDialog(button.getShell(), SWT.READ_ONLY);
+					FileDialog fileDialog = new FileDialog(e.display.getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText("Select a library to import");
 					fileDialog.setFilterExtensions(databaseConverterSupport.getFilterExtensions());
 					fileDialog.setFilterNames(databaseConverterSupport.getFilterNames());
@@ -192,13 +192,13 @@ public class TargetFieldEditor extends FieldEditor {
 						String path = file.getParentFile().getAbsolutePath();
 						preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
 						//
-						ProgressMonitorDialog dialog = new ProgressMonitorDialog(button.getShell());
+						ProgressMonitorDialog dialog = new ProgressMonitorDialog(e.display.getActiveShell());
 						DatabaseImportRunnable databaseImportRunnable = new DatabaseImportRunnable(file);
 						try {
 							dialog.run(false, false, databaseImportRunnable);
 							IMassSpectra massSpectra = databaseImportRunnable.getMassSpectra();
 							if(massSpectra.size() > WARN_NUMBER_IMPORT_ENTRIES) {
-								if(MessageDialog.openQuestion(button.getShell(), "Import", "Do you really want to import " + massSpectra.size() + " target entries?")) {
+								if(MessageDialog.openQuestion(e.display.getActiveShell(), "Import", "Do you really want to import " + massSpectra.size() + " target entries?")) {
 									addTargetTemplates(massSpectra);
 								}
 							} else {
@@ -258,7 +258,7 @@ public class TargetFieldEditor extends FieldEditor {
 				Object object = structuredSelection.getFirstElement();
 				if(object instanceof ITargetTemplate) {
 					ITargetTemplate targetTemplate = (ITargetTemplate)object;
-					InputDialog dialog = new InputDialog(button.getShell(), "Target", "Edit the target.", targetTemplates.extractTargetTemplate(targetTemplate), new TargetTemplateInputValidator(targetTemplates.keySet()));
+					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Target", "Edit the target.", targetTemplates.extractTargetTemplate(targetTemplate), new TargetTemplateInputValidator(targetTemplates.keySet()));
 					if(IDialogConstants.OK_ID == dialog.open()) {
 						String item = dialog.getValue();
 						ITargetTemplate targetTemplateNew = targetTemplates.extractTargetTemplate(item);
@@ -287,7 +287,7 @@ public class TargetFieldEditor extends FieldEditor {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(button.getShell(), "Target Template(s)", "Do you want to delete the selected target template(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Template(s)", "Do you want to delete the selected target template(s)?")) {
 					IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {
 						if(object instanceof ITargetTemplate) {
@@ -311,7 +311,7 @@ public class TargetFieldEditor extends FieldEditor {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(button.getShell(), "Target Template(s)", "Do you want to delete all target template(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Template(s)", "Do you want to delete all target template(s)?")) {
 					targetTemplates.clear();
 					setTableViewerInput();
 				}

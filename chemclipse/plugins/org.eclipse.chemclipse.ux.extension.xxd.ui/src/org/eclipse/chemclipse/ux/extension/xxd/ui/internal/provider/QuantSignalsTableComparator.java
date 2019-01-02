@@ -31,7 +31,7 @@ public class QuantSignalsTableComparator extends AbstractRecordTableComparator i
 					sortOrder = Double.compare(entry2.getSignal(), entry1.getSignal());
 					break;
 				case 1:
-					sortOrder = Float.compare(entry2.getRelativeResponse(), entry1.getRelativeResponse());
+					sortOrder = Double.compare(entry2.getRelativeResponse(), entry1.getRelativeResponse());
 					break;
 				case 2:
 					sortOrder = Double.compare(entry2.getUncertainty(), entry1.getUncertainty());

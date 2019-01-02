@@ -14,23 +14,21 @@ package org.eclipse.chemclipse.model.quantitation;
 public abstract class AbstractQuantitationSignal implements IQuantitationSignal {
 
 	private double signal = 0.0d;
-	private float relativeResponse = ABSOLUTE_RESPONSE;
+	private double relativeResponse = ABSOLUTE_RELATIVE_RESPONSE; // TODO double
 	private double uncertainty = 0.0d;
 	private boolean use = true;
 
-	public AbstractQuantitationSignal(double signal, float relativeResponse) {
+	public AbstractQuantitationSignal(double signal, double relativeResponse) {
+		this(signal, relativeResponse, 0.0d, true);
+	}
+
+	public AbstractQuantitationSignal(double signal, double relativeResponse, double uncertainty) {
+		this(signal, relativeResponse, uncertainty, true);
+	}
+
+	public AbstractQuantitationSignal(double signal, double relativeResponse, double uncertainty, boolean use) {
 		this.signal = signal;
 		this.relativeResponse = relativeResponse;
-		this.use = true;
-	}
-
-	public AbstractQuantitationSignal(double signal, float relativeResponse, double uncertainty) {
-		this(signal, relativeResponse);
-		this.uncertainty = uncertainty;
-	}
-
-	public AbstractQuantitationSignal(double signal, float relativeResponse, double uncertainty, boolean use) {
-		this(signal, relativeResponse);
 		this.uncertainty = uncertainty;
 		this.use = use;
 	}
@@ -42,9 +40,15 @@ public abstract class AbstractQuantitationSignal implements IQuantitationSignal 
 	}
 
 	@Override
-	public float getRelativeResponse() {
+	public double getRelativeResponse() {
 
 		return relativeResponse;
+	}
+
+	@Override
+	public void setRelativeResponse(double relativeResponse) {
+
+		this.relativeResponse = relativeResponse;
 	}
 
 	@Override

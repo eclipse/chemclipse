@@ -47,7 +47,7 @@ public class QuantitationCompoundMSD_2_Test extends TestCase {
 
 	public void testGetConcentrationResponseEntries_1() {
 
-		assertNotNull(quantitationCompound.getConcentrationResponseEntries());
+		assertNotNull(quantitationCompound.getResponseSignals());
 	}
 
 	public void testGetConcentrationUnit_1() {

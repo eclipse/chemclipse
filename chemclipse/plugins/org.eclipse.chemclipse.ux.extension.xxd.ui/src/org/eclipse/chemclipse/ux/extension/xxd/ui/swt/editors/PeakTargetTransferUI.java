@@ -245,9 +245,9 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 
 				Object object = comboViewerSink.getStructuredSelection().getFirstElement();
 				if(object instanceof IChromatogramSelection) {
-					transferPeakTargets(button.getShell());
+					transferPeakTargets(e.display.getActiveShell());
 				} else if(object instanceof IChromatogram) {
-					transferPeakTargets(button.getShell());
+					transferPeakTargets(e.display.getActiveShell());
 				}
 			}
 		});

@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.equations.QuadraticEquation;
 
-public class ConcentrationResponseEntries extends ArrayList<IConcentrationResponseEntry> implements IConcentrationResponseEntries {
+public class ResponseSignals extends ArrayList<IResponseSignal> implements IResponseSignals {
 
 	private static final long serialVersionUID = 7626025302880914344L;
 
@@ -81,7 +81,7 @@ public class ConcentrationResponseEntries extends ArrayList<IConcentrationRespon
 	public double getMaxResponseValue() {
 
 		double maxResponse = 0;
-		for(IConcentrationResponseEntry entry : this) {
+		for(IResponseSignal entry : this) {
 			double response = entry.getResponse();
 			if(response > maxResponse) {
 				maxResponse = response;
@@ -94,17 +94,17 @@ public class ConcentrationResponseEntries extends ArrayList<IConcentrationRespon
 	public Set<Double> getSignalSet() {
 
 		Set<Double> signalSet = new HashSet<Double>();
-		for(IConcentrationResponseEntry entry : this) {
+		for(IResponseSignal entry : this) {
 			signalSet.add(entry.getSignal());
 		}
 		return signalSet;
 	}
 
 	@Override
-	public List<IConcentrationResponseEntry> getList(double signal) {
+	public List<IResponseSignal> getList(double signal) {
 
-		List<IConcentrationResponseEntry> entries = new ArrayList<IConcentrationResponseEntry>();
-		for(IConcentrationResponseEntry entry : this) {
+		List<IResponseSignal> entries = new ArrayList<IResponseSignal>();
+		for(IResponseSignal entry : this) {
 			if(entry.getSignal() == signal) {
 				entries.add(entry);
 			}
@@ -126,7 +126,7 @@ public class ConcentrationResponseEntries extends ArrayList<IConcentrationRespon
 		/*
 		 * Parse all entries and extract those who are needed.
 		 */
-		for(IConcentrationResponseEntry entry : this) {
+		for(IResponseSignal entry : this) {
 			/*
 			 * Check the signal.
 			 */

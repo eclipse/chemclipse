@@ -15,15 +15,15 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 
 public class QuantitationCompoundEntryEdit {
 
-	private IQuantitationCompound quantitationCompoundMSD;
+	private IQuantitationCompound quantitationCompound;
 
 	public IQuantitationCompound getQuantitationCompound() {
 
-		return quantitationCompoundMSD;
+		return quantitationCompound;
 	}
 
-	public void setQuantitationCompoundMSD(IQuantitationCompound quantitationCompoundMSD) {
+	public void setQuantitationCompoundMSD(IQuantitationCompound quantitationCompound) {
 
-		this.quantitationCompoundMSD = quantitationCompoundMSD;
+		this.quantitationCompound = quantitationCompound;
 	}
 }

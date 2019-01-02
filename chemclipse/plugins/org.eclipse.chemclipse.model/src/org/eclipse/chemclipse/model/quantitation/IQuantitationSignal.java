@@ -11,30 +11,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
+/**
+ * signal, e.g.: 104 for Styrene or 0 for TIC
+ * relative response, e.g.: 100 for 100%
+ * uncertainty, e.g.: 0.02 for a uncertainty of 0.02%
+ *
+ */
 public interface IQuantitationSignal {
 
 	double TIC_SIGNAL = 0.0d;
-	float ABSOLUTE_RESPONSE = 100.0f; // 100 is used for the TIC signal.
+	double ABSOLUTE_RELATIVE_RESPONSE = 100.0d; // 100 is used for the TIC signal.
 
-	/**
-	 * E.g. 104 for styrene
-	 * 
-	 * @return double
-	 */
 	double getSignal();
 
-	/**
-	 * E.g. 100
-	 * 
-	 * @return float
-	 */
-	float getRelativeResponse();
+	double getRelativeResponse();
 
-	/**
-	 * E.g. 0.02 for a uncertainty of 0.02 %.
-	 * 
-	 * @return double
-	 */
+	void setRelativeResponse(double relativeResponse);
+
 	double getUncertainty();
 
 	void setUncertainty(double uncertainty);

@@ -13,15 +13,15 @@ package org.eclipse.chemclipse.model.quantitation;
 
 public class QuantitationSignal extends AbstractQuantitationSignal implements IQuantitationSignal {
 
-	public QuantitationSignal(double signal, float relativeResponse) {
+	public QuantitationSignal(double signal, double relativeResponse) {
 		super(signal, relativeResponse);
 	}
 
-	public QuantitationSignal(double signal, float relativeResponse, double uncertainty) {
+	public QuantitationSignal(double signal, double relativeResponse, double uncertainty) {
 		super(signal, relativeResponse, uncertainty);
 	}
 
-	public QuantitationSignal(double signal, float relativeResponse, double uncertainty, boolean use) {
+	public QuantitationSignal(double signal, double relativeResponse, double uncertainty, boolean use) {
 		super(signal, relativeResponse, uncertainty, use);
 	}
 }

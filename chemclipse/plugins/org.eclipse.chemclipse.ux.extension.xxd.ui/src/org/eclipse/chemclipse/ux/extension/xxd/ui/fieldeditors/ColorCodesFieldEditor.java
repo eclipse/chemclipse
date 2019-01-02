@@ -112,7 +112,7 @@ public class ColorCodesFieldEditor extends FieldEditor {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				ColorCodeDialog dialog = new ColorCodeDialog(button.getShell());
+				ColorCodeDialog dialog = new ColorCodeDialog(e.display.getActiveShell());
 				if(IDialogConstants.OK_ID == dialog.open()) {
 					ColorCode colorCode = dialog.getColorCode();
 					if(colorCode != null) {
@@ -139,7 +139,7 @@ public class ColorCodesFieldEditor extends FieldEditor {
 				Object object = structuredSelection.getFirstElement();
 				if(object instanceof ColorCode) {
 					ColorCode colorCode = (ColorCode)object;
-					ColorCodeDialog dialog = new ColorCodeDialog(button.getShell(), colorCode);
+					ColorCodeDialog dialog = new ColorCodeDialog(e.display.getActiveShell(), colorCode);
 					if(IDialogConstants.OK_ID == dialog.open()) {
 						colorCode = dialog.getColorCode();
 						if(colorCode != null) {
@@ -163,7 +163,7 @@ public class ColorCodesFieldEditor extends FieldEditor {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(button.getShell(), "Color Code(s)", "Do you want to delete the selected color code(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Color Code(s)", "Do you want to delete the selected color code(s)?")) {
 					List<String> removeKeys = new ArrayList<>();
 					IStructuredSelection structuredSelection = (IStructuredSelection)colorCodeTableUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {

@@ -18,8 +18,8 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntries;
-import org.eclipse.chemclipse.model.quantitation.IConcentrationResponseEntry;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
@@ -27,9 +27,9 @@ import org.eclipse.chemclipse.numeric.equations.IEquation;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.CalibrationChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -49,6 +49,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
@@ -63,6 +64,9 @@ public class QuantResponseChartUI extends Composite {
 	private static final Logger logger = Logger.getLogger(QuantResponseChartUI.class);
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	//
+	private Composite toolbarInfo;
+	private Label labelInfo;
 	private CalibrationChart calibrationChart;
 	@SuppressWarnings("rawtypes")
 	private IQuantitationCompound quantitationCompound;
@@ -87,7 +91,10 @@ public class QuantResponseChartUI extends Composite {
 		composite.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(composite);
+		toolbarInfo = createToolbarInfo(composite);
 		createCalibrationChart(composite);
+		//
+		PartSupport.setCompositeVisibility(toolbarInfo, true);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -96,11 +103,50 @@ public class QuantResponseChartUI extends Composite {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
+		createButtonToggleToolbarInfo(composite);
 		createToggleChartSeriesLegendButton(composite);
+		createToggleLegendMarkerButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
+	}
+
+	private Composite createToolbarInfo(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, false));
+		//
+		labelInfo = new Label(composite, SWT.NONE);
+		labelInfo.setText("");
+		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return composite;
+	}
+
+	private Button createButtonToggleToolbarInfo(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle info toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
 	}
 
 	private void createToggleChartSeriesLegendButton(Composite parent) {
@@ -114,6 +160,22 @@ public class QuantResponseChartUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				calibrationChart.toggleSeriesLegendVisibility();
+			}
+		});
+	}
+
+	private void createToggleLegendMarkerButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the chart legend marker.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_LEGEND_MARKER, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				calibrationChart.togglePositionLegendVisibility();
+				calibrationChart.redraw();
 			}
 		});
 	}
@@ -181,8 +243,13 @@ public class QuantResponseChartUI extends Composite {
 
 	private void setQuantitationCompound() {
 
+		labelInfo.setText("");
 		calibrationChart.deleteSeries();
+		//
 		if(quantitationCompound != null) {
+			//
+			labelInfo.setText("f(x) = a+bx², R² = 0.999"); // TODO
+			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			ILineSeriesData lineSeriesDataPoints;
 			ILineSeriesData lineSeriesDataEquation;
@@ -191,7 +258,7 @@ public class QuantResponseChartUI extends Composite {
 			calibrationChart.setConcentrationLabel(quantitationCompound.getConcentrationUnit());
 			boolean useCrossZero = quantitationCompound.isCrossZero();
 			CalibrationMethod calibrationMethod = quantitationCompound.getCalibrationMethod();
-			IConcentrationResponseEntries concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntries();
+			IResponseSignals concentrationResponseEntries = quantitationCompound.getResponseSignals();
 			Set<Double> signals = concentrationResponseEntries.getSignalSet();
 			for(double signal : signals) {
 				/*
@@ -199,7 +266,7 @@ public class QuantResponseChartUI extends Composite {
 				 */
 				Color color = colors.getColor();
 				String label = Double.toString(signal);
-				List<IConcentrationResponseEntry> signalEntries = concentrationResponseEntries.getList(signal);
+				List<IResponseSignal> signalEntries = concentrationResponseEntries.getList(signal);
 				lineSeriesDataPoints = getLineSeriesData(signalEntries, label, color);
 				if(lineSeriesDataPoints != null) {
 					/*
@@ -228,14 +295,14 @@ public class QuantResponseChartUI extends Composite {
 		}
 	}
 
-	private ILineSeriesData getLineSeriesData(List<IConcentrationResponseEntry> signalEntries, String label, Color color) {
+	private ILineSeriesData getLineSeriesData(List<IResponseSignal> signalEntries, String label, Color color) {
 
 		int size = signalEntries.size();
 		double[] xSeries = new double[size];
 		double[] ySeries = new double[size];
 		//
 		for(int i = 0; i < size; i++) {
-			IConcentrationResponseEntry concentrationResponseEntry = signalEntries.get(i);
+			IResponseSignal concentrationResponseEntry = signalEntries.get(i);
 			xSeries[i] = concentrationResponseEntry.getConcentration();
 			ySeries[i] = concentrationResponseEntry.getResponse();
 		}
@@ -248,7 +315,7 @@ public class QuantResponseChartUI extends Composite {
 		return lineSeriesData;
 	}
 
-	private ILineSeriesData getLineSeriesData(List<IConcentrationResponseEntry> signalEntries, IEquation equation, CalibrationMethod calibrationMethod, boolean useCrossZero, Point pointMin, Point pointMax, String label, Color color) {
+	private ILineSeriesData getLineSeriesData(List<IResponseSignal> signalEntries, IEquation equation, CalibrationMethod calibrationMethod, boolean useCrossZero, Point pointMin, Point pointMax, String label, Color color) {
 
 		ILineSeriesData lineSeriesData = null;
 		switch(calibrationMethod) {
@@ -376,7 +443,7 @@ public class QuantResponseChartUI extends Composite {
 		return lineSeriesData;
 	}
 
-	private ILineSeriesData calculateAverageSeries(List<IConcentrationResponseEntry> entries, String label, Color color) {
+	private ILineSeriesData calculateAverageSeries(List<IResponseSignal> entries, String label, Color color) {
 
 		double x = 0.0d;
 		double y = 0.0d;
@@ -387,7 +454,7 @@ public class QuantResponseChartUI extends Composite {
 		/*
 		 * Calculate the center.
 		 */
-		for(IConcentrationResponseEntry entry : entries) {
+		for(IResponseSignal entry : entries) {
 			x += entry.getConcentration();
 			y += entry.getResponse();
 		}

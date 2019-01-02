@@ -146,8 +146,7 @@ public class ExtendedQuantCompoundListUI {
 						 */
 						Shell shell = Display.getCurrent().getActiveShell();
 						QuantitationCompoundEntryEdit quantitationCompoundEntryEdit = new QuantitationCompoundEntryEdit();
-						IQuantitationCompound quantitationCompoundOld = quantitationCompound;
-						quantitationCompoundEntryEdit.setQuantitationCompoundMSD(quantitationCompoundOld);
+						quantitationCompoundEntryEdit.setQuantitationCompoundMSD(quantitationCompound);
 						QuantitationCompoundEditDialog dialog = new QuantitationCompoundEditDialog(shell, quantitationCompoundEntryEdit, "Edit the quantitation compound.", quantitationDatabase, false);
 						/*
 						 * Yes, edit the document.
@@ -157,10 +156,10 @@ public class ExtendedQuantCompoundListUI {
 							 * Get the edited compound and set the quantitation
 							 * signals and concentration response entries.
 							 */
-							IQuantitationCompound quantitationCompoundNew = quantitationCompoundEntryEdit.getQuantitationCompound();
-							quantitationCompoundNew.updateQuantitationSignals(quantitationCompoundOld.getQuantitationSignals());
-							quantitationCompoundNew.updateConcentrationResponseEntries(quantitationCompoundOld.getConcentrationResponseEntries());
-							quantitationCompound.updateQuantitationCompound(quantitationCompoundNew);
+							// IQuantitationCompound quantitationCompoundNew = quantitationCompoundEntryEdit.getQuantitationCompound();
+							// quantitationCompoundNew.updateQuantitationSignals(quantitationCompoundOld.getQuantitationSignals());
+							// quantitationCompoundNew.updateConcentrationResponseEntries(quantitationCompoundOld.getConcentrationResponseEntries());
+							// quantitationCompound.updateQuantitationCompound(quantitationCompoundNew);
 							setQuantitationDatabase();
 						}
 					} else {

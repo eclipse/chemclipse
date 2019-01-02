@@ -379,6 +379,7 @@ public class ExtendedTargetsUI {
 		composite.setLayout(new GridLayout(columns, false));
 		//
 		labelInputErrors = createLabel(composite, columns);
+		//
 		comboTargetName = createComboTarget(composite);
 		buttonAddTarget = createButtonAdd(composite);
 		buttonDeleteTarget = createButtonDelete(composite);
@@ -458,7 +459,7 @@ public class ExtendedTargetsUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				deleteTargets();
+				deleteTargets(e.display.getActiveShell());
 			}
 		});
 		return button;
@@ -495,17 +496,18 @@ public class ExtendedTargetsUI {
 		/*
 		 * Add the delete targets support.
 		 */
+		Shell shell = listUI.getTable().getShell();
 		ITableSettings tableSettings = listUI.getTableSettings();
-		addDeleteMenuEntry(tableSettings);
+		addDeleteMenuEntry(shell, tableSettings);
 		addVerifyTargetsMenuEntry(tableSettings);
 		addUnverifyTargetsMenuEntry(tableSettings);
-		addKeyEventProcessors(tableSettings);
+		addKeyEventProcessors(shell, tableSettings);
 		listUI.applySettings(tableSettings);
 		//
 		return listUI;
 	}
 
-	private void addDeleteMenuEntry(ITableSettings tableSettings) {
+	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
 
 		tableSettings.addMenuEntry(new ITableMenuEntry() {
 
@@ -524,7 +526,7 @@ public class ExtendedTargetsUI {
 			@Override
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
-				deleteTargets();
+				deleteTargets(shell);
 			}
 		});
 	}
@@ -577,7 +579,7 @@ public class ExtendedTargetsUI {
 		});
 	}
 
-	private void addKeyEventProcessors(ITableSettings tableSettings) {
+	private void addKeyEventProcessors(Shell shell, ITableSettings tableSettings) {
 
 		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
 
@@ -588,7 +590,7 @@ public class ExtendedTargetsUI {
 					/*
 					 * DEL
 					 */
-					deleteTargets();
+					deleteTargets(shell);
 				} else if(e.keyCode == BaseChart.KEY_CODE_i && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
 					if((e.stateMask & SWT.ALT) == SWT.ALT) {
 						/*
@@ -738,9 +740,9 @@ public class ExtendedTargetsUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void deleteTargets() {
+	private void deleteTargets(Shell shell) {
 
-		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Target(s)");
 		messageBox.setMessage("Would you like to delete the selected target(s)?");
 		if(messageBox.open() == SWT.YES) {

@@ -127,7 +127,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifyChromatogramLength(button.getShell(), MODIFY_LENGTH_SHORTEST);
+				modifyChromatogramLength(e.display.getActiveShell(), MODIFY_LENGTH_SHORTEST);
 			}
 		});
 		//
@@ -145,7 +145,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifyChromatogramLength(button.getShell(), MODIFY_LENGTH_SELECTED);
+				modifyChromatogramLength(e.display.getActiveShell(), MODIFY_LENGTH_SELECTED);
 			}
 		});
 		//
@@ -163,7 +163,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifyChromatogramLength(button.getShell(), MODIFY_LENGTH_LONGEST);
+				modifyChromatogramLength(e.display.getActiveShell(), MODIFY_LENGTH_LONGEST);
 			}
 		});
 		//
@@ -181,7 +181,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifyChromatogramLength(button.getShell(), MODIFY_LENGTH_ADJUST);
+				modifyChromatogramLength(e.display.getActiveShell(), MODIFY_LENGTH_ADJUST);
 			}
 		});
 		//
@@ -200,7 +200,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 			public void widgetSelected(SelectionEvent e) {
 
 				if(setRanges()) {
-					MessageDialog.openInformation(button.getShell(), "Range Selection", "The selected editor range has been set successfully to all opened chromatograms.");
+					MessageDialog.openInformation(e.display.getActiveShell(), "Range Selection", "The selected editor range has been set successfully to all opened chromatograms.");
 				}
 			}
 		});

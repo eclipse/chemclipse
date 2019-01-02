@@ -41,7 +41,7 @@ public class QuantitationSignalMSD_1_Test extends TestCase {
 
 	public void testGetRelativeResponse_1() {
 
-		assertEquals(78.5f, quantitationSignal.getRelativeResponse());
+		assertEquals(78.5d, quantitationSignal.getRelativeResponse());
 	}
 
 	public void testGetUncertainty_1() {
