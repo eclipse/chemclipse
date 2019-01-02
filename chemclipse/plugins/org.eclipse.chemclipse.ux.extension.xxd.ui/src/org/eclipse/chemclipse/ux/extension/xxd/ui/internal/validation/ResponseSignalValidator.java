@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,12 +14,12 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.ResponseSignal;
-import org.eclipse.chemclipse.support.validators.AbstractValidator;
+import org.eclipse.chemclipse.support.util.ValueParserSupport;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
-public class ResponseSignalValidator extends AbstractValidator implements IValidator {
+public class ResponseSignalValidator extends ValueParserSupport implements IValidator {
 
 	public static final String DEMO = "TIC | 1.5 | 289893.38";
 	//

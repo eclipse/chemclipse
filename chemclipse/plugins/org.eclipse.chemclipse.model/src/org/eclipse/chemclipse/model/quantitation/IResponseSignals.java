@@ -18,6 +18,10 @@ import java.util.Set;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.equations.QuadraticEquation;
 
+/**
+ * This must be a list, cause it could contains more than one
+ * value for a specific signal.
+ */
 public interface IResponseSignals extends List<IResponseSignal>, Serializable {
 
 	/**

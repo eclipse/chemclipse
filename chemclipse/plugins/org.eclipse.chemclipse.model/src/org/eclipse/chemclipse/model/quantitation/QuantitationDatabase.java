@@ -12,10 +12,11 @@
 package org.eclipse.chemclipse.model.quantitation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @SuppressWarnings("rawtypes")
-public class QuantitationDatabase extends ArrayList<IQuantitationCompound> implements IQuantitationDatabase {
+public class QuantitationDatabase extends HashSet<IQuantitationCompound> implements IQuantitationDatabase {
 
 	private static final long serialVersionUID = 2742894549648464728L;
 

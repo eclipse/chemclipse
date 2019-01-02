@@ -17,7 +17,7 @@ package org.eclipse.chemclipse.model.quantitation;
  * uncertainty, e.g.: 0.02 for a uncertainty of 0.02%
  *
  */
-public interface IQuantitationSignal {
+public interface IQuantitationSignal extends Comparable<IQuantitationSignal> {
 
 	double TIC_SIGNAL = 0.0d;
 	double ABSOLUTE_RELATIVE_RESPONSE = 100.0d; // 100 is used for the TIC signal.

@@ -9,9 +9,9 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.validators;
+package org.eclipse.chemclipse.support.util;
 
-public abstract class AbstractValidator {
+public class ValueParserSupport {
 
 	protected boolean parseBoolean(String[] values, int index) {
 
@@ -22,7 +22,11 @@ public abstract class AbstractValidator {
 
 		boolean result = def;
 		String value = parseString(values, index, "");
-		result = Boolean.parseBoolean(value);
+		if(Boolean.toString(true).equals(value)) {
+			result = true;
+		} else if(Boolean.toString(false).equals(value)) {
+			result = false;
+		}
 		return result;
 	}
 

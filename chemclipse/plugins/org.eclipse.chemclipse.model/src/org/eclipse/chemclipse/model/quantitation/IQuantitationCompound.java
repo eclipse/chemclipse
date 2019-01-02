@@ -16,7 +16,8 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 
-public interface IQuantitationCompound<T extends IPeak> extends Serializable {
+@SuppressWarnings("rawtypes")
+public interface IQuantitationCompound<T extends IPeak> extends Serializable, Comparable<IQuantitationCompound> {
 
 	String getName();
 
@@ -25,6 +26,10 @@ public interface IQuantitationCompound<T extends IPeak> extends Serializable {
 	String getChemicalClass();
 
 	void setChemicalClass(String chemicalClass);
+
+	String getConcentrationUnit();
+
+	void setConcentrationUnit(String concentrationUnit);
 
 	/**
 	 * Allowed +/- retention time.
@@ -39,13 +44,6 @@ public interface IQuantitationCompound<T extends IPeak> extends Serializable {
 	 * @return {@link IRetentionIndexWindow}
 	 */
 	IRetentionIndexWindow getRetentionIndexWindow();
-
-	/**
-	 * E.g. mg/ml
-	 * 
-	 * @return String
-	 */
-	String getConcentrationUnit();
 
 	boolean isUseTIC();
 

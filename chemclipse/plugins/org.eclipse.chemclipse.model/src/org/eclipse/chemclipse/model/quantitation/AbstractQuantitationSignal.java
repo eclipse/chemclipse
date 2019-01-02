@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.model.quantitation;
 public abstract class AbstractQuantitationSignal implements IQuantitationSignal {
 
 	private double signal = 0.0d;
-	private double relativeResponse = ABSOLUTE_RELATIVE_RESPONSE; // TODO double
+	private double relativeResponse = ABSOLUTE_RELATIVE_RESPONSE;
 	private double uncertainty = 0.0d;
 	private boolean use = true;
 
@@ -105,5 +105,15 @@ public abstract class AbstractQuantitationSignal implements IQuantitationSignal 
 	public String toString() {
 
 		return "AbstractQuantitationSignal [signal=" + signal + ", relativeResponse=" + relativeResponse + ", uncertainty=" + uncertainty + ", use=" + use + "]";
+	}
+
+	@Override
+	public int compareTo(IQuantitationSignal quantitationSignal) {
+
+		int result = 0;
+		if(quantitationSignal != null) {
+			result = Double.compare(getSignal(), quantitationSignal.getSignal());
+		}
+		return result;
 	}
 }

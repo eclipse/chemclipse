@@ -13,8 +13,9 @@ package org.eclipse.chemclipse.model.quantitation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
-public class QuantitationSignals extends ArrayList<IQuantitationSignal> implements IQuantitationSignals {
+public class QuantitationSignals extends TreeSet<IQuantitationSignal> implements IQuantitationSignals {
 
 	private static final long serialVersionUID = 6123008658126987673L;
 

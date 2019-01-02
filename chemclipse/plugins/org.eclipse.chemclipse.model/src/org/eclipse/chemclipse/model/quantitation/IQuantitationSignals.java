@@ -13,8 +13,9 @@ package org.eclipse.chemclipse.model.quantitation;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.NavigableSet;
 
-public interface IQuantitationSignals extends List<IQuantitationSignal>, Serializable {
+public interface IQuantitationSignals extends NavigableSet<IQuantitationSignal>, Serializable {
 
 	/**
 	 * Returns the list of selected signals.

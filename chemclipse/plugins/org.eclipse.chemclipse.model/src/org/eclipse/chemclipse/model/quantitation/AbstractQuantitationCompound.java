@@ -30,7 +30,7 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 	private boolean useCrossZero = true;
 	//
 	private IQuantitationSignals quantitationSignals = new QuantitationSignals();
-	private IResponseSignals concentrationResponseEntries = new ResponseSignals();
+	private IResponseSignals responseSignals = new ResponseSignals();
 	private List<IQuantitationPeak<T>> quantitationPeaks = new ArrayList<>();
 
 	/**
@@ -105,6 +105,12 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 	}
 
 	@Override
+	public void setConcentrationUnit(String concentrationUnit) {
+
+		this.concentrationUnit = concentrationUnit;
+	}
+
+	@Override
 	public boolean isUseTIC() {
 
 		return useTIC;
@@ -149,7 +155,7 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 	@Override
 	public IResponseSignals getResponseSignals() {
 
-		return concentrationResponseEntries;
+		return responseSignals;
 	}
 
 	@Override
@@ -190,5 +196,16 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 	public String toString() {
 
 		return "AbstractQuantitationCompound [name=" + name + ", chemicalClass=" + chemicalClass + ", concentrationUnit=" + concentrationUnit + ", useTIC=" + useTIC + ", calibrationMethod=" + calibrationMethod + ", useCrossZero=" + useCrossZero + "]";
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public int compareTo(IQuantitationCompound quantitationCompound) {
+
+		int result = 0;
+		if(quantitationCompound != null) {
+			result = getName().compareTo(quantitationCompound.getName());
+		}
+		return result;
 	}
 }

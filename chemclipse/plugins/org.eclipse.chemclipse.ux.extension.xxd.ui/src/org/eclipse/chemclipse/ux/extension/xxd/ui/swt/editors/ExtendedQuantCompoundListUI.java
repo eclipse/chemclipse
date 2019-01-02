@@ -11,23 +11,31 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
-import org.eclipse.chemclipse.logging.core.Logger;
+import java.util.Iterator;
+
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.dialogs.QuantitationCompoundEditDialog;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.dialogs.QuantitationCompoundEntryEdit;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.QuantitationCompoundValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageQuantitation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.QuantCompoundListUI;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -35,24 +43,37 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 
 public class ExtendedQuantCompoundListUI {
 
-	private static final Logger logger = Logger.getLogger(ExtendedQuantCompoundListUI.class);
-	private static final String DESCRIPTION = "Quantitation Compound(s)";
+	private static final String MENU_CATEGORY = "Compounds";
 	//
+	private Composite toolbarInfo;
+	private Label labelInfo;
+	private Composite toolbarModify;
+	private Label labelInputErrors;
+	private Text textSignal;
+	private Button buttonAdd;
+	private Button buttonDelete;
 	private Composite toolbarSearch;
 	private SearchSupportUI searchSupportUI;
-	private QuantCompoundListUI quantCompundListUI;
+	private QuantCompoundListUI quantCompoundListUI;
+	//
+	private QuantitationCompoundValidator validator = new QuantitationCompoundValidator();
+	private ControlDecoration controlDecoration;
 	//
 	private IQuantitationDatabase quantitationDatabase = null;
 
@@ -63,7 +84,9 @@ public class ExtendedQuantCompoundListUI {
 	public void update(IQuantitationDatabase quantitationDatabase) {
 
 		this.quantitationDatabase = quantitationDatabase;
-		setQuantitationDatabase();
+		quantCompoundListUI.setQuantitationDatabase(quantitationDatabase);
+		updateInput();
+		updateWidgets();
 	}
 
 	private void initialize(Composite parent) {
@@ -71,10 +94,17 @@ public class ExtendedQuantCompoundListUI {
 		parent.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(parent);
+		toolbarInfo = createToolbarInfo(parent);
+		toolbarModify = createToolbarModify(parent);
 		toolbarSearch = createToolbarSearch(parent);
-		createTable(parent);
+		quantCompoundListUI = createTable(parent);
 		//
+		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		PartSupport.setCompositeVisibility(toolbarModify, false);
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
+		//
+		quantCompoundListUI.setEditEnabled(false);
+		clearLabelInputErrors();
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -85,40 +115,29 @@ public class ExtendedQuantCompoundListUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(5, false));
 		//
-		createAddButton(composite);
-		createEditButton(composite);
+		createButtonToggleToolbarModify(composite);
+		createButtonToggleEditModus(composite);
 		createButtonToggleToolbarSearch(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
 	}
 
-	private Button createAddButton(Composite parent) {
+	private Button createButtonToggleToolbarModify(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Add a new entry.");
+		button.setToolTipText("Toggle modify toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
-			@SuppressWarnings("rawtypes")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(quantitationDatabase != null) {
-					QuantitationCompoundEntryEdit quantitationCompoundEntryEdit = new QuantitationCompoundEntryEdit();
-					QuantitationCompoundEditDialog dialog = new QuantitationCompoundEditDialog(e.display.getActiveShell(), quantitationCompoundEntryEdit, "Create a new quantitation compound.", quantitationDatabase, true);
-					if(dialog.open() == IDialogConstants.OK_ID) {
-						try {
-							IQuantitationCompound quantitationCompound = quantitationCompoundEntryEdit.getQuantitationCompound();
-							quantitationDatabase.add(quantitationCompound);
-							setQuantitationDatabase();
-						} catch(Exception e1) {
-							logger.warn(e1);
-							MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "The quantitation compound already exists in the database.");
-						}
-					}
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarModify);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				} else {
-					MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "No valid database has been selected.");
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});
@@ -126,48 +145,101 @@ public class ExtendedQuantCompoundListUI {
 		return button;
 	}
 
-	private Button createEditButton(Composite parent) {
+	private Composite createToolbarInfo(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, false));
+		//
+		labelInfo = new Label(composite, SWT.NONE);
+		labelInfo.setText("");
+		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return composite;
+	}
+
+	private Composite createToolbarModify(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		int columns = 3;
+		composite.setLayout(new GridLayout(columns, false));
+		//
+		labelInputErrors = createLabel(composite, columns);
+		//
+		textSignal = createTextSignal(composite);
+		buttonAdd = createButtonAdd(composite);
+		buttonDelete = createButtonDelete(composite);
+		//
+		return composite;
+	}
+
+	private Label createLabel(Composite parent, int horizontalSpan) {
+
+		Label label = new Label(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = horizontalSpan;
+		gridData.grabExcessHorizontalSpace = true;
+		label.setLayoutData(gridData);
+		//
+		return label;
+	}
+
+	private Text createTextSignal(Composite parent) {
+
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");
+		text.setToolTipText("Type in a new compound.");
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
+		text.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				validate(validator, controlDecoration, text);
+				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+					addCompound(e.display.getActiveShell());
+				}
+			}
+		});
+		//
+		return text;
+	}
+
+	private Button createButtonAdd(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Edit an entry.");
+		button.setToolTipText("Add a new compound.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
-			@SuppressWarnings("rawtypes")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IQuantitationCompound quantitationCompound = getSelectedQuantitationCompound();
-				if(quantitationCompound != null) {
-					if(quantitationDatabase != null) {
-						/*
-						 * Catch if the database is not available.
-						 */
-						Shell shell = Display.getCurrent().getActiveShell();
-						QuantitationCompoundEntryEdit quantitationCompoundEntryEdit = new QuantitationCompoundEntryEdit();
-						quantitationCompoundEntryEdit.setQuantitationCompoundMSD(quantitationCompound);
-						QuantitationCompoundEditDialog dialog = new QuantitationCompoundEditDialog(shell, quantitationCompoundEntryEdit, "Edit the quantitation compound.", quantitationDatabase, false);
-						/*
-						 * Yes, edit the document.
-						 */
-						if(dialog.open() == IDialogConstants.OK_ID) {
-							/*
-							 * Get the edited compound and set the quantitation
-							 * signals and concentration response entries.
-							 */
-							// IQuantitationCompound quantitationCompoundNew = quantitationCompoundEntryEdit.getQuantitationCompound();
-							// quantitationCompoundNew.updateQuantitationSignals(quantitationCompoundOld.getQuantitationSignals());
-							// quantitationCompoundNew.updateConcentrationResponseEntries(quantitationCompoundOld.getConcentrationResponseEntries());
-							// quantitationCompound.updateQuantitationCompound(quantitationCompoundNew);
-							setQuantitationDatabase();
-						}
-					} else {
-						MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "No valid database has been selected.");
-					}
-				} else {
-					MessageDialog.openError(e.display.getActiveShell(), DESCRIPTION, "Please select a quantitation compound to edit.");
-				}
+				addCompound(e.display.getActiveShell());
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonDelete(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Delete the selected compound(s).");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				deleteCompounds(e.display.getActiveShell());
 			}
 		});
 		//
@@ -183,11 +255,31 @@ public class ExtendedQuantCompoundListUI {
 			@Override
 			public void performSearch(String searchText, boolean caseSensitive) {
 
-				quantCompundListUI.setSearchText(searchText, caseSensitive);
+				quantCompoundListUI.setSearchText(searchText, caseSensitive);
 			}
 		});
 		//
 		return searchSupportUI;
+	}
+
+	private Button createButtonToggleEditModus(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Enable/disable to edit the table.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean editEnabled = !quantCompoundListUI.isEditEnabled();
+				quantCompoundListUI.setEditEnabled(editEnabled);
+				updateInput();
+			}
+		});
+		//
+		return button;
 	}
 
 	private Button createButtonToggleToolbarSearch(Composite parent) {
@@ -257,6 +349,54 @@ public class ExtendedQuantCompoundListUI {
 		});
 	}
 
+	@SuppressWarnings("rawtypes")
+	private void deleteCompounds(Shell shell) {
+
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Delete Compound(s)");
+		messageBox.setMessage("Would you like to delete the selected compound(s)?");
+		if(messageBox.open() == SWT.YES) {
+			/*
+			 * Delete
+			 */
+			Iterator iterator = quantCompoundListUI.getStructuredSelection().iterator();
+			while(iterator.hasNext()) {
+				Object object = iterator.next();
+				if(object instanceof IQuantitationCompound) {
+					quantitationDatabase.remove((IQuantitationCompound)object);
+				}
+			}
+			updateInput();
+		}
+	}
+
+	private void addCompound(Shell shell) {
+
+		boolean isInputValid = validate(validator, controlDecoration, textSignal);
+		if(isInputValid) {
+			setCompound(shell, validator);
+		} else {
+			MessageDialog.openError(shell, "Quantitation Compound", "The given signal is invalid.");
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void setCompound(Shell shell, QuantitationCompoundValidator validator) {
+
+		if(quantitationDatabase != null) {
+			IQuantitationCompound quantitationCompound = validator.getQuantitationCompound();
+			if(quantitationCompound != null) {
+				if(quantitationDatabase.containsQuantitationCompund(quantitationCompound.getName())) {
+					MessageDialog.openError(shell, "Quantitation Compound", "The compound already exists.");
+				} else {
+					quantitationDatabase.add(quantitationCompound);
+					textSignal.setText("");
+					updateInput();
+				}
+			}
+		}
+	}
+
 	private void applySettings() {
 
 		searchSupportUI.reset();
@@ -268,17 +408,17 @@ public class ExtendedQuantCompoundListUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void createTable(Composite parent) {
+	private QuantCompoundListUI createTable(Composite parent) {
 
-		quantCompundListUI = new QuantCompoundListUI(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		Table table = quantCompundListUI.getTable();
+		QuantCompoundListUI listUI = new QuantCompoundListUI(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		Table table = listUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
-		quantCompundListUI.addSelectionChangedListener(new ISelectionChangedListener() {
+		listUI.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
-				Object object = quantCompundListUI.getStructuredSelection().getFirstElement();
+				Object object = listUI.getStructuredSelection().getFirstElement();
 				if(object instanceof IQuantitationCompound) {
 					IQuantitationCompound quantitationCompound = (IQuantitationCompound)object;
 					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
@@ -293,25 +433,101 @@ public class ExtendedQuantCompoundListUI {
 				}
 			}
 		});
+		/*
+		 * Add the delete support.
+		 */
+		Shell shell = listUI.getTable().getShell();
+		ITableSettings tableSettings = listUI.getTableSettings();
+		addDeleteMenuEntry(shell, tableSettings);
+		addKeyEventProcessors(shell, tableSettings);
+		listUI.applySettings(tableSettings);
+		//
+		return listUI;
 	}
 
-	private void setQuantitationDatabase() {
+	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Delete Compound(s)";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return MENU_CATEGORY;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				deleteCompounds(shell);
+			}
+		});
+	}
+
+	private void addKeyEventProcessors(Shell shell, ITableSettings tableSettings) {
+
+		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
+
+			@Override
+			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
+
+				if(e.keyCode == SWT.DEL) {
+					deleteCompounds(shell);
+				}
+			}
+		});
+	}
+
+	private void updateInput() {
 
 		if(quantitationDatabase != null) {
-			quantCompundListUI.setInput(quantitationDatabase);
+			String editInformation = quantCompoundListUI.isEditEnabled() ? "(Edit is enabled)" : "(Edit is disabled)";
+			labelInfo.setText("Quantitation Database " + editInformation);
+			quantCompoundListUI.setInput(quantitationDatabase);
 		} else {
-			quantCompundListUI.clear();
+			labelInfo.setText("");
+			quantCompoundListUI.clear();
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private IQuantitationCompound getSelectedQuantitationCompound() {
+	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
 
-		IQuantitationCompound quantitationCompound = null;
-		Object element = quantCompundListUI.getStructuredSelection().getFirstElement();
-		if(element instanceof IQuantitationCompound) {
-			quantitationCompound = (IQuantitationCompound)element;
+		IStatus status = validator.validate(text.getText());
+		if(status.isOK()) {
+			controlDecoration.hide();
+			clearLabelInputErrors();
+			return true;
+		} else {
+			setLabelInputError(status.getMessage());
+			controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
+			controlDecoration.showHoverText("Input Error");
+			controlDecoration.show();
+			return false;
 		}
-		return quantitationCompound;
+	}
+
+	private void clearLabelInputErrors() {
+
+		labelInputErrors.setText("Example: " + QuantitationCompoundValidator.DEMO);
+		labelInputErrors.setBackground(null);
+	}
+
+	private void setLabelInputError(String message) {
+
+		labelInputErrors.setText(message);
+		labelInputErrors.setBackground(Colors.YELLOW);
+	}
+
+	private void updateWidgets() {
+
+		boolean enabled = (quantitationDatabase == null) ? false : true;
+		textSignal.setEnabled(enabled);
+		buttonAdd.setEnabled(enabled);
+		buttonDelete.setEnabled(enabled);
 	}
 }

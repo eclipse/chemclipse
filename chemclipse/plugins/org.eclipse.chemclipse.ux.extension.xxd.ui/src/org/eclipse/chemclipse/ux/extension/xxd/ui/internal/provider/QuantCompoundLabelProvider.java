@@ -24,23 +24,36 @@ import org.eclipse.swt.graphics.Image;
 
 public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider {
 
+	public static final String NAME = "Name";
+	public static final String CHEMICAL_CLASS = "Chemical Class";
+	public static final String CONCENTRATION_UNIT = "Concentration Unit";
+	public static final String CALIBRATION_METHOD = "Calibration Method";
+	public static final String CROSS_ZERO = "Cross Zero";
+	public static final String USE_TIC = "Use TIC";
+	public static final String RETENTION_TIME = "Retention Time (RT)";
+	public static final String RETENTION_TIME_LOWER = "RT (-)";
+	public static final String RETENTION_TIME_UPPER = "RT (+)";
+	public static final String RETENTION_INDEX = "Retention Index (RI)";
+	public static final String RETENTION_INDEX_LOWER = "RI (-)";
+	public static final String RETENTION_INDEX_UPPER = "RI (+)";
+	//
 	public static final String[] TITLES = {//
-			"Name", //
-			"Chemical Class", //
-			"Concentration Unit", //
-			"Calibration Method", //
-			"Cross Zero", //
-			"Use TIC", //
-			"Retention Time (RT)", //
-			"RT (-)", //
-			"RT (+)", //
-			"Retention Index (RI)", //
-			"RI (-)", //
-			"RI (+)" //
+			NAME, //
+			CHEMICAL_CLASS, //
+			CONCENTRATION_UNIT, //
+			CALIBRATION_METHOD, //
+			CROSS_ZERO, //
+			USE_TIC, //
+			RETENTION_TIME, //
+			RETENTION_TIME_LOWER, //
+			RETENTION_TIME_UPPER, //
+			RETENTION_INDEX, //
+			RETENTION_INDEX_LOWER, //
+			RETENTION_INDEX_UPPER //
 	};
 	//
 	public static final int BOUNDS[] = { //
-			100, //
+			200, //
 			100, //
 			100, //
 			100, //
@@ -54,14 +67,27 @@ public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider 
 			100 //
 	};
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
 			return getImage(element);
-		} else {
-			return null;
+		} else if(columnIndex == 4) {
+			if(element instanceof IQuantitationCompound) {
+				IQuantitationCompound quantitationCompound = (IQuantitationCompound)element;
+				String fileName = (quantitationCompound.isCrossZero()) ? IApplicationImage.IMAGE_SELECTED : IApplicationImage.IMAGE_DESELECTED;
+				return ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImage.SIZE_16x16);
+			}
+		} else if(columnIndex == 5) {
+			if(element instanceof IQuantitationCompound) {
+				IQuantitationCompound quantitationCompound = (IQuantitationCompound)element;
+				String fileName = (quantitationCompound.isUseTIC()) ? IApplicationImage.IMAGE_SELECTED : IApplicationImage.IMAGE_DESELECTED;
+				return ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImage.SIZE_16x16);
+			}
 		}
+		//
+		return null;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -89,10 +115,10 @@ public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider 
 					text = compound.getCalibrationMethod().toString();
 					break;
 				case 4:
-					text = Boolean.toString(compound.isCrossZero());
+					text = ""; // Icon
 					break;
 				case 5:
-					text = Boolean.toString(compound.isUseTIC());
+					text = ""; // Icon
 					break;
 				case 6:
 					text = decimalFormat.format(retentionTimeWindow.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);

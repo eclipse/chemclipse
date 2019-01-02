@@ -11,24 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
-import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 import org.eclipse.chemclipse.support.util.ValueParserSupport;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
-public class QuantitationSignalValidator extends ValueParserSupport implements IValidator {
+public class QuantitationCompoundValidator extends ValueParserSupport implements IValidator {
 
-	public static final String DEMO = "TIC | 100.0 | 0.0 | true";
+	public static final String DEMO = "Styrene | mg/kg | 5.68";
 	//
 	private static final String DELIMITER = "|";
-	private static final String ERROR_TARGET = "Please enter a signal, e.g.: " + DEMO;
+	private static final String ERROR_TARGET = "Please enter a compound, e.g.: " + DEMO;
 	//
-	private double signal;
-	private float relativeResponse;
-	private double uncertainty;
-	private boolean use;
+	private String name;
+	private String concentrationUnit;
+	private int retentionTime;
 
 	@Override
 	public IStatus validate(Object value) {
@@ -44,16 +44,9 @@ public class QuantitationSignalValidator extends ValueParserSupport implements I
 				} else {
 					String[] values = text.trim().split("\\" + DELIMITER);
 					//
-					String signalValue = parseString(values, 0);
-					if("TIC".equals(signalValue)) {
-						signal = IQuantitationSignal.TIC_SIGNAL;
-					} else {
-						signal = parseDouble(values, 0);
-					}
-					//
-					relativeResponse = parseFloat(values, 1);
-					uncertainty = parseDouble(values, 2);
-					use = parseBoolean(values, 3);
+					name = parseString(values, 0);
+					concentrationUnit = parseString(values, 1);
+					retentionTime = (int)(parseDouble(values, 2, 0.0d) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 				}
 			} else {
 				message = ERROR_TARGET;
@@ -67,8 +60,9 @@ public class QuantitationSignalValidator extends ValueParserSupport implements I
 		}
 	}
 
-	public IQuantitationSignal getQuantitationSignal() {
+	@SuppressWarnings("rawtypes")
+	public IQuantitationCompound getQuantitationCompound() {
 
-		return new QuantitationSignal(signal, relativeResponse, uncertainty, use);
+		return new QuantitationCompoundMSD(name, concentrationUnit, retentionTime);
 	}
 }

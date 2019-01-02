@@ -12,9 +12,10 @@
 package org.eclipse.chemclipse.model.quantitation;
 
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("rawtypes")
-public interface IQuantitationDatabase extends List<IQuantitationCompound> {
+public interface IQuantitationDatabase extends Set<IQuantitationCompound> {
 
 	List<String> getCompoundNames();
 

@@ -14,12 +14,12 @@ package org.eclipse.chemclipse.msd.model.core.quantitation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
-import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
@@ -73,7 +73,7 @@ public class QuantitationCompoundMSD_4_Test extends ReferencePeakMSDTestCase {
 
 	public void testGetQuantitationSignals_3() {
 
-		IQuantitationSignal quantitationSignal = quantitationSignals.get(0);
+		IQuantitationSignal quantitationSignal = quantitationSignals.first();
 		assertEquals(AbstractIon.TIC_ION, quantitationSignal.getSignal());
 		assertEquals(IQuantitationSignal.ABSOLUTE_RELATIVE_RESPONSE, quantitationSignal.getRelativeResponse());
 		assertEquals(0.0d, quantitationSignal.getUncertainty());
