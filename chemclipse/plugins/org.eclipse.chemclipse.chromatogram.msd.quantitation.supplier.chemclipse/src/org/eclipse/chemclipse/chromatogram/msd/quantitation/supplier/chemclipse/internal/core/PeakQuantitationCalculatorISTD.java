@@ -24,16 +24,13 @@ import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalculator {
@@ -106,25 +103,12 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 						double integratedArea = peakToQuantify.getIntegratedArea();
 						double concentrationCalculated = ((concentration / peakAreaISTD) * integratedArea) * responseFactor;
 						//
-						if(peakToQuantify instanceof IChromatogramPeakMSD) {
-							/*
-							 * MSD
-							 */
-							IQuantitationEntryMSD quantitationEntryMSD = new QuantitationEntryMSD(nameOfStandard, concentrationCalculated, concentrationUnit, integratedArea, IIon.TIC_ION);
-							quantitationEntryMSD.setCalibrationMethod(CalibrationMethod.ISTD.toString());
-							quantitationEntryMSD.setUsedCrossZero(false);
-							quantitationEntryMSD.setChemicalClass(chemicalClass);
-							peakToQuantify.addQuantitationEntry(quantitationEntryMSD);
-						} else if(peakToQuantify instanceof IChromatogramPeakCSD || peakToQuantify instanceof IChromatogramPeakWSD) {
-							/*
-							 * CSD/WSD
-							 */
-							IQuantitationEntry quantitationEntry = new QuantitationEntry(nameOfStandard, concentrationCalculated, concentrationUnit, integratedArea);
-							quantitationEntry.setCalibrationMethod(CalibrationMethod.ISTD.toString());
-							quantitationEntry.setUsedCrossZero(false);
-							quantitationEntry.setChemicalClass(chemicalClass);
-							peakToQuantify.addQuantitationEntry(quantitationEntry);
-						}
+						IQuantitationEntry quantitationEntryMSD = new QuantitationEntry(nameOfStandard, concentrationCalculated, concentrationUnit, integratedArea);
+						quantitationEntryMSD.setSignal(IQuantitationSignal.TIC_SIGNAL);
+						quantitationEntryMSD.setCalibrationMethod(CalibrationMethod.ISTD.toString());
+						quantitationEntryMSD.setUsedCrossZero(false);
+						quantitationEntryMSD.setChemicalClass(chemicalClass);
+						peakToQuantify.addQuantitationEntry(quantitationEntryMSD);
 					}
 				}
 			}

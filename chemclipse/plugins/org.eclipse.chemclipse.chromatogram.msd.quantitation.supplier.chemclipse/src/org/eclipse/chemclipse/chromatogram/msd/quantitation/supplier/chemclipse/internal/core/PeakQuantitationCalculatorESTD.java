@@ -21,8 +21,8 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -50,8 +50,8 @@ public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalc
 				 * The results will be added to the peak.
 				 */
 				Set<IQuantitationCompound> quantitationCompoundsMSD = getQuantitationEntries(quantitationDatabase, peakMSD);
-				List<IQuantitationEntryMSD> entries = calculator.calculateQuantitationResults(peakMSD, quantitationCompoundsMSD, processingInfo);
-				for(IQuantitationEntryMSD quantitationEntry : entries) {
+				List<IQuantitationEntry> entries = calculator.calculateQuantitationResults(peakMSD, quantitationCompoundsMSD, processingInfo);
+				for(IQuantitationEntry quantitationEntry : entries) {
 					peakMSD.addQuantitationEntry(quantitationEntry);
 				}
 			}

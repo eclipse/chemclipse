@@ -17,8 +17,8 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 
 public class QuantitationCalculatorMSD_TIC_1_Test extends QuantitationCalculator_TIC_TestCase {
 
@@ -28,8 +28,8 @@ public class QuantitationCalculatorMSD_TIC_1_Test extends QuantitationCalculator
 	 * isZeroCrossing: true
 	 */
 	private IQuantitationCalculatorMSD calculator;
-	private List<IQuantitationEntryMSD> quantitationEntries;
-	private IQuantitationEntryMSD quantitationEntry;
+	private List<IQuantitationEntry> quantitationEntries;
+	private IQuantitationEntry quantitationEntry;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -95,6 +95,6 @@ public class QuantitationCalculatorMSD_TIC_1_Test extends QuantitationCalculator
 
 	public void testCalculateConcentration_8() {
 
-		assertEquals(AbstractIon.TIC_ION, quantitationEntry.getIon());
+		assertEquals(IQuantitationSignal.TIC_SIGNAL, quantitationEntry.getSignal());
 	}
 }

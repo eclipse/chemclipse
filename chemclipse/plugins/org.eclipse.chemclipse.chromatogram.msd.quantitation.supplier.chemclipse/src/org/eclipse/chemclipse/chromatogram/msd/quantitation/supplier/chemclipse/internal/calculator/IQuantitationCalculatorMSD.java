@@ -16,7 +16,7 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.msd.model.exceptions.EvaluationException;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
@@ -30,7 +30,7 @@ public interface IQuantitationCalculatorMSD {
 	 * @return List<IQuantitationEntryMSD>
 	 * @throws EvaluationException
 	 */
-	List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, IQuantitationCompound quantitationCompound) throws EvaluationException;
+	List<IQuantitationEntry> calculateQuantitationResults(IPeak peak, IQuantitationCompound quantitationCompound) throws EvaluationException;
 
 	/**
 	 * Returns a list of quantitation entries.
@@ -39,5 +39,5 @@ public interface IQuantitationCalculatorMSD {
 	 * @param quantitationCompounds
 	 * @return List<IQuantitationEntryMSD>
 	 */
-	List<IQuantitationEntryMSD> calculateQuantitationResults(IPeak peak, Set<IQuantitationCompound> quantitationCompounds, IProcessingInfo processingInfo);
+	List<IQuantitationEntry> calculateQuantitationResults(IPeak peak, Set<IQuantitationCompound> quantitationCompounds, IProcessingInfo processingInfo);
 }

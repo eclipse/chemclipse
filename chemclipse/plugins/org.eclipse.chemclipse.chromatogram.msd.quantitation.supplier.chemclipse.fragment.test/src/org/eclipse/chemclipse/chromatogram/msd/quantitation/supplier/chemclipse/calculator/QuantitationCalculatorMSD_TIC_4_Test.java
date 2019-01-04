@@ -17,8 +17,8 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 
 public class QuantitationCalculatorMSD_TIC_4_Test extends QuantitationCalculator_TIC_TestCase {
 
@@ -28,9 +28,9 @@ public class QuantitationCalculatorMSD_TIC_4_Test extends QuantitationCalculator
 	 * isZeroCrossing: false
 	 */
 	private IQuantitationCalculatorMSD calculator;
-	private List<IQuantitationEntryMSD> quantitationEntries;
-	private IQuantitationEntryMSD quantitationEntry1;
-	private IQuantitationEntryMSD quantitationEntry2;
+	private List<IQuantitationEntry> quantitationEntries;
+	private IQuantitationEntry quantitationEntry1;
+	private IQuantitationEntry quantitationEntry2;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -87,7 +87,7 @@ public class QuantitationCalculatorMSD_TIC_4_Test extends QuantitationCalculator
 
 	public void testCalculateConcentration13() {
 
-		assertEquals(103.0d, quantitationEntry1.getIon());
+		assertEquals(103.0d, quantitationEntry1.getSignal());
 	}
 
 	/*
@@ -105,7 +105,7 @@ public class QuantitationCalculatorMSD_TIC_4_Test extends QuantitationCalculator
 
 	public void testCalculateConcentration23() {
 
-		assertEquals(104.0d, quantitationEntry2.getIon());
+		assertEquals(104.0d, quantitationEntry2.getSignal());
 	}
 
 	/*
