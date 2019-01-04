@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,20 +9,9 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions;
+package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings;
 
-public class NoQuantitationTableAvailableException extends Exception {
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.AbstractPeakQuantifierSettings;
 
-	/**
-	 * Renew this uid on each change.
-	 */
-	private static final long serialVersionUID = -7260759821555940761L;
-
-	public NoQuantitationTableAvailableException() {
-		super();
-	}
-
-	public NoQuantitationTableAvailableException(String message) {
-		super(message);
-	}
+public class PeakDatabaseSettings extends AbstractPeakQuantifierSettings {
 }

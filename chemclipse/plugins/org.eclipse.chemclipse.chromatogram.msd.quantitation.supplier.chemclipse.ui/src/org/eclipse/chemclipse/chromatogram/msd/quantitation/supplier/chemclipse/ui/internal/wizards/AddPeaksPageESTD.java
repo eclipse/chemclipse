@@ -26,28 +26,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class AddAllPeakPage extends WizardPage {
+public class AddPeaksPageESTD extends WizardPage {
 
-	private static final Logger logger = Logger.getLogger(AddAllPeakPage.class);
+	private static final Logger logger = Logger.getLogger(AddPeaksPageESTD.class);
 	//
-	private Text textConcentration;
-	private Text textConcentrationUnit;
-	private Text textChemicalClass;
-	private double concentration;
-	private String concentrationUnit;
-	private String chemicalClass;
+	private double concentration = 0.0d;
+	private String concentrationUnit = "";
+	private String chemicalClass = "";
 	//
-	private DecimalFormat decimalFormat;
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
-	public AddAllPeakPage(String pageName) {
+	public AddPeaksPageESTD(String pageName) {
 		super(pageName);
 		setTitle("Peaks to Quantitation Table");
 		setDescription("Set the concentration details.");
-		concentration = 0.0d;
-		concentrationUnit = "";
-		chemicalClass = "";
 		setErrorMessage("Please add a concentration.");
-		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
 	protected double getConcentration() {
@@ -69,28 +62,32 @@ public class AddAllPeakPage extends WizardPage {
 	public void createControl(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout());
-		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 2;
-		composite.setLayout(gridLayout);
+		composite.setLayout(new GridLayout(2, false));
 		//
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
+		createLabel(composite, "Concentration*:");
+		createTextConcentration(composite);
 		//
-		Label label;
+		createLabel(composite, "Concentration Unit*:");
+		createTextConcentrationUnit(composite);
 		//
-		label = new Label(composite, SWT.NONE);
-		label.setText("Concentration*:");
-		textConcentration = new Text(composite, SWT.BORDER);
-		textConcentration.setLayoutData(gridData);
-		textConcentration.addKeyListener(new KeyAdapter() {
+		createLabel(composite, "Chemical Class:");
+		createTextChemicalClass(composite);
+		//
+		setControl(composite);
+	}
+
+	private void createTextConcentration(Composite parent) {
+
+		Text text = new Text(parent, SWT.BORDER);
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				String value = textConcentration.getText();
+				String value = text.getText();
 				if(value == null || value.equals("")) {
-					setErrorMessage("Please set a concentration.");
+					setErrorMessage("Please set a concentration, e.g. 2.5.");
 				} else {
 					try {
 						concentration = decimalFormat.parse(value).doubleValue();
@@ -102,42 +99,48 @@ public class AddAllPeakPage extends WizardPage {
 				}
 			}
 		});
-		//
-		label = new Label(composite, SWT.NONE);
-		label.setText("Concentration Unit*:");
-		textConcentrationUnit = new Text(composite, SWT.BORDER);
-		textConcentrationUnit.setLayoutData(gridData);
-		textConcentrationUnit.addKeyListener(new KeyAdapter() {
+	}
+
+	private void createTextConcentrationUnit(Composite parent) {
+
+		Text text = new Text(parent, SWT.BORDER);
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				String value = textConcentrationUnit.getText();
+				String value = text.getText();
 				if(value == null || value.equals("")) {
-					setErrorMessage("Please set a concentration unit.");
+					setErrorMessage("Please set a concentration unit, e.g. mg/kg.");
 				} else {
 					concentrationUnit = value;
 					setErrorMessage(null);
 				}
 			}
 		});
-		//
-		label = new Label(composite, SWT.NONE);
-		label.setText("Chemical Class:");
-		textChemicalClass = new Text(composite, SWT.BORDER);
-		textChemicalClass.setLayoutData(gridData);
-		textChemicalClass.addKeyListener(new KeyAdapter() {
+	}
+
+	private void createTextChemicalClass(Composite parent) {
+
+		Text text = new Text(parent, SWT.BORDER);
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				String value = textChemicalClass.getText();
+				String value = text.getText();
 				if(value != null && !value.equals("")) {
 					chemicalClass = value;
 				}
 			}
 		});
-		//
-		setControl(composite);
+	}
+
+	private void createLabel(Composite parent, String text) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText(text);
 	}
 }

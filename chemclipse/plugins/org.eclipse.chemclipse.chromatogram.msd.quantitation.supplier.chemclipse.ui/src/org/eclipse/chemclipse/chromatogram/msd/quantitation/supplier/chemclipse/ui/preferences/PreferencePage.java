@@ -14,8 +14,10 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -35,7 +37,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceSupplier.P_SELECTED_QUANTITATION_TABLE, "Selected Quantitation Table", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_QUANTITATION_DATABASE_EDITOR, "Use Editor Quantitation DB", getFieldEditorParent()));
+		addField(new FileFieldEditor(PreferenceSupplier.P_SELECTED_QUANTITATION_DATABASE, "Selected Quantitation DB (*.ocq)", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_NEW_QUANT_DB, "Path new Quantitation DBs", getFieldEditorParent()));
 	}
 
 	/*

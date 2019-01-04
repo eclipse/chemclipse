@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
-import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
+import org.eclipse.chemclipse.xxd.model.quantitation.QuantitationCompound;
 
 public class QuantitationCalculator_XIC_TestCase extends ReferencePeakMSDTestCase {
 
@@ -28,7 +28,7 @@ public class QuantitationCalculator_XIC_TestCase extends ReferencePeakMSDTestCas
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		quantitationCompound = new QuantitationCompoundMSD("Styrene", "mg/ml", 5500);
+		quantitationCompound = new QuantitationCompound("Styrene", "mg/ml", 5500);
 		quantitationCompound.setChemicalClass("Styrene-Butadiene");
 		//
 		quantitationPeaks = new ArrayList<IQuantitationPeak>();

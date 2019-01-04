@@ -25,12 +25,12 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class QuantifyAllPeaksESTDRunnable implements IRunnableWithProgress {
+public class QuantifyPeaksRunnableESTD implements IRunnableWithProgress {
 
 	private IChromatogramSelectionMSD chromatogramSelection;
 	private static final String PEAK_QUANTIFIER_ID = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak";
 
-	public QuantifyAllPeaksESTDRunnable(IChromatogramSelectionMSD chromatogramSelection) {
+	public QuantifyPeaksRunnableESTD(IChromatogramSelectionMSD chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
@@ -38,7 +38,7 @@ public class QuantifyAllPeaksESTDRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Peak List Quantifier", IProgressMonitor.UNKNOWN);
+			monitor.beginTask("Peak List Quantifier (ESTD)", IProgressMonitor.UNKNOWN);
 			//
 			List<IPeak> peaks = new ArrayList<IPeak>();
 			for(IChromatogramPeakMSD peak : chromatogramSelection.getChromatogramMSD().getPeaks()) {
@@ -47,9 +47,6 @@ public class QuantifyAllPeaksESTDRunnable implements IRunnableWithProgress {
 			IProcessingInfo processingInfo = PeakQuantifier.quantify(peaks, PEAK_QUANTIFIER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 			if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
-				/*
-				 * The chromatogram editor shall be reloaded to show the peaks.
-				 */
 				((ChromatogramSelectionMSD)chromatogramSelection).update(true);
 			}
 		} finally {

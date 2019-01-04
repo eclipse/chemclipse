@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.QuantifySelectedPeakESTDRunnable;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.QuantifyPeakRunnableESTD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.progress.core.InfoType;
@@ -25,27 +25,22 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public class QuantifySelectedPeakESTDHandler implements EventHandler {
+public class QuantifyPeakHandlerESTD implements EventHandler {
 
-	private static final Logger logger = Logger.getLogger(QuantifySelectedPeakESTDHandler.class);
+	private static final Logger logger = Logger.getLogger(QuantifyPeakHandlerESTD.class);
 	private static IChromatogramSelectionMSD chromatogramSelection;
 
 	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
+	public void execute(Shell shell, @Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
 		if(chromatogramSelection != null) {
-			final Display display = Display.getCurrent();
-			QuantifySelectedPeakESTDRunnable runnable = new QuantifySelectedPeakESTDRunnable(chromatogramSelection);
-			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+			QuantifyPeakRunnableESTD runnable = new QuantifyPeakRunnableESTD(chromatogramSelection);
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 			try {
-				/*
-				 * Use true, true ... instead of false, true ... if the progress bar
-				 * should be shown in action.
-				 */
 				monitor.run(true, true, runnable);
 			} catch(InvocationTargetException e) {
 				logger.warn(e);

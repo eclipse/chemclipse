@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.Activator;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.PeakDatabaseSettings;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.PeakQuantifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -28,8 +29,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static Logger logger = Logger.getLogger(PreferenceSupplier.class);
 	//
-	public static final String P_SELECTED_QUANTITATION_TABLE = "selectedQuantitationTable";
-	public static final String DEF_SELECTED_QUANTITATION_TABLE = "";
+	public static final String P_USE_QUANTITATION_DATABASE_EDITOR = "useQuantitationDatabaseEditor";
+	public static final boolean DEF_USE_QUANTITATION_DATABASE_EDITOR = false;
+	public static final String P_SELECTED_QUANTITATION_DATABASE = "selectedQuantitationDatabase";
+	public static final String DEF_SELECTED_QUANTITATION_DATABASE = "";
+	public static final String P_FILTER_PATH_NEW_QUANT_DB = "filterPathNewQuantDB";
+	public static final String DEF_FILTER_PATH_NEW_QUANT_DB = "";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -58,7 +63,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		//
-		defaultValues.put(P_SELECTED_QUANTITATION_TABLE, DEF_SELECTED_QUANTITATION_TABLE);
+		defaultValues.put(P_USE_QUANTITATION_DATABASE_EDITOR, Boolean.toString(DEF_USE_QUANTITATION_DATABASE_EDITOR));
+		defaultValues.put(P_SELECTED_QUANTITATION_DATABASE, DEF_SELECTED_QUANTITATION_DATABASE);
+		defaultValues.put(P_FILTER_PATH_NEW_QUANT_DB, DEF_FILTER_PATH_NEW_QUANT_DB);
 		//
 		return defaultValues;
 	}
@@ -69,26 +76,59 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static String getSelectedQuantitationTable() {
+	public static String getSelectedQuantitationDatabase() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_SELECTED_QUANTITATION_TABLE, DEF_SELECTED_QUANTITATION_TABLE);
+		return preferences.get(P_SELECTED_QUANTITATION_DATABASE, DEF_SELECTED_QUANTITATION_DATABASE);
 	}
 
-	public static void setSelectedQuantitationTable(String selectedQuantitationTable) {
+	public static void setSelectedQuantitationDatabase(String selectedQuantitationDatabase) {
 
 		try {
 			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.put(P_SELECTED_QUANTITATION_TABLE, selectedQuantitationTable);
+			preferences.put(P_SELECTED_QUANTITATION_DATABASE, selectedQuantitationDatabase);
 			preferences.flush();
 		} catch(BackingStoreException e) {
 			logger.warn(e);
 		}
 	}
 
-	public static PeakQuantifierSettings getPeakQuantifierSetting() {
+	public static PeakQuantifierSettings getPeakQuantifierSettings() {
 
 		PeakQuantifierSettings peakQuantifierSettings = new PeakQuantifierSettings();
 		return peakQuantifierSettings;
+	}
+
+	public static PeakDatabaseSettings getPeakDatabaseSettings() {
+
+		PeakDatabaseSettings peakDatabaseSettings = new PeakDatabaseSettings();
+		return peakDatabaseSettings;
+	}
+
+	public static String getFilterPathNewQuantDB() {
+
+		return getFilterPath(P_FILTER_PATH_NEW_QUANT_DB, DEF_FILTER_PATH_NEW_QUANT_DB);
+	}
+
+	public static void setFilterPathNewQuantDB(String filterPath) {
+
+		setFilterPath(P_FILTER_PATH_NEW_QUANT_DB, filterPath);
+	}
+
+	private static String getFilterPath(String key, String def) {
+
+		IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
+		return eclipsePreferences.get(key, def);
+	}
+
+	private static void setFilterPath(String key, String filterPath) {
+
+		try {
+			IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
+			eclipsePreferences.put(key, filterPath);
+			eclipsePreferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
 	}
 }

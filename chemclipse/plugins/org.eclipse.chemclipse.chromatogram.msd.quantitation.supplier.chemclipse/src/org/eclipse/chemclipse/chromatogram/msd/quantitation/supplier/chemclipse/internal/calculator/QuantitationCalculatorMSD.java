@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IntegrationQuantitationSupport;
+import org.eclipse.chemclipse.msd.model.core.quantitation.QuantitationSupportMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.EvaluationException;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -68,7 +68,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 			logger.warn("Quantitation - peak area is 0: " + peak);
 			throw new EvaluationException("The peak area must be greater than 0.");
 		}
-		IntegrationQuantitationSupport integrationQuantitationSupport = new IntegrationQuantitationSupport(peak);
+		QuantitationSupportMSD integrationQuantitationSupport = new QuantitationSupportMSD(peak);
 		/*
 		 * Check whether to use TIC or XIC values.
 		 */
@@ -130,7 +130,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	 * @param isZeroCrossing
 	 * @return List<IQuantitationEntryMSD>
 	 */
-	private List<IQuantitationEntryMSD> getQuantitationEntriesXIC(IQuantitationCompound quantitationCompound, IPeakMSD peak, List<Double> selectedQuantitationIons, IntegrationQuantitationSupport integrationQuantitationSupport) {
+	private List<IQuantitationEntryMSD> getQuantitationEntriesXIC(IQuantitationCompound quantitationCompound, IPeakMSD peak, List<Double> selectedQuantitationIons, QuantitationSupportMSD integrationQuantitationSupport) {
 
 		List<IQuantitationEntryMSD> quantitationEntries = new ArrayList<IQuantitationEntryMSD>();
 		//

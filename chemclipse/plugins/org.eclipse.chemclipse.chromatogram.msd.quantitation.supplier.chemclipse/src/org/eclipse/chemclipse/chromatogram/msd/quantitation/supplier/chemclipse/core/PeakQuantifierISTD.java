@@ -48,14 +48,14 @@ public class PeakQuantifierISTD extends AbstractPeakQuantifier implements IPeakQ
 
 		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
-		PeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSetting();
+		PeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSettings();
 		return quantify(peaks, peakQuantifierSettings, monitor);
 	}
 
 	@Override
 	public IProcessingInfo quantify(List<IPeak> peaks, IProgressMonitor monitor) {
 
-		PeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSetting();
+		PeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSettings();
 		return quantify(peaks, peakQuantifierSettings, monitor);
 	}
 

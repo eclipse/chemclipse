@@ -17,20 +17,17 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.io.DatabaseSupport;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
-import org.eclipse.chemclipse.model.quantitation.QuantitationDatabase;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalculator {
-
-	private static final Logger logger = Logger.getLogger(PeakQuantitationCalculatorESTD.class);
 
 	/**
 	 * Calculates the quantitation results for each peak.
@@ -43,8 +40,8 @@ public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalc
 	public IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		System.out.println("Load Selected QuantDB");
-		IQuantitationDatabase quantitationDatabase = new QuantitationDatabase(); // TODO Load
+		DatabaseSupport databaseSupport = new DatabaseSupport();
+		IQuantitationDatabase quantitationDatabase = databaseSupport.load();
 		if(quantitationDatabase != null && quantitationDatabase.size() > 0) {
 			QuantitationCalculatorMSD calculator = new QuantitationCalculatorMSD();
 			for(IPeak peakMSD : peaks) {
@@ -59,27 +56,29 @@ public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalc
 				}
 			}
 		} else {
-			processingInfo.addErrorMessage("ChemClipse Quantitation", "Please select a quantitation table.");
+			processingInfo.addErrorMessage("ChemClipse Quantitation", "Please select a quantitation database.");
 		}
 		return processingInfo;
 	}
 
 	private Set<IQuantitationCompound> getQuantitationEntries(Set<IQuantitationCompound> quantitationCompounds, IPeak peakToQuantify) {
 
-		Set<IQuantitationCompound> quantitationCompoundsMSD = new HashSet<IQuantitationCompound>();
+		Set<IQuantitationCompound> filteredQuantitationCompounds = new HashSet<IQuantitationCompound>();
 		for(IQuantitationCompound quantitationCompound : quantitationCompounds) {
 			/*
 			 * Add the compound if it matches certain conditions:
 			 * Retention Time Window
+			 * Assigned Reference
+			 * ...
 			 */
 			int retentionTime = peakToQuantify.getPeakModel().getRetentionTimeAtPeakMaximum();
 			IRetentionTimeWindow retentionTimeWindow = quantitationCompound.getRetentionTimeWindow();
 			if(retentionTimeWindow.isRetentionTimeInWindow(retentionTime)) {
 				if(doQuantify(peakToQuantify, quantitationCompound.getName())) {
-					quantitationCompoundsMSD.add(quantitationCompound);
+					filteredQuantitationCompounds.add(quantitationCompound);
 				}
 			}
 		}
-		return quantitationCompoundsMSD;
+		return filteredQuantitationCompounds;
 	}
 }

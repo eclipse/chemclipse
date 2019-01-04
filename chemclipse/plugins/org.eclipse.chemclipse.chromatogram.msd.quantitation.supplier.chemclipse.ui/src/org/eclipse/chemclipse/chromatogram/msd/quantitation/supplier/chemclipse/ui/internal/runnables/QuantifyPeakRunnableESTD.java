@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2018 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,18 +13,21 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.core.PeakQuantifierISTD;
-import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.PeakQuantifier;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class QuantifySelectedPeakISTDRunnable implements IRunnableWithProgress {
+public class QuantifyPeakRunnableESTD implements IRunnableWithProgress {
 
-	private IChromatogramSelection chromatogramSelection;
+	private IChromatogramSelectionMSD chromatogramSelection;
+	private static final String PEAK_QUANTIFIER_ID = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak";
 
-	public QuantifySelectedPeakISTDRunnable(IChromatogramSelection chromatogramSelection) {
+	public QuantifyPeakRunnableESTD(IChromatogramSelectionMSD chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
@@ -32,14 +35,13 @@ public class QuantifySelectedPeakISTDRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Peak Quantifier (ISTD)", IProgressMonitor.UNKNOWN);
-			PeakQuantifierISTD peakQuantifierISTD = new PeakQuantifierISTD();
-			peakQuantifierISTD.quantifySelectedPeak(chromatogramSelection, monitor);
+			monitor.beginTask("Peak Quantifier (ESTD)", IProgressMonitor.UNKNOWN);
 			//
+			IPeakMSD peak = chromatogramSelection.getSelectedPeak();
+			IProcessingInfo processingInfo = PeakQuantifier.quantify(peak, PEAK_QUANTIFIER_ID, monitor);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 			if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
 				((ChromatogramSelectionMSD)chromatogramSelection).update(true);
-			} else if(chromatogramSelection instanceof ChromatogramSelectionCSD) {
-				((ChromatogramSelectionCSD)chromatogramSelection).update(true);
 			}
 		} finally {
 			monitor.done();

@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class SelectDocumentPage extends WizardPage {
+public class QuantitationDocumentPageESTD extends WizardPage {
 
 	private List<String> peakTargetNames;
 	private IQuantitationDatabase quantitationDatabase;
@@ -35,21 +35,22 @@ public class SelectDocumentPage extends WizardPage {
 	protected Button buttonMerge;
 	protected Combo comboQuantitationCompoundNames;
 	protected Text textConcentrationMerge;
-	private Label labelConcentrationUnitMerge;
 	//
 	protected Button buttonCreate;
 	protected Combo comboPeakTargetNames;
 	protected Text textConcentrationCreate;
 	protected Text textConcentrationUnitCreate;
 	protected Text textChemicalClassCreate;
+	//
+	private Label labelConcentrationUnitMerge;
 	private Label label1;
 	private Label label2;
 	private Label label3;
 
-	protected SelectDocumentPage(String pageName, List<String> peakTargetNames, IQuantitationDatabase quantitationDatabase) {
+	protected QuantitationDocumentPageESTD(String pageName, List<String> peakTargetNames, IQuantitationDatabase quantitationDatabase) {
 		super(pageName);
 		setTitle("Quantitation Support");
-		setDescription("Create a quantitation document.");
+		setDescription("Create a quantitation component.");
 		this.peakTargetNames = peakTargetNames;
 		this.quantitationDatabase = quantitationDatabase;
 	}
@@ -58,60 +59,76 @@ public class SelectDocumentPage extends WizardPage {
 	public void createControl(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout());
-		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 2;
-		composite.setLayout(gridLayout);
+		composite.setLayout(new GridLayout(2, false));
 		//
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalSpan = 2;
-		//
-		createMergePeakControls(composite, gridData);
-		createAddPeakControls(composite, gridData);
-		enableMergePeakControls(true);
+		createMergePeakControls(composite);
+		createAddPeakControls(composite);
 		/*
 		 * Set the control.
 		 */
+		enableMergePeakControls();
 		setControl(composite);
 	}
 
-	private void createMergePeakControls(Composite parent, GridData gridData) {
+	private void createMergePeakControls(Composite parent) {
 
-		GridData gridDataFill = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataFill.grabExcessHorizontalSpace = true;
-		/*
-		 * Merge the peak with an existing quantitation compound.
-		 */
-		buttonMerge = new Button(parent, SWT.RADIO);
-		buttonMerge.setText("Add peak to existing component");
-		buttonMerge.setSelection(true);
-		buttonMerge.setLayoutData(gridData);
-		buttonMerge.addSelectionListener(new SelectionAdapter() {
+		buttonMerge = createButton(parent, "Add the peak to an existing Quantitation Component", false);
+		comboQuantitationCompoundNames = createComboCompoundNames(parent);
+		textConcentrationMerge = createText(parent);
+		labelConcentrationUnitMerge = createLabel(parent, "", 2);
+	}
+
+	private void createAddPeakControls(Composite parent) {
+
+		buttonCreate = createButton(parent, "Create a new Quantitation Component", false);
+		comboPeakTargetNames = createComboTargetNames(parent);
+		textConcentrationCreate = createText(parent);
+		label1 = createLabel(parent, "Concentration", 1);
+		textConcentrationUnitCreate = createText(parent);
+		label2 = createLabel(parent, "Concentration Unit (e.g. mg/ml)", 1);
+		textChemicalClassCreate = createText(parent);
+		label3 = createLabel(parent, "Chemical Class", 1);
+	}
+
+	private Button createButton(Composite parent, String text, boolean selection) {
+
+		Button button = new Button(parent, SWT.RADIO);
+		button.setText(text);
+		button.setSelection(selection);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		button.setLayoutData(gridData);
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				enableMergePeakControls(buttonMerge.getSelection());
+				enableMergePeakControls();
 			}
 		});
 		//
-		comboQuantitationCompoundNames = new Combo(parent, SWT.NONE);
+		return button;
+	}
+
+	private Combo createComboCompoundNames(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		//
 		if(quantitationDatabase != null) {
 			List<String> quantitationCompoundNames = quantitationDatabase.getCompoundNames();
-			comboQuantitationCompoundNames.setItems(quantitationCompoundNames.toArray(new String[quantitationCompoundNames.size()]));
+			combo.setItems(quantitationCompoundNames.toArray(new String[quantitationCompoundNames.size()]));
 		}
-		comboQuantitationCompoundNames.setLayoutData(gridData);
-		comboQuantitationCompoundNames.addSelectionListener(new SelectionAdapter() {
+		//
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				/*
-				 * Set the concentration unit label.
-				 */
 				if(quantitationDatabase != null) {
-					String name = comboQuantitationCompoundNames.getText();
+					String name = combo.getText();
 					IQuantitationCompound quantitationCompound = quantitationDatabase.getQuantitationCompound(name);
 					if(quantitationCompound != null) {
 						String concentrationUnit = quantitationCompound.getConcentrationUnit();
@@ -121,55 +138,42 @@ public class SelectDocumentPage extends WizardPage {
 			}
 		});
 		//
-		textConcentrationMerge = new Text(parent, SWT.BORDER);
-		//
-		labelConcentrationUnitMerge = new Label(parent, SWT.NONE);
-		labelConcentrationUnitMerge.setText("");
-		labelConcentrationUnitMerge.setLayoutData(gridDataFill);
+		return combo;
 	}
 
-	private void createAddPeakControls(Composite parent, GridData gridData) {
+	private Combo createComboTargetNames(Composite parent) {
 
-		/*
-		 * Create a new quantitation compound.
-		 */
-		buttonCreate = new Button(parent, SWT.RADIO);
-		buttonCreate.setLayoutData(gridData);
-		buttonCreate.setText("Create a new component");
-		buttonCreate.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				/*
-				 * The selection of button merge will be checked
-				 * to enable/disable the controls.
-				 */
-				enableMergePeakControls(buttonMerge.getSelection());
-			}
-		});
-		//
-		comboPeakTargetNames = new Combo(parent, SWT.NONE);
+		Combo combo = new Combo(parent, SWT.NONE);
 		if(peakTargetNames.size() > 0) {
-			comboPeakTargetNames.setItems(peakTargetNames.toArray(new String[peakTargetNames.size()]));
+			combo.setItems(peakTargetNames.toArray(new String[peakTargetNames.size()]));
 		}
-		comboPeakTargetNames.setLayoutData(gridData);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		combo.setLayoutData(gridData);
 		//
-		textConcentrationCreate = new Text(parent, SWT.BORDER);
-		label1 = new Label(parent, SWT.NONE);
-		label1.setText("Concentration");
-		//
-		textConcentrationUnitCreate = new Text(parent, SWT.BORDER);
-		label2 = new Label(parent, SWT.NONE);
-		label2.setText("Concentration Unit (e.g. mg/ml)");
-		//
-		textChemicalClassCreate = new Text(parent, SWT.BORDER);
-		label3 = new Label(parent, SWT.NONE);
-		label3.setText("Chemical Class");
+		return combo;
 	}
 
-	private void enableMergePeakControls(boolean enable) {
+	private Label createLabel(Composite parent, String text, int horizontalSpan) {
 
+		Label label = new Label(parent, SWT.NONE);
+		GridData gridData = new GridData();
+		gridData.horizontalSpan = horizontalSpan;
+		label.setLayoutData(gridData);
+		label.setText(text);
+		return label;
+	}
+
+	private Text createText(Composite parent) {
+
+		Text text = new Text(parent, SWT.BORDER);
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return text;
+	}
+
+	private void enableMergePeakControls() {
+
+		boolean enable = buttonMerge.getSelection();
 		modifyMergeControls(enable);
 		modifyAddControls(!enable);
 	}
@@ -187,6 +191,7 @@ public class SelectDocumentPage extends WizardPage {
 		textConcentrationCreate.setEnabled(enabled);
 		textConcentrationUnitCreate.setEnabled(enabled);
 		textChemicalClassCreate.setEnabled(enabled);
+		//
 		label1.setEnabled(enabled);
 		label2.setEnabled(enabled);
 		label3.setEnabled(enabled);

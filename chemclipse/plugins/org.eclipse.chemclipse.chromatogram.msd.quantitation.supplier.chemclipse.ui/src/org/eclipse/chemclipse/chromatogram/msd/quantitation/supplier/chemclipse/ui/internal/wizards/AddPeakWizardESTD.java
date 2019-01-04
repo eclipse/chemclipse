@@ -18,38 +18,39 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.xxd.model.quantitation.QuantitationCompound;
 import org.eclipse.jface.wizard.Wizard;
 
-public class AddPeakToQuantitationTableWizard extends Wizard {
+public class AddPeakWizardESTD extends Wizard {
 
-	private static final Logger logger = Logger.getLogger(AddPeakToQuantitationTableWizard.class);
-	private SelectDocumentPage documentPage;
+	private static final Logger logger = Logger.getLogger(AddPeakWizardESTD.class);
+	//
+	private QuantitationDocumentPageESTD quantitationDocumentPage;
 	private IQuantitationDatabase quantitationDatabase;
 	private IChromatogramPeakMSD chromatogramPeakMSD;
-	private DecimalFormat decimalFormat;
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
-	public AddPeakToQuantitationTableWizard(IQuantitationDatabase quantitationDatabase, IChromatogramPeakMSD chromatogramPeakMSD) {
+	public AddPeakWizardESTD(IQuantitationDatabase quantitationDatabase, IChromatogramPeakMSD chromatogramPeakMSD) {
 		setNeedsProgressMonitor(true);
-		setWindowTitle("Add Peak to Quantitation Table");
+		setWindowTitle("Add Peak (ESTD)");
 		this.quantitationDatabase = quantitationDatabase;
 		this.chromatogramPeakMSD = chromatogramPeakMSD;
-		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
 	@Override
 	public void addPages() {
 
 		List<String> peakTargetNames = getPeakTargetNames(chromatogramPeakMSD);
-		documentPage = new SelectDocumentPage("CreateDoc", peakTargetNames, quantitationDatabase);
-		addPage(documentPage);
+		quantitationDocumentPage = new QuantitationDocumentPageESTD("Quantitation Document", peakTargetNames, quantitationDatabase);
+		addPage(quantitationDocumentPage);
 	}
 
 	@Override
@@ -57,13 +58,13 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 
 		removeErrorMessage();
 		if(quantitationDatabase == null) {
-			showErrorMessage("Please select a valid database.");
+			showErrorMessage("Please select a valid quantitation database.");
 			return false;
 		} else {
 			/*
 			 * The database must be not null.
 			 */
-			if(documentPage.buttonMerge.getSelection()) {
+			if(quantitationDocumentPage.buttonMerge.getSelection()) {
 				return checkAndMergeQuantitationDocument();
 			} else {
 				return checkAndCreateNewQuantitationDocument();
@@ -76,20 +77,16 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 		/*
 		 * Merge the peak with the existing quantitation document.
 		 */
-		String name = documentPage.comboQuantitationCompoundNames.getText().trim();
+		String name = quantitationDocumentPage.comboQuantitationCompoundNames.getText().trim();
 		IQuantitationCompound quantitationCompoundMSD = quantitationDatabase.getQuantitationCompound(name);
 		if(quantitationCompoundMSD != null) {
 			try {
-				double concentration = decimalFormat.parse(documentPage.textConcentrationMerge.getText().trim()).doubleValue();
+				double concentration = decimalFormat.parse(quantitationDocumentPage.textConcentrationMerge.getText().trim()).doubleValue();
 				if(concentration > 0) {
 					String concentrationUnit = quantitationCompoundMSD.getConcentrationUnit();
 					IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD(chromatogramPeakMSD, concentration, concentrationUnit);
 					quantitationCompoundMSD.getQuantitationPeaks().add(quantitationPeakMSD);
-					/*
-					 * Return true, cause all checks are valid.
-					 */
 					return true;
-					//
 				} else {
 					showErrorMessage("Please select a valid concentration.");
 				}
@@ -108,7 +105,7 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 		/*
 		 * Create a new quantitation document.
 		 */
-		String name = documentPage.comboPeakTargetNames.getText().trim();
+		String name = quantitationDocumentPage.comboPeakTargetNames.getText().trim();
 		if(name == null || name.equals("")) {
 			showErrorMessage("Please select a quantitation compound name.");
 		} else {
@@ -122,7 +119,7 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 				/*
 				 * Concentration Unit
 				 */
-				String concentrationUnit = documentPage.textConcentrationUnitCreate.getText().trim();
+				String concentrationUnit = quantitationDocumentPage.textConcentrationUnitCreate.getText().trim();
 				if(concentrationUnit == null || concentrationUnit.equals("")) {
 					showErrorMessage("Please select a concentration unit.");
 				} else {
@@ -130,23 +127,20 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 					 * Concentration
 					 */
 					try {
-						double concentration = decimalFormat.parse(documentPage.textConcentrationCreate.getText().trim()).doubleValue();
+						double concentration = decimalFormat.parse(quantitationDocumentPage.textConcentrationCreate.getText().trim()).doubleValue();
 						if(concentration > 0) {
 							int retentionTime = chromatogramPeakMSD.getPeakModel().getRetentionTimeAtPeakMaximum();
-							String chemicalClass = documentPage.textChemicalClassCreate.getText().trim();
+							String chemicalClass = quantitationDocumentPage.textChemicalClassCreate.getText().trim();
 							//
-							IQuantitationCompound quantitationCompoundMSD = new QuantitationCompoundMSD(name, concentrationUnit, retentionTime);
-							quantitationCompoundMSD.setChemicalClass(chemicalClass);
-							quantitationCompoundMSD.getRetentionTimeWindow().setAllowedNegativeDeviation(1500);
-							quantitationCompoundMSD.getRetentionIndexWindow().setAllowedPositiveDeviation(1500);
-							quantitationCompoundMSD.setUseTIC(true);
+							IQuantitationCompound quantitationCompound = new QuantitationCompound(name, concentrationUnit, retentionTime);
+							quantitationCompound.setChemicalClass(chemicalClass);
+							quantitationCompound.getRetentionTimeWindow().setAllowedNegativeDeviation(1500);
+							quantitationCompound.getRetentionIndexWindow().setAllowedPositiveDeviation(1500);
+							quantitationCompound.setUseTIC(true);
 							//
 							IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD(chromatogramPeakMSD, concentration, concentrationUnit);
-							quantitationCompoundMSD.getQuantitationPeaks().add(quantitationPeakMSD);
-							quantitationDatabase.add(quantitationCompoundMSD);
-							/*
-							 * Return true, cause all checks are valid.
-							 */
+							quantitationCompound.getQuantitationPeaks().add(quantitationPeakMSD);
+							quantitationDatabase.add(quantitationCompound);
 							return true;
 						} else {
 							showErrorMessage("Please select a valid concentration.");
@@ -163,12 +157,12 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 
 	private void showErrorMessage(String message) {
 
-		documentPage.setErrorMessage(message);
+		quantitationDocumentPage.setErrorMessage(message);
 	}
 
 	private void removeErrorMessage() {
 
-		documentPage.setErrorMessage(null);
+		quantitationDocumentPage.setErrorMessage(null);
 	}
 
 	/**
@@ -177,12 +171,11 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 	 * @param chromatogramPeakMSD
 	 * @return List<String>
 	 */
-	private List<String> getPeakTargetNames(IChromatogramPeakMSD chromatogramPeakMSD) {
+	private List<String> getPeakTargetNames(IPeak peak) {
 
 		List<String> peakTargetNames = new ArrayList<String>();
-		if(chromatogramPeakMSD != null) {
-			//
-			Set<IIdentificationTarget> peakTargets = chromatogramPeakMSD.getTargets();
+		if(peak != null) {
+			Set<IIdentificationTarget> peakTargets = peak.getTargets();
 			if(peakTargets.size() > 0) {
 				/*
 				 * Get the name of the stored identification entry.

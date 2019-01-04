@@ -20,11 +20,13 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class QuantifyAllPeaksISTDRunnable implements IRunnableWithProgress {
+public class QuantifyPeaksRunnableISTD implements IRunnableWithProgress {
 
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 
-	public QuantifyAllPeaksISTDRunnable(IChromatogramSelection chromatogramSelection) {
+	@SuppressWarnings("rawtypes")
+	public QuantifyPeaksRunnableISTD(IChromatogramSelection chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
