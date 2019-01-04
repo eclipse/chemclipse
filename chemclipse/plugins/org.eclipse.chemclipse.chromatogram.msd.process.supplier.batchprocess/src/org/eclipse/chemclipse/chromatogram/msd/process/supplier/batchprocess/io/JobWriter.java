@@ -33,7 +33,7 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.mod
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -174,7 +174,7 @@ public class JobWriter {
 	 * @param processEntries
 	 * @throws XMLStreamException
 	 */
-	private void writeChromatogramProcessEntries(XMLEventWriter eventWriter, XMLEventFactory eventFactory, ProcessMethod processMethod) throws XMLStreamException {
+	private void writeChromatogramProcessEntries(XMLEventWriter eventWriter, XMLEventFactory eventFactory, IProcessMethod processMethod) throws XMLStreamException {
 
 		StartElement entriesStart = eventFactory.createStartElement("", "", JobTags.CHROMATOGRAM_PROCESS_ENTRIES);
 		EndElement entriesEnd = eventFactory.createEndElement("", "", JobTags.CHROMATOGRAM_PROCESS_ENTRIES);

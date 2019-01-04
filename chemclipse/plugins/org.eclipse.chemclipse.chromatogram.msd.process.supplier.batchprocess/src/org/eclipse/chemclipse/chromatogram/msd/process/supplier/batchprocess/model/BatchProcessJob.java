@@ -15,19 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 
 public class BatchProcessJob {
 
 	private List<IChromatogramInputEntry> chromatogramInputEntries = new ArrayList<IChromatogramInputEntry>();
-	private ProcessMethod processMethod = new ProcessMethod();
+	private IProcessMethod processMethod = new ProcessMethod();
 
 	public List<IChromatogramInputEntry> getChromatogramInputEntries() {
 
 		return chromatogramInputEntries;
 	}
 
-	public ProcessMethod getProcessMethod() {
+	public IProcessMethod getProcessMethod() {
 
 		return processMethod;
 	}

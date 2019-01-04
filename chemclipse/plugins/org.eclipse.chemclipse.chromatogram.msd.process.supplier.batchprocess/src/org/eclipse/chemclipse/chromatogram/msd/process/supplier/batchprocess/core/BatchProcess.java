@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.co
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -40,7 +40,7 @@ public class BatchProcess {
 		if(batchProcessJob == null || batchProcessJob.getProcessMethod() == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The batch job and/or process method was null.");
 		} else {
-			ProcessMethod processMethod = batchProcessJob.getProcessMethod();
+			IProcessMethod processMethod = batchProcessJob.getProcessMethod();
 			for(IChromatogramInputEntry chromatogramInput : batchProcessJob.getChromatogramInputEntries()) {
 				String pathChromatogram = chromatogramInput.getInputFile();
 				IProcessingInfo processingInfoX = chromatogramTypeSupport.getChromatogramSelection(pathChromatogram, monitor);
