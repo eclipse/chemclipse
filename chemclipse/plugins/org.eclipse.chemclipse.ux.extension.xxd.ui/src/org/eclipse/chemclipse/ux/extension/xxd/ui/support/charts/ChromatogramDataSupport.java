@@ -18,23 +18,19 @@ import java.util.List;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.MoveDirection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
-import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 
 @SuppressWarnings("rawtypes")
 public class ChromatogramDataSupport {
@@ -157,49 +153,18 @@ public class ChromatogramDataSupport {
 		return builder.toString();
 	}
 
-	public List<? extends IPeak> getPeaks(IChromatogram chromatogram) {
+	public <T extends IPeak> List<T> getPeaks(IChromatogram<T> chromatogram) {
 
 		return getPeaks(chromatogram, null);
 	}
 
-	public List<? extends IPeak> getPeaks(IChromatogram chromatogram, IChromatogramSelection selectedRange) {
+	public <T extends IPeak> List<T> getPeaks(IChromatogram<T> chromatogram, IChromatogramSelection<T> selectedRange) {
 
-		List<? extends IPeak> peaks = new ArrayList<IPeak>();
-		if(chromatogram != null) {
-			if(chromatogram instanceof IChromatogramMSD) {
-				/*
-				 * MSD
-				 */
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				if(selectedRange instanceof IChromatogramSelectionMSD) {
-					peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)selectedRange);
-				} else {
-					peaks = chromatogramMSD.getPeaks();
-				}
-			} else if(chromatogram instanceof IChromatogramCSD) {
-				/*
-				 * CSD
-				 */
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-				if(selectedRange instanceof IChromatogramSelectionCSD) {
-					peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)selectedRange);
-				} else {
-					peaks = chromatogramCSD.getPeaks();
-				}
-			} else if(chromatogram instanceof IChromatogramWSD) {
-				/*
-				 * WSD
-				 */
-				IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
-				if(selectedRange instanceof IChromatogramSelectionWSD) {
-					peaks = chromatogramWSD.getPeaks((IChromatogramSelectionWSD)selectedRange);
-				} else {
-					peaks = chromatogramWSD.getPeaks();
-				}
-			}
+		if(selectedRange != null) {
+			return chromatogram.getPeaks(selectedRange);
+		} else {
+			return chromatogram.getPeaks();
 		}
-		//
-		return peaks;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -245,46 +210,19 @@ public class ChromatogramDataSupport {
 		return scans;
 	}
 
-	public List<? extends IPeak> getPeaks(IChromatogramSelection chromatogramSelection, boolean extractPeaksInSelectedRange) {
+	public <T extends IPeak> List<T> getPeaks(IChromatogramSelection<T> chromatogramSelection, boolean extractPeaksInSelectedRange) {
 
-		List<? extends IPeak> peaks = new ArrayList<IPeak>();
-		//
 		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			if(chromatogram instanceof IChromatogramMSD) {
-				/*
-				 * MSD
-				 */
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+			IChromatogram<T> chromatogram = chromatogramSelection.getChromatogram();
+			if(chromatogram != null) {
 				if(extractPeaksInSelectedRange) {
-					peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)chromatogramSelection);
+					return chromatogram.getPeaks(chromatogramSelection);
 				} else {
-					peaks = chromatogramMSD.getPeaks();
-				}
-			} else if(chromatogram instanceof IChromatogramCSD) {
-				/*
-				 * CSD
-				 */
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-				if(extractPeaksInSelectedRange) {
-					peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)chromatogramSelection);
-				} else {
-					peaks = chromatogramCSD.getPeaks();
-				}
-			} else if(chromatogram instanceof IChromatogramWSD) {
-				/*
-				 * WSD
-				 */
-				IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
-				if(extractPeaksInSelectedRange) {
-					peaks = chromatogramWSD.getPeaks((IChromatogramSelectionWSD)chromatogramSelection);
-				} else {
-					peaks = chromatogramWSD.getPeaks();
+					return chromatogram.getPeaks();
 				}
 			}
 		}
-		//
-		return peaks;
+		return Collections.emptyList();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -307,8 +245,9 @@ public class ChromatogramDataSupport {
 	public void adjustChromatogramSelection(IPeak peak, IChromatogramSelection chromatogramSelection) {
 
 		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			List<? extends IPeak> peaks = getPeaks(chromatogram);
+			@SuppressWarnings("unchecked")
 			List<? extends IPeak> peaksSelection = new ArrayList<>(getPeaks(chromatogram, chromatogramSelection));
 			Collections.sort(peaks, peakRetentionTimeComparator);
 			Collections.sort(peaksSelection, peakRetentionTimeComparator);
@@ -342,13 +281,9 @@ public class ChromatogramDataSupport {
 
 	private boolean scanContainsTargets(IScan scan) {
 
-		boolean scanContainsTargets = false;
-		if(scan instanceof ITargetSupplier) {
-			ITargetSupplier targetSupplier = (ITargetSupplier)scan;
-			if(targetSupplier.getTargets().size() > 0) {
-				scanContainsTargets = true;
-			}
+		if(scan != null) {
+			return !scan.getTargets().isEmpty();
 		}
-		return scanContainsTargets;
+		return false;
 	}
 }

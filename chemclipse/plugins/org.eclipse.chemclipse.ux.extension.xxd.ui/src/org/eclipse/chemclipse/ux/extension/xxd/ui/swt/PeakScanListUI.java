@@ -47,22 +47,25 @@ public class PeakScanListUI extends ExtendedTableViewer {
 
 	public void setInput(IChromatogramSelection chromatogramSelection) {
 
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		setInput(chromatogramSelection, preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_LIST), preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE), preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_LIST), preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE));
+	}
+
+	public void setInput(IChromatogramSelection chromatogramSelection, boolean showPeaks, boolean showPeaksInSelectedRange, boolean showScans, boolean showScansInSelectedRange) {
+
 		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			double chromatogramPeakArea = chromatogram.getPeakIntegratedArea();
 			labelProvider.setChromatogramPeakArea(chromatogramPeakArea);
 			tableComparator.setChromatogramPeakArea(chromatogramPeakArea);
 			//
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			List<Object> input = new ArrayList<Object>();
 			//
-			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_LIST)) {
-				boolean showPeaksInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
+			if(showPeaks) {
 				input.addAll(chromatogramDataSupport.getPeaks(chromatogramSelection, showPeaksInSelectedRange));
 			}
 			//
-			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_LIST)) {
-				boolean showScansInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
+			if(showScans) {
 				input.addAll(chromatogramDataSupport.getIdentifiedScans(chromatogramSelection, showScansInSelectedRange));
 			}
 			//
