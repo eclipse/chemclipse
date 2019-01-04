@@ -13,13 +13,12 @@ package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.swt.graphics.Image;
-
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.swt.graphics.Image;
 
 public class PeakQuantitationEntriesLabelProvider extends AbstractChemClipseLabelProvider {
 
@@ -41,40 +40,40 @@ public class PeakQuantitationEntriesLabelProvider extends AbstractChemClipseLabe
 		 */
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IQuantitationEntryMSD) {
-			IQuantitationEntryMSD quantitationEntryMSD = (IQuantitationEntryMSD)element;
+		if(element instanceof IQuantitationEntry) {
+			IQuantitationEntry quantitationEntry = (IQuantitationEntry)element;
 			switch(columnIndex) {
 				case 0: // Name
-					text = quantitationEntryMSD.getName();
+					text = quantitationEntry.getName();
 					break;
 				case 1: // Chemical Class
-					text = quantitationEntryMSD.getChemicalClass();
+					text = quantitationEntry.getChemicalClass();
 					break;
 				case 2: // Concentration
-					text = decimalFormat.format(quantitationEntryMSD.getConcentration());
+					text = decimalFormat.format(quantitationEntry.getConcentration());
 					break;
 				case 3: // Concentration Unit
-					text = quantitationEntryMSD.getConcentrationUnit();
+					text = quantitationEntry.getConcentrationUnit();
 					break;
 				case 4: // Area
-					text = decimalFormat.format(quantitationEntryMSD.getArea());
+					text = decimalFormat.format(quantitationEntry.getArea());
 					break;
 				case 5: // Ion
-					double ion = quantitationEntryMSD.getIon();
-					if(ion == AbstractIon.TIC_ION) {
-						text = AbstractIon.TIC_DESCRIPTION;
+					double ion = quantitationEntry.getSignal();
+					if(ion == IQuantitationSignal.TIC_SIGNAL) {
+						text = IQuantitationSignal.TIC_DESCRIPTION;
 					} else {
 						text = decimalFormat.format(ion);
 					}
 					break;
 				case 6: // Calibration Method
-					text = quantitationEntryMSD.getCalibrationMethod();
+					text = quantitationEntry.getCalibrationMethod();
 					break;
 				case 7: // Used Cross Zero
-					text = Boolean.toString(quantitationEntryMSD.getUsedCrossZero());
+					text = Boolean.toString(quantitationEntry.getUsedCrossZero());
 					break;
 				case 8: // Description
-					text = quantitationEntryMSD.getDescription();
+					text = quantitationEntry.getDescription();
 					break;
 				default:
 					text = "n.v.";

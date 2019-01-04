@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakQuantitationEntriesContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakQuantitationEntriesLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakQuantitationEntriesTableComparator;
@@ -158,9 +157,9 @@ public class PeakQuantitationEntriesUI {
 			 */
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
-			if(object instanceof IQuantitationEntryMSD) {
-				IQuantitationEntryMSD target = (IQuantitationEntryMSD)object;
-				quantitationEntryList.add(target);
+			if(object instanceof IQuantitationEntry) {
+				IQuantitationEntry quantitationEntry = (IQuantitationEntry)object;
+				quantitationEntryList.add(quantitationEntry);
 			}
 		}
 		return quantitationEntryList;

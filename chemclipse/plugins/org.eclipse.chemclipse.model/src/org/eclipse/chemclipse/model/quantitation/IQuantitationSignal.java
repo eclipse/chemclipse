@@ -20,6 +20,8 @@ package org.eclipse.chemclipse.model.quantitation;
 public interface IQuantitationSignal extends Comparable<IQuantitationSignal> {
 
 	double TIC_SIGNAL = 0.0d;
+	String TIC_DESCRIPTION = "TIC";
+	//
 	double ABSOLUTE_RELATIVE_RESPONSE = 100.0d; // 100 is used for the TIC signal.
 
 	double getSignal();

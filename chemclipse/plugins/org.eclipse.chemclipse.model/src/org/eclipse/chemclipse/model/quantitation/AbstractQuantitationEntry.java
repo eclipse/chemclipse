@@ -18,6 +18,7 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	 */
 	private static final long serialVersionUID = -6312658397485712262L;
 	//
+	private double signal = IQuantitationSignal.TIC_SIGNAL;
 	private String name = "";
 	private String chemicalClass = "";
 	private double concentration = 0.0d;
@@ -32,6 +33,18 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 		this.concentration = concentration;
 		this.concentrationUnit = concentrationUnit;
 		this.area = area;
+	}
+
+	@Override
+	public double getSignal() {
+
+		return signal;
+	}
+
+	@Override
+	public void setSignal(double signal) {
+
+		this.signal = signal;
 	}
 
 	@Override

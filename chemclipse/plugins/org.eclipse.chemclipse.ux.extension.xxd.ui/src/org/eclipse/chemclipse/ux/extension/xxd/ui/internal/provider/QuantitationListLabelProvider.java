@@ -14,8 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -80,13 +79,10 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 					text = decimalFormat.format(quantitationEntry.getArea());
 					break;
 				case 5: // TIC ...
-					text = AbstractIon.TIC_DESCRIPTION;
-					if(quantitationEntry instanceof IQuantitationEntryMSD) {
-						IQuantitationEntryMSD quantitationEntryMSD = (IQuantitationEntryMSD)element;
-						double ion = quantitationEntryMSD.getIon();
-						if(ion != AbstractIon.TIC_ION) {
-							text = decimalFormat.format(ion);
-						}
+					text = IQuantitationSignal.TIC_DESCRIPTION;
+					double signal = quantitationEntry.getSignal();
+					if(signal != IQuantitationSignal.TIC_SIGNAL) {
+						text = decimalFormat.format(signal);
 					}
 					break;
 				case 6:

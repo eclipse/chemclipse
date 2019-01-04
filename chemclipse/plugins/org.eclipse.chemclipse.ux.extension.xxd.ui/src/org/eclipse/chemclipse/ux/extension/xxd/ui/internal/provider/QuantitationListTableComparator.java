@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -43,11 +42,7 @@ public class QuantitationListTableComparator extends AbstractRecordTableComparat
 					sortOrder = Double.compare(quantitationEntry2.getArea(), quantitationEntry1.getArea());
 					break;
 				case 5:
-					if(quantitationEntry1 instanceof IQuantitationEntryMSD && quantitationEntry2 instanceof IQuantitationEntryMSD) {
-						IQuantitationEntryMSD quantitationEntryMSD1 = (IQuantitationEntryMSD)quantitationEntry1;
-						IQuantitationEntryMSD quantitationEntryMSD2 = (IQuantitationEntryMSD)quantitationEntry2;
-						sortOrder = Double.compare(quantitationEntryMSD2.getIon(), quantitationEntryMSD1.getIon());
-					}
+					sortOrder = Double.compare(quantitationEntry2.getSignal(), quantitationEntry1.getSignal());
 					break;
 				case 6:
 					sortOrder = quantitationEntry2.getCalibrationMethod().compareTo(quantitationEntry1.getCalibrationMethod());

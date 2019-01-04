@@ -19,10 +19,11 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.QuantitationSupport;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 
-public class QuantitationSupportMSD {
+public class QuantitationSupportMSD extends QuantitationSupport {
 
 	private static final Logger logger = Logger.getLogger(QuantitationSupportMSD.class);
 	//

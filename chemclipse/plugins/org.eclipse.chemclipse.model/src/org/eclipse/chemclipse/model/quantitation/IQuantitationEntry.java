@@ -15,6 +15,10 @@ import java.io.Serializable;
 
 public interface IQuantitationEntry extends Serializable {
 
+	double getSignal();
+
+	void setSignal(double signal);
+
 	String getName();
 
 	String getChemicalClass();
