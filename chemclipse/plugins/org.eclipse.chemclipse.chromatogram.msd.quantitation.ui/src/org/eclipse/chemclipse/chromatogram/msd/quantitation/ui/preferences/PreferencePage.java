@@ -11,11 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.ui.preferences;
 
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.IWorkbench;
-
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.ui.Activator;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 

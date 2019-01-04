@@ -14,10 +14,7 @@ package org.eclipse.chemclipse.model.quantitation;
 import java.io.Serializable;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.core.IPeak;
-
-@SuppressWarnings("rawtypes")
-public interface IQuantitationCompound<T extends IPeak> extends Serializable, Comparable<IQuantitationCompound> {
+public interface IQuantitationCompound extends Serializable, Comparable<IQuantitationCompound> {
 
 	String getName();
 
@@ -91,7 +88,7 @@ public interface IQuantitationCompound<T extends IPeak> extends Serializable, Co
 	 */
 	void setUseCrossZero(boolean useCrossZero);
 
-	List<IQuantitationPeak<T>> getQuantitationPeaks();
+	List<IQuantitationPeak> getQuantitationPeaks();
 
 	/**
 	 * IQuantitationSignals and IConcentrationResponseEntries

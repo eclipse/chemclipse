@@ -14,9 +14,7 @@ package org.eclipse.chemclipse.model.quantitation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.core.IPeak;
-
-public abstract class AbstractQuantitationCompound<T extends IPeak> implements IQuantitationCompound<T> {
+public abstract class AbstractQuantitationCompound implements IQuantitationCompound {
 
 	private static final long serialVersionUID = 1901297052527290065L;
 	//
@@ -31,7 +29,7 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 	//
 	private IQuantitationSignals quantitationSignals = new QuantitationSignals();
 	private IResponseSignals responseSignals = new ResponseSignals();
-	private List<IQuantitationPeak<T>> quantitationPeaks = new ArrayList<>();
+	private List<IQuantitationPeak> quantitationPeaks = new ArrayList<>();
 
 	/**
 	 * Name, e.g.: Styrene<br/>
@@ -159,7 +157,7 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 	}
 
 	@Override
-	public List<IQuantitationPeak<T>> getQuantitationPeaks() {
+	public List<IQuantitationPeak> getQuantitationPeaks() {
 
 		return quantitationPeaks;
 	}
@@ -173,7 +171,6 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 		return result;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object obj) {
 
@@ -198,7 +195,6 @@ public abstract class AbstractQuantitationCompound<T extends IPeak> implements I
 		return "AbstractQuantitationCompound [name=" + name + ", chemicalClass=" + chemicalClass + ", concentrationUnit=" + concentrationUnit + ", useTIC=" + useTIC + ", calibrationMethod=" + calibrationMethod + ", useCrossZero=" + useCrossZero + "]";
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int compareTo(IQuantitationCompound quantitationCompound) {
 

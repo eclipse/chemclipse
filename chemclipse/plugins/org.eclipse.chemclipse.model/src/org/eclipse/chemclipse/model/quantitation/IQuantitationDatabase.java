@@ -11,11 +11,27 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings("rawtypes")
 public interface IQuantitationDatabase extends Set<IQuantitationCompound> {
+
+	File getFile();
+
+	void setFile(File file);
+
+	String getConverterId();
+
+	void setConverterId(String converterId);
+
+	String getOperator();
+
+	void setOperator(String operator);
+
+	String getDescription();
+
+	void setDescription(String description);
 
 	List<String> getCompoundNames();
 

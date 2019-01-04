@@ -21,11 +21,13 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.converter.quantitation.QuantDBConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IQuantitationDatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.QuantDBImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
@@ -42,13 +44,13 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
-public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implements IDataUpdateSupport, IQuantitationDatabaseEditor {
 
 	private static final Logger logger = Logger.getLogger(SequenceEditor.class);
 	//
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantitationDatabaseEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.QuantitationDatabaseEditor";
-	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/quantifyAllPeaks.gif";
+	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/database.gif";
 	public static final String TOOLTIP = "Quantitation Editor";
 	//
 	private MPart part;
@@ -126,6 +128,18 @@ public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implem
 		}
 	}
 
+	@Override
+	public boolean saveAs() {
+
+		return false;
+	}
+
+	@Override
+	public IQuantitationDatabase getQuantitationDatabase() {
+
+		return quantitationDatabase;
+	}
+
 	private void initialize(Composite parent) {
 
 		createEditorPages(parent);
@@ -142,6 +156,14 @@ public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implem
 	private void createPage(Composite parent) {
 
 		extendedQuantCompoundListUI = new ExtendedQuantCompoundListUI(parent);
+		extendedQuantCompoundListUI.setModificationHandler(new IModificationHandler() {
+
+			@Override
+			public void setDirty(boolean dirty) {
+
+				dirtyable.setDirty(dirty);
+			}
+		});
 	}
 
 	private synchronized IQuantitationDatabase loadQuantitationDatabase() {

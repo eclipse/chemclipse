@@ -328,4 +328,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_AUTH = "auth.png";
 	String IMAGE_AUTH_LOCKED = "auth_locked.gif";
 	String IMAGE_AUTH_UNLOCKED = "auth_unlocked.gif";
+	//
+	String IMAGE_HEADER_DATA = "headerdata.gif";
 }

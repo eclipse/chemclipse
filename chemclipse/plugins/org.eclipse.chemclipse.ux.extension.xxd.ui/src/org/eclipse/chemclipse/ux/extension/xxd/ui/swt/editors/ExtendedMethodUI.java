@@ -17,11 +17,10 @@ import java.util.Collections;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsSupport;
@@ -68,8 +67,7 @@ public class ExtendedMethodUI extends Composite {
 	private Button buttonResetSettings;
 	private MethodListUI listUI;
 	//
-	private ProcessMethod processMethod = null;
-	//
+	private IProcessMethod processMethod = null;
 	private IModificationHandler modificationHandler = null;
 
 	public ExtendedMethodUI(Composite parent, int style) {
@@ -77,7 +75,7 @@ public class ExtendedMethodUI extends Composite {
 		createControl();
 	}
 
-	public void update(ProcessMethod processMethod) {
+	public void update(IProcessMethod processMethod) {
 
 		this.processMethod = processMethod;
 		updateProcessMethod();
@@ -130,7 +128,7 @@ public class ExtendedMethodUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the header toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -138,9 +136,9 @@ public class ExtendedMethodUI extends Composite {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarHeader);
 				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});

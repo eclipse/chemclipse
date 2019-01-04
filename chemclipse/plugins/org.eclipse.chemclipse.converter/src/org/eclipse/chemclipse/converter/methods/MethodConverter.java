@@ -16,6 +16,7 @@ import java.io.File;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -66,7 +67,7 @@ public class MethodConverter {
 			//
 			try {
 				IProcessingInfo processinInfo = convert(file, supplier.getId(), monitor);
-				ProcessMethod processMethod = processinInfo.getProcessingResult(ProcessMethod.class);
+				IProcessMethod processMethod = processinInfo.getProcessingResult(ProcessMethod.class);
 				if(processMethod != null) {
 					return processinInfo;
 				}

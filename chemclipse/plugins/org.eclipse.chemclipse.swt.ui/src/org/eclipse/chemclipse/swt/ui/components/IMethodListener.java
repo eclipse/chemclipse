@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.components;
 
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMethodListener {
 
-	void execute(ProcessMethod processMethods, IProgressMonitor monitor);
+	void execute(IProcessMethod processMethods, IProgressMonitor monitor);
 }

@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.SplitSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDetector;
@@ -50,13 +49,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IPlotArea;
+import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
-import org.eclipse.swtchart.IAxis;
-import org.eclipse.swtchart.IPlotArea;
-import org.eclipse.swtchart.Range;
 
 @SuppressWarnings("rawtypes")
 public class ExtendedPeakChartUI {

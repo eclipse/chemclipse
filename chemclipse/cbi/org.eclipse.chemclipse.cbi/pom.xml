@@ -135,6 +135,8 @@
     <module>../../plugins/org.eclipse.chemclipse.rcp.app.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.pyrolysis.model</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.batchprocess</module>
+    <module>../../plugins/org.eclipse.chemclipse.xxd.model</module>
+    <module>../../plugins/org.eclipse.chemclipse.xxd.model.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.xxd.process</module>
     <module>../../plugins/org.eclipse.chemclipse.xxd.process.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.report</module>
@@ -196,6 +198,7 @@
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.pyrolysis.model.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.batchprocess.fragment.test</module>-->
+    <!--<module>../../plugins/org.eclipse.chemclipse.xxd.model.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.xxd.process.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.report.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.rcp.app.fragment.test</module>-->

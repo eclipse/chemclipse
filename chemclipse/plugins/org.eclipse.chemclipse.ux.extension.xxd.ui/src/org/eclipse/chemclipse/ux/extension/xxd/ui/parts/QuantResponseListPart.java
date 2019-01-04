@@ -47,7 +47,6 @@ public class QuantResponseListPart extends AbstractDataUpdateSupport implements 
 		registerEvent(IChemClipseEvents.TOPIC_QUANT_DB_COMPOUND_UPDATE, IChemClipseEvents.PROPERTY_QUANT_DB_COMPOUND);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateObjects(List<Object> objects, String topic) {
 

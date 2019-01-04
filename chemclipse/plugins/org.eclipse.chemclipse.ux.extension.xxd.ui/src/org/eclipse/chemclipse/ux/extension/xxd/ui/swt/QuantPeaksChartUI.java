@@ -53,7 +53,6 @@ public class QuantPeaksChartUI extends Composite {
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 	//
 	private PeaksChart peaksChart;
-	@SuppressWarnings("rawtypes")
 	private IQuantitationCompound quantitationCompound;
 
 	public QuantPeaksChartUI(Composite parent, int style) {
@@ -61,7 +60,6 @@ public class QuantPeaksChartUI extends Composite {
 		createControl();
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void update(IQuantitationCompound quantitationCompound) {
 
 		this.quantitationCompound = quantitationCompound;
@@ -179,7 +177,6 @@ public class QuantPeaksChartUI extends Composite {
 			//
 			for(Object object : quantitationCompound.getQuantitationPeaks()) {
 				if(object instanceof IQuantitationPeak) {
-					@SuppressWarnings("rawtypes")
 					IQuantitationPeak quantitationPeak = (IQuantitationPeak)object;
 					String label = decimalFormat.format(quantitationPeak.getConcentration()) + " " + quantitationPeak.getConcentrationUnit();
 					IPeak peak = quantitationPeak.getReferencePeak();

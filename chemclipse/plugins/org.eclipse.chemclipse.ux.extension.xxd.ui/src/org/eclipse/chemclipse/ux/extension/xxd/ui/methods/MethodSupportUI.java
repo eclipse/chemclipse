@@ -20,6 +20,7 @@ import java.util.List;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -28,7 +29,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
@@ -385,7 +385,7 @@ public class MethodSupportUI extends Composite {
 						IProcessingInfo processingInfo = MethodConverter.convert(file, monitor);
 						if(!processingInfo.hasErrorMessages()) {
 							try {
-								ProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
+								IProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
 								methodListener.execute(processMethod, monitor);
 							} catch(Exception e) {
 								logger.warn(e);

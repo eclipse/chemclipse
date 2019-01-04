@@ -13,15 +13,15 @@ package org.eclipse.chemclipse.model.quantitation;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 
-public abstract class AbstractQuantitationPeak<T extends IPeak> implements IQuantitationPeak<T> {
+public abstract class AbstractQuantitationPeak implements IQuantitationPeak {
 
 	private static final long serialVersionUID = 195271455326109557L;
 	//
 	private double concentration;
 	private String concentrationUnit;
-	private T referencePeak;
+	private IPeak referencePeak;
 
-	public AbstractQuantitationPeak(T referencePeak, double concentration, String concentrationUnit) {
+	public AbstractQuantitationPeak(IPeak referencePeak, double concentration, String concentrationUnit) {
 		this.referencePeak = referencePeak;
 		this.concentration = concentration;
 		this.concentrationUnit = concentrationUnit;
@@ -46,7 +46,7 @@ public abstract class AbstractQuantitationPeak<T extends IPeak> implements IQuan
 	}
 
 	@Override
-	public T getReferencePeak() {
+	public IPeak getReferencePeak() {
 
 		return referencePeak;
 	}

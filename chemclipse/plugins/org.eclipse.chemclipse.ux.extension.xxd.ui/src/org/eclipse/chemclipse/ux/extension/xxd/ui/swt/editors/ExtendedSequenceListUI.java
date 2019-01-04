@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.converter.model.reports.ISequence;
 import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurement;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -163,7 +163,7 @@ public class ExtendedSequenceListUI {
 
 			@SuppressWarnings("rawtypes")
 			@Override
-			public void execute(ProcessMethod processMethod, IProgressMonitor monitor) {
+			public void execute(IProcessMethod processMethod, IProgressMonitor monitor) {
 
 				IProcessingInfo processingInfo = new ProcessingInfo();
 				//

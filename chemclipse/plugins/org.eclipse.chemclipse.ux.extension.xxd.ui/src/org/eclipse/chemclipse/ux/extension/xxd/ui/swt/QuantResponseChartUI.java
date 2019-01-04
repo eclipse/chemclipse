@@ -18,9 +18,9 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
-import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.IEquation;
@@ -68,7 +68,6 @@ public class QuantResponseChartUI extends Composite {
 	private Composite toolbarInfo;
 	private Label labelInfo;
 	private CalibrationChart calibrationChart;
-	@SuppressWarnings("rawtypes")
 	private IQuantitationCompound quantitationCompound;
 
 	public QuantResponseChartUI(Composite parent, int style) {
@@ -76,7 +75,6 @@ public class QuantResponseChartUI extends Composite {
 		createControl();
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void update(IQuantitationCompound quantitationCompound) {
 
 		this.quantitationCompound = quantitationCompound;

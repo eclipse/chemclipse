@@ -17,16 +17,21 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.swt.graphics.Image;
 
 public class QuantPeaksLabelProvider extends AbstractChemClipseLabelProvider {
 
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
+	//
 	public static final String[] TITLES = { //
 			"Concentration", //
-			"Concentration Unit" //
+			"Concentration Unit", //
+			"Type" //
 	};
 	//
 	public static final int[] BOUNDS = { //
+			100, //
 			100, //
 			100 //
 	};
@@ -42,7 +47,6 @@ public class QuantPeaksLabelProvider extends AbstractChemClipseLabelProvider {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
 	public String getColumnText(Object element, int columnIndex) {
 
 		DecimalFormat decimalFormat = getDecimalFormat();
@@ -55,6 +59,9 @@ public class QuantPeaksLabelProvider extends AbstractChemClipseLabelProvider {
 					break;
 				case 1:
 					text = entry.getConcentrationUnit();
+					break;
+				case 2:
+					text = peakDataSupport.getType(entry.getReferencePeak());
 					break;
 				default:
 					text = "n.v.";

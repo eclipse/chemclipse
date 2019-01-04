@@ -26,7 +26,6 @@ public class QuantCompoundListFilter extends ViewerFilter {
 		this.caseSensitive = caseSensitive;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 

@@ -67,7 +67,6 @@ public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider 
 			100 //
 	};
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 
@@ -90,7 +89,6 @@ public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider 
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 

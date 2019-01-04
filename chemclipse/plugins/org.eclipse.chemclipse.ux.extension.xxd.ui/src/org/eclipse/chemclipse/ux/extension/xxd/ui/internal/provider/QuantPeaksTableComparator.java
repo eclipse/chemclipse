@@ -14,12 +14,14 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.jface.viewers.Viewer;
 
 public class QuantPeaksTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
+
 	@Override
-	@SuppressWarnings("rawtypes")
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
@@ -33,6 +35,9 @@ public class QuantPeaksTableComparator extends AbstractRecordTableComparator imp
 					break;
 				case 1:
 					sortOrder = (entry2.getConcentrationUnit().compareTo(entry1.getConcentrationUnit()));
+					break;
+				case 2:
+					sortOrder = peakDataSupport.getType(entry2.getReferencePeak()).compareTo(peakDataSupport.getType(entry1.getReferencePeak()));
 					break;
 				default:
 					sortOrder = 0;

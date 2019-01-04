@@ -155,6 +155,12 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 				case ISupplierFileIdentifier.TYPE_SEQ:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SEQUENCE_LIST, IApplicationImage.SIZE_16x16);
 					break;
+				case ISupplierFileIdentifier.TYPE_MTH:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16);
+					break;
+				case ISupplierFileIdentifier.TYPE_QDB:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DATABASE, IApplicationImage.SIZE_16x16);
+					break;
 				default:
 					/*
 					 * Default

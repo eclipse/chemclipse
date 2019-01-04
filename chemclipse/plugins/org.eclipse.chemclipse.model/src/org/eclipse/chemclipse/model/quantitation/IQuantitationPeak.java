@@ -15,7 +15,7 @@ import java.io.Serializable;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 
-public interface IQuantitationPeak<T extends IPeak> extends Serializable {
+public interface IQuantitationPeak extends Serializable {
 
 	double getConcentration();
 
@@ -23,5 +23,5 @@ public interface IQuantitationPeak<T extends IPeak> extends Serializable {
 
 	String getConcentrationUnit();
 
-	T getReferencePeak();
+	IPeak getReferencePeak();
 }

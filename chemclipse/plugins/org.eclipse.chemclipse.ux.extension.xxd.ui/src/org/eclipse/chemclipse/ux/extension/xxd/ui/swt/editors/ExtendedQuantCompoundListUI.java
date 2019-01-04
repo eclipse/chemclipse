@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.util.Iterator;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -40,11 +42,14 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -59,11 +64,17 @@ import org.eclipse.swt.widgets.Text;
 
 public class ExtendedQuantCompoundListUI {
 
+	private static final Logger logger = Logger.getLogger(ExtendedQuantCompoundListUI.class);
+	//
+	private static final String DESCRIPTION = "Quantitation Database";
 	private static final String MENU_CATEGORY = "Compounds";
 	//
 	private Composite toolbarInfo;
 	private Label labelInfo;
 	private Composite toolbarModify;
+	private Composite toolbarHeader;
+	private Text textOperator;
+	private Text textDescription;
 	private Label labelInputErrors;
 	private Text textSignal;
 	private Button buttonAdd;
@@ -76,9 +87,15 @@ public class ExtendedQuantCompoundListUI {
 	private ControlDecoration controlDecoration;
 	//
 	private IQuantitationDatabase quantitationDatabase = null;
+	private IModificationHandler modificationHandler = null;
 
 	public ExtendedQuantCompoundListUI(Composite parent) {
 		initialize(parent);
+	}
+
+	public void setModificationHandler(IModificationHandler modificationHandler) {
+
+		this.modificationHandler = modificationHandler;
 	}
 
 	public void update(IQuantitationDatabase quantitationDatabase) {
@@ -95,11 +112,13 @@ public class ExtendedQuantCompoundListUI {
 		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
+		toolbarHeader = createToolbarHeader(parent);
 		toolbarModify = createToolbarModify(parent);
 		toolbarSearch = createToolbarSearch(parent);
 		quantCompoundListUI = createTable(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		PartSupport.setCompositeVisibility(toolbarHeader, false);
 		PartSupport.setCompositeVisibility(toolbarModify, false);
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
 		//
@@ -113,13 +132,62 @@ public class ExtendedQuantCompoundListUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(8, false));
 		//
+		createButtonToggleToolbarInfo(composite);
+		createButtonToggleToolbarHeader(composite);
 		createButtonToggleToolbarModify(composite);
+		createResponseTableButton(composite);
 		createButtonToggleEditModus(composite);
 		createButtonToggleToolbarSearch(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
+	}
+
+	private Button createButtonToggleToolbarInfo(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the info toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleToolbarHeader(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the header toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarHeader);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
 	}
 
 	private Button createButtonToggleToolbarModify(Composite parent) {
@@ -145,6 +213,45 @@ public class ExtendedQuantCompoundListUI {
 		return button;
 	}
 
+	private void createResponseTableButton(Composite parent) {
+
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Create Response Table(s)");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CALCULATE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(quantitationDatabase != null) {
+					IStructuredSelection structuredSelection = quantCompoundListUI.getStructuredSelection();
+					if(!structuredSelection.isEmpty()) {
+						if(MessageDialog.openQuestion(e.display.getActiveShell(), DESCRIPTION, "Would you like to create new concentration response and signal tables for the selected entries?")) {
+							@SuppressWarnings("rawtypes")
+							Iterator iterator = structuredSelection.iterator();
+							while(iterator.hasNext()) {
+								Object object = iterator.next();
+								if(object instanceof IQuantitationCompound) {
+									IQuantitationCompound quantitationCompound = (IQuantitationCompound)object;
+									if(quantitationCompound.getQuantitationPeaks().size() > 0) {
+										quantitationCompound.calculateSignalTablesFromPeaks();
+									} else {
+										logger.warn("There are no quantitation peaks stored: " + quantitationCompound);
+									}
+								}
+							}
+							setDirty(true);
+						}
+					} else {
+						MessageDialog.openInformation(e.display.getActiveShell(), DESCRIPTION, "Please select at least one quantitation compound from the list.");
+					}
+				}
+			}
+		});
+	}
+
 	private Composite createToolbarInfo(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -157,6 +264,67 @@ public class ExtendedQuantCompoundListUI {
 		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return composite;
+	}
+
+	private Composite createToolbarHeader(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(2, false));
+		//
+		textOperator = createOperatorSection(composite);
+		textDescription = createDescriptionSection(composite);
+		//
+		return composite;
+	}
+
+	private Text createOperatorSection(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("Operator:");
+		//
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");
+		text.setToolTipText("Operator");
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+
+				if(quantitationDatabase != null) {
+					quantitationDatabase.setOperator(text.getText().trim());
+					setDirty(true);
+				}
+			}
+		});
+		//
+		return text;
+	}
+
+	private Text createDescriptionSection(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("Description:");
+		//
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");
+		text.setToolTipText("Description");
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+
+				if(quantitationDatabase != null) {
+					quantitationDatabase.setDescription(text.getText().trim());
+					setDirty(true);
+				}
+			}
+		});
+		//
+		return text;
 	}
 
 	private Composite createToolbarModify(Composite parent) {
@@ -380,7 +548,6 @@ public class ExtendedQuantCompoundListUI {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void setCompound(Shell shell, QuantitationCompoundValidator validator) {
 
 		if(quantitationDatabase != null) {
@@ -407,7 +574,6 @@ public class ExtendedQuantCompoundListUI {
 		searchSupportUI.reset();
 	}
 
-	@SuppressWarnings("rawtypes")
 	private QuantCompoundListUI createTable(Composite parent) {
 
 		QuantCompoundListUI listUI = new QuantCompoundListUI(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
@@ -488,9 +654,13 @@ public class ExtendedQuantCompoundListUI {
 		if(quantitationDatabase != null) {
 			String editInformation = quantCompoundListUI.isEditEnabled() ? "(Edit is enabled)" : "(Edit is disabled)";
 			labelInfo.setText("Quantitation Database " + editInformation);
+			textOperator.setText(quantitationDatabase.getOperator());
+			textDescription.setText(quantitationDatabase.getDescription());
 			quantCompoundListUI.setInput(quantitationDatabase);
 		} else {
 			labelInfo.setText("");
+			textOperator.setText("");
+			textDescription.setText("");
 			quantCompoundListUI.clear();
 		}
 	}
@@ -529,5 +699,12 @@ public class ExtendedQuantCompoundListUI {
 		textSignal.setEnabled(enabled);
 		buttonAdd.setEnabled(enabled);
 		buttonDelete.setEnabled(enabled);
+	}
+
+	private void setDirty(boolean dirty) {
+
+		if(modificationHandler != null) {
+			modificationHandler.setDirty(dirty);
+		}
 	}
 }

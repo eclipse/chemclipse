@@ -17,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -60,7 +61,7 @@ public class ChromatogramEditorAction extends AbstractChromatogramEditorAction i
 						IProcessingInfo processingInfo = MethodConverter.convert(file, monitor);
 						if(!processingInfo.hasErrorMessages()) {
 							try {
-								ProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
+								IProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
 								IProcessingInfo processorInfo = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
 								if(processorInfo.hasErrorMessages()) {
 									processingInfo.addMessages(processorInfo);

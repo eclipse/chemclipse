@@ -78,7 +78,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -1320,7 +1320,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
 			@Override
-			public void execute(ProcessMethod processMethod, IProgressMonitor monitor) {
+			public void execute(IProcessMethod processMethod, IProgressMonitor monitor) {
 
 				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 				processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
@@ -1554,8 +1554,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 
 	private ChromatogramActionUI createChromatogramActionUI(Composite parent) {
 
-		ChromatogramActionUI chromatogramActionUI = new ChromatogramActionUI(parent, SWT.NONE);
-		return chromatogramActionUI;
+		return new ChromatogramActionUI(parent, SWT.NONE);
 	}
 
 	private void createResetButton(Composite parent) {

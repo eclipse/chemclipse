@@ -33,7 +33,6 @@ public class ExtendedQuantPeaksListUI extends Composite {
 
 	private static final String DESCRIPTION = "Quantitation Peaks";
 	//
-	@SuppressWarnings("rawtypes")
 	private IQuantitationCompound quantitationCompound;
 	private QuantPeakListUI quantPeakListUI;
 
@@ -42,7 +41,6 @@ public class ExtendedQuantPeaksListUI extends Composite {
 		createControl();
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void update(IQuantitationCompound quantitationCompound) {
 
 		this.quantitationCompound = quantitationCompound;

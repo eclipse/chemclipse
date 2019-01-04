@@ -13,9 +13,12 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
 import java.text.DecimalFormat;
 
+import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 
 public class PeakDataSupport {
 
@@ -39,5 +42,18 @@ public class PeakDataSupport {
 			builder.append("No peak has been selected yet.");
 		}
 		return builder.toString();
+	}
+
+	public String getType(IPeak peak) {
+
+		if(peak instanceof IPeakCSD) {
+			return "[CSD]";
+		} else if(peak instanceof IPeakMSD) {
+			return "[MSD]";
+		} else if(peak instanceof IPeakWSD) {
+			return "[WSD]";
+		} else {
+			return "";
+		}
 	}
 }

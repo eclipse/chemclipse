@@ -50,7 +50,7 @@ public class ProcessMethodEditor extends AbstractDataUpdateSupport implements ID
 	//
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.processMethodEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor";
-	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/sequenceListDefault.gif";
+	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/method.gif";
 	public static final String TOOLTIP = "Process Method Editor";
 	//
 	private MPart part;

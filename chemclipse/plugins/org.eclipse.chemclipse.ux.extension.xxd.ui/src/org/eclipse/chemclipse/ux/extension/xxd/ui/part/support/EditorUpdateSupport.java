@@ -16,11 +16,13 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramProjectEditor;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IQuantitationDatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorXIR;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
@@ -81,22 +83,6 @@ public class EditorUpdateSupport {
 		 * contains 0 elements.
 		 */
 		return chromatogramSelections;
-	}
-
-	@SuppressWarnings("rawtypes")
-	private void addChromatogramSelection(List<IChromatogramSelection> chromatogramSelections, IChromatogramSelection selection) {
-
-		if(selection != null) {
-			chromatogramSelections.add(selection);
-		}
-	}
-
-	@SuppressWarnings("rawtypes")
-	private void addChromatogramSelections(List<IChromatogramSelection> chromatogramSelections, List<IChromatogramSelection> selections) {
-
-		if(selections != null && selections.size() > 0) {
-			chromatogramSelections.addAll(selections);
-		}
 	}
 
 	public List<IScanXIR> getScanSelectionsXIR() {
@@ -171,5 +157,48 @@ public class EditorUpdateSupport {
 		 * contains 0 elements.
 		 */
 		return scanSelections;
+	}
+
+	public List<IQuantitationDatabase> getQuantitationDatabases() {
+
+		List<IQuantitationDatabase> quantitationDatabases = new ArrayList<IQuantitationDatabase>();
+		if(partService != null) {
+			/*
+			 * TODO: see message
+			 */
+			try {
+				Collection<MPart> parts = partService.getParts();
+				for(MPart part : parts) {
+					Object object = part.getObject();
+					if(object instanceof IQuantitationDatabaseEditor) {
+						IQuantitationDatabaseEditor editor = (IQuantitationDatabaseEditor)object;
+						quantitationDatabases.add(editor.getQuantitationDatabase());
+					}
+				}
+			} catch(Exception e) {
+				logger.warn(e);
+			}
+		}
+		/*
+		 * If the window was null and there was no open editor, the list will
+		 * contains 0 elements.
+		 */
+		return quantitationDatabases;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void addChromatogramSelection(List<IChromatogramSelection> chromatogramSelections, IChromatogramSelection selection) {
+
+		if(selection != null) {
+			chromatogramSelections.add(selection);
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void addChromatogramSelections(List<IChromatogramSelection> chromatogramSelections, List<IChromatogramSelection> selections) {
+
+		if(selections != null && selections.size() > 0) {
+			chromatogramSelections.addAll(selections);
+		}
 	}
 }

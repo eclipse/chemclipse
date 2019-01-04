@@ -78,7 +78,11 @@ public class DisplayUtils {
 		//
 		Display display = getDisplay();
 		if(display != null) {
-			shell = display.getActiveShell();
+			try {
+				shell = display.getActiveShell();
+			} catch(Exception e) {
+				logger.warn(e);
+			}
 		}
 		//
 		if(shell == null) {

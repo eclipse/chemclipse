@@ -52,7 +52,6 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 		return tableViewer.isEditEnabled();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected Object getValue(Object element) {
 
@@ -94,7 +93,6 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 		return false;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected void setValue(Object element, Object value) {
 

@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -310,7 +311,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 						IProcessingInfo processingInfo = MethodConverter.convert(file, monitor);
 						if(!processingInfo.hasErrorMessages()) {
 							try {
-								ProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
+								IProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
 								ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 								processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
 							} catch(Exception e) {

@@ -13,28 +13,32 @@ package org.eclipse.chemclipse.model.methods;
 
 import java.util.ArrayList;
 
-public class ProcessMethod extends ArrayList<IProcessEntry> {
+public class ProcessMethod extends ArrayList<IProcessEntry> implements IProcessMethod {
 
 	private static final long serialVersionUID = 1143302899750627448L;
 	//
 	private String operator = "";
 	private String description = "";
 
+	@Override
 	public String getOperator() {
 
 		return operator;
 	}
 
+	@Override
 	public void setOperator(String operator) {
 
 		this.operator = operator;
 	}
 
+	@Override
 	public String getDescription() {
 
 		return description;
 	}
 
+	@Override
 	public void setDescription(String description) {
 
 		this.description = description;

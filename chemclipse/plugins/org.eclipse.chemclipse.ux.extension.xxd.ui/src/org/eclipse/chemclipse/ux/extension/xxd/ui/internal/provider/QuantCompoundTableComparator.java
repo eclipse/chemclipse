@@ -20,7 +20,6 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class QuantCompoundTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
 

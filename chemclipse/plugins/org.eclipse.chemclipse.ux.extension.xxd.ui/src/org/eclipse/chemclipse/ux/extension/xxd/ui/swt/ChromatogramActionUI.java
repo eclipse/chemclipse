@@ -164,7 +164,14 @@ public class ChromatogramActionUI extends Composite {
 						if(action != null) {
 							IProcessingInfo processingInfo = action.applyAction(chromatogramSelection);
 							ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
-							update();
+							e.display.asyncExec(new Runnable() {
+
+								@Override
+								public void run() {
+
+									chromatogramSelection.update(false);
+								}
+							});
 						}
 					} else {
 						MessageDialog.openInformation(DisplayUtils.getShell(), "Action", "Please select a execute method first via the button popup menu (right mouse click).");

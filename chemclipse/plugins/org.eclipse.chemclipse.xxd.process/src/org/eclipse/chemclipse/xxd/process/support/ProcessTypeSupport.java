@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -119,7 +119,7 @@ public class ProcessTypeSupport {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, ProcessMethod processMethod, IProgressMonitor monitor) {
+	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, IProcessMethod processMethod, IProgressMonitor monitor) {
 
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
 		if(chromatogramSelection != null) {
@@ -129,7 +129,7 @@ public class ProcessTypeSupport {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public IProcessingInfo applyProcessor(List<IChromatogramSelection> chromatogramSelections, ProcessMethod processMethod, IProgressMonitor monitor) {
+	public IProcessingInfo applyProcessor(List<IChromatogramSelection> chromatogramSelections, IProcessMethod processMethod, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {

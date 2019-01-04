@@ -11,14 +11,71 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-@SuppressWarnings("rawtypes")
 public class QuantitationDatabase extends HashSet<IQuantitationCompound> implements IQuantitationDatabase {
 
 	private static final long serialVersionUID = 2742894549648464728L;
+	/*
+	 * Transient
+	 * File and ConverterId are set by the DB converter.
+	 */
+	private File file = null;
+	private String converterId = "";
+	//
+	private String operator = "";
+	private String description = "";
+
+	@Override
+	public File getFile() {
+
+		return file;
+	}
+
+	@Override
+	public void setFile(File file) {
+
+		this.file = file;
+	}
+
+	@Override
+	public String getConverterId() {
+
+		return converterId;
+	}
+
+	@Override
+	public void setConverterId(String converterId) {
+
+		this.converterId = converterId;
+	}
+
+	@Override
+	public String getOperator() {
+
+		return operator;
+	}
+
+	@Override
+	public void setOperator(String operator) {
+
+		this.operator = operator;
+	}
+
+	@Override
+	public String getDescription() {
+
+		return description;
+	}
+
+	@Override
+	public void setDescription(String description) {
+
+		this.description = description;
+	}
 
 	@Override
 	public List<String> getCompoundNames() {

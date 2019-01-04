@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.converter.methods;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMethodReader {
 
-	ProcessMethod read(File file, IProgressMonitor monitor);
+	IProcessMethod read(File file, IProgressMonitor monitor);
 }

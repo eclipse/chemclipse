@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
-import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 import org.eclipse.chemclipse.support.util.ValueParserSupport;
+import org.eclipse.chemclipse.xxd.model.quantitation.QuantitationCompound;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -60,9 +60,8 @@ public class QuantitationCompoundValidator extends ValueParserSupport implements
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	public IQuantitationCompound getQuantitationCompound() {
 
-		return new QuantitationCompoundMSD(name, concentrationUnit, retentionTime);
+		return new QuantitationCompound(name, concentrationUnit, retentionTime);
 	}
 }

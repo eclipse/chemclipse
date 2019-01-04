@@ -16,7 +16,6 @@ import java.util.Collection;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 
-@SuppressWarnings("rawtypes")
 public class QuantitationPeaks extends ArrayList<IQuantitationPeak> implements IQuantitationPeaks {
 
 	private static final long serialVersionUID = -4303659297540195715L;

@@ -13,6 +13,5 @@ package org.eclipse.chemclipse.model.quantitation;
 
 import java.util.List;
 
-@SuppressWarnings("rawtypes")
 public interface IQuantitationPeaks extends List<IQuantitationPeak> {
 }

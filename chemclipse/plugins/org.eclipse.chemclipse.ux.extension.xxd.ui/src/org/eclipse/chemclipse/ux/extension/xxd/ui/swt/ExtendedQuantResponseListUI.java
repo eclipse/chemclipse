@@ -53,7 +53,6 @@ public class ExtendedQuantResponseListUI extends Composite {
 
 	private static final String MENU_CATEGORY = "Response";
 	//
-	@SuppressWarnings("rawtypes")
 	private IQuantitationCompound quantitationCompound;
 	//
 	private Composite toolbarInfo;
@@ -73,7 +72,6 @@ public class ExtendedQuantResponseListUI extends Composite {
 		createControl();
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void update(IQuantitationCompound quantitationCompound) {
 
 		this.quantitationCompound = quantitationCompound;
