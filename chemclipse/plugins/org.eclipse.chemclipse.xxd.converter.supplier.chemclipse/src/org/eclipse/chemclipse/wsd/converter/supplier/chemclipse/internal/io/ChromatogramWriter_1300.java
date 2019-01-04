@@ -41,9 +41,9 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.ChromatogramWriterWSD;
@@ -404,14 +404,13 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 			dataOutputStream.writeBoolean(quantitationEntry.getUsedCrossZero()); // Used Cross Zero
 			writeString(dataOutputStream, quantitationEntry.getDescription()); // Description
 			/*
-			 * Only MSD stores an ion.
+			 * Legacy support
 			 */
-			if(quantitationEntry instanceof IQuantitationEntryMSD) {
-				dataOutputStream.writeBoolean(true); // Ion value is stored.
-				IQuantitationEntryMSD quantitationEntryMSD = (IQuantitationEntryMSD)quantitationEntry;
-				dataOutputStream.writeDouble(quantitationEntryMSD.getIon()); // Ion
+			if(quantitationEntry.getSignal() != IQuantitationSignal.TIC_SIGNAL) {
+				dataOutputStream.writeBoolean(true);
+				dataOutputStream.writeDouble(quantitationEntry.getSignal());
 			} else {
-				dataOutputStream.writeBoolean(false); // No ion values is stored.
+				dataOutputStream.writeBoolean(false);
 			}
 		}
 		/*

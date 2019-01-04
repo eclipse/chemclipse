@@ -43,7 +43,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class DatabaseWriter_1000 implements IDatabaseWriter {
@@ -177,6 +176,7 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 			List<IQuantitationEntry> quantitationEntries = peak.getQuantitationEntries();
 			dataOutputStream.writeInt(quantitationEntries.size()); // Number Quantitation Entries
 			for(IQuantitationEntry quantitationEntry : quantitationEntries) {
+				dataOutputStream.writeDouble(quantitationEntry.getSignal());
 				writeString(dataOutputStream, quantitationEntry.getName()); // Name
 				writeString(dataOutputStream, quantitationEntry.getChemicalClass()); // Chemical Class
 				dataOutputStream.writeDouble(quantitationEntry.getConcentration()); // Concentration
@@ -185,16 +185,6 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 				writeString(dataOutputStream, quantitationEntry.getCalibrationMethod()); // Calibration Method
 				dataOutputStream.writeBoolean(quantitationEntry.getUsedCrossZero()); // Used Cross Zero
 				writeString(dataOutputStream, quantitationEntry.getDescription()); // Description
-				/*
-				 * Only MSD stores an ion.
-				 */
-				if(quantitationEntry instanceof IQuantitationEntryMSD) {
-					dataOutputStream.writeBoolean(true); // Ion value is stored.
-					IQuantitationEntryMSD quantitationEntryMSD = (IQuantitationEntryMSD)quantitationEntry;
-					dataOutputStream.writeDouble(quantitationEntryMSD.getIon()); // Ion
-				} else {
-					dataOutputStream.writeBoolean(false); // No ion values is stored.
-				}
 			}
 			/*
 			 * Optimized Mass Spectrum

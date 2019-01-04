@@ -69,7 +69,6 @@ import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
-import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.xxd.model.quantitation.QuantitationCompound;
@@ -489,6 +488,7 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		int numberOfQuantitationEntries = dataInputStream.readInt(); // Number Quantitation Entries
 		for(int i = 1; i <= numberOfQuantitationEntries; i++) {
 			//
+			double signal = dataInputStream.readDouble();
 			String name = readString(dataInputStream); // Name
 			String chemicalClass = readString(dataInputStream); // Chemical Class
 			double concentration = dataInputStream.readDouble(); // Concentration
@@ -497,18 +497,9 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 			String calibrationMethod = readString(dataInputStream); // Calibration Method
 			boolean usedCrossZero = dataInputStream.readBoolean(); // Used Cross Zero
 			String description = readString(dataInputStream); // Description
-			/*
-			 * Only MSD stores an ion.
-			 */
-			IQuantitationEntry quantitationEntry;
-			boolean isMSD = dataInputStream.readBoolean(); // Ion value is stored or not.
-			if(isMSD) {
-				double ion = dataInputStream.readDouble(); // Ion
-				quantitationEntry = new QuantitationEntryMSD(name, concentration, concentrationUnit, area, ion);
-			} else {
-				quantitationEntry = new QuantitationEntry(name, concentration, concentrationUnit, area);
-			}
 			//
+			IQuantitationEntry quantitationEntry = new QuantitationEntry(name, concentration, concentrationUnit, area);
+			quantitationEntry.setSignal(signal);
 			quantitationEntry.setChemicalClass(chemicalClass);
 			quantitationEntry.setCalibrationMethod(calibrationMethod);
 			quantitationEntry.setUsedCrossZero(usedCrossZero);

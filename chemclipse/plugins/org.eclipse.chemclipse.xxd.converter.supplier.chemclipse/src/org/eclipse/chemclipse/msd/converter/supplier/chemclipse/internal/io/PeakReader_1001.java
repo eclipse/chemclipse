@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.VendorIon;
@@ -56,7 +57,6 @@ import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
-import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -286,17 +286,16 @@ public class PeakReader_1001 extends AbstractZipReader implements IPeakReader {
 			boolean usedCrossZero = dataInputStream.readBoolean(); // Used Cross Zero
 			String description = readString(dataInputStream); // Description
 			/*
-			 * Only MSD stores an ion.
+			 * Legacy support
 			 */
-			IQuantitationEntry quantitationEntry;
-			boolean isMSD = dataInputStream.readBoolean(); // Ion value is stored or not.
-			if(isMSD) {
-				double ion = dataInputStream.readDouble(); // Ion
-				quantitationEntry = new QuantitationEntryMSD(name, concentration, concentrationUnit, area, ion);
-			} else {
-				quantitationEntry = new QuantitationEntry(name, concentration, concentrationUnit, area);
+			double signal = IQuantitationSignal.TIC_SIGNAL;
+			boolean isSignal = dataInputStream.readBoolean();
+			if(isSignal) {
+				signal = dataInputStream.readDouble();
 			}
 			//
+			IQuantitationEntry quantitationEntry = new QuantitationEntry(name, concentration, concentrationUnit, area);
+			quantitationEntry.setSignal(signal);
 			quantitationEntry.setChemicalClass(chemicalClass);
 			quantitationEntry.setCalibrationMethod(calibrationMethod);
 			quantitationEntry.setUsedCrossZero(usedCrossZero);
