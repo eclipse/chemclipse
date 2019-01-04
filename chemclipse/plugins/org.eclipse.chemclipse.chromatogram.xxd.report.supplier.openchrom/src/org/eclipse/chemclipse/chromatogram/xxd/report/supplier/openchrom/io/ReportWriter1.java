@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.support.PeakQuantitation;
 import org.eclipse.chemclipse.model.support.PeakQuantitations;
 import org.eclipse.chemclipse.model.support.PeakQuantitationsExtractor;
@@ -53,7 +54,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -787,21 +787,12 @@ public class ReportWriter1 {
 			/*
 			 * A mass spectrum quantitation entry stores additional information.
 			 */
-			if(quantitationEntry instanceof IQuantitationEntryMSD) {
-				IQuantitationEntryMSD quantitationEntryMSD = (IQuantitationEntryMSD)quantitationEntry;
-				printWriter.print(DELIMITER);
-				/*
-				 * TIC or XIC
-				 */
-				double ion = quantitationEntryMSD.getIon();
-				if(ion == AbstractIon.TIC_ION) {
-					printWriter.print(AbstractIon.TIC_DESCRIPTION);
-				} else {
-					printWriter.print(decimalFormat.format(ion));
-				}
+			double signal = quantitationEntry.getSignal();
+			printWriter.print(DELIMITER);
+			if(signal == IQuantitationSignal.TIC_SIGNAL) {
+				printWriter.print(IQuantitationSignal.TIC_DESCRIPTION);
 			} else {
-				printWriter.print(DELIMITER);
-				printWriter.print("--");
+				printWriter.print(decimalFormat.format(signal));
 			}
 			printWriter.println("");
 		}
