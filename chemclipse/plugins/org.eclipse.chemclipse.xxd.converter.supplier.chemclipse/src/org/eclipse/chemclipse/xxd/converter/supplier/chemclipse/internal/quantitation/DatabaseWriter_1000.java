@@ -51,6 +51,9 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 	@Override
 	public void convert(File file, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor) throws IOException {
 
+		System.out.println("Operator: " + quantitationDatabase.getOperator());
+		System.out.println("Description: " + quantitationDatabase.getDescription());
+		//
 		DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file));
 		//
 		dataOutputStream.writeInt(quantitationDatabase.size());

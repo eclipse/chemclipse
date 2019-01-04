@@ -17,7 +17,7 @@ import java.io.IOException;
 import org.eclipse.chemclipse.converter.methods.AbstractMethodImportConverter;
 import org.eclipse.chemclipse.converter.methods.IMethodImportConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.IMethodReader;
@@ -34,7 +34,7 @@ public class MethodImportConverter extends AbstractMethodImportConverter impleme
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		try {
 			IMethodReader reader = new MethodReader_1000();
-			ProcessMethod processMethod = reader.convert(file, monitor);
+			IProcessMethod processMethod = reader.convert(file, monitor);
 			processingInfo.setProcessingResult(processMethod);
 		} catch(IOException e) {
 			processingInfo.addErrorMessage("Method Converter (*.ocm)", "Something has gone wrong to read the file: " + file);

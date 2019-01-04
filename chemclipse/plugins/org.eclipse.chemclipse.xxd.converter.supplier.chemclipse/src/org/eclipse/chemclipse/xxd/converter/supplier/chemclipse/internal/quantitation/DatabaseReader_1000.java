@@ -40,17 +40,17 @@ import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
-import org.eclipse.chemclipse.model.quantitation.ResponseSignal;
-import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.model.quantitation.QuantitationDatabase;
 import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.ResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.RetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.RetentionTimeWindow;
 import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
@@ -69,10 +69,10 @@ import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
-import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationEntryMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
+import org.eclipse.chemclipse.xxd.model.quantitation.QuantitationCompound;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class DatabaseReader_1000 implements IDatabaseReader {
@@ -83,6 +83,9 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 	public IQuantitationDatabase convert(File file, IProgressMonitor monitor) throws IOException {
 
 		IQuantitationDatabase quantitationDatabase = new QuantitationDatabase();
+		quantitationDatabase.setFile(file);
+		quantitationDatabase.setConverterId(CONVERTER_ID);
+		//
 		DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
 		//
 		int size = dataInputStream.readInt();
@@ -107,7 +110,7 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 			/*
 			 * Quantitation Compund
 			 */
-			IQuantitationCompound quantitationCompound = new QuantitationCompoundMSD(name, concentrationUnit, retentionTimeWindow.getRetentionTime());
+			IQuantitationCompound quantitationCompound = new QuantitationCompound(name, concentrationUnit, retentionTimeWindow.getRetentionTime());
 			quantitationCompound.setCalibrationMethod(calibrationMethod);
 			quantitationCompound.setChemicalClass(chemicalClass);
 			quantitationCompound.setUseCrossZero(crossZero);

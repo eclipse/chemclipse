@@ -14,10 +14,10 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.method
 import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMethodReader {
 
-	ProcessMethod convert(File file, IProgressMonitor monitor) throws IOException;
+	IProcessMethod convert(File file, IProgressMonitor monitor) throws IOException;
 }

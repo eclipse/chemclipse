@@ -19,5 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IDatabaseReader {
 
+	String CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.quantitationDatabaseSupplier";
+
 	IQuantitationDatabase convert(File file, IProgressMonitor monitor) throws IOException;
 }

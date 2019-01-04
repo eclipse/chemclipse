@@ -20,6 +20,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -29,9 +30,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MethodReader_1000 implements IMethodReader {
 
 	@Override
-	public ProcessMethod convert(File file, IProgressMonitor monitor) throws IOException {
+	public IProcessMethod convert(File file, IProgressMonitor monitor) throws IOException {
 
-		ProcessMethod processMethod = null;
+		IProcessMethod processMethod = null;
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			if(isValidFileFormat(zipFile)) {
@@ -56,7 +57,7 @@ public class MethodReader_1000 implements IMethodReader {
 		return isValid;
 	}
 
-	private ProcessMethod readData(ZipFile zipFile) throws IOException {
+	private IProcessMethod readData(ZipFile zipFile) throws IOException {
 
 		ProcessMethod processMethod = new ProcessMethod();
 		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_PROCESS_METHOD);
