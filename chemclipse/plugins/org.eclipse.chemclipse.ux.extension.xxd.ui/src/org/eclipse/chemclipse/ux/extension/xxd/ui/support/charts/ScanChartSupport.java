@@ -13,19 +13,23 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IMarkedSignals;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonValueComparator;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DISPLAY_TYPE;
 import org.eclipse.chemclipse.wsd.model.comparator.WavelengthValueComparator;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.swtchart.extensions.barcharts.BarSeriesData;
@@ -37,8 +41,6 @@ import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
 public class ScanChartSupport {
 
-	public static final String DISPLAY_TYPE_TIC = "TIC"; // Total Intensity Chromatogram
-	public static final String DISPLAY_TYPE_SWC = "SWC"; // Selected Wavelength Chromatogram
 	private IonValueComparator ionValueComparator = new IonValueComparator(SortOrder.ASC);
 	private WavelengthValueComparator wavelengthValueComparator = new WavelengthValueComparator(SortOrder.ASC);
 
@@ -56,42 +58,44 @@ public class ScanChartSupport {
 		return lineSeriesData;
 	}
 
-	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId) {
+	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId, DISPLAY_TYPE displayType, IMarkedSignals markedSignals) {
 
 		List<IScan> scans = new ArrayList<>();
 		scans.add(scan);
-		return getLineSeriesDataPoint(scans, mirrored, seriesId, DISPLAY_TYPE_TIC, null);
+		return getLineSeriesDataPoint(scans, mirrored, seriesId, displayType, markedSignals);
 	}
 
-	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId) {
+	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId, DISPLAY_TYPE displayType, IChromatogramSelection chromatogramSelection) {
 
-		return getLineSeriesDataPoint(scans, mirrored, seriesId, DISPLAY_TYPE_TIC, null);
+		IMarkedSignals markedSignals = null;
+		if(displayType.equals(DISPLAY_TYPE.SWC)) {
+			markedSignals = ((IChromatogramSelectionWSD)chromatogramSelection).getSelectedWavelengths();
+		}
+		return getLineSeriesDataPoint(scans, mirrored, seriesId, displayType, markedSignals);
 	}
 
-	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId, String type, IMarkedSignals markedSignals) {
+	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId, DISPLAY_TYPE displayType, IChromatogramSelection chromatogramSelection) {
 
-		List<IScan> scans = new ArrayList<>();
-		scans.add(scan);
-		return getLineSeriesDataPoint(scans, mirrored, seriesId, type, markedSignals);
+		return getLineSeriesDataPoint(Collections.singletonList(scan), mirrored, seriesId, displayType, chromatogramSelection);
 	}
 
-	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId, String type, IMarkedSignals markedSignals) {
+	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId, DISPLAY_TYPE displayType, IMarkedSignals markedSignals) {
 
 		List<Double> xSeries = new ArrayList<>(scans.size());
 		List<Double> ySeries = new ArrayList<>(scans.size());
 		//
 		for(IScan scan : scans) {
-			if(type.equals(DISPLAY_TYPE_TIC)) {
+			if(displayType.equals(DISPLAY_TYPE.TIC)) {
 				if(scan != null) {
 					xSeries.add((double)scan.getRetentionTime());
 					ySeries.add((double)((mirrored) ? scan.getTotalSignal() * -1 : scan.getTotalSignal()));
 				}
-			} else if(type.equals(DISPLAY_TYPE_SWC)) {
+			} else if(displayType.equals(DISPLAY_TYPE.SWC)) {
 				if(scan instanceof IScanWSD && markedSignals instanceof IMarkedWavelengths) {
 					IScanWSD scanWSD = (IScanWSD)scan;
-					IMarkedWavelengths markedWavelengths = (IMarkedWavelengths)markedSignals;
-					for(IMarkedWavelength markedWavelength : markedWavelengths) {
-						Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(markedWavelength.getWavelength());
+					Iterator<IMarkedWavelength> markedWavelengths = ((IMarkedWavelengths)markedSignals).iterator();
+					if(markedWavelengths.hasNext()) {
+						Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(markedWavelengths.next().getWavelength());
 						if(scanSignal.isPresent()) {
 							xSeries.add((double)scan.getRetentionTime());
 							ySeries.add((double)scanSignal.get().getAbundance());

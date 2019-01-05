@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -35,6 +34,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.IonsValida
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.WavelengthValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DISPLAY_TYPE;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
@@ -118,10 +118,12 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 	private int style;
 
 	public ExtendedChromatogramOverlayUI(Composite parent) {
+
 		this(parent, SWT.BORDER);
 	}
 
 	public ExtendedChromatogramOverlayUI(Composite parent, int style) {
+
 		this.style = style;
 		initialize(parent);
 	}
@@ -843,8 +845,8 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 		/*
 		 * Overlay Type
 		 */
-		String overlayType = getOverlayType();
-		comboOverlayType.setToolTipText(overlayChartSupport.getOverlayTypeTooltips(overlayType));
+		Set<DISPLAY_TYPE> types = getOverlayType();
+		comboOverlayType.setToolTipText(DISPLAY_TYPE.toDescription(types));
 		if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS)) {
 			if(isExtractedIonsModusEnabled() || isExtractedWavelengthsModusEnabled()) {
 				PartSupport.setCompositeVisibility(toolbarProfile, true);
@@ -953,11 +955,11 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 				 * refreshUpdateOverlayChart
 				 * Select which series shall be displayed.
 				 */
-				String[] overlayTypes = getOverlayType().split(OverlayChartSupport.ESCAPE_CONCATENATOR + ChromatogramChartSupport.OVERLAY_TYPE_CONCATENATOR);
+				Set<DISPLAY_TYPE> displayTypes = getOverlayType();
 				String derivativeType = comboDerivativeType.getText().trim();
 				//
-				for(String overlayType : overlayTypes) {
-					if(overlayType.equals(ChromatogramChartSupport.DISPLAY_TYPE_SIC)) {
+				for(DISPLAY_TYPE overlayType : displayTypes) {
+					if(overlayType.equals(DISPLAY_TYPE.SIC)) {
 						/*
 						 * SIC
 						 */
@@ -995,7 +997,7 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 								}
 							}
 						}
-					} else if(overlayType.equals(ChromatogramChartSupport.DISPLAY_TYPE_SWC)) {
+					} else if(overlayType.equals(DISPLAY_TYPE.SWC)) {
 						/*
 						 * SWC
 						 */
@@ -1038,7 +1040,7 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 								}
 							}
 						}
-					} else if(overlayType.equals(ChromatogramChartSupport.DISPLAY_TYPE_XWC)) {
+					} else if(overlayType.equals(DISPLAY_TYPE.XWC)) {
 						/*
 						 * AWC
 						 */
@@ -1085,7 +1087,7 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 						String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
 						Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, overlayType);
 						//
-						if(overlayType.equals(ChromatogramChartSupport.DISPLAY_TYPE_BPC) || overlayType.equals(ChromatogramChartSupport.DISPLAY_TYPE_XIC) || overlayType.equals(ChromatogramChartSupport.DISPLAY_TYPE_TSC)) {
+						if(overlayType.equals(DISPLAY_TYPE.BPC) || overlayType.equals(DISPLAY_TYPE.XIC) || overlayType.equals(DISPLAY_TYPE.TSC)) {
 							/*
 							 * BPC, XIC, TSC
 							 */
@@ -1303,22 +1305,22 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 		modifyWidgetStatus();
 	}
 
-	private String getOverlayType() {
+	private Set<DISPLAY_TYPE> getOverlayType() {
 
-		return comboOverlayType.getText().trim();
+		return DISPLAY_TYPE.toDisplayTypes(comboOverlayType.getText().trim());
 	}
 
 	private boolean isExtractedIonsModusEnabled() {
 
-		String overlayType = getOverlayType();
-		return (overlayType.contains(ChromatogramChartSupport.DISPLAY_TYPE_XIC) || //
-				overlayType.contains(ChromatogramChartSupport.DISPLAY_TYPE_SIC) || //
-				overlayType.contains(ChromatogramChartSupport.DISPLAY_TYPE_TSC));
+		Set<DISPLAY_TYPE> overlayType = getOverlayType();
+		return (overlayType.contains(DISPLAY_TYPE.XIC) || //
+				overlayType.contains(DISPLAY_TYPE.SIC) || //
+				overlayType.contains(DISPLAY_TYPE.TSC));
 	}
 
 	private boolean isExtractedWavelengthsModusEnabled() {
 
-		return getOverlayType().contains(ChromatogramChartSupport.DISPLAY_TYPE_SWC);
+		return getOverlayType().contains(DISPLAY_TYPE.SWC);
 	}
 
 	private void createVerticalSeparator(Composite parent) {

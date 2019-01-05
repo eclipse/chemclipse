@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DISPLAY_TYPE;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -48,24 +46,19 @@ public class OverlayChartSupport {
 	public static final String DISPLAY_MODUS_MIRRORED = "Mirrored";
 	//
 	private String[] overlayTypes;
-	private Map<String, String> overlayTypeTooltips;
 	private String[] derivativeTypes;
 	private String[] selectedIons;
 	private String[] displayModi;
 	//
 
 	public OverlayChartSupport() {
+
 		initialize();
 	}
 
 	public String[] getOverlayTypes() {
 
 		return overlayTypes;
-	}
-
-	public String getOverlayTypeTooltips(String overlayType) {
-
-		return overlayTypeTooltips.getOrDefault(overlayType, "");
 	}
 
 	public String[] getDerivativeTypes() {
@@ -86,30 +79,17 @@ public class OverlayChartSupport {
 	private void initialize() {
 
 		overlayTypes = new String[]{//
-				ChromatogramChartSupport.DISPLAY_TYPE_TIC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_BPC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_XIC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_SIC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_XWC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_SWC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_TSC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_TIC_BPC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_TIC_XIC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_TIC_SIC, //
-				ChromatogramChartSupport.DISPLAY_TYPE_TIC_TSC};
-		//
-		overlayTypeTooltips = new HashMap<String, String>();
-		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TIC, ChromatogramChartSupport.DISPLAY_TYPE_TIC_DESCRIPTION);
-		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_BPC, ChromatogramChartSupport.DISPLAY_TYPE_BPC_DESCRIPTION);
-		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_XIC, ChromatogramChartSupport.DISPLAY_TYPE_XIC_DESCRIPTION);
-		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_SIC, ChromatogramChartSupport.DISPLAY_TYPE_SIC_DESCRIPTION);
-		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_XWC, ChromatogramChartSupport.DISPLAY_TYPE_XWC_DESCRIPTION);
-		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_SWC, ChromatogramChartSupport.DISPLAY_TYPE_SWC_DESCRIPTION);
-		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TSC, ChromatogramChartSupport.DISPLAY_TYPE_TSC_DESCRIPTION);
-		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TIC_BPC, ChromatogramChartSupport.DISPLAY_TYPE_TIC_BPC_DESCRIPTION);
-		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TIC_XIC, ChromatogramChartSupport.DISPLAY_TYPE_TIC_XIC_DESCRIPTION);
-		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TIC_SIC, ChromatogramChartSupport.DISPLAY_TYPE_TIC_SIC_DESCRIPTION);
-		overlayTypeTooltips.put(ChromatogramChartSupport.DISPLAY_TYPE_TIC_TSC, ChromatogramChartSupport.DISPLAY_TYPE_TIC_TSC_DESCRIPTION);
+				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TIC), //
+				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.BPC), //
+				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.XIC), //
+				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.SIC), //
+				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.XWC), //
+				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.SWC), //
+				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TSC), //
+				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TIC, DISPLAY_TYPE.BPC), //
+				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TIC, DISPLAY_TYPE.XIC), //
+				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TIC, DISPLAY_TYPE.SIC), //
+				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TIC, DISPLAY_TYPE.TSC)};
 		//
 		derivativeTypes = new String[]{//
 				ChromatogramChartSupport.DERIVATIVE_NONE, //

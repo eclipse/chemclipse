@@ -105,6 +105,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramAxes;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DISPLAY_TYPE;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
@@ -117,7 +118,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarUI;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
-import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -187,9 +187,6 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scan Selected";
 	//
-	private static final String DISPLAY_TYPE_TOTAL_SIGNAL = "DISPLAY_TYPE_TOTAL_SIGNAL";
-	private static final String DISPLAY_TYPE_SELECTED_SIGNAL = "DISPLAY_TYPE_SELECTED_SIGNAL";
-	//
 	private static final int THREE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 3);
 	private static final int FIVE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 5);
 	//
@@ -231,16 +228,18 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	//
-	private String displayType = DISPLAY_TYPE_TOTAL_SIGNAL;
+	private DISPLAY_TYPE displayType = DISPLAY_TYPE.TIC;
 	//
 	private boolean suspendUpdate = false;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	@Inject
 	public ExtendedChromatogramUI(Composite parent, int style) {
+
 		initialize(parent, style);
 	}
 
+	@Override
 	public void setToolbarVisible(boolean visible) {
 
 		PartSupport.setCompositeVisibility(toolbarMain, visible);
@@ -992,17 +991,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
 		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
 		//
-		ILineSeriesData lineSeriesData = null;
-		if(displayType.equals(DISPLAY_TYPE_TOTAL_SIGNAL)) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			lineSeriesData = chromatogramChartSupport.getLineSeriesDataChromatogram(chromatogram, SERIES_ID_CHROMATOGRAM, color);
-		} else if(displayType.equals(DISPLAY_TYPE_SELECTED_SIGNAL)) {
-			if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-				IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
-				IMarkedWavelengths markedWavelengths = chromatogramSelectionWSD.getSelectedWavelengths();
-				lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelectionWSD.getChromatogram(), SERIES_ID_CHROMATOGRAM, ChromatogramChartSupport.DISPLAY_TYPE_SWC, color, markedWavelengths);
-			}
-		}
+		ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM, displayType, color, false);
 		lineSeriesData.getLineSeriesSettings().setEnableArea(enableChromatogramArea);
 		lineSeriesDataList.add(lineSeriesData);
 	}
@@ -1096,14 +1085,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 
 		if(scans.size() > 0) {
 			ILineSeriesData lineSeriesData = null;
-			if(displayType.equals(DISPLAY_TYPE_TOTAL_SIGNAL)) {
-				lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId);
-			} else {
-				if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-					IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
-					lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId, ScanChartSupport.DISPLAY_TYPE_SWC, chromatogramSelectionWSD.getSelectedWavelengths());
-				}
-			}
+			lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId, displayType, chromatogramSelection);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
 			lineSeriesSettings.setSymbolType(plotSymbolType);
@@ -1172,15 +1154,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN));
 			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE);
 			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE));
-			ILineSeriesData lineSeriesData = null;
-			if(displayType.equals(DISPLAY_TYPE_TOTAL_SIGNAL)) {
-				lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN);
-			} else {
-				if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-					IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
-					lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN, ScanChartSupport.DISPLAY_TYPE_SWC, chromatogramSelectionWSD.getSelectedWavelengths());
-				}
-			}
+			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN, displayType, chromatogramSelection);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
 			lineSeriesSettings.setSymbolType(symbolType);
@@ -1199,14 +1173,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 			boolean enableBaselineArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_BASELINE_AREA);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			ILineSeriesData lineSeriesData = null;
-			if(displayType.equals(DISPLAY_TYPE_TOTAL_SIGNAL)) {
-				lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogram, SERIES_ID_BASELINE, color);
-			} else {
-				if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-					IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
-					lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogram, SERIES_ID_BASELINE, ChromatogramChartSupport.DISPLAY_TYPE_SWC, color, chromatogramSelectionWSD.getSelectedWavelengths());
-				}
-			}
+			lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogramSelection, SERIES_ID_BASELINE, displayType, color, false);
 			lineSeriesData.getLineSeriesSettings().setEnableArea(enableBaselineArea);
 			lineSeriesDataList.add(lineSeriesData);
 		}
@@ -1423,11 +1390,11 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		PartSupport.setCompositeVisibility(heatmapArea, !heatmapArea.getVisible());
 		heatmapUI.setChromatogramSelection(chromatogramSelection);
 		if(chromatogramSelection instanceof ChromatogramSelectionWSD) {
-			if(displayType.equals(DISPLAY_TYPE_SELECTED_SIGNAL)) {
-				displayType = DISPLAY_TYPE_TOTAL_SIGNAL;
+			if(displayType.equals(DISPLAY_TYPE.SWC)) {
+				displayType = DISPLAY_TYPE.TIC;
 				update();
-			} else if(displayType.equals(DISPLAY_TYPE_TOTAL_SIGNAL)) {
-				displayType = DISPLAY_TYPE_SELECTED_SIGNAL;
+			} else if(displayType.equals(DISPLAY_TYPE.TIC)) {
+				displayType = DISPLAY_TYPE.SWC;
 				update();
 			}
 		}
