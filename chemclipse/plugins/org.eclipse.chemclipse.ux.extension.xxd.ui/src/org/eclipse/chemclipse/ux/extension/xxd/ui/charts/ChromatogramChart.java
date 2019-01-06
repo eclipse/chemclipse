@@ -60,18 +60,6 @@ public class ChromatogramChart extends LineChart {
 		}
 	}
 
-	public ISecondaryAxisSettings getSecondaryAxisSettingsX(String title) {
-
-		IChartSettings chartSettings = getChartSettings();
-		return chartSupport.getSecondaryAxisSettings(chartSettings.getSecondaryAxisSettingsListX(), title);
-	}
-
-	public ISecondaryAxisSettings getSecondaryAxisSettingsY(String title) {
-
-		IChartSettings chartSettings = getChartSettings();
-		return chartSupport.getSecondaryAxisSettings(chartSettings.getSecondaryAxisSettingsListY(), title);
-	}
-
 	private void initialize() {
 
 		IChartSettings chartSettings = getChartSettings();
@@ -122,7 +110,7 @@ public class ChromatogramChart extends LineChart {
 	private void modifyYAxisRelativeIntensity() {
 
 		IChartSettings chartSettings = getChartSettings();
-		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsY(TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		ISecondaryAxisSettings axisSettings = chartSupport.getSecondaryAxisSettingsY(TITLE_Y_AXIS_RELATIVE_INTENSITY, chartSettings);
 		//
 		String positionNode = PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY;
 		String pattern = "0.00";
@@ -150,7 +138,7 @@ public class ChromatogramChart extends LineChart {
 	private void modifyXAxisSeconds() {
 
 		IChartSettings chartSettings = getChartSettings();
-		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsX(TITLE_X_AXIS_SECONDS);
+		ISecondaryAxisSettings axisSettings = chartSupport.getSecondaryAxisSettingsX(TITLE_X_AXIS_SECONDS, chartSettings);
 		//
 		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_SECONDS;
 		String pattern = "0.00";
@@ -178,7 +166,7 @@ public class ChromatogramChart extends LineChart {
 	private void modifyXAxisMinutes() {
 
 		IChartSettings chartSettings = getChartSettings();
-		ISecondaryAxisSettings axisSettings = getSecondaryAxisSettingsX(TITLE_X_AXIS_MINUTES);
+		ISecondaryAxisSettings axisSettings = chartSupport.getSecondaryAxisSettingsX(TITLE_X_AXIS_MINUTES, chartSettings);
 		//
 		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_MINUTES;
 		String pattern = "0.00";

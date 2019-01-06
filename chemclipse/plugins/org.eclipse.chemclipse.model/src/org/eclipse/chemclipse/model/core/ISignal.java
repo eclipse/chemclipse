@@ -13,23 +13,10 @@ package org.eclipse.chemclipse.model.core;
 
 /**
  * An arbitrary signal, that can be displayed in a X/Y plot.
- *
- * @author Philip Wenig
- *
  */
 public interface ISignal {
 
-	/**
-	 * Returns the signal's X value
-	 * 
-	 * @return the signal's X value
-	 */
 	public double getX();
 
-	/**
-	 * Returns the signal's Y value
-	 * 
-	 * @return the singnal'S Y value
-	 */
 	public double getY();
 }

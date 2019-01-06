@@ -37,12 +37,20 @@ public class PreferencePagePeaksAxes extends FieldEditorPreferencePage implement
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_AREA_DISPLAY_PEAKS, "Show Area", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Retention Time", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_RETENTION_TIME_PEAKS, "Show X Axis (Retention Time)", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_RETENTION_TIME_PEAKS, "Position X Axis (Retention Time):", PreferenceConstants.POSITIONS, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_RETENTION_TIME_PEAKS, "Color X Axis (Retention Time):", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_RETENTION_TIME_PEAKS, "GridLine Style X Axis (Retention Time):", PreferenceConstants.LINE_STYLES, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_RETENTION_TIME_PEAKS, "GridLine Color X Axis (Retention Time):", getFieldEditorParent()));
+		addField(new LabelFieldEditor("Milliseconds", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS_PEAKS, "Show X Axis (Milliseconds)", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS_PEAKS, "Position X Axis (Milliseconds):", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS_PEAKS, "Color X Axis (Milliseconds):", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS_PEAKS, "GridLine Style X Axis (Milliseconds):", PreferenceConstants.LINE_STYLES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS_PEAKS, "GridLine Color X Axis (Milliseconds):", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Minutes", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MINUTES_PEAKS, "Show X Axis (Minutes)", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MINUTES_PEAKS, "Position X Axis (Minutes):", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MINUTES_PEAKS, "Color X Axis (Minutes):", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES_PEAKS, "GridLine Style X Axis (Minutes):", PreferenceConstants.LINE_STYLES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES_PEAKS, "GridLine Color X Axis (Minutes):", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Intensity", getFieldEditorParent()));

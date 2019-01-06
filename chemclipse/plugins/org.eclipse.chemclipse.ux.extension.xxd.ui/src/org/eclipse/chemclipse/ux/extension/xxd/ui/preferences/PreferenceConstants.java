@@ -289,16 +289,27 @@ public class PreferenceConstants {
 	public static final String P_SHOW_AREA_DISPLAY_PEAKS = "showAreaDisplayPeaks";
 	public static final boolean DEF_SHOW_AREA_DISPLAY_PEAKS = false;
 	//
-	public static final String P_SHOW_X_AXIS_RETENTION_TIME_PEAKS = "showXAxisRetentionTimePeaks";
-	public static final boolean DEF_SHOW_X_AXIS_RETENTION_TIME_PEAKS = true;
-	public static final String P_POSITION_X_AXIS_RETENTION_TIME_PEAKS = "positionXAxisRetentionTimePeaks";
-	public static final String DEF_POSITION_X_AXIS_RETENTION_TIME_PEAKS = Position.Primary.toString();
-	public static final String P_COLOR_X_AXIS_RETENTION_TIME_PEAKS = "colorXAxisRetentionTimePeaks";
-	public static final String DEF_COLOR_X_AXIS_RETENTION_TIME_PEAKS = "0,0,0";
-	public static final String P_GRIDLINE_STYLE_X_AXIS_RETENTION_TIME_PEAKS = "gridlineStyleXAxisRetentionTimePeaks";
-	public static final String DEF_GRIDLINE_STYLE_X_AXIS_RETENTION_TIME_PEAKS = LineStyle.DOT.toString();
-	public static final String P_GRIDLINE_COLOR_X_AXIS_RETENTION_TIME_PEAKS = "gridlineColorXAxisRetentionTimePeaks";
-	public static final String DEF_GRIDLINE_COLOR_X_AXIS_RETENTION_TIME_PEAKS = "192,192,192";
+	public static final String P_SHOW_X_AXIS_MILLISECONDS_PEAKS = "showXAxisMillisecondsPeaks";
+	public static final boolean DEF_SHOW_X_AXIS_MILLISECONDS_PEAKS = false;
+	public static final String P_POSITION_X_AXIS_MILLISECONDS_PEAKS = "positionXAxisMillisecondsPeaks";
+	public static final String DEF_POSITION_X_AXIS_MILLISECONDS_PEAKS = Position.Secondary.toString();
+	public static final String P_COLOR_X_AXIS_MILLISECONDS_PEAKS = "colorXAxisMillisecondsPeaks";
+	public static final String DEF_COLOR_X_AXIS_MILLISECONDS_PEAKS = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS_PEAKS = "gridlineStyleXAxisMillisecondsPeaks";
+	public static final String DEF_GRIDLINE_STYLE_X_AXIS_MILLISECONDS_PEAKS = LineStyle.DOT.toString();
+	public static final String P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS_PEAKS = "gridlineColorXAxisMillisecondsPeaks";
+	public static final String DEF_GRIDLINE_COLOR_X_AXIS_MILLISECONDS_PEAKS = "192,192,192";
+	//
+	public static final String P_SHOW_X_AXIS_MINUTES_PEAKS = "showXAxisMinutesPeaks";
+	public static final boolean DEF_SHOW_X_AXIS_MINUTES_PEAKS = true;
+	public static final String P_POSITION_X_AXIS_MINUTES_PEAKS = "positionXAxisMinutesPeaks";
+	public static final String DEF_POSITION_X_AXIS_MINUTES_PEAKS = Position.Primary.toString();
+	public static final String P_COLOR_X_AXIS_MINUTES_PEAKS = "colorXAxisMinutesPeaks";
+	public static final String DEF_COLOR_X_AXIS_MINUTES_PEAKS = "0,0,0";
+	public static final String P_GRIDLINE_STYLE_X_AXIS_MINUTES_PEAKS = "gridlineStyleXAxisMinutesPeaks";
+	public static final String DEF_GRIDLINE_STYLE_X_AXIS_MINUTES_PEAKS = LineStyle.DOT.toString();
+	public static final String P_GRIDLINE_COLOR_X_AXIS_MINUTES_PEAKS = "gridlineColorXAxisMinutesPeaks";
+	public static final String DEF_GRIDLINE_COLOR_X_AXIS_MINUTES_PEAKS = "192,192,192";
 	//
 	public static final String P_SHOW_Y_AXIS_INTENSITY_PEAKS = "showYAxisIntensityPeaks";
 	public static final boolean DEF_SHOW_Y_AXIS_INTENSITY_PEAKS = true;

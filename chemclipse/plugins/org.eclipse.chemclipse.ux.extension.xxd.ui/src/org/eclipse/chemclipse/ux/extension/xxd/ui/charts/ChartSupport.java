@@ -37,6 +37,11 @@ public class ChartSupport {
 		setAxisSettings(axisSettings, position, pattern, color, gridLineStyle, gridColor);
 	}
 
+	public ISecondaryAxisSettings getSecondaryAxisSettingsX(String title, IChartSettings chartSettings) {
+
+		return getSecondaryAxisSettings(chartSettings.getSecondaryAxisSettingsListX(), title);
+	}
+
 	public ISecondaryAxisSettings getSecondaryAxisSettingsY(String title, IChartSettings chartSettings) {
 
 		return getSecondaryAxisSettings(chartSettings.getSecondaryAxisSettingsListY(), title);

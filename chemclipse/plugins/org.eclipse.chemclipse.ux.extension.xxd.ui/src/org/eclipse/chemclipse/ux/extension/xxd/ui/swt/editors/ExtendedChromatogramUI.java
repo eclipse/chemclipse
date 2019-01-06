@@ -230,6 +230,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
+	private ChartSupport chartSupport = new ChartSupport();
 	//
 	private String displayType = DISPLAY_TYPE_TOTAL_SIGNAL;
 	//
@@ -1700,7 +1701,8 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram != null) {
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
-				ISecondaryAxisSettings axisSettings = chromatogramChart.getSecondaryAxisSettingsX(TITLE_X_AXIS_SCANS);
+				ISecondaryAxisSettings axisSettings = chartSupport.getSecondaryAxisSettingsX(TITLE_X_AXIS_SCANS, chartSettings);
+				//
 				if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SCANS)) {
 					if(axisSettings == null) {
 						try {
