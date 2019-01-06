@@ -35,32 +35,53 @@ public class AddPeaksESTD extends AbstractPeakQuantifier implements IPeakQuantif
 
 	private static final String DESCRIPTION = "Peaks to DB (ESTD)";
 
+	private class WizardRunnable implements Runnable {
+
+		private IProcessingInfo processingInfo;
+		private List<IPeak> peaks;
+
+		public WizardRunnable(IProcessingInfo processingInfo, List<IPeak> peaks) {
+			this.processingInfo = processingInfo;
+			this.peaks = peaks;
+		}
+
+		@Override
+		public void run() {
+
+			/*
+			 * Create a new shell and set
+			 * the size to 0 cause only the wizard
+			 * will be shown.
+			 */
+			Shell shell = new Shell();
+			shell.setSize(0, 0);
+			shell.open();
+			addPeaks(peaks, shell, processingInfo);
+			shell.close();
+		}
+	}
+
 	@Override
 	public IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(peakQuantifierSettings instanceof PeakDatabaseSettings) {
-			/*
-			 * Doesn't work from a modal context.
-			 */
 			Shell shell = DisplayUtils.getShell();
 			if(shell != null) {
+				/*
+				 * Normal
+				 */
 				addPeaks(peaks, shell, processingInfo);
+			} else {
+				/*
+				 * Called from a modal dialog, e.g. from
+				 * a popup menu.
+				 */
+				WizardRunnable wizardRunnable = new WizardRunnable(processingInfo, peaks);
+				DisplayUtils.getDisplay().syncExec(wizardRunnable);
 			}
 		}
 		return processingInfo;
-	}
-
-	private void addPeaks(List<IPeak> peaks, Shell shell, IProcessingInfo processingInfo) {
-
-		AddPeaksWizardESTD wizard = new AddPeaksWizardESTD(peaks);
-		WizardDialog dialog = new WizardDialog(shell, wizard);
-		if(dialog.open() == Dialog.OK) {
-			StatusLineLogger.setInfo(InfoType.MESSAGE, "Done: The peaks have been added to the quantitation table.");
-			processingInfo.addErrorMessage(DESCRIPTION, "Successfully added the peaks to the database.");
-		} else {
-			processingInfo.addErrorMessage(DESCRIPTION, "Something went wrong to add the peaks.");
-		}
 	}
 
 	@Override
@@ -85,5 +106,17 @@ public class AddPeaksESTD extends AbstractPeakQuantifier implements IPeakQuantif
 
 		PeakDatabaseSettings peakDatabaseSettings = PreferenceSupplier.getPeakDatabaseSettings();
 		return quantify(peaks, peakDatabaseSettings, monitor);
+	}
+
+	private void addPeaks(List<IPeak> peaks, Shell shell, IProcessingInfo processingInfo) {
+
+		AddPeaksWizardESTD wizard = new AddPeaksWizardESTD(peaks);
+		WizardDialog dialog = new WizardDialog(shell, wizard);
+		if(dialog.open() == Dialog.OK) {
+			StatusLineLogger.setInfo(InfoType.MESSAGE, "Done: The peaks have been added to the quantitation table.");
+			processingInfo.addErrorMessage(DESCRIPTION, "Successfully added the peaks to the database.");
+		} else {
+			processingInfo.addErrorMessage(DESCRIPTION, "Something went wrong to add the peaks.");
+		}
 	}
 }
