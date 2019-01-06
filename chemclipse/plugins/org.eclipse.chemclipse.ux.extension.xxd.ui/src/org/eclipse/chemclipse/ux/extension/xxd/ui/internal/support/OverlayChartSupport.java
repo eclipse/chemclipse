@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DISPLAY_TYPE;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -79,17 +79,17 @@ public class OverlayChartSupport {
 	private void initialize() {
 
 		overlayTypes = new String[]{//
-				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TIC), //
-				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.BPC), //
-				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.XIC), //
-				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.SIC), //
-				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.XWC), //
-				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.SWC), //
-				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TSC), //
-				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TIC, DISPLAY_TYPE.BPC), //
-				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TIC, DISPLAY_TYPE.XIC), //
-				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TIC, DISPLAY_TYPE.SIC), //
-				DISPLAY_TYPE.toShortcut(DISPLAY_TYPE.TIC, DISPLAY_TYPE.TSC)};
+				DisplayType.toShortcut(DisplayType.TIC), //
+				DisplayType.toShortcut(DisplayType.BPC), //
+				DisplayType.toShortcut(DisplayType.XIC), //
+				DisplayType.toShortcut(DisplayType.SIC), //
+				DisplayType.toShortcut(DisplayType.XWC), //
+				DisplayType.toShortcut(DisplayType.SWC), //
+				DisplayType.toShortcut(DisplayType.TSC), //
+				DisplayType.toShortcut(DisplayType.TIC, DisplayType.BPC), //
+				DisplayType.toShortcut(DisplayType.TIC, DisplayType.XIC), //
+				DisplayType.toShortcut(DisplayType.TIC, DisplayType.SIC), //
+				DisplayType.toShortcut(DisplayType.TIC, DisplayType.TSC)};
 		//
 		derivativeTypes = new String[]{//
 				ChromatogramChartSupport.DERIVATIVE_NONE, //

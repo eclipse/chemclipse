@@ -38,7 +38,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DISPLAY_TYPE;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
@@ -85,7 +85,6 @@ public class ChromatogramChartSupport {
 	private boolean showArea = false;
 
 	public ChromatogramChartSupport() {
-
 		usedColorsNormal = new HashMap<String, Color>();
 		usedColorsSIC = new HashMap<String, Color>();
 		usedColorsSWC = new HashMap<String, Color>();
@@ -112,10 +111,10 @@ public class ChromatogramChartSupport {
 		resetColorMaps();
 	}
 
-	public Color getSeriesColor(String seriesId, DISPLAY_TYPE dataType) {
+	public Color getSeriesColor(String seriesId, DisplayType dataType) {
 
 		Color color;
-		if(DISPLAY_TYPE.SIC.equals(dataType)) {
+		if(DisplayType.SIC.equals(dataType)) {
 			/*
 			 * SIC
 			 */
@@ -125,7 +124,7 @@ public class ChromatogramChartSupport {
 				colorSchemeSIC.incrementColor();
 				usedColorsSIC.put(seriesId, color);
 			}
-		} else if(DISPLAY_TYPE.SWC.equals(dataType)) {
+		} else if(DisplayType.SWC.equals(dataType)) {
 			/*
 			 * SIC
 			 */
@@ -152,7 +151,7 @@ public class ChromatogramChartSupport {
 	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
 
-		DISPLAY_TYPE dataType = DISPLAY_TYPE.TIC;
+		DisplayType dataType = DisplayType.TIC;
 		String derivativeType = DERIVATIVE_NONE;
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, derivativeType, color, null, false);
 	}
@@ -160,7 +159,7 @@ public class ChromatogramChartSupport {
 	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogram chromatogram, String seriesId, Color color) {
 
-		DISPLAY_TYPE dataType = DISPLAY_TYPE.TIC;
+		DisplayType dataType = DisplayType.TIC;
 		String derivativeType = DERIVATIVE_NONE;
 		return getLineSeriesData(chromatogram, seriesId, dataType, derivativeType, color, null, false);
 	}
@@ -168,7 +167,7 @@ public class ChromatogramChartSupport {
 	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
 
-		DISPLAY_TYPE dataType = DISPLAY_TYPE.TIC;
+		DisplayType dataType = DisplayType.TIC;
 		String derivativeType = DERIVATIVE_NONE;
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, derivativeType, color, null, true);
 	}
@@ -176,41 +175,41 @@ public class ChromatogramChartSupport {
 	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram chromatogram, String seriesId, Color color) {
 
-		DISPLAY_TYPE dataType = DISPLAY_TYPE.TIC;
+		DisplayType dataType = DisplayType.TIC;
 		String derivativeType = DERIVATIVE_NONE;
 		return getLineSeriesData(chromatogram, seriesId, dataType, derivativeType, color, null, true);
 	}
 
-	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection<?> chromatogramSelection, String seriesId, DISPLAY_TYPE dataType, Color color, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection<?> chromatogramSelection, String seriesId, DisplayType dataType, Color color, boolean timeIntervalSelection) {
 
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, DERIVATIVE_NONE, color, true, timeIntervalSelection);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram chromatogram, String seriesId, DISPLAY_TYPE dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
+	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
 
 		String derivativeType = DERIVATIVE_NONE;
 		return getLineSeriesData(chromatogram, seriesId, dataType, derivativeType, color, signals, true);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DISPLAY_TYPE dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
+	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
 
 		return getLineSeriesData(chromatogram, seriesId, dataType, DERIVATIVE_NONE, color, signals, false);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?> chromatogramSelection, String seriesId, DISPLAY_TYPE dataType, Color color, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?> chromatogramSelection, String seriesId, DisplayType dataType, Color color, boolean timeIntervalSelection) {
 
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, DERIVATIVE_NONE, color, false, timeIntervalSelection);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?> chromatogramSelection, String seriesId, DISPLAY_TYPE dataType, String derivativeType, Color color, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, boolean timeIntervalSelection) {
 
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, derivativeType, color, false, timeIntervalSelection);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, DISPLAY_TYPE dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
@@ -219,7 +218,7 @@ public class ChromatogramChartSupport {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DISPLAY_TYPE dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
+	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		int startScan = 1;
 		int stopScan = chromatogram.getNumberOfScans();
@@ -227,7 +226,7 @@ public class ChromatogramChartSupport {
 	}
 
 	@Deprecated
-	public ILineSeriesData getLineSeriesData(IExtractedWavelengthSignals extractedWavelengthSignals, int wavelength, String seriesId, DISPLAY_TYPE dataType) {
+	public ILineSeriesData getLineSeriesData(IExtractedWavelengthSignals extractedWavelengthSignals, int wavelength, String seriesId, DisplayType dataType) {
 
 		Color color = getSeriesColor(seriesId, dataType);
 		LineStyle lineStyle = getLineStyle(dataType);
@@ -259,13 +258,13 @@ public class ChromatogramChartSupport {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, DISPLAY_TYPE dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
+	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, DisplayType dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		IBaselineModel baselineModel = null;
 		if(baseline) {
-			if(dataType.equals(DISPLAY_TYPE.TIC)) {
+			if(dataType.equals(DisplayType.TIC)) {
 				baselineModel = chromatogram.getBaselineModel();
-			} else if(dataType.equals(DISPLAY_TYPE.SWC)) {
+			} else if(dataType.equals(DisplayType.SWC)) {
 				if(chromatogram instanceof IChromatogramWSD && signals instanceof IMarkedWavelengths) {
 					IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
 					IMarkedWavelengths markedWavelengths = (IMarkedWavelengths)signals;
@@ -408,20 +407,20 @@ public class ChromatogramChartSupport {
 
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?> chromatogramSelection, String seriesId, String derivativeType, Color color, boolean baseline, boolean timeIntervalSelection) {
 
-		DISPLAY_TYPE dataType = null;
+		DisplayType dataType = null;
 		if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-			dataType = DISPLAY_TYPE.SWC;
+			dataType = DisplayType.SWC;
 		} else if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			dataType = DISPLAY_TYPE.TIC;
+			dataType = DisplayType.TIC;
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-			dataType = DISPLAY_TYPE.TIC;
+			dataType = DisplayType.TIC;
 		} else {
-			dataType = DISPLAY_TYPE.TIC;
+			dataType = DisplayType.TIC;
 		}
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, DERIVATIVE_NONE, color, baseline, timeIntervalSelection);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?> chromatogramSelection, String seriesId, DISPLAY_TYPE dataType, String derivativeType, Color color, boolean baseline, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, boolean baseline, boolean timeIntervalSelection) {
 
 		/*
 		 * refreshUpdateOverlayChart
@@ -431,28 +430,28 @@ public class ChromatogramChartSupport {
 		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		IMarkedSignals<?> markedSignals = null;
 		//
-		if(dataType.equals(DISPLAY_TYPE.SIC) || dataType.equals(DISPLAY_TYPE.XIC)) {
+		if(dataType.equals(DisplayType.SIC) || dataType.equals(DisplayType.XIC)) {
 			/*
 			 * SIC | XIC
 			 */
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			markedSignals = chromatogramSelectionMSD.getSelectedIons();
-		} else if(dataType.equals(DISPLAY_TYPE.SWC) || dataType.equals(DISPLAY_TYPE.XWC)) {
+		} else if(dataType.equals(DisplayType.SWC) || dataType.equals(DisplayType.XWC)) {
 			/*
 			 * SWC
 			 */
 			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
 			IMarkedWavelengths markedWavelengths = chromatogramSelectionWSD.getSelectedWavelengths();
 			return getLineSeriesData(chromatogram, seriesId, dataType, derivativeType, color, markedWavelengths, baseline);
-		} else if(dataType.equals(DISPLAY_TYPE.TSC)) {
+		} else if(dataType.equals(DisplayType.TSC)) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			markedSignals = chromatogramSelectionMSD.getExcludedIons();
-		} else if(dataType.equals(DISPLAY_TYPE.BPC)) {
+		} else if(dataType.equals(DisplayType.BPC)) {
 			/*
 			 * BPC
 			 */
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-		} else if(dataType.equals(DISPLAY_TYPE.TIC)) {
+		} else if(dataType.equals(DisplayType.TIC)) {
 			/*
 			 * TIC
 			 */
@@ -471,15 +470,15 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivativeType, color, markedSignals, baseline);
 	}
 
-	private double getIntensity(IScan scan, DISPLAY_TYPE dataType, IMarkedSignals<? extends IMarkedSignal> signals) {
+	private double getIntensity(IScan scan, DisplayType dataType, IMarkedSignals<? extends IMarkedSignal> signals) {
 
 		double intensity = Double.NaN;
-		if(dataType.equals(DISPLAY_TYPE.TIC)) {
+		if(dataType.equals(DisplayType.TIC)) {
 			/*
 			 * TIC
 			 */
 			intensity = scan.getTotalSignal();
-		} else if(dataType.equals(DISPLAY_TYPE.BPC)) {
+		} else if(dataType.equals(DisplayType.BPC)) {
 			/*
 			 * BPC
 			 */
@@ -490,7 +489,7 @@ public class ChromatogramChartSupport {
 					intensity = ion.getAbundance();
 				}
 			}
-		} else if(dataType.equals(DISPLAY_TYPE.XIC)) {
+		} else if(dataType.equals(DisplayType.XIC)) {
 			/*
 			 * XIC
 			 */
@@ -505,7 +504,7 @@ public class ChromatogramChartSupport {
 					}
 				}
 			}
-		} else if(dataType.equals(DISPLAY_TYPE.SIC)) {
+		} else if(dataType.equals(DisplayType.SIC)) {
 			/*
 			 * SIC
 			 */
@@ -521,7 +520,7 @@ public class ChromatogramChartSupport {
 					}
 				}
 			}
-		} else if(dataType.equals(DISPLAY_TYPE.TSC)) {
+		} else if(dataType.equals(DisplayType.TSC)) {
 			/*
 			 * TSC
 			 */
@@ -536,7 +535,7 @@ public class ChromatogramChartSupport {
 					}
 				}
 			}
-		} else if(dataType.equals(DISPLAY_TYPE.SWC) | dataType.equals(DISPLAY_TYPE.XWC)) {
+		} else if(dataType.equals(DisplayType.SWC) | dataType.equals(DisplayType.XWC)) {
 			/*
 			 * SWC
 			 */
@@ -556,22 +555,22 @@ public class ChromatogramChartSupport {
 		return intensity;
 	}
 
-	private LineStyle getLineStyle(DISPLAY_TYPE dataType) {
+	private LineStyle getLineStyle(DisplayType dataType) {
 
 		LineStyle lineStyle;
-		if(dataType.equals(DISPLAY_TYPE.TIC)) {
+		if(dataType.equals(DisplayType.TIC)) {
 			lineStyle = lineStyleTIC;
-		} else if(dataType.equals(DISPLAY_TYPE.BPC)) {
+		} else if(dataType.equals(DisplayType.BPC)) {
 			lineStyle = lineStyleBPC;
-		} else if(dataType.equals(DISPLAY_TYPE.XIC)) {
+		} else if(dataType.equals(DisplayType.XIC)) {
 			lineStyle = lineStyleXIC;
-		} else if(dataType.equals(DISPLAY_TYPE.SIC)) {
+		} else if(dataType.equals(DisplayType.SIC)) {
 			lineStyle = lineStyleSIC;
-		} else if(dataType.equals(DISPLAY_TYPE.TSC)) {
+		} else if(dataType.equals(DisplayType.TSC)) {
 			lineStyle = lineStyleTSC;
-		} else if(dataType.equals(DISPLAY_TYPE.SWC)) {
+		} else if(dataType.equals(DisplayType.SWC)) {
 			lineStyle = lineStyleSWC;
-		} else if(dataType.equals(DISPLAY_TYPE.XWC)) {
+		} else if(dataType.equals(DisplayType.XWC)) {
 			lineStyle = lineStyleAWC;
 		} else {
 			lineStyle = lineStyleDefault;

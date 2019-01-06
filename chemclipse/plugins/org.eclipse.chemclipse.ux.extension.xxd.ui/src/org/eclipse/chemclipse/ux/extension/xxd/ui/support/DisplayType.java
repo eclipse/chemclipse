@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public enum DISPLAY_TYPE {
+public enum DisplayType {
 	TIC("TIC", "Total Intensity Chromatogram"), //
 	BPC("BPC", "Base Peak Chromatogram"), //
 	XIC("XIC", "Extracted Ion Chromatogram"), //
@@ -29,9 +29,9 @@ public enum DISPLAY_TYPE {
 	SRM("SRM", "Single Reaction Monitoring"), //
 	MRM("MRM", "Multiple Reaction Monitoring");
 
-	private static Map<String, DISPLAY_TYPE> shortcutMap = new HashMap<>();
+	private static Map<String, DisplayType> shortcutMap = new HashMap<>();
 	static {
-		for(DISPLAY_TYPE displayType : DISPLAY_TYPE.values()) {
+		for(DisplayType displayType : DisplayType.values()) {
 			shortcutMap.put(displayType.shortucut, displayType);
 		}
 	}
@@ -39,7 +39,7 @@ public enum DISPLAY_TYPE {
 	private String shortucut;
 	private String description;
 
-	private DISPLAY_TYPE(String shortcut, String description) {
+	private DisplayType(String shortcut, String description) {
 
 		this.shortucut = shortcut;
 		this.description = description;
@@ -61,12 +61,12 @@ public enum DISPLAY_TYPE {
 		return description;
 	}
 
-	public static String toDescription(Collection<DISPLAY_TYPE> types) {
+	public static String toDescription(Collection<DisplayType> types) {
 
-		return toDescription(types.toArray(new DISPLAY_TYPE[types.size()]));
+		return toDescription(types.toArray(new DisplayType[types.size()]));
 	}
 
-	public static String toDescription(DISPLAY_TYPE... types) {
+	public static String toDescription(DisplayType... types) {
 
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < types.length; i++) {
@@ -78,12 +78,12 @@ public enum DISPLAY_TYPE {
 		return sb.toString();
 	}
 
-	public static String toShortcut(Collection<DISPLAY_TYPE> types) {
+	public static String toShortcut(Collection<DisplayType> types) {
 
-		return toShortcut(types.toArray(new DISPLAY_TYPE[types.size()]));
+		return toShortcut(types.toArray(new DisplayType[types.size()]));
 	}
 
-	public static String toShortcut(DISPLAY_TYPE... types) {
+	public static String toShortcut(DisplayType... types) {
 
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < types.length; i++) {
@@ -95,7 +95,7 @@ public enum DISPLAY_TYPE {
 		return sb.toString();
 	}
 
-	public static Set<DISPLAY_TYPE> toDisplayTypes(String shortcut) {
+	public static Set<DisplayType> toDisplayTypes(String shortcut) {
 
 		return Arrays.stream(shortcut.split("\\+")).map(s -> shortcutMap.get(s)).collect(Collectors.toSet());
 	}

@@ -34,7 +34,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.IonsValida
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.WavelengthValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DISPLAY_TYPE;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
@@ -845,8 +845,8 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 		/*
 		 * Overlay Type
 		 */
-		Set<DISPLAY_TYPE> types = getOverlayType();
-		comboOverlayType.setToolTipText(DISPLAY_TYPE.toDescription(types));
+		Set<DisplayType> types = getOverlayType();
+		comboOverlayType.setToolTipText(DisplayType.toDescription(types));
 		if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS)) {
 			if(isExtractedIonsModusEnabled() || isExtractedWavelengthsModusEnabled()) {
 				PartSupport.setCompositeVisibility(toolbarProfile, true);
@@ -955,11 +955,11 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 				 * refreshUpdateOverlayChart
 				 * Select which series shall be displayed.
 				 */
-				Set<DISPLAY_TYPE> displayTypes = getOverlayType();
+				Set<DisplayType> displayTypes = getOverlayType();
 				String derivativeType = comboDerivativeType.getText().trim();
 				//
-				for(DISPLAY_TYPE overlayType : displayTypes) {
-					if(overlayType.equals(DISPLAY_TYPE.SIC)) {
+				for(DisplayType overlayType : displayTypes) {
+					if(overlayType.equals(DisplayType.SIC)) {
 						/*
 						 * SIC
 						 */
@@ -997,7 +997,7 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 								}
 							}
 						}
-					} else if(overlayType.equals(DISPLAY_TYPE.SWC)) {
+					} else if(overlayType.equals(DisplayType.SWC)) {
 						/*
 						 * SWC
 						 */
@@ -1040,7 +1040,7 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 								}
 							}
 						}
-					} else if(overlayType.equals(DISPLAY_TYPE.XWC)) {
+					} else if(overlayType.equals(DisplayType.XWC)) {
 						/*
 						 * AWC
 						 */
@@ -1087,7 +1087,7 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 						String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
 						Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, overlayType);
 						//
-						if(overlayType.equals(DISPLAY_TYPE.BPC) || overlayType.equals(DISPLAY_TYPE.XIC) || overlayType.equals(DISPLAY_TYPE.TSC)) {
+						if(overlayType.equals(DisplayType.BPC) || overlayType.equals(DisplayType.XIC) || overlayType.equals(DisplayType.TSC)) {
 							/*
 							 * BPC, XIC, TSC
 							 */
@@ -1305,22 +1305,22 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 		modifyWidgetStatus();
 	}
 
-	private Set<DISPLAY_TYPE> getOverlayType() {
+	private Set<DisplayType> getOverlayType() {
 
-		return DISPLAY_TYPE.toDisplayTypes(comboOverlayType.getText().trim());
+		return DisplayType.toDisplayTypes(comboOverlayType.getText().trim());
 	}
 
 	private boolean isExtractedIonsModusEnabled() {
 
-		Set<DISPLAY_TYPE> overlayType = getOverlayType();
-		return (overlayType.contains(DISPLAY_TYPE.XIC) || //
-				overlayType.contains(DISPLAY_TYPE.SIC) || //
-				overlayType.contains(DISPLAY_TYPE.TSC));
+		Set<DisplayType> overlayType = getOverlayType();
+		return (overlayType.contains(DisplayType.XIC) || //
+				overlayType.contains(DisplayType.SIC) || //
+				overlayType.contains(DisplayType.TSC));
 	}
 
 	private boolean isExtractedWavelengthsModusEnabled() {
 
-		return getOverlayType().contains(DISPLAY_TYPE.SWC);
+		return getOverlayType().contains(DisplayType.SWC);
 	}
 
 	private void createVerticalSeparator(Composite parent) {

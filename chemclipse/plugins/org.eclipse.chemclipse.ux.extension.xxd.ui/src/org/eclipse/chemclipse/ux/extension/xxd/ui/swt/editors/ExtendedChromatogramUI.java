@@ -105,7 +105,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramAxes;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DISPLAY_TYPE;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
@@ -229,7 +229,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private ChartSupport chartSupport = new ChartSupport();
 	//
-	private DISPLAY_TYPE displayType = DISPLAY_TYPE.TIC;
+	private DisplayType displayType = DisplayType.TIC;
 	//
 	private boolean suspendUpdate = false;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -1391,11 +1391,11 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 		PartSupport.setCompositeVisibility(heatmapArea, !heatmapArea.getVisible());
 		heatmapUI.setChromatogramSelection(chromatogramSelection);
 		if(chromatogramSelection instanceof ChromatogramSelectionWSD) {
-			if(displayType.equals(DISPLAY_TYPE.SWC)) {
-				displayType = DISPLAY_TYPE.TIC;
+			if(displayType.equals(DisplayType.SWC)) {
+				displayType = DisplayType.TIC;
 				update();
-			} else if(displayType.equals(DISPLAY_TYPE.TIC)) {
-				displayType = DISPLAY_TYPE.SWC;
+			} else if(displayType.equals(DisplayType.TIC)) {
+				displayType = DisplayType.SWC;
 				update();
 			}
 		}
