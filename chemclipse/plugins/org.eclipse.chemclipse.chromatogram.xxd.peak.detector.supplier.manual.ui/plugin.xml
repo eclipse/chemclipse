@@ -17,4 +17,33 @@
       </toc>
    </extension>
 
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.csd.peak.detector.peakDetectorSupplier">
+      <PeakDetector
+            description="This is the manual UI peak detector (CSD)."
+            id="org.eclipse.chemclipse.chromatogram.csd.peak.detector.supplier.manual.ui"
+            peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.core.PeakDetectorCSD"
+            peakDetectorName="Manual Peak Detector (CSD)"
+            peakDetectorSettings="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.settings.PeakDetectorSettingsCSD">
+      </PeakDetector>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.peak.detector.peakDetectorSupplier">
+      <PeakDetector
+            description="This is the manual UI peak detector (MSD)."
+            id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.manual.ui"
+            peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.core.PeakDetectorMSD"
+            peakDetectorName="Manual Peak Detector (MSD)"
+            peakDetectorSettings="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.settings.PeakDetectorSettingsMSD">
+      </PeakDetector>
+   </extension>   
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.peakDetectorSupplier">
+      <PeakDetector
+            description="This is the manual UI peak detector (WSD)."
+            id="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.supplier.manual.ui"
+            peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.core.PeakDetectorWSD"
+            peakDetectorName="Manual Peak Detector (WSD)">
+      </PeakDetector>
+   </extension>
 </plugin>

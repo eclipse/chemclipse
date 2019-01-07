@@ -9,8 +9,16 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.msd.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.logging;bundle-version="0.8.0",
  org.eclipse.chemclipse.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.csd.model;bundle-version="0.8.0"
+ org.eclipse.chemclipse.csd.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.wsd.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.chromatogram.csd.peak.detector;bundle-version="0.8.0",
+ org.eclipse.chemclipse.chromatogram.peak.detector;bundle-version="0.8.0",
+ org.eclipse.chemclipse.chromatogram.wsd.peak.detector;bundle-version="0.8.0",
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.7.1",
+ org.eclipse.chemclipse.support;bundle-version="0.8.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: ChemClipse
-Export-Package: org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.core
+Export-Package: org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.core,
+ org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.preferences,
+ org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.settings
