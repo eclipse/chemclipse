@@ -17,15 +17,15 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
+import org.eclipse.chemclipse.model.quantitation.QuantitationSupport;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.QuantitationSupportMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.EvaluationException;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
@@ -68,7 +68,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 			logger.warn("Quantitation - peak area is 0: " + peak);
 			throw new EvaluationException("The peak area must be greater than 0.");
 		}
-		QuantitationSupportMSD integrationQuantitationSupport = new QuantitationSupportMSD(peak);
+		QuantitationSupport integrationQuantitationSupport = new QuantitationSupport(peak);
 		/*
 		 * Check whether to use TIC or XIC values.
 		 */
@@ -112,7 +112,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 
 		List<IQuantitationEntry> quantitationEntries = new ArrayList<IQuantitationEntry>();
 		double integratedArea = peak.getIntegratedArea();
-		double signal = IQuantitationSignal.TIC_SIGNAL;
+		double signal = ISignal.TOTAL_INTENSITY;
 		IQuantitationEntry quantitationEntry = getQuantitationEntry(signal, quantitationCompound, integratedArea);
 		quantitationEntries.add(quantitationEntry);
 		//
@@ -127,7 +127,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	 * @param isZeroCrossing
 	 * @return List<IQuantitationEntryMSD>
 	 */
-	private List<IQuantitationEntry> getQuantitationEntriesXIC(IQuantitationCompound quantitationCompound, IPeakMSD peak, List<Double> selectedQuantitationIons, QuantitationSupportMSD integrationQuantitationSupport) {
+	private List<IQuantitationEntry> getQuantitationEntriesXIC(IQuantitationCompound quantitationCompound, IPeakMSD peak, List<Double> selectedQuantitationIons, QuantitationSupport integrationQuantitationSupport) {
 
 		List<IQuantitationEntry> quantitationEntries = new ArrayList<IQuantitationEntry>();
 		//

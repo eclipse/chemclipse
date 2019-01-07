@@ -15,10 +15,10 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.IQuantitationCalculatorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 
 public class QuantitationCalculatorMSD_TIC_1_Test extends QuantitationCalculator_TIC_TestCase {
 
@@ -95,6 +95,6 @@ public class QuantitationCalculatorMSD_TIC_1_Test extends QuantitationCalculator
 
 	public void testCalculateConcentration_8() {
 
-		assertEquals(IQuantitationSignal.TIC_SIGNAL, quantitationEntry.getSignal());
+		assertEquals(ISignal.TOTAL_INTENSITY, quantitationEntry.getSignal());
 	}
 }

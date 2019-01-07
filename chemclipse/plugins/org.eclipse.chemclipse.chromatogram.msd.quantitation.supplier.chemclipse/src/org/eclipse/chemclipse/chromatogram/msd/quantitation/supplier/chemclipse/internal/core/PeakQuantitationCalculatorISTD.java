@@ -20,11 +20,11 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -104,7 +104,7 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 						double concentrationCalculated = ((concentration / peakAreaISTD) * integratedArea) * responseFactor;
 						//
 						IQuantitationEntry quantitationEntryMSD = new QuantitationEntry(nameOfStandard, concentrationCalculated, concentrationUnit, integratedArea);
-						quantitationEntryMSD.setSignal(IQuantitationSignal.TIC_SIGNAL);
+						quantitationEntryMSD.setSignal(ISignal.TOTAL_INTENSITY);
 						quantitationEntryMSD.setCalibrationMethod(CalibrationMethod.ISTD.toString());
 						quantitationEntryMSD.setUsedCrossZero(false);
 						quantitationEntryMSD.setChemicalClass(chemicalClass);
