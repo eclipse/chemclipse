@@ -47,9 +47,7 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		 * If excludedMassFragements is null the the total ion list will be
 		 * returned.
 		 */
-		ITotalScanSignals signals;
-		signals = initializeTotalIonSignals(startScan, stopScan, excludedIons);
-		return signals;
+		return initializeTotalIonSignals(startScan, stopScan, excludedIons);
 	}
 
 	@Override

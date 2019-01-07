@@ -26,8 +26,8 @@ import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
@@ -200,8 +200,6 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 		 * Create a new mass spectrum and add the ions.
 		 */
 		IRegularMassSpectrum massSpectrum = new RegularMassSpectrum();
-		IIon defaultIon;
-		float abundance;
 		int startIon = extractedIonSignal.getStartIon();
 		int stopIon = extractedIonSignal.getStopIon();
 		/*
@@ -220,10 +218,10 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 			if(excludedIonsNominal.contains(ion)) {
 				continue;
 			}
-			abundance = extractedIonSignal.getAbundance(ion);
+			float abundance = extractedIonSignal.getAbundance(ion);
 			if(abundance > 0.0f) {
 				try {
-					defaultIon = new Ion(ion, abundance);
+					IIon defaultIon = new Ion(ion, abundance);
 					massSpectrum.addIon(defaultIon);
 				} catch(AbundanceLimitExceededException e) {
 					logger.warn(e);

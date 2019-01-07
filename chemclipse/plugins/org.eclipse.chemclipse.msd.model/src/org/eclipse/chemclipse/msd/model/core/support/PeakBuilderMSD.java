@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.msd.model.core.support;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -34,6 +35,8 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
+import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
+import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.TotalIonSignalExtractor;
@@ -43,6 +46,90 @@ import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 
 public class PeakBuilderMSD {
+
+	/**
+	 * EXPERIMENTAL!
+	 * 
+	 * @param chromatogram
+	 * @param scanRange
+	 * @param calculatePeakIncludedBackground
+	 * @param includedIons
+	 * @return IChromatogramPeakMSD
+	 * @throws PeakException
+	 */
+	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean calculatePeakIncludedBackground, Set<Integer> includedIons) throws PeakException {
+
+		validateChromatogram(chromatogram);
+		validateScanRange(scanRange);
+		checkScanRange(chromatogram, scanRange);
+		if(includedIons.size() == 0) {
+			throw new PeakException("At least one included ion needs to be selected.");
+		}
+		//
+		ExtractedIonSignalExtractor extractor = new ExtractedIonSignalExtractor(chromatogram);
+		IExtractedIonSignals extractedIonSignals = extractor.getExtractedIonSignals(scanRange.getStartScan(), scanRange.getStopScan());
+		for(IExtractedIonSignal extractedIonSignal : extractedIonSignals.getExtractedIonSignals()) {
+			int start = extractedIonSignal.getStartIon();
+			int stop = extractedIonSignal.getStopIon();
+			for(int ion = start; ion <= stop; ion++) {
+				if(!includedIons.contains(ion)) {
+					extractedIonSignal.setAbundance(ion, 0, true);
+				}
+			}
+		}
+		//
+		ITotalScanSignals totalScanSignals = extractedIonSignals.getTotalIonSignals(scanRange);
+		ITotalScanSignal totalScanSignal = totalScanSignals.getTotalScanSignal(scanRange.getStartScan());
+		float startBackgroundAbundance = totalScanSignal.getTotalSignal();
+		totalScanSignal = totalScanSignals.getTotalScanSignal(scanRange.getStopScan());
+		float stopBackgroundAbundance = totalScanSignal.getTotalSignal();
+		//
+		IBackgroundAbundanceRange backgroundAbundanceRange;
+		if(calculatePeakIncludedBackground) {
+			backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
+		} else {
+			float base = Math.min(startBackgroundAbundance, stopBackgroundAbundance);
+			backgroundAbundanceRange = new BackgroundAbundanceRange(base, base);
+		}
+		LinearEquation backgroundEquation = getBackgroundEquation(totalScanSignals, scanRange, backgroundAbundanceRange);
+		//
+		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalIonSignals(totalScanSignals, backgroundEquation);
+		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalIonSignals);
+		ITotalScanSignal totalScanSignalMax = totalScanSignals.getMaxTotalScanSignal();
+		int scanNumber = chromatogram.getScanNumber(totalScanSignalMax.getRetentionTime());
+		IScanMSD massSpectrum = extractedIonSignals.getScan(scanNumber);
+		massSpectrum.setRetentionTime(totalScanSignalMax.getRetentionTime());
+		IPeakMassSpectrum peakMassSpectrum = getPeakMassSpectrum(chromatogram, massSpectrum, backgroundEquation);
+		//
+		IPeakModelMSD peakModel = new PeakModelMSD(peakMassSpectrum, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
+		IChromatogramPeakMSD peak = new ChromatogramPeakMSD(peakModel, chromatogram);
+		return peak;
+	}
+
+	/**
+	 * EXPERIMENTAL!
+	 */
+	private static IPeakMassSpectrum getPeakMassSpectrum(IChromatogramMSD chromatogram, IScanMSD massSpectrum, LinearEquation backgroundEquation) throws PeakException {
+
+		if(chromatogram == null || massSpectrum == null || backgroundEquation == null) {
+			throw new PeakException("The chromatogram, massSpectrum or backgroundEquation must not be null.");
+		}
+		/*
+		 * Get the peak mass spectrum and subtract the background.
+		 */
+		IPeakMassSpectrum peakMassSpectrum = null;
+		if(massSpectrum != null) {
+			/*
+			 * Adjust the peak mass spectrum.
+			 */
+			float actualSignal = massSpectrum.getTotalSignal();
+			float backgroundSignal = (float)backgroundEquation.calculateY(massSpectrum.getRetentionTime());
+			float correctedSignal = actualSignal - backgroundSignal;
+			float percentage = (100.0f / correctedSignal) * actualSignal;
+			peakMassSpectrum = new PeakMassSpectrum(massSpectrum, percentage);
+		}
+		return peakMassSpectrum;
+	}
 
 	/**
 	 * Creates an instance of IPeak.<br/>
