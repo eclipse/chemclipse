@@ -26,12 +26,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIn
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
@@ -104,8 +103,8 @@ public class ChromatogramIntegratorSupport {
 	 */
 	private void calculateIntegrationResults(int ion, ISumareaIntegrator chromatogramIntegrator, ISumareaIntegrator backgroundIntegrator, IChromatogramSelectionMSD chromatogramSelection, List<IIntegrationEntry> chromatogramIntegrationEntries, List<IIntegrationEntry> backgroundIntegrationEntries, IChromatogramIntegrationResults chromatogramIntegrationResults) {
 
-		IIntegrationEntryMSD chromatogramIntegrationEntry = calculateChromatogramIonArea(ion, chromatogramIntegrator, chromatogramSelection);
-		IIntegrationEntryMSD backgroundIntegrationEntry = calculateBackgroundIonArea(ion, backgroundIntegrator, chromatogramSelection);
+		IIntegrationEntry chromatogramIntegrationEntry = calculateChromatogramIonArea(ion, chromatogramIntegrator, chromatogramSelection);
+		IIntegrationEntry backgroundIntegrationEntry = calculateBackgroundIonArea(ion, backgroundIntegrator, chromatogramSelection);
 		chromatogramIntegrationEntries.add(chromatogramIntegrationEntry);
 		backgroundIntegrationEntries.add(backgroundIntegrationEntry);
 		setIntegrationResult(ion, chromatogramIntegrationResults, chromatogramIntegrationEntry.getIntegratedArea(), backgroundIntegrationEntry.getIntegratedArea());
@@ -120,17 +119,17 @@ public class ChromatogramIntegratorSupport {
 		chromatogramIntegrationResults.add(chromatogramIntegrationResult);
 	}
 
-	private IIntegrationEntryMSD calculateChromatogramIonArea(int ion, ISumareaIntegrator chromatogramIntegrator, IChromatogramSelectionMSD chromatogramSelection) {
+	private IIntegrationEntry calculateChromatogramIonArea(int ion, ISumareaIntegrator chromatogramIntegrator, IChromatogramSelectionMSD chromatogramSelection) {
 
 		double chromatogramArea = chromatogramIntegrator.integrate(chromatogramSelection, ion);
-		IIntegrationEntryMSD chromatogramIntegrationEntry = new IntegrationEntryMSD(ion, chromatogramArea);
+		IIntegrationEntry chromatogramIntegrationEntry = new IntegrationEntry(ion, chromatogramArea);
 		return chromatogramIntegrationEntry;
 	}
 
-	private IIntegrationEntryMSD calculateBackgroundIonArea(int ion, ISumareaIntegrator backgroundIntegrator, IChromatogramSelectionMSD chromatogramSelection) {
+	private IIntegrationEntry calculateBackgroundIonArea(int ion, ISumareaIntegrator backgroundIntegrator, IChromatogramSelectionMSD chromatogramSelection) {
 
 		double backgroundArea = backgroundIntegrator.integrate(chromatogramSelection, ion);
-		IIntegrationEntryMSD backgroundIntegrationEntry = new IntegrationEntryMSD(ion, backgroundArea);
+		IIntegrationEntry backgroundIntegrationEntry = new IntegrationEntry(ion, backgroundArea);
 		return backgroundIntegrationEntry;
 	}
 
