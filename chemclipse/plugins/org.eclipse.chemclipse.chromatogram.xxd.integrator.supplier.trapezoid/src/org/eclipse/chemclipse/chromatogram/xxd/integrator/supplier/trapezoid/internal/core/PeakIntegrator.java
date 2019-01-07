@@ -31,16 +31,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.ISegment;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.Segment;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.SegmentAreaCalculator;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.IIntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
-import org.eclipse.chemclipse.csd.model.implementation.IntegrationEntryCSD;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
+import org.eclipse.chemclipse.model.core.ISignal;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.support.IntegrationConstraint;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
@@ -48,12 +47,9 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IIonPercentages;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IonPercentages;
-import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
-import org.eclipse.chemclipse.wsd.model.core.IIntegrationEntryWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
-import org.eclipse.chemclipse.wsd.model.core.implementation.IntegrationEntryWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -289,7 +285,7 @@ public class PeakIntegrator implements IPeakIntegrator {
 			 * ions does not contain IIon.TIC_Ion, which means,
 			 * the TIC signal should be integrated.
 			 */
-			IIntegrationEntryMSD integrationEntry;
+			IIntegrationEntry integrationEntry;
 			if(selectedIons.size() > 0 && !selectedIons.getIonsNominal().contains(AbstractIon.getIon(IIon.TIC_ION))) {
 				Set<Integer> ions = selectedIons.getIonsNominal();
 				IIonPercentages ionPercentages = new IonPercentages(massSpectrum);
@@ -299,11 +295,11 @@ public class PeakIntegrator implements IPeakIntegrator {
 				for(Integer ion : ions) {
 					float correctionFactor = ionPercentages.getPercentage(ion) / IIonPercentages.MAX_PERCENTAGE;
 					double integratedArea = integratedAreaTIC * correctionFactor;
-					integrationEntry = new IntegrationEntryMSD(ion, integratedArea);
+					integrationEntry = new IntegrationEntry(ion, integratedArea);
 					integrationEntries.add(integrationEntry);
 				}
 			} else {
-				integrationEntry = new IntegrationEntryMSD(AbstractIon.TIC_ION, integratedAreaTIC);
+				integrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, integratedAreaTIC);
 				integrationEntries.add(integrationEntry);
 			}
 			//
@@ -312,14 +308,14 @@ public class PeakIntegrator implements IPeakIntegrator {
 			 * FID
 			 */
 			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground);
-			IIntegrationEntryCSD integrationEntry = new IntegrationEntryCSD(integratedAreaTIC);
+			IIntegrationEntry integrationEntry = new IntegrationEntry(integratedAreaTIC);
 			integrationEntries.add(integrationEntry);
 		} else if(peak instanceof IPeakWSD) {
 			/*
 			 * WSD
 			 */
 			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground);
-			IIntegrationEntryWSD integrationEntry = new IntegrationEntryWSD(integratedAreaTIC);
+			IIntegrationEntry integrationEntry = new IntegrationEntry(integratedAreaTIC);
 			integrationEntries.add(integrationEntry);
 		}
 		//

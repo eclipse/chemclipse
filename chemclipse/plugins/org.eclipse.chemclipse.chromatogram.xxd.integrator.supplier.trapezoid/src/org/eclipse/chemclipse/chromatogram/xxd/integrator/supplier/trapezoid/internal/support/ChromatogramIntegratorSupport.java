@@ -24,13 +24,12 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.int
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IChromatogramIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.csd.model.implementation.IntegrationEntryCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.ISignal;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramIntegratorSupport {
@@ -87,9 +86,9 @@ public class ChromatogramIntegratorSupport {
 		 */
 		IIntegrationEntry chromatogramIntegrationEntry = null;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			chromatogramIntegrationEntry = new IntegrationEntryMSD(AbstractIon.TIC_ION, chromatogramArea);
+			chromatogramIntegrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, chromatogramArea);
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-			chromatogramIntegrationEntry = new IntegrationEntryCSD(chromatogramArea);
+			chromatogramIntegrationEntry = new IntegrationEntry(chromatogramArea);
 		}
 		//
 		if(chromatogramIntegrationEntry != null) {
@@ -113,9 +112,9 @@ public class ChromatogramIntegratorSupport {
 		 */
 		IIntegrationEntry backgroundIntegrationEntry = null;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			backgroundIntegrationEntry = new IntegrationEntryMSD(AbstractIon.TIC_ION, backgroundArea);
+			backgroundIntegrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, backgroundArea);
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-			backgroundIntegrationEntry = new IntegrationEntryCSD(backgroundArea);
+			backgroundIntegrationEntry = new IntegrationEntry(backgroundArea);
 		}
 		//
 		if(backgroundIntegrationEntry != null) {
