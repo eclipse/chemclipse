@@ -46,7 +46,7 @@ public class AddPeaksWizardESTD extends Wizard {
 	@Override
 	public void addPages() {
 
-		page = new AddPeaksPageESTD("Do you like to add the peaks to the quantitation table?\r\nThey will be identified by their best target.\r\nIf a target already exists in the table, it will be merged.");
+		page = new AddPeaksPageESTD("PeakPageESTD");
 		addPage(page);
 	}
 
