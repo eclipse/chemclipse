@@ -246,7 +246,7 @@ public class QuantResponseChartUI extends Composite {
 		//
 		if(quantitationCompound != null) {
 			//
-			labelInfo.setText("f(x) = a+bx², R² = 0.999"); // TODO
+			labelInfo.setText("Quantitation Compound: " + quantitationCompound.getName());
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			ILineSeriesData lineSeriesDataPoints;
