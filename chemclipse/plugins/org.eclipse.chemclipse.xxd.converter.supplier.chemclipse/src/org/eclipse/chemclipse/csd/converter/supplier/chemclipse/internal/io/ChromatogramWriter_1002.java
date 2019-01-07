@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.IChromatogramCSDZipWriter;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.IIntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
@@ -240,13 +239,7 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 
 		dataOutputStream.writeInt(integrationEntries.size()); // Number Integration Entries
 		for(IIntegrationEntry integrationEntry : integrationEntries) {
-			if(integrationEntry instanceof IIntegrationEntryCSD) {
-				/*
-				 * It must be a FID integration entry.
-				 */
-				IIntegrationEntryCSD integrationEntryFID = (IIntegrationEntryCSD)integrationEntry;
-				dataOutputStream.writeDouble(integrationEntryFID.getIntegratedArea()); // Integrated Area
-			}
+			dataOutputStream.writeDouble(integrationEntry.getIntegratedArea()); // Integrated Area
 		}
 	}
 

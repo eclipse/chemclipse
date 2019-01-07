@@ -31,7 +31,6 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IChromatogramMSDZipWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
@@ -341,14 +340,8 @@ public class ChromatogramWriter_0701 extends AbstractChromatogramWriter implemen
 
 		dataOutputStream.writeInt(integrationEntries.size()); // Number Integration Entries
 		for(IIntegrationEntry integrationEntry : integrationEntries) {
-			if(integrationEntry instanceof IIntegrationEntryMSD) {
-				/*
-				 * It must be a MSD integration entry.
-				 */
-				IIntegrationEntryMSD integrationEntryMSD = (IIntegrationEntryMSD)integrationEntry;
-				dataOutputStream.writeDouble(integrationEntryMSD.getIon()); // m/z
-				dataOutputStream.writeDouble(integrationEntryMSD.getIntegratedArea()); // Integrated Area
-			}
+			dataOutputStream.writeDouble(integrationEntry.getSignal()); // m/z
+			dataOutputStream.writeDouble(integrationEntry.getIntegratedArea()); // Integrated Area
 		}
 	}
 

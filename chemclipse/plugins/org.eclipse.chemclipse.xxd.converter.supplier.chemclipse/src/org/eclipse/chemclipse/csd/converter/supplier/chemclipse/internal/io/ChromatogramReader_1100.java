@@ -29,10 +29,8 @@ import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogr
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.VendorScan;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.IIntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.implementation.IntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.implementation.PeakModelCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
@@ -43,6 +41,7 @@ import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
@@ -359,7 +358,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double integratedArea = dataInputStream.readDouble(); // Integrated Area
-			IIntegrationEntryCSD integrationEntry = new IntegrationEntryCSD(integratedArea);
+			IIntegrationEntry integrationEntry = new IntegrationEntry(integratedArea);
 			integrationEntries.add(integrationEntry);
 		}
 		return integrationEntries;

@@ -29,17 +29,16 @@ import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IChromatogramMSDZipWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -533,7 +532,7 @@ public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implemen
 			/*
 			 * Legacy support
 			 */
-			if(quantitationEntry.getSignal() != IQuantitationSignal.TIC_SIGNAL) {
+			if(quantitationEntry.getSignal() != ISignal.TOTAL_INTENSITY) {
 				dataOutputStream.writeBoolean(true);
 				dataOutputStream.writeDouble(quantitationEntry.getSignal());
 			} else {
@@ -556,14 +555,8 @@ public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implemen
 
 		dataOutputStream.writeInt(integrationEntries.size()); // Number Integration Entries
 		for(IIntegrationEntry integrationEntry : integrationEntries) {
-			if(integrationEntry instanceof IIntegrationEntryMSD) {
-				/*
-				 * It must be a MSD integration entry.
-				 */
-				IIntegrationEntryMSD integrationEntryMSD = (IIntegrationEntryMSD)integrationEntry;
-				dataOutputStream.writeDouble(integrationEntryMSD.getIon()); // m/z
-				dataOutputStream.writeDouble(integrationEntryMSD.getIntegratedArea()); // Integrated Area
-			}
+			dataOutputStream.writeDouble(integrationEntry.getSignal()); // m/z
+			dataOutputStream.writeDouble(integrationEntry.getIntegratedArea()); // Integrated Area
 		}
 	}
 

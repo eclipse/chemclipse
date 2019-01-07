@@ -33,12 +33,10 @@ import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogr
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.VendorScan;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.IIntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.implementation.IntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.implementation.PeakModelCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
@@ -50,6 +48,7 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
@@ -66,11 +65,11 @@ import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramReaderMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -437,7 +436,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double integratedArea = dataInputStream.readDouble(); // Integrated Area
-			IIntegrationEntryCSD integrationEntry = new IntegrationEntryCSD(integratedArea);
+			IIntegrationEntry integrationEntry = new IntegrationEntry(integratedArea);
 			integrationEntries.add(integrationEntry);
 		}
 		return integrationEntries;
@@ -782,7 +781,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			/*
 			 * Legacy support
 			 */
-			double signal = IQuantitationSignal.TIC_SIGNAL;
+			double signal = ISignal.TOTAL_INTENSITY;
 			boolean isSignal = dataInputStream.readBoolean();
 			if(isSignal) {
 				signal = dataInputStream.readDouble();

@@ -35,7 +35,6 @@ import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -271,14 +270,8 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 
 		dataOutputStream.writeInt(integrationEntries.size()); // Number Integration Entries
 		for(IIntegrationEntry integrationEntry : integrationEntries) {
-			if(integrationEntry instanceof IIntegrationEntryMSD) {
-				/*
-				 * It must be a MSD integration entry.
-				 */
-				IIntegrationEntryMSD integrationEntryMSD = (IIntegrationEntryMSD)integrationEntry;
-				dataOutputStream.writeDouble(integrationEntryMSD.getIon()); // m/z
-				dataOutputStream.writeDouble(integrationEntryMSD.getIntegratedArea()); // Integrated Area
-			}
+			dataOutputStream.writeDouble(integrationEntry.getSignal()); // m/z
+			dataOutputStream.writeDouble(integrationEntry.getIntegratedArea()); // Integrated Area
 		}
 	}
 

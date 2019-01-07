@@ -35,13 +35,13 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.support.history.IEditHistory;
@@ -50,7 +50,6 @@ import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.ChromatogramW
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.IChromatogramWSDZipWriter;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.IIntegrationEntryWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakModelWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
@@ -406,7 +405,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 			/*
 			 * Legacy support
 			 */
-			if(quantitationEntry.getSignal() != IQuantitationSignal.TIC_SIGNAL) {
+			if(quantitationEntry.getSignal() != ISignal.TOTAL_INTENSITY) {
 				dataOutputStream.writeBoolean(true);
 				dataOutputStream.writeDouble(quantitationEntry.getSignal());
 			} else {
@@ -423,13 +422,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 
 		dataOutputStream.writeInt(integrationEntries.size()); // Number Integration Entries
 		for(IIntegrationEntry integrationEntry : integrationEntries) {
-			if(integrationEntry instanceof IIntegrationEntryWSD) {
-				/*
-				 * It must be a WSD integration entry.
-				 */
-				IIntegrationEntryWSD integrationEntryWSD = (IIntegrationEntryWSD)integrationEntry;
-				dataOutputStream.writeDouble(integrationEntryWSD.getIntegratedArea()); // Integrated Area
-			}
+			dataOutputStream.writeDouble(integrationEntry.getIntegratedArea()); // Integrated Area
 		}
 	}
 

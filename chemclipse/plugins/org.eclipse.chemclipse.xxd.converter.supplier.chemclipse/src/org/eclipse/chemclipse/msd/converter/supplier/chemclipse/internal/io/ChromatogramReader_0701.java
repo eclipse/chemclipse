@@ -41,6 +41,7 @@ import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IChromatogramMSDZipReader;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorChromatogram;
@@ -52,13 +53,11 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogr
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
 import org.eclipse.chemclipse.support.history.EditInformation;
@@ -295,7 +294,7 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double ion = dataInputStream.readDouble(); // m/z
 			double integratedArea = dataInputStream.readDouble(); // Integrated Area
-			IIntegrationEntryMSD integrationEntry = new IntegrationEntryMSD(ion, integratedArea);
+			IIntegrationEntry integrationEntry = new IntegrationEntry(ion, integratedArea);
 			integrationEntries.add(integrationEntry);
 		}
 		return integrationEntries;

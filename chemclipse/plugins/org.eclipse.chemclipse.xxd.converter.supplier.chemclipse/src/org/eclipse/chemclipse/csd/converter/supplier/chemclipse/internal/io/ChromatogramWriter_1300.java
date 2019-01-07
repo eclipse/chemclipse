@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramW
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.IChromatogramCSDZipWriter;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.IIntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
@@ -41,13 +40,13 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.support.history.IEditHistory;
@@ -374,7 +373,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 			/*
 			 * Legacy support
 			 */
-			if(quantitationEntry.getSignal() != IQuantitationSignal.TIC_SIGNAL) {
+			if(quantitationEntry.getSignal() != ISignal.TOTAL_INTENSITY) {
 				dataOutputStream.writeBoolean(true);
 				dataOutputStream.writeDouble(quantitationEntry.getSignal());
 			} else {
@@ -391,13 +390,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 
 		dataOutputStream.writeInt(integrationEntries.size()); // Number Integration Entries
 		for(IIntegrationEntry integrationEntry : integrationEntries) {
-			if(integrationEntry instanceof IIntegrationEntryCSD) {
-				/*
-				 * It must be a FID integration entry.
-				 */
-				IIntegrationEntryCSD integrationEntryFID = (IIntegrationEntryCSD)integrationEntry;
-				dataOutputStream.writeDouble(integrationEntryFID.getIntegratedArea()); // Integrated Area
-			}
+			dataOutputStream.writeDouble(integrationEntry.getIntegratedArea()); // Integrated Area
 		}
 	}
 

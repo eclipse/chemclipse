@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
@@ -53,7 +54,6 @@ import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.ResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.RetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.RetentionTimeWindow;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
@@ -63,7 +63,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
-import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
@@ -416,9 +415,9 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
 		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
-			double ion = dataInputStream.readDouble(); // m/z
+			double signal = dataInputStream.readDouble(); // m/z
 			double integratedArea = dataInputStream.readDouble(); // Integrated Area
-			IIntegrationEntryMSD integrationEntry = new IntegrationEntryMSD(ion, integratedArea);
+			IIntegrationEntry integrationEntry = new IntegrationEntry(signal, integratedArea);
 			integrationEntries.add(integrationEntry);
 		}
 		return integrationEntries;

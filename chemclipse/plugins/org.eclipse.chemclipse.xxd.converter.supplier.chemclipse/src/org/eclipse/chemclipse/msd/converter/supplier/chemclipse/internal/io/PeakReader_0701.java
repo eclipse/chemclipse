@@ -22,6 +22,7 @@ import java.util.zip.ZipFile;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.core.PeakType;
@@ -34,17 +35,16 @@ import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.VendorIon;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
@@ -129,7 +129,7 @@ public class PeakReader_0701 extends AbstractZipReader implements IPeakReader {
 		peak.setModelDescription(modelDescription);
 		peak.setPeakType(peakType);
 		//
-		List<IIntegrationEntryMSD> integrationEntries = readIntegrationEntries(dataInputStream);
+		List<IIntegrationEntry> integrationEntries = readIntegrationEntries(dataInputStream);
 		peak.setIntegratedArea(integrationEntries, integratorDescription);
 		//
 		readPeakIdentificationTargets(dataInputStream, peak, monitor);
@@ -171,14 +171,14 @@ public class PeakReader_0701 extends AbstractZipReader implements IPeakReader {
 		return massSpectrum;
 	}
 
-	private List<IIntegrationEntryMSD> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
+	private List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IIntegrationEntryMSD> integrationEntries = new ArrayList<IIntegrationEntryMSD>();
+		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
 		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double ion = dataInputStream.readDouble(); // m/z
 			double integratedArea = dataInputStream.readDouble(); // Integrated Area
-			IIntegrationEntryMSD integrationEntry = new IntegrationEntryMSD(ion, integratedArea);
+			IIntegrationEntry integrationEntry = new IntegrationEntry(ion, integratedArea);
 			integrationEntries.add(integrationEntry);
 		}
 		return integrationEntries;

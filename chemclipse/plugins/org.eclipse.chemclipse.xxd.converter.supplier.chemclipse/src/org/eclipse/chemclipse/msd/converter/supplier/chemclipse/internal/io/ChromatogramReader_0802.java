@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
@@ -41,10 +42,10 @@ import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IChromatogramMSDZipReader;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorIon;
@@ -55,7 +56,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogr
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -64,7 +64,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
 import org.eclipse.chemclipse.support.history.EditInformation;
@@ -308,7 +307,7 @@ public class ChromatogramReader_0802 extends AbstractChromatogramReader implemen
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double ion = dataInputStream.readDouble(); // m/z
 			double integratedArea = dataInputStream.readDouble(); // Integrated Area
-			IIntegrationEntryMSD integrationEntry = new IntegrationEntryMSD(ion, integratedArea);
+			IIntegrationEntry integrationEntry = new IntegrationEntry(ion, integratedArea);
 			integrationEntries.add(integrationEntry);
 		}
 		return integrationEntries;
@@ -362,7 +361,7 @@ public class ChromatogramReader_0802 extends AbstractChromatogramReader implemen
 			/*
 			 * Legacy support
 			 */
-			double signal = IQuantitationSignal.TIC_SIGNAL;
+			double signal = ISignal.TOTAL_INTENSITY;
 			boolean isSignal = dataInputStream.readBoolean();
 			if(isSignal) {
 				signal = dataInputStream.readDouble();
