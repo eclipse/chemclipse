@@ -45,6 +45,13 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swtchart.IAxis.Position;
+import org.eclipse.swtchart.IBarSeries;
+import org.eclipse.swtchart.IBarSeries.BarWidthStyle;
+import org.eclipse.swtchart.ICustomPaintListener;
+import org.eclipse.swtchart.ILineSeries;
+import org.eclipse.swtchart.IPlotArea;
+import org.eclipse.swtchart.ISeries;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
@@ -62,13 +69,6 @@ import org.eclipse.swtchart.extensions.customcharts.MassSpectrumChart.LabelOptio
 import org.eclipse.swtchart.extensions.exceptions.SeriesException;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
-import org.eclipse.swtchart.IAxis.Position;
-import org.eclipse.swtchart.IBarSeries;
-import org.eclipse.swtchart.IBarSeries.BarWidthStyle;
-import org.eclipse.swtchart.ICustomPaintListener;
-import org.eclipse.swtchart.ILineSeries;
-import org.eclipse.swtchart.IPlotArea;
-import org.eclipse.swtchart.ISeries;
 
 public class ScanChartUI extends ScrollableChart {
 
@@ -505,6 +505,7 @@ public class ScanChartUI extends ScrollableChart {
 					IBarSeriesSettings barSeriesSettings = barSeriesData.getBarSeriesSettings();
 					barSeriesSettings.getSeriesSettingsHighlight(); // Initialize
 					IBarSeries barSeries = (IBarSeries)createSeries(optimizedSeriesData, barSeriesSettings);
+					barSeriesSettings.setBarOverlay(true);
 					baseChart.applyBarSeriesSettings(barSeries, barSeriesSettings);
 					/*
 					 * Automatically use stretched if it is a large data set.
