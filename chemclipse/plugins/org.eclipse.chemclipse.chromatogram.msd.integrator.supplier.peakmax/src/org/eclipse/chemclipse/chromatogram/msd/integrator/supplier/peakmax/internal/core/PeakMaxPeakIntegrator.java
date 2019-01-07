@@ -38,7 +38,6 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IIonPercentages;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IonPercentages;
-import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -247,7 +246,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 			for(Integer ion : selectedIonsNominal) {
 				float correctionFactor = ionPercentages.getPercentage(ion) / IIonPercentages.MAX_PERCENTAGE;
 				double integratedArea = integratedAreaTIC * correctionFactor;
-				integrationEntry = new IntegrationEntryMSD(ion, integratedArea);
+				integrationEntry = new IntegrationEntry(ion, integratedArea);
 				integrationEntries.add(integrationEntry);
 			}
 		} else {
