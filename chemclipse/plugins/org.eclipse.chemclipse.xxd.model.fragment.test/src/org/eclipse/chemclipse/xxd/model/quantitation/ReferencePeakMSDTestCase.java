@@ -13,19 +13,19 @@ package org.eclipse.chemclipse.xxd.model.quantitation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
+import org.eclipse.chemclipse.model.core.ISignal;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
+import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
-import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
-import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.msd.model.implementation.PeakIon;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
@@ -125,7 +125,7 @@ public class ReferencePeakMSDTestCase extends TestCase {
 			float totalSignal = referencePeakMSD.getPeakModel().getPeakMassSpectrum().getTotalSignal();
 			for(IIon ion : referencePeakMSD.getPeakModel().getPeakMassSpectrum().getIons()) {
 				double percentageIonIntensity = (1.0d / totalSignal) * ion.getAbundance();
-				IIntegrationEntry integrationEntry = new IntegrationEntryMSD(ion.getIon(), baseArea * scale * percentageIonIntensity);
+				IIntegrationEntry integrationEntry = new IntegrationEntry(ion.getIon(), baseArea * scale * percentageIonIntensity);
 				integrationEntries.add(integrationEntry);
 			}
 			referencePeakMSD.setIntegratedArea(integrationEntries, "Test Integrator XIC");
@@ -135,7 +135,7 @@ public class ReferencePeakMSDTestCase extends TestCase {
 			 */
 			referencePeakMSD = new PeakMSD(peakModel, "TIC");
 			List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
-			IIntegrationEntry integrationEntry = new IntegrationEntryMSD(AbstractIon.TIC_ION, baseArea * scale);
+			IIntegrationEntry integrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, baseArea * scale);
 			integrationEntries.add(integrationEntry);
 			referencePeakMSD.setIntegratedArea(integrationEntries, "Test Integrator TIC");
 		}

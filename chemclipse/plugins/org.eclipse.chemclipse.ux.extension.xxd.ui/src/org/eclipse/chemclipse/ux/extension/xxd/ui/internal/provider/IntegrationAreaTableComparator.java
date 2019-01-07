@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -31,11 +30,7 @@ public class IntegrationAreaTableComparator extends AbstractRecordTableComparato
 					sortOrder = Double.compare(integrationEntry2.getIntegratedArea(), integrationEntry1.getIntegratedArea());
 					break;
 				case 1:
-					if(integrationEntry1 instanceof IIntegrationEntryMSD && integrationEntry2 instanceof IIntegrationEntryMSD) {
-						IIntegrationEntryMSD quantitationEntryMSD1 = (IIntegrationEntryMSD)integrationEntry1;
-						IIntegrationEntryMSD quantitationEntryMSD2 = (IIntegrationEntryMSD)integrationEntry2;
-						sortOrder = Double.compare(quantitationEntryMSD2.getIon(), quantitationEntryMSD1.getIon());
-					}
+					sortOrder = Double.compare(integrationEntry2.getSignal(), integrationEntry1.getSignal());
 					break;
 				default:
 					sortOrder = 0;

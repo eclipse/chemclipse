@@ -21,7 +21,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.msd.model.core,
  org.eclipse.chemclipse.msd.model.core.comparator,
- org.eclipse.chemclipse.msd.model.core.quantitation,
  org.eclipse.chemclipse.msd.model.core.selection,
  org.eclipse.chemclipse.msd.model.core.support,
  org.eclipse.chemclipse.msd.model.exceptions,

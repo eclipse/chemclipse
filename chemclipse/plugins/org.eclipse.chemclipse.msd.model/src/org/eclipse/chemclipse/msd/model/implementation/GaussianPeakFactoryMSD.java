@@ -18,6 +18,7 @@ import org.apache.commons.math3.analysis.function.Gaussian;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -88,7 +89,7 @@ public class GaussianPeakFactoryMSD {
 		/*
 		 * Set Peak Area
 		 */
-		final IIntegrationEntry integrationEntry = new IntegrationEntryMSD(ION_VALUE, area);
+		final IIntegrationEntry integrationEntry = new IntegrationEntry(ION_VALUE, area);
 		final List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		integrationEntries.add(integrationEntry);
 		final IPeakMSD peakMSD = new PeakMSD(peakModelMSD);

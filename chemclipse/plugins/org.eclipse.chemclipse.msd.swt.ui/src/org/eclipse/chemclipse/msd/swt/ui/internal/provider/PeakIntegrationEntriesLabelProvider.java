@@ -13,13 +13,12 @@ package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.swt.graphics.Image;
-
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
+import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.swt.graphics.Image;
 
 public class PeakIntegrationEntriesLabelProvider extends AbstractChemClipseLabelProvider {
 
@@ -41,15 +40,15 @@ public class PeakIntegrationEntriesLabelProvider extends AbstractChemClipseLabel
 		 */
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IIntegrationEntryMSD) {
-			IIntegrationEntryMSD integrationEntryMSD = (IIntegrationEntryMSD)element;
+		if(element instanceof IIntegrationEntry) {
+			IIntegrationEntry integrationEntryMSD = (IIntegrationEntry)element;
 			switch(columnIndex) {
 				case 0: // Ion
-					double ion = integrationEntryMSD.getIon();
-					if(ion == AbstractIon.TIC_ION) {
-						text = AbstractIon.TIC_DESCRIPTION;
+					double signal = integrationEntryMSD.getSignal();
+					if(signal == ISignal.TOTAL_INTENSITY) {
+						text = ISignal.TOTAL_INTENSITY_DESCRIPTION;
 					} else {
-						text = decimalFormat.format(ion);
+						text = decimalFormat.format(signal);
 					}
 					break;
 				case 1: // Area

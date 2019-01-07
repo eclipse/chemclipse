@@ -14,8 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -53,13 +52,12 @@ public class IntegrationAreaLabelProvider extends AbstractChemClipseLabelProvide
 					text = decimalFormat.format(integrationEntry.getIntegratedArea());
 					break;
 				case 1: // TIC ...
-					text = AbstractIon.TIC_DESCRIPTION;
-					if(integrationEntry instanceof IIntegrationEntryMSD) {
-						IIntegrationEntryMSD integrationEntryMSD = (IIntegrationEntryMSD)element;
-						double ion = integrationEntryMSD.getIon();
-						if(ion != AbstractIon.TIC_ION) {
-							text = decimalFormat.format(ion);
-						}
+					IIntegrationEntry integrationEntryMSD = (IIntegrationEntry)element;
+					double signal = integrationEntryMSD.getSignal();
+					if(signal != ISignal.TOTAL_INTENSITY) {
+						text = decimalFormat.format(signal);
+					} else {
+						text = ISignal.TOTAL_INTENSITY_DESCRIPTION;
 					}
 					break;
 				default:

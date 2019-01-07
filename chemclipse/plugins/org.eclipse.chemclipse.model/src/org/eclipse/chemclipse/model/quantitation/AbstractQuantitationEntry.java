@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
+import org.eclipse.chemclipse.model.core.ISignal;
+
 public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 
 	/**
@@ -18,7 +20,7 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	 */
 	private static final long serialVersionUID = -6312658397485712262L;
 	//
-	private double signal = IQuantitationSignal.TIC_SIGNAL;
+	private double signal = ISignal.TOTAL_INTENSITY;
 	private String name = "";
 	private String chemicalClass = "";
 	private double concentration = 0.0d;

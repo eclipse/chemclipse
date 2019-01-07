@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.ResponseSignal;
 import org.eclipse.chemclipse.support.util.ValueParserSupport;
@@ -46,7 +46,7 @@ public class ResponseSignalValidator extends ValueParserSupport implements IVali
 					//
 					String signalValue = parseString(values, 0);
 					if("TIC".equals(signalValue)) {
-						signal = IQuantitationSignal.TIC_SIGNAL;
+						signal = ISignal.TOTAL_INTENSITY;
 					} else {
 						signal = parseDouble(values, 0);
 					}

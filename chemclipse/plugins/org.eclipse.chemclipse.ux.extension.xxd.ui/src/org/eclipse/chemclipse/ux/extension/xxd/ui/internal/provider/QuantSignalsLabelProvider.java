@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -67,7 +68,7 @@ public class QuantSignalsLabelProvider extends AbstractChemClipseLabelProvider {
 			switch(columnIndex) {
 				case 0:
 					double signal = entry.getSignal();
-					if(signal == IQuantitationSignal.TIC_SIGNAL) {
+					if(signal == ISignal.TOTAL_INTENSITY) {
 						text = "TIC";
 					} else {
 						text = decimalFormat.format(signal);

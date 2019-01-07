@@ -15,5 +15,7 @@ import java.io.Serializable;
 
 public interface IIntegrationEntry extends Serializable {
 
+	double getSignal();
+
 	double getIntegratedArea();
 }

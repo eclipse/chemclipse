@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
+import org.eclipse.chemclipse.model.core.ISignal;
+
 public class ResponseSignal implements IResponseSignal {
 
 	private static final long serialVersionUID = -4768367983343261439L;
 	//
-	private double signal = IQuantitationSignal.TIC_SIGNAL;
+	private double signal = ISignal.TOTAL_INTENSITY;
 	private double concentration = 0.0d;
 	private double response = 0.0d;
 

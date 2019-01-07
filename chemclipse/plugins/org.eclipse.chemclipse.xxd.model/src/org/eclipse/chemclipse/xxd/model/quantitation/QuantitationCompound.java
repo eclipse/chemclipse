@@ -15,16 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.quantitation.AbstractQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
+import org.eclipse.chemclipse.model.quantitation.QuantitationSupport;
 import org.eclipse.chemclipse.model.quantitation.ResponseSignal;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.QuantitationSupportMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 
 public class QuantitationCompound extends AbstractQuantitationCompound implements IQuantitationCompound {
@@ -67,10 +68,10 @@ public class QuantitationCompound extends AbstractQuantitationCompound implement
 			/*
 			 * The integrated area needs to use the TIC mode. Otherwise, wrong areas/response values would be calculated.
 			 */
-			QuantitationSupportMSD integrationQuantitationSupport = new QuantitationSupportMSD(peak);
+			QuantitationSupport integrationQuantitationSupport = new QuantitationSupport(peak);
 			if(integrationQuantitationSupport.validateTIC()) {
 				//
-				double ion = IQuantitationSignal.TIC_SIGNAL;
+				double ion = ISignal.TOTAL_INTENSITY;
 				double response = integrationQuantitationSupport.getIntegrationArea(ion);
 				//
 				if(firstPeak) {
@@ -99,7 +100,7 @@ public class QuantitationCompound extends AbstractQuantitationCompound implement
 				/*
 				 * The integrated area needs to use the TIC mode. Otherwise, wrong areas/response values would be calculated.
 				 */
-				QuantitationSupportMSD integrationQuantitationSupport = new QuantitationSupportMSD(peak);
+				QuantitationSupport integrationQuantitationSupport = new QuantitationSupport(peak);
 				//
 				IScanMSD massSpectrum = peakMSD.getExtractedMassSpectrum();
 				IExtractedIonSignal extractedIonSignal = massSpectrum.getExtractedIonSignal();

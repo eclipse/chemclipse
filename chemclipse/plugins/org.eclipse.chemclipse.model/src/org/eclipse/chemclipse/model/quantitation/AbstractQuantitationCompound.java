@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.model.quantitation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.core.ISignal;
+
 public abstract class AbstractQuantitationCompound implements IQuantitationCompound {
 
 	private static final long serialVersionUID = 1901297052527290065L;
@@ -55,7 +57,7 @@ public abstract class AbstractQuantitationCompound implements IQuantitationCompo
 		this.name = name;
 		this.concentrationUnit = concentrationUnit;
 		retentionTimeWindow.setRetentionTime(retentionTime);
-		quantitationSignals.add(new QuantitationSignal(IQuantitationSignal.TIC_SIGNAL, IQuantitationSignal.ABSOLUTE_RELATIVE_RESPONSE, 0.0, true));
+		quantitationSignals.add(new QuantitationSignal(ISignal.TOTAL_INTENSITY, IQuantitationSignal.ABSOLUTE_RELATIVE_RESPONSE, 0.0, true));
 	}
 
 	@Override

@@ -16,6 +16,9 @@ package org.eclipse.chemclipse.model.core;
  */
 public interface ISignal {
 
+	double TOTAL_INTENSITY = 0.0d;
+	String TOTAL_INTENSITY_DESCRIPTION = "TIC";
+
 	public double getX();
 
 	public double getY();

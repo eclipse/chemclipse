@@ -11,14 +11,34 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.implementation;
 
-import org.eclipse.chemclipse.model.core.AbstractIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.ISignal;
 
-public class IntegrationEntry extends AbstractIntegrationEntry implements IIntegrationEntry {
+public class IntegrationEntry implements IIntegrationEntry {
 
-	private static final long serialVersionUID = -7897277307510543981L;
+	private static final long serialVersionUID = 1948207146553081259L;
+	//
+	private final double signal;
+	private final double integratedArea;
 
 	public IntegrationEntry(double integratedArea) {
-		super(integratedArea);
+		this(ISignal.TOTAL_INTENSITY, integratedArea);
+	}
+
+	public IntegrationEntry(double signal, double integratedArea) {
+		this.signal = signal;
+		this.integratedArea = integratedArea;
+	}
+
+	@Override
+	public double getSignal() {
+
+		return signal;
+	}
+
+	@Override
+	public double getIntegratedArea() {
+
+		return integratedArea;
 	}
 }

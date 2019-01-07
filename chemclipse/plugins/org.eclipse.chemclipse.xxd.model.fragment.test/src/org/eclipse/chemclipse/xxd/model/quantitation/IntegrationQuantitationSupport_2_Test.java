@@ -14,18 +14,18 @@ package org.eclipse.chemclipse.xxd.model.quantitation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.quantitation.QuantitationSupport;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.QuantitationSupportMSD;
 
 public class IntegrationQuantitationSupport_2_Test extends QuantitationCalculator_TIC_TestCase {
 
-	private QuantitationSupportMSD support;
+	private QuantitationSupport support;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		support = new QuantitationSupportMSD(getReferencePeakMSD_XIC_1());
+		support = new QuantitationSupport(getReferencePeakMSD_XIC_1());
 	}
 
 	@Override

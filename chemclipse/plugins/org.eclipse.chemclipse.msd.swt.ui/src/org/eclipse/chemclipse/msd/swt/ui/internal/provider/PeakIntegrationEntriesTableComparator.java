@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
+import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -25,15 +25,15 @@ public class PeakIntegrationEntriesTableComparator extends AbstractRecordTableCo
 		 * SYNCHRONIZE: PeakIntegrationEntriesLabelProvider PeakIntegrationEntriesLabelComparator PeakIntegrationEntriesView
 		 */
 		int sortOrder = 0;
-		if(e1 instanceof IIntegrationEntryMSD && e2 instanceof IIntegrationEntryMSD) {
-			IIntegrationEntryMSD integrationEntryMSD1 = (IIntegrationEntryMSD)e1;
-			IIntegrationEntryMSD integrationEntryMSD2 = (IIntegrationEntryMSD)e2;
+		if(e1 instanceof IIntegrationEntry && e2 instanceof IIntegrationEntry) {
+			IIntegrationEntry integrationEntry1 = (IIntegrationEntry)e1;
+			IIntegrationEntry integrationEntry2 = (IIntegrationEntry)e2;
 			switch(getPropertyIndex()) {
 				case 0: // Ion
-					sortOrder = Double.compare(integrationEntryMSD2.getIon(), integrationEntryMSD1.getIon());
+					sortOrder = Double.compare(integrationEntry2.getSignal(), integrationEntry1.getSignal());
 					break;
 				case 1: // Area
-					sortOrder = Double.compare(integrationEntryMSD2.getIntegratedArea(), integrationEntryMSD1.getIntegratedArea());
+					sortOrder = Double.compare(integrationEntry2.getIntegratedArea(), integrationEntry1.getIntegratedArea());
 					break;
 				default:
 					sortOrder = 0;

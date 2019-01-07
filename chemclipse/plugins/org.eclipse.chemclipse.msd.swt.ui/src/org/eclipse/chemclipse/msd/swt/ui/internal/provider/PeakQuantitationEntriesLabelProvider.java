@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -60,8 +60,8 @@ public class PeakQuantitationEntriesLabelProvider extends AbstractChemClipseLabe
 					break;
 				case 5: // Ion
 					double ion = quantitationEntry.getSignal();
-					if(ion == IQuantitationSignal.TIC_SIGNAL) {
-						text = IQuantitationSignal.TIC_DESCRIPTION;
+					if(ion == ISignal.TOTAL_INTENSITY) {
+						text = ISignal.TOTAL_INTENSITY_DESCRIPTION;
 					} else {
 						text = decimalFormat.format(ion);
 					}
