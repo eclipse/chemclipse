@@ -36,11 +36,11 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.support.PeakQuantitation;
 import org.eclipse.chemclipse.model.support.PeakQuantitations;
 import org.eclipse.chemclipse.model.support.PeakQuantitationsExtractor;
@@ -48,7 +48,6 @@ import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
@@ -499,23 +498,20 @@ public class ReportWriter1 {
 
 		List<IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
 		for(IIntegrationEntry integrationEntry : integrationEntries) {
-			if(integrationEntry instanceof IIntegrationEntryMSD) {
-				IIntegrationEntryMSD integrationEntryMSD = (IIntegrationEntryMSD)integrationEntry;
-				printWriter.print("[" + number + "]");
-				printWriter.print(DELIMITER);
-				/*
-				 * TIC or XIC
-				 */
-				double ion = integrationEntryMSD.getIon();
-				if(ion == AbstractIon.TIC_ION) {
-					printWriter.print(AbstractIon.TIC_DESCRIPTION);
-				} else {
-					printWriter.print(decimalFormat.format(ion));
-				}
-				printWriter.print(DELIMITER);
-				printWriter.print(decimalFormat.format(integrationEntryMSD.getIntegratedArea()));
-				printWriter.println("");
+			printWriter.print("[" + number + "]");
+			printWriter.print(DELIMITER);
+			/*
+			 * TIC or XIC
+			 */
+			double signal = integrationEntry.getSignal();
+			if(signal == ISignal.TOTAL_INTENSITY) {
+				printWriter.print(ISignal.TOTAL_INTENSITY_DESCRIPTION);
+			} else {
+				printWriter.print(decimalFormat.format(signal));
 			}
+			printWriter.print(DELIMITER);
+			printWriter.print(decimalFormat.format(integrationEntry.getIntegratedArea()));
+			printWriter.println("");
 		}
 	}
 
@@ -706,18 +702,15 @@ public class ReportWriter1 {
 			/*
 			 * TIC or XIC
 			 */
-			if(integrationEntry instanceof IIntegrationEntryMSD) {
-				IIntegrationEntryMSD integrationEntryMSD = (IIntegrationEntryMSD)integrationEntry;
-				double ion = integrationEntryMSD.getIon();
-				if(ion == AbstractIon.TIC_ION) {
-					printWriter.print(AbstractIon.TIC_DESCRIPTION);
-				} else {
-					printWriter.print(decimalFormat.format(ion));
-				}
-				printWriter.print(DELIMITER);
-				printWriter.print(decimalFormat.format(integrationEntryMSD.getIntegratedArea()));
-				printWriter.println("");
+			double signal = integrationEntry.getSignal();
+			if(signal == ISignal.TOTAL_INTENSITY) {
+				printWriter.print(ISignal.TOTAL_INTENSITY_DESCRIPTION);
+			} else {
+				printWriter.print(decimalFormat.format(signal));
 			}
+			printWriter.print(DELIMITER);
+			printWriter.print(decimalFormat.format(integrationEntry.getIntegratedArea()));
+			printWriter.println("");
 		}
 	}
 
@@ -789,8 +782,8 @@ public class ReportWriter1 {
 			 */
 			double signal = quantitationEntry.getSignal();
 			printWriter.print(DELIMITER);
-			if(signal == IQuantitationSignal.TIC_SIGNAL) {
-				printWriter.print(IQuantitationSignal.TIC_DESCRIPTION);
+			if(signal == ISignal.TOTAL_INTENSITY) {
+				printWriter.print(ISignal.TOTAL_INTENSITY_DESCRIPTION);
 			} else {
 				printWriter.print(decimalFormat.format(signal));
 			}
