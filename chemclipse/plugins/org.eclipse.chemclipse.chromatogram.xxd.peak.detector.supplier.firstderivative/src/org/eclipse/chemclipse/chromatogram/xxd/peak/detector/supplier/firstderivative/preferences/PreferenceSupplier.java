@@ -108,7 +108,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static PeakDetectorSettingsMSD getPeakDetectorMSDSettings() {
+	public static PeakDetectorSettingsMSD getPeakDetectorSettingsMSD() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		PeakDetectorSettingsMSD peakDetectorSettings = new PeakDetectorSettingsMSD();

@@ -93,7 +93,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		if(peakDetectorSettings == null)
-			peakDetectorSettings = PreferenceSupplier.getPeakDetectorMSDSettings();
+			peakDetectorSettings = PreferenceSupplier.getPeakDetectorSettingsMSD();
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);
 	}
 
