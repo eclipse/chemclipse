@@ -80,6 +80,7 @@ public class ExtendedSequenceListUI {
 	private String initialDataPath = "";
 	private ISequence<? extends ISequenceRecord> sequence;
 	private ChromatogramTypeSupportUI chromatogramTypeSupport = new ChromatogramTypeSupportUI();
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ExtendedSequenceListUI(Composite parent) {
 		initialize(parent);
@@ -365,6 +366,11 @@ public class ExtendedSequenceListUI {
 				Table table = sequenceListUI.getTable();
 				int[] indices = table.getSelectionIndices();
 				List<File> files = new ArrayList<>();
+				//
+				String chromatogramProcessMethod = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_LOAD_PROCESS_METHOD);
+				if(!"".equals(chromatogramProcessMethod)) {
+					// MessageDialog.openWarning(e.display.getActiveShell(), "Batch Open", "A default chromatogram processing method is currently set.");
+				}
 				//
 				for(int index : indices) {
 					Object object = table.getItem(index).getData();
