@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.fieldeditors;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -56,6 +58,9 @@ public class TargetFieldEditor extends FieldEditor {
 	//
 	private static final int NUMBER_COLUMNS = 2;
 	private static final int WARN_NUMBER_IMPORT_ENTRIES = 500;
+	private static final String FILTER_EXTENSION = "*.txt";
+	private static final String FILTER_NAME = "Target List (*.txt)";
+	private static final String FILE_NAME = "TargetList.txt";
 	//
 	private Composite composite;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -139,10 +144,12 @@ public class TargetFieldEditor extends FieldEditor {
 		composite.setLayoutData(gridData);
 		//
 		setButtonLayoutData(createButtonAdd(composite));
-		setButtonLayoutData(createButtonImport(composite));
 		setButtonLayoutData(createButtonEdit(composite));
 		setButtonLayoutData(createButtonRemove(composite));
 		setButtonLayoutData(createButtonRemoveAll(composite));
+		setButtonLayoutData(createButtonImportDB(composite));
+		setButtonLayoutData(createButtonImport(composite));
+		setButtonLayoutData(createButtonExport(composite));
 	}
 
 	private Button createButtonAdd(Composite parent) {
@@ -169,82 +176,6 @@ public class TargetFieldEditor extends FieldEditor {
 		return button;
 	}
 
-	private Button createButtonImport(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Import");
-		button.setToolTipText("Import a target template(s) from a library.");
-		button.addSelectionListener(new SelectionAdapter() {
-
-			public void widgetSelected(SelectionEvent e) {
-
-				try {
-					DatabaseConverterSupport databaseConverterSupport = DatabaseConverter.getDatabaseConverterSupport();
-					FileDialog fileDialog = new FileDialog(e.display.getActiveShell(), SWT.READ_ONLY);
-					fileDialog.setText("Select a library to import");
-					fileDialog.setFilterExtensions(databaseConverterSupport.getFilterExtensions());
-					fileDialog.setFilterNames(databaseConverterSupport.getFilterNames());
-					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER));
-					String pathname = fileDialog.open();
-					if(pathname != null) {
-						//
-						File file = new File(pathname);
-						String path = file.getParentFile().getAbsolutePath();
-						preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
-						//
-						ProgressMonitorDialog dialog = new ProgressMonitorDialog(e.display.getActiveShell());
-						DatabaseImportRunnable databaseImportRunnable = new DatabaseImportRunnable(file);
-						try {
-							dialog.run(false, false, databaseImportRunnable);
-							IMassSpectra massSpectra = databaseImportRunnable.getMassSpectra();
-							if(massSpectra.size() > WARN_NUMBER_IMPORT_ENTRIES) {
-								if(MessageDialog.openQuestion(e.display.getActiveShell(), "Import", "Do you really want to import " + massSpectra.size() + " target entries?")) {
-									addTargetTemplates(massSpectra);
-								}
-							} else {
-								addTargetTemplates(massSpectra);
-							}
-							setTableViewerInput();
-						} catch(InvocationTargetException e1) {
-							logger.warn(e1);
-						} catch(InterruptedException e1) {
-							logger.warn(e1);
-						}
-					}
-				} catch(NoConverterAvailableException e1) {
-					logger.warn(e1);
-				}
-			}
-		});
-		//
-		return button;
-	}
-
-	private void addTargetTemplates(IMassSpectra massSpectra) {
-
-		for(IScanMSD scanMSD : massSpectra.getList()) {
-			if(scanMSD instanceof ILibraryMassSpectrum) {
-				/*
-				 * Get the library
-				 */
-				ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)scanMSD;
-				ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
-				/*
-				 * Transfer the target
-				 */
-				ITargetTemplate targetTemplate = new TargetTemplate();
-				targetTemplate.setName(libraryInformation.getName());
-				targetTemplate.setCasNumber(libraryInformation.getCasNumber());
-				targetTemplate.setComments(libraryInformation.getComments());
-				targetTemplate.setContributor(libraryInformation.getContributor());
-				targetTemplate.setReferenceId(libraryInformation.getReferenceIdentifier());
-				//
-				targetTemplates.add(targetTemplate);
-			}
-		}
-		setTableViewerInput();
-	}
-
 	private Button createButtonEdit(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -257,8 +188,11 @@ public class TargetFieldEditor extends FieldEditor {
 				IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListUI.getSelection();
 				Object object = structuredSelection.getFirstElement();
 				if(object instanceof ITargetTemplate) {
+					Set<String> keySetEdit = new HashSet<>();
+					keySetEdit.addAll(targetTemplates.keySet());
 					ITargetTemplate targetTemplate = (ITargetTemplate)object;
-					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Target", "Edit the target.", targetTemplates.extractTargetTemplate(targetTemplate), new TargetTemplateInputValidator(targetTemplates.keySet()));
+					keySetEdit.remove(targetTemplate.getName());
+					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Target", "Edit the target.", targetTemplates.extractTargetTemplate(targetTemplate), new TargetTemplateInputValidator(keySetEdit));
 					if(IDialogConstants.OK_ID == dialog.open()) {
 						String item = dialog.getValue();
 						ITargetTemplate targetTemplateNew = targetTemplates.extractTargetTemplate(item);
@@ -319,6 +253,143 @@ public class TargetFieldEditor extends FieldEditor {
 		});
 		//
 		return button;
+	}
+
+	private Button createButtonImportDB(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("Import Library");
+		button.setToolTipText("Import a target template(s) from a library.");
+		button.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+
+				try {
+					DatabaseConverterSupport databaseConverterSupport = DatabaseConverter.getDatabaseConverterSupport();
+					FileDialog fileDialog = new FileDialog(e.display.getActiveShell(), SWT.READ_ONLY);
+					fileDialog.setText("Select a library to import");
+					fileDialog.setFilterExtensions(databaseConverterSupport.getFilterExtensions());
+					fileDialog.setFilterNames(databaseConverterSupport.getFilterNames());
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER));
+					String pathname = fileDialog.open();
+					if(pathname != null) {
+						//
+						File file = new File(pathname);
+						String path = file.getParentFile().getAbsolutePath();
+						preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
+						//
+						ProgressMonitorDialog dialog = new ProgressMonitorDialog(e.display.getActiveShell());
+						DatabaseImportRunnable databaseImportRunnable = new DatabaseImportRunnable(file);
+						try {
+							dialog.run(false, false, databaseImportRunnable);
+							IMassSpectra massSpectra = databaseImportRunnable.getMassSpectra();
+							if(massSpectra.size() > WARN_NUMBER_IMPORT_ENTRIES) {
+								if(MessageDialog.openQuestion(e.display.getActiveShell(), "Import", "Do you really want to import " + massSpectra.size() + " target entries?")) {
+									addTargetTemplates(massSpectra);
+								}
+							} else {
+								addTargetTemplates(massSpectra);
+							}
+							setTableViewerInput();
+						} catch(InvocationTargetException e1) {
+							logger.warn(e1);
+						} catch(InterruptedException e1) {
+							logger.warn(e1);
+						}
+					}
+				} catch(NoConverterAvailableException e1) {
+					logger.warn(e1);
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonImport(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("Import");
+		button.setToolTipText("Import a target list.");
+		button.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+
+				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+				fileDialog.setText("Target List");
+				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{FILTER_NAME});
+				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER));
+				String pathname = fileDialog.open();
+				if(pathname != null) {
+					File file = new File(pathname);
+					String path = file.getParentFile().getAbsolutePath();
+					preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
+					targetTemplates.importItems(file);
+					setTableViewerInput();
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonExport(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("Export");
+		button.setToolTipText("Export the target list.");
+		button.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+
+				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+				fileDialog.setOverwrite(true);
+				fileDialog.setText("Target List");
+				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{FILTER_NAME});
+				fileDialog.setFileName(FILE_NAME);
+				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER));
+				String pathname = fileDialog.open();
+				if(pathname != null) {
+					File file = new File(pathname);
+					String path = file.getParentFile().getAbsolutePath();
+					preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
+					if(targetTemplates.exportItems(file)) {
+						MessageDialog.openInformation(button.getShell(), "Target List", "The target list has been exported successfully.");
+					} else {
+						MessageDialog.openWarning(button.getShell(), "Target List", "Something went wrong to export the target list.");
+					}
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private void addTargetTemplates(IMassSpectra massSpectra) {
+
+		for(IScanMSD scanMSD : massSpectra.getList()) {
+			if(scanMSD instanceof ILibraryMassSpectrum) {
+				/*
+				 * Get the library
+				 */
+				ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)scanMSD;
+				ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
+				/*
+				 * Transfer the target
+				 */
+				ITargetTemplate targetTemplate = new TargetTemplate();
+				targetTemplate.setName(libraryInformation.getName());
+				targetTemplate.setCasNumber(libraryInformation.getCasNumber());
+				targetTemplate.setComments(libraryInformation.getComments());
+				targetTemplate.setContributor(libraryInformation.getContributor());
+				targetTemplate.setReferenceId(libraryInformation.getReferenceIdentifier());
+				//
+				targetTemplates.add(targetTemplate);
+			}
+		}
+		setTableViewerInput();
 	}
 
 	private void setTableViewerInput() {

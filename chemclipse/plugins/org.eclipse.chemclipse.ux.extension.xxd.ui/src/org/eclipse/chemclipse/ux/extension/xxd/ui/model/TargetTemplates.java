@@ -11,9 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.model;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.ITargetTemplate;
 import org.eclipse.chemclipse.model.identifier.TargetTemplate;
 import org.eclipse.chemclipse.support.util.TargetListUtil;
@@ -21,6 +28,8 @@ import org.eclipse.chemclipse.support.util.TargetListUtil;
 public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 
 	private static final long serialVersionUID = -439374805911311705L;
+	private static final Logger logger = Logger.getLogger(TargetTemplates.class);
+	//
 	private TargetListUtil targetListUtil = new TargetListUtil();
 
 	public void add(ITargetTemplate targetTemplate) {
@@ -52,6 +61,45 @@ public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 			}
 		}
 		return builder.toString().trim();
+	}
+
+	public void importItems(File file) {
+
+		try {
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+			String line;
+			while((line = bufferedReader.readLine()) != null) {
+				ITargetTemplate template = extractTargetTemplate(line);
+				if(template != null) {
+					add(template);
+				}
+			}
+			bufferedReader.close();
+		} catch(FileNotFoundException e) {
+			logger.warn(e);
+		} catch(IOException e) {
+			logger.warn(e);
+		}
+	}
+
+	public boolean exportItems(File file) {
+
+		try {
+			PrintWriter printWriter = new PrintWriter(file);
+			Iterator<ITargetTemplate> iterator = values().iterator();
+			while(iterator.hasNext()) {
+				StringBuilder builder = new StringBuilder();
+				ITargetTemplate template = iterator.next();
+				extractTargetTemplate(template, builder);
+				printWriter.println(builder.toString());
+			}
+			printWriter.flush();
+			printWriter.close();
+			return true;
+		} catch(FileNotFoundException e) {
+			logger.warn(e);
+			return false;
+		}
 	}
 
 	private void loadSettings(String targetTemplates) {
