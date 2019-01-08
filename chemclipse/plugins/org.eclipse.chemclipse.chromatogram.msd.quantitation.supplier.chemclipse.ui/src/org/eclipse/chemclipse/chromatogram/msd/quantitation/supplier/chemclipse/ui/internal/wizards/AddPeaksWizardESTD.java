@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.io.DatabaseSupport;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -105,13 +107,17 @@ public class AddPeaksWizardESTD extends Wizard {
 								quantitationCompound.setChemicalClass(page.getChemicalClass());
 								//
 								IRetentionTimeWindow retentionTimeWindow = quantitationCompound.getRetentionTimeWindow();
-								retentionTimeWindow.setAllowedNegativeDeviation(1500); // Default
-								retentionTimeWindow.setAllowedPositiveDeviation(1500); // Default
+								if(retentionTime > 0) {
+									retentionTimeWindow.setAllowedNegativeDeviation((int)(PreferenceSupplier.getRetentionTimeNegativeDeviation() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+									retentionTimeWindow.setAllowedPositiveDeviation((int)(PreferenceSupplier.getRetentionTimePositiveDeviation() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+								}
 								//
 								IRetentionIndexWindow retentionIndexWindow = quantitationCompound.getRetentionIndexWindow();
 								retentionIndexWindow.setRetentionIndex(retentionIndex);
-								retentionIndexWindow.setAllowedNegativeDeviation(10); // Default
-								retentionIndexWindow.setAllowedPositiveDeviation(10); // Default
+								if(retentionIndex > 0) {
+									retentionIndexWindow.setAllowedNegativeDeviation(PreferenceSupplier.getRetentionIndexNegativeDeviation());
+									retentionIndexWindow.setAllowedPositiveDeviation(PreferenceSupplier.getRetentionIndexPositiveDeviation());
+								}
 								//
 								IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD((IPeakMSD)peak, concentration, concentrationUnit);
 								quantitationCompound.getQuantitationPeaks().add(quantitationPeakMSD);
