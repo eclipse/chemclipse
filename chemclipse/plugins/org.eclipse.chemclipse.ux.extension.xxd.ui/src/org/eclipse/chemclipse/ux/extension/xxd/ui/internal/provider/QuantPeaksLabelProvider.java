@@ -22,11 +22,14 @@ import org.eclipse.swt.graphics.Image;
 
 public class QuantPeaksLabelProvider extends AbstractChemClipseLabelProvider {
 
+	public static final String CONCENTRATION = "Concentration";
+	public static final String CONCENTRATION_UNIT = "Unit";
+	//
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
 	public static final String[] TITLES = { //
-			"Concentration", //
-			"Concentration Unit", //
+			CONCENTRATION, //
+			CONCENTRATION_UNIT, //
 			"Type" //
 	};
 	//

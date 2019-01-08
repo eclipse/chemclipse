@@ -46,6 +46,12 @@ public abstract class AbstractQuantitationPeak implements IQuantitationPeak {
 	}
 
 	@Override
+	public void setConcentrationUnit(String concentrationUnit) {
+
+		this.concentrationUnit = concentrationUnit;
+	}
+
+	@Override
 	public IPeak getReferencePeak() {
 
 		return referencePeak;

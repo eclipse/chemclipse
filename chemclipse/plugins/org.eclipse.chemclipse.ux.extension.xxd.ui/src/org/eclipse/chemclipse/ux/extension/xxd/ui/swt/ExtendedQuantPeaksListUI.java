@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaksAxes;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -28,10 +29,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 public class ExtendedQuantPeaksListUI extends Composite {
 
 	private static final String DESCRIPTION = "Quantitation Peaks";
+	//
+	private Composite toolbarInfo;
+	private Label labelInfo;
 	//
 	private IQuantitationCompound quantitationCompound;
 	private QuantPeakListUI quantPeakListUI;
@@ -44,7 +49,7 @@ public class ExtendedQuantPeaksListUI extends Composite {
 	public void update(IQuantitationCompound quantitationCompound) {
 
 		this.quantitationCompound = quantitationCompound;
-		setQuantitationCompound();
+		updateInput();
 	}
 
 	private void createControl() {
@@ -55,7 +60,11 @@ public class ExtendedQuantPeaksListUI extends Composite {
 		composite.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(composite);
+		toolbarInfo = createToolbarInfo(composite);
 		createTable(composite);
+		//
+		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		quantPeakListUI.setEditEnabled(false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -64,9 +73,10 @@ public class ExtendedQuantPeaksListUI extends Composite {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 		//
 		createResponseTableButton(composite);
+		createButtonToggleEditModus(composite);
 		createSettingsButton(composite);
 	}
 
@@ -93,6 +103,26 @@ public class ExtendedQuantPeaksListUI extends Composite {
 				}
 			}
 		});
+	}
+
+	private Button createButtonToggleEditModus(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Enable/disable to edit the table.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean editEnabled = !quantPeakListUI.isEditEnabled();
+				quantPeakListUI.setEditEnabled(editEnabled);
+				updateInput();
+			}
+		});
+		//
+		return button;
 	}
 
 	private void createSettingsButton(Composite parent) {
@@ -123,6 +153,20 @@ public class ExtendedQuantPeaksListUI extends Composite {
 		});
 	}
 
+	private Composite createToolbarInfo(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, false));
+		//
+		labelInfo = new Label(composite, SWT.NONE);
+		labelInfo.setText("");
+		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return composite;
+	}
+
 	private void createTable(Composite parent) {
 
 		quantPeakListUI = new QuantPeakListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
@@ -131,12 +175,14 @@ public class ExtendedQuantPeaksListUI extends Composite {
 
 	private void applySettings() {
 
-		setQuantitationCompound();
+		updateInput();
 	}
 
-	private void setQuantitationCompound() {
+	private void updateInput() {
 
 		if(quantitationCompound != null) {
+			String editInformation = quantPeakListUI.isEditEnabled() ? "(Edit is enabled)" : "(Edit is disabled)";
+			labelInfo.setText("Quantitation Compound: " + quantitationCompound.getName() + " " + editInformation);
 			quantPeakListUI.setInput(quantitationCompound.getQuantitationPeaks());
 		} else {
 			quantPeakListUI.clear();

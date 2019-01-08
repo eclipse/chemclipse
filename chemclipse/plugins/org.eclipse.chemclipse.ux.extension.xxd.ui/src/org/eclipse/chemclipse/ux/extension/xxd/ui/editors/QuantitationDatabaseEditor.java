@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.quantitation.QuantDBConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
+import org.eclipse.chemclipse.model.handler.ISaveHandler;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
@@ -162,6 +163,14 @@ public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implem
 			public void setDirty(boolean dirty) {
 
 				dirtyable.setDirty(dirty);
+			}
+		});
+		extendedQuantCompoundListUI.setSaveHandler(new ISaveHandler() {
+
+			@Override
+			public void doSave() {
+
+				save();
 			}
 		});
 	}

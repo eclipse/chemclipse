@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
+import org.eclipse.chemclipse.model.handler.ISaveHandler;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -79,6 +80,7 @@ public class ExtendedQuantCompoundListUI {
 	private Text textSignal;
 	private Button buttonAdd;
 	private Button buttonDelete;
+	private Button buttonSave;
 	private Composite toolbarSearch;
 	private SearchSupportUI searchSupportUI;
 	private QuantCompoundListUI quantCompoundListUI;
@@ -88,6 +90,7 @@ public class ExtendedQuantCompoundListUI {
 	//
 	private IQuantitationDatabase quantitationDatabase = null;
 	private IModificationHandler modificationHandler = null;
+	private ISaveHandler saveHandler = null;
 
 	public ExtendedQuantCompoundListUI(Composite parent) {
 		initialize(parent);
@@ -96,6 +99,11 @@ public class ExtendedQuantCompoundListUI {
 	public void setModificationHandler(IModificationHandler modificationHandler) {
 
 		this.modificationHandler = modificationHandler;
+	}
+
+	public void setSaveHandler(ISaveHandler saveHandler) {
+
+		this.saveHandler = saveHandler;
 	}
 
 	public void update(IQuantitationDatabase quantitationDatabase) {
@@ -132,7 +140,7 @@ public class ExtendedQuantCompoundListUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(9, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarHeader(composite);
@@ -140,6 +148,7 @@ public class ExtendedQuantCompoundListUI {
 		createResponseTableButton(composite);
 		createButtonToggleEditModus(composite);
 		createButtonToggleToolbarSearch(composite);
+		buttonSave = createSaveButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
 	}
@@ -473,6 +482,26 @@ public class ExtendedQuantCompoundListUI {
 		return button;
 	}
 
+	private Button createSaveButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Save");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(saveHandler != null) {
+					saveHandler.doSave();
+				}
+			}
+		});
+		//
+		return button;
+	}
+
 	private void createResetButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -695,6 +724,7 @@ public class ExtendedQuantCompoundListUI {
 
 	private void updateWidgets() {
 
+		buttonSave.setEnabled((saveHandler == null) ? false : true);
 		boolean enabled = (quantitationDatabase == null) ? false : true;
 		textSignal.setEnabled(enabled);
 		buttonAdd.setEnabled(enabled);

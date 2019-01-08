@@ -23,5 +23,7 @@ public interface IQuantitationPeak extends Serializable {
 
 	String getConcentrationUnit();
 
+	void setConcentrationUnit(String concentrationUnit);
+
 	IPeak getReferencePeak();
 }
