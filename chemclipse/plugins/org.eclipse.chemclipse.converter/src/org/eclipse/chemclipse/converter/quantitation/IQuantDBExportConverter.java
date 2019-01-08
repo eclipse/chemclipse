@@ -13,12 +13,12 @@ package org.eclipse.chemclipse.converter.quantitation;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.converter.core.IImportConverter;
+import org.eclipse.chemclipse.converter.core.IExportConverter;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public interface IQuantDBExportConverter extends IImportConverter {
+public interface IQuantDBExportConverter extends IExportConverter {
 
 	IProcessingInfo convert(File file, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor);
 }
