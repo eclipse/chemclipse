@@ -98,8 +98,8 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 
 		dataOutputStream.writeInt(concentrationResponseEntriesMSD.size());
 		for(IResponseSignal concentrationResponseEntryMSD : concentrationResponseEntriesMSD) {
-			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getConcentration());
 			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getSignal());
+			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getConcentration());
 			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getResponse());
 		}
 	}

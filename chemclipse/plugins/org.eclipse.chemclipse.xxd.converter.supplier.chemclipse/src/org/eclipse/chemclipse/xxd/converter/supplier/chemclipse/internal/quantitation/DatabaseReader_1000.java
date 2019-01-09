@@ -157,10 +157,10 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		List<IResponseSignal> concentrationResponseEntriesMSD = new ArrayList<IResponseSignal>();
 		int size = dataInputStream.readInt();
 		for(int i = 0; i < size; i++) {
-			double ion = dataInputStream.readDouble();
+			double signal = dataInputStream.readDouble();
 			double concentration = dataInputStream.readDouble();
 			double response = dataInputStream.readDouble();
-			IResponseSignal concentrationResponseEntryMSD = new ResponseSignal(ion, concentration, response);
+			IResponseSignal concentrationResponseEntryMSD = new ResponseSignal(signal, concentration, response);
 			concentrationResponseEntriesMSD.add(concentrationResponseEntryMSD);
 		}
 		return concentrationResponseEntriesMSD;
@@ -171,11 +171,11 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		List<IQuantitationSignal> quantitationSignalsMSD = new ArrayList<IQuantitationSignal>();
 		int size = dataInputStream.readInt();
 		for(int i = 0; i < size; i++) {
-			double ion = dataInputStream.readDouble();
+			double signal = dataInputStream.readDouble();
 			float relativeResponse = dataInputStream.readFloat();
 			double uncertainty = dataInputStream.readDouble();
 			boolean use = dataInputStream.readBoolean();
-			IQuantitationSignal quantitationSignalMSD = new QuantitationSignal(ion, relativeResponse, uncertainty, use);
+			IQuantitationSignal quantitationSignalMSD = new QuantitationSignal(signal, relativeResponse, uncertainty, use);
 			quantitationSignalsMSD.add(quantitationSignalMSD);
 		}
 		return quantitationSignalsMSD;
