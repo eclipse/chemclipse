@@ -288,7 +288,7 @@ public class ExtendedTargetsUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Enable/disable to edit the table.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -296,6 +296,7 @@ public class ExtendedTargetsUI {
 
 				boolean editEnabled = !targetListUI.isEditEnabled();
 				targetListUI.setEditEnabled(editEnabled);
+				button.setImage(ApplicationImageFactory.getInstance().getImage((editEnabled) ? IApplicationImage.IMAGE_EDIT_ENTRY_ACTIVE : IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
 				updateInput();
 			}
 		});

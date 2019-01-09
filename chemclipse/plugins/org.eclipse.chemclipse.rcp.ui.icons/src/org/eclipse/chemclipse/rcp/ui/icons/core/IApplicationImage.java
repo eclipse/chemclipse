@@ -309,6 +309,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_INTERNAL_STANDARDS_ACTIVE = "internalStandardsActive.gif";
 	String IMAGE_EXTERNAL_STANDARDS_DEFAULT = "externalStandardsDefault.gif";
 	String IMAGE_EXTERNAL_STANDARDS_ACTIVE = "externalStandardsActive.gif";
+	String IMAGE_EDIT_ENTRY_DEFAULT = "editEntryDefault.gif";
+	String IMAGE_EDIT_ENTRY_ACTIVE = "editEntryActive.gif";
 	//
 	String IMAGE_PROCESS_CONTROL = "processControl.gif";
 	String IMAGE_START_PROCESSING = "startProcessing.gif";

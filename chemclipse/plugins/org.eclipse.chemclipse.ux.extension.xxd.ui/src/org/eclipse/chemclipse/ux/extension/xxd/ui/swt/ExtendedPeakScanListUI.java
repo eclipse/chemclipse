@@ -164,6 +164,8 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 		PartSupport.setCompositeVisibility(toolbarInfoTop, true);
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
 		PartSupport.setCompositeVisibility(toolbarInfoBottom, true);
+		//
+		peakScanListUI.setEditEnabled(false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -582,7 +584,7 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Enable/disable to edit the table.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -590,6 +592,7 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 
 				boolean editEnabled = !peakScanListUI.isEditEnabled();
 				peakScanListUI.setEditEnabled(editEnabled);
+				button.setImage(ApplicationImageFactory.getInstance().getImage((editEnabled) ? IApplicationImage.IMAGE_EDIT_ENTRY_ACTIVE : IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
 				updateLabel();
 			}
 		});
