@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
 
 import junit.framework.TestCase;
 
-public class QuantitationSignalMSD_1_Test extends TestCase {
+public class QuantitationSignal_1_Test extends TestCase {
 
 	private IQuantitationSignal quantitationSignal;
 

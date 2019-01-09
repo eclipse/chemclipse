@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 
-public class QuantitationCompoundMSD_3_Test extends ReferencePeakMSDTestCase {
+public class QuantitationCompound_3_Test extends ReferencePeakMSDTestCase {
 
 	private IQuantitationCompound quantitationCompound;
 	private IQuantitationSignals quantitationSignals;

@@ -57,7 +57,6 @@ public abstract class AbstractQuantitationCompound implements IQuantitationCompo
 		this.name = name;
 		this.concentrationUnit = concentrationUnit;
 		retentionTimeWindow.setRetentionTime(retentionTime);
-		quantitationSignals.add(new QuantitationSignal(ISignal.TOTAL_INTENSITY, IQuantitationSignal.ABSOLUTE_RELATIVE_RESPONSE, 0.0, true));
 	}
 
 	@Override
@@ -162,6 +161,13 @@ public abstract class AbstractQuantitationCompound implements IQuantitationCompo
 	public List<IQuantitationPeak> getQuantitationPeaks() {
 
 		return quantitationPeaks;
+	}
+
+	@Override
+	public void setQuantitationSignalTIC() {
+
+		quantitationSignals.clear();
+		quantitationSignals.add(new QuantitationSignal(ISignal.TOTAL_INTENSITY, IQuantitationSignal.ABSOLUTE_RELATIVE_RESPONSE, 0.0, true));
 	}
 
 	@Override

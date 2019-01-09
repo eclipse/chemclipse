@@ -97,4 +97,10 @@ public interface IQuantitationCompound extends Serializable, Comparable<IQuantit
 	 * 
 	 */
 	void calculateSignalTablesFromPeaks();
+
+	/**
+	 * Sets the default TIC quantitation signal.
+	 * All other quantitation signals will be removed.
+	 */
+	void setQuantitationSignalTIC();
 }

@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 
 import junit.framework.TestCase;
 
-public class QuantitationCompoundMSD_2_Test extends TestCase {
+public class QuantitationCompound_2_Test extends TestCase {
 
 	private IQuantitationCompound quantitationCompound;
 

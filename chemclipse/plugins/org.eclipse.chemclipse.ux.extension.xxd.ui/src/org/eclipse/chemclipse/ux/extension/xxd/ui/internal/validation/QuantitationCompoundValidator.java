@@ -60,8 +60,12 @@ public class QuantitationCompoundValidator extends ValueParserSupport implements
 		}
 	}
 
-	public IQuantitationCompound getQuantitationCompound() {
+	public IQuantitationCompound getQuantitationCompound(boolean createDefaultSignal) {
 
-		return new QuantitationCompound(name, concentrationUnit, retentionTime);
+		IQuantitationCompound quantitationCompound = new QuantitationCompound(name, concentrationUnit, retentionTime);
+		if(createDefaultSignal) {
+			quantitationCompound.setQuantitationSignalTIC();
+		}
+		return quantitationCompound;
 	}
 }

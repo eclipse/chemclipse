@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 
 import junit.framework.TestCase;
 
-public class ConcentrationResponseEntryMSD_1_Test extends TestCase {
+public class ConcentrationResponseEntry_1_Test extends TestCase {
 
 	private IResponseSignal concentrationResponseEntry;
 

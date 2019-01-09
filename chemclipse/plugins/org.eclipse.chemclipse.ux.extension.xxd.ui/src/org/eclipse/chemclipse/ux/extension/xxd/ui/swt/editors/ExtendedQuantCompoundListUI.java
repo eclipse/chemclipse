@@ -582,7 +582,7 @@ public class ExtendedQuantCompoundListUI {
 	private void setCompound(Shell shell, QuantitationCompoundValidator validator) {
 
 		if(quantitationDatabase != null) {
-			IQuantitationCompound quantitationCompound = validator.getQuantitationCompound();
+			IQuantitationCompound quantitationCompound = validator.getQuantitationCompound(true);
 			if(quantitationCompound != null) {
 				if(quantitationDatabase.containsQuantitationCompund(quantitationCompound.getName())) {
 					MessageDialog.openError(shell, "Quantitation Compound", "The compound already exists.");

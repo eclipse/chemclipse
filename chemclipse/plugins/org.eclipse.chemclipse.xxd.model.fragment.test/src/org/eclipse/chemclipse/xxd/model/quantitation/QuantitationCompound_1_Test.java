@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 
 import junit.framework.TestCase;
 
-public class QuantitationCompoundMSD_1_Test extends TestCase {
+public class QuantitationCompound_1_Test extends TestCase {
 
 	private IQuantitationCompound quantitationCompound;
 
@@ -77,7 +77,7 @@ public class QuantitationCompoundMSD_1_Test extends TestCase {
 	public void testGetQuantitationSignals_2() {
 
 		IQuantitationSignals entries = quantitationCompound.getQuantitationSignals();
-		assertEquals(1, entries.size()); // Default TIC, 100
+		assertEquals(0, entries.size()); // Default TIC, 100
 	}
 
 	public void testGetRetentionIndexWindow_1() {

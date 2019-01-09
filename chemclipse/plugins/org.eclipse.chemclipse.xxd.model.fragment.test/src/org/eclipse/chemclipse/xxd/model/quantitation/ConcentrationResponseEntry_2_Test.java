@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 
 import junit.framework.TestCase;
 
-public class ConcentrationResponseEntryMSD_3_Test extends TestCase {
+public class ConcentrationResponseEntry_2_Test extends TestCase {
 
 	private IResponseSignal concentrationResponseEntry1;
 	private IResponseSignal concentrationResponseEntry2;
@@ -26,7 +26,7 @@ public class ConcentrationResponseEntryMSD_3_Test extends TestCase {
 
 		super.setUp();
 		concentrationResponseEntry1 = new ResponseSignal(76.2d, 0.7d, 47875);
-		concentrationResponseEntry2 = new ResponseSignal(75.2d, 0.7d, 47875);
+		concentrationResponseEntry2 = new ResponseSignal(76.2d, 0.7d, 47875);
 	}
 
 	@Override
@@ -39,31 +39,31 @@ public class ConcentrationResponseEntryMSD_3_Test extends TestCase {
 
 	public void testEquals_1() {
 
-		assertFalse(concentrationResponseEntry1.equals(concentrationResponseEntry2));
+		assertTrue(concentrationResponseEntry1.equals(concentrationResponseEntry2));
 	}
 
 	public void testEquals_2() {
 
-		assertFalse(concentrationResponseEntry2.equals(concentrationResponseEntry1));
+		assertTrue(concentrationResponseEntry2.equals(concentrationResponseEntry1));
 	}
 
 	public void testHashCode_1() {
 
-		assertTrue(concentrationResponseEntry1.hashCode() != concentrationResponseEntry2.hashCode());
+		assertEquals(concentrationResponseEntry1.hashCode(), concentrationResponseEntry2.hashCode());
 	}
 
 	public void testHashCode_2() {
 
-		assertTrue(concentrationResponseEntry2.hashCode() != concentrationResponseEntry1.hashCode());
+		assertEquals(concentrationResponseEntry2.hashCode(), concentrationResponseEntry1.hashCode());
 	}
 
 	public void testToString_1() {
 
-		assertTrue(concentrationResponseEntry1.toString() != concentrationResponseEntry2.toString());
+		assertEquals(concentrationResponseEntry1.toString(), concentrationResponseEntry2.toString());
 	}
 
 	public void testToString_2() {
 
-		assertTrue(concentrationResponseEntry2.toString() != concentrationResponseEntry1.toString());
+		assertEquals(concentrationResponseEntry2.toString(), concentrationResponseEntry1.toString());
 	}
 }
