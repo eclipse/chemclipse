@@ -15,22 +15,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.io.DatabaseSupport;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
-import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
-import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
-import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
-import org.eclipse.chemclipse.xxd.model.quantitation.QuantitationCompound;
 import org.eclipse.jface.wizard.Wizard;
 
 public class AddPeaksWizardESTD extends Wizard {
@@ -64,7 +55,8 @@ public class AddPeaksWizardESTD extends Wizard {
 		} else if(concentrationUnit == null || concentrationUnit.equals("")) {
 			showErrorMessage("Please select a concentration unit for compounds that will be created.");
 			return false;
-		} else if(concentration <= 0) {
+		} else if(concentration < 0) {
+			// < 0 to allow to add a background/noise peak
 			showErrorMessage("Please select a valid concentration.");
 			return false;
 		} else {
@@ -85,42 +77,18 @@ public class AddPeaksWizardESTD extends Wizard {
 						 * Name is not null.
 						 */
 						if(peak instanceof IPeakMSD) {
+							QuantitationCompoundSupport quantitationCompoundSupport = new QuantitationCompoundSupport();
 							if(quantitationDatabase.containsQuantitationCompund(name)) {
 								/*
-								 * Merge the quantitation peak
+								 * Merge
 								 */
-								IQuantitationCompound quantitationCompound = quantitationDatabase.getQuantitationCompound(name);
-								if(quantitationCompound != null) {
-									IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD((IPeakMSD)peak, concentration, quantitationCompound.getConcentrationUnit());
-									quantitationCompound.getQuantitationPeaks().add(quantitationPeakMSD);
-								}
+								quantitationCompoundSupport.merge(quantitationDatabase, peak, name, concentration);
 							} else {
 								/*
-								 * Add a new peak
+								 * New
 								 */
-								IPeakModel peakModel = peak.getPeakModel();
-								IScan scan = peakModel.getPeakMaximum();
-								int retentionTime = scan.getRetentionTime();
-								float retentionIndex = scan.getRetentionIndex();
-								//
-								IQuantitationCompound quantitationCompound = new QuantitationCompound(name, concentrationUnit, retentionTime);
-								quantitationCompound.setChemicalClass(page.getChemicalClass());
-								//
-								IRetentionTimeWindow retentionTimeWindow = quantitationCompound.getRetentionTimeWindow();
-								if(retentionTime > 0) {
-									retentionTimeWindow.setAllowedNegativeDeviation((int)(PreferenceSupplier.getRetentionTimeNegativeDeviation() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-									retentionTimeWindow.setAllowedPositiveDeviation((int)(PreferenceSupplier.getRetentionTimePositiveDeviation() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-								}
-								//
-								IRetentionIndexWindow retentionIndexWindow = quantitationCompound.getRetentionIndexWindow();
-								retentionIndexWindow.setRetentionIndex(retentionIndex);
-								if(retentionIndex > 0) {
-									retentionIndexWindow.setAllowedNegativeDeviation(PreferenceSupplier.getRetentionIndexNegativeDeviation());
-									retentionIndexWindow.setAllowedPositiveDeviation(PreferenceSupplier.getRetentionIndexPositiveDeviation());
-								}
-								//
-								IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD((IPeakMSD)peak, concentration, concentrationUnit);
-								quantitationCompound.getQuantitationPeaks().add(quantitationPeakMSD);
+								String chemicalClass = page.getChemicalClass();
+								IQuantitationCompound quantitationCompound = quantitationCompoundSupport.create(peak, name, concentration, concentrationUnit, chemicalClass);
 								quantitationDatabase.add(quantitationCompound);
 							}
 						}

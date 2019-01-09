@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.xxd.model.quantitation.QuantitationCompound;
 import org.eclipse.jface.wizard.Wizard;
 
 public class AddPeakWizardESTD extends Wizard {
@@ -128,18 +127,11 @@ public class AddPeakWizardESTD extends Wizard {
 					 */
 					try {
 						double concentration = decimalFormat.parse(quantitationDocumentPage.textConcentrationCreate.getText().trim()).doubleValue();
-						if(concentration > 0) {
-							int retentionTime = chromatogramPeakMSD.getPeakModel().getRetentionTimeAtPeakMaximum();
+						if(concentration >= 0) {
+							// >= 0 to allow to add a background/noise peak
+							QuantitationCompoundSupport quantitationCompoundSupport = new QuantitationCompoundSupport();
 							String chemicalClass = quantitationDocumentPage.textChemicalClassCreate.getText().trim();
-							//
-							IQuantitationCompound quantitationCompound = new QuantitationCompound(name, concentrationUnit, retentionTime);
-							quantitationCompound.setChemicalClass(chemicalClass);
-							quantitationCompound.getRetentionTimeWindow().setAllowedNegativeDeviation(1500);
-							quantitationCompound.getRetentionIndexWindow().setAllowedPositiveDeviation(1500);
-							quantitationCompound.setUseTIC(true);
-							//
-							IQuantitationPeak quantitationPeakMSD = new QuantitationPeakMSD(chromatogramPeakMSD, concentration, concentrationUnit);
-							quantitationCompound.getQuantitationPeaks().add(quantitationPeakMSD);
+							IQuantitationCompound quantitationCompound = quantitationCompoundSupport.create(chromatogramPeakMSD, name, concentration, concentrationUnit, chemicalClass);
 							quantitationDatabase.add(quantitationCompound);
 							return true;
 						} else {
