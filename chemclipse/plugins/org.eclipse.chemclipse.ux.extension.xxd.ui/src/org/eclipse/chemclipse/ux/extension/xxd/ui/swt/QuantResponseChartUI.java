@@ -465,6 +465,7 @@ public class QuantResponseChartUI extends Composite {
 		//
 		ILineSeriesData lineSeriesData = getLineSeriesData(xSeries, ySeries, label, color);
 		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+		lineSeriesSettings.setSymbolSize(6);
 		lineSeriesSettings.setSymbolType(PlotSymbolType.CROSS);
 		//
 		return lineSeriesData;

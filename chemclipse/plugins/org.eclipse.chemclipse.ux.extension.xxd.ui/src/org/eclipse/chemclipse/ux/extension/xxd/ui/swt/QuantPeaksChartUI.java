@@ -172,18 +172,29 @@ public class QuantPeaksChartUI extends Composite {
 		if(quantitationCompound != null) {
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			//
+			int counter = 1;
 			IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_PEAKS));
 			boolean enableArea = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_AREA_DISPLAY_PEAKS);
 			//
 			for(Object object : quantitationCompound.getQuantitationPeaks()) {
 				if(object instanceof IQuantitationPeak) {
+					//
 					IQuantitationPeak quantitationPeak = (IQuantitationPeak)object;
-					String label = decimalFormat.format(quantitationPeak.getConcentration()) + " " + quantitationPeak.getConcentrationUnit();
+					StringBuilder builder = new StringBuilder();
+					builder.append("P");
+					builder.append(counter);
+					builder.append(" (");
+					builder.append(decimalFormat.format(quantitationPeak.getConcentration()));
+					builder.append(" ");
+					builder.append(quantitationPeak.getConcentrationUnit());
+					builder.append(")");
 					IPeak peak = quantitationPeak.getReferencePeak();
-					ILineSeriesData lineSeriesData = peakChartSupport.getPeak(peak, false, false, colors.getColor(), label);
+					ILineSeriesData lineSeriesData = peakChartSupport.getPeak(peak, false, false, colors.getColor(), builder.toString());
 					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 					lineSeriesSettings.setEnableArea(enableArea);
 					lineSeriesDataList.add(lineSeriesData);
+					//
+					counter++;
 					colors.incrementColor();
 				}
 			}
