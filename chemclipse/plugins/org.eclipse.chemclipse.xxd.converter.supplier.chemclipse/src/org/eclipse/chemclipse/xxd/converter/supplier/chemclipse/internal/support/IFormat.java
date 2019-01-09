@@ -55,11 +55,11 @@ public interface IFormat {
 	/*
 	 * Quantitation DB (*.ocq)
 	 */
-	int QUANTITATION_DB_COMPRESSION_LEVEL = 0; // 0 - 9 => 0 no compression
-	int QUANTITATION_DB_COMPRESSION_TYPE = ZipOutputStream.DEFLATED;
+	int QUANTDB_COMPRESSION_LEVEL = 0; // 0 - 9 => 0 no compression
+	int QUANTDB_COMPRESSION_TYPE = ZipOutputStream.DEFLATED;
 	//
-	String QUANTITATION_DB_VERSION_0001 = "0.0.0.1";
-	String QUANTITATION_DB_VERSION_LATEST = QUANTITATION_DB_VERSION_0001;
+	String QUANTDB_VERSION_0001 = "0.0.0.1";
+	String QUANTDB_VERSION_LATEST = QUANTDB_VERSION_0001;
 	//
 	String DIR_SEPARATOR = "/";
 	String WSD = "WSD";
@@ -180,4 +180,11 @@ public interface IFormat {
 	 * Process Method
 	 */
 	String FILE_PROCESS_METHOD = "PROCESS_METHOD";
+	/*
+	 * MSD
+	 */
+	String QUANTDB = "QUANTDB";
+	String QUANTITATION_DATABASE = "QUANTITATION_DATABASE";
+	String DIR_QUANTDB = QUANTDB + DIR_SEPARATOR;
+	String FILE_QUANTDB = DIR_QUANTDB + QUANTITATION_DATABASE;
 }

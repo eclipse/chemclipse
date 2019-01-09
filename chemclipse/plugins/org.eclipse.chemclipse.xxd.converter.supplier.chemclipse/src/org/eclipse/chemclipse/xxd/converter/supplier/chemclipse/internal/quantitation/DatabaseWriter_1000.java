@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.quantitation;
 
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -42,44 +45,112 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 public class DatabaseWriter_1000 implements IDatabaseWriter {
 
 	@Override
 	public void convert(File file, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor) throws IOException {
 
-		System.out.println("Operator: " + quantitationDatabase.getOperator());
-		System.out.println("Description: " + quantitationDatabase.getDescription());
+		/*
+		 * ZIP
+		 */
+		FileOutputStream fileOutputStream = new FileOutputStream(file);
+		ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(fileOutputStream));
+		zipOutputStream.setLevel(PreferenceSupplier.getChromatogramCompressionLevel());
+		zipOutputStream.setMethod(IFormat.QUANTDB_COMPRESSION_TYPE);
+		/*
+		 * Write the data.
+		 */
+		writeDatabase(zipOutputStream, "", quantitationDatabase, monitor);
+		/*
+		 * Flush and close the output stream.
+		 */
+		zipOutputStream.flush();
+		zipOutputStream.close();
+	}
+
+	private void writeDatabase(ZipOutputStream zipOutputStream, String directoryPrefix, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor) throws IOException {
+
+		writeVersion(zipOutputStream, directoryPrefix, monitor);
+		writeDatabaseFolder(zipOutputStream, directoryPrefix, quantitationDatabase, monitor);
+	}
+
+	private void writeVersion(ZipOutputStream zipOutputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException {
+
+		ZipEntry zipEntry;
+		DataOutputStream dataOutputStream;
+		/*
+		 * Version
+		 */
+		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_VERSION);
+		zipOutputStream.putNextEntry(zipEntry);
+		dataOutputStream = new DataOutputStream(zipOutputStream);
+		String version = IFormat.QUANTDB_VERSION_0001;
+		dataOutputStream.writeInt(version.length()); // Length Version
+		dataOutputStream.writeChars(version); // Version
 		//
-		DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file));
+		dataOutputStream.flush();
+		zipOutputStream.closeEntry();
+	}
+
+	private void writeDatabaseFolder(ZipOutputStream zipOutputStream, String directoryPrefix, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor) throws IOException {
+
+		ZipEntry zipEntry = new ZipEntry(directoryPrefix + IFormat.DIR_QUANTDB);
+		zipOutputStream.putNextEntry(zipEntry);
+		zipOutputStream.closeEntry();
 		//
-		dataOutputStream.writeInt(quantitationDatabase.size());
-		for(IQuantitationCompound quantitationCompound : quantitationDatabase) {
-			/*
-			 * Write the data.
-			 */
-			writeString(dataOutputStream, quantitationCompound.getName());
-			writeString(dataOutputStream, quantitationCompound.getConcentrationUnit());
-			writeString(dataOutputStream, quantitationCompound.getCalibrationMethod().toString());
-			writeString(dataOutputStream, quantitationCompound.getChemicalClass());
-			dataOutputStream.writeBoolean(quantitationCompound.isCrossZero());
-			dataOutputStream.writeBoolean(quantitationCompound.isUseTIC());
+		writeContent(zipOutputStream, directoryPrefix, quantitationDatabase, monitor);
+	}
+
+	private void writeContent(ZipOutputStream zipOutputStream, String directoryPrefix, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor) throws IOException {
+
+		int size = quantitationDatabase.size();
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Database", size);
+		//
+		try {
+			ZipEntry zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_QUANTDB);
+			zipOutputStream.putNextEntry(zipEntry);
+			DataOutputStream dataOutputStream = new DataOutputStream(zipOutputStream);
 			//
-			List<IQuantitationPeak> quantitationPeaks = quantitationCompound.getQuantitationPeaks();
-			writeQuantitationPeaks(dataOutputStream, quantitationPeaks);
+			writeString(dataOutputStream, quantitationDatabase.getOperator());
+			writeString(dataOutputStream, quantitationDatabase.getDescription());
+			dataOutputStream.writeInt(size);
 			//
-			IResponseSignals concentrationResponseEntriesMSD = quantitationCompound.getResponseSignals();
-			writeConcentrationResponseEntries(dataOutputStream, concentrationResponseEntriesMSD);
+			for(IQuantitationCompound quantitationCompound : quantitationDatabase) {
+				//
+				writeString(dataOutputStream, quantitationCompound.getName());
+				writeString(dataOutputStream, quantitationCompound.getConcentrationUnit());
+				writeString(dataOutputStream, quantitationCompound.getCalibrationMethod().toString());
+				writeString(dataOutputStream, quantitationCompound.getChemicalClass());
+				dataOutputStream.writeBoolean(quantitationCompound.isCrossZero());
+				dataOutputStream.writeBoolean(quantitationCompound.isUseTIC());
+				//
+				List<IQuantitationPeak> quantitationPeaks = quantitationCompound.getQuantitationPeaks();
+				writeQuantitationPeaks(dataOutputStream, quantitationPeaks);
+				//
+				IResponseSignals concentrationResponseEntriesMSD = quantitationCompound.getResponseSignals();
+				writeResponseSignals(dataOutputStream, concentrationResponseEntriesMSD);
+				//
+				IQuantitationSignals quantitationSignalsMSD = quantitationCompound.getQuantitationSignals();
+				writeQuantitationSignals(dataOutputStream, quantitationSignalsMSD);
+				//
+				IRetentionIndexWindow retentionIndexWindow = quantitationCompound.getRetentionIndexWindow();
+				writeRetentionIndexWindow(dataOutputStream, retentionIndexWindow);
+				//
+				IRetentionTimeWindow retentionTimeWindow = quantitationCompound.getRetentionTimeWindow();
+				writeRetentionTimeWindow(dataOutputStream, retentionTimeWindow);
+				//
+				subMonitor.worked(1);
+			}
 			//
-			IQuantitationSignals quantitationSignalsMSD = quantitationCompound.getQuantitationSignals();
-			writeQuantitationSignals(dataOutputStream, quantitationSignalsMSD);
-			//
-			IRetentionIndexWindow retentionIndexWindow = quantitationCompound.getRetentionIndexWindow();
-			writeRetentionIndexWindow(dataOutputStream, retentionIndexWindow);
-			//
-			IRetentionTimeWindow retentionTimeWindow = quantitationCompound.getRetentionTimeWindow();
-			writeRetentionTimeWindow(dataOutputStream, retentionTimeWindow);
+			dataOutputStream.flush();
+			zipOutputStream.closeEntry();
+		} finally {
+			SubMonitor.done(subMonitor);
 		}
 	}
 
@@ -94,24 +165,24 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 		}
 	}
 
-	private static void writeConcentrationResponseEntries(DataOutputStream dataOutputStream, IResponseSignals concentrationResponseEntriesMSD) throws IOException {
+	private static void writeResponseSignals(DataOutputStream dataOutputStream, IResponseSignals responseSignals) throws IOException {
 
-		dataOutputStream.writeInt(concentrationResponseEntriesMSD.size());
-		for(IResponseSignal concentrationResponseEntryMSD : concentrationResponseEntriesMSD) {
-			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getSignal());
-			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getConcentration());
-			dataOutputStream.writeDouble(concentrationResponseEntryMSD.getResponse());
+		dataOutputStream.writeInt(responseSignals.size());
+		for(IResponseSignal responseSignal : responseSignals) {
+			dataOutputStream.writeDouble(responseSignal.getSignal());
+			dataOutputStream.writeDouble(responseSignal.getConcentration());
+			dataOutputStream.writeDouble(responseSignal.getResponse());
 		}
 	}
 
-	private static void writeQuantitationSignals(DataOutputStream dataOutputStream, IQuantitationSignals quantitationSignalsMSD) throws IOException {
+	private static void writeQuantitationSignals(DataOutputStream dataOutputStream, IQuantitationSignals quantitationSignals) throws IOException {
 
-		dataOutputStream.writeInt(quantitationSignalsMSD.size());
-		for(IQuantitationSignal quantitationSignalMSD : quantitationSignalsMSD) {
-			dataOutputStream.writeDouble(quantitationSignalMSD.getSignal());
-			dataOutputStream.writeFloat((float)quantitationSignalMSD.getRelativeResponse());
-			dataOutputStream.writeDouble(quantitationSignalMSD.getUncertainty());
-			dataOutputStream.writeBoolean(quantitationSignalMSD.isUse());
+		dataOutputStream.writeInt(quantitationSignals.size());
+		for(IQuantitationSignal quantitationSignal : quantitationSignals) {
+			dataOutputStream.writeDouble(quantitationSignal.getSignal());
+			dataOutputStream.writeFloat((float)quantitationSignal.getRelativeResponse());
+			dataOutputStream.writeDouble(quantitationSignal.getUncertainty());
+			dataOutputStream.writeBoolean(quantitationSignal.isUse());
 		}
 	}
 
@@ -135,25 +206,25 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 			IPeakMSD peakMSD = (IPeakMSD)peak;
 			IPeakModelMSD peakModel = peakMSD.getPeakModel();
 			//
-			writeString(dataOutputStream, peak.getDetectorDescription()); // Detector Description
+			writeString(dataOutputStream, peak.getDetectorDescription());
 			writeString(dataOutputStream, peak.getQuantifierDescription());
 			dataOutputStream.writeBoolean(peak.isActiveForAnalysis());
-			writeString(dataOutputStream, peak.getIntegratorDescription()); // Integrator Description
-			writeString(dataOutputStream, peak.getModelDescription()); // Model Description
-			writeString(dataOutputStream, peak.getPeakType().toString()); // Peak Type
-			dataOutputStream.writeInt(peak.getSuggestedNumberOfComponents()); // Suggest Number Of Components
+			writeString(dataOutputStream, peak.getIntegratorDescription());
+			writeString(dataOutputStream, peak.getModelDescription());
+			writeString(dataOutputStream, peak.getPeakType().toString());
+			dataOutputStream.writeInt(peak.getSuggestedNumberOfComponents());
 			//
-			dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStartRetentionTime())); // Start Background Abundance
-			dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStopRetentionTime())); // Stop Background Abundance
+			dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStartRetentionTime()));
+			dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStopRetentionTime()));
 			//
 			IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
-			writeMassSpectrum(dataOutputStream, massSpectrum); // Mass Spectrum
+			writeMassSpectrum(dataOutputStream, massSpectrum);
 			//
 			List<Integer> retentionTimes = peakModel.getRetentionTimes();
-			dataOutputStream.writeInt(retentionTimes.size()); // Number Retention Times
+			dataOutputStream.writeInt(retentionTimes.size());
 			for(int retentionTime : retentionTimes) {
-				dataOutputStream.writeInt(retentionTime); // Retention Time
-				dataOutputStream.writeFloat(peakModel.getPeakAbundance(retentionTime)); // Intensity
+				dataOutputStream.writeInt(retentionTime);
+				dataOutputStream.writeFloat(peakModel.getPeakAbundance(retentionTime));
 			}
 			//
 			List<IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
@@ -162,7 +233,7 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 			 * Identification Results
 			 */
 			Set<IIdentificationTarget> peakTargets = peak.getTargets();
-			dataOutputStream.writeInt(peakTargets.size()); // Number Peak Targets
+			dataOutputStream.writeInt(peakTargets.size());
 			for(IIdentificationTarget peakTarget : peakTargets) {
 				if(peakTarget instanceof IIdentificationTarget) {
 					IIdentificationTarget identificationEntry = peakTarget;
@@ -173,17 +244,17 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 			 * Quantitation Results
 			 */
 			List<IQuantitationEntry> quantitationEntries = peak.getQuantitationEntries();
-			dataOutputStream.writeInt(quantitationEntries.size()); // Number Quantitation Entries
+			dataOutputStream.writeInt(quantitationEntries.size());
 			for(IQuantitationEntry quantitationEntry : quantitationEntries) {
 				dataOutputStream.writeDouble(quantitationEntry.getSignal());
-				writeString(dataOutputStream, quantitationEntry.getName()); // Name
-				writeString(dataOutputStream, quantitationEntry.getChemicalClass()); // Chemical Class
-				dataOutputStream.writeDouble(quantitationEntry.getConcentration()); // Concentration
-				writeString(dataOutputStream, quantitationEntry.getConcentrationUnit()); // Concentration Unit
-				dataOutputStream.writeDouble(quantitationEntry.getArea()); // Area
-				writeString(dataOutputStream, quantitationEntry.getCalibrationMethod()); // Calibration Method
-				dataOutputStream.writeBoolean(quantitationEntry.getUsedCrossZero()); // Used Cross Zero
-				writeString(dataOutputStream, quantitationEntry.getDescription()); // Description
+				writeString(dataOutputStream, quantitationEntry.getName());
+				writeString(dataOutputStream, quantitationEntry.getChemicalClass());
+				dataOutputStream.writeDouble(quantitationEntry.getConcentration());
+				writeString(dataOutputStream, quantitationEntry.getConcentrationUnit());
+				dataOutputStream.writeDouble(quantitationEntry.getArea());
+				writeString(dataOutputStream, quantitationEntry.getCalibrationMethod());
+				dataOutputStream.writeBoolean(quantitationEntry.getUsedCrossZero());
+				writeString(dataOutputStream, quantitationEntry.getDescription());
 			}
 			/*
 			 * Optimized Mass Spectrum
@@ -200,18 +271,18 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 
 	private static void writeMassSpectrum(DataOutputStream dataOutputStream, IRegularMassSpectrum massSpectrum) throws IOException {
 
-		dataOutputStream.writeShort(massSpectrum.getMassSpectrometer()); // Mass Spectrometer
-		dataOutputStream.writeShort(massSpectrum.getMassSpectrumType()); // Mass Spectrum Type
-		dataOutputStream.writeDouble(massSpectrum.getPrecursorIon()); // Precursor Ion (0 if MS1 or none has been selected)
+		dataOutputStream.writeShort(massSpectrum.getMassSpectrometer());
+		dataOutputStream.writeShort(massSpectrum.getMassSpectrumType());
+		dataOutputStream.writeDouble(massSpectrum.getPrecursorIon());
 		writeNormalMassSpectrum(dataOutputStream, massSpectrum);
 	}
 
 	private static void writeNormalMassSpectrum(DataOutputStream dataOutputStream, IScanMSD massSpectrum) throws IOException {
 
-		dataOutputStream.writeInt(massSpectrum.getRetentionTime()); // Retention Time
+		dataOutputStream.writeInt(massSpectrum.getRetentionTime());
 		dataOutputStream.writeInt(massSpectrum.getRetentionTimeColumn1());
 		dataOutputStream.writeInt(massSpectrum.getRetentionTimeColumn2());
-		dataOutputStream.writeFloat(massSpectrum.getRetentionIndex()); // Retention Index
+		dataOutputStream.writeFloat(massSpectrum.getRetentionIndex());
 		dataOutputStream.writeBoolean(massSpectrum.hasAdditionalRetentionIndices());
 		if(massSpectrum.hasAdditionalRetentionIndices()) {
 			Map<RetentionIndexType, Float> retentionIndicesTyped = massSpectrum.getRetentionIndicesTyped();
@@ -221,15 +292,15 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 				dataOutputStream.writeFloat(retentionIndexTyped.getValue());
 			}
 		}
-		dataOutputStream.writeInt(massSpectrum.getTimeSegmentId()); // Time Segment Id
-		dataOutputStream.writeInt(massSpectrum.getCycleNumber()); // Cycle Number
+		dataOutputStream.writeInt(massSpectrum.getTimeSegmentId());
+		dataOutputStream.writeInt(massSpectrum.getCycleNumber());
 		//
 		List<IIon> ions = massSpectrum.getIons();
-		writeMassSpectrumIons(dataOutputStream, ions); // Ions
+		writeMassSpectrumIons(dataOutputStream, ions);
 		/*
 		 * Identification Results
 		 */
-		dataOutputStream.writeInt(massSpectrum.getTargets().size()); // Number Mass Spectrum Targets
+		dataOutputStream.writeInt(massSpectrum.getTargets().size());
 		for(IIdentificationTarget identificationTarget : massSpectrum.getTargets()) {
 			writeIdentificationEntry(dataOutputStream, identificationTarget);
 		}
@@ -237,10 +308,10 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 
 	private static void writeMassSpectrumIons(DataOutputStream dataOutputStream, List<IIon> ions) throws IOException {
 
-		dataOutputStream.writeInt(ions.size()); // Number of ions
+		dataOutputStream.writeInt(ions.size());
 		for(IIon ion : ions) {
-			dataOutputStream.writeDouble(ion.getIon()); // m/z
-			dataOutputStream.writeFloat(ion.getAbundance()); // Abundance
+			dataOutputStream.writeDouble(ion.getIon());
+			dataOutputStream.writeFloat(ion.getAbundance());
 			/*
 			 * Ion Transition
 			 */
@@ -251,27 +322,27 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 				/*
 				 * parent m/z start, ...
 				 */
-				dataOutputStream.writeInt(1); // Ion transition available
-				writeString(dataOutputStream, ionTransition.getCompoundName()); // compound name
-				dataOutputStream.writeDouble(ionTransition.getQ1StartIon()); // parent m/z start
-				dataOutputStream.writeDouble(ionTransition.getQ1StopIon()); // parent m/z stop
-				dataOutputStream.writeDouble(ionTransition.getQ3StartIon()); // daughter m/z start
-				dataOutputStream.writeDouble(ionTransition.getQ3StopIon()); // daughter m/z stop
-				dataOutputStream.writeDouble(ionTransition.getCollisionEnergy()); // collision energy
-				dataOutputStream.writeDouble(ionTransition.getQ1Resolution()); // q1 resolution
-				dataOutputStream.writeDouble(ionTransition.getQ3Resolution()); // q3 resolution
-				dataOutputStream.writeInt(ionTransition.getTransitionGroup()); // transition group
-				dataOutputStream.writeInt(ionTransition.getDwell()); // dwell
+				dataOutputStream.writeInt(1);
+				writeString(dataOutputStream, ionTransition.getCompoundName());
+				dataOutputStream.writeDouble(ionTransition.getQ1StartIon());
+				dataOutputStream.writeDouble(ionTransition.getQ1StopIon());
+				dataOutputStream.writeDouble(ionTransition.getQ3StartIon());
+				dataOutputStream.writeDouble(ionTransition.getQ3StopIon());
+				dataOutputStream.writeDouble(ionTransition.getCollisionEnergy());
+				dataOutputStream.writeDouble(ionTransition.getQ1Resolution());
+				dataOutputStream.writeDouble(ionTransition.getQ3Resolution());
+				dataOutputStream.writeInt(ionTransition.getTransitionGroup());
+				dataOutputStream.writeInt(ionTransition.getDwell());
 			}
 		}
 	}
 
 	private static void writeIntegrationEntries(DataOutputStream dataOutputStream, List<? extends IIntegrationEntry> integrationEntries) throws IOException {
 
-		dataOutputStream.writeInt(integrationEntries.size()); // Number Integration Entries
+		dataOutputStream.writeInt(integrationEntries.size());
 		for(IIntegrationEntry integrationEntry : integrationEntries) {
-			dataOutputStream.writeDouble(integrationEntry.getSignal()); // m/z
-			dataOutputStream.writeDouble(integrationEntry.getIntegratedArea()); // Integrated Area
+			dataOutputStream.writeDouble(integrationEntry.getSignal());
+			dataOutputStream.writeDouble(integrationEntry.getIntegratedArea());
 		}
 	}
 
@@ -280,37 +351,37 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 		ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
 		IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
 		//
-		writeString(dataOutputStream, identificationEntry.getIdentifier()); // Identifier
+		writeString(dataOutputStream, identificationEntry.getIdentifier());
 		dataOutputStream.writeBoolean(identificationEntry.isManuallyVerified());
 		//
-		writeString(dataOutputStream, libraryInformation.getCasNumber()); // CAS-Number
-		writeString(dataOutputStream, libraryInformation.getComments()); // Comments
+		writeString(dataOutputStream, libraryInformation.getCasNumber());
+		writeString(dataOutputStream, libraryInformation.getComments());
 		writeString(dataOutputStream, libraryInformation.getReferenceIdentifier());
-		writeString(dataOutputStream, libraryInformation.getMiscellaneous()); // Miscellaneous
+		writeString(dataOutputStream, libraryInformation.getMiscellaneous());
 		writeString(dataOutputStream, libraryInformation.getDatabase());
 		writeString(dataOutputStream, libraryInformation.getContributor());
-		writeString(dataOutputStream, libraryInformation.getName()); // Name
-		Set<String> synonyms = libraryInformation.getSynonyms(); // Synonyms
+		writeString(dataOutputStream, libraryInformation.getName());
+		Set<String> synonyms = libraryInformation.getSynonyms();
 		int numberOfSynonyms = synonyms.size();
 		dataOutputStream.writeInt(numberOfSynonyms);
 		for(String synonym : synonyms) {
 			writeString(dataOutputStream, synonym);
 		}
-		writeString(dataOutputStream, libraryInformation.getFormula()); // Formula
-		writeString(dataOutputStream, libraryInformation.getSmiles()); // SMILES
-		writeString(dataOutputStream, libraryInformation.getInChI()); // InChI
-		dataOutputStream.writeDouble(libraryInformation.getMolWeight()); // Mol Weight
-		dataOutputStream.writeFloat(comparisonResult.getMatchFactor()); // Match Factor
-		dataOutputStream.writeFloat(comparisonResult.getMatchFactorDirect()); // Match Factor Direct
-		dataOutputStream.writeFloat(comparisonResult.getReverseMatchFactor()); // Reverse Match Factor
-		dataOutputStream.writeFloat(comparisonResult.getReverseMatchFactorDirect()); // Reverse Match Factor Direct
-		dataOutputStream.writeFloat(comparisonResult.getProbability()); // Probability
-		dataOutputStream.writeBoolean(comparisonResult.isMatch()); // Is Match
+		writeString(dataOutputStream, libraryInformation.getFormula());
+		writeString(dataOutputStream, libraryInformation.getSmiles());
+		writeString(dataOutputStream, libraryInformation.getInChI());
+		dataOutputStream.writeDouble(libraryInformation.getMolWeight());
+		dataOutputStream.writeFloat(comparisonResult.getMatchFactor());
+		dataOutputStream.writeFloat(comparisonResult.getMatchFactorDirect());
+		dataOutputStream.writeFloat(comparisonResult.getReverseMatchFactor());
+		dataOutputStream.writeFloat(comparisonResult.getReverseMatchFactorDirect());
+		dataOutputStream.writeFloat(comparisonResult.getProbability());
+		dataOutputStream.writeBoolean(comparisonResult.isMatch());
 	}
 
 	private static void writeString(DataOutputStream dataOutputStream, String value) throws IOException {
 
-		dataOutputStream.writeInt(value.length()); // Value Length
-		dataOutputStream.writeChars(value); // Value
+		dataOutputStream.writeInt(value.length());
+		dataOutputStream.writeChars(value);
 	}
 }

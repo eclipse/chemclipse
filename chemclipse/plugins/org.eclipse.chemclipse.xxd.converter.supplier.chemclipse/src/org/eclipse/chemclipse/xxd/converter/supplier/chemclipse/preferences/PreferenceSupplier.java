@@ -53,9 +53,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * *.ocq
 	 */
 	public static final String P_QUANTITATION_DB_VERSION_SAVE = "quantitationDatabaseVersionSave";
-	public static final String DEF_QUANTITATION_DB_VERSION_SAVE = IFormat.QUANTITATION_DB_VERSION_LATEST;
+	public static final String DEF_QUANTITATION_DB_VERSION_SAVE = IFormat.QUANTDB_VERSION_LATEST;
 	public static final String P_QUANTITATION_DB_COMPRESSION_LEVEL = "quantitationDatabaseCompressionLevel";
-	public static final int DEF_QUANTITATION_DB_COMPRESSION_LEVEL = IFormat.QUANTITATION_DB_COMPRESSION_LEVEL;
+	public static final int DEF_QUANTITATION_DB_COMPRESSION_LEVEL = IFormat.QUANTDB_COMPRESSION_LEVEL;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 

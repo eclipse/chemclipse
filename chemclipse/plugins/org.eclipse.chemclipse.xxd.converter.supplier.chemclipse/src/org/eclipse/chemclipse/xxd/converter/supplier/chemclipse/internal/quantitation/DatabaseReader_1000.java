@@ -13,12 +13,13 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.quanti
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
@@ -70,71 +71,119 @@ import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.model.quantitation.QuantitationCompound;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
-public class DatabaseReader_1000 implements IDatabaseReader {
+public class DatabaseReader_1000 extends AbstractDatabaseReader implements IDatabaseReader {
 
 	private static final Logger logger = Logger.getLogger(DatabaseReader_1000.class);
 
 	@Override
 	public IQuantitationDatabase convert(File file, IProgressMonitor monitor) throws IOException {
 
-		IQuantitationDatabase quantitationDatabase = new QuantitationDatabase();
-		quantitationDatabase.setFile(file);
-		quantitationDatabase.setConverterId(CONVERTER_ID);
-		//
-		DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
-		//
-		int size = dataInputStream.readInt();
-		for(int i = 0; i < size; i++) {
-			/*
-			 * Read the data.
-			 */
-			String name = readString(dataInputStream);
-			String concentrationUnit = readString(dataInputStream);
-			CalibrationMethod calibrationMethod = CalibrationMethod.valueOf(readString(dataInputStream));
-			String chemicalClass = readString(dataInputStream);
-			boolean crossZero = dataInputStream.readBoolean();
-			boolean useTIC = dataInputStream.readBoolean();
-			/*
-			 * Quantitation Peaks
-			 */
-			List<IQuantitationPeak> quantitationPeaks = readQuantitationPeaks(dataInputStream);
-			List<IResponseSignal> concentrationResponseEntriesMSD = readConcentrationResponseEntries(dataInputStream);
-			List<IQuantitationSignal> quantitationSignalsMSD = readQuantitationSignals(dataInputStream);
-			IRetentionIndexWindow retentionIndexWindow = readRetentionIndexWindow(dataInputStream);
-			IRetentionTimeWindow retentionTimeWindow = readRetentionTimeWindow(dataInputStream);
-			/*
-			 * Quantitation Compund
-			 */
-			IQuantitationCompound quantitationCompound = new QuantitationCompound(name, concentrationUnit, retentionTimeWindow.getRetentionTime());
-			quantitationCompound.setCalibrationMethod(calibrationMethod);
-			quantitationCompound.setChemicalClass(chemicalClass);
-			quantitationCompound.setUseCrossZero(crossZero);
-			quantitationCompound.setUseTIC(useTIC);
-			//
-			quantitationCompound.getRetentionIndexWindow().setAllowedNegativeDeviation(retentionIndexWindow.getAllowedNegativeDeviation());
-			quantitationCompound.getRetentionIndexWindow().setAllowedPositiveDeviation(retentionIndexWindow.getAllowedPositiveDeviation());
-			quantitationCompound.getRetentionIndexWindow().setRetentionIndex(retentionIndexWindow.getRetentionIndex());
-			//
-			quantitationCompound.getRetentionTimeWindow().setAllowedNegativeDeviation(retentionTimeWindow.getAllowedNegativeDeviation());
-			quantitationCompound.getRetentionTimeWindow().setAllowedPositiveDeviation(retentionTimeWindow.getAllowedPositiveDeviation());
-			//
-			quantitationCompound.getResponseSignals().addAll(concentrationResponseEntriesMSD);
-			quantitationCompound.getQuantitationSignals().addAll(quantitationSignalsMSD);
-			//
-			quantitationCompound.getQuantitationPeaks().addAll(quantitationPeaks);
-			/*
-			 * DB
-			 */
-			quantitationDatabase.add(quantitationCompound);
+		IQuantitationDatabase quantitationDatabase = null;
+		ZipFile zipFile = new ZipFile(file);
+		try {
+			if(isValidFileFormat(zipFile)) {
+				quantitationDatabase = readFromZipFile(zipFile, "", file, monitor);
+			}
+		} finally {
+			zipFile.close();
 		}
 		//
 		return quantitationDatabase;
 	}
 
-	private static List<IQuantitationPeak> readQuantitationPeaks(DataInputStream dataInputStream) throws IOException {
+	private IQuantitationDatabase readFromZipFile(ZipFile zipFile, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
+
+		return readZipData(zipFile, directoryPrefix, file, monitor);
+	}
+
+	private IQuantitationDatabase readZipData(Object object, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
+
+		IQuantitationDatabase quantitationDatabase = new QuantitationDatabase();
+		quantitationDatabase.setFile(file);
+		quantitationDatabase.setConverterId(CONVERTER_ID);
+		//
+		boolean closeStream;
+		if(object instanceof ZipFile) {
+			/*
+			 * ZipFile
+			 */
+			closeStream = true;
+		} else if(object instanceof ZipInputStream) {
+			/*
+			 * ZipInputStream
+			 */
+			closeStream = false;
+		} else {
+			return null;
+		}
+		//
+		readContent(getDataInputStream(object, directoryPrefix + IFormat.FILE_QUANTDB), closeStream, quantitationDatabase, monitor);
+		//
+		return quantitationDatabase;
+	}
+
+	private void readContent(DataInputStream dataInputStream, boolean closeStream, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor) throws IOException {
+
+		quantitationDatabase.setOperator(readString(dataInputStream));
+		quantitationDatabase.setDescription(readString(dataInputStream));
+		int size = dataInputStream.readInt();
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Database", size);
+		//
+		try {
+			for(int i = 0; i < size; i++) {
+				//
+				String name = readString(dataInputStream);
+				String concentrationUnit = readString(dataInputStream);
+				CalibrationMethod calibrationMethod = CalibrationMethod.valueOf(readString(dataInputStream));
+				String chemicalClass = readString(dataInputStream);
+				boolean crossZero = dataInputStream.readBoolean();
+				boolean useTIC = dataInputStream.readBoolean();
+				//
+				List<IQuantitationPeak> quantitationPeaks = readQuantitationPeaks(dataInputStream);
+				List<IResponseSignal> concentrationResponseEntriesMSD = readConcentrationResponseEntries(dataInputStream);
+				List<IQuantitationSignal> quantitationSignalsMSD = readQuantitationSignals(dataInputStream);
+				IRetentionIndexWindow retentionIndexWindow = readRetentionIndexWindow(dataInputStream);
+				IRetentionTimeWindow retentionTimeWindow = readRetentionTimeWindow(dataInputStream);
+				//
+				IQuantitationCompound quantitationCompound = new QuantitationCompound(name, concentrationUnit, retentionTimeWindow.getRetentionTime());
+				quantitationCompound.setCalibrationMethod(calibrationMethod);
+				quantitationCompound.setChemicalClass(chemicalClass);
+				quantitationCompound.setUseCrossZero(crossZero);
+				quantitationCompound.setUseTIC(useTIC);
+				//
+				quantitationCompound.getRetentionIndexWindow().setAllowedNegativeDeviation(retentionIndexWindow.getAllowedNegativeDeviation());
+				quantitationCompound.getRetentionIndexWindow().setAllowedPositiveDeviation(retentionIndexWindow.getAllowedPositiveDeviation());
+				quantitationCompound.getRetentionIndexWindow().setRetentionIndex(retentionIndexWindow.getRetentionIndex());
+				//
+				quantitationCompound.getRetentionTimeWindow().setAllowedNegativeDeviation(retentionTimeWindow.getAllowedNegativeDeviation());
+				quantitationCompound.getRetentionTimeWindow().setAllowedPositiveDeviation(retentionTimeWindow.getAllowedPositiveDeviation());
+				//
+				quantitationCompound.getResponseSignals().addAll(concentrationResponseEntriesMSD);
+				quantitationCompound.getQuantitationSignals().addAll(quantitationSignalsMSD);
+				//
+				quantitationCompound.getQuantitationPeaks().addAll(quantitationPeaks);
+				/*
+				 * DB
+				 */
+				quantitationDatabase.add(quantitationCompound);
+				subMonitor.worked(1);
+			}
+		} finally {
+			SubMonitor.done(subMonitor);
+		}
+		//
+		//
+		if(closeStream) {
+			dataInputStream.close();
+		}
+	}
+
+	private List<IQuantitationPeak> readQuantitationPeaks(DataInputStream dataInputStream) throws IOException {
 
 		List<IQuantitationPeak> quantitationPeaks = new ArrayList<IQuantitationPeak>();
 		IonTransitionSettings ionTransitionSettings = new IonTransitionSettings();
@@ -152,36 +201,36 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		return quantitationPeaks;
 	}
 
-	private static List<IResponseSignal> readConcentrationResponseEntries(DataInputStream dataInputStream) throws IOException {
+	private List<IResponseSignal> readConcentrationResponseEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IResponseSignal> concentrationResponseEntriesMSD = new ArrayList<IResponseSignal>();
+		List<IResponseSignal> responseSignals = new ArrayList<IResponseSignal>();
 		int size = dataInputStream.readInt();
 		for(int i = 0; i < size; i++) {
 			double signal = dataInputStream.readDouble();
 			double concentration = dataInputStream.readDouble();
 			double response = dataInputStream.readDouble();
-			IResponseSignal concentrationResponseEntryMSD = new ResponseSignal(signal, concentration, response);
-			concentrationResponseEntriesMSD.add(concentrationResponseEntryMSD);
+			IResponseSignal responseSignal = new ResponseSignal(signal, concentration, response);
+			responseSignals.add(responseSignal);
 		}
-		return concentrationResponseEntriesMSD;
+		return responseSignals;
 	}
 
-	private static List<IQuantitationSignal> readQuantitationSignals(DataInputStream dataInputStream) throws IOException {
+	private List<IQuantitationSignal> readQuantitationSignals(DataInputStream dataInputStream) throws IOException {
 
-		List<IQuantitationSignal> quantitationSignalsMSD = new ArrayList<IQuantitationSignal>();
+		List<IQuantitationSignal> quantitationSignals = new ArrayList<IQuantitationSignal>();
 		int size = dataInputStream.readInt();
 		for(int i = 0; i < size; i++) {
 			double signal = dataInputStream.readDouble();
 			float relativeResponse = dataInputStream.readFloat();
 			double uncertainty = dataInputStream.readDouble();
 			boolean use = dataInputStream.readBoolean();
-			IQuantitationSignal quantitationSignalMSD = new QuantitationSignal(signal, relativeResponse, uncertainty, use);
-			quantitationSignalsMSD.add(quantitationSignalMSD);
+			IQuantitationSignal quantitationSignal = new QuantitationSignal(signal, relativeResponse, uncertainty, use);
+			quantitationSignals.add(quantitationSignal);
 		}
-		return quantitationSignalsMSD;
+		return quantitationSignals;
 	}
 
-	private static IRetentionIndexWindow readRetentionIndexWindow(DataInputStream dataInputStream) throws IOException {
+	private IRetentionIndexWindow readRetentionIndexWindow(DataInputStream dataInputStream) throws IOException {
 
 		IRetentionIndexWindow retentionIndexWindow = new RetentionIndexWindow();
 		retentionIndexWindow.setAllowedNegativeDeviation(dataInputStream.readFloat());
@@ -190,7 +239,7 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		return retentionIndexWindow;
 	}
 
-	private static IRetentionTimeWindow readRetentionTimeWindow(DataInputStream dataInputStream) throws IOException {
+	private IRetentionTimeWindow readRetentionTimeWindow(DataInputStream dataInputStream) throws IOException {
 
 		IRetentionTimeWindow retentionTimeWindow = new RetentionTimeWindow();
 		retentionTimeWindow.setAllowedNegativeDeviation(dataInputStream.readFloat());
@@ -199,25 +248,25 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		return retentionTimeWindow;
 	}
 
-	private static IPeakMSD readPeak(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException, IllegalArgumentException, PeakException {
+	private IPeakMSD readPeak(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException, IllegalArgumentException, PeakException {
 
-		String detectorDescription = readString(dataInputStream); // Detector Description
+		String detectorDescription = readString(dataInputStream);
 		String quantifierDescription = readString(dataInputStream);
 		boolean activeForAnalysis = dataInputStream.readBoolean();
-		String integratorDescription = readString(dataInputStream); // Integrator Description
-		String modelDescription = readString(dataInputStream); // Model Description
-		PeakType peakType = PeakType.valueOf(readString(dataInputStream)); // Peak Type
-		int suggestedNumberOfComponents = dataInputStream.readInt(); // Suggest Number Of Components
+		String integratorDescription = readString(dataInputStream);
+		String modelDescription = readString(dataInputStream);
+		PeakType peakType = PeakType.valueOf(readString(dataInputStream));
+		int suggestedNumberOfComponents = dataInputStream.readInt();
 		//
-		float startBackgroundAbundance = dataInputStream.readFloat(); // Start Background Abundance
-		float stopBackgroundAbundance = dataInputStream.readFloat(); // Stop Background Abundance
+		float startBackgroundAbundance = dataInputStream.readFloat();
+		float stopBackgroundAbundance = dataInputStream.readFloat();
 		//
 		IPeakMassSpectrum peakMaximum = readPeakMassSpectrum(dataInputStream, ionTransitionSettings);
 		//
-		int numberOfRetentionTimes = dataInputStream.readInt(); // Number Retention Times
+		int numberOfRetentionTimes = dataInputStream.readInt();
 		IPeakIntensityValues intensityValues = new PeakIntensityValues(Float.MAX_VALUE);
 		for(int i = 1; i <= numberOfRetentionTimes; i++) {
-			int retentionTime = dataInputStream.readInt(); // Retention Time
+			int retentionTime = dataInputStream.readInt();
 			float relativeIntensity = dataInputStream.readFloat(); // Intensity
 			intensityValues.addIntensityValue(retentionTime, relativeIntensity);
 		}
@@ -256,11 +305,11 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		return peak;
 	}
 
-	private static IPeakMassSpectrum readPeakMassSpectrum(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
+	private IPeakMassSpectrum readPeakMassSpectrum(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
 
-		short massSpectrometer = dataInputStream.readShort(); // Mass Spectrometer
-		short massSpectrumType = dataInputStream.readShort(); // Mass Spectrum Type
-		double precursorIon = dataInputStream.readDouble(); // Precursor Ion (0 if MS1 or none has been selected)
+		short massSpectrometer = dataInputStream.readShort();
+		short massSpectrumType = dataInputStream.readShort();
+		double precursorIon = dataInputStream.readDouble();
 		//
 		IPeakMassSpectrum massSpectrum = new PeakMassSpectrum();
 		massSpectrum.setMassSpectrometer(massSpectrometer);
@@ -272,12 +321,12 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		return massSpectrum;
 	}
 
-	private static void readNormalMassSpectrum(IScanMSD massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
+	private void readNormalMassSpectrum(IScanMSD massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
 
-		int retentionTime = dataInputStream.readInt(); // Retention Time
+		int retentionTime = dataInputStream.readInt();
 		int retentionTimeColumn1 = dataInputStream.readInt();
 		int retentionTimeColumn2 = dataInputStream.readInt();
-		float retentionIndex = dataInputStream.readFloat(); // Retention Index
+		float retentionIndex = dataInputStream.readFloat();
 		if(dataInputStream.readBoolean()) {
 			int size = dataInputStream.readInt();
 			for(int i = 0; i < size; i++) {
@@ -286,8 +335,8 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 				massSpectrum.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
 			}
 		}
-		int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
-		int cycleNumber = dataInputStream.readInt(); // Cycle Number
+		int timeSegmentId = dataInputStream.readInt();
+		int cycleNumber = dataInputStream.readInt();
 		massSpectrum.setRetentionTime(retentionTime);
 		massSpectrum.setRetentionTimeColumn1(retentionTimeColumn1);
 		massSpectrum.setRetentionTimeColumn2(retentionTimeColumn2);
@@ -295,7 +344,7 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		massSpectrum.setTimeSegmentId(timeSegmentId);
 		massSpectrum.setCycleNumber(cycleNumber);
 		//
-		int numberOfIons = dataInputStream.readInt(); // Number of ions
+		int numberOfIons = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfIons; i++) {
 			/*
 			 * Read Ions
@@ -317,12 +366,12 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		readMassSpectrumIdentificationTargets(dataInputStream, massSpectrum);
 	}
 
-	private static IIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException, AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+	private IIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException, AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
 
 		IIon ion;
 		//
-		double mz = dataInputStream.readDouble(); // m/z
-		float abundance = dataInputStream.readFloat(); // Abundance
+		double mz = dataInputStream.readDouble();
+		float abundance = dataInputStream.readFloat();
 		/*
 		 * Ion Transition
 		 */
@@ -333,16 +382,16 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 			/*
 			 * parent m/z start, ...
 			 */
-			String compoundName = readString(dataInputStream); // compound name
-			double filter1FirstIon = dataInputStream.readDouble(); // parent m/z start
-			double filter1LastIon = dataInputStream.readDouble(); // parent m/z stop
-			double filter3FirstIon = dataInputStream.readDouble(); // daughter m/z start
-			double filter3LastIon = dataInputStream.readDouble(); // daughter m/z stop
-			double collisionEnergy = dataInputStream.readDouble(); // collision energy
-			double filter1Resolution = dataInputStream.readDouble(); // q1 resolution
-			double filter3Resolution = dataInputStream.readDouble(); // q3 resolution
-			int transitionGroup = dataInputStream.readInt(); // transition group
-			int dwell = dataInputStream.readInt(); // dwell
+			String compoundName = readString(dataInputStream);
+			double filter1FirstIon = dataInputStream.readDouble();
+			double filter1LastIon = dataInputStream.readDouble();
+			double filter3FirstIon = dataInputStream.readDouble();
+			double filter3LastIon = dataInputStream.readDouble();
+			double collisionEnergy = dataInputStream.readDouble();
+			double filter1Resolution = dataInputStream.readDouble();
+			double filter3Resolution = dataInputStream.readDouble();
+			int transitionGroup = dataInputStream.readInt();
+			int dwell = dataInputStream.readInt();
 			//
 			IIonTransition ionTransition = ionTransitionSettings.getIonTransition(compoundName, filter1FirstIon, filter1LastIon, filter3FirstIon, filter3LastIon, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
 			ionTransition.setDwell(dwell);
@@ -351,35 +400,35 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		return ion;
 	}
 
-	private static void readMassSpectrumIdentificationTargets(DataInputStream dataInputStream, IScanMSD massSpectrum) throws IOException {
+	private void readMassSpectrumIdentificationTargets(DataInputStream dataInputStream, IScanMSD massSpectrum) throws IOException {
 
-		int numberOfMassSpectrumTargets = dataInputStream.readInt(); // Number Mass Spectrum Targets
+		int numberOfMassSpectrumTargets = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfMassSpectrumTargets; i++) {
 			//
-			String identifier = readString(dataInputStream); // Identifier
+			String identifier = readString(dataInputStream);
 			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
-			String casNumber = readString(dataInputStream); // CAS-Number
-			String comments = readString(dataInputStream); // Comments
+			String casNumber = readString(dataInputStream);
+			String comments = readString(dataInputStream);
 			String referenceIdentifier = readString(dataInputStream);
-			String miscellaneous = readString(dataInputStream); // Miscellaneous
+			String miscellaneous = readString(dataInputStream);
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
-			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			String name = readString(dataInputStream);
+			Set<String> synonyms = new HashSet<String>();
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
 			}
-			String formula = readString(dataInputStream); // Formula
-			String smiles = readString(dataInputStream); // SMILES
-			String inChI = readString(dataInputStream); // InChI
-			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			float matchFactor = dataInputStream.readFloat(); // Match Factor
-			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
-			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
-			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
-			float probability = dataInputStream.readFloat(); // Probability
+			String formula = readString(dataInputStream);
+			String smiles = readString(dataInputStream);
+			String inChI = readString(dataInputStream);
+			double molWeight = dataInputStream.readDouble();
+			float matchFactor = dataInputStream.readFloat();
+			float matchFactorDirect = dataInputStream.readFloat();
+			float reverseMatchFactor = dataInputStream.readFloat();
+			float reverseMatchFactorDirect = dataInputStream.readFloat();
+			float probability = dataInputStream.readFloat();
 			boolean isMatch = dataInputStream.readBoolean();
 			//
 			ILibraryInformation libraryInformation = new LibraryInformation();
@@ -410,48 +459,48 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		}
 	}
 
-	private static List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
+	private List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
 
 		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
-		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
+		int numberOfIntegrationEntries = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
-			double signal = dataInputStream.readDouble(); // m/z
-			double integratedArea = dataInputStream.readDouble(); // Integrated Area
+			double signal = dataInputStream.readDouble();
+			double integratedArea = dataInputStream.readDouble();
 			IIntegrationEntry integrationEntry = new IntegrationEntry(signal, integratedArea);
 			integrationEntries.add(integrationEntry);
 		}
 		return integrationEntries;
 	}
 
-	private static void readPeakIdentificationTargets(DataInputStream dataInputStream, IPeakMSD peak) throws IOException {
+	private void readPeakIdentificationTargets(DataInputStream dataInputStream, IPeakMSD peak) throws IOException {
 
-		int numberOfPeakTargets = dataInputStream.readInt(); // Number Peak Targets
+		int numberOfPeakTargets = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfPeakTargets; i++) {
 			//
-			String identifier = readString(dataInputStream); // Identifier
+			String identifier = readString(dataInputStream);
 			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
-			String casNumber = readString(dataInputStream); // CAS-Number
-			String comments = readString(dataInputStream); // Comments
+			String casNumber = readString(dataInputStream);
+			String comments = readString(dataInputStream);
 			String referenceIdentifier = readString(dataInputStream);
-			String miscellaneous = readString(dataInputStream); // Miscellaneous
+			String miscellaneous = readString(dataInputStream);
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
-			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			String name = readString(dataInputStream);
+			Set<String> synonyms = new HashSet<String>();
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
 			}
-			String formula = readString(dataInputStream); // Formula
-			String smiles = readString(dataInputStream); // SMILES
-			String inChI = readString(dataInputStream); // InChI
-			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			float matchFactor = dataInputStream.readFloat(); // Match Factor
-			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
-			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
-			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
-			float probability = dataInputStream.readFloat(); // Probability
+			String formula = readString(dataInputStream);
+			String smiles = readString(dataInputStream);
+			String inChI = readString(dataInputStream);
+			double molWeight = dataInputStream.readDouble();
+			float matchFactor = dataInputStream.readFloat();
+			float matchFactorDirect = dataInputStream.readFloat();
+			float reverseMatchFactor = dataInputStream.readFloat();
+			float reverseMatchFactorDirect = dataInputStream.readFloat();
+			float probability = dataInputStream.readFloat();
 			boolean isMatch = dataInputStream.readBoolean();
 			//
 			IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
@@ -482,20 +531,20 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		}
 	}
 
-	private static void readPeakQuantitationEntries(DataInputStream dataInputStream, IPeakMSD peak) throws IOException {
+	private void readPeakQuantitationEntries(DataInputStream dataInputStream, IPeakMSD peak) throws IOException {
 
-		int numberOfQuantitationEntries = dataInputStream.readInt(); // Number Quantitation Entries
+		int numberOfQuantitationEntries = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfQuantitationEntries; i++) {
 			//
 			double signal = dataInputStream.readDouble();
-			String name = readString(dataInputStream); // Name
-			String chemicalClass = readString(dataInputStream); // Chemical Class
-			double concentration = dataInputStream.readDouble(); // Concentration
-			String concentrationUnit = readString(dataInputStream); // Concentration Unit
-			double area = dataInputStream.readDouble(); // Area
-			String calibrationMethod = readString(dataInputStream); // Calibration Method
-			boolean usedCrossZero = dataInputStream.readBoolean(); // Used Cross Zero
-			String description = readString(dataInputStream); // Description
+			String name = readString(dataInputStream);
+			String chemicalClass = readString(dataInputStream);
+			double concentration = dataInputStream.readDouble();
+			String concentrationUnit = readString(dataInputStream);
+			double area = dataInputStream.readDouble();
+			String calibrationMethod = readString(dataInputStream);
+			boolean usedCrossZero = dataInputStream.readBoolean();
+			String description = readString(dataInputStream);
 			//
 			IQuantitationEntry quantitationEntry = new QuantitationEntry(name, concentration, concentrationUnit, area);
 			quantitationEntry.setSignal(signal);
@@ -508,13 +557,18 @@ public class DatabaseReader_1000 implements IDatabaseReader {
 		}
 	}
 
-	private static String readString(DataInputStream dataInputStream) throws IOException {
+	private boolean isValidFileFormat(ZipFile zipFile) throws IOException {
 
-		int length = dataInputStream.readInt();
-		StringBuilder builder = new StringBuilder();
-		for(int i = 1; i <= length; i++) {
-			builder.append(String.valueOf(dataInputStream.readChar()));
+		boolean isValid = false;
+		DataInputStream dataInputStream;
+		//
+		dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
+		String version = readString(dataInputStream);
+		if(version.equals(IFormat.QUANTDB_VERSION_0001)) {
+			isValid = true;
 		}
-		return builder.toString();
+		dataInputStream.close();
+		//
+		return isValid;
 	}
 }
