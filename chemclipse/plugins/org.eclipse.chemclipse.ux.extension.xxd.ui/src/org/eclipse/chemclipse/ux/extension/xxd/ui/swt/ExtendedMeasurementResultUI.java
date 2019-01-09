@@ -342,7 +342,11 @@ public class ExtendedMeasurementResultUI {
 	private void updateMeasurementResult(IMeasurementResult measurementResult) {
 
 		if(prepareMeasurementResultTable(measurementResult)) {
-			extendedTableViewer.setInput(measurementResult);
+			try {
+				extendedTableViewer.setInput(measurementResult);
+			} catch(Exception e) {
+				// TODO
+			}
 		}
 	}
 
@@ -367,6 +371,12 @@ public class ExtendedMeasurementResultUI {
 					}
 				}
 			}
+		} else {
+			extendedTableViewer.setInput(null);
+			extendedTableViewer.setContentProvider(DEFAULT_CONTENT_PROVIDER);
+			extendedTableViewer.createColumns(DEFAULT_TITLES, DEFAULT_BOUNDS);
+			extendedTableViewer.setLabelProvider(DEFAULT_LABEL_PROVIDER);
+			extendedTableViewer.setInput(null);
 		}
 		//
 		return isContentProviderSet;
@@ -374,7 +384,11 @@ public class ExtendedMeasurementResultUI {
 
 	private void clearTable() {
 
-		extendedTableViewer.setComparator(null);
+		try {
+			extendedTableViewer.setComparator(null);
+		} catch(Exception e) {
+			// TODO
+		}
 		//
 		if(extendedTableViewer.getContentProvider() == null) {
 			extendedTableViewer.createColumns(DEFAULT_TITLES, DEFAULT_BOUNDS);
