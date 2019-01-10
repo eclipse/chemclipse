@@ -34,9 +34,10 @@ public class MethodConverter {
 	 * org.eclipse.chemclipse.xxd.converter.supplier.chemclipse
 	 */
 	public static final String DEFAULT_MÉTHOD_CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.processMethodSupplier";
-	public static final String DEFAULT_METHOD_FILE_NAME = "ProcessMethod.ocm";
-	public static final String[] DEFAULT_METHOD_FILE_EXTENSIONS = new String[]{"*.ocm"};
-	public static final String[] DEFAULT_METHOD_FILE_NAMES = new String[]{"Process Method (*.ocm)"};
+	public static final String DEFAULT_METHOD_FILE_NAME_EXTENSION = "ocm";
+	public static final String DEFAULT_METHOD_FILE_NAME = "ProcessMethod." + DEFAULT_METHOD_FILE_NAME_EXTENSION;
+	public static final String[] DEFAULT_METHOD_FILE_EXTENSIONS = new String[]{"*." + DEFAULT_METHOD_FILE_NAME_EXTENSION};
+	public static final String[] DEFAULT_METHOD_FILE_NAMES = new String[]{"Process Method (*." + DEFAULT_METHOD_FILE_NAME_EXTENSION + ")"};
 	//
 	private static final Logger logger = Logger.getLogger(MethodConverter.class);
 	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.converter.processMethodSupplier";
