@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
@@ -26,6 +25,7 @@ public interface IPreprocessing {
 		private String string;
 
 		private DATA_TYPE_PROCESSING(String string) {
+
 			this.string = string;
 		}
 
@@ -42,7 +42,7 @@ public interface IPreprocessing {
 
 	boolean isOnlySelected();
 
-	<V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples);
+	<V extends IVariable, S extends ISample> void process(ISamples<V, S> samples);
 
 	void setOnlySelected(boolean onlySelected);
 

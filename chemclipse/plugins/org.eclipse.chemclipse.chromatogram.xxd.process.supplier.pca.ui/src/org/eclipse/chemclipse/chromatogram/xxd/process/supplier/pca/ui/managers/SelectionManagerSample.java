@@ -12,10 +12,9 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.ux.fx.ui.SelectionManagerProto;
 
-public class SelectionManagerSample extends SelectionManagerProto<ISample<? extends ISampleData>> {
+public class SelectionManagerSample extends SelectionManagerProto<ISample> {
 
 	private static SelectionManagerSample instance;
 
@@ -30,6 +29,7 @@ public class SelectionManagerSample extends SelectionManagerProto<ISample<? exte
 	}
 
 	private SelectionManagerSample() {
+
 		super();
 	}
 }

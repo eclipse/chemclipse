@@ -16,7 +16,6 @@ import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart.ErrorResidueBarChart;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
@@ -33,7 +32,7 @@ import javafx.collections.ListChangeListener;
 
 public class ErrorResiduePart {
 
-	private ListChangeListener<ISample<? extends ISampleData>> actualSelectionChangeListener;
+	private ListChangeListener<ISample> actualSelectionChangeListener;
 	private ErrorResidueBarChart errorResidueChart;
 	private ChangeListener<IPcaResultsVisualization> pcaResultChangeLisnter;
 	private IPcaResultsVisualization pcaResults;
@@ -41,6 +40,7 @@ public class ErrorResiduePart {
 	private boolean partHasBeenDestroy;
 
 	public ErrorResiduePart() {
+
 		selectionChangeListener = new ListChangeListener<IPcaResult>() {
 
 			@Override
@@ -74,10 +74,10 @@ public class ErrorResiduePart {
 				});
 			}
 		};
-		actualSelectionChangeListener = new ListChangeListener<ISample<? extends ISampleData>>() {
+		actualSelectionChangeListener = new ListChangeListener<ISample>() {
 
 			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
+			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample> c) {
 
 				Display.getDefault().asyncExec(() -> {
 					if(partHasBeenDestroy)

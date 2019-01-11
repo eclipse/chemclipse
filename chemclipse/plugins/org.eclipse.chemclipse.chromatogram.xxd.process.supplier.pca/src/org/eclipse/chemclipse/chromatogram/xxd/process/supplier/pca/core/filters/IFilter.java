@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
@@ -39,7 +38,7 @@ public interface IFilter extends IPreprocessing {
 		return variables.stream().allMatch(v -> (v instanceof IRetentionTime));
 	}
 
-	<V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples);
+	<V extends IVariable, S extends ISample> List<Boolean> filter(ISamples<V, S> samples);
 
 	String getSelectionResult();
 
@@ -47,7 +46,7 @@ public interface IFilter extends IPreprocessing {
 	boolean isOnlySelected();
 
 	@Override
-	default <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
+	default <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
 		List<Boolean> result = filter(samples);
 		List<V> variables = samples.getVariables();

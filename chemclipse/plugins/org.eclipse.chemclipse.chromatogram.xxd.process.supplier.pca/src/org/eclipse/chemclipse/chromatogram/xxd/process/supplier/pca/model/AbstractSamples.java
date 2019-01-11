@@ -11,27 +11,28 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class AbstractSamples<V extends IVariable, S extends ISample<? extends ISampleData>> implements ISamples<V, S> {
+public abstract class AbstractSamples<V extends IVariable, S extends ISample> implements ISamples<V, S> {
 
-	private ObservableList<S> samples;
-	private ObservableList<V> variables;
+	private List<S> samples;
+	private List<V> variables;
 
 	public AbstractSamples() {
-		samples = FXCollections.observableArrayList(ISample.extractor());
-		variables = FXCollections.observableArrayList(IVariable.extractor());
+
+		samples = new ArrayList<>();
+		variables = new ArrayList<>();
 	}
 
 	@Override
-	public ObservableList<S> getSampleList() {
+	public List<S> getSampleList() {
 
 		return samples;
 	}
 
 	@Override
-	public ObservableList<V> getVariables() {
+	public List<V> getVariables() {
 
 		return variables;
 	}

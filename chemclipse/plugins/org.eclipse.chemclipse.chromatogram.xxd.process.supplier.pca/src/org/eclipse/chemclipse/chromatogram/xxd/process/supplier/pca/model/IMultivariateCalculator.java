@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public interface IMultivariateCalculator {
 
-	void addObservation(double[] obsData, ISample<?> sampleKey, String groupName);
+	void addObservation(double[] obsData, ISample sampleKey, String groupName);
 
 	double[] applyLoadings(double[] obs);
 
@@ -33,7 +33,7 @@ public interface IMultivariateCalculator {
 
 	double[] getLoadingVector(int var);
 
-	double[] getScoreVector(ISample<?> sampleId);
+	double[] getScoreVector(ISample sampleId);
 
 	ArrayList<String> getGroupNames();
 

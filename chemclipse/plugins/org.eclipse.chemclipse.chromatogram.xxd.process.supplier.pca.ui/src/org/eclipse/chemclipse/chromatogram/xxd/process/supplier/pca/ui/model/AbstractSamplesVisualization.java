@@ -12,13 +12,13 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
-public abstract class AbstractSamplesVisualization<V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> implements ISamplesVisualization<V, S>, ISamples<V, S> {
+public abstract class AbstractSamplesVisualization<V extends IVariableVisualization, S extends ISampleVisualization> implements ISamplesVisualization<V, S>, ISamples<V, S> {
 
-	public <VM extends IVariable, SM extends ISample<? extends ISampleData>> AbstractSamplesVisualization(ISamples<VM, SM> samplesModel) {
+	public <VM extends IVariable, SM extends ISample> AbstractSamplesVisualization(ISamples<VM, SM> samplesModel) {
+
 		super();
 	}
 }

@@ -33,7 +33,7 @@ public class CenteringMean extends AbstractCentering {
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
+	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
 		List<V> variables = samples.getVariables();
 		for(int i = 0; i < variables.size(); i++) {

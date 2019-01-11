@@ -21,7 +21,6 @@ import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
@@ -32,13 +31,14 @@ public class CVFilter extends AbstractPreprocessing implements IFilter {
 	private String selectionResult = "";
 
 	public CVFilter() {
+
 		super();
 		this.alpha = 0.7;
 		setDataTypeProcessing(DATA_TYPE_PROCESSING.RAW_DATA);
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
+	public <V extends IVariable, S extends ISample> List<Boolean> filter(ISamples<V, S> samples) {
 
 		List<S> samplesList = selectSamples(samples);
 		List<Boolean> selection = new ArrayList<>();
@@ -53,7 +53,7 @@ public class CVFilter extends AbstractPreprocessing implements IFilter {
 				Collection<SummaryStatistics> categoryData = new ArrayList<>();
 				for(Set<S> set : samplesByGroupName) {
 					SummaryStatistics summaryStatistics = new SummaryStatistics();
-					for(ISample<?> sample : set) {
+					for(ISample sample : set) {
 						double d = getData(sample.getSampleData().get(i));
 						summaryStatistics.addValue(d);
 					}

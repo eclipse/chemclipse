@@ -41,9 +41,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaEvaluation {
 
-	private <V extends IVariable, S extends ISample<? extends ISampleData>> Map<ISample<?>, double[]> extractData(ISamples<V, S> samples, String algorithm, IPcaSettings settings, boolean[] isSelectedVariable) {
+	private <V extends IVariable, S extends ISample> Map<ISample, double[]> extractData(ISamples<V, S> samples, String algorithm, IPcaSettings settings, boolean[] isSelectedVariable) {
 
-		Map<ISample<? extends ISampleData>, double[]> selectedSamples = new HashMap<>();
+		Map<ISample, double[]> selectedSamples = new HashMap<>();
 		List<? extends IVariable> retentionTimes = samples.getVariables();
 		/*
 		 * get variables
@@ -52,7 +52,7 @@ public class PcaEvaluation {
 			isSelectedVariable[i] = isSelectedVariable[i] & retentionTimes.get(i).isSelected();
 			if(settings.IsRemoveUselessVariables()) {
 				int numEmptyValues = 0;
-				for(ISample<? extends ISampleData> sample : samples.getSampleList()) {
+				for(ISample sample : samples.getSampleList()) {
 					if(!sample.getSampleData().get(i).isEmpty()) {
 						numEmptyValues++;
 					}
@@ -72,7 +72,7 @@ public class PcaEvaluation {
 			}
 		}
 		final Set<String> groups = samples.getSampleList().stream().map(s -> s.getGroupName()).distinct().collect(Collectors.toList()).stream().limit(2).collect(Collectors.toSet());
-		for(ISample<? extends ISampleData> sample : samples.getSampleList()) {
+		for(ISample sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
 			if(sample.isSelected()) {
 				List<? extends ISampleData> data = sample.getSampleData();
@@ -88,13 +88,13 @@ public class PcaEvaluation {
 			}
 		}
 		if(algorithm.equals(IPcaSettings.OPLS_ALGO_NIPALS)) {
-			Map<ISample<? extends ISampleData>, double[]> groupSelected = selectedSamples.entrySet().stream().filter(e -> groups.contains(e.getKey().getGroupName())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+			Map<ISample, double[]> groupSelected = selectedSamples.entrySet().stream().filter(e -> groups.contains(e.getKey().getGroupName())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 			return groupSelected;
 		}
 		return selectedSamples;
 	}
 
-	private <V extends IVariable, S extends ISample<? extends ISampleData>> boolean[] selectedVariables(ISamples<V, S> samples, IPcaSettings settings) {
+	private <V extends IVariable, S extends ISample> boolean[] selectedVariables(ISamples<V, S> samples, IPcaSettings settings) {
 
 		List<? extends IVariable> retentionTimes = samples.getVariables();
 		boolean[] isSelectedVariable = new boolean[retentionTimes.size()];
@@ -103,7 +103,7 @@ public class PcaEvaluation {
 			isSelectedVariable[i] = isSelectedVariable[i] & retentionTimes.get(i).isSelected();
 			if(settings.IsRemoveUselessVariables()) {
 				int numEmptyValues = 0;
-				for(ISample<? extends ISampleData> sample : samples.getSampleList()) {
+				for(ISample sample : samples.getSampleList()) {
 					if(sample.isSelected()) {
 						if(!sample.getSampleData().get(i).isEmpty()) {
 							numEmptyValues++;
@@ -152,9 +152,9 @@ public class PcaEvaluation {
 		return cumulativeExplainedVariances;
 	}
 
-	private int getNumSampleVars(Map<ISample<?>, double[]> extractData) {
+	private int getNumSampleVars(Map<ISample, double[]> extractData) {
 
-		Iterator<Map.Entry<ISample<?>, double[]>> it = extractData.entrySet().iterator();
+		Iterator<Map.Entry<ISample, double[]>> it = extractData.entrySet().iterator();
 		if(it.hasNext()) {
 			return it.next().getValue().length;
 		}
@@ -170,7 +170,7 @@ public class PcaEvaluation {
 	 * @param numberOfPrincipalComponents
 	 * @return PrincipalComponentAnalysis
 	 */
-	private IMultivariateCalculator setupPCA(Map<ISample<?>, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents, String pcaAlgorithm) {
+	private IMultivariateCalculator setupPCA(Map<ISample, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents, String pcaAlgorithm) {
 
 		/*
 		 * Initialize the PCA analysis.
@@ -188,20 +188,20 @@ public class PcaEvaluation {
 		/*
 		 * Add the samples.
 		 */
-		for(Map.Entry<ISample<?>, double[]> entry : pcaPeakMap.entrySet()) {
+		for(Map.Entry<ISample, double[]> entry : pcaPeakMap.entrySet()) {
 			principalComponentAnalysis.addObservation(entry.getValue(), entry.getKey(), entry.getKey().getGroupName());
 		}
 		return principalComponentAnalysis;
 	}
 
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> PcaResults process(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
+	public <V extends IVariable, S extends ISample> PcaResults process(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
 
 		monitor.subTask("Run PCA");
 		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
 		String pcaAlgorithm = settings.getPcaAlgorithm();
 		PcaResults pcaResults = new PcaResults(settings);
 		boolean[] isSelectedVariables = selectedVariables(samples, settings);
-		Map<ISample<?>, double[]> extractData = extractData(samples, pcaAlgorithm, settings, isSelectedVariables);
+		Map<ISample, double[]> extractData = extractData(samples, pcaAlgorithm, settings, isSelectedVariables);
 		setRetentionTime(pcaResults, samples, isSelectedVariables);
 		int numVars = getNumSampleVars(extractData);
 		/*
@@ -228,16 +228,16 @@ public class PcaEvaluation {
 		return pcaResults;
 	}
 
-	private void setEigenSpaceAndErrorValues(IMultivariateCalculator principalComponentAnalysis, Map<ISample<?>, double[]> pcaPeakMap, IPcaResults pcaResults) {
+	private void setEigenSpaceAndErrorValues(IMultivariateCalculator principalComponentAnalysis, Map<ISample, double[]> pcaPeakMap, IPcaResults pcaResults) {
 
 		/*
 		 * Set the eigen space and error membership values.
 		 */
 		List<IPcaResult> resultsList = new ArrayList<>();
-		for(Entry<ISample<?>, double[]> entry : pcaPeakMap.entrySet()) {
+		for(Entry<ISample, double[]> entry : pcaPeakMap.entrySet()) {
 			double[] sampleData = entry.getValue();
 			double[] scoreVector = null;
-			ISample<?> sample = entry.getKey();
+			ISample sample = entry.getKey();
 			double errorMemberShip = Double.NaN;
 			IPcaResult pcaResult = new PcaResult(sample);
 			pcaResult.setName(sample.getName());
@@ -247,10 +247,11 @@ public class PcaEvaluation {
 			pcaResult.setSampleData(sampleData);
 			resultsList.add(pcaResult);
 		}
-		pcaResults.getPcaResultList().setAll(resultsList);
+		pcaResults.getPcaResultList().clear();
+		pcaResults.getPcaResultList().addAll(resultsList);
 	}
 
-	private void setRetentionTime(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples, boolean[] isSelectedVariables) {
+	private void setRetentionTime(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample> samples, boolean[] isSelectedVariables) {
 
 		List<IVaribleExtracted> variables = new ArrayList<>();
 		for(int i = 0; i < samples.getVariables().size(); i++) {
@@ -259,6 +260,7 @@ public class PcaEvaluation {
 				variables.add(new Variable(variable));
 			}
 		}
-		pcaResults.getExtractedVariables().setAll(variables);
+		pcaResults.getExtractedVariables().clear();
+		pcaResults.getExtractedVariables().addAll(variables);
 	}
 }

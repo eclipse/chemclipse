@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ITransformation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.MeanValuesReplacer;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -42,6 +41,7 @@ public class PcaPreprocessingData implements IDataModification {
 	private Map<Consumer<IPreprocessing>, Boolean> listeners = new ConcurrentHashMap<>();
 
 	public PcaPreprocessingData() {
+
 		onlySelected = true;
 		removeUselessVariables = true;
 		centeringScaling = new SimpleObjectProperty<>();
@@ -103,9 +103,9 @@ public class PcaPreprocessingData implements IDataModification {
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples, IProgressMonitor monitor) {
+	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples, IProgressMonitor monitor) {
 
-		for(ISample<?> sample : samples.getSampleList()) {
+		for(ISample sample : samples.getSampleList()) {
 			sample.getSampleData().stream().forEach(d -> {
 				double data = d.getData();
 				d.setModifiedData(data);
@@ -124,9 +124,6 @@ public class PcaPreprocessingData implements IDataModification {
 		if(centeringScaling.getValue() != null) {
 			centeringScaling.getValue().setOnlySelected(onlySelected);
 			centeringScaling.getValue().process(samples);
-		}
-		for(ISample<?> sample : samples.getSampleList()) {
-			sample.setSampleDataHasBeenChanged();
 		}
 	}
 

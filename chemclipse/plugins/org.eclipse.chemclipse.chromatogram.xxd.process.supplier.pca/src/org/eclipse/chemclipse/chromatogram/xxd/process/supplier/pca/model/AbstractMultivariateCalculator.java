@@ -23,7 +23,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	private double mean[];
 	private int numComps;
 	private DenseMatrix64F sampleData = new DenseMatrix64F(1, 1);
-	private ArrayList<ISample<?>> sampleKeys = new ArrayList<>();
+	private ArrayList<ISample> sampleKeys = new ArrayList<>();
 	private ArrayList<String> groupNames = new ArrayList<>();
 	private int sampleIndex;
 	private boolean computeSuccess;
@@ -43,18 +43,20 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		}
 	}
 
+	@Override
 	public void setComputeSuccess() {
 
 		computeSuccess = true;
 	}
 
+	@Override
 	public boolean getComputeStatus() {
 
 		return computeSuccess;
 	}
 
 	@Override
-	public void addObservation(double[] obsData, ISample<?> sampleKey, String groupName) {
+	public void addObservation(double[] obsData, ISample sampleKey, String groupName) {
 
 		if(obsData.length < sampleData.getNumCols()) {
 			this.invalidatePca();
@@ -146,6 +148,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		return loadingVector.data;
 	}
 
+	@Override
 	public double getSummedVariance() {
 
 		// calculate means of variables
@@ -191,6 +194,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		return mean;
 	}
 
+	@Override
 	public int getNumComps() {
 
 		return numComps;
@@ -202,7 +206,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	}
 
 	@Override
-	public double[] getScoreVector(ISample<?> sampleId) {
+	public double[] getScoreVector(ISample sampleId) {
 
 		int obs = sampleKeys.indexOf(sampleId);
 		DenseMatrix64F scoreVector = new DenseMatrix64F(1, numComps);
@@ -230,16 +234,19 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		this.scores = scores;
 	}
 
+	@Override
 	public void setNumComps(int numComps) {
 
 		this.numComps = numComps;
 	}
 
+	@Override
 	public void invalidatePca() {
 
 		this.pcaValid = false;
 	}
 
+	@Override
 	public boolean isPcaValid() {
 
 		return this.pcaValid;

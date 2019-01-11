@@ -11,19 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import javafx.beans.Observable;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.StringProperty;
-import javafx.util.Callback;
-
 public interface IVariable extends Comparable<IVariable> {
-
-	static <V extends IVariable> Callback<V, Observable[]> extractor() {
-
-		return (V v) -> new Observable[]{v.descriptionProperty(), v.valueProperty(), v.typeProperty(), v.selectedProperty()};
-	}
-
-	StringProperty descriptionProperty();
 
 	String getDescription();
 
@@ -33,8 +21,6 @@ public interface IVariable extends Comparable<IVariable> {
 
 	boolean isSelected();
 
-	BooleanProperty selectedProperty();
-
 	void setDescription(String description);
 
 	void setSelected(boolean selected);
@@ -42,8 +28,4 @@ public interface IVariable extends Comparable<IVariable> {
 	void setType(String type);
 
 	void setValue(String value);
-
-	StringProperty typeProperty();
-
-	StringProperty valueProperty();
 }

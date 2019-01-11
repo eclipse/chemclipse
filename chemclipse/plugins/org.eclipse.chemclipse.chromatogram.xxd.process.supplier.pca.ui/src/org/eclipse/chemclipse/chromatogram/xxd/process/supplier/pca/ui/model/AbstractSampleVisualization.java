@@ -19,21 +19,31 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyLongProperty;
+import javafx.beans.property.ReadOnlyLongWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public abstract class AbstractSampleVisualization<D extends ISampleData> implements ISampleVisualization<D> {
+public abstract class AbstractSampleVisualization implements ISampleVisualization {
 
 	private IntegerProperty color;
-	private ISample<D> delegator;
+	private ISample delegator;
+	private StringProperty groupName;
+	private StringProperty name;
+	private ReadOnlyLongWrapper sampleDataHasBeenChanged;
+	private BooleanProperty selected;
 
-	public AbstractSampleVisualization(ISample<D> sampleModel) {
-		color = new SimpleIntegerProperty();
+	public AbstractSampleVisualization(ISample sampleModel) {
+
+		this.color = new SimpleIntegerProperty();
 		this.delegator = sampleModel;
+		this.sampleDataHasBeenChanged = new ReadOnlyLongWrapper();
 		setColorRgba(255, 0, 0, 1.0);
 	}
 
-	public AbstractSampleVisualization(ISample<D> sampleModel, int r, int g, int b, double alpha) {
+	public AbstractSampleVisualization(ISample sampleModel, int r, int g, int b, double alpha) {
+
 		this(sampleModel);
 		setColorRgba(r, g, b, alpha);
 	}
@@ -63,7 +73,7 @@ public abstract class AbstractSampleVisualization<D extends ISampleData> impleme
 	}
 
 	@Override
-	public List<D> getSampleData() {
+	public List<? extends ISampleData> getSampleData() {
 
 		return delegator.getSampleData();
 	}
@@ -71,13 +81,16 @@ public abstract class AbstractSampleVisualization<D extends ISampleData> impleme
 	@Override
 	public long getSampleDataHasBeenChanged() {
 
-		return delegator.getSampleDataHasBeenChanged();
+		return sampleDataHasBeenChanged.get();
 	}
 
 	@Override
 	public StringProperty groupNameProperty() {
 
-		return delegator.groupNameProperty();
+		if(groupName == null) {
+			groupName = new SimpleStringProperty(delegator.getName());
+		}
+		return groupName;
 	}
 
 	@Override
@@ -89,19 +102,25 @@ public abstract class AbstractSampleVisualization<D extends ISampleData> impleme
 	@Override
 	public StringProperty nameProperty() {
 
-		return delegator.nameProperty();
+		if(name == null) {
+			name = new SimpleStringProperty(delegator.getName());
+		}
+		return name;
 	}
 
 	@Override
 	public ReadOnlyLongProperty sampleDataHasBeenChangedProperty() {
 
-		return delegator.sampleDataHasBeenChangedProperty();
+		return sampleDataHasBeenChanged.getReadOnlyProperty();
 	}
 
 	@Override
 	public BooleanProperty selectedProperty() {
 
-		return delegator.selectedProperty();
+		if(selected == null) {
+			selected = new SimpleBooleanProperty(delegator.isSelected());
+		}
+		return selected;
 	}
 
 	@Override
@@ -114,18 +133,24 @@ public abstract class AbstractSampleVisualization<D extends ISampleData> impleme
 	public void setGroupName(String groupName) {
 
 		delegator.setGroupName(groupName);
+		if(this.groupName != null) {
+			this.groupName.set(groupName);
+		}
 	}
 
 	@Override
 	public void setName(String name) {
 
 		delegator.setName(name);
+		if(this.name != null) {
+			this.name.set(name);
+		}
 	}
 
 	@Override
 	public void setSampleDataHasBeenChanged() {
 
-		delegator.setSampleDataHasBeenChanged();
+		sampleDataHasBeenChanged.add(1);
 	}
 
 	@Override

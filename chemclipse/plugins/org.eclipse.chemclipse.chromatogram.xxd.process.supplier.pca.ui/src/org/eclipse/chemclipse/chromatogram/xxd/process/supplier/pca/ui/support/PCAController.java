@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPrep
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
@@ -68,7 +67,7 @@ public class PCAController {
 	private Spinner pcy;
 	private Spinner pcz;
 	private Button runAnalysis;
-	private Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> samples;
+	private Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samples;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private Button autoReevaluate;
 	private Button settings;
@@ -83,7 +82,7 @@ public class PCAController {
 		}
 		evaluateRun.set(false);
 	};
-	private ListChangeListener<? super ISampleVisualization<? extends ISampleData>> reevaluationSamplesChangeListener = e -> {
+	private ListChangeListener<? super ISampleVisualization> reevaluationSamplesChangeListener = e -> {
 		if(!evaluateRun.get()) {
 			Display.getDefault().timerExec(100, autoreevaluete);
 		}
@@ -100,6 +99,7 @@ public class PCAController {
 	};
 
 	public PCAController(Composite parent, Object layoutData) {
+
 		samples = Optional.empty();
 		pcaResults = Optional.empty();
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -211,8 +211,8 @@ public class PCAController {
 				try {
 					monitor.run(false, false, progressMonitor -> {
 						progressMonitor.setTaskName("Initialization");
-						ISamplesVisualization<? extends IVariableVisualization, ? extends ISample<? extends ISampleData>> s = samples.get();
-						ObservableList<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> el = SelectionManagerSamples.getInstance().getElements();
+						ISamplesVisualization<? extends IVariableVisualization, ? extends ISample> s = samples.get();
+						ObservableList<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> el = SelectionManagerSamples.getInstance().getElements();
 						if(!el.contains(s)) {
 							el.add(s);
 						}
@@ -232,6 +232,7 @@ public class PCAController {
 	private void preprocessData() {
 
 		pcaPreprocessingData.process(samples.get(), new NullProgressMonitor());
+		samples.get().updateDataAllSamples();
 	}
 
 	public Optional<IPcaResultsVisualization> getPcaResults() {
@@ -239,22 +240,22 @@ public class PCAController {
 		return pcaResults;
 	}
 
-	public Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> getSamples() {
+	public Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> getSamples() {
 
 		return samples;
 	}
 
-	public void setSamples(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samples) {
+	public void setSamples(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples) {
 
 		if(this.samples.isPresent()) {
-			ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samplesVisualizationOld = this.samples.get();
+			ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samplesVisualizationOld = this.samples.get();
 			samplesVisualizationOld.getSampleList().removeListener(reevaluationSamplesChangeListener);
 			samplesVisualizationOld.getVariables().removeListener(reevaluationRetentionTimeChangeListener);
 			this.pcaPreprocessingData.removeListener(changePreprocessing);
 		}
 		this.samples = Optional.of(samples);
 		if(this.samples.isPresent()) {
-			ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samplesVisualizationNew = this.samples.get();
+			ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samplesVisualizationNew = this.samples.get();
 			samplesVisualizationNew.getSampleList().addListener(reevaluationSamplesChangeListener);
 			samplesVisualizationNew.getVariables().addListener(reevaluationRetentionTimeChangeListener);
 			this.pcaPreprocessingData = SelectionManagerSamples.getInstance().getPreprocessoringData(this.samples.get());

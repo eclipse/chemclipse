@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
@@ -31,6 +30,7 @@ public class RetentionTimeFilter extends AbstractPreprocessing implements IFilte
 	private String selectionResult = "";
 
 	public RetentionTimeFilter() {
+
 		super();
 		filtrationType = SELECT_INTERVAL;
 		intervals = new ArrayList<>();
@@ -47,7 +47,7 @@ public class RetentionTimeFilter extends AbstractPreprocessing implements IFilte
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
+	public <V extends IVariable, S extends ISample> List<Boolean> filter(ISamples<V, S> samples) {
 
 		List<V> variables = samples.getVariables();
 		List<Boolean> selection = new ArrayList<>(variables.size());

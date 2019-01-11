@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaria
 public class ScalingPareto extends AbstaractScaling {
 
 	public ScalingPareto(int centeringType) {
+
 		super(centeringType);
 	}
 
@@ -37,7 +38,7 @@ public class ScalingPareto extends AbstaractScaling {
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
+	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
 		boolean onlySeleted = isOnlySelected();
 		int centeringType = getCenteringType();
@@ -46,7 +47,7 @@ public class ScalingPareto extends AbstaractScaling {
 		for(int i = 0; i < variables.size(); i++) {
 			final double mean = getCenteringValue(samplesList, i, centeringType);
 			final double deviationSqrt = Math.sqrt(getStandartDeviation(samplesList, i, centeringType));
-			for(ISample<?> sample : samplesList) {
+			for(ISample sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if((sample.isSelected() || !onlySeleted)) {
 					double data = getData(sampleData);

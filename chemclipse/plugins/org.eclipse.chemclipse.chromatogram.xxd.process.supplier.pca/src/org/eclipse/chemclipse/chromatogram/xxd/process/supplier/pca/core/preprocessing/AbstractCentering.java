@@ -21,9 +21,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 public abstract class AbstractCentering extends AbstractPreprocessing implements ICentering {
 
 	public AbstractCentering() {
+
 	}
 
-	protected <S extends ISample<? extends ISampleData>> double getCenteringValue(List<S> list, int position, int type) {
+	protected <S extends ISample> double getCenteringValue(List<S> list, int position, int type) {
 
 		boolean onlySelected = isOnlySelected();
 		DoubleStream selectedData = list.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).mapToDouble(d -> getData(d));
@@ -45,12 +46,12 @@ public abstract class AbstractCentering extends AbstractPreprocessing implements
 		}
 	}
 
-	protected <S extends ISample<? extends ISampleData>> double getStandartDeviation(List<S> samples, int position, int type) {
+	protected <S extends ISample> double getStandartDeviation(List<S> samples, int position, int type) {
 
 		return Math.sqrt(Math.abs(getVariance(samples, position, type)));
 	}
 
-	protected <S extends ISample<? extends ISampleData>> double getVariance(List<S> samples, int position, int type) {
+	protected <S extends ISample> double getVariance(List<S> samples, int position, int type) {
 
 		boolean onlySelected = isOnlySelected();
 		List<ISampleData> sampleData = samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).collect(Collectors.toList());

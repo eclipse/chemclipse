@@ -11,15 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import javafx.beans.Observable;
-import javafx.util.Callback;
-
 public interface IPcaResult {
-
-	static Callback<IPcaResult, Observable[]> extractor() {
-
-		return (IPcaResult r) -> new Observable[]{r.getSample().selectedProperty()};
-	}
 
 	double[] getScoreVector();
 
@@ -29,7 +21,7 @@ public interface IPcaResult {
 
 	String getName();
 
-	ISample<? extends ISampleData> getSample();
+	ISample getSample();
 
 	double[] getSampleData();
 

@@ -31,6 +31,7 @@ public class SortModel implements ISortModel {
 	private TableProvider tableProvider;
 
 	public SortModel(TableProvider tableProvider) {
+
 		this.sortedRow = new ArrayList<>();
 		sortDirection = SortDirectionEnum.NONE;
 		this.tableProvider = tableProvider;
@@ -139,7 +140,7 @@ public class SortModel implements ISortModel {
 				 * sort by abundance
 				 */
 				ISample sample = tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
-				List<ISampleData> sampleData = sample.getSampleData();
+				List<? extends ISampleData> sampleData = sample.getSampleData();
 				sortedRow.sort((i, j) -> {
 					ISampleData sampleDataA = sampleData.get(i);
 					ISampleData sampleDataB = sampleData.get(j);

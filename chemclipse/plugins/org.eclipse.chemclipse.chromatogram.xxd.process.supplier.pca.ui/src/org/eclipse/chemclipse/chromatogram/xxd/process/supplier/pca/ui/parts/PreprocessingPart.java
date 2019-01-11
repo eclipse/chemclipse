@@ -20,7 +20,6 @@ import javax.annotation.PreDestroy;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
@@ -39,21 +38,22 @@ import javafx.collections.ListChangeListener;
 
 public class PreprocessingPart {
 
-	private static Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, PcaPreprocessingData> preprocessings;
+	private static Map<ISamples<? extends IVariable, ? extends ISample>, PcaPreprocessingData> preprocessings;
 	private DataPreprocessingSelection dataPreprocessing;
-	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> samplesChangeListener;
+	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samplesChangeListener;
 
 	public PreprocessingPart() {
+
 		synchronized(PreprocessingPart.class) {
 			if(preprocessings == null) {
 				preprocessings = new ConcurrentHashMap<>();
-				SelectionManagerSamples.getInstance().getElements().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
+				SelectionManagerSamples.getInstance().getElements().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample>>() {
 
 					@Override
-					public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> c) {
+					public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample>> c) {
 
 						while(c.next()) {
-							for(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples : c.getRemoved()) {
+							for(ISamples<? extends IVariable, ? extends ISample> samples : c.getRemoved()) {
 								preprocessings.remove(samples);
 							}
 						}
@@ -61,19 +61,19 @@ public class PreprocessingPart {
 				});
 			}
 		}
-		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>>() {
+		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> c) {
+			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> c) {
 
 				PcaPreprocessingData pcaPreprocessingData = new PcaPreprocessingData();
-				ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = null;
+				ISamplesVisualization<? extends IVariable, ? extends ISampleVisualization> samples = null;
 				if(!c.getList().isEmpty()) {
 					samples = c.getList().get(0);
 					pcaPreprocessingData = getPcaPreprocessingData(samples);
 				}
 				final PcaPreprocessingData preprocessingData = pcaPreprocessingData;
-				final ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> s = samples;
+				final ISamplesVisualization<? extends IVariable, ? extends ISampleVisualization> s = samples;
 				Display.getDefault().syncExec(() -> {
 					dataPreprocessing.update(preprocessingData);
 					dataPreprocessing.setSamples(s);
@@ -95,14 +95,14 @@ public class PreprocessingPart {
 		if(SelectionManagerSamples.getInstance().getSelection().isEmpty()) {
 			dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, null);
 		} else {
-			ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = SelectionManagerSamples.getInstance().getSelection().get(0);
+			ISamplesVisualization<? extends IVariable, ? extends ISampleVisualization> samples = SelectionManagerSamples.getInstance().getSelection().get(0);
 			dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, null, getPcaPreprocessingData(samples));
 			dataPreprocessing.setSamples(samples);
 		}
 		SelectionManagerSamples.getInstance().getSelection().addListener(samplesChangeListener);
 	}
 
-	private PcaPreprocessingData getPcaPreprocessingData(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
+	private PcaPreprocessingData getPcaPreprocessingData(ISamples<? extends IVariable, ? extends ISample> samples) {
 
 		if(samples instanceof IDataPreprocessing) {
 			IDataPreprocessing dataPreprocessing = (IDataPreprocessing)samples;

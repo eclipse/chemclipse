@@ -25,6 +25,7 @@ public abstract class AbstractPreprocessing implements IPreprocessing {
 	private DATA_TYPE_PROCESSING dataTypeProcessing;
 
 	public AbstractPreprocessing() {
+
 		this.onlySelected = true;
 		this.dataTypeProcessing = DATA_TYPE_PROCESSING.MODIFIED_DATA;
 	}
@@ -53,7 +54,7 @@ public abstract class AbstractPreprocessing implements IPreprocessing {
 		return dataTypeProcessing;
 	}
 
-	protected <V extends IVariable, S extends ISample<? extends ISampleData>> List<S> selectSamples(ISamples<V, S> samples) {
+	protected <V extends IVariable, S extends ISample> List<S> selectSamples(ISamples<V, S> samples) {
 
 		return samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
 	}

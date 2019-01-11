@@ -13,47 +13,21 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.List;
 
-import javafx.beans.Observable;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyLongProperty;
-import javafx.beans.property.StringProperty;
-import javafx.util.Callback;
-
-public interface ISample<D extends ISampleData> {
-
-	static <S extends ISample<? extends ISampleData>> Callback<S, Observable[]> extractor() {
-
-		return (S s) -> new Observable[]{s.nameProperty(), s.groupNameProperty(), s.selectedProperty(), s.sampleDataHasBeenChangedProperty()};
-	}
+public interface ISample {
 
 	String getGroupName();
 
 	String getName();
 
-	List<D> getSampleData();
+	List<? extends ISampleData> getSampleData();
+	// long getSampleDataHasBeenChanged();
 
-	long getSampleDataHasBeenChanged();
-
-	StringProperty groupNameProperty();
-
+	// void setSampleDataHasBeenChanged();
 	boolean isSelected();
-
-	/*
-	 * boolean isSelected(){
-	 * return sampleMode.isSelected();
-	 * }
-	 */
-	StringProperty nameProperty();
-
-	ReadOnlyLongProperty sampleDataHasBeenChangedProperty();
-
-	BooleanProperty selectedProperty();
 
 	void setGroupName(String groupName);
 
 	void setName(String name);
-
-	void setSampleDataHasBeenChanged();
 
 	void setSelected(boolean selected);
 }

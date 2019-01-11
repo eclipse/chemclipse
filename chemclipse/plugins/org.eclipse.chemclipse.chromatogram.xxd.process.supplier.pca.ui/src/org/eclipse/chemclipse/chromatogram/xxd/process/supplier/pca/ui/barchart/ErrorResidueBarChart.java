@@ -25,7 +25,6 @@ import java.util.Optional;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableExtractedVisalization;
@@ -80,6 +79,7 @@ public class ErrorResidueBarChart {
 	private int sortType;
 
 	public ErrorResidueBarChart(Composite parent, Object layoutData) {
+
 		/*
 		 * JavaFX init
 		 */
@@ -234,11 +234,11 @@ public class ErrorResidueBarChart {
 						node.setOnMouseClicked(e -> {
 							if(e.getButton().equals(MouseButton.PRIMARY)) {
 								if(e.getClickCount() == 2) {
-									ISample<? extends ISampleData> s = pcaResult.getSample();
+									ISample s = pcaResult.getSample();
 									if(e.isControlDown()) {
 										s.setSelected(!s.isSelected());
 									} else {
-										ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
+										ObservableList<ISample> selection = SelectionManagerSample.getInstance().getSelection();
 										if(!selection.contains(s)) {
 											selection.setAll(s);
 										} else {

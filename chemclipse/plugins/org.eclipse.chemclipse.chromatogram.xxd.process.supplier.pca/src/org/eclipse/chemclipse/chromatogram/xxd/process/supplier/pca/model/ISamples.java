@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import javafx.collections.ObservableList;
+import java.util.List;
 
-public interface ISamples<V extends IVariable, S extends ISample<? extends ISampleData>> {
+public interface ISamples<V extends IVariable, S extends ISample> {
 
-	ObservableList<S> getSampleList();
+	List<S> getSampleList();
 
-	ObservableList<V> getVariables();
+	List<V> getVariables();
 }

@@ -11,8 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 
-public interface ISamplesVisualization<V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> extends ISamples<V, S> {
+import javafx.collections.ObservableList;
+
+public interface ISamplesVisualization<V extends IVariableVisualization, S extends ISampleVisualization> extends ISamples<V, S> {
+
+	@Override
+	ObservableList<S> getSampleList();
+
+	@Override
+	ObservableList<V> getVariables();
+
+	default void updateDataAllSamples() {
+
+		for(ISampleVisualization sample : getSampleList()) {
+			sample.setSampleDataHasBeenChanged();
+		}
+	}
 }

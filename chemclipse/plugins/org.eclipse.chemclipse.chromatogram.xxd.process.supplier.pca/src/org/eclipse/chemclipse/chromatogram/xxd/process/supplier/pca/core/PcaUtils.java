@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.correlation.Covariance;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
@@ -46,7 +45,7 @@ import org.ejml.interfaces.decomposition.EigenDecomposition;
 
 public class PcaUtils {
 
-	public static <V extends IVariable, S extends ISample<? extends ISampleData>> Map<String, double[]> extractData(ISamples<V, S> samples) {
+	public static <V extends IVariable, S extends ISample> Map<String, double[]> extractData(ISamples<V, S> samples) {
 
 		Map<String, double[]> selectedSamples = new HashMap<>();
 		List<V> variables = samples.getVariables();
@@ -69,7 +68,7 @@ public class PcaUtils {
 		return selectedSamples;
 	}
 
-	public static <V extends IVariable, S extends ISample<? extends ISampleData>> RealMatrix getCovarianceMatrix(ISamples<V, S> samples) {
+	public static <V extends IVariable, S extends ISample> RealMatrix getCovarianceMatrix(ISamples<V, S> samples) {
 
 		Map<String, double[]> data = extractData(samples);
 		double[][] array = new double[data.size()][];
@@ -84,7 +83,7 @@ public class PcaUtils {
 		return covariance.getCovarianceMatrix();
 	}
 
-	public static <V extends IVariable, S extends ISample<? extends ISampleData>> double[] getEigenValuesCovarianceMatrix(ISamples<V, S> samples) {
+	public static <V extends IVariable, S extends ISample> double[] getEigenValuesCovarianceMatrix(ISamples<V, S> samples) {
 
 		RealMatrix covarianceMatrix = getCovarianceMatrix(samples);
 		EigenDecomposition<DenseMatrix64F> eigenDecomposition = DecompositionFactory.eig(covarianceMatrix.getColumnDimension(), false, true);
@@ -122,10 +121,10 @@ public class PcaUtils {
 	 * @param onlySelected
 	 * @return all group which list of samples contains, if some group name is null Set contains also null value
 	 */
-	public static <S extends ISample<? extends ISampleData>> Set<String> getGroupNames(List<S> samples, boolean onlySelected) {
+	public static <S extends ISample> Set<String> getGroupNames(List<S> samples, boolean onlySelected) {
 
 		Set<String> groupNames = new HashSet<>();
-		for(ISample<?> sample : samples) {
+		for(ISample sample : samples) {
 			String groupName = sample.getGroupName();
 			if(!onlySelected || sample.isSelected()) {
 				groupNames.add(groupName);
@@ -149,7 +148,7 @@ public class PcaUtils {
 	 * @param samples
 	 * @return return sorted map, key is first occurrence group name in List, Value contains group name, Value can be null
 	 */
-	public static <S extends ISample<? extends ISampleData>> SortedMap<Integer, String> getIndexsFirstOccurrence(List<S> samples) {
+	public static <S extends ISample> SortedMap<Integer, String> getIndexsFirstOccurrence(List<S> samples) {
 
 		SortedMap<Integer, String> names = new TreeMap<>();
 		for(int i = 0; i < samples.size(); i++) {
@@ -198,7 +197,7 @@ public class PcaUtils {
 		return map;
 	}
 
-	public static <S extends ISample<? extends ISampleData>> Map<String, Set<S>> getSamplesByGroupName(List<S> samples, boolean containsNullGroupName, boolean onlySelected) {
+	public static <S extends ISample> Map<String, Set<S>> getSamplesByGroupName(List<S> samples, boolean containsNullGroupName, boolean onlySelected) {
 
 		Map<String, Set<S>> samplesByGroupName = new HashMap<>();
 		Set<String> groupNames = getGroupNames(samples, onlySelected);
@@ -226,14 +225,6 @@ public class PcaUtils {
 			}
 			if(name0 == null && name1 != null) {
 				return -1;
-			}
-			if(name0.equals(name1)) {
-				if(arg0 instanceof Group) {
-					return -1;
-				}
-				if(arg1 instanceof Group) {
-					return 1;
-				}
 			}
 			return name0.compareTo(name1);
 		};
@@ -266,9 +257,9 @@ public class PcaUtils {
 	 *
 	 * @param samples
 	 */
-	public static <S extends ISample<? extends ISampleData>> void sortSampleListByGroup(List<S> samples) {
+	public static <S extends ISample> void sortSampleListByGroup(List<S> samples) {
 
-		Comparator<ISample<?>> comparator = (arg0, arg1) -> {
+		Comparator<ISample> comparator = (arg0, arg1) -> {
 			String name0 = arg0.getGroupName();
 			String name1 = arg1.getGroupName();
 			if(name0 == null && name1 == null) {
@@ -280,22 +271,14 @@ public class PcaUtils {
 			if(name0 == null && name1 != null) {
 				return -1;
 			}
-			if(name0.equals(name1)) {
-				if(arg0 instanceof Group) {
-					return -1;
-				}
-				if(arg1 instanceof Group) {
-					return 1;
-				}
-			}
 			return name0.compareTo(name1);
 		};
 		Collections.sort(samples, comparator);
 	}
 
-	public static <S extends ISample<? extends ISampleData>> void sortSampleListByName(List<S> samples) {
+	public static <S extends ISample> void sortSampleListByName(List<S> samples) {
 
-		Comparator<ISample<?>> comparator = (arg0, arg1) -> {
+		Comparator<ISample> comparator = (arg0, arg1) -> {
 			return arg0.getName().compareTo(arg1.getName());
 		};
 		Collections.sort(samples, comparator);

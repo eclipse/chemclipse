@@ -14,27 +14,17 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyLongProperty;
-import javafx.beans.property.ReadOnlyLongWrapper;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+public abstract class AbstractSample<D extends ISampleData> implements ISample {
 
-public abstract class AbstractSample<D extends ISampleData> implements ISample<D> {
-
-	private StringProperty groupName;
-	private StringProperty name;
+	private String groupName;
+	private String name;
 	private List<D> sampleData;
-	private ReadOnlyLongWrapper sampleDataHasBeenChanged;
-	private BooleanProperty selected;
+	private boolean selected;
 
 	public AbstractSample(String name) {
+
+		this.name = name;
 		sampleData = new ArrayList<>();
-		this.name = new SimpleStringProperty(name);
-		this.groupName = new SimpleStringProperty();
-		this.selected = new SimpleBooleanProperty(true);
-		this.sampleDataHasBeenChanged = new ReadOnlyLongWrapper(0);
 	}
 
 	@Override
@@ -49,20 +39,20 @@ public abstract class AbstractSample<D extends ISampleData> implements ISample<D
 		if(getClass() != otherObject.getClass()) {
 			return false;
 		}
-		ISample<?> other = (ISample<?>)otherObject;
+		ISample other = (ISample)otherObject;
 		return name.equals(other.getName());
 	}
 
 	@Override
 	public String getGroupName() {
 
-		return groupName.get();
+		return groupName;
 	}
 
 	@Override
 	public String getName() {
 
-		return name.get();
+		return name;
 	}
 
 	@Override
@@ -72,37 +62,7 @@ public abstract class AbstractSample<D extends ISampleData> implements ISample<D
 	}
 
 	@Override
-	public long getSampleDataHasBeenChanged() {
-
-		return sampleDataHasBeenChanged.get();
-	}
-
-	@Override
-	public StringProperty groupNameProperty() {
-
-		return groupName;
-	}
-
-	@Override
 	public boolean isSelected() {
-
-		return selected.get();
-	}
-
-	@Override
-	public StringProperty nameProperty() {
-
-		return name;
-	}
-
-	@Override
-	public ReadOnlyLongProperty sampleDataHasBeenChangedProperty() {
-
-		return sampleDataHasBeenChanged.getReadOnlyProperty();
-	}
-
-	@Override
-	public BooleanProperty selectedProperty() {
 
 		return selected;
 	}
@@ -110,24 +70,18 @@ public abstract class AbstractSample<D extends ISampleData> implements ISample<D
 	@Override
 	public void setGroupName(String groupName) {
 
-		this.groupName.set(groupName);
+		this.groupName = groupName;
 	}
 
 	@Override
 	public void setName(String name) {
 
-		this.name.set(name);
-	}
-
-	@Override
-	public void setSampleDataHasBeenChanged() {
-
-		sampleDataHasBeenChanged.set(sampleDataHasBeenChanged.get() + 1);
+		this.name = name;
 	}
 
 	@Override
 	public void setSelected(boolean selected) {
 
-		this.selected.set(selected);
+		this.selected = selected;
 	}
 }

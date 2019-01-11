@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,14 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
-public interface ISampleDataGroup<S extends ISample<? extends ISampleData>> extends ISampleData {
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
+
+public class VariableVisualization extends AbstractVariableVisualization {
+
+	public VariableVisualization(IVaribleExtracted variableModel) {
+
+		super(variableModel);
+	}
 }

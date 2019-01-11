@@ -18,7 +18,6 @@ import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.ScorePlot3d;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
@@ -36,7 +35,7 @@ import javafx.collections.ListChangeListener;
 
 public class ScorePlot3DPart {
 
-	private ListChangeListener<ISample<? extends ISampleData>> actualSelectionChangeListener;
+	private ListChangeListener<ISample> actualSelectionChangeListener;
 	private ChangeListener<IPcaResultsVisualization> pcaResultChangeLisnter;
 	private IPcaResultsVisualization pcaResults;
 	private ScorePlot3d scorePlot3d;
@@ -45,6 +44,7 @@ public class ScorePlot3DPart {
 	private boolean partHasBeenDestroy;
 
 	public ScorePlot3DPart() {
+
 		settingUpdateListener = new Consumer<IPcaSettingsVisualization>() {
 
 			@Override
@@ -69,10 +69,10 @@ public class ScorePlot3DPart {
 				});
 			}
 		};
-		actualSelectionChangeListener = new ListChangeListener<ISample<? extends ISampleData>>() {
+		actualSelectionChangeListener = new ListChangeListener<ISample>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
+			public void onChanged(ListChangeListener.Change<? extends ISample> c) {
 
 				Display.getDefault().asyncExec(() -> {
 					if(partHasBeenDestroy)

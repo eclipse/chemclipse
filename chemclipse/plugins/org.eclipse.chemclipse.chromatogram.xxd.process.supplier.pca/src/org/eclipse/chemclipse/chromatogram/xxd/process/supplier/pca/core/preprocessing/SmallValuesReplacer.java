@@ -34,7 +34,7 @@ public class SmallValuesReplacer extends AbstractPreprocessing {
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
+	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
 		List<V> variables = samples.getVariables();
 		List<S> sampleList = samples.getSampleList();

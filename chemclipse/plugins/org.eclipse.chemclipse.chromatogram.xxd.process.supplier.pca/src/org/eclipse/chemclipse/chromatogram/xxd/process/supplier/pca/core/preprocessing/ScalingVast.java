@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaria
 public class ScalingVast extends AbstaractScaling {
 
 	public ScalingVast(int centeringType) {
+
 		super(centeringType);
 	}
 
@@ -37,7 +38,7 @@ public class ScalingVast extends AbstaractScaling {
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
+	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
 		boolean onlySelected = isOnlySelected();
 		int centeringType = getCenteringType();
@@ -46,7 +47,7 @@ public class ScalingVast extends AbstaractScaling {
 		for(int i = 0; i < variables.size(); i++) {
 			final double mean = getCenteringValue(samplesList, i, centeringType);
 			final double variace = getVariance(samplesList, i, centeringType);
-			for(ISample<?> sample : samplesList) {
+			for(ISample sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if((sample.isSelected() || !onlySelected)) {
 					double data = getData(sampleData);

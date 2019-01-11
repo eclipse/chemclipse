@@ -11,57 +11,37 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 public abstract class AbstractVariable implements IVariable {
 
-	private StringProperty description;
-	private BooleanProperty selected;
-	private StringProperty type;
-	private StringProperty value;
+	private String description;
+	private boolean selected;
+	private String type;
+	private String value;
 
 	public AbstractVariable() {
-		value = new SimpleStringProperty();
-		type = new SimpleStringProperty();
-		selected = new SimpleBooleanProperty(true);
-		description = new SimpleStringProperty();
-	}
 
-	@Override
-	public StringProperty descriptionProperty() {
-
-		return description;
 	}
 
 	@Override
 	public String getDescription() {
 
-		return description.get();
+		return description;
 	}
 
 	@Override
 	public String getType() {
 
-		return type.get();
+		return type;
 	}
 
 	@Override
 	public String getValue() {
 
-		return value.get();
+		return value;
 	}
 
 	@Override
 	public boolean isSelected() {
-
-		return selected.get();
-	}
-
-	@Override
-	public BooleanProperty selectedProperty() {
 
 		return selected;
 	}
@@ -69,36 +49,24 @@ public abstract class AbstractVariable implements IVariable {
 	@Override
 	public void setDescription(String description) {
 
-		this.description.set(description);
+		this.description = description;
 	}
 
 	@Override
 	public void setSelected(boolean selected) {
 
-		this.selected.set(selected);
+		this.selected = selected;
 	}
 
 	@Override
 	public void setType(String type) {
 
-		this.type.set(type);
+		this.type = type;
 	}
 
 	@Override
 	public void setValue(String value) {
 
-		this.value.set(value);
-	}
-
-	@Override
-	public StringProperty typeProperty() {
-
-		return type;
-	}
-
-	@Override
-	public StringProperty valueProperty() {
-
-		return value;
+		this.value = value;
 	}
 }

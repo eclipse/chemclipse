@@ -16,7 +16,6 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.SeriesConverter;
@@ -65,8 +64,8 @@ public class ScorePlot extends PCA2DPlot {
 
 			String selectedSeriesId = baseChart.getSelectedseriesId(event);
 			if(!selectedSeriesId.equals("")) {
-				ISample<? extends ISampleData> sample = extractedResults.get(selectedSeriesId).getSample();
-				ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
+				ISample sample = extractedResults.get(selectedSeriesId).getSample();
+				ObservableList<ISample> selection = SelectionManagerSample.getInstance().getSelection();
 				if(!selection.contains(sample)) {
 					selection.setAll(sample);
 				} else {
@@ -101,7 +100,7 @@ public class ScorePlot extends PCA2DPlot {
 
 			String selectedSeriesId = baseChart.getSelectedseriesId(event);
 			if(!selectedSeriesId.equals("")) {
-				ISample<? extends ISampleData> sample = extractedResults.get(selectedSeriesId).getSample();
+				ISample sample = extractedResults.get(selectedSeriesId).getSample();
 				if(sample.isSelected()) {
 					sample.setSelected(false);
 				} else {
@@ -114,6 +113,7 @@ public class ScorePlot extends PCA2DPlot {
 	private final Map<String, IPcaResult> extractedResults = new HashMap<>();
 
 	public ScorePlot(Composite parent) {
+
 		super(parent, "Score Plot");
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.clearHandledEventProcessors();

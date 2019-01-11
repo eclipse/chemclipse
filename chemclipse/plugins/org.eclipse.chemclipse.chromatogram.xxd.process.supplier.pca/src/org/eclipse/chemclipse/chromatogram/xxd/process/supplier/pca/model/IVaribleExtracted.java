@@ -11,15 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import javafx.beans.Observable;
-import javafx.util.Callback;
-
 public interface IVaribleExtracted extends IVariable {
-
-	static <V extends IVaribleExtracted> Callback<V, Observable[]> extractor() {
-
-		return (V v) -> new Observable[]{v.getVariableOrigin().selectedProperty()};
-	}
 
 	IVariable getVariableOrigin();
 }

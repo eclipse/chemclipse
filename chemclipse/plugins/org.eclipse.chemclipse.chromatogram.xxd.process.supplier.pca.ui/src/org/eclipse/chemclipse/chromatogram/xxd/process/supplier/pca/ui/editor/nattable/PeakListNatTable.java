@@ -19,7 +19,6 @@ import java.util.SortedMap;
 import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportDataSupplier;
@@ -79,6 +78,7 @@ public class PeakListNatTable {
 	SelectionLayer selectionLayer;
 
 	public PeakListNatTable(Composite parent, Object layoutData) {
+
 		tableData = new TableData();
 		tableProvider = new TableProvider(tableData);
 		createPeakListIntensityTableSection(parent, layoutData);
@@ -322,7 +322,7 @@ public class PeakListNatTable {
 		natTable.refresh();
 	}
 
-	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samples) {
+	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples) {
 
 		tableData.update(samples);
 		sortModel.update();

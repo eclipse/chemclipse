@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
 import javafx.beans.Observable;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.StringProperty;
 import javafx.util.Callback;
 
 public interface IVariableVisualization extends IColor, IVariable {
@@ -22,4 +24,12 @@ public interface IVariableVisualization extends IColor, IVariable {
 
 		return (V v) -> new Observable[]{v.descriptionProperty(), v.valueProperty(), v.typeProperty(), v.selectedProperty(), v.colorProperty()};
 	}
+
+	StringProperty typeProperty();
+
+	BooleanProperty selectedProperty();
+
+	StringProperty valueProperty();
+
+	StringProperty descriptionProperty();
 }

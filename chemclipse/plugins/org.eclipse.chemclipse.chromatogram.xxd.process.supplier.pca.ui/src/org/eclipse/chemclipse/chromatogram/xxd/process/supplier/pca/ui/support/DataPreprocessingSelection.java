@@ -30,9 +30,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.TransformationLOG10;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.TransformationPower;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -57,7 +58,7 @@ public class DataPreprocessingSelection {
 	private CCombo normalizationCombo;
 	private PcaPreprocessingData pcaPreprocessingData;
 	//
-	private ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples;
+	private ISamplesVisualization<? extends IVariable, ? extends ISampleVisualization> samples;
 	//
 	private final int SCALING_AUTO = 0;
 	private final int SCALING_LEVEL = 4;
@@ -74,10 +75,12 @@ public class DataPreprocessingSelection {
 	private CCombo transformationCombo;
 
 	public DataPreprocessingSelection(Composite composite, Object layoutData) {
+
 		this(composite, layoutData, new PcaPreprocessingData());
 	}
 
 	public DataPreprocessingSelection(Composite composite, Object layoutData, PcaPreprocessingData pcaPreprocessingData) {
+
 		init(composite, layoutData);
 		update(pcaPreprocessingData);
 	}
@@ -164,7 +167,7 @@ public class DataPreprocessingSelection {
 		transformationCombo.setLayoutData(GridDataFactory.copyData(layoutData));
 	}
 
-	public ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> getSamples() {
+	public ISamples<? extends IVariable, ? extends ISample> getSamples() {
 
 		return samples;
 	}
@@ -180,7 +183,7 @@ public class DataPreprocessingSelection {
 		addScaling(composite, new GridData(GridData.FILL_HORIZONTAL));
 	}
 
-	public void setSamples(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
+	public void setSamples(ISamplesVisualization<? extends IVariable, ? extends ISample> samples) {
 
 		this.samples = samples;
 	}
@@ -343,6 +346,7 @@ public class DataPreprocessingSelection {
 		}
 		if(samples != null) {
 			pcaPreprocessingData.process(samples, new NullProgressMonitor());
+			samples.updateDataAllSamples();
 		}
 	}
 

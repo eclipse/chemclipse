@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
@@ -25,12 +24,13 @@ public class EmptyDataFilter extends AbstractPreprocessing implements IFilter {
 	private String selectionResult = "";
 
 	public EmptyDataFilter() {
+
 		super();
 		setDataTypeProcessing(DATA_TYPE_PROCESSING.MODIFIED_DATA);
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
+	public <V extends IVariable, S extends ISample> List<Boolean> filter(ISamples<V, S> samples) {
 
 		List<S> selectedSamples = selectSamples(samples);
 		List<Boolean> selection = new ArrayList<>();

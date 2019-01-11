@@ -22,4 +22,7 @@ public interface IPcaResultVisualization extends IPcaResult, IColor {
 
 		return (IPcaResultVisualization r) -> new Observable[]{r.getSample().selectedProperty(), r.colorProperty()};
 	}
+
+	@Override
+	ISampleVisualization getSample();
 }

@@ -17,17 +17,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 
 public class TableData {
 
-	private List<ISampleVisualization<? extends ISampleData>> samples = new ArrayList<>();
+	private List<ISampleVisualization> samples = new ArrayList<>();
 	private List<IVariableVisualization> variables = new ArrayList<>();
 
 	public TableData() {
+
 	}
 
 	public void clear() {
@@ -39,7 +39,7 @@ public class TableData {
 	/**
 	 * @return sorted samples by groups, this List contains instances of class Group
 	 */
-	public List<ISampleVisualization<? extends ISampleData>> getSamples() {
+	public List<ISampleVisualization> getSamples() {
 
 		return samples;
 	}
@@ -63,7 +63,7 @@ public class TableData {
 		return variables;
 	}
 
-	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> isamples) {
+	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> isamples) {
 
 		/*
 		 * remove old data

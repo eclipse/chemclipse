@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaria
 public class ScalingRange extends AbstaractScaling {
 
 	public ScalingRange(int centeringType) {
+
 		super(centeringType);
 	}
 
@@ -30,13 +31,13 @@ public class ScalingRange extends AbstaractScaling {
 		return "";
 	}
 
-	private <S extends ISample<? extends ISampleData>> double getMax(List<S> samples, int index) {
+	private <S extends ISample> double getMax(List<S> samples, int index) {
 
 		boolean onlySelected = isOnlySelected();
 		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(s -> getData(s)).summaryStatistics().getMax();
 	}
 
-	private <S extends ISample<? extends ISampleData>> double getMin(List<S> samples, int index) {
+	private <S extends ISample> double getMin(List<S> samples, int index) {
 
 		boolean onlySelected = isOnlySelected();
 		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(s -> getData(s)).summaryStatistics().getMin();
@@ -49,7 +50,7 @@ public class ScalingRange extends AbstaractScaling {
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
+	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
 		boolean onlySelected = isOnlySelected();
 		int centeringType = getCenteringType();
@@ -59,7 +60,7 @@ public class ScalingRange extends AbstaractScaling {
 			final double mean = getCenteringValue(samplesList, i, centeringType);
 			final double max = getMax(samplesList, i);
 			final double min = getMin(samplesList, i);
-			for(ISample<?> sample : samplesList) {
+			for(ISample sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if((sample.isSelected() || !onlySelected)) {
 					double data = getData(sampleData);

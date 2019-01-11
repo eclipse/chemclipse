@@ -49,6 +49,7 @@ public class PcaExtractionScans implements IDataExtraction {
 	private boolean useDefoultProperties;
 
 	public PcaExtractionScans(int retentionTimeWindow, int maximalNumberScans, List<IDataInputEntry> dataInputEntries, int extractionType, boolean useDefoultProperties) {
+
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.dataInputEntriesAll = dataInputEntries;
 		this.extractionType = extractionType;

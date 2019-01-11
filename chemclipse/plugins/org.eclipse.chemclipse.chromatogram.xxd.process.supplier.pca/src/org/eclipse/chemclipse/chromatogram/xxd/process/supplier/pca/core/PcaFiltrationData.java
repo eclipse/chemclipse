@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -28,6 +27,7 @@ public class PcaFiltrationData implements IDataModification {
 	private boolean resetSelectedRetentionTimes = true;
 
 	public PcaFiltrationData() {
+
 		filters = new ArrayList<>();
 	}
 
@@ -54,7 +54,7 @@ public class PcaFiltrationData implements IDataModification {
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples, IProgressMonitor monitor) {
+	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples, IProgressMonitor monitor) {
 
 		List<V> variables = samples.getVariables();
 		if(resetSelectedRetentionTimes) {
@@ -82,7 +82,7 @@ public class PcaFiltrationData implements IDataModification {
 		this.resetSelectedRetentionTimes = resetSelectedRetentionTimes;
 	}
 
-	private <V extends IVariable, S extends ISample<? extends ISampleData>> void setSelectAllRow(ISamples<V, S> samples, boolean selection) {
+	private <V extends IVariable, S extends ISample> void setSelectAllRow(ISamples<V, S> samples, boolean selection) {
 
 		List<V> variables = samples.getVariables();
 		for(int i = 0; i < variables.size(); i++) {

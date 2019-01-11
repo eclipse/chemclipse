@@ -27,6 +27,7 @@ public class SamplesVisualization extends AbstractSamplesVisualization<Retention
 	private ObservableList<SampleVisualization> samplesVisualization;
 
 	public SamplesVisualization(Samples samples) {
+
 		super(samples);
 		this.samples = samples;
 		samplesVisualization = FXCollections.observableArrayList(ISampleVisualization.extractor());

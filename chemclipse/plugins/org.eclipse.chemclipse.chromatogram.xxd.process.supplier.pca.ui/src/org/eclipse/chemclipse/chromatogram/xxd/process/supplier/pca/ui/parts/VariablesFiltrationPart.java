@@ -20,7 +20,6 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariablesFiltration;
@@ -42,27 +41,28 @@ import javafx.collections.ListChangeListener;
 
 public class VariablesFiltrationPart {
 
-	private static Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, PcaFiltrationData> filters;
-	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> actualSelectionLisnter;
+	private static Map<ISamples<? extends IVariable, ? extends ISample>, PcaFiltrationData> filters;
+	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> actualSelectionLisnter;
 	private Label countSelectedRow;
 	@Inject
 	private Display display;
 	private FiltersTable filtersTable;
 	private Runnable changeSelectionVariables;
 	private ListChangeListener<IVariableVisualization> changeVariablesChangeListener;
-	private ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samples;
+	private ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples;
 
 	public VariablesFiltrationPart() {
+
 		synchronized(VariablesFiltrationPart.class) {
 			if(filters == null) {
 				filters = new ConcurrentHashMap<>();
-				SelectionManagerSamples.getInstance().getElements().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
+				SelectionManagerSamples.getInstance().getElements().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample>>() {
 
 					@Override
-					public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> c) {
+					public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample>> c) {
 
 						while(c.next()) {
-							for(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples : c.getRemoved()) {
+							for(ISamples<? extends IVariable, ? extends ISample> samples : c.getRemoved()) {
 								filters.remove(samples);
 							}
 						}
@@ -79,10 +79,10 @@ public class VariablesFiltrationPart {
 				Display.getDefault().timerExec(100, changeSelectionVariables);
 			}
 		};
-		actualSelectionLisnter = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>>() {
+		actualSelectionLisnter = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> c) {
+			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> c) {
 
 				PcaFiltrationData pcaFiltrationData = new PcaFiltrationData();
 				if(samples != null) {
@@ -166,7 +166,7 @@ public class VariablesFiltrationPart {
 		SelectionManagerSamples.getInstance().getSelection().addListener(actualSelectionLisnter);
 	}
 
-	private PcaFiltrationData getPcaFiltrationData(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
+	private PcaFiltrationData getPcaFiltrationData(ISamples<? extends IVariable, ? extends ISample> samples) {
 
 		if(samples instanceof IVariablesFiltration) {
 			IVariablesFiltration variablesFiltration = (IVariablesFiltration)samples;

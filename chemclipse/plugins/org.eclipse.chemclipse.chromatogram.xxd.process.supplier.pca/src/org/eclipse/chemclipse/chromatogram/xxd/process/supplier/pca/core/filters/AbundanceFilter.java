@@ -18,7 +18,6 @@ import java.util.stream.DoubleStream;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
@@ -38,6 +37,7 @@ public class AbundanceFilter extends AbstractPreprocessing implements IFilter {
 	private String selectionResult = "";
 
 	public AbundanceFilter() {
+
 		super();
 		comparator = gt;
 		filterType = ALL_VALUE;
@@ -47,7 +47,7 @@ public class AbundanceFilter extends AbstractPreprocessing implements IFilter {
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
+	public <V extends IVariable, S extends ISample> List<Boolean> filter(ISamples<V, S> samples) {
 
 		List<S> selectedSamples = selectSamples(samples);
 		List<Boolean> selection = new ArrayList<>();

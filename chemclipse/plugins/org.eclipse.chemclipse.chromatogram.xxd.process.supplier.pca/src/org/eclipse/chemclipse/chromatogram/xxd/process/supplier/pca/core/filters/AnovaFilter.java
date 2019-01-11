@@ -22,7 +22,6 @@ import org.apache.commons.math3.stat.inference.OneWayAnova;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
@@ -33,13 +32,14 @@ public class AnovaFilter extends AbstractPreprocessing implements IFilter {
 	private String selectionResult = "";
 
 	public AnovaFilter() {
+
 		super();
 		alpha = 0.05;
 		setDataTypeProcessing(DATA_TYPE_PROCESSING.RAW_DATA);
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
+	public <V extends IVariable, S extends ISample> List<Boolean> filter(ISamples<V, S> samples) {
 
 		List<S> samplesList = selectSamples(samples);
 		List<V> variables = samples.getVariables();
@@ -55,7 +55,7 @@ public class AnovaFilter extends AbstractPreprocessing implements IFilter {
 				Collection<SummaryStatistics> categoryData = new ArrayList<>();
 				for(Set<S> group : samplesByGroupName) {
 					SummaryStatistics summaryStatistics = new SummaryStatistics();
-					for(ISample<?> sample : group) {
+					for(ISample sample : group) {
 						double d = getData(sample.getSampleData().get(i));
 						summaryStatistics.addValue(d);
 					}

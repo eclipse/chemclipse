@@ -18,7 +18,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers.CreatePcaEvaluation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
@@ -62,6 +61,7 @@ public class PCAEditorFX {
 	private MPart part;
 
 	public PCAEditorFX() {
+
 	}
 
 	@PostConstruct
@@ -109,7 +109,7 @@ public class PCAEditorFX {
 	@PreDestroy
 	public void preDestroy() {
 
-		Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> samples = controller.getSamples();
+		Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samples = controller.getSamples();
 		if(samples.isPresent()) {
 			boolean contains = SelectionManagerSamples.getInstance().getSelection().remove(samples.get());
 			if(contains) {
@@ -125,7 +125,7 @@ public class PCAEditorFX {
 
 		fxCanvas.setFocus();
 		if(controller != null && controller.getSamples().isPresent()) {
-			ISampleVisualization<? extends ISampleData> sample = controller.getSelectedSamples();
+			ISampleVisualization sample = controller.getSelectedSamples();
 			SelectionManagerSamples.getInstance().getSelection().setAll(controller.getSamples().get());
 			if(sample != null) {
 				SelectionManagerSample.getInstance().getSelection().setAll(sample);

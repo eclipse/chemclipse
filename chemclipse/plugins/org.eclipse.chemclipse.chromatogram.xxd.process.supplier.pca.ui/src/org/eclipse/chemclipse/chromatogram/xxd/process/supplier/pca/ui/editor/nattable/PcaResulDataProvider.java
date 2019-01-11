@@ -23,6 +23,7 @@ public class PcaResulDataProvider implements IDataProvider {
 	private TableProvider tableProvider;
 
 	public PcaResulDataProvider(TableProvider tableProvider, SortModel sortModel) {
+
 		this.sortModel = sortModel;
 		this.tableProvider = tableProvider;
 	}
@@ -45,8 +46,8 @@ public class PcaResulDataProvider implements IDataProvider {
 			String peaksNames = tableProvider.getDataTable().getVariables().get(sortRowIndex).getDescription();
 			return peaksNames;
 		} else {
-			List<ISampleVisualization<?>> samples = tableProvider.getDataTable().getSamples();
-			ISample<?> sample = samples.get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
+			List<ISampleVisualization> samples = tableProvider.getDataTable().getSamples();
+			ISample sample = samples.get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 			if(sample.getSampleData().size() <= sortRowIndex) {
 				return Double.NaN;
 			}

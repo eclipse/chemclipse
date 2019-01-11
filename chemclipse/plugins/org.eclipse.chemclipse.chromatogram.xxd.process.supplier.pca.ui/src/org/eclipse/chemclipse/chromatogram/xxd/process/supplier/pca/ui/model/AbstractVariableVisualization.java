@@ -15,15 +15,22 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaria
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class AbstractVariableVisualization implements IVariableVisualization {
 
 	private IntegerProperty color;
 	private IVariable delegator;
+	private StringProperty description;
+	private BooleanProperty selected;
+	private StringProperty type;
+	private StringProperty value;
 
 	public AbstractVariableVisualization(IVariable variableModel) {
+
 		super();
 		color = new SimpleIntegerProperty();
 		this.delegator = variableModel;
@@ -44,7 +51,10 @@ public class AbstractVariableVisualization implements IVariableVisualization {
 	@Override
 	public StringProperty descriptionProperty() {
 
-		return delegator.descriptionProperty();
+		if(description == null) {
+			this.description = new SimpleStringProperty(delegator.getDescription());
+		}
+		return description;
 	}
 
 	@Override
@@ -80,7 +90,10 @@ public class AbstractVariableVisualization implements IVariableVisualization {
 	@Override
 	public BooleanProperty selectedProperty() {
 
-		return delegator.selectedProperty();
+		if(selected == null) {
+			selected = new SimpleBooleanProperty(delegator.isSelected());
+		}
+		return selected;
 	}
 
 	@Override
@@ -93,35 +106,53 @@ public class AbstractVariableVisualization implements IVariableVisualization {
 	public void setDescription(String description) {
 
 		delegator.setDescription(description);
+		if(this.delegator != null) {
+			this.delegator.setValue(description);
+		}
 	}
 
 	@Override
 	public void setSelected(boolean selected) {
 
 		delegator.setSelected(selected);
+		if(this.selected != null) {
+			this.selected.set(selected);
+		}
 	}
 
 	@Override
 	public void setType(String type) {
 
 		delegator.setType(type);
+		if(this.type != null) {
+			this.type.set(type);
+		}
 	}
 
 	@Override
 	public void setValue(String value) {
 
 		delegator.setValue(value);
+		if(this.value != null) {
+			this.value.set(value);
+		}
 	}
 
 	@Override
 	public StringProperty typeProperty() {
 
-		return delegator.typeProperty();
+		if(type == null) {
+			type = new SimpleStringProperty(delegator.getType());
+		}
+		return type;
 	}
 
 	@Override
 	public StringProperty valueProperty() {
 
-		return delegator.valueProperty();
+		if(value == null) {
+			value = new SimpleStringProperty(delegator.getType());
+		}
+		return value;
 	}
 }

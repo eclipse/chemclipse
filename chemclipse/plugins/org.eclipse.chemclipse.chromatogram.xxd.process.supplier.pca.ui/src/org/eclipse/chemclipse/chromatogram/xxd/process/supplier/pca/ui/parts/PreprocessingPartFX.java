@@ -17,7 +17,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
@@ -42,7 +41,7 @@ public class PreprocessingPartFX {
 
 	private final static Logger logger = Logger.getLogger(PreprocessingPartFX.class);
 	private PreprocessingController controller;
-	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> samplesChangeListener;
+	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samplesChangeListener;
 	/**
 	 * View controller. Will be only available after {@link #createScene(Composite)} was called.
 	 */
@@ -53,13 +52,14 @@ public class PreprocessingPartFX {
 	private MPart part;
 
 	public PreprocessingPartFX() {
-		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>>() {
+
+		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> c) {
+			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> c) {
 
 				if(!c.getList().isEmpty()) {
-					ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samples = c.getList().get(0);
+					ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples = c.getList().get(0);
 					controller.setPreprecessing(SelectionManagerSamples.getInstance().getPreprocessoringData(samples));
 				} else {
 					controller.reset();
@@ -85,7 +85,7 @@ public class PreprocessingPartFX {
 			controller = fXMLLoader.getController();
 			SelectionManagerSamples.getInstance().selectionProperty().addListener(samplesChangeListener);
 			if(!SelectionManagerSamples.getInstance().selectionProperty().isEmpty()) {
-				ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samples = SelectionManagerSamples.getInstance().selectionProperty().get(0);
+				ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples = SelectionManagerSamples.getInstance().selectionProperty().get(0);
 				controller.setPreprecessing(SelectionManagerSamples.getInstance().getPreprocessoringData(samples));
 			}
 			final Scene scene = new Scene(root);

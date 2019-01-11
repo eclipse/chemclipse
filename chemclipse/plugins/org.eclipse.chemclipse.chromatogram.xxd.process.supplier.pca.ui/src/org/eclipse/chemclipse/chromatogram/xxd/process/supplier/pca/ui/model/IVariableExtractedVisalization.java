@@ -22,4 +22,7 @@ public interface IVariableExtractedVisalization extends IVariableVisualization, 
 
 		return (IVariableExtractedVisalization v) -> new Observable[]{v.colorProperty(), v.getVariableOrigin().selectedProperty()};
 	}
+
+	@Override
+	IVariableVisualization getVariableOrigin();
 }

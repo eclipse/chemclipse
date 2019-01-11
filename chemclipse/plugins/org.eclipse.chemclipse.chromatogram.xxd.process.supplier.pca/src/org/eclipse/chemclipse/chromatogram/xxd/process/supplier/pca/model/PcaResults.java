@@ -11,25 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 
 	private List<double[]> loadingVectors;
 	private double[] explainedVariances;
 	private double[] cumulativeExplainedVariances;
-	private ObservableList<IVaribleExtracted> extractedVariables;
-	private ObservableList<IPcaResult> pcaResultList;
+	private List<IVaribleExtracted> extractedVariables;
+	private List<IPcaResult> pcaResultList;
 	//
 	private IPcaSettings pcaSettings;
 
 	public PcaResults(IPcaSettings pcaSettings) {
+
 		this.pcaSettings = pcaSettings;
-		extractedVariables = FXCollections.observableArrayList(IVaribleExtracted.extractor());
-		pcaResultList = FXCollections.observableArrayList(IPcaResult.extractor());
+		extractedVariables = new ArrayList<>();
+		pcaResultList = new ArrayList<>();
 	}
 
 	@Override
@@ -39,13 +38,13 @@ public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 	}
 
 	@Override
-	public ObservableList<IVaribleExtracted> getExtractedVariables() {
+	public List<IVaribleExtracted> getExtractedVariables() {
 
 		return extractedVariables;
 	}
 
 	@Override
-	public ObservableList<IPcaResult> getPcaResultList() {
+	public List<IPcaResult> getPcaResultList() {
 
 		return pcaResultList;
 	}

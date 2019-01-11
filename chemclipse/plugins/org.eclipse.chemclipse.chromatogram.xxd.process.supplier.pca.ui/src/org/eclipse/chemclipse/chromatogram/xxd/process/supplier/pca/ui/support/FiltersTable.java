@@ -18,7 +18,6 @@ import java.util.Optional;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
@@ -37,14 +36,16 @@ public class FiltersTable {
 
 	private boolean autoUpdate;
 	private PcaFiltrationData pcaFiltrationData;
-	private Optional<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> samples;
+	private Optional<ISamples<? extends IVariable, ? extends ISample>> samples;
 	private Table table;
 
 	public FiltersTable(Composite parent, Object layoutData) {
+
 		this(parent, layoutData, new PcaFiltrationData());
 	}
 
 	public FiltersTable(Composite parent, Object layoutData, PcaFiltrationData pcaFiltrationData) {
+
 		this.pcaFiltrationData = pcaFiltrationData;
 		samples = Optional.empty();
 		createTable(parent, layoutData);
@@ -162,7 +163,7 @@ public class FiltersTable {
 		this.pcaFiltrationData = pcaFiltrationData;
 	}
 
-	public void setSamples(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
+	public void setSamples(ISamples<? extends IVariable, ? extends ISample> samples) {
 
 		this.samples = Optional.of(samples);
 	}

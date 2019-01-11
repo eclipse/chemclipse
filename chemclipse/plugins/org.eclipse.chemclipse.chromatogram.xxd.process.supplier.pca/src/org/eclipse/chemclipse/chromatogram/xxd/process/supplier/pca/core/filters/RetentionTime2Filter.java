@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
@@ -29,6 +28,7 @@ public class RetentionTime2Filter extends AbstractPreprocessing implements IFilt
 	private List<IVariable> variablesSelected;
 
 	public RetentionTime2Filter(List<IVariable> variables, boolean inverse) {
+
 		super();
 		this.variablesSelected = new ArrayList<>(variables);
 		this.inverse = inverse;
@@ -36,7 +36,7 @@ public class RetentionTime2Filter extends AbstractPreprocessing implements IFilt
 	}
 
 	@Override
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
+	public <V extends IVariable, S extends ISample> List<Boolean> filter(ISamples<V, S> samples) {
 
 		int size = samples.getVariables().size();
 		List<Boolean> seletions = new ArrayList<>(size);

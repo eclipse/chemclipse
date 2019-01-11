@@ -12,15 +12,29 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 
 import javafx.beans.Observable;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyLongProperty;
+import javafx.beans.property.StringProperty;
 import javafx.util.Callback;
 
-public interface ISampleVisualization<D extends ISampleData> extends ISample<D>, IColor {
+public interface ISampleVisualization extends ISample, IColor {
 
-	static <S extends ISampleVisualization<? extends ISampleData>> Callback<S, Observable[]> extractor() {
+	static <S extends ISampleVisualization> Callback<S, Observable[]> extractor() {
 
 		return (S s) -> new Observable[]{s.nameProperty(), s.groupNameProperty(), s.selectedProperty(), s.sampleDataHasBeenChangedProperty(), s.colorProperty()};
 	}
+
+	StringProperty groupNameProperty();
+
+	StringProperty nameProperty();
+
+	ReadOnlyLongProperty sampleDataHasBeenChangedProperty();
+
+	BooleanProperty selectedProperty();
+
+	long getSampleDataHasBeenChanged();
+
+	void setSampleDataHasBeenChanged();
 }

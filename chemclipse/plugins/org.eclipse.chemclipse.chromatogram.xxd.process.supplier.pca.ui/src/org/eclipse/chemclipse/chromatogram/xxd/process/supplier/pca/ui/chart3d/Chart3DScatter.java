@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
@@ -44,6 +43,7 @@ public class Chart3DScatter {
 		private static final long serialVersionUID = -2717902232561677870L;
 
 		public UpdateSelectionEvent() {
+
 			super(SELECTION_UPDATE);
 		}
 	}
@@ -56,6 +56,7 @@ public class Chart3DScatter {
 	private Chart3DSettings settings;
 
 	public Chart3DScatter(Chart3DSettings settings) {
+
 		this.settings = settings;
 		this.radius = 15;
 		data.clear();
@@ -63,6 +64,7 @@ public class Chart3DScatter {
 	}
 
 	public Chart3DScatter(Chart3DSettings settings, IPcaResultsVisualization pcaResults) {
+
 		this(settings);
 		data.clear();
 		for(IPcaResultVisualization pcaResult : pcaResults.getPcaResultList()) {
@@ -167,7 +169,7 @@ public class Chart3DScatter {
 						if(e.isControlDown()) {
 							d.getSample().setSelected(!d.getSample().isSelected());
 						} else {
-							ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
+							ObservableList<ISample> selection = SelectionManagerSample.getInstance().getSelection();
 							if(!selection.contains(d.getSample())) {
 								selection.setAll(d.getSample());
 							} else {

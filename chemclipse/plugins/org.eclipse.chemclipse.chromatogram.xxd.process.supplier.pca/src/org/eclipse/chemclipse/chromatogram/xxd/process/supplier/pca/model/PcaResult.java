@@ -19,11 +19,12 @@ public class PcaResult implements IPcaResult {
 	private String groupName;
 	private boolean isDisplayed;
 	private String name;
-	private ISample<? extends ISampleData> sample;
+	private ISample sample;
 	private double[] sampleData;
 
-	public PcaResult(ISample<? extends ISampleData> sample) {
-		isDisplayed = true;
+	public PcaResult(ISample sample) {
+
+		this.isDisplayed = true;
 		this.sample = sample;
 	}
 
@@ -52,7 +53,7 @@ public class PcaResult implements IPcaResult {
 	}
 
 	@Override
-	public ISample<? extends ISampleData> getSample() {
+	public ISample getSample() {
 
 		return sample;
 	}
