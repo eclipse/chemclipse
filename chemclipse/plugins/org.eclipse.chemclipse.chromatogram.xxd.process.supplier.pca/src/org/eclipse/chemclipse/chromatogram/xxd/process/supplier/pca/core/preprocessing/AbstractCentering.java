@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.ISampleData;
 
 public abstract class AbstractCentering extends AbstractPreprocessing implements ICentering {
 

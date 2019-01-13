@@ -29,11 +29,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ScalingVast;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.TransformationLOG10;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.TransformationPower;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
+import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.ISamples;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;

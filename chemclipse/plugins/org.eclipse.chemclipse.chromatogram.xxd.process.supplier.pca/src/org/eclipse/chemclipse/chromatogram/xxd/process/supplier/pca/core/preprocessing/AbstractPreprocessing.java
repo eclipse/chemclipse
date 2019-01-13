@@ -14,10 +14,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.prepro
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.ISampleData;
+import org.eclipse.chemclipse.model.statistics.ISamples;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 
 public abstract class AbstractPreprocessing implements IPreprocessing {
 

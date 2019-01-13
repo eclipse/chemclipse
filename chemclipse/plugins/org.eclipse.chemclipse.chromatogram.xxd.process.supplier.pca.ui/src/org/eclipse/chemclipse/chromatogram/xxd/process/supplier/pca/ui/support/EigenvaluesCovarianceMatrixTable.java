@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;

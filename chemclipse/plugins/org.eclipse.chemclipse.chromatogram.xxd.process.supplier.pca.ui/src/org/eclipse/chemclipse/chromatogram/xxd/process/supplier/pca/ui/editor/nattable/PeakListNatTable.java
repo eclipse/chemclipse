@@ -19,12 +19,12 @@ import java.util.SortedMap;
 import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportDataSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.columnChooser.command.DisplayColumnChooserCommandHandler;

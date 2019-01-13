@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.ux.fx.ui.SelectionManagerProto;
 
 public class SelectionManagerSample extends SelectionManagerProto<ISample> {

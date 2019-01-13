@@ -20,9 +20,9 @@ import java.util.Set;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.ISamples;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 
 public class CVFilter extends AbstractPreprocessing implements IFilter {
 

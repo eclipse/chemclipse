@@ -18,7 +18,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
@@ -26,6 +25,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceScorePlot2DPage;
+import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.jface.preference.IPreferencePage;

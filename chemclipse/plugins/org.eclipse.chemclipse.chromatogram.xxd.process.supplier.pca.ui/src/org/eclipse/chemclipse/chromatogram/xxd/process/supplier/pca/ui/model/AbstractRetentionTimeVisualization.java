@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
+import org.eclipse.chemclipse.model.statistics.IRetentionTime;
 
 public class AbstractRetentionTimeVisualization extends AbstractVariableVisualization implements IRetentionTime {
 

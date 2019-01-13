@@ -17,13 +17,13 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableExtractedVisalization;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;

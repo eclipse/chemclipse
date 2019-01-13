@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import org.eclipse.chemclipse.model.statistics.AbstractVariable;
+import org.eclipse.chemclipse.model.statistics.IVariable;
+
 public class Variable extends AbstractVariable implements IVaribleExtracted {
 
 	private IVariable variable;
 
 	public Variable(IVariable variable) {
+
 		this.variable = variable;
 		setValue(variable.getValue());
 		setDescription(variable.getDescription());

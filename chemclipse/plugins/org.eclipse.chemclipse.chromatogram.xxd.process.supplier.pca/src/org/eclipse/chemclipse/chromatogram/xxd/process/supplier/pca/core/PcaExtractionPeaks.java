@@ -26,11 +26,11 @@ import java.util.TreeSet;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.RetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.model.statistics.RetentionTime;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;

@@ -26,10 +26,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IMulti
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.OplsCalculatorNipals;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCalculatorNipals;
@@ -37,6 +33,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCal
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Variable;
+import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.ISampleData;
+import org.eclipse.chemclipse.model.statistics.ISamples;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaEvaluation {

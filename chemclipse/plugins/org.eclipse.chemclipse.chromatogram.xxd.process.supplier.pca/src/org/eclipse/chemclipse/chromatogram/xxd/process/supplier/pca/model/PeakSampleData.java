@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.statistics.ISampleData;
+import org.eclipse.chemclipse.model.statistics.SampleData;
 
 public class PeakSampleData extends SampleData implements ISampleData {
 

@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaInputRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IPcaInputWizard;
@@ -38,6 +37,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISa
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.SamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.PcaColorGroup;
+import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;

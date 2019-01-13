@@ -15,11 +15,11 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.PcaColorGroup;
+import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 import javafx.collections.ObservableList;

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import org.eclipse.chemclipse.model.statistics.IVariable;
+
 public interface IVaribleExtracted extends IVariable {
 
 	IVariable getVariableOrigin();

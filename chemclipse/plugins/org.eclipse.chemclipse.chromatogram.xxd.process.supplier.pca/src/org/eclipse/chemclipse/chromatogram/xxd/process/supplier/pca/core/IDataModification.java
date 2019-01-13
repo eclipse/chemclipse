@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.ISamples;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IDataModification {

@@ -19,7 +19,6 @@ import java.util.function.Consumer;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
@@ -32,6 +31,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVa
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.PcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.core.runtime.NullProgressMonitor;

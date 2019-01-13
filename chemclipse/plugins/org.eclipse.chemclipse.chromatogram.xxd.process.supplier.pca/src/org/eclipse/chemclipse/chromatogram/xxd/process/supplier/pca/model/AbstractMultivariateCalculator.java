@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.ArrayList;
 
+import org.eclipse.chemclipse.model.statistics.ISample;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 

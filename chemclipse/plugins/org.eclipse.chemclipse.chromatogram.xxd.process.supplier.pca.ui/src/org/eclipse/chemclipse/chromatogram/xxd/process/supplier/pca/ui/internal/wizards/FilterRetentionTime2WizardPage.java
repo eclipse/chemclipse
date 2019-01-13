@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.RetentionTime2Filter;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
 public class PcaResulHeaderProvider implements IDataProvider {

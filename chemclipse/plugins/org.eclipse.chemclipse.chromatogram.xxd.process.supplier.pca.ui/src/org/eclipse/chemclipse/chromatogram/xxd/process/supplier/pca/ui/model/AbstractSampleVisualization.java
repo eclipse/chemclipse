@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.ISampleData;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;

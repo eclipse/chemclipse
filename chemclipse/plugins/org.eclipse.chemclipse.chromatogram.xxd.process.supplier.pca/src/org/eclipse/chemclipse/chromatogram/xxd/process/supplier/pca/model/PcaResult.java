@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import org.eclipse.chemclipse.model.statistics.ISample;
+
 public class PcaResult implements IPcaResult {
 
 	private double[] scoreVector;

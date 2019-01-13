@@ -19,9 +19,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEval
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
@@ -29,6 +26,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISa
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.PcaResultsVisualization;
+import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.ISamples;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.ux.fx.ui.SelectionManagerProto;
 import org.eclipse.core.runtime.IProgressMonitor;
 

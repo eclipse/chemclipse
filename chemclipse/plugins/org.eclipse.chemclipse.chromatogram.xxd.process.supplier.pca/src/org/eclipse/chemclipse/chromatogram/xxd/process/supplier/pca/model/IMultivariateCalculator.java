@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.ArrayList;
 
+import org.eclipse.chemclipse.model.statistics.ISample;
+
 public interface IMultivariateCalculator {
 
 	void addObservation(double[] obsData, ISample sampleKey, String groupName);

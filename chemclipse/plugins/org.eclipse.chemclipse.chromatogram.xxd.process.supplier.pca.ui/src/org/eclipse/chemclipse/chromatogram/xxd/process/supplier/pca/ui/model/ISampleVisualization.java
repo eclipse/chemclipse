@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.model.statistics.ISample;
 
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
