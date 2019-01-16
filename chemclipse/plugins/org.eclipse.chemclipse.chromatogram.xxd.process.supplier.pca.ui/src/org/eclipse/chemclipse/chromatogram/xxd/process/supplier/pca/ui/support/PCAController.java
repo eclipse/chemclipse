@@ -97,9 +97,9 @@ public class PCAController {
 			Display.getDefault().timerExec(100, autoreevaluete);
 		}
 	};
+	private SelectionManagerSamples selectionManagerSamples;
 
 	public PCAController(Composite parent, Object layoutData) {
-
 		samples = Optional.empty();
 		pcaResults = Optional.empty();
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -212,14 +212,14 @@ public class PCAController {
 					monitor.run(false, false, progressMonitor -> {
 						progressMonitor.setTaskName("Initialization");
 						ISamplesVisualization<? extends IVariableVisualization, ? extends ISample> s = samples.get();
-						ObservableList<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> el = SelectionManagerSamples.getInstance().getElements();
+						ObservableList<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> el = getSelectionManagerSamples().getElements();
 						if(!el.contains(s)) {
 							el.add(s);
 						}
 						IPcaSettings pcaSettings = new PcaSettings(maxPC, pcaAlgorithm);
 						pcaSettings.setRemoveUselessVariables(pcaPreprocessingData.isRemoveUselessVariables());
 						IPcaSettingsVisualization pcaSettingsVisualization = new PcaSettingsVisualization(pcX, pcY, pcZ);
-						final IPcaResultsVisualization results = SelectionManagerSamples.getInstance().evaluatePca(s, pcaSettings, pcaSettingsVisualization, progressMonitor, true);
+						final IPcaResultsVisualization results = getSelectionManagerSamples().evaluatePca(s, pcaSettings, pcaSettingsVisualization, progressMonitor, true);
 						pcaResults = Optional.of(results);
 					});
 				} catch(Exception e) {
@@ -227,6 +227,14 @@ public class PCAController {
 				}
 			}
 		}
+	}
+
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(selectionManagerSamples != null) {
+			return selectionManagerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
 	}
 
 	private void preprocessData() {
@@ -258,9 +266,14 @@ public class PCAController {
 			ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samplesVisualizationNew = this.samples.get();
 			samplesVisualizationNew.getSampleList().addListener(reevaluationSamplesChangeListener);
 			samplesVisualizationNew.getVariables().addListener(reevaluationRetentionTimeChangeListener);
-			this.pcaPreprocessingData = SelectionManagerSamples.getInstance().getPreprocessoringData(this.samples.get());
+			this.pcaPreprocessingData = getSelectionManagerSamples().getPreprocessoringData(this.samples.get());
 			this.pcaPreprocessingData.addListener(changePreprocessing);
 		}
 		Display.getDefault().timerExec(100, autoreevaluete);
+	}
+
+	public void setSelectionManagerSamples(SelectionManagerSamples selectionManagerSamples) {
+
+		this.selectionManagerSamples = selectionManagerSamples;
 	}
 }

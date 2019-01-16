@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -40,8 +41,10 @@ public class ScorePlot3d {
 	private final double rotateModifier = 10;
 	private Chart3DScatter scatter;
 	private Chart3DSettings settings;
+	private SelectionManagerSample selectionManager;
 
-	public ScorePlot3d(Composite parent, Object dataLayout) {
+	public ScorePlot3d(Composite parent, Object dataLayout, SelectionManagerSample selectionManager) {
+		this.selectionManager = selectionManager;
 		/*
 		 * JavaFX init
 		 */
@@ -184,7 +187,7 @@ public class ScorePlot3d {
 		Chart3DSettings.setAxes2(settings, 800);
 		axes = new Axes(settings);
 		axes.buildAxes();
-		scatter = new Chart3DScatter(settings, pcaResults);
+		scatter = new Chart3DScatter(settings, pcaResults, selectionManager);
 		createScene();
 		createScene();
 	}

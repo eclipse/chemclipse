@@ -50,13 +50,15 @@ public class VariablesFiltrationPart {
 	private Runnable changeSelectionVariables;
 	private ListChangeListener<IVariableVisualization> changeVariablesChangeListener;
 	private ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSamples managerSamples;
 
 	public VariablesFiltrationPart() {
-
 		synchronized(VariablesFiltrationPart.class) {
 			if(filters == null) {
 				filters = new ConcurrentHashMap<>();
-				SelectionManagerSamples.getInstance().getElements().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample>>() {
+				getSelectionManagerSamples().getElements().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample>>() {
 
 					@Override
 					public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample>> c) {
@@ -104,6 +106,14 @@ public class VariablesFiltrationPart {
 				});
 			}
 		};
+	}
+
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(managerSamples != null) {
+			return managerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
 	}
 
 	private void createButton(Composite parent) {
@@ -155,15 +165,15 @@ public class VariablesFiltrationPart {
 		 */
 		createButton(composite);
 		countSelectedRow = new Label(parent, SWT.None);
-		if(!SelectionManagerSamples.getInstance().getSelection().isEmpty()) {
-			samples = SelectionManagerSamples.getInstance().getSelection().get(0);
+		if(!getSelectionManagerSamples().getSelection().isEmpty()) {
+			samples = getSelectionManagerSamples().getSelection().get(0);
 			samples.getVariables().addListener(changeVariablesChangeListener);
 			filtersTable.setPcaFiltrationData(getPcaFiltrationData(samples));
 			filtersTable.setSamples(samples);
 			filtersTable.update();
 		}
 		updateLabelTotalSelection();
-		SelectionManagerSamples.getInstance().getSelection().addListener(actualSelectionLisnter);
+		getSelectionManagerSamples().getSelection().addListener(actualSelectionLisnter);
 	}
 
 	private PcaFiltrationData getPcaFiltrationData(ISamples<? extends IVariable, ? extends ISample> samples) {
@@ -185,7 +195,7 @@ public class VariablesFiltrationPart {
 	@PreDestroy
 	public void preDestroy() {
 
-		SelectionManagerSamples.getInstance().getSelection().removeListener(actualSelectionLisnter);
+		getSelectionManagerSamples().getSelection().removeListener(actualSelectionLisnter);
 		if(samples != null) {
 			samples.getVariables().removeListener(changeVariablesChangeListener);
 		}

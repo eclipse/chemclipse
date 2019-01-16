@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISa
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PreprocessingController;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -49,10 +48,10 @@ public class PreprocessingPartFX {
 	@Inject
 	private Composite parent;
 	@Inject
-	private MPart part;
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSamples managerSamples;
 
 	public PreprocessingPartFX() {
-
 		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>>() {
 
 			@Override
@@ -60,7 +59,7 @@ public class PreprocessingPartFX {
 
 				if(!c.getList().isEmpty()) {
 					ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples = c.getList().get(0);
-					controller.setPreprecessing(SelectionManagerSamples.getInstance().getPreprocessoringData(samples));
+					controller.setPreprecessing(getSelectionManagerSamples().getPreprocessoringData(samples));
 				} else {
 					controller.reset();
 				}
@@ -83,16 +82,24 @@ public class PreprocessingPartFX {
 			fXMLLoader.setBuilderFactory(new JavaFXBuilderFactory());
 			final Parent root = fXMLLoader.load(location.openStream());
 			controller = fXMLLoader.getController();
-			SelectionManagerSamples.getInstance().selectionProperty().addListener(samplesChangeListener);
-			if(!SelectionManagerSamples.getInstance().selectionProperty().isEmpty()) {
-				ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples = SelectionManagerSamples.getInstance().selectionProperty().get(0);
-				controller.setPreprecessing(SelectionManagerSamples.getInstance().getPreprocessoringData(samples));
+			getSelectionManagerSamples().selectionProperty().addListener(samplesChangeListener);
+			if(!getSelectionManagerSamples().selectionProperty().isEmpty()) {
+				ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples = getSelectionManagerSamples().selectionProperty().get(0);
+				controller.setPreprecessing(getSelectionManagerSamples().getPreprocessoringData(samples));
 			}
 			final Scene scene = new Scene(root);
 			fxCanvas.setScene(scene);
 		} catch(final Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		}
+	}
+
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(managerSamples != null) {
+			return managerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
 	}
 
 	private void init(final Composite parent) {
@@ -109,6 +116,6 @@ public class PreprocessingPartFX {
 	@PreDestroy
 	public void preDestroy() {
 
-		SelectionManagerSamples.getInstance().selectionProperty().removeListener(samplesChangeListener);
+		getSelectionManagerSamples().selectionProperty().removeListener(samplesChangeListener);
 	}
 }

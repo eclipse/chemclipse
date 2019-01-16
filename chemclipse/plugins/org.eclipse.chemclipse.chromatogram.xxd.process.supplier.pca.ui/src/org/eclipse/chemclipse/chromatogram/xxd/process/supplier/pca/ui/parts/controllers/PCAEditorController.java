@@ -49,6 +49,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -82,9 +83,19 @@ public class PCAEditorController {
 	private ResourceBundle resources;
 	private ListChangeListener<ISample> sampleChangeSelectionListener;
 	private Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samples;
+	@FXML()
+	private Button loadPeaksButton;
+	@FXML()
+	private Button loadScansButton;
+	private SelectionManagerSamples selectionManagerSamples;
+
+	public void setLoadButtonVisible(boolean visible) {
+
+		loadPeaksButton.setVisible(visible);
+		loadScansButton.setVisible(visible);
+	}
 
 	public PCAEditorController() {
-
 		samples = Optional.empty();
 		sampleChangeSelectionListener = new ListChangeListener<ISample>() {
 
@@ -99,8 +110,8 @@ public class PCAEditorController {
 			@Override
 			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample> c) {
 
-				if(samples.isPresent() && SelectionManagerSamples.getInstance().getSelection().contains(samples.get())) {
-					ObservableList<ISample> selection = SelectionManagerSample.getInstance().getSelection();
+				if(samples.isPresent() && getSelectionManagerSamples().getSelection().contains(samples.get())) {
+					ObservableList<ISample> selection = getSelectionManagerSamples().getSelectionManagerSample().getSelection();
 					if(!selection.isEmpty()) {
 						ISample s = selection.get(0);
 						seletedSample((ISampleVisualization)s);
@@ -110,6 +121,20 @@ public class PCAEditorController {
 				}
 			}
 		};
+	}
+
+	public void setSelectionManagerSamples(SelectionManagerSamples selectionManagerSamples) {
+
+		this.selectionManagerSamples = selectionManagerSamples;
+		selectionManagerSamples.getSelectionManagerSample().getSelection().addListener(actualSelectionChangeListener);
+	}
+
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(selectionManagerSamples != null) {
+			return selectionManagerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
 	}
 
 	public Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> getSamples() {
@@ -163,7 +188,7 @@ public class PCAEditorController {
 
 		if(event.getCode() == KeyCode.ESCAPE) {
 			cTableSamples.getSelectionModel().clearSelection();
-			SelectionManagerSample.getInstance().getSelection().clear();
+			getSelectionManagerSamples().getSelectionManagerSample().getSelection().clear();
 		}
 	}
 
@@ -275,7 +300,6 @@ public class PCAEditorController {
 				}
 			}
 		});
-		SelectionManagerSample.getInstance().getSelection().addListener(actualSelectionChangeListener);
 		updateNumerSeletedSamples();
 	}
 
@@ -304,7 +328,7 @@ public class PCAEditorController {
 	public void preDestroy() {
 
 		setSamples(null);
-		SelectionManagerSample.getInstance().getSelection().remove(actualSelectionChangeListener);
+		getSelectionManagerSamples().getSelectionManagerSample().getSelection().remove(actualSelectionChangeListener);
 	}
 
 	public void removeSelectedSample() {
@@ -331,14 +355,14 @@ public class PCAEditorController {
 		 * Set samples
 		 */
 		if(samples.isPresent()) {
-			SelectionManagerSamples.getInstance().getElements().remove(samples.get());
-			SelectionManagerSamples.getInstance().getSelection().clear();
+			getSelectionManagerSamples().getElements().remove(samples.get());
+			getSelectionManagerSamples().getSelection().clear();
 			samples.get().getSampleList().removeListener(sampleChangeSelectionListener);
 		}
 		if(newSamples != null) {
 			this.samples = Optional.of(newSamples);
-			SelectionManagerSamples.getInstance().getElements().add(samples.get());
-			SelectionManagerSamples.getInstance().getSelection().add(samples.get());
+			getSelectionManagerSamples().getElements().add(samples.get());
+			getSelectionManagerSamples().getSelection().add(samples.get());
 			samples.get().getSampleList().addListener(sampleChangeSelectionListener);
 			updateNumerSeletedSamples();
 			inputSamples.accept(samples.get());

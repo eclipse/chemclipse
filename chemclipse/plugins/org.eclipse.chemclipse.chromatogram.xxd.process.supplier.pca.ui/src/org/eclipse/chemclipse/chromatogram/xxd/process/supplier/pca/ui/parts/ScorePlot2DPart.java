@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
@@ -64,9 +65,14 @@ public class ScorePlot2DPart {
 			scorePlot.update(pcaResults);
 		}
 	};
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSamples managerSamples;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSample managerSample;
 
 	public ScorePlot2DPart() {
-
 		settingUpdateListener = new Consumer<IPcaSettingsVisualization>() {
 
 			@Override
@@ -142,8 +148,8 @@ public class ScorePlot2DPart {
 		Composite scorePlotComposite = new Composite(composite, SWT.None);
 		scorePlotComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		scorePlotComposite.setLayout(new FillLayout());
-		scorePlot = new ScorePlot(scorePlotComposite);
-		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
+		scorePlot = new ScorePlot(scorePlotComposite, getSelectionManagerSample());
+		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = getSelectionManagerSamples().getActualSelectedPcaResults();
 		pcaresults.addListener(pcaResultChangeLisnter);
 		this.pcaResults = pcaresults.get();
 		if(this.pcaResults != null) {
@@ -151,7 +157,23 @@ public class ScorePlot2DPart {
 			this.pcaResults.getPcaResultList().addListener(selectionChangeListener);
 			this.pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
 		}
-		SelectionManagerSample.getInstance().getSelection().addListener(actualSelectionChangeListener);
+		getSelectionManagerSample().getSelection().addListener(actualSelectionChangeListener);
+	}
+
+	private SelectionManagerSample getSelectionManagerSample() {
+
+		if(managerSample != null) {
+			return managerSample;
+		}
+		return SelectionManagerSample.getInstance();
+	}
+
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(managerSamples != null) {
+			return managerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
 	}
 
 	private void createSettingsButtons(Composite buttonsComposite) {
@@ -190,8 +212,8 @@ public class ScorePlot2DPart {
 
 		partHasBeenDestroy = true;
 		Display.getDefault().timerExec(-1, updateSelection);
-		SelectionManagerSample.getInstance().getSelection().removeListener(actualSelectionChangeListener);
-		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
+		getSelectionManagerSample().getSelection().removeListener(actualSelectionChangeListener);
+		getSelectionManagerSamples().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
 		if(pcaResults != null) {
 			this.pcaResults.getPcaResultList().removeListener(selectionChangeListener);
 			this.pcaResults.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);

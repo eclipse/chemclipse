@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.ScorePlot3d;
@@ -42,9 +43,14 @@ public class ScorePlot3DPart {
 	private ListChangeListener<IPcaResult> selectionChangeListener;
 	private Consumer<IPcaSettingsVisualization> settingUpdateListener;
 	private boolean partHasBeenDestroy;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSamples managerSamples;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSample managerSample;
 
 	public ScorePlot3DPart() {
-
 		settingUpdateListener = new Consumer<IPcaSettingsVisualization>() {
 
 			@Override
@@ -112,8 +118,8 @@ public class ScorePlot3DPart {
 		partHasBeenDestroy = false;
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
-		scorePlot3d = new ScorePlot3d(composite, null);
-		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
+		scorePlot3d = new ScorePlot3d(composite, null, getSelectionManagerSample());
+		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = getSelectionManagerSamples().getActualSelectedPcaResults();
 		pcaresults.addListener(pcaResultChangeLisnter);
 		this.pcaResults = pcaresults.get();
 		if(this.pcaResults != null) {
@@ -121,19 +127,35 @@ public class ScorePlot3DPart {
 			this.pcaResults.getPcaResultList().addListener(selectionChangeListener);
 			this.pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
 		}
-		SelectionManagerSample.getInstance().getSelection().addListener(actualSelectionChangeListener);
+		getSelectionManagerSample().getSelection().addListener(actualSelectionChangeListener);
 	}
 
 	@PreDestroy
 	public void preDestroy() {
 
 		partHasBeenDestroy = true;
-		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
-		SelectionManagerSample.getInstance().getSelection().removeListener(actualSelectionChangeListener);
+		getSelectionManagerSamples().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
+		getSelectionManagerSample().getSelection().removeListener(actualSelectionChangeListener);
 		if(pcaResults != null) {
 			this.pcaResults.getPcaResultList().removeListener(selectionChangeListener);
 			this.pcaResults.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);
 		}
+	}
+
+	private SelectionManagerSample getSelectionManagerSample() {
+
+		if(managerSample != null) {
+			return managerSample;
+		}
+		return SelectionManagerSample.getInstance();
+	}
+
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(managerSamples != null) {
+			return managerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
 	}
 
 	public void updateSelection() {

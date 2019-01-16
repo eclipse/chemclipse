@@ -59,9 +59,14 @@ public class PCAEditorFX {
 	private PCAController pcaController;
 	@Inject
 	private MPart part;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSamples managerSamples;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSample managerSample;
 
 	public PCAEditorFX() {
-
 	}
 
 	@PostConstruct
@@ -79,6 +84,7 @@ public class PCAEditorFX {
 			fXMLLoader.setBuilderFactory(new JavaFXBuilderFactory());
 			final Parent root = fXMLLoader.load(location.openStream());
 			controller = fXMLLoader.getController();
+			controller.setSelectionManagerSamples(getSelectionManagerSamples());
 			controller.setSamplesConsumer((s) -> {
 				pcaController.setSamples(s);
 			});
@@ -89,6 +95,11 @@ public class PCAEditorFX {
 				ISamplesVisualization samples = (ISamplesVisualization)object;
 				controller.setSamples(samples);
 			}
+			Object laodData = part.getTransientData().get(CreatePcaEvaluation.ALLOW_DATALOAD);
+			if(laodData instanceof Boolean) {
+				controller.setLoadButtonVisible((Boolean)laodData);
+			}
+			setFocus();
 		} catch(final Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		}
@@ -100,6 +111,7 @@ public class PCAEditorFX {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, false));
 		pcaController = new PCAController(composite, new GridData(GridData.FILL_HORIZONTAL));
+		pcaController.setSelectionManagerSamples(getSelectionManagerSamples());
 		fxCanvas = new FXCanvas(composite, SWT.NONE);
 		fxCanvas.setLayoutData(new GridData(GridData.FILL_BOTH));
 		Platform.setImplicitExit(false);
@@ -111,13 +123,29 @@ public class PCAEditorFX {
 
 		Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samples = controller.getSamples();
 		if(samples.isPresent()) {
-			boolean contains = SelectionManagerSamples.getInstance().getSelection().remove(samples.get());
+			boolean contains = getSelectionManagerSamples().getSelection().remove(samples.get());
 			if(contains) {
-				SelectionManagerSample.getInstance().getSelection().clear();
+				getSelectionManagerSample().getSelection().clear();
 			}
-			SelectionManagerSamples.getInstance().getElements().remove(samples.get());
+			getSelectionManagerSamples().getElements().remove(samples.get());
 		}
 		controller.preDestroy();
+	}
+
+	private SelectionManagerSample getSelectionManagerSample() {
+
+		if(managerSample != null) {
+			return managerSample;
+		}
+		return SelectionManagerSample.getInstance();
+	}
+
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(managerSamples != null) {
+			return managerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
 	}
 
 	@Focus
@@ -126,12 +154,12 @@ public class PCAEditorFX {
 		fxCanvas.setFocus();
 		if(controller != null && controller.getSamples().isPresent()) {
 			ISampleVisualization sample = controller.getSelectedSamples();
-			SelectionManagerSamples.getInstance().getSelection().setAll(controller.getSamples().get());
+			getSelectionManagerSamples().getSelection().setAll(controller.getSamples().get());
 			if(sample != null) {
-				SelectionManagerSample.getInstance().getSelection().setAll(sample);
+				getSelectionManagerSample().getSelection().setAll(sample);
 			}
 		} else {
-			SelectionManagerSamples.getInstance().getSelection().clear();
+			getSelectionManagerSamples().getSelection().clear();
 		}
 	}
 }

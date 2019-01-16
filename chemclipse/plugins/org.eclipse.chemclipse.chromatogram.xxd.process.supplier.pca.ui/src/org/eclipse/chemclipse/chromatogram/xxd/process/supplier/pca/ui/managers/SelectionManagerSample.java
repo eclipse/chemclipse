@@ -28,8 +28,7 @@ public class SelectionManagerSample extends SelectionManagerProto<ISample> {
 		return instance;
 	}
 
-	private SelectionManagerSample() {
-
+	public SelectionManagerSample() {
 		super();
 	}
 }

@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart.ExplainedVarianceBarChart;
@@ -35,6 +36,9 @@ public class ExplainedVariancePart {
 	private IPcaResultsVisualization pcaResults;
 	private ListChangeListener<IPcaResult> selectionChangeListener;
 	private boolean partHasBeenDestroy;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSamples managerSamples;
 
 	public ExplainedVariancePart() {
 		selectionChangeListener = new ListChangeListener<IPcaResult>() {
@@ -78,7 +82,7 @@ public class ExplainedVariancePart {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new FillLayout());
 		explainedVarianceChart = new ExplainedVarianceBarChart(composite, null);
-		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
+		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = getSelectionManagerSamples().getActualSelectedPcaResults();
 		pcaresults.addListener(pcaResultChangeLisnter);
 		pcaResults = pcaresults.get();
 		if(pcaResults != null) {
@@ -87,11 +91,19 @@ public class ExplainedVariancePart {
 		}
 	}
 
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(managerSamples != null) {
+			return managerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
+	}
+
 	@PreDestroy
 	public void preDestroy() {
 
 		partHasBeenDestroy = true;
-		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
+		getSelectionManagerSamples().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
 		if(pcaResults != null) {
 			pcaResults.getPcaResultList().removeListener(selectionChangeListener);
 		}

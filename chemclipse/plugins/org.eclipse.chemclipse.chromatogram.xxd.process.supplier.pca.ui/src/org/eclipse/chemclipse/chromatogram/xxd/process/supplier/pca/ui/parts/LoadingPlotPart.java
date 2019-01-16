@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.LoadingPlot;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
@@ -59,6 +60,9 @@ public class LoadingPlotPart {
 	};
 	private ListChangeListener<IVariableExtractedVisalization> variableChanger;
 	private Consumer<IPcaSettingsVisualization> settingUpdateListener;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSamples managerSamples;
 
 	public LoadingPlotPart() {
 		settingUpdateListener = new Consumer<IPcaSettingsVisualization>() {
@@ -119,7 +123,7 @@ public class LoadingPlotPart {
 		loadingPlotComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		loadingPlotComposite.setLayout(new FillLayout());
 		loadingPlot = new LoadingPlot(loadingPlotComposite);
-		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaResults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
+		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaResults = getSelectionManagerSamples().getActualSelectedPcaResults();
 		pcaResults.addListener(pcaResultChangeLisnter);
 		if(pcaResults.isNotNull().get()) {
 			this.pcaResults = pcaResults.get();
@@ -127,6 +131,14 @@ public class LoadingPlotPart {
 			this.pcaResults.getExtractedVariables().addListener(variableChanger);
 			this.pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
 		}
+	}
+
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(managerSamples != null) {
+			return managerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
 	}
 
 	private void createSettingsButtons(Composite buttonsComposite) {
@@ -164,7 +176,7 @@ public class LoadingPlotPart {
 	public void preDestroy() {
 
 		partHasBeenDestroy = true;
-		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
+		getSelectionManagerSamples().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
 		if(pcaResults != null) {
 			pcaResults.getExtractedVariables().removeListener(variableChanger);
 			pcaResults.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);

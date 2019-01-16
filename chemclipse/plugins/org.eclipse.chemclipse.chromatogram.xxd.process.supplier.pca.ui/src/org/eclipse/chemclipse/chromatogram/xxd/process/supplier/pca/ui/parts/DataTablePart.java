@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.PeakListNatTable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
@@ -36,9 +37,11 @@ public class DataTablePart {
 	private ListChangeListener<ISample> sampleChangeListener;
 	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samplesChangeListener;
 	private ListChangeListener<IVariableVisualization> variableChangeListener;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSamples managerSamples;
 
 	public DataTablePart() {
-
 		changeData = () -> peakListIntensityTable.refreshTable();
 		changeSelectedSample = () -> peakListIntensityTable.update(actualSamples);
 		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>>() {
@@ -87,19 +90,27 @@ public class DataTablePart {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new FillLayout());
 		peakListIntensityTable = new PeakListNatTable(composite, null);
-		SelectionManagerSamples.getInstance().getSelection().addListener(samplesChangeListener);
-		if(!SelectionManagerSamples.getInstance().getSelection().isEmpty()) {
-			actualSamples = SelectionManagerSamples.getInstance().getSelection().get(0);
+		getSelectionManagerSamples().getSelection().addListener(samplesChangeListener);
+		if(!getSelectionManagerSamples().getSelection().isEmpty()) {
+			actualSamples = getSelectionManagerSamples().getSelection().get(0);
 			actualSamples.getSampleList().addListener(sampleChangeListener);
 			actualSamples.getVariables().addListener(variableChangeListener);
 			peakListIntensityTable.update(actualSamples);
 		}
 	}
 
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(managerSamples != null) {
+			return managerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
+	}
+
 	@PreDestroy
 	public void preDestroy() {
 
-		SelectionManagerSamples.getInstance().getSelection().removeListener(samplesChangeListener);
+		getSelectionManagerSamples().getSelection().removeListener(samplesChangeListener);
 		if(actualSamples != null) {
 			actualSamples.getSampleList().removeListener(sampleChangeListener);
 			actualSamples.getVariables().removeListener(variableChangeListener);

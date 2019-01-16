@@ -43,7 +43,6 @@ public class Chart3DScatter {
 		private static final long serialVersionUID = -2717902232561677870L;
 
 		public UpdateSelectionEvent() {
-
 			super(SELECTION_UPDATE);
 		}
 	}
@@ -54,18 +53,18 @@ public class Chart3DScatter {
 	private final Group mainGroup = new Group();
 	private double radius;
 	private Chart3DSettings settings;
+	private SelectionManagerSample selectionManagerSample;
 
 	public Chart3DScatter(Chart3DSettings settings) {
-
 		this.settings = settings;
 		this.radius = 15;
 		data.clear();
 		update();
 	}
 
-	public Chart3DScatter(Chart3DSettings settings, IPcaResultsVisualization pcaResults) {
-
+	public Chart3DScatter(Chart3DSettings settings, IPcaResultsVisualization pcaResults, SelectionManagerSample selectionManagerSample) {
 		this(settings);
+		this.selectionManagerSample = selectionManagerSample;
 		data.clear();
 		for(IPcaResultVisualization pcaResult : pcaResults.getPcaResultList()) {
 			data.add(pcaResult);
@@ -76,7 +75,7 @@ public class Chart3DScatter {
 	private Color getColor(IPcaResultVisualization data) {
 
 		Color color = PcaColorGroup.getSampleColorFX(data);
-		if(SelectionManagerSample.getInstance().getSelection().contains(data.getSample())) {
+		if(selectionManagerSample.getSelection().contains(data.getSample())) {
 			return PcaColorGroup.getActualSelectedColor(color);
 		} else {
 			if(data.getSample().isSelected()) {
@@ -169,7 +168,7 @@ public class Chart3DScatter {
 						if(e.isControlDown()) {
 							d.getSample().setSelected(!d.getSample().isSelected());
 						} else {
-							ObservableList<ISample> selection = SelectionManagerSample.getInstance().getSelection();
+							ObservableList<ISample> selection = selectionManagerSample.getSelection();
 							if(!selection.contains(d.getSample())) {
 								selection.setAll(d.getSample());
 							} else {

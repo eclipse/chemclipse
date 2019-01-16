@@ -45,33 +45,8 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 
 		synchronized(SelectionManagerSamples.class) {
 			if(instance == null) {
-				instance = new SelectionManagerSamples();
+				instance = new SelectionManagerSamples(SelectionManagerSample.getInstance());
 			}
-			instance.getSelection().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample>>() {
-
-				@Override
-				public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample>> c) {
-
-					SelectionManagerSample.getInstance().getSelection().clear();
-					if(!c.getList().isEmpty()) {
-						instance.actualSelectedPcaResults.setValue(instance.pcaResults.get(c.getList().get(0)));
-					} else {
-						instance.actualSelectedPcaResults.setValue(null);
-					}
-				}
-			});
-			instance.getElements().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample>>() {
-
-				@Override
-				public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample>> c) {
-
-					while(c.next()) {
-						for(ISamples<? extends IVariable, ? extends ISample> samples : c.getRemoved()) {
-							instance.pcaResults.remove(samples);
-						}
-					}
-				}
-			});
 		}
 		return instance;
 	}
@@ -79,10 +54,11 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 	private ObjectProperty<IPcaResultsVisualization> actualSelectedPcaResults;
 	private Map<ISamples<? extends IVariable, ? extends ISample>, IPcaResultsVisualization> pcaResults;
 	private Map<ISamples<? extends IVariable, ? extends ISample>, PcaPreprocessingData> preprocessings;
+	private SelectionManagerSample selectionManagerSample;
 
-	private SelectionManagerSamples() {
-
+	public SelectionManagerSamples(SelectionManagerSample selectionManagerSample) {
 		super();
+		this.selectionManagerSample = selectionManagerSample;
 		pcaResults = new HashMap<>();
 		actualSelectedPcaResults = new SimpleObjectProperty<>();
 		preprocessings = new HashMap<>();
@@ -100,6 +76,36 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 				}
 			}
 		});
+		getSelection().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample>>() {
+
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample>> c) {
+
+				selectionManagerSample.getSelection().clear();
+				if(!c.getList().isEmpty()) {
+					actualSelectedPcaResults.setValue(pcaResults.get(c.getList().get(0)));
+				} else {
+					actualSelectedPcaResults.setValue(null);
+				}
+			}
+		});
+		getElements().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample>>() {
+
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample>> c) {
+
+				while(c.next()) {
+					for(ISamples<? extends IVariable, ? extends ISample> samples : c.getRemoved()) {
+						pcaResults.remove(samples);
+					}
+				}
+			}
+		});
+	}
+
+	public SelectionManagerSample getSelectionManagerSample() {
+
+		return selectionManagerSample;
 	}
 
 	public <V extends IVariableVisualization, S extends ISampleVisualization> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaSettingsVisualization pcaSettingsVisualization, IProgressMonitor monitor, boolean setSelected) {

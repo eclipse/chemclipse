@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataPreprocessing;
@@ -41,13 +42,15 @@ public class PreprocessingPart {
 	private static Map<ISamples<? extends IVariable, ? extends ISample>, PcaPreprocessingData> preprocessings;
 	private DataPreprocessingSelection dataPreprocessing;
 	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samplesChangeListener;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSamples managerSamples;
 
 	public PreprocessingPart() {
-
 		synchronized(PreprocessingPart.class) {
 			if(preprocessings == null) {
 				preprocessings = new ConcurrentHashMap<>();
-				SelectionManagerSamples.getInstance().getElements().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample>>() {
+				getSelectionManagerSamples().getElements().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample>>() {
 
 					@Override
 					public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample>> c) {
@@ -82,6 +85,14 @@ public class PreprocessingPart {
 		};
 	}
 
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(managerSamples != null) {
+			return managerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
+	}
+
 	@PostConstruct
 	public void createComposite(Composite parent) {
 
@@ -92,14 +103,14 @@ public class PreprocessingPart {
 		Composite compositeNormalizationTables = new Composite(scrollNormalizationTables, SWT.NONE);
 		scrollNormalizationTables.setContent(compositeNormalizationTables);
 		compositeNormalizationTables.setLayout(new FillLayout());
-		if(SelectionManagerSamples.getInstance().getSelection().isEmpty()) {
+		if(getSelectionManagerSamples().getSelection().isEmpty()) {
 			dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, null);
 		} else {
-			ISamplesVisualization<? extends IVariable, ? extends ISampleVisualization> samples = SelectionManagerSamples.getInstance().getSelection().get(0);
+			ISamplesVisualization<? extends IVariable, ? extends ISampleVisualization> samples = getSelectionManagerSamples().getSelection().get(0);
 			dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, null, getPcaPreprocessingData(samples));
 			dataPreprocessing.setSamples(samples);
 		}
-		SelectionManagerSamples.getInstance().getSelection().addListener(samplesChangeListener);
+		getSelectionManagerSamples().getSelection().addListener(samplesChangeListener);
 	}
 
 	private PcaPreprocessingData getPcaPreprocessingData(ISamples<? extends IVariable, ? extends ISample> samples) {
@@ -121,6 +132,6 @@ public class PreprocessingPart {
 	@PreDestroy
 	public void preDestroy() {
 
-		SelectionManagerSamples.getInstance().getSelection().removeListener(samplesChangeListener);
+		getSelectionManagerSamples().getSelection().removeListener(samplesChangeListener);
 	}
 }

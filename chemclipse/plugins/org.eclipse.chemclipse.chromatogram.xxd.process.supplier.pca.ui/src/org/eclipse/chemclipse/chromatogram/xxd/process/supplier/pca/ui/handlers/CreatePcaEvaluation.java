@@ -37,6 +37,7 @@ public class CreatePcaEvaluation {
 	private static final String PCA_PERSPECTIVE = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	public static final String PCA_CREATE_NEW_EDITOR = "CREATE_NEW_EDITOR";
 	public static final String DATA_SAMPLES = "DATA_SAMPLES";
+	public static final String ALLOW_DATALOAD = "ALLOW_DATALOAD";
 
 	public static void createPart(ISamplesVisualization samplesVisualization) {
 

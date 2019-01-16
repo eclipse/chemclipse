@@ -77,9 +77,10 @@ public class ErrorResidueBarChart {
 	// private final Map<String, Color> groupColor = new HashMap<>();
 	private Optional<IPcaResults<IPcaResultVisualization, IVariableExtractedVisalization>> pcaResults = Optional.empty();
 	private int sortType;
+	private SelectionManagerSample selectionManagerSample;
 
-	public ErrorResidueBarChart(Composite parent, Object layoutData) {
-
+	public ErrorResidueBarChart(Composite parent, Object layoutData, SelectionManagerSample selectionManagerSample) {
+		this.selectionManagerSample = selectionManagerSample;
 		/*
 		 * JavaFX init
 		 */
@@ -98,7 +99,7 @@ public class ErrorResidueBarChart {
 	private String barStyle(IPcaResultVisualization pcaResult) {
 
 		Color c = PcaColorGroup.getSampleColorFX(pcaResult);
-		if(SelectionManagerSample.getInstance().getSelection().contains(pcaResult.getSample())) {
+		if(selectionManagerSample.getSelection().contains(pcaResult.getSample())) {
 			c = PcaColorGroup.getActualSelectedColor(c);
 		} else if(!pcaResult.getSample().isSelected()) {
 			c = PcaColorGroup.getUnselectedColor(c);
@@ -238,7 +239,7 @@ public class ErrorResidueBarChart {
 									if(e.isControlDown()) {
 										s.setSelected(!s.isSelected());
 									} else {
-										ObservableList<ISample> selection = SelectionManagerSample.getInstance().getSelection();
+										ObservableList<ISample> selection = selectionManagerSample.getSelection();
 										if(!selection.contains(s)) {
 											selection.setAll(s);
 										} else {

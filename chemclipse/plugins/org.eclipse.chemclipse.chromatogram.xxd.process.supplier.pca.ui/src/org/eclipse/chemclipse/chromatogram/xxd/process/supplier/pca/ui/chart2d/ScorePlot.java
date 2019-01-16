@@ -65,7 +65,7 @@ public class ScorePlot extends PCA2DPlot {
 			String selectedSeriesId = baseChart.getSelectedseriesId(event);
 			if(!selectedSeriesId.equals("")) {
 				ISample sample = extractedResults.get(selectedSeriesId).getSample();
-				ObservableList<ISample> selection = SelectionManagerSample.getInstance().getSelection();
+				ObservableList<ISample> selection = selectionManagerSample.getSelection();
 				if(!selection.contains(sample)) {
 					selection.setAll(sample);
 				} else {
@@ -111,10 +111,11 @@ public class ScorePlot extends PCA2DPlot {
 	}
 
 	private final Map<String, IPcaResult> extractedResults = new HashMap<>();
+	private SelectionManagerSample selectionManagerSample;
 
-	public ScorePlot(Composite parent) {
-
+	public ScorePlot(Composite parent, SelectionManagerSample selectionManagerSample) {
 		super(parent, "Score Plot");
+		this.selectionManagerSample = selectionManagerSample;
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.clearHandledEventProcessors();
 		chartSettings.addHandledEventProcessor(new SelectSeriesEvent());
@@ -140,7 +141,7 @@ public class ScorePlot extends PCA2DPlot {
 		deleteSeries();
 		addSeriesData(SeriesConverter.sampleToSeries(pcaResults, pcaResults.getPcaSettingsVisualization().getPcX(), pcaResults.getPcaSettingsVisualization().getPcY(), extractedResults));
 		extractedResults.entrySet().forEach(e -> {
-			if(SelectionManagerSample.getInstance().getSelection().contains(e.getValue().getSample())) {
+			if(selectionManagerSample.getSelection().contains(e.getValue().getSample())) {
 				getBaseChart().selectSeries(e.getKey());
 			}
 		});

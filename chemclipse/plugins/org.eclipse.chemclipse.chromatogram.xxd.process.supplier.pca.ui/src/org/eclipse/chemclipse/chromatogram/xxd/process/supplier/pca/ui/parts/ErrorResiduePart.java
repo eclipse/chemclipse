@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart.ErrorResidueBarChart;
@@ -38,9 +39,14 @@ public class ErrorResiduePart {
 	private IPcaResultsVisualization pcaResults;
 	private ListChangeListener<IPcaResult> selectionChangeListener;
 	private boolean partHasBeenDestroy;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSamples managerSamples;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private SelectionManagerSample managerSample;
 
 	public ErrorResiduePart() {
-
 		selectionChangeListener = new ListChangeListener<IPcaResult>() {
 
 			@Override
@@ -93,25 +99,41 @@ public class ErrorResiduePart {
 
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new FillLayout());
-		errorResidueChart = new ErrorResidueBarChart(composite, null);
-		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
+		errorResidueChart = new ErrorResidueBarChart(composite, null, getSelectionManagerSample());
+		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = getSelectionManagerSamples().getActualSelectedPcaResults();
 		pcaresults.addListener(pcaResultChangeLisnter);
 		pcaResults = pcaresults.get();
 		if(pcaResults != null) {
 			errorResidueChart.update(pcaresults.getValue());
 			pcaResults.getPcaResultList().addListener(selectionChangeListener);
 		}
-		SelectionManagerSample.getInstance().getSelection().addListener(actualSelectionChangeListener);
+		getSelectionManagerSample().getSelection().addListener(actualSelectionChangeListener);
 	}
 
 	@PreDestroy
 	public void preDestroy() {
 
 		partHasBeenDestroy = true;
-		SelectionManagerSample.getInstance().getSelection().removeListener(actualSelectionChangeListener);
-		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
+		getSelectionManagerSample().getSelection().removeListener(actualSelectionChangeListener);
+		getSelectionManagerSamples().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
 		if(pcaResults != null) {
 			pcaResults.getPcaResultList().removeListener(selectionChangeListener);
 		}
+	}
+
+	private SelectionManagerSample getSelectionManagerSample() {
+
+		if(managerSample != null) {
+			return managerSample;
+		}
+		return SelectionManagerSample.getInstance();
+	}
+
+	private SelectionManagerSamples getSelectionManagerSamples() {
+
+		if(managerSamples != null) {
+			return managerSamples;
+		}
+		return SelectionManagerSamples.getInstance();
 	}
 }
