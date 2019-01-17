@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.List;
 
-public interface IPcaResults<R extends IPcaResult, V extends IVaribleExtracted> {
+import org.eclipse.chemclipse.model.statistics.IVariable;
+
+public interface IPcaResults<R extends IPcaResult, V extends IVariable> {
 
 	List<double[]> getLoadingVectors();
 

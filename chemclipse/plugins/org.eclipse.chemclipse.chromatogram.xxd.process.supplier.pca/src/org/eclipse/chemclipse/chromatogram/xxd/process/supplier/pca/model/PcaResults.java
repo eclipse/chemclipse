@@ -14,12 +14,14 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
+import org.eclipse.chemclipse.model.statistics.IVariable;
+
+public class PcaResults implements IPcaResults<IPcaResult, IVariable> {
 
 	private List<double[]> loadingVectors;
 	private double[] explainedVariances;
 	private double[] cumulativeExplainedVariances;
-	private List<IVaribleExtracted> extractedVariables;
+	private List<IVariable> extractedVariables;
 	private List<IPcaResult> pcaResultList;
 	//
 	private IPcaSettings pcaSettings;
@@ -38,7 +40,7 @@ public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 	}
 
 	@Override
-	public List<IVaribleExtracted> getExtractedVariables() {
+	public List<IVariable> getExtractedVariables() {
 
 		return extractedVariables;
 	}

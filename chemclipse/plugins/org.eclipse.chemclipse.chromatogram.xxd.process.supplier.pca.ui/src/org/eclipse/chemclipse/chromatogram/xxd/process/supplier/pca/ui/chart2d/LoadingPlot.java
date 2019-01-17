@@ -17,14 +17,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.SeriesConverter;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swtchart.ISeries;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ICustomSelectionHandler;
@@ -40,7 +41,6 @@ import org.eclipse.swtchart.extensions.events.SelectDataPointEvent;
 import org.eclipse.swtchart.extensions.events.UndoRedoEvent;
 import org.eclipse.swtchart.extensions.events.ZoomEvent;
 import org.eclipse.swtchart.extensions.scattercharts.IScatterSeriesData;
-import org.eclipse.swtchart.ISeries;
 
 public class LoadingPlot extends PCA2DPlot {
 
@@ -69,8 +69,8 @@ public class LoadingPlot extends PCA2DPlot {
 
 			String selectedSeriesId = baseChart.getSelectedseriesId(event);
 			if(!selectedSeriesId.equals("")) {
-				IVaribleExtracted variable = extractedValues.get(selectedSeriesId);
-				variable.getVariableOrigin().setSelected(!variable.getVariableOrigin().isSelected());
+				IVariable variable = extractedValues.get(selectedSeriesId);
+				variable.setSelected(!variable.isSelected());
 			}
 		}
 	}
@@ -78,10 +78,11 @@ public class LoadingPlot extends PCA2DPlot {
 	final public static int LABELS_DESCRIPTION = 2;
 	final public static int LABELS_RETENTION_TIME_MINUTES = 1;
 	final private Set<String> actualSelection = new HashSet<>();
-	final private Map<String, IVaribleExtracted> extractedValues = new HashMap<>();
+	final private Map<String, IVariable> extractedValues = new HashMap<>();
 	private int labelsType = LABELS_RETENTION_TIME_MINUTES;
 
 	public LoadingPlot(Composite parent) {
+
 		super(parent, "Loading Plot");
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.clearHandledEventProcessors();
@@ -111,7 +112,7 @@ public class LoadingPlot extends PCA2DPlot {
 		return actualSelection;
 	}
 
-	public Map<String, IVaribleExtracted> getExtractedValues() {
+	public Map<String, IVariable> getExtractedValues() {
 
 		return extractedValues;
 	}

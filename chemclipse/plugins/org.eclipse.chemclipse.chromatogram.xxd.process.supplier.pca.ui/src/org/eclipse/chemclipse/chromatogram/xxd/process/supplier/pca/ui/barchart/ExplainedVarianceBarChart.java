@@ -25,7 +25,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableExtractedVisalization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -57,9 +57,10 @@ public class ExplainedVarianceBarChart {
 	private final List<IPcaResultVisualization> data = new ArrayList<>();
 	private final List<Double> data2 = new ArrayList<>();
 	private FXCanvas fxCanvas;
-	private Optional<IPcaResults<IPcaResultVisualization, IVariableExtractedVisalization>> pcaResults = Optional.empty();
+	private Optional<IPcaResults<IPcaResultVisualization, IVariableVisualization>> pcaResults = Optional.empty();
 
 	public ExplainedVarianceBarChart(Composite parent, Object layoutData) {
+
 		/*
 		 * JavaFX init
 		 */
@@ -220,7 +221,7 @@ public class ExplainedVarianceBarChart {
 		createScene();
 	}
 
-	public void update(IPcaResults<IPcaResultVisualization, IVariableExtractedVisalization> pcaResults) {
+	public void update(IPcaResults<IPcaResultVisualization, IVariableVisualization> pcaResults) {
 
 		/*
 		 * update data

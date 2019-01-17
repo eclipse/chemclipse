@@ -26,13 +26,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IMulti
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.OplsCalculatorNipals;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCalculatorNipals;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCalculatorSvd;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Variable;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
@@ -253,14 +251,12 @@ public class PcaEvaluation {
 
 	private void setRetentionTime(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample> samples, boolean[] isSelectedVariables) {
 
-		List<IVaribleExtracted> variables = new ArrayList<>();
+		pcaResults.getExtractedVariables().clear();
 		for(int i = 0; i < samples.getVariables().size(); i++) {
 			if(isSelectedVariables[i]) {
 				IVariable variable = samples.getVariables().get(i);
-				variables.add(new Variable(variable));
+				pcaResults.getExtractedVariables().add(variable);
 			}
 		}
-		pcaResults.getExtractedVariables().clear();
-		pcaResults.getExtractedVariables().addAll(variables);
 	}
 }

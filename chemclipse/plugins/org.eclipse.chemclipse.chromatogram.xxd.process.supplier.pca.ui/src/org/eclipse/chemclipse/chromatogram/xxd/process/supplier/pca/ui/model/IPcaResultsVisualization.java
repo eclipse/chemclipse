@@ -15,11 +15,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaRe
 
 import javafx.collections.ObservableList;
 
-public interface IPcaResultsVisualization extends IPcaResults<IPcaResultVisualization, IVariableExtractedVisalization> {
+public interface IPcaResultsVisualization extends IPcaResults<IPcaResultVisualization, IVariableVisualization> {
 
 	IPcaSettingsVisualization getPcaSettingsVisualization();
 
-	ObservableList<IVariableExtractedVisalization> getExtractedVariables();
+	@Override
+	ObservableList<IVariableVisualization> getExtractedVariables();
 
+	@Override
 	ObservableList<IPcaResultVisualization> getPcaResultList();
 }

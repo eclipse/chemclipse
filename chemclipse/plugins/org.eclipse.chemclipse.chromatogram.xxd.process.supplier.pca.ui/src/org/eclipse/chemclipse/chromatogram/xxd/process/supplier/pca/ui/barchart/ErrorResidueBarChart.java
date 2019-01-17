@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaRe
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableExtractedVisalization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.PcaColorGroup;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.swt.SWT;
@@ -75,11 +75,12 @@ public class ErrorResidueBarChart {
 	// private int displayData;
 	private FXCanvas fxCanvas;
 	// private final Map<String, Color> groupColor = new HashMap<>();
-	private Optional<IPcaResults<IPcaResultVisualization, IVariableExtractedVisalization>> pcaResults = Optional.empty();
+	private Optional<IPcaResults<IPcaResultVisualization, IVariableVisualization>> pcaResults = Optional.empty();
 	private int sortType;
 	private SelectionManagerSample selectionManagerSample;
 
 	public ErrorResidueBarChart(Composite parent, Object layoutData, SelectionManagerSample selectionManagerSample) {
+
 		this.selectionManagerSample = selectionManagerSample;
 		/*
 		 * JavaFX init
@@ -358,7 +359,7 @@ public class ErrorResidueBarChart {
 		}
 	}
 
-	public void update(IPcaResults<IPcaResultVisualization, IVariableExtractedVisalization> pcaResults) {
+	public void update(IPcaResults<IPcaResultVisualization, IVariableVisualization> pcaResults) {
 
 		/*
 		 * update data

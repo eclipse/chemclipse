@@ -63,12 +63,18 @@ public abstract class AbstractSampleVisualization implements ISampleVisualizatio
 	@Override
 	public String getGroupName() {
 
+		if(groupName != null) {
+			return groupName.get();
+		}
 		return delegator.getGroupName();
 	}
 
 	@Override
 	public String getName() {
 
+		if(name != null) {
+			return name.get();
+		}
 		return delegator.getName();
 	}
 
@@ -96,6 +102,9 @@ public abstract class AbstractSampleVisualization implements ISampleVisualizatio
 	@Override
 	public boolean isSelected() {
 
+		if(selected != null) {
+			return selected.get();
+		}
 		return delegator.isSelected();
 	}
 

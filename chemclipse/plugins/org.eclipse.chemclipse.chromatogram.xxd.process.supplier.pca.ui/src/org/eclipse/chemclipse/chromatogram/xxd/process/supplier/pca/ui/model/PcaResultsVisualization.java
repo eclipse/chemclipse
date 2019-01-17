@@ -16,28 +16,34 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class PcaResultsVisualization<R extends IPcaResult, V extends IVaribleExtracted> implements IPcaResultsVisualization {
+public class PcaResultsVisualization<R extends IPcaResult, V extends IVariableVisualization> implements IPcaResultsVisualization {
 
-	private IPcaResults<R, V> delegator;
+	private IPcaResults<IPcaResult, IVariable> delegator;
 	private ObservableList<IPcaResultVisualization> pcaResultsVisualization;
 	private IPcaSettingsVisualization pcaSettingsVisualization;
-	private ObservableList<IVariableExtractedVisalization> variablesExtractedVisalization;
+	private ObservableList<IVariableVisualization> variablesExtractedVisalization;
 
-	public PcaResultsVisualization(IPcaResults<R, V> modelData, IPcaSettingsVisualization pcaSettingsVisualization) {
+	public PcaResultsVisualization(IPcaResults<IPcaResult, IVariable> modelData, IPcaSettingsVisualization pcaSettingsVisualization) {
 
 		super();
 		this.delegator = modelData;
 		this.pcaSettingsVisualization = pcaSettingsVisualization;
 		pcaResultsVisualization = FXCollections.observableArrayList(IPcaResultVisualization.extractor());
-		variablesExtractedVisalization = FXCollections.observableArrayList(IVariableExtractedVisalization.extractor());
+		variablesExtractedVisalization = FXCollections.observableArrayList(IVariableVisualization.extractor());
 		if(!(modelData == null)) {
 			modelData.getPcaResultList().forEach(r -> pcaResultsVisualization.add(new PcaResultVisualization(r)));
-			modelData.getExtractedVariables().forEach(v -> variablesExtractedVisalization.add(new VariableExtractedVisualization(v)));
+			modelData.getExtractedVariables().forEach(v -> {
+				if(v instanceof IVariableVisualization) {
+					variablesExtractedVisalization.add((IVariableVisualization)v);
+				} else {
+					variablesExtractedVisalization.add(new VariableVisualization(v));
+				}
+			});
 		}
 	}
 
@@ -48,7 +54,7 @@ public class PcaResultsVisualization<R extends IPcaResult, V extends IVaribleExt
 	}
 
 	@Override
-	public ObservableList<IVariableExtractedVisalization> getExtractedVariables() {
+	public ObservableList<IVariableVisualization> getExtractedVariables() {
 
 		return variablesExtractedVisalization;
 	}

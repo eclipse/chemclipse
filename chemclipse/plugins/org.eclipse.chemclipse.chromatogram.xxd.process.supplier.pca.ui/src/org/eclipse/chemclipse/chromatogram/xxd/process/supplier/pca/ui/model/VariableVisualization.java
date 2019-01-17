@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 
 public class VariableVisualization extends AbstractVariableVisualization {
 
-	public VariableVisualization(IVaribleExtracted variableModel) {
+	public VariableVisualization(IVariable variableModel) {
 
 		super(variableModel);
 	}

@@ -66,24 +66,36 @@ public class AbstractVariableVisualization implements IVariableVisualization {
 	@Override
 	public String getDescription() {
 
+		if(description != null) {
+			return description.get();
+		}
 		return delegator.getDescription();
 	}
 
 	@Override
 	public String getType() {
 
+		if(type != null) {
+			return type.get();
+		}
 		return delegator.getType();
 	}
 
 	@Override
 	public String getValue() {
 
+		if(value != null) {
+			return value.get();
+		}
 		return delegator.getValue();
 	}
 
 	@Override
 	public boolean isSelected() {
 
+		if(selected != null) {
+			return selected.get();
+		}
 		return delegator.isSelected();
 	}
 
@@ -151,7 +163,7 @@ public class AbstractVariableVisualization implements IVariableVisualization {
 	public StringProperty valueProperty() {
 
 		if(value == null) {
-			value = new SimpleStringProperty(delegator.getType());
+			value = new SimpleStringProperty(delegator.getValue());
 		}
 		return value;
 	}

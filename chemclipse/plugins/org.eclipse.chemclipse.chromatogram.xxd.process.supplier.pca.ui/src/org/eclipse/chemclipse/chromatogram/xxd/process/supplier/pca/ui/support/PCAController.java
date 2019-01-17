@@ -100,6 +100,7 @@ public class PCAController {
 	private SelectionManagerSamples selectionManagerSamples;
 
 	public PCAController(Composite parent, Object layoutData) {
+
 		samples = Optional.empty();
 		pcaResults = Optional.empty();
 		Composite composite = new Composite(parent, SWT.NONE);

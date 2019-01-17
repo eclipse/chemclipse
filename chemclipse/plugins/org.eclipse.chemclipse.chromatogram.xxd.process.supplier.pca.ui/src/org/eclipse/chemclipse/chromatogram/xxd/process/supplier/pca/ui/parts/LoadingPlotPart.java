@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.L
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableExtractedVisalization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceLoadingPlot2DPage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -58,13 +58,14 @@ public class LoadingPlotPart {
 			loadingPlot.update(pcaResults);
 		}
 	};
-	private ListChangeListener<IVariableExtractedVisalization> variableChanger;
+	private ListChangeListener<IVariableVisualization> variableChanger;
 	private Consumer<IPcaSettingsVisualization> settingUpdateListener;
 	@Inject
 	@org.eclipse.e4.core.di.annotations.Optional
 	private SelectionManagerSamples managerSamples;
 
 	public LoadingPlotPart() {
+
 		settingUpdateListener = new Consumer<IPcaSettingsVisualization>() {
 
 			@Override
@@ -73,10 +74,10 @@ public class LoadingPlotPart {
 				Display.getDefault().timerExec(100, updateSelection);
 			}
 		};
-		variableChanger = new ListChangeListener<IVariableExtractedVisalization>() {
+		variableChanger = new ListChangeListener<IVariableVisualization>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends IVariableExtractedVisalization> c) {
+			public void onChanged(ListChangeListener.Change<? extends IVariableVisualization> c) {
 
 				Display.getDefault().timerExec(100, updateSelection);
 			}
