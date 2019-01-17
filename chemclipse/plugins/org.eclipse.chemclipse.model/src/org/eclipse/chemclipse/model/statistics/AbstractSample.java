@@ -25,6 +25,7 @@ public abstract class AbstractSample<D extends ISampleData> implements ISample {
 
 		this.name = name;
 		sampleData = new ArrayList<>();
+		selected = true;
 	}
 
 	@Override
