@@ -29,6 +29,7 @@ public class PcaResultsVisualization<R extends IPcaResult, V extends IVaribleExt
 	private ObservableList<IVariableExtractedVisalization> variablesExtractedVisalization;
 
 	public PcaResultsVisualization(IPcaResults<R, V> modelData, IPcaSettingsVisualization pcaSettingsVisualization) {
+
 		super();
 		this.delegator = modelData;
 		this.pcaSettingsVisualization = pcaSettingsVisualization;

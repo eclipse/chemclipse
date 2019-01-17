@@ -88,7 +88,7 @@ public abstract class AbstractSampleVisualization implements ISampleVisualizatio
 	public StringProperty groupNameProperty() {
 
 		if(groupName == null) {
-			groupName = new SimpleStringProperty(delegator.getName());
+			groupName = new SimpleStringProperty(delegator.getGroupName());
 		}
 		return groupName;
 	}
@@ -157,5 +157,8 @@ public abstract class AbstractSampleVisualization implements ISampleVisualizatio
 	public void setSelected(boolean selected) {
 
 		delegator.setSelected(selected);
+		if(this.selected != null) {
+			this.selected.set(selected);
+		}
 	}
 }

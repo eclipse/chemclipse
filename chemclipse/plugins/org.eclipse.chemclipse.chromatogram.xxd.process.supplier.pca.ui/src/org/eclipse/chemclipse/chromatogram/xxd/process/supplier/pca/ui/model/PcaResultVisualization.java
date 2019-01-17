@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.model.statistics.ISample;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -27,7 +28,12 @@ public class PcaResultVisualization implements IPcaResultVisualization {
 		super();
 		this.color = new SimpleIntegerProperty();
 		this.delegator = dataModel;
-		this.sampleVisualization = new SampleVisualization(dataModel.getSample());
+		ISample sample = dataModel.getSample();
+		if(sample instanceof ISampleVisualization) {
+			this.sampleVisualization = (ISampleVisualization)sample;
+		} else {
+			this.sampleVisualization = new SampleVisualization(dataModel.getSample());
+		}
 	}
 
 	@Override
