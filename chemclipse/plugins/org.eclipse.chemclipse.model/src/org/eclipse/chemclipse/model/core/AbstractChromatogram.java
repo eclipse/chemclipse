@@ -315,7 +315,9 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		/*
 		 * Check if the retention time is out of limits.
 		 */
-		if(retentionTime < getStartRetentionTime() || retentionTime > getStopRetentionTime()) {
+		int stopRetentionTime = getStopRetentionTime();
+		int startRetentionTime = getStartRetentionTime();
+		if(retentionTime < startRetentionTime || retentionTime > stopRetentionTime) {
 			return 0;
 		}
 		/*
@@ -329,8 +331,9 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		 * If the given retention time fits the last scan, return the scan
 		 * number of the last scan.
 		 */
-		if(retentionTime == getStopRetentionTime()) {
-			return getNumberOfScans();
+		int numberOfScans = getNumberOfScans();
+		if(retentionTime == stopRetentionTime) {
+			return numberOfScans;
 		}
 		/*
 		 * Calculate the scan number starting point to not iterate through all
@@ -344,9 +347,13 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		 * }
 		 */
 		// TODO optimieren? Collections.binarySearch?
-		for(int scan = 1; scan <= getNumberOfScans(); scan++) {
-			if(getScan(scan).getRetentionTime() > retentionTime) {
-				return --scan;
+		for(int scanNumber = 1; scanNumber <= numberOfScans; scanNumber++) {
+			IScan scan = getScan(scanNumber);
+			if(scan != null) {
+				int rt = scan.getRetentionTime();
+				if(rt >= retentionTime) {
+					return scanNumber;
+				}
 			}
 		}
 		/*
