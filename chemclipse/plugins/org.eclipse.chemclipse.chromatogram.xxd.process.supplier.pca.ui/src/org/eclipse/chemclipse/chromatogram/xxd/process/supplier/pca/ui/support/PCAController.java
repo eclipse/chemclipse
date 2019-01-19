@@ -32,8 +32,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.Pca
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.statistics.ISample;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -42,9 +40,6 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -70,7 +65,6 @@ public class PCAController {
 	private Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samples;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private Button autoReevaluate;
-	private Button settings;
 	private AtomicBoolean evaluateRun = new AtomicBoolean(false);
 	private Runnable autoreevaluete = () -> {
 		boolean start = evaluateRun.compareAndSet(false, true);
@@ -169,31 +163,20 @@ public class PCAController {
 		autoReevaluate = new Button(composite, SWT.CHECK);
 		autoReevaluate.setText("Auto Re-evaluate");
 		autoReevaluate.setSelection(preferenceStore.getBoolean(PreferenceSupplier.P_AUTO_REEVALUATE));
-		settings = new Button(composite, SWT.PUSH);
-		GridData gridData = new GridData();
-		gridData.horizontalAlignment = GridData.END;
-		gridData.verticalAlignment = GridData.FILL;
-		settings.setLayoutData(gridData);
-		settings.setToolTipText("Open the Settings");
-		settings.setText("");
-		settings.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		settings.addSelectionListener(new SelectionAdapter() {
+	}
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
+	public void openSettingsDialog(Display display) {
 
-				IPreferencePage preferencePageChromatogram = new PreferencePage();
-				preferencePageChromatogram.setTitle("PCA Settings ");
-				//
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageChromatogram));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				preferenceDialog.open();
-			}
-		});
+		IPreferencePage preferencePageChromatogram = new PreferencePage();
+		preferencePageChromatogram.setTitle("PCA Settings ");
+		//
+		PreferenceManager preferenceManager = new PreferenceManager();
+		preferenceManager.addToRoot(new PreferenceNode("1", preferencePageChromatogram));
+		//
+		PreferenceDialog preferenceDialog = new PreferenceDialog(display.getActiveShell(), preferenceManager);
+		preferenceDialog.create();
+		preferenceDialog.setMessage("Settings");
+		preferenceDialog.open();
 	}
 
 	private void evaluatePCA() {

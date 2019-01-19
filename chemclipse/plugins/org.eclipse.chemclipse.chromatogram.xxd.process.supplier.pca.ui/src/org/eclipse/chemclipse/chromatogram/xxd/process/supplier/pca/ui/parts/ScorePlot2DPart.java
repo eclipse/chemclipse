@@ -27,20 +27,17 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceScorePlot2DPage;
 import org.eclipse.chemclipse.model.statistics.ISample;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.e4.core.commands.EHandlerService;
+import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
@@ -51,6 +48,11 @@ import javafx.collections.ListChangeListener;
 
 public class ScorePlot2DPart {
 
+	@SuppressWarnings("restriction")
+	@Inject
+	private EHandlerService handlerService;
+	private static String ID_COMMAND_SETTINGS = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.command.settings2dscoreplot";
+	//
 	private ListChangeListener<ISample> actualSelectionChangeListener;
 	private ChangeListener<IPcaResultsVisualization> pcaResultChangeLisnter;
 	private IPcaResultsVisualization pcaResults;
@@ -73,6 +75,8 @@ public class ScorePlot2DPart {
 	private SelectionManagerSample managerSample;
 
 	public ScorePlot2DPart() {
+
+		//
 		settingUpdateListener = new Consumer<IPcaSettingsVisualization>() {
 
 			@Override
@@ -133,18 +137,13 @@ public class ScorePlot2DPart {
 		};
 	}
 
+	@SuppressWarnings("restriction")
 	@PostConstruct
 	public void createComposite(Composite parent) {
 
 		partHasBeenDestroy = false;
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
-		Composite buttonsComposite = new Composite(composite, SWT.None);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
-		buttonsComposite.setLayoutData(gridData);
-		buttonsComposite.setLayout(new GridLayout(1, false));
-		createSettingsButtons(buttonsComposite);
 		Composite scorePlotComposite = new Composite(composite, SWT.None);
 		scorePlotComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		scorePlotComposite.setLayout(new FillLayout());
@@ -158,6 +157,30 @@ public class ScorePlot2DPart {
 			this.pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
 		}
 		getSelectionManagerSample().getSelection().addListener(actualSelectionChangeListener);
+		//
+		handlerService.activateHandler(ID_COMMAND_SETTINGS, new Object() {
+
+			@Execute
+			private void execute(Display display) {
+
+				IPreferencePage preferenceScorePlot2DPage = new PreferenceScorePlot2DPage();
+				preferenceScorePlot2DPage.setTitle("Score Plot 2D Settings ");
+				//
+				PreferenceManager preferenceManager = new PreferenceManager();
+				preferenceManager.addToRoot(new PreferenceNode("1", preferenceScorePlot2DPage));
+				//
+				PreferenceDialog preferenceDialog = new PreferenceDialog(display.getActiveShell(), preferenceManager);
+				preferenceDialog.create();
+				preferenceDialog.setMessage("Settings");
+				if(preferenceDialog.open() == Window.OK) {
+					if(partHasBeenDestroy)
+						return;
+					if(pcaResults != null) {
+						scorePlot.update(pcaResults);
+					}
+				}
+			}
+		});
 	}
 
 	private SelectionManagerSample getSelectionManagerSample() {
@@ -174,37 +197,6 @@ public class ScorePlot2DPart {
 			return managerSamples;
 		}
 		return SelectionManagerSamples.getInstance();
-	}
-
-	private void createSettingsButtons(Composite buttonsComposite) {
-
-		Button button = new Button(buttonsComposite, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				IPreferencePage preferenceScorePlot2DPage = new PreferenceScorePlot2DPage();
-				preferenceScorePlot2DPage.setTitle("Score Plot 2D Settings ");
-				//
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferenceScorePlot2DPage));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					if(partHasBeenDestroy)
-						return;
-					if(pcaResults != null) {
-						scorePlot.update(pcaResults);
-					}
-				}
-			}
-		});
 	}
 
 	@PreDestroy

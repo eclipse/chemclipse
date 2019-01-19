@@ -27,12 +27,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVa
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PCAEditorController;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.PCAController;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.e4.core.commands.EHandlerService;
+import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import javafx.application.Platform;
 import javafx.embed.swt.FXCanvas;
@@ -65,14 +68,28 @@ public class PCAEditorFX {
 	@Inject
 	@org.eclipse.e4.core.di.annotations.Optional
 	private SelectionManagerSample managerSample;
+	@SuppressWarnings("restriction")
+	@Inject
+	private EHandlerService handlerService;
+	private static String ID_COMMAND_SETTINGS = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.command.settingspcaeditor";
 
 	public PCAEditorFX() {
+
 	}
 
+	@SuppressWarnings("restriction")
 	@PostConstruct
 	public void createControl() {
 
 		init(parent);
+		handlerService.activateHandler(ID_COMMAND_SETTINGS, new Object() {
+
+			@Execute
+			private void execute(Display display) {
+
+				pcaController.openSettingsDialog(display);
+			}
+		});
 	}
 
 	protected void createScene(final Composite parent) {

@@ -23,20 +23,17 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceLoadingPlot2DPage;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.e4.core.commands.EHandlerService;
+import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
@@ -47,6 +44,11 @@ import javafx.collections.ListChangeListener;
 
 public class LoadingPlotPart {
 
+	@SuppressWarnings("restriction")
+	@Inject
+	private EHandlerService handlerService;
+	private static final String ID_COMMAND_SETTINGS = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.command.settingsloadingplot";
+	//
 	private LoadingPlot loadingPlot;
 	private ChangeListener<IPcaResultsVisualization> pcaResultChangeLisnter;
 	private IPcaResultsVisualization pcaResults;
@@ -108,18 +110,13 @@ public class LoadingPlotPart {
 		};
 	}
 
+	@SuppressWarnings("restriction")
 	@PostConstruct
 	public void createComposite(Composite parent) {
 
 		partHasBeenDestroy = false;
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
-		Composite buttonsComposite = new Composite(composite, SWT.None);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
-		buttonsComposite.setLayoutData(gridData);
-		buttonsComposite.setLayout(new GridLayout(1, false));
-		createSettingsButtons(buttonsComposite);
 		Composite loadingPlotComposite = new Composite(composite, SWT.None);
 		loadingPlotComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		loadingPlotComposite.setLayout(new FillLayout());
@@ -132,6 +129,29 @@ public class LoadingPlotPart {
 			this.pcaResults.getExtractedVariables().addListener(variableChanger);
 			this.pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
 		}
+		handlerService.activateHandler(ID_COMMAND_SETTINGS, new Object() {
+
+			@Execute
+			private void execute(Display display) {
+
+				IPreferencePage preferenceLoadingPlot2DPage = new PreferenceLoadingPlot2DPage();
+				preferenceLoadingPlot2DPage.setTitle("Loaing Plot 2D Settings ");
+				//
+				PreferenceManager preferenceManager = new PreferenceManager();
+				preferenceManager.addToRoot(new PreferenceNode("1", preferenceLoadingPlot2DPage));
+				//
+				PreferenceDialog preferenceDialog = new PreferenceDialog(display.getActiveShell(), preferenceManager);
+				preferenceDialog.create();
+				preferenceDialog.setMessage("Settings");
+				if(preferenceDialog.open() == Window.OK) {
+					if(partHasBeenDestroy)
+						return;
+					if(LoadingPlotPart.this.pcaResults != null) {
+						loadingPlot.update(LoadingPlotPart.this.pcaResults);
+					}
+				}
+			}
+		});
 	}
 
 	private SelectionManagerSamples getSelectionManagerSamples() {
@@ -140,37 +160,6 @@ public class LoadingPlotPart {
 			return managerSamples;
 		}
 		return SelectionManagerSamples.getInstance();
-	}
-
-	private void createSettingsButtons(Composite buttonsComposite) {
-
-		Button button = new Button(buttonsComposite, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				IPreferencePage preferenceLoadingPlot2DPage = new PreferenceLoadingPlot2DPage();
-				preferenceLoadingPlot2DPage.setTitle("Loaing Plot 2D Settings ");
-				//
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferenceLoadingPlot2DPage));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					if(partHasBeenDestroy)
-						return;
-					if(pcaResults != null) {
-						loadingPlot.update(pcaResults);
-					}
-				}
-			}
-		});
 	}
 
 	@PreDestroy
