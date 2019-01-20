@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
@@ -32,6 +33,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.Pca
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -53,7 +56,12 @@ import javafx.collections.ObservableList;
 
 public class PCAController {
 
+	public enum EvaluationState {
+		WARNING, ERROR, OK;
+	}
+
 	private static final Logger logger = Logger.getLogger(PCAController.class);
+	private EvaluationState evaluationState = EvaluationState.OK;
 	private Spinner numerPrincipalComponents;
 	private Combo pcaAlgo;
 	private Optional<IPcaResultsVisualization> pcaResults;
@@ -72,6 +80,8 @@ public class PCAController {
 			preprocessData();
 			if(autoReevaluate.getSelection()) {
 				evaluatePCA();
+			} else {
+				setWarning("Data has been modified", false);
 			}
 		}
 		evaluateRun.set(false);
@@ -101,7 +111,6 @@ public class PCAController {
 		composite.setLayoutData(layoutData);
 		composite.setLayout(new GridLayout(13, false));
 		runAnalysis = new Button(composite, SWT.PUSH);
-		runAnalysis.setText("RUN");
 		runAnalysis.addListener(SWT.Selection, e -> {
 			evaluatePCA();
 		});
@@ -163,6 +172,10 @@ public class PCAController {
 		autoReevaluate = new Button(composite, SWT.CHECK);
 		autoReevaluate.setText("Auto Re-evaluate");
 		autoReevaluate.setSelection(preferenceStore.getBoolean(PreferenceSupplier.P_AUTO_REEVALUATE));
+		autoReevaluate.addListener(SWT.Selection, e -> {
+			setOk(false);
+		});
+		setOk(true);
 	}
 
 	public void openSettingsDialog(Display display) {
@@ -177,6 +190,35 @@ public class PCAController {
 		preferenceDialog.create();
 		preferenceDialog.setMessage("Settings");
 		preferenceDialog.open();
+	}
+
+	private void setOk(boolean removeState) {
+
+		if(evaluationState.equals(EvaluationState.OK) || removeState) {
+			if(autoReevaluate.getSelection()) {
+				runAnalysis.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_AUTO_UPDATE, IApplicationImage.SIZE_16x16));
+			} else {
+				runAnalysis.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+			}
+			runAnalysis.setToolTipText(null);
+			evaluationState = EvaluationState.OK;
+		}
+	}
+
+	private void setError(String errorMessage) {
+
+		runAnalysis.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ERROR, IApplicationImage.SIZE_16x16));
+		runAnalysis.setToolTipText(errorMessage);
+		evaluationState = EvaluationState.ERROR;
+	}
+
+	private void setWarning(String warningMessage, boolean removeError) {
+
+		if(!evaluationState.equals(EvaluationState.ERROR) || removeError) {
+			runAnalysis.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_WARNING, IApplicationImage.SIZE_16x16));
+			runAnalysis.setToolTipText(warningMessage);
+			evaluationState = EvaluationState.WARNING;
+		}
 	}
 
 	private void evaluatePCA() {
@@ -194,20 +236,30 @@ public class PCAController {
 				int pcZ = pcz.getSelection();
 				try {
 					monitor.run(false, false, progressMonitor -> {
-						progressMonitor.setTaskName("Initialization");
-						ISamplesVisualization<? extends IVariableVisualization, ? extends ISample> s = samples.get();
-						ObservableList<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> el = getSelectionManagerSamples().getElements();
-						if(!el.contains(s)) {
-							el.add(s);
+						try {
+							progressMonitor.setTaskName("Initialization");
+							ISamplesVisualization<? extends IVariableVisualization, ? extends ISample> s = samples.get();
+							ObservableList<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> el = getSelectionManagerSamples().getElements();
+							if(!el.contains(s)) {
+								el.add(s);
+							}
+							IPcaSettings pcaSettings = new PcaSettings(maxPC, pcaAlgorithm);
+							pcaSettings.setRemoveUselessVariables(pcaPreprocessingData.isRemoveUselessVariables());
+							IPcaSettingsVisualization pcaSettingsVisualization = new PcaSettingsVisualization(pcX, pcY, pcZ);
+							final IPcaResultsVisualization results = getSelectionManagerSamples().evaluatePca(s, pcaSettings, pcaSettingsVisualization, progressMonitor, true);
+							pcaResults = Optional.of(results);
+							setOk(true);
+						} catch(MathIllegalArgumentException e) {
+							setError(e.getMessage());
+							logger.error(e.getLocalizedMessage(), e);
+						} catch(Exception e) {
+							setError("Some error ocurred.");
+							logger.error(e.getLocalizedMessage(), e);
 						}
-						IPcaSettings pcaSettings = new PcaSettings(maxPC, pcaAlgorithm);
-						pcaSettings.setRemoveUselessVariables(pcaPreprocessingData.isRemoveUselessVariables());
-						IPcaSettingsVisualization pcaSettingsVisualization = new PcaSettingsVisualization(pcX, pcY, pcZ);
-						final IPcaResultsVisualization results = getSelectionManagerSamples().evaluatePca(s, pcaSettings, pcaSettingsVisualization, progressMonitor, true);
-						pcaResults = Optional.of(results);
 					});
 				} catch(Exception e) {
 					logger.error(e.getLocalizedMessage(), e);
+					setError("Some error ocurred.");
 				}
 			}
 		}

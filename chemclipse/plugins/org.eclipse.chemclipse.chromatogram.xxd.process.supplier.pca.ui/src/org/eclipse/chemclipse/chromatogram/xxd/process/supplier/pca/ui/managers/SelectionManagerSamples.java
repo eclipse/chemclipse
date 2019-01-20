@@ -57,6 +57,7 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 	private SelectionManagerSample selectionManagerSample;
 
 	public SelectionManagerSamples(SelectionManagerSample selectionManagerSample) {
+
 		super();
 		this.selectionManagerSample = selectionManagerSample;
 		pcaResults = new HashMap<>();
@@ -111,6 +112,13 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 	public <V extends IVariableVisualization, S extends ISampleVisualization> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaSettingsVisualization pcaSettingsVisualization, IProgressMonitor monitor, boolean setSelected) {
 
 		monitor.setTaskName("Evaluation");
+		// remove all current result
+		synchronized(pcaResults) {
+			pcaResults.remove(samples);
+		}
+		if(setSelected) {
+			actualSelectedPcaResults.setValue(null);
+		}
 		PcaEvaluation pcaEvaluation = new PcaEvaluation();
 		PcaResults results = pcaEvaluation.process(samples, settings, monitor);
 		IPcaResultsVisualization pcaResultsVisualization = new PcaResultsVisualization<>(results, pcaSettingsVisualization);

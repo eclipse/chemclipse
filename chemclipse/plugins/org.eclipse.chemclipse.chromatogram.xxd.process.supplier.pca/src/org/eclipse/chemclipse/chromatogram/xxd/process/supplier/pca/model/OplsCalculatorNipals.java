@@ -17,10 +17,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.OptionalDouble;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 
 public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
+
+	public OplsCalculatorNipals(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
+
+		super(numObs, numVars, numComps);
+	}
 
 	private DenseMatrix64F getYVector() {
 
@@ -31,7 +37,7 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		List<String> uniqueGroupNames = Arrays.asList(groupNamesSet.toArray(new String[groupNamesSet.size()]));
 		int yIterator = 0;
 		for(String myString : groupNames) {
-			vector[yIterator] = (double)uniqueGroupNames.indexOf(myString);
+			vector[yIterator] = uniqueGroupNames.indexOf(myString);
 			yIterator++;
 		}
 		DenseMatrix64F yVector = new DenseMatrix64F(groupNames.size(), 1, true, vector);

@@ -11,11 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 import org.ejml.ops.NormOps;
 
 public class PcaCalculatorNipals extends AbstractMultivariateCalculator {
+
+	public PcaCalculatorNipals(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
+
+		super(numObs, numVars, numComps);
+	}
 
 	@Override
 	public void compute() {

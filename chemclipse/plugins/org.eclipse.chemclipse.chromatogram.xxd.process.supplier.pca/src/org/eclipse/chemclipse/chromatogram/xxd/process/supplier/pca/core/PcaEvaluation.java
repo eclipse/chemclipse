@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IMultivariateCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
@@ -167,8 +168,9 @@ public class PcaEvaluation {
 	 * @param sampleSize
 	 * @param numberOfPrincipalComponents
 	 * @return PrincipalComponentAnalysis
+	 * @throws Exception
 	 */
-	private IMultivariateCalculator setupPCA(Map<ISample, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents, String pcaAlgorithm) {
+	private IMultivariateCalculator setupPCA(Map<ISample, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents, String pcaAlgorithm) throws MathIllegalArgumentException {
 
 		/*
 		 * Initialize the PCA analysis.
@@ -176,13 +178,12 @@ public class PcaEvaluation {
 		int numSamples = pcaPeakMap.size();
 		IMultivariateCalculator principalComponentAnalysis = null;
 		if(pcaAlgorithm.equals(IPcaSettings.PCA_ALGO_NIPALS)) {
-			principalComponentAnalysis = new PcaCalculatorNipals();
+			principalComponentAnalysis = new PcaCalculatorNipals(numSamples, sampleSize, numberOfPrincipalComponents);
 		} else if(pcaAlgorithm.equals(IPcaSettings.PCA_ALGO_SVD)) {
-			principalComponentAnalysis = new PcaCalculatorSvd();
+			principalComponentAnalysis = new PcaCalculatorSvd(numSamples, sampleSize, numberOfPrincipalComponents);
 		} else if(pcaAlgorithm.equals(IPcaSettings.OPLS_ALGO_NIPALS)) {
-			principalComponentAnalysis = new OplsCalculatorNipals();
+			principalComponentAnalysis = new OplsCalculatorNipals(numSamples, sampleSize, numberOfPrincipalComponents);
 		}
-		principalComponentAnalysis.initialize(numSamples, sampleSize, numberOfPrincipalComponents);
 		/*
 		 * Add the samples.
 		 */
@@ -192,7 +193,7 @@ public class PcaEvaluation {
 		return principalComponentAnalysis;
 	}
 
-	public <V extends IVariable, S extends ISample> PcaResults process(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
+	public <V extends IVariable, S extends ISample> PcaResults process(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) throws MathIllegalArgumentException {
 
 		monitor.subTask("Run PCA");
 		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
@@ -213,7 +214,7 @@ public class PcaEvaluation {
 		/*
 		 * Collect PCA results
 		 */
-		if(!principalComponentAnalysis.getComputeStatus() || !principalComponentAnalysis.isPcaValid()) {
+		if(!principalComponentAnalysis.getComputeStatus()) {
 			return null;
 		}
 		List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);

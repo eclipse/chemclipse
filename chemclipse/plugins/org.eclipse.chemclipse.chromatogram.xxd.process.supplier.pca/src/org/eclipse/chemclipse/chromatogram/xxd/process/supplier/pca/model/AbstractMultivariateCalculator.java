@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.ArrayList;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
@@ -23,25 +24,31 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	private DenseMatrix64F scores;
 	private double mean[];
 	private int numComps;
-	private DenseMatrix64F sampleData = new DenseMatrix64F(1, 1);
+	private DenseMatrix64F sampleData;
 	private ArrayList<ISample> sampleKeys = new ArrayList<>();
 	private ArrayList<String> groupNames = new ArrayList<>();
 	private int sampleIndex;
 	private boolean computeSuccess;
-	private boolean pcaValid;
 
-	@Override
-	public void initialize(int numObs, int numVars, int numComps) {
+	public AbstractMultivariateCalculator(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
 
-		this.sampleData.reshape(numObs, numVars, false);
+		if(numComps > numObs) {
+			throw new MathIllegalArgumentException("Number of samples has to be equle or bigger than number of componets.");
+		}
+		if(numVars <= 0) {
+			throw new MathIllegalArgumentException("Number of variables has to be equle or bigger than one.");
+		}
+		if(numObs <= 0) {
+			throw new MathIllegalArgumentException("Number of samples has to be equle or bigger than one.");
+		}
+		if(numComps <= 0) {
+			throw new MathIllegalArgumentException("Number of samples has to be equle or bigger than one.");
+		}
+		sampleData = new DenseMatrix64F(numObs, numVars);
 		this.mean = new double[numVars];
 		sampleIndex = 0;
 		this.numComps = numComps;
 		computeSuccess = false;
-		pcaValid = true;
-		if(this.numComps > numObs) {
-			invalidatePca();
-		}
 	}
 
 	@Override
@@ -58,10 +65,12 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 
 	@Override
 	public void addObservation(double[] obsData, ISample sampleKey, String groupName) {
+		/*
+		 * if(obsData.length < sampleData.getNumCols()) {
+		 * this.invalidatePca();
+		 * }
+		 */
 
-		if(obsData.length < sampleData.getNumCols()) {
-			this.invalidatePca();
-		}
 		for(int i = 0; i < obsData.length; i++) {
 			sampleData.set(sampleIndex, i, obsData[i]);
 		}
@@ -70,8 +79,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		sampleIndex++;
 	}
 
-	@Override
-	public ArrayList<String> getGroupNames() {
+	protected ArrayList<String> getGroupNames() {
 
 		return groupNames;
 	}
@@ -89,8 +97,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	 * @param obs
 	 *            one observation / sample
 	 */
-	@Override
-	public double[] applyLoadings(double[] obs) {
+	private double[] applyLoadings(double[] obs) {
 
 		DenseMatrix64F mean = DenseMatrix64F.wrap(sampleData.getNumCols(), 1, this.mean);
 		DenseMatrix64F sample = new DenseMatrix64F(sampleData.getNumCols(), 1, true, obs);
@@ -111,7 +118,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	@Override
 	public double getErrorMetric(double[] obs) {
 
-		if(!isPcaValid() || !getComputeStatus()) {
+		if(!getComputeStatus()) {
 			return 0.0;
 		}
 		double[] eig = applyLoadings(obs);
@@ -190,18 +197,17 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		return explainedVariance;
 	}
 
-	public double[] getMean() {
+	protected double[] getMean() {
 
 		return mean;
 	}
 
-	@Override
-	public int getNumComps() {
+	protected int getNumComps() {
 
 		return numComps;
 	}
 
-	public DenseMatrix64F getSampleData() {
+	protected DenseMatrix64F getSampleData() {
 
 		return sampleData;
 	}
@@ -215,7 +221,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		return scoreVector.data;
 	}
 
-	public double[] reproject(double[] scoreVector) {
+	protected double[] reproject(double[] scoreVector) {
 
 		DenseMatrix64F sample = new DenseMatrix64F(sampleData.getNumCols(), 1);
 		DenseMatrix64F rotated = DenseMatrix64F.wrap(numComps, 1, scoreVector);
@@ -225,31 +231,13 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		return sample.data;
 	}
 
-	public void setLoadings(DenseMatrix64F loadings) {
+	protected void setLoadings(DenseMatrix64F loadings) {
 
 		this.loadings = loadings;
 	}
 
-	public void setScores(DenseMatrix64F scores) {
+	protected void setScores(DenseMatrix64F scores) {
 
 		this.scores = scores;
-	}
-
-	@Override
-	public void setNumComps(int numComps) {
-
-		this.numComps = numComps;
-	}
-
-	@Override
-	public void invalidatePca() {
-
-		this.pcaValid = false;
-	}
-
-	@Override
-	public boolean isPcaValid() {
-
-		return this.pcaValid;
 	}
 }

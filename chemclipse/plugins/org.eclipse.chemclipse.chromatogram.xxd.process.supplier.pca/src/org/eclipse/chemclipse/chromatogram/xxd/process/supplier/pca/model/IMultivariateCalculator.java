@@ -11,15 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import java.util.ArrayList;
-
 import org.eclipse.chemclipse.model.statistics.ISample;
 
 public interface IMultivariateCalculator {
 
 	void addObservation(double[] obsData, ISample sampleKey, String groupName);
-
-	double[] applyLoadings(double[] obs);
 
 	void compute();
 
@@ -27,25 +23,13 @@ public interface IMultivariateCalculator {
 
 	void setComputeSuccess();
 
-	boolean isPcaValid();
-
-	void invalidatePca();
-
 	double getErrorMetric(double[] obs);
 
 	double[] getLoadingVector(int var);
 
 	double[] getScoreVector(ISample sampleId);
 
-	ArrayList<String> getGroupNames();
-
-	void initialize(int numObs, int numVars, int numComps);
-
 	double getSummedVariance();
 
 	double getExplainedVariance(int var);
-
-	void setNumComps(int numComps);
-
-	int getNumComps();
 }

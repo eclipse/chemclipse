@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.factory.DecompositionFactory;
 import org.ejml.interfaces.decomposition.SingularValueDecomposition;
@@ -18,6 +19,11 @@ import org.ejml.ops.CommonOps;
 import org.ejml.ops.SingularOps;
 
 public class PcaCalculatorSvd extends AbstractMultivariateCalculator {
+
+	public PcaCalculatorSvd(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
+
+		super(numObs, numVars, numComps);
+	}
 
 	@Override
 	public void compute() {
