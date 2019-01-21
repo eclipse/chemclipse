@@ -88,6 +88,9 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_BATCHPROCESS_PEAKIDENT = "batchprocessPeakIdent.gif";
 	String IMAGE_CONFIGURE = "configure.gif";
 	String IMAGE_EXECUTE = "execute.gif";
+	String IMAGE_EXECUTE_WARNING = "execute_warning.png";
+	String IMAGE_EXECUTE_ERROR = "execute_error.png";
+	String IMAGE_EXECUTE_AUTO_UPDATE = "execute_auto_update.png";
 	String IMAGE_PEAK_MANUAL = "peak-manual.gif";
 	String IMAGE_PEAK_DETECTOR = "peakdetector.gif";
 	String IMAGE_PEAK_DETECTOR_DECONVOLUTION = "peakdetectorDeconvolution.gif";
