@@ -12,13 +12,24 @@
 package org.eclipse.chemclipse.model.core;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
 
-public interface IPeak extends ITargetSupplier, Comparable<IPeak> {
+public interface IPeak extends ITargetSupplier {
+	
+	/**
+	 * This comparator compares peaks based on the RT at the maximum of the intensity of the peak model
+	 */
+	public static final Comparator<IPeak> COMPARATOR_RT_MAX = (o1, o2) -> Integer.compare(o1.getPeakModel().getRetentionTimeAtPeakMaximum(), o2.getPeakModel().getRetentionTimeAtPeakMaximum());
+	
+	/**
+	 * This comparator compares peaks based on the RT at the start of the intensity of the peak model
+	 */
+	public static final Comparator<IPeak> COMPARATOR_RT_START = (o1, o2) -> Integer.compare(o1.getPeakModel().getStartRetentionTime(), o2.getPeakModel().getStartRetentionTime());
 
 	IPeakModel getPeakModel();
 
