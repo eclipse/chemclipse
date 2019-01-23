@@ -97,6 +97,7 @@
     <module>../../plugins/org.eclipse.chemclipse.nmr.processor.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.pcr.converter</module>
     <module>../../plugins/org.eclipse.chemclipse.pcr.converter.ui</module>
+    <module>../../plugins/org.eclipse.chemclipse.pdfbox.extensions</module>
     <module>../../plugins/org.eclipse.chemclipse.xir.converter</module>
     <module>../../plugins/org.eclipse.chemclipse.xir.converter.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.classifier</module>
@@ -160,6 +161,7 @@
     <module>../../plugins/org.eclipse.chemclipse.progress.fragment.test</module>
     <module>../../plugins/org.eclipse.chemclipse.keystore.fragment.test</module>
     <module>../../plugins/org.eclipse.chemclipse.model.fragment.test</module>
+    <module>../../plugins/org.eclipse.chemclipse.pdfbox.extensions.fragment.test</module>
     <!--
 	JUnit UI Tests        
     -->        
