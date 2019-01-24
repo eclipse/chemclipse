@@ -21,11 +21,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.BaselineModel;
@@ -112,7 +116,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 * Specific chromatogram implementations might define
 	 * specific peak types, which must extend from IPeak.
 	 */
-	private Set<T> peaks = new TreeSet<T>();
+	private PeakRTMap<T> peaks = new PeakRTMap<T>();
 	private Set<IIdentificationTarget> identificationTargets = new HashSet<>();
 
 	/**
@@ -1026,33 +1030,36 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	@Override
 	public int getNumberOfPeaks() {
 
-		return peaks.size();
+		return peaks.peakcount;
 	}
 
 	@Override
 	public void addPeak(T peak) {
 
-		if(!peaks.contains(peak) && peak.getPeakModel().getWidthByInflectionPoints() > 0) {
-			peaks.add(peak);
+		if(peak.getPeakModel().getWidthByInflectionPoints() > 0) {
+			peaks.addPeak(peak);
 		}
 	}
 
 	@Override
 	public void removePeak(T peak) {
 
-		peaks.remove(peak);
+		peaks.removePeak(peak);
 	}
 
 	@Override
 	public void removePeaks(List<T> peaksToDelete) {
 
-		peaks.removeAll(peaksToDelete);
+		// because of the datastructure we can't use removeAll, but removing one peak at a time is quite efficient anyways
+		for(T peak : peaksToDelete) {
+			removePeak(peak);
+		}
 	}
 
 	@Override
 	public List<T> getPeaks() {
 
-		return new ArrayList<T>(peaks);
+		return collectPeaks(peaks.values());
 	}
 
 	// TODO JUnit
@@ -1060,43 +1067,18 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	@Override
 	public List<T> getPeaks(IChromatogramSelection chromatogramSelection) {
 
-		List<T> peakList = new ArrayList<T>();
 		if(chromatogramSelection != null) {
 			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
 			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			int peakRetentionTime;
-			for(T peak : peaks) {
-				/*
-				 * Include all peaks which retention time at peak maximum is in
-				 * between start and stop retention time of the selection.
-				 */
-				peakRetentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
-				if(peakRetentionTime >= startRetentionTime && peakRetentionTime <= stopRetentionTime) {
-					peakList.add(peak);
-				}
-			}
+			return getPeaks(startRetentionTime, stopRetentionTime);
 		}
-		return peakList;
+		return Collections.emptyList();
 	}
 
 	@Override
-	public T getPeak(int retentionTime) {
+	public List<T> getPeaks(int startRetentionTime, int stopRetentionTime) {
 
-		/*
-		 * Try to get a peak in the surrounding of the retention time.
-		 */
-		T selectedPeak = null;
-		exitloop:
-		for(T peak : peaks) {
-			int peakStartRetentionTime = peak.getPeakModel().getStartRetentionTime();
-			int peakStopRetentionTime = peak.getPeakModel().getStopRetentionTime();
-			if(retentionTime >= peakStartRetentionTime && retentionTime <= peakStopRetentionTime) {
-				selectedPeak = peak;
-				break exitloop;
-			}
-		}
-		//
-		return selectedPeak;
+		return collectPeaks(peaks.subMap(startRetentionTime, true, stopRetentionTime, true).values());
 	}
 
 	@Override
@@ -1149,4 +1131,75 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		return builder.toString();
 	}
 	// ----------------------------hashCode, equals and toString
+
+	/**
+	 * Collect all peaks from a collection of lists into one list and sort them according to the {@link IPeak#COMPARATOR_RT_MAX}
+	 * 
+	 * @param values
+	 *            the values to merge
+	 * @return the collected peaks
+	 */
+	private static <T extends IPeak> List<T> collectPeaks(Collection<Collection<T>> values) {
+
+		ArrayList<T> list = new ArrayList<>();
+		for(Collection<T> value : values) {
+			list.addAll(value);
+		}
+		Collections.sort(list, IPeak.COMPARATOR_RT_MAX);
+		return list;
+	}
+
+	/**
+	 * A specialized Map that retains peaks indexed by there maximum signal retention time,
+	 * to ensure data consistency, data should only be added through the provided {@link #addPeak(IPeak)} and {@link #removePeak(IPeak)}
+	 * 
+	 * @author Christoph Läubrich
+	 *
+	 * @param <T>
+	 */
+	private static final class PeakRTMap<T extends IPeak> extends TreeMap<Integer, Collection<T>> {
+
+		private static final long serialVersionUID = 6339698016420166069L;
+		private int peakcount;
+
+		public void addPeak(T peak) {
+
+			Integer rt = getKey(peak);
+			Collection<T> list = get(rt);
+			if(list == null) {
+				// this will ensure that peaks, that are equal not added twice
+				// but different peaks remain in the order of insertion
+				list = new LinkedHashSet<>();
+				put(rt, list);
+			}
+			if(list.add(peak)) {
+				peakcount++;
+			}
+		}
+
+		public void removePeak(T peakToRemove) {
+
+			Integer rt = getKey(peakToRemove);
+			Collection<T> list = get(rt);
+			if(list != null) {
+				for(Iterator<T> iterator = list.iterator(); iterator.hasNext();) {
+					T other = iterator.next();
+					if(other.equals(peakToRemove)) {
+						iterator.remove();
+						peakcount--;
+						break;
+					}
+				}
+				if(list.isEmpty()) {
+					// allow for garbage collection....
+					remove(rt);
+				}
+			}
+		}
+
+		private static Integer getKey(IPeak peak) {
+
+			return peak.getPeakModel().getRetentionTimeAtPeakMaximum();
+		}
+	}
 }

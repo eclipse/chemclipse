@@ -27,8 +27,13 @@ public interface IChromatogramPeaks<T extends IPeak> {
 
 	void removePeaks(List<T> peaksToDelete);
 
-	T getPeak(int retentionTime);
-
+	/**
+	 * returns all peaks that are inside the given retention time, that means the retention time is within the start/stop retention time of the peak
+	 * @param retentionTime
+	 * @return a list of peaks at the given retention time, ordered by the start retention time of the peak
+	 */
+	List<T> getPeaks(int startRetentionTime, int stopRetentiontime);
+	
 	/**
 	 * Returns a list.
 	 * Modification does not change the chromatogram peak list.
