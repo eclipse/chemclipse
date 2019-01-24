@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -79,7 +79,7 @@ public class PeaksChart extends LineChart {
 		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS_PEAKS;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS_PEAKS;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS_PEAKS;
-		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS_PEAKS);
+		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS_PEAKS);
 		//
 		chartSupport.setAxisSettings(primaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 		primaryAxisSettingsX.setVisible(isShowAxis);
@@ -96,7 +96,7 @@ public class PeaksChart extends LineChart {
 		String colorNode = PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY_PEAKS;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY_PEAKS;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY_PEAKS;
-		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY_PEAKS);
+		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY_PEAKS);
 		//
 		chartSupport.setAxisSettings(primaryAxisSettingsY, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 		primaryAxisSettingsY.setVisible(isShowAxis);
@@ -112,7 +112,7 @@ public class PeaksChart extends LineChart {
 		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_MINUTES_PEAKS;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES_PEAKS;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES_PEAKS;
-		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_X_AXIS_MINUTES_PEAKS);
+		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MINUTES_PEAKS);
 		//
 		if(isShowAxis) {
 			if(axisSettings == null) {
@@ -140,7 +140,7 @@ public class PeaksChart extends LineChart {
 		String colorNode = PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY_PEAKS;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS;
-		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY_PEAKS);
+		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY_PEAKS);
 		//
 		if(isShowAxis) {
 			if(axisSettings == null) {

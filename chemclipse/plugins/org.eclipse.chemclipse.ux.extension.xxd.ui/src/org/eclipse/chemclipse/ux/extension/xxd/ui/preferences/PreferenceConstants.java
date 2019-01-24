@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -450,6 +450,8 @@ public class PreferenceConstants {
 	public static final String DEF_GRIDLINE_STYLE_X_AXIS_MILLISECONDS = LineStyle.NONE.toString();
 	public static final String P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS = "gridlineColorXAxisMilliseconds";
 	public static final String DEF_GRIDLINE_COLOR_X_AXIS_MILLISECONDS = "192,192,192";
+	public static final String P_SHOW_X_AXIS_TITLE_MILLISECONDS = "showXAxisTitleMilliseconds";
+	public static final boolean DEF_SHOW_X_AXIS_TITLE_MILLISECONDS = true;
 	//
 	public static final String P_SHOW_X_AXIS_SECONDS = "showXAxisSeconds";
 	public static final boolean DEF_SHOW_X_AXIS_SECONDS = false;
@@ -461,6 +463,8 @@ public class PreferenceConstants {
 	public static final String DEF_GRIDLINE_STYLE_X_AXIS_SECONDS = LineStyle.NONE.toString();
 	public static final String P_GRIDLINE_COLOR_X_AXIS_SECONDS = "gridlineColorXAxisSeconds";
 	public static final String DEF_GRIDLINE_COLOR_X_AXIS_SECONDS = "192,192,192";
+	public static final String P_SHOW_X_AXIS_TITLE_SECONDS = "showXAxisTitleSeconds";
+	public static final boolean DEF_SHOW_X_AXIS_TITLE_SECONDS = true;
 	//
 	public static final String P_SHOW_X_AXIS_MINUTES = "showXAxisMinutes";
 	public static final boolean DEF_SHOW_X_AXIS_MINUTES = true;
@@ -472,6 +476,8 @@ public class PreferenceConstants {
 	public static final String DEF_GRIDLINE_STYLE_X_AXIS_MINUTES = LineStyle.DOT.toString();
 	public static final String P_GRIDLINE_COLOR_X_AXIS_MINUTES = "gridlineColorXAxisMinutes";
 	public static final String DEF_GRIDLINE_COLOR_X_AXIS_MINUTES = "192,192,192";
+	public static final String P_SHOW_X_AXIS_TITLE_MINUTES = "showXAxisTitleMinutes";
+	public static final boolean DEF_SHOW_X_AXIS_TITLE_MINUTES = true;
 	//
 	public static final String P_SHOW_X_AXIS_SCANS = "showXAxisScans";
 	public static final boolean DEF_SHOW_X_AXIS_SCANS = false;
@@ -483,6 +489,8 @@ public class PreferenceConstants {
 	public static final String DEF_GRIDLINE_STYLE_X_AXIS_SCANS = LineStyle.NONE.toString();
 	public static final String P_GRIDLINE_COLOR_X_AXIS_SCANS = "gridlineColorXAxisScans";
 	public static final String DEF_GRIDLINE_COLOR_X_AXIS_SCANS = "192,192,192";
+	public static final String P_SHOW_X_AXIS_TITLE_SCANS = "showXAxisTitleScans";
+	public static final boolean DEF_SHOW_X_AXIS_TITLE_SCANS = true;
 	//
 	public static final String P_SHOW_Y_AXIS_INTENSITY = "showYAxisIntensity";
 	public static final boolean DEF_SHOW_Y_AXIS_INTENSITY = true;
@@ -494,6 +502,8 @@ public class PreferenceConstants {
 	public static final String DEF_GRIDLINE_STYLE_Y_AXIS_INTENSITY = LineStyle.NONE.toString();
 	public static final String P_GRIDLINE_COLOR_Y_AXIS_INTENSITY = "gridlineColorYAxisIntensity";
 	public static final String DEF_GRIDLINE_COLOR_Y_AXIS_INTENSITY = "192,192,192";
+	public static final String P_SHOW_Y_AXIS_TITLE_INTENSITY = "showYAxisTitleIntensity";
+	public static final boolean DEF_SHOW_Y_AXIS_TITLE_INTENSITY = true;
 	//
 	public static final String P_SHOW_Y_AXIS_RELATIVE_INTENSITY = "showYAxisRelativeIntensity";
 	public static final boolean DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY = true;
@@ -505,6 +515,8 @@ public class PreferenceConstants {
 	public static final String DEF_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY = LineStyle.DOT.toString();
 	public static final String P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY = "gridlineColorYAxisRelativeIntensity";
 	public static final String DEF_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY = "192,192,192";
+	public static final String P_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY = "showYAxisTitleRelativeIntensity";
+	public static final boolean DEF_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY = true;
 	//
 	public static final String P_CHROMATOGRAM_SELECTED_ACTION_ID = "chromatogramSelectedActionId";
 	public static final String DEF_CHROMATOGRAM_SELECTED_ACTION_ID = "";

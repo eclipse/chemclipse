@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -84,10 +84,10 @@ public class ChromatogramChart extends LineChart {
 		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS;
-		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS);
 		//
 		chartSupport.setAxisSettings(primaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
-		primaryAxisSettingsX.setVisible(isShowAxis);
+		primaryAxisSettingsX.setVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS));
+		primaryAxisSettingsX.setTitleVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MILLISECONDS));
 	}
 
 	private void modifyYAxisIntensity() {
@@ -101,10 +101,10 @@ public class ChromatogramChart extends LineChart {
 		String colorNode = PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY;
-		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY);
 		//
 		chartSupport.setAxisSettings(primaryAxisSettingsY, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
-		primaryAxisSettingsY.setVisible(isShowAxis);
+		primaryAxisSettingsY.setVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY));
+		primaryAxisSettingsY.setTitleVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_INTENSITY));
 	}
 
 	private void modifyYAxisRelativeIntensity() {
@@ -117,20 +117,24 @@ public class ChromatogramChart extends LineChart {
 		String colorNode = PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY;
-		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY);
+		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY);
+		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY);
 		//
 		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(TITLE_Y_AXIS_RELATIVE_INTENSITY, new PercentageConverter(SWT.VERTICAL, true));
 				chartSupport.setAxisSettings(secondaryAxisSettingsY, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				secondaryAxisSettingsY.setTitleVisible(isShowAxisTitle);
 				chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 			} else {
 				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 				axisSettings.setVisible(true);
+				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
 		} else {
 			if(axisSettings != null) {
 				axisSettings.setVisible(false);
+				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
 		}
 	}
@@ -145,20 +149,24 @@ public class ChromatogramChart extends LineChart {
 		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_SECONDS;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SECONDS;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SECONDS;
-		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_X_AXIS_SECONDS);
+		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SECONDS);
+		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_SECONDS);
 		//
 		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_SECONDS, new MillisecondsToSecondsConverter());
 				chartSupport.setAxisSettings(secondaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				secondaryAxisSettingsX.setTitleVisible(isShowAxisTitle);
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 			} else {
 				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 				axisSettings.setVisible(true);
+				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
 		} else {
 			if(axisSettings != null) {
 				axisSettings.setVisible(false);
+				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
 		}
 	}
@@ -173,20 +181,24 @@ public class ChromatogramChart extends LineChart {
 		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_MINUTES;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES;
-		boolean isShowAxis = chartSupport.isShowAxis(PreferenceConstants.P_SHOW_X_AXIS_MINUTES);
+		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MINUTES);
+		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES);
 		//
 		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_MINUTES, new MillisecondsToMinuteConverter());
 				chartSupport.setAxisSettings(secondaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				secondaryAxisSettingsX.setTitleVisible(isShowAxisTitle);
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 			} else {
 				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 				axisSettings.setVisible(true);
+				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
 		} else {
 			if(axisSettings != null) {
 				axisSettings.setVisible(false);
+				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
 		}
 	}

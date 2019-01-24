@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -236,7 +236,6 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 
 	@Inject
 	public ExtendedChromatogramUI(Composite parent, int style) {
-
 		initialize(parent, style);
 	}
 
@@ -1676,6 +1675,7 @@ public class ExtendedChromatogramUI implements ToolbarUI {
 							int scanDelay = chromatogram.getScanDelay();
 							int scanInterval = chromatogram.getScanInterval();
 							ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_SCANS, new MillisecondsToScanNumberConverter(scanDelay, scanInterval));
+							secondaryAxisSettingsX.setTitleVisible(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_SCANS));
 							setScanAxisSettings(secondaryAxisSettingsX);
 							chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 						} catch(Exception e) {
