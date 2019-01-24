@@ -25,7 +25,9 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ConfigurableUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodListUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodUIConfig;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePage;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -51,7 +53,7 @@ import org.eclipse.swt.widgets.Text;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-public class ExtendedMethodUI extends Composite {
+public class ExtendedMethodUI extends Composite implements ConfigurableUI<MethodUIConfig> {
 
 	private static final Logger logger = Logger.getLogger(ExtendedMethodUI.class);
 	//
@@ -69,6 +71,7 @@ public class ExtendedMethodUI extends Composite {
 	//
 	private IProcessMethod processMethod = null;
 	private IModificationHandler modificationHandler = null;
+	private Composite toolbarMain;
 
 	public ExtendedMethodUI(Composite parent, int style) {
 		super(parent, style);
@@ -104,14 +107,14 @@ public class ExtendedMethodUI extends Composite {
 
 	private void createToolbarMain(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
+		toolbarMain = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		toolbarMain.setLayoutData(gridData);
+		toolbarMain.setLayout(new GridLayout(3, false));
 		//
-		createDataInfoLabel(composite);
-		createButtonToggleToolbarHeader(composite);
-		createSettingsButton(composite);
+		createDataInfoLabel(toolbarMain);
+		createButtonToggleToolbarHeader(toolbarMain);
+		createSettingsButton(toolbarMain);
 	}
 
 	private void createDataInfoLabel(Composite parent) {
@@ -486,5 +489,18 @@ public class ExtendedMethodUI extends Composite {
 		if(modificationHandler != null) {
 			modificationHandler.setDirty(dirty);
 		}
+	}
+
+	@Override
+	public MethodUIConfig getConfig() {
+
+		return new MethodUIConfig() {
+
+			@Override
+			public void setToolbarVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolbarMain, visible);
+			}
+		};
 	}
 }

@@ -18,14 +18,11 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakScanListEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakScanListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakScanListLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakScanListTableComparator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
@@ -45,13 +42,7 @@ public class PeakScanListUI extends ExtendedTableViewer {
 		createColumns();
 	}
 
-	public void setInput(IChromatogramSelection chromatogramSelection) {
-
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		setInput(chromatogramSelection, preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_LIST), preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE), preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_LIST), preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE));
-	}
-
-	public void setInput(IChromatogramSelection chromatogramSelection, boolean showPeaks, boolean showPeaksInSelectedRange, boolean showScans, boolean showScansInSelectedRange) {
+	public void setInput(IChromatogramSelection chromatogramSelection, boolean showPeaks, boolean showScans, boolean inSelectedRange) {
 
 		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
@@ -62,11 +53,11 @@ public class PeakScanListUI extends ExtendedTableViewer {
 			List<Object> input = new ArrayList<Object>();
 			//
 			if(showPeaks) {
-				input.addAll(chromatogramDataSupport.getPeaks(chromatogramSelection, showPeaksInSelectedRange));
+				input.addAll(chromatogramDataSupport.getPeaks(chromatogramSelection, inSelectedRange));
 			}
 			//
 			if(showScans) {
-				input.addAll(chromatogramDataSupport.getIdentifiedScans(chromatogramSelection, showScansInSelectedRange));
+				input.addAll(chromatogramDataSupport.getIdentifiedScans(chromatogramSelection, inSelectedRange));
 			}
 			//
 			super.setInput(input);

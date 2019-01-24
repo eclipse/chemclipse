@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - support for configuration
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -75,7 +76,7 @@ import org.eclipse.swtchart.extensions.core.ISeriesModificationListener;
 import org.eclipse.swtchart.extensions.core.SeriesStatusAdapter;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 
-public class ExtendedChromatogramOverlayUI implements ToolbarUI {
+public class ExtendedChromatogramOverlayUI implements ConfigurableUI<ChromatogramOverlayUIConfig> {
 
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramOverlayUI.class);
 	/*
@@ -118,12 +119,10 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 	private int style;
 
 	public ExtendedChromatogramOverlayUI(Composite parent) {
-
 		this(parent, SWT.BORDER);
 	}
 
 	public ExtendedChromatogramOverlayUI(Composite parent, int style) {
-
 		this.style = style;
 		initialize(parent);
 	}
@@ -1355,8 +1354,15 @@ public class ExtendedChromatogramOverlayUI implements ToolbarUI {
 	}
 
 	@Override
-	public void setToolbarVisible(boolean visible) {
+	public ChromatogramOverlayUIConfig getConfig() {
 
-		PartSupport.setCompositeVisibility(toolbarMain, visible);
+		return new ChromatogramOverlayUIConfig() {
+
+			@Override
+			public void setToolbarVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolbarMain, visible);
+			}
+		};
 	}
 }

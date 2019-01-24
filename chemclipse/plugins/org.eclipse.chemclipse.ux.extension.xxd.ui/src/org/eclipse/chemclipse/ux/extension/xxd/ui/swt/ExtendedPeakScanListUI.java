@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -65,6 +66,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -78,11 +80,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 
 @SuppressWarnings("rawtypes")
-public class ExtendedPeakScanListUI implements ToolbarUI {
+public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConfig> {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakScanListUI.class);
 	//
@@ -106,10 +109,18 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 	private Map<String, Object> map = new HashMap<String, Object>();
 	private Composite toolbarMain;
 	private Composite toolbarLabel;
+	private boolean showScans;
+	private boolean showPeaks;
+	private boolean showSelectedRange;
 
 	@Inject
-	public ExtendedPeakScanListUI(Composite parent) {
+	public ExtendedPeakScanListUI(Composite parent, IPreferenceStore store) {
 		initialize(parent);
+		if(store != null) {
+			showPeaks = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_LIST);
+			showSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE) || preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
+			showScans = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_LIST);
+		}
 	}
 
 	@Focus
@@ -132,23 +143,12 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 		if(chromatogramSelection == null) {
 			peakScanListUI.clear();
 		} else {
-			updateUI(peakScanListUI, chromatogramSelection);
+			peakScanListUI.setInput(chromatogramSelection, showPeaks, showScans, showSelectedRange);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				buttonSave.setEnabled(true);
 			}
 		}
-	}
-
-	/**
-	 * THis methods is reserved for subclasses that wish to intercept the setting of the selection, the superclass simply calls {@link PeakScanListUI#setInput(IChromatogramSelection)}
-	 * 
-	 * @param ui
-	 * @param selection
-	 */
-	protected void updateUI(PeakScanListUI ui, IChromatogramSelection selection) {
-
-		ui.setInput(selection);
 	}
 
 	private void initialize(Composite parent) {
@@ -622,11 +622,6 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 		});
 	}
 
-	public PeakScanListUI getPeakScanListUI() {
-
-		return peakScanListUI;
-	}
-
 	private Button createSaveButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -797,9 +792,69 @@ public class ExtendedPeakScanListUI implements ToolbarUI {
 	}
 
 	@Override
-	public void setToolbarVisible(boolean visible) {
+	public PeakScanListUIConfig getConfig() {
 
-		PartSupport.setCompositeVisibility(toolbarMain, visible);
-		PartSupport.setCompositeVisibility(toolbarLabel, visible);
+		return new PeakScanListUIConfig() {
+
+			@Override
+			public void setToolbarVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolbarMain, visible);
+			}
+
+			@Override
+			public void setToolbarInfoVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolbarLabel, visible);
+			}
+
+			@Override
+			public boolean hasToolbarInfo() {
+
+				return true;
+			}
+
+			@Override
+			public void setShowScans(boolean showScans) {
+
+				ExtendedPeakScanListUI.this.showScans = showScans;
+			}
+
+			@Override
+			public void setShowPeaks(boolean showPeaks) {
+
+				ExtendedPeakScanListUI.this.showPeaks = showPeaks;
+			}
+
+			@Override
+			public void setShowSelectedRange(boolean showSelectedRange) {
+
+				ExtendedPeakScanListUI.this.showSelectedRange = showSelectedRange;
+			}
+
+			@Override
+			public void setVisibleColumns(Set<String> visibleColumns) {
+
+				List<TableViewerColumn> columns = peakScanListUI.getTableViewerColumns();
+				for(TableViewerColumn column : columns) {
+					TableColumn tableColumn = column.getColumn();
+					if(visibleColumns.contains(tableColumn.getText())) {
+						Object oldWidth = tableColumn.getData("OLD_WITH");
+						if(oldWidth instanceof Number) {
+							tableColumn.setWidth(((Number)oldWidth).intValue());
+						}
+						Object oldResizable = tableColumn.getData("OLD_RESIZABLE");
+						if(oldResizable instanceof Boolean) {
+							tableColumn.setResizable(((Boolean)oldResizable).booleanValue());
+						}
+					} else {
+						tableColumn.setData("OLD_WITH", tableColumn.getWidth());
+						tableColumn.setData("OLD_RESIZABLE", tableColumn.getResizable());
+						tableColumn.setWidth(0);
+						tableColumn.setResizable(false);
+					}
+				}
+			}
+		};
 	}
 }

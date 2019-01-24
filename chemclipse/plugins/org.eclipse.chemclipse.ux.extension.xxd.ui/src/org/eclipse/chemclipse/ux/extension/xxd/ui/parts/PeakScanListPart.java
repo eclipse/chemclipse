@@ -17,6 +17,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakScanListUI;
@@ -31,7 +32,7 @@ public class PeakScanListPart extends AbstractDataUpdateSupport implements IData
 	@Inject
 	public PeakScanListPart(Composite parent, MPart part) {
 		super(part);
-		extendedPeakScanListUI = new ExtendedPeakScanListUI(parent);
+		extendedPeakScanListUI = new ExtendedPeakScanListUI(parent, Activator.getDefault().getPreferenceStore());
 	}
 
 	@Focus

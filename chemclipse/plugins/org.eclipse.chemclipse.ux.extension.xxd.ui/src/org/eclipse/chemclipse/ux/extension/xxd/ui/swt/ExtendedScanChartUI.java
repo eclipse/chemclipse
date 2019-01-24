@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,11 +8,13 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add support for configuration
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,6 +43,7 @@ import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanChartPart;
@@ -48,6 +51,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -78,7 +82,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 @SuppressWarnings("rawtypes")
-public class ExtendedScanChartUI {
+public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 	private static final Logger logger = Logger.getLogger(ScanChartPart.class);
 	//
@@ -121,6 +125,8 @@ public class ExtendedScanChartUI {
 	//
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private EditorUpdateSupport editorUpdateSupport;
+	private Composite toolBarMain;
+	private Composite toolbarInfoLabel;
 
 	private class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 
@@ -253,22 +259,22 @@ public class ExtendedScanChartUI {
 
 	private void createToolbarMain(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
+		toolBarMain = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(10, false));
+		toolBarMain.setLayoutData(gridData);
+		toolBarMain.setLayout(new GridLayout(10, false));
 		//
-		createButtonToggleToolbarInfo(composite);
-		comboDataType = createDataType(composite);
-		comboSignalType = createSignalType(composite);
-		createButtonToggleToolbarIdentify(composite);
-		createButtonToggleToolbarReferences(composite);
-		createToggleChartLegendButton(composite);
-		createResetButton(composite);
-		buttonSaveScan = createSaveButton(composite);
-		buttonOptimizedScan = createOptimizedScanButton(composite);
-		createSettingsButton(composite);
+		createButtonToggleToolbarInfo(toolBarMain);
+		comboDataType = createDataType(toolBarMain);
+		comboSignalType = createSignalType(toolBarMain);
+		createButtonToggleToolbarIdentify(toolBarMain);
+		createButtonToggleToolbarReferences(toolBarMain);
+		createToggleChartLegendButton(toolBarMain);
+		createResetButton(toolBarMain);
+		buttonSaveScan = createSaveButton(toolBarMain);
+		buttonOptimizedScan = createOptimizedScanButton(toolBarMain);
+		createSettingsButton(toolBarMain);
 	}
 
 	private Composite createToolbarIdentify(Composite parent) {
@@ -824,16 +830,16 @@ public class ExtendedScanChartUI {
 
 	private Composite createToolbarInfo(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
+		toolbarInfoLabel = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		toolbarInfoLabel.setLayoutData(gridData);
+		toolbarInfoLabel.setLayout(new GridLayout(1, false));
 		//
-		labelScan = new Label(composite, SWT.NONE);
+		labelScan = new Label(toolbarInfoLabel, SWT.NONE);
 		labelScan.setText("");
 		labelScan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		return composite;
+		return toolbarInfoLabel;
 	}
 
 	private void createScanChart(Composite parent) {
@@ -944,6 +950,51 @@ public class ExtendedScanChartUI {
 			buttonPreviousReferenceScan.setEnabled(combo.getSelectionIndex() > 0);
 			buttonNextReferenceScan.setEnabled(combo.getSelectionIndex() < combo.getItemCount() - 1);
 		}
+	}
+
+	@Override
+	public ScanChartUIConfig getConfig() {
+
+		return new ScanChartUIConfig() {
+
+			ChartConfigSupport axisSupport = new ChartConfigSupport(scanChartUI, EnumSet.of(ChartAxis.PRIMARY_X, ChartAxis.PRIMARY_Y, ChartAxis.SECONDARY_Y));
+
+			@Override
+			public void setToolbarVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolBarMain, visible);
+			}
+
+			@Override
+			public boolean hasToolbarInfo() {
+
+				return true;
+			}
+
+			@Override
+			public void setToolbarInfoVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolbarInfoLabel, visible);
+			}
+
+			@Override
+			public void setAxisLabelVisible(ChartAxis axis, boolean visible) {
+
+				axisSupport.setAxisLabelVisible(axis, visible);
+			}
+
+			@Override
+			public void setAxisVisible(ChartAxis axis, boolean visible) {
+
+				axisSupport.setAxisVisible(axis, visible);
+			}
+
+			@Override
+			public boolean hasAxis(ChartAxis axis) {
+
+				return axisSupport.hasAxis(axis);
+			};
+		};
 	}
 
 	private void selectReferenceScan(int moveIndex) {
