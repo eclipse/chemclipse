@@ -303,14 +303,16 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 		if(storedChromatogramSelection instanceof IChromatogramSelectionCSD) {
 			IChromatogramSelectionCSD chromatogramSelection = (IChromatogramSelectionCSD)storedChromatogramSelection;
 			int retentionTime = getRetentionTime(x);
-			IChromatogramPeakCSD selectedPeak = chromatogramSelection.getChromatogramCSD().getPeak(retentionTime);
-			if(selectedPeak != null) {
+			int startRetentionTime = retentionTime - 500;
+			int stopRetentiontime = retentionTime + 500;
+			List<IChromatogramPeakCSD> selectedPeaks = chromatogramSelection.getChromatogramCSD().getPeaks(startRetentionTime, stopRetentiontime);
+			if(selectedPeaks != null && selectedPeaks.size() > 0) {
 				/*
 				 * Fire an update.
 				 */
-				chromatogramSelection.setSelectedPeak(selectedPeak, true);
+				chromatogramSelection.setSelectedPeak(selectedPeaks.get(0), true);
 				if(PreferenceSupplier.isMoveRetentionTimeOnPeakSelection()) {
-					adjustChromatogramSelection(selectedPeak, chromatogramSelection);
+					adjustChromatogramSelection(selectedPeaks.get(0), chromatogramSelection);
 				}
 				chromatogramSelection.update(true);
 			}

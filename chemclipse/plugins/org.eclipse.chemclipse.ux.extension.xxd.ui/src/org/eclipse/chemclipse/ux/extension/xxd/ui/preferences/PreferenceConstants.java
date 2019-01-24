@@ -512,6 +512,10 @@ public class PreferenceConstants {
 	public static final String DEF_CHROMATOGRAM_SAVE_AS_FOLDER = "";
 	public static final String P_CHROMATOGRAM_LOAD_PROCESS_METHOD = "chromatogramLoadProcessMethod";
 	public static final String DEF_CHROMATOGRAM_LOAD_PROCESS_METHOD = "";
+	public static final int MIN_DELTA_MILLISECONDS_PEAK_SELECTION = 0;
+	public static final int MAX_DELTA_MILLISECONDS_PEAK_SELECTION = 120000; // = 2.0 minutes
+	public static final String P_DELTA_MILLISECONDS_PEAK_SELECTION = "deltaMillisecondsPeakSelection";
+	public static final int DEF_DELTA_MILLISECONDS_PEAK_SELECTION = 2000; // 2 seconds
 	/*
 	 * Calibration Chart
 	 */
