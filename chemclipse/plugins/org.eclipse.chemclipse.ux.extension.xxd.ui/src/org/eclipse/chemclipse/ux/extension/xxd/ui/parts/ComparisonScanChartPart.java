@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSuppor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedComparisonScanUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class ComparisonScanChartPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
@@ -38,7 +39,7 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 	@Inject
 	public ComparisonScanChartPart(Composite parent, MPart part) {
 		super(part);
-		extendedComparisonScanUI = new ExtendedComparisonScanUI(parent);
+		extendedComparisonScanUI = new ExtendedComparisonScanUI(parent, SWT.BORDER);
 	}
 
 	@Focus

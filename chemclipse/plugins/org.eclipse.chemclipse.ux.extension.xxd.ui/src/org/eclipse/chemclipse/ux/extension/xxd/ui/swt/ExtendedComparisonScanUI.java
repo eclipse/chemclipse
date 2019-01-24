@@ -8,10 +8,12 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - make this configureable
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.EnumSet;
 
 import javax.inject.Inject;
 
@@ -32,6 +34,7 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.LibraryServiceRunnable;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.e4.ui.di.Focus;
@@ -53,7 +56,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
-public class ExtendedComparisonScanUI {
+public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUIConfig> {
 
 	private static final Logger logger = Logger.getLogger(ExtendedComparisonScanUI.class);
 	//
@@ -92,9 +95,14 @@ public class ExtendedComparisonScanUI {
 	private boolean displayShifted = false;
 	//
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
+	private Composite toolbarMain;
+	private Composite toolbarInfo;
+	private int style;
+	private Composite comparisonInfo;
 
 	@Inject
-	public ExtendedComparisonScanUI(Composite parent) {
+	public ExtendedComparisonScanUI(Composite parent, int style) {
+		this.style = style;
 		initialize(parent);
 	}
 
@@ -277,32 +285,32 @@ public class ExtendedComparisonScanUI {
 
 	private void createToolbarMain(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
+		toolbarMain = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(6, false));
+		toolbarMain.setLayoutData(gridData);
+		toolbarMain.setLayout(new GridLayout(6, false));
 		//
-		createButtonToggleToolbarInfo(composite);
-		createButtonToggleToolbarOptions(composite);
-		createResetButton(composite);
-		createSaveButton(composite);
-		buttonOptimizedScan = createOptimizedScanButton(composite);
-		createSettingsButton(composite);
+		createButtonToggleToolbarInfo(toolbarMain);
+		createButtonToggleToolbarOptions(toolbarMain);
+		createResetButton(toolbarMain);
+		createSaveButton(toolbarMain);
+		buttonOptimizedScan = createOptimizedScanButton(toolbarMain);
+		createSettingsButton(toolbarMain);
 	}
 
 	private Composite createToolbarInfoUnknown(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
+		toolbarInfo = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		toolbarInfo.setLayoutData(gridData);
+		toolbarInfo.setLayout(new GridLayout(1, false));
 		//
-		labelInfoReference = new Label(composite, SWT.NONE);
+		labelInfoReference = new Label(toolbarInfo, SWT.NONE);
 		labelInfoReference.setText("");
 		labelInfoReference.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		return composite;
+		return toolbarInfo;
 	}
 
 	private Composite createToolbarOptions(Composite parent) {
@@ -448,22 +456,22 @@ public class ExtendedComparisonScanUI {
 
 	private void createScanChart(Composite parent) {
 
-		scanChartUI = new ScanChartUI(parent, SWT.BORDER);
+		scanChartUI = new ScanChartUI(parent, style);
 		scanChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	private Composite createToolbarInfoReference(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
+		comparisonInfo = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		comparisonInfo.setLayoutData(gridData);
+		comparisonInfo.setLayout(new GridLayout(1, false));
 		//
-		labelInfoComparison = new Label(composite, SWT.NONE);
+		labelInfoComparison = new Label(comparisonInfo, SWT.NONE);
 		labelInfoComparison.setText("");
 		labelInfoComparison.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		return composite;
+		return comparisonInfo;
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
@@ -630,5 +638,83 @@ public class ExtendedComparisonScanUI {
 	private void applySettings() {
 
 		updateChart();
+	}
+
+	@Override
+	public ComparisonScanUIConfig getConfig() {
+
+		return new ComparisonScanUIConfig() {
+
+			ChartConfigSupport axisSupport = new ChartConfigSupport(scanChartUI, EnumSet.of(ChartAxis.PRIMARY_X, ChartAxis.PRIMARY_Y, ChartAxis.SECONDARY_Y));
+
+			@Override
+			public void setToolbarVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolbarMain, visible);
+			}
+
+			@Override
+			public boolean hasToolbarInfo() {
+
+				return true;
+			}
+
+			@Override
+			public void setToolbarInfoVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolbarInfo, visible);
+			}
+
+			@Override
+			public void setAxisLabelVisible(ChartAxis axis, boolean visible) {
+
+				axisSupport.setAxisLabelVisible(axis, visible);
+			}
+
+			@Override
+			public void setAxisVisible(ChartAxis axis, boolean visible) {
+
+				axisSupport.setAxisVisible(axis, visible);
+			}
+
+			@Override
+			public boolean hasAxis(ChartAxis axis) {
+
+				return axisSupport.hasAxis(axis);
+			}
+
+			@Override
+			public void setDisplayOption(DisplayOption option) {
+
+				ExtendedComparisonScanUI.this.displayOption = option.name();
+			}
+
+			@Override
+			public void setDisplayDifference(boolean displayDifference) {
+
+				ExtendedComparisonScanUI.this.displayDifference = displayDifference;
+				updateChart();
+			}
+
+			@Override
+			public void setDisplayMirrored(boolean displayMirrored) {
+
+				ExtendedComparisonScanUI.this.displayMirrored = displayMirrored;
+				updateChart();
+			}
+
+			@Override
+			public void setDisplayShifted(boolean displayShifted) {
+
+				ExtendedComparisonScanUI.this.displayShifted = displayShifted;
+				updateChart();
+			}
+
+			@Override
+			public void setComparisonLabelVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(comparisonInfo, visible);
+			};
+		};
 	}
 }
