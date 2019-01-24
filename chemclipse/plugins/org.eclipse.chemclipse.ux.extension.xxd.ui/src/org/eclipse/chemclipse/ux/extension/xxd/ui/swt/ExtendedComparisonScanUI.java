@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.LibraryServ
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -115,23 +116,33 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 	public void update(IScanMSD scanMSD) {
 
 		if(displayOption.equals(OPTION_UPDATE_SCAN_1)) {
-			try {
-				scan1 = scanMSD.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
-				scan1Optimized = null;
-				buttonOptimizedScan.setEnabled(true);
-				updateChart();
-			} catch(CloneNotSupportedException e) {
-				logger.warn(e);
+			scan1Optimized = null;
+			if(scanMSD == null) {
+				scan1 = null;
+				buttonOptimizedScan.setEnabled(false);
+			} else {
+				try {
+					scan1 = scanMSD.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+					buttonOptimizedScan.setEnabled(true);
+					updateChart();
+				} catch(CloneNotSupportedException e) {
+					logger.warn(e);
+				}
 			}
 			updateChart();
 		} else if(displayOption.equals(OPTION_UPDATE_SCAN_2)) {
-			try {
-				scan2 = scanMSD.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
-				scan2Optimized = null;
-				buttonOptimizedScan.setEnabled(true);
-				updateChart();
-			} catch(CloneNotSupportedException e) {
-				logger.warn(e);
+			scan2Optimized = null;
+			if(scanMSD == null) {
+				scan2 = null;
+				buttonOptimizedScan.setEnabled(false);
+			} else {
+				try {
+					scan2 = scanMSD.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+					buttonOptimizedScan.setEnabled(true);
+					updateChart();
+				} catch(CloneNotSupportedException e) {
+					logger.warn(e);
+				}
 			}
 		}
 	}

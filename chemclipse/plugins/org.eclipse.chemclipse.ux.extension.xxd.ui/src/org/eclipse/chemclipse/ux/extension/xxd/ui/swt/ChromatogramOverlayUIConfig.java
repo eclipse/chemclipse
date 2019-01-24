@@ -11,5 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-public interface ChromatogramOverlayUIConfig extends ToolbarConfig {
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+
+public interface ChromatogramOverlayUIConfig extends ToolbarConfig, AxisConfig {
+
+	enum DisplayModus {
+		NORMAL, MIRRORED;
+	}
+
+	void setDisplayModus(DisplayModus modus, IChromatogramSelection<?> selection);
 }
