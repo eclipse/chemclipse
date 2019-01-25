@@ -20,17 +20,17 @@ import org.eclipse.swtchart.extensions.core.ScrollableChart;
 public class ChartConfigSupport implements AxisConfig {
 
 	private ScrollableChart chart;
-	private EnumSet<ChartAxis> avaiableAxis;
+	private EnumSet<ChartAxis> available;
 
-	public ChartConfigSupport(ScrollableChart chart, EnumSet<ChartAxis> avaiableAxis) {
+	public ChartConfigSupport(ScrollableChart chart, EnumSet<ChartAxis> available) {
 		this.chart = chart;
-		this.avaiableAxis = avaiableAxis;
+		this.available = available;
 	}
 
 	@Override
 	public void setAxisLabelVisible(ChartAxis axis, boolean visible) {
 
-		if(avaiableAxis.contains(axis)) {
+		if(available.contains(axis)) {
 			switch(axis) {
 				case PRIMARY_X:
 					chart.getChartSettings().getPrimaryAxisSettingsX().setTitleVisible(visible);
@@ -57,7 +57,7 @@ public class ChartConfigSupport implements AxisConfig {
 	@Override
 	public void setAxisVisible(ChartAxis axis, boolean visible) {
 
-		if(avaiableAxis.contains(axis)) {
+		if(available.contains(axis)) {
 			switch(axis) {
 				case PRIMARY_X:
 					chart.getChartSettings().getPrimaryAxisSettingsX().setVisible(visible);
@@ -85,6 +85,6 @@ public class ChartConfigSupport implements AxisConfig {
 	@Override
 	public boolean hasAxis(ChartAxis axis) {
 
-		return avaiableAxis.contains(axis);
+		return available.contains(axis);
 	}
 }

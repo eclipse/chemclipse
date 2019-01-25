@@ -66,6 +66,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -147,6 +148,15 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				buttonSave.setEnabled(true);
+			}
+			if(showSelectedRange) {
+				IPeak selectedPeak = chromatogramSelection.getSelectedPeak();
+				IScan selectedScan = chromatogramSelection.getSelectedScan();
+				if(selectedPeak != null && showPeaks) {
+					peakScanListUI.setSelection(new StructuredSelection(selectedPeak), true);
+				} else if(selectedScan != null && showScans) {
+					peakScanListUI.setSelection(new StructuredSelection(selectedScan), true);
+				}
 			}
 		}
 	}
