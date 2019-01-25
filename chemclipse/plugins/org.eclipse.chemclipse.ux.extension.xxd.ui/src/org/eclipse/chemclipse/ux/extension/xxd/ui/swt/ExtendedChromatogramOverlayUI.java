@@ -14,8 +14,12 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -30,6 +34,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.IonsValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.WavelengthValidator;
@@ -114,7 +119,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
 	@SuppressWarnings("rawtypes")
-	private List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
+	private Map<IChromatogramSelection, List<String>> chromatogramSelections = new LinkedHashMap<>();
 	private Composite toolbarMain;
 	private int style;
 
@@ -131,7 +136,9 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	public void update(List<IChromatogramSelection> chromatogramSelections) {
 
 		this.chromatogramSelections.clear();
-		this.chromatogramSelections.addAll(chromatogramSelections);
+		for(IChromatogramSelection selection : chromatogramSelections) {
+			this.chromatogramSelections.put(selection, new ArrayList<>());
+		}
 		refreshUpdateOverlayChart();
 	}
 
@@ -338,31 +345,34 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 					 * Get the display modus.
 					 */
 					String displayModus = button.getData(BUTTON_MIRROR_KEY).toString();
-					BaseChart baseChart = chromatogramChart.getBaseChart();
-					IChartSettings chartSettings = chromatogramChart.getChartSettings();
-					String seriesId = getSelectedSeriesId();
-					//
-					if(displayModus.equals(OverlayChartSupport.DISPLAY_MODUS_MIRRORED)) {
-						if(!mirroredSeries.contains(seriesId)) {
-							baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
-							mirroredSeries.add(seriesId);
-						}
-					} else {
-						if(mirroredSeries.contains(seriesId)) {
-							baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
-							mirroredSeries.remove(seriesId);
-						}
-					}
-					//
-					modifyWidgetStatus();
-					chromatogramChart.applySettings(chartSettings);
-					chromatogramChart.adjustRange(true);
-					chromatogramChart.redraw();
+					setDisplayModus(displayModus, getSelectedSeriesId());
 				}
 			}
 		});
 		//
 		return button;
+	}
+
+	protected void setDisplayModus(String displayModus, String seriesId) {
+
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		if(displayModus.equals(OverlayChartSupport.DISPLAY_MODUS_MIRRORED)) {
+			if(!mirroredSeries.contains(seriesId)) {
+				baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
+				mirroredSeries.add(seriesId);
+			}
+		} else {
+			if(mirroredSeries.contains(seriesId)) {
+				baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
+				mirroredSeries.remove(seriesId);
+			}
+		}
+		//
+		modifyWidgetStatus();
+		chromatogramChart.applySettings(chartSettings);
+		chromatogramChart.adjustRange(true);
+		chromatogramChart.redraw();
 	}
 
 	private void createSelectedIonsCombo(Composite parent) {
@@ -944,9 +954,10 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 			Set<String> availableSeriesIds = new HashSet<String>();
 			BaseChart baseChart = chromatogramChart.getBaseChart();
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			//
-			for(int i = 0; i < chromatogramSelections.size(); i++) {
-				IChromatogramSelection chromatogramSelection = chromatogramSelections.get(i);
+			int i = 0;
+			for(Entry<IChromatogramSelection, List<String>> entry : chromatogramSelections.entrySet()) {
+				IChromatogramSelection chromatogramSelection = entry.getKey();
+				List<String> selectionSeries = entry.getValue();
 				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 				List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
 				String chromatogramName = chromatogram.getName() + ChromatogramChartSupport.EDITOR_TAB + (i + 1);
@@ -968,6 +979,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 								String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + ion + OverlayChartSupport.OVERLAY_STOP_MARKER;
 								Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
 								availableSeriesIds.add(seriesId);
+								selectionSeries.add(seriesId);
 								if(!baseChart.isSeriesContained(seriesId)) {
 									IMarkedIons markedIons = new MarkedIons();
 									markedIons.add(ion);
@@ -987,6 +999,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 										String seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + ion + OverlayChartSupport.OVERLAY_STOP_MARKER;
 										Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
 										availableSeriesIds.add(seriesId);
+										selectionSeries.add(seriesId);
 										if(!baseChart.isSeriesContained(seriesId)) {
 											IMarkedIons markedIons = new MarkedIons();
 											markedIons.add(ion);
@@ -1007,6 +1020,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 								//
 								String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
 								availableSeriesIds.add(seriesId);
+								selectionSeries.add(seriesId);
 								Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
 								IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
 								markedWavelengths.add(wavelength);
@@ -1027,6 +1041,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 											//
 											String seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
 											availableSeriesIds.add(seriesId);
+											selectionSeries.add(seriesId);
 											Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
 											IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
 											markedWavelengths.add(wavelength);
@@ -1049,6 +1064,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 								//
 								String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
 								availableSeriesIds.add(seriesId);
+								selectionSeries.add(seriesId);
 								Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
 								IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
 								markedWavelengths.add(wavelength);
@@ -1069,6 +1085,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 											//
 											String seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
 											availableSeriesIds.add(seriesId);
+											selectionSeries.add(seriesId);
 											Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
 											IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
 											markedWavelengths.add(wavelength);
@@ -1096,6 +1113,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 							//
 							if(chromatogram instanceof IChromatogramMSD) {
 								availableSeriesIds.add(seriesId);
+								selectionSeries.add(seriesId);
 								if(!baseChart.isSeriesContained(seriesId)) {
 									lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, markedIons, false));
 								}
@@ -1110,6 +1128,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 										String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
 										String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
 										availableSeriesIds.add(referenceSeriesId);
+										selectionSeries.add(seriesId);
 										if(!baseChart.isSeriesContained(referenceSeriesId)) {
 											color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, overlayType);
 											lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, overlayType, derivativeType, color, markedIons, false));
@@ -1122,6 +1141,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 							 * TIC
 							 */
 							availableSeriesIds.add(seriesId);
+							selectionSeries.add(seriesId);
 							if(!baseChart.isSeriesContained(seriesId)) {
 								lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, null, false));
 							}
@@ -1134,6 +1154,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 									String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
 									String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
 									availableSeriesIds.add(referenceSeriesId);
+									selectionSeries.add(referenceSeriesId);
 									if(!baseChart.isSeriesContained(referenceSeriesId)) {
 										color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, overlayType);
 										lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, overlayType, derivativeType, color, null, false));
@@ -1143,6 +1164,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 						}
 					}
 				}
+				i++;
 			}
 			/*
 			 * Add the selected series
@@ -1358,10 +1380,45 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 
 		return new ChromatogramOverlayUIConfig() {
 
+			ChartConfigSupport chartConfigSupport = new ChartConfigSupport(chromatogramChart, EnumSet.of(ChartAxis.PRIMARY_X, ChartAxis.PRIMARY_Y, ChartAxis.SECONDARY_Y));
+
 			@Override
 			public void setToolbarVisible(boolean visible) {
 
 				PartSupport.setCompositeVisibility(toolbarMain, visible);
+			}
+
+			@Override
+			public void setAxisLabelVisible(ChartAxis axis, boolean visible) {
+
+				chartConfigSupport.setAxisLabelVisible(axis, visible);
+			}
+
+			@Override
+			public void setAxisVisible(ChartAxis axis, boolean visible) {
+
+				chartConfigSupport.setAxisVisible(axis, visible);
+			}
+
+			@Override
+			public boolean hasAxis(ChartAxis axis) {
+
+				return chartConfigSupport.hasAxis(axis);
+			}
+
+			@Override
+			public void setDisplayModus(DisplayModus modus, IChromatogramSelection<?> selection) {
+
+				List<String> list = chromatogramSelections.get(selection);
+				if(list != null) {
+					for(String id : list) {
+						if(modus == DisplayModus.MIRRORED) {
+							ExtendedChromatogramOverlayUI.this.setDisplayModus(OverlayChartSupport.DISPLAY_MODUS_MIRRORED, id);
+						} else {
+							ExtendedChromatogramOverlayUI.this.setDisplayModus(OverlayChartSupport.DISPLAY_MODUS_NORMAL, id);
+						}
+					}
+				}
 			}
 		};
 	}
