@@ -1107,7 +1107,8 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	@Override
 	public int hashCode() {
 
-		return 7 * Integer.valueOf(getNumberOfScans()).hashCode() + 9 * Float.valueOf(getTotalSignal()).hashCode() + 11 * Float.valueOf(getMinSignal()).hashCode() + 9 * Float.valueOf(getMaxSignal()).hashCode() + 7 * Integer.valueOf(getStartRetentionTime()).hashCode() + 9 * Integer.valueOf(getStopRetentionTime()).hashCode();
+		// for performance reason we here only take some basic information into account
+		return 7 * Integer.valueOf(getNumberOfScans()).hashCode() + 7 * Integer.valueOf(getStartRetentionTime()).hashCode() + 9 * Integer.valueOf(getStopRetentionTime()).hashCode();
 	}
 
 	@Override

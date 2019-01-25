@@ -163,7 +163,8 @@ public abstract class AbstractChromatogramPeakMSD extends AbstractPeakMSD implem
 	@Override
 	public int hashCode() {
 
-		return 7 * getPeakModel().hashCode() + 11 * chromatogram.hashCode();
+		// use the hashcode of the peakmodel and the identity hashcode of the chromatogram, so this is consistent with equals
+		return getPeakModel().hashCode() + System.identityHashCode(chromatogram);
 	}
 
 	@Override
