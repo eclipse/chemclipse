@@ -216,7 +216,7 @@ public class PageUtil {
 			 * Data
 			 */
 			if(pdTable.getNumberDataRows() > 0) {
-				for(int i = pdTable.getStartIndex(); i <= pdTable.getStopIndex(); i++) {
+				for(int i = pdTable.getStartIndex(); i < pdTable.getStopIndex(); i++) {
 					List<CellElement> rowCells = pdTable.getDataRow(i);
 					Color color = (i % 2 == 0) ? null : tableElement.getColorData();
 					y += printTableRow(y, tableElement, rowCells, color);
