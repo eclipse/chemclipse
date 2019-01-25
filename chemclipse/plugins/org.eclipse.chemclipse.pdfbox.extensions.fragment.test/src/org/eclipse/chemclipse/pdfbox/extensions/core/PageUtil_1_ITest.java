@@ -75,6 +75,7 @@ public class PageUtil_1_ITest extends TestCase {
 		printPageRight(document, font);
 		printPageRightShorten(document, font);
 		printPageMultiLine(document, font);
+		printPageTextMinHeight(document, font);
 		printPageRotate0(document, font);
 		printPageRotate180(document, font);
 		printPageLogoPortrait(document, font);
@@ -170,6 +171,25 @@ public class PageUtil_1_ITest extends TestCase {
 		pageUtil.printText(new TextElement(10, 100, 190).setText(LINE_CONTENT).setTextOption(TextOption.MULTI_LINE).setMinHeight(5));
 		pageUtil.printText(new TextElement(10, 150, 190).setText(LINE_CONTENT).setTextOption(TextOption.MULTI_LINE).setMinHeight(15));
 		pageUtil.printText(new TextElement(10, 297, 190).setText(LINE_LAST).setReferenceY(ReferenceY.BOTTOM));
+		//
+		pageUtil.printLine(new LineElement(10, 10, 10, 287).setLineWidth(0.2f)); // left
+		pageUtil.printLine(new LineElement(10, 10, 200, 10).setLineWidth(0.2f)); // top
+		pageUtil.printLine(new LineElement(200, 10, 200, 287).setLineWidth(0.2f)); // right
+		pageUtil.printLine(new LineElement(10, 287, 200, 287).setLineWidth(0.2f)); // bottom
+		//
+		pageUtil.close();
+		return pageUtil.getPage();
+	}
+
+	private PDPage printPageTextMinHeight(PDDocument document, PDFont font) throws IOException {
+
+		PageUtil pageUtil = new PageUtil(document, new PageSettings(PDRectangle.A4, PageBase.TOP_LEFT, Unit.MM, false));
+		//
+		float y = 10.0f;
+		float minHeight = 5.0f;
+		for(int i = 0; i < 10; i++) {
+			y += pageUtil.printText(new TextElement(10, y, 190).setText(LINE_CONTENT).setMinHeight(minHeight + i * 1.0f));
+		}
 		//
 		pageUtil.printLine(new LineElement(10, 10, 10, 287).setLineWidth(0.2f)); // left
 		pageUtil.printLine(new LineElement(10, 10, 200, 10).setLineWidth(0.2f)); // top

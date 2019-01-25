@@ -114,22 +114,27 @@ public class PageUtil {
 		float height = 0.0f;
 		String text = textElement.getText();
 		if(text.length() > 0) {
+			float textHeight = 0.0f;
+			//
 			switch(textElement.getTextOption()) {
 				case NONE:
-					height = printTextDefault(textElement);
+					textHeight = printTextDefault(textElement);
 					break;
 				case SHORTEN:
-					height = printTextShorten(textElement);
+					textHeight = printTextShorten(textElement);
 					break;
 				case MULTI_LINE:
-					height = printTextMultiLine(textElement);
+					textHeight = printTextMultiLine(textElement);
 					break;
 				default:
 					logger.warn("Option not supported: " + textElement.getTextOption());
 					logger.warn("Option selected instead: " + TextOption.NONE);
-					height = printTextDefault(textElement);
+					textHeight = printTextDefault(textElement);
 					break;
 			}
+			//
+			float minHeight = unitConverter.convertToPt(textElement.getMinHeight());
+			height = (textHeight > minHeight) ? textHeight : minHeight;
 		}
 		//
 		return unitConverter.convertFromPt(height);
@@ -564,8 +569,8 @@ public class PageUtil {
 		List<String> parts = cutStringMultiLine(text, textWidth, maxWidth);
 		float offset = 0.0f;
 		for(String part : parts) {
-			printText(font, fontSize, color, x, y - offset, part);
-			offset += (textHeight > minHeight) ? textHeight : minHeight;
+			float height = printText(font, fontSize, color, x, y - offset, part);
+			offset += (height > minHeight) ? height : minHeight;
 		}
 		//
 		return offset;
