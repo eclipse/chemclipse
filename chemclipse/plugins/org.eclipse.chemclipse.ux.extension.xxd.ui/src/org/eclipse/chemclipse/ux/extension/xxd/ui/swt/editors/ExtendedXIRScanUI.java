@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartXIR;
@@ -104,7 +103,7 @@ public class ExtendedXIRScanUI {
 				lineSeriesData = new LineSeriesData(getSeriesDataProcessed(scanXIR, "Processed Data"));
 				lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 				lineSeriesSettings.setLineColor(Colors.RED);
-				lineSeriesSettings.setEnableArea(true);
+				lineSeriesSettings.setEnableArea(false);
 				lineSeriesDataList.add(lineSeriesData);
 			}
 			//

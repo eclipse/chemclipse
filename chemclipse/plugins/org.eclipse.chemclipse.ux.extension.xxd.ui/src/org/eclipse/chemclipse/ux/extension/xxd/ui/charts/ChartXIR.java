@@ -108,6 +108,7 @@ public class ChartXIR extends LineChart {
 		chartSettings.setVerticalSliderVisible(false);
 		chartSettings.getRangeRestriction().setZeroX(true);
 		chartSettings.getRangeRestriction().setZeroY(true);
+		chartSettings.getRangeRestriction().setForceZeroMinY(true);
 		//
 		setPrimaryAxisSetProcessed(chartSettings);
 		addSecondaryAxisSetProcessed(chartSettings);
@@ -128,6 +129,8 @@ public class ChartXIR extends LineChart {
 		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		primaryAxisSettingsY.setGridLineStyle(LineStyle.NONE);
+		primaryAxisSettingsY.setVisible(true);
+		primaryAxisSettingsY.setReversed(true);
 	}
 
 	private void addSecondaryAxisSetProcessed(IChartSettings chartSettings) {
