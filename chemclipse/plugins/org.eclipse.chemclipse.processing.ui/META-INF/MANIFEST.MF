@@ -5,8 +5,10 @@ Bundle-SymbolicName: org.eclipse.chemclipse.processing.ui;singleton:=true
 Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.processing.ui.Activator
 Bundle-Vendor: %Bundle-Vendor
-Export-Package: org.eclipse.chemclipse.processing.ui.parts,
- org.eclipse.chemclipse.processing.ui.support
+Export-Package: org.eclipse.chemclipse.processing.ui,
+ org.eclipse.chemclipse.processing.ui.parts,
+ org.eclipse.chemclipse.processing.ui.support,
+ org.eclipse.chemclipse.processing.ui.swt
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.chemclipse.processing;bundle-version="0.8.0",

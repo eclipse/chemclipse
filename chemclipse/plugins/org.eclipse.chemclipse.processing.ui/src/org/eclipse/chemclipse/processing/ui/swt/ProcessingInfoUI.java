@@ -10,7 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Janos Binder - cleanup
  *******************************************************************************/
-package org.eclipse.chemclipse.processing.ui.internal.swt;
+package org.eclipse.chemclipse.processing.ui.swt;
 
 import java.util.HashMap;
 import java.util.Map;

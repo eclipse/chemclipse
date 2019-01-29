@@ -17,7 +17,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.internal.swt.ProcessingInfoUI;
+import org.eclipse.chemclipse.processing.ui.swt.ProcessingInfoUI;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
