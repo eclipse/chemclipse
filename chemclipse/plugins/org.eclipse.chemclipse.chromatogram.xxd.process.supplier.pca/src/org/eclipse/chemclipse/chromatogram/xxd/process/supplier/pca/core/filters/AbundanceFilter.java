@@ -37,7 +37,7 @@ public class AbundanceFilter extends AbstractFilter implements IFilter {
 
 	public AbundanceFilter() {
 
-		super(DATA_TYPE_PROCESSING.RAW_DATA);
+		super(DataTypeProcessing.RAW_DATA);
 		comparator = gt;
 		filterType = ALL_VALUE;
 		limitType = LIMIT_GREATER_THAN;

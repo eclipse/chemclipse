@@ -28,7 +28,7 @@ public class RetentionTime2Filter extends AbstractFilter implements IFilter {
 
 	public RetentionTime2Filter(List<IVariable> variables, boolean inverse) {
 
-		super(DATA_TYPE_PROCESSING.VARIABLES);
+		super(DataTypeProcessing.VARIABLES);
 		this.variablesSelected = new ArrayList<>(variables);
 		this.inverse = inverse;
 	}

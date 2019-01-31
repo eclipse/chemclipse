@@ -30,7 +30,7 @@ public class RetentionTimeFilter extends AbstractFilter implements IFilter {
 
 	public RetentionTimeFilter() {
 
-		super(DATA_TYPE_PROCESSING.VARIABLES);
+		super(DataTypeProcessing.VARIABLES);
 		filtrationType = SELECT_INTERVAL;
 		intervals = new ArrayList<>();
 	}

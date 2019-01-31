@@ -24,7 +24,7 @@ public class EmptyDataFilter extends AbstractFilter implements IFilter {
 
 	public EmptyDataFilter() {
 
-		super(DATA_TYPE_PROCESSING.MODIFIED_DATA);
+		super(DataTypeProcessing.MODIFIED_DATA);
 	}
 
 	@Override

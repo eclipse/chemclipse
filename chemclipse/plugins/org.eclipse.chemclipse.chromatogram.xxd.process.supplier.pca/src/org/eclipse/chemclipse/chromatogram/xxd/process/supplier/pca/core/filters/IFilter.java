@@ -22,14 +22,14 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 
 public interface IFilter extends IPreprocessing {
 
-	enum DATA_TYPE_PROCESSING {
+	enum DataTypeProcessing {
 		RAW_DATA("Raw Data"), //
 		MODIFIED_DATA("Modified Data"), //
 		VARIABLES("Variables");
 
 		private String string;
 
-		private DATA_TYPE_PROCESSING(String string) {
+		private DataTypeProcessing(String string) {
 
 			this.string = string;
 		}
@@ -41,9 +41,9 @@ public interface IFilter extends IPreprocessing {
 		}
 	}
 
-	void setDataTypeProcessing(DATA_TYPE_PROCESSING processType);
+	void setDataTypeProcessing(DataTypeProcessing processType);
 
-	DATA_TYPE_PROCESSING getDataTypeProcessing();
+	DataTypeProcessing getDataTypeProcessing();
 
 	static String getErrorMessage(String messagge) {
 

@@ -31,7 +31,7 @@ public class CVFilter extends AbstractFilter implements IFilter {
 
 	public CVFilter() {
 
-		super(DATA_TYPE_PROCESSING.RAW_DATA);
+		super(DataTypeProcessing.RAW_DATA);
 		this.alpha = 0.7;
 	}
 

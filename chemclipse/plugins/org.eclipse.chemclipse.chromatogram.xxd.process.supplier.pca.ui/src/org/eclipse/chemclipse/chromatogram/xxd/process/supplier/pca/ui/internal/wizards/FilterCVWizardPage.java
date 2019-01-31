@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AbstractFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.CVFilter;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter.DATA_TYPE_PROCESSING;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter.DataTypeProcessing;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
@@ -37,7 +37,7 @@ public class FilterCVWizardPage extends WizardPage implements IFilterWizardPage 
 
 	final private DataBindingContext dbc = new DataBindingContext();
 	private IObservableValue<Double> observeAlfa;
-	private IObservableValue<DATA_TYPE_PROCESSING> dataTypeFiltration;
+	private IObservableValue<DataTypeProcessing> dataTypeFiltration;
 
 	protected FilterCVWizardPage(CVFilter cvFilter) {
 
@@ -45,7 +45,7 @@ public class FilterCVWizardPage extends WizardPage implements IFilterWizardPage 
 		setTitle("Coefficient of Variation Filter for Noise Reduction");
 		setDescription("CV filter works just with selected samples, which are in group (contains group name)");
 		observeAlfa = PojoProperties.value(CVFilter.class, "alpha", Double.class).observe(cvFilter);
-		dataTypeFiltration = PojoProperties.value(AbstractFilter.class, "dataTypeProcessing", DATA_TYPE_PROCESSING.class).observe(cvFilter);
+		dataTypeFiltration = PojoProperties.value(AbstractFilter.class, "dataTypeProcessing", DataTypeProcessing.class).observe(cvFilter);
 	}
 
 	@Override
@@ -58,13 +58,13 @@ public class FilterCVWizardPage extends WizardPage implements IFilterWizardPage 
 		//
 		Label label = new Label(composite, SWT.None);
 		label.setText("Select data type filtration");
-		SelectObservableValue<DATA_TYPE_PROCESSING> selectedRadioButtonObservableProcessData = new SelectObservableValue<>();
+		SelectObservableValue<DataTypeProcessing> selectedRadioButtonObservableProcessData = new SelectObservableValue<>();
 		Button button = new Button(composite, SWT.RADIO);
 		button.setText("Use on raw data");
-		selectedRadioButtonObservableProcessData.addOption(DATA_TYPE_PROCESSING.RAW_DATA, WidgetProperties.selection().observe(button));
+		selectedRadioButtonObservableProcessData.addOption(DataTypeProcessing.RAW_DATA, WidgetProperties.selection().observe(button));
 		button = new Button(composite, SWT.RADIO);
 		button.setText("Use on modified data");
-		selectedRadioButtonObservableProcessData.addOption(DATA_TYPE_PROCESSING.MODIFIED_DATA, WidgetProperties.selection().observe(button));
+		selectedRadioButtonObservableProcessData.addOption(DataTypeProcessing.MODIFIED_DATA, WidgetProperties.selection().observe(button));
 		dbc.bindValue(selectedRadioButtonObservableProcessData, dataTypeFiltration, new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT), null);
 		//
 		label = new Label(composite, SWT.None);

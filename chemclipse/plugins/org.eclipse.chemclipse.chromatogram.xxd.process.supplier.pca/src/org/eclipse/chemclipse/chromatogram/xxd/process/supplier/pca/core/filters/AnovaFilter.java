@@ -32,7 +32,7 @@ public class AnovaFilter extends AbstractFilter implements IFilter {
 
 	public AnovaFilter() {
 
-		super(DATA_TYPE_PROCESSING.RAW_DATA);
+		super(DataTypeProcessing.RAW_DATA);
 		alpha = 0.05;
 	}
 

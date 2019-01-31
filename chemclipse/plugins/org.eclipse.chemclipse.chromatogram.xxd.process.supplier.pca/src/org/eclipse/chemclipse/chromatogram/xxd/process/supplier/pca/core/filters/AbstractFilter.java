@@ -16,9 +16,9 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 
 public abstract class AbstractFilter extends AbstractPreprocessing implements IFilter {
 
-	private DATA_TYPE_PROCESSING dataTypeProcessing;
+	private DataTypeProcessing dataTypeProcessing;
 
-	public AbstractFilter(DATA_TYPE_PROCESSING dataTypeProcessing) {
+	public AbstractFilter(DataTypeProcessing dataTypeProcessing) {
 
 		this.dataTypeProcessing = dataTypeProcessing;
 	}
@@ -36,13 +36,13 @@ public abstract class AbstractFilter extends AbstractPreprocessing implements IF
 	}
 
 	@Override
-	public void setDataTypeProcessing(DATA_TYPE_PROCESSING processDataType) {
+	public void setDataTypeProcessing(DataTypeProcessing processDataType) {
 
 		this.dataTypeProcessing = processDataType;
 	}
 
 	@Override
-	public DATA_TYPE_PROCESSING getDataTypeProcessing() {
+	public DataTypeProcessing getDataTypeProcessing() {
 
 		return dataTypeProcessing;
 	}
