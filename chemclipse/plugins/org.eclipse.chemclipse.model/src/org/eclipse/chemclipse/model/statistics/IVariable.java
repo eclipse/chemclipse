@@ -28,4 +28,8 @@ public interface IVariable extends Comparable<IVariable> {
 	void setType(String type);
 
 	void setValue(String value);
+
+	void setClassification(String classification);
+
+	String getClassification();
 }

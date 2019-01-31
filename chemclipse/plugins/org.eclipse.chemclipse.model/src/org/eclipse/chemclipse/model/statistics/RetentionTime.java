@@ -33,13 +33,16 @@ public class RetentionTime extends AbstractVariable implements IRetentionTime {
 	private int retentionTime;
 
 	public RetentionTime(int retentioTime) {
+
 		super();
 		this.retentionTime = retentioTime;
 		setValue(convertValue());
 		setType(IRetentionTime.TYPE);
+		setSelected(true);
 	}
 
 	public RetentionTime(int retentionTime, String description) {
+
 		this(retentionTime);
 		setDescription(description);
 	}

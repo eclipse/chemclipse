@@ -18,4 +18,27 @@ public interface ISamples<V extends IVariable, S extends ISample> {
 	List<S> getSampleList();
 
 	List<V> getVariables();
+
+	/**
+	 * return true if there are at least two not empty data
+	 * 
+	 * @param row
+	 *            - row index start from 0
+	 * @return
+	 */
+	default boolean selectVariable(int row) {
+
+		int numEmptyValues = 0;
+		for(ISample sample : getSampleList()) {
+			if(sample.isSelected()) {
+				if(!sample.getSampleData().get(row).isEmpty()) {
+					numEmptyValues++;
+				}
+			}
+		}
+		if(numEmptyValues <= 1) {
+			return false;
+		}
+		return true;
+	}
 }

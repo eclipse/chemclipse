@@ -17,6 +17,7 @@ public abstract class AbstractVariable implements IVariable {
 	private boolean selected;
 	private String type;
 	private String value;
+	private String classification;
 
 	public AbstractVariable() {
 
@@ -68,5 +69,17 @@ public abstract class AbstractVariable implements IVariable {
 	public void setValue(String value) {
 
 		this.value = value;
+	}
+
+	@Override
+	public String getClassification() {
+
+		return classification;
+	}
+
+	@Override
+	public void setClassification(String classification) {
+
+		this.classification = classification;
 	}
 }
