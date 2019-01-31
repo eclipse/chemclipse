@@ -14,19 +14,17 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filter
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class EmptyDataFilter extends AbstractPreprocessing implements IFilter {
+public class EmptyDataFilter extends AbstractFilter implements IFilter {
 
 	private String selectionResult = "";
 
 	public EmptyDataFilter() {
 
-		super();
-		setDataTypeProcessing(DATA_TYPE_PROCESSING.MODIFIED_DATA);
+		super(DATA_TYPE_PROCESSING.MODIFIED_DATA);
 	}
 
 	@Override

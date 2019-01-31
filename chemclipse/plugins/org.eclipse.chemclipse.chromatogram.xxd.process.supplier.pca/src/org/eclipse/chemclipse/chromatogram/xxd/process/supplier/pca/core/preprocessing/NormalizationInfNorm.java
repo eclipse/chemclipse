@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
+import java.util.List;
+import java.util.stream.IntStream;
+
 import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class NormalizationInfNorm extends AbstractPreprocessing implements INormalization {
+public class NormalizationInfNorm extends AbstractDataModificator implements INormalization {
 
 	public NormalizationInfNorm() {
 
@@ -39,8 +43,11 @@ public class NormalizationInfNorm extends AbstractPreprocessing implements INorm
 
 		for(ISample sample : samples.getSampleList()) {
 			if(sample.isSelected() || !isOnlySelected()) {
-				double max = sample.getSampleData().stream().filter(d -> !d.isEmpty()).mapToDouble(d -> Math.abs(getData(d))).summaryStatistics().getMax();
-				sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> d.setModifiedData(getData(d) / max));
+				List<? extends ISampleData> sampleData = sample.getSampleData();
+				double max = IntStream.range(0, sampleData.size()).filter(i -> !sampleData.get(i).isEmpty()).filter(i -> !skipVariable(samples, i))//
+						.mapToDouble(i -> Math.abs(getData(sampleData.get(i)))).summaryStatistics().getMax();
+				IntStream.range(0, sampleData.size()).filter(i -> !sampleData.get(i).isEmpty()).filter(i -> !skipVariable(samples, i))//
+						.forEach(i -> sampleData.get(i).setModifiedData(getData(sampleData.get(i)) / max));
 			}
 		}
 	}

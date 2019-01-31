@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AbstractFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.CVFilter;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing.DATA_TYPE_PROCESSING;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter.DATA_TYPE_PROCESSING;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
@@ -40,11 +40,12 @@ public class FilterCVWizardPage extends WizardPage implements IFilterWizardPage 
 	private IObservableValue<DATA_TYPE_PROCESSING> dataTypeFiltration;
 
 	protected FilterCVWizardPage(CVFilter cvFilter) {
+
 		super("CV filter");
 		setTitle("Coefficient of Variation Filter for Noise Reduction");
 		setDescription("CV filter works just with selected samples, which are in group (contains group name)");
 		observeAlfa = PojoProperties.value(CVFilter.class, "alpha", Double.class).observe(cvFilter);
-		dataTypeFiltration = PojoProperties.value(AbstractPreprocessing.class, "dataTypeProcessing", DATA_TYPE_PROCESSING.class).observe(cvFilter);
+		dataTypeFiltration = PojoProperties.value(AbstractFilter.class, "dataTypeProcessing", DATA_TYPE_PROCESSING.class).observe(cvFilter);
 	}
 
 	@Override

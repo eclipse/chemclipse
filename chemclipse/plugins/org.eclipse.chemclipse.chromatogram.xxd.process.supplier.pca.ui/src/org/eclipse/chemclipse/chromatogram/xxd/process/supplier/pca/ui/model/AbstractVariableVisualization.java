@@ -28,11 +28,12 @@ public class AbstractVariableVisualization implements IVariableVisualization {
 	private BooleanProperty selected;
 	private StringProperty type;
 	private StringProperty value;
+	private StringProperty classification;
 
 	public AbstractVariableVisualization(IVariable variableModel) {
 
 		super();
-		color = new SimpleIntegerProperty();
+		color = new SimpleIntegerProperty(16711680);
 		this.delegator = variableModel;
 	}
 
@@ -166,5 +167,32 @@ public class AbstractVariableVisualization implements IVariableVisualization {
 			value = new SimpleStringProperty(delegator.getValue());
 		}
 		return value;
+	}
+
+	@Override
+	public void setClassification(String classification) {
+
+		delegator.setClassification(classification);
+		if(this.classification != null) {
+			this.classification.set(classification);
+		}
+	}
+
+	@Override
+	public String getClassification() {
+
+		if(classification != null) {
+			return classification.get();
+		}
+		return delegator.getClassification();
+	}
+
+	@Override
+	public StringProperty classificationProperty() {
+
+		if(classification == null) {
+			classification = new SimpleStringProperty();
+		}
+		return classification;
 	}
 }

@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
@@ -13,29 +13,24 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
 import java.util.function.Consumer;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
+
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.StringProperty;
 
-public interface IPcaSettingsVisualization {
+public interface IPcaSettingsVisualization extends IPcaSettings {
 
-	void addChangeListener(Consumer<IPcaSettingsVisualization> listner);
+	void removeListener(Consumer<IPcaSettingsVisualization> changeSettingsListner);
 
-	int getPcX();
+	void addListener(Consumer<IPcaSettingsVisualization> changeSettingsListner);
 
-	int getPcY();
+	IntegerProperty numberOfPrincipalComponentsProperty();
 
-	int getPcZ();
+	StringProperty pcaAlgorithmProperty();
 
-	IntegerProperty pcXProperty();
+	BooleanProperty removeUselessVariablesProperty();
 
-	IntegerProperty pcYProperty();
-
-	IntegerProperty pcZProperty();
-
-	void removeChangeListener(Consumer<IPcaSettingsVisualization> listner);
-
-	void setPcX(int pcX);
-
-	void setPcY(int pcY);
-
-	void setPcZ(int pcZ);
+	@Override
+	IPcaSettingsVisualization makeDeepCopy();
 }

@@ -11,5 +11,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
-public interface INormalization extends IPreprocessing {
+public interface INormalization extends IDataModificator {
 }

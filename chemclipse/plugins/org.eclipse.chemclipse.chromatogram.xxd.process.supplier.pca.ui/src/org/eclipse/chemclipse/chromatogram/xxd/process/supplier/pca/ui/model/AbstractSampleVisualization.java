@@ -159,7 +159,7 @@ public abstract class AbstractSampleVisualization implements ISampleVisualizatio
 	@Override
 	public void setSampleDataHasBeenChanged() {
 
-		sampleDataHasBeenChanged.add(1);
+		sampleDataHasBeenChanged.set(sampleDataHasBeenChanged.get() + 1);
 	}
 
 	@Override

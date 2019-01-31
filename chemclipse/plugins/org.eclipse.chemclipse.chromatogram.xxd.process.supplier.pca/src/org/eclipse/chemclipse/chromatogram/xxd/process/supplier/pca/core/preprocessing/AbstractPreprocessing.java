@@ -15,19 +15,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.model.statistics.ISample;
-import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
 public abstract class AbstractPreprocessing implements IPreprocessing {
 
 	private boolean onlySelected;
-	private DATA_TYPE_PROCESSING dataTypeProcessing;
 
 	public AbstractPreprocessing() {
 
 		this.onlySelected = true;
-		this.dataTypeProcessing = DATA_TYPE_PROCESSING.MODIFIED_DATA;
 	}
 
 	@Override
@@ -42,31 +39,8 @@ public abstract class AbstractPreprocessing implements IPreprocessing {
 		this.onlySelected = onlySelected;
 	}
 
-	@Override
-	public void setDataTypeProcessing(DATA_TYPE_PROCESSING processDataType) {
-
-		this.dataTypeProcessing = processDataType;
-	}
-
-	@Override
-	public DATA_TYPE_PROCESSING getDataTypeProcessing() {
-
-		return dataTypeProcessing;
-	}
-
 	protected <V extends IVariable, S extends ISample> List<S> selectSamples(ISamples<V, S> samples) {
 
 		return samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
-	}
-
-	protected double getData(ISampleData sampleData) {
-
-		switch(dataTypeProcessing) {
-			case MODIFIED_DATA:
-				return sampleData.getModifiedData();
-			case RAW_DATA:
-				return sampleData.getData();
-		}
-		throw new UnsupportedOperationException();
 	}
 }

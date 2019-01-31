@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtr
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
 import org.eclipse.jface.wizard.Wizard;
 
 public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
@@ -30,6 +31,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 	private PcaExtractionPeaks pcaExtractionData;
 
 	public PcaPeaksInputWizard() {
+
 		super();
 		mainPropertiesPage = new MainPropertiesPeaksInputWizardPage("MainProperites");
 		dataInputFromPeakFilesPage = new PeakFilesInputPageWizard("DataInputFiles");
@@ -79,5 +81,11 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 		int retentionTimeWindow = mainPropertiesPage.getRetentionTimeWindow();
 		pcaExtractionData = new PcaExtractionPeaks(dataInputs, retentionTimeWindow, IDataExtraction.EXTRACT_PEAK);
 		return true;
+	}
+
+	@Override
+	public IPcaSettingsVisualization getPcaSettingsVisualization() {
+
+		return preprocessingData.getPcaSettings();
 	}
 }

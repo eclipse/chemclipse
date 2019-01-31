@@ -16,12 +16,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class RetentionTime2Filter extends AbstractPreprocessing implements IFilter {
+public class RetentionTime2Filter extends AbstractFilter implements IFilter {
 
 	private boolean inverse;
 	private String selectionResult = "";
@@ -29,10 +28,9 @@ public class RetentionTime2Filter extends AbstractPreprocessing implements IFilt
 
 	public RetentionTime2Filter(List<IVariable> variables, boolean inverse) {
 
-		super();
+		super(DATA_TYPE_PROCESSING.VARIABLES);
 		this.variablesSelected = new ArrayList<>(variables);
 		this.inverse = inverse;
-		setDataTypeProcessing(DATA_TYPE_PROCESSING.VARIABLES);
 	}
 
 	@Override

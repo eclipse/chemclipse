@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.CenteringMean;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.CenteringMedian;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ICentering;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IDataModificator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.INormalization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IScaling;
@@ -35,6 +36,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.SmallValuesReplacer;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.TransformationLOG10;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.TransformationPower;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -65,7 +70,7 @@ public class PreprocessingController {
 	@FXML // fx:id="cNormalizeData"
 	private ComboBox<ComboItem<INormalization>> cNormalizeData; // Value injected by FXMLLoader
 	@FXML // fx:id="cReplaceEmptyValue"
-	private ComboBox<ComboItem<IPreprocessing>> cReplaceEmptyValue; // Value injected by FXMLLoader
+	private ComboBox<ComboItem<IDataModificator>> cReplaceEmptyValue; // Value injected by FXMLLoader
 	@FXML // fx:id="bNormalizeData"
 	private CheckBox bNormalizeData; // Value injected by FXMLLoader
 	@FXML // fx:id="cTransformData"
@@ -80,10 +85,14 @@ public class PreprocessingController {
 	private ComboBox<ComboItem<IScaling>> cScaleData; // Value injected by FXMLLoader
 	@FXML // fx:id="bRemoveVariables"
 	private CheckBox bRemoveVariables; // Value injected by FXMLLoader
+	@FXML
+	private CheckBox bUseOnlySelectedVariables;
 	//
 	private int centeringType;
 	private PcaPreprocessingData preprecessing;
 	private volatile boolean isSetPreprocessing;
+	private IPcaSettingsVisualization pcaSettings;
+	private ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples;
 
 	private class ComboItem<Preprocessing extends IPreprocessing> {
 
@@ -92,6 +101,7 @@ public class PreprocessingController {
 		private Supplier<Preprocessing> preprecessing;
 
 		public ComboItem(String name, String pathPicture, Supplier<Preprocessing> preprecessing) {
+
 			super();
 			this.name = name;
 			this.pathPicture = pathPicture;
@@ -354,23 +364,23 @@ public class PreprocessingController {
 		cReplaceEmptyValue.getItems().add(new ComboItem<>("Mean", "", () -> new MeanValuesReplacer()));
 		cReplaceEmptyValue.getItems().add(new ComboItem<>("Median", "", () -> new MedianValuesReplacer()));
 		cReplaceEmptyValue.getItems().add(new ComboItem<>("Small Random", "", () -> new SmallValuesReplacer()));
-		cReplaceEmptyValue.valueProperty().addListener(new ChangeListener<ComboItem<IPreprocessing>>() {
+		cReplaceEmptyValue.valueProperty().addListener(new ChangeListener<ComboItem<IDataModificator>>() {
 
 			@Override
-			public void changed(ObservableValue<? extends ComboItem<IPreprocessing>> observable, ComboItem<IPreprocessing> oldValue, ComboItem<IPreprocessing> newValue) {
+			public void changed(ObservableValue<? extends ComboItem<IDataModificator>> observable, ComboItem<IDataModificator> oldValue, ComboItem<IDataModificator> newValue) {
 
 				dataPreprocessing();
 			}
 		});
-		cReplaceEmptyValue.setCellFactory(new Callback<ListView<ComboItem<IPreprocessing>>, ListCell<ComboItem<IPreprocessing>>>() {
+		cReplaceEmptyValue.setCellFactory(new Callback<ListView<ComboItem<IDataModificator>>, ListCell<ComboItem<IDataModificator>>>() {
 
 			@Override
-			public ListCell<ComboItem<IPreprocessing>> call(ListView<ComboItem<IPreprocessing>> p) {
+			public ListCell<ComboItem<IDataModificator>> call(ListView<ComboItem<IDataModificator>> p) {
 
-				return new ListCell<ComboItem<IPreprocessing>>() {
+				return new ListCell<ComboItem<IDataModificator>>() {
 
 					@Override
-					protected void updateItem(ComboItem<IPreprocessing> item, boolean empty) {
+					protected void updateItem(ComboItem<IDataModificator> item, boolean empty) {
 
 						super.updateItem(item, empty);
 						if(item == null) {
@@ -381,10 +391,10 @@ public class PreprocessingController {
 				};
 			}
 		});
-		cReplaceEmptyValue.setConverter(new StringConverter<ComboItem<IPreprocessing>>() {
+		cReplaceEmptyValue.setConverter(new StringConverter<ComboItem<IDataModificator>>() {
 
 			@Override
-			public String toString(ComboItem<IPreprocessing> item) {
+			public String toString(ComboItem<IDataModificator> item) {
 
 				if(item != null) {
 					return item.name;
@@ -393,7 +403,7 @@ public class PreprocessingController {
 			}
 
 			@Override
-			public ComboItem<IPreprocessing> fromString(String string) {
+			public ComboItem<IDataModificator> fromString(String string) {
 
 				return null;
 			}
@@ -406,14 +416,31 @@ public class PreprocessingController {
 				dataPreprocessing();
 			}
 		});
+		bUseOnlySelectedVariables.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+
+				dataPreprocessing();
+			}
+		});
 		reset();
 	}
 
-	public void setPreprecessing(PcaPreprocessingData preprecessing) {
+	public void setUpdate(PcaPreprocessingData preprecessing, IPcaSettingsVisualization pcaSettings) {
+
+		setUpdate(preprecessing, null, pcaSettings);
+	}
+
+	public void setUpdate(PcaPreprocessingData preprecessing, ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples, IPcaSettingsVisualization pcaSettings) {
 
 		reset();
 		isSetPreprocessing = true;
 		this.preprecessing = preprecessing;
+		this.pcaSettings = pcaSettings;
+		this.samples = samples;
+		//
+		bUseOnlySelectedVariables.setSelected(preprecessing.isModifyOnlySelectedVariable());
 		INormalization normalization = preprecessing.getNormalization();
 		if(normalization != null) {
 			List<ComboItem<INormalization>> items = cNormalizeData.getItems();
@@ -463,21 +490,23 @@ public class PreprocessingController {
 				}
 			}
 		}
-		IPreprocessing replaceEmptyValue = preprecessing.getReplaceEmptyValues();
-		List<ComboItem<IPreprocessing>> itemsReplaces = cReplaceEmptyValue.getItems();
+		IDataModificator replaceEmptyValue = preprecessing.getReplaceEmptyValues();
+		List<ComboItem<IDataModificator>> itemsReplaces = cReplaceEmptyValue.getItems();
 		int index = getIndexSelection(itemsReplaces, replaceEmptyValue);
 		if(index != -1) {
 			cReplaceEmptyValue.getSelectionModel().select(index);
 		}
-		bRemoveVariables.setSelected(preprecessing.isRemoveUselessVariables());
+		bRemoveVariables.selectedProperty().set(pcaSettings.isRemoveUselessVariables());
 		isSetPreprocessing = false;
 	}
 
-	private void dataPreprocessing() {
+	public void dataPreprocessing() {
 
 		if(preprecessing == null || isSetPreprocessing) {
 			return;
 		}
+		preprecessing.setModifyOnlySelectedVariable(bUseOnlySelectedVariables.isSelected());
+		preprecessing.setRemoveUselessVariables(bRemoveVariables.isSelected());
 		if(bNormalizeData.isSelected()) {
 			INormalization normalization = cNormalizeData.getSelectionModel().getSelectedItem().preprecessing.get();
 			INormalization oldNormalization = preprecessing.getNormalization();
@@ -487,7 +516,7 @@ public class PreprocessingController {
 		} else {
 			preprecessing.setNormalization(null);
 		}
-		IPreprocessing replacer = cReplaceEmptyValue.getSelectionModel().getSelectedItem().preprecessing.get();
+		IDataModificator replacer = cReplaceEmptyValue.getSelectionModel().getSelectedItem().preprecessing.get();
 		if(!replacer.getClass().getName().equals(preprecessing.getReplaceEmptyValues().getClass().getName())) {
 			preprecessing.setReplaceEmptyValues(replacer);
 		}
@@ -520,7 +549,9 @@ public class PreprocessingController {
 				preprecessing.setCenteringScaling(null);
 			}
 		}
-		preprecessing.setRemoveUselessVariables(bRemoveVariables.isSelected());
+		if(pcaSettings != null) {
+			pcaSettings.setRemoveUselessVariables(bRemoveVariables.isSelected());
+		}
 	}
 
 	public void reset() {

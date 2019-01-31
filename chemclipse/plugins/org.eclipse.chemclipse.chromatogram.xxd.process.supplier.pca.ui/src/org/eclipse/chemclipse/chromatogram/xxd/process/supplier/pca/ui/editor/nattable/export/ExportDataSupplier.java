@@ -24,6 +24,7 @@ public class ExportDataSupplier {
 	private TableProvider tableProvider;
 
 	public ExportDataSupplier(TableProvider tableProvider, IDataProvider data, IDataProvider header, ColumnGroupModel columnGroupModel) {
+
 		this.data = data;
 		this.header = header;
 		this.columnGroupModel = columnGroupModel;
@@ -33,11 +34,6 @@ public class ExportDataSupplier {
 	public int getColumnCount() {
 
 		return data.getColumnCount();
-	}
-
-	public String getDataType(int column) {
-
-		return tableProvider.getColumnLable(column);
 	}
 
 	public Object getDataValue(int column, int row) {

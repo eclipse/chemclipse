@@ -14,6 +14,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 import java.net.URL;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.PcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PreprocessingController;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -31,14 +34,17 @@ import javafx.scene.Scene;
 public class PreprocessingDataWizardPage extends WizardPage {
 
 	private PcaPreprocessingData pcaPreprocessingData;
+	private IPcaSettingsVisualization pcaSettings;
 	private FXCanvas fxCanvas;
 	private PreprocessingController controller;
 
 	protected PreprocessingDataWizardPage(String pageName) {
+
 		super(pageName);
 		setTitle("Preprocess Data");
 		setDescription("Data can be also preprocessed later in the process in Data Preprocessing page");
 		pcaPreprocessingData = new PcaPreprocessingData();
+		pcaSettings = new PcaSettingsVisualization(PreferenceSupplier.getPcaSettings());
 	}
 
 	@Override
@@ -62,7 +68,7 @@ public class PreprocessingDataWizardPage extends WizardPage {
 			fXMLLoader.setBuilderFactory(new JavaFXBuilderFactory());
 			final Parent root = fXMLLoader.load(location.openStream());
 			controller = fXMLLoader.getController();
-			controller.setPreprecessing(pcaPreprocessingData);
+			controller.setUpdate(pcaPreprocessingData, pcaSettings);
 			final Scene scene = new Scene(root);
 			fxCanvas.setScene(scene);
 		} catch(final Exception e) {
@@ -72,5 +78,10 @@ public class PreprocessingDataWizardPage extends WizardPage {
 	public PcaPreprocessingData getPcaPreprocessingData() {
 
 		return pcaPreprocessingData;
+	}
+
+	public IPcaSettingsVisualization getPcaSettings() {
+
+		return pcaSettings;
 	}
 }

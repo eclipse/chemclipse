@@ -19,6 +19,7 @@ public class PcaResulHeaderProvider implements IDataProvider {
 	private TableProvider tableProvider;
 
 	public PcaResulHeaderProvider(TableProvider tableProvider) {
+
 		this.tableProvider = tableProvider;
 	}
 
@@ -32,11 +33,16 @@ public class PcaResulHeaderProvider implements IDataProvider {
 	public Object getDataValue(int columnIndex, int rowIndex) {
 
 		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
-			return "";
+			return null;
+		}
+		if(columnIndex == TableProvider.COLUMN_INDEX_COLOR) {
+			return null;
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_VARIABLES) {
 			return tableProvider.getDataTable().getVariableName();
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
 			return "Description";
+		} else if(columnIndex == TableProvider.COLUMN_INDEX_CLASSIFICATIONS) {
+			return "Classifications";
 		} else {
 			ISample sample = tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 			return sample.getName();

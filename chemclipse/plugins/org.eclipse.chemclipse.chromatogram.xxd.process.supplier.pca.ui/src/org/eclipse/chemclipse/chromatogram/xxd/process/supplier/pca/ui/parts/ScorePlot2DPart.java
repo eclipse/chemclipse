@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceScorePlot2DPage;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.e4.core.commands.EHandlerService;
@@ -58,7 +58,7 @@ public class ScorePlot2DPart {
 	private IPcaResultsVisualization pcaResults;
 	private ScorePlot scorePlot;
 	private ListChangeListener<IPcaResultVisualization> selectionChangeListener;
-	private Consumer<IPcaSettingsVisualization> settingUpdateListener;
+	private Consumer<IPcaVisualization> settingUpdateListener;
 	private boolean partHasBeenDestroy;
 	private Runnable updateSelection = () -> {
 		if(partHasBeenDestroy)
@@ -70,17 +70,14 @@ public class ScorePlot2DPart {
 	@Inject
 	@org.eclipse.e4.core.di.annotations.Optional
 	private SelectionManagerSamples managerSamples;
-	@Inject
-	@org.eclipse.e4.core.di.annotations.Optional
-	private SelectionManagerSample managerSample;
 
 	public ScorePlot2DPart() {
 
 		//
-		settingUpdateListener = new Consumer<IPcaSettingsVisualization>() {
+		settingUpdateListener = new Consumer<IPcaVisualization>() {
 
 			@Override
-			public void accept(IPcaSettingsVisualization t) {
+			public void accept(IPcaVisualization t) {
 
 				Display.getDefault().timerExec(100, updateSelection);
 			}
@@ -123,12 +120,12 @@ public class ScorePlot2DPart {
 					pcaResults = newValue;
 					if(oldValue != null) {
 						oldValue.getPcaResultList().removeListener(selectionChangeListener);
-						oldValue.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);
+						oldValue.getPcaVisualization().removeChangeListener(settingUpdateListener);
 					}
 					if(newValue != null) {
 						scorePlot.update(newValue);
 						newValue.getPcaResultList().addListener(selectionChangeListener);
-						newValue.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
+						newValue.getPcaVisualization().addChangeListener(settingUpdateListener);
 					} else {
 						scorePlot.deleteSeries();
 					}
@@ -154,7 +151,7 @@ public class ScorePlot2DPart {
 		if(this.pcaResults != null) {
 			scorePlot.update(pcaresults.getValue());
 			this.pcaResults.getPcaResultList().addListener(selectionChangeListener);
-			this.pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
+			this.pcaResults.getPcaVisualization().addChangeListener(settingUpdateListener);
 		}
 		getSelectionManagerSample().getSelection().addListener(actualSelectionChangeListener);
 		//
@@ -185,10 +182,7 @@ public class ScorePlot2DPart {
 
 	private SelectionManagerSample getSelectionManagerSample() {
 
-		if(managerSample != null) {
-			return managerSample;
-		}
-		return SelectionManagerSample.getInstance();
+		return getSelectionManagerSamples().getSelectionManagerSample();
 	}
 
 	private SelectionManagerSamples getSelectionManagerSamples() {
@@ -208,7 +202,7 @@ public class ScorePlot2DPart {
 		getSelectionManagerSamples().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
 		if(pcaResults != null) {
 			this.pcaResults.getPcaResultList().removeListener(selectionChangeListener);
-			this.pcaResults.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);
+			this.pcaResults.getPcaVisualization().removeChangeListener(settingUpdateListener);
 		}
 	}
 }

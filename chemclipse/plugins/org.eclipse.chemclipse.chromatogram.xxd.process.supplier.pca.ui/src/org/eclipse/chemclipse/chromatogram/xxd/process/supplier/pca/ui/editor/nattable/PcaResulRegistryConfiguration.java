@@ -14,7 +14,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.n
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.Set;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.PcaColorGroup;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
@@ -24,16 +26,20 @@ import org.eclipse.nebula.widgets.nattable.data.convert.DefaultBooleanDisplayCon
 import org.eclipse.nebula.widgets.nattable.data.convert.DefaultDoubleDisplayConverter;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.editor.CheckBoxCellEditor;
-import org.eclipse.nebula.widgets.nattable.painter.cell.CheckBoxPainter;
 import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
 import org.eclipse.nebula.widgets.nattable.style.Style;
+import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 
 public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration {
 
-	public PcaResulRegistryConfiguration(TableProvider provider) {
+	private PcaResulDataProvider provider;
+
+	public PcaResulRegistryConfiguration(PcaResulDataProvider provider) {
+
 		super();
+		this.provider = provider;
 	}
 
 	@Override
@@ -45,7 +51,9 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 	private void setFormatCell(IConfigRegistry configRegistry) {
 
 		// Set format for sample data
-		configRegistry.unregisterConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, DisplayMode.NORMAL, TableProvider.COLUMN_LABEL_SAMPLE_DATA);
+		configRegistry.unregisterConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
+				DisplayMode.NORMAL, //
+				TableProvider.COLUMN_LABEL_SAMPLE_DATA);
 		DefaultDoubleDisplayConverter format = new DefaultDoubleDisplayConverter();
 		DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ENGLISH);
 		symbols.setNaN("#N/A");
@@ -65,16 +73,39 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 		configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, //
 				style, DisplayMode.NORMAL, //
 				TableProvider.COLUMN_LABEL_PEAKS_NAMES);
+		// Set colors
+		TableProvider tableProvider = provider.getTableProvider();
+		Set<Integer> colors = tableProvider.getDataTable().getColores();
+		for(Integer color : colors) {
+			String colorLabel = tableProvider.getColorLabel(color);
+			Style cellStyleClassification = new Style();
+			cellStyleClassification.setAttributeValue( //
+					CellStyleAttributes.BACKGROUND_COLOR, //
+					PcaColorGroup.getSampleColorSWT(color));
+			//
+			configRegistry.registerConfigAttribute( //
+					CellConfigAttributes.CELL_STYLE, //
+					cellStyleClassification, //
+					DisplayMode.NORMAL, colorLabel);
+		}
+		//
+		style = new Style();
+		style.setAttributeValue(CellStyleAttributes.FOREGROUND_COLOR, //
+				GUIHelper.COLOR_GRAY);
+		configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, // attribute to apply
+				style, //
+				DisplayMode.NORMAL, //
+									//
+				TableProvider.ROW_LABEL_UNSELECTED); //
 		//
 		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
 				new DefaultBooleanDisplayConverter(), //
 				DisplayMode.NORMAL, //
 				TableProvider.COLUMN_LABEL_SELECTED);
 		configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER, //
-				new CheckBoxPainter(), //
+				new CheckBoxPainterExtended(provider), //
 				DisplayMode.NORMAL, //
 				TableProvider.COLUMN_LABEL_SELECTED);
-		// configure editing
 		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, //
 				IEditableRule.ALWAYS_EDITABLE, DisplayMode.NORMAL, //
 				TableProvider.COLUMN_LABEL_SELECTED);

@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class MedianValuesReplacer extends AbstractPreprocessing {
+public class MedianValuesReplacer extends AbstractDataModificator {
 
 	@Override
 	public String getDescription() {
@@ -39,6 +39,9 @@ public class MedianValuesReplacer extends AbstractPreprocessing {
 		List<V> variables = samples.getVariables();
 		List<S> sampleList = samples.getSampleList();
 		for(int i = 0; i < variables.size(); i++) {
+			if(skipVariable(samples, i)) {
+				continue;
+			}
 			List<Double> collectedValues = new ArrayList<>();
 			for(S sample : sampleList) {
 				if(sample.isSelected() || !isOnlySelected()) {

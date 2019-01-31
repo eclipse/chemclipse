@@ -32,4 +32,6 @@ public interface IVariableVisualization extends IColor, IVariable {
 	StringProperty valueProperty();
 
 	StringProperty descriptionProperty();
+
+	StringProperty classificationProperty();
 }

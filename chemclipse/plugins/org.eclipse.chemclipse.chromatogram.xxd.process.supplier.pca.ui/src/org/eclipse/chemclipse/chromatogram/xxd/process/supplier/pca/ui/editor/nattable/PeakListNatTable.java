@@ -12,15 +12,19 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportDataSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
@@ -30,6 +34,7 @@ import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.columnChooser.command.DisplayColumnChooserCommandHandler;
 import org.eclipse.nebula.widgets.nattable.config.ConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.DefaultNatTableStyleConfiguration;
+import org.eclipse.nebula.widgets.nattable.coordinate.Range;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.freeze.CompositeFreezeLayer;
 import org.eclipse.nebula.widgets.nattable.freeze.FreezeLayer;
@@ -53,35 +58,46 @@ import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.nebula.widgets.nattable.layer.event.ColumnStructuralChangeEvent;
 import org.eclipse.nebula.widgets.nattable.layer.event.ILayerEvent;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
+import org.eclipse.nebula.widgets.nattable.selection.command.SelectRowsCommand;
+import org.eclipse.nebula.widgets.nattable.selection.event.RowSelectionEvent;
 import org.eclipse.nebula.widgets.nattable.sort.SortHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.sort.config.SingleClickSortConfiguration;
 import org.eclipse.nebula.widgets.nattable.tree.command.TreeCollapseAllCommand;
 import org.eclipse.nebula.widgets.nattable.ui.menu.AbstractHeaderMenuConfiguration;
 import org.eclipse.nebula.widgets.nattable.ui.menu.PopupMenuBuilder;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
+import org.eclipse.nebula.widgets.nattable.viewport.command.ShowRowInViewportCommand;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
+import javafx.collections.ObservableList;
+
 public class PeakListNatTable {
 
 	private ColumnGroupHeaderLayer columnGroupHeaderLayer;
 	private PcaResulHeaderProvider columnHeaderDataProvider;
+	private DataLayer bodyDataLayer;
 	private ColumnHideShowLayer columnHideShowLayer;
 	private PcaResulDataProvider dataProvider;
 	private ExportData exportData;
+	private ColumnHeaderLayer columnHeaderLayer;
+	private SelectionManagerSamples selectionManagerSamples;
+	private ViewportLayer viewportLayer;
 	NatTable natTable;
 	SortModel sortModel;
 	TableData tableData;
 	TableProvider tableProvider;
 	SelectionLayer selectionLayer;
 
-	public PeakListNatTable(Composite parent, Object layoutData) {
+	public PeakListNatTable(Composite parent, Object layoutData, SelectionManagerSamples selectionManagerSamples) {
 
 		tableData = new TableData();
-		tableProvider = new TableProvider(tableData);
+		sortModel = new SortModel(tableData);
+		tableProvider = new TableProvider(tableData, sortModel);
 		createPeakListIntensityTableSection(parent, layoutData);
+		this.selectionManagerSamples = selectionManagerSamples;
 	}
 
 	private void attachToolTip() {
@@ -108,6 +124,10 @@ public class PeakListNatTable {
 					if(row < 2) {
 						return columnHeaderDataProvider.getDataValue(columnIndex, 0).toString();
 					} else {
+						Object cellData = dataProvider.getDataValue(columnIndex, rowIndex);
+						if(cellData == null) {
+							return null;
+						}
 						return dataProvider.getDataValue(columnIndex, rowIndex).toString();
 					}
 				}
@@ -144,16 +164,17 @@ public class PeakListNatTable {
 	 */
 	private void createPeakListIntensityTableSection(Composite parent, Object layoutData) {
 
-		sortModel = new SortModel(tableProvider);
 		dataProvider = new PcaResulDataProvider(tableProvider, sortModel);
-		DataLayer bodyDataLayer = new DataLayer(dataProvider);
+		bodyDataLayer = new DataLayer(dataProvider);
+		bodyDataLayer.setDefaultColumnWidthByPosition(0, 30);
+		bodyDataLayer.setDefaultColumnWidthByPosition(1, 30);
 		bodyDataLayer.setConfigLabelAccumulator(new PcaResultLabelProvider(tableProvider));
 		final RowHideShowLayer rowHideShowLayer = new RowHideShowLayer(bodyDataLayer);
 		columnHideShowLayer = new ColumnHideShowLayer(rowHideShowLayer);
 		ColumnGroupModel columnGroupModel = new ColumnGroupModel();
 		ColumnGroupExpandCollapseLayer columnGroupExpandCollapseLayer = new ColumnGroupExpandCollapseLayer(columnHideShowLayer, columnGroupModel, columnGroupModel);
 		selectionLayer = new SelectionLayer(columnGroupExpandCollapseLayer);
-		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
+		viewportLayer = new ViewportLayer(selectionLayer);
 		final FreezeLayer freezeLayer = new FreezeLayer(selectionLayer);
 		final CompositeFreezeLayer compositeFreezeLayer = new CompositeFreezeLayer(freezeLayer, viewportLayer, selectionLayer);
 		/*
@@ -161,7 +182,7 @@ public class PeakListNatTable {
 		 */
 		columnHeaderDataProvider = new PcaResulHeaderProvider(tableProvider);
 		DataLayer columnHeaderDataLayer = new DefaultColumnHeaderDataLayer(columnHeaderDataProvider);
-		ColumnHeaderLayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, compositeFreezeLayer, selectionLayer);
+		columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, compositeFreezeLayer, selectionLayer);
 		SortHeaderLayer<?> sortHeaderLayer = new SortHeaderLayer<>(columnHeaderLayer, sortModel);
 		columnGroupHeaderLayer = new ColumnGroupHeaderLayer(sortHeaderLayer, selectionLayer, columnGroupModel);
 		/*
@@ -208,8 +229,32 @@ public class PeakListNatTable {
 			}
 		});
 		natTable.addConfiguration(new SingleClickSortConfiguration());
-		natTable.addConfiguration(new PcaResulRegistryConfiguration(tableProvider));
+		natTable.addConfiguration(new PcaResulRegistryConfiguration(dataProvider));
 		natTable.addConfiguration(new BodyMenuConfiguration(this));
+		natTable.addLayerListener(new ILayerListener() {
+
+			// Default selection behavior selects cells by default.
+			@Override
+			public void handleLayerEvent(ILayerEvent event) {
+
+				if(event instanceof RowSelectionEvent) {
+					Collection<Range> selections = selectionLayer.getSelectedRowPositions();
+					for(Range r : selections) {
+						try {
+							int index = sortModel.getOrderRow().get(r.start);
+							IVariable selectedVariable = tableData.getVariables().get(index);
+							ObservableList<IVariable> selectedVariables = selectionManagerSamples.getSelectionManagerVariable().getSelection();
+							if(!selectedVariables.contains(selectedVariable)) {
+								selectedVariables.setAll(selectedVariable);
+							}
+							return;
+						} catch(IndexOutOfBoundsException e) {
+							// TODO: handle exception
+						}
+					}
+				}
+			}
+		});
 		natTable.configure();
 		/*
 		 * Freeze column dynamically
@@ -237,6 +282,12 @@ public class PeakListNatTable {
 				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_SELECTED)) {
 					num++;
 				}
+				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_CLASSIFICATIONS)) {
+					num++;
+				}
+				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_COLOR)) {
+					num++;
+				}
 				if((event instanceof ColumnStructuralChangeEvent) || freezeColumns != num) {
 					if(num > 0) {
 						compositeFreezeLayer.doCommand(new FreezeColumnCommand(compositeFreezeLayer, num - 1, false, true));
@@ -252,6 +303,43 @@ public class PeakListNatTable {
 	public void exportTableDialog(Display display) {
 
 		exportData.exportTableDialog(display);
+	}
+
+	public void selectRow(IVariable variable) {
+
+		int index = tableData.getVariables().indexOf(variable);
+		if(index == -1) {
+			return;
+		}
+		int sortedDataIndex = sortModel.getOrderRow().indexOf(index);
+		int viewportPosition = viewportLayer.getRowPositionByIndex(sortedDataIndex);
+		int viewportHeight = viewportLayer.getRowCount();
+		int viewPortTargetPosition;
+		boolean isVisible = (viewportPosition >= 0) && (viewportPosition < viewportHeight);
+		if(!isVisible) {
+			if(viewportPosition < 0) {
+				/*
+				 * The target row is below the viewport window so we want to calculate the
+				 * index of the bottom of the table.
+				 */
+				viewPortTargetPosition = sortedDataIndex - (viewportHeight / 2) + columnHeaderLayer.getRowCount();
+				viewPortTargetPosition = Math.max(0, viewPortTargetPosition);
+			} else {
+				/*
+				 * The target row is above the viewport window so we want to calculate the
+				 * index of the top row to show in the viewport.
+				 */
+				viewPortTargetPosition = Math.min(sortedDataIndex + (viewportHeight / 2) - 1, bodyDataLayer.getRowCount() - 1);
+			}
+			natTable.doCommand(new ShowRowInViewportCommand(viewportLayer, viewPortTargetPosition));
+		}
+		Set<Range> ranges = selectionLayer.getSelectedRowPositions();
+		for(Range range : ranges) {
+			if(range.start <= sortedDataIndex && sortedDataIndex < range.end) {
+				return;
+			}
+		}
+		natTable.doCommand(new SelectRowsCommand(selectionLayer, 0, sortedDataIndex, false, false));
 	}
 
 	/**
@@ -322,10 +410,12 @@ public class PeakListNatTable {
 		natTable.refresh();
 	}
 
-	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples) {
+	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples, IPcaSettings pcaSettings) {
 
-		tableData.update(samples);
+		tableData.update(samples, pcaSettings);
 		sortModel.update();
+		natTable.addConfiguration(new PcaResulRegistryConfiguration(dataProvider));
+		natTable.configure();
 		natTable.update();
 		natTable.refresh();
 		generateGroup();

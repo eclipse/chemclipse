@@ -19,7 +19,6 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers.CreatePcaEvaluation;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
@@ -65,16 +64,12 @@ public class PCAEditorFX {
 	@Inject
 	@org.eclipse.e4.core.di.annotations.Optional
 	private SelectionManagerSamples managerSamples;
-	@Inject
-	@org.eclipse.e4.core.di.annotations.Optional
-	private SelectionManagerSample managerSample;
 	@SuppressWarnings("restriction")
 	@Inject
 	private EHandlerService handlerService;
 	private static String ID_COMMAND_SETTINGS = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.command.settingspcaeditor";
 
 	public PCAEditorFX() {
-
 	}
 
 	@SuppressWarnings("restriction")
@@ -104,6 +99,7 @@ public class PCAEditorFX {
 			controller.setSelectionManagerSamples(getSelectionManagerSamples());
 			controller.setSamplesConsumer((s) -> {
 				pcaController.setSamples(s);
+				pcaController.evaluatePCA();
 			});
 			final Scene scene = new Scene(root);
 			fxCanvas.setScene(scene);
@@ -111,6 +107,7 @@ public class PCAEditorFX {
 			if(object instanceof ISamplesVisualization) {
 				ISamplesVisualization samples = (ISamplesVisualization)object;
 				controller.setSamples(samples);
+				pcaController.evaluatePCA();
 			}
 			Object laodData = part.getTransientData().get(CreatePcaEvaluation.ALLOW_DATALOAD);
 			if(laodData instanceof Boolean) {
@@ -142,19 +139,11 @@ public class PCAEditorFX {
 		if(samples.isPresent()) {
 			boolean contains = getSelectionManagerSamples().getSelection().remove(samples.get());
 			if(contains) {
-				getSelectionManagerSample().getSelection().clear();
+				getSelectionManagerSamples().getSelectionManagerSample().getSelection().clear();
 			}
 			getSelectionManagerSamples().getElements().remove(samples.get());
 		}
 		controller.preDestroy();
-	}
-
-	private SelectionManagerSample getSelectionManagerSample() {
-
-		if(managerSample != null) {
-			return managerSample;
-		}
-		return SelectionManagerSample.getInstance();
 	}
 
 	private SelectionManagerSamples getSelectionManagerSamples() {
@@ -173,7 +162,7 @@ public class PCAEditorFX {
 			ISampleVisualization sample = controller.getSelectedSamples();
 			getSelectionManagerSamples().getSelection().setAll(controller.getSamples().get());
 			if(sample != null) {
-				getSelectionManagerSample().getSelection().setAll(sample);
+				getSelectionManagerSamples().getSelectionManagerSample().getSelection().setAll(sample);
 			}
 		} else {
 			getSelectionManagerSamples().getSelection().clear();

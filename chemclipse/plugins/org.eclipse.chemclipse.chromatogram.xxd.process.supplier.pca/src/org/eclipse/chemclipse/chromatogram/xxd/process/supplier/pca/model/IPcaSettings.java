@@ -17,13 +17,17 @@ public interface IPcaSettings {
 	String PCA_ALGO_NIPALS = "Nipals";
 	String OPLS_ALGO_NIPALS = "OPLS";
 
+	void setNumberOfPrincipalComponents(int numberOfPrincipalComponents);
+
 	int getNumberOfPrincipalComponents();
 
 	String getPcaAlgorithm();
 
 	void setPcaAlgorithm(String pcaAlgo);
 
-	boolean IsRemoveUselessVariables();
+	boolean isRemoveUselessVariables();
 
 	void setRemoveUselessVariables(boolean b);
+
+	IPcaSettings makeDeepCopy();
 }

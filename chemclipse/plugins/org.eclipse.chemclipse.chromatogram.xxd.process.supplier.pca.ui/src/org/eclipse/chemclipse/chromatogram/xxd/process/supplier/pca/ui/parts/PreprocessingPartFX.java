@@ -14,13 +14,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 import java.net.URL;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.PcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PreprocessingController;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.swt.SWT;
@@ -29,48 +29,31 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
 import javafx.embed.swt.FXCanvas;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class PreprocessingPartFX {
+public class PreprocessingPartFX extends GeneralPcaPart {
 
 	private final static Logger logger = Logger.getLogger(PreprocessingPartFX.class);
 	private PreprocessingController controller;
-	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samplesChangeListener;
 	/**
 	 * View controller. Will be only available after {@link #createScene(Composite)} was called.
 	 */
 	private FXCanvas fxCanvas;
-	@Inject
-	private Composite parent;
-	@Inject
-	@org.eclipse.e4.core.di.annotations.Optional
-	private SelectionManagerSamples managerSamples;
 
+	@Inject
 	public PreprocessingPartFX() {
-		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>>() {
-
-			@Override
-			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> c) {
-
-				if(!c.getList().isEmpty()) {
-					ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples = c.getList().get(0);
-					controller.setPreprecessing(getSelectionManagerSamples().getPreprocessoringData(samples));
-				} else {
-					controller.reset();
-				}
-			}
-		};
+		super();
 	}
 
 	@PostConstruct
-	public void createControl() {
+	public void postConstruct(Composite composite) {
 
-		init(parent);
+		init(composite);
+		inicializeHandler();
 	}
 
 	protected void createScene(final Composite parent) {
@@ -82,24 +65,12 @@ public class PreprocessingPartFX {
 			fXMLLoader.setBuilderFactory(new JavaFXBuilderFactory());
 			final Parent root = fXMLLoader.load(location.openStream());
 			controller = fXMLLoader.getController();
-			getSelectionManagerSamples().selectionProperty().addListener(samplesChangeListener);
-			if(!getSelectionManagerSamples().selectionProperty().isEmpty()) {
-				ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples = getSelectionManagerSamples().selectionProperty().get(0);
-				controller.setPreprecessing(getSelectionManagerSamples().getPreprocessoringData(samples));
-			}
+			setSamples();
 			final Scene scene = new Scene(root);
 			fxCanvas.setScene(scene);
 		} catch(final Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		}
-	}
-
-	private SelectionManagerSamples getSelectionManagerSamples() {
-
-		if(managerSamples != null) {
-			return managerSamples;
-		}
-		return SelectionManagerSamples.getInstance();
 	}
 
 	private void init(final Composite parent) {
@@ -113,9 +84,37 @@ public class PreprocessingPartFX {
 		Platform.runLater(() -> createScene(parent));
 	}
 
-	@PreDestroy
-	public void preDestroy() {
+	@Override
+	protected void variablesHasBeenUpdated() {
 
-		getSelectionManagerSamples().selectionProperty().removeListener(samplesChangeListener);
+	}
+
+	@Override
+	protected void samplesHasBeenUpdated() {
+
+	}
+
+	@Override
+	protected void samplesHasBeenSet() {
+
+		setSamples();
+	}
+
+	@Override
+	protected void settingsHasBeenChanged() {
+
+	}
+
+	private void setSamples() {
+
+		ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples = getSamples();
+		if(controller != null) {
+			if(samples != null) {
+				controller.setUpdate(getSelectionManagerSamples().getPreprocessingData(samples), samples, getSelectionManagerSamples().getPcaSettings(samples));
+				controller.dataPreprocessing();
+			} else {
+				controller.setUpdate(new PcaPreprocessingData(), new PcaSettingsVisualization());
+			}
+		}
 	}
 }

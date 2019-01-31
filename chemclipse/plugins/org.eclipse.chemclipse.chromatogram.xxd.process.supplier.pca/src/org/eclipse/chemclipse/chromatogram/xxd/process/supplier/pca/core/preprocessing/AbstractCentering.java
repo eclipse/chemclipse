@@ -18,10 +18,11 @@ import java.util.stream.DoubleStream;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISampleData;
 
-public abstract class AbstractCentering extends AbstractPreprocessing implements ICentering {
+public abstract class AbstractCentering extends AbstractDataModificator implements ICentering {
 
 	public AbstractCentering() {
 
+		super();
 	}
 
 	protected <S extends ISample> double getCenteringValue(List<S> list, int position, int type) {

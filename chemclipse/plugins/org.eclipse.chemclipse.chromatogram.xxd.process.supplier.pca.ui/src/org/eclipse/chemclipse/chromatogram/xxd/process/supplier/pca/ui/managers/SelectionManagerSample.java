@@ -16,18 +16,6 @@ import org.eclipse.chemclipse.ux.fx.ui.SelectionManagerProto;
 
 public class SelectionManagerSample extends SelectionManagerProto<ISample> {
 
-	private static SelectionManagerSample instance;
-
-	public static SelectionManagerSample getInstance() {
-
-		synchronized(SelectionManagerSample.class) {
-			if(instance == null) {
-				instance = new SelectionManagerSample();
-			}
-		}
-		return instance;
-	}
-
 	public SelectionManagerSample() {
 		super();
 	}

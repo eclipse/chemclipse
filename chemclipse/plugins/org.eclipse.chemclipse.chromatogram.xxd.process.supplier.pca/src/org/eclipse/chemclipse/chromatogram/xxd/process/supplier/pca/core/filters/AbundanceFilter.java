@@ -16,12 +16,11 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.DoubleStream;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class AbundanceFilter extends AbstractPreprocessing implements IFilter {
+public class AbundanceFilter extends AbstractFilter implements IFilter {
 
 	final static public int ALL_VALUE = 0;
 	final static public int ANY_VALUE = 1;
@@ -38,12 +37,11 @@ public class AbundanceFilter extends AbstractPreprocessing implements IFilter {
 
 	public AbundanceFilter() {
 
-		super();
+		super(DATA_TYPE_PROCESSING.RAW_DATA);
 		comparator = gt;
 		filterType = ALL_VALUE;
 		limitType = LIMIT_GREATER_THAN;
 		limitValue = 0;
-		setDataTypeProcessing(DATA_TYPE_PROCESSING.RAW_DATA);
 	}
 
 	@Override

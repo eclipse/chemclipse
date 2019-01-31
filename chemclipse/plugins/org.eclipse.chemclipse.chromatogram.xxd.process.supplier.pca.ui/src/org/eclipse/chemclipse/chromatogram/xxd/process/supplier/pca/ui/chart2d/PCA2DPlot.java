@@ -23,6 +23,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.extensions.axisconverter.PassThroughConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
@@ -30,18 +31,18 @@ import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.scattercharts.ScatterChart;
-import org.eclipse.swtchart.IAxis.Position;
 
 public abstract class PCA2DPlot extends ScatterChart {
 
 	private Color COLOR_BLACK = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-	private DecimalFormat decimalFormat = new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH));
+	private DecimalFormat decimalFormat = new DecimalFormat(("0.00E0"), new DecimalFormatSymbols(Locale.ENGLISH));
 	//
 	private String chartTitle = "";
 	private String xAxisTitle = "PC1";
 	private String yAxisTitle = "PC2";
 
 	public PCA2DPlot(Composite parent, String chartTitle) {
+
 		super(parent, SWT.None);
 		this.chartTitle = chartTitle;
 		initialize();

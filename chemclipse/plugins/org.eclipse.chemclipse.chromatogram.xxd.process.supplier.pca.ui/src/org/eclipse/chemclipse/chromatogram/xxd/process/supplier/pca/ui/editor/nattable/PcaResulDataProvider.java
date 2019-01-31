@@ -45,6 +45,11 @@ public class PcaResulDataProvider implements IDataProvider {
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
 			String peaksNames = tableProvider.getDataTable().getVariables().get(sortRowIndex).getDescription();
 			return peaksNames;
+		} else if(columnIndex == TableProvider.COLUMN_INDEX_CLASSIFICATIONS) {
+			String peaksNames = tableProvider.getDataTable().getVariables().get(sortRowIndex).getClassification();
+			return peaksNames;
+		} else if(columnIndex == TableProvider.COLUMN_INDEX_COLOR) {
+			return "";
 		} else {
 			List<ISampleVisualization> samples = tableProvider.getDataTable().getSamples();
 			ISample sample = samples.get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
@@ -67,7 +72,20 @@ public class PcaResulDataProvider implements IDataProvider {
 
 		int sortRowIndex = sortModel.getOrderRow().get(rowIndex);
 		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
-			tableProvider.getDataTable().getVariables().get(sortRowIndex).setSelected((boolean)newValue);
+			if(isRowEditable(rowIndex)) {
+				tableProvider.getDataTable().getVariables().get(sortRowIndex).setSelected((boolean)newValue);
+			}
 		}
+	}
+
+	public TableProvider getTableProvider() {
+
+		return tableProvider;
+	}
+
+	public boolean isRowEditable(int rowIndex) {
+
+		int sortRowIndex = sortModel.getOrderRow().get(rowIndex);
+		return tableProvider.getDataTable().getModifiableRowList()[sortRowIndex];
 	}
 }

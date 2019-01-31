@@ -15,7 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaVisualization;
 
 import javafx.scene.paint.Color;
 
@@ -117,7 +117,7 @@ public class Chart3DSettings {
 
 	public static void setSettings(Chart3DSettings settings, IPcaResultsVisualization pcaResults) {
 
-		IPcaSettingsVisualization pcaSettings = pcaResults.getPcaSettingsVisualization();
+		IPcaVisualization pcaSettings = pcaResults.getPcaVisualization();
 		int pcX = pcaSettings.getPcX() - 1;
 		int pcY = pcaSettings.getPcY() - 1;
 		int pcZ = pcaSettings.getPcZ() - 1;

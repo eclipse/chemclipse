@@ -11,12 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class TransformationLOG10 extends AbstractPreprocessing implements ITransformation {
+public class TransformationLOG10 extends AbstractDataModificator implements ITransformation {
 
 	@Override
 	public String getDescription() {
@@ -34,7 +36,12 @@ public class TransformationLOG10 extends AbstractPreprocessing implements ITrans
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
 		samples.getSampleList().stream().filter(s -> s.isSelected() || !isOnlySelected()).forEach(s -> {
-			for(ISampleData data : s.getSampleData()) {
+			List<? extends ISampleData> sampleData = s.getSampleData();
+			for(int i = 0; i < sampleData.size(); i++) {
+				if(skipVariable(samples, i)) {
+					continue;
+				}
+				ISampleData data = sampleData.get(i);
 				data.setModifiedData(10.0 * Math.log10(getData(data)));
 			}
 		});

@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AbstractFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AbundanceFilter;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing.DATA_TYPE_PROCESSING;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter.DATA_TYPE_PROCESSING;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
@@ -43,12 +43,13 @@ public class FilterAbundanceWizardPage extends WizardPage implements IFilterWiza
 	private IObservableValue<DATA_TYPE_PROCESSING> dataTypeFiltration;
 
 	protected FilterAbundanceWizardPage(AbundanceFilter abundanceFilter) {
+
 		super("Abundance Filter");
 		setTitle("Abundance Filter");
 		observableLimitType = PojoProperties.value(AbundanceFilter.class, "limitType", Integer.class).observe(abundanceFilter);
 		observeLimitValue = PojoProperties.value(AbundanceFilter.class, "limitValue", Double.class).observe(abundanceFilter);
 		observableFilterType = PojoProperties.value(AbundanceFilter.class, "filterType", Integer.class).observe(abundanceFilter);
-		dataTypeFiltration = PojoProperties.value(AbstractPreprocessing.class, "dataTypeProcessing", DATA_TYPE_PROCESSING.class).observe(abundanceFilter);
+		dataTypeFiltration = PojoProperties.value(AbstractFilter.class, "dataTypeProcessing", DATA_TYPE_PROCESSING.class).observe(abundanceFilter);
 	}
 
 	@Override

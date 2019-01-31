@@ -19,10 +19,9 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.ScorePlot3d;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaVisualization;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -41,20 +40,17 @@ public class ScorePlot3DPart {
 	private IPcaResultsVisualization pcaResults;
 	private ScorePlot3d scorePlot3d;
 	private ListChangeListener<IPcaResult> selectionChangeListener;
-	private Consumer<IPcaSettingsVisualization> settingUpdateListener;
+	private Consumer<IPcaVisualization> settingUpdateListener;
 	private boolean partHasBeenDestroy;
 	@Inject
 	@org.eclipse.e4.core.di.annotations.Optional
 	private SelectionManagerSamples managerSamples;
-	@Inject
-	@org.eclipse.e4.core.di.annotations.Optional
-	private SelectionManagerSample managerSample;
 
 	public ScorePlot3DPart() {
-		settingUpdateListener = new Consumer<IPcaSettingsVisualization>() {
+		settingUpdateListener = new Consumer<IPcaVisualization>() {
 
 			@Override
-			public void accept(IPcaSettingsVisualization t) {
+			public void accept(IPcaVisualization t) {
 
 				Display.getDefault().syncExec(() -> {
 					if(partHasBeenDestroy)
@@ -98,12 +94,12 @@ public class ScorePlot3DPart {
 					pcaResults = newValue;
 					if(oldValue != null) {
 						oldValue.getPcaResultList().removeListener(selectionChangeListener);
-						oldValue.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);
+						oldValue.getPcaVisualization().removeChangeListener(settingUpdateListener);
 					}
 					if(newValue != null) {
 						scorePlot3d.update(newValue);
 						pcaResults.getPcaResultList().addListener(selectionChangeListener);
-						pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
+						pcaResults.getPcaVisualization().addChangeListener(settingUpdateListener);
 					} else {
 						scorePlot3d.removeData();
 					}
@@ -118,16 +114,16 @@ public class ScorePlot3DPart {
 		partHasBeenDestroy = false;
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
-		scorePlot3d = new ScorePlot3d(composite, null, getSelectionManagerSample());
+		scorePlot3d = new ScorePlot3d(composite, null, getSelectionManagerSamples().getSelectionManagerSample());
 		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = getSelectionManagerSamples().getActualSelectedPcaResults();
 		pcaresults.addListener(pcaResultChangeLisnter);
 		this.pcaResults = pcaresults.get();
 		if(this.pcaResults != null) {
 			scorePlot3d.update(pcaresults.getValue());
 			this.pcaResults.getPcaResultList().addListener(selectionChangeListener);
-			this.pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
+			this.pcaResults.getPcaVisualization().addChangeListener(settingUpdateListener);
 		}
-		getSelectionManagerSample().getSelection().addListener(actualSelectionChangeListener);
+		getSelectionManagerSamples().getSelectionManagerSample().getSelection().addListener(actualSelectionChangeListener);
 	}
 
 	@PreDestroy
@@ -135,19 +131,11 @@ public class ScorePlot3DPart {
 
 		partHasBeenDestroy = true;
 		getSelectionManagerSamples().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
-		getSelectionManagerSample().getSelection().removeListener(actualSelectionChangeListener);
+		getSelectionManagerSamples().getSelectionManagerSample().getSelection().removeListener(actualSelectionChangeListener);
 		if(pcaResults != null) {
 			this.pcaResults.getPcaResultList().removeListener(selectionChangeListener);
-			this.pcaResults.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);
+			this.pcaResults.getPcaVisualization().removeChangeListener(settingUpdateListener);
 		}
-	}
-
-	private SelectionManagerSample getSelectionManagerSample() {
-
-		if(managerSample != null) {
-			return managerSample;
-		}
-		return SelectionManagerSample.getInstance();
 	}
 
 	private SelectionManagerSamples getSelectionManagerSamples() {

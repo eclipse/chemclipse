@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AbstractFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AnovaFilter;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing.DATA_TYPE_PROCESSING;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter.DATA_TYPE_PROCESSING;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
@@ -40,11 +40,12 @@ public class FilterAnovaWizardPage extends WizardPage implements IFilterWizardPa
 	private IObservableValue<DATA_TYPE_PROCESSING> dataTypeFiltration;
 
 	protected FilterAnovaWizardPage(AnovaFilter anovaFilter) {
+
 		super("ANOVA Filter");
 		setTitle("One-way Analysis of Variance Filter");
 		setDescription("ANOVA filter works just with selected sampels, which are in group (contains group name)");
 		observeAlfa = PojoProperties.value(AnovaFilter.class, "alpha", Double.class).observe(anovaFilter);
-		dataTypeFiltration = PojoProperties.value(AbstractPreprocessing.class, "dataTypeProcessing", DATA_TYPE_PROCESSING.class).observe(anovaFilter);
+		dataTypeFiltration = PojoProperties.value(AbstractFilter.class, "dataTypeProcessing", DATA_TYPE_PROCESSING.class).observe(anovaFilter);
 	}
 
 	@Override

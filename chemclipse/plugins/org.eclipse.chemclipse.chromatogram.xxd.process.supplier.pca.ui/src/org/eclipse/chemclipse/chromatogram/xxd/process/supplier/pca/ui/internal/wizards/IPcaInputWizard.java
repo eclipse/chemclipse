@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataEx
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
 import org.eclipse.jface.wizard.IWizard;
 
 public interface IPcaInputWizard extends IWizard {
@@ -28,4 +29,6 @@ public interface IPcaInputWizard extends IWizard {
 	PcaFiltrationData getPcaFiltrationData();
 
 	PcaPreprocessingData getPcaPreprocessingData();
+
+	IPcaSettingsVisualization getPcaSettingsVisualization();
 }

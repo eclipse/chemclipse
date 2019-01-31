@@ -14,14 +14,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filter
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.statistics.IRetentionTime;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class RetentionTimeFilter extends AbstractPreprocessing implements IFilter {
+public class RetentionTimeFilter extends AbstractFilter implements IFilter {
 
 	final public static int DESELECT_INTERVAL = 1;
 	final public static int SELECT_INTERVAL = 0;
@@ -31,10 +30,9 @@ public class RetentionTimeFilter extends AbstractPreprocessing implements IFilte
 
 	public RetentionTimeFilter() {
 
-		super();
+		super(DATA_TYPE_PROCESSING.VARIABLES);
 		filtrationType = SELECT_INTERVAL;
 		intervals = new ArrayList<>();
-		setDataTypeProcessing(DATA_TYPE_PROCESSING.VARIABLES);
 	}
 
 	public List<int[]> copyInterval() {

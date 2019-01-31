@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ICentering;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IDataModificator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.INormalization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ITransformation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.MeanValuesReplacer;
 import org.eclipse.chemclipse.model.statistics.ISample;
@@ -25,69 +25,53 @@ import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
 public class PcaPreprocessingData implements IDataModification {
 
 	private ObjectProperty<ICentering> centeringScaling;
 	private ObjectProperty<INormalization> normalization;
-	private boolean onlySelected;
 	private ObjectProperty<ITransformation> transformation;
-	private ObjectProperty<IPreprocessing> replaceEmptyValues;
-	private boolean removeUselessVariables;
-	private Map<Consumer<IPreprocessing>, Boolean> listeners = new ConcurrentHashMap<>();
+	private ObjectProperty<IDataModificator> replaceEmptyValues;
+	private BooleanProperty modifyOnlySelectedVariable;
+	private BooleanProperty onlySelected;
+	private BooleanProperty removeUselessVariables;
+	private Map<Consumer<PcaPreprocessingData>, Boolean> listeners = new ConcurrentHashMap<>();
 
 	public PcaPreprocessingData() {
 
-		onlySelected = true;
-		removeUselessVariables = true;
 		centeringScaling = new SimpleObjectProperty<>();
-		centeringScaling.addListener(new ChangeListener<ICentering>() {
-
-			@Override
-			public void changed(ObservableValue<? extends ICentering> observable, ICentering oldValue, ICentering newValue) {
-
-				for(Consumer<IPreprocessing> listener : listeners.keySet()) {
-					listener.accept(newValue);
-				}
-			}
-		});
+		centeringScaling.addListener((observable, oldValue, newValue) -> objectUpdate());
+		//
 		normalization = new SimpleObjectProperty<>();
-		normalization.addListener(new ChangeListener<INormalization>() {
-
-			@Override
-			public void changed(ObservableValue<? extends INormalization> observable, INormalization oldValue, INormalization newValue) {
-
-				for(Consumer<IPreprocessing> listener : listeners.keySet()) {
-					listener.accept(newValue);
-				}
-			}
-		});
+		normalization.addListener((observable, oldValue, newValue) -> objectUpdate());
+		//
 		transformation = new SimpleObjectProperty<>();
-		transformation.addListener(new ChangeListener<ITransformation>() {
-
-			@Override
-			public void changed(ObservableValue<? extends ITransformation> observable, ITransformation oldValue, ITransformation newValue) {
-
-				for(Consumer<IPreprocessing> listener : listeners.keySet()) {
-					listener.accept(newValue);
-				}
-			}
-		});
+		transformation.addListener((observable, oldValue, newValue) -> objectUpdate());
+		//
 		replaceEmptyValues = new SimpleObjectProperty<>(new MeanValuesReplacer());
-		replaceEmptyValues.addListener(new ChangeListener<IPreprocessing>() {
+		replaceEmptyValues.addListener((observable, oldValue, newValue) -> objectUpdate());
+		//
+		onlySelected = new SimpleBooleanProperty(true);
+		onlySelected.addListener((observable, oldValue, newValue) -> objectUpdate());
+		//
+		modifyOnlySelectedVariable = new SimpleBooleanProperty(false);
+		modifyOnlySelectedVariable.addListener((observable, oldValue, newValue) -> objectUpdate());
+		//
+		removeUselessVariables = new SimpleBooleanProperty(true);
+		removeUselessVariables.addListener((observable, oldValue, newValue) -> objectUpdate());
+	}
 
-			@Override
-			public void changed(ObservableValue<? extends IPreprocessing> observable, IPreprocessing oldValue, IPreprocessing newValue) {
+	private void objectUpdate() {
 
-				for(Consumer<IPreprocessing> listener : listeners.keySet()) {
-					listener.accept(newValue);
-				}
+		synchronized(listeners) {
+			for(Consumer<PcaPreprocessingData> listener : listeners.keySet()) {
+				listener.accept(PcaPreprocessingData.this);
 			}
-		});
+		}
 	}
 
 	@Override
@@ -99,7 +83,7 @@ public class PcaPreprocessingData implements IDataModification {
 	@Override
 	public boolean isOnlySelected() {
 
-		return onlySelected;
+		return onlySelected.get();
 	}
 
 	@Override
@@ -111,36 +95,39 @@ public class PcaPreprocessingData implements IDataModification {
 				d.setModifiedData(data);
 			});
 		}
-		if(normalization.getValue() != null) {
-			normalization.getValue().setOnlySelected(onlySelected);
-			normalization.getValue().process(samples);
+		if(normalization.get() != null) {
+			normalization.get().setOnlySelected(onlySelected.get());
+			normalization.get().setRemoveUselessVariables(removeUselessVariables.get());
+			normalization.get().setModifyOnlySelectedVariable(modifyOnlySelectedVariable.get());
+			normalization.get().process(samples);
 		}
-		replaceEmptyValues.getValue().setOnlySelected(onlySelected);
-		replaceEmptyValues.getValue().process(samples);
-		if(transformation.getValue() != null) {
-			transformation.getValue().setOnlySelected(onlySelected);
-			transformation.getValue().process(samples);
+		replaceEmptyValues.get().setOnlySelected(onlySelected.get());
+		replaceEmptyValues.get().setRemoveUselessVariables(removeUselessVariables.get());
+		replaceEmptyValues.get().setModifyOnlySelectedVariable(modifyOnlySelectedVariable.get());
+		replaceEmptyValues.get().process(samples);
+		if(transformation.get() != null) {
+			transformation.get().setOnlySelected(onlySelected.get());
+			transformation.get().setRemoveUselessVariables(removeUselessVariables.get());
+			transformation.get().setModifyOnlySelectedVariable(modifyOnlySelectedVariable.get());
+			transformation.get().process(samples);
 		}
-		if(centeringScaling.getValue() != null) {
-			centeringScaling.getValue().setOnlySelected(onlySelected);
-			centeringScaling.getValue().process(samples);
+		if(centeringScaling.get() != null) {
+			centeringScaling.get().setOnlySelected(onlySelected.get());
+			centeringScaling.get().setRemoveUselessVariables(removeUselessVariables.get());
+			centeringScaling.get().setModifyOnlySelectedVariable(modifyOnlySelectedVariable.get());
+			centeringScaling.get().process(samples);
 		}
 	}
 
 	@Override
 	public void setOnlySelected(boolean onlySelected) {
 
-		this.onlySelected = onlySelected;
+		this.onlySelected.set(onlySelected);
 	}
 
-	public boolean isRemoveUselessVariables() {
+	public BooleanProperty onlySelectedPropery() {
 
-		return removeUselessVariables;
-	}
-
-	public void setRemoveUselessVariables(boolean removeUselessVariables) {
-
-		this.removeUselessVariables = removeUselessVariables;
+		return onlySelected;
 	}
 
 	public ObjectProperty<ICentering> centeringScalingProperty() {
@@ -188,28 +175,53 @@ public class PcaPreprocessingData implements IDataModification {
 		this.transformationProperty().set(transformation);
 	}
 
-	public ObjectProperty<IPreprocessing> replaceEmptyValuesProperty() {
+	public ObjectProperty<IDataModificator> replaceEmptyValuesProperty() {
 
 		return this.replaceEmptyValues;
 	}
 
-	public IPreprocessing getReplaceEmptyValues() {
+	public IDataModificator getReplaceEmptyValues() {
 
 		return this.replaceEmptyValuesProperty().get();
 	}
 
-	public void setReplaceEmptyValues(final IPreprocessing replaceEmptyValues) {
+	public void setReplaceEmptyValues(final IDataModificator replaceEmptyValues) {
 
 		this.replaceEmptyValuesProperty().set(replaceEmptyValues);
 	}
 
-	public void addListener(Consumer<IPreprocessing> listener) {
+	public void addListener(Consumer<PcaPreprocessingData> listener) {
 
 		listeners.put(listener, true);
 	}
 
-	public void removeListener(Consumer<IPreprocessing> listener) {
+	public void removeListener(Consumer<PcaPreprocessingData> listener) {
 
 		listeners.remove(listener);
+	}
+
+	public boolean isModifyOnlySelectedVariable() {
+
+		return modifyOnlySelectedVariable.get();
+	}
+
+	public void setModifyOnlySelectedVariable(boolean modifyOnlySelectedVariable) {
+
+		this.modifyOnlySelectedVariable.set(modifyOnlySelectedVariable);
+	}
+
+	public BooleanProperty modifyOnlySelectedVariable() {
+
+		return modifyOnlySelectedVariable;
+	}
+
+	public void setRemoveUselessVariables(boolean removeUselessVariables) {
+
+		this.removeUselessVariables.set(removeUselessVariables);
+	}
+
+	public BooleanProperty removeUselessVariablesProperty() {
+
+		return removeUselessVariables;
 	}
 }

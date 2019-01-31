@@ -25,14 +25,14 @@ public class PcaResultsVisualization<R extends IPcaResult, V extends IVariableVi
 
 	private IPcaResults<IPcaResult, IVariable> delegator;
 	private ObservableList<IPcaResultVisualization> pcaResultsVisualization;
-	private IPcaSettingsVisualization pcaSettingsVisualization;
+	private IPcaVisualization pcaVisualization;
 	private ObservableList<IVariableVisualization> variablesExtractedVisalization;
 
-	public PcaResultsVisualization(IPcaResults<IPcaResult, IVariable> modelData, IPcaSettingsVisualization pcaSettingsVisualization) {
+	public PcaResultsVisualization(IPcaResults<IPcaResult, IVariable> modelData, IPcaVisualization pcaVisualization) {
 
 		super();
 		this.delegator = modelData;
-		this.pcaSettingsVisualization = pcaSettingsVisualization;
+		this.pcaVisualization = pcaVisualization;
 		pcaResultsVisualization = FXCollections.observableArrayList(IPcaResultVisualization.extractor());
 		variablesExtractedVisalization = FXCollections.observableArrayList(IVariableVisualization.extractor());
 		if(!(modelData == null)) {
@@ -72,9 +72,9 @@ public class PcaResultsVisualization<R extends IPcaResult, V extends IVariableVi
 	}
 
 	@Override
-	public IPcaSettingsVisualization getPcaSettingsVisualization() {
+	public IPcaVisualization getPcaVisualization() {
 
-		return pcaSettingsVisualization;
+		return pcaVisualization;
 	}
 
 	@Override

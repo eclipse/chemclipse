@@ -12,11 +12,14 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
@@ -25,6 +28,8 @@ public class TableData {
 
 	private List<ISampleVisualization> samples = new ArrayList<>();
 	private List<IVariableVisualization> variables = new ArrayList<>();
+	private Set<Integer> colors = new HashSet<>();
+	private boolean[] modifiableRowList;
 
 	public TableData() {
 
@@ -63,13 +68,14 @@ public class TableData {
 		return variables;
 	}
 
-	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> isamples) {
+	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> isamples, IPcaSettings pcaSettings) {
 
 		/*
 		 * remove old data
 		 */
 		variables.clear();
 		samples.clear();
+		colors.clear();
 		/*
 		 * copy data and insert object ISample and IGroup and sort this object by group name
 		 */
@@ -81,8 +87,24 @@ public class TableData {
 		 * set retention time
 		 */
 		variables.addAll(isamples.getVariables());
-		/*
-		 * Set peaks names
-		 */
+		variables.forEach(v -> colors.add(v.getColor()));
+		modifiableRowList = new boolean[variables.size()];
+		for(int i = 0; i < modifiableRowList.length; i++) {
+			if(pcaSettings.isRemoveUselessVariables()) {
+				modifiableRowList[i] = isamples.selectVariable(i);
+			} else {
+				modifiableRowList[i] = true;
+			}
+		}
+	}
+
+	public Set<Integer> getColores() {
+
+		return colors;
+	}
+
+	public boolean[] getModifiableRowList() {
+
+		return modifiableRowList;
 	}
 }

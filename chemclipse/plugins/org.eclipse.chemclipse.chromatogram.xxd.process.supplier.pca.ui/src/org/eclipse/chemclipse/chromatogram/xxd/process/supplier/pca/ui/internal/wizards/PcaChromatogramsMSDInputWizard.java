@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtr
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
 import org.eclipse.jface.wizard.Wizard;
 
 public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputWizard {
@@ -30,6 +31,7 @@ public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputW
 	private PcaExtractionScans pcaExtractionData;
 
 	public PcaChromatogramsMSDInputWizard() {
+
 		super();
 		mainPropertiesPage = new MainPropertiesScansInputWizardPage("MainProperites");
 		dataInputFromScanFilesPage = new ChromatogramMSDFilesPageWizard("DataInputFiles");
@@ -82,5 +84,11 @@ public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputW
 		int maximalNumberScans = mainPropertiesPage.getMaximalNumberScans();
 		pcaExtractionData = new PcaExtractionScans(retentionTimeWindow, maximalNumberScans, dataInputs, extractionType, useDefoultProperties);
 		return true;
+	}
+
+	@Override
+	public IPcaSettingsVisualization getPcaSettingsVisualization() {
+
+		return preprocessingDataWizardPage.getPcaSettings();
 	}
 }

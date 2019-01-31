@@ -57,6 +57,9 @@ public class ScalingRange extends AbstaractScaling {
 		List<V> variables = samples.getVariables();
 		List<S> samplesList = samples.getSampleList();
 		for(int i = 0; i < variables.size(); i++) {
+			if(skipVariable(samples, i)) {
+				continue;
+			}
 			final double mean = getCenteringValue(samplesList, i, centeringType);
 			final double max = getMax(samplesList, i);
 			final double min = getMin(samplesList, i);

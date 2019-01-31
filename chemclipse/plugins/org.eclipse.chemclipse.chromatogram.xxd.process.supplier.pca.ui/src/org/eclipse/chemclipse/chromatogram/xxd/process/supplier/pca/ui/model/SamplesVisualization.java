@@ -14,13 +14,15 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataPreprocessing;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDefaultPcaSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariablesFiltration;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class SamplesVisualization extends AbstractSamplesVisualization<RetentionTimeVisualization, SampleVisualization> implements IDataPreprocessing, IVariablesFiltration {
+public class SamplesVisualization extends AbstractSamplesVisualization<RetentionTimeVisualization, SampleVisualization> implements IDataPreprocessing, IVariablesFiltration, IDefaultPcaSettings {
 
 	private ObservableList<RetentionTimeVisualization> retentionsTimeVisualization;
 	private Samples samples;
@@ -58,5 +60,11 @@ public class SamplesVisualization extends AbstractSamplesVisualization<Retention
 	public ObservableList<RetentionTimeVisualization> getVariables() {
 
 		return retentionsTimeVisualization;
+	}
+
+	@Override
+	public IPcaSettings getDefaultPcaSettings() {
+
+		return samples.getDefaultPcaSettings();
 	}
 }

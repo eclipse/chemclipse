@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaInputRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IPcaInputWizard;
@@ -277,7 +278,7 @@ public class PCAEditorController {
 							final int index = row.getIndex();
 							if(index < 0 || index >= cTableSamples.getItems().size()) {
 								cTableSamples.getSelectionModel().clearSelection();
-								SelectionManagerSample.getInstance().getSelection().clear();
+								getSelectionManagerSamples().getSelectionManagerSample().getSelection().clear();
 								event.consume();
 							}
 						}
@@ -294,8 +295,9 @@ public class PCAEditorController {
 				List<? extends ISampleVisualization> samples = c.getList();
 				if(!samples.isEmpty()) {
 					ISampleVisualization s = samples.get(0);
-					if(!SelectionManagerSample.getInstance().getSelection().contains(s)) {
-						SelectionManagerSample.getInstance().getSelection().setAll(s);
+					SelectionManagerSample managerSample = getSelectionManagerSamples().getSelectionManagerSample();
+					if(!managerSample.getSelection().contains(s)) {
+						managerSample.getSelection().setAll(s);
 					}
 				}
 			}
@@ -320,7 +322,9 @@ public class PCAEditorController {
 			 * Calculate the results and show the score plot page.
 			 */
 			monitor.run(true, true, runnable);
-			setSamples(new SamplesVisualization(runnable.getSamples()));
+			Samples samples = runnable.getSamples();
+			samples.setDefaultPcaSettings(wizard.getPcaSettingsVisualization());
+			setSamples(new SamplesVisualization(samples));
 		}
 		return status;
 	}
@@ -368,8 +372,8 @@ public class PCAEditorController {
 			inputSamples.accept(samples.get());
 			cTableSamples.setItems(FXCollections.observableArrayList(samples.get().getSampleList()));
 			Set<String> groupNames = samples.get().getSampleList().stream().map(s -> s.getGroupName()).collect(Collectors.toSet());
-			Map<String, Integer> colors = Coloring.getColorsForGroup(groupNames);
-			samples.get().getSampleList().forEach(s -> s.setColor(colors.get(s.getGroupName())));
+			Map<String, Integer> colorsGroupName = Coloring.getColorsForGroup(groupNames);
+			samples.get().getSampleList().forEach(s -> s.setColor(colorsGroupName.get(s.getGroupName())));
 		}
 	}
 

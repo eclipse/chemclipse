@@ -16,11 +16,10 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.PeakListNatTable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
-import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.ISamples;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -28,94 +27,77 @@ import org.eclipse.swt.widgets.Display;
 
 import javafx.collections.ListChangeListener;
 
-public class DataTablePart {
+public class DataTablePart extends GeneralPcaPart {
 
-	private ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> actualSamples;
 	private Runnable changeData;
 	private Runnable changeSelectedSample;
 	private PeakListNatTable peakListIntensityTable;
-	private ListChangeListener<ISample> sampleChangeListener;
-	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samplesChangeListener;
-	private ListChangeListener<IVariableVisualization> variableChangeListener;
+	private ListChangeListener<IVariable> actualVariableChangeListener = e -> {
+		if(!e.getList().isEmpty()) {
+			peakListIntensityTable.selectRow(e.getList().get(0));
+		}
+	};
+	private Composite composite;
+
 	@Inject
-	@org.eclipse.e4.core.di.annotations.Optional
-	private SelectionManagerSamples managerSamples;
-
 	public DataTablePart() {
-		changeData = () -> peakListIntensityTable.refreshTable();
-		changeSelectedSample = () -> peakListIntensityTable.update(actualSamples);
-		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>>() {
-
-			@Override
-			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> c) {
-
-				if(actualSamples != null) {
-					actualSamples.getSampleList().removeListener(sampleChangeListener);
-					actualSamples.getVariables().removeListener(variableChangeListener);
-				}
-				if(!c.getList().isEmpty()) {
-					ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples = c.getList().get(0);
-					actualSamples = samples;
-					peakListIntensityTable.update(samples);
-					actualSamples.getVariables().addListener(variableChangeListener);
-					samples.getSampleList().addListener(sampleChangeListener);
-				} else {
-					peakListIntensityTable.clearTable();
-				}
-			}
-		};
-		sampleChangeListener = new ListChangeListener<ISample>() {
-
-			@Override
-			public void onChanged(ListChangeListener.Change<? extends ISample> c) {
-
-				if(!c.getList().isEmpty()) {
-					Display.getDefault().timerExec(100, changeSelectedSample);
-				}
-			}
-		};
-		variableChangeListener = new ListChangeListener<IVariableVisualization>() {
-
-			@Override
-			public void onChanged(ListChangeListener.Change<? extends IVariableVisualization> c) {
-
-				Display.getDefault().timerExec(100, changeData);
-			}
-		};
+		super();
 	}
 
 	@PostConstruct
+	public void postContruct(Composite composite) {
+
+		this.composite = composite;
+		changeData = () -> peakListIntensityTable.refreshTable();
+		changeSelectedSample = () -> {
+			ISamples<? extends IVariableVisualization, ? extends ISampleVisualization> samples = getSamples();
+			if(samples != null) {
+				peakListIntensityTable.update(getSamples(), getPcaSettingsVisualization());
+			} else {
+				peakListIntensityTable.clearTable();
+			}
+		};
+		getSelectionManagerSamples().getSelectionManagerVariable().getSelection().addListener(actualVariableChangeListener);
+		createComposite(composite);
+		inicializeHandler();
+	}
+
 	public void createComposite(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new FillLayout());
-		peakListIntensityTable = new PeakListNatTable(composite, null);
-		getSelectionManagerSamples().getSelection().addListener(samplesChangeListener);
-		if(!getSelectionManagerSamples().getSelection().isEmpty()) {
-			actualSamples = getSelectionManagerSamples().getSelection().get(0);
-			actualSamples.getSampleList().addListener(sampleChangeListener);
-			actualSamples.getVariables().addListener(variableChangeListener);
-			peakListIntensityTable.update(actualSamples);
-		}
-	}
-
-	private SelectionManagerSamples getSelectionManagerSamples() {
-
-		if(managerSamples != null) {
-			return managerSamples;
-		}
-		return SelectionManagerSamples.getInstance();
+		peakListIntensityTable = new PeakListNatTable(composite, null, getSelectionManagerSamples());
 	}
 
 	@PreDestroy
-	public void preDestroy() {
+	private void preDestroy() {
 
-		getSelectionManagerSamples().getSelection().removeListener(samplesChangeListener);
-		if(actualSamples != null) {
-			actualSamples.getSampleList().removeListener(sampleChangeListener);
-			actualSamples.getVariables().removeListener(variableChangeListener);
-		}
+		getSelectionManagerSamples().getSelectionManagerVariable().getSelection().removeListener(actualVariableChangeListener);
 		Display.getDefault().timerExec(-1, changeSelectedSample);
 		Display.getDefault().timerExec(-1, changeData);
+	}
+
+	@Override
+	protected void variablesHasBeenUpdated() {
+
+		composite.getDisplay().timerExec(100, changeData);
+	}
+
+	@Override
+	protected void samplesHasBeenUpdated() {
+
+		composite.getDisplay().timerExec(100, changeSelectedSample);
+	}
+
+	@Override
+	protected void samplesHasBeenSet() {
+
+		composite.getDisplay().timerExec(100, changeSelectedSample);
+	}
+
+	@Override
+	protected void settingsHasBeenChanged() {
+
+		composite.getDisplay().timerExec(100, changeData);
 	}
 }

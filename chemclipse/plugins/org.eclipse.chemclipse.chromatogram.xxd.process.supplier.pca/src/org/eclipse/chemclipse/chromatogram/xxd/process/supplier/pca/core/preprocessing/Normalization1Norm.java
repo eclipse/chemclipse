@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
+import java.util.List;
+import java.util.stream.IntStream;
+
 import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class Normalization1Norm extends AbstractPreprocessing implements INormalization {
+public class Normalization1Norm extends AbstractDataModificator implements INormalization {
 
 	public Normalization1Norm() {
 
@@ -39,8 +43,12 @@ public class Normalization1Norm extends AbstractPreprocessing implements INormal
 
 		for(ISample sample : samples.getSampleList()) {
 			if(sample.isSelected() || !isOnlySelected()) {
-				double sum = sample.getSampleData().stream().filter(d -> !d.isEmpty()).mapToDouble(d -> Math.abs(getData(d))).sum();
-				sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> d.setModifiedData(getData(d) / sum));
+				List<? extends ISampleData> sampleData = sample.getSampleData();
+				System.out.println(sample.getName());
+				double sum = IntStream.range(0, sampleData.size()).filter(i -> !sampleData.get(i).isEmpty()).filter(i -> !skipVariable(samples, i))//
+						.mapToDouble(i -> Math.abs(getData(sampleData.get(i)))).sum();
+				IntStream.range(0, sampleData.size()).filter(i -> !sampleData.get(i).isEmpty()).filter(i -> !skipVariable(samples, i))//
+						.forEach(i -> sampleData.get(i).setModifiedData(getData(sampleData.get(i)) / sum));
 			}
 		}
 	}

@@ -28,13 +28,13 @@ public class SortModel implements ISortModel {
 	private SortDirectionEnum sortDirection;
 	private int sortedColumn;
 	private List<Integer> sortedRow;
-	private TableProvider tableProvider;
+	private TableData tableData;
 
-	public SortModel(TableProvider tableProvider) {
+	public SortModel(TableData tableProvider) {
 
 		this.sortedRow = new ArrayList<>();
 		sortDirection = SortDirectionEnum.NONE;
-		this.tableProvider = tableProvider;
+		this.tableData = tableProvider;
 	}
 
 	@Override
@@ -116,13 +116,25 @@ public class SortModel implements ISortModel {
 			}
 			final int setDirection = direction;
 			if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
-				List<? extends IVariable> variables = tableProvider.getDataTable().getVariables();
-				sortedRow.sort((i, j) -> setDirection * Boolean.compare(variables.get(i).isSelected(), variables.get(j).isSelected()));
+				List<? extends IVariable> variables = tableData.getVariables();
+				boolean[] modifiableRowList = tableData.getModifiableRowList();
+				sortedRow.sort((i, j) -> {
+					if(!modifiableRowList[i] && !modifiableRowList[j]) {
+						return 0;
+					}
+					if(!modifiableRowList[j]) {
+						return 1 * setDirection;
+					}
+					if(!modifiableRowList[i]) {
+						return -1 * setDirection;
+					}
+					return setDirection * Boolean.compare(variables.get(i).isSelected(), variables.get(j).isSelected());
+				});
 			} else if(columnIndex == TableProvider.COLUMN_INDEX_VARIABLES) {
 				/*
 				 * sort by retention time
 				 */
-				List<IVariableVisualization> variableVisualizations = tableProvider.getDataTable().getVariables();
+				List<IVariableVisualization> variableVisualizations = tableData.getVariables();
 				sortedRow.sort((i, j) -> {
 					return setDirection * variableVisualizations.get(i).compareTo(variableVisualizations.get(j));
 				});
@@ -131,15 +143,29 @@ public class SortModel implements ISortModel {
 				 * sort by variable description
 				 */
 				Comparator<String> nullSafeStringComparator = Comparator.nullsFirst(String::compareTo);
-				List<IVariableVisualization> variables = tableProvider.getDataTable().getVariables();
+				List<IVariableVisualization> variables = tableData.getVariables();
 				sortedRow.sort((i, j) -> {
 					return setDirection * nullSafeStringComparator.compare(variables.get(i).getDescription(), variables.get(j).getDescription());
+				});
+			} else if(columnIndex == TableProvider.COLUMN_INDEX_CLASSIFICATIONS) {
+				/*
+				 * sort by variable description
+				 */
+				Comparator<String> nullSafeStringComparator = Comparator.nullsFirst(String::compareTo);
+				List<IVariableVisualization> variables = tableData.getVariables();
+				sortedRow.sort((i, j) -> {
+					return setDirection * nullSafeStringComparator.compare(variables.get(i).getClassification(), variables.get(j).getClassification());
+				});
+			} else if(columnIndex == TableProvider.COLUMN_INDEX_COLOR) {
+				sortedRow.sort((i, j) -> {
+					List<IVariableVisualization> variables = tableData.getVariables();
+					return setDirection * Integer.compare(variables.get(i).getColor(), variables.get(i).getColor());
 				});
 			} else {
 				/*
 				 * sort by abundance
 				 */
-				ISample sample = tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
+				ISample sample = tableData.getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 				List<? extends ISampleData> sampleData = sample.getSampleData();
 				sortedRow.sort((i, j) -> {
 					ISampleData sampleDataA = sampleData.get(i);
@@ -158,7 +184,7 @@ public class SortModel implements ISortModel {
 	 */
 	public void update() {
 
-		int numberOfRow = tableProvider.getDataTable().getVariables().size();
+		int numberOfRow = tableData.getVariables().size();
 		sortedRow.clear();
 		for(int i = 0; i < numberOfRow; i++) {
 			sortedRow.add(i);

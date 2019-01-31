@@ -139,13 +139,13 @@ public class ScorePlot extends PCA2DPlot {
 	public void update(IPcaResultsVisualization pcaResults) {
 
 		deleteSeries();
-		addSeriesData(SeriesConverter.sampleToSeries(pcaResults, pcaResults.getPcaSettingsVisualization().getPcX(), pcaResults.getPcaSettingsVisualization().getPcY(), extractedResults));
+		addSeriesData(SeriesConverter.sampleToSeries(pcaResults, pcaResults.getPcaVisualization().getPcX(), pcaResults.getPcaVisualization().getPcY(), extractedResults));
 		extractedResults.entrySet().forEach(e -> {
 			if(selectionManagerSample.getSelection().contains(e.getValue().getSample())) {
 				getBaseChart().selectSeries(e.getKey());
 			}
 		});
-		update(pcaResults.getPcaSettingsVisualization().getPcX(), pcaResults.getPcaSettingsVisualization().getPcY());
+		update(pcaResults.getPcaVisualization().getPcX(), pcaResults.getPcaVisualization().getPcY());
 		redraw();
 	}
 }

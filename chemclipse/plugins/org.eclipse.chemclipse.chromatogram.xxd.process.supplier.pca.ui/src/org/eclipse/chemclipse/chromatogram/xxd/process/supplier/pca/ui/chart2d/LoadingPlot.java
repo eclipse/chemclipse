@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.SeriesConverter;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -42,7 +43,45 @@ import org.eclipse.swtchart.extensions.events.UndoRedoEvent;
 import org.eclipse.swtchart.extensions.events.ZoomEvent;
 import org.eclipse.swtchart.extensions.scattercharts.IScatterSeriesData;
 
+import javafx.collections.ObservableList;
+
 public class LoadingPlot extends PCA2DPlot {
+
+	private class SelectActualSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getButton() {
+
+			return BaseChart.BUTTON_LEFT;
+		}
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.NONE;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			String selectedSeriesId = baseChart.getSelectedseriesId(event);
+			if(!selectedSeriesId.equals("")) {
+				IVariable variable = extractedValues.get(selectedSeriesId);
+				ObservableList<IVariable> selection = selectionManagerVariable.getSelection();
+				if(!selection.contains(variable)) {
+					selection.setAll(variable);
+				} else {
+					selection.remove(variable);
+				}
+			}
+		}
+	}
 
 	private class SelectSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
@@ -80,13 +119,16 @@ public class LoadingPlot extends PCA2DPlot {
 	final private Set<String> actualSelection = new HashSet<>();
 	final private Map<String, IVariable> extractedValues = new HashMap<>();
 	private int labelsType = LABELS_RETENTION_TIME_MINUTES;
+	private SelectionManagerVariable selectionManagerVariable;
 
-	public LoadingPlot(Composite parent) {
+	public LoadingPlot(Composite parent, SelectionManagerVariable selectionManagerVariable) {
 
 		super(parent, "Loading Plot");
+		this.selectionManagerVariable = selectionManagerVariable;
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.clearHandledEventProcessors();
 		chartSettings.addHandledEventProcessor(new SelectSeriesEvent());
+		chartSettings.addHandledEventProcessor(new SelectActualSeriesEvent());
 		chartSettings.addHandledEventProcessor(new ResetSeriesEvent());
 		chartSettings.addHandledEventProcessor(new SelectDataPointEvent());
 		chartSettings.addHandledEventProcessor(new ZoomEvent());
@@ -131,8 +173,8 @@ public class LoadingPlot extends PCA2DPlot {
 
 	public void update(IPcaResultsVisualization pcaResults) {
 
-		int pcX = pcaResults.getPcaSettingsVisualization().getPcX();
-		int pcY = pcaResults.getPcaSettingsVisualization().getPcY();
+		int pcX = pcaResults.getPcaVisualization().getPcX();
+		int pcY = pcaResults.getPcaVisualization().getPcY();
 		List<IScatterSeriesData> series;
 		if(labelsType == LABELS_RETENTION_TIME_MINUTES) {
 			series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY, extractedValues);
@@ -142,6 +184,11 @@ public class LoadingPlot extends PCA2DPlot {
 		deleteSeries();
 		addSeriesData(series);
 		update(pcX, pcY);
+		extractedValues.entrySet().forEach(e -> {
+			if(selectionManagerVariable.getSelection().contains(e.getValue())) {
+				getBaseChart().selectSeries(e.getKey());
+			}
+		});
 		updateSelection();
 	}
 

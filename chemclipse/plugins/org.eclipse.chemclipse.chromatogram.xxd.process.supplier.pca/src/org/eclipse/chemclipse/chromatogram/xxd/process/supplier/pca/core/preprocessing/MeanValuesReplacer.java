@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class MeanValuesReplacer extends AbstractPreprocessing {
+public class MeanValuesReplacer extends AbstractDataModificator {
 
 	@Override
 	public String getDescription() {
@@ -38,6 +38,9 @@ public class MeanValuesReplacer extends AbstractPreprocessing {
 		List<V> variables = samples.getVariables();
 		List<S> sampleList = samples.getSampleList();
 		for(int i = 0; i < variables.size(); i++) {
+			if(skipVariable(samples, i)) {
+				continue;
+			}
 			double sum = 0;
 			int count = 0;
 			for(S sample : sampleList) {

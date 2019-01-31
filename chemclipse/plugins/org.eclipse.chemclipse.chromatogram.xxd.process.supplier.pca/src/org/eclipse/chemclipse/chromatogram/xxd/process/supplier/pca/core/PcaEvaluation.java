@@ -49,7 +49,7 @@ public class PcaEvaluation {
 		 */
 		for(int i = 0; i < isSelectedVariable.length; i++) {
 			isSelectedVariable[i] = isSelectedVariable[i] & retentionTimes.get(i).isSelected();
-			if(settings.IsRemoveUselessVariables()) {
+			if(settings.isRemoveUselessVariables()) {
 				int numEmptyValues = 0;
 				for(ISample sample : samples.getSampleList()) {
 					if(!sample.getSampleData().get(i).isEmpty()) {
@@ -100,7 +100,7 @@ public class PcaEvaluation {
 		Arrays.fill(isSelectedVariable, true);
 		for(int i = 0; i < isSelectedVariable.length; i++) {
 			isSelectedVariable[i] = isSelectedVariable[i] & retentionTimes.get(i).isSelected();
-			if(settings.IsRemoveUselessVariables()) {
+			if(settings.isRemoveUselessVariables()) {
 				int numEmptyValues = 0;
 				for(ISample sample : samples.getSampleList()) {
 					if(sample.isSelected()) {

@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
- * Jan Holy - initial API and implementation
+ * jan - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
@@ -15,105 +15,120 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
+
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 
 public class PcaSettingsVisualization implements IPcaSettingsVisualization {
 
+	private StringProperty pcaAlgorithm = new SimpleStringProperty();
+	private IntegerProperty numberOfPrincipalComponents = new SimpleIntegerProperty();
+	private BooleanProperty removeUselessVariables = new SimpleBooleanProperty();
 	private Map<Consumer<IPcaSettingsVisualization>, Boolean> listeners = new ConcurrentHashMap<>();
-	private IntegerProperty pcX;
-	private IntegerProperty pcY;
-	private IntegerProperty pcZ;
 
 	public PcaSettingsVisualization() {
-		this.pcX = new SimpleIntegerProperty(1);
-		this.pcY = new SimpleIntegerProperty(2);
-		this.pcZ = new SimpleIntegerProperty(3);
-		this.pcX.addListener((ChangeListener<Number>)(observable, oldValue, newValue) -> updateLister());
-		this.pcY.addListener((ChangeListener<Number>)(observable, oldValue, newValue) -> updateLister());
-		this.pcZ.addListener((ChangeListener<Number>)(observable, oldValue, newValue) -> updateLister());
+
+		this.pcaAlgorithm.addListener((ChangeListener<String>)(observable, oldValue, newValue) -> updateLister());
+		this.numberOfPrincipalComponents.addListener((ChangeListener<Number>)(observable, oldValue, newValue) -> updateLister());
+		this.removeUselessVariables.addListener((ChangeListener<Boolean>)(observable, oldValue, newValue) -> updateLister());
 	}
 
-	public PcaSettingsVisualization(int pcX, int pcY, int pcZ) {
+	public PcaSettingsVisualization(IPcaSettings pcaSettings) {
+
 		this();
-		setPcX(pcX);
-		setPcY(pcY);
-		setPcZ(pcZ);
+		this.pcaAlgorithm.set(pcaSettings.getPcaAlgorithm());
+		this.numberOfPrincipalComponents.set(pcaSettings.getNumberOfPrincipalComponents());
+		this.removeUselessVariables.set(pcaSettings.isRemoveUselessVariables());
 	}
 
 	@Override
-	public void addChangeListener(Consumer<IPcaSettingsVisualization> listener) {
+	public void setNumberOfPrincipalComponents(int numberOfPrincipalComponents) {
 
-		listeners.put(listener, true);
+		this.numberOfPrincipalComponents.set(numberOfPrincipalComponents);
 	}
 
 	@Override
-	public int getPcX() {
+	public int getNumberOfPrincipalComponents() {
 
-		return this.pcX.get();
+		return numberOfPrincipalComponents.get();
 	}
 
 	@Override
-	public int getPcY() {
+	public String getPcaAlgorithm() {
 
-		return this.pcY.get();
+		return pcaAlgorithm.get();
 	}
 
 	@Override
-	public int getPcZ() {
+	public void setPcaAlgorithm(String pcaAlgo) {
 
-		return this.pcZ.get();
+		pcaAlgorithm.set(pcaAlgo);
 	}
 
 	@Override
-	public IntegerProperty pcXProperty() {
+	public boolean isRemoveUselessVariables() {
 
-		return pcX;
+		return removeUselessVariables.get();
 	}
 
 	@Override
-	public IntegerProperty pcYProperty() {
+	public void setRemoveUselessVariables(boolean b) {
 
-		return pcY;
+		removeUselessVariables.set(b);
 	}
 
 	@Override
-	public IntegerProperty pcZProperty() {
+	public IPcaSettingsVisualization makeDeepCopy() {
 
-		return pcZ;
+		PcaSettingsVisualization pcaSettingsVisualization = new PcaSettingsVisualization();
+		pcaSettingsVisualization.setNumberOfPrincipalComponents(numberOfPrincipalComponents.get());
+		pcaSettingsVisualization.setPcaAlgorithm(pcaAlgorithm.get());
+		pcaSettingsVisualization.setRemoveUselessVariables(removeUselessVariables.get());
+		return pcaSettingsVisualization;
 	}
 
 	@Override
-	public void removeChangeListener(Consumer<IPcaSettingsVisualization> listener) {
+	public void removeListener(Consumer<IPcaSettingsVisualization> changeSettingsListener) {
 
-		listeners.remove(listener);
+		listeners.remove(changeSettingsListener);
 	}
 
 	@Override
-	public void setPcX(int pcX) {
+	public void addListener(Consumer<IPcaSettingsVisualization> changeSettingsListener) {
 
-		this.pcX.set(pcX);
+		listeners.put(changeSettingsListener, true);
 	}
 
 	@Override
-	public void setPcY(int pcY) {
+	public IntegerProperty numberOfPrincipalComponentsProperty() {
 
-		this.pcY.set(pcY);
+		return numberOfPrincipalComponents;
 	}
 
 	@Override
-	public void setPcZ(int pcZ) {
+	public StringProperty pcaAlgorithmProperty() {
 
-		this.pcZ.set(pcZ);
+		return pcaAlgorithm;
+	}
+
+	@Override
+	public BooleanProperty removeUselessVariablesProperty() {
+
+		return removeUselessVariables;
 	}
 
 	protected void updateLister() {
 
 		synchronized(listeners) {
-			listeners.forEach((e, b) -> {
-				e.accept(this);
-			});
+			for(Consumer<IPcaSettingsVisualization> listener : listeners.keySet()) {
+				listener.accept(this);
+			}
 		}
 	}
 }

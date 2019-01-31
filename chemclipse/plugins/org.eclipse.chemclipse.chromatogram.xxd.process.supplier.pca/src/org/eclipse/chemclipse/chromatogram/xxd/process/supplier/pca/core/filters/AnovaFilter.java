@@ -20,12 +20,11 @@ import java.util.Set;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.apache.commons.math3.stat.inference.OneWayAnova;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractPreprocessing;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class AnovaFilter extends AbstractPreprocessing implements IFilter {
+public class AnovaFilter extends AbstractFilter implements IFilter {
 
 	private double alpha;
 	final private String name = "Anova filter";
@@ -33,9 +32,8 @@ public class AnovaFilter extends AbstractPreprocessing implements IFilter {
 
 	public AnovaFilter() {
 
-		super();
+		super(DATA_TYPE_PROCESSING.RAW_DATA);
 		alpha = 0.05;
-		setDataTypeProcessing(DATA_TYPE_PROCESSING.RAW_DATA);
 	}
 
 	@Override

@@ -37,6 +37,9 @@ public class CenteringMedian extends AbstractCentering {
 
 		List<V> variables = samples.getVariables();
 		for(int i = 0; i < variables.size(); i++) {
+			if(skipVariable(samples, i)) {
+				continue;
+			}
 			final double value = getCenteringValue(samples.getSampleList(), i, CENTERING_MEADIAN);
 			final int j = i;
 			samples.getSampleList().stream().forEach(s -> {

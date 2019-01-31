@@ -24,9 +24,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SeriesData;
@@ -42,6 +40,7 @@ public class SeriesConverter {
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
 		List<IVariableVisualization> variables = pcaResults.getExtractedVariables();
 		for(int i = 0; i < variables.size(); i++) {
+			IVariableVisualization variable = variables.get(i);
 			String name = variables.get(i).getValue();
 			extractedValues.put(name, variables.get(i));
 			double x = 0;
@@ -54,15 +53,17 @@ public class SeriesConverter {
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
-			if(variables.get(i).isSelected()) {
-				scatterSeriesSettings.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
+			Color color = PcaColorGroup.getSampleColorSWT(variable);
+			if(variable.isSelected()) {
+				scatterSeriesSettings.setSymbolColor(color);
 			} else {
-				scatterSeriesSettings.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+				scatterSeriesSettings.setSymbolColor(PcaColorGroup.getUnselectedColor(color));
 			}
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_TYPE)));
 			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_SIZE));
 			IScatterSeriesSettings scatterSeriesSettingsHighlight = (IScatterSeriesSettings)scatterSeriesSettings.getSeriesSettingsHighlight();
-			scatterSeriesSettingsHighlight.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
+			scatterSeriesSettingsHighlight.setSymbolColor(PcaColorGroup.getActualSelectedColor(color));
+			scatterSeriesSettingsHighlight.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_SIZE) + 2);
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
 		return scatterSeriesDataList;
@@ -74,8 +75,8 @@ public class SeriesConverter {
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
 		List<IVariableVisualization> variables = pcaResults.getExtractedVariables();
 		for(int i = 0; i < variables.size(); i++) {
-			IVariable retentionTime = variables.get(i);
-			String description = retentionTime.getDescription();
+			IVariableVisualization variable = variables.get(i);
+			String description = variable.getDescription();
 			String name = null;
 			if(description == null || description.isEmpty()) {
 				name = variables.get(i).getValue();
@@ -93,11 +94,17 @@ public class SeriesConverter {
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
-			scatterSeriesSettings.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
+			Color color = PcaColorGroup.getSampleColorSWT(variable);
+			if(variable.isSelected()) {
+				scatterSeriesSettings.setSymbolColor(color);
+			} else {
+				scatterSeriesSettings.setSymbolColor(PcaColorGroup.getUnselectedColor(color));
+			}
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_TYPE)));
 			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_SIZE));
 			IScatterSeriesSettings scatterSeriesSettingsHighlight = (IScatterSeriesSettings)scatterSeriesSettings.getSeriesSettingsHighlight();
-			scatterSeriesSettingsHighlight.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
+			scatterSeriesSettingsHighlight.setSymbolColor(PcaColorGroup.getActualSelectedColor(color));
+			scatterSeriesSettingsHighlight.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_SIZE) + 2);
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
 		return scatterSeriesDataList;

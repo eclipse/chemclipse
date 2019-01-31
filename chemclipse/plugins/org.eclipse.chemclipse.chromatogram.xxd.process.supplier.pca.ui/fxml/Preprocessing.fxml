@@ -12,33 +12,16 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="297.0" prefWidth="436.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PreprocessingController">
+<AnchorPane prefHeight="344.0" prefWidth="428.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PreprocessingController">
    <children>
-      <BorderPane prefHeight="454.0" prefWidth="857.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane prefHeight="297.0" prefWidth="436.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
             <VBox prefHeight="391.0" prefWidth="858.0" BorderPane.alignment="CENTER">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <children>
-                  <TitledPane animated="false" collapsible="false" prefHeight="85.0" prefWidth="432.0" text="Step  1: Data Normalization">
-                     <content>
-                        <GridPane style="-fx-background-color: white;">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0" prefWidth="200.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="667.0" minWidth="10.0" prefWidth="232.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <CheckBox fx:id="bTransformData" mnemonicParsing="false" text="Normalize Data" />
-                              <ComboBox fx:id="cNormalizeData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" />
-                              <CheckBox fx:id="bNormalizeData" layoutX="20.0" layoutY="16.0" mnemonicParsing="false" text="Normalize Data" />
-                           </children>
-                        </GridPane>
-                     </content></TitledPane>
-                  <TitledPane animated="false" collapsible="false" prefHeight="213.0" prefWidth="422.0" text="Step 2: Data Transformation Centering and Scaling">
+                  <TitledPane animated="false" collapsible="false" prefHeight="213.0" prefWidth="422.0" text="Data Preprocessing">
                      <content>
                         <GridPane style="-fx-background-color: white;">
                            <columnConstraints>
@@ -50,32 +33,36 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <ComboBox fx:id="cReplaceEmptyValue" prefWidth="200.0" GridPane.columnIndex="1" />
-                              <Label text="Replace empty value with" />
-                              <CheckBox fx:id="bTransformData" mnemonicParsing="false" text="Transform Data" GridPane.rowIndex="1" />
-                              <ComboBox fx:id="cTransformData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <CheckBox fx:id="bCenterData" mnemonicParsing="false" text="Center Data" GridPane.rowIndex="2" />
-                              <ComboBox fx:id="cCenterData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <CheckBox fx:id="bScaleData" mnemonicParsing="false" text="Scale Data" GridPane.rowIndex="3" />
-                              <ComboBox fx:id="cScaleData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <ComboBox fx:id="cReplaceEmptyValue" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="Replace empty value with" GridPane.rowIndex="1" />
+                              <CheckBox fx:id="bTransformData" mnemonicParsing="false" text="Transform Data" GridPane.rowIndex="2" />
+                              <ComboBox fx:id="cTransformData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <CheckBox fx:id="bCenterData" mnemonicParsing="false" text="Center Data" GridPane.rowIndex="3" />
+                              <ComboBox fx:id="cCenterData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <CheckBox fx:id="bScaleData" mnemonicParsing="false" text="Scale Data" GridPane.rowIndex="4" />
+                              <ComboBox fx:id="cScaleData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <ComboBox fx:id="cNormalizeData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" />
+                              <CheckBox fx:id="bNormalizeData" mnemonicParsing="false" text="Normalize Data" />
                            </children>
                         </GridPane>
                      </content>
                   </TitledPane>
-                  <TitledPane animated="false" collapsible="false" prefHeight="63.0" prefWidth="425.0" text="Step 3: Before evaluation">
+                  <TitledPane animated="false" collapsible="false" prefHeight="113.0" prefWidth="432.0" text="Settings">
                      <content>
-                        <GridPane prefHeight="53.0" prefWidth="428.0" style="-fx-background-color: white;">
+                        <GridPane prefHeight="57.0" prefWidth="426.0" style="-fx-background-color: white;">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0" prefWidth="200.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="667.0" minWidth="10.0" prefWidth="232.0" />
                            </columnConstraints>
                            <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
                               <CheckBox fx:id="bRemoveVariables" mnemonicParsing="false" text="Remove Variables, which contains none or one value" GridPane.columnSpan="2" />
+                              <CheckBox fx:id="bUseOnlySelectedVariables" mnemonicParsing="false" text="Use only selected Variables for data preprocessing" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </content>

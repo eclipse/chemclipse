@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -43,6 +44,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_AUTO_REEVALUATE = false;
 	public static final String P_RETENTION_TIME_WINDOW_PEAKS = "retentionTimeWindowPeaks";
 	public static final double DEF_RETENTION_TIME_WINDOW_PEAKS = 0.1;
+	public static final String P_REMOVE_USELESS_VARIABLES = "removeUselessVariables";
+	public static final boolean DEF_REMOVE_USELESS_VARIABLES = true;
 	// Score Plot general Settings
 	public static final String P_SCORE_PLOT_2D_SYMBOL_SIZE = "scorePlot2dSymbolSize";
 	public static final int DEF_SCORE_PLOT_2D_SYMBOL_SIZE = 6;
@@ -94,6 +97,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_LOADING_PLOT_2D_SYMBOL_SIZE, Integer.toString(DEF_LOADING_PLOT_2D_SYMBOL_SIZE));
 		defaultValues.put(P_LOADING_PLOT_2D_SYMBOL_TYPE, DEF_LOADING_PLOT_2D_SYMBOL_TYPE);
 		return defaultValues;
+	}
+
+	public static IPcaSettings getPcaSettings() {
+
+		IPcaSettings pcaSettings = new PcaSettings();
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		pcaSettings.setNumberOfPrincipalComponents(preferences.getInt(P_NUMBER_OF_COMPONENTS, DEF_NUMBER_OF_COMPONENTS));
+		pcaSettings.setPcaAlgorithm(preferences.get(P_ALGORITHM_TYPE, DEF_ALGORITHM_TYPE));
+		pcaSettings.setRemoveUselessVariables(preferences.getBoolean(P_REMOVE_USELESS_VARIABLES, DEF_REMOVE_USELESS_VARIABLES));
+		return pcaSettings;
 	}
 
 	@Override

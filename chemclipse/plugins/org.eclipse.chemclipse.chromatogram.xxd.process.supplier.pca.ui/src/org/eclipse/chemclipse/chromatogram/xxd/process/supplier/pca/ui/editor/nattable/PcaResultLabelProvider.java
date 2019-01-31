@@ -22,23 +22,20 @@ public class PcaResultLabelProvider implements IConfigLabelProvider {
 	private TableProvider tableProvider;
 
 	public PcaResultLabelProvider(TableProvider tableProvider) {
+
 		this.tableProvider = tableProvider;
 	}
 
 	@Override
 	public void accumulateConfigLabels(LabelStack configLabels, int columnPosition, int rowPosition) {
 
-		configLabels.addLabel(tableProvider.getColumnLable(columnPosition));
+		tableProvider.getLabels(columnPosition, rowPosition).forEach(s -> configLabels.addLabel(s));
 	}
 
 	@Override
 	public Collection<String> getProvidedLabels() {
 
-		Collection<String> result = new HashSet<String>();
-		result.add(TableProvider.COLUMN_LABEL_RETENTION_TIMES);
-		result.add(TableProvider.COLUMN_LABEL_SAMPLE_DATA);
-		result.add(TableProvider.COLUMN_LABEL_PEAKS_NAMES);
-		result.add(TableProvider.COLUMN_LABEL_SELECTED);
+		Collection<String> result = new HashSet<String>(tableProvider.getLabels());
 		return result;
 	}
 }
