@@ -227,7 +227,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
-	private ChartSupport chartSupport = new ChartSupport();
+	private ChartSupport chartSupport = new ChartSupport(Activator.getDefault().getPreferenceStore());
 	//
 	private DisplayType displayType = DisplayType.TIC;
 	//
@@ -1699,7 +1699,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private void setScanAxisSettings(IAxisSettings axisSettings) {
 
-		ChartSupport chartSupport = new ChartSupport();
+		ChartSupport chartSupport = new ChartSupport(Activator.getDefault().getPreferenceStore());
 		Position position = Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SCANS));
 		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_X_AXIS_SCANS));
 		LineStyle gridLineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SCANS));

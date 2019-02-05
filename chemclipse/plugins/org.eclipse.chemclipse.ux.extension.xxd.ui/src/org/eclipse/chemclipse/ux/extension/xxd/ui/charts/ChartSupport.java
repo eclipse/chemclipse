@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swtchart.IAxis.Position;
@@ -26,7 +25,11 @@ import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
 
 public class ChartSupport {
 
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private IPreferenceStore preferenceStore;
+
+	public ChartSupport(IPreferenceStore preferenceStore) {
+		this.preferenceStore = preferenceStore;
+	}
 
 	public void setAxisSettings(IAxisSettings axisSettings, String positionNode, String pattern, String colorNode, String gridLineStyleNode, String gridColorNode) {
 
