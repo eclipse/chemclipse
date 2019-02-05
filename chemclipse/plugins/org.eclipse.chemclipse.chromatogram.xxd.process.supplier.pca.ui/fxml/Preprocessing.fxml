@@ -26,7 +26,7 @@
                      <children>
                         <TitledPane animated="false" collapsible="false" prefHeight="219.0" prefWidth="396.0" text="Data Preprocessing">
                            <content>
-                              <GridPane style="-fx-background-color: white;">
+                              <GridPane style="-fx-background-color: white;" vgap="5.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0" prefWidth="200.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="675.0" minWidth="10.0" prefWidth="202.0" />
