@@ -8,9 +8,6 @@ Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.logging;bundle-version="0.8.0",
  org.eclipse.e4.core.services;bundle-version="1.1.0",
- com.fasterxml.jackson.core.jackson-core;bundle-version="2.6.2",
- com.fasterxml.jackson.core.jackson-databind;bundle-version="2.6.2",
- com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2",
  org.eclipse.core.databinding;bundle-version="1.6.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
@@ -27,3 +24,6 @@ Export-Package: org.eclipse.chemclipse.support.comparator,
  org.eclipse.chemclipse.support.text,
  org.eclipse.chemclipse.support.util,
  org.eclipse.chemclipse.support.validators
+Import-Package: com.fasterxml.jackson.annotation;version="2.5.0",
+ com.fasterxml.jackson.core;version="2.5.0",
+ com.fasterxml.jackson.databind;version="2.5.0"
