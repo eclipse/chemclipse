@@ -14,12 +14,13 @@ package org.eclipse.chemclipse.nmr.model.support;
 import java.io.IOException;
 import java.io.ObjectInput;
 
+import org.eclipse.chemclipse.nmr.model.core.IMeasurementNMR;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 
 public class StreamObjectReader {
 
-	public static IDataNMRSelection readObject(ObjectInput objectInput) throws ClassNotFoundException, IOException {
+	public static IMeasurementNMR readObject(ObjectInput objectInput) throws ClassNotFoundException, IOException {
 
-		return (IDataNMRSelection)objectInput.readObject();
+		return (IMeasurementNMR)objectInput.readObject();
 	}
 }
