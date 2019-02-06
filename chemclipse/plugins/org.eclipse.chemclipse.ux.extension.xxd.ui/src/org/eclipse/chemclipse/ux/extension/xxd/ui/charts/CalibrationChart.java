@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -27,7 +28,7 @@ public class CalibrationChart extends LineChart {
 	private static final String TITLE_Y_AXIS_RESPONSE = "Response";
 	private static final String TITLE_Y_AXIS_RELATIVE_RESPONSE = "Relative Response [%]";
 	//
-	private ChartSupport chartSupport = new ChartSupport();
+	private ChartSupport chartSupport = new ChartSupport(Activator.getDefault().getPreferenceStore());
 
 	public CalibrationChart() {
 		super();
