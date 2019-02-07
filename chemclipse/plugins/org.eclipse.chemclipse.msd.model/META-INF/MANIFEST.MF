@@ -31,4 +31,5 @@ Export-Package: org.eclipse.chemclipse.msd.model.core,
  org.eclipse.chemclipse.msd.model.util,
  org.eclipse.chemclipse.msd.model.xic
 Import-Package: javax.annotation;version="1.1.0",
- org.apache.commons.math3.analysis;version="3.0.0"
+ org.apache.commons.math3.analysis;version="3.0.0",
+ org.apache.commons.math3.stat.inference;version="3.0.0"
