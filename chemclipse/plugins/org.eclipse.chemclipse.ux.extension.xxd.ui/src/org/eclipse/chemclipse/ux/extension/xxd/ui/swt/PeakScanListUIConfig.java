@@ -18,23 +18,20 @@ public interface PeakScanListUIConfig extends ToolbarConfig {
 	/**
 	 * Sets whether this list displays scans
 	 * 
-	 * @param showScans
+	 * @param show
+	 * @param inRange
+	 *            if true only select in given range, ignored when show is false
 	 */
-	void setShowScans(boolean showScans);
+	void setShowScans(boolean show, boolean inRange);
 
 	/**
 	 * Sets whether this list displays peaks
 	 * 
 	 * @param showScans
+	 * @param inRange
+	 *            if true only select in given range, ignored when show is false
 	 */
-	void setShowPeaks(boolean showPeaks);
-
-	/**
-	 * Sets whether this list displays only scans/peaks from the selected range
-	 * 
-	 * @param showSelectedRange
-	 */
-	void setShowSelectedRange(boolean showSelectedRange);
+	void setShowPeaks(boolean show, boolean inRange);
 
 	/**
 	 * Set what columns should be visible

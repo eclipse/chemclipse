@@ -42,7 +42,7 @@ public class PeakScanListUI extends ExtendedTableViewer {
 		createColumns();
 	}
 
-	public void setInput(IChromatogramSelection chromatogramSelection, boolean showPeaks, boolean showScans, boolean inSelectedRange) {
+	public void setInput(IChromatogramSelection<?> chromatogramSelection, boolean showPeaks, boolean showPeaksInRange, boolean showScans, boolean showScansInRange) {
 
 		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
@@ -53,11 +53,11 @@ public class PeakScanListUI extends ExtendedTableViewer {
 			List<Object> input = new ArrayList<Object>();
 			//
 			if(showPeaks) {
-				input.addAll(chromatogramDataSupport.getPeaks(chromatogramSelection, inSelectedRange));
+				input.addAll(chromatogramDataSupport.getPeaks(chromatogramSelection, showPeaksInRange));
 			}
 			//
 			if(showScans) {
-				input.addAll(chromatogramDataSupport.getIdentifiedScans(chromatogramSelection, inSelectedRange));
+				input.addAll(chromatogramDataSupport.getIdentifiedScans(chromatogramSelection, showScansInRange));
 			}
 			//
 			super.setInput(input);
