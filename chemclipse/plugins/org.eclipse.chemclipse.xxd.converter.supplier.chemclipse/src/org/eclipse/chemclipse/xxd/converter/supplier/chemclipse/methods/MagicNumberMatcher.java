@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,6 @@ public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IM
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		return file.getName().toLowerCase().endsWith(".ocm");
+		return checkFileExtension(file, ".ocm");
 	}
 }

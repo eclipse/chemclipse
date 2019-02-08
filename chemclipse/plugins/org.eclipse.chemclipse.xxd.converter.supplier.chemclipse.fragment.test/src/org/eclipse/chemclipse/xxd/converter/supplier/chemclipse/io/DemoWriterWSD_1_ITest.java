@@ -24,9 +24,11 @@ import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogr
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorScanSignal;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Ignore;
 
 import junit.framework.TestCase;
 
+@Ignore
 public class DemoWriterWSD_1_ITest extends TestCase {
 
 	@Override
@@ -36,6 +38,7 @@ public class DemoWriterWSD_1_ITest extends TestCase {
 		//
 	}
 
+	@Ignore
 	public void testReader_1() throws Exception {
 
 		// tests the reader & writer for wsd
