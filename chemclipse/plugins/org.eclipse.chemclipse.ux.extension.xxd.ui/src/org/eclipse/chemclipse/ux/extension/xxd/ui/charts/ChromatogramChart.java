@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -31,7 +32,7 @@ public class ChromatogramChart extends LineChart {
 	private static final String TITLE_Y_AXIS_INTENSITY = "Intensity";
 	private static final String TITLE_Y_AXIS_RELATIVE_INTENSITY = "Relative Intensity [%]";
 	//
-	private ChartSupport chartSupport = new ChartSupport();
+	private ChartSupport chartSupport = new ChartSupport(Activator.getDefault().getPreferenceStore());
 
 	public ChromatogramChart() {
 		super();
