@@ -21,9 +21,6 @@ public class MagicNumberMatcherMassSpectrum extends AbstractMagicNumberMatcher i
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		if(file.getName().endsWith(".jdx") || file.getName().endsWith(".jdl")) {
-			return true;
-		}
-		return false;
+		return (checkFileExtension(file, ".jdx") || checkFileExtension(file, ".jdl"));
 	}
 }
