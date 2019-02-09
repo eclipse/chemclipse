@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
@@ -40,7 +38,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -56,6 +53,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -115,9 +113,12 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	protected boolean showScansInRange;
 	protected boolean showPeaksInRange;
 	private IPreferenceStore preferenceStore;
+	private boolean moveRetentionTimeOnPeakSelection;
+	protected InteractionMode interactionMode = InteractionMode.SOURCE;
+	private IEventBroker eventBroker;
 
-	@Inject
-	public ExtendedPeakScanListUI(Composite parent, IPreferenceStore preferenceStore) {
+	public ExtendedPeakScanListUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
+		this.eventBroker = eventBroker;
 		this.preferenceStore = preferenceStore;
 		initialize(parent);
 	}
@@ -129,6 +130,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			showPeaksInRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
 			showScans = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_LIST);
 			showScansInRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
+			moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
 		}
 	}
 
@@ -158,20 +160,22 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			if(chromatogram instanceof IChromatogramMSD) {
 				buttonSave.setEnabled(true);
 			}
-			List<Object> selection = new ArrayList<>(2);
-			if(showPeaks) {
-				IPeak selectedPeak = chromatogramSelection.getSelectedPeak();
-				if(selectedPeak != null) {
-					selection.add(selectedPeak);
+			if(interactionMode == InteractionMode.SINK || interactionMode == InteractionMode.BIDIRECTIONAL) {
+				List<Object> selection = new ArrayList<>(2);
+				if(showPeaks) {
+					IPeak selectedPeak = chromatogramSelection.getSelectedPeak();
+					if(selectedPeak != null) {
+						selection.add(selectedPeak);
+					}
 				}
-			}
-			if(showScans) {
-				IScan selectedScan = chromatogramSelection.getSelectedIdentifiedScan();
-				if(selectedScan != null) {
-					selection.add(selectedScan);
+				if(showScans) {
+					IScan selectedScan = chromatogramSelection.getSelectedIdentifiedScan();
+					if(selectedScan != null) {
+						selection.add(selectedScan);
+					}
 				}
+				peakScanListUI.setSelection(new StructuredSelection(selection));
 			}
-			peakScanListUI.setSelection(new StructuredSelection(selection));
 		}
 	}
 
@@ -441,17 +445,23 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 
 	private void propagateSelection() {
 
+		if(interactionMode != InteractionMode.SOURCE && interactionMode != InteractionMode.BIDIRECTIONAL) {
+			return;
+		}
 		IStructuredSelection selection = peakScanListUI.getStructuredSelection();
 		if(!selection.isEmpty()) {
-			for(Object object : selection.toList()) {
+			List list = selection.toList();
+			if(list.size() > 1) {
+				// we can't select more than one item at once for now
+				return;
+			}
+			for(Object object : list) {
 				if(object instanceof IPeak) {
 					/*
 					 * Fire updates
 					 */
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					IPeak peak = (IPeak)object;
 					IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
-					boolean moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
 					if(moveRetentionTimeOnPeakSelection) {
 						chromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
 					}
@@ -462,7 +472,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 						public void run() {
 
 							chromatogramSelection.setSelectedPeak(peak);
-							eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+							sendEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
 						}
 					});
 					//
@@ -471,7 +481,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 						@Override
 						public void run() {
 
-							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
+							sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
 						}
 					});
 					//
@@ -488,7 +498,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 								map.clear();
 								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, peakMSD.getExtractedMassSpectrum());
 								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
-								eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+								sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
 							}
 						});
 					}
@@ -496,7 +506,6 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 					/*
 					 * Fire updates
 					 */
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					IScan scan = (IScan)object;
 					IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), comparator);
 					//
@@ -506,7 +515,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 						public void run() {
 
 							chromatogramSelection.setSelectedIdentifiedScan(scan);
-							eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+							sendEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
 						}
 					});
 					//
@@ -515,7 +524,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 						@Override
 						public void run() {
 
-							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
+							sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
 						}
 					});
 					//
@@ -532,12 +541,19 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 								map.clear();
 								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, scanMSD);
 								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
-								eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+								sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
 							}
 						});
 					}
 				}
 			}
+		}
+	}
+
+	protected void sendEvent(String topic, Object data) {
+
+		if(eventBroker != null) {
+			eventBroker.send(topic, data);
 		}
 	}
 
@@ -875,6 +891,18 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 
 				ExtendedPeakScanListUI.this.showPeaks = show;
 				ExtendedPeakScanListUI.this.showPeaksInRange = inRange;
+			}
+
+			@Override
+			public void setMoveRetentionTimeOnPeakSelection(boolean enabled) {
+
+				ExtendedPeakScanListUI.this.moveRetentionTimeOnPeakSelection = enabled;
+			}
+
+			@Override
+			public void setInteractionMode(InteractionMode interactionMode) {
+
+				ExtendedPeakScanListUI.this.interactionMode = interactionMode;
 			}
 		};
 	}

@@ -16,6 +16,29 @@ import java.util.Set;
 public interface PeakScanListUIConfig extends ToolbarConfig {
 
 	/**
+	 * Defines how the UI interacts with the Chromatogram selection
+	 *
+	 */
+	enum InteractionMode {
+		/**
+		 * No interaction
+		 */
+		NONE,
+		/**
+		 * The UI is the source of selections
+		 */
+		SOURCE,
+		/**
+		 * The UI is the sink of selections
+		 */
+		SINK,
+		/**
+		 * the UI is the source and the sink of selections
+		 */
+		BIDIRECTIONAL;
+	}
+
+	/**
 	 * Sets whether this list displays scans
 	 * 
 	 * @param show
@@ -39,4 +62,13 @@ public interface PeakScanListUIConfig extends ToolbarConfig {
 	 * @param visibleColumns
 	 */
 	void setVisibleColumns(Set<String> visibleColumns);
+
+	void setMoveRetentionTimeOnPeakSelection(boolean enabled);
+
+	/**
+	 * The interaction mode to use
+	 * 
+	 * @param interactionMode
+	 */
+	void setInteractionMode(InteractionMode interactionMode);
 }
