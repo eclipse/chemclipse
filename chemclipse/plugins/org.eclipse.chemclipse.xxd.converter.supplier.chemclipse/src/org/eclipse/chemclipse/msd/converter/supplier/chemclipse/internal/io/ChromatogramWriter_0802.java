@@ -253,9 +253,9 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		IEditHistory editHistory = chromatogram.getEditHistory();
-		dataOutputStream.writeInt(editHistory.getHistoryList().size()); // Number of entries
+		dataOutputStream.writeInt(editHistory.size()); // Number of entries
 		// Date, Description
-		for(IEditInformation editInformation : editHistory.getHistoryList()) {
+		for(IEditInformation editInformation : editHistory) {
 			dataOutputStream.writeLong(editInformation.getDate().getTime()); // Date
 			writeString(dataOutputStream, editInformation.getDescription()); // Description
 		}
