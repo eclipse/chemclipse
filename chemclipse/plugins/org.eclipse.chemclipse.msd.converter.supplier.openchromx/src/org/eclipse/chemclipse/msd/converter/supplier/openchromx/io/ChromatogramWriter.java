@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
@@ -41,9 +40,6 @@ import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-/**
- * @author eselmeister
- */
 public class ChromatogramWriter extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
 	@Override
@@ -176,8 +172,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 		 * Write all elements from the edit history.
 		 */
 		eventWriter.add(editHistoryStart);
-		List<IEditInformation> editInformations = editHistory.getHistoryList();
-		for(IEditInformation editInformation : editInformations) {
+		for(IEditInformation editInformation : editHistory) {
 			editDate = eventFactory.createAttribute(IChromatogramTags.EDIT_DATE, editInformation.getDate().toString());
 			description = eventFactory.createCData(editInformation.getDescription());
 			eventWriter.add(editInformationStart);
