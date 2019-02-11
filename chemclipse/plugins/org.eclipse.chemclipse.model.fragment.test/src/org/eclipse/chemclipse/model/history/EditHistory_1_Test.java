@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.history;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.support.history.EditHistory;
 import org.eclipse.chemclipse.support.history.EditHistorySortOrder;
 import org.eclipse.chemclipse.support.history.EditInformation;
+import org.eclipse.chemclipse.support.history.EditInformationComparator;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 
@@ -62,7 +65,7 @@ public class EditHistory_1_Test extends TestCase {
 
 	public void testGetEditHistory_1() {
 
-		List<IEditInformation> history = editHistory.getHistoryList();
+		List<IEditInformation> history = new ArrayList<>(editHistory);
 		assertEquals("1st entry", entry1, history.get(0).getDescription());
 		assertEquals("2nd entry", entry2, history.get(1).getDescription());
 		assertEquals("3rd entry", entry3, history.get(2).getDescription());
@@ -70,7 +73,8 @@ public class EditHistory_1_Test extends TestCase {
 
 	public void testGetEditHistory_2() {
 
-		List<IEditInformation> history = editHistory.getHistoryList(EditHistorySortOrder.DATE_ASC);
+		List<IEditInformation> history = new ArrayList<>(editHistory);
+		Collections.sort(history, new EditInformationComparator(EditHistorySortOrder.DATE_ASC));
 		assertEquals("1st entry", entry1, history.get(0).getDescription());
 		assertEquals("2nd entry", entry2, history.get(1).getDescription());
 		assertEquals("3rd entry", entry3, history.get(2).getDescription());
@@ -78,7 +82,8 @@ public class EditHistory_1_Test extends TestCase {
 
 	public void testGetEditHistory_3() {
 
-		List<IEditInformation> history = editHistory.getHistoryList(EditHistorySortOrder.DATE_DESC);
+		List<IEditInformation> history = new ArrayList<>(editHistory);
+		Collections.sort(history, new EditInformationComparator(EditHistorySortOrder.DATE_DESC));
 		assertEquals("1st entry", entry3, history.get(0).getDescription());
 		assertEquals("2nd entry", entry2, history.get(1).getDescription());
 		assertEquals("3rd entry", entry1, history.get(2).getDescription());

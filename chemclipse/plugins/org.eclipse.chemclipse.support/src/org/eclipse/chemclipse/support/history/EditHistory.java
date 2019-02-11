@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,33 +12,8 @@
 package org.eclipse.chemclipse.support.history;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-public class EditHistory implements IEditHistory {
+public class EditHistory extends ArrayList<IEditInformation> implements IEditHistory {
 
-	private List<IEditInformation> history;
-
-	public EditHistory() {
-		history = new ArrayList<IEditInformation>();
-	}
-
-	@Override
-	public void add(IEditInformation editInformation) {
-
-		history.add(editInformation);
-	}
-
-	@Override
-	public List<IEditInformation> getHistoryList() {
-
-		return getHistoryList(EditHistorySortOrder.DATE_ASC);
-	}
-
-	@Override
-	public List<IEditInformation> getHistoryList(EditHistorySortOrder editHistorySortOrder) {
-
-		Collections.sort(history, new EditInformationComparator(editHistorySortOrder));
-		return history;
-	}
+	private static final long serialVersionUID = 7519887668722567599L;
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,29 +13,5 @@ package org.eclipse.chemclipse.support.history;
 
 import java.util.List;
 
-public interface IEditHistory {
-
-	/**
-	 * This method adds a entry to the edit history.
-	 * 
-	 * @param editInformation
-	 */
-	void add(IEditInformation editInformation);
-
-	/**
-	 * If no value is given, the sort order will be ascending by date.<br/>
-	 * You can also choose a editHistorySortOrder.
-	 * 
-	 * @return List<IEditInformation>
-	 */
-	List<IEditInformation> getHistoryList();
-
-	/**
-	 * The editHistorySortOder defines the sort order of the history list.<br/>
-	 * If no value is given, the sort order will be ascending by date.
-	 * 
-	 * @param editHistorySortOrder
-	 * @return List<IEditInformation>
-	 */
-	List<IEditInformation> getHistoryList(EditHistorySortOrder editHistorySortOrder);
+public interface IEditHistory extends List<IEditInformation> {
 }

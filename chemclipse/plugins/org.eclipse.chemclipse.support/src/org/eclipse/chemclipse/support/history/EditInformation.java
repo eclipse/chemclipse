@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,8 +19,9 @@ import org.eclipse.chemclipse.support.messages.SupportMessages;
 public class EditInformation implements IEditInformation {
 
 	private Date date;
-	private String description;
-	private String editor;
+	private String description = "";
+	private String editor = "";
+	//
 	public static final String NO_DESCRIPTION = SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_NO_DESCRIPTION);
 	public static final String NO_EDITOR = SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_NOT_AVAILABLE);
 
@@ -110,39 +111,47 @@ public class EditInformation implements IEditInformation {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public int hashCode() {
 
-		if(this == obj) {
-			return true;
-		}
-		if(obj == null) {
-			return false;
-		}
-		if(getClass() != obj.getClass()) {
-			return false;
-		}
-		IEditInformation other = (IEditInformation)obj;
-		return getDate().getTime() == other.getDate().getTime() && getDescription().equals(other.getDate()) && getEditor().equals(other.getEditor());
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((editor == null) ? 0 : editor.hashCode());
+		return result;
 	}
 
 	@Override
-	public int hashCode() {
+	public boolean equals(Object obj) {
 
-		return 7 * date.hashCode() + 11 * description.hashCode() + 13 * editor.hashCode();
+		if(this == obj)
+			return true;
+		if(obj == null)
+			return false;
+		if(getClass() != obj.getClass())
+			return false;
+		EditInformation other = (EditInformation)obj;
+		if(date == null) {
+			if(other.date != null)
+				return false;
+		} else if(!date.equals(other.date))
+			return false;
+		if(description == null) {
+			if(other.description != null)
+				return false;
+		} else if(!description.equals(other.description))
+			return false;
+		if(editor == null) {
+			if(other.editor != null)
+				return false;
+		} else if(!editor.equals(other.editor))
+			return false;
+		return true;
 	}
 
 	@Override
 	public String toString() {
 
-		StringBuilder builder = new StringBuilder();
-		builder.append(getClass().getName());
-		builder.append("[");
-		builder.append("date=" + date);
-		builder.append(",");
-		builder.append("description=" + description);
-		builder.append(",");
-		builder.append("editor=" + editor);
-		builder.append("]");
-		return builder.toString();
+		return "EditInformation [date=" + date + ", description=" + description + ", editor=" + editor + "]";
 	}
 }
