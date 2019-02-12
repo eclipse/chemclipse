@@ -38,3 +38,4 @@ Export-Package: org.eclipse.chemclipse.model.baseline,
  org.eclipse.chemclipse.model.types,
  org.eclipse.chemclipse.model.updates,
  org.eclipse.chemclipse.model.versioning
+Import-Package: org.eclipse.chemclipse.filter;version="[1.0.0,2.0.0)"
