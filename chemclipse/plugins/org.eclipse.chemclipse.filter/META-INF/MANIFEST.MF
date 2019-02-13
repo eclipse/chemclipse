@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Chemclipse Filter API
+Bundle-SymbolicName: org.eclipse.chemclipse.filter
+Bundle-Version: 0.8.0.qualifier
+Bundle-Vendor: Lablicate GmbH
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.osgi.service.component.annotations;version="[1.2.0,2.0.0)"
+Service-Component: OSGI-INF/org.eclipse.chemclipse.filter.internal.OSGiFilterFactory.xml
+Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.chemclipse.filter;version="1.0.0"

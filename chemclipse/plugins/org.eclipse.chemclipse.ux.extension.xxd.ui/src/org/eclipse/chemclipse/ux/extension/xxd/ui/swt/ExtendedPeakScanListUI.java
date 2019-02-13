@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
@@ -40,7 +38,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -56,6 +53,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -66,6 +64,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
@@ -104,7 +103,6 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	//
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ListSupport listSupport = new ListSupport();
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 	//
 	private Map<String, Object> map = new HashMap<String, Object>();
@@ -112,15 +110,27 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	private Composite toolbarLabel;
 	private boolean showScans;
 	private boolean showPeaks;
-	private boolean showSelectedRange;
+	protected boolean showScansInRange;
+	protected boolean showPeaksInRange;
+	private IPreferenceStore preferenceStore;
+	private boolean moveRetentionTimeOnPeakSelection;
+	protected InteractionMode interactionMode = InteractionMode.SOURCE;
+	private IEventBroker eventBroker;
 
-	@Inject
-	public ExtendedPeakScanListUI(Composite parent, IPreferenceStore store) {
+	public ExtendedPeakScanListUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
+		this.eventBroker = eventBroker;
+		this.preferenceStore = preferenceStore;
 		initialize(parent);
-		if(store != null) {
+	}
+
+	private void updateFromPreferences() {
+
+		if(preferenceStore != null) {
 			showPeaks = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_LIST);
-			showSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE) || preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
+			showPeaksInRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
 			showScans = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_LIST);
+			showScansInRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
+			moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
 		}
 	}
 
@@ -138,25 +148,33 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 
 	public void updateChromatogramSelection() {
 
+		updateFromPreferences();
 		updateLabel();
 		buttonSave.setEnabled(false);
 		//
 		if(chromatogramSelection == null) {
 			peakScanListUI.clear();
 		} else {
-			peakScanListUI.setInput(chromatogramSelection, showPeaks, showScans, showSelectedRange);
+			peakScanListUI.setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				buttonSave.setEnabled(true);
 			}
-			if(showSelectedRange) {
-				IPeak selectedPeak = chromatogramSelection.getSelectedPeak();
-				IScan selectedScan = chromatogramSelection.getSelectedScan();
-				if(selectedPeak != null && showPeaks) {
-					peakScanListUI.setSelection(new StructuredSelection(selectedPeak), true);
-				} else if(selectedScan != null && showScans) {
-					peakScanListUI.setSelection(new StructuredSelection(selectedScan), true);
+			if(interactionMode == InteractionMode.SINK || interactionMode == InteractionMode.BIDIRECTIONAL) {
+				List<Object> selection = new ArrayList<>(2);
+				if(showPeaks) {
+					IPeak selectedPeak = chromatogramSelection.getSelectedPeak();
+					if(selectedPeak != null) {
+						selection.add(selectedPeak);
+					}
 				}
+				if(showScans) {
+					IScan selectedScan = chromatogramSelection.getSelectedIdentifiedScan();
+					if(selectedScan != null) {
+						selection.add(selectedScan);
+					}
+				}
+				peakScanListUI.setSelection(new StructuredSelection(selection));
 			}
 		}
 	}
@@ -427,104 +445,115 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 
 	private void propagateSelection() {
 
-		Table table = peakScanListUI.getTable();
-		int index = table.getSelectionIndex();
-		if(index >= 0) {
-			TableItem tableItem = table.getItem(index);
-			Object object = tableItem.getData();
-			if(object instanceof IPeak) {
-				/*
-				 * Fire updates
-				 */
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				IPeak peak = (IPeak)object;
-				IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
-				boolean moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
-				if(moveRetentionTimeOnPeakSelection) {
-					chromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
-				}
-				//
-				DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-
-						chromatogramSelection.setSelectedPeak(peak);
-						eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+		if(interactionMode != InteractionMode.SOURCE && interactionMode != InteractionMode.BIDIRECTIONAL) {
+			return;
+		}
+		IStructuredSelection selection = peakScanListUI.getStructuredSelection();
+		if(!selection.isEmpty()) {
+			List list = selection.toList();
+			if(list.size() > 1) {
+				// we can't select more than one item at once for now
+				return;
+			}
+			for(Object object : list) {
+				if(object instanceof IPeak) {
+					/*
+					 * Fire updates
+					 */
+					IPeak peak = (IPeak)object;
+					IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
+					if(moveRetentionTimeOnPeakSelection) {
+						chromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
 					}
-				});
-				//
-				DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-
-						eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
-					}
-				});
-				//
-				if(peak instanceof IPeakMSD) {
-					IPeakMSD peakMSD = (IPeakMSD)peak;
+					//
 					DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 						@Override
 						public void run() {
 
-							/*
-							 * Send the mass spectrum update, e.g. used by the comparison part.
-							 */
-							map.clear();
-							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, peakMSD.getExtractedMassSpectrum());
-							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
-							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+							chromatogramSelection.setSelectedPeak(peak);
+							sendEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
 						}
 					});
-				}
-			} else if(object instanceof IScan) {
-				/*
-				 * Fire updates
-				 */
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				IScan scan = (IScan)object;
-				IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), comparator);
-				//
-				DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-
-						chromatogramSelection.setSelectedIdentifiedScan(scan);
-						eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
-					}
-				});
-				//
-				DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-
-						eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
-					}
-				});
-				//
-				if(scan instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)scan;
+					//
 					DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 						@Override
 						public void run() {
 
-							/*
-							 * Send the identification target update to let e.g. the molecule renderer react on an update.
-							 */
-							map.clear();
-							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, scanMSD);
-							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
-							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+							sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
 						}
 					});
+					//
+					if(peak instanceof IPeakMSD) {
+						IPeakMSD peakMSD = (IPeakMSD)peak;
+						DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+							@Override
+							public void run() {
+
+								/*
+								 * Send the mass spectrum update, e.g. used by the comparison part.
+								 */
+								map.clear();
+								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, peakMSD.getExtractedMassSpectrum());
+								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
+								sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+							}
+						});
+					}
+				} else if(object instanceof IScan) {
+					/*
+					 * Fire updates
+					 */
+					IScan scan = (IScan)object;
+					IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), comparator);
+					//
+					DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							chromatogramSelection.setSelectedIdentifiedScan(scan);
+							sendEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+						}
+					});
+					//
+					DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
+						}
+					});
+					//
+					if(scan instanceof IScanMSD) {
+						IScanMSD scanMSD = (IScanMSD)scan;
+						DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+							@Override
+							public void run() {
+
+								/*
+								 * Send the identification target update to let e.g. the molecule renderer react on an update.
+								 */
+								map.clear();
+								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, scanMSD);
+								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
+								sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+							}
+						});
+					}
 				}
 			}
+		}
+	}
+
+	protected void sendEvent(String topic, Object data) {
+
+		if(eventBroker != null) {
+			eventBroker.send(topic, data);
 		}
 	}
 
@@ -691,36 +720,38 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		if(preferenceStore != null) {
+			Button button = new Button(parent, SWT.PUSH);
+			button.setToolTipText("Open the Settings");
+			button.setText("");
+			button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+			button.addSelectionListener(new SelectionAdapter() {
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageSWT = new PreferencePageSWT();
-				preferencePageSWT.setTitle("Settings (SWT)");
-				IPreferencePage preferencePageLists = new PreferencePageLists();
-				preferencePageLists.setTitle("Lists");
-				//
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageLists));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+					IPreferencePage preferencePageSWT = new PreferencePageSWT();
+					preferencePageSWT.setTitle("Settings (SWT)");
+					IPreferencePage preferencePageLists = new PreferencePageLists();
+					preferencePageLists.setTitle("Lists");
+					//
+					PreferenceManager preferenceManager = new PreferenceManager();
+					preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
+					preferenceManager.addToRoot(new PreferenceNode("2", preferencePageLists));
+					//
+					PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
+					preferenceDialog.create();
+					preferenceDialog.setMessage("Settings");
+					if(preferenceDialog.open() == Window.OK) {
+						try {
+							applySettings();
+						} catch(Exception e1) {
+							MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						}
 					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	private void updateLabel() {
@@ -825,24 +856,6 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			}
 
 			@Override
-			public void setShowScans(boolean showScans) {
-
-				ExtendedPeakScanListUI.this.showScans = showScans;
-			}
-
-			@Override
-			public void setShowPeaks(boolean showPeaks) {
-
-				ExtendedPeakScanListUI.this.showPeaks = showPeaks;
-			}
-
-			@Override
-			public void setShowSelectedRange(boolean showSelectedRange) {
-
-				ExtendedPeakScanListUI.this.showSelectedRange = showSelectedRange;
-			}
-
-			@Override
 			public void setVisibleColumns(Set<String> visibleColumns) {
 
 				List<TableViewerColumn> columns = peakScanListUI.getTableViewerColumns();
@@ -864,6 +877,32 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 						tableColumn.setResizable(false);
 					}
 				}
+			}
+
+			@Override
+			public void setShowScans(boolean show, boolean inRange) {
+
+				ExtendedPeakScanListUI.this.showScans = show;
+				ExtendedPeakScanListUI.this.showScansInRange = inRange;
+			}
+
+			@Override
+			public void setShowPeaks(boolean show, boolean inRange) {
+
+				ExtendedPeakScanListUI.this.showPeaks = show;
+				ExtendedPeakScanListUI.this.showPeaksInRange = inRange;
+			}
+
+			@Override
+			public void setMoveRetentionTimeOnPeakSelection(boolean enabled) {
+
+				ExtendedPeakScanListUI.this.moveRetentionTimeOnPeakSelection = enabled;
+			}
+
+			@Override
+			public void setInteractionMode(InteractionMode interactionMode) {
+
+				ExtendedPeakScanListUI.this.interactionMode = interactionMode;
 			}
 		};
 	}

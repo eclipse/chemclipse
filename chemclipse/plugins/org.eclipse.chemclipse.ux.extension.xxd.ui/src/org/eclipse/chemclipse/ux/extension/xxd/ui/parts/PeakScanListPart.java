@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakScanListUI;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
@@ -30,9 +31,9 @@ public class PeakScanListPart extends AbstractDataUpdateSupport implements IData
 	private ExtendedPeakScanListUI extendedPeakScanListUI;
 
 	@Inject
-	public PeakScanListPart(Composite parent, MPart part) {
+	public PeakScanListPart(Composite parent, MPart part, IEventBroker eventBroker) {
 		super(part);
-		extendedPeakScanListUI = new ExtendedPeakScanListUI(parent, Activator.getDefault().getPreferenceStore());
+		extendedPeakScanListUI = new ExtendedPeakScanListUI(parent, eventBroker, Activator.getDefault().getPreferenceStore());
 	}
 
 	@Focus

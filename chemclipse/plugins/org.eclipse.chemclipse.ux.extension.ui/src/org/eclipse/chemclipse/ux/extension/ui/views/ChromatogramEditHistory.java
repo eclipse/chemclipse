@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.support.ui.parts.EditHistoryPart;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.swt.widgets.Composite;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -32,8 +33,8 @@ public class ChromatogramEditHistory extends EditHistoryPart {
 	private EventHandler eventHandler;
 
 	@Inject
-	public ChromatogramEditHistory(EPartService partService, MPart part, IEventBroker eventBroker, EventHandler eventHandler) {
-		super(partService, part, eventBroker);
+	public ChromatogramEditHistory(Composite parent, EPartService partService, MPart part, IEventBroker eventBroker, EventHandler eventHandler) {
+		super(parent, partService, part, eventBroker);
 		this.partService = partService;
 		this.part = part;
 		this.eventBroker = eventBroker;

@@ -1,0 +1,48 @@
+All Filters for a specific itemtype should comply with the following pattern where
+
+[ItemType] is the type of the item to be filtered
+
+/**
+ * A {@link Filter} Extension interface for filters that can work on {@link [ItemType]}s.
+ * This is part of the Chemclipse FilterFramework, to make the Filter available simply register it with the OSGi Servicefactory under the {@link Filter} interface, implementors are encouraged to also register each filter under all sub(filter) interface.
+ * 
+ * @author Christoph Läubrich
+ *
+ * @param <ConfigType>
+ */
+public interface [ItemType]Filter<ConfigType> extends Filter<ConfigType> {
+
+	/**
+	 * Filters the given Collection of {@link [ItemType]}s with this filter, the collection must be modifiable so the filter can either remove an item from the list or filter the item individually
+	 * 
+	 * @param filterItems
+	 * @param configuration
+	 *            the configuration to apply or <code>null</code> if no special configuration is desired
+	 * @param monitor
+	 *            a {@link IProgressMonitor} to report progress of the filtering or <code>null</code> if no progress is desired
+	 * @return a {@link IProcessingResult} that describes the outcome of the filtering, the result will be {@link Boolean#TRUE} if any item in the list was filter or {@link Boolean#FALSE} if no item was filtered or there was an error. The messages of the {@link IProcessingResult} may contain further information
+	 * @throws IllegalArgumentException
+	 *             if any of the given {@link [ItemType]} are incompatible with this filter ({@link #accepts[ItemType]([ItemType])} returns <code>false</code> for them)
+	 */
+	IProcessingResult<Boolean> filter[ItemType]s(Collection<[ItemType]> filterItems, ConfigType configuration, IProgressMonitor monitor) throws IllegalArgumentException;
+
+	/**
+	 * Checks if the given {@link [ItemType]} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}
+	 * 
+	 * @param item
+	 *            the {@link [ItemType]} to check
+	 * @return <code>true</code> if this {@link [ItemType]} can be applied, <code>false</code> otherwise
+	 */
+	boolean accepts[ItemType]([ItemType] item);
+
+	/**
+	 * Creates a new configuration that is specially suited for the given {@link [ItemType]} type
+	 * 
+	 * @param item
+	 * @return
+	 */
+	default ConfigType createConfiguration([ItemType] item) {
+
+		return createNewConfiguration();
+	}
+}

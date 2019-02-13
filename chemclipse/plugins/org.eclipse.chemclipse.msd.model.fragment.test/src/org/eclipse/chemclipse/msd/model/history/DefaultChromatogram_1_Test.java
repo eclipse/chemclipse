@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.history;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.support.history.EditHistorySortOrder;
 import org.eclipse.chemclipse.support.history.EditInformation;
+import org.eclipse.chemclipse.support.history.EditInformationComparator;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 
 import junit.framework.TestCase;
@@ -59,7 +62,7 @@ public class DefaultChromatogram_1_Test extends TestCase {
 
 	public void testGetEditHistory_1() {
 
-		List<IEditInformation> history = chromatogram.getEditHistory().getHistoryList();
+		List<IEditInformation> history = new ArrayList<>(chromatogram.getEditHistory());
 		assertEquals("1st entry", entry1, history.get(0).getDescription());
 		assertEquals("2nd entry", entry2, history.get(1).getDescription());
 		assertEquals("3rd entry", entry3, history.get(2).getDescription());
@@ -67,7 +70,8 @@ public class DefaultChromatogram_1_Test extends TestCase {
 
 	public void testGetEditHistory_2() {
 
-		List<IEditInformation> history = chromatogram.getEditHistory().getHistoryList(EditHistorySortOrder.DATE_ASC);
+		List<IEditInformation> history = new ArrayList<>(chromatogram.getEditHistory());
+		Collections.sort(history, new EditInformationComparator(EditHistorySortOrder.DATE_ASC));
 		assertEquals("1st entry", entry1, history.get(0).getDescription());
 		assertEquals("2nd entry", entry2, history.get(1).getDescription());
 		assertEquals("3rd entry", entry3, history.get(2).getDescription());
@@ -75,7 +79,8 @@ public class DefaultChromatogram_1_Test extends TestCase {
 
 	public void testGetEditHistory_3() {
 
-		List<IEditInformation> history = chromatogram.getEditHistory().getHistoryList(EditHistorySortOrder.DATE_DESC);
+		List<IEditInformation> history = new ArrayList<>(chromatogram.getEditHistory());
+		Collections.sort(history, new EditInformationComparator(EditHistorySortOrder.DATE_DESC));
 		assertEquals("1st entry", entry3, history.get(0).getDescription());
 		assertEquals("2nd entry", entry2, history.get(1).getDescription());
 		assertEquals("3rd entry", entry1, history.get(2).getDescription());

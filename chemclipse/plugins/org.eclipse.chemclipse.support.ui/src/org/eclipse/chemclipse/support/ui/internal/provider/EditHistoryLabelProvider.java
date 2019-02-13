@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,22 @@ import org.eclipse.swt.graphics.Image;
 
 public class EditHistoryLabelProvider extends LabelProvider implements ITableLabelProvider {
 
+	public static final String DATE = SupportMessages.INSTANCE().getMessage(ISupportMessages.COLUMN_DATE);
+	public static final String DESCRIPTION = SupportMessages.INSTANCE().getMessage(ISupportMessages.COLUMN_DESCRIPTION);
+	public static final String EDITOR = SupportMessages.INSTANCE().getMessage(ISupportMessages.COLUMN_EDITOR);
+	//
+	public static final String[] TITLES = {//
+			DATE, //
+			DESCRIPTION, //
+			EDITOR //
+	};
+	//
+	public static final int[] BOUNDS = {//
+			100, //
+			300, //
+			100 //
+	};
+
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 
@@ -35,13 +51,13 @@ public class EditHistoryLabelProvider extends LabelProvider implements ITableLab
 		if(element instanceof IEditInformation) {
 			IEditInformation editInformation = (IEditInformation)element;
 			switch(columnIndex) {
-				case 0: // Date
+				case 0:
 					text = editInformation.getDate().toString();
 					break;
-				case 1: // Description
+				case 1:
 					text = editInformation.getDescription();
 					break;
-				case 2: // Editor
+				case 2:
 					text = editInformation.getEditor();
 					break;
 				default:
