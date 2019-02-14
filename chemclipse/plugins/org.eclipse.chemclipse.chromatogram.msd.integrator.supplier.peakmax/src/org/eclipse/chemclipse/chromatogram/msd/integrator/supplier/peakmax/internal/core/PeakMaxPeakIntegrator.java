@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -238,7 +239,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		 * ions does not contain IIon.TIC_Ion, which means,
 		 * the TIC signal should be integrated.
 		 */
-		if(selectedIonsNominal.size() > 0 && !selectedIonsNominal.contains(IIon.TIC_ION) && scan instanceof IScanMSD) {
+		if(selectedIonsNominal.size() > 0 && !selectedIonsNominal.contains(AbstractIon.getIon(IIon.TIC_ION)) && scan instanceof IScanMSD) {
 			IIonPercentages ionPercentages = new IonPercentages((IScanMSD)scan);
 			/*
 			 * Calculate the percentage integrated area for each selected ion.
