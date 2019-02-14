@@ -13,9 +13,14 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui;
 
 import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SelectionUpdateSupport;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
@@ -29,6 +34,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 	private ScopedPreferenceStore preferenceStoreSubtract;
+	private SelectionUpdateSupport selectionUpdateSupport;
 
 	/**
 	 * The constructor
@@ -45,6 +51,7 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStoreSubtract(PreferenceSupplier.INSTANCE());
+		selectionUpdateSupport = new SelectionUpdateSupport(getEventBroker(context));
 	}
 
 	/*
@@ -54,6 +61,7 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 
 		plugin = null;
+		selectionUpdateSupport = null;
 		super.stop(context);
 	}
 
@@ -78,6 +86,11 @@ public class Activator extends AbstractUIPlugin {
 		return location.getURL().getPath().toString();
 	}
 
+	public SelectionUpdateSupport getSelectionUpdateSupport() {
+
+		return selectionUpdateSupport;
+	}
+
 	private void initializePreferenceStoreSubtract(IPreferenceSupplier preferenceSupplier) {
 
 		if(preferenceSupplier != null) {
@@ -90,5 +103,12 @@ public class Activator extends AbstractUIPlugin {
 				preferenceStoreSubtract.setDefault(entry.getKey(), entry.getValue());
 			}
 		}
+	}
+
+	private IEventBroker getEventBroker(BundleContext bundleContext) {
+
+		IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(bundleContext);
+		eclipseContext.set(Logger.class, null);
+		return eclipseContext.get(IEventBroker.class);
 	}
 }

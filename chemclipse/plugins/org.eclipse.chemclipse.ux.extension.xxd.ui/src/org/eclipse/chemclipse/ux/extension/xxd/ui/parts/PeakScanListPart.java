@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SelectionUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakScanListUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -34,6 +35,14 @@ public class PeakScanListPart extends AbstractDataUpdateSupport implements IData
 	public PeakScanListPart(Composite parent, MPart part, IEventBroker eventBroker) {
 		super(part);
 		extendedPeakScanListUI = new ExtendedPeakScanListUI(parent, eventBroker, Activator.getDefault().getPreferenceStore());
+		/*
+		 * Initialize
+		 * The AbstractDataUpdateSupport haven't had a chance yet to listen to updates.
+		 */
+		String topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION;
+		SelectionUpdateSupport selectionUpdateSupport = Activator.getDefault().getSelectionUpdateSupport();
+		updateObjects(selectionUpdateSupport.getLatestSelection(topic), topic);
+		selectionUpdateSupport = null;
 	}
 
 	@Focus
