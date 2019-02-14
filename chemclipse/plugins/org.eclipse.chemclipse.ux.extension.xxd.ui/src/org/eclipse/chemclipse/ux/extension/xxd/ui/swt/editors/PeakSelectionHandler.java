@@ -74,17 +74,36 @@ public class PeakSelectionHandler extends AbstractHandledEventProcessor implemen
 				/*
 				 * Fire an update.
 				 */
-				IPeak peak = peaks.get(0);
-				chromatogramSelection.setSelectedPeak(peak);
-				boolean moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
-				if(moveRetentionTimeOnPeakSelection) {
-					chromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
+				IPeak peak = selectNearestPeak(peaks, retentionTime);
+				if(peak != null) {
+					chromatogramSelection.setSelectedPeak(peak);
+					boolean moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
+					if(moveRetentionTimeOnPeakSelection) {
+						chromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
+					}
+					//
+					extendedChromatogramUI.updateSelection();
+					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+					eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
 				}
-				//
-				extendedChromatogramUI.updateSelection();
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
 			}
 		}
+	}
+
+	private IPeak selectNearestPeak(List<IPeak> peaks, int retentionTime) {
+
+		IPeak nearestPeak = null;
+		for(IPeak peak : peaks) {
+			if(nearestPeak == null) {
+				nearestPeak = peak;
+			} else {
+				int deltaNearest = Math.abs(retentionTime - nearestPeak.getPeakModel().getRetentionTimeAtPeakMaximum());
+				int deltaCurrent = Math.abs(retentionTime - peak.getPeakModel().getRetentionTimeAtPeakMaximum());
+				if(deltaCurrent <= deltaNearest) {
+					nearestPeak = peak;
+				}
+			}
+		}
+		return nearestPeak;
 	}
 }
