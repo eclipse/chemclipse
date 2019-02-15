@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettings {
 
-	@JsonProperty(value = "Number Highes", defaultValue = "5")
+	@JsonProperty(value = "Number Highest", defaultValue = "5")
 	@IntSettingsProperty(minValue = 2, maxValue = 50)
 	private int numberHighest = 5;
 	@JsonProperty(value = "Number Lowest", defaultValue = "5")
