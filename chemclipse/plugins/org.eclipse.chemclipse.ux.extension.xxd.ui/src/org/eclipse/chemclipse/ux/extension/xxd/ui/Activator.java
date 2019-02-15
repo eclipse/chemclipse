@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,8 +15,9 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SelectionUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -34,7 +35,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 	private ScopedPreferenceStore preferenceStoreSubtract;
-	private SelectionUpdateSupport selectionUpdateSupport;
+	private DataUpdateSupport dataUpdateSupport;
 
 	/**
 	 * The constructor
@@ -51,7 +52,8 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStoreSubtract(PreferenceSupplier.INSTANCE());
-		selectionUpdateSupport = new SelectionUpdateSupport(getEventBroker(context));
+		dataUpdateSupport = new DataUpdateSupport(getEventBroker(context));
+		initialize(dataUpdateSupport);
 	}
 
 	/*
@@ -61,7 +63,7 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 
 		plugin = null;
-		selectionUpdateSupport = null;
+		dataUpdateSupport = null;
 		super.stop(context);
 	}
 
@@ -86,9 +88,25 @@ public class Activator extends AbstractUIPlugin {
 		return location.getURL().getPath().toString();
 	}
 
-	public SelectionUpdateSupport getSelectionUpdateSupport() {
+	public DataUpdateSupport getDataUpdateSupport() {
 
-		return selectionUpdateSupport;
+		return dataUpdateSupport;
+	}
+
+	private void initialize(DataUpdateSupport dataUpdateSupport) {
+
+		/*
+		 * The specific events will be removed soon.
+		 */
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		/*
+		 * Register the data update support early to get all recent selections.
+		 */
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
 	}
 
 	private void initializePreferenceStoreSubtract(IPreferenceSupplier preferenceSupplier) {

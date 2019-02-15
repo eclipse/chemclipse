@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,18 +18,22 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SelectionUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakScanListUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class PeakScanListPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class PeakScanListPart extends AbstractUpdateSupport implements IUpdateSupport {
 
 	private ExtendedPeakScanListUI extendedPeakScanListUI;
+	//
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION;
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 
 	@Inject
 	public PeakScanListPart(Composite parent, MPart part, IEventBroker eventBroker) {
@@ -39,31 +43,39 @@ public class PeakScanListPart extends AbstractDataUpdateSupport implements IData
 		 * Initialize
 		 * The AbstractDataUpdateSupport haven't had a chance yet to listen to updates.
 		 */
-		String topic = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION;
-		SelectionUpdateSupport selectionUpdateSupport = Activator.getDefault().getSelectionUpdateSupport();
-		updateObjects(selectionUpdateSupport.getLatestSelection(topic), topic);
-		selectionUpdateSupport = null;
+		updateLatestSelection();
+		dataUpdateSupport.add(new IDataUpdateListener() {
+
+			@Override
+			public void update(String topic, List<Object> objects) {
+
+				if(doUpdate()) {
+					parent.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							updateSelection(objects, topic);
+						}
+					});
+				}
+			}
+		});
 	}
 
 	@Focus
 	public void setFocus() {
 
-		updateObjects(getObjects(), getTopic());
+		updateLatestSelection();
 	}
 
-	@Override
-	public void registerEvents() {
+	private void updateLatestSelection() {
 
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Override
-	public void updateObjects(List<Object> objects, String topic) {
+	private void updateSelection(List<Object> objects, String topic) {
 
 		/*
 		 * 0 => because only one property was used to register the event.
