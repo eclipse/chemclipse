@@ -10,3 +10,5 @@ chemclipse/features/net.openchrom.chromatogram.msd.filter.supplier.ionremover.fe
 chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.ionremover.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.ionremover/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.filter.supplier.ionremover.updateSite/target/
+target/
+bin/
