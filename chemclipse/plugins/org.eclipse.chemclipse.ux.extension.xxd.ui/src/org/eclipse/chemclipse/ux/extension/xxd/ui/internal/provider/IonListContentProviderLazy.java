@@ -42,6 +42,8 @@ public class IonListContentProviderLazy implements ILazyContentProvider {
 	@Override
 	public void updateElement(int index) {
 
-		tableViewer.replace(ions.get(index), index);
+		if(ions != null && index < ions.size()) {
+			tableViewer.replace(ions.get(index), index);
+		}
 	}
 }
