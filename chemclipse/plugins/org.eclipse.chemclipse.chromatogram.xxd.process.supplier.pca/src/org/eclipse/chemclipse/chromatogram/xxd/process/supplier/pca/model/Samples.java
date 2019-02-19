@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
@@ -24,7 +24,7 @@ public class Samples extends AbstractSamples<RetentionTime, Sample> implements I
 	private PcaPreprocessingData pcaPreprocessingData;
 	private IPcaSettings pcaSettings;
 
-	public Samples(List<IDataInputEntry> dataInputEntries) {
+	public Samples(Collection<IDataInputEntry> dataInputEntries) {
 
 		super();
 		dataInputEntries.forEach(d -> getSampleList().add(new Sample(d)));
