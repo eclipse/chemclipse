@@ -42,26 +42,15 @@ public class ChromatogramIntegratorSupport {
 		/*
 		 * Get the chromatogram and background area.
 		 */
-		IIntegrationEntry chromatogramIntegrationEntry = calculateChromatogramIntegrationEntry(chromatogramSelection, monitor);
-		IIntegrationEntry backgroundIntegrationEntry = calculateBackgroundIntegrationEntry(chromatogramSelection, monitor);
-		//
-		double chromatogramArea = 0;
-		double backgroundArea = 0;
-		/*
-		 * Chromatogram Area
-		 */
-		if(chromatogramIntegrationEntry != null) {
-			chromatogramArea = chromatogramIntegrationEntry.getIntegratedArea();
-		}
-		/*
-		 * Background Area
-		 */
-		if(backgroundIntegrationEntry != null) {
-			backgroundArea = backgroundIntegrationEntry.getIntegratedArea();
-		}
+		List<IIntegrationEntry> chromatogramIntegrationEntries = calculateChromatogramIntegrationEntry(chromatogramSelection, monitor);
+		List<IIntegrationEntry> backgroundIntegrationEntries = calculateBackgroundIntegrationEntry(chromatogramSelection, monitor);
+		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		chromatogram.setIntegratedArea(chromatogramIntegrationEntries, backgroundIntegrationEntries, INTEGRATOR_DESCRIPTION);
 		/*
 		 * Chromatogram Results
 		 */
+		double chromatogramArea = getArea(chromatogramIntegrationEntries);
+		double backgroundArea = getArea(backgroundIntegrationEntries);
 		IChromatogramIntegrationResults chromatogramIntegrationResults = new ChromatogramIntegrationResults();
 		IChromatogramIntegrationResult chromatogramIntegrationResult = new ChromatogramIntegrationResult(chromatogramArea, backgroundArea);
 		chromatogramIntegrationResults.add(chromatogramIntegrationResult);
@@ -76,9 +65,9 @@ public class ChromatogramIntegratorSupport {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	private IIntegrationEntry calculateChromatogramIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	private List<IIntegrationEntry> calculateChromatogramIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		monitor.subTask("Integrate the chromatogram area");
+		List<IIntegrationEntry> chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		IChromatogramIntegrator chromatogramIntegrator = new ChromatogramIntegrator();
 		double chromatogramArea = chromatogramIntegrator.integrate(chromatogramSelection);
 		/*
@@ -92,19 +81,16 @@ public class ChromatogramIntegratorSupport {
 		}
 		//
 		if(chromatogramIntegrationEntry != null) {
-			List<IIntegrationEntry> chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
 			chromatogramIntegrationEntries.add(chromatogramIntegrationEntry);
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			chromatogram.setChromatogramIntegratedArea(chromatogramIntegrationEntries, INTEGRATOR_DESCRIPTION);
 		}
 		//
-		return chromatogramIntegrationEntry;
+		return chromatogramIntegrationEntries;
 	}
 
 	@SuppressWarnings("rawtypes")
-	private IIntegrationEntry calculateBackgroundIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	private List<IIntegrationEntry> calculateBackgroundIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		monitor.subTask("Integrate the background area");
+		List<IIntegrationEntry> backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		IBackgroundIntegrator backgroundIntegrator = new BackgroundIntegrator();
 		double backgroundArea = backgroundIntegrator.integrate(chromatogramSelection);
 		/*
@@ -118,12 +104,18 @@ public class ChromatogramIntegratorSupport {
 		}
 		//
 		if(backgroundIntegrationEntry != null) {
-			List<IIntegrationEntry> backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
 			backgroundIntegrationEntries.add(backgroundIntegrationEntry);
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			chromatogram.setBackgroundIntegratedArea(backgroundIntegrationEntries, INTEGRATOR_DESCRIPTION);
 		}
 		//
-		return backgroundIntegrationEntry;
+		return backgroundIntegrationEntries;
+	}
+
+	private double getArea(List<IIntegrationEntry> integrationEntries) {
+
+		double area = 0.0d;
+		for(IIntegrationEntry integrationEntry : integrationEntries) {
+			area += integrationEntry.getIntegratedArea();
+		}
+		return area;
 	}
 }

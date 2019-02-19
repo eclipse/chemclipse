@@ -30,7 +30,6 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 	private IPeakIntegrationResult result;
 	private PeakIntegrationSettings peakIntegrationSettings;
 	private String INTEGRATOR = "Integrator Trapezoid";
-	private String INTEGRATOR_TIC = "Integrator Trapezoid: TIC";
 
 	@Override
 	protected void setUp() throws Exception {
@@ -76,7 +75,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -95,7 +94,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -117,7 +116,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -140,7 +139,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -161,7 +160,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -182,7 +181,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -204,7 +203,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -226,7 +225,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -247,7 +246,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -269,7 +268,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -291,7 +290,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -313,7 +312,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -335,7 +334,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -358,7 +357,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -380,7 +379,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR + ": XIC = 50 77 103", description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -402,7 +401,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR + ": XIC = 50 77 103", description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -428,7 +427,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR + ": XIC = 50 77 103", description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -454,7 +453,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR + ": XIC = 50 77 103", description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -484,7 +483,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR + ": XIC = 50 51 74 77 78 103 104 105", description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -514,7 +513,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR + ": XIC = 50 51 74 77 78 103 104 105", description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -548,7 +547,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR + ": XIC = 50 51 74 77 78 103 104 105", description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -582,7 +581,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR + ": XIC = 50 51 74 77 78 103 104 105", description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -613,7 +612,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -644,7 +643,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -679,7 +678,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -714,7 +713,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			assertEquals(INTEGRATOR, result.getIntegratorType());
 			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
 			String description = super.getPeak().getIntegratorDescription();
-			assertEquals(INTEGRATOR_TIC, description);
+			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}

@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -77,7 +76,7 @@ public class PeakIntegrator implements IPeakIntegrator {
 		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
 		//
 		List<? extends IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getSelectedIons(), includeBackground);
-		addPeakAreaAndDescription(peak, peakIntegrationSettings, integrationEntries);
+		peak.setIntegratedArea(integrationEntries, IPeakIntegrator.DESCRIPTION);
 		/*
 		 * Get the peak area if the peak should be reported.
 		 */
@@ -218,48 +217,6 @@ public class PeakIntegrator implements IPeakIntegrator {
 		if(integrationSettings == null) {
 			throw new ValueMustNotBeNullException("The integration settings must not be null.");
 		}
-	}
-
-	/**
-	 * Adds the peak area and description.
-	 * 
-	 * @param peak
-	 * @param peakIntegrationSettings
-	 * @param integratedArea
-	 */
-	private void addPeakAreaAndDescription(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, List<? extends IIntegrationEntry> integrationEntries) {
-
-		/*
-		 * Set the peak area and its description independently of the report.
-		 */
-		String integratorDescription;
-		IMarkedIons selectedIons = peakIntegrationSettings.getSelectedIons();
-		/*
-		 * Add a appropriate description detector description to the peak.
-		 */
-		StringBuilder builder = new StringBuilder();
-		if(selectedIons.size() > 0 && !selectedIons.getIonsNominal().contains(AbstractIon.getIon(IIon.TIC_ION))) {
-			builder.append(IPeakIntegrator.DESCRIPTION);
-			builder.append(":");
-			builder.append(" ");
-			builder.append(IPeakIntegrator.XIC);
-			/*
-			 * Get the ion list and sort it.
-			 */
-			List<Integer> integratedIons = new ArrayList<Integer>(getIntegratedIons(selectedIons));
-			Collections.sort(integratedIons);
-			for(Integer ion : integratedIons) {
-				builder.append(" ");
-				builder.append(ion);
-			}
-		} else {
-			builder.append(IPeakIntegrator.DESCRIPTION);
-			builder.append(":");
-			builder.append(" ");
-			builder.append(IPeakIntegrator.TIC);
-		}
-		integratorDescription = builder.toString();
-		peak.setIntegratedArea(integrationEntries, integratorDescription);
 	}
 
 	/**
