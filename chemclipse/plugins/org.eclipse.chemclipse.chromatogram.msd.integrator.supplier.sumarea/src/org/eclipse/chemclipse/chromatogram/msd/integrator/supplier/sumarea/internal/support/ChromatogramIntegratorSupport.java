@@ -88,8 +88,7 @@ public class ChromatogramIntegratorSupport {
 			/*
 			 * Set the integration entries.
 			 */
-			chromatogram.setChromatogramIntegratedArea(chromatogramIntegrationEntries, INTEGRATOR_DESCRIPTION);
-			chromatogram.setBackgroundIntegratedArea(backgroundIntegrationEntries, INTEGRATOR_DESCRIPTION);
+			chromatogram.setIntegratedArea(chromatogramIntegrationEntries, backgroundIntegrationEntries, INTEGRATOR_DESCRIPTION);
 			//
 			return chromatogramIntegrationResults;
 		} catch(ChromatogramIsNullException e) {
