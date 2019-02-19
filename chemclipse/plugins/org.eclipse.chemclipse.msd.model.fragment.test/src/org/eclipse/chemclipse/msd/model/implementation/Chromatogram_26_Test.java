@@ -48,7 +48,6 @@ public class Chromatogram_26_Test extends TestCase {
 		chromatogramIntegrationEntries.add(chromatogramIntegrationEntry);
 		chromatogramIntegrationEntry = new IntegrationEntry(34.7f, 4885.1d);
 		chromatogramIntegrationEntries.add(chromatogramIntegrationEntry);
-		chromatogram.setChromatogramIntegratedArea(chromatogramIntegrationEntries, "ChromatogramIntegrator");
 		/*
 		 * Background Integration Entries
 		 */
@@ -57,7 +56,8 @@ public class Chromatogram_26_Test extends TestCase {
 		backgroundIntegrationEntries.add(backgroundIntegrationEntry);
 		backgroundIntegrationEntry = new IntegrationEntry(56.1f, 92043074.78d);
 		backgroundIntegrationEntries.add(backgroundIntegrationEntry);
-		chromatogram.setBackgroundIntegratedArea(backgroundIntegrationEntries, "BackgroundIntegrator");
+		//
+		chromatogram.setIntegratedArea(chromatogramIntegrationEntries, backgroundIntegrationEntries, "Test Integrator");
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class Chromatogram_26_Test extends TestCase {
 
 	public void testGetChromatogramIntegratorDescription_1() {
 
-		assertEquals("ChromatogramIntegrator", chromatogram.getChromatogramIntegratorDescription());
+		assertEquals("Test Integrator", chromatogram.getIntegratorDescription());
 	}
 
 	public void testGetBackgroundIntegratedArea_1() {
@@ -84,6 +84,6 @@ public class Chromatogram_26_Test extends TestCase {
 
 	public void testGetBackgroundIntegratorDescription_1() {
 
-		assertEquals("BackgroundIntegrator", chromatogram.getBackgroundIntegratorDescription());
+		assertEquals("Test Integrator", chromatogram.getIntegratorDescription());
 	}
 }

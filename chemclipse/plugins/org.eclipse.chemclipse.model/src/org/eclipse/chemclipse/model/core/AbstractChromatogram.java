@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -104,9 +104,8 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	/*
 	 * Integration entries.
 	 */
-	private String chromatogramIntegratorDescription = "";
+	private String integratorDescription = "";
 	private List<IIntegrationEntry> chromatogramIntegrationEntries;
-	private String backgroundIntegratorDescription = "";
 	private List<IIntegrationEntry> backgroundIntegrationEntries;
 	//
 	private IMethod method;
@@ -571,7 +570,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		}
 	}
 
-	// -----------------------------IAdaptable
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Object getAdapter(Class adapter) {
@@ -579,28 +577,24 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		return Platform.getAdapterManager().getAdapter(this, adapter);
 	}
 
-	// -----------------------------------------------IChromatogramVersioning
 	@Override
 	public IVersionManagement getVersionManagement() {
 
 		return versionManagement;
 	}
 
-	// -----------------------------------------------IChromatogramEditHistory
 	@Override
 	public IEditHistory getEditHistory() {
 
 		return editHistory;
 	}
 
-	// -----------------------------------------------IChromatogramBaseline
 	@Override
 	public IBaselineModel getBaselineModel() {
 
 		return baselineModel;
 	}
 
-	// -----------------------------------------------IUpdater
 	@Override
 	public void addChromatogramUpdateListener(IChromatogramUpdateListener listener) {
 
@@ -649,7 +643,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		}
 	}
 
-	// -----------------------------------------------Name methods
 	@Override
 	public String extractNameFromDirectory(String nameDefault, String directoryExtension) {
 
@@ -740,16 +733,16 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	}
 
 	@Override
-	public String getChromatogramIntegratorDescription() {
+	public String getIntegratorDescription() {
 
-		return chromatogramIntegratorDescription;
+		return integratorDescription;
 	}
 
 	@Override
-	public void setChromatogramIntegratorDescription(String chromatogramIntegratorDescription) {
+	public void setIntegratorDescription(String integratorDescription) {
 
-		if(chromatogramIntegratorDescription != null) {
-			this.chromatogramIntegratorDescription = chromatogramIntegratorDescription;
+		if(integratorDescription != null) {
+			this.integratorDescription = integratorDescription;
 		}
 	}
 
@@ -760,11 +753,16 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	}
 
 	@Override
-	public void setChromatogramIntegratedArea(List<IIntegrationEntry> chromatogramIntegrationEntries, String chromatogramIntegratorDescription) {
+	public void setIntegratedArea(List<IIntegrationEntry> chromatogramIntegrationEntries, List<IIntegrationEntry> backgroundIntegrationEntries, String integratorDescription) {
 
+		setIntegratorDescription(integratorDescription);
+		//
 		if(chromatogramIntegrationEntries != null) {
-			setChromatogramIntegratorDescription(chromatogramIntegratorDescription);
 			this.chromatogramIntegrationEntries = chromatogramIntegrationEntries;
+		}
+		//
+		if(backgroundIntegrationEntries != null) {
+			this.backgroundIntegrationEntries = backgroundIntegrationEntries;
 		}
 	}
 
@@ -775,32 +773,9 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	}
 
 	@Override
-	public String getBackgroundIntegratorDescription() {
-
-		return backgroundIntegratorDescription;
-	}
-
-	@Override
-	public void setBackgroundIntegratorDescription(String backgroundIntegratorDescription) {
-
-		if(backgroundIntegratorDescription != null) {
-			this.backgroundIntegratorDescription = backgroundIntegratorDescription;
-		}
-	}
-
-	@Override
 	public double getBackgroundIntegratedArea() {
 
 		return getIntegratedArea(backgroundIntegrationEntries);
-	}
-
-	@Override
-	public void setBackgroundIntegratedArea(List<IIntegrationEntry> backgroundIntegrationEntries, String backgroundIntegratorDescription) {
-
-		if(backgroundIntegrationEntries != null) {
-			setBackgroundIntegratorDescription(backgroundIntegratorDescription);
-			this.backgroundIntegrationEntries = backgroundIntegrationEntries;
-		}
 	}
 
 	@Override

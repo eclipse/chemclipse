@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+
+import junit.framework.TestCase;
 
 /**
  * @author eselmeister
@@ -27,8 +27,7 @@ public class Chromatogram_25_Test extends TestCase {
 
 		super.setUp();
 		chromatogram = new ChromatogramMSD();
-		chromatogram.setChromatogramIntegratedArea(null, "SomeTest");
-		chromatogram.setBackgroundIntegratedArea(null, "SomeTest");
+		chromatogram.setIntegratedArea(null, null, "SomeTest");
 	}
 
 	@Override
@@ -45,7 +44,7 @@ public class Chromatogram_25_Test extends TestCase {
 
 	public void testGetChromatogramIntegratorDescription_1() {
 
-		assertEquals("", chromatogram.getChromatogramIntegratorDescription());
+		assertEquals("SomeTest", chromatogram.getIntegratorDescription());
 	}
 
 	public void testGetBackgroundIntegratedArea_1() {
@@ -55,6 +54,6 @@ public class Chromatogram_25_Test extends TestCase {
 
 	public void testGetBackgroundIntegratorDescription_1() {
 
-		assertEquals("", chromatogram.getBackgroundIntegratorDescription());
+		assertEquals("SomeTest", chromatogram.getIntegratorDescription());
 	}
 }

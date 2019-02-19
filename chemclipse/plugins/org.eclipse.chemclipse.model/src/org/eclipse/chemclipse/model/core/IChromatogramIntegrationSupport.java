@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,18 +16,18 @@ import java.util.List;
 public interface IChromatogramIntegrationSupport {
 
 	/**
-	 * Returns the chromatogram integrator description.
+	 * Returns the integrator description.
 	 * 
 	 * @return String
 	 */
-	String getChromatogramIntegratorDescription();
+	String getIntegratorDescription();
 
 	/**
-	 * Sets the chromatogram integrator description.
+	 * Sets the integrator description.
 	 * 
 	 * @param integratorDescription
 	 */
-	void setChromatogramIntegratorDescription(String chromatogramIntegratorDescription);
+	void setIntegratorDescription(String integratorDescription);
 
 	/**
 	 * Returns the integrated area of the chromatogram.
@@ -35,20 +35,6 @@ public interface IChromatogramIntegrationSupport {
 	 * @return double
 	 */
 	double getChromatogramIntegratedArea();
-
-	/**
-	 * Returns the background integrator description.
-	 * 
-	 * @return String
-	 */
-	String getBackgroundIntegratorDescription();
-
-	/**
-	 * Sets the background integrator description.
-	 * 
-	 * @param integratorDescription
-	 */
-	void setBackgroundIntegratorDescription(String backgroundIntegratorDescription);
 
 	/**
 	 * Returns the integrated area of the background.
@@ -65,12 +51,12 @@ public interface IChromatogramIntegrationSupport {
 	double getPeakIntegratedArea();
 
 	/**
-	 * Sets the integration results for the chromatogram area.
+	 * Sets the integration results.
 	 * 
 	 * @param integratorDescription
 	 * @param integrationEntries
 	 */
-	void setChromatogramIntegratedArea(List<IIntegrationEntry> chromatogramIntegrationEntries, String chromatogramIntegratorDescription);
+	void setIntegratedArea(List<IIntegrationEntry> chromatogramIntegrationEntries, List<IIntegrationEntry> backgroundIntegrationEntries, String integratorDescription);
 
 	/**
 	 * Returns the list of integration entries for the chromatographic area.
@@ -78,14 +64,6 @@ public interface IChromatogramIntegrationSupport {
 	 * @return List<IIntegrationEntry>
 	 */
 	List<IIntegrationEntry> getChromatogramIntegrationEntries();
-
-	/**
-	 * Sets the integration results for the background area.
-	 * 
-	 * @param integratorDescription
-	 * @param integrationEntries
-	 */
-	void setBackgroundIntegratedArea(List<IIntegrationEntry> backgroundIntegrationEntries, String backgroundIntegratorDescription);
 
 	/**
 	 * Returns the list of integration entries for the background area.

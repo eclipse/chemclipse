@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -57,9 +57,13 @@ public class ExtendedIntegrationAreaUI {
 
 		this.object = object;
 		if(object instanceof IPeak) {
-			labelInfo.setText(peakDataSupport.getPeakLabel((IPeak)object));
+			IPeak peak = (IPeak)object;
+			String description = peak.getIntegratorDescription();
+			labelInfo.setText(peakDataSupport.getPeakLabel(peak) + " | " + description);
 		} else if(object instanceof IChromatogram) {
-			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel((IChromatogram)object));
+			IChromatogram chromatogram = (IChromatogram)object;
+			String description = chromatogram.getIntegratorDescription();
+			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogram) + " | " + description);
 		} else {
 			labelInfo.setText("No data has been selected.");
 		}
