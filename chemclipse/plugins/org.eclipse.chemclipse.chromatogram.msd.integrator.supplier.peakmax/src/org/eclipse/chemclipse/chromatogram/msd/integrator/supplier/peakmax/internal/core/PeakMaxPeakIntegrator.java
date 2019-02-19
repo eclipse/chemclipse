@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.internal.core;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -53,7 +52,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		PeakIntegrationResult result = null;
 		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
 		List<IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getSelectedIons());
-		addPeakAreaAndDescription(peak, peakIntegrationSettings, integrationEntries);
+		peak.setIntegratedArea(integrationEntries, IPeakMaxPeakIntegrator.DESCRIPTION);
 		/*
 		 * Get the peak area if the peak should be reported.
 		 */
@@ -171,52 +170,6 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		if(integrationSettings == null) {
 			throw new ValueMustNotBeNullException("The integration settings must not be null.");
 		}
-	}
-
-	/**
-	 * Adds the peak area and description.
-	 * 
-	 * @param peak
-	 * @param peakIntegrationSettings
-	 * @param integratedArea
-	 */
-	private void addPeakAreaAndDescription(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, List<IIntegrationEntry> integrationEntries) {
-
-		/*
-		 * Set the peak area and its description independently of the report.
-		 */
-		String integratorDescription;
-		IMarkedIons selectedIons = peakIntegrationSettings.getSelectedIons();
-		Set<Integer> selectedIonsNominal = selectedIons.getIonsNominal();
-		/*
-		 * Add a appropriate description detector description to the peak.
-		 */
-		StringBuilder builder = new StringBuilder();
-		if(selectedIonsNominal.size() > 0 && !selectedIonsNominal.contains(IIon.TIC_ION)) {
-			builder.append(IPeakMaxPeakIntegrator.DESCRIPTION);
-			builder.append(":");
-			builder.append(" ");
-			builder.append(IPeakMaxPeakIntegrator.XIC);
-			/*
-			 * Get the ion list and sort it.
-			 */
-			List<Integer> integratedIons = new ArrayList<Integer>(getIntegratedIons(selectedIons));
-			Collections.sort(integratedIons);
-			for(Integer ion : integratedIons) {
-				builder.append(" ");
-				builder.append(ion);
-			}
-		} else {
-			builder.append(IPeakMaxPeakIntegrator.DESCRIPTION);
-			builder.append(":");
-			builder.append(" ");
-			builder.append(IPeakMaxPeakIntegrator.TIC);
-		}
-		integratorDescription = builder.toString();
-		/*
-		 * Set the integration results.
-		 */
-		peak.setIntegratedArea(integrationEntries, integratorDescription);
 	}
 
 	/**
