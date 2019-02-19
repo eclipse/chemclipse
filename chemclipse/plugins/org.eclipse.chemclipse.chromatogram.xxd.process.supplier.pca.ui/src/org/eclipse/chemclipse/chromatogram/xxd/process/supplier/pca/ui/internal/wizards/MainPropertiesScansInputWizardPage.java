@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionScans.ExtractionType;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.conversion.IConverter;
@@ -33,17 +33,18 @@ import org.eclipse.swt.widgets.Text;
 public class MainPropertiesScansInputWizardPage extends WizardPage {
 
 	private DataBindingContext dbc = new DataBindingContext();
-	private int extractionType;
+	private ExtractionType extractionType;
 	private IObservableValue<Integer> maximalNumberScans = new WritableValue<>();
 	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
 	private boolean useDefoultProperties;
 
 	protected MainPropertiesScansInputWizardPage(String pageName) {
+
 		super(pageName);
 		setTitle("Set Main Parameters");
 		retentionTimeWindow.setValue(1.0);
 		maximalNumberScans.setValue(5000);
-		extractionType = IDataExtraction.CLOSEST_SCAN;
+		extractionType = ExtractionType.CLOSEST_SCAN;
 		useDefoultProperties = true;
 	}
 
@@ -62,10 +63,10 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 		button = new Button(composite, SWT.RADIO);
 		button.setText("Select the closest scan");
 		button.setSelection(true);
-		button.addListener(SWT.Selection, e -> extractionType = IDataExtraction.CLOSEST_SCAN);
+		button.addListener(SWT.Selection, e -> extractionType = ExtractionType.CLOSEST_SCAN);
 		button = new Button(composite, SWT.RADIO);
 		button.setText("Interpolate scan");
-		button.addListener(SWT.Selection, e -> extractionType = IDataExtraction.LINEAR_INTERPOLATION_SCAN);
+		button.addListener(SWT.Selection, e -> extractionType = ExtractionType.LINEAR_INTERPOLATION_SCAN);
 		label = new Label(composite, SWT.None);
 		label.setText("Retention Time Windows (s)");
 		Text text = new Text(composite, SWT.BORDER);
@@ -99,7 +100,7 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 		setControl(composite);
 	}
 
-	public int getExtractionType() {
+	public ExtractionType getExtractionType() {
 
 		return extractionType;
 	}

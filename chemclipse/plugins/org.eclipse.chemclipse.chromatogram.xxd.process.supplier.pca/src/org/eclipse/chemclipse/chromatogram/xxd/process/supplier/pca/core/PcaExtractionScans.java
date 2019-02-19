@@ -38,21 +38,25 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaExtractionScans implements IDataExtraction {
 
+	public enum ExtractionType {
+		CLOSEST_SCAN, LINEAR_INTERPOLATION_SCAN;
+	}
+
 	private int beginRetentionTimeMax;
 	private List<IDataInputEntry> dataInputEntriesAll;
 	private int endRetentionTimeMin;
-	private int extractionType;
+	private ExtractionType extractionType;
 	private int maximalNumberScans;
 	private int retentionTimeWindow;
 	private int scanInterval;
 	private boolean similarChromatogram; // chromatograms have to have some retention time in first scan and same scan interval
 	private boolean useDefoultProperties;
 
-	public PcaExtractionScans(int retentionTimeWindow, int maximalNumberScans, List<IDataInputEntry> dataInputEntries, int extractionType, boolean useDefoultProperties) {
+	public PcaExtractionScans(int retentionTimeWindow, int maximalNumberScans, List<IDataInputEntry> dataInputEntries, ExtractionType scanAlignment, boolean useDefoultProperties) {
 
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.dataInputEntriesAll = dataInputEntries;
-		this.extractionType = extractionType;
+		this.extractionType = scanAlignment;
 		this.useDefoultProperties = useDefoultProperties;
 		this.maximalNumberScans = maximalNumberScans;
 	}

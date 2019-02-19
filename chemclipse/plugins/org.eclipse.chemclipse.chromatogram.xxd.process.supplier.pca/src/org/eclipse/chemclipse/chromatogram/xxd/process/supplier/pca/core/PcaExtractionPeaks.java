@@ -38,13 +38,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class PcaExtractionPeaks implements IDataExtraction {
 
 	private List<IDataInputEntry> dataInputEntriesAll;
-	private int extractionType;
 	private int retentionTimeWindow;
 
-	public PcaExtractionPeaks(List<IDataInputEntry> dataInputEntriesAll, int retentionTimeWindow, int extractionType) {
+	public PcaExtractionPeaks(List<IDataInputEntry> dataInputEntriesAll, int retentionTimeWindow) {
+
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.dataInputEntriesAll = dataInputEntriesAll;
-		this.extractionType = extractionType;
 	}
 
 	private List<Integer> calculateCondensedRetentionTimes(Map<String, SortedMap<Integer, IPeak>> extractPeaks) {
@@ -191,17 +190,7 @@ public class PcaExtractionPeaks implements IDataExtraction {
 		 * Initialize PCA Results
 		 */
 		Samples samples = new Samples(dataInputEntriesAll);
-		if(!(extractionType == EXTRACT_PEAK || extractionType == EXTRACT_PEAK_CUMULATION)) {
-			extractionType = EXTRACT_PEAK;
-		}
-		/*
-		 * Extract data
-		 */
-		switch(extractionType) {
-			case EXTRACT_PEAK:
-				extractPeakData(samples, retentionTimeWindow, monitor);
-				break;
-		}
+		extractPeakData(samples, retentionTimeWindow, monitor);
 		setRetentionTimeDescription(samples);
 		return samples;
 	}

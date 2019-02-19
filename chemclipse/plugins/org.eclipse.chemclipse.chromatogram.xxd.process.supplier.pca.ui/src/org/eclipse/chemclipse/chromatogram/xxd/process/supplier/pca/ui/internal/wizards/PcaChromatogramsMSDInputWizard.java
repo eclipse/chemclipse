@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionScans;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionScans.ExtractionType;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
@@ -80,9 +81,9 @@ public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputW
 		List<IDataInputEntry> dataInputs = getDataInputEntries();
 		int retentionTimeWindow = mainPropertiesPage.getRetentionTimeWindow();
 		boolean useDefoultProperties = mainPropertiesPage.isUseDefoultProperties();
-		int extractionType = mainPropertiesPage.getExtractionType();
+		ExtractionType scanAlignment = mainPropertiesPage.getExtractionType();
 		int maximalNumberScans = mainPropertiesPage.getMaximalNumberScans();
-		pcaExtractionData = new PcaExtractionScans(retentionTimeWindow, maximalNumberScans, dataInputs, extractionType, useDefoultProperties);
+		pcaExtractionData = new PcaExtractionScans(retentionTimeWindow, maximalNumberScans, dataInputs, scanAlignment, useDefoultProperties);
 		return true;
 	}
 

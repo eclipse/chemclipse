@@ -79,7 +79,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 
 		List<IDataInputEntry> dataInputs = getDataInputEntries();
 		int retentionTimeWindow = mainPropertiesPage.getRetentionTimeWindow();
-		pcaExtractionData = new PcaExtractionPeaks(dataInputs, retentionTimeWindow, IDataExtraction.EXTRACT_PEAK);
+		pcaExtractionData = new PcaExtractionPeaks(dataInputs, retentionTimeWindow);
 		return true;
 	}
 

@@ -23,11 +23,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IDataExtraction {
 
-	int CLOSEST_SCAN = 2;
-	int EXTRACT_PEAK = 0;
-	int EXTRACT_PEAK_CUMULATION = 1;
-	int LINEAR_INTERPOLATION_SCAN = 3;
-
 	Samples process(IProgressMonitor monitor);
 
 	default void setRetentionTimeDescription(Samples samples) {
