@@ -403,13 +403,12 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 
 	private void readArea(DataInputStream dataInputStream, boolean closeStream, IChromatogramCSD chromatogram) throws IOException {
 
-		String chromatogramIntegratorDescription = readString(dataInputStream); // Chromatogram Integrator Description
+		String integratorDescription = readString(dataInputStream); // Chromatogram Integrator Description
 		List<IIntegrationEntry> chromatogramIntegrationEntries = readIntegrationEntries(dataInputStream);
-		chromatogram.setChromatogramIntegratedArea(chromatogramIntegrationEntries, chromatogramIntegratorDescription);
-		//
-		String backgroundIntegratorDescription = readString(dataInputStream); // Background Integrator Description
+		readString(dataInputStream); // Background Integrator Description
 		List<IIntegrationEntry> backgroundIntegrationEntries = readIntegrationEntries(dataInputStream);
-		chromatogram.setBackgroundIntegratedArea(backgroundIntegrationEntries, backgroundIntegratorDescription);
+		//
+		chromatogram.setIntegratedArea(chromatogramIntegrationEntries, backgroundIntegrationEntries, integratorDescription);
 		//
 		if(closeStream) {
 			dataInputStream.close();
