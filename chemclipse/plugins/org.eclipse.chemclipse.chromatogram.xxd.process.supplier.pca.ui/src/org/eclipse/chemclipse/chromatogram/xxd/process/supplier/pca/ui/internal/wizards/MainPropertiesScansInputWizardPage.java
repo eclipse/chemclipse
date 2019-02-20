@@ -36,7 +36,7 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 	private ExtractionType extractionType;
 	private IObservableValue<Integer> maximalNumberScans = new WritableValue<>();
 	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
-	private boolean useDefoultProperties;
+	private boolean useDefaultProperties;
 
 	protected MainPropertiesScansInputWizardPage(String pageName) {
 
@@ -45,7 +45,7 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 		retentionTimeWindow.setValue(1.0);
 		maximalNumberScans.setValue(5000);
 		extractionType = ExtractionType.CLOSEST_SCAN;
-		useDefoultProperties = true;
+		useDefaultProperties = true;
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 		Button button = new Button(composite, SWT.CHECK);
 		button.setText("Use default properties if it is possible (chromatogram have same start retention time and same scan interval)");
 		button.setSelection(true);
-		button.addListener(SWT.Selection, e -> useDefoultProperties = ((Button)e.widget).getSelection());
+		button.addListener(SWT.Selection, e -> useDefaultProperties = ((Button)e.widget).getSelection());
 		Label label = new Label(composite, SWT.None);
 		label.setText("Retention Time Windows will be set according to scan interval");
 		button = new Button(composite, SWT.RADIO);
@@ -115,8 +115,8 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 		return (int)Math.round(retentionTimeWindow.getValue() * 1000);
 	}
 
-	public boolean isUseDefoultProperties() {
+	public boolean isUseDefaultProperties() {
 
-		return useDefoultProperties;
+		return useDefaultProperties;
 	}
 }

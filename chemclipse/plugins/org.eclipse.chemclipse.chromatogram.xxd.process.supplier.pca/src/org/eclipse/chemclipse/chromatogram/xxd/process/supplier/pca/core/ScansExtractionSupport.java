@@ -46,13 +46,13 @@ public class ScansExtractionSupport {
 	private ExtractionType extractionType;
 	private int maximalNumberScans;
 	private int retentionTimeWindow;
-	private boolean useDefoultProperties;
+	private boolean useDefaultProperties;
 
-	public ScansExtractionSupport(int retentionTimeWindow, int maximalNumberScans, ExtractionType extractionType, boolean useDefoultProperties) {
+	public ScansExtractionSupport(int retentionTimeWindow, int maximalNumberScans, ExtractionType extractionType, boolean useDefaultProperties) {
 
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.extractionType = extractionType;
-		this.useDefoultProperties = useDefoultProperties;
+		this.useDefaultProperties = useDefaultProperties;
 		this.maximalNumberScans = maximalNumberScans;
 	}
 
@@ -140,7 +140,7 @@ public class ScansExtractionSupport {
 		Map<String, NavigableMap<Integer, Float>> extractScans = extractScans(dataInput, monitor);
 		//
 		boolean similarChromatogram = true;
-		if(useDefoultProperties) {
+		if(useDefaultProperties) {
 			Collection<NavigableMap<Integer, Float>> dataSet = extractScans.values();
 			boolean isFirst = true;
 			Set<Integer> retentionTimes = new HashSet<>();
@@ -166,8 +166,8 @@ public class ScansExtractionSupport {
 			retentionTimeWindow = (endRetentionTimeMin - beginRetentionTimeMax) / maximalNumberScans;
 			similarChromatogram = false;
 		}
-		if(similarChromatogram && useDefoultProperties) {
-			useDefoultProperties(samples, extractScans);
+		if(similarChromatogram && useDefaultProperties) {
+			useDefaultProperties(samples, extractScans);
 		} else {
 			switch(extractionType) {
 				case CLOSEST_SCAN:
@@ -204,7 +204,7 @@ public class ScansExtractionSupport {
 		samples.getVariables().addAll(RetentionTime.create(retentionTime));
 	}
 
-	private void useDefoultProperties(Samples samples, Map<String, NavigableMap<Integer, Float>> extractScans) {
+	private void useDefaultProperties(Samples samples, Map<String, NavigableMap<Integer, Float>> extractScans) {
 
 		Set<Integer> retentionTimesSet = extractScans.entrySet().iterator().next().getValue().keySet();
 		List<Integer> retentionTimes = new ArrayList<>(retentionTimesSet);

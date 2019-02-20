@@ -80,10 +80,10 @@ public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputW
 
 		List<IDataInputEntry> dataInputs = getDataInputEntries();
 		int retentionTimeWindow = mainPropertiesPage.getRetentionTimeWindow();
-		boolean useDefoultProperties = mainPropertiesPage.isUseDefoultProperties();
+		boolean useDefaultProperties = mainPropertiesPage.isUseDefaultProperties();
 		ExtractionType scanAlignment = mainPropertiesPage.getExtractionType();
 		int maximalNumberScans = mainPropertiesPage.getMaximalNumberScans();
-		pcaExtractionData = new PcaExtractionScans(retentionTimeWindow, maximalNumberScans, dataInputs, scanAlignment, useDefoultProperties);
+		pcaExtractionData = new PcaExtractionScans(retentionTimeWindow, maximalNumberScans, dataInputs, scanAlignment, useDefaultProperties);
 		return true;
 	}
 

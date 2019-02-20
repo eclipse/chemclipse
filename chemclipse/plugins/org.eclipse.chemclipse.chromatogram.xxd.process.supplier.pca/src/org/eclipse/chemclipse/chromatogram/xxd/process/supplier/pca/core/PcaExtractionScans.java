@@ -32,21 +32,21 @@ public class PcaExtractionScans implements IDataExtraction {
 	private ExtractionType extractionType;
 	private int maximalNumberScans;
 	private int retentionTimeWindow;
-	private boolean useDefoultProperties;
+	private boolean useDefaultProperties;
 
-	public PcaExtractionScans(int retentionTimeWindow, int maximalNumberScans, List<IDataInputEntry> dataInputEntries, ExtractionType scanAlignment, boolean useDefoultProperties) {
+	public PcaExtractionScans(int retentionTimeWindow, int maximalNumberScans, List<IDataInputEntry> dataInputEntries, ExtractionType scanAlignment, boolean useDefaultProperties) {
 
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.dataInputEntriesAll = dataInputEntries;
 		this.extractionType = scanAlignment;
-		this.useDefoultProperties = useDefoultProperties;
+		this.useDefaultProperties = useDefaultProperties;
 		this.maximalNumberScans = maximalNumberScans;
 	}
 
 	@Override
 	public Samples process(IProgressMonitor monitor) {
 
-		ScansExtractionSupport scansExtractionSupport = new ScansExtractionSupport(retentionTimeWindow, maximalNumberScans, extractionType, useDefoultProperties);
+		ScansExtractionSupport scansExtractionSupport = new ScansExtractionSupport(retentionTimeWindow, maximalNumberScans, extractionType, useDefaultProperties);
 		Map<IDataInputEntry, Collection<IScan>> inputData = new HashMap<>();
 		for(IDataInputEntry input : dataInputEntriesAll) {
 			IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(new File(input.getInputFile()), monitor);
