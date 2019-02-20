@@ -14,15 +14,15 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
@@ -60,7 +60,7 @@ public class ScansExtractionSupport {
 
 		beginRetentionTimeMax = 0;
 		endRetentionTimeMin = Integer.MAX_VALUE;
-		Map<String, NavigableMap<Integer, Float>> scanMap = new HashMap<>();
+		Map<String, NavigableMap<Integer, Float>> scanMap = new LinkedHashMap<>();
 		for(Entry<IDataInputEntry, Collection<IScan>> input : inputs.entrySet()) {
 			TreeMap<Integer, Float> extractScans = new TreeMap<>();
 			Collection<IScan> scans = input.getValue();
@@ -143,22 +143,21 @@ public class ScansExtractionSupport {
 		if(useDefaultProperties) {
 			Collection<NavigableMap<Integer, Float>> dataSet = extractScans.values();
 			boolean isFirst = true;
-			Set<Integer> retentionTimes = new HashSet<>();
-			int retentionTimeSize = retentionTimes.size();
+			Set<Integer> retentionTimes = new TreeSet<>();
 			for(NavigableMap<Integer, Float> data : dataSet) {
 				if(isFirst) {
-					retentionTimes.addAll(data.keySet());
+					retentionTimes.addAll(data.subMap(beginRetentionTimeMax, endRetentionTimeMin + 1).keySet());
+					isFirst = false;
 				} else {
-					if(data.size() != retentionTimes.size()) {
-						similarChromatogram = false;
-						break;
-					}
-					long dataSiza = data.keySet().stream().filter(time -> retentionTimes.contains(time)).count();
-					if(dataSiza != retentionTimeSize) {
+					if(!retentionTimes.equals(data.subMap(beginRetentionTimeMax, endRetentionTimeMin + 1).keySet())) {
 						similarChromatogram = false;
 						break;
 					}
 				}
+			}
+			if(similarChromatogram) {
+				useDefaultProperties(samples, retentionTimes, extractScans);
+				return samples;
 			}
 		}
 		int size = ((endRetentionTimeMin - beginRetentionTimeMax) / retentionTimeWindow);
@@ -166,17 +165,13 @@ public class ScansExtractionSupport {
 			retentionTimeWindow = (endRetentionTimeMin - beginRetentionTimeMax) / maximalNumberScans;
 			similarChromatogram = false;
 		}
-		if(similarChromatogram && useDefaultProperties) {
-			useDefaultProperties(samples, extractScans);
-		} else {
-			switch(extractionType) {
-				case CLOSEST_SCAN:
-					setClosestScan(samples, extractScans);
-					break;
-				case LINEAR_INTERPOLATION_SCAN:
-					interpolation(samples, extractScans, new LinearInterpolator());
-					break;
-			}
+		switch(extractionType) {
+			case CLOSEST_SCAN:
+				setClosestScan(samples, extractScans);
+				break;
+			case LINEAR_INTERPOLATION_SCAN:
+				interpolation(samples, extractScans, new LinearInterpolator());
+				break;
 		}
 		return samples;
 	}
@@ -204,9 +199,8 @@ public class ScansExtractionSupport {
 		samples.getVariables().addAll(RetentionTime.create(retentionTime));
 	}
 
-	private void useDefaultProperties(Samples samples, Map<String, NavigableMap<Integer, Float>> extractScans) {
+	private void useDefaultProperties(Samples samples, Set<Integer> retentionTimesSet, Map<String, NavigableMap<Integer, Float>> extractScans) {
 
-		Set<Integer> retentionTimesSet = extractScans.entrySet().iterator().next().getValue().keySet();
 		List<Integer> retentionTimes = new ArrayList<>(retentionTimesSet);
 		Collections.sort(retentionTimes);
 		for(Sample sample : samples.getSampleList()) {
