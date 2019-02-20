@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +36,7 @@ public class PcaExtractionPeaks implements IDataExtraction {
 
 	private Map<IDataInputEntry, IPeaks> extractPeaks(List<IDataInputEntry> peakinpitFiles, IProgressMonitor monitor) {
 
-		Map<IDataInputEntry, IPeaks> peakMap = new HashMap<>();
+		Map<IDataInputEntry, IPeaks> peakMap = new LinkedHashMap<>();
 		for(IDataInputEntry peakFile : peakinpitFiles) {
 			try {
 				/*

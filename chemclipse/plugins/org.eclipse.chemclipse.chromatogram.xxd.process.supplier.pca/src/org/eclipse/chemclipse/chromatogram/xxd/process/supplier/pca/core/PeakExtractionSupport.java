@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2018,2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -56,8 +56,8 @@ public class PeakExtractionSupport {
 
 	private Map<String, SortedMap<Integer, IPeak>> exctractPcaPeakMap(Map<String, IPeaks> peakMap, int retentionTimeWindow) {
 
-		Map<String, TreeMap<Integer, IPeak>> pcaPeakRetentionTime = new HashMap<>();
-		Map<String, SortedMap<Integer, IPeak>> pcaPeakCondenseRetentionTime = new HashMap<>();
+		Map<String, TreeMap<Integer, IPeak>> pcaPeakRetentionTime = new LinkedHashMap<>();
+		Map<String, SortedMap<Integer, IPeak>> pcaPeakCondenseRetentionTime = new LinkedHashMap<>();
 		int totalCountPeak = 0;
 		for(Map.Entry<String, IPeaks> peakEnry : peakMap.entrySet()) {
 			String name = peakEnry.getKey();
@@ -115,7 +115,7 @@ public class PeakExtractionSupport {
 	public Samples extractPeakData(Map<IDataInputEntry, IPeaks> peaks, IProgressMonitor monitor) {
 
 		Samples samples = new Samples(peaks.keySet());
-		Map<String, IPeaks> peakMap = new HashMap<>();
+		Map<String, IPeaks> peakMap = new LinkedHashMap<>();
 		peaks.forEach((dataInputEntry, peaksInput) -> {
 			peakMap.put(dataInputEntry.getName(), peaksInput);
 		});
@@ -186,7 +186,7 @@ public class PeakExtractionSupport {
 
 	private SortedMap<Double, Collection<Integer>> setWeightRetentionTimes(Map<String, TreeMap<Integer, IPeak>> pcaPeakRetetntionTimeMap, int retentionTimeWindow) {
 
-		Map<Integer, Double> peakSum = new HashMap<>();
+		Map<Integer, Double> peakSum = new LinkedHashMap<>();
 		int step = 1;
 		if(retentionTimeWindow > 400) {
 			step = retentionTimeWindow / 400;
