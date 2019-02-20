@@ -13,19 +13,14 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.easymock.EasyMock;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.implementation.Peaks;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,9 +34,9 @@ public class PeakExtractionSupportTest_1_4 {
 
 		PeakExtractionSupport peakExtractionSupport = new PeakExtractionSupport(1);
 		Map<IDataInputEntry, IPeaks> dataInput = new LinkedHashMap<>();
-		putDataToMap("Sample1", "Group1", new int[]{1, 2}, new double[]{3.2, 3.4}, dataInput);
-		putDataToMap("Sample2", "Group2", new int[]{1, 2}, new double[]{7, 10}, dataInput);
-		putDataToMap("Sample3", null, new int[]{1, 2, 3}, new double[]{2, 3, 4}, dataInput);
+		TestSupport.putPeakDataToMap("Sample1", "Group1", new int[]{1, 2}, new double[]{3.2, 3.4}, dataInput);
+		TestSupport.putPeakDataToMap("Sample2", "Group2", new int[]{1, 2}, new double[]{7, 10}, dataInput);
+		TestSupport.putPeakDataToMap("Sample3", null, new int[]{1, 2, 3}, new double[]{2, 3, 4}, dataInput);
 		samples = peakExtractionSupport.extractPeakData(dataInput, new NullProgressMonitor());
 	}
 
@@ -92,36 +87,5 @@ public class PeakExtractionSupportTest_1_4 {
 		assertEquals(3, sampleData.get(1).getModifiedData(), 0.0);
 		assertEquals(4, sampleData.get(2).getData(), 0.0);
 		assertEquals(4, sampleData.get(2).getModifiedData(), 0.0);
-	}
-
-	protected void putDataToMap(String name, String groupName, int[] retentionTimes, double[] integrationArea, Map<IDataInputEntry, IPeaks> map) {
-
-		map.put(createDataInputEntry(name, groupName), cretePeaks(retentionTimes, integrationArea));
-	}
-
-	private IDataInputEntry createDataInputEntry(String name, String groupName) {
-
-		IDataInputEntry entry = EasyMock.createMock(IDataInputEntry.class);
-		EasyMock.expect(entry.getName()).andStubReturn(name);
-		EasyMock.expect(entry.getGroupName()).andStubReturn(groupName);
-		EasyMock.replay(entry);
-		return entry;
-	}
-
-	private IPeaks cretePeaks(int[] retentionTimes, double[] integrationArea) {
-
-		IPeaks peaks = new Peaks();
-		for(int i = 0; i < integrationArea.length; i++) {
-			IPeakModelMSD peakModel = EasyMock.createMock(IPeakModelMSD.class);
-			EasyMock.expect(peakModel.getRetentionTimeAtPeakMaximum()).andStubReturn(retentionTimes[i]);
-			EasyMock.replay(peakModel);
-			IChromatogramPeakMSD peak = EasyMock.createMock(IChromatogramPeakMSD.class);
-			EasyMock.expect(peak.getPeakModel()).andStubReturn(peakModel);
-			EasyMock.expect(peak.getIntegratedArea()).andStubReturn(integrationArea[i]);
-			EasyMock.expect(peak.getTargets()).andStubReturn(new HashSet<>());
-			EasyMock.replay(peak);
-			peaks.addPeak(peak);
-		}
-		return peaks;
 	}
 }
