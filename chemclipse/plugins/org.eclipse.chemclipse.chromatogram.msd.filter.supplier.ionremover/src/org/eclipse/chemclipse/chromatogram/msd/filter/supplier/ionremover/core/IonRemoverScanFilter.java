@@ -12,10 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core;
 
 import java.text.MessageFormat;
-import java.util.Collection;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.filter.Filter;
+import org.eclipse.chemclipse.filter.FilterList;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.filter.IScanFilter;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -52,7 +52,7 @@ public class IonRemoverScanFilter implements IScanFilter<MassSpectrumFilterSetti
 	}
 
 	@Override
-	public IProcessingResult<Boolean> filterIScans(Collection<IScan> filterItems, MassSpectrumFilterSettings configuration, IProgressMonitor monitor) throws IllegalArgumentException {
+	public IProcessingResult<Boolean> filterIScans(FilterList<IScan> filterItems, MassSpectrumFilterSettings configuration, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		if(configuration == null) {
 			configuration = createNewConfiguration();
