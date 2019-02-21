@@ -13,13 +13,13 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.CutOffScanFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.CutOffScanFilterSettings.CutDirection;
 import org.eclipse.chemclipse.filter.Filter;
+import org.eclipse.chemclipse.filter.FilterList;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.filter.IScanFilter;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -56,7 +56,7 @@ public class CutOffScanFilter implements IScanFilter<CutOffScanFilterSettings> {
 	}
 
 	@Override
-	public IProcessingResult<Boolean> filterIScans(Collection<IScan> filterItems, CutOffScanFilterSettings configuration, IProgressMonitor monitor) throws IllegalArgumentException {
+	public IProcessingResult<Boolean> filterIScans(FilterList<IScan> filterItems, CutOffScanFilterSettings configuration, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		if(configuration == null) {
 			configuration = createNewConfiguration();
