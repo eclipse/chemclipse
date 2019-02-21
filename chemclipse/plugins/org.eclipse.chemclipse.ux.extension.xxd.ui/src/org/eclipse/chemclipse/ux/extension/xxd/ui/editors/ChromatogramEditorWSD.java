@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.filter.FilterFactory;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -25,7 +26,7 @@ public class ChromatogramEditorWSD extends ChromatogramEditor {
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD";
 
 	@Inject
-	public ChromatogramEditorWSD(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
-		super(DataType.WSD, parent, part, dirtyable, shell);
+	public ChromatogramEditorWSD(Composite parent, MPart part, MDirtyable dirtyable, Shell shell, FilterFactory filterFactory) {
+		super(DataType.WSD, parent, part, dirtyable, shell, filterFactory);
 	}
 }

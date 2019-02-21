@@ -13,8 +13,9 @@ package org.eclipse.chemclipse.filter.internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -66,6 +67,23 @@ public class OSGiFilterFactory implements FilterFactory {
 				}
 			}
 		}
+		Collections.sort(list, new Comparator<Filter<?>>() {
+
+			@Override
+			public int compare(Filter<?> f1, Filter<?> f2) {
+
+				return getName(f1).compareToIgnoreCase(getName(f2));
+			}
+
+			private String getName(Filter<?> f) {
+
+				String name = f.getFilterName();
+				if(name != null) {
+					return name;
+				}
+				return f.getClass().getName();
+			}
+		});
 		return list;
 	}
 
@@ -77,10 +95,9 @@ public class OSGiFilterFactory implements FilterFactory {
 
 	protected void removeFilter(Filter<?> filter) {
 
-		for(Iterator<FilterDescriptor> iterator = filterDescriptors.iterator(); iterator.hasNext();) {
-			FilterDescriptor filterDescriptor = iterator.next();
+		for(FilterDescriptor filterDescriptor : filterDescriptors) {
 			if(filterDescriptor.filter == filter) {
-				iterator.remove();
+				filterDescriptors.remove(filterDescriptor);
 				return;
 			}
 		}
@@ -94,6 +111,12 @@ public class OSGiFilterFactory implements FilterFactory {
 		FilterDescriptor(Filter<?> filter, Map<String, ?> properties) {
 			this.filter = filter;
 			this.properties = new HashMap<>(properties);
+		}
+
+		@Override
+		public String toString() {
+
+			return "Filter: " + filter + ", Properties: " + properties;
 		}
 	}
 }

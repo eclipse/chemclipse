@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
+import org.eclipse.chemclipse.filter.FilterFactory;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -96,13 +97,15 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private Shell shell;
+	private FilterFactory filterFactory;
 
-	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
+	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, FilterFactory filterFactory, Shell shell) {
 		super(part);
 		//
 		this.dataType = dataType;
 		this.part = part;
 		this.dirtyable = dirtyable;
+		this.filterFactory = filterFactory;
 		this.eventBroker = ModelSupportAddon.getEventBroker();
 		this.shell = shell;
 		//
@@ -429,6 +432,6 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 	private void createChromatogramPage(Composite parent) {
 
-		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.BORDER);
+		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.BORDER, filterFactory);
 	}
 }

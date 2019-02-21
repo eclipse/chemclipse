@@ -11,9 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.filter;
 
-import java.util.Collection;
-
 import org.eclipse.chemclipse.filter.Filter;
+import org.eclipse.chemclipse.filter.FilterList;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.processing.core.IProcessingResult;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -40,7 +39,7 @@ public interface IMeasurementFilter<ConfigType> extends Filter<ConfigType> {
 	 * @throws IllegalArgumentException
 	 *             if any of the given {@link IMeasurement} are incompatible with this filter ({@link #acceptsIMeasurement(IMeasurement)} returns <code>false</code> for them)
 	 */
-	IProcessingResult<Boolean> filterIMeasurements(Collection<IMeasurement> filterItems, ConfigType configuration, IProgressMonitor monitor) throws IllegalArgumentException;
+	IProcessingResult<Boolean> filterIMeasurements(FilterList<IMeasurement> filterItems, ConfigType configuration, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link IMeasurement} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}

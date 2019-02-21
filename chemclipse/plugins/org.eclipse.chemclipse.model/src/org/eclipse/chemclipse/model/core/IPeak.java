@@ -18,14 +18,15 @@ import java.util.List;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
+import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.IAdaptable;
 
-public interface IPeak extends ITargetSupplier {
-	
+public interface IPeak extends ITargetSupplier, IAdaptable {
+
 	/**
 	 * This comparator compares peaks based on the RT at the maximum of the intensity of the peak model
 	 */
 	public static final Comparator<IPeak> COMPARATOR_RT_MAX = (o1, o2) -> Integer.compare(o1.getPeakModel().getRetentionTimeAtPeakMaximum(), o2.getPeakModel().getRetentionTimeAtPeakMaximum());
-	
 	/**
 	 * This comparator compares peaks based on the RT at the start of the intensity of the peak model
 	 */
@@ -248,4 +249,10 @@ public interface IPeak extends ITargetSupplier {
 	void setClassifier(String classifier);
 
 	void addClassifier(String classifier);
+
+	@Override
+	default <T> T getAdapter(Class<T> adapter) {
+
+		return Adapters.adapt(this, adapter);
+	}
 }

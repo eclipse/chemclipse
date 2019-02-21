@@ -11,9 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.filter;
 
-import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.chemclipse.filter.Filter;
+import org.eclipse.chemclipse.filter.FilterList;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingResult;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -40,7 +45,7 @@ public interface IChromatogramSelectionFilter<ConfigType> extends Filter<ConfigT
 	 * @throws IllegalArgumentException
 	 *             if any of the given {@link IChromatogramSelection} are incompatible with this filter ({@link #acceptsIChromatogramSelection(IChromatogramSelection)} returns <code>false</code> for them)
 	 */
-	IProcessingResult<Boolean> filterIChromatogramSelections(Collection<IChromatogramSelection<?>> filterItems, ConfigType configuration, IProgressMonitor monitor) throws IllegalArgumentException;
+	IProcessingResult<Boolean> filterIChromatogramSelections(FilterList<IChromatogramSelection<?>> filterItems, ConfigType configuration, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link IChromatogramSelection} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}
@@ -60,5 +65,54 @@ public interface IChromatogramSelectionFilter<ConfigType> extends Filter<ConfigT
 	default ConfigType createConfiguration(IChromatogramSelection<?> item) {
 
 		return createNewConfiguration();
+	}
+
+	static <T extends IPeak> FilterList<IPeak> peakList(IChromatogram<T> chromatogram, IChromatogramSelection<?> selection) {
+
+		List<T> peaks = selection == null ? chromatogram.getPeaks() : chromatogram.getPeaks(selection);
+		return new FilterList<IPeak>() {
+
+			@Override
+			public Iterator<IPeak> iterator() {
+
+				return FilterList.convert(peaks.iterator());
+			}
+
+			@Override
+			public int size() {
+
+				return peaks.size();
+			}
+
+			@Override
+			public <X extends IPeak> void remove(X item) {
+
+				for(T peak : peaks) {
+					if(peak == item) {
+						chromatogram.removePeak(peak);
+						return;
+					}
+				}
+			}
+		};
+	}
+
+	static FilterList<IScan> scanList(IChromatogram<?> chromatogram) {
+
+		List<IScan> scans = chromatogram.getScans();
+		return new FilterList<IScan>() {
+
+			@Override
+			public Iterator<IScan> iterator() {
+
+				return FilterList.convert(scans.iterator());
+			}
+
+			@Override
+			public int size() {
+
+				return scans.size();
+			}
+		};
 	}
 }

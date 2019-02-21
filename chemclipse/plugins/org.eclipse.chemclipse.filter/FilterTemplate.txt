@@ -24,7 +24,7 @@ public interface [ItemType]Filter<ConfigType> extends Filter<ConfigType> {
 	 * @throws IllegalArgumentException
 	 *             if any of the given {@link [ItemType]} are incompatible with this filter ({@link #accepts[ItemType]([ItemType])} returns <code>false</code> for them)
 	 */
-	IProcessingResult<Boolean> filter[ItemType]s(Collection<[ItemType]> filterItems, ConfigType configuration, IProgressMonitor monitor) throws IllegalArgumentException;
+	IProcessingResult<Boolean> filter[ItemType]s(FilterList<[ItemType]> filterItems, ConfigType configuration, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link [ItemType]} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}

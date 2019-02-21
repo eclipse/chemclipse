@@ -33,7 +33,7 @@ public interface IProcessingResult<T> {
 		addMessage(new ProcessingMessage(type, description, message));
 	}
 
-	default void addMessages(final IProcessingResult<T> processingInfo) {
+	default void addMessages(final IProcessingResult<?> processingInfo) {
 
 		for(final IProcessingMessage message : processingInfo.getMessages()) {
 			addMessage(message);

@@ -19,8 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.inject.Inject;
+import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.ChromatogramFilterCSD;
 import org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.IChromatogramFilterSupportCSD;
@@ -69,6 +68,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSu
 import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupport;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.filter.FilterFactory;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
@@ -208,7 +208,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private HeatmapUI heatmapUI;
 	private Composite heatmapArea;
 	//
-	private IChromatogramSelection chromatogramSelection = null;
+	private IChromatogramSelection<?> chromatogramSelection = null;
 	//
 	private List<IChartMenuEntry> chartMenuEntriesCalculators = new ArrayList<IChartMenuEntry>();
 	private List<IChartMenuEntry> chartMenuEntriesClassifier = new ArrayList<IChartMenuEntry>();
@@ -233,9 +233,10 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	//
 	private boolean suspendUpdate = false;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private FilterFactory filterFactory;
 
-	@Inject
-	public ExtendedChromatogramUI(Composite parent, int style) {
+	public ExtendedChromatogramUI(Composite parent, int style, FilterFactory filterFactory) {
+		this.filterFactory = filterFactory;
 		initialize(parent, style);
 	}
 
@@ -609,6 +610,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			 * Generic
 			 */
 			addChartMenuEntriesFilter(chartSettings);
+			addFilterFactoryEntries(chartSettings);
 			/*
 			 * Specific
 			 */
@@ -622,6 +624,25 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		}
 		//
 		chromatogramChart.applySettings(chartSettings);
+	}
+
+	private void addFilterFactoryEntries(IChartSettings chartSettings) {
+
+		if(filterFactory == null) {
+			return;
+		}
+		List<IChartMenuEntry> entries = FilterMenuFactory.createChromatogramSelectionEntries(filterFactory, new Supplier<IChromatogramSelection<?>>() {
+
+			@Override
+			public IChromatogramSelection<?> get() {
+
+				return chromatogramSelection;
+			}
+		});
+		for(IChartMenuEntry entry : entries) {
+			chartMenuEntriesFilter.add(entry);
+			chartSettings.addMenuEntry(entry);
+		}
 	}
 
 	private void addChartMenuEntriesFilter(IChartSettings chartSettings) {
@@ -999,7 +1020,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private void addPeakData(List<ILineSeriesData> lineSeriesDataList) {
 
 		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 			//
 			List<? extends IPeak> peaks = chromatogramDataSupport.getPeaks(chromatogram);
@@ -1171,7 +1192,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		if(chromatogramSelection != null && showChromatogramBaseline) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_BASELINE));
 			boolean enableBaselineArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_BASELINE_AREA);
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			ILineSeriesData lineSeriesData = null;
 			lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogramSelection, SERIES_ID_BASELINE, displayType, color, false);
 			lineSeriesData.getLineSeriesSettings().setEnableArea(enableBaselineArea);

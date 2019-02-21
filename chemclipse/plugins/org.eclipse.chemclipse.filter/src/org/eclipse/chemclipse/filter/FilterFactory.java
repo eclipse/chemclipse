@@ -33,4 +33,17 @@ public interface FilterFactory {
 	 * @return the filters that are matched
 	 */
 	<FilterType extends Filter<?>> Collection<FilterType> getFilters(Class<FilterType> filterType, BiFunction<FilterType, Map<String, ?>, Boolean> acceptor);
+
+	/**
+	 * Helper method to create generic Class types for subinterfaces that satisfy the {@link #getFilters(Class, BiFunction)} method, e.g.
+	 * <pre>Collection&lt;IScanFilter<?>> scanFilter = filterFactory.getFilters(FilterFactory.genericClass(IScanFilter.class), new BiFunction&lt;IScanFilter<?>, Map&lt;String, ?>, Boolean>() { ...});</pre>
+	 * 
+	 * @param cls
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	static <T> Class<T> genericClass(Class<?> cls) {
+
+		return (Class<T>)cls;
+	}
 }
