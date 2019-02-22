@@ -106,6 +106,38 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="CellColorProvider" type="string">
+            <annotation>
+               <documentation>
+                  public class CellColorProvider implements ICellColorProvider {
+
+	@Override
+	public void setCellColor(ExtendedTableViewer tableViewer) {
+
+		TableViewerColumn tableViewerColumn = tableViewer.getTableViewerColumn(&quot;My Label&quot;);
+		if(tableViewerColumn != null) {
+			tableViewerColumn.setLabelProvider(new StyledCellLabelProvider() {
+
+				@Override
+				public void update(ViewerCell cell) {
+
+					if(cell != null) {
+						cell.setBackground(Colors.YELLOW);
+						cell.setForeground(Colors.BLACK);
+						cell.setText(&quot;Hello&quot;);
+						super.update(cell);
+					}
+				}
+			});
+		}
+	}
+}
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.chemclipse.ux.extension.ui.provider.ICellColorProvider"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

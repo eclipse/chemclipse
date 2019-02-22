@@ -24,10 +24,10 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ICellColorProvider;
 import org.eclipse.chemclipse.ux.extension.ui.support.IMeasurementResultTitles;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
@@ -62,6 +62,7 @@ public class ExtendedMeasurementResultUI {
 	private static final String ATTRIBUTE_LABEL_PROVIDER = "LabelProvider";
 	private static final String ATTRIBUTE_COMPARATOR = "Comparator";
 	private static final String ATTRIBUTE_SELECTION_LISTENER = "SelectionListener";
+	private static final String ATTRIBUTE_CELL_COLOR_PROVIDER = "CellColorProvider";
 	//
 	private Label labelChromatogramInfo;
 	private Label labelMeasurementResultInfo;
@@ -368,9 +369,10 @@ public class ExtendedMeasurementResultUI {
 					try {
 						clearTable();
 						setContentProvider(configurationElement);
+						setCellColorProvider(configurationElement);
 						setSelectionListener(configurationElement);
 						isContentProviderSet = true;
-					} catch(CoreException e) {
+					} catch(Exception e) {
 						logger.info(e);
 					}
 				}
@@ -406,7 +408,7 @@ public class ExtendedMeasurementResultUI {
 		}
 	}
 
-	private void setContentProvider(IConfigurationElement configurationElement) throws CoreException {
+	private void setContentProvider(IConfigurationElement configurationElement) throws Exception {
 
 		IMeasurementResultTitles titles = (IMeasurementResultTitles)configurationElement.createExecutableExtension(ATTRIBUTE_TITLES);
 		IStructuredContentProvider contentProvider = (IStructuredContentProvider)configurationElement.createExecutableExtension(ATTRIBUTE_CONTENT_PROVIDER);
@@ -417,6 +419,25 @@ public class ExtendedMeasurementResultUI {
 		extendedTableViewer.setLabelProvider(tableLabelProvider);
 		extendedTableViewer.setContentProvider(contentProvider);
 		extendedTableViewer.setComparator(viewerComparator);
+	}
+
+	private void setCellColorProvider(IConfigurationElement configurationElement) {
+
+		/*
+		 * Optional
+		 */
+		ICellColorProvider cellColorProvider = null;
+		if(configurationElement.getAttribute(ATTRIBUTE_CELL_COLOR_PROVIDER) != null) {
+			try {
+				cellColorProvider = (ICellColorProvider)configurationElement.createExecutableExtension(ATTRIBUTE_CELL_COLOR_PROVIDER);
+			} catch(Exception e) {
+				logger.warn(e);
+			}
+		}
+		//
+		if(cellColorProvider != null) {
+			cellColorProvider.setCellColor(extendedTableViewer);
+		}
 	}
 
 	private void setSelectionListener(IConfigurationElement configurationElement) {
@@ -433,12 +454,14 @@ public class ExtendedMeasurementResultUI {
 			/*
 			 * Be aware, the selection listener is optional.
 			 */
-			Object object = configurationElement.createExecutableExtension(ATTRIBUTE_SELECTION_LISTENER);
-			if(object instanceof SelectionListener) {
-				selectionListener = (SelectionListener)object;
-				table.addSelectionListener(selectionListener);
+			if(configurationElement.getAttribute(ATTRIBUTE_SELECTION_LISTENER) != null) {
+				Object object = configurationElement.createExecutableExtension(ATTRIBUTE_SELECTION_LISTENER);
+				if(object instanceof SelectionListener) {
+					selectionListener = (SelectionListener)object;
+					table.addSelectionListener(selectionListener);
+				}
 			}
-		} catch(CoreException e) {
+		} catch(Exception e) {
 			logger.info(e);
 		}
 	}

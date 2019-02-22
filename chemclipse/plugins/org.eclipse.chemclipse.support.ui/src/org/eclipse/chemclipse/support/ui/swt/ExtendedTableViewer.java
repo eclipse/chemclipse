@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -217,6 +217,23 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	public List<TableViewerColumn> getTableViewerColumns() {
 
 		return Collections.unmodifiableList(tableViewerColumns);
+	}
+
+	/**
+	 * Returns the table viewer column with the given label or null
+	 * if none was matched.
+	 * 
+	 * @param label
+	 * @return {@link TableViewerColumn}
+	 */
+	public TableViewerColumn getTableViewerColumn(String label) {
+
+		for(TableViewerColumn tableViewerColum : tableViewerColumns) {
+			if(tableViewerColum.getColumn().getText().equals(label)) {
+				return tableViewerColum;
+			}
+		}
+		return null;
 	}
 
 	@Override
