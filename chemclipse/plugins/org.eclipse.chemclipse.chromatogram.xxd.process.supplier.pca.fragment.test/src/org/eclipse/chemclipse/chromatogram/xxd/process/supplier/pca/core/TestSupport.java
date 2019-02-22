@@ -48,20 +48,6 @@ public class TestSupport {
 		map.put(createDataInputEntry(name, groupName), cretePeaks(retentionTimes, integrationArea));
 	}
 
-	public static Samples createSamples() {
-
-		String[][] samples = {{"Sample1", "Group1"}, //
-				{"Sample2", "Group2"}, //
-				{"Sample3", "Group3"}, //
-				{"Sample4", "Group4"}};
-		int[] variables = {10, 20, 30, 40, 50};
-		double[][] data = {{1.2, 3.5, 4.6, 0.9, 9.8}, //
-				{1.3, 2.5, 5.6, 0.5, 10.8}, //
-				{0.5, 3.2, 9.0, 1.9, 7.8}, //
-				{1.4, 3.9, 4.8, 0.8, 9.7}};
-		return createSamples(samples, variables, data);
-	}
-
 	public static Samples createSamples2() {
 
 		String[][] samples = {{"Sample1", "Group1"}, //
@@ -104,6 +90,15 @@ public class TestSupport {
 			IntStream.range(0, variables.length).forEach(variable -> //
 			samplesOutput.getSampleList().get(iFinal).getSampleData().add(new PeakSampleData(sampleData[variable])));
 			i++;
+		}
+		return samplesOutput;
+	}
+
+	public static Samples createSamples(String[][] samples, boolean[] selected, int[] variables, double[][] data) {
+
+		Samples samplesOutput = createSamples(samples, variables, data);
+		for(int i = 0; i < selected.length; i++) {
+			samplesOutput.getSampleList().get(i).setSelected(selected[i]);
 		}
 		return samplesOutput;
 	}
