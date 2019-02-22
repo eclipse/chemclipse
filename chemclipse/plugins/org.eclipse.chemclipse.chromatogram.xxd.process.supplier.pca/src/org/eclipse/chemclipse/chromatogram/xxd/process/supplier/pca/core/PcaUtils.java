@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaRe
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.statistics.ISample;
@@ -47,10 +48,10 @@ public class PcaUtils {
 
 	/**
 	 * 
-	 * This method extract data from sample
+	 * This method extract data from sample, it extracts only selected samples {@link ISample#isSelected()}
 	 * 
 	 * @param samples
-	 * @return
+	 * @return map where is key name of sample and value are sample data
 	 */
 	public static <V extends IVariable, S extends ISample> Map<String, double[]> extractData(ISamples<V, S> samples) {
 
@@ -76,9 +77,10 @@ public class PcaUtils {
 	}
 
 	/**
+	 * This method create covariance matrix from sample, it is created only from selected samples {@link ISample#isSelected()}
 	 * 
 	 * @param samples
-	 * @return
+	 * @return covariance matrix
 	 */
 	public static <V extends IVariable, S extends ISample> RealMatrix getCovarianceMatrix(ISamples<V, S> samples) {
 
@@ -98,7 +100,7 @@ public class PcaUtils {
 	/**
 	 * 
 	 * @param samples
-	 * @return
+	 * @return real part of covariance matrix return by {@link #getCovarianceMatrix(ISamples)}
 	 */
 	public static <V extends IVariable, S extends ISample> double[] getEigenValuesCovarianceMatrix(ISamples<V, S> samples) {
 
@@ -115,7 +117,7 @@ public class PcaUtils {
 	/**
 	 * 
 	 * @param pcaResults
-	 * @return
+	 * @return all groupName {@link IPcaResult#getGroupName()}
 	 */
 	public static Set<String> getGroupNames(IPcaResults<?, ?> pcaResults) {
 
@@ -130,7 +132,7 @@ public class PcaUtils {
 	/**
 	 * 
 	 * @param pcaResults
-	 * @return
+	 * @return all groupName {@link IPcaResult#getGroupName()}
 	 */
 	public static Set<String> getGroupNames(List<IPcaResult> pcaResults) {
 
@@ -197,7 +199,7 @@ public class PcaUtils {
 	 * @param peaks
 	 * @param leftRetentionTimeBound
 	 * @param rightRetentionTimeBound
-	 * @return
+	 * @return all peaks which has peak maximum {@link IPeakModel#getPeakMaximum()} between {@code leftRetentionTimeBound} and {@code rightRetentionTimeBound}
 	 */
 	public static List<IPeak> getPeaks(IPeaks peaks, int leftRetentionTimeBound, int rightRetentionTimeBound) {
 
@@ -318,7 +320,7 @@ public class PcaUtils {
 	}
 
 	/**
-	 * sort list by group name, instance of SampleGroupMean will be sorted before other object in case of identical group name
+	 * sort list by group name
 	 *
 	 * @param samples
 	 */
@@ -342,6 +344,7 @@ public class PcaUtils {
 	}
 
 	/**
+	 * sort list by name {@link ISample#getName()}
 	 * 
 	 * @param samples
 	 */
