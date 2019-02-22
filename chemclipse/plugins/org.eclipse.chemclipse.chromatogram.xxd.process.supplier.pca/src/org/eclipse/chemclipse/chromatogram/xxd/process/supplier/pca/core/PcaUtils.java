@@ -45,6 +45,13 @@ import org.ejml.interfaces.decomposition.EigenDecomposition;
 
 public class PcaUtils {
 
+	/**
+	 * 
+	 * This method extract data from sample
+	 * 
+	 * @param samples
+	 * @return
+	 */
 	public static <V extends IVariable, S extends ISample> Map<String, double[]> extractData(ISamples<V, S> samples) {
 
 		Map<String, double[]> selectedSamples = new HashMap<>();
@@ -68,6 +75,11 @@ public class PcaUtils {
 		return selectedSamples;
 	}
 
+	/**
+	 * 
+	 * @param samples
+	 * @return
+	 */
 	public static <V extends IVariable, S extends ISample> RealMatrix getCovarianceMatrix(ISamples<V, S> samples) {
 
 		Map<String, double[]> data = extractData(samples);
@@ -83,6 +95,11 @@ public class PcaUtils {
 		return covariance.getCovarianceMatrix();
 	}
 
+	/**
+	 * 
+	 * @param samples
+	 * @return
+	 */
 	public static <V extends IVariable, S extends ISample> double[] getEigenValuesCovarianceMatrix(ISamples<V, S> samples) {
 
 		RealMatrix covarianceMatrix = getCovarianceMatrix(samples);
@@ -95,6 +112,11 @@ public class PcaUtils {
 		return eigenvalues;
 	}
 
+	/**
+	 * 
+	 * @param pcaResults
+	 * @return
+	 */
 	public static Set<String> getGroupNames(IPcaResults<?, ?> pcaResults) {
 
 		Set<String> groupNames = new HashSet<>();
@@ -105,6 +127,11 @@ public class PcaUtils {
 		return groupNames;
 	}
 
+	/**
+	 * 
+	 * @param pcaResults
+	 * @return
+	 */
 	public static Set<String> getGroupNames(List<IPcaResult> pcaResults) {
 
 		Set<String> groupNames = new HashSet<>();
@@ -133,6 +160,11 @@ public class PcaUtils {
 		return groupNames;
 	}
 
+	/**
+	 * 
+	 * @param inputEntries
+	 * @return
+	 */
 	public static Set<String> getGroupNamesFromEntry(List<IDataInputEntry> inputEntries) {
 
 		Set<String> groupNames = new HashSet<>();
@@ -160,6 +192,13 @@ public class PcaUtils {
 		return names;
 	}
 
+	/**
+	 * 
+	 * @param peaks
+	 * @param leftRetentionTimeBound
+	 * @param rightRetentionTimeBound
+	 * @return
+	 */
 	public static List<IPeak> getPeaks(IPeaks peaks, int leftRetentionTimeBound, int rightRetentionTimeBound) {
 
 		List<IPeak> peakInInterval = new ArrayList<>();
@@ -172,6 +211,12 @@ public class PcaUtils {
 		return peakInInterval;
 	}
 
+	/**
+	 * 
+	 * @param samples
+	 * @param onlySelected
+	 * @return
+	 */
 	public static List<TreeSet<String>> getPeaksNames(List<Sample> samples, boolean onlySelected) {
 
 		List<TreeSet<String>> map = new ArrayList<>();
@@ -197,6 +242,13 @@ public class PcaUtils {
 		return map;
 	}
 
+	/**
+	 * 
+	 * @param samples
+	 * @param containsNullGroupName
+	 * @param onlySelected
+	 * @return
+	 */
 	public static <S extends ISample> Map<String, Set<S>> getSamplesByGroupName(List<S> samples, boolean containsNullGroupName, boolean onlySelected) {
 
 		Map<String, Set<S>> samplesByGroupName = new HashMap<>();
@@ -212,6 +264,10 @@ public class PcaUtils {
 		return samplesByGroupName;
 	}
 
+	/**
+	 * 
+	 * @param pcaResults
+	 */
 	public static void sortPcaResultsByGroup(List<IPcaResult> pcaResults) {
 
 		Comparator<IPcaResult> comparator = (arg0, arg1) -> {
@@ -231,6 +287,10 @@ public class PcaUtils {
 		Collections.sort(pcaResults, comparator);
 	}
 
+	/**
+	 * 
+	 * @param samples
+	 */
 	public static void sortPcaResultsByName(List<IPcaResult> samples) {
 
 		Comparator<IPcaResult> comparator = (arg0, arg1) -> {
@@ -239,6 +299,11 @@ public class PcaUtils {
 		Collections.sort(samples, comparator);
 	}
 
+	/**
+	 * 
+	 * @param pcaResults
+	 * @param inverse
+	 */
 	public static void sortPcaResultsListByErrorMemberShip(List<IPcaResult> pcaResults, boolean inverse) {
 
 		int i = 1;
@@ -276,6 +341,10 @@ public class PcaUtils {
 		Collections.sort(samples, comparator);
 	}
 
+	/**
+	 * 
+	 * @param samples
+	 */
 	public static <S extends ISample> void sortSampleListByName(List<S> samples) {
 
 		Comparator<ISample> comparator = (arg0, arg1) -> {
