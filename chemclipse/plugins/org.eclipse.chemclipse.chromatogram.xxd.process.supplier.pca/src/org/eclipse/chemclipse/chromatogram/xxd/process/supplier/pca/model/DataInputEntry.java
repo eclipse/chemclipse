@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.io.File;
+import java.util.Objects;
 
 public class DataInputEntry implements IDataInputEntry {
 
@@ -24,6 +25,7 @@ public class DataInputEntry implements IDataInputEntry {
 	 * @param inputFile
 	 */
 	public DataInputEntry(String inputFile) {
+
 		if(inputFile != null) {
 			this.inputFile = inputFile;
 		}
@@ -64,5 +66,27 @@ public class DataInputEntry implements IDataInputEntry {
 	public void setGroupName(String groupName) {
 
 		this.groupName = groupName;
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(getName());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+
+		if(o == null) {
+			return false;
+		}
+		if(o == this) {
+			return true;
+		}
+		if(!(o instanceof DataInputEntry)) {
+			return false;
+		}
+		DataInputEntry dataInputEntry = (DataInputEntry)o;
+		return dataInputEntry.getName().equals(getName());
 	}
 }
