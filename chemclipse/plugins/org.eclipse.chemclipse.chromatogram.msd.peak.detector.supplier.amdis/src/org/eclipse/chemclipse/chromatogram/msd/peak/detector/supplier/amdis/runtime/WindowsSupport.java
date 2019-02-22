@@ -68,7 +68,7 @@ public class WindowsSupport extends AbstractWindowsSupport implements IExtendedR
 			/*
 			 * taskkill kills the e.g. AMDIS application.
 			 */
-			command = "taskkill /IM AMDIS_32.exe";
+			command = "taskkill /f /IM AMDIS_32.exe";
 		}
 		return command;
 	}
