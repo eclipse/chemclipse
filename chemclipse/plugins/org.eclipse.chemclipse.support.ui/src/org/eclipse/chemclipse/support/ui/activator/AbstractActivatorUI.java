@@ -14,10 +14,14 @@ package org.eclipse.chemclipse.support.ui.activator;
 import java.net.URL;
 import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -34,6 +38,10 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 	 * achieve a clean separation of concerns.
 	 */
 	private ScopedPreferenceStore preferenceStore;
+	/*
+	 * The event broker is initialized on first use.
+	 */
+	private IEventBroker eventBroker = null;
 
 	/*
 	 * (non-Javadoc)
@@ -76,6 +84,16 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 	public Image getImage(String key) {
 
 		return getImageRegistry().get(key);
+	}
+
+	public IEventBroker getEventBroker() {
+
+		if(eventBroker == null) {
+			IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(getBundle().getBundleContext());
+			eclipseContext.set(Logger.class, null);
+			eventBroker = eclipseContext.get(IEventBroker.class);
+		}
+		return eventBroker;
 	}
 
 	/**
