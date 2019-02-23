@@ -19,6 +19,8 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.sett
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.IProcessingResult;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,8 +40,18 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			if(peakDetectorSettings instanceof PeakDetectorSettings) {
 				PeakDetectorSettings amdisSettings = (PeakDetectorSettings)peakDetectorSettings;
 				AmdisIdentifier identifier = new AmdisIdentifier();
-				identifier.calulateAndSetDeconvolutedPeaks(chromatogramSelection, amdisSettings, monitor);
-				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "AMDIS Peak Detector", "Peaks have been detected successfully."));
+				try {
+					IProcessingResult<Void> result = identifier.calulateAndSetDeconvolutedPeaks(chromatogramSelection, amdisSettings, monitor);
+					if(!result.hasErrorMessages()) {
+						processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "AMDIS Peak Detector", "Peaks have been detected successfully."));
+					}
+					for(IProcessingMessage message : result.getMessages()) {
+						processingInfo.addMessage(message);
+					}
+				} catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
+					return null;
+				}
 			} else {
 				logger.warn("The settings is not of type: " + PeakDetectorSettings.class);
 			}
