@@ -11,7 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-public interface MethodUIConfig extends ToolbarConfig, TableConfig {
+import java.util.Set;
 
-	void setShowSettingsOnAdd(boolean showSettingsOnAdd);
+public interface TableConfig {
+
+	/**
+	 * Set what columns should be visible
+	 * 
+	 * @param visibleColumns
+	 */
+	void setVisibleColumns(Set<String> visibleColumns);
+
+	/**
+	 * 
+	 * @return a set of columns available for this table config
+	 */
+	Set<String> getColumns();
 }
