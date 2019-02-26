@@ -228,9 +228,9 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	 */
 	public TableViewerColumn getTableViewerColumn(String label) {
 
-		for(TableViewerColumn tableViewerColum : tableViewerColumns) {
-			if(tableViewerColum.getColumn().getText().equals(label)) {
-				return tableViewerColum;
+		for(TableViewerColumn tableViewerColumn : tableViewerColumns) {
+			if(tableViewerColumn.getColumn().getText().equals(label)) {
+				return tableViewerColumn;
 			}
 		}
 		return null;

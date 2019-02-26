@@ -85,6 +85,11 @@ public class PageUtil {
 		super.finalize();
 	}
 
+	public PDDocument getDocument() {
+
+		return document;
+	}
+
 	public PDPage getPage() {
 
 		return page;

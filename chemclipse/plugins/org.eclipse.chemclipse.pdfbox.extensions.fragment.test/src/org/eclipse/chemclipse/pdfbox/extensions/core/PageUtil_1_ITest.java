@@ -50,20 +50,14 @@ public class PageUtil_1_ITest extends TestCase {
 
 	public void test1() throws IOException {
 
-		PDDocument document = null;
-		try {
+		try (PDDocument document = new PDDocument()) {
 			String path = "PageUtil_1_ITest.pdf";
-			document = new PDDocument();
 			printHeaderData(document);
 			document.save(path);
 			File file = new File(path);
 			assertTrue(file.exists());
 		} catch(IOException e) {
 			System.out.println(e);
-		} finally {
-			if(document != null) {
-				document.close();
-			}
 		}
 	}
 
