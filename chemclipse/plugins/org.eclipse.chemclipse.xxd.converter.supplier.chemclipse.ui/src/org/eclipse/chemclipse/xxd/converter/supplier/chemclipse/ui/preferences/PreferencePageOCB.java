@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences;
 
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -39,9 +40,7 @@ public class PreferencePageOCB extends FieldEditorPreferencePage implements IWor
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_VERSION_SAVE, "Save (*.ocb) as version:", PreferenceSupplier.getChromatogramVersions(), getFieldEditorParent()));
-		IntegerFieldEditor chromatogramCompressionLevelEditor = new IntegerFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_COMPRESSION_LEVEL, "Compression 0 = off, 9 = best", getFieldEditorParent());
-		chromatogramCompressionLevelEditor.setValidRange(PreferenceSupplier.MIN_COMPRESSION_LEVEL, PreferenceSupplier.MAX_COMPRESSION_LEVEL);
-		addField(chromatogramCompressionLevelEditor);
+		addField(new SpinnerFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_COMPRESSION_LEVEL, "Compression 0 = off, 9 = best", PreferenceSupplier.MIN_COMPRESSION_LEVEL, PreferenceSupplier.MAX_COMPRESSION_LEVEL, getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_FORCE_LOAD_ALTERNATE_DETECTOR, "Force load as alternate detector type", getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));

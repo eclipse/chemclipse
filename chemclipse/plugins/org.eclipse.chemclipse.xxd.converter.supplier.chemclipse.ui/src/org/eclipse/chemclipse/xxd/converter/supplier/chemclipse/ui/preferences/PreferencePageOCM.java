@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences;
 
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.Activator;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -36,9 +36,7 @@ public class PreferencePageOCM extends FieldEditorPreferencePage implements IWor
 	public void createFieldEditors() {
 
 		addField(new ComboFieldEditor(PreferenceSupplier.P_METHOD_VERSION_SAVE, "Save (*.ocm) as version:", PreferenceSupplier.getMethodVersions(), getFieldEditorParent()));
-		IntegerFieldEditor compressionLevelEditor = new IntegerFieldEditor(PreferenceSupplier.P_METHOD_COMPRESSION_LEVEL, "Compression 0 = off, 9 = best", getFieldEditorParent());
-		compressionLevelEditor.setValidRange(PreferenceSupplier.MIN_COMPRESSION_LEVEL, PreferenceSupplier.MAX_COMPRESSION_LEVEL);
-		addField(compressionLevelEditor);
+		addField(new SpinnerFieldEditor(PreferenceSupplier.P_METHOD_COMPRESSION_LEVEL, "Compression 0 = off, 9 = best", PreferenceSupplier.MIN_COMPRESSION_LEVEL, PreferenceSupplier.MAX_COMPRESSION_LEVEL, getFieldEditorParent()));
 	}
 
 	/*
