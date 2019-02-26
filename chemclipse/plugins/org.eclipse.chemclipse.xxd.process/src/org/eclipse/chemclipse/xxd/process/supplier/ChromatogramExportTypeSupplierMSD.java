@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add support for export path configuration
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
@@ -22,7 +23,6 @@ import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMS
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.xxd.process.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,7 +38,7 @@ public class ChromatogramExportTypeSupplierMSD extends AbstractProcessTypeSuppli
 			ProcessorSupplier processorSupplier = new ProcessorSupplier(supplier.getId());
 			processorSupplier.setName(supplier.getFilterName());
 			processorSupplier.setDescription(supplier.getDescription());
-			// processorSupplier.setSettingsClass(supplier.getSettingsClass()); // TODO
+			processorSupplier.setSettingsClass(ChromatogramExportSettings.class);
 			addProcessorSupplier(processorSupplier);
 		}
 	}
@@ -47,14 +47,19 @@ public class ChromatogramExportTypeSupplierMSD extends AbstractProcessTypeSuppli
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
+		ChromatogramExportSettings settings;
+		if(processSettings instanceof ChromatogramExportSettings) {
+			settings = (ChromatogramExportSettings)processSettings;
+		} else {
+			settings = new ChromatogramExportSettings();
+		}
 		IProcessingInfo processingInfo = null;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-			String chromatogramExportFolder = PreferenceSupplier.getChromatogramExportFolder();
-			File exportFolder = new File(chromatogramExportFolder);
-			if(exportFolder.exists()) {
+			File exportFolder = new File(settings.getExportFolder());
+			if(exportFolder.exists() || exportFolder.mkdirs()) {
 				IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
-				File file = new File(chromatogramExportFolder + File.separator + chromatogramMSD.getName());
+				File file = new File(exportFolder, chromatogramMSD.getName());
 				processingInfo = ChromatogramConverterMSD.getInstance().convert(file, chromatogramMSD, processorId, monitor);
 			}
 		}
