@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Christoph Läubrich.
+ * Copyright (c) 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  */
 public class MethodAdapterFactory implements IAdapterFactory {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
 
@@ -41,13 +40,21 @@ public class MethodAdapterFactory implements IAdapterFactory {
 				if(location != null) {
 					File localfile = location.toFile();
 					if(localfile.exists()) {
-						IProcessingInfo processingInfo = MethodConverter.convert(localfile, new NullProgressMonitor());
-						if(processingInfo != null) {
-							return (T)processingInfo.getProcessingResult(IProcessMethod.class);
-						}
+						return adapterType.cast(convertFile(localfile));
 					}
 				}
+			} else if(adaptableObject instanceof File) {
+				return adapterType.cast(convertFile((File)adaptableObject));
 			}
+		}
+		return null;
+	}
+
+	public IProcessMethod convertFile(File localfile) {
+
+		IProcessingInfo processingInfo = MethodConverter.convert(localfile, new NullProgressMonitor());
+		if(processingInfo != null) {
+			return processingInfo.getProcessingResult(IProcessMethod.class);
 		}
 		return null;
 	}

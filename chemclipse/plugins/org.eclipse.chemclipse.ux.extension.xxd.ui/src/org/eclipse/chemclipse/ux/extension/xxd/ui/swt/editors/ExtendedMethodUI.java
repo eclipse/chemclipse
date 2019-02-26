@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,11 +8,13 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - make UI configurable
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
@@ -22,6 +24,7 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
@@ -34,6 +37,8 @@ import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -47,6 +52,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
@@ -72,6 +78,8 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private IProcessMethod processMethod = null;
 	private IModificationHandler modificationHandler = null;
 	private Composite toolbarMain;
+	private Composite buttons;
+	protected boolean showSettingsOnAdd;
 
 	public ExtendedMethodUI(Composite parent, int style) {
 		super(parent, style);
@@ -103,6 +111,16 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		//
 		PartSupport.setCompositeVisibility(toolbarHeader, false);
 		enableTableButtons();
+		listUI.addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+
+				if(isEnabled() && buttonModifySettings.isEnabled()) {
+					executeModifySettings(getShell());
+				}
+			}
+		});
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -268,18 +286,18 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	private void createToolbarBottom(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
+		buttons = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(6, false));
+		buttons.setLayoutData(gridData);
+		buttons.setLayout(new GridLayout(6, false));
 		//
-		buttonAdd = createAddButton(composite);
-		buttonRemove = createRemoveButton(composite);
-		buttonMoveUp = createMoveUpButton(composite);
-		buttonMoveDown = createMoveDownButton(composite);
-		buttonModifySettings = createModifySettingsButton(composite);
-		buttonResetSettings = createResetSettingsButton(composite);
+		buttonAdd = createAddButton(buttons);
+		buttonRemove = createRemoveButton(buttons);
+		buttonMoveUp = createMoveUpButton(buttons);
+		buttonMoveDown = createMoveDownButton(buttons);
+		buttonModifySettings = createModifySettingsButton(buttons);
+		buttonResetSettings = createResetSettingsButton(buttons);
 	}
 
 	private Button createAddButton(Composite parent) {
@@ -303,6 +321,9 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 						IProcessEntry processEntry = wizard.getProcessEntry();
 						if(processEntry != null) {
 							processMethod.add(processEntry);
+							if(showSettingsOnAdd) {
+								modifyProcessEntry(getShell(), processEntry);
+							}
 							updateProcessMethod();
 						}
 					}
@@ -402,29 +423,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(processMethod != null) {
-					Object object = listUI.getStructuredSelection().getFirstElement();
-					if(object instanceof IProcessEntry) {
-						IProcessEntry processEntry = (IProcessEntry)object;
-						Class<? extends IProcessSettings> processSettingsClass = processEntry.getProcessSettingsClass();
-						if(processSettingsClass != null) {
-							try {
-								SettingsSupport settingsSupport = new SettingsSupport();
-								String content = settingsSupport.getSettingsAsJson(processEntry.getJsonSettings(), processSettingsClass, e.display.getActiveShell());
-								processEntry.setJsonSettings(content);
-								updateProcessMethod();
-							} catch(JsonParseException e1) {
-								logger.warn(e1);
-							} catch(JsonMappingException e1) {
-								logger.warn(e1);
-							} catch(IOException e1) {
-								logger.warn(e1);
-							}
-						} else {
-							logger.warn("Settings class is null: " + processEntry);
-						}
-					}
-				}
+				executeModifySettings(parent.getShell());
 			}
 		});
 		//
@@ -484,6 +483,14 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		buttonResetSettings.setEnabled(enabled);
 	}
 
+	@Override
+	public void setEnabled(boolean enabled) {
+
+		super.setEnabled(enabled);
+		listUI.getControl().setEnabled(enabled);
+		PartSupport.setCompositeVisibility(buttons, enabled);
+	}
+
 	private void setDirty(boolean dirty) {
 
 		if(modificationHandler != null) {
@@ -496,11 +503,63 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 		return new MethodUIConfig() {
 
+			TableConfigSupport tabelConfig = new TableConfigSupport(listUI);
+
 			@Override
 			public void setToolbarVisible(boolean visible) {
 
 				PartSupport.setCompositeVisibility(toolbarMain, visible);
 			}
+
+			@Override
+			public void setVisibleColumns(Set<String> visibleColumns) {
+
+				tabelConfig.setVisibleColumns(visibleColumns);
+			}
+
+			@Override
+			public Set<String> getColumns() {
+
+				return tabelConfig.getColumns();
+			}
+
+			@Override
+			public void setShowSettingsOnAdd(boolean showSettingsOnAdd) {
+
+				ExtendedMethodUI.this.showSettingsOnAdd = showSettingsOnAdd;
+			}
 		};
+	}
+
+	private void executeModifySettings(Shell shell) {
+
+		if(processMethod != null) {
+			Object object = listUI.getStructuredSelection().getFirstElement();
+			if(object instanceof IProcessEntry) {
+				IProcessEntry processEntry = (IProcessEntry)object;
+				modifyProcessEntry(shell, processEntry);
+				updateProcessMethod();
+			}
+		}
+	}
+
+	public void modifyProcessEntry(Shell shell, IProcessEntry processEntry) {
+
+		Class<? extends IProcessSettings> processSettingsClass = processEntry.getProcessSettingsClass();
+		if(processSettingsClass != null) {
+			try {
+				SettingsSupport settingsSupport = new SettingsSupport();
+				String content = settingsSupport.getSettingsAsJson(processEntry.getJsonSettings(), processSettingsClass, shell);
+				processEntry.setJsonSettings(content);
+			} catch(JsonParseException e1) {
+				logger.warn(e1);
+			} catch(JsonMappingException e1) {
+				logger.warn(e1);
+			} catch(IOException e1) {
+				logger.warn(e1);
+			}
+		} else {
+			logger.warn("Settings class is null: " + processEntry);
+		}
 	}
 }

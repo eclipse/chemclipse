@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,6 +49,7 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
@@ -66,7 +67,6 @@ import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -80,7 +80,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 
@@ -837,6 +836,8 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 
 		return new PeakScanListUIConfig() {
 
+			TableConfigSupport tableConfig = new TableConfigSupport(peakScanListUI);
+
 			@Override
 			public void setToolbarVisible(boolean visible) {
 
@@ -858,25 +859,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			@Override
 			public void setVisibleColumns(Set<String> visibleColumns) {
 
-				List<TableViewerColumn> columns = peakScanListUI.getTableViewerColumns();
-				for(TableViewerColumn column : columns) {
-					TableColumn tableColumn = column.getColumn();
-					if(visibleColumns.contains(tableColumn.getText())) {
-						Object oldWidth = tableColumn.getData("OLD_WITH");
-						if(oldWidth instanceof Number) {
-							tableColumn.setWidth(((Number)oldWidth).intValue());
-						}
-						Object oldResizable = tableColumn.getData("OLD_RESIZABLE");
-						if(oldResizable instanceof Boolean) {
-							tableColumn.setResizable(((Boolean)oldResizable).booleanValue());
-						}
-					} else {
-						tableColumn.setData("OLD_WITH", tableColumn.getWidth());
-						tableColumn.setData("OLD_RESIZABLE", tableColumn.getResizable());
-						tableColumn.setWidth(0);
-						tableColumn.setResizable(false);
-					}
-				}
+				tableConfig.setVisibleColumns(visibleColumns);
 			}
 
 			@Override
@@ -903,6 +886,12 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			public void setInteractionMode(InteractionMode interactionMode) {
 
 				ExtendedPeakScanListUI.this.interactionMode = interactionMode;
+			}
+
+			@Override
+			public Set<String> getColumns() {
+
+				return tableConfig.getColumns();
 			}
 		};
 	}

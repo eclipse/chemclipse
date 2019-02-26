@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.model.notifier;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -24,19 +23,14 @@ public class DynamicChromatogramSelectionUpdateNotifier implements IChromatogram
 
 	@Inject
 	private IEventBroker eventBroker;
-	private Map<String, Object> map;
 
 	public DynamicChromatogramSelectionUpdateNotifier() {
-		map = new HashMap<String, Object>();
 	}
 
 	@Override
 	public void update(IChromatogramSelectionMSD chromatogramSelection, boolean forceReload) {
 
-		/*
-		 * Don't use a new map each time, to prevent unnecessary object creation.
-		 */
-		map.clear();
+		HashMap<Object, Object> map = new HashMap<>(2);
 		map.put(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION, chromatogramSelection);
 		map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, forceReload);
 		eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, map);

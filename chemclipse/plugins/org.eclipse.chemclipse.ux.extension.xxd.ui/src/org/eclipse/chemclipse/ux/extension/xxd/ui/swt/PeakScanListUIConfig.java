@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.util.Set;
-
-public interface PeakScanListUIConfig extends ToolbarConfig {
+public interface PeakScanListUIConfig extends ToolbarConfig, TableConfig {
 
 	/**
 	 * Defines how the UI interacts with the Chromatogram selection
@@ -55,13 +53,6 @@ public interface PeakScanListUIConfig extends ToolbarConfig {
 	 *            if true only select in given range, ignored when show is false
 	 */
 	void setShowPeaks(boolean show, boolean inRange);
-
-	/**
-	 * Set what columns should be visible
-	 * 
-	 * @param visibleColumns
-	 */
-	void setVisibleColumns(Set<String> visibleColumns);
 
 	void setMoveRetentionTimeOnPeakSelection(boolean enabled);
 
