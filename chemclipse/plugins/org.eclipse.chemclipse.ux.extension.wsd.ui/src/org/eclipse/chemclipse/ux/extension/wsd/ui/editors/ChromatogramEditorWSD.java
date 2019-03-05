@@ -204,7 +204,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 			public void run() {
 
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
+				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, chromatogramSelection);
 			}
 		});
 		/*

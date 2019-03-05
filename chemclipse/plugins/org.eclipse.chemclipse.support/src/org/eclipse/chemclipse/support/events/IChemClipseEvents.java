@@ -86,8 +86,8 @@ public interface IChemClipseEvents {
 	 * UNLOAD
 	 * Close the chromatogram editor.
 	 */
-	String TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION = "chromatogram/xxd/load/chromatogramselection"; // IEventBroker.DATA
-	String TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION = "chromatogram/xxd/unload/chromatogramselection";
+	String TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION = "chromatogram/xxd/load/chromatogramselection"; // IEventBroker.DATA
+	String TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION = "chromatogram/xxd/unload/chromatogramselection";
 	String TOPIC_SCAN_XXD_UPDATE_SELECTION = "scan/xxd/update/selection";
 	String TOPIC_SCAN_XXD_UNLOAD_SELECTION = "scan/xxd/unload/selection";
 	String TOPIC_PEAK_XXD_UPDATE_SELECTION = "peak/xxd/update/selection";

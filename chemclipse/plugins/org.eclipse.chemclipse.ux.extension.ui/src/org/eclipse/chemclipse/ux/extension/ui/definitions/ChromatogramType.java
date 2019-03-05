@@ -58,7 +58,7 @@ public class ChromatogramType implements EventHandler {
 				chromatogramSelection = (IChromatogramSelectionWSD)object;
 				chromatogramType = CHROMATOGRAM_TYPE_WSD;
 			}
-		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION)) {
+		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION)) {
 			Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
 			if(object instanceof IChromatogramSelection) {
 				chromatogramSelection = (IChromatogramSelection)object;
@@ -70,7 +70,7 @@ public class ChromatogramType implements EventHandler {
 					chromatogramType = CHROMATOGRAM_TYPE_WSD;
 				}
 			}
-		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION)) {
+		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION)) {
 			chromatogramSelection = null;
 			chromatogramType = CHROMATOGRAM_TYPE_NONE;
 		}

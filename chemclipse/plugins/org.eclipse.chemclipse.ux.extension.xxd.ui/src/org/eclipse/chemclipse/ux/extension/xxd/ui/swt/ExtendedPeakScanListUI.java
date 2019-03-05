@@ -401,14 +401,25 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 					deleteScanIdentification((IScan)object);
 				}
 			}
-			updateChromatogramSelection();
+			/*
+			 * Send update.
+			 */
+			chromatogramSelection.update(true);
+			// if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+			// eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, chromatogramSelection);
+			// } else if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+			// eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, chromatogramSelection);
+			// } else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+			// eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, chromatogramSelection);
+			// }
+			// eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
 		}
 	}
 
 	private void deleteScanIdentification(IScan scan) {
 
-		if(chromatogramSelection != null) {
-			scan.removeAllTargets();
+		if(scan != null) {
+			scan.getTargets().clear();
 		}
 	}
 

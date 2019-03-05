@@ -32,7 +32,7 @@ public class PeakScanListPart extends AbstractUpdateSupport implements IUpdateSu
 
 	private ExtendedPeakScanListUI extendedPeakScanListUI;
 	//
-	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 
 	@Inject
@@ -97,7 +97,7 @@ public class PeakScanListPart extends AbstractUpdateSupport implements IUpdateSu
 
 	private boolean isChromatogramUnloadEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION)) {
+		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION)) {
 			return true;
 		}
 		return false;
@@ -111,7 +111,7 @@ public class PeakScanListPart extends AbstractUpdateSupport implements IUpdateSu
 			return true;
 		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
 			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION)) {
+		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION)) {
 			return true;
 		}
 		return false;

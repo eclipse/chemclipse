@@ -290,12 +290,6 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	}
 
 	@Override
-	public void removeAllTargets() {
-
-		System.out.println("AbstractScan - please override removeAllTargets() in specific implementation.");
-	}
-
-	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Object getAdapter(Class adapter) {
 

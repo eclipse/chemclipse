@@ -177,7 +177,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 			@Override
 			public void run() {
 
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, null);
+				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, null);
 			}
 		});
 		//

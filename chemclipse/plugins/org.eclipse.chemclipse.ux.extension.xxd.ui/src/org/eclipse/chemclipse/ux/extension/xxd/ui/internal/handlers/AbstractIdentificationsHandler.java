@@ -64,7 +64,7 @@ public abstract class AbstractIdentificationsHandler {
 					if(deleteScanIdentifications) {
 						List<IScan> scans = chromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram());
 						for(IScan scan : scans) {
-							scan.removeAllTargets();
+							scan.getTargets().clear();
 						}
 					}
 					/*

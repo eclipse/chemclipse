@@ -274,7 +274,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				public void run() {
 
 					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-					eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
+					eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
 				}
 			});
 		}
