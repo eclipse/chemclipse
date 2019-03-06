@@ -512,6 +512,12 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			}
 
 			@Override
+			public boolean isToolbarVisible() {
+
+				return toolbarMain.isVisible();
+			}
+
+			@Override
 			public void setVisibleColumns(Set<String> visibleColumns) {
 
 				tabelConfig.setVisibleColumns(visibleColumns);

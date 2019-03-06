@@ -1389,6 +1389,12 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 			}
 
 			@Override
+			public boolean isToolbarVisible() {
+
+				return toolbarMain.isVisible();
+			}
+
+			@Override
 			public void setAxisLabelVisible(ChartAxis axis, boolean visible) {
 
 				chartConfigSupport.setAxisLabelVisible(axis, visible);

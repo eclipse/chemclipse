@@ -246,6 +246,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		PartSupport.setCompositeVisibility(toolbarMain, visible);
 	}
 
+	@Override
+	public boolean isToolbarVisible() {
+
+		return toolbarMain.isVisible();
+	}
+
 	public void fireUpdate() {
 
 		fireUpdateChromatogram();

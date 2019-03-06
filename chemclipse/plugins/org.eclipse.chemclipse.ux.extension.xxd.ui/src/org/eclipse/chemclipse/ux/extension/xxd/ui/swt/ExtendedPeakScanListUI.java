@@ -848,6 +848,12 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			}
 
 			@Override
+			public boolean isToolbarVisible() {
+
+				return toolbarMain.isVisible();
+			}
+
+			@Override
 			public void setToolbarInfoVisible(boolean visible) {
 
 				PartSupport.setCompositeVisibility(toolbarLabel, visible);

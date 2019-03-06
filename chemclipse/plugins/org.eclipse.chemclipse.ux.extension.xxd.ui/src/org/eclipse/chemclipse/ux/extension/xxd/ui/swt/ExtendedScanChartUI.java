@@ -125,7 +125,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	//
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private EditorUpdateSupport editorUpdateSupport;
-	private Composite toolBarMain;
+	private Composite toolbarMain;
 	private Composite toolbarInfoLabel;
 
 	private class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
@@ -259,22 +259,22 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 	private void createToolbarMain(Composite parent) {
 
-		toolBarMain = new Composite(parent, SWT.NONE);
+		toolbarMain = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		toolBarMain.setLayoutData(gridData);
-		toolBarMain.setLayout(new GridLayout(10, false));
+		toolbarMain.setLayoutData(gridData);
+		toolbarMain.setLayout(new GridLayout(10, false));
 		//
-		createButtonToggleToolbarInfo(toolBarMain);
-		comboDataType = createDataType(toolBarMain);
-		comboSignalType = createSignalType(toolBarMain);
-		createButtonToggleToolbarIdentify(toolBarMain);
-		createButtonToggleToolbarReferences(toolBarMain);
-		createToggleChartLegendButton(toolBarMain);
-		createResetButton(toolBarMain);
-		buttonSaveScan = createSaveButton(toolBarMain);
-		buttonOptimizedScan = createOptimizedScanButton(toolBarMain);
-		createSettingsButton(toolBarMain);
+		createButtonToggleToolbarInfo(toolbarMain);
+		comboDataType = createDataType(toolbarMain);
+		comboSignalType = createSignalType(toolbarMain);
+		createButtonToggleToolbarIdentify(toolbarMain);
+		createButtonToggleToolbarReferences(toolbarMain);
+		createToggleChartLegendButton(toolbarMain);
+		createResetButton(toolbarMain);
+		buttonSaveScan = createSaveButton(toolbarMain);
+		buttonOptimizedScan = createOptimizedScanButton(toolbarMain);
+		createSettingsButton(toolbarMain);
 	}
 
 	private Composite createToolbarIdentify(Composite parent) {
@@ -962,7 +962,13 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void setToolbarVisible(boolean visible) {
 
-				PartSupport.setCompositeVisibility(toolBarMain, visible);
+				PartSupport.setCompositeVisibility(toolbarMain, visible);
+			}
+
+			@Override
+			public boolean isToolbarVisible() {
+
+				return toolbarMain.isVisible();
 			}
 
 			@Override
