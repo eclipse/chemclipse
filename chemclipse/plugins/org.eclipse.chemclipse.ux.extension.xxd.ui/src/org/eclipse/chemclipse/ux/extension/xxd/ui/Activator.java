@@ -52,7 +52,7 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStoreSubtract(PreferenceSupplier.INSTANCE());
-		dataUpdateSupport = new DataUpdateSupport(getEventBroker(context));
+		dataUpdateSupport = new DataUpdateSupport(getEventBroker());
 		initialize(dataUpdateSupport);
 	}
 
@@ -93,6 +93,14 @@ public class Activator extends AbstractUIPlugin {
 		return dataUpdateSupport;
 	}
 
+	public IEventBroker getEventBroker() {
+
+		BundleContext bundleContext = getBundle().getBundleContext();
+		IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(bundleContext);
+		eclipseContext.set(Logger.class, null);
+		return eclipseContext.get(IEventBroker.class);
+	}
+
 	private void initialize(DataUpdateSupport dataUpdateSupport) {
 
 		/*
@@ -107,6 +115,14 @@ public class Activator extends AbstractUIPlugin {
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_IDENTIFICATION_TARGET_SUPPLIER);
+		/*
+		 * Unload needed?
+		 */
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_IDENTIFICATION_TARGET_SUPPLIER);
 	}
 
 	private void initializePreferenceStoreSubtract(IPreferenceSupplier preferenceSupplier) {
@@ -121,12 +137,5 @@ public class Activator extends AbstractUIPlugin {
 				preferenceStoreSubtract.setDefault(entry.getKey(), entry.getValue());
 			}
 		}
-	}
-
-	private IEventBroker getEventBroker(BundleContext bundleContext) {
-
-		IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(bundleContext);
-		eclipseContext.set(Logger.class, null);
-		return eclipseContext.get(IEventBroker.class);
 	}
 }

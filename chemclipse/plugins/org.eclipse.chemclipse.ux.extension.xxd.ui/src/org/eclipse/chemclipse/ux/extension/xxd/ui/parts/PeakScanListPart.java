@@ -18,64 +18,29 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakScanListUI;
-import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class PeakScanListPart extends AbstractUpdateSupport implements IUpdateSupport {
+public class PeakScanListPart extends EnhancedUpdateSupport implements IUpdateSupport {
 
 	private ExtendedPeakScanListUI extendedPeakScanListUI;
-	//
-	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
-	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 
 	@Inject
-	public PeakScanListPart(Composite parent, MPart part, IEventBroker eventBroker) {
-		super(part);
-		extendedPeakScanListUI = new ExtendedPeakScanListUI(parent, eventBroker, Activator.getDefault().getPreferenceStore());
-		/*
-		 * Initialize
-		 * The AbstractDataUpdateSupport haven't had a chance yet to listen to updates.
-		 */
-		updateLatestSelection();
-		dataUpdateSupport.add(new IDataUpdateListener() {
-
-			@Override
-			public void update(String topic, List<Object> objects) {
-
-				if(doUpdate()) {
-					parent.getDisplay().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-
-							updateSelection(objects, topic);
-						}
-					});
-				}
-			}
-		});
+	public PeakScanListPart(Composite parent, MPart part) {
+		super(parent, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, part);
 	}
 
-	@Focus
-	public void setFocus() {
+	@Override
+	public void createControl(Composite parent) {
 
-		updateLatestSelection();
-	}
-
-	private void updateLatestSelection() {
-
-		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
+		extendedPeakScanListUI = new ExtendedPeakScanListUI(parent, Activator.getDefault().getEventBroker(), Activator.getDefault().getPreferenceStore());
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void updateSelection(List<Object> objects, String topic) {
+	public void updateSelection(List<Object> objects, String topic) {
 
 		/*
 		 * 0 => because only one property was used to register the event.
