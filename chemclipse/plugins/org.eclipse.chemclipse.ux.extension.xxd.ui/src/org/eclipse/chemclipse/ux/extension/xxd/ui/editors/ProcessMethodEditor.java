@@ -123,7 +123,7 @@ public class ProcessMethodEditor extends AbstractDataUpdateSupport implements ID
 	public void save() {
 
 		if(processMethod != null && processMethodFile != null) {
-			MethodConverter.convert(processMethodFile, processMethod, MethodConverter.DEFAULT_MÉTHOD_CONVERTER_ID, new NullProgressMonitor());
+			MethodConverter.convert(processMethodFile, processMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
 			dirtyable.setDirty(false);
 		}
 	}

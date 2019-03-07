@@ -33,7 +33,7 @@ public class MethodConverter {
 	 * Keep in sync with:
 	 * org.eclipse.chemclipse.xxd.converter.supplier.chemclipse
 	 */
-	public static final String DEFAULT_MÉTHOD_CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.processMethodSupplier";
+	public static final String DEFAULT_METHOD_CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.processMethodSupplier";
 	public static final String DEFAULT_METHOD_FILE_NAME_EXTENSION = "ocm";
 	public static final String DEFAULT_METHOD_FILE_NAME = "ProcessMethod." + DEFAULT_METHOD_FILE_NAME_EXTENSION;
 	public static final String[] DEFAULT_METHOD_FILE_EXTENSIONS = new String[]{"*." + DEFAULT_METHOD_FILE_NAME_EXTENSION};

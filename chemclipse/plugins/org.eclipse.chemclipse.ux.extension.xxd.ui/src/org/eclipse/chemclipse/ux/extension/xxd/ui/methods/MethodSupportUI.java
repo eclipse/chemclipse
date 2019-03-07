@@ -337,7 +337,7 @@ public class MethodSupportUI extends Composite {
 			processMethod.setOperator(UserManagement.getCurrentUser());
 			processMethod.setDescription("This is an empty process method. Please modify.");
 			//
-			IProcessingInfo processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_MÉTHOD_CONVERTER_ID, new NullProgressMonitor());
+			IProcessingInfo processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
 			if(!processingInfo.hasErrorMessages()) {
 				preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
 				computeMethodComboItems();
