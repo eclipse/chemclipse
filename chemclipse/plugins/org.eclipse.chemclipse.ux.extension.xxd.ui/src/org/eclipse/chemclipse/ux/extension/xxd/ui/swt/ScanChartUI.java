@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -207,13 +207,13 @@ public class ScanChartUI extends ScrollableChart {
 			if(usedSignalType.equals(SignalType.PROFILE)) {
 				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 				ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesData(scan, "", false);
-				lineSeriesData.getLineSeriesSettings().setLineColor(colorScan1);
+				lineSeriesData.getSettings().setLineColor(colorScan1);
 				lineSeriesDataList.add(lineSeriesData);
 				addLineSeriesData(lineSeriesDataList);
 			} else {
 				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
 				IBarSeriesData barSeriesData = scanChartSupport.getBarSeriesData(scan, "", false);
-				barSeriesData.getBarSeriesSettings().setBarColor(colorScan1);
+				barSeriesData.getSettings().setBarColor(colorScan1);
 				barSeriesDataList.add(barSeriesData);
 				addBarSeriesData(barSeriesDataList);
 			}
@@ -246,8 +246,8 @@ public class ScanChartUI extends ScrollableChart {
 				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 				ILineSeriesData lineSeriesDataScan1 = scanChartSupport.getLineSeriesData(scan1, labelScan1, false);
 				ILineSeriesData lineSeriesDataScan2 = scanChartSupport.getLineSeriesData(scan2, labelScan2, mirrored);
-				lineSeriesDataScan1.getLineSeriesSettings().setLineColor(colorScan1);
-				lineSeriesDataScan2.getLineSeriesSettings().setLineColor(colorScan2);
+				lineSeriesDataScan1.getSettings().setLineColor(colorScan1);
+				lineSeriesDataScan2.getSettings().setLineColor(colorScan2);
 				lineSeriesDataList.add(lineSeriesDataScan1);
 				lineSeriesDataList.add(lineSeriesDataScan2);
 				addLineSeriesData(lineSeriesDataList);
@@ -255,8 +255,8 @@ public class ScanChartUI extends ScrollableChart {
 				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
 				IBarSeriesData barSeriesDataScan1 = scanChartSupport.getBarSeriesData(scan1, labelScan1, false);
 				IBarSeriesData barSeriesDataScan2 = scanChartSupport.getBarSeriesData(scan2, labelScan2, mirrored);
-				barSeriesDataScan1.getBarSeriesSettings().setBarColor(colorScan1);
-				barSeriesDataScan2.getBarSeriesSettings().setBarColor(colorScan2);
+				barSeriesDataScan1.getSettings().setBarColor(colorScan1);
+				barSeriesDataScan2.getSettings().setBarColor(colorScan2);
 				barSeriesDataList.add(barSeriesDataScan1);
 				barSeriesDataList.add(barSeriesDataScan2);
 				addBarSeriesData(barSeriesDataList);
@@ -502,7 +502,7 @@ public class ScanChartUI extends ScrollableChart {
 				try {
 					ISeriesData seriesData = barSeriesData.getSeriesData();
 					ISeriesData optimizedSeriesData = calculateSeries(seriesData, COMPRESS_TO_LENGTH);
-					IBarSeriesSettings barSeriesSettings = barSeriesData.getBarSeriesSettings();
+					IBarSeriesSettings barSeriesSettings = barSeriesData.getSettings();
 					barSeriesSettings.getSeriesSettingsHighlight(); // Initialize
 					IBarSeries barSeries = (IBarSeries)createSeries(optimizedSeriesData, barSeriesSettings);
 					barSeriesSettings.setBarOverlay(true);
@@ -540,7 +540,7 @@ public class ScanChartUI extends ScrollableChart {
 				try {
 					ISeriesData seriesData = lineSeriesData.getSeriesData();
 					ISeriesData optimizedSeriesData = calculateSeries(seriesData, COMPRESS_TO_LENGTH);
-					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 					lineSeriesSettings.getSeriesSettingsHighlight(); // Initialize
 					ILineSeries lineSeries = (ILineSeries)createSeries(optimizedSeriesData, lineSeriesSettings);
 					baseChart.applyLineSeriesSettings(lineSeries, lineSeriesSettings);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -190,7 +190,7 @@ public class QuantPeaksChartUI extends Composite {
 					builder.append(")");
 					IPeak peak = quantitationPeak.getReferencePeak();
 					ILineSeriesData lineSeriesData = peakChartSupport.getPeak(peak, false, false, colors.getColor(), builder.toString());
-					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 					lineSeriesSettings.setEnableArea(enableArea);
 					lineSeriesDataList.add(lineSeriesData);
 					//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -187,13 +187,13 @@ public class ExtendedBaselineUI {
 			colorScheme.reset();
 			//
 			ILineSeriesData lineSeriesDataChromatogram = getLineSeriesData(chromatogram, "Chromatogram", false);
-			ILineSeriesSettings lineSeriesSettingsChromatogram = lineSeriesDataChromatogram.getLineSeriesSettings();
+			ILineSeriesSettings lineSeriesSettingsChromatogram = lineSeriesDataChromatogram.getSettings();
 			lineSeriesSettingsChromatogram.setLineColor(colorScheme.getColor());
 			lineSeriesSettingsChromatogram.setEnableArea(false);
 			lineSeriesDataList.add(lineSeriesDataChromatogram);
 			//
 			ILineSeriesData lineSeriesDataBaseline = getLineSeriesData(chromatogram, "Baseline", true);
-			ILineSeriesSettings lineSeriesSettingsBaseline = lineSeriesDataBaseline.getLineSeriesSettings();
+			ILineSeriesSettings lineSeriesSettingsBaseline = lineSeriesDataBaseline.getSettings();
 			lineSeriesSettingsBaseline.setLineColor(colorScheme.getNextColor());
 			lineSeriesSettingsBaseline.setEnableArea(false);
 			lineSeriesDataList.add(lineSeriesDataBaseline);

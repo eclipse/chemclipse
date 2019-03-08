@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -178,7 +178,7 @@ public class ExtendedXIROverlayUI {
 				 * Get the data.
 				 */
 				ILineSeriesData lineSeriesData = getLineSeriesData(scanXIR, "XIR_" + i++);
-				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 				lineSeriesSettings.setLineColor(color);
 				lineSeriesSettings.setEnableArea(false);
 				//
@@ -193,7 +193,7 @@ public class ExtendedXIROverlayUI {
 	private ILineSeriesData getLineSeriesData(IScanXIR scanXIR, String id) {
 
 		ILineSeriesData lineSeriesData = new LineSeriesData(getSeriesDataProcessed(scanXIR, id));
-		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 		lineSeriesSettings.setLineColor(Colors.RED);
 		lineSeriesSettings.setEnableArea(true);
 		//

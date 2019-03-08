@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -247,7 +247,7 @@ public class ChromatogramChartSupport {
 		//
 		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 		lineSeriesSettings.setLineColor(color);
 		lineSeriesSettings.setLineStyle(lineStyle);
 		lineSeriesSettings.setEnableArea(showArea);
@@ -362,7 +362,7 @@ public class ChromatogramChartSupport {
 		 */
 		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 		lineSeriesSettings.setLineColor(color);
 		lineSeriesSettings.setLineStyle(lineStyle);
 		lineSeriesSettings.setEnableArea(showArea);

@@ -1019,7 +1019,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
 		//
 		ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM, displayType, color, false);
-		lineSeriesData.getLineSeriesSettings().setEnableArea(enableChromatogramArea);
+		lineSeriesData.getSettings().setEnableArea(enableChromatogramArea);
 		lineSeriesDataList.add(lineSeriesData);
 	}
 
@@ -1064,7 +1064,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			//
 			Collections.sort(peaks, peakRetentionTimeComparator);
 			ILineSeriesData lineSeriesData = peakChartSupport.getPeaks(peaks, true, false, symbolColor, seriesId);
-			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setEnableArea(false);
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
 			lineSeriesSettings.setSymbolType(plotSymbolType);
@@ -1113,7 +1113,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		if(scans.size() > 0) {
 			ILineSeriesData lineSeriesData = null;
 			lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId, displayType, chromatogramSelection);
-			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
 			lineSeriesSettings.setSymbolType(plotSymbolType);
 			lineSeriesSettings.setSymbolSize(symbolSize);
@@ -1160,7 +1160,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_SIZE);
 			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE));
 			lineSeriesData = peakChartSupport.getPeak(peak, true, mirrored, colorPeak, SERIES_ID_SELECTED_PEAK_SHAPE);
-			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setSymbolType(symbolType);
 			lineSeriesSettings.setSymbolColor(colorPeak);
 			lineSeriesSettings.setSymbolSize(markerSize);
@@ -1182,7 +1182,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE);
 			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE));
 			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN, displayType, chromatogramSelection);
-			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
 			lineSeriesSettings.setSymbolType(symbolType);
 			lineSeriesSettings.setSymbolSize(markerSize);
@@ -1200,7 +1200,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			boolean enableBaselineArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_BASELINE_AREA);
 			ILineSeriesData lineSeriesData = null;
 			lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogramSelection, SERIES_ID_BASELINE, displayType, color, false);
-			lineSeriesData.getLineSeriesSettings().setEnableArea(enableBaselineArea);
+			lineSeriesData.getSettings().setEnableArea(enableBaselineArea);
 			lineSeriesDataList.add(lineSeriesData);
 		}
 	}

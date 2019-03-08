@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -86,13 +86,13 @@ public class ExtendedXIRScanUI {
 				 * Raw and Background Data
 				 */
 				lineSeriesData = new LineSeriesData(getSeriesData(scanXIR, "Raw Signals", true));
-				lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+				lineSeriesSettings = lineSeriesData.getSettings();
 				lineSeriesSettings.setLineColor(Colors.RED);
 				lineSeriesSettings.setEnableArea(false);
 				lineSeriesDataList.add(lineSeriesData);
 				//
 				lineSeriesData = new LineSeriesData(getSeriesData(scanXIR, "Background Signals", false));
-				lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+				lineSeriesSettings = lineSeriesData.getSettings();
 				lineSeriesSettings.setLineColor(Colors.BLACK);
 				lineSeriesSettings.setEnableArea(false);
 				lineSeriesDataList.add(lineSeriesData);
@@ -101,7 +101,7 @@ public class ExtendedXIRScanUI {
 				 * Processed Data
 				 */
 				lineSeriesData = new LineSeriesData(getSeriesDataProcessed(scanXIR, "Processed Data"));
-				lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+				lineSeriesSettings = lineSeriesData.getSettings();
 				lineSeriesSettings.setLineColor(Colors.RED);
 				lineSeriesSettings.setEnableArea(false);
 				lineSeriesDataList.add(lineSeriesData);
