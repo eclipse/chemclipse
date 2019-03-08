@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -62,6 +62,7 @@ public class ChartXIR extends LineChart {
 		chartSettings.setVerticalSliderVisible(false);
 		chartSettings.getRangeRestriction().setZeroX(false);
 		chartSettings.getRangeRestriction().setZeroY(false);
+		chartSettings.getRangeRestriction().setForceZeroMinY(false);
 		//
 		setPrimaryAxisSetRaw(chartSettings);
 		addSecondaryAxisSetRaw(chartSettings);
@@ -82,6 +83,8 @@ public class ChartXIR extends LineChart {
 		primaryAxisSettingsY.setTitle("Light measured by detector");
 		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsY.setVisible(true);
+		primaryAxisSettingsY.setReversed(false);
 	}
 
 	private void addSecondaryAxisSetRaw(IChartSettings chartSettings) {
