@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2011, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.csv.io;
 
@@ -39,20 +40,20 @@ public class ChromatogramWriterTestCase extends TestCase {
 		 * Import the chromatogram.
 		 */
 		fileImport = new File(this.pathImport);
-		IProcessingInfo processingInfoImport = ChromatogramConverterMSD.getInstance().convert(fileImport, this.extensionPointImport, new NullProgressMonitor());
-		chromatogramImport = processingInfoImport.getProcessingResult(IChromatogramMSD.class);
+		IProcessingInfo<IChromatogramMSD> processingInfoImport = ChromatogramConverterMSD.getInstance().convert(fileImport, this.extensionPointImport, new NullProgressMonitor());
+		chromatogramImport = processingInfoImport.getProcessingResult();
 		/*
 		 * Export the chromatogram.
 		 */
 		fileExport = new File(this.pathExport);
-		IProcessingInfo processingInfoExport = ChromatogramConverterMSD.getInstance().convert(fileExport, chromatogramImport, this.extensionPointExportReimport, new NullProgressMonitor());
-		fileExport = processingInfoExport.getProcessingResult(File.class);
+		IProcessingInfo<File> processingInfoExport = ChromatogramConverterMSD.getInstance().convert(fileExport, chromatogramImport, this.extensionPointExportReimport, new NullProgressMonitor());
+		fileExport = processingInfoExport.getProcessingResult();
 		/*
 		 * Reimport the exported chromatogram.
 		 */
 		chromatogramImport = null;
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileExport, this.extensionPointExportReimport, new NullProgressMonitor());
-		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
+		IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(fileExport, this.extensionPointExportReimport, new NullProgressMonitor());
+		chromatogram = processingInfo.getProcessingResult();
 	}
 
 	@Override
