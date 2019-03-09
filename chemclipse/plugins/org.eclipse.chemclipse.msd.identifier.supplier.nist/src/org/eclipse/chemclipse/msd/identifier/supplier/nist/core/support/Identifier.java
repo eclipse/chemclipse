@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support;
 
@@ -25,7 +26,7 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.TargetCombinedComparator;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -89,12 +90,13 @@ public class Identifier {
 	private static final String BACKUP_CONTROL_EXTENSION = ".openchrom.bak";
 
 	public Identifier() {
+
 		targetCombinedComparator = new TargetCombinedComparator(SortOrder.DESC);
 	}
 
 	/**
 	 * Performs a mass spectrum identification.
-	 * 
+	 *
 	 * @param massSpectrumList
 	 * @param massSpectrumIdentifierSettings
 	 * @param monitor
@@ -136,7 +138,7 @@ public class Identifier {
 				runtimeSupport.getNistSupport().setNumberOfUnknownEntriesToProcess(numberOfUnknownEntriesToProcess);
 				logger.info("Prepare");
 				prepareFiles(runtimeSupport, massSpectra, monitor);
-				long maxProcessTime = (long)(massSpectrumIdentifierSettings.getTimeoutInMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				long maxProcessTime = (long)(massSpectrumIdentifierSettings.getTimeoutInMinutes() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				logger.info("Max Process time: " + maxProcessTime);
 				logger.info("Run Identification");
 				ICompounds compounds = runNistApplication(runtimeSupport, maxProcessTime, monitor);
@@ -162,14 +164,14 @@ public class Identifier {
 
 	/**
 	 * Performs a peak identification.
-	 * 
+	 *
 	 * @param peaks
 	 * @param peakIdentifierSettings
 	 * @param monitor
 	 * @return IPeakIdentificationResults
 	 * @throws FileNotFoundException
 	 */
-	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
+	public IPeakIdentificationResults runPeakIdentification(List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		/*
@@ -198,7 +200,7 @@ public class Identifier {
 				int numberOfUnknownEntriesToProcess = massSpectra.size();
 				runtimeSupport.getNistSupport().setNumberOfUnknownEntriesToProcess(numberOfUnknownEntriesToProcess);
 				prepareFiles(runtimeSupport, massSpectra, monitor);
-				long maxProcessTime = (long)(peakIdentifierSettings.getTimeoutInMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				long maxProcessTime = (long)(peakIdentifierSettings.getTimeoutInMinutes() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				ICompounds compounds = runNistApplication(runtimeSupport, maxProcessTime, monitor);
 				identificationResults = assignPeakCompounds(compounds, peaks, identificationResults, peakIdentifierSettings, identifierTable, processingInfo, monitor);
 			}
@@ -219,7 +221,7 @@ public class Identifier {
 		cleanFiles(runtimeSupport, monitor);
 		restoreControlFiles(runtimeSupport);
 		//
-		return (IPeakIdentificationResults)identificationResults;
+		return identificationResults;
 	}
 
 	public void openNistForPeakIdentification(List<IPeakMSD> peaks, INistSettings nistSettings, IProgressMonitor monitor) throws FileNotFoundException {
@@ -259,7 +261,7 @@ public class Identifier {
 
 	private Map<String, String> setMassSpectrumIdentifier(List<IScanMSD> massSpectrumList) {
 
-		Map<String, String> identifierTable = new HashMap<String, String>();
+		Map<String, String> identifierTable = new HashMap<>();
 		int id = 1;
 		for(IScanMSD massSpectrum : massSpectrumList) {
 			setIdentifier(massSpectrum, id++, identifierTable);
@@ -285,14 +287,14 @@ public class Identifier {
 
 	private List<IScanMSD> getMassSpectra(IMassSpectra massSpectra) {
 
-		List<IScanMSD> massSpectrumList = new ArrayList<IScanMSD>();
+		List<IScanMSD> massSpectrumList = new ArrayList<>();
 		for(int i = 1; i <= massSpectra.size(); i++) {
 			massSpectrumList.add(massSpectra.getMassSpectrum(i));
 		}
 		return massSpectrumList;
 	}
 
-	private IMassSpectra getMassSpectraFromPeakList(List<IPeakMSD> peaks) {
+	private IMassSpectra getMassSpectraFromPeakList(List<? extends IPeakMSD> peaks) {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		for(IPeakMSD peak : peaks) {
@@ -302,9 +304,9 @@ public class Identifier {
 		return massSpectra;
 	}
 
-	private Map<String, String> setPeakIdentifier(List<IPeakMSD> peaks) {
+	private Map<String, String> setPeakIdentifier(List<? extends IPeakMSD> peaks) {
 
-		Map<String, String> identifierTable = new HashMap<String, String>();
+		Map<String, String> identifierTable = new HashMap<>();
 		int id = 1;
 		for(IPeakMSD peak : peaks) {
 			IScanMSD massSpectrum = peak.getExtractedMassSpectrum();
@@ -313,7 +315,7 @@ public class Identifier {
 		return identifierTable;
 	}
 
-	private void resetPeakIdentifier(List<IPeakMSD> peaks, Map<String, String> identifierTable) {
+	private void resetPeakIdentifier(List<? extends IPeakMSD> peaks, Map<String, String> identifierTable) {
 
 		for(IPeakMSD peak : peaks) {
 			IScanMSD massSpectrum = peak.getExtractedMassSpectrum();
@@ -368,7 +370,7 @@ public class Identifier {
 
 	/**
 	 * Deletes the file.
-	 * 
+	 *
 	 * @param path
 	 */
 	private void deleteFile(String path) {
@@ -428,7 +430,7 @@ public class Identifier {
 
 	/**
 	 * Prepares the files.
-	 * 
+	 *
 	 * @param runtimeSupport
 	 * @param monitor
 	 * @param peaks
@@ -480,7 +482,7 @@ public class Identifier {
 
 	/**
 	 * Runs the NIST application.
-	 * 
+	 *
 	 * @param runtimeSupport
 	 * @param monitor
 	 */
@@ -585,7 +587,7 @@ public class Identifier {
 	/**
 	 * Assign the compounds to the peaks.
 	 */
-	private IPeakIdentificationResults assignPeakCompounds(ICompounds compounds, List<IPeakMSD> peaks, IPeakIdentificationResults identificationResults, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo, IProgressMonitor monitor) {
+	private IPeakIdentificationResults assignPeakCompounds(ICompounds compounds, List<? extends IPeakMSD> peaks, IPeakIdentificationResults identificationResults, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo, IProgressMonitor monitor) {
 
 		monitor.subTask("Assign the identified peaks.");
 		/*
@@ -598,13 +600,13 @@ public class Identifier {
 
 	/**
 	 * Get the result.
-	 * 
+	 *
 	 * @param peak
 	 * @param compound
 	 * @param peakIdentifierSettings
 	 * @return {@link INistPeakIdentificationResults}
 	 */
-	public IPeakIdentificationResults getPeakIdentificationResults(ICompounds compounds, List<IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo) {
+	public IPeakIdentificationResults getPeakIdentificationResults(ICompounds compounds, List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo) {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		IPeakIdentificationResult identificationResult;
@@ -625,7 +627,7 @@ public class Identifier {
 				/*
 				 * Extract all hits and set the identification result.
 				 */
-				List<IIdentificationTarget> peakTargets = new ArrayList<IIdentificationTarget>();
+				List<IIdentificationTarget> peakTargets = new ArrayList<>();
 				int maxIndex = compound.size();
 				identificationResult = new PeakIdentificationResult();
 				for(int index = 1; index <= maxIndex; index++) {
@@ -654,7 +656,7 @@ public class Identifier {
 				 * Assign only the best hits.
 				 */
 				Collections.sort(peakTargets, targetCombinedComparator);
-				int size = (numberOfTargets <= peakTargets.size()) ? numberOfTargets : peakTargets.size();
+				int size = numberOfTargets <= peakTargets.size() ? numberOfTargets : peakTargets.size();
 				for(int i = 0; i < size; i++) {
 					peak.getTargets().add(peakTargets.get(i));
 				}
@@ -674,7 +676,7 @@ public class Identifier {
 		return identificationResults;
 	}
 
-	private IPeakMSD getPeakByIdentifier(List<IPeakMSD> peaks, String identifier) {
+	private IPeakMSD getPeakByIdentifier(List<? extends IPeakMSD> peaks, String identifier) {
 
 		if(identifier.equals("")) {
 			return null;
@@ -690,7 +692,7 @@ public class Identifier {
 
 	/**
 	 * Returns the identification entry or null if something has gone wrong.
-	 * 
+	 *
 	 * @param compound
 	 * @param index
 	 * @return {@link INistPeakIdentificationEntry}
@@ -731,7 +733,7 @@ public class Identifier {
 
 	/**
 	 * Assigns the mass spectrum compounds.
-	 * 
+	 *
 	 * @param compounds
 	 * @param massSpectra
 	 * @param identificationResults
@@ -774,7 +776,7 @@ public class Identifier {
 
 	/**
 	 * Returns the mass spectrum identification result.
-	 * 
+	 *
 	 * @param massSpectrum
 	 * @param compound
 	 * @param massSpectrumIdentifierSettings
@@ -783,7 +785,7 @@ public class Identifier {
 	public IIdentificationResult getMassSpectrumIdentificationResult(IScanMSD massSpectrum, ICompound compound, MassSpectrumIdentifierSettings massSpectrumIdentifierSettings) {
 
 		int numberOfTargets = massSpectrumIdentifierSettings.getNumberOfTargets();
-		List<IIdentificationTarget> massSpectrumTargets = new ArrayList<IIdentificationTarget>();
+		List<IIdentificationTarget> massSpectrumTargets = new ArrayList<>();
 		IIdentificationResult identificationResult = new IdentificationResult();
 		//
 		for(int index = 1; index <= compound.size(); index++) {
@@ -802,7 +804,7 @@ public class Identifier {
 		 * Assign only the best hits.
 		 */
 		Collections.sort(massSpectrumTargets, targetCombinedComparator);
-		int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
+		int size = numberOfTargets <= massSpectrumTargets.size() ? numberOfTargets : massSpectrumTargets.size();
 		for(int i = 0; i < size; i++) {
 			massSpectrum.getTargets().add(massSpectrumTargets.get(i));
 		}
@@ -812,7 +814,7 @@ public class Identifier {
 
 	/**
 	 * Returns the mass spectrum identification entry.
-	 * 
+	 *
 	 * @param hit
 	 * @return INistMassSpectrumIdentificationEntry
 	 */
