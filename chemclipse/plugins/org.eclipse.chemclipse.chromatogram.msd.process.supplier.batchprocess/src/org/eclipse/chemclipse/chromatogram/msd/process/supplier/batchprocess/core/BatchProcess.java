@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2010, 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -43,7 +43,7 @@ public class BatchProcess {
 			IProcessMethod processMethod = batchProcessJob.getProcessMethod();
 			for(IChromatogramInputEntry chromatogramInput : batchProcessJob.getChromatogramInputEntries()) {
 				String pathChromatogram = chromatogramInput.getInputFile();
-				IProcessingInfo processingInfoX = chromatogramTypeSupport.getChromatogramSelection(pathChromatogram, monitor);
+				IProcessingInfo<IChromatogramSelection<?, ?>> processingInfoX = chromatogramTypeSupport.getChromatogramSelection(pathChromatogram, monitor);
 				if(!processingInfoX.hasErrorMessages()) {
 					try {
 						IChromatogramSelection chromatogramSelection = processingInfoX.getProcessingResult(IChromatogramSelection.class);
