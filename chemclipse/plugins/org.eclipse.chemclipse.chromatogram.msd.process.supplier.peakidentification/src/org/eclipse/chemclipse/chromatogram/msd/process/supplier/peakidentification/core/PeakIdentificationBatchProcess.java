@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2011, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.core;
 
@@ -52,7 +53,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		IProcessingMessage processingMessage;
 		File peakInputFile;
 		IPeaks peakImports;
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
+		List<IPeakMSD> peaks = new ArrayList<>();
 		IPeakIdentificationBatchProcessReport batchProcessReport = new PeakIdentificationBatchProcessReport();
 		/*
 		 * Validate
@@ -66,10 +67,10 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		for(IPeakInputEntry inputEntry : peakIdentificationBatchJob.getPeakInputEntries()) {
 			try {
 				peakInputFile = new File(inputEntry.getInputFile());
-				IProcessingInfo processingPeakImportConverterInfo = loadPeaksFromFile(peakInputFile, monitor);
+				IProcessingInfo<IPeaks> processingPeakImportConverterInfo = loadPeaksFromFile(peakInputFile, monitor);
 				processingInfo.addMessages(processingPeakImportConverterInfo);
 				try {
-					peakImports = processingPeakImportConverterInfo.getProcessingResult(IPeaks.class);
+					peakImports = processingPeakImportConverterInfo.getProcessingResult();
 					for(IPeak peak : peakImports.getPeaks()) {
 						if(peak instanceof IPeakMSD) {
 							peaks.add((IPeakMSD)peak);

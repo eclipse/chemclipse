@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2011, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables;
 
@@ -51,9 +52,9 @@ public class BatchRunnable implements IRunnableWithProgress {
 			monitor.beginTask("Peak Identification Batch Process", IProgressMonitor.UNKNOWN);
 			IPeakIdentificationBatchJob peakIdentificationBatchJob = reader.read(file, monitor);
 			PeakIdentificationBatchProcess batchProcess = new PeakIdentificationBatchProcess();
-			final IProcessingInfo processingInfo = batchProcess.execute(peakIdentificationBatchJob, monitor);
+			final IProcessingInfo<IPeakIdentificationBatchProcessReport> processingInfo = batchProcess.execute(peakIdentificationBatchJob, monitor);
 			try {
-				final IPeakIdentificationBatchProcessReport report = processingInfo.getProcessingResult(IPeakIdentificationBatchProcessReport.class);
+				final IPeakIdentificationBatchProcessReport report = processingInfo.getProcessingResult();
 				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 				/*
 				 * Update the peak results page
