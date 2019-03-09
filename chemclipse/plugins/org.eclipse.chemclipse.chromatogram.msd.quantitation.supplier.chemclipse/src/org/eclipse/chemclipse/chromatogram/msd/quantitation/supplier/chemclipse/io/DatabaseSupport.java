@@ -1,13 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2019 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.io;
 
@@ -22,12 +23,13 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class DatabaseSupport {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DatabaseSupport.class);
 
 	/**
 	 * Tries to load the quantitation database from the given file.
 	 * Result could be null if the operation failed.
-	 * 
+	 *
 	 * @param file
 	 * @return
 	 */
@@ -37,12 +39,9 @@ public class DatabaseSupport {
 		File file = new File(PreferenceSupplier.getSelectedQuantitationDatabase());
 		//
 		if(file != null && file.exists()) {
-			try {
-				IProcessingInfo processingInfo = QuantDBConverter.convert(file, new NullProgressMonitor());
-				quantitationDatabase = processingInfo.getProcessingResult(IQuantitationDatabase.class);
-			} catch(Exception e) {
-				logger.warn(e);
-			}
+
+			IProcessingInfo<IQuantitationDatabase> processingInfo = QuantDBConverter.convert(file, new NullProgressMonitor());
+			quantitationDatabase = processingInfo.getProcessingResult();
 		}
 		//
 		return quantitationDatabase;
