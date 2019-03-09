@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
  * This AdapterFactory allows for adaption of resource files to {@link ProcessMethod}s, so one can simply call Adapters#adapt(eclipseResource, ProcessMethod.class)} to read a process method stored inside Eclipse resource tree
- * 
+ *
  * @author Christoph Läubrich
  *
  */
@@ -52,9 +52,9 @@ public class MethodAdapterFactory implements IAdapterFactory {
 
 	public IProcessMethod convertFile(File localfile) {
 
-		IProcessingInfo processingInfo = MethodConverter.convert(localfile, new NullProgressMonitor());
+		IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(localfile, new NullProgressMonitor());
 		if(processingInfo != null) {
-			return processingInfo.getProcessingResult(IProcessMethod.class);
+			return processingInfo.getProcessingResult();
 		}
 		return null;
 	}
