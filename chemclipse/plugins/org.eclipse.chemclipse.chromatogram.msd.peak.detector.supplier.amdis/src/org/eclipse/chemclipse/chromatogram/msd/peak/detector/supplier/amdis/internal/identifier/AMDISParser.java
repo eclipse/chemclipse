@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright (c) 2019 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
- * Christoph Läubrich - initial API and implementation
+ * Christoph Lï¿½ubrich - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.internal.identifier;
 
@@ -50,14 +50,14 @@ public class AMDISParser {
 			if(!waitForFileComplete(eluFile, 5, TimeUnit.MINUTES, subMonitor.split(10, SubMonitor.SUPPRESS_NONE))) {
 				throw new InterruptedException("AMDIS does not finished writing file within the time bounds");
 			}
-			IProcessingInfo peaksResult = PeakConverterMSD.convert(eluFile, PeakProcessorSupport.PEAK_CONVERTER_ID, subMonitor.split(70));
+			IProcessingInfo<IPeaks> peaksResult = PeakConverterMSD.convert(eluFile, PeakProcessorSupport.PEAK_CONVERTER_ID, subMonitor.split(70));
 			if(peaksResult == null) {
 				result.addErrorMessage(AmdisIdentifier.IDENTIFIER, "PeakParser returned no result");
 				return result;
 			}
 			Object processingResult = peaksResult.getProcessingResult();
 			if(processingResult instanceof IPeaks) {
-				result.setProcessingResult(peaksResult.getProcessingResult(IPeaks.class));
+				result.setProcessingResult(peaksResult.getProcessingResult());
 			}
 			for(IProcessingMessage message : peaksResult.getMessages()) {
 				result.addMessage(message);
@@ -80,7 +80,7 @@ public class AMDISParser {
 		long[] size = new long[CHECK_WINDOW_SIZE];
 		int index = 0;
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Wait for file " + file.getName() + " to complete", (int)(millis / WAIT_MS));
-		while(millis > (System.currentTimeMillis() - start)) {
+		while(millis > System.currentTimeMillis() - start) {
 			Thread.sleep(WAIT_MS);
 			subMonitor.worked(1);
 			if(index < CHECK_WINDOW_SIZE) {
@@ -116,7 +116,7 @@ public class AMDISParser {
 		long start = System.currentTimeMillis();
 		long millis = unit.toMillis(timeout);
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Wait for file " + file.getName() + " to appear", (int)(millis / WAIT_MS));
-		while(millis > (System.currentTimeMillis() - start) && !file.exists()) {
+		while(millis > System.currentTimeMillis() - start && !file.exists()) {
 			Thread.sleep(WAIT_MS);
 			subMonitor.worked(1);
 		}

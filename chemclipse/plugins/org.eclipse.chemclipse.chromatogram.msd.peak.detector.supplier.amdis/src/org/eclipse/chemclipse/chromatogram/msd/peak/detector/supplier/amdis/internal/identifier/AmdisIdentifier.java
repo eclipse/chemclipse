@@ -1,14 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2018, 2019 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - fix bug 544729 AMDIS Idnetifier misses ELU File
+ * Christoph LÃ¤ubrich - fix bug 544729 AMDIS Idnetifier misses ELU File
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.internal.identifier;
 
@@ -57,7 +57,7 @@ public class AmdisIdentifier {
 		 */
 		String amdisTmpPath = PreferenceSupplier.getAmdisTmpPath();
 		File file = new File(amdisTmpPath + File.separator + chromatogram.getName());
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(file, chromatogram, CONVERTER_ID, subMonitor.split(10));
+		IProcessingInfo<File> processingInfo = ChromatogramConverterMSD.getInstance().convert(file, chromatogram, CONVERTER_ID, subMonitor.split(10));
 		if(processingInfo == null) {
 			result.addErrorMessage(IDENTIFIER, "Conversion to CDF returned no result");
 			return result;
@@ -65,7 +65,7 @@ public class AmdisIdentifier {
 		for(IProcessingMessage message : processingInfo.getMessages()) {
 			result.addMessage(message);
 		}
-		File fileChromatogram = processingInfo.getProcessingResult(File.class);
+		File fileChromatogram = processingInfo.getProcessingResult();
 		if(fileChromatogram == null) {
 			result.addErrorMessage(IDENTIFIER, "Conversion to CDF returned no file");
 			return result;
@@ -128,7 +128,7 @@ public class AmdisIdentifier {
 
 	/**
 	 * Returns the AMDIS compatible file path.
-	 * 
+	 *
 	 * @param fileChromatogram
 	 * @return String
 	 */

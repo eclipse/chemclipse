@@ -1,19 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core;
 
 import java.io.File;
 import java.util.Date;
 
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.PathResolver;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.PeakDetectorSettings;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -37,9 +39,9 @@ public class AmdisPeakDetector_1 extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_OP17760));
+		file = new File(PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_OP17760));
 		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(file, new NullProgressMonitor());
-		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
+		chromatogram = (IChromatogramMSD)processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		peakDetectorSettings = new PeakDetectorSettings();
 		detector = new PeakDetector();

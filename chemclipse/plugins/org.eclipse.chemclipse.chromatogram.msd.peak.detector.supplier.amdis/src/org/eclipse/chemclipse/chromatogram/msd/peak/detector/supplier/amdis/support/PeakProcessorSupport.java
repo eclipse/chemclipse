@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -40,14 +40,14 @@ public class PeakProcessorSupport {
 
 	public void extractEluFileAndSetPeaks(IChromatogramSelectionMSD chromatogramSelection, File file, PeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = PeakConverterMSD.convert(file, PEAK_CONVERTER_ID, monitor);
-		IPeaks peaks = processingInfo.getProcessingResult(IPeaks.class);
+		IProcessingInfo<IPeaks> processingInfo = PeakConverterMSD.convert(file, PEAK_CONVERTER_ID, monitor);
+		IPeaks peaks = processingInfo.getProcessingResult();
 		insertPeaks(chromatogramSelection, peaks.getPeaks(), peakDetectorSettings, monitor);
 	}
 
 	/**
 	 * Extracts the given ELU file and sets the peaks.
-	 * 
+	 *
 	 * @param chromatogramSelection
 	 * @param file
 	 * @param minSignalToNoiseRatio
@@ -69,9 +69,9 @@ public class PeakProcessorSupport {
 					IPeakMSD peakMSD = (IPeakMSD)peak;
 					IPeakModelMSD peakModelMSD = peakMSD.getPeakModel();
 					//
-					int startScan = (peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN) instanceof Integer) ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN) : 0;
-					int stopScan = (peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_STOP_SCAN) instanceof Integer) ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_STOP_SCAN) : 0;
-					int maxScan = (peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_MAX_SCAN) instanceof Integer) ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_MAX_SCAN) : 0;
+					int startScan = peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN) instanceof Integer ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN) : 0;
+					int stopScan = peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_STOP_SCAN) instanceof Integer ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_STOP_SCAN) : 0;
+					int maxScan = peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_MAX_SCAN) instanceof Integer ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_MAX_SCAN) : 0;
 					/*
 					 * There seems to be an offset of 1 scan.
 					 * Why? No clue ...
@@ -93,7 +93,7 @@ public class PeakProcessorSupport {
 							 * Pre-check
 							 */
 							if(startScan > 0 && stopScan > startScan && maxScan > startScan) {
-								List<Integer> retentionTimes = new ArrayList<Integer>();
+								List<Integer> retentionTimes = new ArrayList<>();
 								for(int scan = startScan; scan <= stopScan; scan++) {
 									retentionTimes.add(chromatogram.getScan(scan).getRetentionTime());
 								}
