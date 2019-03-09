@@ -1,10 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved.
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.runnables;
 
@@ -34,7 +35,7 @@ public class ImportChromatogramRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		File chromatogramImportFile = new File(pathChromatogram);
-		org.eclipse.chemclipse.processing.core.IProcessingInfo processingInfoImport = ChromatogramConverterMSD.getInstance().convert(chromatogramImportFile, monitor);
+		org.eclipse.chemclipse.processing.core.IProcessingInfo<IChromatogramMSD> processingInfoImport = ChromatogramConverterMSD.getInstance().convert(chromatogramImportFile, monitor);
 		chromatogramMSD = processingInfoImport.getProcessingResult(IChromatogramMSD.class);
 	}
 }

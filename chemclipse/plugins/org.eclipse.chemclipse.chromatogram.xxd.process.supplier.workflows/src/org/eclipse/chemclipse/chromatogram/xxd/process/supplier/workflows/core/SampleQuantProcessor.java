@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.core;
 
@@ -62,7 +63,7 @@ public class SampleQuantProcessor {
 			 */
 			sampleQuantReport.setPathChromatogramOriginal(pathChromatogramOriginal);
 			File chromatogramImportFile = new File(pathChromatogramOriginal);
-			IProcessingInfo processingInfoImport = ChromatogramConverterMSD.getInstance().convert(chromatogramImportFile, monitor);
+			IProcessingInfo<IChromatogramMSD> processingInfoImport = ChromatogramConverterMSD.getInstance().convert(chromatogramImportFile, monitor);
 			IChromatogramMSD chromatogramMSD = processingInfoImport.getProcessingResult(IChromatogramMSD.class);
 			//
 			sampleQuantReport.setName(chromatogramMSD.getName());
@@ -73,7 +74,7 @@ public class SampleQuantProcessor {
 			/*
 			 * Identify scans
 			 */
-			List<IScanMSD> scansToIdentify = new ArrayList<IScanMSD>();
+			List<IScanMSD> scansToIdentify = new ArrayList<>();
 			List<ISampleQuantSubstance> sampleQuantSubstances = sampleQuantReport.getSampleQuantSubstances();
 			for(ISampleQuantSubstance sampleQuantSubstance : sampleQuantSubstances) {
 				int maxScan = sampleQuantSubstance.getMaxScan();
@@ -89,7 +90,7 @@ public class SampleQuantProcessor {
 			 * Export the chromatogram
 			 */
 			File chromatogramExportFile = new File(sampleQuantReportFile.getAbsolutePath().replace(REPORT_FILE_EXTENSION, CHROMATOGRAM_FILE_EXTENSION));
-			IProcessingInfo processingInfoExport = ChromatogramConverterMSD.getInstance().convert(chromatogramExportFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+			IProcessingInfo<File> processingInfoExport = ChromatogramConverterMSD.getInstance().convert(chromatogramExportFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
 			sampleQuantReport.setPathChromatogramEdited(processingInfoExport.getProcessingResult(File.class).getAbsolutePath());
 			/*
 			 * Write sample quant report
@@ -104,7 +105,7 @@ public class SampleQuantProcessor {
 
 	/**
 	 * The additional report data file could be null if no additional data is available.
-	 * 
+	 *
 	 * @param fileAdditionalReportData
 	 * @param fileAreaPercentReport
 	 * @param fileQuantitationReport
@@ -112,7 +113,7 @@ public class SampleQuantProcessor {
 	 */
 	public List<ISampleQuantSubstance> extractSampleQuantSubstances(File fileAdditionalReportData, File fileAreaPercentReport, File fileQuantitationReport) {
 
-		List<ISampleQuantSubstance> sampleQuantSubstances = new ArrayList<ISampleQuantSubstance>();
+		List<ISampleQuantSubstance> sampleQuantSubstances = new ArrayList<>();
 		/*
 		 * Extract the report data.
 		 */
@@ -134,7 +135,7 @@ public class SampleQuantProcessor {
 			final int INDEX_SUMRPT_MISC = getRowIndex(reportRowModelQuantitation, "Misc");
 			final int INDEX_SUMRPT_QVALUE = getRowIndex(reportRowModelQuantitation, "Qvalue");
 			//
-			Map<Integer, List<String>> areaPercentRowMap = new HashMap<Integer, List<String>>();
+			Map<Integer, List<String>> areaPercentRowMap = new HashMap<>();
 			for(List<String> row : reportRowModelAreaPercent) {
 				int retentionTime = (int)(getValueDouble(row.get(INDEX_RTRERES_RT).trim()) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 				areaPercentRowMap.put(retentionTime, row);
@@ -188,7 +189,7 @@ public class SampleQuantProcessor {
 
 	private String getCasNumber(String name, Map<String, String> reportCompoundCasMap) {
 
-		return (reportCompoundCasMap.get(name) != null) ? reportCompoundCasMap.get(name) : "";
+		return reportCompoundCasMap.get(name) != null ? reportCompoundCasMap.get(name) : "";
 	}
 
 	private int getMaxScan(List<String> rowAreaPercent, int INDEX_RTRERES_MAX_SCAN) {
@@ -211,7 +212,7 @@ public class SampleQuantProcessor {
 
 	private Map<String, String> extractReportCompoundCasMap(File fileAdditionalReportData) {
 
-		Map<String, String> reportCompoundCasMap = new HashMap<String, String>();
+		Map<String, String> reportCompoundCasMap = new HashMap<>();
 		if(fileAdditionalReportData != null && fileAdditionalReportData.exists()) {
 			TargetsReader targetsReader = new TargetsReader();
 			reportCompoundCasMap = targetsReader.getCompoundCasMap(fileAdditionalReportData);
@@ -222,7 +223,7 @@ public class SampleQuantProcessor {
 	private IReportRowModel extractReportRowModel(File fileImport, String extensionPointId) {
 
 		IReportRowModel reportRowModel;
-		IProcessingInfo processingInfo = ReportConverter.convert(fileImport, extensionPointId, new NullProgressMonitor());
+		IProcessingInfo<IReportRowModel> processingInfo = ReportConverter.convert(fileImport, extensionPointId, new NullProgressMonitor());
 		try {
 			reportRowModel = processingInfo.getProcessingResult(IReportRowModel.class);
 		} catch(TypeCastException e) {
