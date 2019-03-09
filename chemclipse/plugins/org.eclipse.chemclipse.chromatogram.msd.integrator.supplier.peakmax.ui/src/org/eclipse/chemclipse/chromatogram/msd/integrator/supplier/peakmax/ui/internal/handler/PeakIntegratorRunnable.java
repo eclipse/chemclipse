@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2012, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.ui.internal.handler;
 
@@ -21,7 +22,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class PeakIntegratorRunnable implements IRunnableWithProgress {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(PeakIntegratorRunnable.class);
 	private static final String PEAK_INTEGRATOR_ID = "org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.peakIntegrator";
 	private IChromatogramSelectionMSD chromatogramSelection;
@@ -50,18 +51,12 @@ public class PeakIntegratorRunnable implements IRunnableWithProgress {
 			/*
 			 * Show the processing view if error messages occurred.
 			 */
-			IProcessingInfo processingInfo = PeakIntegrator.integrate(chromatogramSelection, peakIntegrationSettings, PEAK_INTEGRATOR_ID, monitor);
+			IProcessingInfo<IPeakIntegrationResults> processingInfo = PeakIntegrator.integrate(chromatogramSelection, peakIntegrationSettings, PEAK_INTEGRATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
-			/*
-			 * Try to set the results.
-			 */
-			try {
-				IPeakIntegrationResults peakIntegrationResults = processingInfo.getProcessingResult(IPeakIntegrationResults.class);
-				IntegrationResultUpdateNotifier.fireUpdateChange(peakIntegrationResults);
-				updateSelection();
-			} catch(TypeCastException e) {
-				logger.warn(e);
-			}
+			IPeakIntegrationResults peakIntegrationResults = processingInfo.getProcessingResult();
+			IntegrationResultUpdateNotifier.fireUpdateChange(peakIntegrationResults);
+			updateSelection();
+
 		} finally {
 			monitor.done();
 		}
