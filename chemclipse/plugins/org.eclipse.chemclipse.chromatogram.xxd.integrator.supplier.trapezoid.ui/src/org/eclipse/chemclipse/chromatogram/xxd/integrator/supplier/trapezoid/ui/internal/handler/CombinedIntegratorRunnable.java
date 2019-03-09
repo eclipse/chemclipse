@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -47,7 +47,7 @@ public class CombinedIntegratorRunnable implements IRunnableWithProgress {
 			/*
 			 * Show the processing view if error messages occurred.
 			 */
-			IProcessingInfo processingInfo = CombinedIntegrator.integrate(chromatogramSelection, COMBINED_INTEGRATOR_ID, monitor);
+			IProcessingInfo<ICombinedIntegrationResult> processingInfo = CombinedIntegrator.integrate(chromatogramSelection, COMBINED_INTEGRATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			/*
 			 * Try to set the results.
