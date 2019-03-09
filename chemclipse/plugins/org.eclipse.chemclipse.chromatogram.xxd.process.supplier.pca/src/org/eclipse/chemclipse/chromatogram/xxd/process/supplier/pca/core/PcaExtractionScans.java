@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
@@ -49,8 +50,8 @@ public class PcaExtractionScans implements IDataExtraction {
 		ScansExtractionSupport scansExtractionSupport = new ScansExtractionSupport(retentionTimeWindow, maximalNumberScans, extractionType, useDefaultProperties);
 		Map<IDataInputEntry, Collection<IScan>> inputData = new HashMap<>();
 		for(IDataInputEntry input : dataInputEntriesAll) {
-			IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(new File(input.getInputFile()), monitor);
-			List<IScan> scans = processingInfo.getProcessingResult(IChromatogramMSD.class).getScans();
+			IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(new File(input.getInputFile()), monitor);
+			List<IScan> scans = processingInfo.getProcessingResult().getScans();
 			inputData.put(input, scans);
 		}
 		return scansExtractionSupport.process(inputData, monitor);

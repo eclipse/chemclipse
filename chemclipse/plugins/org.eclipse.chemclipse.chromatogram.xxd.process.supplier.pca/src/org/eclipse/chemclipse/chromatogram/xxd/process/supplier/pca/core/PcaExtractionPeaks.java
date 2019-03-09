@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
@@ -42,8 +43,8 @@ public class PcaExtractionPeaks implements IDataExtraction {
 				/*
 				 * Try to catch exceptions if wrong files have been selected.
 				 */
-				IProcessingInfo processingInfo = PeakConverterMSD.convert(new File(peakFile.getInputFile()), monitor);
-				IPeaks peaks = processingInfo.getProcessingResult(IPeaks.class);
+				IProcessingInfo<IPeaks> processingInfo = PeakConverterMSD.convert(new File(peakFile.getInputFile()), monitor);
+				IPeaks peaks = processingInfo.getProcessingResult();
 				peakMap.put(peakFile, peaks);
 			} catch(Exception e) {
 			}
