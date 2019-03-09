@@ -1,14 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Lorenz Gerber - initial API and implementation
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.identifier;
 
@@ -59,10 +60,10 @@ public class BasePeakIdentifier {
 	//
 	// private static final String ESSTOGEERATIO = "S/G Ratio";
 	private static final String NOTFOUND = "Not Found (BasePeak Identifier)";
-	private static final ArrayList<Integer> syringylBaseMZs = new ArrayList<Integer>();
-	private static final ArrayList<Integer> guaiacylBaseMZs = new ArrayList<Integer>();
-	private static final ArrayList<Integer> pHydroxyPhenylBaseMZs = new ArrayList<Integer>();
-	private static final ArrayList<Integer> carbohydrateBaseMZs = new ArrayList<Integer>();
+	private static final ArrayList<Integer> syringylBaseMZs = new ArrayList<>();
+	private static final ArrayList<Integer> guaiacylBaseMZs = new ArrayList<>();
+	private static final ArrayList<Integer> pHydroxyPhenylBaseMZs = new ArrayList<>();
+	private static final ArrayList<Integer> carbohydrateBaseMZs = new ArrayList<>();
 	//
 	private TargetBuilder targetBuilder;
 	// These one's are run when initializing the class
@@ -94,9 +95,9 @@ public class BasePeakIdentifier {
 		massSpectraFiles = PathResolver.getAbsolutePath(PathResolver.GERBER_ET_AL_2012);
 	}
 
-	public void identifyPeaks(List<IPeakMSD> peaks, IBasePeakSettings settings, IProgressMonitor monitor) {
+	public void identifyPeaks(List<? extends IPeakMSD> peaks, IBasePeakSettings settings, IProgressMonitor monitor) {
 
-		List<IPeakMSD> peaksNotFound = new ArrayList<IPeakMSD>();
+		List<IPeakMSD> peaksNotFound = new ArrayList<>();
 		for(int i = 0; i < peaks.size(); i++) {
 			// current peak to work with
 			IPeakMSD peak = peaks.get(i);
@@ -136,13 +137,13 @@ public class BasePeakIdentifier {
 			if(containsMoreThanOneBasePeakIdentification(peakTargets)) {
 				IIdentificationTarget peakTargetToRemove = null;
 				exitloop:
-				for(IIdentificationTarget peakTarget : peakTargets) {
-					ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
-					if(libraryInformation.getName().equals(NOTFOUND)) {
-						peakTargetToRemove = peakTarget;
-						break exitloop;
+					for(IIdentificationTarget peakTarget : peakTargets) {
+						ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
+						if(libraryInformation.getName().equals(NOTFOUND)) {
+							peakTargetToRemove = peakTarget;
+							break exitloop;
+						}
 					}
-				}
 				//
 				if(peakTargetToRemove != null) {
 					peak.getTargets().remove(peakTargetToRemove);
@@ -153,7 +154,7 @@ public class BasePeakIdentifier {
 
 	public void identifyMassSpectra(List<IScanMSD> massSpectrumList, IBasePeakSettings settings, IProgressMonitor monitor) {
 
-		List<IScanMSD> scansNotFound = new ArrayList<IScanMSD>();
+		List<IScanMSD> scansNotFound = new ArrayList<>();
 		for(int i = 0; i < massSpectrumList.size(); i++) {
 			// current scan to work with
 			IScanMSD massSpectrum = massSpectrumList.get(i);
@@ -184,13 +185,13 @@ public class BasePeakIdentifier {
 			if(containsMoreThanOneBasePeakIdentificationMassSpectrum(scan.getTargets())) {
 				IIdentificationTarget targetToRemove = null;
 				exitloop:
-				for(IIdentificationTarget target : scan.getTargets()) {
-					ILibraryInformation libraryInformation = target.getLibraryInformation();
-					if(libraryInformation.getName().equals(NOTFOUND)) {
-						targetToRemove = target;
-						break exitloop;
+					for(IIdentificationTarget target : scan.getTargets()) {
+						ILibraryInformation libraryInformation = target.getLibraryInformation();
+						if(libraryInformation.getName().equals(NOTFOUND)) {
+							targetToRemove = target;
+							break exitloop;
+						}
 					}
-				}
 				//
 				if(targetToRemove != null) {
 					scan.getTargets().remove(targetToRemove);
@@ -201,7 +202,7 @@ public class BasePeakIdentifier {
 
 	/**
 	 * Returns identified mass spectra from the database.
-	 * 
+	 *
 	 * @param identificationTarget
 	 * @param monitor
 	 * @return {@link IMassSpectra}
@@ -224,7 +225,7 @@ public class BasePeakIdentifier {
 					/*
 					 * List mass spectra
 					 */
-					List<IScanMSD> identifiedMassSpectra = new ArrayList<IScanMSD>();
+					List<IScanMSD> identifiedMassSpectra = new ArrayList<>();
 					if(references != null) {
 						for(IScanMSD reference : references.getList()) {
 							/*
@@ -269,7 +270,7 @@ public class BasePeakIdentifier {
 	private static IMassSpectra getStandardsMassSpectra() {
 
 		File file = new File(PathResolver.getAbsolutePath(PathResolver.REFERENCES));
-		IProcessingInfo processingInfo = DatabaseConverter.convert(file, new NullProgressMonitor());
+		IProcessingInfo<IMassSpectra> processingInfo = DatabaseConverter.convert(file, new NullProgressMonitor());
 		IMassSpectra massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 		return massSpectra;
 	}
@@ -294,8 +295,9 @@ public class BasePeakIdentifier {
 			return PHYDROXYPHENYL;
 		} else if(carbohydrateBaseMZs.contains(basePeak)) {
 			return CARBOHYDRATE;
-		} else
+		} else {
 			return NOTFOUND;
+		}
 	}
 
 	private IComparisonResult getComparisonResult() {
