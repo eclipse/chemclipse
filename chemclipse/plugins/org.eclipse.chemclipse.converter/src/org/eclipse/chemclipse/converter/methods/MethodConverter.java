@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,6 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
@@ -20,7 +19,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -59,32 +57,29 @@ public class MethodConverter {
 	 * This class has only static methods.
 	 */
 	private MethodConverter() {
-
 	}
 
-	public static IProcessingInfo<IProcessMethod> convert(final File file, IProgressMonitor monitor) {
+	public static IProcessingInfo convert(final File file, IProgressMonitor monitor) {
 
 		MethodConverterSupport converterSupport = getMethodConverterSupport();
 		for(ISupplier supplier : converterSupport.getSupplier()) {
 			//
-			try {
-				IProcessingInfo<IProcessMethod> processinInfo = convert(file, supplier.getId(), monitor);
-				IProcessMethod processMethod = processinInfo.getProcessingResult();
-				if(processMethod != null) {
-					return processinInfo;
-				}
-			} catch(TypeCastException e) {
-				logger.warn(e);
+
+			IProcessingInfo<IProcessMethod> processinInfo = convert(file, supplier.getId(), monitor);
+			IProcessMethod processMethod = processinInfo.getProcessingResult();
+			if(processMethod != null) {
+				return processinInfo;
 			}
+
 		}
 		//
 		return getNoImportConverterAvailableProcessingInfo(file);
 	}
 
-	public static <R> IProcessingInfo<R> convert(final File file, final String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo convert(final File file, final String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<R> processingInfo;
-		IMethodImportConverter<R> importConverter = getMethodImportConverter(converterId);
+		IProcessingInfo processingInfo;
+		IMethodImportConverter importConverter = getMethodImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
@@ -93,18 +88,18 @@ public class MethodConverter {
 		return processingInfo;
 	}
 
-	public static <R> IProcessingInfo<R> convert(File file, IProcessMethod processMethod, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo convert(File file, IProcessMethod processMethod, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<R> processingInfo = null;
+		IProcessingInfo processingInfo = null;
 		MethodConverterSupport converterSupport = getMethodConverterSupport();
 		exitloop:
-		for(ISupplier supplier : converterSupport.getSupplier()) {
-			if(supplier.isExportable() && supplier.getId().equals(converterId)) {
-				IMethodExportConverter<R> exportConverter = getMethodExportConverter(converterId);
-				processingInfo = exportConverter.convert(file, processMethod, monitor);
-				break exitloop;
+			for(ISupplier supplier : converterSupport.getSupplier()) {
+				if(supplier.isExportable() && supplier.getId().equals(converterId)) {
+					IMethodExportConverter exportConverter = getMethodExportConverter(converterId);
+					processingInfo = exportConverter.convert(file, processMethod, monitor);
+					break exitloop;
+				}
 			}
-		}
 		//
 		if(processingInfo == null) {
 			processingInfo = getNoExportConverterAvailableProcessingInfo(file);
@@ -113,11 +108,11 @@ public class MethodConverter {
 		return processingInfo;
 	}
 
-	private static <R> IMethodImportConverter<R> getMethodImportConverter(final String converterId) {
+	private static IMethodImportConverter getMethodImportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IMethodImportConverter<R> instance = null;
+		IMethodImportConverter instance = null;
 		if(element != null) {
 			try {
 				instance = (IMethodImportConverter)element.createExecutableExtension(IMPORT_CONVERTER);
@@ -128,11 +123,11 @@ public class MethodConverter {
 		return instance;
 	}
 
-	private static <R> IMethodExportConverter<R> getMethodExportConverter(final String converterId) {
+	private static IMethodExportConverter getMethodExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IMethodExportConverter<R> instance = null;
+		IMethodExportConverter instance = null;
 		if(element != null) {
 			try {
 				instance = (IMethodExportConverter)element.createExecutableExtension(EXPORT_CONVERTER);
@@ -180,16 +175,16 @@ public class MethodConverter {
 		return converterSupport;
 	}
 
-	private static <R> IProcessingInfo<R> getNoImportConverterAvailableProcessingInfo(File file) {
+	private static IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo<R> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("Method Import Converter", "There is no suitable converter available to load the method from the file: " + file.getAbsolutePath());
 		return processingInfo;
 	}
 
-	private static <R> IProcessingInfo<R> getNoExportConverterAvailableProcessingInfo(File file) {
+	private static IProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo<R> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addErrorMessage("Method Export Converter", "There is no suitable converter available to write the method to the file: " + file.getAbsolutePath());
 		return processingInfo;
 	}

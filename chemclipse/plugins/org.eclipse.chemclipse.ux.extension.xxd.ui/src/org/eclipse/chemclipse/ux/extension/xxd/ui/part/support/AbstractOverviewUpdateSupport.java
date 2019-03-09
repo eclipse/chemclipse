@@ -5,10 +5,9 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
@@ -23,19 +22,15 @@ import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
-import org.eclipse.chemclipse.nmr.model.core.IMeasurementNMR;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
-import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
 public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSupport implements IOverviewUpdateSupport {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AbstractOverviewUpdateSupport.class);
 	private String filePath = "";
 
@@ -68,8 +63,8 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
 		/*
 		 * Unload
 		 */
@@ -123,18 +118,18 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 				/*
 				 * NMR
 				 */
-				IProcessingInfo<IMeasurementNMR> processingInfo = ScanConverterNMR.convert(file, new NullProgressMonitor());
-				IMeasurementNMR data = processingInfo.getProcessingResult();
-				if(data != null) {
+				IProcessingInfo processingInfo = ScanConverterNMR.convert(file, new NullProgressMonitor());
+				Object data = processingInfo.getProcessingResult();
+				if(data instanceof IMeasurementInfo) {
 					update(data);
 				}
 			} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE)) {
 				/*
 				 * XIR
 				 */
-				IProcessingInfo<IScanXIR> processingInfo = ScanConverterXIR.convert(file, new NullProgressMonitor());
-				IScanXIR data = processingInfo.getProcessingResult();
-				if(data != null) {
+				IProcessingInfo processingInfo = ScanConverterXIR.convert(file, new NullProgressMonitor());
+				Object data = processingInfo.getProcessingResult();
+				if(data instanceof IMeasurementInfo) {
 					update(data);
 				}
 			} else {
@@ -169,6 +164,7 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 		if(processingInfo != null) {
 			chromatogramOverview = processingInfo.getProcessingResult();
 		}
+
 		//
 		return chromatogramOverview;
 	}

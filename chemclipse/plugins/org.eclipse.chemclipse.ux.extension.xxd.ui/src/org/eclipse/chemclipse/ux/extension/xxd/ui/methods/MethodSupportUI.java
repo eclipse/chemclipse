@@ -1,14 +1,13 @@
 /*******************************************************************************
  * Copyright (c) 2018, 2019 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -338,7 +337,7 @@ public class MethodSupportUI extends Composite {
 			processMethod.setOperator(UserManagement.getCurrentUser());
 			processMethod.setDescription("This is an empty process method. Please modify.");
 			//
-			IProcessingInfo<?> processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_MÉTHOD_CONVERTER_ID, new NullProgressMonitor());
+			IProcessingInfo processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
 			if(!processingInfo.hasErrorMessages()) {
 				preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
 				computeMethodComboItems();
@@ -394,12 +393,12 @@ public class MethodSupportUI extends Composite {
 		Combo combo = comboViewerMethods.getCombo();
 		//
 		exitloop:
-		for(int i = 0; i < combo.getItemCount(); i++) {
-			if(combo.getItem(i).equals(selectedMethodName)) {
-				combo.select(i);
-				break exitloop;
+			for(int i = 0; i < combo.getItemCount(); i++) {
+				if(combo.getItem(i).equals(selectedMethodName)) {
+					combo.select(i);
+					break exitloop;
+				}
 			}
-		}
 		//
 		if(combo.getSelectionIndex() == -1) {
 			combo.select(0);
@@ -423,15 +422,15 @@ public class MethodSupportUI extends Composite {
 								IProcessMethod processMethod = processingInfo.getProcessingResult();
 								methodListener.execute(processMethod, monitor);
 							} catch(Exception e) {
-								logger.error(e.getLocalizedMessage(), e);
+								logger.warn(e);
 							}
 						}
 					}
 				});
 			} catch(InvocationTargetException e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.warn(e);
 			} catch(InterruptedException e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.warn(e);
 			}
 		}
 	}
