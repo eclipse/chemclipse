@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl;
 
@@ -30,7 +31,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
@@ -49,13 +49,13 @@ public class AlkanePatternDetectorMSD {
 			 * Import the chromatogram.
 			 */
 			File file = new File(chromatogramPath);
-			IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(file, monitor);
-			chromatogramMSD = processingInfo.getProcessingResult(IChromatogramMSD.class);
+			IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(file, monitor);
+			chromatogramMSD = processingInfo.getProcessingResult();
 			/*
 			 * Create a selection
 			 */
 			IChromatogramSelectionMSD chromatogramSelectionMSD = new ChromatogramSelectionMSD(chromatogramMSD);
-			List<IPeakMSD> peaks;
+			List<IChromatogramPeakMSD> peaks;
 			if(useAlreadyDetectedPeaks) {
 				/*
 				 * Use existing peaks.
@@ -94,7 +94,7 @@ public class AlkanePatternDetectorMSD {
 			if(!"".equals(pathRetentionIndexFile)) {
 				RetentionIndexCalculator retentionIndexCalculator = new RetentionIndexCalculator();
 				CalculatorSettings calculatorSettings = new CalculatorSettings();
-				List<String> retentionIndexFiles = new ArrayList<String>();
+				List<String> retentionIndexFiles = new ArrayList<>();
 				retentionIndexFiles.add(pathRetentionIndexFile);
 				calculatorSettings.setRetentionIndexFiles(retentionIndexFiles);
 				retentionIndexCalculator.apply(chromatogramSelectionMSD, calculatorSettings, monitor);
@@ -107,14 +107,14 @@ public class AlkanePatternDetectorMSD {
 			IPeakIdentifierSettingsMSD peakIdentifierSettings = null;
 			peakIdentifier.identify(peaks, peakIdentifierSettings, monitor);
 		} catch(Exception e) {
-			logger.warn(e);
+			logger.error(e.getLocalizedMessage(), e);
 		}
 		return chromatogramMSD;
 	}
 
-	private List<IPeakMSD> extractPeaks(IChromatogramMSD chromatogramMSD) {
+	private List<IChromatogramPeakMSD> extractPeaks(IChromatogramMSD chromatogramMSD) {
 
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
+		List<IChromatogramPeakMSD> peaks = new ArrayList<>();
 		for(IChromatogramPeakMSD peak : chromatogramMSD.getPeaks()) {
 			peaks.add(peak);
 		}

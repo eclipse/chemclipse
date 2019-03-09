@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl;
 
@@ -25,6 +26,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.support.DatabasesCache
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.PathResolver;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -43,6 +45,7 @@ public class AlkaneIdentifier {
 	private DatabasesCache databasesCache;
 
 	public AlkaneIdentifier() {
+
 		//
 		FileListUtil fileListUtil = new FileListUtil();
 		massSpectraFiles = getDatabase();
@@ -56,7 +59,7 @@ public class AlkaneIdentifier {
 
 	/**
 	 * Run the peak identification.
-	 * 
+	 *
 	 * @param peaks
 	 * @param peakIdentifierSettings
 	 * @param processingInfo
@@ -64,7 +67,7 @@ public class AlkaneIdentifier {
 	 * @return {@link IPeakIdentificationResults}
 	 * @throws FileNotFoundException
 	 */
-	public IProcessingInfo runPeakIdentification(List<IPeakMSD> peaks, IProgressMonitor monitor) throws FileNotFoundException {
+	public IProcessingInfo runPeakIdentification(List<? extends IPeakMSD> peaks, IProgressMonitor monitor) throws FileNotFoundException {
 
 		/*
 		 * Create the file identifier settings.
@@ -96,7 +99,7 @@ public class AlkaneIdentifier {
 
 	/**
 	 * Returns identified mass spectra from the database.
-	 * 
+	 *
 	 * @param identificationTarget
 	 * @param monitor
 	 * @return {@link IMassSpectra}
@@ -119,7 +122,7 @@ public class AlkaneIdentifier {
 	private void setIdentifierSettings(IIdentifierSettingsMSD identifierSettings) {
 
 		identifierSettings.setMassSpectrumComparatorId(MASS_SPECTRUM_COMPARATOR_ID);
-		identifierSettings.setPenaltyCalculation(IIdentifierSettingsMSD.PENALTY_CALCULATION_NONE);
+		identifierSettings.setPenaltyCalculation(IIdentifierSettings.PENALTY_CALCULATION_NONE);
 		identifierSettings.setPenaltyCalculationLevelFactor(0.0f);
 		identifierSettings.setMaxPenalty(0.0f);
 		identifierSettings.setRetentionTimeWindow(0);

@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2014, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl;
 
@@ -31,6 +32,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -122,7 +124,7 @@ public class RetentionIndexCalculator {
 		 */
 		List<String> retentionIndexFiles = calculatorSettings.getRetentionIndexFiles();
 		CalibrationFileReader calibrationFileReader = new CalibrationFileReader();
-		Map<String, ISeparationColumnIndices> calibrationMap = new HashMap<String, ISeparationColumnIndices>();
+		Map<String, ISeparationColumnIndices> calibrationMap = new HashMap<>();
 		for(String retentionIndexFile : retentionIndexFiles) {
 			File file = new File(retentionIndexFile);
 			ISeparationColumnIndices separationColumnIndices = calibrationFileReader.parse(file);
@@ -180,7 +182,7 @@ public class RetentionIndexCalculator {
 				/*
 				 * Calculate the retention index.
 				 */
-				retentionIndex = retentionIndexLow + (factorRetentionIndex * nominatorRT / denominatorRT);
+				retentionIndex = retentionIndexLow + factorRetentionIndex * nominatorRT / denominatorRT;
 			}
 		}
 		//
@@ -234,11 +236,11 @@ public class RetentionIndexCalculator {
 	public IChromatogramSelection getChromatogramSelection(Object object) {
 
 		if(object instanceof IChromatogramSelection) {
-			return ((IChromatogramSelection)object);
+			return (IChromatogramSelection)object;
 		} else if(object instanceof IChromatogramCSD) {
 			return new ChromatogramSelectionCSD((IChromatogramCSD)object);
 		} else if(object instanceof IChromatogramMSD) {
-			return new ChromatogramSelectionCSD((IChromatogramMSD)object);
+			return new ChromatogramSelectionMSD((IChromatogramMSD)object);
 		} else if(object instanceof IChromatogramWSD) {
 			return new ChromatogramSelectionWSD((IChromatogramWSD)object);
 		} else {

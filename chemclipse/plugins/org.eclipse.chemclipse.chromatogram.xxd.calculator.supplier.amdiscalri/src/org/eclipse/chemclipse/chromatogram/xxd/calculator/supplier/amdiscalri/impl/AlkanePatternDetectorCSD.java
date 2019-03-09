@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Loggging
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl;
 
@@ -45,8 +46,8 @@ public class AlkanePatternDetectorCSD {
 			 * Import the chromatogram.
 			 */
 			File file = new File(chromatogramPath);
-			IProcessingInfo processingInfo = ChromatogramConverterCSD.getInstance().convert(file, monitor);
-			chromatogramCSD = processingInfo.getProcessingResult(IChromatogramCSD.class);
+			IProcessingInfo<IChromatogramCSD> processingInfo = ChromatogramConverterCSD.getInstance().convert(file, monitor);
+			chromatogramCSD = processingInfo.getProcessingResult();
 			/*
 			 * Create a selection
 			 */
@@ -82,13 +83,13 @@ public class AlkanePatternDetectorCSD {
 			if(!"".equals(pathRetentionIndexFile)) {
 				RetentionIndexCalculator retentionIndexCalculator = new RetentionIndexCalculator();
 				CalculatorSettings calculatorSettings = new CalculatorSettings();
-				List<String> retentionIndexFiles = new ArrayList<String>();
+				List<String> retentionIndexFiles = new ArrayList<>();
 				retentionIndexFiles.add(pathRetentionIndexFile);
 				calculatorSettings.setRetentionIndexFiles(retentionIndexFiles);
 				retentionIndexCalculator.apply(chromatogramSelectionCSD, calculatorSettings, monitor);
 			}
 		} catch(Exception e) {
-			logger.warn(e);
+			logger.error(e.getLocalizedMessage(), e);
 		}
 		return chromatogramCSD;
 	}
