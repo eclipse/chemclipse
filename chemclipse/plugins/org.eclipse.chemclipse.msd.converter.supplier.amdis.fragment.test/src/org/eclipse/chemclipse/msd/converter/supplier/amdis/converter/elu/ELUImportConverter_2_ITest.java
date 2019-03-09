@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Janos Binder - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.elu;
 
@@ -20,6 +21,7 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.PathResolver;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.ELUReader;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
@@ -43,7 +45,7 @@ public class ELUImportConverter_2_ITest extends TestCase {
 
 		super.setUp();
 		reader = new ELUReader();
-		String pathname = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PEAKS_1_ELU);
+		String pathname = PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PEAKS_1_ELU);
 		file = new File(pathname);
 	}
 
@@ -59,7 +61,7 @@ public class ELUImportConverter_2_ITest extends TestCase {
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		preferences.putBoolean(PreferenceSupplier.P_EXCLUDE_UNCERTAIN_IONS, true);
 		try {
-			IProcessingInfo processingInfo = reader.read(file, new NullProgressMonitor());
+			IProcessingInfo<IPeaks> processingInfo = reader.read(file, new NullProgressMonitor());
 			List<IPeak> peaks = processingInfo.getProcessingResult(IPeaks.class).getPeaks();
 			IPeakMSD peak1 = (IPeakMSD)peaks.get(0);
 			IPeakMassSpectrum peakMassSpectrum1 = peak1.getPeakModel().getPeakMassSpectrum();

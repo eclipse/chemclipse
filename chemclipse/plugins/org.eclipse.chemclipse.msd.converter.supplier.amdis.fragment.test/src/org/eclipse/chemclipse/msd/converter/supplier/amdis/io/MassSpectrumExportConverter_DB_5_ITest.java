@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
@@ -20,6 +21,7 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.PathResolver;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
@@ -36,8 +38,8 @@ public class MassSpectrumExportConverter_DB_5_ITest extends MassSpectrumExportCo
 	@Override
 	protected void setUp() throws Exception {
 
-		exportFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTDIR_EXPORT) + File.separator + TestPathHelper.TESTFILE_EXPORT_DB_MSL_IDENTIFIER);
-		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTDIR_EXPORT) + File.separator + TestPathHelper.TESTFILE_EXPORT_DB_MSL_IDENTIFIER);
+		exportFile = new File(PathResolver.getAbsolutePath(TestPathHelper.TESTDIR_EXPORT) + File.separator + TestPathHelper.TESTFILE_EXPORT_DB_MSL_IDENTIFIER);
+		importFile = new File(PathResolver.getAbsolutePath(TestPathHelper.TESTDIR_EXPORT) + File.separator + TestPathHelper.TESTFILE_EXPORT_DB_MSL_IDENTIFIER);
 		super.setUp();
 	}
 
@@ -60,7 +62,7 @@ public class MassSpectrumExportConverter_DB_5_ITest extends MassSpectrumExportCo
 		//
 		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		try {
-			massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
+			massSpectra = (IMassSpectra)processingInfo.getProcessingResult(IMassSpectra.class);
 		} catch(TypeCastException e) {
 			assertTrue("TypeCastException", false);
 		}

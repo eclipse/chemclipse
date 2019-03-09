@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp;
 
@@ -26,15 +27,15 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MSPDatabaseImportConverter extends AbstractDatabaseImportConverter {
+public class MSPDatabaseImportConverter extends AbstractDatabaseImportConverter<IMassSpectra> {
 
 	private static final Logger logger = Logger.getLogger(MSPDatabaseImportConverter.class);
 	private static final String DESCRIPTION = "AMDIS MSP Database Import";
 
 	@Override
-	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectra> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(file);
+		IProcessingInfo<IMassSpectra> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
 			try {
 				file = SpecificationValidatorMSP.validateSpecification(file);
@@ -46,16 +47,16 @@ public class MSPDatabaseImportConverter extends AbstractDatabaseImportConverter 
 					processingInfo.addErrorMessage(DESCRIPTION, "No mass spectra are stored." + file.getAbsolutePath());
 				}
 			} catch(FileNotFoundException e) {
-				logger.warn(e);
+				logger.warn(e.getLocalizedMessage());
 				processingInfo.addErrorMessage(DESCRIPTION, "The file couldn't be found: " + file.getAbsolutePath());
 			} catch(FileIsNotReadableException e) {
-				logger.warn(e);
+				logger.warn(e.getLocalizedMessage());
 				processingInfo.addErrorMessage(DESCRIPTION, "The file is not readable: " + file.getAbsolutePath());
 			} catch(FileIsEmptyException e) {
-				logger.warn(e);
+				logger.warn(e.getLocalizedMessage());
 				processingInfo.addErrorMessage(DESCRIPTION, "The file is empty: " + file.getAbsolutePath());
 			} catch(IOException e) {
-				logger.warn(e);
+				logger.warn(e.getLocalizedMessage(), e);
 				processingInfo.addErrorMessage(DESCRIPTION, "Something has gone completely wrong: " + file.getAbsolutePath());
 			}
 		}

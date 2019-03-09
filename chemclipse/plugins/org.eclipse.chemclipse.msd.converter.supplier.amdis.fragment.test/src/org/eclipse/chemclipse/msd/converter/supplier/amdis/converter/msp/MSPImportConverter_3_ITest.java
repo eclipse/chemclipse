@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp;
 
@@ -15,6 +16,7 @@ import java.io.File;
 
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.database.IDatabaseImportConverter;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.PathResolver;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -33,10 +35,10 @@ public class MSPImportConverter_3_ITest extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		File importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_LIB_3_MSP));
-		IDatabaseImportConverter importConverter = new MSPDatabaseImportConverter();
-		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
-		massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
+		File importFile = new File(PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_LIB_3_MSP));
+		IDatabaseImportConverter<IMassSpectra> importConverter = new MSPDatabaseImportConverter();
+		IProcessingInfo<IMassSpectra> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		massSpectra = processingInfo.getProcessingResult();
 	}
 
 	@Override
