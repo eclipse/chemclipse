@@ -5,9 +5,10 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -19,5 +20,5 @@ public interface ChromatogramOverlayUIConfig extends ToolbarConfig, AxisConfig {
 		NORMAL, MIRRORED;
 	}
 
-	void setDisplayModus(DisplayModus modus, IChromatogramSelection<?> selection);
+	void setDisplayModus(DisplayModus modus, IChromatogramSelection<?, ?> selection);
 }

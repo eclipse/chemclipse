@@ -1,14 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Janos Binder - small fix with error messages
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.core;
 
@@ -27,14 +28,14 @@ public abstract class AbstractImportConverter implements IImportConverter {
 	 * It is possible, that there is no file stored on disk or the file is not
 	 * readable.<br/>
 	 * If the file is empty is handled also.
-	 * 
+	 *
 	 * @param file
 	 * @return {@link IProcessingInfo}
 	 */
 	@Override
-	public IProcessingInfo validate(File file) {
+	public <T> IProcessingInfo<T> validate(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		if(file == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The given file couldn't be found.");
 		} else {

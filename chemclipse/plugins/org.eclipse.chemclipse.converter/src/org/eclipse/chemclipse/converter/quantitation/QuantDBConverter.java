@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.quantitation;
 
@@ -19,7 +20,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -57,30 +57,27 @@ public class QuantDBConverter {
 	 * This class has only static methods.
 	 */
 	private QuantDBConverter() {
+
 	}
 
-	public static IProcessingInfo convert(final File file, IProgressMonitor monitor) {
+	public static IProcessingInfo<IQuantitationDatabase> convert(final File file, IProgressMonitor monitor) {
 
 		QuantDBConverterSupport converterSupport = getQuantDBConverterSupport();
 		for(ISupplier supplier : converterSupport.getSupplier()) {
 			//
-			try {
-				IProcessingInfo processinInfo = convert(file, supplier.getId(), monitor);
-				IQuantitationDatabase quantitationDatabase = processinInfo.getProcessingResult(IQuantitationDatabase.class);
-				if(quantitationDatabase != null) {
-					return processinInfo;
-				}
-			} catch(TypeCastException e) {
-				logger.warn(e);
+			IProcessingInfo<IQuantitationDatabase> processinInfo = convert(file, supplier.getId(), monitor);
+			IQuantitationDatabase quantitationDatabase = processinInfo.getProcessingResult();
+			if(quantitationDatabase != null) {
+				return processinInfo;
 			}
 		}
 		//
 		return getNoImportConverterAvailableProcessingInfo(file);
 	}
 
-	public static IProcessingInfo convert(final File file, final String converterId, IProgressMonitor monitor) {
+	public static <R> IProcessingInfo<R> convert(final File file, final String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<R> processingInfo;
 		IQuantDBImportConverter importConverter = getImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
@@ -90,9 +87,9 @@ public class QuantDBConverter {
 		return processingInfo;
 	}
 
-	public static IProcessingInfo convert(File file, IQuantitationDatabase quantitationDatabase, String converterId, IProgressMonitor monitor) {
+	public static <R> IProcessingInfo<R> convert(File file, IQuantitationDatabase quantitationDatabase, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = null;
+		IProcessingInfo<R> processingInfo = null;
 		QuantDBConverterSupport converterSupport = getQuantDBConverterSupport();
 		exitloop:
 		for(ISupplier supplier : converterSupport.getSupplier()) {
@@ -110,16 +107,16 @@ public class QuantDBConverter {
 		return processingInfo;
 	}
 
-	private static IQuantDBImportConverter getImportConverter(final String converterId) {
+	private static <R> IQuantDBImportConverter<R> getImportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IQuantDBImportConverter instance = null;
+		IQuantDBImportConverter<R> instance = null;
 		if(element != null) {
 			try {
 				instance = (IQuantDBImportConverter)element.createExecutableExtension(IMPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
@@ -134,7 +131,7 @@ public class QuantDBConverter {
 			try {
 				instance = (IQuantDBExportConverter)element.createExecutableExtension(EXPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
@@ -177,16 +174,16 @@ public class QuantDBConverter {
 		return converterSupport;
 	}
 
-	private static IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
+	private static <R> IProcessingInfo<R> getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<R> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("QuantDB Import Converter", "There is no suitable converter available to load the database from the file: " + file.getAbsolutePath());
 		return processingInfo;
 	}
 
-	private static IProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
+	private static <R> IProcessingInfo<R> getNoExportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<R> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("QuantDB Export Converter", "There is no suitable converter available to write the database to the file: " + file.getAbsolutePath());
 		return processingInfo;
 	}

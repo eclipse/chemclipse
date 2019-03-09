@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.chromatogram;
 
@@ -30,21 +31,23 @@ import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.support.LibraryInformationSupport;
 import org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public final class ChromatogramConverterMSD extends AbstractChromatogramConverter<IChromatogramMSD> implements IChromatogramConverter<IChromatogramMSD> {
+public final class ChromatogramConverterMSD extends AbstractChromatogramConverter<IChromatogramPeakMSD, IChromatogramMSD> implements IChromatogramConverter<IChromatogramPeakMSD, IChromatogramMSD> {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramConverterMSD.class);
-	private static IChromatogramConverter<IChromatogramMSD> instance = null;
+	private static IChromatogramConverter<IChromatogramPeakMSD, IChromatogramMSD> instance = null;
 
 	public ChromatogramConverterMSD() {
+
 		super("org.eclipse.chemclipse.msd.converter.chromatogramSupplier", IChromatogramMSD.class);
 	}
 
-	public static IChromatogramConverter<IChromatogramMSD> getInstance() {
+	public static IChromatogramConverter<IChromatogramPeakMSD, IChromatogramMSD> getInstance() {
 
 		if(instance == null) {
 			instance = new ChromatogramConverterMSD();
@@ -54,13 +57,13 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 	}
 
 	@Override
-	public void postProcessChromatogram(IProcessingInfo processingInfo, IProgressMonitor monitor) {
+	public void postProcessChromatogram(IProcessingInfo<IChromatogramMSD> processingInfo, IProgressMonitor monitor) {
 
 		/*
 		 * TODO: Create an extension point for the post processing supplier!
 		 */
 		if(processingInfo != null && processingInfo.getProcessingResult() instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = processingInfo.getProcessingResult(IChromatogramMSD.class);
+			IChromatogramMSD chromatogramMSD = processingInfo.getProcessingResult();
 			File file = chromatogramMSD.getFile();
 			File directory = getDirectory(file);
 			if(directory != null && directory.exists()) {
@@ -110,8 +113,8 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 			if(file != null) {
 				MassLibConverter massLibConverter = new MassLibConverter();
 				try {
-					IProcessingInfo processingInfo = massLibConverter.parseRetentionIndices(file);
-					ISeparationColumnIndices separationColumnIndices = processingInfo.getProcessingResult(ISeparationColumnIndices.class);
+					IProcessingInfo<ISeparationColumnIndices> processingInfo = massLibConverter.parseRetentionIndices(file);
+					ISeparationColumnIndices separationColumnIndices = processingInfo.getProcessingResult();
 					chromatogramMSD.getSeparationColumnIndices().putAll(separationColumnIndices);
 				} catch(TypeCastException e) {
 					logger.warn(e);
@@ -163,8 +166,8 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 			if(file != null) {
 				AMDISConverter amdisConverter = new AMDISConverter();
 				try {
-					IProcessingInfo processingInfo = amdisConverter.parseRetentionIndices(file);
-					ISeparationColumnIndices separationColumnIndices = processingInfo.getProcessingResult(ISeparationColumnIndices.class);
+					IProcessingInfo<ISeparationColumnIndices> processingInfo = amdisConverter.parseRetentionIndices(file);
+					ISeparationColumnIndices separationColumnIndices = processingInfo.getProcessingResult();
 					chromatogramMSD.getSeparationColumnIndices().putAll(separationColumnIndices);
 				} catch(TypeCastException e) {
 					logger.warn(e);

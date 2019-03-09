@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.internal.support;
 
@@ -28,12 +29,13 @@ public class ChromatogramOverviewImportRunnable implements IRunnableWithProgress
 	private File chromatogram;
 
 	public ChromatogramOverviewImportRunnable(File chromatogram) {
+
 		this.chromatogram = chromatogram;
 	}
 
 	/**
 	 * Returns the chromatogram overview. But, use the class as a runnable.
-	 * 
+	 *
 	 * @return
 	 */
 	public IChromatogramOverview getChromatogramOverview() {
@@ -46,7 +48,7 @@ public class ChromatogramOverviewImportRunnable implements IRunnableWithProgress
 
 		try {
 			monitor.beginTask("Import Chromatogram Overview", IProgressMonitor.UNKNOWN);
-			IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convertOverview(chromatogram, monitor);
+			IProcessingInfo<IChromatogramOverview> processingInfo = ChromatogramConverterMSD.getInstance().convertOverview(chromatogram, monitor);
 			chromatogramOverview = processingInfo.getProcessingResult(IChromatogramOverview.class);
 		} catch(Exception e) {
 			/*
@@ -55,7 +57,7 @@ public class ChromatogramOverviewImportRunnable implements IRunnableWithProgress
 			 * FileIsNotReadableException FileIsEmptyException
 			 * ChromatogramIsNullException
 			 */
-			logger.warn(e);
+			logger.error(e.getLocalizedMessage(), e);
 		} finally {
 			monitor.done();
 		}

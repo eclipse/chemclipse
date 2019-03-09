@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.sequence;
 
@@ -19,7 +20,6 @@ import org.eclipse.chemclipse.converter.model.reports.ISequence;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -45,22 +45,18 @@ public class SequenceConverter {
 	 * This class has only static methods.
 	 */
 	private SequenceConverter() {
+
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static IProcessingInfo convert(final File file, IProgressMonitor monitor) {
+	public static IProcessingInfo<ISequence<?>> convert(final File file, IProgressMonitor monitor) {
 
 		SequenceConverterSupport sequenceConverterSupport = getSequenceConverterSupport();
 		for(ISupplier supplier : sequenceConverterSupport.getSupplier()) {
 			//
-			try {
-				IProcessingInfo processinInfo = convert(file, supplier.getId(), monitor);
-				ISequence sequence = processinInfo.getProcessingResult(ISequence.class);
-				if(sequence != null) {
-					return processinInfo;
-				}
-			} catch(TypeCastException e) {
-				logger.warn(e);
+			IProcessingInfo<ISequence<?>> processinInfo = convert(file, supplier.getId(), monitor);
+			ISequence<?> sequence = processinInfo.getProcessingResult();
+			if(sequence != null) {
+				return processinInfo;
 			}
 		}
 		//

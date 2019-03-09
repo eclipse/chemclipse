@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables;
 
@@ -29,6 +30,7 @@ public class ScanNMRImportRunnable implements IRunnableWithProgress {
 	private IMeasurementNMR measurementNMR = null;
 
 	public ScanNMRImportRunnable(File file) {
+
 		this.file = file;
 	}
 
@@ -42,8 +44,8 @@ public class ScanNMRImportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Import Scan", IProgressMonitor.UNKNOWN);
-			IProcessingInfo processingInfo = ScanConverterNMR.convert(file, monitor);
-			measurementNMR = processingInfo.getProcessingResult(IMeasurementNMR.class);
+			IProcessingInfo<IMeasurementNMR> processingInfo = ScanConverterNMR.convert(file, monitor);
+			measurementNMR = processingInfo.getProcessingResult();
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		} finally {

@@ -5,9 +5,10 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.model.filter;
 
@@ -26,7 +27,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * A {@link Filter} Extension interface for filters that can work on {@link IChromatogramSelection}s.
  * This is part of the Chemclipse FilterFramework, to make the Filter available simply register it with the OSGi Servicefactory under the {@link Filter} interface, implementors are encouraged to also register each filter under all sub(filter) interface.
- * 
+ *
  * @author Christoph Läubrich
  *
  * @param <ConfigType>
@@ -35,7 +36,7 @@ public interface IChromatogramSelectionFilter<ConfigType> extends Filter<ConfigT
 
 	/**
 	 * Filters the given Collection of {@link IChromatogramSelection}s with this filter, the collection must be modifiable so the filter can either remove an item from the list or filter the item individually
-	 * 
+	 *
 	 * @param filterItems
 	 * @param configuration
 	 *            the configuration to apply or <code>null</code> if no special configuration is desired
@@ -45,29 +46,29 @@ public interface IChromatogramSelectionFilter<ConfigType> extends Filter<ConfigT
 	 * @throws IllegalArgumentException
 	 *             if any of the given {@link IChromatogramSelection} are incompatible with this filter ({@link #acceptsIChromatogramSelection(IChromatogramSelection)} returns <code>false</code> for them)
 	 */
-	IProcessingResult<Boolean> filterIChromatogramSelections(FilterList<IChromatogramSelection<?>> filterItems, ConfigType configuration, IProgressMonitor monitor) throws IllegalArgumentException;
+	IProcessingResult<Boolean> filterIChromatogramSelections(FilterList<IChromatogramSelection<?, ?>> filterItems, ConfigType configuration, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link IChromatogramSelection} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}
-	 * 
+	 *
 	 * @param item
 	 *            the {@link IChromatogramSelection} to check
 	 * @return <code>true</code> if this {@link IChromatogramSelection} can be applied, <code>false</code> otherwise
 	 */
-	boolean acceptsIChromatogramSelection(IChromatogramSelection<?> item);
+	boolean acceptsIChromatogramSelection(IChromatogramSelection<?, ?> item);
 
 	/**
 	 * Creates a new configuration that is specially suited for the given {@link IChromatogramSelection} type
-	 * 
+	 *
 	 * @param item
 	 * @return
 	 */
-	default ConfigType createConfiguration(IChromatogramSelection<?> item) {
+	default ConfigType createConfiguration(IChromatogramSelection<?, ?> item) {
 
 		return createNewConfiguration();
 	}
 
-	static <T extends IPeak> FilterList<IPeak> peakList(IChromatogram<T> chromatogram, IChromatogramSelection<?> selection) {
+	static <T extends IPeak> FilterList<IPeak> peakList(IChromatogram<T> chromatogram, IChromatogramSelection<?, ?> selection) {
 
 		List<T> peaks = selection == null ? chromatogram.getPeaks() : chromatogram.getPeaks(selection);
 		return new FilterList<IPeak>() {

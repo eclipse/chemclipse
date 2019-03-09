@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.support;
 
@@ -50,6 +51,7 @@ public class DatabasesCache {
 	private List<String> massSpectraFiles;
 
 	public DatabasesCache(List<String> massSpectraFiles) {
+
 		/*
 		 * Initialize the static maps once.
 		 */
@@ -68,7 +70,7 @@ public class DatabasesCache {
 
 	/**
 	 * Used to sort the ion list.
-	 * 
+	 *
 	 * @return {@link IonAbundanceComparator}
 	 */
 	public IonAbundanceComparator getIonAbundanceComparator() {
@@ -78,7 +80,7 @@ public class DatabasesCache {
 
 	public Map<String, IMassSpectra> getDatabases(List<String> databaseList, IProgressMonitor monitor) throws FileNotFoundException {
 
-		List<String> databaseNames = new ArrayList<String>();
+		List<String> databaseNames = new ArrayList<>();
 		for(String database : databaseList) {
 			try {
 				File file = new File(database);
@@ -125,14 +127,14 @@ public class DatabasesCache {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param identificationTarget
 	 * @param monitor
 	 * @return
 	 */
 	public List<IScanMSD> getDatabaseMassSpectra(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
 
-		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
+		List<IScanMSD> massSpectra = new ArrayList<>();
 		if(identificationTarget != null) {
 			//
 			try {
@@ -191,7 +193,7 @@ public class DatabasesCache {
 
 	private void loadMassSpectraFromFile(File file, IProgressMonitor monitor) throws TypeCastException {
 
-		IProcessingInfo processingInfo = DatabaseConverter.convert(file, monitor);
+		IProcessingInfo<IMassSpectra> processingInfo = DatabaseConverter.convert(file, monitor);
 		IMassSpectra massSpectraDatabase = processingInfo.getProcessingResult(IMassSpectra.class);
 		/*
 		 * Add the database to databases.
@@ -206,13 +208,13 @@ public class DatabasesCache {
 		 */
 		Map<String, IScanMSD> databaseNames = allDatabaseNames.get(databaseName);
 		if(databaseNames == null) {
-			databaseNames = new HashMap<String, IScanMSD>();
+			databaseNames = new HashMap<>();
 			allDatabaseNames.put(databaseName, databaseNames);
 		}
 		//
 		Map<String, IScanMSD> databaseCasNumbers = allDatabaseCasNumbers.get(databaseName);
 		if(databaseCasNumbers == null) {
-			databaseCasNumbers = new HashMap<String, IScanMSD>();
+			databaseCasNumbers = new HashMap<>();
 			allDatabaseCasNumbers.put(databaseName, databaseCasNumbers);
 		}
 		//
@@ -230,27 +232,27 @@ public class DatabasesCache {
 	private static void initializeDatabaseMaps() {
 
 		if(fileSizes == null) {
-			fileSizes = new HashMap<String, Long>();
+			fileSizes = new HashMap<>();
 		}
 		//
 		if(fileModifications == null) {
-			fileModifications = new HashMap<String, Long>();
+			fileModifications = new HashMap<>();
 		}
 		//
 		if(fileNames == null) {
-			fileNames = new HashSet<String>();
+			fileNames = new HashSet<>();
 		}
 		//
 		if(massSpectraDatabases == null) {
-			massSpectraDatabases = new HashMap<String, IMassSpectra>();
+			massSpectraDatabases = new HashMap<>();
 		}
 		//
 		if(allDatabaseNames == null) {
-			allDatabaseNames = new HashMap<String, Map<String, IScanMSD>>();
+			allDatabaseNames = new HashMap<>();
 		}
 		//
 		if(allDatabaseCasNumbers == null) {
-			allDatabaseCasNumbers = new HashMap<String, Map<String, IScanMSD>>();
+			allDatabaseCasNumbers = new HashMap<>();
 		}
 	}
 }

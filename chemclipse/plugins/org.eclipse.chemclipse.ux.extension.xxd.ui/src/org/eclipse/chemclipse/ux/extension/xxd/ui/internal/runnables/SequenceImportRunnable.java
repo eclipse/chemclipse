@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables;
 
@@ -19,7 +20,6 @@ import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -32,6 +32,7 @@ public class SequenceImportRunnable implements IRunnableWithProgress {
 	private ISequence<? extends ISequenceRecord> sequence;
 
 	public SequenceImportRunnable(File file) {
+
 		this.file = file;
 	}
 
@@ -40,20 +41,15 @@ public class SequenceImportRunnable implements IRunnableWithProgress {
 		return sequence;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Sequence", 2);
 		try {
-			try {
-				subMonitor.worked(1);
-				IProcessingInfo processingInfo = SequenceConverter.convert(file, monitor);
-				sequence = processingInfo.getProcessingResult(ISequence.class);
-				subMonitor.worked(2);
-			} catch(TypeCastException e) {
-				// No action - can't parse the chromatogram.
-			}
+			subMonitor.worked(1);
+			IProcessingInfo<ISequence<? extends ISequenceRecord>> processingInfo = SequenceConverter.convert(file, monitor);
+			sequence = processingInfo.getProcessingResult();
+			subMonitor.worked(2);
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		} finally {

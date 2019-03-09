@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.selection;
 
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
@@ -36,7 +36,7 @@ import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateN
  * Start and stop scan are not provided as they can be calculated by the
  * retention time.
  */
-public class ChromatogramSelectionMSD extends AbstractChromatogramSelection implements IChromatogramSelectionMSD {
+public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChromatogramPeakMSD, IChromatogramMSD> implements IChromatogramSelectionMSD {
 
 	private static final long serialVersionUID = -7506022245739815452L;
 	//
@@ -47,13 +47,13 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 	private IMarkedIons excludedIons;
 	private IMarkedIonTransitions markedIonTransitions;
 
-	@SuppressWarnings("rawtypes")
-	public ChromatogramSelectionMSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
+	public ChromatogramSelectionMSD(IChromatogramMSD chromatogram) throws ChromatogramIsNullException {
+
 		this(chromatogram, true);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ChromatogramSelectionMSD(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+	public ChromatogramSelectionMSD(IChromatogramMSD chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+
 		super(chromatogram, fireUpdate);
 		/*
 		 * Create instances of selected and excluded ions.
@@ -64,7 +64,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 		 * Marked ion transitions.
 		 */
 		if(chromatogram instanceof IChromatogramMSD) {
-			IIonTransitionSettings ionTransitionSettings = ((IChromatogramMSD)chromatogram).getIonTransitionSettings();
+			IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
 			if(ionTransitionSettings == null) {
 				markedIonTransitions = new MarkedIonTransitions();
 			} else {
@@ -81,6 +81,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 	}
 
 	// ------------------------------------IChromatogramSelection
+	@Override
 	public void dispose() {
 
 		super.dispose();
@@ -255,14 +256,6 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 			if(update) {
 				fireUpdateChange(false);
 			}
-		}
-	}
-
-	@Override
-	public void setSelectedPeak(IPeak selectedPeak) {
-
-		if(selectedPeak instanceof IChromatogramPeakMSD) {
-			setSelectedPeak((IChromatogramPeakMSD)selectedPeak, false);
 		}
 	}
 

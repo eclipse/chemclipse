@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2013, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.ui.wizards;
 
@@ -39,6 +40,7 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 	private ImportDirectoryWizardPage importDirectoryWizardPage;
 
 	public ChromatogramImportWizard() {
+
 		setNeedsProgressMonitor(true);
 		setWindowTitle("Chromatogram Import Wizard");
 	}
@@ -95,8 +97,8 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 						/*
 						 * Import
 						 */
-						IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(inputFile, monitor);
-						IChromatogramMSD chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
+						IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(inputFile, monitor);
+						IChromatogramMSD chromatogram = processingInfo.getProcessingResult();
 						//
 						String directory = importDirectory;
 						if(!importDirectory.endsWith(File.separator)) {
@@ -128,7 +130,7 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 
 	private List<File> getInputFiles() {
 
-		List<File> inputFiles = new ArrayList<File>();
+		List<File> inputFiles = new ArrayList<>();
 		ISelection selection = rawFileSelectionWizardPage.getSelection();
 		if(selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection)selection;

@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
  * the Eclipse Public License v1.0 which accompanies this distribution, and is
  * available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.library;
 
@@ -23,7 +24,6 @@ import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -40,11 +40,12 @@ public class LibraryService {
 	 * This class should have only static methods.
 	 */
 	private LibraryService() {
+
 	}
 
-	public static IProcessingInfo identify(IIdentificationTarget identificationTarget, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectra> identify(IIdentificationTarget identificationTarget, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IMassSpectra> processingInfo;
 		ILibraryService libraryService = getLibraryService(identifierId);
 		if(libraryService != null) {
 			processingInfo = libraryService.identify(identificationTarget, monitor);
@@ -54,9 +55,9 @@ public class LibraryService {
 		return processingInfo;
 	}
 
-	public static IProcessingInfo identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectra> identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo();
 		ILibraryServiceSupport libraryServiceSupport = getLibraryServiceSupport();
 		try {
 			/*
@@ -65,26 +66,23 @@ public class LibraryService {
 			List<String> availableIdentifierIds = libraryServiceSupport.getAvailableIdentifierIds();
 			IMassSpectra massSpectra = null;
 			exitloop:
-			for(String identifierId : availableIdentifierIds) {
-				/*
-				 * Test all available library services.
-				 */
-				ILibraryService libraryService = getLibraryService(identifierId);
-				if(libraryService != null) {
-					try {
+				for(String identifierId : availableIdentifierIds) {
+					/*
+					 * Test all available library services.
+					 */
+					ILibraryService libraryService = getLibraryService(identifierId);
+					if(libraryService != null) {
+
 						/*
 						 * It's a match if at least one mass spectrum is returned.
 						 */
 						processingInfo = libraryService.identify(identificationTarget, monitor);
-						massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
+						massSpectra = processingInfo.getProcessingResult();
 						if(massSpectra.size() > 0) {
 							break exitloop;
 						}
-					} catch(TypeCastException e) {
-						//
 					}
 				}
-			}
 			/*
 			 * Post check.
 			 */
@@ -100,7 +98,7 @@ public class LibraryService {
 
 	/**
 	 * Returns an {@link ILibraryServiceSupport} instance.
-	 * 
+	 *
 	 * @return {@link ILibraryServiceSupport}
 	 */
 	public static ILibraryServiceSupport getLibraryServiceSupport() {
@@ -137,7 +135,7 @@ public class LibraryService {
 			try {
 				instance = (ILibraryService)element.createExecutableExtension(Identifier.IDENTIFIER);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
@@ -146,7 +144,7 @@ public class LibraryService {
 	/**
 	 * Returns an {@link IConfigurationElement} instance or null if none is
 	 * available.
-	 * 
+	 *
 	 * @param filterId
 	 * @return IConfigurationElement
 	 */
@@ -166,9 +164,9 @@ public class LibraryService {
 	}
 
 	// --------------------------------------------private methods
-	private static IProcessingInfo getNoIdentifierAvailableProcessingInfo() {
+	private static <T> IProcessingInfo<T> getNoIdentifierAvailableProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Library Service", NO_IDENTIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

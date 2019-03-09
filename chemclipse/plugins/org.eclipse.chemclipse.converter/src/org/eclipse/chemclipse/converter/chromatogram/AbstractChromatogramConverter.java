@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.chromatogram;
 
@@ -31,8 +32,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 
-@SuppressWarnings("rawtypes")
-public abstract class AbstractChromatogramConverter<T extends IChromatogram> implements IChromatogramConverter<T> {
+public abstract class AbstractChromatogramConverter<P extends IPeak, T extends IChromatogram<P>> implements IChromatogramConverter<P, T> {
 
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramConverter.class);
 	//
@@ -43,6 +43,7 @@ public abstract class AbstractChromatogramConverter<T extends IChromatogram> imp
 	private Class<T> type;
 
 	public AbstractChromatogramConverter(String extensionPoint, Class<T> type) {
+
 		this.extensionPoint = extensionPoint;
 		this.type = type;
 	}
@@ -53,7 +54,7 @@ public abstract class AbstractChromatogramConverter<T extends IChromatogram> imp
 	 * about all valid and registered chromatogram converters.<br/>
 	 * It can be used to get more information about the registered converters
 	 * such like filter names, file extensions.
-	 * 
+	 *
 	 * @return ChromatogramConverterSupport
 	 */
 	@Override
@@ -102,7 +103,7 @@ public abstract class AbstractChromatogramConverter<T extends IChromatogram> imp
 	 * available.<br/>
 	 * If no converter was available, a
 	 * NoChromatogramConverterAvailableException will be thrown.
-	 * 
+	 *
 	 * @param chromatogram
 	 * @param converterId
 	 * @param monitor
@@ -134,7 +135,7 @@ public abstract class AbstractChromatogramConverter<T extends IChromatogram> imp
 	 * For example that the file is not readable or the file is not existent.<br/>
 	 * If no converter was able to read the file, a
 	 * NoChromatogramConverterAvailableException will be thrown.
-	 * 
+	 *
 	 * @param chromatogram
 	 * @param converterId
 	 * @param monitor
@@ -155,7 +156,7 @@ public abstract class AbstractChromatogramConverter<T extends IChromatogram> imp
 
 	/**
 	 * If no suitable parser was found, null will be returned.
-	 * 
+	 *
 	 * @param file
 	 * @param overview
 	 * @param monitor
@@ -165,7 +166,7 @@ public abstract class AbstractChromatogramConverter<T extends IChromatogram> imp
 	public IProcessingInfo getChromatogram(File file, boolean overview, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		List<IProcessingMessage> processingMessagesError = new ArrayList<IProcessingMessage>();
+		List<IProcessingMessage> processingMessagesError = new ArrayList<>();
 		IChromatogramConverterSupport converterSupport = getChromatogramConverterSupport();
 		//
 		try {
@@ -268,7 +269,7 @@ public abstract class AbstractChromatogramConverter<T extends IChromatogram> imp
 	}
 
 	@Override
-	public IProcessingInfo convert(File file, IChromatogram<? extends IPeak> chromatogram, String converterId, IProgressMonitor monitor) {
+	public IProcessingInfo convert(File file, T chromatogram, String converterId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		Object converter = getChromatogramConverter(converterId, Converter.EXPORT_CONVERTER);
@@ -284,7 +285,7 @@ public abstract class AbstractChromatogramConverter<T extends IChromatogram> imp
 
 		boolean result = false;
 		if(element != null) {
-			result = Boolean.valueOf(element.getAttribute(Converter.IS_IMPORTABLE)) && (getChromatogramConverter(element, Converter.IMPORT_CONVERTER) instanceof IChromatogramImportConverter);
+			result = Boolean.valueOf(element.getAttribute(Converter.IS_IMPORTABLE)) && getChromatogramConverter(element, Converter.IMPORT_CONVERTER) instanceof IChromatogramImportConverter;
 		}
 		return result;
 	}
@@ -293,7 +294,7 @@ public abstract class AbstractChromatogramConverter<T extends IChromatogram> imp
 
 		boolean result = false;
 		if(element != null) {
-			result = Boolean.valueOf(element.getAttribute(Converter.IS_EXPORTABLE)) && (getChromatogramConverter(element, Converter.EXPORT_CONVERTER) instanceof IChromatogramExportConverter);
+			result = Boolean.valueOf(element.getAttribute(Converter.IS_EXPORTABLE)) && getChromatogramConverter(element, Converter.EXPORT_CONVERTER) instanceof IChromatogramExportConverter;
 		}
 		return result;
 	}
@@ -340,13 +341,13 @@ public abstract class AbstractChromatogramConverter<T extends IChromatogram> imp
 
 	private String getFileName(File file) {
 
-		return (file != null) ? file.getAbsolutePath() : "no file";
+		return file != null ? file.getAbsolutePath() : "no file";
 	}
 
 	/**
 	 * Returns an IChromatogramExportConverter instance or null if none is
 	 * available.
-	 * 
+	 *
 	 * @param converterId
 	 * @return IConfigurationElement
 	 */
@@ -367,7 +368,7 @@ public abstract class AbstractChromatogramConverter<T extends IChromatogram> imp
 
 	/**
 	 * This method may return null.
-	 * 
+	 *
 	 * @param element
 	 * @return {@link IMagicNumberMatcher}
 	 */

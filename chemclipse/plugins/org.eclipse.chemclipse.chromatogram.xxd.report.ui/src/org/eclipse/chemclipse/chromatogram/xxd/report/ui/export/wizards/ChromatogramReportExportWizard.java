@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2012, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.ui.export.wizards;
 
@@ -45,6 +46,7 @@ public class ChromatogramReportExportWizard extends Wizard implements IExportWiz
 	private ReportSupplierSelectionWizardPage reportSupplierSelectionWizardPage;
 
 	public ChromatogramReportExportWizard() {
+
 		setNeedsProgressMonitor(true);
 		setWindowTitle("Chromatogram Report Wizard");
 	}
@@ -87,9 +89,9 @@ public class ChromatogramReportExportWizard extends Wizard implements IExportWiz
 							 * Load each chromatogram
 							 */
 							File chromatogramFile = new File(inputFile);
-							IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(chromatogramFile, CONVERTER_ID, monitor);
+							IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(chromatogramFile, CONVERTER_ID, monitor);
 							try {
-								IChromatogramMSD chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
+								IChromatogramMSD chromatogram = processingInfo.getProcessingResult();
 								if(chromatogram != null) {
 									/*
 									 * Report: Append the reports or use distinct files?
@@ -142,7 +144,7 @@ public class ChromatogramReportExportWizard extends Wizard implements IExportWiz
 
 	private List<String> getInputFiles() {
 
-		List<String> inputFiles = new ArrayList<String>();
+		List<String> inputFiles = new ArrayList<>();
 		Table inputFilesTable = chromatogramSelectionWizardPage.getTable();
 		TableItem[] items = inputFilesTable.getItems();
 		for(TableItem item : items) {
@@ -153,7 +155,7 @@ public class ChromatogramReportExportWizard extends Wizard implements IExportWiz
 
 	private Map<String, String> getReportSupplier() {
 
-		Map<String, String> reportSupplier = new HashMap<String, String>();
+		Map<String, String> reportSupplier = new HashMap<>();
 		Table reportSupplierTable = reportSupplierSelectionWizardPage.getTable();
 		TableItem[] items = reportSupplierTable.getItems();
 		for(TableItem item : items) {

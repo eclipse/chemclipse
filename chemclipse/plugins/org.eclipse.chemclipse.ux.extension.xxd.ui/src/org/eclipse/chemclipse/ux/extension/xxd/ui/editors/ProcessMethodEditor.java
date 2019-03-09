@@ -5,9 +5,10 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -57,13 +58,14 @@ public class ProcessMethodEditor extends AbstractDataUpdateSupport implements ID
 	private MDirtyable dirtyable;
 	//
 	private File processMethodFile;
-	private ProcessMethod processMethod;
+	private IProcessMethod processMethod;
 	private ExtendedMethodUI extendedMethodUI;
 	//
 	private Shell shell;
 
 	@Inject
 	public ProcessMethodEditor(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
+
 		super(part);
 		//
 		this.part = part;
@@ -154,9 +156,9 @@ public class ProcessMethodEditor extends AbstractDataUpdateSupport implements ID
 		});
 	}
 
-	private synchronized ProcessMethod loadProcessMethod() {
+	private synchronized IProcessMethod loadProcessMethod() {
 
-		ProcessMethod processMethod = null;
+		IProcessMethod processMethod = null;
 		Object object = part.getObject();
 		if(object instanceof Map) {
 			/*
@@ -172,7 +174,7 @@ public class ProcessMethodEditor extends AbstractDataUpdateSupport implements ID
 		return processMethod;
 	}
 
-	private ProcessMethod loadProcessMethod(File file, boolean batch) {
+	private IProcessMethod loadProcessMethod(File file, boolean batch) {
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		MethodImportRunnable runnable = new MethodImportRunnable(file);
@@ -180,7 +182,7 @@ public class ProcessMethodEditor extends AbstractDataUpdateSupport implements ID
 			/*
 			 * No fork, otherwise it might crash when loading the data takes too long.
 			 */
-			boolean fork = (batch) ? false : true;
+			boolean fork = batch ? false : true;
 			dialog.run(fork, false, runnable);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);

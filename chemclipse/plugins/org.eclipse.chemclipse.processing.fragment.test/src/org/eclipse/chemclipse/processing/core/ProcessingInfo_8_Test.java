@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.core;
 
@@ -27,6 +28,7 @@ public class ProcessingInfo_8_Test extends TestCase {
 		private String data = "";
 
 		public MyClass(String data) {
+
 			this.data = data;
 		}
 
@@ -37,16 +39,16 @@ public class ProcessingInfo_8_Test extends TestCase {
 		}
 	}
 
-	private IProcessingInfo processingInfo;
+	private IProcessingInfo<Object> processingInfo;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		processingInfo = new ProcessingInfo();
+		processingInfo = new ProcessingInfo<>();
 		MyClass myClass = new MyClass("Test");
 		processingInfo.setProcessingResult(myClass);
-		processingInfo.setProcessingResult(null);
+		// processingInfo.setProcessingResult(null);
 	}
 
 	@Override
@@ -58,7 +60,7 @@ public class ProcessingInfo_8_Test extends TestCase {
 	public void testProcessingInfo_1() {
 
 		try {
-			MyInterface result = processingInfo.getProcessingResult(MyInterface.class);
+			MyInterface result = (MyInterface)processingInfo.getProcessingResult();
 			assertNotNull(result);
 			assertEquals("Test", result.getData());
 		} catch(TypeCastException e) {

@@ -1,13 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.converter.core;
 
@@ -42,14 +43,14 @@ public class ScanConverterNMR {
 
 	}
 
-	public static IProcessingInfo convert(final File file, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo<IMeasurementNMR> convert(final File file, final String converterId, final IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IMeasurementNMR> processingInfo;
 		/*
 		 * Do not use a safe runnable here, because an object must
 		 * be returned or null.
 		 */
-		IScanImportConverter importConverter = getScanImportConverter(converterId);
+		IScanImportConverter<IMeasurementNMR> importConverter = getScanImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
@@ -58,22 +59,22 @@ public class ScanConverterNMR {
 		return processingInfo;
 	}
 
-	public static IProcessingInfo convert(final File file, final IProgressMonitor monitor) {
+	public static IProcessingInfo<IMeasurementNMR> convert(final File file, final IProgressMonitor monitor) {
 
 		return getScan(file, false, monitor);
 	}
 
 	/**
 	 * If no suitable parser was found, null will be returned.
-	 * 
+	 *
 	 * @param file
 	 * @param overview
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	private static IProcessingInfo getScan(final File file, boolean overview, IProgressMonitor monitor) {
+	private static <T> IProcessingInfo<T> getScan(final File file, boolean overview, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<T> processingInfo;
 		IScanConverterSupport converterSupport = getScanConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
@@ -82,7 +83,7 @@ public class ScanConverterNMR {
 				 * Do not use a safe runnable here, because an object must
 				 * be returned or null.
 				 */
-				IScanImportConverter importConverter = getScanImportConverter(converterId);
+				IScanImportConverter<T> importConverter = getScanImportConverter(converterId);
 				if(importConverter != null) {
 					processingInfo = importConverter.convert(file, monitor);
 					if(!processingInfo.hasErrorMessages()) {
@@ -99,14 +100,14 @@ public class ScanConverterNMR {
 		return getProcessingError(file);
 	}
 
-	public static IProcessingInfo convert(final File file, final IMeasurementNMR scan, final String converterId, final IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> convert(final File file, final IMeasurementNMR scan, final String converterId, final IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<T> processingInfo;
 		/*
 		 * Do not use a safe runnable here, because an object must
 		 * be returned or null.
 		 */
-		IScanExportConverter exportConverter = getScanExportConverter(converterId);
+		IScanExportConverter<T> exportConverter = getScanExportConverter(converterId);
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, scan, monitor);
 		} else {
@@ -115,31 +116,33 @@ public class ScanConverterNMR {
 		return processingInfo;
 	}
 
-	private static IScanImportConverter getScanImportConverter(final String converterId) {
+	@SuppressWarnings("unchecked")
+	private static <T> IScanImportConverter<T> getScanImportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IScanImportConverter instance = null;
+		IScanImportConverter<T> instance = null;
 		if(element != null) {
 			try {
-				instance = (IScanImportConverter)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
+				instance = (IScanImportConverter<T>)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
 	}
 
-	private static IScanExportConverter getScanExportConverter(final String converterId) {
+	@SuppressWarnings("unchecked")
+	private static <T> IScanExportConverter<T> getScanExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IScanExportConverter instance = null;
+		IScanExportConverter<T> instance = null;
 		if(element != null) {
 			try {
-				instance = (IScanExportConverter)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
+				instance = (IScanExportConverter<T>)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
@@ -206,9 +209,9 @@ public class ScanConverterNMR {
 		return magicNumberMatcher;
 	}
 
-	private static IProcessingInfo getProcessingError(File file) {
+	private static <T> IProcessingInfo<T> getProcessingError(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("Scan Converter", "No suitable converter was found for: " + file);
 		return processingInfo;
 	}

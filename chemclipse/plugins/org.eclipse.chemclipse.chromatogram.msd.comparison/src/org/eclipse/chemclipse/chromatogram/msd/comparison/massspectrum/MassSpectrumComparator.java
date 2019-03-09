@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum;
 
@@ -21,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.purity.IM
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.purity.MassSpectrumPurityResult;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -46,7 +48,7 @@ import org.eclipse.core.runtime.Platform;
  * Database search will still use this feature but should be implemented in
  * another class to separate the two different concerns of comparison and
  * identification.
- * 
+ *
  * @author eselmeister
  */
 public class MassSpectrumComparator {
@@ -65,14 +67,14 @@ public class MassSpectrumComparator {
 	private static final String SUPPORTS_HIGH_RESOLUTION_MS = "highResolutionMS";
 	//
 	private static ComparatorCache comparatorCache;
-	private static IProcessingInfo processingInfoComparisonSkip;
+	private static IProcessingInfo<IComparisonResult> processingInfoComparisonSkip;
 	private static final float NO_MATCH = 0.0f;
 	/*
 	 * Initialize all values.
 	 */
 	static {
 		comparatorCache = new ComparatorCache();
-		processingInfoComparisonSkip = new ProcessingInfo();
+		processingInfoComparisonSkip = new ProcessingInfo<>();
 		processingInfoComparisonSkip.setProcessingResult(new ComparisonResult(NO_MATCH, NO_MATCH, NO_MATCH, NO_MATCH));
 	}
 
@@ -80,6 +82,7 @@ public class MassSpectrumComparator {
 	 * This class has only static methods.
 	 */
 	private MassSpectrumComparator() {
+
 	}
 
 	/**
@@ -88,14 +91,14 @@ public class MassSpectrumComparator {
 	 * a comparison.<br/>
 	 * You can chose the comparator through the comparatorId.<br/>
 	 * The unknown and reference mass spectrum will be left as they are.
-	 * 
+	 *
 	 */
-	public static IProcessingInfo compare(IScanMSD unknown, IScanMSD reference, String comparatorId, boolean usePreOptimization, double thresholdPreOptimization) {
+	public static IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference, String comparatorId, boolean usePreOptimization, double thresholdPreOptimization) {
 
 		return compare(unknown, reference, getMassSpectrumComparator(comparatorId), usePreOptimization, thresholdPreOptimization);
 	}
 
-	public static IProcessingInfo compare(IScanMSD unknown, IScanMSD reference, IMassSpectrumComparator massSpectrumComparator, boolean usePreOptimization, double thresholdPreOptimization) {
+	public static IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference, IMassSpectrumComparator massSpectrumComparator, boolean usePreOptimization, double thresholdPreOptimization) {
 
 		/*
 		 * Check if the mass spectrum needs to be compared.
@@ -107,7 +110,7 @@ public class MassSpectrumComparator {
 		/*
 		 * Do the comparison
 		 */
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IComparisonResult> processingInfo;
 		if(compare) {
 			if(massSpectrumComparator != null) {
 				processingInfo = massSpectrumComparator.compare(unknown, reference);
@@ -125,20 +128,20 @@ public class MassSpectrumComparator {
 
 	/**
 	 * Calculates the purity of the extracted mass spectrum in comparison to the genuine.
-	 * 
+	 *
 	 * @param extractedMassSpectrum
 	 * @param genuineMassSpectrum
 	 * @param ionRange
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo getPurityResult(IScanMSD extractedMassSpectrum, IScanMSD genuineMassSpectrum) {
+	public static IProcessingInfo<IMassSpectrumPurityResult> getPurityResult(IScanMSD extractedMassSpectrum, IScanMSD genuineMassSpectrum) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IMassSpectrumPurityResult> processingInfo = new ProcessingInfo<>();
 		try {
 			IMassSpectrumPurityResult massSpectrumPurityResult = new MassSpectrumPurityResult(extractedMassSpectrum, genuineMassSpectrum);
 			processingInfo.setProcessingResult(massSpectrumPurityResult);
 		} catch(ComparisonException e) {
-			logger.warn(e);
+			logger.error(e.getLocalizedMessage(), e);
 			processingInfo.addErrorMessage("MassSpectrum Purity", "The mass spectrum purity couldn't be calculated.");
 		}
 		return processingInfo;
@@ -147,7 +150,7 @@ public class MassSpectrumComparator {
 	/**
 	 * Returns an array of all available comparator names and ids.
 	 * The array may be empty.
-	 * 
+	 *
 	 * @return String[][]
 	 */
 	public static String[][] getAvailableComparatorIds() {
@@ -239,7 +242,7 @@ public class MassSpectrumComparator {
 
 	/**
 	 * Returns an IMassSpectrumComparator instance or null if none is available.
-	 * 
+	 *
 	 * @param converterId
 	 * @return IConfigurationElement
 	 */

@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -337,7 +338,7 @@ public class MethodSupportUI extends Composite {
 			processMethod.setOperator(UserManagement.getCurrentUser());
 			processMethod.setDescription("This is an empty process method. Please modify.");
 			//
-			IProcessingInfo processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
+			IProcessingInfo<?> processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_MÉTHOD_CONVERTER_ID, new NullProgressMonitor());
 			if(!processingInfo.hasErrorMessages()) {
 				preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
 				computeMethodComboItems();
@@ -416,21 +417,21 @@ public class MethodSupportUI extends Composite {
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						IProcessingInfo processingInfo = MethodConverter.convert(file, monitor);
+						IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, monitor);
 						if(!processingInfo.hasErrorMessages()) {
 							try {
-								IProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
+								IProcessMethod processMethod = processingInfo.getProcessingResult();
 								methodListener.execute(processMethod, monitor);
 							} catch(Exception e) {
-								logger.warn(e);
+								logger.error(e.getLocalizedMessage(), e);
 							}
 						}
 					}
 				});
 			} catch(InvocationTargetException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			} catch(InterruptedException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 	}

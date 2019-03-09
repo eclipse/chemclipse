@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -38,11 +39,12 @@ public class PeakScanListUI extends ExtendedTableViewer {
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 
 	public PeakScanListUI(Composite parent, int style) {
+
 		super(parent, style);
 		createColumns();
 	}
 
-	public void setInput(IChromatogramSelection<?> chromatogramSelection, boolean showPeaks, boolean showPeaksInRange, boolean showScans, boolean showScansInRange) {
+	public void setInput(IChromatogramSelection<?, ?> chromatogramSelection, boolean showPeaks, boolean showPeaksInRange, boolean showScans, boolean showScansInRange) {
 
 		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
@@ -50,7 +52,7 @@ public class PeakScanListUI extends ExtendedTableViewer {
 			labelProvider.setChromatogramPeakArea(chromatogramPeakArea);
 			tableComparator.setChromatogramPeakArea(chromatogramPeakArea);
 			//
-			List<Object> input = new ArrayList<Object>();
+			List<Object> input = new ArrayList<>();
 			//
 			if(showPeaks) {
 				input.addAll(chromatogramDataSupport.getPeaks(chromatogramSelection, showPeaksInRange));

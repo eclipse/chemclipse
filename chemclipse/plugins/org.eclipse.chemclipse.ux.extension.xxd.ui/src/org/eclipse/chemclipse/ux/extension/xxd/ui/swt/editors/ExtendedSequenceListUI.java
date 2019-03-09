@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -162,11 +162,11 @@ public class ExtendedSequenceListUI {
 		methodSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
-			@SuppressWarnings("rawtypes")
+
 			@Override
 			public void execute(IProcessMethod processMethod, IProgressMonitor monitor) {
 
-				IProcessingInfo processingInfo = new ProcessingInfo();
+				IProcessingInfo<IChromatogramSelection<?, ?>> processingInfo = new ProcessingInfo<>();
 				//
 				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 				TableItem[] tableItems = sequenceListUI.getTable().getItems();
@@ -179,11 +179,11 @@ public class ExtendedSequenceListUI {
 						 */
 						ISequenceRecord sequenceRecord = (ISequenceRecord)object;
 						String pathChromatogram = sequence.getDataPath() + File.separator + sequenceRecord.getDataFile();
-						IProcessingInfo processingInfoChromatogram = chromatogramTypeSupport.getChromatogramSelection(pathChromatogram, monitor);
+						IProcessingInfo<IChromatogramSelection<?, ?>> processingInfoChromatogram = chromatogramTypeSupport.getChromatogramSelection(pathChromatogram, monitor);
 						if(!processingInfoChromatogram.hasErrorMessages()) {
-							IChromatogramSelection chromatogramSelection = processingInfoChromatogram.getProcessingResult(IChromatogramSelection.class);
+							IChromatogramSelection<?, ?> chromatogramSelection = processingInfoChromatogram.getProcessingResult();
 							addSequenceRecordInformation(sequenceRecord, chromatogramSelection.getChromatogram());
-							IProcessingInfo processorInfo = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+							IProcessingInfo<IChromatogramSelection<?, ?>> processorInfo = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
 							if(processorInfo.hasErrorMessages()) {
 								processingInfo.addMessages(processorInfo);
 							} else {

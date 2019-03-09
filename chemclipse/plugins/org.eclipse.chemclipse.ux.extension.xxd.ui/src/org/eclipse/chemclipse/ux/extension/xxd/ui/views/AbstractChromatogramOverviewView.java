@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.views;
 
@@ -47,11 +48,12 @@ public abstract class AbstractChromatogramOverviewView implements IChromatogramO
 	private List<EventHandler> registeredEventHandler;
 
 	public AbstractChromatogramOverviewView(MPart part, EPartService partService, IEventBroker eventBroker) {
+
 		this.part = part;
 		this.partService = partService;
 		this.eventBroker = eventBroker;
 		//
-		registeredEventHandler = new ArrayList<EventHandler>();
+		registeredEventHandler = new ArrayList<>();
 		registerEventBroker(eventBroker);
 	}
 
@@ -103,6 +105,7 @@ public abstract class AbstractChromatogramOverviewView implements IChromatogramO
 
 		EventHandler eventHandler = new EventHandler() {
 
+			@Override
 			public void handleEvent(Event event) {
 
 				try {
@@ -123,6 +126,7 @@ public abstract class AbstractChromatogramOverviewView implements IChromatogramO
 
 		EventHandler eventHandler = new EventHandler() {
 
+			@Override
 			public void handleEvent(Event event) {
 
 				try {
@@ -142,7 +146,7 @@ public abstract class AbstractChromatogramOverviewView implements IChromatogramO
 
 	/**
 	 * Try to show the overview of the given chromatogram overview.
-	 * 
+	 *
 	 * @param file
 	 * @throws FileIsEmptyException
 	 * @throws FileIsNotReadableException
@@ -158,7 +162,7 @@ public abstract class AbstractChromatogramOverviewView implements IChromatogramO
 			/*
 			 * Load the chromatogram overview.
 			 */
-			IProcessingInfo processingInfo = null;
+			IProcessingInfo<IChromatogramOverview> processingInfo = null;
 			switch(topic) {
 				case IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE:
 					processingInfo = ChromatogramConverterMSD.getInstance().convertOverview(file, new NullProgressMonitor());

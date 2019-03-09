@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2013, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.csd.ui.internal.support;
 
@@ -29,6 +30,7 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 	private ChromatogramSelectionCSD chromatogramSelection;
 
 	public ChromatogramImportRunnable(File file, ChromatogramSelectionCSD chromatogramSelection) {
+
 		this.file = file;
 		this.chromatogramSelection = chromatogramSelection;
 	}
@@ -43,8 +45,8 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Import Chromatogram", IProgressMonitor.UNKNOWN);
-			IProcessingInfo processingInfo = ChromatogramConverterCSD.getInstance().convert(file, monitor);
-			IChromatogramCSD chromatogram = processingInfo.getProcessingResult(IChromatogramCSD.class);
+			IProcessingInfo<IChromatogramCSD> processingInfo = ChromatogramConverterCSD.getInstance().convert(file, monitor);
+			IChromatogramCSD chromatogram = processingInfo.getProcessingResult();
 			chromatogramSelection = new ChromatogramSelectionCSD(chromatogram);
 		} catch(Exception e) {
 			/*
@@ -53,7 +55,7 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 			 * FileIsNotReadableException FileIsEmptyException
 			 * ChromatogramIsNullException
 			 */
-			logger.warn(e);
+			logger.error(e.getLocalizedMessage(), e);
 		} finally {
 			monitor.done();
 		}

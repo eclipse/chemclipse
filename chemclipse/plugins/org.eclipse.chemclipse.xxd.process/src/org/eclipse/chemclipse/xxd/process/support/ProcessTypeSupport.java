@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2011, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
 
@@ -56,7 +57,7 @@ public class ProcessTypeSupport {
 
 	private static final Logger logger = Logger.getLogger(ProcessTypeSupport.class);
 	//
-	private Map<String, IProcessTypeSupplier> processSupplierMap = new HashMap<>();
+	private Map<String, IProcessTypeSupplier<?>> processSupplierMap = new HashMap<>();
 
 	public ProcessTypeSupport() {
 		/*
@@ -86,7 +87,7 @@ public class ProcessTypeSupport {
 		// NoiseCalculator?
 	}
 
-	private void addProcessSupplier(IProcessTypeSupplier processTypeSupplier) {
+	private void addProcessSupplier(IProcessTypeSupplier<?> processTypeSupplier) {
 
 		try {
 			for(String processorId : processTypeSupplier.getProcessorIds()) {
@@ -106,33 +107,33 @@ public class ProcessTypeSupport {
 		List<IProcessTypeSupplier> supplier = new ArrayList<>();
 		for(IProcessTypeSupplier processTypeSupplier : processSupplierMap.values()) {
 			exitloop:
-			for(DataType dataType : dataTypes) {
-				if(processTypeSupplier.getSupportedDataTypes().contains(dataType)) {
-					if(!supplier.contains(processTypeSupplier)) {
-						supplier.add(processTypeSupplier);
-						break exitloop;
+				for(DataType dataType : dataTypes) {
+					if(processTypeSupplier.getSupportedDataTypes().contains(dataType)) {
+						if(!supplier.contains(processTypeSupplier)) {
+							supplier.add(processTypeSupplier);
+							break exitloop;
+						}
 					}
 				}
-			}
 		}
 		return supplier;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, IProcessMethod processMethod, IProgressMonitor monitor) {
 
-		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
+	public <T> IProcessingInfo<T> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessMethod processMethod, IProgressMonitor monitor) {
+
+		List<IChromatogramSelection<?, ?>> chromatogramSelections = new ArrayList<>();
 		if(chromatogramSelection != null) {
 			chromatogramSelections.add(chromatogramSelection);
 		}
 		return applyProcessor(chromatogramSelections, processMethod, monitor);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo applyProcessor(List<IChromatogramSelection> chromatogramSelections, IProcessMethod processMethod, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+	public <T> IProcessingInfo<T> applyProcessor(List<? extends IChromatogramSelection<?, ?>> chromatogramSelections, IProcessMethod processMethod, IProgressMonitor monitor) {
+
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
+		for(IChromatogramSelection<?, ?> chromatogramSelection : chromatogramSelections) {
 			/*
 			 * Process referenced chromatograms?
 			 * Will make things more complex. Discussion needed.
@@ -141,7 +142,7 @@ public class ProcessTypeSupport {
 			 */
 			for(IProcessEntry processEntry : processMethod) {
 				String processorId = processEntry.getProcessorId();
-				IProcessTypeSupplier processTypeSupplier = processSupplierMap.get(processorId);
+				IProcessTypeSupplier<?> processTypeSupplier = processSupplierMap.get(processorId);
 				if(processTypeSupplier != null) {
 					/*
 					 * If processEntry.getJsonSettings() == {} (IProcessEntry.EMPTY_JSON_SETTINGS),

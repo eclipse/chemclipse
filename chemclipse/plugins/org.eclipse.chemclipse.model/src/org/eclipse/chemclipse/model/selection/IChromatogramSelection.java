@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2012, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.model.selection;
 
@@ -19,15 +20,15 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.numeric.core.Point;
 
-public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUpdateListener, Serializable {
+public interface IChromatogramSelection<P extends IPeak, C extends IChromatogram<P>> extends IChromatogramUpdateListener, Serializable {
 
 	/**
 	 * Returns the stored chromatogram.
 	 * May return null.
-	 * 
+	 *
 	 * @return {@link IChromatogram}
 	 */
-	IChromatogram<T> getChromatogram();
+	C getChromatogram();
 
 	/**
 	 * Reset all values to the given chromatogram bounds.<br/>
@@ -40,7 +41,7 @@ public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUp
 
 	/**
 	 * Resets all values as reset and fires optionally an update.
-	 * 
+	 *
 	 * @param fireUpdate
 	 */
 	void reset(boolean fireUpdate);
@@ -48,7 +49,7 @@ public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUp
 	/**
 	 * Returns the start retention time.<br/>
 	 * The retention time is stored in milliseconds.
-	 * 
+	 *
 	 * @return int
 	 */
 	int getStartRetentionTime();
@@ -63,7 +64,7 @@ public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUp
 	/**
 	 * Returns the stop retention time.<br/>
 	 * The retention time is stored in milliseconds.
-	 * 
+	 *
 	 * @return int
 	 */
 	int getStopRetentionTime();
@@ -77,7 +78,7 @@ public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUp
 
 	/**
 	 * Returns the start abundance.
-	 * 
+	 *
 	 * @return float
 	 */
 	float getStartAbundance();
@@ -90,7 +91,7 @@ public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUp
 
 	/**
 	 * Returns the stop abundance.
-	 * 
+	 *
 	 * @return float
 	 */
 	float getStopAbundance();
@@ -118,7 +119,7 @@ public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUp
 	/**
 	 * Sets the values and fires an update after validating and setting all
 	 * values.
-	 * 
+	 *
 	 * @param startRetentionTime
 	 * @param stopRetentionTime
 	 * @param startAbundance
@@ -130,7 +131,7 @@ public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUp
 	 * All listeners will be informed about an update.
 	 * This method needs to be implemented by each ChromatogramSelection implementation, e.g. for ChromatogramSelectionMSD:
 	 * org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionUpdateNotifier.fireUpdateChange(this, false);
-	 * 
+	 *
 	 * @param forceReload
 	 */
 	void fireUpdateChange(boolean forceReload);
@@ -138,7 +139,7 @@ public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUp
 	/**
 	 * Returns the selected scan of the current chromatogram or null, if none is
 	 * stored.
-	 * 
+	 *
 	 * @return {@link IScan}
 	 */
 	IScan getSelectedScan();
@@ -151,7 +152,7 @@ public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUp
 
 	/**
 	 * Use this convenient method, if you don't want to fire and update.
-	 * 
+	 *
 	 * @param selectedScan
 	 * @param update
 	 */
@@ -159,12 +160,14 @@ public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUp
 
 	/**
 	 * Returns the selected peak.
-	 * 
+	 *
 	 * @return IPeak
 	 */
-	IPeak getSelectedPeak();
+	P getSelectedPeak();
 
-	void setSelectedPeak(IPeak selectedPeak);
+	void setSelectedPeak(P selectedPeak);
+
+	void setSelectedPeak(P selectedPeak, boolean update);
 
 	IScan getSelectedIdentifiedScan();
 
@@ -176,14 +179,14 @@ public interface IChromatogramSelection<T extends IPeak> extends IChromatogramUp
 
 	/**
 	 * Lock the offset in the UI display.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	boolean isLockOffset();
 
 	/**
 	 * Set this value to lock the offset in the UI.
-	 * 
+	 *
 	 * @param lockOffset
 	 */
 	void setLockOffset(boolean lockOffset);

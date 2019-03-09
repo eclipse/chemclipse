@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
@@ -27,7 +28,6 @@ import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -66,6 +66,7 @@ public class ChromatogramHeaderView {
 			 */
 			EventHandler eventHandlerFileOverview = new EventHandler() {
 
+				@Override
 				public void handleEvent(Event event) {
 
 					try {
@@ -74,7 +75,7 @@ public class ChromatogramHeaderView {
 							setChromatogram((File)object);
 						}
 					} catch(Exception e) {
-						logger.warn(e);
+						logger.error(e.getLocalizedMessage(), e);
 					}
 				}
 			};
@@ -84,6 +85,7 @@ public class ChromatogramHeaderView {
 			 */
 			EventHandler eventHandlerInstanceOverview = new EventHandler() {
 
+				@Override
 				public void handleEvent(Event event) {
 
 					try {
@@ -93,7 +95,7 @@ public class ChromatogramHeaderView {
 							updateChromatogram(chromatogramOverview);
 						}
 					} catch(Exception e) {
-						logger.warn(e);
+						logger.error(e.getLocalizedMessage(), e);
 					}
 				}
 			};
@@ -163,15 +165,12 @@ public class ChromatogramHeaderView {
 			/*
 			 * Load the chromatogram overview.
 			 */
-			IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convertOverview(file, new NullProgressMonitor());
-			try {
+			IProcessingInfo<IChromatogramOverview> processingInfo = ChromatogramConverterMSD.getInstance().convertOverview(file, new NullProgressMonitor());
+			
 				IChromatogramOverview chromatogramOverview = processingInfo.getProcessingResult(IChromatogramOverview.class);
 				if(chromatogramOverview != null) {
 					updateChromatogram(chromatogramOverview);
 				}
-			} catch(TypeCastException e) {
-				logger.warn(e);
-			}
 		}
 	}
 }

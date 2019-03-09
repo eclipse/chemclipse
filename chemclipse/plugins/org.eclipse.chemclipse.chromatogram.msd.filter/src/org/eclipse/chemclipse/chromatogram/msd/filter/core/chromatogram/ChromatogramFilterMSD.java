@@ -1,16 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -42,6 +44,7 @@ public class ChromatogramFilterMSD {
 	 * This class is a singleton. Use only static methods.
 	 */
 	private ChromatogramFilterMSD() {
+
 	}
 
 	/**
@@ -50,7 +53,7 @@ public class ChromatogramFilterMSD {
 	 * mechanism.<br/>
 	 * You could think of filters that for example remove background
 	 * automatically or mean normalize the chromatogram.
-	 * 
+	 *
 	 * @param chromatogramSelection
 	 * @param chromatogramFilterSettings
 	 * @param filterId
@@ -63,7 +66,7 @@ public class ChromatogramFilterMSD {
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
 		}
 		return processingInfo;
@@ -73,20 +76,20 @@ public class ChromatogramFilterMSD {
 	/**
 	 * Applies the specified filter, but retrieves the IChromatogramFilterSettings dynamically.<br/>
 	 * See also method: applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor)
-	 * 
+	 *
 	 * @param chromatogramSelection
 	 * @param filterId
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionMSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IChromatogramFilterResult> processingInfo;
 		IChromatogramFilterMSD chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
 		}
 		return processingInfo;
@@ -112,7 +115,7 @@ public class ChromatogramFilterMSD {
 					IChromatogramFilterSettings instance = (IChromatogramFilterSettings)element.createExecutableExtension(FILTER_SETTINGS);
 					supplier.setSettingsClass(instance.getClass());
 				} catch(CoreException e) {
-					logger.warn(e);
+					logger.error(e.getLocalizedMessage(), e);
 					// settings class is optional, set null instead
 					supplier.setSettingsClass(null);
 				}
@@ -136,7 +139,7 @@ public class ChromatogramFilterMSD {
 			try {
 				instance = (IChromatogramFilterMSD)element.createExecutableExtension(FILTER);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
@@ -145,7 +148,7 @@ public class ChromatogramFilterMSD {
 	/**
 	 * Returns an {@link IChromatogramFilterMSD} instance or null if none is
 	 * available.
-	 * 
+	 *
 	 * @param filterId
 	 * @return IConfigurationElement
 	 */

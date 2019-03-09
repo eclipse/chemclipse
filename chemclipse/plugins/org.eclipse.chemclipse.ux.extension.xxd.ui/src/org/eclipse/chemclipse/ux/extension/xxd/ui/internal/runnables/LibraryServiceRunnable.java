@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2017, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables;
 
@@ -27,6 +28,7 @@ public class LibraryServiceRunnable implements IRunnableWithProgress {
 	private IScanMSD libraryMassSpectrum;
 
 	public LibraryServiceRunnable(IIdentificationTarget identificationTarget) {
+
 		this.identificationTarget = identificationTarget;
 	}
 
@@ -42,11 +44,12 @@ public class LibraryServiceRunnable implements IRunnableWithProgress {
 			monitor.beginTask("Library Service", IProgressMonitor.UNKNOWN);
 			try {
 				IProcessingInfo processingInfo = LibraryService.identify(identificationTarget, monitor);
-				IMassSpectra massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
+				IMassSpectra massSpectra = (IMassSpectra)processingInfo.getProcessingResult();
 				if(massSpectra.size() > 0) {
 					libraryMassSpectrum = massSpectra.getMassSpectrum(1);
 				}
 			} catch(Exception e) {
+				e.printStackTrace();
 				libraryMassSpectrum = null;
 			}
 		} finally {

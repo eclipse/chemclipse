@@ -1,13 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables;
 
@@ -29,6 +30,7 @@ public class QuantDBImportRunnable implements IRunnableWithProgress {
 	private IQuantitationDatabase quantitationDatabase = null;
 
 	public QuantDBImportRunnable(File file) {
+
 		this.file = file;
 	}
 
@@ -42,7 +44,7 @@ public class QuantDBImportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Import Quantitation Database", IProgressMonitor.UNKNOWN);
-			IProcessingInfo processingInfo = QuantDBConverter.convert(file, monitor);
+			IProcessingInfo<IQuantitationDatabase> processingInfo = QuantDBConverter.convert(file, monitor);
 			quantitationDatabase = processingInfo.getProcessingResult(IQuantitationDatabase.class);
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);

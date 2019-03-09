@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.identifier.impl;
 
@@ -25,12 +26,12 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PeakIdentifierRemoveUnidentified extends AbstractPeakIdentifierCSD {
+public class PeakIdentifierRemoveUnidentified<T> extends AbstractPeakIdentifierCSD<T> {
 
 	@Override
-	public IProcessingInfo identify(List<IPeakCSD> peaks, IPeakIdentifierSettingsCSD peakIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<T> identify(List<? extends IPeakCSD> peaks, IPeakIdentifierSettingsCSD peakIdentifierSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		/*
 		 * Remove all unidentified peaks.
 		 */
@@ -48,45 +49,46 @@ public class PeakIdentifierRemoveUnidentified extends AbstractPeakIdentifierCSD 
 			}
 			processingInfo.addInfoMessage("Identifier", "Done - unidentified peaks have been removed.");
 		} catch(Exception e) {
+			e.printStackTrace();
 			processingInfo.addErrorMessage("Identifier", "Something has gone wrong.");
 		}
 		return processingInfo;
 	}
 
 	@Override
-	public IProcessingInfo identify(IPeakCSD peak, IPeakIdentifierSettingsCSD peakIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<T> identify(IPeakCSD peak, IPeakIdentifierSettingsCSD peakIdentifierSettings, IProgressMonitor monitor) {
 
-		List<IPeakCSD> peaks = new ArrayList<IPeakCSD>();
+		List<IPeakCSD> peaks = new ArrayList<>();
 		peaks.add(peak);
 		return identify(peaks, peakIdentifierSettings, monitor);
 	}
 
 	@Override
-	public IProcessingInfo identify(IPeakCSD peak, IProgressMonitor monitor) {
+	public IProcessingInfo<T> identify(IPeakCSD peak, IProgressMonitor monitor) {
 
 		PeakIdentifierSettingsCSD peakIdentifierSettings = new PeakIdentifierSettingsCSD();
 		return identify(peak, peakIdentifierSettings, monitor);
 	}
 
 	@Override
-	public IProcessingInfo identify(List<IPeakCSD> peaks, IProgressMonitor monitor) {
+	public IProcessingInfo<T> identify(List<? extends IPeakCSD> peaks, IProgressMonitor monitor) {
 
 		PeakIdentifierSettingsCSD peakIdentifierSettings = new PeakIdentifierSettingsCSD();
 		return identify(peaks, peakIdentifierSettings, monitor);
 	}
 
 	@Override
-	public IProcessingInfo identify(IChromatogramSelectionCSD chromatogramSelectionCSD, IProgressMonitor monitor) {
+	public IProcessingInfo<T> identify(IChromatogramSelectionCSD chromatogramSelectionCSD, IProgressMonitor monitor) {
 
 		PeakIdentifierSettingsCSD peakIdentifierSettings = new PeakIdentifierSettingsCSD();
 		return identify(chromatogramSelectionCSD, peakIdentifierSettings, monitor);
 	}
 
 	@Override
-	public IProcessingInfo identify(IChromatogramSelectionCSD chromatogramSelectionCSD, IPeakIdentifierSettingsCSD peakIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<T> identify(IChromatogramSelectionCSD chromatogramSelectionCSD, IPeakIdentifierSettingsCSD peakIdentifierSettings, IProgressMonitor monitor) {
 
-		IChromatogramCSD chromatogramCSD = chromatogramSelectionCSD.getChromatogramCSD();
-		List<IPeakCSD> peaks = new ArrayList<IPeakCSD>();
+		IChromatogramCSD chromatogramCSD = chromatogramSelectionCSD.getChromatogram();
+		List<IPeakCSD> peaks = new ArrayList<>();
 		for(IChromatogramPeakCSD chromatogramPeakCSD : chromatogramCSD.getPeaks(chromatogramSelectionCSD)) {
 			peaks.add(chromatogramPeakCSD);
 		}

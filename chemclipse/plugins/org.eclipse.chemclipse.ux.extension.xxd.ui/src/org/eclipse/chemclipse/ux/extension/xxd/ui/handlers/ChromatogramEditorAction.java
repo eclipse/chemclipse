@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.handlers;
 
@@ -16,9 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -33,7 +32,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-public class ChromatogramEditorAction extends AbstractChromatogramEditorAction implements IChromatogramEditorAction {
+public class ChromatogramEditorAction<T> extends AbstractChromatogramEditorAction<T> implements IChromatogramEditorAction<T> {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramEditorAction.class);
 	//
@@ -43,9 +42,9 @@ public class ChromatogramEditorAction extends AbstractChromatogramEditorAction i
 	private ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 
 	@Override
-	public IProcessingInfo applyAction(IChromatogramSelection<? extends IPeak> chromatogramSelection) {
+	public IProcessingInfo<T> applyAction(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		//
 		String directoryPath = preferenceStore.getString(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER);
 		String selectedMethod = preferenceStore.getString(PreferenceConstants.P_SELECTED_METHOD_NAME);
@@ -58,26 +57,26 @@ public class ChromatogramEditorAction extends AbstractChromatogramEditorAction i
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						IProcessingInfo processingInfo = MethodConverter.convert(file, monitor);
+						IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, monitor);
 						if(!processingInfo.hasErrorMessages()) {
 							try {
-								IProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
-								IProcessingInfo processorInfo = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+								IProcessMethod processMethod = processingInfo.getProcessingResult();
+								IProcessingInfo<IProcessMethod> processorInfo = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
 								if(processorInfo.hasErrorMessages()) {
 									processingInfo.addMessages(processorInfo);
 								} else {
 									processingInfo.addInfoMessage(DESCRIPTION, "Success processing file: " + file);
 								}
 							} catch(Exception e) {
-								logger.warn(e);
+								logger.error(e.getLocalizedMessage(), e);
 							}
 						}
 					}
 				});
 			} catch(InvocationTargetException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			} catch(InterruptedException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		} else {
 			processingInfo.addErrorMessage(DESCRIPTION, "It seems that no method has been selected yet.");

@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.selection;
 
@@ -26,31 +27,37 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
  * Start and stop scan are not provided as they can be calculated by the
  * retention time.<br/>
  */
-@SuppressWarnings("rawtypes")
-public interface IChromatogramSelectionMSD extends IChromatogramSelection {
+public interface IChromatogramSelectionMSD extends IChromatogramSelection<IChromatogramPeakMSD, IChromatogramMSD> {
 
 	/**
 	 * Returns the stored chromatogram.
 	 * May return null.
-	 * 
+	 *
+	 * @deprecated use {@link #getChromatogram()} instead
 	 * @return {@link IChromatogramMSD}
 	 */
-	IChromatogramMSD getChromatogramMSD();
+	@Deprecated
+	default IChromatogramMSD getChromatogramMSD() {
+
+		return getChromatogram();
+	}
 
 	/**
 	 * Returns the selected scan of the current chromatogram or null, if none is
 	 * stored.
-	 * 
+	 *
 	 * @return {@link IVendorMassSpectrum}
 	 */
+	@Override
 	IVendorMassSpectrum getSelectedScan();
 
 	/**
 	 * Returns the selected identified scan of the current chromatogram or null,
 	 * if none is stored.
-	 * 
+	 *
 	 * @return {@link IVendorMassSpectrum}
 	 */
+	@Override
 	IVendorMassSpectrum getSelectedIdentifiedScan();
 
 	/**
@@ -61,7 +68,7 @@ public interface IChromatogramSelectionMSD extends IChromatogramSelection {
 
 	/**
 	 * Use this convenient method, if you don't want to fire and update.
-	 * 
+	 *
 	 * @param selectedScan
 	 * @param update
 	 */
@@ -75,51 +82,29 @@ public interface IChromatogramSelectionMSD extends IChromatogramSelection {
 
 	/**
 	 * Use this convenient method, if you don't want to fire and update.
-	 * 
+	 *
 	 * @param selectedScan
 	 * @param update
 	 */
 	void setSelectedIdentifiedScan(IVendorMassSpectrum selectedIdentifiedScan, boolean update);
 
 	/**
-	 * Returns the selected peak of the current chromatogram or null, if none is
-	 * stored.
-	 * 
-	 * @return {@link IChromatogramPeakMSD}
-	 */
-	IChromatogramPeakMSD getSelectedPeak();
-
-	/**
-	 * Sets the selected peak of the current chromatogram.<br/>
-	 * The peak must not be null.
-	 */
-	void setSelectedPeak(IChromatogramPeakMSD selectedPeak);
-
-	/**
-	 * Use this convenient method, if you don't want to fire and update.
-	 * 
-	 * @param selectedScan
-	 * @param update
-	 */
-	void setSelectedPeak(IChromatogramPeakMSD selectedPeak, boolean update);
-
-	/**
 	 * Returns a list of selected ions.
-	 * 
+	 *
 	 * @return IMarkedIons
 	 */
 	IMarkedIons getSelectedIons();
 
 	/**
 	 * Returns a list of excluded ions.
-	 * 
+	 *
 	 * @return IMarkedIons
 	 */
 	IMarkedIons getExcludedIons();
 
 	/**
 	 * Returns the instance of selected ion transitions.
-	 * 
+	 *
 	 * @return {@link IMarkedIonTransitions}
 	 */
 	IMarkedIonTransitions getMarkedIonTransitions();

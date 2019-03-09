@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.massspectrum;
 
@@ -43,7 +44,7 @@ import org.eclipse.core.runtime.Platform;
  * AMDIS *.msl<br/>
  * JCAMP-DX *.jdx<br/>
  * ASCII *.txt<br/>
- * 
+ *
  * @author eselmeister
  */
 public class MassSpectrumConverter {
@@ -55,23 +56,24 @@ public class MassSpectrumConverter {
 	 * This class has only static methods.
 	 */
 	private MassSpectrumConverter() {
+
 	}
 
 	/**
 	 * Imports mass spectra from the given file converted by the given converter.
-	 * 
+	 *
 	 * @param file
 	 * @param converterId
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo convert(File file, String converterId, IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> convert(File file, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<T> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
-		IMassSpectrumImportConverter importConverter = getMassSpectrumImportConverter(converterId);
+		IMassSpectrumImportConverter<T> importConverter = getMassSpectrumImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
@@ -82,27 +84,27 @@ public class MassSpectrumConverter {
 
 	/**
 	 * Imports mass spectra from the given file.
-	 * 
+	 *
 	 * @param file
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = getMassSpectra(file, monitor);
+		IProcessingInfo<T> processingInfo = getMassSpectra(file, monitor);
 		return processingInfo;
 	}
 
 	/**
 	 * Returns the mass spectra.
-	 * 
+	 *
 	 * @param chromatogram
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	private static IProcessingInfo getMassSpectra(final File file, IProgressMonitor monitor) {
+	private static <T> IProcessingInfo<T> getMassSpectra(final File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo();
 		MassSpectrumConverterSupport converterSupport = getMassSpectrumConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
@@ -111,7 +113,7 @@ public class MassSpectrumConverter {
 				 * Do not use a safe runnable here, because a IMassSpectra
 				 * object must be returned or null.
 				 */
-				IMassSpectrumImportConverter importConverter = getMassSpectrumImportConverter(converterId);
+				IMassSpectrumImportConverter<T> importConverter = getMassSpectrumImportConverter(converterId);
 				if(importConverter != null) {
 					/*
 					 * Why should the method not declare the exceptions that
@@ -149,7 +151,7 @@ public class MassSpectrumConverter {
 
 	/**
 	 * Exports the mass spectrum.
-	 * 
+	 *
 	 * @param file
 	 * @param massSpectrum
 	 * @param append
@@ -157,13 +159,13 @@ public class MassSpectrumConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, String converterId, IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> convert(File file, IScanMSD massSpectrum, boolean append, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<T> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
-		IMassSpectrumExportConverter exportConverter = getMassSpectrumExportConverter(converterId);
+		IMassSpectrumExportConverter<T> exportConverter = getMassSpectrumExportConverter(converterId);
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, massSpectrum, append, monitor);
 		} else {
@@ -174,7 +176,7 @@ public class MassSpectrumConverter {
 
 	/**
 	 * Exports the mass spectra.
-	 * 
+	 *
 	 * @param file
 	 * @param massSpectra
 	 * @param append
@@ -182,13 +184,13 @@ public class MassSpectrumConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, String converterId, IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> convert(File file, IMassSpectra massSpectra, boolean append, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<T> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
-		IMassSpectrumExportConverter exportConverter = getMassSpectrumExportConverter(converterId);
+		IMassSpectrumExportConverter<T> exportConverter = getMassSpectrumExportConverter(converterId);
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, massSpectra, append, monitor);
 		} else {
@@ -202,20 +204,20 @@ public class MassSpectrumConverter {
 	/**
 	 * Returns an IMassSpectrumImportConverter instance or null if none is
 	 * available.
-	 * 
+	 *
 	 * @param converterId
 	 * @return IMassSpectrumImportConverter
 	 */
-	private static IMassSpectrumImportConverter getMassSpectrumImportConverter(final String converterId) {
+	private static <T> IMassSpectrumImportConverter<T> getMassSpectrumImportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IMassSpectrumImportConverter instance = null;
+		IMassSpectrumImportConverter<T> instance = null;
 		if(element != null) {
 			try {
-				instance = (IMassSpectrumImportConverter)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
+				instance = (IMassSpectrumImportConverter<T>)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
@@ -224,20 +226,20 @@ public class MassSpectrumConverter {
 	/**
 	 * Returns an IMassSpectrumExportConverter instance or null if none is
 	 * available.
-	 * 
+	 *
 	 * @param converterId
 	 * @return IMassSpectrumExportConverter
 	 */
-	private static IMassSpectrumExportConverter getMassSpectrumExportConverter(final String converterId) {
+	private static <T> IMassSpectrumExportConverter<T> getMassSpectrumExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IMassSpectrumExportConverter instance = null;
+		IMassSpectrumExportConverter<T> instance = null;
 		if(element != null) {
 			try {
 				instance = (IMassSpectrumExportConverter)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
@@ -246,7 +248,7 @@ public class MassSpectrumConverter {
 	/**
 	 * Returns an IChromatogramExportConverter instance or null if none is
 	 * available.
-	 * 
+	 *
 	 * @param converterId
 	 * @return IConfigurationElement
 	 */
@@ -271,7 +273,7 @@ public class MassSpectrumConverter {
 	 * about all valid and registered mass spectrum converters.<br/>
 	 * It can be used to get more information about the registered converters
 	 * such like filter names, file extensions.
-	 * 
+	 *
 	 * @return ChromatogramConverterSupport
 	 */
 	public static MassSpectrumConverterSupport getMassSpectrumConverterSupport() {
@@ -324,17 +326,17 @@ public class MassSpectrumConverter {
 	}
 
 	// ---------------------------------------------ConverterMethods
-	private static IProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
+	private static <T> IProcessingInfo<T> getNoExportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "MassSpectrum Export Converter", "There is no suitable converter available to export the mass spectra to the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
 	}
 
-	private static IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
+	private static <T> IProcessingInfo<T> getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "MassSpectrum Import Converter", "There is no suitable converter available to load the mass spectra from the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

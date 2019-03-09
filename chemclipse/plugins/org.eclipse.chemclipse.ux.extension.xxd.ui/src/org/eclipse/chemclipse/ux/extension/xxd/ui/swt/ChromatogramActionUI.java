@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -24,6 +25,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -71,6 +73,7 @@ public class ChromatogramActionUI extends Composite {
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ChromatogramActionUI(Composite parent, int style) {
+
 		super(parent, style);
 		initialize();
 	}
@@ -149,7 +152,7 @@ public class ChromatogramActionUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Execute the selected chromatogram action.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_EXTENSION, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_EXTENSION, IApplicationImageProvider.SIZE_16x16));
 		//
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -258,7 +261,7 @@ public class ChromatogramActionUI extends Composite {
 		return extensions;
 	}
 
-	private boolean isChromatogramSuitableForExtension(ChromatogramEditorActionExtension extension, IChromatogramSelection<? extends IPeak> chromatogramSelection) {
+	private boolean isChromatogramSuitableForExtension(ChromatogramEditorActionExtension extension, IChromatogramSelection<? extends IPeak, ?> chromatogramSelection) {
 
 		if(extension != null && chromatogramSelection != null) {
 			if(chromatogramSelection instanceof IChromatogramSelectionMSD && extension.isMSD()) {

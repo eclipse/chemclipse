@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2012, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
 
@@ -19,7 +20,7 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public interface IProcessTypeSupplier {
+public interface IProcessTypeSupplier<T> {
 
 	String NOT_AVAILABLE = "n.a.";
 
@@ -37,6 +38,5 @@ public interface IProcessTypeSupplier {
 
 	List<String> getProcessorIds() throws Exception;
 
-	@SuppressWarnings("rawtypes")
-	IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor);
+	IProcessingInfo<T> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor);
 }

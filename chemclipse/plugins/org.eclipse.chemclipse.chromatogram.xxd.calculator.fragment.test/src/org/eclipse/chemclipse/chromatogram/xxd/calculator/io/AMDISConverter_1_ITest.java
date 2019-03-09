@@ -1,18 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.io;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.PathResolver;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.TestPathHelper;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
@@ -27,10 +29,10 @@ public class AMDISConverter_1_ITest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 
-		File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CALIBRATION_CAL_1));
+		File file = new File(PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CALIBRATION_CAL_1));
 		AMDISConverter converter = new AMDISConverter();
-		IProcessingInfo processingInfo = converter.parseRetentionIndices(file);
-		separationColumnIndices = processingInfo.getProcessingResult(ISeparationColumnIndices.class);
+		IProcessingInfo<ISeparationColumnIndices> processingInfo = converter.parseRetentionIndices(file);
+		separationColumnIndices = processingInfo.getProcessingResult();
 		super.setUp();
 	}
 

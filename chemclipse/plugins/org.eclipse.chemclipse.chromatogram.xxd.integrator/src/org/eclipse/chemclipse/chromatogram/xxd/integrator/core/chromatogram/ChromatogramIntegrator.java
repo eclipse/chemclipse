@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -38,7 +38,7 @@ import org.eclipse.core.runtime.Platform;
  * XCalibur<br/>
  * Not all of these are pure mass spectrometric evaluation tools, but may give a
  * hint how to solve some basic problems.
- * 
+ *
  * @author eselmeister
  */
 public class ChromatogramIntegrator {
@@ -64,18 +64,17 @@ public class ChromatogramIntegrator {
 
 	/**
 	 * Integrates a chromatogram.
-	 * 
+	 *
 	 * @param chromatogramSelection
 	 * @param chromatogramIntegrationSettings
 	 * @param integratorId
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings, String integratorId, IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> integrate(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings, String integratorId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IChromatogramIntegrator integrator = getIntegrator(integratorId);
+		IProcessingInfo<T> processingInfo;
+		IChromatogramIntegrator<T> integrator = getIntegrator(integratorId);
 		if(integrator != null) {
 			processingInfo = integrator.integrate(chromatogramSelection, chromatogramIntegrationSettings, monitor);
 		} else {
@@ -86,17 +85,16 @@ public class ChromatogramIntegrator {
 
 	/**
 	 * Integrates a chromatogram.
-	 * 
+	 *
 	 * @param chromatogramSelection
 	 * @param integratorId
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, String integratorId, IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> integrate(IChromatogramSelection<?, ?> chromatogramSelection, String integratorId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IChromatogramIntegrator integrator = getIntegrator(integratorId);
+		IProcessingInfo<T> processingInfo;
+		IChromatogramIntegrator<T> integrator = getIntegrator(integratorId);
 		if(integrator != null) {
 			processingInfo = integrator.integrate(chromatogramSelection, monitor);
 		} else {
@@ -137,14 +135,15 @@ public class ChromatogramIntegrator {
 	}
 
 	// --------------------------------------------private methods
-	private static IChromatogramIntegrator getIntegrator(final String integratorId) {
+	@SuppressWarnings("unchecked")
+	private static <T> IChromatogramIntegrator<T> getIntegrator(final String integratorId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(integratorId);
-		IChromatogramIntegrator instance = null;
+		IChromatogramIntegrator<T> instance = null;
 		if(element != null) {
 			try {
-				instance = (IChromatogramIntegrator)element.createExecutableExtension(INTEGRATOR);
+				instance = (IChromatogramIntegrator<T>)element.createExecutableExtension(INTEGRATOR);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}
@@ -154,7 +153,7 @@ public class ChromatogramIntegrator {
 
 	/**
 	 * Returns an IIntegrator instance or null if none is available.
-	 * 
+	 *
 	 * @param integratorId
 	 * @return IConfigurationElement
 	 */
@@ -174,9 +173,9 @@ public class ChromatogramIntegrator {
 	}
 
 	// --------------------------------------------private methods
-	private static IProcessingInfo getNoIntegratorAvailableProcessingInfo() {
+	private static <T> IProcessingInfo<T> getNoIntegratorAvailableProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Chromatogram Integrator", NO_INTEGRATOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

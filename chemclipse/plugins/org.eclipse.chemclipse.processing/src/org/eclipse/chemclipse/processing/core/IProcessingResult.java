@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -68,5 +68,5 @@ public interface IProcessingResult<T> {
 
 	void setProcessingResult(T processingResult);
 
-	IProcessingInfo toInfo();
+	IProcessingInfo<T> toInfo();
 }

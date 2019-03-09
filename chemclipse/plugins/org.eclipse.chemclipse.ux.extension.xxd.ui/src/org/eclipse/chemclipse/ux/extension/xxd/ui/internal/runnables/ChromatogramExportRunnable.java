@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables;
 
@@ -23,13 +24,11 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-@SuppressWarnings("rawtypes")
 public class ChromatogramExportRunnable implements IRunnableWithProgress {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramExportRunnable.class);
@@ -40,6 +39,7 @@ public class ChromatogramExportRunnable implements IRunnableWithProgress {
 	private DataType dataType;
 
 	public ChromatogramExportRunnable(File file, IChromatogram chromatogram, ISupplier supplier, DataType dataType) {
+
 		this.file = file;
 		this.chromatogram = chromatogram;
 		this.supplier = supplier;
@@ -56,7 +56,7 @@ public class ChromatogramExportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Export Chromatogram", IProgressMonitor.UNKNOWN);
-			IProcessingInfo processingInfo = null;
+			IProcessingInfo<File> processingInfo = null;
 			switch(dataType) {
 				case MSD_NOMINAL:
 				case MSD_TANDEM:
@@ -84,11 +84,7 @@ public class ChromatogramExportRunnable implements IRunnableWithProgress {
 			}
 			//
 			if(processingInfo != null) {
-				try {
-					data = processingInfo.getProcessingResult(File.class);
-				} catch(TypeCastException e) {
-					logger.warn(e);
-				}
+				data = processingInfo.getProcessingResult();
 			}
 		} finally {
 			monitor.done();

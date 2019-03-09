@@ -1,22 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Dr. Philip Wenig, Matthias Mailänder.
- * 
+ * Copyright (c) 2013, 2018, 2019 Dr. Philip Wenig, Matthias Mailänder.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Matthias Mailänder - refined the wavelength selection
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core.selection;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
@@ -24,21 +25,21 @@ import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateNotifier;
 
 @SuppressWarnings("rawtypes")
-public class ChromatogramSelectionWSD extends AbstractChromatogramSelection implements IChromatogramSelectionWSD {
+public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChromatogramPeakWSD, IChromatogramWSD> implements IChromatogramSelectionWSD {
 
 	private static final long serialVersionUID = 6548761643931077446L;
 	//
 	private IScanWSD selectedScan;
-	private IPeak selectedPeak;
+	private IChromatogramPeakWSD selectedPeak;
 	private IMarkedWavelengths selectedWavelengths;
 	private IScan identifiedScan;
 
-	public ChromatogramSelectionWSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
+	public ChromatogramSelectionWSD(IChromatogramWSD chromatogram) throws ChromatogramIsNullException {
 
 		this(chromatogram, true);
 	}
 
-	public ChromatogramSelectionWSD(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+	public ChromatogramSelectionWSD(IChromatogramWSD chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
 
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
@@ -48,7 +49,7 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 		/*
 		 * Populate the list with wavelengths from the first scan of the currently loaded chromatogram.
 		 */
-		IChromatogramWSD wsdChromatogram = (IChromatogramWSD)chromatogram;
+		IChromatogramWSD wsdChromatogram = chromatogram;
 		IScanWSD scan = (IScanWSD)wsdChromatogram.getScans().stream().findFirst().get();
 		selectedWavelengths = new MarkedWavelengths();
 		selectedWavelengths.add(scan.getScanSignals().stream().findFirst().get().getWavelength());
@@ -81,7 +82,7 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 	}
 
 	@Override
-	public IPeak getSelectedPeak() {
+	public IChromatogramPeakWSD getSelectedPeak() {
 
 		return selectedPeak;
 	}
@@ -158,9 +159,23 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 	}
 
 	@Override
-	public void setSelectedPeak(IPeak selectedPeak) {
+	public void setSelectedPeak(IChromatogramPeakWSD selectedPeak) {
 
-		System.out.println("Implement Peak WSD");
+		this.selectedPeak = selectedPeak;
+	}
+
+	@Override
+	public void setSelectedPeak(IChromatogramPeakWSD selectedPeak, boolean update) {
+
+		this.selectedPeak = selectedPeak;
+		if(selectedPeak != null) {
+			/*
+			 * Fire update change if neccessary.
+			 */
+			if(update) {
+				fireUpdateChange(false);
+			}
+		}
 	}
 
 	@Override

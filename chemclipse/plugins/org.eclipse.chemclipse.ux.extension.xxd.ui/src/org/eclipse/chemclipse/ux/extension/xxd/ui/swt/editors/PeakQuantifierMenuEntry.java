@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -37,6 +38,7 @@ public class PeakQuantifierMenuEntry extends AbstractChartMenuEntry implements I
 
 	@SuppressWarnings("rawtypes")
 	public PeakQuantifierMenuEntry(ExtendedChromatogramUI extendedChromatogramUI, String name, String peakQuantifierId, String type, IChromatogramSelection chromatogramSelection) {
+
 		this.extendedChromatogramUI = extendedChromatogramUI;
 		this.name = name;
 		this.peakQuantifierId = peakQuantifierId;
@@ -84,7 +86,7 @@ public class PeakQuantifierMenuEntry extends AbstractChartMenuEntry implements I
 		}
 	}
 
-	private List<IPeak> extractPeaks(IChromatogramSelection<? extends IPeak> chromatogramSelection) {
+	private List<IPeak> extractPeaks(IChromatogramSelection<? extends IPeak, ?> chromatogramSelection) {
 
 		IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
 		List<IPeak> peaks = new ArrayList<>();

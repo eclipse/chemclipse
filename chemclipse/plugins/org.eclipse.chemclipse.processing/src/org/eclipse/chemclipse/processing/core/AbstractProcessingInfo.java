@@ -1,14 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2012, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Alexander Kerner - implementation
+ * Alexander Kerner - implementation, Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.core;
 
@@ -17,22 +17,24 @@ import java.util.List;
 
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
-public abstract class AbstractProcessingInfo implements IProcessingInfo {
+public abstract class AbstractProcessingInfo<T> implements IProcessingInfo<T> {
 
 	private List<IProcessingMessage> processingMessages;
-	private Object processingResult;
+	private T processingResult;
 
 	public AbstractProcessingInfo() {
-		processingMessages = new ArrayList<IProcessingMessage>();
+
+		processingMessages = new ArrayList<>();
 	}
 
-	public AbstractProcessingInfo(IProcessingInfo processingInfo) {
+	public AbstractProcessingInfo(IProcessingInfo<T> processingInfo) {
+
 		this();
 		addMessages(processingInfo);
 	}
 
 	@Override
-	public void addMessages(IProcessingInfo processingInfo) {
+	public void addMessages(IProcessingInfo<T> processingInfo) {
 
 		if(processingInfo != null && processingInfo != this) {
 			/*
@@ -90,24 +92,25 @@ public abstract class AbstractProcessingInfo implements IProcessingInfo {
 	}
 
 	@Override
-	public void setProcessingResult(Object processingResult) {
+	public void setProcessingResult(T processingResult) {
 
 		this.processingResult = processingResult;
 	}
 
 	@Override
-	public Object getProcessingResult() {
+	public T getProcessingResult() {
 
 		return processingResult;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getProcessingResult(Class<T> type) throws TypeCastException {
+	public <V> V getProcessingResult(Class<V> type) throws TypeCastException {
 
 		if(type.isInstance(processingResult)) {
-			return (T)processingResult;
+			return (V)processingResult;
 		} else {
-			Class<?> actualClass = (processingResult == null) ? new Exception("NULL").getClass() : processingResult.getClass();
+			Class<?> actualClass = processingResult == null ? new Exception("NULL").getClass() : processingResult.getClass();
 			throw createTypeCastException("Processing Info", actualClass, type);
 		}
 	}
@@ -134,6 +137,7 @@ public abstract class AbstractProcessingInfo implements IProcessingInfo {
 		return false;
 	}
 
+	@Deprecated
 	@Override
 	public TypeCastException createTypeCastException(String description, Class<?> actual, Class<?> expected) {
 

@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.io;
 
@@ -29,8 +30,8 @@ public class MassLibConverter_1_ITest extends TestCase {
 
 		File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CALIBRATION_INF_1));
 		MassLibConverter converter = new MassLibConverter();
-		IProcessingInfo processingInfo = converter.parseRetentionIndices(file);
-		separationColumnIndices = processingInfo.getProcessingResult(ISeparationColumnIndices.class);
+		IProcessingInfo<ISeparationColumnIndices> processingInfo = converter.parseRetentionIndices(file);
+		separationColumnIndices = processingInfo.getProcessingResult();
 		super.setUp();
 	}
 

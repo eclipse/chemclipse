@@ -1,28 +1,29 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2012, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.model.selection;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.numeric.core.Point;
 
-@SuppressWarnings("rawtypes")
-public abstract class AbstractChromatogramSelection implements IChromatogramSelection {
+public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak, C extends IChromatogram<T>> implements IChromatogramSelection<T, C> {
 
 	/**
 	 * Renew this UUID on change.
 	 */
 	private static final long serialVersionUID = -4663012287216101211L;
-	private IChromatogram chromatogram;
+	private C chromatogram;
 	private int startRetentionTime;
 	private int stopRetentionTime;
 	private float startAbundance;
@@ -34,11 +35,13 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 	private boolean lockOffset;
 	private Point offset;
 
-	public AbstractChromatogramSelection(IChromatogram chromatogram) throws ChromatogramIsNullException {
+	public AbstractChromatogramSelection(C chromatogram) throws ChromatogramIsNullException {
+
 		this(chromatogram, true);
 	}
 
-	public AbstractChromatogramSelection(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+	public AbstractChromatogramSelection(C chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+
 		/*
 		 * Check
 		 */
@@ -62,7 +65,7 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 	}
 
 	@Override
-	public IChromatogram getChromatogram() {
+	public C getChromatogram() {
 
 		return chromatogram;
 	}
@@ -283,6 +286,7 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 		if(getClass() != otherObject.getClass()) {
 			return false;
 		}
+		@SuppressWarnings("rawtypes")
 		AbstractChromatogramSelection other = (AbstractChromatogramSelection)otherObject;
 		return getChromatogram() == other.getChromatogram() && getStartRetentionTime() == other.getStartRetentionTime() && getStopRetentionTime() == other.getStopRetentionTime();
 	}

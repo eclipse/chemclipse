@@ -5,10 +5,11 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - support for configuration
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -42,6 +43,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
@@ -114,7 +116,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private OverlayChartSupport overlayChartSupport = new OverlayChartSupport();
 	private ControlDecoration controlDecoration;
-	private Set<String> mirroredSeries = new HashSet<String>();
+	private Set<String> mirroredSeries = new HashSet<>();
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
@@ -951,9 +953,9 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private void refreshUpdateOverlayChart() {
 
 		if(chromatogramSelections.size() > 0) {
-			Set<String> availableSeriesIds = new HashSet<String>();
+			Set<String> availableSeriesIds = new HashSet<>();
 			BaseChart baseChart = chromatogramChart.getBaseChart();
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			int i = 0;
 			for(Entry<IChromatogramSelection, List<String>> entry : chromatogramSelections.entrySet()) {
 				IChromatogramSelection chromatogramSelection = entry.getKey();
@@ -1214,7 +1216,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 
 	private List<Integer> getSelectedIons() {
 
-		List<Integer> selectedIons = new ArrayList<Integer>();
+		List<Integer> selectedIons = new ArrayList<>();
 		String ionsText = textSignalsFromSettings.getText().trim();
 		//
 		IonsValidator ionsValidator = new IonsValidator();
@@ -1334,9 +1336,9 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private boolean isExtractedIonsModusEnabled() {
 
 		Set<DisplayType> overlayType = getOverlayType();
-		return (overlayType.contains(DisplayType.XIC) || //
+		return overlayType.contains(DisplayType.XIC) || //
 				overlayType.contains(DisplayType.SIC) || //
-				overlayType.contains(DisplayType.TSC));
+				overlayType.contains(DisplayType.TSC);
 	}
 
 	private boolean isExtractedWavelengthsModusEnabled() {
@@ -1413,7 +1415,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 			}
 
 			@Override
-			public void setDisplayModus(DisplayModus modus, IChromatogramSelection<?> selection) {
+			public void setDisplayModus(DisplayModus modus, IChromatogramSelection<?, ?> selection) {
 
 				List<String> list = chromatogramSelections.get(selection);
 				if(list != null) {

@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.io;
 
@@ -38,13 +39,13 @@ public class MassLibConverter {
 
 	/**
 	 * Return ISeparationColumnIndices via IProcessingInfo.
-	 * 
+	 *
 	 * @param file
 	 * @return {@link IProcessingInfo}
 	 */
-	public IProcessingInfo parseRetentionIndices(File file) {
+	public IProcessingInfo<ISeparationColumnIndices> parseRetentionIndices(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<ISeparationColumnIndices> processingInfo = new ProcessingInfo<>();
 		ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices();
 		ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
 		/*
@@ -113,9 +114,9 @@ public class MassLibConverter {
 		return processingInfo;
 	}
 
-	public IProcessingInfo parseTargets(File file) {
+	public IProcessingInfo<Map<Integer, String>> parseTargets(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<Map<Integer, String>> processingInfo = new ProcessingInfo<>();
 		Map<Integer, String> targets = new HashMap<>();
 		//
 		try {

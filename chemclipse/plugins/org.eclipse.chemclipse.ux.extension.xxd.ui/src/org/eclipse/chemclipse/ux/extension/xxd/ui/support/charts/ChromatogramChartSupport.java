@@ -5,9 +5,10 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
@@ -85,9 +86,10 @@ public class ChromatogramChartSupport {
 	private boolean showArea = false;
 
 	public ChromatogramChartSupport() {
-		usedColorsNormal = new HashMap<String, Color>();
-		usedColorsSIC = new HashMap<String, Color>();
-		usedColorsSWC = new HashMap<String, Color>();
+
+		usedColorsNormal = new HashMap<>();
+		usedColorsSIC = new HashMap<>();
+		usedColorsSWC = new HashMap<>();
 		loadUserSettings();
 	}
 
@@ -180,36 +182,33 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, seriesId, dataType, derivativeType, color, null, true);
 	}
 
-	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection<?> chromatogramSelection, String seriesId, DisplayType dataType, Color color, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Color color, boolean timeIntervalSelection) {
 
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, DERIVATIVE_NONE, color, true, timeIntervalSelection);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
+	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
 
 		String derivativeType = DERIVATIVE_NONE;
 		return getLineSeriesData(chromatogram, seriesId, dataType, derivativeType, color, signals, true);
 	}
 
-	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
 
 		return getLineSeriesData(chromatogram, seriesId, dataType, DERIVATIVE_NONE, color, signals, false);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?> chromatogramSelection, String seriesId, DisplayType dataType, Color color, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Color color, boolean timeIntervalSelection) {
 
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, DERIVATIVE_NONE, color, false, timeIntervalSelection);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, boolean timeIntervalSelection) {
 
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, derivativeType, color, false, timeIntervalSelection);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
@@ -217,7 +216,6 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivativeType, color, signals, baseline);
 	}
 
-	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		int startScan = 1;
@@ -405,7 +403,7 @@ public class ChromatogramChartSupport {
 		return compressionToLength;
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?> chromatogramSelection, String seriesId, String derivativeType, Color color, boolean baseline, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, String derivativeType, Color color, boolean baseline, boolean timeIntervalSelection) {
 
 		DisplayType dataType = null;
 		if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
@@ -420,7 +418,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, DERIVATIVE_NONE, color, baseline, timeIntervalSelection);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, boolean baseline, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, boolean baseline, boolean timeIntervalSelection) {
 
 		/*
 		 * refreshUpdateOverlayChart

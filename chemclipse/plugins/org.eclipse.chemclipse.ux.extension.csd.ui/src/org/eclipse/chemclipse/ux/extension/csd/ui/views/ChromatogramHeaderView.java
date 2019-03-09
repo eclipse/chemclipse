@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.csd.ui.views;
 
@@ -24,10 +25,8 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -55,6 +54,7 @@ public class ChromatogramHeaderView {
 
 	@Inject
 	public ChromatogramHeaderView(Composite parent, IEventBroker eventBroker) {
+
 		//
 		dateFormat = ValueFormat.getDateFormatEnglish();
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
@@ -95,7 +95,7 @@ public class ChromatogramHeaderView {
 							updateChromatogram(chromatogramOverview);
 						}
 					} catch(Exception e) {
-						logger.warn(e);
+						logger.error(e.getLocalizedMessage(), e);
 					}
 				}
 			};
@@ -111,7 +111,7 @@ public class ChromatogramHeaderView {
 
 	/**
 	 * Sets the chromatogram overview.
-	 * 
+	 *
 	 * @param chromatogramOverview
 	 */
 	private void updateChromatogram(IChromatogramOverview chromatogramOverview) {
@@ -132,8 +132,8 @@ public class ChromatogramHeaderView {
 			addHeaderLine(builder, "Misc (separated)", chromatogramOverview.getMiscInfoSeparated());
 			addHeaderLine(builder, "Details", chromatogramOverview.getDetailedInfo());
 			addHeaderLine(builder, "Scans", Integer.toString(chromatogramOverview.getNumberOfScans()));
-			addHeaderLine(builder, "Start RT (min)", decimalFormat.format(chromatogramOverview.getStartRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-			addHeaderLine(builder, "Stop RT (min)", decimalFormat.format(chromatogramOverview.getStopRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+			addHeaderLine(builder, "Start RT (min)", decimalFormat.format(chromatogramOverview.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+			addHeaderLine(builder, "Stop RT (min)", decimalFormat.format(chromatogramOverview.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 			addHeaderLine(builder, "Barcode", chromatogramOverview.getBarcode());
 			text.setText(builder.toString());
 		}
@@ -149,7 +149,7 @@ public class ChromatogramHeaderView {
 
 	/**
 	 * Try to show the overview of the given chromatogram overview.
-	 * 
+	 *
 	 * @param file
 	 * @throws FileIsEmptyException
 	 * @throws FileIsNotReadableException
@@ -165,14 +165,10 @@ public class ChromatogramHeaderView {
 			/*
 			 * Load the chromatogram overview.
 			 */
-			IProcessingInfo processingInfo = ChromatogramConverterCSD.getInstance().convertOverview(file, new NullProgressMonitor());
-			try {
-				IChromatogramOverview chromatogramOverview = processingInfo.getProcessingResult(IChromatogramOverview.class);
-				if(chromatogramOverview != null) {
-					updateChromatogram(chromatogramOverview);
-				}
-			} catch(TypeCastException e) {
-				logger.warn(e);
+			IProcessingInfo<IChromatogramOverview> processingInfo = ChromatogramConverterCSD.getInstance().convertOverview(file, new NullProgressMonitor());
+			IChromatogramOverview chromatogramOverview = processingInfo.getProcessingResult();
+			if(chromatogramOverview != null) {
+				updateChromatogram(chromatogramOverview);
 			}
 		}
 	}

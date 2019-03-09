@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2011, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks;
 
@@ -20,13 +21,13 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
-public abstract class AbstractPeakIntegrator implements IPeakIntegrator {
+public abstract class AbstractPeakIntegrator<T> implements IPeakIntegrator<T> {
 
 	public static final String DESCRIPTION = "Peak Integrator";
 
-	protected IProcessingInfo validate(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings) {
+	protected IProcessingInfo<T> validate(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		if(peak == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The given peak must not be null.");
 		}
@@ -34,9 +35,9 @@ public abstract class AbstractPeakIntegrator implements IPeakIntegrator {
 		return processingInfo;
 	}
 
-	protected IProcessingInfo validate(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings) {
+	protected IProcessingInfo<T> validate(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		if(peaks == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The given list of peaks must not be null.");
 		}
@@ -44,14 +45,13 @@ public abstract class AbstractPeakIntegrator implements IPeakIntegrator {
 		return processingInfo;
 	}
 
-	@SuppressWarnings("rawtypes")
-	protected IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings) {
+	protected IProcessingInfo<T> validate(IChromatogramSelection<?, ?> chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram selection must not be null.");
 		}
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		if(chromatogram == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram must not be null.");
 		}
@@ -59,7 +59,7 @@ public abstract class AbstractPeakIntegrator implements IPeakIntegrator {
 		return processingInfo;
 	}
 
-	private void testPeakIntegrationSettings(IPeakIntegrationSettings peakIntegrationSettings, IProcessingInfo processingInfo) {
+	private void testPeakIntegrationSettings(IPeakIntegrationSettings peakIntegrationSettings, IProcessingInfo<T> processingInfo) {
 
 		if(peakIntegrationSettings == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The given peak integration settings must not be null");

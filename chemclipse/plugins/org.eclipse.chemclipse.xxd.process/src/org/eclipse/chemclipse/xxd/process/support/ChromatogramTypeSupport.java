@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
 
@@ -19,6 +20,7 @@ import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCS
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -41,19 +43,19 @@ public class ChromatogramTypeSupport {
 	private List<ISupplierFileIdentifier> supplierEditorSupportList = new ArrayList<>();
 
 	public ChromatogramTypeSupport() {
+
 		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.MSD));
 		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.CSD));
 		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.WSD));
 	}
 
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo getChromatogramSelection(String pathChromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramSelection<?, ?>> getChromatogramSelection(String pathChromatogram, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IChromatogramSelection<?, ?>> processingInfo = new ProcessingInfo<>();
 		File file = new File(pathChromatogram);
 		DataType dataType = detectDataType(file);
 		if(dataType != null) {
-			IChromatogramSelection chromatogramSelection = null;
+			IChromatogramSelection<? extends IChromatogramPeak, ?> chromatogramSelection = null;
 			boolean fireUpdate = false;
 			//
 			switch(dataType) {
@@ -61,18 +63,18 @@ public class ChromatogramTypeSupport {
 				case MSD_TANDEM:
 				case MSD_HIGHRES:
 				case MSD:
-					IProcessingInfo processingInfoMSD = ChromatogramConverterMSD.getInstance().convert(file, monitor);
-					IChromatogramMSD chromatogramMSD = processingInfoMSD.getProcessingResult(IChromatogramMSD.class);
+					IProcessingInfo<IChromatogramMSD> processingInfoMSD = ChromatogramConverterMSD.getInstance().convert(file, monitor);
+					IChromatogramMSD chromatogramMSD = processingInfoMSD.getProcessingResult();
 					chromatogramSelection = new ChromatogramSelectionMSD(chromatogramMSD, fireUpdate);
 					break;
 				case CSD:
-					IProcessingInfo processingInfoCSD = ChromatogramConverterCSD.getInstance().convert(file, monitor);
-					IChromatogramCSD chromatogramCSD = processingInfoCSD.getProcessingResult(IChromatogramCSD.class);
+					IProcessingInfo<IChromatogramCSD> processingInfoCSD = ChromatogramConverterCSD.getInstance().convert(file, monitor);
+					IChromatogramCSD chromatogramCSD = processingInfoCSD.getProcessingResult();
 					chromatogramSelection = new ChromatogramSelectionCSD(chromatogramCSD, fireUpdate);
 					break;
 				case WSD:
-					IProcessingInfo processingInfoWSD = ChromatogramConverterWSD.getInstance().convert(file, monitor);
-					IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult(IChromatogramWSD.class);
+					IProcessingInfo<IChromatogramWSD> processingInfoWSD = ChromatogramConverterWSD.getInstance().convert(file, monitor);
+					IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult();
 					chromatogramSelection = new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate);
 					break;
 				default:

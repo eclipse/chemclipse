@@ -1,13 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.impl;
 
@@ -61,7 +62,8 @@ public class ChromatogramFilterTargetTransfer extends AbstractChromatogramFilter
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void transferScanTargets(IChromatogramSelection<? extends IPeak> chromatogramSelection, FilterSettingsTargetTransfer filterSettings) {
+	@SuppressWarnings("unchecked")
+	private void transferScanTargets(IChromatogramSelection chromatogramSelection, FilterSettingsTargetTransfer filterSettings) {
 
 		List<? extends IPeak> peaks = chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
 		List<IScan> identifiedScans = extractIdentifiedScans(chromatogramSelection);
@@ -79,7 +81,8 @@ public class ChromatogramFilterTargetTransfer extends AbstractChromatogramFilter
 		}
 	}
 
-	private List<IScan> extractIdentifiedScans(IChromatogramSelection<? extends IPeak> chromatogramSelection) {
+	@SuppressWarnings("unchecked")
+	private List<IScan> extractIdentifiedScans(IChromatogramSelection chromatogramSelection) {
 
 		IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
 		int startRetentionTime = chromatogramSelection.getStartRetentionTime();

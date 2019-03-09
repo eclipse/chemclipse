@@ -5,9 +5,10 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -48,7 +49,7 @@ import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
 /**
  * This class handles all the hard parts of creating of filter menu items out of filterable objects
- * 
+ *
  * @author Christoph Läubrich
  *
  */
@@ -61,12 +62,12 @@ public class FilterMenuFactory {
 	private static final String CATEGORY_SELECTION_PEAKS = "Filter Peaks in Selection";
 	private static final String CATEGORY_ALL_SCANS = "Filter all Scans";
 
-	public static List<IChartMenuEntry> createChromatogramSelectionEntries(FilterFactory filterFactory, Supplier<IChromatogramSelection<?>> supplier) {
+	public static List<IChartMenuEntry> createChromatogramSelectionEntries(FilterFactory filterFactory, Supplier<IChromatogramSelection<?, ?>> supplier) {
 
 		List<IChartMenuEntry> result = new ArrayList<>();
 		Collection<IChromatogramSelectionFilter<?>> chromatogramSelectionFilter = filterFactory.getFilters(FilterFactory.genericClass(IChromatogramSelectionFilter.class), new BiFunction<IChromatogramSelectionFilter<?>, Map<String, ?>, Boolean>() {
 
-			private IChromatogramSelection<?> chromatogramSelection = supplier.get();
+			private IChromatogramSelection<?, ?> chromatogramSelection = supplier.get();
 
 			@Override
 			public Boolean apply(IChromatogramSelectionFilter<?> t, Map<String, ?> u) {
@@ -85,7 +86,7 @@ public class FilterMenuFactory {
 			@Override
 			public IChromatogram<?> get() {
 
-				IChromatogramSelection<?> selection = supplier.get();
+				IChromatogramSelection<?, ?> selection = supplier.get();
 				if(selection != null) {
 					return selection.getChromatogram();
 				}
@@ -369,20 +370,20 @@ public class FilterMenuFactory {
 		}
 	}
 
-	private static final class ChromatogramSelectionFilterMenuEntry<T> extends AbstractFilterChartMenuEntry<IChromatogramSelectionFilter<T>, IChromatogramSelection<?>> {
+	private static final class ChromatogramSelectionFilterMenuEntry<T> extends AbstractFilterChartMenuEntry<IChromatogramSelectionFilter<T>, IChromatogramSelection<?, ?>> {
 
-		public ChromatogramSelectionFilterMenuEntry(IChromatogramSelectionFilter<T> filter, Supplier<? extends IChromatogramSelection<?>> supplier) {
+		public ChromatogramSelectionFilterMenuEntry(IChromatogramSelectionFilter<T> filter, Supplier<? extends IChromatogramSelection<?, ?>> supplier) {
 			super(CATEGORY_SELECTION, filter, supplier);
 		}
 
 		@Override
-		protected boolean isValid(IChromatogramSelectionFilter<T> filter, IChromatogramSelection<?> item) {
+		protected boolean isValid(IChromatogramSelectionFilter<T> filter, IChromatogramSelection<?, ?> item) {
 
 			return filter.acceptsIChromatogramSelection(item);
 		}
 
 		@Override
-		protected IProcessingResult<Boolean> filter(IChromatogramSelectionFilter<T> filter, IChromatogramSelection<?> item, IProgressMonitor monitor) {
+		protected IProcessingResult<Boolean> filter(IChromatogramSelectionFilter<T> filter, IChromatogramSelection<?, ?> item, IProgressMonitor monitor) {
 
 			T configuration = filter.createConfiguration(item);
 			return filter.filterIChromatogramSelections(FilterList.singelton(item), configuration, monitor);

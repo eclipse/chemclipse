@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2012, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.csd.ui.views;
 
@@ -23,7 +24,6 @@ import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCS
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.components.chromatogram.ChromatogramOverviewUI;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -47,6 +47,7 @@ public class ChromatogramOverviewView {
 
 	@Inject
 	public ChromatogramOverviewView(Composite parent, IEventBroker eventBroker) {
+
 		chromatogramOverviewUI = new ChromatogramOverviewUI(parent, SWT.NONE);
 		if(eventBroker != null) {
 			/*
@@ -54,6 +55,7 @@ public class ChromatogramOverviewView {
 			 */
 			EventHandler eventHandlerFileOverview = new EventHandler() {
 
+				@Override
 				public void handleEvent(Event event) {
 
 					try {
@@ -62,7 +64,7 @@ public class ChromatogramOverviewView {
 							setChromatogram((File)object);
 						}
 					} catch(Exception e) {
-						logger.warn(e);
+						logger.error(e.getLocalizedMessage(), e);
 					}
 				}
 			};
@@ -72,6 +74,7 @@ public class ChromatogramOverviewView {
 			 */
 			EventHandler eventHandlerInstanceOverview = new EventHandler() {
 
+				@Override
 				public void handleEvent(Event event) {
 
 					try {
@@ -81,7 +84,7 @@ public class ChromatogramOverviewView {
 							updateChromatogram(chromatogramOverview);
 						}
 					} catch(Exception e) {
-						logger.warn(e);
+						logger.error(e.getLocalizedMessage(), e);
 					}
 				}
 			};
@@ -97,7 +100,7 @@ public class ChromatogramOverviewView {
 
 	/**
 	 * Sets the chromatogram overview.
-	 * 
+	 *
 	 * @param chromatogramOverview
 	 */
 	private void updateChromatogram(IChromatogramOverview chromatogramOverview) {
@@ -109,7 +112,7 @@ public class ChromatogramOverviewView {
 
 	/**
 	 * Try to show the overview of the given chromatogram overview.
-	 * 
+	 *
 	 * @param file
 	 * @throws FileIsEmptyException
 	 * @throws FileIsNotReadableException
@@ -125,14 +128,10 @@ public class ChromatogramOverviewView {
 			/*
 			 * Load the chromatogram overview.
 			 */
-			IProcessingInfo processingInfo = ChromatogramConverterCSD.getInstance().convertOverview(file, new NullProgressMonitor());
-			try {
-				IChromatogramOverview chromatogramOverview = processingInfo.getProcessingResult(IChromatogramOverview.class);
-				if(chromatogramOverview != null) {
-					updateChromatogram(chromatogramOverview);
-				}
-			} catch(TypeCastException e) {
-				logger.warn(e);
+			IProcessingInfo<IChromatogramOverview> processingInfo = ChromatogramConverterCSD.getInstance().convertOverview(file, new NullProgressMonitor());
+			IChromatogramOverview chromatogramOverview = processingInfo.getProcessingResult();
+			if(chromatogramOverview != null) {
+				updateChromatogram(chromatogramOverview);
 			}
 		}
 	}

@@ -5,9 +5,10 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -208,19 +209,19 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private HeatmapUI heatmapUI;
 	private Composite heatmapArea;
 	//
-	private IChromatogramSelection<?> chromatogramSelection = null;
+	private IChromatogramSelection<?, ?> chromatogramSelection = null;
 	//
-	private List<IChartMenuEntry> chartMenuEntriesCalculators = new ArrayList<IChartMenuEntry>();
-	private List<IChartMenuEntry> chartMenuEntriesClassifier = new ArrayList<IChartMenuEntry>();
-	private List<IChartMenuEntry> chartMenuEntriesFilter = new ArrayList<IChartMenuEntry>();
-	private List<IChartMenuEntry> chartMenuEntriesPeakDetectors = new ArrayList<IChartMenuEntry>();
-	private List<IChartMenuEntry> chartMenuEntriesPeakIntegrators = new ArrayList<IChartMenuEntry>();
-	private List<IChartMenuEntry> chartMenuEntriesPeakIdentifier = new ArrayList<IChartMenuEntry>();
-	private List<IChartMenuEntry> chartMenuEntriesPeakQuantifier = new ArrayList<IChartMenuEntry>();
-	private List<IChartMenuEntry> chartMenuEntriesReports = new ArrayList<IChartMenuEntry>();
+	private List<IChartMenuEntry> chartMenuEntriesCalculators = new ArrayList<>();
+	private List<IChartMenuEntry> chartMenuEntriesClassifier = new ArrayList<>();
+	private List<IChartMenuEntry> chartMenuEntriesFilter = new ArrayList<>();
+	private List<IChartMenuEntry> chartMenuEntriesPeakDetectors = new ArrayList<>();
+	private List<IChartMenuEntry> chartMenuEntriesPeakIntegrators = new ArrayList<>();
+	private List<IChartMenuEntry> chartMenuEntriesPeakIdentifier = new ArrayList<>();
+	private List<IChartMenuEntry> chartMenuEntriesPeakQuantifier = new ArrayList<>();
+	private List<IChartMenuEntry> chartMenuEntriesReports = new ArrayList<>();
 	//
-	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
-	private Map<String, IdentificationLabelMarker> scanLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
+	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<>();
+	private Map<String, IdentificationLabelMarker> scanLabelMarkerMap = new HashMap<>();
 	//
 	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
@@ -446,7 +447,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_SCAN);
 		chromatogramChart.deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
 		//
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 		addSelectedScanData(lineSeriesDataList);
 		addSelectedIdentifiedScanData(lineSeriesDataList);
 		addLineSeriesData(lineSeriesDataList);
@@ -459,7 +460,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_SHAPE);
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_BACKGROUND);
 		//
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 		addSelectedPeakData(lineSeriesDataList);
 		addLineSeriesData(lineSeriesDataList);
 		adjustChromatogramSelectionRange();
@@ -519,11 +520,11 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			for(ISecondaryAxisSettings axisSetting : axisSettings) {
 				if(axisSetting.getTitle().equals("Minutes")) {
 					if(deltaRetentionTime >= FIVE_MINUTES) {
-						axisSetting.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
+						axisSetting.setDecimalFormat(new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH)));
 					} else if(deltaRetentionTime >= THREE_MINUTES) {
-						axisSetting.setDecimalFormat(new DecimalFormat(("0.000"), new DecimalFormatSymbols(Locale.ENGLISH)));
+						axisSetting.setDecimalFormat(new DecimalFormat("0.000", new DecimalFormatSymbols(Locale.ENGLISH)));
 					} else {
-						axisSetting.setDecimalFormat(new DecimalFormat(("0.0000"), new DecimalFormatSymbols(Locale.ENGLISH)));
+						axisSetting.setDecimalFormat(new DecimalFormat("0.0000", new DecimalFormatSymbols(Locale.ENGLISH)));
 					}
 				}
 			}
@@ -637,10 +638,10 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		if(filterFactory == null) {
 			return;
 		}
-		List<IChartMenuEntry> entries = FilterMenuFactory.createChromatogramSelectionEntries(filterFactory, new Supplier<IChromatogramSelection<?>>() {
+		List<IChartMenuEntry> entries = FilterMenuFactory.createChromatogramSelectionEntries(filterFactory, new Supplier<IChromatogramSelection<?, ?>>() {
 
 			@Override
-			public IChromatogramSelection<?> get() {
+			public IChromatogramSelection<?, ?> get() {
 
 				return chromatogramSelection;
 			}
@@ -1000,7 +1001,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private void addChromatogramSeriesData() {
 
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 		//
 		addChromatogramData(lineSeriesDataList);
 		addPeakData(lineSeriesDataList);
@@ -1030,10 +1031,10 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 			//
 			List<? extends IPeak> peaks = chromatogramDataSupport.getPeaks(chromatogram);
-			List<IPeak> peaksActiveNormal = new ArrayList<IPeak>();
-			List<IPeak> peaksInactiveNormal = new ArrayList<IPeak>();
-			List<IPeak> peaksActiveISTD = new ArrayList<IPeak>();
-			List<IPeak> peaksInactiveISTD = new ArrayList<IPeak>();
+			List<IPeak> peaksActiveNormal = new ArrayList<>();
+			List<IPeak> peaksInactiveNormal = new ArrayList<>();
+			List<IPeak> peaksActiveISTD = new ArrayList<>();
+			List<IPeak> peaksInactiveISTD = new ArrayList<>();
 			//
 			for(IPeak peak : peaks) {
 				if(peak.getInternalStandards().size() > 0) {
@@ -1639,12 +1640,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		//
 		ISecondaryAxisSettings secondaryAxisScanNumber = null;
 		exitloop:
-		for(ISecondaryAxisSettings secondaryAxis : secondaryAxisSettings) {
-			if(secondaryAxis.getLabel().equals(LABEL_SCAN_NUMBER)) {
-				secondaryAxisScanNumber = secondaryAxis;
-				break exitloop;
+			for(ISecondaryAxisSettings secondaryAxis : secondaryAxisSettings) {
+				if(secondaryAxis.getLabel().equals(LABEL_SCAN_NUMBER)) {
+					secondaryAxisScanNumber = secondaryAxis;
+					break exitloop;
+				}
 			}
-		}
 		//
 		if(secondaryAxisScanNumber != null) {
 			secondaryAxisSettings.remove(secondaryAxisScanNumber);
@@ -1669,12 +1670,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				String name = separationColumn.getName();
 				int index = -1;
 				exitloop:
-				for(String item : comboViewerSeparationColumn.getCombo().getItems()) {
-					index++;
-					if(item.equals(name)) {
-						break exitloop;
+					for(String item : comboViewerSeparationColumn.getCombo().getItems()) {
+						index++;
+						if(item.equals(name)) {
+							break exitloop;
+						}
 					}
-				}
 				//
 				if(index >= 0) {
 					comboViewerSeparationColumn.getCombo().select(index);

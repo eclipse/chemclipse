@@ -5,9 +5,10 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
@@ -311,7 +312,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						IProcessingInfo processingInfo = MethodConverter.convert(file, monitor);
+						IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, monitor);
 						if(!processingInfo.hasErrorMessages()) {
 							try {
 								IProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
@@ -377,7 +378,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 			/*
 			 * No fork, otherwise it might crash when loading a chromatogram takes too long.
 			 */
-			boolean fork = (batch) ? false : true;
+			boolean fork = batch ? false : true;
 			dialog.run(fork, false, runnable);
 			chromatogramSelection = runnable.getChromatogramSelection();
 			chromatogramFile = file;

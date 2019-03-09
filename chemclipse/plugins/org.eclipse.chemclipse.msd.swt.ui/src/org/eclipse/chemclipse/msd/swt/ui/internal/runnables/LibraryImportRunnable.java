@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.runnables;
 
@@ -26,6 +27,7 @@ public class LibraryImportRunnable implements IRunnableWithProgress {
 	private IMassSpectra massSpectra;
 
 	public LibraryImportRunnable(File file) {
+
 		this.file = file;
 	}
 
@@ -37,7 +39,7 @@ public class LibraryImportRunnable implements IRunnableWithProgress {
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		IProcessingInfo processingInfo = DatabaseConverter.convert(file, monitor);
+		IProcessingInfo<IMassSpectra> processingInfo = DatabaseConverter.convert(file, monitor);
 		massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
 	}
 }

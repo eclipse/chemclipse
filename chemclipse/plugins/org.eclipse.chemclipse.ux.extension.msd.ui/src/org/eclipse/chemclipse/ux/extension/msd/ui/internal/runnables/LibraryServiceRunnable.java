@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2016, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.internal.runnables;
 
@@ -30,6 +31,7 @@ public class LibraryServiceRunnable implements IRunnableWithProgress {
 	private IIdentificationTarget identificationTarget;
 
 	public LibraryServiceRunnable(AbstractMassSpectrumLibraryView massSpectrumLibraryView, IScanMSD unknownMassSpectrum, IIdentificationTarget identificationTarget) {
+
 		this.massSpectrumLibraryView = massSpectrumLibraryView;
 		this.unknownMassSpectrum = unknownMassSpectrum;
 		this.identificationTarget = identificationTarget;
@@ -41,8 +43,8 @@ public class LibraryServiceRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Library Service", IProgressMonitor.UNKNOWN);
 			try {
-				IProcessingInfo processingInfo = LibraryService.identify(identificationTarget, monitor);
-				IMassSpectra massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
+				IProcessingInfo<IMassSpectra> processingInfo = LibraryService.identify(identificationTarget, monitor);
+				IMassSpectra massSpectra = processingInfo.getProcessingResult();
 				if(massSpectra.size() > 0) {
 					IScanMSD libraryMassSpectrum = massSpectra.getMassSpectrum(1);
 					updateSelection(unknownMassSpectrum, libraryMassSpectrum, true);

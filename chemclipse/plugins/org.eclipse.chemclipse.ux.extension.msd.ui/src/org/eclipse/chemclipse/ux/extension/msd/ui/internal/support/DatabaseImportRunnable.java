@@ -1,13 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.internal.support;
 
@@ -28,6 +29,7 @@ public class DatabaseImportRunnable implements IRunnableWithProgress {
 	private IMassSpectra massSpectra;
 
 	public DatabaseImportRunnable(File file) {
+
 		this.file = file;
 	}
 
@@ -42,7 +44,7 @@ public class DatabaseImportRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Import Database", IProgressMonitor.UNKNOWN);
 			IProcessingInfo processingInfo = DatabaseConverter.convert(file, monitor);
-			massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
+			massSpectra = (IMassSpectra)processingInfo.getProcessingResult(IMassSpectra.class);
 		} catch(Exception e) {
 			/*
 			 * Exceptions: FileNotFoundException
@@ -50,7 +52,7 @@ public class DatabaseImportRunnable implements IRunnableWithProgress {
 			 * FileIsNotReadableException FileIsEmptyException
 			 * ChromatogramIsNullException
 			 */
-			logger.warn(e);
+			logger.error(e.getLocalizedMessage(), e);
 		} finally {
 			monitor.done();
 		}

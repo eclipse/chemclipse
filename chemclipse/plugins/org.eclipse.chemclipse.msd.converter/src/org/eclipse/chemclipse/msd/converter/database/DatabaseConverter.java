@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.database;
 
@@ -43,7 +44,7 @@ import org.eclipse.core.runtime.Platform;
  * AMDIS *.msl<br/>
  * JCAMP-DX *.jdx<br/>
  * ASCII *.txt<br/>
- * 
+ *
  * @author eselmeister
  */
 public class DatabaseConverter {
@@ -55,23 +56,24 @@ public class DatabaseConverter {
 	 * This class has only static methods.
 	 */
 	private DatabaseConverter() {
+
 	}
 
 	/**
 	 * Imports mass spectra from the given file converted by the given converter.
-	 * 
+	 *
 	 * @param file
 	 * @param converterId
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo convert(File file, String converterId, IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> convert(File file, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<T> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
-		IDatabaseImportConverter importConverter = getDatabaseImportConverter(converterId);
+		IDatabaseImportConverter<T> importConverter = getDatabaseImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
@@ -82,27 +84,27 @@ public class DatabaseConverter {
 
 	/**
 	 * Imports mass spectra from the given file.
-	 * 
+	 *
 	 * @param file
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = getMassSpectra(file, monitor);
+		IProcessingInfo<T> processingInfo = getMassSpectra(file, monitor);
 		return processingInfo;
 	}
 
 	/**
 	 * Returns the mass spectra.
-	 * 
+	 *
 	 * @param chromatogram
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	private static IProcessingInfo getMassSpectra(final File file, IProgressMonitor monitor) {
+	private static <T> IProcessingInfo<T> getMassSpectra(final File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo();
 		DatabaseConverterSupport converterSupport = getDatabaseConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
@@ -111,7 +113,7 @@ public class DatabaseConverter {
 				 * Do not use a safe runnable here, because a IMassSpectra
 				 * object must be returned or null.
 				 */
-				IDatabaseImportConverter importConverter = getDatabaseImportConverter(converterId);
+				IDatabaseImportConverter<T> importConverter = getDatabaseImportConverter(converterId);
 				if(importConverter != null) {
 					/*
 					 * Why should the method not declare the exceptions that
@@ -149,7 +151,7 @@ public class DatabaseConverter {
 
 	/**
 	 * Exports the mass spectrum.
-	 * 
+	 *
 	 * @param file
 	 * @param massSpectrum
 	 * @param append
@@ -157,13 +159,13 @@ public class DatabaseConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, String converterId, IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> convert(File file, IScanMSD massSpectrum, boolean append, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<T> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
-		IDatabaseExportConverter exportConverter = getDatabaseExportConverter(converterId);
+		IDatabaseExportConverter<T> exportConverter = getDatabaseExportConverter(converterId);
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, massSpectrum, append, monitor);
 		} else {
@@ -174,7 +176,7 @@ public class DatabaseConverter {
 
 	/**
 	 * Exports the mass spectra.
-	 * 
+	 *
 	 * @param file
 	 * @param massSpectra
 	 * @param append
@@ -182,13 +184,13 @@ public class DatabaseConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, String converterId, IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> convert(File file, IMassSpectra massSpectra, boolean append, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<T> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
-		IDatabaseExportConverter exportConverter = getDatabaseExportConverter(converterId);
+		IDatabaseExportConverter<T> exportConverter = getDatabaseExportConverter(converterId);
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, massSpectra, append, monitor);
 		} else {
@@ -202,20 +204,21 @@ public class DatabaseConverter {
 	/**
 	 * Returns an IDatabaseImportConverter instance or null if none is
 	 * available.
-	 * 
+	 *
 	 * @param converterId
 	 * @return IDatabaseImportConverter
 	 */
-	private static IDatabaseImportConverter getDatabaseImportConverter(final String converterId) {
+	@SuppressWarnings("unchecked")
+	private static <T> IDatabaseImportConverter<T> getDatabaseImportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IDatabaseImportConverter instance = null;
+		IDatabaseImportConverter<T> instance = null;
 		if(element != null) {
 			try {
-				instance = (IDatabaseImportConverter)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
+				instance = (IDatabaseImportConverter<T>)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
@@ -224,20 +227,21 @@ public class DatabaseConverter {
 	/**
 	 * Returns an IDatabaseExportConverter instance or null if none is
 	 * available.
-	 * 
+	 *
 	 * @param converterId
 	 * @return IDatabaseExportConverter
 	 */
-	private static IDatabaseExportConverter getDatabaseExportConverter(final String converterId) {
+	@SuppressWarnings("unchecked")
+	private static <T> IDatabaseExportConverter<T> getDatabaseExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IDatabaseExportConverter instance = null;
+		IDatabaseExportConverter<T> instance = null;
 		if(element != null) {
 			try {
-				instance = (IDatabaseExportConverter)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
+				instance = (IDatabaseExportConverter<T>)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
@@ -246,7 +250,7 @@ public class DatabaseConverter {
 	/**
 	 * Returns an IChromatogramExportConverter instance or null if none is
 	 * available.
-	 * 
+	 *
 	 * @param converterId
 	 * @return IConfigurationElement
 	 */
@@ -271,7 +275,7 @@ public class DatabaseConverter {
 	 * about all valid and registered mass spectrum converters.<br/>
 	 * It can be used to get more information about the registered converters
 	 * such like filter names, file extensions.
-	 * 
+	 *
 	 * @return ChromatogramConverterSupport
 	 */
 	public static DatabaseConverterSupport getDatabaseConverterSupport() {
@@ -324,17 +328,17 @@ public class DatabaseConverter {
 	}
 
 	// ---------------------------------------------ConverterMethods
-	private static IProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
+	private static <T> IProcessingInfo<T> getNoExportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "Database Export Converter", "There is no suitable converter available to export the mass spectra to the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
 	}
 
-	private static IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
+	private static <T> IProcessingInfo<T> getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "Database Import Converter", "There is no suitable converter available to load the mass spectra from the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

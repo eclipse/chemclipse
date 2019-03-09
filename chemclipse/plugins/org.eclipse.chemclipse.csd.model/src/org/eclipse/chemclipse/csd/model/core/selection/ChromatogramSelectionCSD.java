@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2013, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.model.core.selection;
 
@@ -18,12 +19,11 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.notifier.ChromatogramSelectionCSDUpdateNotifier;
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 
-public class ChromatogramSelectionCSD extends AbstractChromatogramSelection implements IChromatogramSelectionCSD {
+public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChromatogramPeakCSD, IChromatogramCSD> implements IChromatogramSelectionCSD {
 
 	private static final long serialVersionUID = -2614321209701949490L;
 	//
@@ -31,13 +31,13 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 	private IChromatogramPeakCSD selectedPeak;
 	private IScan identifiedScan;
 
-	@SuppressWarnings("rawtypes")
-	public ChromatogramSelectionCSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
+	public ChromatogramSelectionCSD(IChromatogramCSD chromatogram) throws ChromatogramIsNullException {
+
 		this(chromatogram, true);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ChromatogramSelectionCSD(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+	public ChromatogramSelectionCSD(IChromatogramCSD chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.
@@ -46,6 +46,7 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 		reset(fireUpdate);
 	}
 
+	@Override
 	public void dispose() {
 
 		super.dispose();
@@ -156,14 +157,6 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 			if(update) {
 				ChromatogramSelectionCSDUpdateNotifier.fireUpdateChange(this, false);
 			}
-		}
-	}
-
-	@Override
-	public void setSelectedPeak(IPeak selectedPeak) {
-
-		if(selectedPeak instanceof IChromatogramPeakCSD) {
-			setSelectedPeak((IChromatogramPeakCSD)selectedPeak, false);
 		}
 	}
 
