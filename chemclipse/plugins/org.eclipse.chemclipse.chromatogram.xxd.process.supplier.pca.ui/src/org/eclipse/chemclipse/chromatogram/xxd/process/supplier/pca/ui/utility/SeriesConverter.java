@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -52,7 +52,7 @@ public class SeriesConverter {
 			double y = pcaResults.getLoadingVectors().get(pcY - 1)[i];
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
-			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
+			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getSettings();
 			Color color = PcaColorGroup.getSampleColorSWT(variable);
 			if(variable.isSelected()) {
 				scatterSeriesSettings.setSymbolColor(color);
@@ -93,7 +93,7 @@ public class SeriesConverter {
 			double y = pcaResults.getLoadingVectors().get(pcY - 1)[i];
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
-			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
+			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getSettings();
 			Color color = PcaColorGroup.getSampleColorSWT(variable);
 			if(variable.isSelected()) {
 				scatterSeriesSettings.setSymbolColor(color);
@@ -139,7 +139,7 @@ public class SeriesConverter {
 			 * Set the color.
 			 */
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
-			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
+			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getSettings();
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_TYPE)));
 			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_SIZE));
 			Color color = PcaColorGroup.getSampleColorSWT(pcaResult);
