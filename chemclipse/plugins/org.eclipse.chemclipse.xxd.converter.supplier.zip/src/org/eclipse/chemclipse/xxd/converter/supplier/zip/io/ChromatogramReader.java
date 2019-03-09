@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2012, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.zip.io;
 
@@ -34,7 +35,6 @@ import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMS
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.xxd.converter.supplier.zip.internal.converter.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.zip.internal.converter.PathHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -50,7 +50,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 		/*
 		 * All chromatogram file extensions.
 		 */
-		chromatogramFileExtensions = new ArrayList<String>();
+		chromatogramFileExtensions = new ArrayList<>();
 		IChromatogramConverterSupport support = ChromatogramConverterMSD.getInstance().getChromatogramConverterSupport();
 		for(ISupplier supplier : support.getSupplier()) {
 			chromatogramFileExtensions.add(supplier.getFileExtension());
@@ -70,24 +70,16 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		File fileChromatogram = extractChromatogramFile(file, monitor);
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileChromatogram, monitor);
-		try {
-			return processingInfo.getProcessingResult(IChromatogramMSD.class);
-		} catch(TypeCastException e) {
-			throw new IOException(e);
-		}
+		IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(fileChromatogram, monitor);
+		return processingInfo.getProcessingResult();
 	}
 
 	@Override
 	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		File fileChromatogram = extractChromatogramFile(file, monitor);
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convertOverview(fileChromatogram, monitor);
-		try {
-			return processingInfo.getProcessingResult(IChromatogramOverview.class);
-		} catch(TypeCastException e) {
-			throw new IOException(e);
-		}
+		IProcessingInfo<IChromatogramOverview> processingInfo = ChromatogramConverterMSD.getInstance().convertOverview(fileChromatogram, monitor);
+		return processingInfo.getProcessingResult();
 	}
 
 	private File extractChromatogramFile(File file, IProgressMonitor monitor) throws IOException {
@@ -126,7 +118,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 
 	/**
 	 * This method returns null if no directory have been found.
-	 * 
+	 *
 	 * @param file
 	 * @param destinationDirectory
 	 * @param monitor
