@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core;
 
@@ -19,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.filter.exceptions.ChromatogramSelecti
 import org.eclipse.chemclipse.chromatogram.filter.exceptions.FilterSettingsException;
 import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoFilterAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
@@ -58,7 +58,7 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		 * Import
 		 */
 		fileImport = new File("E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705.D\\DATA.MS");
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 	}
