@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -95,7 +95,7 @@ public class FileIdentifier {
 
 	/**
 	 * Run the peak identification.
-	 * 
+	 *
 	 * @param peaks
 	 * @param peakIdentifierSettings
 	 * @param processingInfo
@@ -103,7 +103,7 @@ public class FileIdentifier {
 	 * @return {@link IPeakIdentificationResults}
 	 * @throws FileNotFoundException
 	 */
-	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
+	public IPeakIdentificationResults runPeakIdentification(List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
 		/*
 		 * The alternate identifier is used, when another plugin tries to use this file identification process.
@@ -140,7 +140,7 @@ public class FileIdentifier {
 
 	/**
 	 * Returns identified mass spectra from the database.
-	 * 
+	 *
 	 * @param identificationTarget
 	 * @param monitor
 	 * @return {@link IMassSpectra}
@@ -183,7 +183,7 @@ public class FileIdentifier {
 				return;
 			}
 			//
-			List<IIdentificationTarget> massSpectrumTargets = new ArrayList<IIdentificationTarget>();
+			List<IIdentificationTarget> massSpectrumTargets = new ArrayList<>();
 			for(int index = 0; index < references.size(); index++) {
 				try {
 					/*
@@ -193,7 +193,7 @@ public class FileIdentifier {
 					monitor.subTask("Compare " + countUnknown);
 					//
 					IScanMSD reference = references.get(index);
-					IProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
+					IProcessingInfo<IComparisonResult> infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
 					IComparisonResult comparisonResult = infoCompare.getProcessingResult(IComparisonResult.class);
 					applyPenaltyOnDemand(unknown, reference, comparisonResult, fileIdentifierSettings);
 					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
@@ -214,7 +214,7 @@ public class FileIdentifier {
 			if(massSpectrumTargets.size() > 0) {
 				Collections.sort(massSpectrumTargets, targetCombinedComparator);
 				int numberOfTargets = fileIdentifierSettings.getNumberOfTargets();
-				int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
+				int size = numberOfTargets <= massSpectrumTargets.size() ? numberOfTargets : massSpectrumTargets.size();
 				for(int i = 0; i < size; i++) {
 					unknown.getTargets().add(massSpectrumTargets.get(i));
 				}
@@ -224,7 +224,7 @@ public class FileIdentifier {
 		}
 	}
 
-	private void comparePeaksAgainstDatabase(PeakIdentifierSettings fileIdentifierSettings, List<IPeakMSD> peaks, String identifier, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
+	private void comparePeaksAgainstDatabase(PeakIdentifierSettings fileIdentifierSettings, List<? extends IPeakMSD> peaks, String identifier, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
 
 		/*
 		 * Run the identification.
@@ -244,7 +244,7 @@ public class FileIdentifier {
 				return;
 			}
 			//
-			List<IIdentificationTarget> peakTargets = new ArrayList<IIdentificationTarget>();
+			List<IIdentificationTarget> peakTargets = new ArrayList<>();
 			IScanMSD unknown = peakMSD.getPeakModel().getPeakMassSpectrum();
 			for(int index = 0; index < references.size(); index++) {
 				/*
@@ -253,7 +253,7 @@ public class FileIdentifier {
 				try {
 					monitor.subTask("Compare " + countUnknown);
 					IScanMSD reference = references.get(index);
-					IProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
+					IProcessingInfo<IComparisonResult> infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
 					IComparisonResult comparisonResult = infoCompare.getProcessingResult(IComparisonResult.class);
 					applyPenaltyOnDemand(unknown, reference, comparisonResult, fileIdentifierSettings);
 					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
@@ -273,7 +273,7 @@ public class FileIdentifier {
 			if(peakTargets.size() > 0) {
 				Collections.sort(peakTargets, targetCombinedComparator);
 				int numberOfTargets = fileIdentifierSettings.getNumberOfTargets();
-				int size = (numberOfTargets <= peakTargets.size()) ? numberOfTargets : peakTargets.size();
+				int size = numberOfTargets <= peakTargets.size() ? numberOfTargets : peakTargets.size();
 				for(int i = 0; i < size; i++) {
 					peakMSD.getTargets().add(peakTargets.get(i));
 				}
