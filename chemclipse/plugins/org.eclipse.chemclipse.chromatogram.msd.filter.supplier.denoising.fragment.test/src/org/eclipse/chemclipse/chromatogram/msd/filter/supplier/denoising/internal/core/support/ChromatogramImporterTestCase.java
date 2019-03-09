@@ -1,18 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2010, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
  * the Eclipse Public License v1.0 which accompanies this distribution, and is
  * available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.internal.core.support;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.PathResolver;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -36,8 +38,8 @@ public class ChromatogramImporterTestCase extends TestCase {
 		/*
 		 * Import
 		 */
-		File fileImport = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1));
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		File fileImport = new File(PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1));
+		IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 	}
