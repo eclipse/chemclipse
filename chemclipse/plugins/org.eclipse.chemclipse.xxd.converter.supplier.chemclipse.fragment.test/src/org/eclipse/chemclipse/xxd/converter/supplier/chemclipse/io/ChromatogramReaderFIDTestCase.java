@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2014, 2018, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.io;
 
@@ -33,7 +34,7 @@ public class ChromatogramReaderFIDTestCase extends TestCase {
 
 		super.setUp();
 		fileImport = new File(this.pathImport);
-		IProcessingInfo processingInfo = ChromatogramConverterCSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		IProcessingInfo<IChromatogramCSD> processingInfo = ChromatogramConverterCSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		try {
 			chromatogram = processingInfo.getProcessingResult(IChromatogramCSD.class);
 		} catch(TypeCastException e) {

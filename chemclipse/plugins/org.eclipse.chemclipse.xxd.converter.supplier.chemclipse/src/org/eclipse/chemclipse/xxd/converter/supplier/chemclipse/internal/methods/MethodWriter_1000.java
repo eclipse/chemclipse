@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - API
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods;
 
@@ -21,7 +22,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -32,7 +33,7 @@ import org.osgi.framework.FrameworkUtil;
 public class MethodWriter_1000 implements IMethodWriter {
 
 	@Override
-	public void convert(File file, ProcessMethod processMethod, IProgressMonitor monitor) throws IOException {
+	public void convert(File file, IProcessMethod processMethod, IProgressMonitor monitor) throws IOException {
 
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(fileOutputStream));
@@ -49,7 +50,7 @@ public class MethodWriter_1000 implements IMethodWriter {
 		zipOutputStream.close();
 	}
 
-	public void writeProcessMethod(ZipOutputStream zipOutputStream, ProcessMethod processMethod, IProgressMonitor monitor) throws IOException {
+	public void writeProcessMethod(ZipOutputStream zipOutputStream, IProcessMethod processMethod, IProgressMonitor monitor) throws IOException {
 
 		writeVersion(zipOutputStream, monitor);
 		writeData(zipOutputStream, processMethod, monitor);
@@ -68,7 +69,7 @@ public class MethodWriter_1000 implements IMethodWriter {
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeData(ZipOutputStream zipOutputStream, ProcessMethod processMethod, IProgressMonitor monitor) throws IOException {
+	private void writeData(ZipOutputStream zipOutputStream, IProcessMethod processMethod, IProgressMonitor monitor) throws IOException {
 
 		/*
 		 * Data
