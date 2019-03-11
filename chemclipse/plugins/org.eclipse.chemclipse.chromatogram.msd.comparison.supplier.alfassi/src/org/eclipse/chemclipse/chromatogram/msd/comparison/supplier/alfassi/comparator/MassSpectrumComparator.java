@@ -1,13 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.comparator;
 
@@ -28,7 +29,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
  * See article:<br/>
  * <br/>
  * Alfassi, Z. B., Vector analysis of multi-measurements identification
- * 
+ *
  * @author eselmeister
  */
 public class MassSpectrumComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
@@ -38,9 +39,9 @@ public class MassSpectrumComparator extends AbstractMassSpectrumComparator imple
 	private static final Logger logger = Logger.getLogger(MassSpectrumComparator.class);
 
 	@Override
-	public IProcessingInfo compare(IScanMSD unknown, IScanMSD reference) {
+	public IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference) {
 
-		IProcessingInfo processingInfo = super.validate(unknown, reference);
+		IProcessingInfo<IComparisonResult> processingInfo = super.validate(unknown, reference);
 		if(!processingInfo.hasErrorMessages()) {
 			try {
 				IMatchCalculator geometricDistanceCalculator = new GeometricDistanceCalculator();

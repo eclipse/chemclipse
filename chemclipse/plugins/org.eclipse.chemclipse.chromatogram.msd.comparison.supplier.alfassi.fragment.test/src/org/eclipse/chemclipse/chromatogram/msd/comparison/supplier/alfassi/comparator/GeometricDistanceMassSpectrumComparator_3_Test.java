@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 public class GeometricDistanceMassSpectrumComparator_3_Test extends MassSpectrumSetTestCase {
 
 	private MassSpectrumComparator comparator;
-	private IProcessingInfo processingInfo;
+	private IProcessingInfo<IComparisonResult> processingInfo;
 	private IComparisonResult result;
 
 	@Override
@@ -31,7 +31,7 @@ public class GeometricDistanceMassSpectrumComparator_3_Test extends MassSpectrum
 		//
 		comparator = new MassSpectrumComparator();
 		processingInfo = comparator.compare(unknown, reference);
-		result = processingInfo.getProcessingResult(IComparisonResult.class);
+		result = processingInfo.getProcessingResult();
 	}
 
 	@Override
