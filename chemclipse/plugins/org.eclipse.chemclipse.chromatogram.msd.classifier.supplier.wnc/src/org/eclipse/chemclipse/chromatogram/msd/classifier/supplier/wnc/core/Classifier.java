@@ -1,17 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
- * 
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.core.AbstractChromatogramClassifier;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.exceptions.ClassifierException;
@@ -34,9 +36,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class Classifier extends AbstractChromatogramClassifier {
 
 	@Override
-	public IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramClassifierSettings);
+		IProcessingInfo<IChromatogramClassifierResult> processingInfo = validate(chromatogramSelection, chromatogramClassifierSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramClassifierSettings instanceof ClassifierSettings) {
 				try {
@@ -58,7 +60,7 @@ public class Classifier extends AbstractChromatogramClassifier {
 	}
 
 	@Override
-	public IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		ClassifierSettings classifierSettings = PreferenceSupplier.getClassifierSettings();
 		return applyClassifier(chromatogramSelection, classifierSettings, monitor);
