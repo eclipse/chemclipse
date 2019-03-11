@@ -27,7 +27,7 @@ public interface IExportConverter {
 	 * @param file
 	 * @return {@link IProcessingInfo}
 	 */
-	<R> IProcessingInfo<R> validate(File file);
+	IProcessingInfo<File> validate(File file);
 
 	default <R> IProcessingInfo<R> validate(String nameHint, InputStream stream) throws IOException {
 

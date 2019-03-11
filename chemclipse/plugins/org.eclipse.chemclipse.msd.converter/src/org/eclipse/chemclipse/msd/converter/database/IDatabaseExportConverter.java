@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public interface IDatabaseExportConverter<T> extends IExportConverter {
+public interface IDatabaseExportConverter extends IExportConverter {
 
 	/**
 	 * Exports the mass spectrum to the given file.
@@ -31,7 +31,7 @@ public interface IDatabaseExportConverter<T> extends IExportConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<T> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor);
+	IProcessingInfo<File> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor);
 
 	/**
 	 * Exports the mass spectra to the given file.
@@ -42,7 +42,7 @@ public interface IDatabaseExportConverter<T> extends IExportConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<T> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor);
+	IProcessingInfo<File> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor);
 
 	/**
 	 * Checks the mass spectrum instance and throws an exception if the mass
@@ -51,7 +51,7 @@ public interface IDatabaseExportConverter<T> extends IExportConverter {
 	 * @param massSpectrum
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<T> validate(IScanMSD massSpectrum);
+	IProcessingInfo<File> validate(IScanMSD massSpectrum);
 
 	/**
 	 * Checks the mass spectra instance and throws an exception if the mass
@@ -60,5 +60,5 @@ public interface IDatabaseExportConverter<T> extends IExportConverter {
 	 * @param massSpectrum
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<T> validate(IMassSpectra massSpectra);
+	IProcessingInfo<File> validate(IMassSpectra massSpectra);
 }

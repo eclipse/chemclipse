@@ -159,13 +159,13 @@ public class DatabaseConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static <T> IProcessingInfo<T> convert(File file, IScanMSD massSpectrum, boolean append, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<File> convert(File file, IScanMSD massSpectrum, boolean append, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
+		IProcessingInfo<File> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
-		IDatabaseExportConverter<T> exportConverter = getDatabaseExportConverter(converterId);
+		IDatabaseExportConverter exportConverter = getDatabaseExportConverter(converterId);
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, massSpectrum, append, monitor);
 		} else {
@@ -184,13 +184,13 @@ public class DatabaseConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static <T> IProcessingInfo<T> convert(File file, IMassSpectra massSpectra, boolean append, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<File> convert(File file, IMassSpectra massSpectra, boolean append, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
+		IProcessingInfo<File> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
-		IDatabaseExportConverter<T> exportConverter = getDatabaseExportConverter(converterId);
+		IDatabaseExportConverter exportConverter = getDatabaseExportConverter(converterId);
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, massSpectra, append, monitor);
 		} else {
@@ -232,14 +232,14 @@ public class DatabaseConverter {
 	 * @return IDatabaseExportConverter
 	 */
 	@SuppressWarnings("unchecked")
-	private static <T> IDatabaseExportConverter<T> getDatabaseExportConverter(final String converterId) {
+	private static <T> IDatabaseExportConverter getDatabaseExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IDatabaseExportConverter<T> instance = null;
+		IDatabaseExportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IDatabaseExportConverter<T>)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
+				instance = (IDatabaseExportConverter)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.error(e.getLocalizedMessage(), e);
 			}
