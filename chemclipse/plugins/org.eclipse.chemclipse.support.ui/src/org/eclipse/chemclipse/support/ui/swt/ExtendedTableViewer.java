@@ -148,7 +148,12 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		refresh();
 		/*
 		 * Set the columns.
+		 * A label provider must be available.
 		 */
+		if(getLabelProvider() == null) {
+			return;
+		}
+		//
 		for(int i = 0; i < titles.length; i++) {
 			/*
 			 * Column sort.
