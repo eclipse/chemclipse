@@ -27,8 +27,11 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class AMDISParser {
 
+	private static final int WAIT_TIMEOUT_ELU = Integer.parseInt(System.getProperty("chemclipse.amdis.timeout.elu", "60"));
+	private static final int WAIT_TIMEOUT_COMPLETE = Integer.parseInt(System.getProperty("chemclipse.amdis.timeout.complete", "5"));
+	private static final int WATCH_WINDOW = Integer.parseInt(System.getProperty("chemclipse.amdis.watch.window", "1"));
 	private static final int WAIT_MS = 100;
-	private static final int CHECK_WINDOW_SIZE = (int)(TimeUnit.SECONDS.toMillis(1) / WAIT_MS);
+	private static final int CHECK_WINDOW_SIZE = (int)(TimeUnit.SECONDS.toMillis(WATCH_WINDOW) / WAIT_MS);
 	private File eluFile;
 	private File finFile;
 	private File resFile;
@@ -44,10 +47,10 @@ public class AMDISParser {
 		DefaultProcessingResult<IPeaks> result = new DefaultProcessingResult<>();
 		try {
 			SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
-			if(!waitForFile(eluFile, 30, TimeUnit.SECONDS, subMonitor.split(10, SubMonitor.SUPPRESS_NONE))) {
+			if(!waitForFile(eluFile, WAIT_TIMEOUT_ELU, TimeUnit.SECONDS, subMonitor.split(10, SubMonitor.SUPPRESS_NONE))) {
 				throw new InterruptedException("AMDIS does not created required file within the time bounds");
 			}
-			if(!waitForFileComplete(eluFile, 5, TimeUnit.MINUTES, subMonitor.split(10, SubMonitor.SUPPRESS_NONE))) {
+			if(!waitForFileComplete(eluFile, WAIT_TIMEOUT_COMPLETE, TimeUnit.MINUTES, subMonitor.split(10, SubMonitor.SUPPRESS_NONE))) {
 				throw new InterruptedException("AMDIS does not finished writing file within the time bounds");
 			}
 			IProcessingInfo<IPeaks> peaksResult = PeakConverterMSD.convert(eluFile, PeakProcessorSupport.PEAK_CONVERTER_ID, subMonitor.split(70));
