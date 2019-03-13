@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,25 +13,9 @@ package org.eclipse.chemclipse.processing.core;
 
 import java.util.List;
 
-public interface IProcessingResult<T> {
-
-	default void addErrorMessage(final String description, final String message) {
-
-		addMessage(description, message, MessageType.ERROR);
-	}
-
-	default void addInfoMessage(final String description, final String message) {
-
-		final IProcessingMessage processingMessage = new ProcessingMessage(MessageType.INFO, description, message);
-		addMessage(processingMessage);
-	}
+public interface IProcessingResult<T> extends MessageConsumer {
 
 	void addMessage(IProcessingMessage processingMessage);
-
-	default void addMessage(final String description, final String message, final MessageType type) {
-
-		addMessage(new ProcessingMessage(type, description, message));
-	}
 
 	default void addMessages(final IProcessingResult<?> processingInfo) {
 
@@ -40,9 +24,12 @@ public interface IProcessingResult<T> {
 		}
 	}
 
-	default void addWarnMessage(final String description, final String message) {
+	@Override
+	default void addMessage(String description, String message, Throwable t, MessageType type) {
 
-		addMessage(description, message, MessageType.WARN);
+		ProcessingMessage msg = new ProcessingMessage(type, description, message);
+		msg.setException(t);
+		addMessage(msg);
 	}
 
 	List<IProcessingMessage> getMessages();
