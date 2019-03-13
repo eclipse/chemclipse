@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
-public interface IProcessingInfo<T> {
+public interface IProcessingInfo<T> extends MessageConsumer {
 
 	/**
 	 * Adds all message from {@link IProcessingInfo} to this processing info
@@ -33,13 +33,13 @@ public interface IProcessingInfo<T> {
 	 */
 	void addMessage(IProcessingMessage processingMessage);
 
-	/**
-	 * Adds an info message to the processing info.
-	 *
-	 * @param description
-	 * @param message
-	 */
-	void addInfoMessage(String description, String message);
+	@Override
+	default void addMessage(String description, String message, Throwable t, MessageType type) {
+
+		ProcessingMessage msg = new ProcessingMessage(type, description, message);
+		msg.setException(t);
+		addMessage(msg);
+	}
 
 	/**
 	 * Adds a warn message to the processing info.
@@ -47,6 +47,7 @@ public interface IProcessingInfo<T> {
 	 * @param description
 	 * @param message
 	 */
+	@Override
 	void addWarnMessage(String description, String message);
 
 	/**
@@ -57,14 +58,6 @@ public interface IProcessingInfo<T> {
 	 * @param proposedSolution
 	 */
 	void addWarnMessage(String description, String message, String proposedSolution);
-
-	/**
-	 * Adds an error message to the processing info.
-	 *
-	 * @param description
-	 * @param message
-	 */
-	void addErrorMessage(String description, String message);
 
 	/**
 	 * Adds an error message to the processing info.
