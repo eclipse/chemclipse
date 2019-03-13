@@ -139,72 +139,75 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		 */
 		Table table = getTable();
 		table.setRedraw(false);
+		//
 		tableViewerColumns.clear();
 		table.clearAll();
 		while(table.getColumnCount() > 0) {
 			table.getColumns()[0].dispose();
 		}
-		table.setRedraw(true);
-		refresh();
+		table.removeAll();
 		/*
-		 * Set the columns.
 		 * A label provider must be available.
 		 */
-		if(getLabelProvider() == null) {
-			return;
+		if(getLabelProvider() != null) {
+			/*
+			 * Set the columns.
+			 */
+			for(int i = 0; i < titles.length; i++) {
+				/*
+				 * Column sort.
+				 */
+				final int index = i;
+				final TableViewerColumn tableViewerColumn = new TableViewerColumn(this, SWT.NONE);
+				tableViewerColumns.add(tableViewerColumn);
+				final TableColumn tableColumn = tableViewerColumn.getColumn();
+				tableColumn.setText(titles[i]);
+				tableColumn.setWidth(bounds[i]);
+				tableColumn.setResizable(true);
+				tableColumn.setMoveable(true);
+				tableColumn.addSelectionListener(new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+
+						ViewerComparator viewerComparator = getComparator();
+						if(viewerComparator instanceof IRecordTableComparator) {
+							/*
+							 * Only sort if a record table sorter has been set.
+							 */
+							IRecordTableComparator recordTableComparator = (IRecordTableComparator)viewerComparator;
+							recordTableComparator.setColumn(index);
+							int direction = table.getSortDirection();
+							if(table.getSortColumn() == tableColumn) {
+								/*
+								 * Toggle the sort direction
+								 */
+								direction = (direction == SWT.UP) ? SWT.DOWN : SWT.UP;
+							} else {
+								direction = SWT.UP;
+							}
+							table.setSortDirection(direction);
+							table.setSortColumn(tableColumn);
+							refresh();
+						}
+					}
+				});
+				/*
+				 * Column Move Listener
+				 */
+				tableColumn.addListener(SWT.Move, new Listener() {
+
+					@Override
+					public void handleEvent(Event event) {
+
+						fireColumnMoved();
+					}
+				});
+			}
 		}
 		//
-		for(int i = 0; i < titles.length; i++) {
-			/*
-			 * Column sort.
-			 */
-			final int index = i;
-			final TableViewerColumn tableViewerColumn = new TableViewerColumn(this, SWT.NONE);
-			tableViewerColumns.add(tableViewerColumn);
-			final TableColumn tableColumn = tableViewerColumn.getColumn();
-			tableColumn.setText(titles[i]);
-			tableColumn.setWidth(bounds[i]);
-			tableColumn.setResizable(true);
-			tableColumn.setMoveable(true);
-			tableColumn.addSelectionListener(new SelectionAdapter() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-
-					ViewerComparator viewerComparator = getComparator();
-					if(viewerComparator instanceof IRecordTableComparator) {
-						/*
-						 * Only sort if a record table sorter has been set.
-						 */
-						IRecordTableComparator recordTableComparator = (IRecordTableComparator)viewerComparator;
-						recordTableComparator.setColumn(index);
-						int direction = table.getSortDirection();
-						if(table.getSortColumn() == tableColumn) {
-							/*
-							 * Toggle the sort direction
-							 */
-							direction = (direction == SWT.UP) ? SWT.DOWN : SWT.UP;
-						} else {
-							direction = SWT.UP;
-						}
-						table.setSortDirection(direction);
-						table.setSortColumn(tableColumn);
-						refresh();
-					}
-				}
-			});
-			/*
-			 * Column Move Listener
-			 */
-			tableColumn.addListener(SWT.Move, new Listener() {
-
-				@Override
-				public void handleEvent(Event event) {
-
-					fireColumnMoved();
-				}
-			});
-		}
+		table.setRedraw(true);
+		refresh();
 		/*
 		 * Set header and lines visible.
 		 */
