@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 public abstract class EnhancedUpdateSupport extends AbstractUpdateSupport implements IEnhancedUpdateSupport {
 
 	private String defaultTopic = "";
+	private boolean isVisible = false;
 	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 
 	public EnhancedUpdateSupport(Composite parent, String defaultTopic, MPart part) {
@@ -37,7 +38,8 @@ public abstract class EnhancedUpdateSupport extends AbstractUpdateSupport implem
 			@Override
 			public void update(String topic, List<Object> objects) {
 
-				if(doUpdate()) {
+				isVisible = doUpdate();
+				if(isVisible) {
 					parent.getDisplay().asyncExec(new Runnable() {
 
 						@Override
@@ -49,12 +51,16 @@ public abstract class EnhancedUpdateSupport extends AbstractUpdateSupport implem
 				}
 			}
 		});
+		isVisible = doUpdate();
 	}
 
 	@Focus
 	public void setFocus() {
 
-		updateLatestSelection();
+		if(!isVisible) {
+			updateLatestSelection();
+			isVisible = true;
+		}
 	}
 
 	private void updateLatestSelection() {
