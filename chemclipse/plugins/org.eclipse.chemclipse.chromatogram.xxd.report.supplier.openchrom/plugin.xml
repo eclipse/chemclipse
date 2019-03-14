@@ -20,7 +20,16 @@
             reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core.Report2"
             reportName="Area Percent Report (*.txt)"
             reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings">
-      </ChromatogramReportSupplier>      
+      </ChromatogramReportSupplier>    
+      <ChromatogramReportSupplier
+            description="Chromatogram Quantitation Report."
+            fileExtension=".txt"
+            fileName="QuantitationReport"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.quantitationreport"
+            reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core.Report3"
+            reportName="Quantitation Report (*.txt)"
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings">
+      </ChromatogramReportSupplier>            
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
