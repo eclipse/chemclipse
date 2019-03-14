@@ -145,7 +145,8 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		while(table.getColumnCount() > 0) {
 			table.getColumns()[0].dispose();
 		}
-		table.removeAll();
+		table.setRedraw(true);
+		refresh();
 		/*
 		 * A label provider must be available.
 		 */
@@ -205,9 +206,6 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 				});
 			}
 		}
-		//
-		table.setRedraw(true);
-		refresh();
 		/*
 		 * Set header and lines visible.
 		 */
