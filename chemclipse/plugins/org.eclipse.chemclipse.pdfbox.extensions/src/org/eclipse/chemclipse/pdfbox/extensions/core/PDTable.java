@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pdfbox.extensions.elements.CellElement;
+import org.eclipse.chemclipse.pdfbox.extensions.settings.TextOption;
 
 public class PDTable {
 
@@ -28,6 +29,8 @@ public class PDTable {
 	private int indexHeader = -1;
 	private List<List<CellElement>> headerRows = new ArrayList<>();
 	private List<List<String>> dataRows = new ArrayList<>();
+	//
+	private TextOption textOption = TextOption.NONE;
 
 	public PDTable() {
 		this(CellElement.BORDER_ALL);
@@ -39,6 +42,11 @@ public class PDTable {
 		 */
 		nextHeaderRow();
 		this.defaultBorder = defaultBorder;
+	}
+
+	public void setTextOption(TextOption textOption) {
+
+		this.textOption = textOption;
 	}
 
 	public void nextHeaderRow() {
@@ -126,7 +134,7 @@ public class PDTable {
 			List<String> row = dataRows.get(i);
 			for(int j = 0; j < row.size(); j++) {
 				float width = headerRows.get(indexHeader).get(j).getMaxWidth();
-				rowCells.add(new CellElement(row.get(j), width, defaultBorder));
+				rowCells.add(new CellElement(row.get(j), width, defaultBorder).setTextOption(textOption));
 			}
 		}
 		return rowCells;
