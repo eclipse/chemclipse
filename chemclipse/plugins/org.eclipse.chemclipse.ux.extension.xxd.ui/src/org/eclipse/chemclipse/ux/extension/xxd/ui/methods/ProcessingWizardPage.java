@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -50,15 +50,16 @@ public class ProcessingWizardPage extends WizardPage {
 	private Button checkboxWSD;
 	private ComboViewer comboViewerCategory;
 	private ComboViewer comboViewerProcessor;
-	private ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
+	private ProcessTypeSupport processTypeSupport;
 	private IProcessTypeSupplier processTypeSupplier = null;
 	//
 	private CategoryComparator categoryComparator = new CategoryComparator();
 	private NameComparator nameComparator = new NameComparator();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
-	protected ProcessingWizardPage() {
+	protected ProcessingWizardPage(ProcessTypeSupport processTypeSupport) {
 		super("ProcessingWizardPage");
+		this.processTypeSupport = processTypeSupport;
 		setTitle("Process Entry");
 		setDescription("Select a chromatogram filter, integrator, identifier ... .");
 	}

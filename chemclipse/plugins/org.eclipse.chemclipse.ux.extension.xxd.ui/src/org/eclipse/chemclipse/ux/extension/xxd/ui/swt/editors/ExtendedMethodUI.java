@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMeth
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ConfigurableUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodListUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodUIConfig;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePage;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -80,9 +81,11 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private Composite toolbarMain;
 	private Composite buttons;
 	protected boolean showSettingsOnAdd;
+	private ProcessTypeSupport processingSupport;
 
-	public ExtendedMethodUI(Composite parent, int style) {
+	public ExtendedMethodUI(Composite parent, int style, ProcessTypeSupport processingSupport) {
 		super(parent, style);
+		this.processingSupport = processingSupport;
 		createControl();
 	}
 
@@ -312,7 +315,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			public void widgetSelected(SelectionEvent e) {
 
 				if(processMethod != null) {
-					ProcessingWizard wizard = new ProcessingWizard();
+					ProcessingWizard wizard = new ProcessingWizard(processingSupport);
 					WizardDialog wizardDialog = new WizardDialog(e.display.getActiveShell(), wizard);
 					wizardDialog.setMinimumPageSize(ProcessingWizard.DEFAULT_WIDTH, ProcessingWizard.DEFAULT_HEIGHT);
 					wizardDialog.create();

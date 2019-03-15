@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.MethodImpor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -65,7 +66,6 @@ public class ProcessMethodEditor extends AbstractDataUpdateSupport implements ID
 
 	@Inject
 	public ProcessMethodEditor(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
-
 		super(part);
 		//
 		this.part = part;
@@ -145,7 +145,7 @@ public class ProcessMethodEditor extends AbstractDataUpdateSupport implements ID
 
 	private void createPage(Composite parent) {
 
-		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE);
+		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, new ProcessTypeSupport());
 		extendedMethodUI.setModificationHandler(new IModificationHandler() {
 
 			@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -25,11 +26,11 @@ public class ProcessingWizard extends Wizard {
 	private ProcessingWizardPage wizardPage;
 	private IProcessEntry processEntry = null;
 
-	public ProcessingWizard() {
+	public ProcessingWizard(ProcessTypeSupport processingSupport) {
 		setWindowTitle("Settings");
 		setDialogSettings(new DialogSettings(PROCESSING_SECTION));
 		setNeedsProgressMonitor(true);
-		wizardPage = new ProcessingWizardPage();
+		wizardPage = new ProcessingWizardPage(processingSupport);
 	}
 
 	@Override
