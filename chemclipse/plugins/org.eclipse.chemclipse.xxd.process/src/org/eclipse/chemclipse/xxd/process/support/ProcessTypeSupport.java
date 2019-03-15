@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -87,7 +87,12 @@ public class ProcessTypeSupport {
 		// NoiseCalculator?
 	}
 
-	private void addProcessSupplier(IProcessTypeSupplier<?> processTypeSupplier) {
+	/**
+	 * Adds the given {@link IProcessTypeSupplier} to this {@link ProcessTypeSupport} this allows for adding non standard supplier
+	 * 
+	 * @param processTypeSupplier
+	 */
+	public void addProcessSupplier(IProcessTypeSupplier<?> processTypeSupplier) {
 
 		try {
 			for(String processorId : processTypeSupplier.getProcessorIds()) {
@@ -107,18 +112,17 @@ public class ProcessTypeSupport {
 		List<IProcessTypeSupplier> supplier = new ArrayList<>();
 		for(IProcessTypeSupplier processTypeSupplier : processSupplierMap.values()) {
 			exitloop:
-				for(DataType dataType : dataTypes) {
-					if(processTypeSupplier.getSupportedDataTypes().contains(dataType)) {
-						if(!supplier.contains(processTypeSupplier)) {
-							supplier.add(processTypeSupplier);
-							break exitloop;
-						}
+			for(DataType dataType : dataTypes) {
+				if(processTypeSupplier.getSupportedDataTypes().contains(dataType)) {
+					if(!supplier.contains(processTypeSupplier)) {
+						supplier.add(processTypeSupplier);
+						break exitloop;
 					}
 				}
+			}
 		}
 		return supplier;
 	}
-
 
 	public <T> IProcessingInfo<T> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessMethod processMethod, IProgressMonitor monitor) {
 
@@ -128,7 +132,6 @@ public class ProcessTypeSupport {
 		}
 		return applyProcessor(chromatogramSelections, processMethod, monitor);
 	}
-
 
 	public <T> IProcessingInfo<T> applyProcessor(List<? extends IChromatogramSelection<?, ?>> chromatogramSelections, IProcessMethod processMethod, IProgressMonitor monitor) {
 
