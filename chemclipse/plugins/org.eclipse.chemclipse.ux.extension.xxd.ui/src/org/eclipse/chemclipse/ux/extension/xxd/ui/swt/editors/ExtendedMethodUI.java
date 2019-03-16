@@ -83,6 +83,10 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	protected boolean showSettingsOnAdd;
 	private ProcessTypeSupport processingSupport;
 
+	public ExtendedMethodUI(Composite parent, int style) {
+		this(parent, style, new ProcessTypeSupport());
+	}
+
 	public ExtendedMethodUI(Composite parent, int style, ProcessTypeSupport processingSupport) {
 		super(parent, style);
 		this.processingSupport = processingSupport;
