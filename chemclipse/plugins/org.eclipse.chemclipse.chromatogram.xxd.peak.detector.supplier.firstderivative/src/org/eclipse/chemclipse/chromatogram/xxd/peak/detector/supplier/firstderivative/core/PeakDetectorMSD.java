@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -203,7 +203,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 * 
 	 * @param slopeList
 	 */
-	private List<IRawPeak> getRawPeaks(IFirstDerivativeDetectorSlopes slopes, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
+	public static List<IRawPeak> getRawPeaks(IFirstDerivativeDetectorSlopes slopes, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
 		double threshold;
 		switch(peakDetectorSettings.getThreshold()) {
@@ -274,7 +274,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 * @param rawPeak
 	 * @return boolean
 	 */
-	private boolean isValidRawPeak(IRawPeak rawPeak) {
+	private static boolean isValidRawPeak(IRawPeak rawPeak) {
 
 		boolean isValid = false;
 		int width = rawPeak.getStopScan() - rawPeak.getStartScan() + 1;
@@ -307,7 +307,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 * @param scanOffset
 	 * @return int
 	 */
-	private int detectPeakStart(IFirstDerivativeDetectorSlopes slopes, int startScan, int scanOffset, double threshold) {
+	private static int detectPeakStart(IFirstDerivativeDetectorSlopes slopes, int startScan, int scanOffset, double threshold) {
 
 		int size = slopes.size();
 		int peakStart = size - 1;
@@ -341,7 +341,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 * @param scanOffset
 	 * @return int
 	 */
-	private int detectPeakMaximum(IFirstDerivativeDetectorSlopes slopes, int startScan, int scanOffset) {
+	private static int detectPeakMaximum(IFirstDerivativeDetectorSlopes slopes, int startScan, int scanOffset) {
 
 		int size = slopes.size();
 		IDetectorSlope slope;
@@ -365,7 +365,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 * @param scanOffset
 	 * @return int
 	 */
-	private int detectPeakStop(IFirstDerivativeDetectorSlopes slopes, int startScan, int scanOffset) {
+	private static int detectPeakStop(IFirstDerivativeDetectorSlopes slopes, int startScan, int scanOffset) {
 
 		int size = slopes.size();
 		int peakStop = size - CONSECUTIVE_SCAN_STEPS;
