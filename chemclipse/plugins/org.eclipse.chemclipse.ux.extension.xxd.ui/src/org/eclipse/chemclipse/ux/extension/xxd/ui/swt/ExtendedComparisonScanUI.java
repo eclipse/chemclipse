@@ -123,7 +123,6 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 				try {
 					scan1 = scanMSD.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
 					buttonOptimizedScan.setEnabled(true);
-					updateChart();
 				} catch(CloneNotSupportedException e) {
 					logger.warn(e);
 				}
@@ -138,11 +137,11 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 				try {
 					scan2 = scanMSD.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
 					buttonOptimizedScan.setEnabled(true);
-					updateChart();
 				} catch(CloneNotSupportedException e) {
 					logger.warn(e);
 				}
 			}
+			updateChart();
 		}
 	}
 
