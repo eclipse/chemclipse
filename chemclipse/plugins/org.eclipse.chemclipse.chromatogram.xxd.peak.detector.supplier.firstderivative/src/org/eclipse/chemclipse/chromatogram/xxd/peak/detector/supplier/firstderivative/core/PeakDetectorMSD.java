@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.Threshold;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlope;
@@ -198,15 +199,20 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 		}
 	}
 
+	private static List<IRawPeak> getRawPeaks(IFirstDerivativeDetectorSlopes slopes, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
+
+		return getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
+	}
+
 	/**
 	 * Marks the peaks with start, stop and max.
 	 * 
 	 * @param slopeList
 	 */
-	public static List<IRawPeak> getRawPeaks(IFirstDerivativeDetectorSlopes slopes, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
+	public static List<IRawPeak> getRawPeaks(IFirstDerivativeDetectorSlopes slopes, Threshold thresholdSetting, IProgressMonitor monitor) {
 
 		double threshold;
-		switch(peakDetectorSettings.getThreshold()) {
+		switch(thresholdSetting) {
 			case OFF:
 				threshold = 0.0005d;
 				break;
