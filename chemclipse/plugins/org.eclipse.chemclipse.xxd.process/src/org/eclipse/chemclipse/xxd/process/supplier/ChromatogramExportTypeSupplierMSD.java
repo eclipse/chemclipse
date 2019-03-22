@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - add support for export path configuration
+ * Christoph Läubrich - add support for export path configuration, fix name clash for processor ids
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
@@ -30,12 +30,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramExportTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
 	public static final String CATEGORY = "Chromatogram Export [MSD]";
+	private static final String PREFIX = "msd.export.";
 
 	public ChromatogramExportTypeSupplierMSD() {
 		super(CATEGORY, new DataType[]{DataType.MSD});
 		IChromatogramConverterSupport support = ChromatogramConverterMSD.getInstance().getChromatogramConverterSupport();
 		for(ISupplier supplier : support.getExportSupplier()) {
-			ProcessorSupplier processorSupplier = new ProcessorSupplier(supplier.getId());
+			ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX + supplier.getId());
 			processorSupplier.setName(supplier.getFilterName());
 			processorSupplier.setDescription(supplier.getDescription());
 			processorSupplier.setSettingsClass(ChromatogramExportSettings.class);
@@ -47,6 +48,9 @@ public class ChromatogramExportTypeSupplierMSD extends AbstractProcessTypeSuppli
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
+		if(processorId.startsWith(PREFIX)) {
+			processorId = processorId.substring(PREFIX.length());
+		}
 		ChromatogramExportSettings settings;
 		if(processSettings instanceof ChromatogramExportSettings) {
 			settings = (ChromatogramExportSettings)processSettings;
@@ -58,7 +62,7 @@ public class ChromatogramExportTypeSupplierMSD extends AbstractProcessTypeSuppli
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			File exportFolder = new File(settings.getExportFolder());
 			if(exportFolder.exists() || exportFolder.mkdirs()) {
-				IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
+				IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogram();
 				File file = new File(exportFolder, chromatogramMSD.getName());
 				processingInfo = ChromatogramConverterMSD.getInstance().convert(file, chromatogramMSD, processorId, monitor);
 			}

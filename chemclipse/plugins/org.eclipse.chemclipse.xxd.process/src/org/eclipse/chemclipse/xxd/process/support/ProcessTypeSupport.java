@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - improve logging output
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
 
@@ -96,8 +97,9 @@ public class ProcessTypeSupport {
 
 		try {
 			for(String processorId : processTypeSupplier.getProcessorIds()) {
-				if(processSupplierMap.containsKey(processorId)) {
-					logger.warn("The following processor id is contained twice: " + processorId);
+				IProcessTypeSupplier<?> typeSupplier = processSupplierMap.get(processorId);
+				if(typeSupplier != null) {
+					logger.warn("The processor id " + processorId + " is already defined by " + typeSupplier.getClass().getSimpleName() + " and is ignored for redefining supplier " + processTypeSupplier.getClass().getSimpleName());
 				} else {
 					processSupplierMap.put(processorId, processTypeSupplier);
 				}
@@ -107,10 +109,11 @@ public class ProcessTypeSupport {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List<IProcessTypeSupplier> getProcessorTypeSuppliers(List<DataType> dataTypes) {
 
 		List<IProcessTypeSupplier> supplier = new ArrayList<>();
-		for(IProcessTypeSupplier processTypeSupplier : processSupplierMap.values()) {
+		for(IProcessTypeSupplier<?> processTypeSupplier : processSupplierMap.values()) {
 			exitloop:
 			for(DataType dataType : dataTypes) {
 				if(processTypeSupplier.getSupportedDataTypes().contains(dataType)) {
