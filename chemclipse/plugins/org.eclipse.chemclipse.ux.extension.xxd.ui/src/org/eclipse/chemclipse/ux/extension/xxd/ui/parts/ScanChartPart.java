@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanChartUI;
@@ -30,7 +31,7 @@ public class ScanChartPart extends EnhancedUpdateSupport implements IUpdateSuppo
 
 	@Inject
 	public ScanChartPart(Composite parent, MPart part) {
-		super(parent, IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, part);
+		super(parent, Activator.getDefault().getDataUpdateSupport(), IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, part);
 	}
 
 	@Override

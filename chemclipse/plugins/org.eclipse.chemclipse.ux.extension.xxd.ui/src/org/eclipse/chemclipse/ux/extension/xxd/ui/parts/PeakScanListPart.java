@@ -30,7 +30,7 @@ public class PeakScanListPart extends EnhancedUpdateSupport implements IUpdateSu
 
 	@Inject
 	public PeakScanListPart(Composite parent, MPart part) {
-		super(parent, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, part);
+		super(parent, Activator.getDefault().getDataUpdateSupport(), IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, part);
 	}
 
 	@Override

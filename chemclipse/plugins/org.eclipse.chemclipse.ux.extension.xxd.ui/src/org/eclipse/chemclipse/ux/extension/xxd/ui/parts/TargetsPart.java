@@ -17,6 +17,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedTargetsUI;
@@ -29,7 +30,7 @@ public class TargetsPart extends EnhancedUpdateSupport implements IUpdateSupport
 
 	@Inject
 	public TargetsPart(Composite parent, MPart part) {
-		super(parent, IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, part);
+		super(parent, Activator.getDefault().getDataUpdateSupport(), IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, part);
 	}
 
 	@Override
