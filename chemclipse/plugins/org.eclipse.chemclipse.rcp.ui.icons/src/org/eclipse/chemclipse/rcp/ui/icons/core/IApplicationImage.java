@@ -340,4 +340,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_HEADER_DATA = "headerdata.gif";
 	String IMAGE_CHART_DATA_SHOW = "chartDataShow.png";
 	String IMAGE_CHART_DATA_HIDE = "chartDataHide.png";
+	//
+	String IMAGE_PERSON_DEFAULT = "personDefault.gif";
+	String IMAGE_PERSON_ACTIVE = "personActive.gif";
 }
