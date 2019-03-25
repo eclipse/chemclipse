@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,6 @@ import java.util.List;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
-import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IAdaptable;
 
 public interface IPeak extends ITargetSupplier, IAdaptable {
@@ -253,6 +252,6 @@ public interface IPeak extends ITargetSupplier, IAdaptable {
 	@Override
 	default <T> T getAdapter(Class<T> adapter) {
 
-		return Adapters.adapt(this, adapter);
+		return null;
 	}
 }

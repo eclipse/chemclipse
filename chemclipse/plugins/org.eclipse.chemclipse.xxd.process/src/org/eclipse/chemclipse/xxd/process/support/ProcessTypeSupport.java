@@ -39,6 +39,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramIntegratorTypeSup
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramReportTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ClassifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.CombinedIntegratorTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.MassspectrumProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplierCSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakFilterTypeSupplierMSD;
@@ -84,6 +85,8 @@ public class ProcessTypeSupport {
 		addProcessSupplier(new ChromatogramExportTypeSupplierMSD()); // OK - Improve settings
 		addProcessSupplier(new ChromatogramExportTypeSupplierCSD()); // OK - Improve settings
 		addProcessSupplier(new ChromatogramExportTypeSupplierWSD()); // OK - Improve settings
+		addProcessSupplier(MassspectrumProcessTypeSupplier.createPeakFilterSupplier());
+		addProcessSupplier(MassspectrumProcessTypeSupplier.createScanFilterSupplier());
 		// MassSpectrumFilter?
 		// NoiseCalculator?
 	}
