@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,15 +8,16 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Christoph Läubrich - cleanup API
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.model.core.AbstractMeasurementInfo;
+import org.eclipse.chemclipse.model.core.AbstractMeasurement;
 
-public class MeasurementNMR extends AbstractMeasurementInfo implements IMeasurementNMR {
+public class MeasurementNMR extends AbstractMeasurement implements IMeasurementNMR {
 
 	/**
 	 *
@@ -38,7 +39,6 @@ public class MeasurementNMR extends AbstractMeasurementInfo implements IMeasurem
 		return scanNMR;
 	}
 
-	@Override
 	public void setScanMMR(IScanNMR scanNMR) {
 
 		this.scanNMR = scanNMR;
@@ -50,13 +50,11 @@ public class MeasurementNMR extends AbstractMeasurementInfo implements IMeasurem
 		return scanFID;
 	}
 
-	@Override
 	public void setScanFID(IScanFID scanFID) {
 
 		this.scanFID = scanFID;
 	}
 
-	@Override
 	public void putProcessingParameters(String name, Double parameter) {
 
 		parameters.put(name, parameter);

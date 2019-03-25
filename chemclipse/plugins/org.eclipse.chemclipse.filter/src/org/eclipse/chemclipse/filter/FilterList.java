@@ -20,8 +20,10 @@ import java.util.function.Consumer;
  * 
  * @author Christoph Läubrich
  *
+ * @deprecated use the {@link FilterChain} approach instead
  * @param <T>
  */
+@Deprecated
 public interface FilterList<T> extends Iterable<T> {
 
 	default <X extends T> void remove(X item) {
