@@ -86,7 +86,6 @@ public class ChromatogramChartSupport {
 	private boolean showArea = false;
 
 	public ChromatogramChartSupport() {
-
 		usedColorsNormal = new HashMap<>();
 		usedColorsSIC = new HashMap<>();
 		usedColorsSWC = new HashMap<>();

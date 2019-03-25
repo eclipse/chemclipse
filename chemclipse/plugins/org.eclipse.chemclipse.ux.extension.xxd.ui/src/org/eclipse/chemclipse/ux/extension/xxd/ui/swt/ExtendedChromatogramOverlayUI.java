@@ -43,7 +43,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
@@ -1153,13 +1152,15 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 							if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
 								int j = 1;
 								for(IChromatogram referencedChromatogram : referencedChromatograms) {
-									String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
-									String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
-									availableSeriesIds.add(referenceSeriesId);
-									selectionSeries.add(referenceSeriesId);
-									if(!baseChart.isSeriesContained(referenceSeriesId)) {
-										color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, overlayType);
-										lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, overlayType, derivativeType, color, null, false));
+									if(referencedChromatogram != null) {
+										String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+										String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
+										availableSeriesIds.add(referenceSeriesId);
+										selectionSeries.add(referenceSeriesId);
+										if(!baseChart.isSeriesContained(referenceSeriesId)) {
+											color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, overlayType);
+											lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, overlayType, derivativeType, color, null, false));
+										}
 									}
 								}
 							}
