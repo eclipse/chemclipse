@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import org.eclipse.core.runtime.IAdaptable;
+
 /**
  * An arbitrary signal, that can be displayed in a X/Y plot.
  */
-public interface ISignal {
+public interface ISignal extends IAdaptable {
 
 	double TOTAL_INTENSITY = 0.0d;
 	String TOTAL_INTENSITY_DESCRIPTION = "TIC";
@@ -22,4 +24,13 @@ public interface ISignal {
 	public double getX();
 
 	public double getY();
+
+	/**
+	 * Signals might provide access to to special non standard properties
+	 */
+	@Override
+	default <T> T getAdapter(Class<T> adapter) {
+
+		return null;
+	}
 }
