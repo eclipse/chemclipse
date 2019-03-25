@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - Fix invalid string check, support supplier without file extension
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.files;
 
@@ -33,12 +34,6 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 	@Override
 	public boolean isSupplierFile(File file) {
 
-		String extension = file.toString().toLowerCase();
-		String supplierExtension;
-		/*
-		 * All directories are stored in upper cases.
-		 * See plugin.xml
-		 */
 		if(file.isDirectory()) {
 			return false;
 		}
@@ -46,49 +41,60 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 		 * Check each supplier.
 		 */
 		for(ISupplier supplier : suppliers) {
-			//
-			supplierExtension = supplier.getFileExtension().toLowerCase();
-			if(supplierExtension != "") {
-				if(supplierExtension.contains(IConverterSupport.WILDCARD_NUMBER)) {
-					/*
-					 * Get the matcher.
-					 */
-					String extensionMatcher = regularExpressions.get(supplierExtension);
-					if(extensionMatcher == null) {
-						extensionMatcher = AbstractConverterSupport.getExtensionMatcher(supplierExtension);
-						regularExpressions.put(supplierExtension, extensionMatcher);
-					}
-					/*
-					 * E.g. *.r## is a matcher for *.r01, *.r02 ...
-					 */
-					if(extension.matches(extensionMatcher)) {
-						return supplier.isImportable();
-					}
-				} else if(extension.endsWith(supplierExtension)) {
-					/*
-					 * Test various implementations.
-					 */
-					if(supplier.isImportable()) {
-						return true;
-					} else {
-						/*
-						 * Try to find a supplier which is capable
-						 * to read the data.
-						 */
-						for(ISupplier specificSupplier : suppliers) {
-							if(extension.endsWith(specificSupplier.getFileExtension())) {
-								if(specificSupplier.isImportable()) {
-									return true;
-								}
-							}
-						}
-					}
-				}
+			if(isValidSupplier(file, supplier)) {
+				return true;
 			}
 		}
 		/*
 		 * If no converter was found, return false.
 		 */
+		return false;
+	}
+
+	public boolean isValidSupplier(File file, ISupplier supplier) {
+
+		String extension = file.toString().toLowerCase();
+		String supplierExtension = supplier.getFileExtension().toLowerCase();
+		boolean hasExtension = supplierExtension != null && !supplierExtension.isEmpty();
+		if(hasExtension) {
+			if(supplierExtension.contains(IConverterSupport.WILDCARD_NUMBER)) {
+				/*
+				 * Get the matcher.
+				 */
+				String extensionMatcher = regularExpressions.get(supplierExtension);
+				if(extensionMatcher == null) {
+					extensionMatcher = AbstractConverterSupport.getExtensionMatcher(supplierExtension);
+					regularExpressions.put(supplierExtension, extensionMatcher);
+				}
+				/*
+				 * E.g. *.r## is a matcher for *.r01, *.r02 ...
+				 */
+				if(extension.matches(extensionMatcher)) {
+					return supplier.isImportable();
+				}
+			} else if(extension.endsWith(supplierExtension)) {
+				/*
+				 * Test various implementations.
+				 */
+				if(supplier.isImportable()) {
+					return true;
+				} else {
+					/*
+					 * Try to find a supplier which is capable
+					 * to read the data.
+					 */
+					for(ISupplier specificSupplier : suppliers) {
+						if(extension.endsWith(specificSupplier.getFileExtension())) {
+							if(specificSupplier.isImportable()) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		} else {
+			return supplier.isImportable();
+		}
 		return false;
 	}
 
