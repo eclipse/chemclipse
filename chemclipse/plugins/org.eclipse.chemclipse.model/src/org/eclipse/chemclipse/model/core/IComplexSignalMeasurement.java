@@ -11,32 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
-/**
- * Extends the {@link ISignal} interface by means of providing access to the complex part of a signal
- * 
- * @author Christoph Läubrich
- *
- */
-public interface IComplexSignal extends ISignal {
+import java.util.Collection;
+
+public interface IComplexSignalMeasurement<T extends IComplexSignal> extends IMeasurement {
 
 	/**
 	 * 
-	 * @return the imaginary part of the y-component
+	 * @return the signals that makes up this {@link IComplexSignalMeasurement}
 	 */
-	public double getImaginaryY();
-
-	default double getMagnitudeY() {
-
-		double i = getImaginaryY();
-		double r = getY();
-		return Math.sqrt(r * r + i * i);
-	}
-
-	default double getPhase() {
-
-		double i = getImaginaryY();
-		double r = getY();
-		double p = i / r;
-		return Math.atan(p);
-	}
+	Collection<? extends T> getSignals();
 }

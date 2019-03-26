@@ -9,34 +9,37 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.core;
+package org.eclipse.chemclipse.filter;
+
+import java.util.Date;
 
 /**
- * Extends the {@link ISignal} interface by means of providing access to the complex part of a signal
+ * Object can implement this interface to promote that they are filtered
  * 
  * @author Christoph Läubrich
  *
+ * @param <FilteredType>
  */
-public interface IComplexSignal extends ISignal {
+public interface Filtered<FilteredType> {
 
 	/**
 	 * 
-	 * @return the imaginary part of the y-component
+	 * @return the filtered object
 	 */
-	public double getImaginaryY();
+	FilteredType getFilteredObject();
 
-	default double getMagnitudeY() {
+	/**
+	 * 
+	 * @return the time when this filter was applied
+	 */
+	Date getFilterTime();
 
-		double i = getImaginaryY();
-		double r = getY();
-		return Math.sqrt(r * r + i * i);
-	}
+	/**
+	 * 
+	 * @return the filter that was responsible for filtering this object or <code>null</code> if this is not known
+	 */
+	default Filter<?> getFilter() {
 
-	default double getPhase() {
-
-		double i = getImaginaryY();
-		double r = getY();
-		double p = i / r;
-		return Math.atan(p);
+		return null;
 	}
 }

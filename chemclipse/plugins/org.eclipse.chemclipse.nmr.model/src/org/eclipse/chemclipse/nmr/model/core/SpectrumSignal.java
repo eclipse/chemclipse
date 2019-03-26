@@ -16,48 +16,48 @@ import java.math.BigDecimal;
 import org.eclipse.chemclipse.model.core.IComplexSignal;
 
 /**
- * The {@link FIDSignal} consists of an acquisition time and an intensity
+ * The {@link SpectrumSignal} consists of an acquisition time and an intensity
  * 
  * @author Christoph Läubrich
  *
  */
-public interface FIDSignal extends IComplexSignal {
+public interface SpectrumSignal extends IComplexSignal {
 
 	/**
 	 * 
-	 * @return the (relative) time this signal was recorded
+	 * @return the chemical shift in ppm
 	 */
-	BigDecimal getSignalTime();
+	BigDecimal getChemicalShift();
 
 	/**
-	 * The real component of the intensity also known as the "real" part of the data
-	 * 
-	 * @return the intensity
-	 */
-	Number getRealComponent();
-
-	/**
-	 * the imaginary component of the intensity also known as the "imaginary" part of the data
+	 * The absorptive intensity (also known as the "real part" of the signal)
 	 * 
 	 * @return the intensity
 	 */
-	Number getImaginaryComponent();
+	Number getAbsorptiveIntensity();
+
+	/**
+	 * The dispersive intensity (also knows as the "imaginary part" of the signal)
+	 * 
+	 * @return the intensity
+	 */
+	Number getDispersiveIntensity();
 
 	@Override
 	default double getX() {
 
-		return getSignalTime().doubleValue();
+		return getChemicalShift().doubleValue();
 	}
 
 	@Override
 	default double getY() {
 
-		return getRealComponent().doubleValue();
+		return getAbsorptiveIntensity().doubleValue();
 	}
 
 	@Override
 	default double getImaginaryY() {
 
-		return getImaginaryComponent().doubleValue();
+		return getDispersiveIntensity().doubleValue();
 	}
 }

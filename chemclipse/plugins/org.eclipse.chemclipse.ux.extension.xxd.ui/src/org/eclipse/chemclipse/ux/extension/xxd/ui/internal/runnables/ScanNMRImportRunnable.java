@@ -16,8 +16,8 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
-import org.eclipse.chemclipse.nmr.model.core.IMeasurementNMR;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -27,14 +27,13 @@ public class ScanNMRImportRunnable implements IRunnableWithProgress {
 	private static final Logger logger = Logger.getLogger(ScanNMRImportRunnable.class);
 	//
 	private File file;
-	private IMeasurementNMR measurementNMR = null;
+	private IComplexSignalMeasurement<?> measurementNMR = null;
 
 	public ScanNMRImportRunnable(File file) {
-
 		this.file = file;
 	}
 
-	public IMeasurementNMR getScanNMR() {
+	public IComplexSignalMeasurement<?> getScanNMR() {
 
 		return measurementNMR;
 	}
@@ -44,7 +43,7 @@ public class ScanNMRImportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Import Scan", IProgressMonitor.UNKNOWN);
-			IProcessingInfo<IMeasurementNMR> processingInfo = ScanConverterNMR.convert(file, monitor);
+			IProcessingInfo<IComplexSignalMeasurement<?>> processingInfo = ScanConverterNMR.convert(file, monitor);
 			measurementNMR = processingInfo.getProcessingResult();
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);

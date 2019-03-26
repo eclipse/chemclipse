@@ -22,6 +22,8 @@ import org.eclipse.chemclipse.converter.scan.IScanConverterSupport;
 import org.eclipse.chemclipse.converter.scan.ScanConverterSupport;
 import org.eclipse.chemclipse.converter.scan.ScanSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
+import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.nmr.model.core.IMeasurementNMR;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -40,17 +42,16 @@ public class ScanConverterNMR {
 	 * This class has only static methods.
 	 */
 	private ScanConverterNMR() {
-
 	}
 
-	public static IProcessingInfo<IMeasurementNMR> convert(final File file, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo<IMeasurement> convert(final File file, final String converterId, final IProgressMonitor monitor) {
 
-		IProcessingInfo<IMeasurementNMR> processingInfo;
+		IProcessingInfo<IMeasurement> processingInfo;
 		/*
 		 * Do not use a safe runnable here, because an object must
 		 * be returned or null.
 		 */
-		IScanImportConverter<IMeasurementNMR> importConverter = getScanImportConverter(converterId);
+		IScanImportConverter<IMeasurement> importConverter = getScanImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
@@ -59,7 +60,7 @@ public class ScanConverterNMR {
 		return processingInfo;
 	}
 
-	public static IProcessingInfo<IMeasurementNMR> convert(final File file, final IProgressMonitor monitor) {
+	public static IProcessingInfo<IComplexSignalMeasurement<?>> convert(final File file, final IProgressMonitor monitor) {
 
 		return getScan(file, false, monitor);
 	}
@@ -88,7 +89,7 @@ public class ScanConverterNMR {
 					processingInfo = importConverter.convert(file, monitor);
 					if(!processingInfo.hasErrorMessages()) {
 						Object object = processingInfo.getProcessingResult();
-						if(object instanceof IMeasurementNMR) {
+						if(object instanceof IComplexSignalMeasurement<?>) {
 							return processingInfo;
 						}
 					}

@@ -15,3 +15,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.nmr.model.core,
  org.eclipse.chemclipse.nmr.model.selection,
  org.eclipse.chemclipse.nmr.model.support
+Import-Package: org.eclipse.chemclipse.filter;version="[1.0.0,1.1.0)"

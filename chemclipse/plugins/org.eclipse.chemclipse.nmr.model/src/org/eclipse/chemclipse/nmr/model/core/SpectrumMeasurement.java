@@ -15,36 +15,12 @@ import java.util.Collection;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 
-public interface FIDMeasurement extends IComplexSignalMeasurement<FIDSignal> {
-
-	enum DataDimension {
-		ONE_DIMENSIONAL("1D"), TWO_DIMENSIONAL("2D"), THREE_DIMENSIONAL("3D"), FOUR_DIMENSIONAL("4D");
-
-		private String name;
-
-		DataDimension(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String toString() {
-
-			return name;
-		}
-	}
-
-	DataDimension getDataDimension();
-
-	double getSweepWidth();
-
-	double getIrradiationCarrierFrequency();
-
-	double getAcquisitionTime();
+public interface SpectrumMeasurement extends IComplexSignalMeasurement<SpectrumSignal> {
 
 	/**
 	 * 
-	 * @return the signals that makes up this {@link FIDMeasurement}
+	 * @return the signals that makes up this {@link SpectrumMeasurement}
 	 */
 	@Override
-	Collection<? extends FIDSignal> getSignals();
+	Collection<? extends SpectrumSignal> getSignals();
 }

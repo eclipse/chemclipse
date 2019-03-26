@@ -20,6 +20,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.nmr.model.selection.DataNMRSelection;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -67,7 +68,6 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 
 	@Inject
 	public ScanEditorNMR(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
-
 		super(part);
 		//
 		this.part = part;
@@ -192,7 +192,11 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 		}
 		//
 		scanFile = file;
-		return new DataNMRSelection(runnable.getScanNMR());
+		IComplexSignalMeasurement<?> nmr = runnable.getScanNMR();
+		if(nmr != null) {
+			part.setLabel(nmr.getDataName());
+		}
+		return new DataNMRSelection(nmr);
 	}
 
 	private void createEditorPages(Composite parent) {

@@ -16,7 +16,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.nmr.model.core.ISignalNMR;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -202,20 +201,20 @@ public class ExtendedNMROverlayUI {
 		double[] xSeries;
 		double[] ySeries;
 		//
-		if(dataNMRSelection != null) {
-			int size = dataNMRSelection.getMeasurmentNMR().getScanMNR().getNumberOfFourierPoints();
-			xSeries = new double[size];
-			ySeries = new double[size];
-			int index = 0;
-			for(ISignalNMR scanSignal : dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR()) {
-				xSeries[index] = scanSignal.getChemicalShift();
-				ySeries[index] = scanSignal.getIntensityOfSpectrum();
-				index++;
-			}
-		} else {
-			xSeries = new double[0];
-			ySeries = new double[0];
-		}
+		// if(dataNMRSelection != null) {
+		// int size = dataNMRSelection.getMeasurmentNMR().getScanMNR().getNumberOfFourierPoints();
+		// xSeries = new double[size];
+		// ySeries = new double[size];
+		// int index = 0;
+		// for(ISignalNMR scanSignal : dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR()) {
+		// xSeries[index] = scanSignal.getChemicalShift();
+		// ySeries[index] = scanSignal.getIntensityOfSpectrum();
+		// index++;
+		// }
+		// } else {
+		xSeries = new double[0];
+		ySeries = new double[0];
+		// }
 		//
 		return new SeriesData(xSeries, ySeries, id);
 	}
