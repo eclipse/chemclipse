@@ -13,18 +13,23 @@ All Filters for a specific itemtype should comply with the following pattern whe
 public interface [ItemType]Filter<ConfigType> extends Filter<ConfigType> {
 
 	/**
-	 * Filters the given Collection of {@link [ItemType]}s with this filter, the collection must be modifiable so the filter can either remove an item from the list or filter the item individually
+	 * Filters the given Collection of {@link [ItemType]}s with this filter and returns the result.
+	 * The resulting Collection could either be the same or a ne collection, might have more or less items
 	 * 
 	 * @param filterItems
 	 * @param configuration
 	 *            the configuration to apply or <code>null</code> if no special configuration is desired
+	 * @param nextFilter
+	 *            the next filter to invoke, implementors might allow further processing with other filters in the chain by calling {@link FilterChain#doFilter(Object, org.eclipse.chemclipse.processing.core.MessageConsumer)}
+ 	 * @param messageConsumer
+	 *            Filters are meant to not throwing checked exceptions nor return no result if something goes wrong but report problems to the {@link MessageConsumer} this allows the upstream caller to decide what to do
 	 * @param monitor
 	 *            a {@link IProgressMonitor} to report progress of the filtering or <code>null</code> if no progress is desired
 	 * @return a {@link IProcessingResult} that describes the outcome of the filtering, the result will be {@link Boolean#TRUE} if any item in the list was filter or {@link Boolean#FALSE} if no item was filtered or there was an error. The messages of the {@link IProcessingResult} may contain further information
 	 * @throws IllegalArgumentException
 	 *             if any of the given {@link [ItemType]} are incompatible with this filter ({@link #accepts[ItemType]([ItemType])} returns <code>false</code> for them)
 	 */
-	IProcessingResult<Boolean> filter[ItemType]s(FilterList<[ItemType]> filterItems, ConfigType configuration, IProgressMonitor monitor) throws IllegalArgumentException;
+	Collection<? extends [ItemType]> filter[ItemType]s(Collection<? extends [ItemType]> filterItems, ConfigType configuration, FilterChain<Collection<? extends [ItemType]>> nextFilter, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link [ItemType]} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}

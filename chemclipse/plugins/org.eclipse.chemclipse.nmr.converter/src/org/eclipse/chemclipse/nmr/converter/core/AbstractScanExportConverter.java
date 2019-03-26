@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.nmr.converter.core;
 
 import org.eclipse.chemclipse.converter.core.AbstractExportConverter;
 
-public abstract class AbstractScanExportConverter extends AbstractExportConverter implements IScanExportConverter {
+public abstract class AbstractScanExportConverter<T> extends AbstractExportConverter implements IScanExportConverter<T> {
 }

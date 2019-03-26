@@ -194,9 +194,10 @@ public class FilterMenuFactory {
 				return false;
 			}
 		});
-		for(IMeasurementFilter<?> filter : filterList) {
-			result.add(new MeasurementFilterMenuEntry<>(filter, supplier));
-		}
+		// TODO we need to rethink the idea here...
+		// for(IMeasurementFilter<?> filter : filterList) {
+		// result.add(new MeasurementFilterMenuEntry<>(filter, supplier));
+		// }
 		sortEntries(result);
 		return result;
 	}
@@ -350,26 +351,26 @@ public class FilterMenuFactory {
 		}
 	}
 
-	private static final class MeasurementFilterMenuEntry<T> extends AbstractFilterChartMenuEntry<IMeasurementFilter<T>, IMeasurement> {
-
-		public MeasurementFilterMenuEntry(IMeasurementFilter<T> filter, Supplier<? extends IMeasurement> supplier) {
-			super(CATEGORY_MEASUREMENT, filter, supplier);
-		}
-
-		@Override
-		protected boolean isValid(IMeasurementFilter<T> filter, IMeasurement item) {
-
-			return filter.acceptsIMeasurement(item);
-		}
-
-		@Override
-		protected IProcessingResult<Boolean> filter(IMeasurementFilter<T> filter, IMeasurement item, IProgressMonitor monitor) {
-
-			T configuration = filter.createConfiguration(item);
-			return filter.filterIMeasurements(FilterList.singelton(item), configuration, monitor);
-		}
-	}
-
+	// TODO this must be handled different
+	// private static final class MeasurementFilterMenuEntry<T> extends AbstractFilterChartMenuEntry<IMeasurementFilter<T>, IMeasurement> {
+	//
+	// public MeasurementFilterMenuEntry(IMeasurementFilter<T> filter, Supplier<? extends IMeasurement> supplier) {
+	// super(CATEGORY_MEASUREMENT, filter, supplier);
+	// }
+	//
+	// @Override
+	// protected boolean isValid(IMeasurementFilter<T> filter, IMeasurement item) {
+	//
+	// return filter.acceptsIMeasurement(item);
+	// }
+	//
+	// @Override
+	// protected IProcessingResult<Boolean> filter(IMeasurementFilter<T> filter, IMeasurement item, IProgressMonitor monitor) {
+	//
+	// T configuration = filter.createConfiguration(item);
+	// return filter.filterIMeasurements(FilterList.singelton(item), configuration, monitor);
+	// }
+	// }
 	private static final class ChromatogramSelectionFilterMenuEntry<T> extends AbstractFilterChartMenuEntry<IChromatogramSelectionFilter<T>, IChromatogramSelection<?, ?>> {
 
 		public ChromatogramSelectionFilterMenuEntry(IChromatogramSelectionFilter<T> filter, Supplier<? extends IChromatogramSelection<?, ?>> supplier) {

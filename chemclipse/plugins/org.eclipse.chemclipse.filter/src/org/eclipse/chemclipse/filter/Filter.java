@@ -47,6 +47,16 @@ public interface Filter<ConfigType> {
 	}
 
 	/**
+	 * A filter can advertise the general category of data it is able to process, this can be used to narrow down Filters presented to a user
+	 * 
+	 * @return the default implementation returns {@link DataType#AUTO_DETECT} as the only choice to indicate that the caller has to determine the type by means of content type sensing
+	 */
+	default FilterCategory[] getFilterCategories() {
+
+		return new FilterCategory[]{FilterCategory.AUTO_DETECT};
+	}
+
+	/**
 	 * Creates a new instance of the ConfigType for this {@link Filter}, probably initialized with some sensible defaults. A filter might then be later called with this config or the config might first be edited by the user.
 	 * 
 	 * @return the default-config for this filter
