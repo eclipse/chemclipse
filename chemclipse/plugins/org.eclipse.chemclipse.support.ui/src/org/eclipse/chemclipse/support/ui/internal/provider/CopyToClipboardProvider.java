@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.TableItem;
 public class CopyToClipboardProvider {
 
 	private final String DELIMITER = "\t";
+	private final String LINE_BREAK = "\n";
 
 	public void copyToClipboard(Clipboard clipboard, ExtendedTableViewer extendedTableViewer) {
 
@@ -43,7 +44,7 @@ public class CopyToClipboardProvider {
 		String[] titles = getTitles(extendedTableViewer);
 		//
 		for(int column : columns) {
-			builder.append(titles[column]);
+			builder.append(optimizeText(titles[column]));
 			builder.append(DELIMITER);
 		}
 		builder.append(OperatingSystemUtils.getLineDelimiter());
@@ -62,11 +63,16 @@ public class CopyToClipboardProvider {
 			 */
 			selection = table.getItem(index);
 			for(int column : columns) {
-				builder.append(selection.getText(column));
+				builder.append(optimizeText(selection.getText(column)));
 				builder.append(DELIMITER);
 			}
 			builder.append(OperatingSystemUtils.getLineDelimiter());
 		}
+	}
+
+	private String optimizeText(String text) {
+
+		return text.replaceAll(LINE_BREAK, " ");
 	}
 
 	private void addNoContentMessageOnDemand(StringBuilder builder) {
