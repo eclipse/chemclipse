@@ -25,7 +25,7 @@ public interface FIDSignal extends IComplexSignal {
 
 	/**
 	 * 
-	 * @return the (relative) time this signal was recorded
+	 * @return the (relative) time this signal was recorded in seconds
 	 */
 	BigDecimal getSignalTime();
 

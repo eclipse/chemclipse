@@ -47,6 +47,12 @@ public class FilteredFIDMeasurement extends FilteredMeasurement<FIDMeasurement> 
 	}
 
 	@Override
+	public double getFirstDataPointOffset() {
+
+		return getFilteredObject().getFirstDataPointOffset();
+	}
+
+	@Override
 	public double getIrradiationCarrierFrequency() {
 
 		return getFilteredObject().getIrradiationCarrierFrequency();

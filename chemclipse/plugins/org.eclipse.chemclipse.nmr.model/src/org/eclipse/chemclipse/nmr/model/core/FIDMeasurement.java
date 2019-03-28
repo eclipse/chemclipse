@@ -41,6 +41,8 @@ public interface FIDMeasurement extends IComplexSignalMeasurement<FIDSignal> {
 
 	double getAcquisitionTime();
 
+	double getFirstDataPointOffset();
+
 	/**
 	 * 
 	 * @return the signals that makes up this {@link FIDMeasurement}
