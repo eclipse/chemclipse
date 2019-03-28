@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.converter.scan.ScanSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurement;
-import org.eclipse.chemclipse.nmr.model.core.IMeasurementNMR;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
@@ -101,7 +100,7 @@ public class ScanConverterNMR {
 		return getProcessingError(file);
 	}
 
-	public static <T> IProcessingInfo<T> convert(final File file, final IMeasurementNMR scan, final String converterId, final IProgressMonitor monitor) {
+	public static <T> IProcessingInfo<T> convert(final File file, final IComplexSignalMeasurement<?> scan, final String converterId, final IProgressMonitor monitor) {
 
 		IProcessingInfo<T> processingInfo;
 		/*

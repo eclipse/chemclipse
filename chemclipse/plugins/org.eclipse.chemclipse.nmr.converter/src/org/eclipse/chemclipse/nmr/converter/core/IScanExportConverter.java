@@ -15,11 +15,11 @@ package org.eclipse.chemclipse.nmr.converter.core;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IExportConverter;
-import org.eclipse.chemclipse.nmr.model.core.IMeasurementNMR;
+import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IScanExportConverter<T> extends IExportConverter {
 
-	IProcessingInfo<T> convert(File file, IMeasurementNMR measurementNMR, IProgressMonitor monitor);
+	IProcessingInfo<T> convert(File file, IComplexSignalMeasurement<?> measurementNMR, IProgressMonitor monitor);
 }
