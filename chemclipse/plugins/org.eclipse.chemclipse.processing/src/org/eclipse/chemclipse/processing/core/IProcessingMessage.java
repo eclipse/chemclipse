@@ -57,6 +57,8 @@ public interface IProcessingMessage {
 	 */
 	String getProposedSolution();
 
+	Throwable getException();
+
 	/**
 	 * 
 	 * @return the details for this message or <code>null</code> if none are supplied

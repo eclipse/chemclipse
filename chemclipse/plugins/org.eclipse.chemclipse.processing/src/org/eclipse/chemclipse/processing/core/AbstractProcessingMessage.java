@@ -93,6 +93,12 @@ public abstract class AbstractProcessingMessage implements IProcessingMessage {
 	}
 
 	@Override
+	public Throwable getException() {
+
+		return null;
+	}
+
+	@Override
 	public String toString() {
 
 		StringBuilder builder = new StringBuilder();
