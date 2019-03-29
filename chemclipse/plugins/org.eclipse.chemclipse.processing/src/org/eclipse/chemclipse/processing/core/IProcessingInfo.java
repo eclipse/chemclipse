@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
-public interface IProcessingInfo<T> extends MessageConsumer {
+public interface IProcessingInfo<T> extends MessageConsumer, MessageProvider {
 
 	/**
 	 * Adds all message from {@link IProcessingInfo} to this processing info
@@ -24,7 +24,7 @@ public interface IProcessingInfo<T> extends MessageConsumer {
 	 *
 	 * @param processingInfo
 	 */
-	void addMessages(IProcessingInfo<T> processingInfo);
+	void addMessages(IProcessingInfo<?> processingInfo);
 
 	/**
 	 * Adds a message to the processing info.
@@ -73,6 +73,7 @@ public interface IProcessingInfo<T> extends MessageConsumer {
 	 *
 	 * @return the list of messages
 	 */
+	@Override
 	List<IProcessingMessage> getMessages();
 
 	/**
@@ -98,20 +99,6 @@ public interface IProcessingInfo<T> extends MessageConsumer {
 	 */
 	@Deprecated
 	<V> V getProcessingResult(Class<V> type) throws TypeCastException;
-
-	/**
-	 * Returns whether the process info stores error message or not.
-	 *
-	 * @return boolean
-	 */
-	boolean hasErrorMessages();
-
-	/**
-	 * Returns whether the process info stores warn message or not.
-	 *
-	 * @return boolean
-	 */
-	boolean hasWarnMessages();
 
 	/**
 	 * Creates a new TypeCastException and adds a IProcessingMessage.

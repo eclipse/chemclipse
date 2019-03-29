@@ -60,12 +60,13 @@ public class DefaultProcessingResult<T> implements IProcessingResult<T> {
 	}
 
 	@Override
-	public IProcessingInfo toInfo() {
+	public IProcessingInfo<T> toInfo() {
 
-		final ProcessingInfo result = new ProcessingInfo();
+		final ProcessingInfo<T> result = new ProcessingInfo<T>();
 		for(final IProcessingMessage message : getMessages()) {
 			result.addMessage(message);
 		}
+		result.setProcessingResult(getProcessingResult());
 		return result;
 	}
 }

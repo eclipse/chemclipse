@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.processing.core;
 
 import java.util.List;
 
-public interface IProcessingResult<T> extends MessageConsumer {
+public interface IProcessingResult<T> extends MessageConsumer, MessageProvider {
 
 	void addMessage(IProcessingMessage processingMessage);
 
@@ -32,26 +32,12 @@ public interface IProcessingResult<T> extends MessageConsumer {
 		addMessage(msg);
 	}
 
+	@Override
 	List<IProcessingMessage> getMessages();
 
 	List<IProcessingMessage> getMessages(MessageType type);
 
 	T getProcessingResult();
-
-	default boolean hasErrorMessages() {
-
-		return !getMessages(MessageType.ERROR).isEmpty();
-	}
-
-	default boolean hasMessages(final MessageType type) {
-
-		return !getMessages(type).isEmpty();
-	}
-
-	default boolean hasWarnMessages() {
-
-		return !getMessages(MessageType.WARN).isEmpty();
-	}
 
 	void setProcessingResult(T processingResult);
 

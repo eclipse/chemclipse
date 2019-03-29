@@ -55,4 +55,11 @@ public interface MessageConsumer {
 	}
 
 	void addMessage(final String description, final String message, Throwable t, final MessageType type);
+
+	default void addMessages(MessageProvider messageProvider) {
+
+		for(IProcessingMessage message : messageProvider.getMessages()) {
+			addMessage(message.getDescription(), message.getMessage(), message.getException(), message.getMessageType());
+		}
+	}
 }

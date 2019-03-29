@@ -23,18 +23,16 @@ public abstract class AbstractProcessingInfo<T> implements IProcessingInfo<T> {
 	private T processingResult;
 
 	public AbstractProcessingInfo() {
-
 		processingMessages = new ArrayList<>();
 	}
 
 	public AbstractProcessingInfo(IProcessingInfo<T> processingInfo) {
-
 		this();
 		addMessages(processingInfo);
 	}
 
 	@Override
-	public void addMessages(IProcessingInfo<T> processingInfo) {
+	public void addMessages(IProcessingInfo<?> processingInfo) {
 
 		if(processingInfo != null && processingInfo != this) {
 			/*
