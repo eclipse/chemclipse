@@ -13,6 +13,8 @@
 package org.eclipse.chemclipse.nmr.converter.core;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.Converter;
@@ -31,6 +33,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SubMonitor;
 
 public class ScanConverterNMR {
 
@@ -59,37 +62,31 @@ public class ScanConverterNMR {
 		return processingInfo;
 	}
 
-	public static IProcessingInfo<IComplexSignalMeasurement<?>> convert(final File file, final IProgressMonitor monitor) {
+	@SuppressWarnings("unchecked")
+	public static IProcessingInfo<Collection<IComplexSignalMeasurement<?>>> convert(final File file, final IProgressMonitor monitor) {
 
-		return getScan(file, false, monitor);
-	}
-
-	/**
-	 * If no suitable parser was found, null will be returned.
-	 *
-	 * @param file
-	 * @param overview
-	 * @param monitor
-	 * @return {@link IProcessingInfo}
-	 */
-	private static <T> IProcessingInfo<T> getScan(final File file, boolean overview, IProgressMonitor monitor) {
-
-		IProcessingInfo<T> processingInfo;
 		IScanConverterSupport converterSupport = getScanConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
+			SubMonitor subMonitor = SubMonitor.convert(monitor, availableConverterIds.size());
 			for(String converterId : availableConverterIds) {
-				/*
-				 * Do not use a safe runnable here, because an object must
-				 * be returned or null.
-				 */
-				IScanImportConverter<T> importConverter = getScanImportConverter(converterId);
+				IScanImportConverter<?> importConverter = getScanImportConverter(converterId);
 				if(importConverter != null) {
-					processingInfo = importConverter.convert(file, monitor);
-					if(!processingInfo.hasErrorMessages()) {
+					IProcessingInfo<?> processingInfo = importConverter.convert(file, subMonitor.split(1));
+					if(processingInfo != null && !processingInfo.hasErrorMessages()) {
 						Object object = processingInfo.getProcessingResult();
 						if(object instanceof IComplexSignalMeasurement<?>) {
-							return processingInfo;
+							IComplexSignalMeasurement<?> measurement = (IComplexSignalMeasurement<?>)object;
+							ProcessingInfo<Collection<IComplexSignalMeasurement<?>>> info = new ProcessingInfo<>();
+							info.setProcessingResult(Collections.singleton(measurement));
+							info.addMessages(processingInfo);
+							return info;
+						} else if(object instanceof Collection<?>) {
+							Collection<?> collection = (Collection<?>)object;
+							ProcessingInfo<Collection<IComplexSignalMeasurement<?>>> info = new ProcessingInfo<>();
+							info.setProcessingResult((Collection<IComplexSignalMeasurement<?>>)collection);
+							info.addMessages(processingInfo);
+							return info;
 						}
 					}
 				}

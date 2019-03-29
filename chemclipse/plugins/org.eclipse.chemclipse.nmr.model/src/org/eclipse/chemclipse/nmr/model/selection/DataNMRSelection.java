@@ -12,53 +12,70 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.selection;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
-import org.eclipse.core.runtime.Adapters;
 
-public class DataNMRSelection implements IDataNMRSelection {
+public class DataNMRSelection extends Observable implements IDataNMRSelection {
 
-	private Queue<IComplexSignalMeasurement<?>> measurements = new LinkedList<>();
+	private List<IComplexSignalMeasurement<?>> measurements = new ArrayList<>();
+	private IComplexSignalMeasurement<?> measurement;
 
-	public DataNMRSelection(IComplexSignalMeasurement<?> measurement) {
-		measurements.add(measurement);
+	public DataNMRSelection() {
 	}
 
 	@Override
 	public synchronized IComplexSignalMeasurement<?> getMeasurement() {
 
-		return measurements.peek();
+		return measurement;
+	}
+
+	public synchronized void addMeasurement(IComplexSignalMeasurement<?> measurement) {
+
+		if(!measurements.contains(measurement)) {
+			measurements.add(measurement);
+			setActiveMeasurement(measurement);
+			setChanged();
+			notifyObservers(ChangeType.NEW_ITEM);
+		}
+	}
+
+	public void setActiveMeasurement(IComplexSignalMeasurement<?> measurement) {
+
+		if(measurements.contains(measurement)) {
+			this.measurement = measurement;
+			setChanged();
+			notifyObservers(ChangeType.SELECTION_CHANGED);
+		}
 	}
 
 	@Override
-	public <T extends IComplexSignalMeasurement<?>> T getMeasurement(Class<T> type) {
-
-		return Adapters.adapt(getMeasurement(), type);
-	}
-
-	public void addMeasurement(IComplexSignalMeasurement<?> measurement) {
-
-		measurements.add(measurement);
-	}
-
 	public synchronized IComplexSignalMeasurement<?>[] getMeasurements() {
 
 		return measurements.toArray(new IComplexSignalMeasurement<?>[0]);
 	}
 
-	public synchronized int size() {
+	public synchronized void removeMeasurement(IComplexSignalMeasurement<?> measurement) {
 
-		return measurements.size();
+		if(measurements.remove(measurement)) {
+			if(this.measurement == measurement) {
+				if(measurements.size() > 0) {
+					setActiveMeasurement(measurements.get(measurements.size() - 1));
+				} else {
+					setActiveMeasurement(null);
+				}
+			}
+			setChanged();
+			notifyObservers(ChangeType.REMOVED_ITEM);
+		}
 	}
 
-	public synchronized IComplexSignalMeasurement<?> remove() {
+	@Override
+	public void removeObserver(Observer observer) {
 
-		if(measurements.size() > 1) {
-			return measurements.poll();
-		} else {
-			return null;
-		}
+		deleteObserver(observer);
 	}
 }

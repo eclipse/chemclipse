@@ -12,10 +12,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.selection;
 
+import java.util.Observer;
+
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 
 public interface IDataNMRSelection {
+
+	enum ChangeType {
+		SELECTION_CHANGED, NEW_ITEM, REMOVED_ITEM;
+	}
 
 	/**
 	 * 
@@ -25,9 +31,16 @@ public interface IDataNMRSelection {
 
 	/**
 	 * 
-	 * @param type
-	 *            the desired type
-	 * @return the given type of measurement or <code>null</code> if such a type is not available
+	 * @return all measurements that belongs to this selection
 	 */
-	<T extends IComplexSignalMeasurement<?>> T getMeasurement(Class<T> type);
+	IComplexSignalMeasurement<?>[] getMeasurements();
+
+	/**
+	 * Adds an observer that is called whenever the current active selection changes
+	 * 
+	 * @param observer
+	 */
+	void addObserver(Observer observer);
+
+	void removeObserver(Observer observer);
 }
