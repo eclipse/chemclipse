@@ -47,7 +47,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implements IDataUpdateSupport, IQuantitationDatabaseEditor {
 
-	private static final Logger logger = Logger.getLogger(SequenceEditor.class);
+	private static final Logger logger = Logger.getLogger(QuantitationDatabaseEditor.class);
 	//
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantitationDatabaseEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.QuantitationDatabaseEditor";
