@@ -344,4 +344,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	//
 	String IMAGE_PERSON_DEFAULT = "personDefault.gif";
 	String IMAGE_PERSON_ACTIVE = "personActive.gif";
+	//
+	String IMAGE_FILE_ADD = "fileAdd.gif";
+	String IMAGE_FOLDER_ADD = "folderAdd.gif";
 }
