@@ -7,5 +7,6 @@ Bundle-Activator: org.eclipse.chemclipse.progress.Activator
 Require-Bundle: org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: org.eclipse.chemclipse.progress.core
+Export-Package: org.eclipse.chemclipse.progress,
+ org.eclipse.chemclipse.progress.core
 Bundle-Vendor: %Bundle-Vendor
