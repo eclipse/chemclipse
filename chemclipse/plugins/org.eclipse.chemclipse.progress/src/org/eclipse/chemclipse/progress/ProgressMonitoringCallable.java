@@ -1,17 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
- * All rights reserved. This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License, version 3,
- * as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see http://www.gnu.org/licenses.
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
  * Alexander Kerner - initial API and implementation
@@ -49,42 +42,42 @@ import java.util.function.Consumer;
  */
 public abstract class ProgressMonitoringCallable<T> implements Callable<T> {
 
-    private BiConsumer<Double, Double> progressConsumer;
+	private BiConsumer<Double, Double> progressConsumer;
 
-    private Consumer<String> progressMessageConsumer;
+	private Consumer<String> progressMessageConsumer;
 
-    public BiConsumer<Double, Double> getProgressConsumer() {
-	return progressConsumer;
-    }
-
-    public void updateProgress(final double cnt, final double total) {
-	if (progressConsumer != null) {
-	    progressConsumer.accept(cnt, total);
+	public BiConsumer<Double, Double> getProgressConsumer() {
+		return progressConsumer;
 	}
-    }
 
-    public void updateMessage(final String message) {
-	if (progressMessageConsumer != null) {
-	    progressMessageConsumer.accept(message);
+	public void updateProgress(final double cnt, final double total) {
+		if (progressConsumer != null) {
+			progressConsumer.accept(cnt, total);
+		}
 	}
-    }
 
-    public void updateProgress(final long cnt, final long total) {
-	updateProgress((double) cnt, (double) total);
-    }
+	public void updateMessage(final String message) {
+		if (progressMessageConsumer != null) {
+			progressMessageConsumer.accept(message);
+		}
+	}
 
-    public Consumer<String> getProgressMessageConsumer() {
-	return progressMessageConsumer;
-    }
+	public void updateProgress(final long cnt, final long total) {
+		updateProgress((double) cnt, (double) total);
+	}
 
-    public ProgressMonitoringCallable<T> setProgressConsumer(final BiConsumer<Double, Double> progressConsumer) {
-	this.progressConsumer = progressConsumer;
-	return this;
-    }
+	public Consumer<String> getProgressMessageConsumer() {
+		return progressMessageConsumer;
+	}
 
-    public ProgressMonitoringCallable<T> setProgressMessageConsumer(final Consumer<String> progressMessageConsumer) {
-	this.progressMessageConsumer = progressMessageConsumer;
-	return this;
-    }
+	public ProgressMonitoringCallable<T> setProgressConsumer(final BiConsumer<Double, Double> progressConsumer) {
+		this.progressConsumer = progressConsumer;
+		return this;
+	}
+
+	public ProgressMonitoringCallable<T> setProgressMessageConsumer(final Consumer<String> progressMessageConsumer) {
+		this.progressMessageConsumer = progressMessageConsumer;
+		return this;
+	}
 
 }
