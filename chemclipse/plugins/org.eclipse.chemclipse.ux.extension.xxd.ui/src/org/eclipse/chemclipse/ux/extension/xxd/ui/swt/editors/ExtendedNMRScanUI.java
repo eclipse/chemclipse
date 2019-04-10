@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - rework for new datamodel and processor support
@@ -67,12 +67,12 @@ public class ExtendedNMRScanUI implements Observer {
 			IComplexSignalMeasurement<?> measurement = dataNMRSelection.getMeasurement();
 			boolean rawData = measurement instanceof FIDMeasurement;
 			chartNMR.modifyChart(rawData);
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			ILineSeriesData lineSeriesData;
 			if(measurement == null) {
 				lineSeriesData = new LineSeriesData(new SeriesData(new double[0], new double[0], SERIES_ID));
 			} else {
-				lineSeriesData = new LineSeriesData(createSignalSeries(SERIES_ID, measurement.getSignals()));
+				lineSeriesData = new LineSeriesData(createSignalSeries(SERIES_ID, measurement.getSignals(), rawData));
 			}
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setEnableArea(!rawData);
@@ -87,14 +87,18 @@ public class ExtendedNMRScanUI implements Observer {
 		return chartNMR;
 	}
 
-	private static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals) {
+	private static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals, boolean rawData) {
 
 		int size = signals.size();
 		double[] xSeries = new double[size];
 		double[] ySeries = new double[size];
 		int index = 0;
 		for(ISignal fidSignal : signals) {
-			xSeries[index] = fidSignal.getX();
+			if(rawData) {
+				xSeries[index] = fidSignal.getX();
+			} else {
+				xSeries[size - 1 - index] = fidSignal.getX();
+			}
 			ySeries[index] = fidSignal.getY();
 			index++;
 		}
