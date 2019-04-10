@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2019 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - Fix invalid string check, support supplier without file extension
@@ -28,7 +28,7 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 
 	public AbstractSupplierFileIdentifier(List<ISupplier> suppliers) {
 		this.suppliers = suppliers;
-		regularExpressions = new HashMap<String, String>();
+		regularExpressions = new HashMap<>();
 	}
 
 	@Override
@@ -142,7 +142,6 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 
 	private boolean isDirectoryPatternMatch(File file, String[] directoryParts, int index) {
 
-		boolean isMatch = false;
 		if(file.isDirectory()) {
 			if(index < directoryParts.length) {
 				if(file.getName().matches(directoryParts[index])) {
@@ -150,14 +149,19 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 					if(index == directoryParts.length) {
 						return true;
 					} else {
-						for(File subFile : file.listFiles()) {
-							isMatch = isDirectoryPatternMatch(subFile, directoryParts, index);
+						File[] listFiles = file.listFiles();
+						if(listFiles != null) {
+							for(File subFile : listFiles) {
+								if(isDirectoryPatternMatch(subFile, directoryParts, index)) {
+									return true;
+								}
+							}
 						}
 					}
 				}
 			}
 		}
-		return isMatch;
+		return false;
 	}
 
 	@Override
