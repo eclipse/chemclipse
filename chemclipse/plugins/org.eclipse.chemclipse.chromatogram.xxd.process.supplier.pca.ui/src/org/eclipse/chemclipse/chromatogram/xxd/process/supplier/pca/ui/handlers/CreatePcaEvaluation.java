@@ -39,7 +39,7 @@ public class CreatePcaEvaluation {
 	public static final String DATA_SAMPLES = "DATA_SAMPLES";
 	public static final String ALLOW_DATALOAD = "ALLOW_DATALOAD";
 
-	public static void createPart(ISamplesVisualization samplesVisualization) {
+	public static void createPart(ISamplesVisualization<?, ?> samplesVisualization) {
 
 		MApplication application = ModelSupportAddon.getApplication();
 		EModelService modelService = ModelSupportAddon.getModelService();
@@ -59,7 +59,7 @@ public class CreatePcaEvaluation {
 
 	@Inject
 	@Optional
-	public void createNewEditor(@UIEventTopic(PCA_CREATE_NEW_EDITOR) ISamplesVisualization samplesVisualization) {
+	public void createNewEditor(@UIEventTopic(PCA_CREATE_NEW_EDITOR) ISamplesVisualization<?, ?> samplesVisualization) {
 
 		switchPespective();
 		createPart(samplesVisualization);
