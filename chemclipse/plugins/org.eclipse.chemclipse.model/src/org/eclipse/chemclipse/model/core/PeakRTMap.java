@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 public final class PeakRTMap<T extends IPeak> implements Serializable, IChromatogramPeaks<T> {
 
 	private static final long serialVersionUID = 6339698016420166069L;
+	//
 	private int peakcount;
 	private TreeMap<Integer, Collection<T>> internalMap = new TreeMap<>();
 
@@ -120,6 +121,7 @@ public final class PeakRTMap<T extends IPeak> implements Serializable, IChromato
 	public void removeAllPeaks() {
 
 		internalMap.clear();
+		peakcount = 0;
 	}
 
 	@Override
