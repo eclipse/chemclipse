@@ -50,6 +50,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_RETENTION_INDEX_POSITIVE_DEVIATION = "retentionIndexPositiveDeviation";
 	public static final float DEF_RETENTION_INDEX_POSITIVE_DEVIATION = 10.0f; // Index
 	//
+	public static final String QUANTITATION_STRATEGY_NONE = "NONE";
+	public static final String QUANTITATION_STRATEGY_RETENTION_TIME = "RT";
+	public static final String QUANTITATION_STRATEGY_REFERENCES = "REFS";
+	public static final String QUANTITATION_STRATEGY_NAME = "NAME";
+	//
+	public static final String[][] QUANTITATION_STRATEGY_OPTIONS = new String[][]{//
+			{"None", QUANTITATION_STRATEGY_NONE}, //
+			{"Retention Time", QUANTITATION_STRATEGY_RETENTION_TIME}, //
+			{"References", QUANTITATION_STRATEGY_REFERENCES}, //
+			{"Name", QUANTITATION_STRATEGY_NAME}};
+	//
+	public static final String P_QUANTITATION_STRATEGY = "quantitationStrategy";
+	public static final String DEF_QUANTITATION_STRATEGY = QUANTITATION_STRATEGY_NONE;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -84,6 +98,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_RETENTION_TIME_POSITIVE_DEVIATION, Double.toString(DEF_RETENTION_TIME_POSITIVE_DEVIATION));
 		defaultValues.put(P_RETENTION_INDEX_NEGATIVE_DEVIATION, Float.toString(DEF_RETENTION_INDEX_NEGATIVE_DEVIATION));
 		defaultValues.put(P_RETENTION_INDEX_POSITIVE_DEVIATION, Float.toString(DEF_RETENTION_INDEX_POSITIVE_DEVIATION));
+		defaultValues.put(P_QUANTITATION_STRATEGY, DEF_QUANTITATION_STRATEGY);
 		//
 		return defaultValues;
 	}
@@ -155,6 +170,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getFloat(P_RETENTION_INDEX_POSITIVE_DEVIATION, DEF_RETENTION_INDEX_POSITIVE_DEVIATION);
+	}
+
+	public static String getQuantitationStrategy() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(P_QUANTITATION_STRATEGY, DEF_QUANTITATION_STRATEGY);
 	}
 
 	private static String getFilterPath(String key, String def) {

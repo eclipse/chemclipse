@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,8 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.core;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 
 public abstract class AbstractPeakQuantitationCalculator {
 
@@ -25,6 +27,18 @@ public abstract class AbstractPeakQuantitationCalculator {
 			doQuantify = true;
 		}
 		return doQuantify;
+	}
+
+	public boolean isIdentifierMatch(IPeak peak, String nameOfQuantitationCompound) {
+
+		Set<IIdentificationTarget> targets = peak.getTargets();
+		for(IIdentificationTarget target : targets) {
+			if(target.getLibraryInformation().getName().equals(nameOfQuantitationCompound)) {
+				return true;
+			}
+		}
+		//
+		return false;
 	}
 
 	public boolean isAreaValid(IPeak peakToQuantify, IPeak peakISTD) {

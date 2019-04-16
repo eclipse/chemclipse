@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import java.util.Set;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.io.DatabaseSupport;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
@@ -63,20 +64,38 @@ public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalc
 
 	private Set<IQuantitationCompound> getQuantitationEntries(Set<IQuantitationCompound> quantitationCompounds, IPeak peakToQuantify) {
 
+		String quantitationStratregy = PreferenceSupplier.getQuantitationStrategy();
+		//
 		Set<IQuantitationCompound> filteredQuantitationCompounds = new HashSet<IQuantitationCompound>();
 		for(IQuantitationCompound quantitationCompound : quantitationCompounds) {
 			/*
 			 * Add the compound if it matches certain conditions:
 			 * Retention Time Window
 			 * Assigned Reference
+			 * Name match
 			 * ...
 			 */
-			int retentionTime = peakToQuantify.getPeakModel().getRetentionTimeAtPeakMaximum();
-			IRetentionTimeWindow retentionTimeWindow = quantitationCompound.getRetentionTimeWindow();
-			if(retentionTimeWindow.isRetentionTimeInWindow(retentionTime)) {
-				if(doQuantify(peakToQuantify, quantitationCompound.getName())) {
+			switch(quantitationStratregy) {
+				case PreferenceSupplier.QUANTITATION_STRATEGY_RETENTION_TIME:
+					int retentionTime = peakToQuantify.getPeakModel().getRetentionTimeAtPeakMaximum();
+					IRetentionTimeWindow retentionTimeWindow = quantitationCompound.getRetentionTimeWindow();
+					if(retentionTimeWindow.isRetentionTimeInWindow(retentionTime)) {
+						filteredQuantitationCompounds.add(quantitationCompound);
+					}
+					break;
+				case PreferenceSupplier.QUANTITATION_STRATEGY_REFERENCES:
+					if(doQuantify(peakToQuantify, quantitationCompound.getName())) {
+						filteredQuantitationCompounds.add(quantitationCompound);
+					}
+					break;
+				case PreferenceSupplier.QUANTITATION_STRATEGY_NAME:
+					if(isIdentifierMatch(peakToQuantify, quantitationCompound.getName())) {
+						filteredQuantitationCompounds.add(quantitationCompound);
+					}
+					break;
+				default:
 					filteredQuantitationCompounds.add(quantitationCompound);
-				}
+					break;
 			}
 		}
 		return filteredQuantitationCompounds;
