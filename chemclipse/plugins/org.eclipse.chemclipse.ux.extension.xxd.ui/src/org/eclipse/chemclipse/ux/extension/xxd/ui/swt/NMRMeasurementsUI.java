@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.function.BiFunction;
 
+import org.eclipse.chemclipse.filter.FilterChain;
 import org.eclipse.chemclipse.filter.FilterFactory;
 import org.eclipse.chemclipse.filter.Filtered;
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
@@ -30,8 +32,11 @@ import org.eclipse.chemclipse.nmr.model.core.FIDMeasurement;
 import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.nmr.model.selection.DataNMRSelection;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection.ChangeType;
+import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -52,8 +57,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-
-import net.openchrom.nmr.processing.FilterUtils;
 
 public class NMRMeasurementsUI implements Observer {
 
@@ -220,7 +223,15 @@ public class NMRMeasurementsUI implements Observer {
 
 	private <T> void applyFilter(IMeasurementFilter<T> filter, IMeasurement measurement) {
 
-		Collection<? extends IMeasurement> filtered = FilterUtils.applyFilter(filter, measurement);
+		T configuration = filter.createConfiguration(measurement);
+		Collection<? extends IMeasurement> filtered = filter.filterIMeasurements(Collections.singleton(measurement), configuration, new FilterChain<Collection<? extends IMeasurement>>() {
+
+			@Override
+			public Collection<? extends IMeasurement> doFilter(Collection<? extends IMeasurement> items, MessageConsumer messageConsumer) {
+
+				return items;
+			}
+		}, new DefaultProcessingResult<>(), new NullProgressMonitor());
 		for(IMeasurement item : filtered) {
 			if(item instanceof IComplexSignalMeasurement<?>) {
 				if(selection != null) {
