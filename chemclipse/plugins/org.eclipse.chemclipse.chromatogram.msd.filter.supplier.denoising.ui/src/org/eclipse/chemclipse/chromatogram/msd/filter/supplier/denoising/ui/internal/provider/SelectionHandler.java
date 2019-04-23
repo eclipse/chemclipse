@@ -26,17 +26,21 @@ public class SelectionHandler extends SelectionAdapter implements SelectionListe
 	@Override
 	public void widgetSelected(SelectionEvent e) {
 
-		Object object = e.getSource();
-		if(object instanceof Table) {
-			Table table = (Table)object;
-			int index = table.getSelectionIndex();
-			TableItem tableItem = table.getItem(index);
-			Object data = tableItem.getData();
-			if(data instanceof ICombinedMassSpectrum) {
-				ICombinedMassSpectrum combinedMassSpectrum = (ICombinedMassSpectrum)data;
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, combinedMassSpectrum);
+		try {
+			Object object = e.getSource();
+			if(object instanceof Table) {
+				Table table = (Table)object;
+				int index = table.getSelectionIndex();
+				TableItem tableItem = table.getItem(index);
+				Object data = tableItem.getData();
+				if(data instanceof ICombinedMassSpectrum) {
+					ICombinedMassSpectrum combinedMassSpectrum = (ICombinedMassSpectrum)data;
+					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+					eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, combinedMassSpectrum);
+				}
 			}
+		} catch(Exception e1) {
+			//
 		}
 	}
 }
