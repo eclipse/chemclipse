@@ -1,3 +1,0 @@
-2013-12-27 14:44:18,914 WARN  [main] org.eclipse.chemclipse.logging.support.Settings: Set default values for the settings and/or workspace definition: java.lang.Exception: The settings and/or workspace definition must be not null.
-2013-12-27 15:40:25,822 WARN  [main] org.eclipse.chemclipse.logging.support.Settings: Set default values for the settings and/or workspace definition: java.lang.Exception: The settings and/or workspace definition must be not null.
-2013-12-27 15:43:17,096 WARN  [main] org.eclipse.chemclipse.logging.support.Settings: Set default values for the settings and/or workspace definition: java.lang.Exception: The settings and/or workspace definition must be not null.
