@@ -179,7 +179,8 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			case 4:
 				boolean showRetentionIndexWithoutDecimals = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS);
 				if(showRetentionIndexWithoutDecimals) {
-					text = Integer.toString((int)peakModel.getPeakMaximum().getRetentionIndex());
+					DecimalFormat integerFormat = createIntegerDecimalFormatInstance();
+					text = integerFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
 				} else {
 					text = decimalFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
 				}
@@ -187,7 +188,8 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			case 5:
 				boolean showAreaWithoutDecimals = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS);
 				if(showAreaWithoutDecimals) {
-					text = Integer.toString((int)peak.getIntegratedArea());
+					DecimalFormat integerFormat = createIntegerDecimalFormatInstance();
+					text = integerFormat.format(peak.getIntegratedArea());
 				} else {
 					text = decimalFormat.format(peak.getIntegratedArea());
 				}
