@@ -39,7 +39,7 @@ public abstract class EnhancedUpdateSupport extends AbstractUpdateSupport implem
 			public void update(String topic, List<Object> objects) {
 
 				isVisible = doUpdate();
-				if(isVisible) {
+				if(isVisible && parent != null) {
 					parent.getDisplay().asyncExec(new Runnable() {
 
 						@Override

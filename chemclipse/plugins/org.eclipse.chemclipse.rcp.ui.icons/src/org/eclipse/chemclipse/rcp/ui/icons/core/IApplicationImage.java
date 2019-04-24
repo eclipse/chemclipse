@@ -53,7 +53,11 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SCAN_FID = "scan-fid.png";
 	//
 	String IMAGE_SAMPLE = "sample.gif";
+	String IMAGE_SAMPLE_QUALIFIER = "sample-qualifier.gif";
 	String IMAGE_SAMPLE_ISTD = "sample-istd.gif";
+	String IMAGE_SAMPLE_ISTD_QUALIFIER = "sample-istd-qualifier.gif";
+	String IMAGE_SAMPLE_QC = "sample-qc.gif";
+	String IMAGE_SAMPLE_QC_QUALIFIER = "sample-qc-qualifier.gif";
 	//
 	String IMAGE_PREFERENCES = "preferences.gif";
 	String IMAGE_DRIVE = "drive.gif";
@@ -347,4 +351,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	//
 	String IMAGE_FILE_ADD = "fileAdd.gif";
 	String IMAGE_FOLDER_ADD = "folderAdd.gif";
+	//
+	String IMAGE_CHROMATOGRAM_BLANK = "chromatogramBlank.gif";
 }
