@@ -13,13 +13,33 @@ package org.eclipse.chemclipse.nmr.model.core;
 
 import java.util.Collection;
 
+import org.eclipse.chemclipse.model.core.IComplexSignal;
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurementBody;
 
-public interface SpectrumMeasurementBody extends IComplexSignalMeasurementBody<SpectrumSignal> {
+public interface FIDMeasurementBody<T extends IComplexSignal> extends IComplexSignalMeasurementBody<T> {
+
+	enum DataDimension {
+		ONE_DIMENSIONAL("1D"), TWO_DIMENSIONAL("2D"), THREE_DIMENSIONAL("3D"), FOUR_DIMENSIONAL("4D");
+
+		private String name;
+
+		DataDimension(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String toString() {
+
+			return name;
+		}
+	}
+
+	DataDimension getDataDimension();
+
 	/**
 	 *
-	 * @return the signals that makes up this {@link SpectrumMeasurement}
+	 * @return the signals that makes up this {@link FIDMeasurementBody}
 	 */
 	@Override
-	Collection<? extends SpectrumSignal> getSignals();
+	Collection<? extends T> getSignals();
 }

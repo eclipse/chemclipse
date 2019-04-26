@@ -6,20 +6,36 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
+ *
  * Contributors:
  * Alexander Kerner - initial API and implementation
+ *
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
-import org.eclipse.chemclipse.model.core.IComplexSignalMeasurementBody;
+public class SimpleNMRMeasurement implements SpectrumMeasurementBody, Serializable {
 
-public interface SpectrumMeasurementBody extends IComplexSignalMeasurementBody<SpectrumSignal> {
 	/**
 	 *
-	 * @return the signals that makes up this {@link SpectrumMeasurement}
 	 */
+	private static final long serialVersionUID = -1821879076290727455L;
+
+	private Collection<SpectrumSignal> signals = new ArrayList<>();
+
 	@Override
-	Collection<? extends SpectrumSignal> getSignals();
+	public Collection<SpectrumSignal> getSignals() {
+		return Collections.unmodifiableCollection(signals);
+	}
+
+	public void setSignals(Collection<? extends SpectrumSignal> signals) {
+		this.signals = new ArrayList<>(signals);
+	}
+
+
+
 }
