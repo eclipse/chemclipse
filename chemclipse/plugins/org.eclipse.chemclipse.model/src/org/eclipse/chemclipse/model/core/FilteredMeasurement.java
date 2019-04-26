@@ -5,9 +5,10 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -23,11 +24,16 @@ import org.eclipse.chemclipse.filter.Filtered;
 import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
 
 /**
- * This class is meant as a class for Filters that wants to filter some aspects of a {@link IMeasurement}, the class simply delegates to an original {@link IMeasurement} and returns all his data to the caller.
- * A filter can now extend this class and return for example a filtered set of data, or use the setters to override the original data
- * 
- * <b>Important</b> This class is not meant for format readers, these should extend {@link AbstractMeasurement} instead and implement the interface on a reader specific class
- * 
+ * This class is meant as a class for Filters that wants to filter some aspects
+ * of a {@link IMeasurement}, the class simply delegates to an original
+ * {@link IMeasurement} and returns all his data to the caller. A filter can now
+ * extend this class and return for example a filtered set of data, or use the
+ * setters to override the original data
+ *
+ * <b>Important</b> This class is not meant for format readers, these should
+ * extend {@link AbstractMeasurement} instead and implement the interface on a
+ * reader specific class
+ *
  * @author Christoph Läubrich
  *
  */
@@ -47,10 +53,11 @@ public class FilteredMeasurement<FilteredType extends IMeasurement> implements I
 	private String miscInfo;
 	private Date date;
 	private String operator;
-	private Map<String, IMeasurementResult> measurementResults = new HashMap<String, IMeasurementResult>(1);
+	private Map<String, IMeasurementResult> measurementResults = new HashMap<>(1);
 	private Map<String, String> headerMap = new HashMap<>(1);
 	private Date created = new Date();
-	private Filter<?> filter;
+
+	private transient Filter<?> filter;
 
 	public FilteredMeasurement(FilteredType measurement) {
 		if(measurement == null) {
@@ -71,12 +78,18 @@ public class FilteredMeasurement<FilteredType extends IMeasurement> implements I
 		return created;
 	}
 
+	/**
+	 * <b>Note:</b> This field is transient.
+	 */
 	@Override
 	public Filter<?> getFilter() {
 
 		return filter;
 	}
 
+	/**
+	 * <b>Note:</b> This field is transient.
+	 */
 	public void setFilter(Filter<?> filter) {
 
 		this.filter = filter;

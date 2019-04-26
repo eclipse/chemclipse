@@ -7,12 +7,18 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Christoph Läubrich - initial API and implementation
+ * Alexander Kerner - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
-public interface IComplexSignalMeasurement<T extends IComplexSignal>
-extends IMeasurement, IComplexSignalMeasurementBody<T> {
+import java.util.Collection;
 
+public interface IComplexSignalMeasurementBody<T extends IComplexSignal> {
+
+	/**
+	 *
+	 * @return the signals that makes up this {@link IComplexSignalMeasurement}
+	 */
+	Collection<? extends T> getSignals();
 
 }
