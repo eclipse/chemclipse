@@ -7,12 +7,19 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Christoph Läubrich - initial API and implementation
+ * Alexander Kerner - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.core;
+package org.eclipse.chemclipse.nmr.model.core;
 
-public interface IComplexSignalMeasurement<T extends IComplexSignal>
-		extends IMeasurement, IComplexSignalMeasuremntBody<IComplexSignal> {
+import java.util.Collection;
 
+import org.eclipse.chemclipse.model.core.IComplexSignalMeasuremntBody;
 
+public interface SpectrumMeasurementBody extends IComplexSignalMeasuremntBody<SpectrumSignal> {
+	/**
+	 *
+	 * @return the signals that makes up this {@link SpectrumMeasurement}
+	 */
+	@Override
+	Collection<? extends SpectrumSignal> getSignals();
 }
