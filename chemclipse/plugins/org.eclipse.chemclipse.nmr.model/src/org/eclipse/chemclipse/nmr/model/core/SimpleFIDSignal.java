@@ -50,7 +50,7 @@ public class SimpleFIDSignal implements FIDSignal, Externalizable {
 	/**
 	 * No-arg constructor for serialization only.
 	 */
-	protected SimpleFIDSignal() {
+	public SimpleFIDSignal() {
 
 	}
 
