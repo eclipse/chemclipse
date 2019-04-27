@@ -30,6 +30,17 @@ public class SimpleFIDSignal implements FIDSignal, Externalizable {
 	private Number real;
 	private Number imag;
 
+	public static List<SimpleFIDSignal> copy(Collection<? extends FIDSignal> signals) {
+		List<SimpleFIDSignal> result = new ArrayList<>();
+		for (FIDSignal s : signals) {
+			if (s instanceof SimpleFIDSignal) {
+				result.add((SimpleFIDSignal) s);
+			} else
+				result.add(new SimpleFIDSignal(s));
+		}
+		return result;
+	}
+
 	public SimpleFIDSignal(BigDecimal time, Number real, Number imag) {
 		this.time = time;
 		this.real = real;
@@ -37,12 +48,17 @@ public class SimpleFIDSignal implements FIDSignal, Externalizable {
 	}
 
 	/**
-	 * No-arg for serialization
+	 * No-arg constructor for serialization only.
 	 */
-	public SimpleFIDSignal() {
+	protected SimpleFIDSignal() {
 
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param template the {@link FIDSignal} to copy values from
+	 */
 	public SimpleFIDSignal(FIDSignal template) {
 		this(template.getSignalTime(), template.getRealComponent(), template.getImaginaryComponent());
 	}
@@ -81,14 +97,5 @@ public class SimpleFIDSignal implements FIDSignal, Externalizable {
 
 	}
 
-	public static List<SimpleFIDSignal> copy(Collection<? extends FIDSignal> signals) {
-		List<SimpleFIDSignal> result = new ArrayList<>();
-		for (FIDSignal s : signals) {
-			if (s instanceof SimpleFIDSignal) {
-				result.add((SimpleFIDSignal) s);
-			} else
-				result.add(new SimpleFIDSignal(s));
-		}
-		return result;
-	}
+
 }
