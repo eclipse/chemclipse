@@ -105,26 +105,14 @@ public class CalibrationChartSupport {
 
 	private ILineSeriesData calculateLinearEquationSeries(IEquation equation, boolean useCrossZero, Point pointMin, Point pointMax, String label, Color color) {
 
-		double[] xSeries = new double[2];
-		double[] ySeries = new double[2];
-		//
-		double x;
-		double y;
-		double xMax = pointMax.getX();
-		double yMax = pointMax.getY();
 		/*
 		 * Take care the intersections of the equations with
 		 * the border are inside the plotting area.
 		 */
-		x = equation.calculateX(yMax);
-		if(x > xMax) {
-			y = equation.calculateY(xMax);
-			x = xMax;
-		} else {
-			y = equation.calculateY(x);
-		}
+		double[] xSeries = new double[2];
+		double[] ySeries = new double[2];
 		/*
-		 * Set the x and y signals.
+		 * MIN
 		 */
 		if(useCrossZero) {
 			xSeries[0] = 0;
@@ -133,8 +121,11 @@ public class CalibrationChartSupport {
 			xSeries[0] = pointMin.getX();
 			ySeries[0] = pointMin.getY();
 		}
-		xSeries[1] = x;
-		ySeries[1] = y;
+		/*
+		 * MAX
+		 */
+		xSeries[1] = pointMax.getX();
+		ySeries[1] = equation.calculateY(pointMax.getX());
 		//
 		ILineSeriesData lineSeriesData = getLineSeriesData(xSeries, ySeries, label, color);
 		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
