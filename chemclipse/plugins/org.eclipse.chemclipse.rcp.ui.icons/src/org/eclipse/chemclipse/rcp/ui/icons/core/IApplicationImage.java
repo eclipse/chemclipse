@@ -353,4 +353,5 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_FOLDER_ADD = "folderAdd.gif";
 	//
 	String IMAGE_CHROMATOGRAM_BLANK = "chromatogramBlank.gif";
+	String IMAGE_INTERPOLATE = "interpolate.png";
 }
