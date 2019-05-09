@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 @SuppressWarnings("rawtypes")
 public class FilterRemover extends AbstractChromatogramFilter {
@@ -80,18 +81,23 @@ public class FilterRemover extends AbstractChromatogramFilter {
 			 */
 			for(int scan = startScan; scan <= stopScan; scan++) {
 				if(scanRemoverPattern.remove()) {
-					monitor.subTask("Remove scan from chromatogram: " + scan);
 					scansToRemove.add(scan);
 				}
 			}
 			/*
 			 * Use a remove counter, because each time a scan will be removed, the chromatogram contains one scan less.
 			 */
-			int removeCounter = 0;
-			for(Integer scan : scansToRemove) {
-				scan -= removeCounter;
-				chromatogram.removeScan(scan);
-				removeCounter++;
+			SubMonitor subMonitor = SubMonitor.convert(monitor, "Remove scan(s) from chromatogram", scansToRemove.size());
+			try {
+				int removeCounter = 0;
+				for(Integer scan : scansToRemove) {
+					scan -= removeCounter;
+					chromatogram.removeScan(scan);
+					removeCounter++;
+					subMonitor.worked(1);
+				}
+			} finally {
+				SubMonitor.done(subMonitor);
 			}
 			//
 			chromatogram.recalculateScanNumbers();

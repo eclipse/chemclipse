@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 /**
  * This filter removes empty scans.
@@ -79,7 +80,6 @@ public class FilterCleaner extends AbstractChromatogramFilter {
 				 * MSD
 				 */
 				if(((IScanMSD)chromatogramScan).getNumberOfIons() == 0) {
-					monitor.subTask("Remove scan from chromatogram: " + scan);
 					scansToRemove.add(scan);
 				}
 			} else if(chromatogramScan instanceof IScanCSD) {
@@ -87,7 +87,6 @@ public class FilterCleaner extends AbstractChromatogramFilter {
 				 * CSD
 				 */
 				if(((IScanCSD)chromatogramScan).getTotalSignal() == 0) {
-					monitor.subTask("Remove scan from chromatogram: " + scan);
 					scansToRemove.add(scan);
 				}
 			} else if(chromatogramScan instanceof IScanWSD) {
@@ -95,7 +94,6 @@ public class FilterCleaner extends AbstractChromatogramFilter {
 				 * WSD
 				 */
 				if(((IScanWSD)chromatogramScan).getScanSignals().size() == 0) {
-					monitor.subTask("Remove scan from chromatogram: " + scan);
 					scansToRemove.add(scan);
 				}
 			}
@@ -103,11 +101,17 @@ public class FilterCleaner extends AbstractChromatogramFilter {
 		/*
 		 * Use a remove counter, because each time a scan will be removed, the chromatogram contains one scan less.
 		 */
-		int removeCounter = 0;
-		for(Integer scan : scansToRemove) {
-			scan -= removeCounter;
-			chromatogram.removeScan(scan);
-			removeCounter++;
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Remove empty scan(s) from chromatogram.", 100);
+		try {
+			int removeCounter = 0;
+			for(Integer scan : scansToRemove) {
+				scan -= removeCounter;
+				chromatogram.removeScan(scan);
+				removeCounter++;
+			}
+			subMonitor.worked(1);
+		} finally {
+			SubMonitor.done(subMonitor);
 		}
 		//
 		chromatogram.recalculateScanNumbers();
