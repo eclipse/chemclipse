@@ -25,6 +25,7 @@ public class InputValue {
 	private Object maxValue = null;
 	private String regularExpression = null;
 	private IntegerValidation integerValidation = null;
+	private boolean isMultiLine = false; // StringSettingsProperty
 
 	public boolean hasMinMaxConstraint() {
 
@@ -33,7 +34,7 @@ public class InputValue {
 
 	public boolean hasRegexConstraint() {
 
-		return (regularExpression != null);
+		return (regularExpression != null && !"".equals(regularExpression));
 	}
 
 	public boolean hasIntegerValidation() {
@@ -129,5 +130,15 @@ public class InputValue {
 	public void setIntegerValidation(IntegerValidation integerValidation) {
 
 		this.integerValidation = integerValidation;
+	}
+
+	public boolean isMultiLine() {
+
+		return isMultiLine;
+	}
+
+	public void setMultiLine(boolean isMultiLine) {
+
+		this.isMultiLine = isMultiLine;
 	}
 }

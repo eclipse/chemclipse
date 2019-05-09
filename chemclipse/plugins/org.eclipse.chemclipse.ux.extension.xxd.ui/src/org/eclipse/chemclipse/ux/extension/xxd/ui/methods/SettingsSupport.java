@@ -158,6 +158,7 @@ public class SettingsSupport {
 						} else if(annotation instanceof StringSettingsProperty) {
 							StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
 							inputValue.setRegularExpression(settingsProperty.regExp());
+							inputValue.setMultiLine(settingsProperty.isMultiLine());
 						} else if(annotation instanceof IonsSelectionSettingProperty) {
 							// IonsSelectionSettingProperty settingsProperty = (IonsSelectionSettingProperty)annotation;
 							/*

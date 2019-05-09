@@ -145,13 +145,17 @@ public class WidgetItem {
 		Class<?> rawType = inputValue.getRawType();
 		if(rawType != null) {
 			if(rawType == int.class || rawType == Integer.class) {
-				control = createTextWidget(parent);
+				control = createTextWidgetNormal(parent);
 			} else if(rawType == float.class || rawType == Float.class) {
-				control = createTextWidget(parent);
+				control = createTextWidgetNormal(parent);
 			} else if(rawType == double.class || rawType == Double.class) {
-				control = createTextWidget(parent);
+				control = createTextWidgetNormal(parent);
 			} else if(rawType == String.class) {
-				control = createTextWidget(parent);
+				if(inputValue.isMultiLine()) {
+					control = createTextWidgetMultiLine(parent);
+				} else {
+					control = createTextWidgetNormal(parent);
+				}
 			} else if(rawType == boolean.class || rawType == Boolean.class) {
 				control = createCheckboxWidget(parent);
 			} else if(rawType.isEnum()) {
@@ -168,12 +172,22 @@ public class WidgetItem {
 		return control;
 	}
 
-	private Control createTextWidget(Composite parent) {
+	private Control createTextWidgetNormal(Composite parent) {
 
-		Text text = new Text(parent, SWT.BORDER);
+		return createTextWidget(parent, SWT.BORDER, new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	private Control createTextWidgetMultiLine(Composite parent) {
+
+		return createTextWidget(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI, new GridData(GridData.FILL_BOTH));
+	}
+
+	private Control createTextWidget(Composite parent, int style, GridData gridData) {
+
+		Text text = new Text(parent, style);
 		text.setText(inputValue.getValue());
 		text.setToolTipText(inputValue.getDescription());
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.setLayoutData(gridData);
 		return text;
 	}
 

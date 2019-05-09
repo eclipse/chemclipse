@@ -85,8 +85,21 @@ public class InputValidator implements IValidator {
 				}
 			} else if(rawType == String.class) {
 				if(inputValue.hasRegexConstraint()) {
-					if(!value.matches(inputValue.getRegularExpression())) {
-						message = "The value must match the expression: " + inputValue.getRegularExpression();
+					if(inputValue.isMultiLine()) {
+						String[] lines = value.split("[\r\n]+");
+						int n = 1;
+						exitloop:
+						for(String line : lines) {
+							if(!line.matches(inputValue.getRegularExpression())) {
+								message = "Line #" + n + " is not formatted correctly.";
+								break exitloop;
+							}
+							n++;
+						}
+					} else {
+						if(!value.matches(inputValue.getRegularExpression())) {
+							message = "The value must match the expression: " + inputValue.getRegularExpression();
+						}
 					}
 				}
 			} else if(rawType == boolean.class || rawType == Boolean.class) {
