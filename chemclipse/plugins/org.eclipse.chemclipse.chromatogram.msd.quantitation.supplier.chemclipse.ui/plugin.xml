@@ -14,7 +14,7 @@
             category="org.eclipse.chemclipse.chromatogram.msd.quantitation.ui.preferences.quantifierPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.preferences.peakQuantifierPreferencePage"
-            name="Standard Peak Quantifier">
+            name="Standard Peak Quantifier (ESTD)">
       </page>
    </extension>
    <extension
