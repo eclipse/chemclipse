@@ -227,7 +227,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			scanObject.setRetentionTime(retentionTime);
 			//
 			IScanSignalWSD scanSignalObject = new VendorScanSignal();
-			scanSignalObject.setWavelength(IScanSignalWSD.TIC_SIGNAL);
+			scanSignalObject.setWavelength(ISignal.TOTAL_INTENSITY);
 			scanSignalObject.setAbundance(totalSignal);
 			scanObject.addScanSignal(scanSignalObject);
 			chromatogram.addScan(scanObject);
