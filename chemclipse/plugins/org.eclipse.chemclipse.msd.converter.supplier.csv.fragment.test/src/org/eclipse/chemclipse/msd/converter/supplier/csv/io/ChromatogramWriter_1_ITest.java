@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,16 +15,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
-import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.ChromatogramWriter;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class ChromatogramWriter_1_ITest extends ChromatogramReaderTestCase {
 
-	private IChromatogramMSDWriter chromatogramWriter;
+	private ChromatogramWriter chromatogramWriter;
 
 	@Override
 	protected void setUp() throws Exception {

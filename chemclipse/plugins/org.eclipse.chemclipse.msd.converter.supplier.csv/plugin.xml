@@ -26,7 +26,33 @@
             isImportable="false">
       </ChromatogramSupplier>      
    </extension>
-      <extension
+   <extension
+         point="org.eclipse.chemclipse.csd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads and Writes Chromatograms to CSV."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.core.ChromatogramExportConverter"
+            fileExtension=".csv"
+            filterName="CSV Chromatogram (*.csv)"
+            id="org.eclipse.chemclipse.csd.converter.supplier.csv"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcherChromatogram"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.wsd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads and Writes Chromatograms to CSV."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.core.ChromatogramExportConverter"
+            fileExtension=".csv"
+            filterName="CSV Chromatogram (*.csv)"
+            id="org.eclipse.chemclipse.csd.converter.supplier.csv"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcherChromatogram"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>
+   <extension
          point="org.eclipse.chemclipse.msd.converter.databaseSupplier">
       <DatabaseSupplier
             description="Writes mass spectra into character separated value (csv) files."
