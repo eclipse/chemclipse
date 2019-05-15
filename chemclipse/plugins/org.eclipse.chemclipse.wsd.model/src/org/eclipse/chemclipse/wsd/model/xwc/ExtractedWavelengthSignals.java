@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
@@ -31,14 +32,6 @@ import org.eclipse.chemclipse.wsd.model.core.exceptions.NoExtractedWavelengthSig
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanWSD;
 
-/**
- * @deprecated Use {@link ExtractedSingleWavelengthSignals} instead
- *
- * @see {@link ExtractedSingleWavelengthSignalExtractor}
- * @see {@link ExtractedSingleWavelengthSignal}
- * 
- */
-@Deprecated
 public class ExtractedWavelengthSignals implements IExtractedWavelengthSignals {
 
 	private static final Logger logger = Logger.getLogger(ExtractedWavelengthSignals.class);
@@ -221,13 +214,13 @@ public class ExtractedWavelengthSignals implements IExtractedWavelengthSignals {
 	public ITotalScanSignals getTotalWavelengthSignals() {
 
 		IScanRange scanRange = new ScanRange(getStartScan(), getStopScan());
-		return getTotalWavelengthSignals((int)IScanSignalWSD.TIC_SIGNAL, scanRange);
+		return getTotalWavelengthSignals((int)ISignal.TOTAL_INTENSITY, scanRange);
 	}
 
 	@Override
 	public ITotalScanSignals getTotalWavelengthSignals(IScanRange scanRange) {
 
-		return getTotalWavelengthSignals((int)IScanSignalWSD.TIC_SIGNAL, scanRange);
+		return getTotalWavelengthSignals((int)ISignal.TOTAL_INTENSITY, scanRange);
 	}
 
 	@Override
@@ -254,7 +247,7 @@ public class ExtractedWavelengthSignals implements IExtractedWavelengthSignals {
 				retentionTime = extractedWavelengthSignal.getRetentionTime();
 				retentionIndex = extractedWavelengthSignal.getRetentionIndex();
 				// TIC
-				if(wavelength == (int)IScanSignalWSD.TIC_SIGNAL) {
+				if(wavelength == (int)ISignal.TOTAL_INTENSITY) {
 					signal = extractedWavelengthSignal.getTotalSignal();
 				} else { // XIC
 					signal = extractedWavelengthSignal.getAbundance(wavelength);

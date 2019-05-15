@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,20 +40,8 @@ public interface IScanWSD extends IScan {
 
 	void removeScanSignal(int scan);
 
-	/**
-	 * use method {@link #getExtractedSingleWavelengthSignal(double)} instead
-	 * 
-	 * @return IExtractedWavelengthSignal
-	 */
-	@Deprecated
 	IExtractedWavelengthSignal getExtractedWavelengthSignal();
 
-	/**
-	 * use method {@link #getExtractedSingleWavelengthSignal(double)} instead
-	 * 
-	 * @return IExtractedWavelengthSignal
-	 */
-	@Deprecated
 	IExtractedWavelengthSignal getExtractedWavelengthSignal(double startIon, double stopIon);
 
 	Optional<IExtractedSingleWavelengthSignal> getExtractedSingleWavelengthSignal(double wavelength);
