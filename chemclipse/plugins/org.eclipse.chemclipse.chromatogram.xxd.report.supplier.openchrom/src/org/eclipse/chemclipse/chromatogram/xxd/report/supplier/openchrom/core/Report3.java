@@ -30,10 +30,10 @@ public class Report3 extends AbstractReport {
 	private static final Logger logger = Logger.getLogger(Report3.class);
 
 	@Override
-	public IProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings settings, IProgressMonitor monitor) {
+	public IProcessingInfo<File> report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings settings, IProgressMonitor monitor) {
 
 		file = SpecificationValidator.validateSpecification(file);
-		IProcessingInfo processingInfo = super.validate(file);
+		IProcessingInfo<File> processingInfo = super.validate(file);
 		//
 		if(!processingInfo.hasErrorMessages()) {
 			if(settings instanceof ReportSettings) {

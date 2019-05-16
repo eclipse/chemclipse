@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,10 +30,10 @@ public class Report2 extends AbstractReport {
 	private static final Logger logger = Logger.getLogger(Report2.class);
 
 	@Override
-	public IProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings settings, IProgressMonitor monitor) {
+	public IProcessingInfo<File> report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings settings, IProgressMonitor monitor) {
 
 		file = SpecificationValidator.validateSpecification(file);
-		IProcessingInfo processingInfo = super.validate(file);
+		IProcessingInfo<File> processingInfo = super.validate(file);
 		//
 		if(!processingInfo.hasErrorMessages()) {
 			if(settings instanceof ReportSettings) {

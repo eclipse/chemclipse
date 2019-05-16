@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,22 +27,22 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractReport extends AbstractChromatogramReportGenerator {
 
-	public IProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings settings, IProgressMonitor monitor) {
+	public IProcessingInfo<File> report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings settings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<File>();
 		processingInfo.addErrorMessage("ChemClipse Chromatogram Report", "Please override this method");
 		return processingInfo;
 	}
 
 	@Override
-	public IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings settings, IProgressMonitor monitor) {
+	public IProcessingInfo<File> generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings settings, IProgressMonitor monitor) {
 
 		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
 	@Override
-	public IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<File> generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
 		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
 		ReportSettings settings = PreferenceSupplier.getReportSettings();
@@ -50,13 +50,13 @@ public abstract class AbstractReport extends AbstractChromatogramReportGenerator
 	}
 
 	@Override
-	public IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings settings, IProgressMonitor monitor) {
+	public IProcessingInfo<File> generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings settings, IProgressMonitor monitor) {
 
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
 	@Override
-	public IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IProgressMonitor monitor) {
+	public IProcessingInfo<File> generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IProgressMonitor monitor) {
 
 		ReportSettings settings = PreferenceSupplier.getReportSettings();
 		return report(file, append, chromatograms, settings, monitor);

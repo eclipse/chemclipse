@@ -87,6 +87,8 @@ public class ReportWriter3 {
 		printWriter.print("Conc.");
 		printWriter.print(DELIMITER);
 		printWriter.print("Unit");
+		printWriter.print(DELIMITER);
+		printWriter.print("Description");
 		printWriter.println("");
 		/*
 		 * Data
@@ -113,6 +115,8 @@ public class ReportWriter3 {
 				printWriter.print(dfConcentration.format(quantitationEntry.getConcentration()));
 				printWriter.print(DELIMITER);
 				printWriter.print(quantitationEntry.getConcentrationUnit());
+				printWriter.print(DELIMITER);
+				printWriter.print(quantitationEntry.getDescription());
 				printWriter.println("");
 			}
 			i++;
