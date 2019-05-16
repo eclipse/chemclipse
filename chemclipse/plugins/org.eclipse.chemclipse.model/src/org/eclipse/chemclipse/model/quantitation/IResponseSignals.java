@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,6 +55,18 @@ public interface IResponseSignals extends List<IResponseSignal>, Serializable {
 	 * @return double
 	 */
 	double getAverageFactor(double signal, boolean isCrossZero);
+
+	double getMinResponseValue(double signal);
+
+	double getMaxResponseValue(double signal);
+
+	/**
+	 * Returns the min response value of the stored concentration response entries.
+	 * Or 0 if none value is stored.
+	 * 
+	 * @return double
+	 */
+	double getMinResponseValue();
 
 	/**
 	 * Returns the max response value of the stored concentration response entries.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -75,6 +75,49 @@ public class ResponseSignals extends ArrayList<IResponseSignal> implements IResp
 		}
 		//
 		return x / y;
+	}
+
+	public double getMinResponseValue(double signal) {
+
+		double minResponse = Double.MAX_VALUE;
+		for(IResponseSignal entry : this) {
+			if(signal == entry.getSignal()) {
+				double response = entry.getResponse();
+				if(response < minResponse) {
+					minResponse = response;
+				}
+			}
+		}
+		//
+		return (minResponse == Double.MAX_VALUE) ? 0.0d : minResponse;
+	}
+
+	public double getMaxResponseValue(double signal) {
+
+		double maxResponse = 0;
+		for(IResponseSignal entry : this) {
+			if(signal == entry.getSignal()) {
+				double response = entry.getResponse();
+				if(response > maxResponse) {
+					maxResponse = response;
+				}
+			}
+		}
+		return maxResponse;
+	}
+
+	@Override
+	public double getMinResponseValue() {
+
+		double minResponse = Double.MAX_VALUE;
+		for(IResponseSignal entry : this) {
+			double response = entry.getResponse();
+			if(response < minResponse) {
+				minResponse = response;
+			}
+		}
+		//
+		return (minResponse == Double.MAX_VALUE) ? 0.0d : minResponse;
 	}
 
 	@Override

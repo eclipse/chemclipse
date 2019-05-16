@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,8 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	 * Renew the UUID on change.
 	 */
 	private static final long serialVersionUID = -6312658397485712262L;
+	//
+	private static final String DESCRIPTION_DELIMITER = " | ";
 	//
 	private double signal = ISignal.TOTAL_INTENSITY;
 	private String name = "";
@@ -121,6 +123,20 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	public void setDescription(String description) {
 
 		this.description = description;
+	}
+
+	@Override
+	public void appendDescription(String description) {
+
+		if(description != null) {
+			if(!this.description.contains(description)) {
+				if(this.description.length() == 0) {
+					this.description = description;
+				} else {
+					this.description += DESCRIPTION_DELIMITER + description;
+				}
+			}
+		}
 	}
 
 	@Override

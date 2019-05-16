@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 public abstract class AbstractChromatogramReportGenerator implements IChromatogramReportGenerator {
 
 	@Override
-	public IProcessingInfo validate(File file) {
+	public IProcessingInfo<File> validate(File file) {
 
 		/*
 		 * When no file is given.
@@ -31,7 +31,7 @@ public abstract class AbstractChromatogramReportGenerator implements IChromatogr
 		if(file == null) {
 			return getProcessingInfo("The file couldn't be found.");
 		}
-		IProcessingInfo processingInfo = createDirectoriesAndFiles(file);
+		IProcessingInfo<File> processingInfo = createDirectoriesAndFiles(file);
 		/*
 		 * Tests if the file can be written.
 		 */
@@ -49,7 +49,7 @@ public abstract class AbstractChromatogramReportGenerator implements IChromatogr
 	 * @throws FileIsNotWriteableException
 	 * @throws IOException
 	 */
-	private IProcessingInfo createDirectoriesAndFiles(final File file) {
+	private IProcessingInfo<File> createDirectoriesAndFiles(final File file) {
 
 		/*
 		 * Take a look if the given file is a directory or a file.<br/> Check
@@ -76,12 +76,12 @@ public abstract class AbstractChromatogramReportGenerator implements IChromatogr
 				return getProcessingInfo("The given file couldn't be created:" + file.getAbsolutePath());
 			}
 		}
-		return new ProcessingInfo();
+		return new ProcessingInfo<File>();
 	}
 
-	private IProcessingInfo getProcessingInfo(String message) {
+	private IProcessingInfo<File> getProcessingInfo(String message) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<File>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Chromatogram Report", message);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
