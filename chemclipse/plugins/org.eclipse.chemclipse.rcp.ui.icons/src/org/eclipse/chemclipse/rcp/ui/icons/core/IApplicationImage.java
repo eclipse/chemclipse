@@ -17,6 +17,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	 * Icons and Images
 	 */
 	String IMAGE_ADD = "add.gif";
+	String IMAGE_COPY = "copy.png";
 	String IMAGE_CANCEL = "cancel.gif";
 	String IMAGE_DELETE = "delete.gif";
 	String IMAGE_EXECUTE_ADD = "execute_add.gif";

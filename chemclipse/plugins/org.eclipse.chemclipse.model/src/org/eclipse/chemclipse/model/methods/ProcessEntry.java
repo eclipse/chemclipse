@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,6 +30,18 @@ public class ProcessEntry implements IProcessEntry {
 	private String jsonSettings = EMPTY_JSON_SETTINGS;
 	private List<DataType> supportedDataTypes = new ArrayList<>();
 	private Class<? extends IProcessSettings> processSettingsClass = null;
+
+	public ProcessEntry() {
+	}
+
+	public ProcessEntry(IProcessEntry processEntry) {
+		processorId = processEntry.getProcessorId();
+		name = processEntry.getName();
+		description = processEntry.getDescription();
+		jsonSettings = processEntry.getJsonSettings();
+		supportedDataTypes = processEntry.getSupportedDataTypes();
+		processSettingsClass = processEntry.getProcessSettingsClass();
+	}
 
 	@Override
 	public String getProcessorId() {

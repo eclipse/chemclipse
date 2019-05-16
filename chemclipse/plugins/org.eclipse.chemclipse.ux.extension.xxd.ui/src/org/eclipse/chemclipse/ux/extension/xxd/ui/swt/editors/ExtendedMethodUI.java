@@ -14,15 +14,21 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
+import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
@@ -43,6 +49,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -53,6 +60,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -64,11 +72,14 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	private static final Logger logger = Logger.getLogger(ExtendedMethodUI.class);
 	//
+	private static final String MENU_CATEGORY_STEPS = "Steps";
+	//
 	private Composite toolbarHeader;
 	private Label labelDataInfo;
 	private Text textOperator;
 	private Text textDescription;
 	private Button buttonAdd;
+	private Button buttonCopy;
 	private Button buttonRemove;
 	private Button buttonMoveUp;
 	private Button buttonMoveDown;
@@ -118,16 +129,6 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		//
 		PartSupport.setCompositeVisibility(toolbarHeader, false);
 		enableTableButtons();
-		listUI.addDoubleClickListener(new IDoubleClickListener() {
-
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-
-				if(isEnabled() && buttonModifySettings.isEnabled()) {
-					executeModifySettings(getShell());
-				}
-			}
-		});
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -289,6 +290,89 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				enableTableButtons();
 			}
 		});
+		//
+		Shell shell = listUI.getTable().getShell();
+		ITableSettings tableSettings = listUI.getTableSettings();
+		addDeleteMenuEntry(shell, tableSettings);
+		addKeyEventProcessors(shell, tableSettings);
+		listUI.applySettings(tableSettings);
+		//
+		listUI.addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+
+				if(isEnabled() && buttonModifySettings.isEnabled()) {
+					executeModifySettings(getShell());
+				}
+			}
+		});
+	}
+
+	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Delete Step(s)";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return MENU_CATEGORY_STEPS;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				deleteSteps(shell);
+			}
+		});
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void deleteSteps(Shell shell) {
+
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Delete Processing Step(s)");
+		messageBox.setMessage("Would you like to delete the selected processing step(s)?");
+		if(messageBox.open() == SWT.YES) {
+			/*
+			 * Delete Step(s)
+			 */
+			Iterator iterator = listUI.getStructuredSelection().iterator();
+			while(iterator.hasNext()) {
+				Object object = iterator.next();
+				if(object instanceof IProcessEntry) {
+					deleteStep((IProcessEntry)object);
+				}
+			}
+			updateProcessMethod();
+		}
+	}
+
+	private void deleteStep(IProcessEntry processEntry) {
+
+		if(processMethod != null) {
+			processMethod.remove(processEntry);
+		}
+	}
+
+	private void addKeyEventProcessors(Shell shell, ITableSettings tableSettings) {
+
+		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
+
+			@Override
+			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
+
+				if(e.keyCode == SWT.DEL) {
+					deleteSteps(shell);
+				}
+			}
+		});
 	}
 
 	private void createToolbarBottom(Composite parent) {
@@ -297,9 +381,10 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		buttons.setLayoutData(gridData);
-		buttons.setLayout(new GridLayout(6, false));
+		buttons.setLayout(new GridLayout(7, false));
 		//
 		buttonAdd = createAddButton(buttons);
+		buttonCopy = createCopyButton(buttons);
 		buttonRemove = createRemoveButton(buttons);
 		buttonMoveUp = createMoveUpButton(buttons);
 		buttonMoveDown = createMoveDownButton(buttons);
@@ -331,6 +416,36 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 							if(showSettingsOnAdd) {
 								modifyProcessEntry(getShell(), processEntry);
 							}
+							updateProcessMethod();
+						}
+					}
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createCopyButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Copy a process method.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(processMethod != null) {
+					Table table = listUI.getTable();
+					int index = table.getSelectionIndex();
+					if(index > -1) {
+						Object object = table.getItem(index).getData();
+						if(object instanceof IProcessEntry) {
+							IProcessEntry processEntry = (IProcessEntry)object;
+							IProcessEntry processEntryCopy = new ProcessEntry(processEntry);
+							processMethod.add(index, processEntryCopy);
 							updateProcessMethod();
 						}
 					}
@@ -483,6 +598,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		buttonAdd.setEnabled(processMethod != null);
 		//
 		boolean enabled = (listUI.getTable().getSelectionIndex() > -1) ? true : false;
+		buttonCopy.setEnabled(enabled);
 		buttonRemove.setEnabled(enabled);
 		buttonMoveUp.setEnabled(enabled);
 		buttonMoveDown.setEnabled(enabled);
