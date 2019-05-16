@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -128,6 +128,6 @@ public class QuantitationCalculatorMSD_XIC_4_Test extends QuantitationCalculator
 
 	public void testCalculateConcentration1_4() {
 
-		assertEquals("", quantitationEntry1.getDescription());
+		assertEquals("The integrated area '1.7E5' is < min response '5.0E5'.", quantitationEntry1.getDescription());
 	}
 }
