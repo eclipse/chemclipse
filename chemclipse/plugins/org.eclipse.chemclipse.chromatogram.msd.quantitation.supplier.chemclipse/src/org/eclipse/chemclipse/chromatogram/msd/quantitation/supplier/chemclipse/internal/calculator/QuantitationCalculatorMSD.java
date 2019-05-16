@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,7 @@ import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignals;
+import org.eclipse.chemclipse.model.quantitation.IResponseSignals;
 import org.eclipse.chemclipse.model.quantitation.QuantitationSupport;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -33,6 +35,7 @@ import org.eclipse.chemclipse.numeric.equations.QuadraticEquation;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 
@@ -181,12 +184,25 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 		String concentrationUnit = quantitationCompound.getConcentrationUnit();
 		boolean isCrossZero = quantitationCompound.isCrossZero();
 		double concentration = 0.0d;
+		String description = "";
 		//
 		CalibrationMethod calibrationMethod = quantitationCompound.getCalibrationMethod();
+		IResponseSignals responseSignals = quantitationCompound.getResponseSignals();
+		double minResponse = responseSignals.getMinResponseValue(signal);
+		double maxResponse = responseSignals.getMaxResponseValue(signal);
+		//
 		switch(calibrationMethod) {
 			case LINEAR:
-				LinearEquation linearEquation = quantitationCompound.getResponseSignals().getLinearEquation(signal, isCrossZero);
+				/*
+				 * Only warn if it's outside min/max response.
+				 */
+				LinearEquation linearEquation = responseSignals.getLinearEquation(signal, isCrossZero);
 				concentration = linearEquation.calculateX(integratedArea);
+				if(integratedArea < minResponse) {
+					description = getDescriptionResponse(integratedArea, minResponse, "< min");
+				} else if(integratedArea > maxResponse) {
+					description = getDescriptionResponse(integratedArea, maxResponse, "> max");
+				}
 				break;
 			case QUADRATIC:
 				/*
@@ -195,17 +211,24 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 				 */
 				double factorAverage = quantitationCompound.getResponseSignals().getAverageFactor(signal, isCrossZero);
 				double concentrationAverage = factorAverage * integratedArea;
-				//
-				QuadraticEquation quadraticEquation = quantitationCompound.getResponseSignals().getQuadraticEquation(signal, isCrossZero);
-				double concentration1 = quadraticEquation.calculateX(integratedArea, true);
-				double concentration2 = quadraticEquation.calculateX(integratedArea, false);
-				double delta1 = Math.abs(concentration1 - concentrationAverage);
-				double delta2 = Math.abs(concentration2 - concentrationAverage);
-				//
-				concentration = (delta1 < delta2) ? concentration1 : concentration2;
+				/*
+				 * Don't quantify if it's outside min/max response.
+				 */
+				QuadraticEquation quadraticEquation = responseSignals.getQuadraticEquation(signal, isCrossZero);
+				if(integratedArea < minResponse) {
+					description = getDescriptionResponse(integratedArea, minResponse, "< min");
+				} else if(integratedArea > maxResponse) {
+					description = getDescriptionResponse(integratedArea, maxResponse, "> max");
+				} else {
+					double concentration1 = quadraticEquation.calculateX(integratedArea, true);
+					double concentration2 = quadraticEquation.calculateX(integratedArea, false);
+					double delta1 = Math.abs(concentration1 - concentrationAverage);
+					double delta2 = Math.abs(concentration2 - concentrationAverage);
+					concentration = (delta1 < delta2) ? concentration1 : concentration2;
+				}
 				break;
 			case AVERAGE:
-				double factor = quantitationCompound.getResponseSignals().getAverageFactor(signal, isCrossZero);
+				double factor = responseSignals.getAverageFactor(signal, isCrossZero);
 				concentration = factor * integratedArea;
 				break;
 			case ISTD:
@@ -222,7 +245,22 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 		quantitationEntry.setCalibrationMethod(calibrationMethod.toString());
 		quantitationEntry.setUsedCrossZero(isCrossZero);
 		quantitationEntry.setChemicalClass(chemicalClass);
+		quantitationEntry.setDescription(description);
 		//
 		return quantitationEntry;
+	}
+
+	private String getDescriptionResponse(double integratedArea, double response, String definition) {
+
+		DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0E0");
+		StringBuilder builder = new StringBuilder();
+		builder.append("The integrated area '");
+		builder.append(decimalFormat.format(integratedArea));
+		builder.append("' is ");
+		builder.append(definition); // < min or > max
+		builder.append(" response '");
+		builder.append(decimalFormat.format(response));
+		builder.append("'.");
+		return builder.toString();
 	}
 }
