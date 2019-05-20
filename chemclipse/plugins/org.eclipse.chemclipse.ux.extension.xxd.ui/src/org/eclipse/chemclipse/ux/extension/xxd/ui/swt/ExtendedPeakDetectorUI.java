@@ -38,11 +38,11 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BaselineSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BoxSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDetector;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.BaselineSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
@@ -931,6 +931,7 @@ public class ExtendedPeakDetectorUI {
 		baselineSelectionPaintListener.setY1(yStart);
 		baselineSelectionPaintListener.setX2(xStop);
 		baselineSelectionPaintListener.setY2(yStop);
+		//
 		redraw();
 	}
 
@@ -946,9 +947,11 @@ public class ExtendedPeakDetectorUI {
 
 		xStart = x;
 		yStart = y;
+		//
 		setCursor(SWT.CURSOR_CROSS);
 		boxSelectionPaintListener.setX1(xStart);
 		boxSelectionPaintListener.setX2(xStop);
+		//
 		redraw();
 	}
 
