@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - performance optimization and cleanup
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.explorer;
 
@@ -22,7 +23,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
-import org.eclipse.core.filesystem.EFS;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.action.Action;
@@ -78,14 +77,7 @@ public abstract class AbstractSupplierFileExplorer {
 	//
 
 	public AbstractSupplierFileExplorer(Composite parent) {
-		/*
-		 * Create the tree viewer.
-		 */
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(1, true));
-		TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
-		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
-		//
+		TabFolder tabFolder = new TabFolder(parent, SWT.NONE);
 		createDrivesTreeViewer(tabFolder);
 		createHomeTreeViewer(tabFolder);
 		createUserLocationTreeViewer(tabFolder);
@@ -99,9 +91,9 @@ public abstract class AbstractSupplierFileExplorer {
 		setTreeViewerProvider(treeViewerHome);
 		setTreeViewerProvider(treeViewerUserLocation);
 		//
-		setTreeViewerContent(treeViewerDrives, getDrives());
-		setTreeViewerContent(treeViewerHome, new File(UserManagement.getUserHome()));
-		setTreeViewerContent(treeViewerUserLocation, getUserLocation());
+		setTreeViewerContent(treeViewerDrives, File.listRoots());
+		setTreeViewerContent(treeViewerHome, new File[]{new File(UserManagement.getUserHome())});
+		setTreeViewerContent(treeViewerUserLocation, new File[]{getUserLocation()});
 	}
 
 	private void createDrivesTreeViewer(TabFolder tabFolder) {
@@ -114,7 +106,6 @@ public abstract class AbstractSupplierFileExplorer {
 		composite.setLayout(new GridLayout());
 		//
 		treeViewerDrives = createTreeViewer(composite);
-		setTreeViewerContent(treeViewerDrives, getDrives());
 		addBatchOpenButton(composite, treeViewerDrives);
 		//
 		tabDrives.setControl(composite);
@@ -130,7 +121,6 @@ public abstract class AbstractSupplierFileExplorer {
 		composite.setLayout(new GridLayout());
 		//
 		treeViewerHome = createTreeViewer(composite);
-		setTreeViewerContent(treeViewerHome, new File(UserManagement.getUserHome()));
 		addBatchOpenButton(composite, treeViewerHome);
 		//
 		tabHome.setControl(composite);
@@ -147,40 +137,9 @@ public abstract class AbstractSupplierFileExplorer {
 		//
 		addUserLocationButton(composite, treeViewerUserLocation);
 		treeViewerUserLocation = createTreeViewer(composite);
-		setTreeViewerContent(treeViewerUserLocation, getUserLocation());
 		addBatchOpenButton(composite, treeViewerUserLocation);
 		//
 		tabUserLocation.setControl(composite);
-	}
-
-	private Object getDrives() {
-
-		if(OperatingSystemUtils.isWindows()) {
-			/*
-			 * Windows, try to get C:\\ only
-			 */
-			File root = null;
-			exitloop:
-			for(File file : File.listRoots()) {
-				if(file.getAbsolutePath().startsWith("C:")) {
-					root = file;
-					break exitloop;
-				}
-			}
-			/*
-			 * Show at least the home directory, if C:\\ was not found.
-			 */
-			if(root == null) {
-				root = new File(UserManagement.getUserHome());
-			}
-			//
-			return root;
-		} else {
-			/*
-			 * Mac OS X and Linux
-			 */
-			return EFS.getLocalFileSystem();
-		}
 	}
 
 	private File getUserLocation() {
@@ -195,7 +154,9 @@ public abstract class AbstractSupplierFileExplorer {
 
 	private TreeViewer createTreeViewer(Composite parent) {
 
-		TreeViewer treeViewer = new TreeViewer(parent, SWT.MULTI);
+		TreeViewer treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.VIRTUAL);
+		treeViewer.setUseHashlookup(true);
+		treeViewer.setExpandPreCheckFilters(true);
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		setTreeViewerProvider(treeViewer);
 		/*
