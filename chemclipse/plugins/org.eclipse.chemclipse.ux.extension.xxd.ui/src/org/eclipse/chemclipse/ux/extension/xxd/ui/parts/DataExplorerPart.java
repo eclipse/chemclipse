@@ -160,7 +160,6 @@ public class DataExplorerPart {
 
 			DataExplorerPart explorer = (DataExplorerPart)part.getObject();
 			explorer.setSupplierFileEditorSupport();
-			System.out.println("Executed!");
 		}
 	}
 }

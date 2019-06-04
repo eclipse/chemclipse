@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 
 	private static final File[] NO_CHILD = new File[0];
 	private TreeViewer viewer;
-	private Object[] roots;
+	private File[] roots;
 	private static final int MAX_CACHE_SIZE = 100;
 	private final Map<File, File[]> cache = new LinkedHashMap<File, File[]>(MAX_CACHE_SIZE, 0.75f, true) {
 
@@ -87,10 +88,10 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 			if((treeViewer.getTree().getStyle() & SWT.VIRTUAL) == 0) {
 				throw new IllegalArgumentException("Treeviewer must be constructed with SWT.VIRTUAL flag!");
 			}
-			if(newInput == null || newInput instanceof Object[]) {
-				roots = (Object[])newInput;
+			if(newInput == null || newInput instanceof File[]) {
+				roots = (File[])newInput;
 			} else {
-				throw new IllegalArgumentException("Input must be an Array");
+				throw new IllegalArgumentException("Input must be an Array of Files");
 			}
 			viewer = treeViewer;
 		} else {
@@ -159,6 +160,15 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 			if(parentFile == null) {
 				return roots;
 			}
+			if(roots != null) {
+				// we must scan for "non-root-roots"...
+				String realPath = getRealPath(file);
+				for(File root : roots) {
+					if(realPath.equals(getRealPath(root))) {
+						return roots;
+					}
+				}
+			}
 			return parentFile;
 		}
 		return null;
@@ -171,5 +181,14 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 	public boolean accept(File file) {
 
 		return !file.isHidden() && !file.getName().startsWith(".") && file.canRead();
+	}
+
+	private static String getRealPath(File file) {
+
+		try {
+			return file.getCanonicalPath();
+		} catch(IOException e) {
+			return file.getAbsolutePath();
+		}
 	}
 }
