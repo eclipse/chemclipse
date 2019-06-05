@@ -253,8 +253,8 @@ public abstract class AbstractSupplierFileExplorer {
 				if(pathname != null) {
 					File directory = new File(pathname);
 					if(directory.exists()) {
-						setTreeViewerContent(treeViewerUserLocation, directory);
 						PreferenceSupplier.setUserLocationPath(directory.getAbsolutePath());
+						setTreeViewerContent(treeViewerUserLocation, new File[]{directory});
 					}
 				}
 			}
@@ -440,7 +440,7 @@ public abstract class AbstractSupplierFileExplorer {
 		return counter;
 	}
 
-	private void setTreeViewerContent(TreeViewer treeViewer, Object input) {
+	private void setTreeViewerContent(TreeViewer treeViewer, File[] input) {
 
 		DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
