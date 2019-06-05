@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexExtractor;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
@@ -20,9 +23,9 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
-import org.eclipse.chemclipse.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.ExtendedRetentionIndexListUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexTableViewerUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.ChromatogramPeakChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -39,7 +42,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 	private IRetentionIndexWizardElements wizardElements;
 	//
 	private Button checkBoxValidateRetentionIndices;
-	private SelectedPeakChromatogramUI selectedPeakChromatogramUI;
+	private ChromatogramPeakChart chromatogramPeakChart;
 	private ExtendedRetentionIndexListUI extendedRetentionIndexTableViewerUI;
 
 	public PageCalibrationTable(IRetentionIndexWizardElements wizardElements) {
@@ -74,7 +77,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 			IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
 			if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
 				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-				selectedPeakChromatogramUI.updateSelection(chromatogramSelection, true);
+				updateChromatogramChart(chromatogramSelection);
 				RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
 				ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogram);
 				wizardElements.setSeparationColumnIndices(separationColumnIndices);
@@ -120,7 +123,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		Composite parent = new Composite(composite, SWT.NONE);
 		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 		parent.setLayout(new FillLayout());
-		selectedPeakChromatogramUI = new SelectedPeakChromatogramUI(parent, SWT.BORDER);
+		chromatogramPeakChart = new ChromatogramPeakChart(parent, SWT.BORDER);
 	}
 
 	private void createTableField(Composite composite) {
@@ -148,7 +151,9 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 						IPeak selectedPeak = getSelectedPeak(chromatogram, retentionTime);
 						if(selectedPeak != null) {
 							chromatogramSelection.setSelectedPeak(selectedPeak);
-							selectedPeakChromatogramUI.updateSelection(chromatogramSelection, true);
+							List<IPeak> selectedPeaks = new ArrayList<>();
+							selectedPeaks.add(selectedPeak);
+							updateSelectedPeaksInChart(selectedPeaks);
 						}
 					}
 				}
@@ -183,5 +188,16 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		 * Updates the status
 		 */
 		updateStatus(message);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void updateChromatogramChart(IChromatogramSelection chromatogramSelection) {
+
+		chromatogramPeakChart.update(chromatogramSelection);
+	}
+
+	private void updateSelectedPeaksInChart(List<IPeak> selectedPeaks) {
+
+		chromatogramPeakChart.update(selectedPeaks);
 	}
 }

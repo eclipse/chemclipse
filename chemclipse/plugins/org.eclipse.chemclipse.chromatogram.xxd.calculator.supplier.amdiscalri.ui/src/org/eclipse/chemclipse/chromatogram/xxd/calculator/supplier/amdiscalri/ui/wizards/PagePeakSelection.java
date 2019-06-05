@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,7 +29,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
-import org.eclipse.chemclipse.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.ChromatogramPeakChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTableRetentionIndexViewerUI;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -49,7 +49,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 
 	private static final Logger logger = Logger.getLogger(PagePeakSelection.class);
 	private IRetentionIndexWizardElements wizardElements;
-	private SelectedPeakChromatogramUI selectedPeakChromatogramUI;
+	private ChromatogramPeakChart chromatogramPeakChart;
 	private Composite massSpectrumComposite;
 	private SimpleMassSpectrumUI simpleMassSpectrumUI;
 	private PeakTableRetentionIndexViewerUI peakTableViewerUI;
@@ -104,9 +104,12 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 				List<? extends IPeak> peaks = chromatogram.getPeaks();
 				peakTableViewerUI.setInput(peaks);
 				if(peaks.size() > 0) {
+					List<IPeak> selectedPeaks = new ArrayList<>();
 					IPeak selectedPeak = peaks.get(0);
+					selectedPeaks.add(selectedPeak);
 					chromatogramSelection.setSelectedPeak(selectedPeak);
-					selectedPeakChromatogramUI.updateSelection(chromatogramSelection, true);
+					updateChromatogramChart(chromatogramSelection);
+					updateSelectedPeaksInChart(selectedPeaks);
 					if(selectedPeak instanceof IPeakMSD) {
 						IPeakMSD peakMSD = (IPeakMSD)selectedPeak;
 						simpleMassSpectrumUI.update(peakMSD.getExtractedMassSpectrum(), true);
@@ -136,7 +139,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setLayout(new FillLayout());
-		selectedPeakChromatogramUI = new SelectedPeakChromatogramUI(composite, SWT.BORDER);
+		chromatogramPeakChart = new ChromatogramPeakChart(composite, SWT.BORDER);
 	}
 
 	private void createMassSpectrumField(Composite parent) {
@@ -160,6 +163,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 			public void selectionChanged(SelectionChangedEvent event) {
 
 				propagateChange(PEAK_SHOW);
+				updateSelectedPeaksInChart(getSelectionChromatogramPeakList());
 			}
 		});
 		//
@@ -209,9 +213,10 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 					chromatogram.removePeaks(peaksToDelete);
 					chromatogramSelection.reset();
 					peakTableViewerUI.setInput(chromatogram.getPeaks());
+					updateChromatogramChart(chromatogramSelection);
+					updateSelectedPeaksInChart(null);
 					break;
 			}
-			selectedPeakChromatogramUI.updateSelection(chromatogramSelection, true);
 		}
 	}
 
@@ -242,7 +247,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		return chromatogramSelection;
 	}
 
-	private List<? extends IPeak> getSelectionChromatogramPeakList() {
+	private List<IPeak> getSelectionChromatogramPeakList() {
 
 		Table table = peakTableViewerUI.getTable();
 		List<IPeak> peakList = new ArrayList<>();
@@ -285,5 +290,16 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		 * Updates the status
 		 */
 		updateStatus(message);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void updateChromatogramChart(IChromatogramSelection chromatogramSelection) {
+
+		chromatogramPeakChart.update(chromatogramSelection);
+	}
+
+	private void updateSelectedPeaksInChart(List<IPeak> selectedPeaks) {
+
+		chromatogramPeakChart.update(selectedPeaks);
 	}
 }
