@@ -224,11 +224,41 @@ public abstract class AbstractSupplierFileExplorer {
 						}
 					});
 				}
+				if(file.isDirectory()) {
+					contextMenu.add(new Action("Open all contained measurements in this folder") {
+
+						@Override
+						public void run() {
+
+							openRecurse(file);
+						}
+					});
+				}
 			}
 		});
 		Menu menu = contextMenu.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 	}
+
+	public boolean openRecurse(File file) {
+
+		boolean opened = false;
+		File[] listFiles = file.listFiles();
+		if(listFiles != null) {
+			for(File f : listFiles) {
+				opened |= openEditor(f, true);
+			}
+			if(!opened) {
+				for(File f : listFiles) {
+					if(f.isDirectory()) {
+						// recurse into sub-directory...
+						opened |= openRecurse(f);
+					}
+				}
+			}
+		}
+		return opened;
+	};
 
 	void setTreeViewerProvider(TreeViewer treeViewer) {
 
@@ -334,8 +364,9 @@ public abstract class AbstractSupplierFileExplorer {
 		}
 	}
 
-	private void openEditor(File file, boolean batch) {
+	private boolean openEditor(File file, boolean batch) {
 
+		boolean success = false;
 		if(file != null) {
 			/*
 			 * Get the settings and the
@@ -354,14 +385,14 @@ public abstract class AbstractSupplierFileExplorer {
 			 * Open the file(s).
 			 */
 			batch = (!openFirstDataMatchOnly && activeFileSupplierList.size() > 1) ? true : batch; // Prevent SWT thread deadlocks
-			exitloop:
 			for(ISupplierFileEditorSupport activeFileSupplier : activeFileSupplierList) {
-				boolean success = openEditor(file, activeFileSupplier, batch);
+				success = success | openEditor(file, activeFileSupplier, batch);
 				if(success && openFirstDataMatchOnly) {
-					break exitloop;
+					break;
 				}
 			}
 		}
+		return success;
 	}
 
 	private boolean openEditor(File file, ISupplierFileEditorSupport activeFileSupplier, boolean batch) {
