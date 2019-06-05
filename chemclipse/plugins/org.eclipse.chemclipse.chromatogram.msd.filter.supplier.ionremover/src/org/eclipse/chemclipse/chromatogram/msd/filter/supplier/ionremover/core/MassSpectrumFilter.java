@@ -44,7 +44,7 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 				IonSettingUtil settingIon = new IonSettingUtil();
 				IMarkedIons markedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(massSpectrumFilterSettings.getIonsToRemove())));
 				for(IScanMSD massSpectrum : massSpectra) {
-					massSpectrum.getTargets().clear();
+//					massSpectrum.getTargets().clear();
 					massSpectrum.removeIons(markedIons);
 				}
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been optimized successfully."));
