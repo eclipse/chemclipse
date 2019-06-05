@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,12 +8,12 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - support new lazy table model
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.wizards;
 
 import java.io.File;
 
-import org.eclipse.core.filesystem.EFS;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
@@ -37,10 +37,15 @@ public class TreeViewerFilesystemSupport {
 	 */
 	public static void retrieveAndSetLocalFileSystem(final TreeViewer treeViewer, final String expandToDirectoryPath) {
 
-		retrieveAndSetLocalFileSystem(treeViewer, EFS.getLocalFileSystem(), expandToDirectoryPath);
+		retrieveAndSetLocalFileSystem(treeViewer, File.listRoots(), expandToDirectoryPath);
 	}
 
-	public static void retrieveAndSetLocalFileSystem(final TreeViewer treeViewer, Object input, final String expandToDirectoryPath) {
+	public static void retrieveAndSetLocalFileSystem(final TreeViewer treeViewer, File input, final String expandToDirectoryPath) {
+
+		retrieveAndSetLocalFileSystem(treeViewer, new File[]{input}, expandToDirectoryPath);
+	}
+
+	public static void retrieveAndSetLocalFileSystem(final TreeViewer treeViewer, File[] input, final String expandToDirectoryPath) {
 
 		Display.getCurrent().asyncExec(new Runnable() {
 

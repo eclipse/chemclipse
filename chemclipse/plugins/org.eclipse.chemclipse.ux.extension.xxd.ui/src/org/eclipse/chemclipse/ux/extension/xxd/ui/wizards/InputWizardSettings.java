@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Christoph Läubrich - support new lazy table model
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
@@ -18,13 +19,9 @@ import java.util.List;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
-import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard.TreeSelection;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
-import org.eclipse.jface.viewers.IContentProvider;
 import org.osgi.service.prefs.BackingStoreException;
 
 public class InputWizardSettings {
@@ -44,8 +41,6 @@ public class InputWizardSettings {
 
 	private String title = "Title";
 	private String description = "Description";
-	private IBaseLabelProvider labelProvider = null;
-	private IContentProvider contentProvider = null;
 	private IEclipsePreferences eclipsePreferences = null;
 	private String nodeName = "";
 	//
@@ -55,16 +50,14 @@ public class InputWizardSettings {
 	private String selectedHomePath = "";
 	private String selectedUserLocationPath = "";
 	private TreeSelection defaultTree = TreeSelection.NONE;
+	private List<ISupplierFileIdentifier> supplierFileIdentifierList;
 
 	public InputWizardSettings(DataType dataType) {
 		this(new DataType[]{dataType});
 	}
 
 	public InputWizardSettings(DataType[] dataTypes) {
-		/*
-		 * Collect the items.
-		 */
-		List<ISupplierFileIdentifier> supplierFileIdentifierList = new ArrayList<>();
+		supplierFileIdentifierList = new ArrayList<>();
 		for(DataType dataType : dataTypes) {
 			switch(dataType) {
 				case MSD_CHROMATOGRAM:
@@ -86,8 +79,11 @@ public class InputWizardSettings {
 		/*
 		 * Assign the label and content provider.
 		 */
-		this.labelProvider = new DataExplorerLabelProvider(supplierFileIdentifierList);
-		this.contentProvider = new DataExplorerContentProvider(supplierFileIdentifierList);
+	}
+
+	public List<ISupplierFileIdentifier> getSupplierFileIdentifierList() {
+
+		return supplierFileIdentifierList;
 	}
 
 	public void saveSelectedPath(TreeSelection treeSelection) {
@@ -142,16 +138,6 @@ public class InputWizardSettings {
 	public void setDescription(String description) {
 
 		this.description = description;
-	}
-
-	public IBaseLabelProvider getLabelProvider() {
-
-		return labelProvider;
-	}
-
-	public IContentProvider getContentProvider() {
-
-		return contentProvider;
 	}
 
 	public IEclipsePreferences getEclipsePreferences() {

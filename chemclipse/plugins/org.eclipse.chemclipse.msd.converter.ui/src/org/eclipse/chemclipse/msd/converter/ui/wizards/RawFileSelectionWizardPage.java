@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,15 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - support new lazy table model
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.ui.wizards;
 
-import org.eclipse.core.filesystem.EFS;
+import java.io.File;
+
+import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -19,10 +24,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-
-import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 
 public class RawFileSelectionWizardPage extends WizardPage {
 
@@ -50,10 +51,11 @@ public class RawFileSelectionWizardPage extends WizardPage {
 		/*
 		 * Chromatogram Tree Viewer
 		 */
-		chromatogramViewer = new TreeViewer(composite, SWT.MULTI);
+		chromatogramViewer = new TreeViewer(composite, SWT.MULTI | SWT.VIRTUAL);
+		chromatogramViewer.setUseHashlookup(true);
 		chromatogramViewer.setLabelProvider(new DataExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
 		chromatogramViewer.setContentProvider(new DataExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
-		chromatogramViewer.setInput(EFS.getLocalFileSystem());
+		chromatogramViewer.setInput(File.listRoots());
 		/*
 		 * Set the control.
 		 */

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
+ * Christoph Läubrich - support new lazy table model
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
@@ -18,9 +19,9 @@ import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.TreeViewerFilesystemSupport;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard.TreeSelection;
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileSystem;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -85,7 +86,7 @@ public class InputEntriesWizardPage extends WizardPage {
 		String directoryPath = inputWizardSettings.getSelectedDrivePath();
 		Composite composite = new Composite(tabFolder, SWT.None);
 		composite.setLayout(new FillLayout());
-		createDirectoryTree(composite, getDrives(), directoryPath, TreeSelection.DRIVES);
+		createDirectoryTree(composite, File.listRoots(), directoryPath, TreeSelection.DRIVES);
 		//
 		tabDrives.setControl(composite);
 	}
@@ -98,7 +99,7 @@ public class InputEntriesWizardPage extends WizardPage {
 		String directoryPath = inputWizardSettings.getSelectedHomePath();
 		Composite composite = new Composite(tabFolder, SWT.None);
 		composite.setLayout(new FillLayout());
-		createDirectoryTree(composite, new File(UserManagement.getUserHome()), directoryPath, TreeSelection.HOME);
+		createDirectoryTree(composite, new File[]{new File(UserManagement.getUserHome())}, directoryPath, TreeSelection.HOME);
 		//
 		tabHome.setControl(composite);
 	}
@@ -111,7 +112,7 @@ public class InputEntriesWizardPage extends WizardPage {
 		String directoryPath = inputWizardSettings.getSelectedUserLocationPath();
 		Composite composite = new Composite(tabFolder, SWT.None);
 		composite.setLayout(new FillLayout());
-		createDirectoryTree(composite, getUserLocation(), directoryPath, TreeSelection.USER_LOCATION);
+		createDirectoryTree(composite, new File[]{getUserLocation()}, directoryPath, TreeSelection.USER_LOCATION);
 		//
 		tabUserLocation.setControl(composite);
 	}
@@ -126,17 +127,13 @@ public class InputEntriesWizardPage extends WizardPage {
 		return userLocation;
 	}
 
-	private IFileSystem getDrives() {
-
-		return EFS.getLocalFileSystem();
-	}
-
-	public TreeViewer createDirectoryTree(Composite composite, Object input, String expandToDirectoryPath, TreeSelection actuelSelection) {
+	public TreeViewer createDirectoryTree(Composite composite, File[] input, String expandToDirectoryPath, TreeSelection actuelSelection) {
 
 		//
-		TreeViewer chromatogramViewer = new TreeViewer(composite, SWT.MULTI);
-		chromatogramViewer.setLabelProvider(inputWizardSettings.getLabelProvider());
-		chromatogramViewer.setContentProvider(inputWizardSettings.getContentProvider());
+		TreeViewer chromatogramViewer = new TreeViewer(composite, SWT.MULTI | SWT.VIRTUAL);
+		chromatogramViewer.setUseHashlookup(true);
+		chromatogramViewer.setLabelProvider(new DataExplorerLabelProvider(inputWizardSettings.getSupplierFileIdentifierList()));
+		chromatogramViewer.setContentProvider(new DataExplorerContentProvider(inputWizardSettings.getSupplierFileIdentifierList()));
 		chromatogramViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
