@@ -26,7 +26,14 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * This implements a lazy {@link File}based TreeContent.
+ * This implements a lazy {@link File}based TreeContent. Care must be taken when using this provider:
+ * <ul>
+ * <li>The Treeviewer must be constructed with the Virtual Flag:
+ * <br>
+ * <code>TreeViewer treeViewer = new TreeViewer(parent, &lt;other options&gt; | SWT.VIRTUAL);<br>
+ * treeViewer.setUseHashlookup(true);</code></li>
+ * <li>The Input must be of type File[] (or null)</li>
+ * </ul>
  * 
  * @author Christoph Läubrich
  *
@@ -87,6 +94,10 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 			TreeViewer treeViewer = (TreeViewer)newViewer;
 			if((treeViewer.getTree().getStyle() & SWT.VIRTUAL) == 0) {
 				throw new IllegalArgumentException("Treeviewer must be constructed with SWT.VIRTUAL flag!");
+			}
+			if(newInput instanceof File) {
+				// convert single file input to array
+				newInput = new File[]{(File)newInput};
 			}
 			if(newInput == null || newInput instanceof File[]) {
 				roots = (File[])newInput;
