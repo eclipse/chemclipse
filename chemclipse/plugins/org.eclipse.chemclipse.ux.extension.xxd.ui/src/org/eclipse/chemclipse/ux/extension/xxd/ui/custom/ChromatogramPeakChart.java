@@ -14,8 +14,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.custom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -35,6 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.LineStyle;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 
@@ -42,22 +45,27 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 
 	private static final String SERIES_ID_CHROMATOGRAM = "Chromatogram";
 	private static final String SERIES_ID_PEAKS_NORMAL = "Peaks Normal";
-	private static final String SERIES_ID_PEAKS_SELECTED = "Peaks Selected";
+	private static final String SERIES_ID_PEAKS_SELECTED_MARKER = "Peaks Selected Marker";
+	private static final String SERIES_ID_PEAKS_SELECTED_SHAPE = "Peaks Selected Shape";
+	private static final String SERIES_ID_PEAKS_SELECTED_BACKGROUND = "Peaks Selected Background";
 	//
 	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	//
 	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<>();
+	private Set<String> selectedPeakIds = new HashSet<>();
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ChromatogramPeakChart() {
 		super();
+		init();
 	}
 
 	public ChromatogramPeakChart(Composite parent, int style) {
 		super(parent, style);
+		init();
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -75,16 +83,25 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void update(List<IPeak> selectedPeaks) {
 
-		if(selectedPeaks == null || selectedPeaks.size() == 0) {
-			deleteSeries(SERIES_ID_PEAKS_SELECTED);
-		} else {
+		clearSelectedPeakSeries();
+		if(selectedPeaks != null && selectedPeaks.size() > 0) {
+			int index = 1;
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-			addPeakData(selectedPeaks, lineSeriesDataList);
+			for(IPeak peak : selectedPeaks) {
+				addSelectedPeak(peak, lineSeriesDataList, index++);
+			}
 			addLineSeriesData(lineSeriesDataList);
 		}
+	}
+
+	private void init() {
+
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setCreateMenu(true);
+		chartSettings.getRangeRestriction().setRestrictZoom(true);
+		applySettings(chartSettings);
 	}
 
 	private void addLineSeriesData(List<ILineSeriesData> lineSeriesDataList) {
@@ -111,10 +128,10 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 	private void addPeakData(List<IPeak> peaks, List<ILineSeriesData> lineSeriesDataList) {
 
 		int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
-		addPeaks(lineSeriesDataList, peaks, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL);
+		addPeaks(lineSeriesDataList, peaks, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL, true);
 	}
 
-	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
+	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, boolean addLabelMarker) {
 
 		if(peaks.size() > 0) {
 			//
@@ -130,15 +147,58 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 			/*
 			 * Add the labels.
 			 */
-			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
-			boolean showChromatogramPeakLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS);
-			if(showChromatogramPeakLabels) {
-				IPlotArea plotArea = (IPlotArea)getBaseChart().getPlotArea();
-				int indexSeries = lineSeriesDataList.size() - 1;
-				IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(getBaseChart(), indexSeries, peaks, null);
-				plotArea.addCustomPaintListener(peakLabelMarker);
-				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
+			if(addLabelMarker) {
+				removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
+				boolean showChromatogramPeakLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS);
+				if(showChromatogramPeakLabels) {
+					IPlotArea plotArea = (IPlotArea)getBaseChart().getPlotArea();
+					int indexSeries = lineSeriesDataList.size() - 1;
+					IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(getBaseChart(), indexSeries, peaks, null);
+					plotArea.addCustomPaintListener(peakLabelMarker);
+					peakLabelMarkerMap.put(seriesId, peakLabelMarker);
+				}
 			}
+		}
+	}
+
+	private void addSelectedPeak(IPeak peak, List<ILineSeriesData> lineSeriesDataList, int index) {
+
+		if(peak != null) {
+			/*
+			 * Settings
+			 */
+			boolean mirrored = false;
+			Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_PEAK));
+			/*
+			 * Peak Marker
+			 */
+			String peakMarkerId = getSelectedPeakSerieId(SERIES_ID_PEAKS_SELECTED_MARKER, index);
+			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
+			List<IPeak> peaks = new ArrayList<>();
+			peaks.add(peak);
+			addPeaks(lineSeriesDataList, peaks, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, colorPeak, peakMarkerId, false);
+			selectedPeakIds.add(peakMarkerId);
+			/*
+			 * Peak
+			 */
+			String peakShapeId = getSelectedPeakSerieId(SERIES_ID_PEAKS_SELECTED_SHAPE, index);
+			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_SIZE);
+			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE));
+			ILineSeriesData lineSeriesData = peakChartSupport.getPeak(peak, true, mirrored, colorPeak, peakShapeId);
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+			lineSeriesSettings.setSymbolType(symbolType);
+			lineSeriesSettings.setSymbolColor(colorPeak);
+			lineSeriesSettings.setSymbolSize(markerSize);
+			lineSeriesDataList.add(lineSeriesData);
+			selectedPeakIds.add(peakShapeId);
+			/*
+			 * Background
+			 */
+			String peakBackgroundId = getSelectedPeakSerieId(SERIES_ID_PEAKS_SELECTED_BACKGROUND, index);
+			Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BACKGROUND));
+			lineSeriesData = peakChartSupport.getPeakBackground(peak, mirrored, colorBackground, peakBackgroundId);
+			lineSeriesDataList.add(lineSeriesData);
+			selectedPeakIds.add(peakBackgroundId);
 		}
 	}
 
@@ -152,5 +212,18 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		if(labelMarker != null) {
 			plotArea.removeCustomPaintListener(labelMarker);
 		}
+	}
+
+	private String getSelectedPeakSerieId(String id, int index) {
+
+		return id + " (" + index + ")";
+	}
+
+	private void clearSelectedPeakSeries() {
+
+		for(String id : selectedPeakIds) {
+			deleteSeries(id);
+		}
+		selectedPeakIds.clear();
 	}
 }
