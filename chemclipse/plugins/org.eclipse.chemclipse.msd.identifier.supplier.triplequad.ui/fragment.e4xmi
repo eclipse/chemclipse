@@ -6,7 +6,6 @@
   <imports xsi:type="basic:Part" xmi:id="_FIcQUJzzEeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleNominalMassSpectrumIonListView"/>
   <imports xsi:type="basic:Part" xmi:id="_ITUQ4JzzEeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.ionTransitionChromatogramView"/>
   <imports xsi:type="basic:Part" xmi:id="_LyefYJzzEeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.scanTransition"/>
-  <imports xsi:type="basic:Part" xmi:id="_yaKhYJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.mirroredScanNominal"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_SWjQYJzzEeWBAdlSUXpdLg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_R3ijsJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.perspective" label="MS/MS Identification" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_Y-3ywJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.partsashcontainer.0">
@@ -27,9 +26,6 @@
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_hKUxQJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.partstack.4">
             <children xsi:type="advanced:Placeholder" xmi:id="_shZ-QJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.placeholder.4" ref="_FIcQUJzzEeWBAdlSUXpdLg"/>
-          </children>
-          <children xsi:type="basic:PartStack" xmi:id="_hh-cQJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.partstack.5">
-            <children xsi:type="advanced:Placeholder" xmi:id="_voAi0Jz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.placeholder.5" ref="_yaKhYJz0EeWBAdlSUXpdLg"/>
           </children>
         </children>
       </children>
