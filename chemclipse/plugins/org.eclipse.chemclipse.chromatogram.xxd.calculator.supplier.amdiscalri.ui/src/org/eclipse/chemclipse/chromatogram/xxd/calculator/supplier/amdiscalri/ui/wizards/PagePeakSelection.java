@@ -26,10 +26,9 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.ChromatogramPeakChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanChartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTableRetentionIndexViewerUI;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -51,7 +50,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 	private IRetentionIndexWizardElements wizardElements;
 	private ChromatogramPeakChart chromatogramPeakChart;
 	private Composite massSpectrumComposite;
-	private SimpleMassSpectrumUI simpleMassSpectrumUI;
+	private ExtendedScanChartUI extendedScanChartUI;
 	private PeakTableRetentionIndexViewerUI peakTableViewerUI;
 	//
 	private static final int PEAK_SHOW = 1;
@@ -112,7 +111,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 					updateSelectedPeaksInChart(selectedPeaks);
 					if(selectedPeak instanceof IPeakMSD) {
 						IPeakMSD peakMSD = (IPeakMSD)selectedPeak;
-						simpleMassSpectrumUI.update(peakMSD.getExtractedMassSpectrum(), true);
+						extendedScanChartUI.update(peakMSD.getExtractedMassSpectrum());
 					}
 				}
 			}
@@ -147,7 +146,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		massSpectrumComposite = new Composite(parent, SWT.NONE);
 		massSpectrumComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		massSpectrumComposite.setLayout(new FillLayout());
-		simpleMassSpectrumUI = new SimpleMassSpectrumUI(massSpectrumComposite, SWT.BORDER, MassValueDisplayPrecision.NOMINAL);
+		extendedScanChartUI = new ExtendedScanChartUI(massSpectrumComposite);
 	}
 
 	private void createPeakTableField(Composite parent) {
@@ -204,7 +203,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 					chromatogramSelection.setSelectedPeak(selectedPeak);
 					if(selectedPeak instanceof IPeakMSD) {
 						IPeakMSD peakMSD = (IPeakMSD)selectedPeak;
-						simpleMassSpectrumUI.update(peakMSD.getExtractedMassSpectrum(), true);
+						extendedScanChartUI.update(peakMSD.getExtractedMassSpectrum());
 					}
 					break;
 				case PEAKS_DELETE:
