@@ -165,6 +165,11 @@ public class ChartNMR extends LineChart {
 
 	public static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals, boolean reverse) {
 
+		return createSignalSeries(id, signals, reverse, 0.0d);
+	}
+
+	public static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals, boolean reverse, double yOffset) {
+
 		int size = signals.size();
 		double[] xSeries = new double[size];
 		double[] ySeries = new double[size];
@@ -175,7 +180,7 @@ public class ChartNMR extends LineChart {
 			} else {
 				xSeries[size - 1 - index] = fidSignal.getX();
 			}
-			ySeries[index] = fidSignal.getY();
+			ySeries[index] = fidSignal.getY() + yOffset;
 			index++;
 		}
 		return new SeriesData(xSeries, ySeries, id);
