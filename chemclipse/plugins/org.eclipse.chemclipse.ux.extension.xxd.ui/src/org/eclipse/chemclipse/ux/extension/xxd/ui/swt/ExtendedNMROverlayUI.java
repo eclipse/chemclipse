@@ -8,24 +8,27 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - restore initial implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
-
+import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
+import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
+import org.eclipse.chemclipse.nmr.model.core.SpectrumSignal;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -42,7 +45,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
-import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
@@ -50,22 +52,34 @@ import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
 public class ExtendedNMROverlayUI {
 
+	private enum Mode {
+		OVERLAY, STACKED
+	}
+
 	private ChartNMR chartNMR;
 	//
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 	//
 	private List<IDataNMRSelection> dataNMRSelections = new ArrayList<>();
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private IColorScheme colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY));
+	private EPartService partservice;
+	private IColorScheme colorSchemeNormal;
+	private IPreferenceStore preferenceStore;
+	private Mode mode = Mode.OVERLAY;
 
-	@Inject
-	public ExtendedNMROverlayUI(Composite parent) {
+	public ExtendedNMROverlayUI(Composite parent, EPartService partservice, IPreferenceStore preferenceStore) {
+		this.partservice = partservice;
+		this.preferenceStore = preferenceStore;
+		if(preferenceStore != null) {
+			colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY));
+		} else {
+			colorSchemeNormal = Colors.getColorScheme(Colors.COLOR_SCHEME_RED);
+		}
 		initialize(parent);
 	}
 
 	public void update() {
 
-		dataNMRSelections = editorUpdateSupport.getDataNMRSelections();
+		dataNMRSelections = editorUpdateSupport.getDataNMRSelections(partservice);
 		refreshUpdateOverlayChart();
 	}
 
@@ -83,11 +97,48 @@ public class ExtendedNMROverlayUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
+		createModeButtons(composite);
 		createToggleChartLegendButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
+	}
+
+	private void createModeButtons(Composite parent) {
+
+		{
+			Button button = new Button(parent, SWT.PUSH);
+			button.setToolTipText("Stacked Mode");
+			button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY_MIRRORED, IApplicationImage.SIZE_16x16));
+			button.addSelectionListener(new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					if(mode != Mode.STACKED) {
+						mode = Mode.STACKED;
+						refreshUpdateOverlayChart();
+					}
+				}
+			});
+		}
+		{
+			Button button = new Button(parent, SWT.PUSH);
+			button.setToolTipText("Overlay Mode");
+			button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY, IApplicationImage.SIZE_16x16));
+			button.addSelectionListener(new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					if(mode != Mode.OVERLAY) {
+						mode = Mode.OVERLAY;
+						refreshUpdateOverlayChart();
+					}
+				}
+			});
+		}
 	}
 
 	private void createToggleChartLegendButton(Composite parent) {
@@ -123,6 +174,9 @@ public class ExtendedNMROverlayUI {
 
 	private void createSettingsButton(Composite parent) {
 
+		if(preferenceStore == null) {
+			return;
+		}
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Open the Settings");
 		button.setText("");
@@ -139,6 +193,7 @@ public class ExtendedNMROverlayUI {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageOverlay));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
+				preferenceDialog.setPreferenceStore(preferenceStore);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
@@ -172,50 +227,56 @@ public class ExtendedNMROverlayUI {
 			int i = 1;
 			Color color = colorSchemeNormal.getColor();
 			//
+			double yOffset = 0;
 			for(IDataNMRSelection dataNMRSelection : dataNMRSelections) {
-				/*
-				 * Get the data.
-				 */
-				ILineSeriesData lineSeriesData = getLineSeriesData(dataNMRSelection, "NMR_" + i++);
-				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
-				lineSeriesSettings.setLineColor(color);
-				lineSeriesSettings.setEnableArea(false);
-				//
-				lineSeriesDataList.add(lineSeriesData);
-				color = colorSchemeNormal.getNextColor();
+				ILineSeriesData lineSeriesData = getLineSeriesData(dataNMRSelection, "NMR_" + i++, yOffset);
+				if(lineSeriesData != null) {
+					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+					lineSeriesSettings.setLineColor(color);
+					lineSeriesSettings.setEnableArea(false);
+					//
+					lineSeriesDataList.add(lineSeriesData);
+					color = colorSchemeNormal.getNextColor();
+					if(mode == Mode.STACKED) {
+						yOffset = getMax(lineSeriesData.getSeriesData()) * 1.1d;
+					}
+				}
 			}
 			//
 			chartNMR.addSeriesData(lineSeriesDataList, LineChart.MEDIUM_COMPRESSION);
 		}
 	}
 
-	private ILineSeriesData getLineSeriesData(IDataNMRSelection dataNMRSelection, String id) {
+	private double getMax(ISeriesData seriesData) {
 
-		ISeriesData seriesData = getSeriesDataProcessed(dataNMRSelection, id);
+		double max = 0;
+		double[] ySeries = seriesData.getYSeries();
+		for(double y : ySeries) {
+			if(y > max) {
+				max = y;
+			}
+		}
+		return max;
+	}
+
+	private ILineSeriesData getLineSeriesData(IDataNMRSelection dataNMRSelection, String id, double yOffset) {
+
+		ISeriesData seriesData = getSeriesDataProcessed(dataNMRSelection, id, yOffset);
+		if(seriesData == null) {
+			return null;
+		}
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 		return lineSeriesData;
 	}
 
-	private ISeriesData getSeriesDataProcessed(IDataNMRSelection dataNMRSelection, String id) {
+	private ISeriesData getSeriesDataProcessed(IDataNMRSelection dataNMRSelection, String id, double yOffset) {
 
-		double[] xSeries;
-		double[] ySeries;
-		//
-		// if(dataNMRSelection != null) {
-		// int size = dataNMRSelection.getMeasurmentNMR().getScanMNR().getNumberOfFourierPoints();
-		// xSeries = new double[size];
-		// ySeries = new double[size];
-		// int index = 0;
-		// for(ISignalNMR scanSignal : dataNMRSelection.getMeasurmentNMR().getScanMNR().getSignalsNMR()) {
-		// xSeries[index] = scanSignal.getChemicalShift();
-		// ySeries[index] = scanSignal.getIntensityOfSpectrum();
-		// index++;
-		// }
-		// } else {
-		xSeries = new double[0];
-		ySeries = new double[0];
-		// }
-		//
-		return new SeriesData(xSeries, ySeries, id);
+		IComplexSignalMeasurement<?> measurement = dataNMRSelection.getMeasurement();
+		if(measurement instanceof SpectrumMeasurement) {
+			SpectrumMeasurement spectrum = (SpectrumMeasurement)measurement;
+			Collection<? extends SpectrumSignal> signals = spectrum.getSignals();
+			return ChartNMR.createSignalSeries(id, signals, true, yOffset);
+		}
+		return null;
 	}
 }

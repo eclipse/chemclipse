@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,13 +8,16 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add static helper method
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Collection;
 import java.util.Locale;
 
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ScanToSecondsConverter;
 import org.eclipse.swt.SWT;
@@ -25,7 +28,9 @@ import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
+import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
+import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
 public class ChartNMR extends LineChart {
@@ -156,5 +161,28 @@ public class ChartNMR extends LineChart {
 
 		chartSettings.getSecondaryAxisSettingsListX().clear();
 		chartSettings.getSecondaryAxisSettingsListY().clear();
+	}
+
+	public static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals, boolean reverse) {
+
+		return createSignalSeries(id, signals, reverse, 0.0d);
+	}
+
+	public static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals, boolean reverse, double yOffset) {
+
+		int size = signals.size();
+		double[] xSeries = new double[size];
+		double[] ySeries = new double[size];
+		int index = 0;
+		for(ISignal fidSignal : signals) {
+			if(reverse) {
+				xSeries[index] = fidSignal.getX();
+			} else {
+				xSeries[size - 1 - index] = fidSignal.getX();
+			}
+			ySeries[index] = fidSignal.getY() + yOffset;
+			index++;
+		}
+		return new SeriesData(xSeries, ySeries, id);
 	}
 }
