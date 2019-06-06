@@ -13,13 +13,11 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
-import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.nmr.model.core.FIDMeasurement;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection.ChangeType;
@@ -29,7 +27,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
-import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
@@ -72,7 +69,7 @@ public class ExtendedNMRScanUI implements Observer {
 			if(measurement == null) {
 				lineSeriesData = new LineSeriesData(new SeriesData(new double[0], new double[0], SERIES_ID));
 			} else {
-				lineSeriesData = new LineSeriesData(createSignalSeries(SERIES_ID, measurement.getSignals(), rawData));
+				lineSeriesData = new LineSeriesData(ChartNMR.createSignalSeries(SERIES_ID, measurement.getSignals(), !rawData));
 			}
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setEnableArea(!rawData);
@@ -85,24 +82,6 @@ public class ExtendedNMRScanUI implements Observer {
 	public Control getControl() {
 
 		return chartNMR;
-	}
-
-	private static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals, boolean rawData) {
-
-		int size = signals.size();
-		double[] xSeries = new double[size];
-		double[] ySeries = new double[size];
-		int index = 0;
-		for(ISignal fidSignal : signals) {
-			if(rawData) {
-				xSeries[index] = fidSignal.getX();
-			} else {
-				xSeries[size - 1 - index] = fidSignal.getX();
-			}
-			ySeries[index] = fidSignal.getY();
-			index++;
-		}
-		return new SeriesData(xSeries, ySeries, id);
 	}
 
 	@Override

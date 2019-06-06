@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - Fix method for NMR
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
@@ -122,40 +123,20 @@ public class EditorUpdateSupport {
 		return dataNMRSelections;
 	}
 
-	public List<IDataNMRSelection> getDataNMRSelections() {
+	public List<IDataNMRSelection> getDataNMRSelections(EPartService partService) {
 
 		List<IDataNMRSelection> scanSelections = new ArrayList<IDataNMRSelection>();
-		if(partService != null) {
-			/*
-			 * TODO: see message
-			 */
-			try {
-				Collection<MPart> parts = partService.getParts();
-				for(MPart part : parts) {
-					Object object = part.getObject();
-					if(object != null) {
-						/*
-						 * NMR
-						 */
-						IDataNMRSelection selection = null;
-						if(object instanceof IScanEditorNMR) {
-							IScanEditorNMR editor = (IScanEditorNMR)object;
-							selection = editor.getScanSelection();
-						}
-						//
-						if(selection != null) {
-							scanSelections.add(selection);
-						}
-					}
+		Collection<MPart> parts = partService.getParts();
+		for(MPart part : parts) {
+			Object object = part.getObject();
+			if(object instanceof IScanEditorNMR) {
+				IScanEditorNMR editor = (IScanEditorNMR)object;
+				IDataNMRSelection selection = editor.getScanSelection();
+				if(selection != null) {
+					scanSelections.add(selection);
 				}
-			} catch(Exception e) {
-				logger.warn(e);
 			}
 		}
-		/*
-		 * If the window was null and there was no open editor, the list will
-		 * contains 0 elements.
-		 */
 		return scanSelections;
 	}
 
