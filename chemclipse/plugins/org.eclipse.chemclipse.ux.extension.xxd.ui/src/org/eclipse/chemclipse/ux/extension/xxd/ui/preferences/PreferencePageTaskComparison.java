@@ -29,7 +29,6 @@ public class PreferencePageTaskComparison extends FieldEditorPreferencePage impl
 	public void createFieldEditors() {
 
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_CHART, "Comparison Scan:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_MS_LIBRARY_STACK, "Mass Spectrum Library Stack:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

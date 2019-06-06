@@ -50,14 +50,11 @@ public interface IPerspectiveAndViewIds {
 	String VIEW_MASS_SPECTRUM_IONS_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumIonsListView";
 	String VIEW_MASS_SPECTRUM_IONS_LIST_NOMINAL = "org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleNominalMassSpectrumIonListView";
 	String VIEW_PEAK_MASS_SPECTRUM_IONS_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMassSpectrumIonsListView";
-	String VIEW_PEAK_MASS_SPECTRUM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMassSpectrumView";
 	String VIEW_PEAK_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMSDView";
 	String VIEW_SELECTED_ION_CHROMATOGRAM_ACCURATE = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedAccurateIonChromtogramView";
 	String VIEW_SELECTED_ION_CHROMATOGRAM_EXACT = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedExactIonChromtogramView";
 	String VIEW_SELECTED_ION_CHROMATOGRAM_NOMINAL_COMBINED = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedIonCombinedChromtogramView";
 	String VIEW_SELECTED_PEAK_AND_CHROMATOGRAM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedPeakChromtogramView";
-	String VIEW_MASS_SPECTRUM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleNominalMassSpectrumView";
-	String VIEW_PROFILE_MASS_SPECTRUM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.profileMassSpectrumView";
 	String VIEW_PEAK_QUANTITATION_ENRTIES = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakQuantitationEntries";
 	String VIEW_PEAK_INTEGRATION_ENRTIES = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakIntegrationEntries";
 	String VIEW_INTEGRATION_RESULTS = "org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.integrationResultView";
@@ -65,10 +62,6 @@ public interface IPerspectiveAndViewIds {
 	String VIEW_CHROMATOGRAM_FILE_EXPLORER_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramFileExplorerView";
 	String VIEW_MASS_SPECTRA_IDENTIFIED_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectraIdentifiedList";
 	String VIEW_MASS_SPECTRUM_TARGETS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumTargetsView";
-	String VIEW_OPTIMIZED_MASS_SPECTRUM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleOptimizedNominalMassSpectrumView";
-	String VIEW_MASS_SPECTRUM_LIBRARY_COMPARISON = "org.eclipse.chemclipse.ux.extension.msd.ui.part.differencelibrarycomparison";
-	String VIEW_MASS_SPECTRUM_STACK = "org.eclipse.chemclipse.ux.extension.msd.ui.part.editorMassSpectrumStackView";
-	String VIEW_MASS_SPECTRUM_LIBRARY_STACK = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massspectrumlibrarystack";
 	/*
 	 * Legacy
 	 */

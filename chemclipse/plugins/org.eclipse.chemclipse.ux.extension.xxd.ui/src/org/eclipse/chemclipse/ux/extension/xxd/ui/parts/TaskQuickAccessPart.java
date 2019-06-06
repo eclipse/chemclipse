@@ -383,12 +383,10 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			public void widgetSelected(SelectionEvent e) {
 
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_CHART));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_MS_LIBRARY_STACK, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_MS_LIBRARY_STACK));
 			}
 		});
 		//
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, button, imageActive, imageDefault);
-		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_MS_LIBRARY_STACK, button, imageActive, imageDefault);
 	}
 
 	private void createMeasurementResultTask(Composite parent) {
