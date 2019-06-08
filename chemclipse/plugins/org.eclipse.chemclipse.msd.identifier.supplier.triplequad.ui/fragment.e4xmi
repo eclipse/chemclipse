@@ -1,32 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_mvSgkJzyEeWBAdlSUXpdLg">
-  <imports xsi:type="advanced:Area" xmi:id="_-Sco4JzyEeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
-  <imports xsi:type="basic:Part" xmi:id="__xbIUJzyEeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumFileExplorerView"/>
-  <imports xsi:type="basic:Part" xmi:id="_CPH50JzzEeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumLibraryExplorerView"/>
-  <imports xsi:type="basic:Part" xmi:id="_FIcQUJzzEeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleNominalMassSpectrumIonListView"/>
-  <imports xsi:type="basic:Part" xmi:id="_ITUQ4JzzEeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.ionTransitionChromatogramView"/>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_SWjQYJzzEeWBAdlSUXpdLg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
-    <elements xsi:type="advanced:Perspective" xmi:id="_R3ijsJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.perspective" label="MS/MS Identification" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
-      <children xsi:type="basic:PartSashContainer" xmi:id="_Y-3ywJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.partsashcontainer.0">
-        <children xsi:type="basic:PartSashContainer" xmi:id="_b5B2wJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.partsashcontainer.1" horizontal="true">
-          <children xsi:type="basic:PartStack" xmi:id="_faekQJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.partstack.0">
-            <children xsi:type="advanced:Placeholder" xmi:id="_ijWZsJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.placeholder.0" ref="_GiIxsJz0EeWBAdlSUXpdLg"/>
-          </children>
-          <children xsi:type="basic:PartStack" xmi:id="_f-G1wJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.partstack.1">
-            <children xsi:type="advanced:Placeholder" xmi:id="_kQOyQJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.placeholder.1" ref="_HHhWsJz0EeWBAdlSUXpdLg"/>
-          </children>
-          <children xsi:type="basic:PartStack" xmi:id="_gRGqQJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.partstack.2">
-            <children xsi:type="advanced:Placeholder" xmi:id="_lIdawJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.placeholder.2" ref="_ITUQ4JzzEeWBAdlSUXpdLg"/>
-          </children>
-        </children>
-        <children xsi:type="basic:PartSashContainer" xmi:id="_cQc4QJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.partsashcontainer.2" horizontal="true">
-          <children xsi:type="basic:PartStack" xmi:id="_hKUxQJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.partstack.4">
-            <children xsi:type="advanced:Placeholder" xmi:id="_shZ-QJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.placeholder.4" ref="_FIcQUJzzEeWBAdlSUXpdLg"/>
-          </children>
-        </children>
-      </children>
-    </elements>
-  </fragments>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_mvSgkJzyEeWBAdlSUXpdLg">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_V0QtYJzzEeWBAdlSUXpdLg" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
     <elements xsi:type="basic:Part" xmi:id="_GiIxsJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.part.substanceList" contributionURI="bundleclass://org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui/org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.parts.SubstanceListPart" label="Substance List" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_HHhWsJz0EeWBAdlSUXpdLg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.part.timeDistribution" contributionURI="bundleclass://org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui/org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui.parts.TimeDistributionPart" label="Time Distribution" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
