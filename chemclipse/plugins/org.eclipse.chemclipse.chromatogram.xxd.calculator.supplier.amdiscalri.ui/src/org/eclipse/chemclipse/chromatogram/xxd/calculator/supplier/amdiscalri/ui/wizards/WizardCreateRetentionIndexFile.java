@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizardPage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings.InputDataType;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -67,12 +67,12 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 		/*
 		 * Pages must implement IExtendedWizardPage / extend AbstractExtendedWizardPage
 		 */
-		InputWizardSettings inputWizardSettingsMSD = new InputWizardSettings(DataType.MSD_CHROMATOGRAM);
+		InputWizardSettings inputWizardSettingsMSD = new InputWizardSettings(InputDataType.MSD_CHROMATOGRAM);
 		inputWizardSettingsMSD.setTitle("Open Chromatogram (MSD) File(s)");
 		inputWizardSettingsMSD.setDescription("Select a chromatogram/chromatograms file to open.");
 		inputWizardSettingsMSD.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.P_FILTER_PATH_MODELS_MSD);
 		//
-		InputWizardSettings inputWizardSettingsCSD = new InputWizardSettings(DataType.CSD_CHROMATOGRAM);
+		InputWizardSettings inputWizardSettingsCSD = new InputWizardSettings(InputDataType.CSD_CHROMATOGRAM);
 		inputWizardSettingsCSD.setTitle("Open Chromatogram (CSD) File(s)");
 		inputWizardSettingsCSD.setDescription("Select a chromatogram/chromatograms file to open.");
 		inputWizardSettingsCSD.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.P_FILTER_PATH_MODELS_CSD);
