@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
-import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorSupportFactory;
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -48,8 +50,9 @@ public class ChromatogramMSDInputFilesWizardPage extends WizardPage {
 		 * Chromatogram Tree Viewer
 		 */
 		chromatogramViewer = new TreeViewer(composite, SWT.MULTI);
-		chromatogramViewer.setLabelProvider(new DataExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
-		chromatogramViewer.setContentProvider(new DataExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
+		ISupplierFileIdentifier instanceIdentifier = new EditorSupportFactory(DataType.MSD).getInstanceIdentifier();
+		chromatogramViewer.setLabelProvider(new DataExplorerLabelProvider(instanceIdentifier));
+		chromatogramViewer.setContentProvider(new DataExplorerContentProvider(instanceIdentifier));
 		chromatogramViewer.setInput(EFS.getLocalFileSystem());
 		/*
 		 * Set the control.
