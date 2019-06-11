@@ -14,9 +14,11 @@ package org.eclipse.chemclipse.msd.converter.ui.wizards;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -53,8 +55,9 @@ public class RawFileSelectionWizardPage extends WizardPage {
 		 */
 		chromatogramViewer = new TreeViewer(composite, SWT.MULTI | SWT.VIRTUAL);
 		chromatogramViewer.setUseHashlookup(true);
-		chromatogramViewer.setLabelProvider(new DataExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
-		chromatogramViewer.setContentProvider(new DataExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
+		ISupplierFileIdentifier fileIdentifier = new SupplierFileIdentifier(DataType.MSD);
+		chromatogramViewer.setLabelProvider(new DataExplorerLabelProvider(fileIdentifier));
+		chromatogramViewer.setContentProvider(new DataExplorerContentProvider(fileIdentifier));
 		chromatogramViewer.setInput(File.listRoots());
 		/*
 		 * Set the control.

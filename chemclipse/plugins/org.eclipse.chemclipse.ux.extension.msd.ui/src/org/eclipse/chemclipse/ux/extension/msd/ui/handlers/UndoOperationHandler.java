@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.ux.extension.msd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -39,8 +38,8 @@ public class UndoOperationHandler implements EventHandler {
 	boolean canExecute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
 		if(part != null) {
-			if(chromatogramSelection != null && part.getElementId().equals(ChromatogramEditorMSD.ID)) {
-				return chromatogramSelection.getChromatogramMSD().canUndo();
+			if(chromatogramSelection != null) {
+				return chromatogramSelection.getChromatogram().canUndo();
 			}
 		}
 		return false;
@@ -63,7 +62,7 @@ public class UndoOperationHandler implements EventHandler {
 						/*
 						 * Undo the operation.
 						 */
-						IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
+						IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 						if(chromatogram != null) {
 							chromatogram.undoOperation(chromatogramSelection);
 						}

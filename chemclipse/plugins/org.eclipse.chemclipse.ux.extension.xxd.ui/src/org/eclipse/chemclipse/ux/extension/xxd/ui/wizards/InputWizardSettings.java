@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard.TreeSelection;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -32,7 +34,7 @@ public class InputWizardSettings {
 	private static final Logger logger = Logger.getLogger(InputEntriesWizard.class);
 	private static final String DEFAULT_TREE_SELECTION = "DEFAULT_TREE_SELECTION";
 
-	public enum DataType {
+	public enum InputDataType {
 		MSD_CHROMATOGRAM, //
 		MSD_PEAKS, //
 		CSD_CHROMATOGRAM, //
@@ -52,19 +54,19 @@ public class InputWizardSettings {
 	private TreeSelection defaultTree = TreeSelection.NONE;
 	private List<ISupplierFileIdentifier> supplierFileIdentifierList;
 
-	public InputWizardSettings(DataType dataType) {
-		this(new DataType[]{dataType});
+	public InputWizardSettings(InputDataType dataType) {
+		this(new InputDataType[]{dataType});
 	}
 
-	public InputWizardSettings(DataType[] dataTypes) {
+	public InputWizardSettings(InputDataType[] dataTypes) {
 		supplierFileIdentifierList = new ArrayList<>();
-		for(DataType dataType : dataTypes) {
+		for(InputDataType dataType : dataTypes) {
 			switch(dataType) {
 				case MSD_CHROMATOGRAM:
-					supplierFileIdentifierList.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport.getInstanceIdentifier());
+					supplierFileIdentifierList.add(new EditorSupportFactory(DataType.MSD).getInstanceIdentifier());
 					break;
 				case MSD_PEAKS:
-					supplierFileIdentifierList.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport.getInstanceIdentifier());
+					supplierFileIdentifierList.add(new EditorSupportFactory(DataType.MSD).getInstanceIdentifier());
 					break;
 				case CSD_CHROMATOGRAM:
 					supplierFileIdentifierList.add(org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport.getInstanceIdentifier());
