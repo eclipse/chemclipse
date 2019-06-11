@@ -38,7 +38,6 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.EditorChromatogramUI;
-import org.eclipse.chemclipse.msd.swt.ui.components.ions.MarkedIonsChooser;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -132,11 +131,6 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	private File chromatogramFile;
 	private ChromatogramSelectionMSD chromatogramSelection;
 	private EditorChromatogramUI chromatogramUI;
-	/*
-	 * Options.
-	 */
-	private MarkedIonsChooser selectedIonChooser;
-	private MarkedIonsChooser excludedIonChooser;
 	/*
 	 * Indices of the pages.
 	 */
@@ -568,10 +562,6 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 
 	private void updateOptionsPageValues() {
 
-		if(selectedIonChooser != null && excludedIonChooser != null) {
-			selectedIonChooser.setMarkedIons(chromatogramSelection.getSelectedIons());
-			excludedIonChooser.setMarkedIons(chromatogramSelection.getExcludedIons());
-		}
 	}
 
 	private void updateInfoPageValues() {
@@ -837,13 +827,8 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		compositeIons.setLayout(new GridLayout(2, true));
 		compositeIons.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		selectedIonChooser = new MarkedIonsChooser(compositeIons, SWT.NONE);
-		selectedIonChooser.setMarkedIons(chromatogramSelection.getSelectedIons());
-		selectedIonChooser.setLabelText("Add/Remove selected ions");
-		//
-		excludedIonChooser = new MarkedIonsChooser(compositeIons, SWT.NONE);
-		excludedIonChooser.setMarkedIons(chromatogramSelection.getExcludedIons());
-		excludedIonChooser.setLabelText("Add/Remove excluded ions");
+		Composite comp1 = new Composite(compositeIons, SWT.NONE);
+		Composite comp2 = new Composite(compositeIons, SWT.NONE);
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
