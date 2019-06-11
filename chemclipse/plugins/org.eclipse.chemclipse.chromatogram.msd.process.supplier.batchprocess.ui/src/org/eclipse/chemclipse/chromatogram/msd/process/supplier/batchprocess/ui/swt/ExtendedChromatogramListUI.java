@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -220,7 +220,7 @@ public class ExtendedChromatogramListUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(batchProcessJob != null) {
-					InputWizardSettings inputWizardSettings = new InputWizardSettings(new InputWizardSettings.DataType[]{InputWizardSettings.DataType.MSD_CHROMATOGRAM, InputWizardSettings.DataType.CSD_CHROMATOGRAM, InputWizardSettings.DataType.WSD_CHROMATOGRAM});
+					InputWizardSettings inputWizardSettings = new InputWizardSettings(new InputWizardSettings.InputDataType[]{InputWizardSettings.InputDataType.MSD_CHROMATOGRAM, InputWizardSettings.InputDataType.CSD_CHROMATOGRAM, InputWizardSettings.InputDataType.WSD_CHROMATOGRAM});
 					inputWizardSettings.setTitle("Chromatogram");
 					inputWizardSettings.setDescription("Select chromatogram(s) to analyze.");
 					inputWizardSettings.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.P_FILTER_PATH_IMPORT_RECORDS);
