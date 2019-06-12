@@ -22,13 +22,6 @@
     <elements xsi:type="basic:Part" xmi:id="_pWhTQI8wEeiO3oL5WUkZBQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.sequenceexplorer" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.SequenceExplorerPart" label="Sequence Explorer" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/sequenceListDefault.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_7SwRMNngEeiyx5W2f1mKlA" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverlay" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ChromatogramOverlayPart" label="Chromatogram Overlay" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlayDefault.gif"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_lUKRoKuHEeSKQ7OYnQVHjQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay" positionInList="before:org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.chromatogramOverlaySelectedIons">
-    <elements xsi:type="advanced:Placeholder" xmi:id="_T5VH8BTOEeW6yZo_81fQOw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.chromatogramOverlaySubtract"/>
-    <elements xsi:type="advanced:Placeholder" xmi:id="_2b0IABQzEeW0y8Q1koI2OA" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.chromatogramOverlayMirrored"/>
-  </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_3wrCQMnGEeWO_6AUKBdskw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.miscellaneousOverlay">
-    <elements xsi:type="advanced:Placeholder" xmi:id="_8KQRoMnGEeWO_6AUKBdskw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.1"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_NOrRACskEeakPPc3RJFSAg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_PjP7sCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main" label="Data Analysis (Main)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_qS_7gCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.3">
@@ -64,9 +57,6 @@
         </children>
       </children>
     </elements>
-  </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_fhpq0E9PEea2h67Ksldq6g" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay" positionInList="after:org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.chromatogramOverlaySelectedIons">
-    <elements xsi:type="advanced:Placeholder" xmi:id="_P8Z0QE9PEea2h67Ksldq6g" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.10"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_2yQBwJ0_Eee_5ZW_PnglkQ" featurename="descriptors" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="basic_1:PartDescriptor" xmi:id="_ErRAAJ1AEee_5ZW_PnglkQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverlayPartDescriptor" label="Chromatogram Overlay" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlayDefault.gif" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ChromatogramOverlayPart"/>
