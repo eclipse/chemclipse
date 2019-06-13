@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,12 +8,16 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - support file selection
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.support.settings.FileSettingProperty;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -21,11 +25,19 @@ import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 public class WidgetItem {
@@ -34,9 +46,11 @@ public class WidgetItem {
 	private InputValidator inputValidator;
 	private ControlDecoration controlDecoration;
 	private Control control;
+	private String currentSelection;
 
 	public WidgetItem(InputValue inputValue) {
 		this.inputValue = inputValue;
+		currentSelection = inputValue.getValue();
 	}
 
 	public InputValue getInputValue() {
@@ -72,7 +86,7 @@ public class WidgetItem {
 		/*
 		 * Get the input.
 		 */
-		String input = "";
+		String input = currentSelection;
 		if(control instanceof Text) {
 			input = ((Text)control).getText().trim();
 		} else if(control instanceof Button) {
@@ -101,6 +115,12 @@ public class WidgetItem {
 		Object value = null;
 		Class<?> rawType = inputValue.getRawType();
 		if(rawType != null) {
+			if(rawType == File.class) {
+				if(currentSelection == null || currentSelection.isEmpty()) {
+					return null;
+				}
+				return new File(currentSelection);
+			}
 			if(control instanceof Text) {
 				/*
 				 * Text
@@ -141,35 +161,105 @@ public class WidgetItem {
 	@SuppressWarnings("rawtypes")
 	private Control createControl(Composite parent) throws Exception {
 
-		Control control = null;
 		Class<?> rawType = inputValue.getRawType();
 		if(rawType != null) {
 			if(rawType == int.class || rawType == Integer.class) {
-				control = createTextWidgetNormal(parent);
+				return createTextWidgetNormal(parent);
 			} else if(rawType == float.class || rawType == Float.class) {
-				control = createTextWidgetNormal(parent);
+				return createTextWidgetNormal(parent);
 			} else if(rawType == double.class || rawType == Double.class) {
-				control = createTextWidgetNormal(parent);
+				return createTextWidgetNormal(parent);
 			} else if(rawType == String.class) {
 				if(inputValue.isMultiLine()) {
-					control = createTextWidgetMultiLine(parent);
+					return createTextWidgetMultiLine(parent);
 				} else {
-					control = createTextWidgetNormal(parent);
+					return createTextWidgetNormal(parent);
 				}
 			} else if(rawType == boolean.class || rawType == Boolean.class) {
-				control = createCheckboxWidget(parent);
+				return createCheckboxWidget(parent);
 			} else if(rawType.isEnum()) {
 				List<String> input = new ArrayList<>();
 				Enum[] enums = (Enum[])rawType.getEnumConstants();
 				for(int i = 0; i < enums.length; i++) {
 					input.add(enums[i].toString());
 				}
-				control = createComboViewerWidget(parent, input);
+				return createComboViewerWidget(parent, input);
+			} else if(rawType == File.class) {
+				return createFileWidget(parent);
 			} else {
 				throw new Exception("Unknown Raw Type: " + rawType);
 			}
 		}
-		return control;
+		return null;
+	}
+
+	private Control createFileWidget(Composite parent) {
+
+		FileSettingProperty fileSettingProperty = inputValue.getFileSettingProperty();
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridLayout layout = new GridLayout(2, false);
+		layout.verticalSpacing = 0;
+		composite.setLayout(layout);
+		CLabel label = new CLabel(composite, SWT.NONE);
+		label.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+		String value = inputValue.getValue();
+		if(value == null || value.isEmpty()) {
+			value = inputValue.getDefaultValue();
+		}
+		if(value == null || value.isEmpty()) {
+			label.setText("Please choose a location ...");
+		} else {
+			label.setText(value);
+		}
+		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+		Button button = new Button(composite, SWT.PUSH);
+		button.setText(" ... ");
+		button.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean filechooser;
+				int style;
+				if(fileSettingProperty != null) {
+					filechooser = !fileSettingProperty.onlyDirectory();
+					if(fileSettingProperty.dialogType() == DialogType.OPEN_DIALOG) {
+						style = SWT.OPEN;
+					} else {
+						style = SWT.SAVE;
+					}
+				} else {
+					filechooser = true;
+					style = SWT.OPEN;
+				}
+				if(filechooser) {
+					FileDialog dialog = new FileDialog(button.getShell(), style);
+					String open = dialog.open();
+					if(open != null) {
+						label.setText(open);
+						currentSelection = open;
+					}
+				} else {
+					DirectoryDialog dialog = new DirectoryDialog(button.getShell(), style);
+					String open = dialog.open();
+					if(open != null) {
+						label.setText(open);
+						currentSelection = open;
+					}
+				}
+				Listener[] listeners = composite.getListeners(SWT.Selection);
+				for(Listener listener : listeners) {
+					listener.handleEvent(new Event());
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+		return composite;
 	}
 
 	private Control createTextWidgetNormal(Composite parent) {

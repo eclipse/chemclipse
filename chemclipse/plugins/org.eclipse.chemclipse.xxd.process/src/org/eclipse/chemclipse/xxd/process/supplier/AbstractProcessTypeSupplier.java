@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add generics, add method for custom error msg
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
@@ -24,7 +25,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 
-public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+public abstract class AbstractProcessTypeSupplier<T> implements IProcessTypeSupplier<T> {
 
 	private List<ProcessorSupplier> processorSuppliers = new ArrayList<>();
 	//
@@ -95,10 +96,15 @@ public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplie
 		settingsClassMap.put(processorId, processorSupplier.getSettingsClass());
 	}
 
-	protected IProcessingInfo getProcessingInfoError(String processorId) {
+	protected IProcessingInfo<T> getProcessingInfoError(String processorId) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addErrorMessage(processorId, "The data is not supported by the processor.");
+		return getProcessingInfoError(processorId, "The data is not supported by the processor.");
+	}
+
+	protected IProcessingInfo<T> getProcessingInfoError(String processorId, String message) {
+
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<T>();
+		processingInfo.addErrorMessage(processorId, message);
 		return processingInfo;
 	}
 }

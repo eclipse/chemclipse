@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,8 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - support FileSettingProperty
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
+
+import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 
 public class InputValue {
 
@@ -26,6 +29,7 @@ public class InputValue {
 	private String regularExpression = null;
 	private IntegerValidation integerValidation = null;
 	private boolean isMultiLine = false; // StringSettingsProperty
+	private FileSettingProperty fileSettingProperty;
 
 	public boolean hasMinMaxConstraint() {
 
@@ -140,5 +144,15 @@ public class InputValue {
 	public void setMultiLine(boolean isMultiLine) {
 
 		this.isMultiLine = isMultiLine;
+	}
+
+	public void setFileSettingProperty(FileSettingProperty annotation) {
+
+		this.fileSettingProperty = annotation;
+	}
+
+	public FileSettingProperty getFileSettingProperty() {
+
+		return fileSettingProperty;
 	}
 }

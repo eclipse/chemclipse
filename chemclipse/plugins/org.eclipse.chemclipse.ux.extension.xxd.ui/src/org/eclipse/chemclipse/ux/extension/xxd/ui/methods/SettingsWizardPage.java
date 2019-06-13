@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - extend event handling
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -28,7 +29,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,8 +80,7 @@ public class SettingsWizardPage extends WizardPage {
 			try {
 				widgetItem.initializeControl(parent);
 				Control control = widgetItem.getControl();
-				addKeyListener(control);
-				addMouseListener(control);
+				addListener(control);
 			} catch(Exception e) {
 				logger.warn(e);
 				Label info = new Label(parent, SWT.NONE);
@@ -87,8 +89,16 @@ public class SettingsWizardPage extends WizardPage {
 		}
 	}
 
-	private void addKeyListener(Control control) {
+	private void addListener(Control control) {
 
+		control.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				validate();
+			}
+		});
 		control.addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -97,10 +107,6 @@ public class SettingsWizardPage extends WizardPage {
 				validate();
 			}
 		});
-	}
-
-	private void addMouseListener(Control control) {
-
 		control.addMouseListener(new MouseAdapter() {
 
 			@Override
