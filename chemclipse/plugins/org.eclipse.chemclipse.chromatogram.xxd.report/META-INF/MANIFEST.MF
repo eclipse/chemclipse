@@ -19,3 +19,4 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.report.chromatogram,
  org.eclipse.chemclipse.chromatogram.xxd.report.model,
  org.eclipse.chemclipse.chromatogram.xxd.report.settings,
  org.eclipse.chemclipse.chromatogram.xxd.report.support
+Import-Package: com.fasterxml.jackson.annotation

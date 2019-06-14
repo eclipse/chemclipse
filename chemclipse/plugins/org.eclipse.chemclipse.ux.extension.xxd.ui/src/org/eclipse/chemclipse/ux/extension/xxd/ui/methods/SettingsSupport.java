@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - Support File settings
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -21,6 +22,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IonsSelectionSettingProperty;
@@ -79,7 +81,10 @@ public class SettingsSupport {
 			for(Map.Entry<String, Object> entry : map.entrySet()) {
 				for(InputValue inputValue : inputValues) {
 					if(inputValue.getName().equals(entry.getKey())) {
-						inputValue.setValue(entry.getValue().toString());
+						Object value = entry.getValue();
+						if(value != null) {
+							inputValue.setValue(value.toString());
+						}
 					}
 				}
 			}
@@ -134,40 +139,40 @@ public class SettingsSupport {
 				 * SettingsProperty ...
 				 */
 				for(Annotation annotation : annotatedField.annotations()) {
-					if(annotation.annotationType().getName().contains("SettingsProperty")) {
-						if(annotation instanceof IntSettingsProperty) {
-							IntSettingsProperty settingsProperty = (IntSettingsProperty)annotation;
-							inputValue.setMinValue(settingsProperty.minValue());
-							inputValue.setMaxValue(settingsProperty.maxValue());
-							switch(settingsProperty.validation()) {
-								case ODD_NUMBER:
-									inputValue.setIntegerValidation(IntegerValidation.ODD);
-									break;
-								default:
-									inputValue.setIntegerValidation(null);
-									break;
-							}
-						} else if(annotation instanceof FloatSettingsProperty) {
-							FloatSettingsProperty settingsProperty = (FloatSettingsProperty)annotation;
-							inputValue.setMinValue(settingsProperty.minValue());
-							inputValue.setMaxValue(settingsProperty.maxValue());
-						} else if(annotation instanceof DoubleSettingsProperty) {
-							DoubleSettingsProperty settingsProperty = (DoubleSettingsProperty)annotation;
-							inputValue.setMinValue(settingsProperty.minValue());
-							inputValue.setMaxValue(settingsProperty.maxValue());
-						} else if(annotation instanceof StringSettingsProperty) {
-							StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
-							inputValue.setRegularExpression(settingsProperty.regExp());
-							inputValue.setMultiLine(settingsProperty.isMultiLine());
-						} else if(annotation instanceof IonsSelectionSettingProperty) {
-							// IonsSelectionSettingProperty settingsProperty = (IonsSelectionSettingProperty)annotation;
-							/*
-							 * Find a better regex to match empty or 28;32 ...
-							 */
-							inputValue.setRegularExpression("(^$|\\d+;?)");
+					if(annotation instanceof IntSettingsProperty) {
+						IntSettingsProperty settingsProperty = (IntSettingsProperty)annotation;
+						inputValue.setMinValue(settingsProperty.minValue());
+						inputValue.setMaxValue(settingsProperty.maxValue());
+						switch(settingsProperty.validation()) {
+							case ODD_NUMBER:
+								inputValue.setIntegerValidation(IntegerValidation.ODD);
+								break;
+							default:
+								inputValue.setIntegerValidation(null);
+								break;
 						}
-						// RetentionTimeMinutesProperty - remove?
+					} else if(annotation instanceof FloatSettingsProperty) {
+						FloatSettingsProperty settingsProperty = (FloatSettingsProperty)annotation;
+						inputValue.setMinValue(settingsProperty.minValue());
+						inputValue.setMaxValue(settingsProperty.maxValue());
+					} else if(annotation instanceof DoubleSettingsProperty) {
+						DoubleSettingsProperty settingsProperty = (DoubleSettingsProperty)annotation;
+						inputValue.setMinValue(settingsProperty.minValue());
+						inputValue.setMaxValue(settingsProperty.maxValue());
+					} else if(annotation instanceof StringSettingsProperty) {
+						StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
+						inputValue.setRegularExpression(settingsProperty.regExp());
+						inputValue.setMultiLine(settingsProperty.isMultiLine());
+					} else if(annotation instanceof IonsSelectionSettingProperty) {
+						// IonsSelectionSettingProperty settingsProperty = (IonsSelectionSettingProperty)annotation;
+						/*
+						 * Find a better regex to match empty or 28;32 ...
+						 */
+						inputValue.setRegularExpression("(^$|\\d+;?)");
+					} else if(annotation instanceof FileSettingProperty) {
+						inputValue.setFileSettingProperty((FileSettingProperty)annotation);
 					}
+					// RetentionTimeMinutesProperty - remove?
 				}
 			}
 		}

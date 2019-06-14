@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018,2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - settings support, error handling
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
@@ -25,8 +26,6 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.xxd.process.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -46,7 +45,11 @@ public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier 
 				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
 				processorSupplier.setName(supplier.getReportName());
 				processorSupplier.setDescription(supplier.getDescription());
-				processorSupplier.setSettingsClass(supplier.getSettingsClass());
+				Class<? extends IChromatogramReportSettings> settingsClass = supplier.getSettingsClass();
+				if(settingsClass == null) {
+					settingsClass = DefaultChromatogramReportSettings.class;
+				}
+				processorSupplier.setSettingsClass(settingsClass);
 				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoReportSupplierAvailableException e) {
@@ -58,32 +61,34 @@ public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier 
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processInfo = null;
-		//
+		IChromatogramReportSettings settings;
+		if(processSettings instanceof IChromatogramReportSettings) {
+			settings = (IChromatogramReportSettings)processSettings;
+		} else {
+			settings = new DefaultChromatogramReportSettings();
+		}
 		if(chromatogramSelection != null) {
-			String reportExportFolder = PreferenceSupplier.getReportExportFolder();
-			File exportFolder = new File(reportExportFolder);
-			if(exportFolder.exists()) {
-				/*
-				 * TODO
-				 */
-				IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
-				File file = new File(reportExportFolder + File.separator + chromatogram.getName());
-				boolean append = false;
-				//
-				if(processSettings != null && processSettings instanceof IChromatogramReportSettings) {
-					processInfo = ChromatogramReports.generate(file, append, chromatogram, (IChromatogramReportSettings)processSettings, processorId, monitor);
-				} else {
-					processInfo = ChromatogramReports.generate(file, append, chromatogram, processorId, monitor);
-				}
+			File exportFolder = settings.getExportFolder();
+			if(exportFolder == null) {
+				return getProcessingInfoError(processorId, "No outputfolder specified and no default configured");
 			}
+			String extension;
+			try {
+				extension = ChromatogramReports.getChromatogramReportSupplierSupport().getReportSupplier(processorId).getFileExtension();
+			} catch(NoReportSupplierAvailableException e) {
+				return getProcessingInfoError(processorId, "Processor not found");
+			}
+			if(exportFolder.exists() || exportFolder.mkdirs()) {
+				IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
+				File file = new File(exportFolder, settings.getFileNamePattern().replace(IChromatogramReportSettings.VARIABLE_CHROMATOGRAM_NAME, chromatogram.getName()).replace(IChromatogramReportSettings.VARIABLE_EXTENSION, extension));
+				IProcessingInfo info = ChromatogramReports.generate(file, settings.isAppend(), chromatogram, settings, processorId, monitor);
+				info.addInfoMessage(processorId, "Report written to " + file.getAbsolutePath());
+				return info;
+			} else {
+				return getProcessingInfoError(processorId, "The specified outputfolder does not exits and can't be created");
+			}
+		} else {
+			return getProcessingInfoError(processorId);
 		}
-		//
-		if(processInfo == null) {
-			processInfo = new ProcessingInfo();
-			processInfo.addErrorMessage(CATEGORY, "Something went wrong to report the chromatogram: " + processorId + " " + chromatogramSelection);
-		}
-		//
-		return processInfo;
 	}
 }

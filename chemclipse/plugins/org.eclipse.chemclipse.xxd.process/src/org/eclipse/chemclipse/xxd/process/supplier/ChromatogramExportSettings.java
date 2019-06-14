@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
+import java.io.File;
+
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.xxd.process.preferences.PreferenceSupplier;
@@ -19,20 +21,36 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ChromatogramExportSettings implements IProcessSettings {
 
-	@JsonProperty(value = "Export Folder (leave empty for default)", defaultValue = "")
+	public static final String VARIABLE_CHROMATOGRAM_NAME = "{chromatogram_name}";
+	public static final String VARIABLE_EXTENSION = "{extension}";
+	@JsonProperty(value = "Export Folder", defaultValue = "")
 	@FileSettingProperty(onlyDirectory = true)
-	private String exportFolder;
+	private File exportFolder;
+	@JsonProperty(value = "Filename", defaultValue = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION)
+	private String filenamePattern = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION;
 
-	public String getExportFolder() {
+	public File getExportFolder() {
 
-		if(exportFolder == null || exportFolder.isEmpty()) {
-			return PreferenceSupplier.getChromatogramExportFolder();
+		if(exportFolder == null) {
+			String folder = PreferenceSupplier.getChromatogramExportFolder();
+			if(folder != null && !folder.isEmpty()) {
+				return new File(folder);
+			}
 		}
 		return exportFolder;
 	}
 
-	public void setExportFolder(String exportFolder) {
+	public void setExportFolder(File exportFolder) {
 
 		this.exportFolder = exportFolder;
+	}
+
+	public String getFileNamePattern() {
+
+		if(filenamePattern == null) {
+			// for backward compatibility
+			return VARIABLE_CHROMATOGRAM_NAME;
+		}
+		return filenamePattern;
 	}
 }

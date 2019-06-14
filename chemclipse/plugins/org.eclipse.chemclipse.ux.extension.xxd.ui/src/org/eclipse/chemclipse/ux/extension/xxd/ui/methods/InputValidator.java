@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,10 +8,15 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - support File properties
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
+import java.io.File;
+
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -107,6 +112,13 @@ public class InputValidator implements IValidator {
 			} else if(rawType.isEnum()) {
 				if("".equals(value)) {
 					message = "Please select and option from the combo box.";
+				}
+			} else if(rawType == File.class) {
+				FileSettingProperty property = inputValue.getFileSettingProperty();
+				if(property != null && !(property.dialogType() == DialogType.SAVE_DIALOG)) {
+					if(!new File(value).exists()) {
+						return "Location does not exits, please choose a valid location";
+					}
 				}
 			} else {
 				logger.info("Unknown Raw Type: " + rawType);
