@@ -8,12 +8,15 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - content-proposal support
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -56,8 +59,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ComboContentAdapter;
+import org.eclipse.jface.fieldassist.ContentProposal;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.jface.fieldassist.IContentProposal;
+import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -428,8 +436,32 @@ public class ExtendedTargetsUI {
 				}
 			}
 		});
-		//
+		enableAuotComplete(combo);
 		return combo;
+	}
+
+	private void enableAuotComplete(Combo combo) {
+
+		IContentProposalProvider proposalProvider = new IContentProposalProvider() {
+
+			@Override
+			public IContentProposal[] getProposals(String contents, int position) {
+
+				List<ContentProposal> list = new ArrayList<>();
+				if(contents != null) {
+					String[] items = combo.getItems();
+					for(String item : items) {
+						if(item.toLowerCase().contains(contents.toLowerCase())) {
+							list.add(new ContentProposal(item));
+						}
+					}
+				}
+				return list.toArray(new IContentProposal[0]);
+			}
+		};
+		ContentProposalAdapter adapter = new ContentProposalAdapter(combo, new ComboContentAdapter(), proposalProvider, null, null);
+		adapter.setPropagateKeys(true);
+		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 	}
 
 	private Button createButtonAdd(Composite parent) {
