@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - Settings
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences;
 
@@ -26,7 +27,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_APPEND_FILES = "appendFiles";
 	public static final boolean DEF_APPEND_FILES = false;
 	//
-	public static final String P_DELTA_RETENTION_TIME = "appendFiles";
+	public static final String P_DELTA_RETENTION_TIME = "deltaRt";
 	public static final int MIN_DELTA_RETENTION_TIME = 0;
 	public static final int MAX_DELTA_RETENTION_TIME = Integer.MAX_VALUE;
 	public static final int DEF_DELTA_RETENTION_TIME = 1000;

@@ -15,3 +15,5 @@ chemclipse/features/net.openchrom.chromatogram.xxd.report.supplier.openchrom.fea
 chemclipse/plugins/net.openchrom.chromatogram.xxd.report.supplier.openchrom.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.xxd.report.supplier.chemclipse/target/
 chemclipse/sites/net.openchrom.chromatogram.xxd.report.supplier.openchrom.updateSite/target/
+bin/
+target/
