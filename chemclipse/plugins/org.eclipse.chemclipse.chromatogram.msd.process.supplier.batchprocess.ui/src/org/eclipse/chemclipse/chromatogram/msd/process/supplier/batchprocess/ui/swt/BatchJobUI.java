@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - move execute Button to the top toolbar to conserve space
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.swt;
 
@@ -69,10 +70,12 @@ public class BatchJobUI extends Composite {
 		setLayout(new FillLayout());
 		//
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(1, false));
 		//
 		createMainComposite(composite);
-		createButtonComposite(composite);
+		GridLayout layoutToolbar = (GridLayout)extendedMethodUI.getToolbarMain().getLayout();
+		layoutToolbar.numColumns = layoutToolbar.numColumns + 1;
+		createExecuteButton(extendedMethodUI.getToolbarMain());
 	}
 
 	private void createMainComposite(Composite parent) {
@@ -112,25 +115,13 @@ public class BatchJobUI extends Composite {
 		});
 	}
 
-	private void createButtonComposite(Composite parent) {
-
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(1, true));
-		composite.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-		//
-		GridData gridDataButtons = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataButtons.minimumWidth = 150;
-		//
-		createExecuteButton(composite);
-	}
-
 	private Button createExecuteButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Execute");
 		button.setToolTipText("Execute the batch job.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
-		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		// button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override

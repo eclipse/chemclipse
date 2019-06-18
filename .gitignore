@@ -10,3 +10,5 @@ chemclipse/features/net.openchrom.chromatogram.msd.process.supplier.batchprocess
 chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.batchprocess.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.batchprocess/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.batchprocess.updateSite/target/
+target/
+bin/
