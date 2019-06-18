@@ -8,15 +8,18 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - make UI configurable
+ * Christoph Läubrich - make UI configurable, support selection of existing process methods
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
@@ -30,7 +33,9 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
@@ -39,6 +44,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodListUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodUIConfig;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePage;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -46,24 +52,36 @@ import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -78,13 +96,13 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private Label labelDataInfo;
 	private Text textOperator;
 	private Text textDescription;
-	private Button buttonAdd;
+	private ToolItem buttonAdd;
 	private Button buttonCopy;
-	private Button buttonRemove;
-	private Button buttonMoveUp;
-	private Button buttonMoveDown;
-	private Button buttonModifySettings;
-	private Button buttonResetSettings;
+	private ToolItem buttonRemove;
+	private ToolItem buttonMoveUp;
+	private ToolItem buttonMoveDown;
+	private ToolItem buttonModifySettings;
+	private ToolItem buttonResetSettings;
 	private MethodListUI listUI;
 	//
 	private IProcessMethod processMethod = null;
@@ -125,10 +143,15 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		createToolbarMain(composite);
 		toolbarHeader = createToolbarHeader(composite);
 		createTable(composite);
-		createToolbarBottom(composite);
+		buttons = createToolbarBottom(composite);
 		//
 		PartSupport.setCompositeVisibility(toolbarHeader, false);
 		enableTableButtons();
+	}
+
+	public Composite getToolbarMain() {
+
+		return toolbarMain;
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -375,37 +398,96 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		});
 	}
 
-	private void createToolbarBottom(Composite parent) {
+	private ToolBar createToolbarBottom(Composite parent) {
 
-		buttons = new Composite(parent, SWT.NONE);
+		ToolBar toolBar = new ToolBar(parent, SWT.FLAT);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		buttons.setLayoutData(gridData);
-		buttons.setLayout(new GridLayout(7, false));
-		//
-		buttonAdd = createAddButton(buttons);
-		buttonCopy = createCopyButton(buttons);
-		buttonRemove = createRemoveButton(buttons);
-		buttonMoveUp = createMoveUpButton(buttons);
-		buttonMoveDown = createMoveDownButton(buttons);
-		buttonModifySettings = createModifySettingsButton(buttons);
-		buttonResetSettings = createResetSettingsButton(buttons);
+		toolBar.setLayoutData(gridData);
+		buttonAdd = createAddButton(toolBar);
+		buttonRemove = createRemoveButton(toolBar);
+		buttonCopy = createCopyButton(toolBar);
+		buttonMoveUp = createMoveUpButton(toolBar);
+		buttonMoveDown = createMoveDownButton(toolBar);
+		buttonModifySettings = createModifySettingsButton(toolBar);
+		buttonResetSettings = createResetSettingsButton(toolBar);
+		return toolBar;
 	}
 
-	private Button createAddButton(Composite parent) {
+	private ToolItem createAddButton(ToolBar toolBar) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Add a process method.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		final ToolItem item = new ToolItem(toolBar, SWT.DROP_DOWN);
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		item.setToolTipText("Add a process method.");
+		final Menu menu = new Menu(toolBar.getShell(), SWT.POP_UP);
+		toolBar.addDisposeListener(new DisposeListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetDisposed(DisposeEvent e) {
 
+				menu.dispose();
+			}
+		});
+		item.addListener(SWT.Selection, event -> {
+			if(event.detail == SWT.ARROW) {
+				Rectangle rect = item.getBounds();
+				Point pt = new Point(rect.x, rect.y + rect.height);
+				pt = toolBar.toDisplay(pt);
+				for(MenuItem menuItem : menu.getItems()) {
+					menuItem.dispose();
+				}
+				List<File> files = MethodSupportUI.getMethodFiles(Activator.getDefault().getPreferenceStore());
+				for(File file : files) {
+					MenuItem menuItem = new MenuItem(menu, SWT.NONE);
+					menuItem.setText(file.getName());
+					menuItem.addSelectionListener(new SelectionListener() {
+
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+
+							loadMethodFile(file);
+						}
+
+						@Override
+						public void widgetDefaultSelected(SelectionEvent e) {
+
+						}
+					});
+				}
+				if(!files.isEmpty()) {
+					new MenuItem(menu, SWT.SEPARATOR);
+				}
+				MenuItem loadItem = new MenuItem(menu, SWT.NONE);
+				loadItem.setText("Load from file...");
+				loadItem.addSelectionListener(new SelectionListener() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+
+						FileDialog fileDialog = new FileDialog(toolBar.getShell(), SWT.OPEN);
+						fileDialog.setText("Select Process Method file");
+						fileDialog.setFileName(MethodConverter.DEFAULT_METHOD_FILE_NAME);
+						fileDialog.setFilterExtensions(MethodConverter.DEFAULT_METHOD_FILE_EXTENSIONS);
+						fileDialog.setFilterNames(MethodConverter.DEFAULT_METHOD_FILE_NAMES);
+						//
+						String filePath = fileDialog.open();
+						if(filePath != null) {
+							File file = new File(filePath);
+							loadMethodFile(file);
+						}
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+
+					}
+				});
+				menu.setLocation(pt.x, pt.y);
+				menu.setVisible(true);
+			} else {
 				if(processMethod != null) {
 					ProcessingWizard wizard = new ProcessingWizard(processingSupport);
-					WizardDialog wizardDialog = new WizardDialog(e.display.getActiveShell(), wizard);
+					WizardDialog wizardDialog = new WizardDialog(toolBar.getShell(), wizard);
 					wizardDialog.setMinimumPageSize(ProcessingWizard.DEFAULT_WIDTH, ProcessingWizard.DEFAULT_HEIGHT);
 					wizardDialog.create();
 					//
@@ -417,16 +499,31 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 								modifyProcessEntry(getShell(), processEntry);
 							}
 							updateProcessMethod();
+							select(Collections.singletonList(processEntry));
 						}
 					}
 				}
 			}
 		});
-		//
-		return button;
+		return item;
 	}
 
-	private Button createCopyButton(Composite parent) {
+	public void loadMethodFile(File file) {
+
+		IProcessMethod method = Adapters.adapt(file, IProcessMethod.class);
+		if(method != null) {
+			processMethod.addAll(method);
+			updateProcessMethod();
+			select(method);
+		}
+	}
+
+	private void select(List<? extends IProcessEntry> entries) {
+
+		listUI.setSelection(new StructuredSelection(entries));
+	}
+
+	private Button createCopyButton(ToolBar parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Copy a process method.");
@@ -456,13 +553,12 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		return button;
 	}
 
-	private Button createRemoveButton(Composite parent) {
+	private ToolItem createRemoveButton(ToolBar toolBar) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Remove the selected process method(s).");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		item.setToolTipText("Remove the selected process method(s).");
+		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -476,45 +572,46 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 							}
 						}
 						updateProcessMethod();
+						select(Collections.emptyList());
 					}
 				}
 			}
 		});
 		//
-		return button;
+		return item;
 	}
 
-	private Button createMoveUpButton(Composite parent) {
+	private ToolItem createMoveUpButton(ToolBar toolBar) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Move the process method(s) up.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
+		item.setToolTipText("Move the process method(s) up.");
+		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				if(processMethod != null) {
 					Table table = listUI.getTable();
+					ISelection selection = listUI.getSelection();
 					for(int index : table.getSelectionIndices()) {
 						Collections.swap(processMethod, index, index - 1);
 					}
 					updateProcessMethod();
+					listUI.setSelection(selection);
 				}
 			}
 		});
 		//
-		return button;
+		return item;
 	}
 
-	private Button createMoveDownButton(Composite parent) {
+	private ToolItem createMoveDownButton(ToolBar toolBar) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Move the process method(s) down.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
+		item.setToolTipText("Move the process method(s) down.");
+		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -522,43 +619,43 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				if(processMethod != null) {
 					Table table = listUI.getTable();
 					int[] indices = table.getSelectionIndices();
+					ISelection selection = listUI.getSelection();
 					for(int i = indices.length - 1; i >= 0; i--) {
 						int index = indices[i];
 						Collections.swap(processMethod, index, index + 1);
 					}
 					updateProcessMethod();
+					listUI.setSelection(selection);
 				}
 			}
 		});
 		//
-		return button;
+		return item;
 	}
 
-	private Button createModifySettingsButton(Composite parent) {
+	private ToolItem createModifySettingsButton(ToolBar toolBar) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Modify the process method settings.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		item.setToolTipText("Modify the process method settings.");
+		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				executeModifySettings(parent.getShell());
+				executeModifySettings(toolBar.getShell());
 			}
 		});
 		//
-		return button;
+		return item;
 	}
 
-	private Button createResetSettingsButton(Composite parent) {
+	private ToolItem createResetSettingsButton(ToolBar toolBar) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Reset the process method settings.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		item.setToolTipText("Reset the process method settings.");
+		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -575,7 +672,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			}
 		});
 		//
-		return button;
+		return item;
 	}
 
 	private void updateProcessMethod() {

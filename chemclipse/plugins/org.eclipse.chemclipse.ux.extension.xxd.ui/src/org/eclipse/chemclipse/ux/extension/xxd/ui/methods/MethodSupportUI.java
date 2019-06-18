@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - make helper method public static to read all configured methods
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -104,7 +105,7 @@ public class MethodSupportUI extends Composite {
 		buttonExecuteMethod = createButtonExecuteMethod(composite);
 		createButtonSettings(composite);
 		//
-		computeMethodComboItems();
+		computeMethodComboItems(getMethodFiles(preferenceStore));
 	}
 
 	private ComboViewer createComboMethod(Composite parent) {
@@ -136,8 +137,9 @@ public class MethodSupportUI extends Composite {
 			public void focusGained(FocusEvent e) {
 
 				int size = combo.getItemCount();
-				if(getMethodFiles().size() != size) {
-					computeMethodComboItems();
+				List<File> files = getMethodFiles(preferenceStore);
+				if(files.size() != size) {
+					computeMethodComboItems(files);
 				} else if(size > 0) {
 					setSelectedMethod();
 				}
@@ -230,7 +232,7 @@ public class MethodSupportUI extends Composite {
 						if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Method", "Do you want to delete the method: " + file.getName() + "?")) {
 							file.delete();
 							preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, "");
-							computeMethodComboItems();
+							computeMethodComboItems(getMethodFiles(preferenceStore));
 						}
 					}
 				}
@@ -303,7 +305,7 @@ public class MethodSupportUI extends Composite {
 
 	private void applySettings() {
 
-		computeMethodComboItems();
+		computeMethodComboItems(getMethodFiles(preferenceStore));
 	}
 
 	private boolean selectMethodDirectory(Shell shell) {
@@ -340,15 +342,14 @@ public class MethodSupportUI extends Composite {
 			IProcessingInfo processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
 			if(!processingInfo.hasErrorMessages()) {
 				preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
-				computeMethodComboItems();
+				computeMethodComboItems(getMethodFiles(preferenceStore));
 				supplierEditorSupport.openEditor(file);
 			}
 		}
 	}
 
-	private void computeMethodComboItems() {
+	private void computeMethodComboItems(List<File> methodFiles) {
 
-		List<File> methodFiles = getMethodFiles();
 		if(methodFiles.size() > 0) {
 			comboViewerMethods.setInput(methodFiles);
 			if(comboViewerMethods.getCombo().getItemCount() > 0) {
@@ -361,7 +362,7 @@ public class MethodSupportUI extends Composite {
 		enableWidgets();
 	}
 
-	private List<File> getMethodFiles() {
+	public static List<File> getMethodFiles(IPreferenceStore preferenceStore) {
 
 		List<File> methodFiles = new ArrayList<>();
 		//
@@ -393,12 +394,12 @@ public class MethodSupportUI extends Composite {
 		Combo combo = comboViewerMethods.getCombo();
 		//
 		exitloop:
-			for(int i = 0; i < combo.getItemCount(); i++) {
-				if(combo.getItem(i).equals(selectedMethodName)) {
-					combo.select(i);
-					break exitloop;
-				}
+		for(int i = 0; i < combo.getItemCount(); i++) {
+			if(combo.getItem(i).equals(selectedMethodName)) {
+				combo.select(i);
+				break exitloop;
 			}
+		}
 		//
 		if(combo.getSelectionIndex() == -1) {
 			combo.select(0);
