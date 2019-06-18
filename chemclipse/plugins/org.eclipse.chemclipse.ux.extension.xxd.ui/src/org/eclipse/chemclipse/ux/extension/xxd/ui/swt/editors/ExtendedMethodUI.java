@@ -97,7 +97,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private Text textOperator;
 	private Text textDescription;
 	private ToolItem buttonAdd;
-	private Button buttonCopy;
+	private ToolItem buttonCopy;
 	private ToolItem buttonRemove;
 	private ToolItem buttonMoveUp;
 	private ToolItem buttonMoveDown;
@@ -523,13 +523,12 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		listUI.setSelection(new StructuredSelection(entries));
 	}
 
-	private Button createCopyButton(ToolBar parent) {
+	private ToolItem createCopyButton(ToolBar toolBar) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Copy a process method.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY, IApplicationImage.SIZE_16x16));
+		item.setToolTipText("Copy a process method.");
+		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -550,7 +549,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			}
 		});
 		//
-		return button;
+		return item;
 	}
 
 	private ToolItem createRemoveButton(ToolBar toolBar) {
