@@ -18,16 +18,9 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
-Export-Package: org.eclipse.chemclipse.swt.ui.base,
- org.eclipse.chemclipse.swt.ui.browser,
+Export-Package: org.eclipse.chemclipse.swt.ui.browser,
  org.eclipse.chemclipse.swt.ui.comparator,
  org.eclipse.chemclipse.swt.ui.components,
- org.eclipse.chemclipse.swt.ui.components.baseline,
- org.eclipse.chemclipse.swt.ui.components.chromatogram,
  org.eclipse.chemclipse.swt.ui.components.peaks,
- org.eclipse.chemclipse.swt.ui.converter,
- org.eclipse.chemclipse.swt.ui.exceptions,
- org.eclipse.chemclipse.swt.ui.marker,
  org.eclipse.chemclipse.swt.ui.preferences,
- org.eclipse.chemclipse.swt.ui.series,
  org.eclipse.chemclipse.swt.ui.support

@@ -18,7 +18,3 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
-Export-Package: org.eclipse.chemclipse.wsd.swt.ui.components,
- org.eclipse.chemclipse.wsd.swt.ui.components.chromatogram,
- org.eclipse.chemclipse.wsd.swt.ui.components.scan,
- org.eclipse.chemclipse.wsd.swt.ui.converter

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
@@ -152,12 +151,6 @@ public class Colors {
 		elements[6][0] = COLOR_SCHEME_UNLIMITED;
 		elements[6][1] = COLOR_SCHEME_UNLIMITED;
 		return elements;
-	}
-
-	public static IColorScheme getColorScheme() {
-
-		String colorSchemeOverlay = PreferenceSupplier.getColorSchemeOverlay();
-		return getColorScheme(colorSchemeOverlay);
 	}
 
 	public static IColorScheme getColorScheme(String colorScheme) {

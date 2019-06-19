@@ -34,7 +34,6 @@ Export-Package: org.eclipse.chemclipse.msd.swt.ui.components,
  org.eclipse.chemclipse.msd.swt.ui.components.massspectrum,
  org.eclipse.chemclipse.msd.swt.ui.components.peak,
  org.eclipse.chemclipse.msd.swt.ui.converter,
- org.eclipse.chemclipse.msd.swt.ui.exceptions,
  org.eclipse.chemclipse.msd.swt.ui.preferences,
  org.eclipse.chemclipse.msd.swt.ui.support
 Bundle-ActivationPolicy: lazy

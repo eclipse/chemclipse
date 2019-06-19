@@ -23,7 +23,3 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
-Export-Package: org.eclipse.chemclipse.csd.swt.ui.components,
- org.eclipse.chemclipse.csd.swt.ui.components.chromatogram,
- org.eclipse.chemclipse.csd.swt.ui.components.peak,
- org.eclipse.chemclipse.csd.swt.ui.converter

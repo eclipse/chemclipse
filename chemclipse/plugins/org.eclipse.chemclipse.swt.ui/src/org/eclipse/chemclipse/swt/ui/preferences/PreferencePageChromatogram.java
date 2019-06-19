@@ -18,12 +18,12 @@ import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class ChromatogramPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageChromatogram extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public ChromatogramPreferencePage() {
+	public PreferencePageChromatogram() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStoreChromatogram());
-		setDescription("Specific chromatogram settings.");
+		setDescription("Chromatogram Settings");
 	}
 
 	@Override

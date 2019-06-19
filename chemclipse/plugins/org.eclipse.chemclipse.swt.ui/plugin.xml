@@ -5,15 +5,9 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
-            class="org.eclipse.chemclipse.swt.ui.preferences.SWTPreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.ui.swt.perspectivePreferencePage"
-            name="Editor/View Preference Page">
-      </page>
-      <page
-            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
-            class="org.eclipse.chemclipse.swt.ui.preferences.ChromatogramPreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.ui.swt.chromatogramPreferencePage"
-            name="Specific Chromatogram Settings">
+            class="org.eclipse.chemclipse.swt.ui.preferences.PreferencePageChromatogram"
+            id="org.eclipse.chemclipse.chromatogram.ui.swt.preferencePageChromatogram"
+            name="Chromatogram Settings">
       </page>
       <page
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"

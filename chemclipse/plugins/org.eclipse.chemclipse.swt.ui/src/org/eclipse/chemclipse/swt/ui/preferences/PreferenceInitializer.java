@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,39 +28,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_SHOW_CHROMATOGRAM_POSITION_MARKER_BOX, true);
-		store.setDefault(PreferenceConstants.P_POSITION_MARKER_BACKGROUND_COLOR, "255,255,255");
-		store.setDefault(PreferenceConstants.P_POSITION_MARKER_FOREGROUND_COLOR, "192,192,192");
 		//
-		store.setDefault(PreferenceConstants.P_SHOW_SELECTED_PEAK_IN_EDITOR, true);
-		store.setDefault(PreferenceConstants.P_SHOW_SCANS_OF_SELECTED_PEAK, true);
-		store.setDefault(PreferenceConstants.P_SIZE_OF_PEAK_SCAN_MARKER, 2);
-		//
-		store.setDefault(PreferenceConstants.P_SHOW_BACKGROUND_IN_CHROMATOGRAM_EDITOR, false);
-		store.setDefault(PreferenceConstants.P_SHOW_CHROMATOGRAM_AREA, true);
-		//
-		store.setDefault(PreferenceConstants.P_SCAN_DISPLAY_NUMBER_OF_IONS, 5);
-		store.setDefault(PreferenceConstants.P_USE_MODULO_DISPLAY_OF_IONS, false);
-		//
-		store.setDefault(PreferenceConstants.P_COLOR_CHROMATOGRAM, "255,0,0");
-		store.setDefault(PreferenceConstants.P_COLOR_MASS_SPECTRUM, "255,0,0");
-		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_OVERLAY, PreferenceConstants.DEF_COLOR_SCHEME_OVERLAY);
-		//
-		store.setDefault(PreferenceConstants.P_AUTO_ADJUST_EDITOR_INTENSITY_DISPLAY, false);
-		store.setDefault(PreferenceConstants.P_AUTO_ADJUST_VIEW_INTENSITY_DISPLAY, false);
 		store.setDefault(PreferenceConstants.P_ALTERNATE_WINDOW_MOVE_DIRECTION, false);
-		//
-		store.setDefault(PreferenceConstants.P_SHOW_AXIS_MILLISECONDS, false);
-		store.setDefault(PreferenceConstants.P_SHOW_AXIS_RELATIVE_INTENSITY, false);
-		//
-		store.setDefault(PreferenceConstants.P_SHOW_CHROMATOGRAM_HAIRLINE_DIVIDER, false);
-		//
 		store.setDefault(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS, true);
-		//
 		store.setDefault(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS, true);
 		store.setDefault(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS, true);
-		//
-		store.setDefault(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION, true);
 		//
 		store.setDefault(PreferenceConstants.P_SEARCH_CASE_SENSITIVE, PreferenceConstants.DEF_SEARCH_CASE_SENSITIVE);
 	}

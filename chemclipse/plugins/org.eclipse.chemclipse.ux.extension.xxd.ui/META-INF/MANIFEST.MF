@@ -104,7 +104,6 @@ Export-Package: org.eclipse.chemclipse.ux.extension.xxd.ui.calibration,
  org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts,
  org.eclipse.chemclipse.ux.extension.xxd.ui.swt,
  org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors,
- org.eclipse.chemclipse.ux.extension.xxd.ui.views,
  org.eclipse.chemclipse.ux.extension.xxd.ui.wizards
 Service-Component: OSGI-INF/deleteAllIdentificationsHandlerMSD.xml,
  OSGI-INF/deleteAllIdentificationsHandlerCSD.xml,
