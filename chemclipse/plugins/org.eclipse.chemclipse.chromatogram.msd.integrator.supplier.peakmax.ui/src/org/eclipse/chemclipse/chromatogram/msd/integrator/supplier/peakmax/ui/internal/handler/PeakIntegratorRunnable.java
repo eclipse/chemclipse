@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,15 +17,12 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.notifier.IntegrationResultUpdateNotifier;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
 
 public class PeakIntegratorRunnable implements IRunnableWithProgress {
 
@@ -42,42 +39,13 @@ public class PeakIntegratorRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("PeakMax Integrator", IProgressMonitor.UNKNOWN);
-			/*
-			 * Detect Peaks in actual chromatogram selection.
-			 */
 			PeakIntegrationSettingsSupport peakIntegrationSettingsSupport = new PeakIntegrationSettingsSupport();
 			IPeakIntegrationSettings peakIntegrationSettings = peakIntegrationSettingsSupport.getPeakIntegrationSettings();
-			/*
-			 * Show the processing view if error messages occurred.
-			 */
 			IProcessingInfo<IPeakIntegrationResults> processingInfo = PeakIntegrator.integrate(chromatogramSelection, peakIntegrationSettings, PEAK_INTEGRATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
-			IPeakIntegrationResults peakIntegrationResults = processingInfo.getProcessingResult();
-			IntegrationResultUpdateNotifier.fireUpdateChange(peakIntegrationResults);
-			updateSelection();
-
+			chromatogramSelection.update(false);
 		} finally {
 			monitor.done();
 		}
 	}
-
-	// ---------------------------------------------------------private methods
-	/*
-	 * Updates the selection using the GUI thread.
-	 */
-	private void updateSelection() {
-
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-
-				if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
-					((ChromatogramSelectionMSD)chromatogramSelection).update(false);
-				}
-			}
-		});
-	}
-	// ---------------------------------------------------------private methods
 }
