@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,7 +26,7 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
 	@EnumSelectionRadioButtonsSettingProperty
 	Threshold threshold = Threshold.MEDIUM;
-	@JsonProperty(value = "Include Background", defaultValue = "false")
+	@JsonProperty(value = "Include Background (VV: true, BV|VB: false)", defaultValue = "false")
 	private boolean includeBackground = false;
 	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_SN_RATIO_MIN, maxValue = PreferenceSupplier.MIN_SN_RATIO_MAX)
