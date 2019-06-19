@@ -34,20 +34,8 @@ public interface IPerspectiveAndViewIds {
 	String PERSPECTIVE_WELCOME = "org.eclipse.chemclipse.ux.extension.ui.perspective.welcome";
 	String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
 	/*
-	 * Views
+	 * Parts
 	 */
-	String VIEW_PEAK_TARGETS_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakTargetsView";
-	String VIEW_PEAK_TARGETS_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.part.peakTargetsView";
 	String VIEW_PROCESSING_INFO = "org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart";
-	String VIEW_CHROMATOGRAM_TARGETS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramTargetsView";
-	String VIEW_SCAN_ACCURATE = "org.eclipse.chemclipse.ux.extension.msd.ui.part.scanAccurate";
-	String VIEW_SELECTED_ION_CHROMATOGRAM_ACCURATE = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedAccurateIonChromtogramView";
-	String VIEW_SELECTED_PEAK_AND_CHROMATOGRAM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedPeakChromtogramView";
-	String VIEW_INTEGRATION_RESULTS = "org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.integrationResultView";
-	String VIEW_MASS_SPECTRUM_IDENTIFICATION_RESULTS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumTargetsView";
-	String VIEW_MASS_SPECTRUM_TARGETS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumTargetsView";
-	/*
-	 * Legacy
-	 */
 	String VIEW_CONSOLE = "org.eclipse.ui.console.ConsoleView";
 }

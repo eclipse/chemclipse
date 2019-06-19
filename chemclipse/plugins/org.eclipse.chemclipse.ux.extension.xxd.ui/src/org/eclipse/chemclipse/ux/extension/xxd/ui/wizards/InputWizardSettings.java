@@ -69,10 +69,10 @@ public class InputWizardSettings {
 					supplierFileIdentifierList.add(new EditorSupportFactory(DataType.MSD).getInstanceIdentifier());
 					break;
 				case CSD_CHROMATOGRAM:
-					supplierFileIdentifierList.add(org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport.getInstanceIdentifier());
+					supplierFileIdentifierList.add(new EditorSupportFactory(DataType.CSD).getInstanceIdentifier());
 					break;
 				case WSD_CHROMATOGRAM:
-					supplierFileIdentifierList.add(org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport.getInstanceIdentifier());
+					supplierFileIdentifierList.add(new EditorSupportFactory(DataType.WSD).getInstanceIdentifier());
 					break;
 				default:
 					break;

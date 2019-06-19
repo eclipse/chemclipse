@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_-zW1gEA9EeKptd0LPKOVuQ">
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EGyMEEBAEeKptd0LPKOVuQ" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
-    <elements xsi:type="basic:Part" xmi:id="_FvWsYEBAEeKptd0LPKOVuQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.integrationResultView" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.integrator.ui/org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.IntegrationResultView" label="Integration Results" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/integrationResults.gif"/>
-  </fragments>
-</fragment:ModelFragments>

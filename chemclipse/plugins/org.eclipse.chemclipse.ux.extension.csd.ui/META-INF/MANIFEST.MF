@@ -42,6 +42,3 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
 Import-Package: javax.annotation;version="1.1.0"
-Export-Package: org.eclipse.chemclipse.ux.extension.csd.ui.editors,
- org.eclipse.chemclipse.ux.extension.csd.ui.support,
- org.eclipse.chemclipse.ux.extension.csd.ui.views
