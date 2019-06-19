@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,6 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram.ChromatogramIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.notifier.IntegrationResultUpdateNotifier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -41,13 +40,9 @@ public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Sumarea Integrator", IProgressMonitor.UNKNOWN);
-			//
 			IProcessingInfo<IChromatogramIntegrationResults> processingInfo = ChromatogramIntegrator.integrate(chromatogramSelection, CHROMATOGRAM_INTEGRATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
-			IChromatogramIntegrationResults chromatogramIntegrationResults = processingInfo.getProcessingResult();
-			IntegrationResultUpdateNotifier.fireUpdateChange(chromatogramIntegrationResults);
-
+			chromatogramSelection.update(false);
 		} finally {
 			monitor.done();
 		}
