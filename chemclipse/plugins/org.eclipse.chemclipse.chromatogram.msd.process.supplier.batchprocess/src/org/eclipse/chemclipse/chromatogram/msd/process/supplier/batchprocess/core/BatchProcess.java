@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - propagate errors/infos from processors to the user
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.core;
 
@@ -47,12 +48,13 @@ public class BatchProcess {
 				if(!processingInfoX.hasErrorMessages()) {
 					try {
 						IChromatogramSelection chromatogramSelection = processingInfoX.getProcessingResult(IChromatogramSelection.class);
-						IProcessingInfo processingInfoY = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
-						if(!processingInfoY.hasErrorMessages()) {
-							processingInfo.addInfoMessage(DESCRIPTION, "Success to process: " + pathChromatogram);
+						IProcessingInfo processorResult = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+						if(processorResult.hasErrorMessages()) {
+							processingInfo.addErrorMessage(DESCRIPTION, "Processing: " + pathChromatogram + " failed");
 						} else {
-							processingInfo.addErrorMessage(DESCRIPTION, "Failure to process: " + pathChromatogram);
+							processingInfo.addInfoMessage(DESCRIPTION, "Processing: " + pathChromatogram + " completed");
 						}
+						processingInfo.addMessages(processorResult);
 					} catch(TypeCastException e) {
 						logger.warn(e);
 						processingInfo.addErrorMessage(DESCRIPTION, "Failure to process: " + pathChromatogram);
