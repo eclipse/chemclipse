@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
- * Christoph Läubrich - improve logging output
+ * Christoph Läubrich - improve logging output, propagate processor messages
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
 
@@ -160,7 +160,11 @@ public class ProcessTypeSupport {
 					 * By default, the system settings of the plugin shall be used instead.
 					 */
 					IProcessSettings processSettings = getProcessSettings(processEntry);
-					processTypeSupplier.applyProcessor(chromatogramSelection, processorId, processSettings, monitor);
+					IProcessingInfo<?> processorResult = processTypeSupplier.applyProcessor(chromatogramSelection, processorId, processSettings, monitor);
+					processingInfo.addMessages(processorResult);
+					if(processorResult.hasErrorMessages()) {
+						break;
+					}
 				}
 			}
 		}
