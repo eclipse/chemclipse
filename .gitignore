@@ -14,3 +14,5 @@ chemclipse/plugins/net.openchrom.chromatogram.msd.classifier.supplier.wnc.ui/tar
 chemclipse/plugins/net.openchrom.chromatogram.msd.classifier.supplier.wnc/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.classifier.supplier.wnc.updateSite/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.fragment.test/testData/files/unzipped-files/Chromatogram1.csv
+target/
+bin/

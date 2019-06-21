@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,20 +8,59 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider;
 
-import javax.naming.directory.InvalidAttributesException;
+import static org.eclipse.chemclipse.support.ui.swt.columns.ColumnBuilder.defaultSortableColumn;
 
-import org.eclipse.chemclipse.ux.extension.ui.support.AbstractMeasurementResultTitles;
-import org.eclipse.chemclipse.ux.extension.ui.support.IMeasurementResultTitles;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 
-public class MeasurementResultTitles extends AbstractMeasurementResultTitles implements IMeasurementResultTitles {
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
+import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
+import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider;
 
-	private static final String[] titles = {"Name", "Ion", "Percentage Sum Intensity [%]", "Percentage Max Intensity [%]"};
-	private static final int bounds[] = {250, 100, 100, 100};
+public class MeasurementResultTitles implements ColumnDefinitionProvider {
 
-	public MeasurementResultTitles() throws InvalidAttributesException {
-		super(titles, bounds);
+	@Override
+	public Collection<? extends ColumnDefinition<?, ?>> getColumnDefinitions() {
+
+		List<ColumnDefinition<?, ?>> list = new ArrayList<>();
+		list.add(defaultSortableColumn("Name", 250, new Function<IWncIon, String>() {
+
+			@Override
+			public String apply(IWncIon ion) {
+
+				return ion.getName();
+			}
+		}).create());
+		list.add(defaultSortableColumn("Ion", 100, new Function<IWncIon, Integer>() {
+
+			@Override
+			public Integer apply(IWncIon ion) {
+
+				return ion.getIon();
+			}
+		}).create());
+		list.add(defaultSortableColumn("Percentage Sum Intensity [%]", 100, new Function<IWncIon, Double>() {
+
+			@Override
+			public Double apply(IWncIon ion) {
+
+				return ion.getPercentageSumIntensity();
+			}
+		}).create());
+		list.add(defaultSortableColumn("Percentage Max Intensity [%]", 100, new Function<IWncIon, Double>() {
+
+			@Override
+			public Double apply(IWncIon ion) {
+
+				return ion.getPercentageMaxIntensity();
+			}
+		}).create());
+		return list;
 	}
 }
