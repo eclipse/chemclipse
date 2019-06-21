@@ -169,26 +169,27 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 			 */
 			boolean mirrored = false;
 			Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_PEAK));
+			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
+			PlotSymbolType symbolTypePeakMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE));
+			int scanMarkerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_SIZE);
+			PlotSymbolType symbolTypeScanMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_TYPE));
 			/*
 			 * Peak Marker
 			 */
 			String peakMarkerId = getSelectedPeakSerieId(SERIES_ID_PEAKS_SELECTED_MARKER, index);
-			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 			List<IPeak> peaks = new ArrayList<>();
 			peaks.add(peak);
-			addPeaks(lineSeriesDataList, peaks, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, colorPeak, peakMarkerId, false);
+			addPeaks(lineSeriesDataList, peaks, symbolTypePeakMarker, symbolSize, colorPeak, peakMarkerId, false);
 			selectedPeakIds.add(peakMarkerId);
 			/*
 			 * Peak
 			 */
 			String peakShapeId = getSelectedPeakSerieId(SERIES_ID_PEAKS_SELECTED_SHAPE, index);
-			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_SIZE);
-			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE));
 			ILineSeriesData lineSeriesData = peakChartSupport.getPeak(peak, true, mirrored, colorPeak, peakShapeId);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
-			lineSeriesSettings.setSymbolType(symbolType);
+			lineSeriesSettings.setSymbolType(symbolTypeScanMarker);
 			lineSeriesSettings.setSymbolColor(colorPeak);
-			lineSeriesSettings.setSymbolSize(markerSize);
+			lineSeriesSettings.setSymbolSize(scanMarkerSize);
 			lineSeriesDataList.add(lineSeriesData);
 			selectedPeakIds.add(peakShapeId);
 			/*

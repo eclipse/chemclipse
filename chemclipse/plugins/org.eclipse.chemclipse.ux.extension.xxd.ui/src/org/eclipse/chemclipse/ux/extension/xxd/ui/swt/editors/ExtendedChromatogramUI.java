@@ -1029,6 +1029,10 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		if(chromatogramSelection != null) {
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
+			PlotSymbolType symbolTypeActiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_MARKER_TYPE));
+			PlotSymbolType symbolTypeInactiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL_MARKER_TYPE));
+			PlotSymbolType symbolTypeActiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE));
+			PlotSymbolType symbolTypeInactiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE));
 			//
 			List<? extends IPeak> peaks = chromatogramDataSupport.getPeaks(chromatogram);
 			List<IPeak> peaksActiveNormal = new ArrayList<>();
@@ -1052,10 +1056,10 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				}
 			}
 			//
-			addPeaks(lineSeriesDataList, peaksActiveNormal, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL_ACTIVE);
-			addPeaks(lineSeriesDataList, peaksInactiveNormal, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_NORMAL_INACTIVE);
-			addPeaks(lineSeriesDataList, peaksActiveISTD, PlotSymbolType.DIAMOND, symbolSize, Colors.RED, SERIES_ID_PEAKS_ISTD_ACTIVE);
-			addPeaks(lineSeriesDataList, peaksInactiveISTD, PlotSymbolType.DIAMOND, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_ISTD_INACTIVE);
+			addPeaks(lineSeriesDataList, peaksActiveNormal, symbolTypeActiveNormal, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL_ACTIVE);
+			addPeaks(lineSeriesDataList, peaksInactiveNormal, symbolTypeInactiveNormal, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_NORMAL_INACTIVE);
+			addPeaks(lineSeriesDataList, peaksActiveISTD, symbolTypeActiveIstd, symbolSize, Colors.RED, SERIES_ID_PEAKS_ISTD_ACTIVE);
+			addPeaks(lineSeriesDataList, peaksInactiveISTD, symbolTypeInactiveIstd, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_ISTD_INACTIVE);
 		}
 	}
 
@@ -1148,23 +1152,24 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			boolean mirrored = false;
 			ILineSeriesData lineSeriesData;
 			Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_PEAK));
+			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
+			PlotSymbolType symbolTypePeakMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE));
+			int scanMarkerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_SIZE);
+			PlotSymbolType symbolTypeScanMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_TYPE));
 			/*
 			 * Peak Marker
 			 */
-			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 			List<IPeak> peaks = new ArrayList<>();
 			peaks.add(peak);
-			addPeaks(lineSeriesDataList, peaks, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, colorPeak, SERIES_ID_SELECTED_PEAK_MARKER);
+			addPeaks(lineSeriesDataList, peaks, symbolTypePeakMarker, symbolSize, colorPeak, SERIES_ID_SELECTED_PEAK_MARKER);
 			/*
 			 * Peak
 			 */
-			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_SIZE);
-			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE));
 			lineSeriesData = peakChartSupport.getPeak(peak, true, mirrored, colorPeak, SERIES_ID_SELECTED_PEAK_SHAPE);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
-			lineSeriesSettings.setSymbolType(symbolType);
+			lineSeriesSettings.setSymbolType(symbolTypeScanMarker);
 			lineSeriesSettings.setSymbolColor(colorPeak);
-			lineSeriesSettings.setSymbolSize(markerSize);
+			lineSeriesSettings.setSymbolSize(scanMarkerSize);
 			lineSeriesDataList.add(lineSeriesData);
 			/*
 			 * Background
@@ -1640,12 +1645,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		//
 		ISecondaryAxisSettings secondaryAxisScanNumber = null;
 		exitloop:
-			for(ISecondaryAxisSettings secondaryAxis : secondaryAxisSettings) {
-				if(secondaryAxis.getLabel().equals(LABEL_SCAN_NUMBER)) {
-					secondaryAxisScanNumber = secondaryAxis;
-					break exitloop;
-				}
+		for(ISecondaryAxisSettings secondaryAxis : secondaryAxisSettings) {
+			if(secondaryAxis.getLabel().equals(LABEL_SCAN_NUMBER)) {
+				secondaryAxisScanNumber = secondaryAxis;
+				break exitloop;
 			}
+		}
 		//
 		if(secondaryAxisScanNumber != null) {
 			secondaryAxisSettings.remove(secondaryAxisScanNumber);
@@ -1670,12 +1675,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				String name = separationColumn.getName();
 				int index = -1;
 				exitloop:
-					for(String item : comboViewerSeparationColumn.getCombo().getItems()) {
-						index++;
-						if(item.equals(name)) {
-							break exitloop;
-						}
+				for(String item : comboViewerSeparationColumn.getCombo().getItems()) {
+					index++;
+					if(item.equals(name)) {
+						break exitloop;
 					}
+				}
 				//
 				if(index >= 0) {
 					comboViewerSeparationColumn.getCombo().select(index);
