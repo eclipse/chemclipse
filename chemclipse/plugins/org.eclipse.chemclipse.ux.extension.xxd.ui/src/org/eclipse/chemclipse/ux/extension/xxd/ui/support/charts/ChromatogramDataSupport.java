@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - make methods static, fix warnings
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
@@ -36,10 +37,9 @@ import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 
 public class ChromatogramDataSupport {
 
-	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
-	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
+	private static PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 
-	public String getChromatogramType(IChromatogramSelection<?, ?> chromatogramSelection) {
+	public static String getChromatogramType(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(chromatogramSelection != null) {
 			return getChromatogramType(chromatogramSelection.getChromatogram());
@@ -48,7 +48,7 @@ public class ChromatogramDataSupport {
 		}
 	}
 
-	public String getChromatogramType(IChromatogram<?> chromatogram) {
+	public static String getChromatogramType(IChromatogram<?> chromatogram) {
 
 		String type;
 		if(chromatogram instanceof IChromatogramMSD) {
@@ -74,7 +74,7 @@ public class ChromatogramDataSupport {
 	public IChromatogramSelection<?, ?> getChromatogramSelection(Object object) {
 
 		if(object instanceof IChromatogramSelection) {
-			return (IChromatogramSelection)object;
+			return (IChromatogramSelection<?, ?>)object;
 		} else if(object instanceof IChromatogramCSD) {
 			return new ChromatogramSelectionCSD((IChromatogramCSD)object);
 		} else if(object instanceof IChromatogramMSD) {
@@ -86,12 +86,12 @@ public class ChromatogramDataSupport {
 		}
 	}
 
-	public String getChromatogramLabel(IChromatogram<?> chromatogram) {
+	public static String getChromatogramLabel(IChromatogram<?> chromatogram) {
 
 		return getChromatogramLabel((IChromatogramOverview)chromatogram);
 	}
 
-	public String getChromatogramLabel(IChromatogramOverview chromatogramOverview) {
+	public static String getChromatogramLabel(IChromatogramOverview chromatogramOverview) {
 
 		StringBuilder builder = new StringBuilder();
 		if(chromatogramOverview != null) {
@@ -103,7 +103,7 @@ public class ChromatogramDataSupport {
 		return builder.toString();
 	}
 
-	public String getChromatogramLabelExtended(IChromatogram<?> chromatogram) {
+	public static String getChromatogramLabelExtended(IChromatogram<?> chromatogram) {
 
 		StringBuilder builder = new StringBuilder();
 		if(chromatogram != null) {
@@ -134,12 +134,13 @@ public class ChromatogramDataSupport {
 		return builder.toString();
 	}
 
-	public String getChromatogramSelectionLabel(IChromatogramSelection<?, ?> chromatogramSelection) {
+	public static String getChromatogramSelectionLabel(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		StringBuilder builder = new StringBuilder();
 		if(chromatogramSelection != null) {
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram != null) {
+				DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 				builder.append("Chromatogram: ");
 				builder.append(chromatogram.getName());
 				builder.append(" | ");
@@ -154,12 +155,12 @@ public class ChromatogramDataSupport {
 		return builder.toString();
 	}
 
-	public <T extends IPeak> List<T> getPeaks(IChromatogram<T> chromatogram) {
+	public static <T extends IPeak> List<T> getPeaks(IChromatogram<T> chromatogram) {
 
 		return getPeaks(chromatogram, null);
 	}
 
-	public <T extends IPeak> List<T> getPeaks(IChromatogram<T> chromatogram, IChromatogramSelection<T, ?> selectedRange) {
+	public static <T extends IPeak> List<T> getPeaks(IChromatogram<T> chromatogram, IChromatogramSelection<T, ?> selectedRange) {
 
 		if(selectedRange != null) {
 			return chromatogram.getPeaks(selectedRange);
@@ -168,13 +169,12 @@ public class ChromatogramDataSupport {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<IScan> getIdentifiedScans(IChromatogram<?> chromatogram) {
+	public static List<IScan> getIdentifiedScans(IChromatogram<?> chromatogram) {
 
 		return getIdentifiedScans(chromatogram, null);
 	}
 
-	public List<IScan> getIdentifiedScans(IChromatogram<? extends IPeak> chromatogram, IChromatogramSelection<?, ?> selectedRange) {
+	public static List<IScan> getIdentifiedScans(IChromatogram<? extends IPeak> chromatogram, IChromatogramSelection<?, ?> selectedRange) {
 
 		int startRetentionTime = 0;
 		int stopRetentionTime = 0;
@@ -211,7 +211,7 @@ public class ChromatogramDataSupport {
 		return scans;
 	}
 
-	public <T extends IPeak> List<T> getPeaks(IChromatogramSelection<T, ?> chromatogramSelection, boolean extractPeaksInSelectedRange) {
+	public static <T extends IPeak> List<T> getPeaks(IChromatogramSelection<T, ?> chromatogramSelection, boolean extractPeaksInSelectedRange) {
 
 		if(chromatogramSelection != null) {
 			IChromatogram<T> chromatogram = chromatogramSelection.getChromatogram();
@@ -226,13 +226,12 @@ public class ChromatogramDataSupport {
 		return Collections.emptyList();
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<? extends IScan> getIdentifiedScans(IChromatogramSelection chromatogramSelection, boolean showScansInSelectedRange) {
+	public static List<? extends IScan> getIdentifiedScans(IChromatogramSelection<?, ?> chromatogramSelection, boolean showScansInSelectedRange) {
 
 		List<? extends IScan> scans = new ArrayList<>();
 		//
 		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(showScansInSelectedRange) {
 				scans = getIdentifiedScans(chromatogram, chromatogramSelection);
 			} else {
@@ -243,13 +242,12 @@ public class ChromatogramDataSupport {
 		return scans;
 	}
 
-	public void adjustChromatogramSelection(IPeak peak, IChromatogramSelection chromatogramSelection) {
+	public static void adjustChromatogramSelection(IPeak peak, IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(chromatogramSelection != null) {
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			List<? extends IPeak> peaks = getPeaks(chromatogram);
-			@SuppressWarnings("unchecked")
-			List<? extends IPeak> peaksSelection = new ArrayList<>(getPeaks(chromatogram, chromatogramSelection));
+			List<? extends IPeak> peaksSelection = new ArrayList<>(chromatogram.getPeaks(chromatogramSelection));
 			Collections.sort(peaks, peakRetentionTimeComparator);
 			Collections.sort(peaksSelection, peakRetentionTimeComparator);
 			//
@@ -271,7 +269,7 @@ public class ChromatogramDataSupport {
 		}
 	}
 
-	private boolean scanIsInSelectedRange(IScan scan, int startRetentionTime, int stopRetentionTime) {
+	private static boolean scanIsInSelectedRange(IScan scan, int startRetentionTime, int stopRetentionTime) {
 
 		int retentionTime = scan.getRetentionTime();
 		if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
@@ -280,7 +278,7 @@ public class ChromatogramDataSupport {
 		return false;
 	}
 
-	private boolean scanContainsTargets(IScan scan) {
+	private static boolean scanContainsTargets(IScan scan) {
 
 		if(scan != null) {
 			return !scan.getTargets().isEmpty();

@@ -9,11 +9,14 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Dr. Janos Binder - initial API and implementation
+ * Christoph Läubrich - Enhance the handling of table columns
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,14 +27,18 @@ import java.util.Set;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.menu.TableMenuEntryComparator;
+import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -39,15 +46,19 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExtendedTableViewer extends TableViewer implements IExtendedTableViewer {
 
+	private static final Logger LOG = LoggerFactory.getLogger(ExtendedTableViewer.class);
 	private static final String MENU_TEXT = "Table PopUp Menu";
 	//
 	private ITableSettings tableSettings;
@@ -159,51 +170,17 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 				 * Column sort.
 				 */
 				final int index = i;
-				final TableViewerColumn tableViewerColumn = new TableViewerColumn(this, SWT.NONE);
-				tableViewerColumns.add(tableViewerColumn);
+				final TableViewerColumn tableViewerColumn = createTableColumn(titles[i], bounds[i]);
 				final TableColumn tableColumn = tableViewerColumn.getColumn();
-				tableColumn.setText(titles[i]);
-				tableColumn.setWidth(bounds[i]);
-				tableColumn.setResizable(true);
-				tableColumn.setMoveable(true);
 				tableColumn.addSelectionListener(new SelectionAdapter() {
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 
-						ViewerComparator viewerComparator = getComparator();
-						if(viewerComparator instanceof IRecordTableComparator) {
-							/*
-							 * Only sort if a record table sorter has been set.
-							 */
-							IRecordTableComparator recordTableComparator = (IRecordTableComparator)viewerComparator;
-							recordTableComparator.setColumn(index);
-							int direction = table.getSortDirection();
-							if(table.getSortColumn() == tableColumn) {
-								/*
-								 * Toggle the sort direction
-								 */
-								direction = (direction == SWT.UP) ? SWT.DOWN : SWT.UP;
-							} else {
-								direction = SWT.UP;
-							}
-							table.setSortDirection(direction);
-							table.setSortColumn(tableColumn);
-							refresh();
-						}
+						sortColumn(table, index, tableColumn);
 					}
 				});
-				/*
-				 * Column Move Listener
-				 */
-				tableColumn.addListener(SWT.Move, new Listener() {
-
-					@Override
-					public void handleEvent(Event event) {
-
-						fireColumnMoved();
-					}
-				});
+				tableViewerColumns.add(tableViewerColumn);
 			}
 		}
 		/*
@@ -213,6 +190,30 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		table.setLinesVisible(true);
 	}
 
+	protected void sortColumn(Table table, final int index, final TableColumn tableColumn) {
+
+		ViewerComparator viewerComparator = getComparator();
+		IRecordTableComparator recordTableComparator = Adapters.adapt(viewerComparator, IRecordTableComparator.class);
+		if(recordTableComparator != null) {
+			/*
+			 * Only sort if a record table sorter has been set.
+			 */
+			recordTableComparator.setColumn(index);
+			int direction = table.getSortDirection();
+			if(table.getSortColumn() == tableColumn) {
+				/*
+				 * Toggle the sort direction
+				 */
+				direction = (direction == SWT.UP) ? SWT.DOWN : SWT.UP;
+			} else {
+				direction = SWT.UP;
+			}
+			table.setSortDirection(direction);
+			table.setSortColumn(tableColumn);
+			refresh();
+		}
+	}
+
 	private void fireColumnMoved() {
 
 		for(IColumnMoveListener columnMoveListener : columnMoveListeners) {
@@ -220,6 +221,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		}
 	}
 
+	@Override
 	public List<TableViewerColumn> getTableViewerColumns() {
 
 		return Collections.unmodifiableList(tableViewerColumns);
@@ -392,5 +394,104 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		};
 		action.setText(menuEntry.getName());
 		return action;
+	}
+
+	@Override
+	public void clearColumns() {
+
+		tableViewerColumns.clear();
+		Table table = getTable();
+		for(TableColumn column : table.getColumns()) {
+			column.dispose();
+		}
+	}
+
+	@Override
+	public <D, C> TableViewerColumn addColumn(ColumnDefinition<D, C> definition) {
+
+		TableViewerColumn viewerColumn = createTableColumn(definition.getTitle(), definition.getWidth());
+		ColumnLabelProvider labelProvider = definition.getLabelProvider();
+		if(labelProvider != null) {
+			viewerColumn.setLabelProvider(labelProvider);
+		}
+		tableViewerColumns.add(viewerColumn);
+		Comparator<C> comparator = definition.getComparator();
+		if(comparator != null) {
+			TableColumn tableColumn = viewerColumn.getColumn();
+			tableColumn.addSelectionListener(new SelectionListener() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					Table table = getTable();
+					int direction = table.getSortDirection();
+					if(table.getSortColumn() == tableColumn) {
+						direction = (direction == SWT.UP) ? SWT.DOWN : SWT.UP;
+					} else {
+						direction = SWT.UP;
+					}
+					setComparator(new ViewerComparator() {
+
+						@Override
+						public void sort(Viewer viewer, Object[] elements) {
+
+							Arrays.sort(elements, new Comparator<Object>() {
+
+								@SuppressWarnings("unchecked")
+								@Override
+								public int compare(Object o1, Object o2) {
+
+									try {
+										C d1 = definition.apply((D)o1);
+										C d2 = definition.apply((D)o2);
+										if(d1 == null) {
+											if(d2 == null) {
+												return 0;
+											} else {
+												return 1;
+											}
+										} else if(d2 == null) {
+											return -1;
+										}
+										return comparator.compare(d1, d2);
+									} catch(ClassCastException e) {
+										LOG.warn("Inconsitent data items in respect to column definition: {}, sorting will be inconsistent!", e.toString());
+										return 0;
+									}
+								}
+							});
+						}
+					});
+					table.setSortDirection(direction);
+					table.setSortColumn(tableColumn);
+					refresh();
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+
+				}
+			});
+		}
+		return viewerColumn;
+	}
+
+	private TableViewerColumn createTableColumn(String title, int width) {
+
+		final TableViewerColumn tableViewerColumn = new TableViewerColumn(this, SWT.NONE);
+		final TableColumn tableColumn = tableViewerColumn.getColumn();
+		tableColumn.setText(title);
+		tableColumn.setWidth(width);
+		tableColumn.setResizable(true);
+		tableColumn.setMoveable(true);
+		tableColumn.addListener(SWT.Move, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				fireColumnMoved();
+			}
+		});
+		return tableViewerColumn;
 	}
 }
