@@ -18,14 +18,20 @@
       </page>
    </extension>
    <extension
-         point="org.eclipse.chemclipse.ux.extension.ui.measurementResultVisualization">
-      <MeasurementResultVisualization
-            Comparator="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.BasePeakResultsTableComparator"
-            ContentProvider="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.BasePeakResultsContentProvider"
-            Identifier="org.eclipse.chemclipse.msd.classifier.supplier.basepeak"
-            LabelProvider="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.BasePeakResultsLabelProvider"
-            Titles="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.MeasurementResultTitles">
-      </MeasurementResultVisualization>
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.ILigninRatios"
+            class="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handlers.MolPeakAdapterFactory">
+                  <adapter
+               type="org.eclipse.jface.viewers.IStructuredContentProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.jface.viewers.ITableLabelProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider">
+         </adapter>
+      </factory>
    </extension>
 
 </plugin>

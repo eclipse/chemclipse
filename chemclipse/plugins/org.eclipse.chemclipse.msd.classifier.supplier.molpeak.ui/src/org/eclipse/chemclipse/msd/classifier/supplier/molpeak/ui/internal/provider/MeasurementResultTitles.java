@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,20 +8,51 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider;
 
-import javax.naming.directory.InvalidAttributesException;
+import static org.eclipse.chemclipse.support.ui.swt.columns.ColumnBuilder.defaultSortableColumn;
 
-import org.eclipse.chemclipse.ux.extension.ui.support.AbstractMeasurementResultTitles;
-import org.eclipse.chemclipse.ux.extension.ui.support.IMeasurementResultTitles;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
-public class MeasurementResultTitles extends AbstractMeasurementResultTitles implements IMeasurementResultTitles {
+import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
+import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider;
 
-	private static final String[] titles = {"Type", "Precentage [%]", "Note"};
-	private static final int[] bounds = {250, 150, 100};
+public class MeasurementResultTitles implements ColumnDefinitionProvider {
 
-	public MeasurementResultTitles() throws InvalidAttributesException {
-		super(titles, bounds);
+	@Override
+	public Collection<? extends ColumnDefinition<?, ?>> getColumnDefinitions() {
+
+		List<ColumnDefinition<?, ?>> list = new ArrayList<>();
+		list.add(defaultSortableColumn("Type", 250, new Function<Map.Entry<String, Double>, String>() {
+
+			@Override
+			public String apply(Map.Entry<String, Double> entry) {
+
+				return entry.getKey();
+			}
+		}).create());
+		list.add(defaultSortableColumn("Precentage [%]", 150, new Function<Map.Entry<String, Double>, Double>() {
+
+			@Override
+			public Double apply(Map.Entry<String, Double> entry) {
+
+				return entry.getValue();
+			}
+		}).create());
+		list.add(defaultSortableColumn("Note", 100, new Function<Map.Entry<String, Double>, String>() {
+
+			@Override
+			public String apply(Map.Entry<String, Double> entry) {
+
+				return "";
+			}
+		}).create());
+		return list;
 	}
 }
