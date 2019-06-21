@@ -44,6 +44,9 @@ public interface IExtendedTableViewer {
 
 	default void addColumns(ColumnDefinitionProvider provider) {
 
+		if(provider == null) {
+			return;
+		}
 		for(ColumnDefinition<?, ?> definition : provider.getColumnDefinitions()) {
 			addColumn(definition);
 		}

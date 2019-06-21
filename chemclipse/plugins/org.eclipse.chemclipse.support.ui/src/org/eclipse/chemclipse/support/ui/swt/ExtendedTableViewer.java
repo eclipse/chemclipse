@@ -36,6 +36,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -404,6 +405,8 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		for(TableColumn column : table.getColumns()) {
 			column.dispose();
 		}
+		table.setHeaderVisible(false);
+		table.setLinesVisible(false);
 	}
 
 	@Override
@@ -424,9 +427,9 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 				public void widgetSelected(SelectionEvent e) {
 
 					Table table = getTable();
-					int direction = table.getSortDirection();
+					final int direction;
 					if(table.getSortColumn() == tableColumn) {
-						direction = (direction == SWT.UP) ? SWT.DOWN : SWT.UP;
+						direction = (table.getSortDirection() == SWT.UP) ? SWT.DOWN : SWT.UP;
 					} else {
 						direction = SWT.UP;
 					}
@@ -435,7 +438,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 						@Override
 						public void sort(Viewer viewer, Object[] elements) {
 
-							Arrays.sort(elements, new Comparator<Object>() {
+							Comparator<Object> comparer = new Comparator<Object>() {
 
 								@SuppressWarnings("unchecked")
 								@Override
@@ -459,7 +462,11 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 										return 0;
 									}
 								}
-							});
+							};
+							if(direction == SWT.DOWN) {
+								comparer = Collections.reverseOrder(comparer);
+							}
+							Arrays.sort(elements, comparer);
 						}
 					});
 					table.setSortDirection(direction);
@@ -472,6 +479,13 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 
 				}
 			});
+		}
+		getTable().setHeaderVisible(true);
+		getTable().setLinesVisible(true);
+		IBaseLabelProvider provider = getLabelProvider();
+		if(provider != null) {
+			// for some stupid reasons, jface IGNORES the global labelprovider if it was set before adding columns... so we set it once again here...
+			setLabelProvider(provider);
 		}
 		return viewerColumn;
 	}
