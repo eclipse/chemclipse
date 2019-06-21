@@ -24,14 +24,20 @@
       </toc>
    </extension>
    <extension
-         point="org.eclipse.chemclipse.ux.extension.ui.measurementResultVisualization">
-      <MeasurementResultVisualization
-            Comparator="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.ClassifierResultTableComparator"
-            ContentProvider="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.ClassifierResultContentProvider"
-            Identifier="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson"
-            LabelProvider="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.ClassifierResultLabelProvider"
-            Titles="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.MeasurementResultTitles">
-      </MeasurementResultVisualization>
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.IDurbinWatsonClassifierResult"
+            class="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.DurbinWatsonAdapterFactory">
+          <adapter
+               type="org.eclipse.jface.viewers.IStructuredContentProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.jface.viewers.ITableLabelProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider">
+         </adapter>
+      </factory>
    </extension>
 
 </plugin>

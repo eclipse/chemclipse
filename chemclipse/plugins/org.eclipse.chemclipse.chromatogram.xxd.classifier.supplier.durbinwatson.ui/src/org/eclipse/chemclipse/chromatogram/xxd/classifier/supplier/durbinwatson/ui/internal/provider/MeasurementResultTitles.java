@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,20 +8,59 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider;
 
-import javax.naming.directory.InvalidAttributesException;
+import static org.eclipse.chemclipse.support.ui.swt.columns.ColumnBuilder.defaultSortableColumn;
 
-import org.eclipse.chemclipse.ux.extension.ui.support.AbstractMeasurementResultTitles;
-import org.eclipse.chemclipse.ux.extension.ui.support.IMeasurementResultTitles;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 
-public class MeasurementResultTitles extends AbstractMeasurementResultTitles implements IMeasurementResultTitles {
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.ISavitzkyGolayFilterRating;
+import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
+import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider;
 
-	private static final String[] titles = {"Rating", "Derivative", "Order", "Width"};
-	private static final int[] bounds = {100, 100, 100, 100};
+public class MeasurementResultTitles implements ColumnDefinitionProvider {
 
-	public MeasurementResultTitles() throws InvalidAttributesException {
-		super(titles, bounds);
+	@Override
+	public Collection<? extends ColumnDefinition<?, ?>> getColumnDefinitions() {
+
+		List<ColumnDefinition<?, ?>> list = new ArrayList<>();
+		list.add(defaultSortableColumn("Rating", 150, new Function<ISavitzkyGolayFilterRating, Double>() {
+
+			@Override
+			public Double apply(ISavitzkyGolayFilterRating rating) {
+
+				return rating.getRating();
+			}
+		}).create());
+		list.add(defaultSortableColumn("Derivative", 150, new Function<ISavitzkyGolayFilterRating, Integer>() {
+
+			@Override
+			public Integer apply(ISavitzkyGolayFilterRating rating) {
+
+				return rating.getFilterSettings().getDerivative();
+			}
+		}).create());
+		list.add(defaultSortableColumn("Order", 150, new Function<ISavitzkyGolayFilterRating, Integer>() {
+
+			@Override
+			public Integer apply(ISavitzkyGolayFilterRating rating) {
+
+				return rating.getFilterSettings().getOrder();
+			}
+		}).create());
+		list.add(defaultSortableColumn("Width", 150, new Function<ISavitzkyGolayFilterRating, Integer>() {
+
+			@Override
+			public Integer apply(ISavitzkyGolayFilterRating rating) {
+
+				return rating.getFilterSettings().getWidth();
+			}
+		}).create());
+		return list;
 	}
 }
