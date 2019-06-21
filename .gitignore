@@ -13,3 +13,5 @@ chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.denoising/targ
 chemclipse/sites/net.openchrom.chromatogram.msd.filter.supplier.denoising.updateSite/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.fragment.test/Openchrom.log
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.fragment.test/*.log
+target/
+bin/

@@ -24,14 +24,22 @@
       </toc>
    </extension>
    <extension
-         point="org.eclipse.chemclipse.ux.extension.ui.measurementResultVisualization">
-      <MeasurementResultVisualization
-            Comparator="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.ResultsTableComparator"
-            ContentProvider="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.ResultsContentProvider"
-            Identifier="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising"
-            LabelProvider="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.ResultsLabelProvider"
-            SelectionListener="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.SelectionHandler"
-            Titles="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.ResultTitles">
-      </MeasurementResultVisualization>
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.IDenoisingFilterResult"
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.DenoisingAdapterFactory">
+         <adapter
+               type="org.eclipse.jface.viewers.IStructuredContentProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.jface.viewers.ITableLabelProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.jface.viewers.ISelectionChangedListener">
+         </adapter>
+      </factory>
    </extension>   
 </plugin>

@@ -11,23 +11,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider;
 
-import java.util.List;
-
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.IDenoisingFilterResult;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 public class ResultsContentProvider implements IStructuredContentProvider {
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Object[] getElements(Object inputElement) {
 
 		if(inputElement instanceof IMeasurementResult) {
 			IMeasurementResult measurementResult = (IMeasurementResult)inputElement;
 			Object object = measurementResult.getResult();
-			if(object instanceof List) {
-				return ((List)object).toArray();
+			if(object instanceof IDenoisingFilterResult) {
+				return ((IDenoisingFilterResult)object).getNoiseMassSpectra().toArray();
 			}
 		}
 		//
