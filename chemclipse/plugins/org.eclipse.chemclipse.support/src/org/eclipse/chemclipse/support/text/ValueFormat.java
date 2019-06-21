@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,16 +8,20 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add function expressions
  *******************************************************************************/
 package org.eclipse.chemclipse.support.text;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Function;
 
 public class ValueFormat {
 
@@ -230,5 +234,48 @@ public class ValueFormat {
 			simpleDateFormatsGerman.put(DEFAULT_DATE_PATTERN, new SimpleDateFormat("dd.MM.yyyy"));
 		}
 		return simpleDateFormatsGerman.get(DEFAULT_DATE_PATTERN);
+	}
+
+	public static <T> Function<T, String> asString() {
+
+		return value -> value == null ? "" : String.valueOf(value);
+	}
+
+	public static <T extends Number> Function<T, String> asNumber(NumberFormat numberFormat) {
+
+		return number -> number == null ? "-" : numberFormat.format(number);
+	}
+
+	public static <T extends Number> Function<T, String> asNumber() {
+
+		if(Locale.getDefault().getLanguage().equals(Locale.GERMAN.getLanguage())) {
+			return asNumber(getDecimalFormatGerman());
+		} else {
+			return asNumber(getDecimalFormatEnglish());
+		}
+	}
+
+	public static <T extends Date> Function<T, String> asDate() {
+
+		if(Locale.getDefault().getLanguage().equals(Locale.GERMAN.getLanguage())) {
+			return asDate(getDateFormatGerman());
+		} else {
+			return asDate(getDateFormatEnglish());
+		}
+	}
+
+	public static <T extends Date> Function<T, String> asDate(DateFormat dateFormat) {
+
+		return date -> date == null ? "-" : dateFormat.format(date);
+	}
+
+	public static Function<Boolean, String> asBool() {
+
+		return asBool("yes", "no");
+	}
+
+	public static Function<Boolean, String> asBool(String trueValue, String falseValue) {
+
+		return value -> value == null ? "" : value ? trueValue : falseValue;
 	}
 }

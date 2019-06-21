@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - improve log output
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.chromatogram;
 
@@ -43,7 +44,6 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	private Class<T> type;
 
 	public AbstractChromatogramConverter(String extensionPoint, Class<T> type) {
-
 		this.extensionPoint = extensionPoint;
 		this.type = type;
 	}
@@ -312,7 +312,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 			try {
 				instance = element.createExecutableExtension(attribute);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.warn("can't load ChromatogramConverter with id = " + element.getAttribute(Converter.ID) + ", attribute = " + attribute + ": " + e);
 			}
 		}
 		return instance;

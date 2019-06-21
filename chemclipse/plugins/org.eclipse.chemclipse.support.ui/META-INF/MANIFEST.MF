@@ -51,6 +51,8 @@ Export-Package: org.eclipse.chemclipse.support.ui.activator,
  org.eclipse.chemclipse.support.ui.preferences.fieldeditors,
  org.eclipse.chemclipse.support.ui.provider,
  org.eclipse.chemclipse.support.ui.swt,
+ org.eclipse.chemclipse.support.ui.swt.columns,
  org.eclipse.chemclipse.support.ui.wizards,
  org.eclipse.chemclipse.support.ui.workbench
-Import-Package: javax.annotation;version="1.1.0"
+Import-Package: javax.annotation;version="1.1.0",
+ org.slf4j

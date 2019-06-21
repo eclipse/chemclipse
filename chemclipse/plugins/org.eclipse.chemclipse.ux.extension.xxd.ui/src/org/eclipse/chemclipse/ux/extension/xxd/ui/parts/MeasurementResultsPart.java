@@ -11,13 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedMeasurementResultUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -49,19 +56,20 @@ public class MeasurementResultsPart extends AbstractDataUpdateSupport implements
 	@Override
 	public void updateObjects(List<Object> objects, String topic) {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
+		Collection<IMeasurementResult> results = Collections.emptyList();
+		String infoLabel = "";
 		if(!isUnloadEvent(topic)) {
 			if(objects.size() == 1) {
 				Object object = objects.get(0);
-				extendedMeasurementResultUI.update(object);
-			} else {
-				extendedMeasurementResultUI.clear();
+				if(object instanceof IChromatogramSelection<?, ?>) {
+					IChromatogramSelection<?, ?> selection = (IChromatogramSelection<?, ?>)object;
+					IChromatogram<?> chromatogram = selection.getChromatogram();
+					results = new ArrayList<>(chromatogram.getMeasurementResults());
+					infoLabel = ChromatogramDataSupport.getChromatogramLabel(chromatogram);
+				}
 			}
-		} else {
-			extendedMeasurementResultUI.clear();
 		}
+		extendedMeasurementResultUI.update(results, infoLabel);
 	}
 
 	private boolean isUnloadEvent(String topic) {
