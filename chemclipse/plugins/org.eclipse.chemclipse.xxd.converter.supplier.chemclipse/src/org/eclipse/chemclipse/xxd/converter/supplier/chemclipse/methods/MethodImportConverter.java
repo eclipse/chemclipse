@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - improve log output
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.methods;
 
@@ -38,7 +39,7 @@ public class MethodImportConverter extends AbstractMethodImportConverter impleme
 			processingInfo.setProcessingResult(processMethod);
 		} catch(IOException e) {
 			processingInfo.addErrorMessage("Method Converter (*.ocm)", "Something has gone wrong to read the file: " + file);
-			logger.warn(e);
+			logger.warn("Error reading file '" + file.getAbsolutePath() + "': " + e);
 		}
 		//
 		return processingInfo;
