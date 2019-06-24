@@ -437,7 +437,7 @@ public class ScanChartUI extends ScrollableChart {
 		String name = preferenceStore.getString(PreferenceConstants.P_SCAN_LABEL_FONT_NAME);
 		int height = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_FONT_SIZE);
 		int style = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_FONT_STYLE);
-		font = Fonts.getFont(name, height, style);
+		font = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
 		//
 		labelHighestIntensities = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_HIGHEST_INTENSITIES);
 		addModuloLabels = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_LABEL_MODULO_INTENSITIES);

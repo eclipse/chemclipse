@@ -187,7 +187,7 @@ public class PreferenceConstants extends ChartOptions {
 	 * Scans
 	 */
 	public static final String P_SCAN_LABEL_FONT_NAME = "scanLabelFontName";
-	public static final String DEF_SCAN_LABEL_FONT_NAME = "Ubuntu";
+	public static final String DEF_SCAN_LABEL_FONT_NAME = "Tahoma";
 	public static final String P_SCAN_LABEL_FONT_SIZE = "scanLabelFontSize";
 	public static final String P_SCAN_LABEL_FONT_STYLE = "scanLabelFontStyle";
 	public static final int DEF_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
@@ -341,7 +341,7 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_SHOW_CHROMATOGRAM_PEAK_LABELS = "showChromatogramPeakLabels";
 	public static final boolean DEF_SHOW_CHROMATOGRAM_PEAK_LABELS = true;
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = "chromatogramPeakLabelFontName";
-	public static final String DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = "Ubuntu";
+	public static final String DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = "Tahoma";
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE = "chromatogramPeakLabelFontSize";
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE = "chromatogramPeakLabelFontStyle";
 	public static final int DEF_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE = SWT.NORMAL;
@@ -366,7 +366,7 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_SHOW_CHROMATOGRAM_SCAN_LABELS = true;
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = "chromatogramScanLabelSymbolSize";
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "chromatogramScanLabelFontName";
-	public static final String DEF_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "Ubuntu";
+	public static final String DEF_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "Tahoma";
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = "chromatogramScanLabelFontSize";
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = "chromatogramScanLabelFontStyle";
 	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
@@ -413,6 +413,11 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_X_AXIS_MILLISECONDS = Position.Secondary.toString();
 	public static final String P_COLOR_X_AXIS_MILLISECONDS = "colorXAxisMilliseconds";
 	public static final String DEF_COLOR_X_AXIS_MILLISECONDS = "0,0,0";
+	public static final String P_FONT_NAME_X_AXIS_MILLISECONDS = "fontNameXAxisMilliseconds";
+	public static final String DEF_FONT_NAME_X_AXIS_MILLISECONDS = "Tahoma";
+	public static final String P_FONT_SIZE_X_AXIS_MILLISECONDS = "fontSizeXAxisMilliseconds";
+	public static final String P_FONT_STYLE_X_AXIS_MILLISECONDS = "fontStyleXAxisMilliseconds";
+	public static final int DEF_FONT_STYLE_X_AXIS_MILLISECONDS = SWT.BOLD;
 	public static final String P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS = "gridlineStyleXAxisMilliseconds";
 	public static final String DEF_GRIDLINE_STYLE_X_AXIS_MILLISECONDS = LineStyle.NONE.toString();
 	public static final String P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS = "gridlineColorXAxisMilliseconds";
@@ -426,6 +431,11 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_X_AXIS_SECONDS = Position.Primary.toString();
 	public static final String P_COLOR_X_AXIS_SECONDS = "colorXAxisSeconds";
 	public static final String DEF_COLOR_X_AXIS_SECONDS = "0,0,0";
+	public static final String P_FONT_NAME_X_AXIS_SECONDS = "fontNameXAxisSeconds";
+	public static final String DEF_FONT_NAME_X_AXIS_SECONDS = "Tahoma";
+	public static final String P_FONT_SIZE_X_AXIS_SECONDS = "fontSizeXAxisSeconds";
+	public static final String P_FONT_STYLE_X_AXIS_SECONDS = "fontStyleXAxisSeconds";
+	public static final int DEF_FONT_STYLE_X_AXIS_SECONDS = SWT.BOLD;
 	public static final String P_GRIDLINE_STYLE_X_AXIS_SECONDS = "gridlineStyleXAxisSeconds";
 	public static final String DEF_GRIDLINE_STYLE_X_AXIS_SECONDS = LineStyle.NONE.toString();
 	public static final String P_GRIDLINE_COLOR_X_AXIS_SECONDS = "gridlineColorXAxisSeconds";
@@ -439,6 +449,11 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_X_AXIS_MINUTES = Position.Primary.toString();
 	public static final String P_COLOR_X_AXIS_MINUTES = "colorXAxisMinutes";
 	public static final String DEF_COLOR_X_AXIS_MINUTES = "0,0,0";
+	public static final String P_FONT_NAME_X_AXIS_MINUTES = "fontNameXAxisMinutes";
+	public static final String DEF_FONT_NAME_X_AXIS_MINUTES = "Tahoma";
+	public static final String P_FONT_SIZE_X_AXIS_MINUTES = "fontSizeXAxisMinutes";
+	public static final String P_FONT_STYLE_X_AXIS_MINUTES = "fontStyleXAxisMinutes";
+	public static final int DEF_FONT_STYLE_X_AXIS_MINUTES = SWT.BOLD;
 	public static final String P_GRIDLINE_STYLE_X_AXIS_MINUTES = "gridlineStyleXAxisMinutes";
 	public static final String DEF_GRIDLINE_STYLE_X_AXIS_MINUTES = LineStyle.DOT.toString();
 	public static final String P_GRIDLINE_COLOR_X_AXIS_MINUTES = "gridlineColorXAxisMinutes";
@@ -452,6 +467,11 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_X_AXIS_SCANS = Position.Primary.toString();
 	public static final String P_COLOR_X_AXIS_SCANS = "colorXAxisScans";
 	public static final String DEF_COLOR_X_AXIS_SCANS = "0,0,0";
+	public static final String P_FONT_NAME_X_AXIS_SCANS = "fontNameXAxisScans";
+	public static final String DEF_FONT_NAME_X_AXIS_SCANS = "Tahoma";
+	public static final String P_FONT_SIZE_X_AXIS_SCANS = "fontSizeXAxisScans";
+	public static final String P_FONT_STYLE_X_AXIS_SCANS = "fontStyleXAxisScans";
+	public static final int DEF_FONT_STYLE_X_AXIS_SCANS = SWT.BOLD;
 	public static final String P_GRIDLINE_STYLE_X_AXIS_SCANS = "gridlineStyleXAxisScans";
 	public static final String DEF_GRIDLINE_STYLE_X_AXIS_SCANS = LineStyle.NONE.toString();
 	public static final String P_GRIDLINE_COLOR_X_AXIS_SCANS = "gridlineColorXAxisScans";
@@ -465,6 +485,11 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_Y_AXIS_INTENSITY = Position.Primary.toString();
 	public static final String P_COLOR_Y_AXIS_INTENSITY = "colorYAxisIntensity";
 	public static final String DEF_COLOR_Y_AXIS_INTENSITY = "0,0,0";
+	public static final String P_FONT_NAME_Y_AXIS_INTENSITY = "fontNameYAxisIntensity";
+	public static final String DEF_FONT_NAME_Y_AXIS_INTENSITY = "Tahoma";
+	public static final String P_FONT_SIZE_Y_AXIS_INTENSITY = "fontSizeYAxisIntensity";
+	public static final String P_FONT_STYLE_Y_AXIS_INTENSITY = "fontStyleYAxisIntensity";
+	public static final int DEF_FONT_STYLE_Y_AXIS_INTENSITY = SWT.BOLD;
 	public static final String P_GRIDLINE_STYLE_Y_AXIS_INTENSITY = "gridlineStyleYAxisIntensity";
 	public static final String DEF_GRIDLINE_STYLE_Y_AXIS_INTENSITY = LineStyle.NONE.toString();
 	public static final String P_GRIDLINE_COLOR_Y_AXIS_INTENSITY = "gridlineColorYAxisIntensity";
@@ -478,6 +503,11 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY = Position.Secondary.toString();
 	public static final String P_COLOR_Y_AXIS_RELATIVE_INTENSITY = "colorYAxisRelativeIntensity";
 	public static final String DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY = "0,0,0";
+	public static final String P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY = "fontNameYAxisRelativeIntensity";
+	public static final String DEF_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY = "Tahoma";
+	public static final String P_FONT_SIZE_Y_AXIS_RELATIVE_INTENSITY = "fontSizeYAxisRelativeIntensity";
+	public static final String P_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY = "fontStyleYAxisRelativeIntensity";
+	public static final int DEF_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY = SWT.BOLD;
 	public static final String P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY = "gridlineStyleYAxisRelativeIntensity";
 	public static final String DEF_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY = LineStyle.DOT.toString();
 	public static final String P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY = "gridlineColorYAxisRelativeIntensity";

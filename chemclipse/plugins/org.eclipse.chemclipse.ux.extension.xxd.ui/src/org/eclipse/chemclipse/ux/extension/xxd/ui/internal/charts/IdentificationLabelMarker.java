@@ -71,7 +71,7 @@ public class IdentificationLabelMarker extends LabelMarker {
 			String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME);
 			int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
 			int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
-			font = Fonts.getFont(name, height, style);
+			font = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
 			//
 			for(IPeak peak : peaks) {
 				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets(), comparator);
@@ -95,7 +95,7 @@ public class IdentificationLabelMarker extends LabelMarker {
 			String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME);
 			int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE);
 			int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);
-			font = Fonts.getFont(name, height, style);
+			font = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
 			//
 			for(IScan scan : scans) {
 				/*

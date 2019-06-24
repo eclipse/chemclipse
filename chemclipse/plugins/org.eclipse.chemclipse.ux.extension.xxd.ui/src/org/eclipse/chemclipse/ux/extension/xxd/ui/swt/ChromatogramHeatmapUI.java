@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
+import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.exceptions.NoExtractedWavelengthSignalStoredException;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
@@ -34,7 +35,6 @@ import org.eclipse.nebula.visualization.widgets.datadefinition.ColorMap.Predefin
 import org.eclipse.nebula.visualization.widgets.figures.IntensityGraphFigure;
 import org.eclipse.nebula.visualization.xygraph.linearscale.Range;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -259,10 +259,8 @@ public class ChromatogramHeatmapUI extends Composite {
 		heatmapTitel = new Label(header, SWT.CENTER);
 		heatmapTitel.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 		heatmapTitel.setLayoutData(layoutData);
-		Font font = new Font(display, "Arial", 12, SWT.BOLD);
-		heatmapTitel.setFont(font);
+		heatmapTitel.setFont(Fonts.getCachedFont(getDisplay(), "Arial", 12, SWT.BOLD));
 		heatmapTitel.setText("");
-		font.dispose();
 		/*
 		 * Heatmap
 		 */

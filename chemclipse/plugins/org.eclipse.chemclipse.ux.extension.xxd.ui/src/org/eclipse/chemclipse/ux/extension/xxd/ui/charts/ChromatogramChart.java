@@ -11,9 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 
+import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToSecondsConverter;
@@ -89,6 +92,12 @@ public class ChromatogramChart extends LineChart {
 		chartSupport.setAxisSettings(primaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 		primaryAxisSettingsX.setVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS));
 		primaryAxisSettingsX.setTitleVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MILLISECONDS));
+		//
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_MILLISECONDS);
+		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_MILLISECONDS);
+		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_X_AXIS_MILLISECONDS);
+		primaryAxisSettingsX.setTitleFont(Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style));
 	}
 
 	private void modifyYAxisIntensity() {
@@ -106,6 +115,12 @@ public class ChromatogramChart extends LineChart {
 		chartSupport.setAxisSettings(primaryAxisSettingsY, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 		primaryAxisSettingsY.setVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY));
 		primaryAxisSettingsY.setTitleVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_INTENSITY));
+		//
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_Y_AXIS_INTENSITY);
+		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_Y_AXIS_INTENSITY);
+		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_Y_AXIS_INTENSITY);
+		primaryAxisSettingsY.setTitleFont(Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style));
 	}
 
 	private void modifyYAxisRelativeIntensity() {
@@ -121,19 +136,28 @@ public class ChromatogramChart extends LineChart {
 		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY);
 		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY);
 		//
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY);
+		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_Y_AXIS_RELATIVE_INTENSITY);
+		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY);
+		Font titleFont = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
+		//
 		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(TITLE_Y_AXIS_RELATIVE_INTENSITY, new PercentageConverter(SWT.VERTICAL, true));
 				chartSupport.setAxisSettings(secondaryAxisSettingsY, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 				secondaryAxisSettingsY.setTitleVisible(isShowAxisTitle);
+				secondaryAxisSettingsY.setTitleFont(titleFont);
 				chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 			} else {
 				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				axisSettings.setTitleFont(titleFont);
 				axisSettings.setVisible(true);
 				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
 		} else {
 			if(axisSettings != null) {
+				axisSettings.setTitleFont(titleFont);
 				axisSettings.setVisible(false);
 				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
@@ -153,19 +177,28 @@ public class ChromatogramChart extends LineChart {
 		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SECONDS);
 		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_SECONDS);
 		//
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_SECONDS);
+		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_SECONDS);
+		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_X_AXIS_SECONDS);
+		Font titleFont = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
+		//
 		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_SECONDS, new MillisecondsToSecondsConverter());
 				chartSupport.setAxisSettings(secondaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				secondaryAxisSettingsX.setTitleFont(titleFont);
 				secondaryAxisSettingsX.setTitleVisible(isShowAxisTitle);
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 			} else {
 				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				axisSettings.setTitleFont(titleFont);
 				axisSettings.setVisible(true);
 				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
 		} else {
 			if(axisSettings != null) {
+				axisSettings.setTitleFont(titleFont);
 				axisSettings.setVisible(false);
 				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
@@ -185,19 +218,28 @@ public class ChromatogramChart extends LineChart {
 		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MINUTES);
 		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES);
 		//
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_MINUTES);
+		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_MINUTES);
+		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_X_AXIS_MINUTES);
+		Font titleFont = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
+		//
 		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_MINUTES, new MillisecondsToMinuteConverter());
 				chartSupport.setAxisSettings(secondaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				secondaryAxisSettingsX.setTitleFont(titleFont);
 				secondaryAxisSettingsX.setTitleVisible(isShowAxisTitle);
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 			} else {
 				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				axisSettings.setTitleFont(titleFont);
 				axisSettings.setVisible(true);
 				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
 		} else {
 			if(axisSettings != null) {
+				axisSettings.setTitleFont(titleFont);
 				axisSettings.setVisible(false);
 				axisSettings.setTitleVisible(isShowAxisTitle);
 			}
