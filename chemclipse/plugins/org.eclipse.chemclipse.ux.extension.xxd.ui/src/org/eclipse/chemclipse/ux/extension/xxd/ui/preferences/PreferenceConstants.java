@@ -32,6 +32,14 @@ public class PreferenceConstants extends ChartOptions {
 			{"Bottom Center", PartSupport.PARTSTACK_BOTTOM_CENTER}, //
 			{"Bottom Right", PartSupport.PARTSTACK_BOTTOM_RIGHT}//
 	};
+	//
+	public static final int MIN_SYMBOL_SIZE = 1;
+	public static final int MAX_SYMBOL_SIZE = 72;
+	public static final int DEF_SYMBOL_SIZE = 5;
+	//
+	public static final int MIN_FONT_SIZE = 1;
+	public static final int MAX_FONT_SIZE = 72;
+	public static final int DEF_FONT_SIZE = 11;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -181,9 +189,6 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_SCAN_LABEL_FONT_NAME = "scanLabelFontName";
 	public static final String DEF_SCAN_LABEL_FONT_NAME = "Ubuntu";
 	public static final String P_SCAN_LABEL_FONT_SIZE = "scanLabelFontSize";
-	public static final int MIN_SCAN_LABEL_FONT_SIZE = 1;
-	public static final int MAX_SCAN_LABEL_FONT_SIZE = 72;
-	public static final int DEF_SCAN_LABEL_FONT_SIZE = 11;
 	public static final String P_SCAN_LABEL_FONT_STYLE = "scanLabelFontStyle";
 	public static final int DEF_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
 	public static final String P_COLOR_SCAN_1 = "colorScan1";
@@ -338,9 +343,6 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = "chromatogramPeakLabelFontName";
 	public static final String DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = "Ubuntu";
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE = "chromatogramPeakLabelFontSize";
-	public static final int MIN_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE = 1;
-	public static final int MAX_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE = 72;
-	public static final int DEF_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE = 11;
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE = "chromatogramPeakLabelFontStyle";
 	public static final int DEF_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE = SWT.NORMAL;
 	public static final String P_SHOW_CHROMATOGRAM_BASELINE = "showChromatogramBaseline";
@@ -350,9 +352,6 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_ENABLE_BASELINE_AREA = "enableBaselineArea";
 	public static final boolean DEF_ENABLE_BASELINE_AREA = true;
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE = "chromatogramPeakLabelSymbolSize";
-	public static final int MIN_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE = 1;
-	public static final int MAX_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE = 72;
-	public static final int DEF_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE = 5;
 	public static final String P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE = "chromatogramSelectedPeakMarkerType";
 	public static final String DEF_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE = PlotSymbolType.INVERTED_TRIANGLE.toString();
 	public static final String P_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_MARKER_TYPE = "chromatogramPeaksActiveNormalMarkerType";
@@ -366,15 +365,9 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_SHOW_CHROMATOGRAM_SCAN_LABELS = "showChromatogramScanLabels";
 	public static final boolean DEF_SHOW_CHROMATOGRAM_SCAN_LABELS = true;
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = "chromatogramScanLabelSymbolSize";
-	public static final int MIN_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = 1;
-	public static final int MAX_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = 72;
-	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = 5;
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "chromatogramScanLabelFontName";
 	public static final String DEF_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "Ubuntu";
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = "chromatogramScanLabelFontSize";
-	public static final int MIN_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = 1;
-	public static final int MAX_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = 72;
-	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = 11;
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = "chromatogramScanLabelFontStyle";
 	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
 	public static final String P_COLOR_CHROMATOGRAM_SELECTED_SCAN_IDENTIFIED = "colorChromatogramSelectedScanIdentified";
