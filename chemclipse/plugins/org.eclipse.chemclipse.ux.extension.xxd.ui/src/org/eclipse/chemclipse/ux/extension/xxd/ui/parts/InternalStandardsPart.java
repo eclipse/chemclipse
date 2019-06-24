@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,38 +17,29 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedInternalStandardsUI;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class InternalStandardsPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class InternalStandardsPart extends EnhancedUpdateSupport implements IUpdateSupport {
 
 	private ExtendedInternalStandardsUI extendedInternalStandardsUI;
 
 	@Inject
 	public InternalStandardsPart(Composite parent, MPart part) {
-		super(part);
+		super(parent, Activator.getDefault().getDataUpdateSupport(), IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, part);
+	}
+
+	@Override
+	public void createControl(Composite parent) {
+
 		extendedInternalStandardsUI = new ExtendedInternalStandardsUI(parent);
 	}
 
-	@Focus
-	public void setFocus() {
-
-		updateObjects(getObjects(), getTopic());
-	}
-
-	@Override
-	public void registerEvents() {
-
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
-	}
-
-	@Override
-	public void updateObjects(List<Object> objects, String topic) {
+	public void updateSelection(List<Object> objects, String topic) {
 
 		/*
 		 * 0 => because only one property was used to register the event.

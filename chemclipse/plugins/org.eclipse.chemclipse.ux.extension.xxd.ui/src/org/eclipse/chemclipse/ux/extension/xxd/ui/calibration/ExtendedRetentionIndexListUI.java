@@ -203,6 +203,7 @@ public class ExtendedRetentionIndexListUI extends Composite {
 				return null;
 			}
 		});
+		//
 		combo.setToolTipText("Select a chromatogram column.");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {

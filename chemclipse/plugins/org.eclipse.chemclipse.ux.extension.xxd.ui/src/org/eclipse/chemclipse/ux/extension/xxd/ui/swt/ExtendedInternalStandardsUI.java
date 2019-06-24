@@ -11,18 +11,25 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -36,6 +43,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -44,6 +53,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
@@ -69,7 +79,7 @@ public class ExtendedInternalStandardsUI {
 	private Label labelPeak;
 	private Label labelInputErrors;
 	//
-	private Text textName;
+	private ComboViewer comboName;
 	private Text textConcentration;
 	private Text textResponseFactor;
 	private Button buttonInsert;
@@ -114,8 +124,23 @@ public class ExtendedInternalStandardsUI {
 		//
 		if(peak != null) {
 			internalStandardsListUI.setInput(peak.getInternalStandards());
+			/*
+			 * Extract the targets to set an ISTD more easily.
+			 */
+			TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
+			List<IIdentificationTarget> targets = new ArrayList<>(peak.getTargets());
+			Collections.sort(targets, comparator);
+			List<String> names = new ArrayList<>();
+			for(IIdentificationTarget target : targets) {
+				String name = target.getLibraryInformation().getName();
+				if(!names.contains(name)) {
+					names.add(name);
+				}
+			}
+			comboName.setInput(names);
 		} else {
 			internalStandardsListUI.setInput(null);
+			comboName.setInput(Collections.emptyList());
 		}
 	}
 
@@ -253,48 +278,44 @@ public class ExtendedInternalStandardsUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
-		createLabelName(composite);
 		createTextName(composite);
-		createLabelConcentration(composite);
 		createTextConcentration(composite);
-		createLabelResponseFactor(composite);
 		createTextResponseFactor(composite);
 		buttonInsert = createButtonInsert(composite);
 		//
 		return composite;
 	}
 
-	private void createLabelName(Composite parent) {
-
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("Name:");
-	}
-
 	private void createTextName(Composite parent) {
 
-		textName = new Text(parent, SWT.BORDER);
-		textName.setText("");
-		textName.setToolTipText("Name of the internal standard.");
-		textName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboName = new ComboViewer(parent, SWT.BORDER);
+		Combo combo = comboName.getCombo();
+		comboName.setContentProvider(ArrayContentProvider.getInstance());
+		comboName.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				return element.toString();
+			}
+		});
+		//
+		combo.setText("");
+		combo.setToolTipText("Name of the internal standard (ISTD).");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		nameValidator = new NameValidator();
-		nameControlDecoration = new ControlDecoration(textName, SWT.LEFT | SWT.TOP);
-		textName.addKeyListener(new KeyAdapter() {
+		nameControlDecoration = new ControlDecoration(combo, SWT.LEFT | SWT.TOP);
+		combo.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				validate(nameValidator, nameControlDecoration, textName);
+				validate(nameValidator, nameControlDecoration, comboName);
 			}
 		});
-	}
-
-	private void createLabelConcentration(Composite parent) {
-
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("Conc.:");
 	}
 
 	private void createTextConcentration(Composite parent) {
@@ -314,12 +335,6 @@ public class ExtendedInternalStandardsUI {
 				validate(concentrationValidator, concentrationControlDecoration, textConcentration);
 			}
 		});
-	}
-
-	private void createLabelResponseFactor(Composite parent) {
-
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("RF:");
 	}
 
 	private void createTextResponseFactor(Composite parent) {
@@ -543,7 +558,7 @@ public class ExtendedInternalStandardsUI {
 				String concentrationUnit = "";
 				double responseFactor = 0.0d;
 				//
-				isInputValid = validate(nameValidator, nameControlDecoration, textName);
+				isInputValid = validate(nameValidator, nameControlDecoration, comboName);
 				name = nameValidator.getName();
 				//
 				if(isInputValid) {
@@ -571,7 +586,7 @@ public class ExtendedInternalStandardsUI {
 						messageBox.open();
 					} else {
 						peak.addInternalStandard(internalStandard);
-						textName.setText("");
+						comboName.getCombo().setText("");
 						textConcentration.setText("");
 						textResponseFactor.setText("1.0");
 						enableButtonFields(ACTION_INITIALIZE);
@@ -600,7 +615,7 @@ public class ExtendedInternalStandardsUI {
 				break;
 			case ACTION_ADD:
 				buttonCancel.setEnabled(true);
-				textName.setEnabled(true);
+				comboName.getCombo().setEnabled(true);
 				textConcentration.setEnabled(true);
 				textResponseFactor.setEnabled(true);
 				buttonInsert.setEnabled(true);
@@ -627,7 +642,7 @@ public class ExtendedInternalStandardsUI {
 		buttonDelete.setEnabled(enabled);
 		buttonAdd.setEnabled(enabled);
 		//
-		textName.setEnabled(enabled);
+		comboName.getCombo().setEnabled(enabled);
 		textConcentration.setEnabled(enabled);
 		textResponseFactor.setEnabled(enabled);
 		buttonInsert.setEnabled(enabled);
@@ -647,7 +662,17 @@ public class ExtendedInternalStandardsUI {
 
 	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
 
-		IStatus status = validator.validate(text.getText());
+		return validate(validator, controlDecoration, text.getText());
+	}
+
+	private boolean validate(IValidator validator, ControlDecoration controlDecoration, ComboViewer combo) {
+
+		return validate(validator, controlDecoration, combo.getCombo().getText());
+	}
+
+	private boolean validate(IValidator validator, ControlDecoration controlDecoration, String text) {
+
+		IStatus status = validator.validate(text);
 		if(status.isOK()) {
 			controlDecoration.hide();
 			clearLabelInputErrors();
