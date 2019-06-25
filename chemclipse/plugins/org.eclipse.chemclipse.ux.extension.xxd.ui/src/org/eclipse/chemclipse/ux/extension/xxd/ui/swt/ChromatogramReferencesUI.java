@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramReferenceDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;

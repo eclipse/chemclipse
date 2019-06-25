@@ -49,6 +49,7 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.InternalStandardDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -59,6 +60,7 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -100,7 +102,6 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	private PeakScanListUI peakScanListUI;
 	private IChromatogramSelection chromatogramSelection;
 	//
-	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ListSupport listSupport = new ListSupport();
 	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 	//
@@ -274,9 +275,12 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		 */
 		Shell shell = listUI.getTable().getShell();
 		ITableSettings tableSettings = listUI.getTableSettings();
+		//
 		addDeleteMenuEntry(shell, tableSettings);
 		addVerifyTargetsMenuEntry(tableSettings);
 		addUnverifyTargetsMenuEntry(tableSettings);
+		modifyInternalStandardsMenuEntry(shell, tableSettings);
+		//
 		addKeyEventProcessors(shell, tableSettings);
 		listUI.applySettings(tableSettings);
 		//
@@ -355,6 +359,30 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		});
 	}
 
+	private void modifyInternalStandardsMenuEntry(Shell shell, ITableSettings tableSettings) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Modify ISTDs (Internal Standards)";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return MENU_CATEGORY;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				modifyInternalStandards(shell);
+			}
+		});
+	}
+
 	private void addKeyEventProcessors(Shell shell, ITableSettings tableSettings) {
 
 		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
@@ -370,15 +398,20 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 				} else if(e.keyCode == BaseChart.KEY_CODE_i && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
 					if((e.stateMask & SWT.ALT) == SWT.ALT) {
 						/*
-						 * CTRL + ALT + I
+						 * CTRL + ALT + i
 						 */
 						setPeaksActiveForAnalysis(false);
 					} else {
 						/*
-						 * CTRL + I
+						 * CTRL + i
 						 */
 						setPeaksActiveForAnalysis(true);
 					}
+				} else if(e.keyCode == BaseChart.KEY_CODE_s && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
+					/*
+					 * CTRL + s
+					 */
+					modifyInternalStandards(shell);
 				} else {
 					propagateSelection();
 				}
@@ -404,7 +437,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			/*
 			 * Send update.
 			 */
-			chromatogramSelection.update(true);
+			sendEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
 		}
 	}
 
@@ -445,6 +478,32 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		}
 	}
 
+	private void modifyInternalStandards(Shell shell) {
+
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Internal Standard (ISTD)");
+		messageBox.setMessage("Would you like to modify the ISTD(s)?");
+		if(messageBox.open() == SWT.YES) {
+			Iterator iterator = peakScanListUI.getStructuredSelection().iterator();
+			while(iterator.hasNext()) {
+				Object object = iterator.next();
+				if(object instanceof IPeak) {
+					IPeak peak = (IPeak)object;
+					if(peak.getIntegratedArea() > 0) {
+						InternalStandardDialog dialog = new InternalStandardDialog(shell, peak);
+						if(IDialogConstants.OK_ID == dialog.open()) {
+							logger.info("Successfully modified ISTDs.");
+						}
+					}
+				}
+			}
+			/*
+			 * Send update.
+			 */
+			sendEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
+		}
+	}
+
 	private void propagateSelection() {
 
 		if(interactionMode != InteractionMode.SOURCE && interactionMode != InteractionMode.BIDIRECTIONAL) {
@@ -465,11 +524,12 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 					IPeak peak = (IPeak)object;
 					IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
 					if(moveRetentionTimeOnPeakSelection) {
-						chromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
+						ChromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
 					}
 					//
 					DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
+						@SuppressWarnings("unchecked")
 						@Override
 						public void run() {
 
@@ -759,14 +819,14 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	private void updateLabel() {
 
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
-			labelChromatogramName.setText(chromatogramDataSupport.getChromatogramLabel(null));
+			labelChromatogramName.setText(ChromatogramDataSupport.getChromatogramLabel(null));
 			labelChromatogramInfo.setText("");
 		} else {
 			String editInformation = peakScanListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			String chromatogramLabel = chromatogramDataSupport.getChromatogramLabel(chromatogram);
+			String chromatogramLabel = ChromatogramDataSupport.getChromatogramLabel(chromatogram);
 			int identifiedPeaks = chromatogram.getNumberOfPeaks();
-			int identifiedScans = chromatogramDataSupport.getIdentifiedScans(chromatogram).size();
+			int identifiedScans = ChromatogramDataSupport.getIdentifiedScans(chromatogram).size();
 			//
 			labelChromatogramName.setText(chromatogramLabel + " - " + editInformation);
 			labelChromatogramInfo.setText("Number of Peaks: " + identifiedPeaks + " | Scans: " + identifiedScans);
