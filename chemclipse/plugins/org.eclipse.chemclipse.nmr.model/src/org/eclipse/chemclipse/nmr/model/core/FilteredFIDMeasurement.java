@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.chemclipse.model.core.AbstractMeasurement;
 import org.eclipse.chemclipse.model.core.FilteredMeasurement;
@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.model.core.FilteredMeasurement;
 public class FilteredFIDMeasurement extends FilteredMeasurement<FIDMeasurement> implements FIDMeasurement {
 
 	private static final long serialVersionUID = -4499531764775929976L;
-	private Collection<? extends FIDSignal> signals;
+	private List<? extends FIDSignal> signals;
 
 	public FilteredFIDMeasurement(FIDMeasurement measurement) {
 		super(measurement);
@@ -65,7 +65,7 @@ public class FilteredFIDMeasurement extends FilteredMeasurement<FIDMeasurement> 
 	}
 
 	@Override
-	public Collection<? extends FIDSignal> getSignals() {
+	public List<? extends FIDSignal> getSignals() {
 
 		if(signals != null) {
 			return signals;
@@ -73,7 +73,7 @@ public class FilteredFIDMeasurement extends FilteredMeasurement<FIDMeasurement> 
 		return getFilteredObject().getSignals();
 	}
 
-	public void setSignals(Collection<? extends FIDSignal> signals) {
+	public void setSignals(List<? extends FIDSignal> signals) {
 
 		this.signals = signals;
 	}

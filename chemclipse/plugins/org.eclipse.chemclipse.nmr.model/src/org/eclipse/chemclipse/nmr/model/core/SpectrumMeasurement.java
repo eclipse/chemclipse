@@ -11,16 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 
 public interface SpectrumMeasurement extends IComplexSignalMeasurement<SpectrumSignal> {
 
 	/**
+	 * Contains the signals of this {@link SpectrumMeasurement}, ordered with the highest ppm value first
 	 * 
 	 * @return the signals that makes up this {@link SpectrumMeasurement}
 	 */
 	@Override
-	Collection<? extends SpectrumSignal> getSignals();
+	List<? extends SpectrumSignal> getSignals();
 }
