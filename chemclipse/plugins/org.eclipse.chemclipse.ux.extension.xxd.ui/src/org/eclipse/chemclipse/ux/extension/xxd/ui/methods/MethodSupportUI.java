@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - make helper method public static to read all configured methods
+ * Christoph Läubrich - make helper method public static to read all configured methods, set processinginfo to the results view
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.UserManagement;
@@ -418,13 +419,16 @@ public class MethodSupportUI extends Composite {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 						IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, monitor);
-						if(!processingInfo.hasErrorMessages()) {
+						boolean hasErrorMessages = processingInfo.hasErrorMessages();
+						if(!hasErrorMessages) {
 							try {
 								IProcessMethod processMethod = processingInfo.getProcessingResult();
 								methodListener.execute(processMethod, monitor);
 							} catch(Exception e) {
 								logger.warn(e);
 							}
+						} else {
+							ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, hasErrorMessages);
 						}
 					}
 				});
