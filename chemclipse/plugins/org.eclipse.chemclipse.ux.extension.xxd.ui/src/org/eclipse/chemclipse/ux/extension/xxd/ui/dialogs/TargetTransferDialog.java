@@ -42,7 +42,7 @@ public class TargetTransferDialog extends Dialog {
 	@Override
 	protected Point getInitialSize() {
 
-		return new Point(600, 250);
+		return new Point(600, 300);
 	}
 
 	@Override

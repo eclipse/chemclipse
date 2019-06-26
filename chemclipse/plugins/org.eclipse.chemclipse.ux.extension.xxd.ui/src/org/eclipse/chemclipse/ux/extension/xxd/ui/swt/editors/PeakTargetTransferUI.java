@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -65,11 +66,17 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 
 	private static final Logger logger = Logger.getLogger(PeakTargetTransferUI.class);
 	//
-	private static final String DESCRIPTION = "Transfer Peak Target(s)";
+	private static final String DESCRIPTION = "Transfer Target(s)";
+	private static final String TYPE_PEAKS = "Peaks";
+	private static final String TYPE_SCANS = "Scans";
+	private static final String[] TYPE_ITEMS = new String[]{TYPE_PEAKS, TYPE_SCANS};
 	//
 	private Label labelSource;
 	private ChromatogramSourceCombo chromatogramSourceCombo;
 	private ComboViewer comboViewerSink;
+	private Combo comboType;
+	private Text textTimeDelta;
+	private Button checkBoxTransfer;
 	private Button buttonExecute;
 	//
 	@SuppressWarnings("rawtypes")
@@ -90,7 +97,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 	public void update(IChromatogramSelection chromatogramSelectionSource) {
 
 		this.chromatogramSelectionSource = chromatogramSelectionSource;
-		updateWidgets();
+		updateInput();
 	}
 
 	private void createControl() {
@@ -110,12 +117,15 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		createLabelInfo(composite, "Target:");
 		comboViewerSink = createComboViewerSink(composite);
 		//
+		createLabelInfo(composite, "Type:");
+		comboType = createTypeCombo(composite);
+		//
 		createLabelInfo(composite, "Options:");
-		createTextTargetDelta(composite);
-		createCheckBoxTransferTargets(composite);
+		textTimeDelta = createTextTargetDelta(composite);
+		checkBoxTransfer = createCheckBoxTransferTargets(composite);
 		buttonExecute = createButtonExecute(composite);
 		//
-		updateWidgets();
+		updateInput();
 	}
 
 	private void createLabelInfo(Composite parent, String text) {
@@ -147,7 +157,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				updateWidgets();
+				updateInput();
 			}
 		});
 		//
@@ -195,7 +205,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				enableButtons();
+				updateWidgets();
 			}
 		});
 		//
@@ -214,7 +224,28 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		return label;
 	}
 
-	private void createTextTargetDelta(Composite parent) {
+	private Combo createTypeCombo(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setItems(TYPE_ITEMS);
+		combo.select(0);
+		combo.setToolTipText("Select a type (Peaks or Scans) to be transfered.");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 3;
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				updateWidgets();
+			}
+		});
+		//
+		return combo;
+	}
+
+	private Text createTextTargetDelta(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText(Double.toString(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME)));
@@ -238,53 +269,54 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 				}
 			}
 		});
+		//
+		return text;
 	}
 
-	private void createCheckBoxTransferTargets(Composite parent) {
+	private Button createCheckBoxTransferTargets(Composite parent) {
 
-		Button checkBox = new Button(parent, SWT.CHECK);
-		checkBox.setText("Best Target Only");
-		checkBox.setSelection(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY));
-		checkBox.setToolTipText("Transfer only the best matching target.");
-		checkBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		checkBox.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY, checkBox.getSelection());
-			}
-		});
-	}
-
-	private Button createButtonExecute(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Transfer Peaks");
-		button.setToolTipText("Transfer the peak targets from the source to the sink chromatogram.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		Button button = new Button(parent, SWT.CHECK);
+		button.setText("Best Target Only");
+		button.setSelection(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY));
+		button.setToolTipText("Transfer only the best matching target.");
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Object object = comboViewerSink.getStructuredSelection().getFirstElement();
-				if(object instanceof IChromatogramSelection) {
-					transferPeakTargets(e.display.getActiveShell());
-				} else if(object instanceof IChromatogram) {
-					transferPeakTargets(e.display.getActiveShell());
-				}
+				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY, button.getSelection());
 			}
 		});
 		//
 		return button;
 	}
 
-	private void updateWidgets() {
+	private Button createButtonExecute(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("Transfer Targets");
+		button.setToolTipText("Transfer the targets from the source to the sink chromatogram.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@SuppressWarnings("rawtypes")
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Object object = comboViewerSink.getStructuredSelection().getFirstElement();
+				IChromatogramSelection chromatogramSelectionSink = chromatogramDataSupport.getChromatogramSelection(object);
+				transferTargets(chromatogramSelectionSource, chromatogramSelectionSink, e.display.getActiveShell());
+			}
+		});
+		//
+		return button;
+	}
+
+	private void updateInput() {
 
 		labelSource.setText(ChromatogramDataSupport.getChromatogramEditorLabel(chromatogramSelectionSource));
-		chromatogramSourceCombo.setEnabled(chromatogramSelectionSource != null);
 		//
 		if(chromatogramSourceCombo.isSourceReferences() && chromatogramSelectionSource != null) {
 			comboViewerSink.setInput(chromatogramSelectionSource.getChromatogram().getReferencedChromatograms());
@@ -294,7 +326,28 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 			comboViewerSink.setInput(null);
 		}
 		//
-		enableButtons();
+		updateWidgets();
+	}
+
+	private void updateWidgets() {
+
+		textTimeDelta.setEnabled(false);
+		checkBoxTransfer.setEnabled(false);
+		buttonExecute.setEnabled(false);
+		/*
+		 * Source and sink selected?
+		 */
+		chromatogramSourceCombo.setEnabled(chromatogramSelectionSource != null);
+		//
+		Object object = comboViewerSink.getStructuredSelection().getFirstElement();
+		if(object instanceof IChromatogramSelection || object instanceof IChromatogram) {
+			buttonExecute.setEnabled(true);
+			checkBoxTransfer.setEnabled(true);
+		}
+		/*
+		 * Peaks or Scans selected?
+		 */
+		textTimeDelta.setEnabled(comboType.getText().equals(TYPE_PEAKS));
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -313,18 +366,6 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		return chromatogramSelections;
 	}
 
-	private void enableButtons() {
-
-		buttonExecute.setEnabled(false);
-		//
-		Object object = comboViewerSink.getStructuredSelection().getFirstElement();
-		if(object instanceof IChromatogramSelection) {
-			buttonExecute.setEnabled(true);
-		} else if(object instanceof IChromatogram) {
-			buttonExecute.setEnabled(true);
-		}
-	}
-
 	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
 
 		IStatus status = validator.validate(text.getText());
@@ -339,61 +380,25 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void transferPeakTargets(Shell shell) {
+	@SuppressWarnings("rawtypes")
+	private void transferTargets(IChromatogramSelection chromatogramSelectionSource, IChromatogramSelection chromatogramSelectionSink, Shell shell) {
 
 		if(chromatogramSelectionSource != null) {
-			Object object = comboViewerSink.getStructuredSelection().getFirstElement();
-			IChromatogramSelection chromatogramSelectionSink = chromatogramDataSupport.getChromatogramSelection(object);
 			if(chromatogramSelectionSink != null && chromatogramSelectionSink != chromatogramSelectionSource) {
 				/*
 				 * Question
 				 */
 				MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-				messageBox.setText("Transfer Peak Target(s)");
-				messageBox.setMessage("Would you like to transfer the selected peak target(s) to chromatogram: " + chromatogramSelectionSink.getChromatogram().getName() + "?");
+				messageBox.setText("Transfer Target(s)");
+				messageBox.setMessage("Would you like to transfer the selected target(s) to chromatogram: " + ChromatogramDataSupport.getChromatogramEditorLabel(chromatogramSelectionSink) + "?");
 				if(messageBox.open() == SWT.YES) {
 					/*
-					 * Transfer the peak targets.
+					 * Transfer the targets.
 					 */
-					int retentionTimeDelta = (int)(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
-					boolean useBestTargetOnly = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
-					//
-					List<? extends IPeak> peaksSource = ChromatogramDataSupport.getPeaks(chromatogramSelectionSource, true);
-					List<? extends IPeak> peaksSink = ChromatogramDataSupport.getPeaks(chromatogramSelectionSink, false);
-					/*
-					 * Are peaks available?
-					 */
-					if(peaksSource.size() > 0) {
-						if(peaksSink.size() > 0) {
-							/*
-							 * Transfer OK
-							 */
-							for(IPeak peakSink : peaksSink) {
-								for(IPeak peakSource : peaksSource) {
-									int retentionTimePeakSink = peakSink.getPeakModel().getRetentionTimeAtPeakMaximum();
-									int retentionTimePeakSource = peakSource.getPeakModel().getRetentionTimeAtPeakMaximum();
-									if(isPeakInFocus(retentionTimePeakSink, retentionTimePeakSource, retentionTimeDelta)) {
-										/*
-										 * Best target or all?
-										 */
-										if(useBestTargetOnly) {
-											IIdentificationTarget peakTarget = IIdentificationTarget.getBestIdentificationTarget(peakSource.getTargets(), comparator);
-											transferPeakTarget(peakTarget, peakSink);
-										} else {
-											for(IIdentificationTarget peakTarget : peakSource.getTargets()) {
-												transferPeakTarget(peakTarget, peakSink);
-											}
-										}
-									}
-								}
-							}
-							MessageDialog.openInformation(shell, DESCRIPTION, "The peak target(s) have been transfered successfully.");
-						} else {
-							showWarnMessage(shell, "The sink chromatogram contains no peaks.");
-						}
+					if(comboType.getText().equals(TYPE_PEAKS)) {
+						transferPeaks(chromatogramSelectionSource, chromatogramSelectionSink, shell);
 					} else {
-						showWarnMessage(shell, "The source chromatogram contains no peaks.");
+						transferScans(chromatogramSelectionSource, chromatogramSelectionSink, shell);
 					}
 				}
 			} else {
@@ -401,6 +406,82 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 			}
 		} else {
 			showWarnMessage(shell, "A source chromatogram is not available.");
+		}
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private void transferPeaks(IChromatogramSelection chromatogramSelectionSource, IChromatogramSelection chromatogramSelectionSink, Shell shell) {
+
+		List<? extends IPeak> peaksSource = ChromatogramDataSupport.getPeaks(chromatogramSelectionSource, true);
+		List<? extends IPeak> peaksSink = ChromatogramDataSupport.getPeaks(chromatogramSelectionSink, false);
+		//
+		int retentionTimeDelta = (int)(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+		boolean useBestTargetOnly = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
+		//
+		if(peaksSource.size() > 0) {
+			if(peaksSink.size() > 0) {
+				/*
+				 * Transfer OK
+				 */
+				for(IPeak peakSink : peaksSink) {
+					for(IPeak peakSource : peaksSource) {
+						int retentionTimePeakSink = peakSink.getPeakModel().getRetentionTimeAtPeakMaximum();
+						int retentionTimePeakSource = peakSource.getPeakModel().getRetentionTimeAtPeakMaximum();
+						if(isPeakInFocus(retentionTimePeakSink, retentionTimePeakSource, retentionTimeDelta)) {
+							/*
+							 * Best target or all?
+							 */
+							if(useBestTargetOnly) {
+								IIdentificationTarget peakTarget = IIdentificationTarget.getBestIdentificationTarget(peakSource.getTargets(), comparator);
+								transferPeakTarget(peakTarget, peakSink);
+							} else {
+								for(IIdentificationTarget peakTarget : peakSource.getTargets()) {
+									transferPeakTarget(peakTarget, peakSink);
+								}
+							}
+						}
+					}
+				}
+				MessageDialog.openInformation(shell, DESCRIPTION, "The peak target(s) have been transfered successfully.");
+			} else {
+				showWarnMessage(shell, "The sink chromatogram contains no peaks.");
+			}
+		} else {
+			showWarnMessage(shell, "The source chromatogram contains no peaks.");
+		}
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private void transferScans(IChromatogramSelection chromatogramSelectionSource, IChromatogramSelection chromatogramSelectionSink, Shell shell) {
+
+		List<IScan> scansSource = ChromatogramDataSupport.getIdentifiedScans(chromatogramSelectionSource.getChromatogram(), chromatogramSelectionSource);
+		//
+		if(scansSource.size() > 0) {
+			/*
+			 * Settings
+			 */
+			IChromatogram chromatogramSink = chromatogramSelectionSink.getChromatogram();
+			boolean useBestTargetOnly = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
+			//
+			for(IScan scanSource : scansSource) {
+				int scanNumber = chromatogramSink.getScanNumber(scanSource.getRetentionTime());
+				if(scanNumber > 0) {
+					IScan scanSink = chromatogramSink.getScan(scanNumber);
+					if(scanSink != null) {
+						if(useBestTargetOnly) {
+							IIdentificationTarget peakTarget = IIdentificationTarget.getBestIdentificationTarget(scanSource.getTargets(), comparator);
+							transferScanTarget(peakTarget, scanSink);
+						} else {
+							for(IIdentificationTarget scanTarget : scanSource.getTargets()) {
+								transferScanTarget(scanTarget, scanSink);
+							}
+						}
+					}
+				}
+			}
+			MessageDialog.openInformation(shell, DESCRIPTION, "The scan target(s) have been transfered successfully.");
+		} else {
+			showWarnMessage(shell, "The source chromatogram contains no identified scans.");
 		}
 	}
 
@@ -421,9 +502,18 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 
 	private void transferPeakTarget(IIdentificationTarget identificationTargetSource, IPeak peakSink) {
 
+		peakSink.getTargets().add(copyIdentificationTarget(identificationTargetSource));
+	}
+
+	private void transferScanTarget(IIdentificationTarget identificationTargetSource, IScan scanSink) {
+
+		scanSink.getTargets().add(copyIdentificationTarget(identificationTargetSource));
+	}
+
+	private IIdentificationTarget copyIdentificationTarget(IIdentificationTarget identificationTargetSource) {
+
 		ILibraryInformation libraryInformation = new LibraryInformation(identificationTargetSource.getLibraryInformation());
 		IComparisonResult comparisonResult = new ComparisonResult(identificationTargetSource.getComparisonResult());
-		IIdentificationTarget peakTargetSink = new IdentificationTarget(libraryInformation, comparisonResult);
-		peakSink.getTargets().add(peakTargetSink);
+		return new IdentificationTarget(libraryInformation, comparisonResult);
 	}
 }

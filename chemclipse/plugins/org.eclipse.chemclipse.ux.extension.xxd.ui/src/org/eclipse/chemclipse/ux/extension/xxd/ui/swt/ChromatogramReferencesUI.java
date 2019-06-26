@@ -51,7 +51,7 @@ public class ChromatogramReferencesUI extends Composite {
 	private Button buttonNext;
 	private Button buttonAdd;
 	private Button buttonRemove;
-	private Button buttonPeakTargetTransfer;
+	private Button buttonTargetTransfer;
 	//
 	private boolean isExpanded = false;
 	//
@@ -95,7 +95,7 @@ public class ChromatogramReferencesUI extends Composite {
 		buttonNext = createButtonSelectNextChromatogram(control);
 		buttonRemove = createButtonRemoveReference(control);
 		buttonAdd = createButtonAddReference(control);
-		buttonPeakTargetTransfer = createButtonPeakTargetTransfer(control);
+		buttonTargetTransfer = createButtonTargetTransfer(control);
 		//
 		enableButtons();
 		showWidgets(isExpanded);
@@ -250,7 +250,7 @@ public class ChromatogramReferencesUI extends Composite {
 		return button;
 	}
 
-	private Button createButtonPeakTargetTransfer(Composite parent) {
+	private Button createButtonTargetTransfer(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -268,7 +268,7 @@ public class ChromatogramReferencesUI extends Composite {
 					TargetTransferDialog dialog = new TargetTransferDialog(e.display.getActiveShell(), chromatogramSelection);
 					dialog.open();
 				} else {
-					MessageDialog.openWarning(e.display.getActiveShell(), "Target Transfer", "Please select a source chromatogram.");
+					MessageDialog.openWarning(e.display.getActiveShell(), "Peak Target Transfer", "Please select a source chromatogram.");
 				}
 			}
 		});
@@ -375,7 +375,7 @@ public class ChromatogramReferencesUI extends Composite {
 		buttonNext.setEnabled(selectionIndex < size - 1);
 		buttonRemove.setEnabled(selectionIndex > 0); // 0 is the master can can't be removed
 		buttonAdd.setEnabled(selectionIndex == 0); // 0 references can be added only to master
-		buttonPeakTargetTransfer.setEnabled(true);
+		buttonTargetTransfer.setEnabled(true);
 	}
 
 	private void showWidgets(boolean expanded) {
@@ -385,7 +385,7 @@ public class ChromatogramReferencesUI extends Composite {
 		PartSupport.setControlVisibility(buttonNext, expanded);
 		PartSupport.setControlVisibility(buttonRemove, expanded);
 		PartSupport.setControlVisibility(buttonAdd, expanded);
-		PartSupport.setControlVisibility(buttonPeakTargetTransfer, expanded);
+		PartSupport.setControlVisibility(buttonTargetTransfer, expanded);
 		//
 		Composite master = getMasterComposite();
 		master.layout(true);
