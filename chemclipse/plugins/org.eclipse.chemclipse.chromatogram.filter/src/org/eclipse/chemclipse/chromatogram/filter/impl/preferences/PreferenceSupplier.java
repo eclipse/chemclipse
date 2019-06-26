@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,7 +16,9 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.filter.Activator;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSelection;
-import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsTargetTransfer;
+import org.eclipse.chemclipse.chromatogram.filter.impl.settings.PeakTargetsToReferencesSettings;
+import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToPeakSettings;
+import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToReferencesSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -32,8 +34,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_STOP_RETENTION_TIME_MINUTES = "stopRetentionTimeMinutes";
 	public static final double DEF_STOP_RETENTION_TIME_MINUTES = 10;
 	//
-	public static final String P_TRANSFER_CLOSEST_SCAN = "transferClosestScan";
-	public static final boolean DEF_TRANSFER_CLOSEST_SCAN = false;
+	public static final String P_STTP_TRANSFER_CLOSEST_SCAN = "scanTargetsToPeakTransferClosestScan";
+	public static final boolean DEF_STTP_TRANSFER_CLOSEST_SCAN = false;
+	public static final String P_STTP_USE_BEST_TARGET_ONLY = "scanTargetsToPeakUseBestTargetOnly";
+	public static final boolean DEF_STTP_USE_BEST_TARGET_ONLY = false;
+	//
+	public static final String P_PTTR_USE_BEST_TARGET_ONLY = "peakTargetsToReferencesUseBestTargetOnly";
+	public static final boolean DEF_PTTR_USE_BEST_TARGET_ONLY = false;
+	public static final String P_DELTA_RETENTION_TIME_MINUTES = "peakTargetsToReferencesDeltaRetentionTimeMinutes";
+	public static final double DEF_DELTA_RETENTION_TIME_MINUTES = 0.1;
+	//
+	public static final String P_STTR_USE_BEST_TARGET_ONLY = "scanTargetsToReferencesUseBestTargetOnly";
+	public static final boolean DEF_STTR_USE_BEST_TARGET_ONLY = false;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -63,7 +75,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_START_RETENTION_TIME_MINUTES, Double.toString(DEF_START_RETENTION_TIME_MINUTES));
 		defaultValues.put(P_STOP_RETENTION_TIME_MINUTES, Double.toString(DEF_STOP_RETENTION_TIME_MINUTES));
-		defaultValues.put(P_TRANSFER_CLOSEST_SCAN, Boolean.toString(DEF_TRANSFER_CLOSEST_SCAN));
+		//
+		defaultValues.put(P_STTP_TRANSFER_CLOSEST_SCAN, Boolean.toString(DEF_STTP_TRANSFER_CLOSEST_SCAN));
+		defaultValues.put(P_STTP_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_STTP_USE_BEST_TARGET_ONLY));
+		//
+		defaultValues.put(P_PTTR_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_PTTR_USE_BEST_TARGET_ONLY));
+		defaultValues.put(P_DELTA_RETENTION_TIME_MINUTES, Double.toString(DEF_DELTA_RETENTION_TIME_MINUTES));
+		//
+		defaultValues.put(P_STTR_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_STTR_USE_BEST_TARGET_ONLY));
+		//
 		return defaultValues;
 	}
 
@@ -82,11 +102,29 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return filterSettings;
 	}
 
-	public static FilterSettingsTargetTransfer getFilterSettingsTargetTransfer() {
+	public static ScanTargetsToPeakSettings getScanToPeakTargetTransferSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		FilterSettingsTargetTransfer filterSettings = new FilterSettingsTargetTransfer();
-		filterSettings.setTransferClosestScan(preferences.getBoolean(P_TRANSFER_CLOSEST_SCAN, DEF_TRANSFER_CLOSEST_SCAN));
-		return filterSettings;
+		ScanTargetsToPeakSettings settings = new ScanTargetsToPeakSettings();
+		settings.setTransferClosestScan(preferences.getBoolean(P_STTP_TRANSFER_CLOSEST_SCAN, DEF_STTP_TRANSFER_CLOSEST_SCAN));
+		settings.setUseBestTargetOnly(preferences.getBoolean(P_STTP_USE_BEST_TARGET_ONLY, DEF_STTP_USE_BEST_TARGET_ONLY));
+		return settings;
+	}
+
+	public static PeakTargetsToReferencesSettings getPeaksToReferencesTransferSettings() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		PeakTargetsToReferencesSettings settings = new PeakTargetsToReferencesSettings();
+		settings.setUseBestTargetOnly(preferences.getBoolean(P_PTTR_USE_BEST_TARGET_ONLY, DEF_PTTR_USE_BEST_TARGET_ONLY));
+		settings.setDeltaRetentionTime(preferences.getDouble(P_DELTA_RETENTION_TIME_MINUTES, DEF_DELTA_RETENTION_TIME_MINUTES));
+		return settings;
+	}
+
+	public static ScanTargetsToReferencesSettings getScansToReferencesTransferSettings() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		ScanTargetsToReferencesSettings settings = new ScanTargetsToReferencesSettings();
+		settings.setUseBestTargetOnly(preferences.getBoolean(P_STTR_USE_BEST_TARGET_ONLY, DEF_STTR_USE_BEST_TARGET_ONLY));
+		return settings;
 	}
 }

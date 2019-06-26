@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,7 +36,6 @@ public class ChromatogramSelection<T extends IChromatogramPeak, C extends IChrom
 	private static final Logger logger = Logger.getLogger(ChromatogramSelection.class);
 
 	public ChromatogramSelection(C chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
-
 		super(chromatogram, fireUpdate);
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
@@ -46,7 +45,6 @@ public class ChromatogramSelection<T extends IChromatogramPeak, C extends IChrom
 	}
 
 	public ChromatogramSelection(C chromatogram) throws ChromatogramIsNullException {
-
 		this(chromatogram, true);
 	}
 

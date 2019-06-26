@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,14 +15,11 @@ package org.eclipse.chemclipse.chromatogram.filter.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.impl.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsTargetTransfer;
+import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToPeakSettings;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -37,7 +34,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 @SuppressWarnings("rawtypes")
-public class ChromatogramFilterTargetTransfer extends AbstractChromatogramFilter implements IChromatogramFilter {
+public class ScanTargetsToPeakFilter extends AbstractTransferFilter {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -45,9 +42,9 @@ public class ChromatogramFilterTargetTransfer extends AbstractChromatogramFilter
 
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(chromatogramFilterSettings instanceof FilterSettingsTargetTransfer) {
-				FilterSettingsTargetTransfer filterSettings = (FilterSettingsTargetTransfer)chromatogramFilterSettings;
-				transferScanTargets(chromatogramSelection, filterSettings);
+			if(chromatogramFilterSettings instanceof ScanTargetsToPeakSettings) {
+				ScanTargetsToPeakSettings settings = (ScanTargetsToPeakSettings)chromatogramFilterSettings;
+				transferTargets(chromatogramSelection, settings);
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Targets transfered successfully."));
 			}
 		}
@@ -58,18 +55,17 @@ public class ChromatogramFilterTargetTransfer extends AbstractChromatogramFilter
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		FilterSettingsTargetTransfer filterSettings = PreferenceSupplier.getFilterSettingsTargetTransfer();
-		return applyFilter(chromatogramSelection, filterSettings, monitor);
+		ScanTargetsToPeakSettings settings = PreferenceSupplier.getScanToPeakTargetTransferSettings();
+		return applyFilter(chromatogramSelection, settings, monitor);
 	}
 
-	@SuppressWarnings("unchecked")
-	private void transferScanTargets(IChromatogramSelection chromatogramSelection, FilterSettingsTargetTransfer filterSettings) {
+	private void transferTargets(IChromatogramSelection chromatogramSelection, ScanTargetsToPeakSettings settings) {
 
-		List<? extends IPeak> peaks = chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
 		List<IScan> identifiedScans = extractIdentifiedScans(chromatogramSelection);
+		List<? extends IPeak> peaks = extractPeaks(chromatogramSelection);
 		//
 		for(IPeak peak : peaks) {
-			List<IScan> targetScans = getScansInPeakRange(peak, identifiedScans, filterSettings);
+			List<IScan> targetScans = getScansInPeakRange(peak, identifiedScans, settings);
 			for(IScan targetScan : targetScans) {
 				for(IIdentificationTarget sourceTarget : targetScan.getTargets()) {
 					ILibraryInformation libraryInformation = new LibraryInformation(sourceTarget.getLibraryInformation());
@@ -81,27 +77,7 @@ public class ChromatogramFilterTargetTransfer extends AbstractChromatogramFilter
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private List<IScan> extractIdentifiedScans(IChromatogramSelection chromatogramSelection) {
-
-		IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
-		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-		int startScan = chromatogram.getScanNumber(startRetentionTime);
-		int stopScan = chromatogram.getScanNumber(stopRetentionTime);
-		//
-		List<IScan> identifiedScans = new ArrayList<>();
-		for(int i = startScan; i <= stopScan; i++) {
-			IScan scan = chromatogram.getScan(i);
-			if(scan.getTargets().size() > 0) {
-				identifiedScans.add(scan);
-			}
-		}
-		//
-		return identifiedScans;
-	}
-
-	private List<IScan> getScansInPeakRange(IPeak peak, List<IScan> scans, FilterSettingsTargetTransfer filterSettings) {
+	private List<IScan> getScansInPeakRange(IPeak peak, List<IScan> scans, ScanTargetsToPeakSettings settings) {
 
 		List<IScan> targetScans = new ArrayList<>();
 		//
@@ -109,7 +85,7 @@ public class ChromatogramFilterTargetTransfer extends AbstractChromatogramFilter
 		int startRetentionTime = peakModel.getStartRetentionTime();
 		int stopRetentionTime = peakModel.getStopRetentionTime();
 		int peakMaxRetentionTime = peakModel.getRetentionTimeAtPeakMaximum();
-		boolean transferClosestScan = filterSettings.isTransferClosestScan();
+		boolean transferClosestScan = settings.isTransferClosestScan();
 		//
 		for(IScan scan : scans) {
 			int retentionTime = scan.getRetentionTime();

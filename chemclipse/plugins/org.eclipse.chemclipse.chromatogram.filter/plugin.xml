@@ -13,11 +13,26 @@
       </ChromatogramFilterSupplier>
       <ChromatogramFilterSupplier
             description="This filter transfers identification targets to peaks."
-            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ChromatogramFilterTargetTransfer"
+            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ScanTargetsToPeakFilter"
             filterName="Scan Target to Peak Transfer"
-            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsTargetTransfer"
-            id="org.eclipse.chemclipse.chromatogram.filter.targetTransferChromatogramSelection">
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToPeakSettings"
+            id="org.eclipse.chemclipse.chromatogram.filter.scanTargetsToPeakTransfer">
+      </ChromatogramFilterSupplier>
+      
+      <ChromatogramFilterSupplier
+            description="This filter transfers peak identification targets to peaks in all listed reference chromatograms."
+            filter="org.eclipse.chemclipse.chromatogram.filter.impl.PeakTargetsToReferencesFilter"
+            filterName="Peak Targets to References Transfer"
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.PeakTargetsToReferencesSettings"
+            id="org.eclipse.chemclipse.chromatogram.filter.peakTargetsToReferencesTransfer">
       </ChromatogramFilterSupplier>      
+      <ChromatogramFilterSupplier
+            description="This filter transfers scan identification targets to scans in all listed reference chromatograms."
+            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ScanTargetsToReferencesFilter"
+            filterName="Scan Targets to References Transfer"
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToReferencesSettings"
+            id="org.eclipse.chemclipse.chromatogram.filter.scanTargetsToReferencesTransfer">
+      </ChromatogramFilterSupplier>           
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

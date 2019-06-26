@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -40,9 +40,20 @@ public class FilterPreferencePage extends FieldEditorPreferencePage implements I
 		addField(new LabelFieldEditor("Chromatogram Selection Filter", getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceSupplier.P_START_RETENTION_TIME_MINUTES, "Start Retention Time (Minutes)", PreferenceSupplier.MIN_RETENTION_TIME_MINUTES, PreferenceSupplier.MAX_RETENTION_TIME_MINUTES, getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceSupplier.P_STOP_RETENTION_TIME_MINUTES, "Stop Retention Time (Minutes)", PreferenceSupplier.MIN_RETENTION_TIME_MINUTES, PreferenceSupplier.MAX_RETENTION_TIME_MINUTES, getFieldEditorParent()));
+		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Scan -> Peak Target Transfer", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_TRANSFER_CLOSEST_SCAN, "Transfer closest scan", getFieldEditorParent()));
+		addField(new LabelFieldEditor("Scan Targets -> Peak Transfer", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_STTP_TRANSFER_CLOSEST_SCAN, "Transfer Closest Scan", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_STTP_USE_BEST_TARGET_ONLY, "Use Best Target Only", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Peak Targets -> Reference Chromatograms Transfer", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_PTTR_USE_BEST_TARGET_ONLY, "Use Best Target Only", getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceSupplier.P_DELTA_RETENTION_TIME_MINUTES, "Delta Retention Time (Minutes)", PreferenceSupplier.MIN_RETENTION_TIME_MINUTES, PreferenceSupplier.MAX_RETENTION_TIME_MINUTES, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Scan Targets -> Reference Chromatograms Transfer", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_STTR_USE_BEST_TARGET_ONLY, "Use Best Target Only", getFieldEditorParent()));
 	}
 
 	/*
