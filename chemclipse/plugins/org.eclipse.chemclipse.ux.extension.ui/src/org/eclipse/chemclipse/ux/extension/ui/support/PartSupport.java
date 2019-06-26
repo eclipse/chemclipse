@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.ui.support;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -121,24 +122,37 @@ public class PartSupport {
 	 */
 	public static MPart get3xEditorPart(String editorId) {
 
-		MPart part = null;
-		/*
-		 * Exception "Application does not have an active window"
-		 */
 		if(partService != null) {
 			try {
-				exitloop:
-				for(MPart mpart : partService.getParts()) {
-					if(mpart.getElementId().equals(COMPATIBILITY_EDITOR_ELEMENT_ID) && mpart.getTags().contains(editorId)) {
-						part = mpart;
-						break exitloop;
+				for(MPart mPart : partService.getParts()) {
+					if(is3xEditorPart(mPart, editorId)) {
+						return mPart;
 					}
 				}
 			} catch(Exception e) {
+				/*
+				 * Handle "Application does not have an active window"
+				 */
 				logger.warn(e);
+				logger.info("Try to find the 3x editor part alternatively.");
+				//
+				MApplication application = ModelSupportAddon.getApplication();
+				if(application != null) {
+					EModelService service = ModelSupportAddon.getModelService();
+					if(service != null) {
+						List<MPart> parts = service.findElements(application, null, MPart.class, null);
+						if(parts != null) {
+							for(MPart mPart : parts) {
+								if(is3xEditorPart(mPart, editorId)) {
+									return mPart;
+								}
+							}
+						}
+					}
+				}
 			}
 		}
-		return part;
+		return null;
 	}
 
 	public static MPart getPart(String partId, String partStackId) {
@@ -441,5 +455,10 @@ public class PartSupport {
 		imageMap.put(false, defaultMap);
 		//
 		buttonImageMap.put(partId, imageMap);
+	}
+
+	private static boolean is3xEditorPart(MPart mPart, String editorId) {
+
+		return mPart.getElementId().equals(COMPATIBILITY_EDITOR_ELEMENT_ID) && mPart.getTags().contains(editorId);
 	}
 }
