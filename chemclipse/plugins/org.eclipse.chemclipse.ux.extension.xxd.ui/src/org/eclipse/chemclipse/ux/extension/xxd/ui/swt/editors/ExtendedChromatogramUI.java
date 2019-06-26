@@ -199,7 +199,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private static final String TOOLBAR_INFO = "TOOLBAR_INFO";
 	private static final String TOOLBAR_RETENTION_INDICES = "TOOLBAR_RETENTION_INDICES";
 	private static final String TOOLBAR_METHOD = "TOOLBAR_METHOD";
-	private static final String TOOLBAR_PEAK_TARGET_TRANSFER = "TOOLBAR_PEAK_TARGET_TRANSFER";
 	private static final String TOOLBAR_CHROMATOGRAM_ALIGNMENT = "TOOLBAR_CHROMATOGRAM_ALIGNMENT";
 	private static final String TOOLBAR_EDIT = "TOOLBAR_EDIT";
 	private Map<String, Composite> toolbars = new HashMap<>();
@@ -231,7 +230,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
-	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private ChartSupport chartSupport = new ChartSupport(Activator.getDefault().getPreferenceStore());
 	//
@@ -418,7 +416,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 		this.chromatogramSelection = chromatogramSelection;
 		chromatogramActionUI.setChromatogramActionMenu(chromatogramSelection);
-		updateToolbar(toolbars.get(TOOLBAR_PEAK_TARGET_TRANSFER), chromatogramSelection);
 		updateToolbar(toolbars.get(TOOLBAR_CHROMATOGRAM_ALIGNMENT), chromatogramSelection);
 		//
 		if(chromatogramSelection != null) {
@@ -1039,7 +1036,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			PlotSymbolType symbolTypeActiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE));
 			PlotSymbolType symbolTypeInactiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE));
 			//
-			List<? extends IPeak> peaks = chromatogramDataSupport.getPeaks(chromatogram);
+			List<? extends IPeak> peaks = ChromatogramDataSupport.getPeaks(chromatogram);
 			List<IPeak> peaksActiveNormal = new ArrayList<>();
 			List<IPeak> peaksInactiveNormal = new ArrayList<>();
 			List<IPeak> peaksActiveISTD = new ArrayList<>();
@@ -1235,7 +1232,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		toolbarMain = createToolbarMain(parent);
 		toolbars.put(TOOLBAR_INFO, createToolbarInfo(parent));
 		toolbars.put(TOOLBAR_EDIT, createToolbarEdit(parent));
-		toolbars.put(TOOLBAR_PEAK_TARGET_TRANSFER, createPeakTargetTransferUI(parent));
 		toolbars.put(TOOLBAR_CHROMATOGRAM_ALIGNMENT, createChromatogramAlignmentUI(parent));
 		toolbars.put(TOOLBAR_METHOD, createToolbarMethod(parent));
 		toolbars.put(TOOLBAR_RETENTION_INDICES, retentionIndexUI = createToolbarRetentionIndexUI(parent));
@@ -1250,7 +1246,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		PartSupport.setCompositeVisibility(toolbarMain, true);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_INFO), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_EDIT), false);
-		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_PEAK_TARGET_TRANSFER), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_CHROMATOGRAM_ALIGNMENT), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_METHOD), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_RETENTION_INDICES), false);
@@ -1271,7 +1266,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
 		createChromatogramReferencesUI(composite);
 		createToggleToolbarButton(composite, "Toggle the edit toolbar.", IApplicationImage.IMAGE_EDIT, TOOLBAR_EDIT);
-		createToggleToolbarButton(composite, "Toggle the peak targets transfer toolbar.", IApplicationImage.IMAGE_TARGETS, TOOLBAR_PEAK_TARGET_TRANSFER);
 		createToggleToolbarButton(composite, "Toggle the chromatogram alignment toolbar.", IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, TOOLBAR_CHROMATOGRAM_ALIGNMENT);
 		createToggleToolbarButton(composite, "Toggle the method toolbar.", IApplicationImage.IMAGE_METHOD, TOOLBAR_METHOD);
 		chromatogramActionUI = createChromatogramActionUI(composite);
@@ -1336,13 +1330,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		});
 		//
 		return methodSupportUI;
-	}
-
-	private PeakTargetTransferUI createPeakTargetTransferUI(Composite parent) {
-
-		PeakTargetTransferUI composite = new PeakTargetTransferUI(parent, SWT.NONE);
-		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		return composite;
 	}
 
 	private ChromatogramAlignmentUI createChromatogramAlignmentUI(Composite parent) {
@@ -1640,7 +1627,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private void updateLabel() {
 
 		if(chromatogramSelection != null) {
-			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabelExtended(chromatogramSelection.getChromatogram()));
+			labelChromatogramInfo.setText(ChromatogramDataSupport.getChromatogramLabelExtended(chromatogramSelection.getChromatogram()));
 		} else {
 			labelChromatogramInfo.setText("");
 		}

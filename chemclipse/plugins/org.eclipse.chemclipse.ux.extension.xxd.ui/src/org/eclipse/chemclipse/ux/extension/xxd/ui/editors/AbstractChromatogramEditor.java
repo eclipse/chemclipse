@@ -292,11 +292,8 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		processChromatogram(chromatogramSelection);
 		//
 		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
-			part.setLabel(chromatogram.getName() + " " + chromatogramDataSupport.getChromatogramType(chromatogramSelection));
+			part.setLabel(ChromatogramDataSupport.getChromatogramEditorLabel(chromatogramSelection));
 			dirtyable.setDirty(true);
-			//
 			chromatogramSelection.update(true);
 		}
 	}

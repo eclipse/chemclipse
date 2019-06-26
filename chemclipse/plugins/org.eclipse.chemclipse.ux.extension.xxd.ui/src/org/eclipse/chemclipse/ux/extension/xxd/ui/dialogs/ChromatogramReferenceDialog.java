@@ -34,7 +34,6 @@ import org.eclipse.swt.widgets.Shell;
 public class ChromatogramReferenceDialog extends Dialog {
 
 	private IChromatogramSelection chromatogramSelection = null;
-	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 
 	public ChromatogramReferenceDialog(Shell parentShell) {
@@ -93,7 +92,7 @@ public class ChromatogramReferenceDialog extends Dialog {
 				if(element instanceof IChromatogramSelection) {
 					IChromatogramSelection chromatogramSelection = (IChromatogramSelection)element;
 					String name = chromatogramSelection.getChromatogram().getName();
-					String type = chromatogramDataSupport.getChromatogramType(chromatogramSelection);
+					String type = ChromatogramDataSupport.getChromatogramType(chromatogramSelection);
 					return getChromatogramLabel(name, type, "Editor");
 				}
 				return null;

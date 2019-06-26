@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,8 +26,8 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ChromatogramSourceCombo extends Composite {
 
-	private static final String SOURCE_REFERENCES = "Referenced Chromatograms";
-	private static final String SOURCE_EDITORS = "Editor Chromatograms";
+	private static final String SOURCE_REFERENCES = "Internal (This Chromatogram)";
+	private static final String SOURCE_EDITORS = "External (Editor Chromatogram)";
 	//
 	private List<String> sources = new ArrayList<String>();
 	private ComboViewer comboViewer;
@@ -81,7 +81,7 @@ public class ChromatogramSourceCombo extends Composite {
 				return null;
 			}
 		});
-		combo.setToolTipText("Select the chromatogram source.");
+		combo.setToolTipText("Select the chromatogram destination.");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 200;
 		combo.setLayoutData(gridData);

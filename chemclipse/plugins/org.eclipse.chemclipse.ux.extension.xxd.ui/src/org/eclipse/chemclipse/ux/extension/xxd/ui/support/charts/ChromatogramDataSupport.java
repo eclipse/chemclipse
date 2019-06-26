@@ -39,6 +39,17 @@ public class ChromatogramDataSupport {
 
 	private static PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 
+	@SuppressWarnings("rawtypes")
+	public static String getChromatogramEditorLabel(IChromatogramSelection<?, ?> chromatogramSelection) {
+
+		if(chromatogramSelection != null) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			return chromatogram.getName() + " " + getChromatogramType(chromatogramSelection);
+		} else {
+			return "";
+		}
+	}
+
 	public static String getChromatogramType(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(chromatogramSelection != null) {

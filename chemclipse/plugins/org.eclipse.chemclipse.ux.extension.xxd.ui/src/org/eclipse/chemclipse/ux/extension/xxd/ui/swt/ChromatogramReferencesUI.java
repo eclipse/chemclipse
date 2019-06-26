@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramReferenceDialog;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.TargetTransferDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
@@ -50,13 +51,12 @@ public class ChromatogramReferencesUI extends Composite {
 	private Button buttonNext;
 	private Button buttonAdd;
 	private Button buttonRemove;
+	private Button buttonPeakTargetTransfer;
 	//
 	private boolean isExpanded = false;
 	//
 	private IChromatogramReferencesListener chromatogramReferencesListener;
 	private List<IChromatogramSelection<?, ?>> chromatogramMasterAndReferences = null; // Init on first update.
-	//
-	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 
 	public ChromatogramReferencesUI(Composite parent, int style) {
 		super(parent, style);
@@ -84,7 +84,7 @@ public class ChromatogramReferencesUI extends Composite {
 		setLayout(new FillLayout());
 		//
 		control = new Composite(this, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(6, false);
+		GridLayout gridLayout = new GridLayout(7, false);
 		gridLayout.horizontalSpacing = 0;
 		gridLayout.marginWidth = 0;
 		control.setLayout(gridLayout);
@@ -95,6 +95,7 @@ public class ChromatogramReferencesUI extends Composite {
 		buttonNext = createButtonSelectNextChromatogram(control);
 		buttonRemove = createButtonRemoveReference(control);
 		buttonAdd = createButtonAddReference(control);
+		buttonPeakTargetTransfer = createButtonPeakTargetTransfer(control);
 		//
 		enableButtons();
 		showWidgets(isExpanded);
@@ -223,7 +224,7 @@ public class ChromatogramReferencesUI extends Composite {
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings("rawtypes")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
@@ -249,21 +250,44 @@ public class ChromatogramReferencesUI extends Composite {
 		return button;
 	}
 
+	private Button createButtonPeakTargetTransfer(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Transfer the peak targets");
+		button.setLayoutData(new GridData());
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TARGETS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@SuppressWarnings("rawtypes")
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IChromatogramSelection chromatogramSelection = getActiveSelection();
+				if(chromatogramSelection != null) {
+					TargetTransferDialog dialog = new TargetTransferDialog(e.display.getActiveShell(), chromatogramSelection);
+					dialog.open();
+				} else {
+					MessageDialog.openWarning(e.display.getActiveShell(), "Target Transfer", "Please select a source chromatogram.");
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	@SuppressWarnings("rawtypes")
 	private void selectChromatogram(int index) {
 
 		comboChromatograms.select(index);
-		if(chromatogramMasterAndReferences != null) {
-			int selectionIndex = comboChromatograms.getSelectionIndex();
-			if(selectionIndex >= 0 && selectionIndex < chromatogramMasterAndReferences.size()) {
-				IChromatogramSelection chromatogramSelection = chromatogramMasterAndReferences.get(selectionIndex);
-				if(chromatogramSelection != null) {
-					fireUpdate(chromatogramSelection);
-				}
-			}
+		IChromatogramSelection chromatogramSelection = getActiveSelection();
+		if(chromatogramSelection != null) {
+			fireUpdate(chromatogramSelection);
 		}
 		enableButtons();
 	}
 
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection getMasterSelection() {
 
 		if(chromatogramMasterAndReferences != null) {
@@ -275,6 +299,22 @@ public class ChromatogramReferencesUI extends Composite {
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
+	private IChromatogramSelection getActiveSelection() {
+
+		if(chromatogramMasterAndReferences != null) {
+			int selectionIndex = comboChromatograms.getSelectionIndex();
+			if(selectionIndex >= 0 && selectionIndex < chromatogramMasterAndReferences.size()) {
+				IChromatogramSelection chromatogramSelection = chromatogramMasterAndReferences.get(selectionIndex);
+				if(chromatogramSelection != null) {
+					return chromatogramSelection;
+				}
+			}
+		}
+		return null;
+	}
+
+	@SuppressWarnings("rawtypes")
 	private void reloadReferencedChromatograms(IChromatogramSelection chromatogramSelection, int index) {
 
 		chromatogramMasterAndReferences = null;
@@ -285,6 +325,7 @@ public class ChromatogramReferencesUI extends Composite {
 	/*
 	 * Update the referenced chromatogram selections once on initialization.
 	 */
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void updateReferencedChromatograms(IChromatogramSelection chromatogramSelection) {
 
 		if(chromatogramMasterAndReferences == null && chromatogramSelection != null) {
@@ -308,7 +349,7 @@ public class ChromatogramReferencesUI extends Composite {
 			String[] references = new String[size];
 			for(int i = 0; i < size; i++) {
 				IChromatogramSelection chromatogramSelectionX = chromatogramMasterAndReferences.get(i);
-				String type = chromatogramDataSupport.getChromatogramType(chromatogramSelectionX);
+				String type = ChromatogramDataSupport.getChromatogramType(chromatogramSelectionX);
 				if(i == 0) {
 					references[i] = "Master Chromatogram " + type;
 				} else {
@@ -334,7 +375,7 @@ public class ChromatogramReferencesUI extends Composite {
 		buttonNext.setEnabled(selectionIndex < size - 1);
 		buttonRemove.setEnabled(selectionIndex > 0); // 0 is the master can can't be removed
 		buttonAdd.setEnabled(selectionIndex == 0); // 0 references can be added only to master
-		//
+		buttonPeakTargetTransfer.setEnabled(true);
 	}
 
 	private void showWidgets(boolean expanded) {
@@ -344,6 +385,7 @@ public class ChromatogramReferencesUI extends Composite {
 		PartSupport.setControlVisibility(buttonNext, expanded);
 		PartSupport.setControlVisibility(buttonRemove, expanded);
 		PartSupport.setControlVisibility(buttonAdd, expanded);
+		PartSupport.setControlVisibility(buttonPeakTargetTransfer, expanded);
 		//
 		Composite master = getMasterComposite();
 		master.layout(true);
@@ -366,6 +408,7 @@ public class ChromatogramReferencesUI extends Composite {
 		return master;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void fireUpdate(IChromatogramSelection chromatogramSelection) {
 
 		if(chromatogramReferencesListener != null) {
