@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.chemclipse.model.core.AbstractMeasurement;
 import org.eclipse.chemclipse.model.core.FilteredMeasurement;
@@ -28,14 +28,14 @@ import org.eclipse.chemclipse.model.core.FilteredMeasurement;
 public class FilteredSpectrumMeasurement extends FilteredMeasurement<SpectrumMeasurement> implements SpectrumMeasurement {
 
 	private static final long serialVersionUID = -4028057722405624626L;
-	private Collection<? extends SpectrumSignal> signals;
+	private List<? extends SpectrumSignal> signals;
 
 	public FilteredSpectrumMeasurement(SpectrumMeasurement original) {
 		super(original);
 	}
 
 	@Override
-	public Collection<? extends SpectrumSignal> getSignals() {
+	public List<? extends SpectrumSignal> getSignals() {
 
 		if(signals != null) {
 			return signals;
@@ -43,7 +43,7 @@ public class FilteredSpectrumMeasurement extends FilteredMeasurement<SpectrumMea
 		return getFilteredObject().getSignals();
 	}
 
-	public void setSignals(Collection<? extends SpectrumSignal> signals) {
+	public void setSignals(List<? extends SpectrumSignal> signals) {
 
 		this.signals = signals;
 	}

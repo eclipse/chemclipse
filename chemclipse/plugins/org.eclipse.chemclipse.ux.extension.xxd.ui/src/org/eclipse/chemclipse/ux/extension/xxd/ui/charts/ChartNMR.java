@@ -19,11 +19,11 @@ import java.util.Locale;
 
 import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ScanToSecondsConverter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.LineStyle;
+import org.eclipse.swtchart.extensions.axisconverter.PassThroughConverter;
 import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
@@ -96,7 +96,7 @@ public class ChartNMR extends LineChart {
 		/*
 		 * X
 		 */
-		ISecondaryAxisSettings secondaryAxisSettingsX1 = new SecondaryAxisSettings("t1 (sec)", new ScanToSecondsConverter());
+		ISecondaryAxisSettings secondaryAxisSettingsX1 = new SecondaryAxisSettings("t1 (sec)", new PassThroughConverter());
 		secondaryAxisSettingsX1.setPosition(Position.Primary);
 		secondaryAxisSettingsX1.setDecimalFormat(new DecimalFormat(("0.000"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		secondaryAxisSettingsX1.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
@@ -174,13 +174,9 @@ public class ChartNMR extends LineChart {
 		double[] xSeries = new double[size];
 		double[] ySeries = new double[size];
 		int index = 0;
-		for(ISignal fidSignal : signals) {
-			if(reverse) {
-				xSeries[index] = fidSignal.getX();
-			} else {
-				xSeries[size - 1 - index] = fidSignal.getX();
-			}
-			ySeries[index] = fidSignal.getY() + yOffset;
+		for(ISignal signal : signals) {
+			xSeries[index] = signal.getX();
+			ySeries[index] = signal.getY() + yOffset;
 			index++;
 		}
 		return new SeriesData(xSeries, ySeries, id);

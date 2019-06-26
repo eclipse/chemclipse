@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 
@@ -26,9 +26,10 @@ public interface FIDMeasurement extends IComplexSignalMeasurement<FIDSignal>, FI
 	double getFirstDataPointOffset();
 
 	/**
-	 *
+	 * Contains the signals of this {@link FIDMeasurement}, ordered with the lowest data time first
+	 * 
 	 * @return the signals that makes up this {@link FIDMeasurement}
 	 */
 	@Override
-	Collection<? extends FIDSignal> getSignals();
+	List<? extends FIDSignal> getSignals();
 }
