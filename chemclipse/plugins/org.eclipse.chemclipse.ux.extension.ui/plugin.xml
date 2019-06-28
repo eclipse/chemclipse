@@ -2,7 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.eclipse.chemclipse.ux.extension.ui.welcometile" name="Welcome Tile" schema="schema/org.eclipse.chemclipse.ux.extension.ui.welcometile.exsd"/>
-   <extension-point id="org.eclipse.chemclipse.ux.extension.ui.measurementResultVisualization" name="Measurement Result Visualization" schema="schema/org.eclipse.chemclipse.ux.extension.ui.measurementResultVisualization.exsd"/>
    <extension
          id="org.eclipse.chemclipse.ux.extension.ui.modelContribution"
          point="org.eclipse.e4.workbench.model">

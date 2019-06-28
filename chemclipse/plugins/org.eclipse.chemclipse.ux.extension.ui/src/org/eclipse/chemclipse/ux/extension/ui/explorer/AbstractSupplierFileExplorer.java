@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
@@ -210,7 +209,7 @@ public abstract class AbstractSupplierFileExplorer {
 								while(it.hasNext()) {
 									File f = (File)it.next();
 									if(f != null && f.isFile() && activeFileSupplier.isMatchMagicNumber(f)) {
-										DisplayUtils.getDisplay().asyncExec(new Runnable() {
+										viewer.getControl().getDisplay().asyncExec(new Runnable() {
 
 											@Override
 											public void run() {
@@ -277,7 +276,7 @@ public abstract class AbstractSupplierFileExplorer {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				DirectoryDialog directoryDialog = new DirectoryDialog(DisplayUtils.getShell(), SWT.READ_ONLY);
+				DirectoryDialog directoryDialog = new DirectoryDialog(e.display.getActiveShell(), SWT.READ_ONLY);
 				directoryDialog.setText("Select a directory.");
 				String pathname = directoryDialog.open();
 				if(pathname != null) {
@@ -309,7 +308,7 @@ public abstract class AbstractSupplierFileExplorer {
 				while(iterator.hasNext()) {
 					Object object = iterator.next();
 					if(object instanceof File) {
-						DisplayUtils.getDisplay().asyncExec(new Runnable() {
+						e.display.asyncExec(new Runnable() {
 
 							@Override
 							public void run() {
@@ -473,7 +472,7 @@ public abstract class AbstractSupplierFileExplorer {
 
 	private void setTreeViewerContent(TreeViewer treeViewer, File[] input) {
 
-		DisplayUtils.getDisplay().asyncExec(new Runnable() {
+		treeViewer.getControl().getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
