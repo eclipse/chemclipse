@@ -121,7 +121,7 @@ public class ScansExtractionSupport {
 			UnivariateFunction fun = interpolator.interpolate(retetnionTime, scanValues);
 			for(int i = beginRetentionTimeMax; i <= endRetentionTimeMin; i += retentionTimeWindow) {
 				double value = fun.value(i);
-				PeakSampleData d = new PeakSampleData(value);
+		PeakSampleData d = new PeakSampleData(value, null);
 				data.add(d);
 			}
 		}
@@ -188,7 +188,7 @@ public class ScansExtractionSupport {
 			NavigableMap<Integer, Float> scans = extractScans.get(sample.getName());
 			for(int i = beginRetentionTimeMax; i <= endRetentionTimeMin; i += retentionTimeWindow) {
 				Float value = getClosestScans(scans, i);
-				PeakSampleData d = new PeakSampleData(value);
+		PeakSampleData d = new PeakSampleData(value, null);
 				data.add(d);
 			}
 		}
@@ -218,10 +218,10 @@ public class ScansExtractionSupport {
 				Float value = scans.get(time);
 				PeakSampleData d;
 				if(value != null) {
-					d = new PeakSampleData(value);
+		    d = new PeakSampleData(value, null);
 				} else {
 					value = getClosestScans(scans, time);
-					d = new PeakSampleData(value);
+		    d = new PeakSampleData(value, null);
 				}
 				data.add(d);
 			}

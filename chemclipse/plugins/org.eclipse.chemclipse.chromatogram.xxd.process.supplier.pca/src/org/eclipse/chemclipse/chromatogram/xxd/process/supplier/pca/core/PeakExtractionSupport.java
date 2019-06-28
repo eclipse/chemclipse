@@ -173,7 +173,7 @@ public class PeakExtractionSupport {
 				int retentionTime = it.next().getRetentionTime();
 				IPeak peak = extractPeak.get(retentionTime);
 				if(peak != null) {
-					PeakSampleData sampleData = new PeakSampleData(peak.getIntegratedArea());
+		    PeakSampleData sampleData = new PeakSampleData(peak.getIntegratedArea(), peak);
 					sampleData.setPeak(peak);
 					sample.getSampleData().add(sampleData);
 				} else {

@@ -26,8 +26,8 @@ public class PeakSampleData extends SampleData implements ISampleData {
 		peak = Optional.empty();
 	}
 
-	public PeakSampleData(double data) {
-		super(data);
+    public PeakSampleData(double data, IPeak data2) {
+	super(data, data2);
 		peak = Optional.empty();
 	}
 
@@ -39,5 +39,6 @@ public class PeakSampleData extends SampleData implements ISampleData {
 	public void setPeak(IPeak peak) {
 
 		this.peak = Optional.of(peak);
+
 	}
 }

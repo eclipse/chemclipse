@@ -88,7 +88,8 @@ public class TestSupport {
 		for(double sampleData[] : data) {
 			final int iFinal = i;
 			IntStream.range(0, variables.length).forEach(variable -> //
-			samplesOutput.getSampleList().get(iFinal).getSampleData().add(new PeakSampleData(sampleData[variable])));
+	    samplesOutput.getSampleList().get(iFinal).getSampleData()
+		    .add(new PeakSampleData(sampleData[variable], null)));
 			i++;
 		}
 		return samplesOutput;

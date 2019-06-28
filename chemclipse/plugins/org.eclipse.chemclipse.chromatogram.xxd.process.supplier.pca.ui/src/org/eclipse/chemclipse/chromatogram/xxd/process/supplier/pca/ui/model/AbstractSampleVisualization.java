@@ -48,6 +48,10 @@ public abstract class AbstractSampleVisualization implements ISampleVisualizatio
 		setColorRgba(r, g, b, alpha);
 	}
 
+    protected ISample getDelegate() {
+	return delegator;
+    }
+
 	@Override
 	public IntegerProperty colorProperty() {
 
