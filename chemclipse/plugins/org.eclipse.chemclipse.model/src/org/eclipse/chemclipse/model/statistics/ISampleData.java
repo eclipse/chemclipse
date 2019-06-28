@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.statistics;
 
-public interface ISampleData {
+public interface ISampleData<T> {
 
 	double getData();
 
@@ -23,4 +23,6 @@ public interface ISampleData {
 	};
 
 	void setModifiedData(double normalizedData);
+
+    T getData2();
 }
