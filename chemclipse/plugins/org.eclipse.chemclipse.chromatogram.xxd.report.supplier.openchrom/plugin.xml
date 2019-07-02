@@ -10,7 +10,7 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.chromatogramReportASCII"
             reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core.Report1"
             reportName="OpenChrom Report (*.txt)"
-            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings">
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings1">
       </ChromatogramReportSupplier>
       <ChromatogramReportSupplier
             description="Chromatogram Report Area%."
@@ -19,7 +19,7 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.areapercentreport"
             reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core.Report2"
             reportName="Area Percent Report (*.txt)"
-            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings">
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings2">
       </ChromatogramReportSupplier>    
       <ChromatogramReportSupplier
             description="Chromatogram Quantitation Report."
@@ -28,7 +28,7 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.quantitationreport"
             reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core.Report3"
             reportName="Quantitation Report (*.txt)"
-            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings">
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings3">
       </ChromatogramReportSupplier>            
    </extension>
    <extension

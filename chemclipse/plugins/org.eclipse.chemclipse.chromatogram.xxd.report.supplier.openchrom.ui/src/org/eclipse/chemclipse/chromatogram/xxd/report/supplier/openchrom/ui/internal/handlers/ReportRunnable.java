@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,14 +23,17 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 public class ReportRunnable implements IRunnableWithProgress {
 
 	private File file;
+	@SuppressWarnings("rawtypes")
 	private IChromatogram chromatogram;
 	private static final String REPORT_SUPPLIER_ID = "org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.chromatogramReportASCII";
 
+	@SuppressWarnings("rawtypes")
 	public ReportRunnable(File file, IChromatogram chromatogram) {
 		this.file = file;
 		this.chromatogram = chromatogram;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 

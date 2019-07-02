@@ -19,7 +19,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings3;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -36,13 +36,13 @@ public class ReportWriter3 {
 
 	private static final String DELIMITER = "\t";
 	//
-	private DecimalFormat dfRetentionTime = ValueFormat.getDecimalFormatEnglish("0.00");
-	private DecimalFormat dfAreaNormal = ValueFormat.getDecimalFormatEnglish("0.0#E0");
-	private DecimalFormat dfConcentration = ValueFormat.getDecimalFormatEnglish("0.000");
+	private DecimalFormat decimalFormatRetentionTime = ValueFormat.getDecimalFormatEnglish("0.00");
+	private DecimalFormat decimalFormatAreaNormal = ValueFormat.getDecimalFormatEnglish("0.0#E0");
+	private DecimalFormat decimalFormatConcentration = ValueFormat.getDecimalFormatEnglish("0.000");
 	private DateFormat dateFormat = ValueFormat.getDateFormatEnglish();
 	private TargetExtendedComparator targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 
-	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, ReportSettings reportSettings, IProgressMonitor monitor) throws IOException {
+	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, ReportSettings3 reportSettings, IProgressMonitor monitor) throws IOException {
 
 		FileWriter fileWriter = new FileWriter(file, append);
 		PrintWriter printWriter = new PrintWriter(fileWriter);
@@ -99,7 +99,7 @@ public class ReportWriter3 {
 			IPeakModel peakModel = peak.getPeakModel();
 			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets(), targetExtendedComparator);
 			String identification = (libraryInformation != null) ? libraryInformation.getName() : "";
-			String retentionTime = dfRetentionTime.format(peakModel.getRetentionTimeAtPeakMaximum() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+			String retentionTime = decimalFormatRetentionTime.format(peakModel.getRetentionTimeAtPeakMaximum() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 			//
 			for(IQuantitationEntry quantitationEntry : peak.getQuantitationEntries()) {
 				printWriter.print("P" + i);
@@ -110,9 +110,9 @@ public class ReportWriter3 {
 				printWriter.print(DELIMITER);
 				printWriter.print(retentionTime);
 				printWriter.print(DELIMITER);
-				printWriter.print(dfAreaNormal.format(quantitationEntry.getArea()));
+				printWriter.print(decimalFormatAreaNormal.format(quantitationEntry.getArea()));
 				printWriter.print(DELIMITER);
-				printWriter.print(dfConcentration.format(quantitationEntry.getConcentration()));
+				printWriter.print(decimalFormatConcentration.format(quantitationEntry.getConcentration()));
 				printWriter.print(DELIMITER);
 				printWriter.print(quantitationEntry.getConcentrationUnit());
 				printWriter.print(DELIMITER);

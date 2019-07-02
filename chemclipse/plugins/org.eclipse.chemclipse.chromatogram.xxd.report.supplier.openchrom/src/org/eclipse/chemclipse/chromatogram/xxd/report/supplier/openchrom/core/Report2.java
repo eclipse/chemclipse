@@ -18,7 +18,9 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.internal.support.SpecificationValidator;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.io.ReportWriter2;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings1;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings2;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -36,8 +38,8 @@ public class Report2 extends AbstractReport {
 		IProcessingInfo<File> processingInfo = super.validate(file);
 		//
 		if(!processingInfo.hasErrorMessages()) {
-			if(settings instanceof ReportSettings) {
-				ReportSettings reportSettings = (ReportSettings)settings;
+			if(settings instanceof ReportSettings1) {
+				ReportSettings2 reportSettings = (ReportSettings2)settings;
 				ReportWriter2 chromatogramReport = new ReportWriter2();
 				try {
 					chromatogramReport.generate(file, append, chromatograms, reportSettings, monitor);
@@ -47,9 +49,24 @@ public class Report2 extends AbstractReport {
 					processingInfo.addErrorMessage("ChemClipse Chromatogram Report", "The report couldn't be created. An error occured.");
 				}
 			} else {
-				logger.warn("The settings are not of type: " + ReportSettings.class);
+				logger.warn("The settings are not of type: " + ReportSettings1.class);
 			}
 		}
 		return processingInfo;
+	}
+
+	@Override
+	public IProcessingInfo<File> generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
+
+		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
+		ReportSettings2 settings = PreferenceSupplier.getReportSettings2();
+		return report(file, append, chromatograms, settings, monitor);
+	}
+
+	@Override
+	public IProcessingInfo<File> generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IProgressMonitor monitor) {
+
+		ReportSettings2 settings = PreferenceSupplier.getReportSettings2();
+		return report(file, append, chromatograms, settings, monitor);
 	}
 }

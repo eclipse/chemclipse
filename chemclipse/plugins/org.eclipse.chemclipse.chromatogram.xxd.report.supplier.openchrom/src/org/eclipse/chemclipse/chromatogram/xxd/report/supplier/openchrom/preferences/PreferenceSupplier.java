@@ -16,7 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings1;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings2;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings3;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -24,13 +26,13 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String P_APPEND_FILES = "appendFiles";
-	public static final boolean DEF_APPEND_FILES = false;
-	//
-	public static final String P_DELTA_RETENTION_TIME = "deltaRt";
 	public static final int MIN_DELTA_RETENTION_TIME = 0;
 	public static final int MAX_DELTA_RETENTION_TIME = Integer.MAX_VALUE;
-	public static final int DEF_DELTA_RETENTION_TIME = 1000;
+	//
+	public static final String P_APPEND_FILES = "appendFiles";
+	public static final boolean DEF_APPEND_FILES = false;
+	public static final String P_DELTA_RETENTION_TIME = "deltaRetentionTime";
+	public static final int DEF_DELTA_RETENTION_TIME = 1000; // 1 Second
 	public static final String P_USE_BEST_MATCH = "useBestMatch";
 	public static final boolean DEF_USE_BEST_MATCH = true;
 	//
@@ -72,10 +74,22 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static ReportSettings getReportSettings() {
+	public static ReportSettings1 getReportSettings1() {
 
-		ReportSettings settings = new ReportSettings();
+		return new ReportSettings1();
+	}
+
+	public static ReportSettings2 getReportSettings2() {
+
+		ReportSettings2 settings = new ReportSettings2();
+		settings.setDeltaRetentionTime(getDeltaRetentionTime());
+		settings.setUseBestMatch(isUseBestMatch());
 		return settings;
+	}
+
+	public static ReportSettings3 getReportSettings3() {
+
+		return new ReportSettings3();
 	}
 
 	public static boolean isAppendFiles() {

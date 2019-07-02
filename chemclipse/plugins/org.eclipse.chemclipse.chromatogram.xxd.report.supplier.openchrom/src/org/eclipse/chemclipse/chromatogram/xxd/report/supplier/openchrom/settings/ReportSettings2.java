@@ -18,10 +18,10 @@ import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ReportSettings extends AbstractChromatogramReportSettings {
+public class ReportSettings2 extends AbstractChromatogramReportSettings {
 
 	@IntSettingsProperty(maxValue = PreferenceSupplier.MAX_DELTA_RETENTION_TIME, minValue = PreferenceSupplier.MIN_DELTA_RETENTION_TIME)
-	@JsonProperty(value = "Delta Retention Time (Minutes)", defaultValue = "" + PreferenceSupplier.DEF_DELTA_RETENTION_TIME)
+	@JsonProperty(value = "Delta Retention Time (Milliseconds)", defaultValue = "" + PreferenceSupplier.DEF_DELTA_RETENTION_TIME)
 	private int deltaRetentionTime = -1;
 	@JsonProperty(value = "Use Best Match", defaultValue = "" + PreferenceSupplier.DEF_USE_BEST_MATCH)
 	private boolean useBestMatch;
@@ -35,13 +35,23 @@ public class ReportSettings extends AbstractChromatogramReportSettings {
 	public int getDeltaRetentionTime() {
 
 		if(deltaRetentionTime < PreferenceSupplier.MIN_DELTA_RETENTION_TIME) {
-			return PreferenceSupplier.getDeltaRetentionTime();
+			return 0;
 		}
 		return deltaRetentionTime;
+	}
+
+	public void setDeltaRetentionTime(int deltaRetentionTime) {
+
+		this.deltaRetentionTime = deltaRetentionTime;
 	}
 
 	public boolean isUseBestMatch() {
 
 		return useBestMatch;
+	}
+
+	public void setUseBestMatch(boolean useBestMatch) {
+
+		this.useBestMatch = useBestMatch;
 	}
 }

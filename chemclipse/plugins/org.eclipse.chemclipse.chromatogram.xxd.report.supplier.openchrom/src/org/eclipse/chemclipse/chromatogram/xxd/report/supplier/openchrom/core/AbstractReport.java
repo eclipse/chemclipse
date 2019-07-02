@@ -17,8 +17,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.chromatogram.AbstractChromatogramReportGenerator;
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -42,27 +40,12 @@ public abstract class AbstractReport extends AbstractChromatogramReportGenerator
 	}
 
 	@Override
-	public IProcessingInfo<File> generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
-
-		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
-		ReportSettings settings = PreferenceSupplier.getReportSettings();
-		return report(file, append, chromatograms, settings, monitor);
-	}
-
-	@Override
 	public IProcessingInfo<File> generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings settings, IProgressMonitor monitor) {
 
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
-	@Override
-	public IProcessingInfo<File> generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IProgressMonitor monitor) {
-
-		ReportSettings settings = PreferenceSupplier.getReportSettings();
-		return report(file, append, chromatograms, settings, monitor);
-	}
-
-	private List<IChromatogram<? extends IPeak>> getChromatogramList(IChromatogram<? extends IPeak> chromatogram) {
+	protected List<IChromatogram<? extends IPeak>> getChromatogramList(IChromatogram<? extends IPeak> chromatogram) {
 
 		List<IChromatogram<? extends IPeak>> chromatograms = new ArrayList<IChromatogram<? extends IPeak>>();
 		chromatograms.add(chromatogram);

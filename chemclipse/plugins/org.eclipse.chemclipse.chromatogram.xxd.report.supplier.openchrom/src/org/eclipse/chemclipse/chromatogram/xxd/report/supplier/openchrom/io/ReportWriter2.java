@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,8 +20,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings2;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
@@ -53,7 +52,7 @@ public class ReportWriter2 {
 		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 	}
 
-	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, ReportSettings reportSettings, IProgressMonitor monitor) throws IOException {
+	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, ReportSettings2 reportSettings, IProgressMonitor monitor) throws IOException {
 
 		FileWriter fileWriter = new FileWriter(file, append);
 		PrintWriter printWriter = new PrintWriter(fileWriter);
@@ -61,7 +60,7 @@ public class ReportWriter2 {
 		for(IChromatogram<? extends IPeak> chromatogram : chromatograms) {
 			printHeader(printWriter, chromatogram);
 			printWriter.println("");
-			printAreaPercentList(printWriter, chromatogram);
+			printAreaPercentList(printWriter, chromatogram, reportSettings);
 			printWriter.println("");
 		}
 		/*
@@ -83,8 +82,11 @@ public class ReportWriter2 {
 		printWriter.println("Miscellaneous: " + chromatogram.getMiscInfo());
 	}
 
-	private void printAreaPercentList(PrintWriter printWriter, IChromatogram<? extends IPeak> chromatogram) {
+	private void printAreaPercentList(PrintWriter printWriter, IChromatogram<? extends IPeak> chromatogram, ReportSettings2 reportSettings) {
 
+		int deltaRetentionTime = reportSettings.getDeltaRetentionTime();
+		boolean useBestMatch = reportSettings.isUseBestMatch();
+		//
 		double[] chromatogramAreaSumArray = getChromatogramAreaSumArray(chromatogram);
 		double[] peakAreaSumArray = initializePeakAreaSumArray(chromatogram);
 		/*
@@ -126,7 +128,7 @@ public class ReportWriter2 {
 				printWriter.print(DELIMITER);
 				printWriter.print((libraryInformation != null) ? libraryInformation.getReferenceIdentifier() : "");
 				printWriter.print(DELIMITER);
-				peakAreaSumArray = printAreaPercentData(printWriter, peakAreaSumArray, libraryInformation, peak, chromatogram); // FID1%, ...
+				peakAreaSumArray = printAreaPercentData(printWriter, peakAreaSumArray, libraryInformation, peak, chromatogram, deltaRetentionTime, useBestMatch); // FID1%, ...
 				printWriter.print(decimalFormat.format(libraryInformation.getRetentionIndex())); // "RI Library"
 				printWriter.print(DELIMITER);
 				printWriter.print(getRetentionIndex(peakModel)); // "RI DA"
@@ -186,12 +188,9 @@ public class ReportWriter2 {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private double[] printAreaPercentData(PrintWriter printWriter, double[] peakAreaSumArray, ILibraryInformation libraryInformation, IPeak peak, IChromatogram chromatogram) {
+	private double[] printAreaPercentData(PrintWriter printWriter, double[] peakAreaSumArray, ILibraryInformation libraryInformation, IPeak peak, IChromatogram chromatogram, int deltaRetentionTime, boolean useBestMatch) {
 
 		int targetRetentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
-		int deltaRetentionTime = PreferenceSupplier.getDeltaRetentionTime();
-		boolean useBestMatch = PreferenceSupplier.isUseBestMatch();
-		//
 		List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
 		//
 		peakAreaSumArray[0] += peak.getIntegratedArea();
