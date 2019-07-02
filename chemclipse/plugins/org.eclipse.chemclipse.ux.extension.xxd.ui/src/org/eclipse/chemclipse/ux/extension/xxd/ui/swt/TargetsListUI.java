@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -82,6 +82,16 @@ public class TargetsListUI extends ExtendedTableViewer {
 			} else if(label.equals(TargetsLabelProvider.CAS)) {
 				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
 			} else if(label.equals(TargetsLabelProvider.COMMENTS)) {
+				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
+			} else if(label.equals(TargetsLabelProvider.FORMULA)) {
+				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
+			} else if(label.equals(TargetsLabelProvider.SMILES)) {
+				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
+			} else if(label.equals(TargetsLabelProvider.INCHI)) {
+				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
+			} else if(label.equals(TargetsLabelProvider.CONTRIBUTOR)) {
+				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
+			} else if(label.equals(TargetsLabelProvider.REFERENCE_ID)) {
 				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
 			}
 		}

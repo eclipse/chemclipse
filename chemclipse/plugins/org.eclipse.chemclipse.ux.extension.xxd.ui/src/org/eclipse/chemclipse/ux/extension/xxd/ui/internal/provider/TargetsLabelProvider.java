@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,11 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String NAME = "Name";
 	public static final String CAS = "CAS";
 	public static final String COMMENTS = "Comments";
+	public static final String FORMULA = "Formula";
+	public static final String SMILES = "SMILES";
+	public static final String INCHI = "InChI";
+	public static final String CONTRIBUTOR = "Contributor";
+	public static final String REFERENCE_ID = "Reference ID";
 	//
 	public static final String[] TITLES = { //
 			VERIFIED_MANUALLY, //
@@ -39,17 +44,17 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			"Match Factor Direct", //
 			"Reverse Factor Direct", //
 			"Probability", //
-			"Formula", //
-			"SMILES", //
-			"InChI", //
+			FORMULA, //
+			SMILES, //
+			INCHI, //
 			"Mol Weight", //
 			"Advise", //
 			"Identifier", //
 			"Miscellaneous", //
 			COMMENTS, //
 			"Database", //
-			"Contributor", //
-			"Reference ID", //
+			CONTRIBUTOR, //
+			REFERENCE_ID, //
 			"Retention Time", //
 			"Retention Index"//
 	};

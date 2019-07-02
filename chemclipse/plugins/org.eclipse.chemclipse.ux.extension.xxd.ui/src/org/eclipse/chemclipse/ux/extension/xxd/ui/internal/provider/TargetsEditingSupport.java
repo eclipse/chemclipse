@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -65,6 +65,16 @@ public class TargetsEditingSupport extends EditingSupport {
 					return identificationTarget.getLibraryInformation().getCasNumber();
 				case TargetsLabelProvider.COMMENTS:
 					return identificationTarget.getLibraryInformation().getComments();
+				case TargetsLabelProvider.FORMULA:
+					return identificationTarget.getLibraryInformation().getFormula();
+				case TargetsLabelProvider.SMILES:
+					return identificationTarget.getLibraryInformation().getSmiles();
+				case TargetsLabelProvider.INCHI:
+					return identificationTarget.getLibraryInformation().getInChI();
+				case TargetsLabelProvider.CONTRIBUTOR:
+					return identificationTarget.getLibraryInformation().getContributor();
+				case TargetsLabelProvider.REFERENCE_ID:
+					return identificationTarget.getLibraryInformation().getReferenceIdentifier();
 			}
 		}
 		return false;
@@ -87,6 +97,21 @@ public class TargetsEditingSupport extends EditingSupport {
 					break;
 				case TargetsLabelProvider.COMMENTS:
 					identificationTarget.getLibraryInformation().setComments((String)value);
+					break;
+				case TargetsLabelProvider.FORMULA:
+					identificationTarget.getLibraryInformation().setFormula((String)value);
+					break;
+				case TargetsLabelProvider.SMILES:
+					identificationTarget.getLibraryInformation().setSmiles((String)value);
+					break;
+				case TargetsLabelProvider.INCHI:
+					identificationTarget.getLibraryInformation().setInChI((String)value);
+					break;
+				case TargetsLabelProvider.CONTRIBUTOR:
+					identificationTarget.getLibraryInformation().setContributor((String)value);
+					break;
+				case TargetsLabelProvider.REFERENCE_ID:
+					identificationTarget.getLibraryInformation().setReferenceIdentifier((String)value);
 					break;
 			}
 			tableViewer.refresh();

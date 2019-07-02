@@ -50,9 +50,11 @@ public class InternalStandardsPart extends EnhancedUpdateSupport implements IUpd
 				Object object = objects.get(0);
 				if(object instanceof IPeak) {
 					peak = (IPeak)object;
+					extendedInternalStandardsUI.update(peak);
 				}
+			} else {
+				extendedInternalStandardsUI.update(null);
 			}
-			extendedInternalStandardsUI.update(peak);
 		}
 	}
 
