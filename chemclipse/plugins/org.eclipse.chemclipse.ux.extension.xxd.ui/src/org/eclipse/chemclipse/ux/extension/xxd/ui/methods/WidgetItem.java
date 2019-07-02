@@ -235,6 +235,16 @@ public class WidgetItem {
 				}
 				if(filechooser) {
 					FileDialog dialog = new FileDialog(button.getShell(), style);
+					if(fileSettingProperty != null) {
+						String[] extensions = fileSettingProperty.validExtensions();
+						String[] extensionNames = fileSettingProperty.extensionNames();
+						if(extensions.length > 0) {
+							dialog.setFilterExtensions(extensions);
+						}
+						if(extensionNames.length > 0) {
+							dialog.setFilterNames(extensionNames);
+						}
+					}
 					String open = dialog.open();
 					if(open != null) {
 						label.setText(open);
