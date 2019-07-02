@@ -13,4 +13,11 @@
 package org.eclipse.chemclipse.model.core;
 
 public interface IChromatogramPeak extends IPeak {
+
+	/**
+	 * Returns the signal to noise ratio of the peak.
+	 *
+	 * @return float
+	 */
+	float getSignalToNoiseRatio();
 }

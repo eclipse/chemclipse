@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,13 +22,6 @@ public interface IChromatogramPeakCSD extends IPeakCSD, IChromatogramPeak {
 	 * @return int
 	 */
 	int getScanMax();
-
-	/**
-	 * Returns the signal to noise ratio of the peak.
-	 *
-	 * @return float
-	 */
-	float getSignalToNoiseRatio();
 
 	/**
 	 * Returns the chromatogram to which this peak belongs to.

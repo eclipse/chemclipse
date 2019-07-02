@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018, 2019 Dr. Philip Wenig, Matthias Mailänder.
+ * Copyright (c) 2013, 2019 Dr. Philip Wenig, Matthias Mailänder.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,12 +35,10 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	private IScan identifiedScan;
 
 	public ChromatogramSelectionWSD(IChromatogramWSD chromatogram) throws ChromatogramIsNullException {
-
 		this(chromatogram, true);
 	}
 
 	public ChromatogramSelectionWSD(IChromatogramWSD chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
-
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.

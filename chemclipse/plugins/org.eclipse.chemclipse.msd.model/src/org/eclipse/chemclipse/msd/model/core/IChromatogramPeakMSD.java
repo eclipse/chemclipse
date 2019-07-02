@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,13 +33,6 @@ public interface IChromatogramPeakMSD extends IPeakMSD, IChromatogramPeak {
 	 * @return float
 	 */
 	float getPurity();
-
-	/**
-	 * Returns the signal to noise ratio of the peak.
-	 *
-	 * @return float
-	 */
-	float getSignalToNoiseRatio();
 
 	/**
 	 * Returns the chromatogram to which this peak belongs to.

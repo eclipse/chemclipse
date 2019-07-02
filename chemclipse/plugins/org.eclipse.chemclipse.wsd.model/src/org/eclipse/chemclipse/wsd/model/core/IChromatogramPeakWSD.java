@@ -24,13 +24,6 @@ public interface IChromatogramPeakWSD extends IPeakWSD, IChromatogramPeak {
 	int getScanMax();
 
 	/**
-	 * Returns the signal to noise ratio of the peak.
-	 *
-	 * @return float
-	 */
-	float getSignalToNoiseRatio();
-
-	/**
 	 * Returns the chromatogram to which this peak belongs to.
 	 *
 	 * @return {@link IChromatogramCSD}
