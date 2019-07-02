@@ -116,7 +116,7 @@ public class InputValidator implements IValidator {
 			} else if(rawType == File.class) {
 				FileSettingProperty property = inputValue.getFileSettingProperty();
 				if(property != null && !(property.dialogType() == DialogType.SAVE_DIALOG)) {
-					if(!new File(value).exists()) {
+					if(value != null && !value.isEmpty() && !new File(value).exists()) {
 						return "Location does not exits, please choose a valid location";
 					}
 				}
