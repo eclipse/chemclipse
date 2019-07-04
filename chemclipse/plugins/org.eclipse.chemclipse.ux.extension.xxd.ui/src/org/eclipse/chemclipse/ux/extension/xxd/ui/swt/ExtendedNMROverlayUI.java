@@ -282,6 +282,9 @@ public class ExtendedNMROverlayUI {
 			//
 			double yOffset = 0;
 			for(SpectrumMeasurement spectra : spectras) {
+				if(spectra == null) {
+					continue;
+				}
 				ILineSeriesData lineSeriesData = getLineSeriesData(spectra, "NMR_" + i++, spectra.getDataName(), yOffset);
 				if(lineSeriesData != null) {
 					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
