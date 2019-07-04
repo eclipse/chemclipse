@@ -25,9 +25,20 @@ public interface IDataNMRSelection {
 
 	/**
 	 * 
+	 * @return the name of this selection
+	 */
+	String getName();
+
+	/**
+	 * 
 	 * @return the current active {@link IMeasurement}
 	 */
 	IComplexSignalMeasurement<?> getMeasurement();
+
+	default void setActiveMeasurement(IComplexSignalMeasurement<?> selection) {
+
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * 
