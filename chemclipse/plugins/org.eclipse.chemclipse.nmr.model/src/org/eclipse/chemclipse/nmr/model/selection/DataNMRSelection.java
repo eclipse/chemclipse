@@ -23,8 +23,20 @@ public class DataNMRSelection extends Observable implements IDataNMRSelection {
 
 	private List<IComplexSignalMeasurement<?>> measurements = new ArrayList<>();
 	private IComplexSignalMeasurement<?> measurement;
+	private String name;
 
 	public DataNMRSelection() {
+		this("NMR");
+	}
+
+	public DataNMRSelection(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String getName() {
+
+		return name;
 	}
 
 	@Override
@@ -43,9 +55,10 @@ public class DataNMRSelection extends Observable implements IDataNMRSelection {
 		}
 	}
 
+	@Override
 	public void setActiveMeasurement(IComplexSignalMeasurement<?> measurement) {
 
-		if(measurements.contains(measurement)) {
+		if(measurement == null || measurements.contains(measurement)) {
 			this.measurement = measurement;
 			setChanged();
 			notifyObservers(ChangeType.SELECTION_CHANGED);
@@ -77,5 +90,11 @@ public class DataNMRSelection extends Observable implements IDataNMRSelection {
 	public void removeObserver(Observer observer) {
 
 		deleteObserver(observer);
+	}
+
+	@Override
+	public synchronized void addObserver(Observer o) {
+
+		super.addObserver(o);
 	}
 }
