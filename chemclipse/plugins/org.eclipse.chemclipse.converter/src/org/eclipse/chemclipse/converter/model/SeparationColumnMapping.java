@@ -68,7 +68,12 @@ public class SeparationColumnMapping extends HashMap<String, String> {
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
 			String line;
 			while((line = bufferedReader.readLine()) != null) {
-				addItem(line.trim());
+				String[] parsedItems = parseString(line.trim());
+				if(parsedItems.length > 0) {
+					for(String item : parsedItems) {
+						addItem(item);
+					}
+				}
 			}
 		} catch(FileNotFoundException e) {
 			logger.warn(e);
