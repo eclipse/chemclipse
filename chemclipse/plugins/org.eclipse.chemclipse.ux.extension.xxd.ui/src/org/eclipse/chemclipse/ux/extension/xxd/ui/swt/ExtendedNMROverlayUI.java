@@ -8,26 +8,29 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - restore initial implementation
+ * Christoph Läubrich - restore initial implementation, support for selection of multiple spectras
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
-import org.eclipse.chemclipse.nmr.model.core.SpectrumSignal;
-import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartNMR;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -57,10 +60,10 @@ public class ExtendedNMROverlayUI {
 	}
 
 	private ChartNMR chartNMR;
-	//
-	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
-	//
-	private List<IDataNMRSelection> dataNMRSelections = new ArrayList<>();
+	/**
+	 * A mapping between (active) {@link IScanEditorNMR} and selected {@link SpectrumMeasurement}s
+	 */
+	private AtomicReference<Map<IScanEditorNMR, SpectrumMeasurement>> dataNMREditors = new AtomicReference<Map<IScanEditorNMR, SpectrumMeasurement>>(Collections.emptyMap());
 	private EPartService partservice;
 	private IColorScheme colorSchemeNormal;
 	private IPreferenceStore preferenceStore;
@@ -79,7 +82,56 @@ public class ExtendedNMROverlayUI {
 
 	public void update() {
 
-		dataNMRSelections = editorUpdateSupport.getDataNMRSelections(partservice);
+		Map<IScanEditorNMR, SpectrumMeasurement> oldSelection = dataNMREditors.get();
+		LinkedHashMap<IScanEditorNMR, SpectrumMeasurement> editors = new LinkedHashMap<>();
+		Collection<MPart> parts = partservice.getParts();
+		for(MPart part : parts) {
+			Object object = part.getObject();
+			if(object instanceof IScanEditorNMR) {
+				IScanEditorNMR editor = (IScanEditorNMR)object;
+				SpectrumMeasurement measurement = oldSelection.get(editor);
+				if(measurement != null) {
+					boolean found = false;
+					for(IComplexSignalMeasurement<?> scan : editor.getScanSelection().getMeasurements()) {
+						if(scan == measurement) {
+							found = true;
+							break;
+						}
+					}
+					if(!found) {
+						// it was removed in the meantime so clear it here...
+						measurement = null;
+					}
+				}
+				if(measurement == null) {
+					IComplexSignalMeasurement<?> selected = editor.getScanSelection().getMeasurement();
+					if(selected instanceof SpectrumMeasurement) {
+						measurement = (SpectrumMeasurement)selected;
+					} else {
+						for(IComplexSignalMeasurement<?> scan : editor.getScanSelection().getMeasurements()) {
+							if(scan instanceof SpectrumMeasurement) {
+								measurement = (SpectrumMeasurement)scan;
+								break;
+							}
+						}
+					}
+				}
+				editors.put(editor, measurement);
+			}
+		}
+		dataNMREditors.compareAndSet(oldSelection, Collections.unmodifiableMap(editors));
+		refreshUpdateOverlayChart();
+	}
+
+	public Map<IScanEditorNMR, SpectrumMeasurement> getCurrentEditors() {
+
+		return dataNMREditors.get();
+	}
+
+	public void setSelection(IScanEditorNMR editorNMR, SpectrumMeasurement spectrumMeasurement) {
+
+		Map<IScanEditorNMR, SpectrumMeasurement> map = dataNMREditors.get();
+		map.replace(editorNMR, spectrumMeasurement);
 		refreshUpdateOverlayChart();
 	}
 
@@ -221,15 +273,16 @@ public class ExtendedNMROverlayUI {
 	private void refreshUpdateOverlayChart() {
 
 		chartNMR.deleteSeries();
-		if(dataNMRSelections.size() > 0) {
+		Collection<SpectrumMeasurement> spectras = dataNMREditors.get().values();
+		if(spectras.size() > 0) {
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			int i = 1;
 			Color color = colorSchemeNormal.getColor();
 			//
 			double yOffset = 0;
-			for(IDataNMRSelection dataNMRSelection : dataNMRSelections) {
-				ILineSeriesData lineSeriesData = getLineSeriesData(dataNMRSelection, "NMR_" + i++, yOffset);
+			for(SpectrumMeasurement spectra : spectras) {
+				ILineSeriesData lineSeriesData = getLineSeriesData(spectra, "NMR_" + i++, spectra.getDataName(), yOffset);
 				if(lineSeriesData != null) {
 					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 					lineSeriesSettings.setLineColor(color);
@@ -259,24 +312,10 @@ public class ExtendedNMROverlayUI {
 		return max;
 	}
 
-	private ILineSeriesData getLineSeriesData(IDataNMRSelection dataNMRSelection, String id, double yOffset) {
+	private ILineSeriesData getLineSeriesData(SpectrumMeasurement spectrumMeasurement, String id, String label, double yOffset) {
 
-		ISeriesData seriesData = getSeriesDataProcessed(dataNMRSelection, id, yOffset);
-		if(seriesData == null) {
-			return null;
-		}
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		ILineSeriesData lineSeriesData = new LineSeriesData(ChartNMR.createSignalSeries(id, spectrumMeasurement.getSignals(), true, yOffset, 0d));
+		lineSeriesData.getSettings().setDescription(label);
 		return lineSeriesData;
-	}
-
-	private ISeriesData getSeriesDataProcessed(IDataNMRSelection dataNMRSelection, String id, double yOffset) {
-
-		IComplexSignalMeasurement<?> measurement = dataNMRSelection.getMeasurement();
-		if(measurement instanceof SpectrumMeasurement) {
-			SpectrumMeasurement spectrum = (SpectrumMeasurement)measurement;
-			Collection<? extends SpectrumSignal> signals = spectrum.getSignals();
-			return ChartNMR.createSignalSeries(id, signals, true, yOffset);
-		}
-		return null;
 	}
 }

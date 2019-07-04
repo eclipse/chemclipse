@@ -149,6 +149,12 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 	}
 
 	@Override
+	public String getName() {
+
+		return part.getLabel();
+	}
+
+	@Override
 	public IDataNMRSelection getScanSelection() {
 
 		return selection;
