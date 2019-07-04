@@ -5,7 +5,15 @@ Bundle-SymbolicName: org.eclipse.chemclipse.converter.ui;singleton:=true
 Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.converter.ui.Activator
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.chemclipse.support.ui;bundle-version="0.8.0",
+ org.eclipse.chemclipse.converter;bundle-version="0.8.0",
+ org.eclipse.chemclipse.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.logging;bundle-version="0.8.0",
+ org.eclipse.chemclipse.support;bundle-version="0.8.0",
+ org.eclipse.chemclipse.rcp.ui.icons;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
+Export-Package: org.eclipse.chemclipse.converter.ui.fieldeditors,
+ org.eclipse.chemclipse.converter.ui.swt

@@ -24,7 +24,6 @@ public class ChromatogramConverterWSD extends AbstractChromatogramConverter<IChr
 	private static IChromatogramConverter<IChromatogramPeakWSD, IChromatogramWSD> instance = null;
 
 	public ChromatogramConverterWSD() {
-
 		super("org.eclipse.chemclipse.wsd.converter.chromatogramSupplier", IChromatogramWSD.class);
 	}
 
@@ -38,7 +37,7 @@ public class ChromatogramConverterWSD extends AbstractChromatogramConverter<IChr
 	}
 
 	@Override
-	public void postProcessChromatogram(IProcessingInfo processingInfo, IProgressMonitor monitor) {
+	public void postProcessChromatogram(IProcessingInfo<IChromatogramWSD> processingInfo, IProgressMonitor monitor) {
 
 	}
 }

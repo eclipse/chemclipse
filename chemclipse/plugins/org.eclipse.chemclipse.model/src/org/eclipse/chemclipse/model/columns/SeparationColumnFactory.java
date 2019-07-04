@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,9 +17,11 @@ import java.util.List;
 public class SeparationColumnFactory {
 
 	public static final String TYPE_DEFAULT = "DEFAULT";
+	//
 	public static final String TYPE_POLAR = "POLAR";
 	public static final String TYPE_APOLAR = "APOLAR";
 	public static final String TYPE_SEMI_POLAR = "SEMI-POLAR";
+	//
 	public static final String TYPE_DB1 = "DB1";
 	public static final String TYPE_DB5 = "DB5";
 	public static final String TYPE_DB1701 = "DB1701";

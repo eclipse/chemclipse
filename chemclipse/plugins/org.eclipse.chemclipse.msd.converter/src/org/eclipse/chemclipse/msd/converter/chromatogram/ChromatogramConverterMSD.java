@@ -19,8 +19,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.io.AMDISConverter;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.io.MassLibConverter;
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverter;
+import org.eclipse.chemclipse.converter.model.SeparationColumnMapping;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -43,7 +46,6 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 	private static IChromatogramConverter<IChromatogramPeakMSD, IChromatogramMSD> instance = null;
 
 	public ChromatogramConverterMSD() {
-
 		super("org.eclipse.chemclipse.msd.converter.chromatogramSupplier", IChromatogramMSD.class);
 	}
 
@@ -70,6 +72,7 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 				parseCalibrationMassLib(chromatogramMSD, directory);
 				parseTargetMassLib(chromatogramMSD, directory);
 				parseCalibrationAMDIS(chromatogramMSD, directory);
+				parseSeparationColumn(chromatogramMSD);
 			}
 		}
 	}
@@ -123,6 +126,7 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 		}
 	}
 
+	@SuppressWarnings({"rawtypes", "deprecation"})
 	private void parseTargetMassLib(IChromatogramMSD chromatogramMSD, File directory) {
 
 		if(PreferenceSupplier.isParseTargetDataMassLib()) {
@@ -157,6 +161,7 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void parseCalibrationAMDIS(IChromatogramMSD chromatogramMSD, File directory) {
 
 		if(PreferenceSupplier.isParseRetentionIndexDataAMDIS()) {
@@ -164,13 +169,30 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 			File file = getFile(directory, fileName, ".cal");
 			//
 			if(file != null) {
-				AMDISConverter amdisConverter = new AMDISConverter();
 				try {
+					AMDISConverter amdisConverter = new AMDISConverter();
 					IProcessingInfo<ISeparationColumnIndices> processingInfo = amdisConverter.parseRetentionIndices(file);
 					ISeparationColumnIndices separationColumnIndices = processingInfo.getProcessingResult();
 					chromatogramMSD.getSeparationColumnIndices().putAll(separationColumnIndices);
 				} catch(TypeCastException e) {
 					logger.warn(e);
+				}
+			}
+		}
+	}
+
+	private void parseSeparationColumn(IChromatogramMSD chromatogramMSD) {
+
+		if(PreferenceSupplier.isParseSeparationColumnFromHeader()) {
+			//
+			SeparationColumnMapping mapping = new SeparationColumnMapping();
+			mapping.load(PreferenceSupplier.getSeparationColumnKeywords());
+			//
+			String miscInfo = chromatogramMSD.getMiscInfo();
+			for(Map.Entry<String, String> column : mapping.entrySet()) {
+				if(miscInfo.contains(column.getKey())) {
+					ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(column.getValue());
+					chromatogramMSD.getSeparationColumnIndices().setSeparationColumn(separationColumn);
 				}
 			}
 		}
