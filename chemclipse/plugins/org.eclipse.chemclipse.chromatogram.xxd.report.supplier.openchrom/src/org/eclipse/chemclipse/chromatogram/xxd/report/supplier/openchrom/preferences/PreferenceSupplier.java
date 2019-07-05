@@ -26,13 +26,15 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final int MIN_DELTA_RETENTION_TIME = 0;
-	public static final int MAX_DELTA_RETENTION_TIME = Integer.MAX_VALUE;
+	public static final double MIN_DELTA_RETENTION_TIME_MINUTES = 0.0d;
+	public static final double MAX_DELTA_RETENTION_TIME_MINUTES = 1.0d; // 1 Minute
 	//
 	public static final String P_APPEND_FILES = "appendFiles";
 	public static final boolean DEF_APPEND_FILES = false;
-	public static final String P_DELTA_RETENTION_TIME = "deltaRetentionTime";
-	public static final int DEF_DELTA_RETENTION_TIME = 1000; // 1 Second
+	public static final String P_DELTA_RETENTION_TIME_MINUTES_LEFT = "deltaRetentionTimeMinutesLeft";
+	public static final double DEF_DELTA_RETENTION_TIME_MINUTES_LEFT = 0.0d;
+	public static final String P_DELTA_RETENTION_TIME_MINUTES_RIGHT = "deltaRetentionTimeMinutesRight";
+	public static final double DEF_DELTA_RETENTION_TIME_MINUTES_RIGHT = 0.0d;
 	public static final String P_USE_BEST_MATCH = "useBestMatch";
 	public static final boolean DEF_USE_BEST_MATCH = true;
 	//
@@ -63,7 +65,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_APPEND_FILES, Boolean.toString(DEF_APPEND_FILES));
-		defaultValues.put(P_DELTA_RETENTION_TIME, Integer.toString(DEF_DELTA_RETENTION_TIME));
+		defaultValues.put(P_DELTA_RETENTION_TIME_MINUTES_LEFT, Double.toString(DEF_DELTA_RETENTION_TIME_MINUTES_LEFT));
+		defaultValues.put(P_DELTA_RETENTION_TIME_MINUTES_RIGHT, Double.toString(DEF_DELTA_RETENTION_TIME_MINUTES_RIGHT));
 		defaultValues.put(P_USE_BEST_MATCH, Boolean.toString(DEF_USE_BEST_MATCH));
 		return defaultValues;
 	}
@@ -82,7 +85,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static ReportSettings2 getReportSettings2() {
 
 		ReportSettings2 settings = new ReportSettings2();
-		settings.setDeltaRetentionTime(getDeltaRetentionTime());
+		settings.setDeltaRetentionTimeMinutesLeft(getDeltaRetentionTimeMinutesLeft());
+		settings.setDeltaRetentionTimeMinutesRight(getDeltaRetentionTimeMinutesRight());
 		settings.setUseBestMatch(isUseBestMatch());
 		return settings;
 	}
@@ -98,10 +102,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return preferences.getBoolean(P_APPEND_FILES, DEF_APPEND_FILES);
 	}
 
-	public static int getDeltaRetentionTime() {
+	public static double getDeltaRetentionTimeMinutesLeft() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_DELTA_RETENTION_TIME, DEF_DELTA_RETENTION_TIME);
+		return preferences.getDouble(P_DELTA_RETENTION_TIME_MINUTES_LEFT, DEF_DELTA_RETENTION_TIME_MINUTES_LEFT);
+	}
+
+	public static double getDeltaRetentionTimeMinutesRight() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getDouble(P_DELTA_RETENTION_TIME_MINUTES_RIGHT, DEF_DELTA_RETENTION_TIME_MINUTES_RIGHT);
 	}
 
 	public static boolean isUseBestMatch() {

@@ -14,15 +14,20 @@ package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settin
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.AbstractChromatogramReportSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ReportSettings2 extends AbstractChromatogramReportSettings {
 
-	@IntSettingsProperty(maxValue = PreferenceSupplier.MAX_DELTA_RETENTION_TIME, minValue = PreferenceSupplier.MIN_DELTA_RETENTION_TIME)
-	@JsonProperty(value = "Delta Retention Time (Milliseconds)", defaultValue = "" + PreferenceSupplier.DEF_DELTA_RETENTION_TIME)
-	private int deltaRetentionTime = -1;
+	@DoubleSettingsProperty(minValue = PreferenceSupplier.MIN_DELTA_RETENTION_TIME_MINUTES, maxValue = PreferenceSupplier.MAX_DELTA_RETENTION_TIME_MINUTES)
+	@JsonProperty(value = "Delta Retention Time Left (Minutes)", defaultValue = "" + PreferenceSupplier.DEF_DELTA_RETENTION_TIME_MINUTES_LEFT)
+	private double deltaRetentionTimeMinutesLeft = 0.0d;
+	//
+	@DoubleSettingsProperty(minValue = PreferenceSupplier.MIN_DELTA_RETENTION_TIME_MINUTES, maxValue = PreferenceSupplier.MAX_DELTA_RETENTION_TIME_MINUTES)
+	@JsonProperty(value = "Delta Retention Time Right (Minutes)", defaultValue = "" + PreferenceSupplier.DEF_DELTA_RETENTION_TIME_MINUTES_RIGHT)
+	private double deltaRetentionTimeMinutesRight = 0.0d;
+	//
 	@JsonProperty(value = "Use Best Match", defaultValue = "" + PreferenceSupplier.DEF_USE_BEST_MATCH)
 	private boolean useBestMatch;
 
@@ -32,17 +37,24 @@ public class ReportSettings2 extends AbstractChromatogramReportSettings {
 		return org.eclipse.chemclipse.xxd.process.preferences.PreferenceSupplier.getReportExportFolder();
 	}
 
-	public int getDeltaRetentionTime() {
+	public double getDeltaRetentionTimeMinutesLeft() {
 
-		if(deltaRetentionTime < PreferenceSupplier.MIN_DELTA_RETENTION_TIME) {
-			return 0;
-		}
-		return deltaRetentionTime;
+		return deltaRetentionTimeMinutesLeft;
 	}
 
-	public void setDeltaRetentionTime(int deltaRetentionTime) {
+	public void setDeltaRetentionTimeMinutesLeft(double deltaRetentionTimeMinutesLeft) {
 
-		this.deltaRetentionTime = deltaRetentionTime;
+		this.deltaRetentionTimeMinutesLeft = deltaRetentionTimeMinutesLeft;
+	}
+
+	public double getDeltaRetentionTimeMinutesRight() {
+
+		return deltaRetentionTimeMinutesRight;
+	}
+
+	public void setDeltaRetentionTimeMinutesRight(double deltaRetentionTimeMinutesRight) {
+
+		this.deltaRetentionTimeMinutesRight = deltaRetentionTimeMinutesRight;
 	}
 
 	public boolean isUseBestMatch() {

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -42,15 +43,9 @@ public class ReportWriter2 {
 
 	private static final String DELIMITER = "\t";
 	//
-	private DecimalFormat decimalFormat;
-	private DateFormat dateFormat;
-	private TargetExtendedComparator targetExtendedComparator;
-
-	public ReportWriter2() {
-		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0000");
-		dateFormat = ValueFormat.getDateFormatEnglish();
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0000");
+	private DateFormat dateFormat = ValueFormat.getDateFormatEnglish();
+	private TargetExtendedComparator targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 
 	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, ReportSettings2 reportSettings, IProgressMonitor monitor) throws IOException {
 
@@ -74,7 +69,7 @@ public class ReportWriter2 {
 
 	private void printHeader(PrintWriter printWriter, IChromatogram<? extends IPeak> chromatogram) {
 
-		printWriter.println("Filename: " + chromatogram.getName());
+		printWriter.println("File Name: " + chromatogram.getName());
 		printWriter.println("Sample Name: " + chromatogram.getDataName());
 		printWriter.println("Additional Info: " + chromatogram.getDetailedInfo() + " " + chromatogram.getMiscInfo()); // Don't change without team feedback.
 		printWriter.println("Acquisition Date: " + dateFormat.format(chromatogram.getDate()));
@@ -82,13 +77,10 @@ public class ReportWriter2 {
 		printWriter.println("Miscellaneous: " + chromatogram.getMiscInfo());
 	}
 
-	private void printAreaPercentList(PrintWriter printWriter, IChromatogram<? extends IPeak> chromatogram, ReportSettings2 reportSettings) {
+	private void printAreaPercentList(PrintWriter printWriter, IChromatogram<? extends IPeak> chromatogramSource, ReportSettings2 reportSettings) {
 
-		int deltaRetentionTime = reportSettings.getDeltaRetentionTime();
-		boolean useBestMatch = reportSettings.isUseBestMatch();
-		//
-		double[] chromatogramAreaSumArray = getChromatogramAreaSumArray(chromatogram);
-		double[] peakAreaSumArray = initializePeakAreaSumArray(chromatogram);
+		double[] chromatogramAreaSumArray = getChromatogramAreaSumArray(chromatogramSource);
+		double[] peakAreaSumArray = initializePeakAreaSumArray(chromatogramSource);
 		/*
 		 * Headline
 		 */
@@ -100,7 +92,11 @@ public class ReportWriter2 {
 		printWriter.print(DELIMITER);
 		printWriter.print("TIC%");
 		printWriter.print(DELIMITER);
-		printAreaPercentHeadlines(printWriter, chromatogram); // FID1%, ...
+		/*
+		 * Variable length depending on referenced chromatograms
+		 */
+		printAreaPercentHeadlines(printWriter, chromatogramSource); // FID1%, ...
+		//
 		printWriter.print("RI Library");
 		printWriter.print(DELIMITER);
 		printWriter.print("RI DA");
@@ -114,31 +110,40 @@ public class ReportWriter2 {
 		/*
 		 * Data
 		 */
-		for(IPeak peak : chromatogram.getPeaks()) {
+		for(IPeak peakSource : chromatogramSource.getPeaks()) {
 			//
-			IPeakModel peakModel = peak.getPeakModel();
-			int retentionTime = peakModel.getRetentionTimeAtPeakMaximum();
-			Set<IIdentificationTarget> peakTargets = peak.getTargets();
-			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peakTargets, targetExtendedComparator);
-			//
-			if(libraryInformation != null) {
-				printWriter.print((libraryInformation != null) ? libraryInformation.getName() : "");
-				printWriter.print(DELIMITER);
-				printWriter.print((libraryInformation != null) ? libraryInformation.getContributor() : "");
-				printWriter.print(DELIMITER);
-				printWriter.print((libraryInformation != null) ? libraryInformation.getReferenceIdentifier() : "");
-				printWriter.print(DELIMITER);
-				peakAreaSumArray = printAreaPercentData(printWriter, peakAreaSumArray, libraryInformation, peak, chromatogram, deltaRetentionTime, useBestMatch); // FID1%, ...
-				printWriter.print(decimalFormat.format(libraryInformation.getRetentionIndex())); // "RI Library"
-				printWriter.print(DELIMITER);
-				printWriter.print(getRetentionIndex(peakModel)); // "RI DA"
-				printWriter.print(DELIMITER);
-				printWriter.print(chromatogram.getScanNumber(retentionTime));
-				printWriter.print(DELIMITER);
-				printWriter.print(decimalFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-				printWriter.print(DELIMITER);
-				printWriter.print(decimalFormat.format(getPurity(peak)));
-				printWriter.println("");
+			IPeakModel peakModelSource = peakSource.getPeakModel();
+			int retentionTime = peakModelSource.getRetentionTimeAtPeakMaximum();
+			Set<IIdentificationTarget> peakTargetsSource = peakSource.getTargets();
+			/*
+			 * Use peak only if targets and a library information
+			 * are available.
+			 */
+			if(peakTargetsSource.size() > 0) {
+				ILibraryInformation libraryInformationSource = IIdentificationTarget.getBestLibraryInformation(peakTargetsSource, targetExtendedComparator);
+				if(libraryInformationSource != null) {
+					printWriter.print((libraryInformationSource != null) ? libraryInformationSource.getName() : "");
+					printWriter.print(DELIMITER);
+					printWriter.print((libraryInformationSource != null) ? libraryInformationSource.getContributor() : "");
+					printWriter.print(DELIMITER);
+					printWriter.print((libraryInformationSource != null) ? libraryInformationSource.getReferenceIdentifier() : "");
+					printWriter.print(DELIMITER);
+					/*
+					 * Variable length depending on referenced chromatograms
+					 */
+					peakAreaSumArray = printAreaPercentData(printWriter, chromatogramSource, peakSource, libraryInformationSource, peakAreaSumArray, reportSettings); // FID1%, ...
+					//
+					printWriter.print(decimalFormat.format(libraryInformationSource.getRetentionIndex())); // "RI Library"
+					printWriter.print(DELIMITER);
+					printWriter.print(getRetentionIndex(peakModelSource)); // "RI DA"
+					printWriter.print(DELIMITER);
+					printWriter.print(chromatogramSource.getScanNumber(retentionTime));
+					printWriter.print(DELIMITER);
+					printWriter.print(decimalFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+					printWriter.print(DELIMITER);
+					printWriter.print(decimalFormat.format(getPurity(peakSource)));
+					printWriter.println("");
+				}
 			}
 		}
 		/*
@@ -165,9 +170,9 @@ public class ReportWriter2 {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void printAreaPercentHeadlines(PrintWriter printWriter, IChromatogram chromatogram) {
+	private void printAreaPercentHeadlines(PrintWriter printWriter, IChromatogram chromatogramSource) {
 
-		List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
+		List<IChromatogram> referencedChromatograms = chromatogramSource.getReferencedChromatograms();
 		//
 		int i = 1;
 		for(IChromatogram referencedChromatogram : referencedChromatograms) {
@@ -188,18 +193,17 @@ public class ReportWriter2 {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private double[] printAreaPercentData(PrintWriter printWriter, double[] peakAreaSumArray, ILibraryInformation libraryInformation, IPeak peak, IChromatogram chromatogram, int deltaRetentionTime, boolean useBestMatch) {
+	private double[] printAreaPercentData(PrintWriter printWriter, IChromatogram chromatogramSource, IPeak peakSource, ILibraryInformation libraryInformationSource, double[] peakAreaSumArray, ReportSettings2 reportSettings) {
 
-		int targetRetentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
-		List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
+		List<IChromatogram> referencedChromatograms = chromatogramSource.getReferencedChromatograms();
 		//
-		peakAreaSumArray[0] += peak.getIntegratedArea();
-		printWriter.print(decimalFormat.format(getPercentagePeakArea(chromatogram, peak))); // "TIC%"
+		peakAreaSumArray[0] += peakSource.getIntegratedArea();
+		printWriter.print(decimalFormat.format(getPercentagePeakArea(chromatogramSource, peakSource))); // "TIC%"
 		printWriter.print(DELIMITER);
 		//
 		int i = 1;
 		for(IChromatogram referencedChromatogram : referencedChromatograms) {
-			IPeak referencedPeak = getReferencedPeak(libraryInformation, referencedChromatogram, targetRetentionTime, deltaRetentionTime, useBestMatch);
+			IPeak referencedPeak = getReferencedPeak(peakSource, libraryInformationSource, referencedChromatogram, reportSettings);
 			double peakArea = (referencedPeak != null) ? referencedPeak.getIntegratedArea() : 0.0d;
 			peakAreaSumArray[i] += peakArea;
 			printWriter.print(decimalFormat.format(getPercentagePeakArea(referencedChromatogram, referencedPeak))); // "FID1A%"
@@ -246,45 +250,100 @@ public class ReportWriter2 {
 		return new double[size];
 	}
 
-	private IPeak getReferencedPeak(ILibraryInformation libraryInformation, IChromatogram<? extends IPeak> referencedChromatogram, int targetRetentionTime, int deltaRetentionTime, boolean useBestMatch) {
+	private IPeak getReferencedPeak(IPeak peakSource, ILibraryInformation libraryInformationSource, IChromatogram<? extends IPeak> referencedChromatogram, ReportSettings2 reportSettings) {
 
-		IPeak peak = null;
+		if(peakSource != null && libraryInformationSource != null && referencedChromatogram != null) {
+			//
+			IPeakModel peakModelSource = peakSource.getPeakModel();
+			int retentionTimeSource = peakModelSource.getRetentionTimeAtPeakMaximum();
+			int startRetentionTime = peakModelSource.getStartRetentionTime() - (int)(reportSettings.getDeltaRetentionTimeMinutesLeft() * IChromatogram.MINUTE_CORRELATION_FACTOR);
+			int stopRetentionTime = peakModelSource.getStopRetentionTime() - (int)(reportSettings.getDeltaRetentionTimeMinutesRight() * IChromatogram.MINUTE_CORRELATION_FACTOR);
+			boolean useBestMatch = reportSettings.isUseBestMatch();
+			//
+			List<IPeak> peaksOfInterest = extractPeaksOfInterest(referencedChromatogram, startRetentionTime, stopRetentionTime);
+			if(peaksOfInterest.size() > 0) {
+				return extractBestMatchingPeak(peaksOfInterest, retentionTimeSource, libraryInformationSource, useBestMatch);
+			}
+		}
 		//
-		int minRetentionTime = targetRetentionTime - deltaRetentionTime;
-		int maxRetentionTime = targetRetentionTime + deltaRetentionTime;
-		//
-		if(libraryInformation != null && referencedChromatogram != null) {
-			exitloop:
-			for(IPeak referencedPeak : referencedChromatogram.getPeaks()) {
-				int retentionTime = referencedPeak.getPeakModel().getRetentionTimeAtPeakMaximum();
-				if(retentionTime >= minRetentionTime && retentionTime <= maxRetentionTime) {
-					Set<IIdentificationTarget> peakTargets = referencedPeak.getTargets();
-					if(useBestMatch) {
-						/*
-						 * Best match
-						 */
-						ILibraryInformation referencedLibraryInformation = IIdentificationTarget.getBestLibraryInformation(peakTargets, targetExtendedComparator);
-						if(isPeakTargetMatch(libraryInformation, referencedLibraryInformation)) {
-							peak = referencedPeak;
-							break exitloop;
-						}
-					} else {
-						/*
-						 * Targets contains match.
-						 */
-						for(IIdentificationTarget peakTarget : peakTargets) {
-							ILibraryInformation referencedLibraryInformation = peakTarget.getLibraryInformation();
-							if(isPeakTargetMatch(libraryInformation, referencedLibraryInformation)) {
-								peak = referencedPeak;
-								break exitloop;
-							}
-						}
+		return null;
+	}
+
+	private IPeak extractBestMatchingPeak(List<IPeak> peaksOfInterest, int retentionTimeSource, ILibraryInformation libraryInformationSource, boolean useBestMatch) {
+
+		if(useBestMatch) {
+			return getClosestPeak(peaksOfInterest, retentionTimeSource);
+		} else {
+			return getBestPeak(peaksOfInterest, libraryInformationSource, retentionTimeSource);
+		}
+	}
+
+	private IPeak getClosestPeak(List<IPeak> peaksOfInterest, int retentionTimeSource) {
+
+		IPeak peakTarget = null;
+		for(IPeak peakReference : peaksOfInterest) {
+			peakTarget = getClosestPeak(peakTarget, peakReference, retentionTimeSource);
+		}
+		return peakTarget;
+	}
+
+	private IPeak getBestPeak(List<IPeak> peaksOfInterest, ILibraryInformation libraryInformationSource, int retentionTimeSource) {
+
+		IPeak peakTarget = null;
+		for(IPeak peakReference : peaksOfInterest) {
+			if(peakTarget == null) {
+				if(isPeakTargetMatch(peakReference, libraryInformationSource)) {
+					peakTarget = peakReference;
+				}
+			} else {
+				IPeak peakClosest = getClosestPeak(peakTarget, peakReference, retentionTimeSource);
+				if(peakClosest != peakTarget) {
+					if(isPeakTargetMatch(peakClosest, libraryInformationSource)) {
+						peakTarget = peakClosest;
 					}
 				}
 			}
 		}
-		//
-		return peak;
+		return peakTarget;
+	}
+
+	private boolean isPeakTargetMatch(IPeak peak, ILibraryInformation libraryInformationSource) {
+
+		for(IIdentificationTarget peakTarget : peak.getTargets()) {
+			if(isPeakTargetMatch(libraryInformationSource, peakTarget.getLibraryInformation())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private IPeak getClosestPeak(IPeak peakTarget, IPeak peakReference, int retentionTimeSource) {
+
+		if(peakTarget == null) {
+			return peakReference;
+		} else {
+			int retentionTimeReference = peakReference.getPeakModel().getRetentionTimeAtPeakMaximum();
+			int retentionTimeTarget = peakTarget.getPeakModel().getRetentionTimeAtPeakMaximum();
+			int deltaReference = Math.abs(retentionTimeSource - retentionTimeReference);
+			int deltaTarget = Math.abs(retentionTimeSource - retentionTimeTarget);
+			if(deltaReference < deltaTarget) {
+				return peakReference;
+			} else {
+				return peakTarget;
+			}
+		}
+	}
+
+	private List<IPeak> extractPeaksOfInterest(IChromatogram<? extends IPeak> referencedChromatogram, int startRetentionTime, int stopRetentionTime) {
+
+		List<IPeak> peaksOfInterest = new ArrayList<>();
+		for(IPeak peak : referencedChromatogram.getPeaks()) {
+			int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
+			if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
+				peaksOfInterest.add(peak);
+			}
+		}
+		return peaksOfInterest;
 	}
 
 	private boolean isPeakTargetMatch(ILibraryInformation libraryInformation, ILibraryInformation referencedLibraryInformation) {

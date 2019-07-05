@@ -13,7 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui.pre
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui.Activator;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.RetentionTimeMinutesFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -37,8 +38,12 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_APPEND_FILES, "Append report files", getFieldEditorParent()));
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_DELTA_RETENTION_TIME, "Delta Retention Time (Minutes)", PreferenceSupplier.MIN_DELTA_RETENTION_TIME, PreferenceSupplier.MAX_DELTA_RETENTION_TIME, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_BEST_MATCH, "Use Best Match", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Area% Report", getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceSupplier.P_DELTA_RETENTION_TIME_MINUTES_LEFT, "Delta Retention Time Left (Minutes)", PreferenceSupplier.MIN_DELTA_RETENTION_TIME_MINUTES, PreferenceSupplier.MAX_DELTA_RETENTION_TIME_MINUTES, getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceSupplier.P_DELTA_RETENTION_TIME_MINUTES_LEFT, "Delta Retention Time Right (Minutes)", PreferenceSupplier.MIN_DELTA_RETENTION_TIME_MINUTES, PreferenceSupplier.MAX_DELTA_RETENTION_TIME_MINUTES, getFieldEditorParent()));
 	}
 
 	/*
