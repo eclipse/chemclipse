@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2019 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Janko Diminic - initial API and implementation
+ * Christoph Läubrich - Adjust to new Chart API
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.chart;
 
@@ -16,15 +17,17 @@ import java.util.Random;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Scrollable;
 import org.eclipse.swtchart.Chart;
 import org.eclipse.swtchart.IAxis;
 import org.eclipse.swtchart.IAxisSet;
+import org.eclipse.swtchart.ICustomPaintListener;
+import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.ISeries;
 
-public class ChartLabelDrawer implements PaintListener, DisposeListener {
+public class ChartLabelDrawer implements ICustomPaintListener, DisposeListener {
 
 	private Chart chart;
 	private IAxis xAxis;
@@ -36,7 +39,7 @@ public class ChartLabelDrawer implements PaintListener, DisposeListener {
 		IAxisSet axisSet = chart.getAxisSet();
 		xAxis = axisSet.getXAxis(0);
 		yAxis = axisSet.getYAxis(0);
-		chart.getPlotArea().addPaintListener(this);
+		chart.getPlotArea().addCustomPaintListener(this);
 	}
 
 	/**
@@ -77,7 +80,14 @@ public class ChartLabelDrawer implements PaintListener, DisposeListener {
 			// log.debug("mz= " + mz + " x= {} y {}", xPos, yPos);
 			String mzString = mz + "";
 			Point textExtent = e.gc.textExtent(mzString);
-			Rectangle clientArea = chart.getPlotArea().getClientArea();
+			IPlotArea area = chart.getPlotArea();
+			Rectangle clientArea;
+			if(area instanceof Scrollable) {
+				Scrollable scrollable = (Scrollable)area;
+				clientArea = scrollable.getClientArea();
+			} else {
+				clientArea = area.getBounds();
+			}
 			// System.out.println(textExtent);
 			int xPosText = xPos - textExtent.x / 2;
 			int yPosText = yPos - textExtent.y;
@@ -110,7 +120,7 @@ public class ChartLabelDrawer implements PaintListener, DisposeListener {
 	protected void clear() {
 
 		if(chart != null) {
-			chart.getPlotArea().removePaintListener(this);
+			chart.getPlotArea().removeCustomPaintListener(this);
 		}
 	}
 
@@ -118,5 +128,11 @@ public class ChartLabelDrawer implements PaintListener, DisposeListener {
 	public void widgetDisposed(DisposeEvent e) {
 
 		clear();
+	}
+
+	@Override
+	public boolean drawBehindSeries() {
+
+		return false;
 	}
 }

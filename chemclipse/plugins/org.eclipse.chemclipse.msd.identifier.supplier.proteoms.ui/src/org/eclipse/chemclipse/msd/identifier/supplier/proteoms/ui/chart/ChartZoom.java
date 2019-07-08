@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2019 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Janko Diminic - initial API and implementation
+ * Christoph Läubrich - Adjust to new chart API
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.chart;
 
@@ -18,8 +19,10 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swtchart.Chart;
 import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.Range;
 
 public class ChartZoom implements DisposeListener, MouseWheelListener, MouseListener {
@@ -38,57 +41,69 @@ public class ChartZoom implements DisposeListener, MouseWheelListener, MouseList
 			throw new IllegalArgumentException("Parameter step must be in the range of 0 to 1.");
 		}
 		this.step = step;
-		chart.getPlotArea().addMouseWheelListener(this);
-		chart.getPlotArea().addMouseListener(this);
+		IPlotArea plotarea = chart.getPlotArea();
+		if(plotarea instanceof Control) {
+			Control control = (Control)plotarea;
+			control.addMouseWheelListener(this);
+			control.addMouseListener(this);
+		}
 	}
 
 	@Override
 	public void mouseScrolled(MouseEvent e) {
 
-		Point p = chart.getPlotArea().toControl(chart.toDisplay(e.x, e.y));
-		IAxis[] axes;
-		int dc;
-		if((e.stateMask & SWT.CTRL) != 0) {
-			axes = chart.getAxisSet().getYAxes();
-			dc = p.y;
-		} else {
-			axes = chart.getAxisSet().getXAxes();
-			dc = p.x;
-		}
-		for(IAxis axis : axes) {
-			Range range = axis.getRange();
-			double x = axis.getDataCoordinate(dc);
-			if(e.count > 0) {
-				// TODO maybe multiply step with count? Hard to explain in
-				// Javadoc, but probably better
-				range.lower = step * x + (1 - step) * range.lower;
-				range.upper = step * x + (1 - step) * range.upper;
+		IPlotArea plotArea = chart.getPlotArea();
+		if(plotArea instanceof Control) {
+			Control control = (Control)plotArea;
+			Point p = control.toControl(chart.toDisplay(e.x, e.y));
+			IAxis[] axes;
+			int dc;
+			if((e.stateMask & SWT.CTRL) != 0) {
+				axes = chart.getAxisSet().getYAxes();
+				dc = p.y;
 			} else {
-				range.lower = -step * x + (1 + step) * range.lower;
-				range.upper = -step * x + (1 + step) * range.upper;
+				axes = chart.getAxisSet().getXAxes();
+				dc = p.x;
 			}
-			if(axis.isCategoryEnabled()) {
-				range.lower = Math.round(range.lower);
-				range.upper = Math.round(range.upper);
-				if(e.count < 0) {
-					Range oldRange = axis.getRange();
-					if(oldRange.lower == range.lower && oldRange.upper == range.upper) {
-						range.lower--;
-						range.upper++;
+			for(IAxis axis : axes) {
+				Range range = axis.getRange();
+				double x = axis.getDataCoordinate(dc);
+				if(e.count > 0) {
+					// TODO maybe multiply step with count? Hard to explain in
+					// Javadoc, but probably better
+					range.lower = step * x + (1 - step) * range.lower;
+					range.upper = step * x + (1 - step) * range.upper;
+				} else {
+					range.lower = -step * x + (1 + step) * range.lower;
+					range.upper = -step * x + (1 + step) * range.upper;
+				}
+				if(axis.isCategoryEnabled()) {
+					range.lower = Math.round(range.lower);
+					range.upper = Math.round(range.upper);
+					if(e.count < 0) {
+						Range oldRange = axis.getRange();
+						if(oldRange.lower == range.lower && oldRange.upper == range.upper) {
+							range.lower--;
+							range.upper++;
+						}
 					}
 				}
+				axis.setRange(range);
 			}
-			axis.setRange(range);
+			chart.redraw();
 		}
-		chart.redraw();
 	}
 
 	@Override
 	public void widgetDisposed(DisposeEvent arg0) {
 
 		if(chart != null) {
-			chart.getPlotArea().removeMouseWheelListener(this);
-			chart.getPlotArea().removeMouseListener(this);
+			IPlotArea plotarea = chart.getPlotArea();
+			if(plotarea instanceof Control) {
+				Control control = (Control)plotarea;
+				control.removeMouseWheelListener(this);
+				control.removeMouseListener(this);
+			}
 		}
 	}
 
