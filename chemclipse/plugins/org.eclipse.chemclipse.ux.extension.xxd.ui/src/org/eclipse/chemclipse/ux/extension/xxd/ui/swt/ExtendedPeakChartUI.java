@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - use {@link IPlotArea} instead of raw composite
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -473,7 +474,7 @@ public class ExtendedPeakChartUI {
 		chartSettings.addHandledEventProcessor(new MouseDoubleClickEventProcessor());
 		peakChart.applySettings(chartSettings);
 		//
-		IPlotArea plotArea = (IPlotArea)getPlotArea();
+		IPlotArea plotArea = getPlotArea();
 		splitSelectionPaintListener = new SplitSelectionPaintListener();
 		plotArea.addCustomPaintListener(splitSelectionPaintListener);
 	}
@@ -707,7 +708,7 @@ public class ExtendedPeakChartUI {
 		return peakSplitted;
 	}
 
-	private Composite getPlotArea() {
+	private IPlotArea getPlotArea() {
 
 		return peakChart.getBaseChart().getPlotArea();
 	}

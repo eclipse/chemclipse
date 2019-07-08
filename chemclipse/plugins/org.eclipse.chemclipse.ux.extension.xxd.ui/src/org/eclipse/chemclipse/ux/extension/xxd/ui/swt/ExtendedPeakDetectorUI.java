@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - use {@link IPlotArea} instead of raw composite
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -594,7 +595,7 @@ public class ExtendedPeakDetectorUI {
 		/*
 		 * Add the paint listeners to draw the selected peak range.
 		 */
-		IPlotArea plotArea = (IPlotArea)getPlotArea();
+		IPlotArea plotArea = getPlotArea();
 		baselineSelectionPaintListener = new BaselineSelectionPaintListener();
 		boxSelectionPaintListener = new BoxSelectionPaintListener();
 		plotArea.addCustomPaintListener(baselineSelectionPaintListener);
@@ -841,7 +842,7 @@ public class ExtendedPeakDetectorUI {
 		}
 	}
 
-	private Composite getPlotArea() {
+	private IPlotArea getPlotArea() {
 
 		return chromatogramChart.getBaseChart().getPlotArea();
 	}
