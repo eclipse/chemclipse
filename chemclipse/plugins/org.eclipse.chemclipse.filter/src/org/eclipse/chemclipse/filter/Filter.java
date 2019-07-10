@@ -51,9 +51,9 @@ public interface Filter<ConfigType> {
 	 * 
 	 * @return the default implementation returns {@link DataType#AUTO_DETECT} as the only choice to indicate that the caller has to determine the type by means of content type sensing
 	 */
-	default FilterCategory[] getFilterCategories() {
+	default DataCategory[] getFilterCategories() {
 
-		return new FilterCategory[]{FilterCategory.AUTO_DETECT};
+		return new DataCategory[]{DataCategory.AUTO_DETECT};
 	}
 
 	/**

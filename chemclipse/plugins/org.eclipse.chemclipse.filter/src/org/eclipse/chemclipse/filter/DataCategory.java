@@ -11,10 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.filter;
 
-public enum FilterCategory {
+/**
+ * Describes very generic and broaden data categories a filter, processor or converter might handle
+ * 
+ * @author Christoph Läubrich
+ *
+ */
+public enum DataCategory {
 	MSD, CSD, WSD, FID, NMR,
 	/**
-	 * Suggests that this Filter can support a wide range of datatypes and content-sensing is the only option to check if the filter can really handle the data or not
+	 * Suggests that this Filter can support a wide range of datatypes and content-sensing is the only option to check if the filter, processor or converter can really handle the data or not
 	 */
 	AUTO_DETECT;
 }

@@ -21,7 +21,7 @@ public interface IMeasurementFilter<ConfigType> extends Filter<ConfigType> {
 
 	/**
 	 * Filters the given Collection of {@link IMeasurement}s with this filter and returns the result.
-	 * The resulting Collection could either be the same or a ne collection, might have more or less items
+	 * The resulting Collection could either be the same or a new collection, might have more or less items
 	 * 
 	 * @param filterItems
 	 * @param configuration
@@ -45,15 +45,15 @@ public interface IMeasurementFilter<ConfigType> extends Filter<ConfigType> {
 	 *            the {@link IMeasurement} to check
 	 * @return <code>true</code> if this {@link IMeasurement} can be applied, <code>false</code> otherwise
 	 */
-	boolean acceptsIMeasurement(IMeasurement item);
+	boolean acceptsIMeasurements(Collection<? extends IMeasurement> items);
 
 	/**
-	 * Creates a new configuration that is specially suited for the given {@link IMeasurement} type
+	 * Creates a new configuration that is specially suited for the given {@link IMeasurement} types
 	 * 
 	 * @param item
 	 * @return
 	 */
-	default ConfigType createConfiguration(IMeasurement item) {
+	default ConfigType createConfiguration(Collection<? extends IMeasurement> items) {
 
 		return createNewConfiguration();
 	}
