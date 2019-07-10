@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core.IonRemoverScanFilter">
    <service>
       <provide interface="org.eclipse.chemclipse.model.filter.IScanFilter"/>
-      <provide interface="org.eclipse.chemclipse.filter.Filter"/>
+      <provide interface="org.eclipse.chemclipse.processing.filter.Filter"/>
    </service>
    <implementation class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core.IonRemoverScanFilter"/>
 </scr:component>
