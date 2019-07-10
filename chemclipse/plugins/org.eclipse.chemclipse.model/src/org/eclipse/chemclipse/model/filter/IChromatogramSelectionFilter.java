@@ -15,13 +15,13 @@ package org.eclipse.chemclipse.model.filter;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.chemclipse.filter.Filter;
-import org.eclipse.chemclipse.filter.FilterList;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingResult;
+import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.filter.FilterList;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**

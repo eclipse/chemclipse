@@ -19,9 +19,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.filter.Filter;
-import org.eclipse.chemclipse.filter.Filtered;
 import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
+import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.filter.Filtered;
 
 /**
  * This class is meant as a class for Filters that wants to filter some aspects

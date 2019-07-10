@@ -9,7 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.filter;
+package org.eclipse.chemclipse.processing;
 
 /**
  * Describes very generic and broaden data categories a filter, processor or converter might handle

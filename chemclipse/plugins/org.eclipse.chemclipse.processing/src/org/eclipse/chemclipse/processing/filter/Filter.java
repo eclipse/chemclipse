@@ -9,7 +9,9 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.filter;
+package org.eclipse.chemclipse.processing.filter;
+
+import org.eclipse.chemclipse.processing.DataCategory;
 
 /**
  * A {@link Filter} is responsible to filter different objects in a configurable manner.

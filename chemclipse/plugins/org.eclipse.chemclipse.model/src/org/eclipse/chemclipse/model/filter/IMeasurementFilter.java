@@ -2,11 +2,11 @@ package org.eclipse.chemclipse.model.filter;
 
 import java.util.Collection;
 
-import org.eclipse.chemclipse.filter.Filter;
-import org.eclipse.chemclipse.filter.FilterChain;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.processing.core.IProcessingResult;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.filter.FilterChain;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -45,15 +45,47 @@ public interface IMeasurementFilter<ConfigType> extends Filter<ConfigType> {
 	 *            the {@link IMeasurement} to check
 	 * @return <code>true</code> if this {@link IMeasurement} can be applied, <code>false</code> otherwise
 	 */
-	boolean acceptsIMeasurements(Collection<? extends IMeasurement> items);
+	default boolean acceptsIMeasurements(Collection<? extends IMeasurement> items) {
+
+		for(IMeasurement item : items) {
+			if(!acceptsIMeasurement(item)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	boolean acceptsIMeasurement(IMeasurement item);
 
 	/**
 	 * Creates a new configuration that is specially suited for the given {@link IMeasurement} types
 	 * 
 	 * @param item
-	 * @return
+	 * @return a new configuration for this items or the default config if items is empty or no suitable configuration can be created
+	 * @throws IllegalArgumentException
+	 *             if any of the given {@link IMeasurement} are incompatible with this filter ({@link #acceptsIMeasurement(IMeasurement)} returns <code>false</code> for them)
 	 */
-	default ConfigType createConfiguration(Collection<? extends IMeasurement> items) {
+	default ConfigType createConfiguration(Collection<? extends IMeasurement> items) throws IllegalArgumentException {
+
+		if(acceptsIMeasurements(items)) {
+			for(IMeasurement item : items) {
+				return createConfiguration(item);
+			}
+			return createNewConfiguration();
+		} else {
+			throw new IllegalArgumentException("incompatible items in collection");
+		}
+	}
+
+	/**
+	 * Creates a configuration for this single item
+	 * 
+	 * @param item
+	 * @return a new configuration for this items or the default config if items is empty or no suitable configuration can be created
+	 * @throws IllegalArgumentException
+	 *             if any the given {@link IMeasurement} is incompatible with this filter ({@link #acceptsIMeasurement(IMeasurement)} returns <code>false</code> for them)
+	 */
+	default ConfigType createConfiguration(IMeasurement item) throws IllegalArgumentException {
 
 		return createNewConfiguration();
 	}

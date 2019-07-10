@@ -65,7 +65,6 @@
     <module>../../plugins/org.eclipse.chemclipse.progress</module>
     <module>../../plugins/org.eclipse.chemclipse.progress.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.keystore</module>
-    <module>../../plugins/org.eclipse.chemclipse.filter</module>
     <module>../../plugins/org.eclipse.chemclipse.model</module>
     <module>../../plugins/org.eclipse.chemclipse.csd.model</module>
     <module>../../plugins/org.eclipse.chemclipse.wsd.model</module>

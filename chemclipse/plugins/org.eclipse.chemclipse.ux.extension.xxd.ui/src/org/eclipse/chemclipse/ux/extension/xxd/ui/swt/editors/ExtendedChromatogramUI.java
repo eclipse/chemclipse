@@ -70,7 +70,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSu
 import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupport;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.filter.FilterFactory;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
@@ -86,6 +85,7 @@ import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;

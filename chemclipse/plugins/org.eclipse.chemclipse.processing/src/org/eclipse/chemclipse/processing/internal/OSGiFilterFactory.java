@@ -9,7 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.filter.internal;
+package org.eclipse.chemclipse.processing.internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 
-import org.eclipse.chemclipse.filter.Filter;
-import org.eclipse.chemclipse.filter.FilterFactory;
+import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;

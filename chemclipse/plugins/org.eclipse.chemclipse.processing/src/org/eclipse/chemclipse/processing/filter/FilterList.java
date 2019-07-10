@@ -9,7 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.filter;
+package org.eclipse.chemclipse.processing.filter;
 
 import java.util.Collections;
 import java.util.Iterator;

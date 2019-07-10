@@ -38,15 +38,47 @@ public interface [ItemType]Filter<ConfigType> extends Filter<ConfigType> {
 	 *            the {@link [ItemType]} to check
 	 * @return <code>true</code> if this {@link [ItemType]} can be applied, <code>false</code> otherwise
 	 */
-	boolean accepts[ItemType]s(Collection<? extends [ItemType]> items);
+	default boolean accepts[ItemType]s(Collection<? extends [ItemType]> items) {
+
+		for([ItemType] item : items) {
+			if(!accepts[ItemType](item)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	boolean accepts[ItemType]([ItemType] item);
 
 	/**
 	 * Creates a new configuration that is specially suited for the given {@link [ItemType]} types
 	 * 
 	 * @param item
-	 * @return
+	 * @return a new configuration for this items or the default config if items is empty or no suitable configuration can be created
+	 * @throws IllegalArgumentException
+	 *             if any of the given {@link [ItemType]} are incompatible with this filter ({@link #accepts[ItemType]([ItemType])} returns <code>false</code> for them)
 	 */
-	default ConfigType createConfiguration(Collection<? extends [ItemType]> items) {
+	default ConfigType createConfiguration(Collection<? extends [ItemType]> items) throws IllegalArgumentException {
+
+		if(accepts[ItemType]s(items)) {
+			for([ItemType] item : items) {
+				return createConfiguration(item);
+			}
+			return createNewConfiguration();
+		} else {
+			throw new IllegalArgumentException("incompatible items in collection");
+		}
+	}
+
+	/**
+	 * Creates a configuration for this single item
+	 * 
+	 * @param item
+	 * @return a new configuration for this items or the default config if items is empty or no suitable configuration can be created
+	 * @throws IllegalArgumentException
+	 *             if any the given {@link [ItemType]} is incompatible with this filter ({@link #accepts[ItemType]([ItemType])} returns <code>false</code> for them)
+	 */
+	default ConfigType createConfiguration([ItemType] item) throws IllegalArgumentException {
 
 		return createNewConfiguration();
 	}

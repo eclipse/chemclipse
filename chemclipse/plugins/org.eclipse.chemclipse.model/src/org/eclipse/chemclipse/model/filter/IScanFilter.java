@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.filter;
 
-import org.eclipse.chemclipse.filter.Filter;
-import org.eclipse.chemclipse.filter.FilterList;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.processing.core.IProcessingResult;
+import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.filter.FilterList;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
