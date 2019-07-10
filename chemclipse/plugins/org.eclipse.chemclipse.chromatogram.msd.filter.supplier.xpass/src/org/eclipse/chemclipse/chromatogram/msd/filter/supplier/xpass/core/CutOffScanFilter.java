@@ -18,8 +18,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.CutOffScanFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.CutOffScanFilterSettings.CutDirection;
-import org.eclipse.chemclipse.filter.Filter;
-import org.eclipse.chemclipse.filter.FilterList;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.filter.IScanFilter;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -29,6 +27,8 @@ import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingResult;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.filter.FilterList;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
