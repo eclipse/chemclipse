@@ -38,13 +38,13 @@ import org.osgi.service.component.annotations.Component;
 public class CutOffScanFilter implements IScanFilter<CutOffScanFilterSettings> {
 
 	@Override
-	public String getFilterName() {
+	public String getName() {
 
 		return "Ion cut off";
 	}
 
 	@Override
-	public String getFilterDescription() {
+	public String getDescription() {
 
 		return "Cut off the lowest/highest abundance ions";
 	}
@@ -77,7 +77,7 @@ public class CutOffScanFilter implements IScanFilter<CutOffScanFilterSettings> {
 			}
 		}
 		result.setProcessingResult(modified > 0 ? Boolean.TRUE : Boolean.FALSE);
-		result.addMessage(new ProcessingMessage(MessageType.INFO, getFilterName(), MessageFormat.format("{0} scan(s) where processed", modified)));
+		result.addMessage(new ProcessingMessage(MessageType.INFO, getName(), MessageFormat.format("{0} scan(s) where processed", modified)));
 		return result;
 	}
 
