@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.Component;
 public class SavitzkyGolaySmoothingFilter implements IScanFilter<MassSpectrumFilterSettings>, ITotalScanSignalsFilter<MassSpectrumFilterSettings> {
 
 	@Override
-	public String getFilterName() {
+	public String getName() {
 
 		return "Savitzky-Golay Smoothing";
 	}
@@ -70,7 +70,7 @@ public class SavitzkyGolaySmoothingFilter implements IScanFilter<MassSpectrumFil
 		IProcessingResult<Integer> golayFilter = new FilterSupplier().applySavitzkyGolayFilter(massSpectra, derivative, order, width, monitor);
 		result.setProcessingResult(golayFilter.getProcessingResult() > 0);
 		result.addMessages(golayFilter);
-		result.addInfoMessage(getFilterName(), filterItems.size() + " scan(s) were smoothed with derivative=" + derivative + ", order=" + order + ", width=" + width);
+		result.addInfoMessage(getName(), filterItems.size() + " scan(s) were smoothed with derivative=" + derivative + ", order=" + order + ", width=" + width);
 		return result;
 	}
 
@@ -95,10 +95,10 @@ public class SavitzkyGolaySmoothingFilter implements IScanFilter<MassSpectrumFil
 		for(ITotalScanSignals signals : filterItems) {
 			IChromatogramFilterResult filterResult = processor.apply(signals, cfs, monitor);
 			if(filterResult.getResultStatus() != ResultStatus.OK) {
-				result.addErrorMessage(getFilterName(), filterResult.getDescription());
+				result.addErrorMessage(getName(), filterResult.getDescription());
 				break;
 			} else {
-				result.addInfoMessage(getFilterName(), filterResult.getDescription());
+				result.addInfoMessage(getName(), filterResult.getDescription());
 				result.setProcessingResult(Boolean.TRUE);
 			}
 		}
