@@ -12,21 +12,23 @@
 package org.eclipse.chemclipse.processing;
 
 /**
- * Describes very generic and broaden data categories a filter, processor or converter might handle
+ * Allows to specify the general processing category of an item
  * 
  * @author Christoph Läubrich
  *
  */
-public enum DataCategory {
-	MSD(Messages.getString("DataCategory.MSD")), CSD(Messages.getString("DataCategory.CSD")), WSD(Messages.getString("DataCategory.WSD")), FID(Messages.getString("DataCategory.FID")), NMR(Messages.getString("DataCategory.NMR")), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+public enum ProcessorCategory {
 	/**
-	 * Suggests that this Filter can support a wide range of datatypes and content-sensing is the only option to check if the filter, processor or converter can really handle the data or not
+	 * Indicates that this item is located in the Filtering domain, that means it adds/removes/changes a specific item
 	 */
-	AUTO_DETECT(Messages.getString("DataCategory.AUTO_DETECT")); //$NON-NLS-1$
+	FILTER(Messages.getString("ProcessorCategory.FILTER")), //$NON-NLS-1$
+	DETECTOR(Messages.getString("ProcessorCategory.DETECTOR")), //$NON-NLS-1$
+	EXPORT(Messages.getString("ProcessorCategory.DETECTOR")), //$NON-NLS-1$
+	CALCULATOR(Messages.getString("ProcessorCategory.CALCULATOR")); //$NON-NLS-1$
 
 	private String label;
 
-	private DataCategory(String label) {
+	ProcessorCategory(String label) {
 		this.label = label;
 	}
 

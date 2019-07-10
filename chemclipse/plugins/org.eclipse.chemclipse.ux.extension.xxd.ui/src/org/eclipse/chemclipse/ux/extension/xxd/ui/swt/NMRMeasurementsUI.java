@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.processing.filter.Filtered;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -209,29 +210,23 @@ public class NMRMeasurementsUI implements Observer {
 		public FilterAction(IMeasurementFilter<?> filter, IMeasurement measurement) {
 			this.filter = filter;
 			this.measurement = measurement;
-			setToolTipText(filter.getFilterDescription());
+			setToolTipText(filter.getDescription());
 			setId(filter.getID());
-			setText(filter.getFilterName());
+			setText(filter.getName());
 		}
 
 		@Override
 		public void run() {
 
-			applyFilter(filter, measurement);
+			// TODO show progressmonitor
+			applyFilter(filter, measurement, new DefaultProcessingResult<>(), new NullProgressMonitor());
 		}
 	}
 
-	private <T> void applyFilter(IMeasurementFilter<T> filter, IMeasurement measurement) {
+	private <T> void applyFilter(IMeasurementFilter<T> filter, IMeasurement measurement, MessageConsumer consumer, IProgressMonitor progressMonitor) {
 
 		T configuration = filter.createConfiguration(measurement);
-		Collection<? extends IMeasurement> filtered = filter.filterIMeasurements(Collections.singleton(measurement), configuration, new FilterChain<Collection<? extends IMeasurement>>() {
-
-			@Override
-			public Collection<? extends IMeasurement> doFilter(Collection<? extends IMeasurement> items, MessageConsumer messageConsumer) {
-
-				return items;
-			}
-		}, new DefaultProcessingResult<>(), new NullProgressMonitor());
+		Collection<? extends IMeasurement> filtered = filter.filterIMeasurements(Collections.singleton(measurement), configuration, FilterChain.returnResult(), consumer, progressMonitor);
 		for(IMeasurement item : filtered) {
 			if(item instanceof IComplexSignalMeasurement<?>) {
 				if(selection != null) {

@@ -29,4 +29,9 @@ import org.eclipse.chemclipse.processing.core.MessageConsumer;
 public interface FilterChain<T> {
 
 	T doFilter(T item, MessageConsumer messageConsumer);
+
+	public static <X> FilterChain<X> returnResult() {
+
+		return (items, messageConsumer) -> items;
+	}
 }

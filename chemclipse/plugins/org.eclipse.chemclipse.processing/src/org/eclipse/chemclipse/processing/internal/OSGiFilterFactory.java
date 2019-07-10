@@ -77,7 +77,7 @@ public class OSGiFilterFactory implements FilterFactory {
 
 			private String getName(Filter<?> f) {
 
-				String name = f.getFilterName();
+				String name = f.getName();
 				if(name != null) {
 					return name;
 				}

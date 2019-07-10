@@ -412,7 +412,7 @@ public class FilterMenuFactory {
 		@Override
 		public String getName() {
 
-			return filter.getFilterName();
+			return filter.getName();
 		}
 
 		@Override
@@ -439,7 +439,7 @@ public class FilterMenuFactory {
 							} catch(RuntimeException e) {
 								e.printStackTrace();
 								ProcessingInfo info = new ProcessingInfo();
-								info.addErrorMessage(filter.getFilterName(), "Failed " + e);
+								info.addErrorMessage(filter.getName(), "Failed " + e);
 								ProcessingInfoViewSupport.updateProcessingInfo(info, true);
 							}
 						}
