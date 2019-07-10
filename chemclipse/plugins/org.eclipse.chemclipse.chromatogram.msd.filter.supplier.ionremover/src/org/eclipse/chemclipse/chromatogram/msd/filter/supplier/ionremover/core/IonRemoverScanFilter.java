@@ -34,13 +34,13 @@ import org.osgi.service.component.annotations.Component;
 public class IonRemoverScanFilter implements IScanFilter<MassSpectrumFilterSettings> {
 
 	@Override
-	public String getFilterName() {
+	public String getName() {
 
 		return "Ion Remover";
 	}
 
 	@Override
-	public String getFilterDescription() {
+	public String getDescription() {
 
 		return "Removes slected ions from the massspectrum of filtered scans";
 	}
@@ -77,7 +77,7 @@ public class IonRemoverScanFilter implements IScanFilter<MassSpectrumFilterSetti
 			}
 		}
 		result.setProcessingResult(modified > 0 ? Boolean.TRUE : Boolean.FALSE);
-		result.addMessage(new ProcessingMessage(MessageType.INFO, getFilterName(), MessageFormat.format("{0} scan(s) where processed", modified)));
+		result.addMessage(new ProcessingMessage(MessageType.INFO, getName(), MessageFormat.format("{0} scan(s) where processed", modified)));
 		return result;
 	}
 
