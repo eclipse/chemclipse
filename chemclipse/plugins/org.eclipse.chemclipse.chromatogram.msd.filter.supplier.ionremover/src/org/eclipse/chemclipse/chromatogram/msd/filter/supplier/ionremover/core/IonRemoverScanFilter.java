@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core;
 import java.text.MessageFormat;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.MassSpectrumFilterSettings;
-import org.eclipse.chemclipse.filter.Filter;
-import org.eclipse.chemclipse.filter.FilterList;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.filter.IScanFilter;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -25,6 +23,8 @@ import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingResult;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.filter.FilterList;
 import org.eclipse.chemclipse.support.util.IonSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
