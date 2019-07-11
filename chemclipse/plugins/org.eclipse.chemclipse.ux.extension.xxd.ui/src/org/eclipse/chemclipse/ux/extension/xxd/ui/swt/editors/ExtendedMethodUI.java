@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -37,7 +38,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ConfigurableUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodListUI;
@@ -496,7 +497,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 						if(processEntry != null) {
 							processMethod.add(processEntry);
 							if(showSettingsOnAdd) {
-								modifyProcessEntry(getShell(), processEntry);
+								modifyProcessEntry(getShell(), processEntry, false);
 							}
 							updateProcessMethod();
 							select(Collections.singletonList(processEntry));
@@ -762,20 +763,26 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			Object object = listUI.getStructuredSelection().getFirstElement();
 			if(object instanceof IProcessEntry) {
 				IProcessEntry processEntry = (IProcessEntry)object;
-				modifyProcessEntry(shell, processEntry);
+				modifyProcessEntry(shell, processEntry, true);
 				updateProcessMethod();
 			}
 		}
 	}
 
-	public void modifyProcessEntry(Shell shell, IProcessEntry processEntry) {
+	private void modifyProcessEntry(Shell shell, IProcessEntry processEntry, boolean alwaysShow) {
 
 		Class<? extends IProcessSettings> processSettingsClass = processEntry.getProcessSettingsClass();
 		if(processSettingsClass != null) {
 			try {
-				SettingsSupport settingsSupport = new SettingsSupport();
-				String content = settingsSupport.getSettingsAsJson(processEntry.getJsonSettings(), processSettingsClass, shell);
-				processEntry.setJsonSettings(content);
+				String oldSettings = processEntry.getJsonSettings();
+				List<InputValue> inputValues = InputValue.readJSON(processSettingsClass, oldSettings);
+				if(inputValues.isEmpty() && !alwaysShow) {
+					return;
+				}
+				String content = SettingsWizard.executeWizard(shell, inputValues);
+				if(content != null) {
+					processEntry.setJsonSettings(content);
+				}
 			} catch(JsonParseException e1) {
 				logger.warn(e1);
 			} catch(JsonMappingException e1) {

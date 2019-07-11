@@ -21,6 +21,8 @@ Export-Package: org.eclipse.chemclipse.support.comparator,
  org.eclipse.chemclipse.support.preferences,
  org.eclipse.chemclipse.support.runtime,
  org.eclipse.chemclipse.support.settings,
+ org.eclipse.chemclipse.support.settings.parser,
+ org.eclipse.chemclipse.support.settings.validation,
  org.eclipse.chemclipse.support.text,
  org.eclipse.chemclipse.support.util,
  org.eclipse.chemclipse.support.validators

@@ -8,9 +8,9 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - Support File settings
+ * Christoph Läubrich - support FileSettingProperty, move static helper method into class
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
+package org.eclipse.chemclipse.support.settings.parser;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -19,16 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.IntegerValidation;
 import org.eclipse.chemclipse.support.settings.IonsSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
-import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Shell;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.BeanDescription;
@@ -40,81 +37,155 @@ import com.fasterxml.jackson.databind.PropertyMetadata;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 
-public class SettingsSupport {
+public class InputValue {
 
-	public <T extends IProcessSettings> T getSettings(String content, Class<T> clazz, Shell shell) throws JsonParseException, JsonMappingException, IOException {
+	private Class<?> rawType = null;
+	private String name = "";
+	private String description = "";
+	private String value = null; // Needed for initialization.
+	private String defaultValue = "";
+	/*
+	 * SettingsProperty ...
+	 */
+	private Object minValue = null;
+	private Object maxValue = null;
+	private String regularExpression = null;
+	private IntegerValidation integerValidation = null;
+	private boolean isMultiLine = false; // StringSettingsProperty
+	private FileSettingProperty fileSettingProperty;
 
-		String contentModified = getSettingsAsJson(content, clazz, shell);
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		T settings = objectMapper.readValue(contentModified, clazz);
-		return settings;
+	public boolean hasMinMaxConstraint() {
+
+		return (minValue != null) && (maxValue != null);
 	}
 
-	public String getSettingsAsJson(String content, Class<? extends IProcessSettings> clazz, Shell shell) throws JsonParseException, JsonMappingException, IOException {
+	public boolean hasRegexConstraint() {
 
-		/*
-		 * Initialize the input values with existing values.
-		 */
-		List<InputValue> inputValues = getInputValues(clazz);
-		initializeInputValues(content, inputValues);
-		try {
-			return getContentViaWizard(shell, inputValues);
-		} catch(Exception e) {
-			/*
-			 * Cancel pressed
-			 */
-			return (content == null) ? IProcessEntry.EMPTY_JSON_SETTINGS : content;
-		}
+		return (regularExpression != null && !"".equals(regularExpression));
 	}
 
-	@SuppressWarnings("unchecked")
-	private void initializeInputValues(String content, List<InputValue> inputValues) throws JsonParseException, JsonMappingException, IOException {
+	public boolean hasIntegerValidation() {
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		/*
-		 * Set existing values.
-		 */
-		if(content != null) {
-			Map<String, Object> map = objectMapper.readValue(content, HashMap.class);
-			for(Map.Entry<String, Object> entry : map.entrySet()) {
-				for(InputValue inputValue : inputValues) {
-					if(inputValue.getName().equals(entry.getKey())) {
-						Object value = entry.getValue();
-						if(value != null) {
-							inputValue.setValue(value.toString());
-						}
-					}
-				}
-			}
-		}
-		/*
-		 * Set default values on demand.
-		 */
-		for(InputValue inputValue : inputValues) {
-			if(inputValue.getValue() == null) {
-				inputValue.setValue(inputValue.getDefaultValue());
-			}
-		}
+		return (integerValidation != null);
 	}
 
-	private String getContentViaWizard(Shell shell, List<InputValue> inputValues) throws Exception {
+	public Class<?> getRawType() {
 
-		SettingsWizard wizard = new SettingsWizard(inputValues);
-		WizardDialog wizardDialog = new WizardDialog(shell, wizard);
-		wizardDialog.setMinimumPageSize(SettingsWizard.DEFAULT_WIDTH, SettingsWizard.DEFAULT_HEIGHT);
-		wizardDialog.create();
-		//
-		if(wizardDialog.open() == WizardDialog.OK) {
-			return wizard.getDialogSettings().get(SettingsWizard.JSON_SETTINGS);
-		} else {
-			throw new Exception("Cancel has been pressed.");
-		}
+		return rawType;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private List<InputValue> getInputValues(Class clazz) {
+	public void setRawType(Class<?> rawType) {
+
+		this.rawType = rawType;
+	}
+
+	public String getName() {
+
+		return name;
+	}
+
+	public void setName(String name) {
+
+		this.name = name;
+	}
+
+	public String getDescription() {
+
+		return description;
+	}
+
+	public void setDescription(String description) {
+
+		this.description = description;
+	}
+
+	public String getValue() {
+
+		return value;
+	}
+
+	public void setValue(String value) {
+
+		this.value = value;
+	}
+
+	public String getDefaultValue() {
+
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+
+		this.defaultValue = defaultValue;
+	}
+
+	public Object getMinValue() {
+
+		return minValue;
+	}
+
+	public void setMinValue(Object minValue) {
+
+		this.minValue = minValue;
+	}
+
+	public Object getMaxValue() {
+
+		return maxValue;
+	}
+
+	public void setMaxValue(Object maxValue) {
+
+		this.maxValue = maxValue;
+	}
+
+	public String getRegularExpression() {
+
+		return regularExpression;
+	}
+
+	public void setRegularExpression(String regularExpression) {
+
+		this.regularExpression = regularExpression;
+	}
+
+	public IntegerValidation getIntegerValidation() {
+
+		return integerValidation;
+	}
+
+	public void setIntegerValidation(IntegerValidation integerValidation) {
+
+		this.integerValidation = integerValidation;
+	}
+
+	public boolean isMultiLine() {
+
+		return isMultiLine;
+	}
+
+	public void setMultiLine(boolean isMultiLine) {
+
+		this.isMultiLine = isMultiLine;
+	}
+
+	public void setFileSettingProperty(FileSettingProperty annotation) {
+
+		this.fileSettingProperty = annotation;
+	}
+
+	public FileSettingProperty getFileSettingProperty() {
+
+		return fileSettingProperty;
+	}
+
+	/**
+	 * parses a given class for annotations and generate {@link InputValue}s from it
+	 * 
+	 * @param clazz
+	 * @return
+	 */
+	public static List<InputValue> getInputValues(Class<?> clazz) {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -177,6 +248,39 @@ public class SettingsSupport {
 			}
 		}
 		//
+		return inputValues;
+	}
+
+	public static List<InputValue> readJSON(Class<?> clazz, String content) throws JsonParseException, JsonMappingException, IOException {
+
+		List<InputValue> inputValues = getInputValues(clazz);
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		/*
+		 * Set existing values.
+		 */
+		if(content != null) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> map = objectMapper.readValue(content, HashMap.class);
+			for(Map.Entry<String, Object> entry : map.entrySet()) {
+				for(InputValue inputValue : inputValues) {
+					if(inputValue.getName().equals(entry.getKey())) {
+						Object value = entry.getValue();
+						if(value != null) {
+							inputValue.setValue(value.toString());
+						}
+					}
+				}
+			}
+		}
+		/*
+		 * Set default values on demand.
+		 */
+		for(InputValue inputValue : inputValues) {
+			if(inputValue.getValue() == null) {
+				inputValue.setValue(inputValue.getDefaultValue());
+			}
+		}
 		return inputValues;
 	}
 }

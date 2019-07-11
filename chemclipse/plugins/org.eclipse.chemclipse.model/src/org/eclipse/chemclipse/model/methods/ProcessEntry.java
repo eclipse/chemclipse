@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - remove empty settings in case of null
  *******************************************************************************/
 package org.eclipse.chemclipse.model.methods;
 
@@ -82,6 +83,9 @@ public class ProcessEntry implements IProcessEntry {
 	@Override
 	public String getJsonSettings() {
 
+		if(jsonSettings == null) {
+			return EMPTY_JSON_SETTINGS;
+		}
 		return jsonSettings;
 	}
 
