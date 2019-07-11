@@ -28,4 +28,5 @@ Export-Package: org.eclipse.chemclipse.support.comparator,
  org.eclipse.chemclipse.support.validators
 Import-Package: com.fasterxml.jackson.annotation;version="2.5.0",
  com.fasterxml.jackson.core;version="2.5.0",
- com.fasterxml.jackson.databind;version="2.5.0"
+ com.fasterxml.jackson.databind;version="2.5.0",
+ com.fasterxml.jackson.databind.introspect;version="2.7.1"
