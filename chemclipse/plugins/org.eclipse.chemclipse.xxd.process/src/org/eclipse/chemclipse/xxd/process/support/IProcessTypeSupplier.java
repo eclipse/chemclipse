@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - add getProcessorSupplier method
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
 
@@ -29,6 +30,19 @@ public interface IProcessTypeSupplier<T> {
 	List<DataType> getSupportedDataTypes();
 
 	List<ProcessorSupplier> getProcessorSuppliers();
+
+	default ProcessorSupplier getProcessorSupplier(String id) {
+
+		try {
+			ProcessorSupplier supplier = new ProcessorSupplier(id);
+			supplier.setDescription(getProcessorDescription(id));
+			supplier.setName(getProcessorName(id));
+			supplier.setSettingsClass(getProcessSettingsClass(id));
+			return supplier;
+		} catch(Exception e) {
+			return null;
+		}
+	}
 
 	Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception;
 

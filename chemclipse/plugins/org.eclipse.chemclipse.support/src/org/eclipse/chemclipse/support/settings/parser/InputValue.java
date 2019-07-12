@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.support.settings.parser;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,11 +28,9 @@ import org.eclipse.chemclipse.support.settings.IntegerValidation;
 import org.eclipse.chemclipse.support.settings.IonsSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyMetadata;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
@@ -254,8 +253,11 @@ public class InputValue {
 		return inputValues;
 	}
 
-	public static List<InputValue> readJSON(Class<?> clazz, String content) throws JsonParseException, JsonMappingException, IOException {
+	public static List<InputValue> readJSON(Class<?> clazz, String content) throws IOException {
 
+		if(clazz == null) {
+			return Collections.emptyList();
+		}
 		List<InputValue> inputValues = getInputValues(clazz);
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);

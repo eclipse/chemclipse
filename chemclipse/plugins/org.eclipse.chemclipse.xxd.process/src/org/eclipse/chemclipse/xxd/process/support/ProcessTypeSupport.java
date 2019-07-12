@@ -105,78 +105,68 @@ public class ProcessTypeSupport {
 		addProcessSupplier(new ChromatogramExportTypeSupplierWSD()); // OK - Improve settings
 		addProcessSupplier(MassspectrumProcessTypeSupplier.createPeakFilterSupplier());
 		addProcessSupplier(MassspectrumProcessTypeSupplier.createScanFilterSupplier());
-		// MassSpectrumFilter?
 		// NoiseCalculator?
 		if(filterFactory != null) {
 			// TODO
 		}
 	}
 
-	public ProcessorPreferences getPreferences(String processorId) {
+	/**
+	 * 
+	 * @return all active preferences for this {@link ProcessTypeSupport}
+	 */
+	public Map<ProcessorSupplier, ProcessorPreferences> getAllPreferences() {
+
+		HashMap<ProcessorSupplier, ProcessorPreferences> map = new HashMap<>();
+		try {
+			IEclipsePreferences storage = getStorage();
+			String[] childrenNames = storage.childrenNames();
+			for(String name : childrenNames) {
+				Preferences node = storage.node(name);
+				if(node.keys().length == 0) {
+					// empty default node
+					continue;
+				}
+				IProcessTypeSupplier<?> supplier = getSupplier(name);
+				if(supplier != null) {
+					IProcessTypeSupplier<?> typeSupplier = getSupplier(name);
+					if(typeSupplier == null) {
+						// not valid for this type support
+						continue;
+					}
+					ProcessorSupplier processorSupplier = typeSupplier.getProcessorSupplier(name);
+					if(processorSupplier != null) {
+						map.put(processorSupplier, new NodeProcessorPreferences(node));
+					}
+				}
+			}
+		} catch(BackingStoreException e) {
+			// can't load it then
+		}
+		return map;
+	}
+
+	public IProcessTypeSupplier<?> getSupplier(String id) {
+
+		return processSupplierMap.get(id);
+	}
+
+	/**
+	 * 
+	 * @param processorId
+	 * @return the preferences for this processor id
+	 */
+	public ProcessorPreferences getPreferences(ProcessorSupplier supplier) {
+
+		return new NodeProcessorPreferences(getStorage().node(supplier.getId()));
+	}
+
+	private IEclipsePreferences getStorage() {
 
 		if(preferences == null) {
 			preferences = InstanceScope.INSTANCE.getNode(ProcessTypeSupport.class.getName());
 		}
-		Preferences node = preferences.node(processorId);
-		return new ProcessorPreferences() {
-
-			@Override
-			public boolean isAskForSettings() {
-
-				return node.getBoolean(KEY_ASK_FOR_SETTINGS, true);
-			}
-
-			@Override
-			public void setAskForSettings(boolean askForSettings) {
-
-				node.putBoolean(KEY_ASK_FOR_SETTINGS, askForSettings);
-				flush();
-			}
-
-			public void flush() {
-
-				try {
-					node.flush();
-				} catch(BackingStoreException e) {
-				}
-			}
-
-			@Override
-			public String getUserSettings() {
-
-				return node.get(KEY_USER_SETTINGS, ProcessEntry.EMPTY_JSON_SETTINGS);
-			}
-
-			@Override
-			public void setUserSettings(String settings) {
-
-				node.put(KEY_USER_SETTINGS, settings);
-				flush();
-			}
-
-			@Override
-			public void reset() {
-
-				try {
-					node.clear();
-					flush();
-				} catch(BackingStoreException e) {
-				}
-			}
-
-			@Override
-			public boolean isUseSystemDefaults() {
-
-				return node.getBoolean(KEY_USE_SYSTEM_DEFAULTS, true);
-			}
-
-			@Override
-			public void setUseSystemDefaults(boolean useSystemDefaults) {
-
-				node.putBoolean(KEY_USE_SYSTEM_DEFAULTS, useSystemDefaults);
-				flush();
-			}
-		};
+		return preferences;
 	}
 
 	/**
@@ -188,7 +178,7 @@ public class ProcessTypeSupport {
 
 		try {
 			for(String processorId : processTypeSupplier.getProcessorIds()) {
-				IProcessTypeSupplier<?> typeSupplier = processSupplierMap.get(processorId);
+				IProcessTypeSupplier<?> typeSupplier = getSupplier(processorId);
 				if(typeSupplier != null) {
 					logger.warn("The processor id " + processorId + " is already defined by " + typeSupplier.getClass().getSimpleName() + " and is ignored for redefining supplier " + processTypeSupplier.getClass().getSimpleName());
 				} else {
@@ -244,7 +234,7 @@ public class ProcessTypeSupport {
 			 */
 			for(IProcessEntry processEntry : processMethod) {
 				String processorId = processEntry.getProcessorId();
-				IProcessTypeSupplier<?> processTypeSupplier = processSupplierMap.get(processorId);
+				IProcessTypeSupplier<?> processTypeSupplier = getSupplier(processorId);
 				if(processTypeSupplier != null) {
 					/*
 					 * If processEntry.getJsonSettings() == {} (IProcessEntry.EMPTY_JSON_SETTINGS),
@@ -313,5 +303,82 @@ public class ProcessTypeSupport {
 		 * Error if other checks failed.
 		 */
 		return IStatus.ERROR;
+	}
+
+	private static final class NodeProcessorPreferences implements ProcessorPreferences {
+
+		private Preferences node;
+
+		public NodeProcessorPreferences(Preferences node) {
+			this.node = node;
+		}
+
+		@Override
+		public boolean isAskForSettings() {
+
+			trySync();
+			return node.getBoolean(KEY_ASK_FOR_SETTINGS, true);
+		}
+
+		public void trySync() {
+
+			try {
+				node.sync();
+			} catch(BackingStoreException e) {
+			}
+		}
+
+		@Override
+		public void setAskForSettings(boolean askForSettings) {
+
+			node.putBoolean(KEY_ASK_FOR_SETTINGS, askForSettings);
+			tryFlush();
+		}
+
+		private void tryFlush() {
+
+			try {
+				node.flush();
+			} catch(BackingStoreException e) {
+			}
+		}
+
+		@Override
+		public String getUserSettings() {
+
+			trySync();
+			return node.get(KEY_USER_SETTINGS, ProcessEntry.EMPTY_JSON_SETTINGS);
+		}
+
+		@Override
+		public void setUserSettings(String settings) {
+
+			node.put(KEY_USER_SETTINGS, settings);
+			tryFlush();
+		}
+
+		@Override
+		public void reset() {
+
+			try {
+				node.clear();
+				tryFlush();
+			} catch(BackingStoreException e) {
+			}
+		}
+
+		@Override
+		public boolean isUseSystemDefaults() {
+
+			trySync();
+			return node.getBoolean(KEY_USE_SYSTEM_DEFAULTS, true);
+		}
+
+		@Override
+		public void setUseSystemDefaults(boolean useSystemDefaults) {
+
+			node.putBoolean(KEY_USE_SYSTEM_DEFAULTS, useSystemDefaults);
+			tryFlush();
+		}
 	}
 }

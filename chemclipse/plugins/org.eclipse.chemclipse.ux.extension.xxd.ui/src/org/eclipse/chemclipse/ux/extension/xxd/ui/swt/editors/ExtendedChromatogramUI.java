@@ -61,6 +61,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsPreferencesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramAxes;
@@ -83,6 +84,7 @@ import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD
 import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -122,6 +124,7 @@ import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
+import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
@@ -525,28 +528,36 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				List<ProcessorSupplier> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
 				Collections.sort(list, new NameComparator());
 				for(ProcessorSupplier supplier : list) {
-					chartSettings.addMenuEntry(new ProcessorSupplierMenuEntry(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier, processTypeSupport.getPreferences(supplier.getId())));
+					chartSettings.addMenuEntry(new ProcessorSupplierMenuEntry(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier, processTypeSupport.getPreferences(supplier)));
 				}
 			}
-			// chartSettings.addMenuEntry(new IChartMenuEntry() {
-			//
-			// @Override
-			// public String getName() {
-			//
-			// return "- manage processing settings -";
-			// }
-			//
-			// @Override
-			// public String getCategory() {
-			//
-			// return "";
-			// }
-			//
-			// @Override
-			// public void execute(Shell shell, ScrollableChart scrollableChart) {
-			//
-			// }
-			// });
+			chartSettings.addMenuEntry(new IChartMenuEntry() {
+
+				@Override
+				public String getName() {
+
+					return "- manage processing settings -";
+				}
+
+				@Override
+				public String getCategory() {
+
+					return "";
+				}
+
+				@Override
+				public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+					SettingsPreferencesWizard.openEditWizard(shell, processTypeSupport);
+				}
+
+				@Override
+				public boolean isEnabled(ScrollableChart scrollableChart) {
+
+					Map<ProcessorSupplier, ProcessorPreferences> allPreferences = processTypeSupport.getAllPreferences();
+					return !allPreferences.isEmpty();
+				}
+			});
 		}
 	}
 
