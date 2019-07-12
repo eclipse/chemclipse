@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -51,7 +52,7 @@ public class ProcessingWizardPage extends WizardPage {
 	private ComboViewer comboViewerCategory;
 	private ComboViewer comboViewerProcessor;
 	private ProcessTypeSupport processTypeSupport;
-	private IProcessTypeSupplier processTypeSupplier = null;
+	private IProcessTypeSupplier<?> processTypeSupplier = null;
 	//
 	private CategoryComparator categoryComparator = new CategoryComparator();
 	private NameComparator nameComparator = new NameComparator();
@@ -142,7 +143,7 @@ public class ProcessingWizardPage extends WizardPage {
 		addSelectedTypeAndPersist(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD, checkboxMSD, dataTypes, DataType.MSD);
 		addSelectedTypeAndPersist(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD, checkboxWSD, dataTypes, DataType.WSD);
 		//
-		List<IProcessTypeSupplier> processTypeSuppliers = processTypeSupport.getProcessorTypeSuppliers(dataTypes);
+		List<IProcessTypeSupplier<?>> processTypeSuppliers = processTypeSupport.getProcessorTypeSuppliers(dataTypes);
 		Collections.sort(processTypeSuppliers, categoryComparator);
 		comboViewerCategory.setInput(processTypeSuppliers);
 	}
@@ -166,7 +167,7 @@ public class ProcessingWizardPage extends WizardPage {
 			public String getText(Object element) {
 
 				if(element instanceof IProcessTypeSupplier) {
-					IProcessTypeSupplier processTypeSupplier = (IProcessTypeSupplier)element;
+					IProcessTypeSupplier<?> processTypeSupplier = (IProcessTypeSupplier<?>)element;
 					return processTypeSupplier.getCategory();
 				}
 				return null;
@@ -184,7 +185,7 @@ public class ProcessingWizardPage extends WizardPage {
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof IProcessTypeSupplier) {
 					try {
-						processTypeSupplier = (IProcessTypeSupplier)object;
+						processTypeSupplier = (IProcessTypeSupplier<?>)object;
 						List<ProcessorSupplier> processSuppliers = new ArrayList<>(processTypeSupplier.getProcessorSuppliers());
 						Collections.sort(processSuppliers, nameComparator);
 						comboViewerProcessor.setInput(processSuppliers);

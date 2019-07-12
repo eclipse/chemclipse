@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,13 +8,13 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - use {@link MessageProvider} interface
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.internal.provider;
 
+import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
 /**
  * @author Dr. Philip Wenig
@@ -38,8 +38,8 @@ public class ProcessingInfoContentProvider implements IStructuredContentProvider
 		/*
 		 * Processing messages
 		 */
-		if(inputElement instanceof IProcessingInfo) {
-			IProcessingInfo processingInfo = (IProcessingInfo)inputElement;
+		if(inputElement instanceof MessageProvider) {
+			MessageProvider processingInfo = (MessageProvider)inputElement;
 			return processingInfo.getMessages().toArray();
 		} else {
 			return null;

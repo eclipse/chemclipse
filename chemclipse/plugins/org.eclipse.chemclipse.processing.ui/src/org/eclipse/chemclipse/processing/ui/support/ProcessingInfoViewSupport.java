@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - use {@link MessageProvider} interface
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.support;
 
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -43,13 +44,13 @@ public class ProcessingInfoViewSupport {
 	 * 
 	 * @param processingInfo
 	 */
-	public static void updateProcessingInfo(final IProcessingInfo processingInfo, final boolean focusProcessingInfoView) {
+	public static void updateProcessingInfo(final MessageProvider processingInfo, final boolean focusProcessingInfoView) {
 
 		Display display = DisplayUtils.getDisplay();
 		updateProcessingInfo(display, processingInfo, focusProcessingInfoView);
 	}
 
-	public static void updateProcessingInfo(final Display display, final IProcessingInfo processingInfo, final boolean focusProcessingInfoView) {
+	public static void updateProcessingInfo(final Display display, final MessageProvider processingInfo, final boolean focusProcessingInfoView) {
 
 		display.asyncExec(new Runnable() {
 
@@ -90,7 +91,7 @@ public class ProcessingInfoViewSupport {
 	 * 
 	 * @param processingInfo
 	 */
-	private static void updateProcessingInfoView(IProcessingInfo processingInfo) {
+	private static void updateProcessingInfoView(MessageProvider processingInfo) {
 
 		/*
 		 * Create the dynamic update notifier if it has been not created yet.

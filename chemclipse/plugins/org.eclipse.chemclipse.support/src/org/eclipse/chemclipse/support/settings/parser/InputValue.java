@@ -91,6 +91,9 @@ public class InputValue {
 
 	public String getDescription() {
 
+		if(description == null) {
+			return "";
+		}
 		return description;
 	}
 

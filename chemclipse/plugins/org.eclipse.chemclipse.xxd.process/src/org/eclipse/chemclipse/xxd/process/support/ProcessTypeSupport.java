@@ -9,12 +9,14 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
- * Christoph Läubrich - improve logging output, propagate processor messages
+ * Christoph Läubrich - improve logging output, propagate processor messages, enhance for usage in editors, preference support for processors
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +24,14 @@ import java.util.Map;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
+import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.filter.FilterFactory;
+import org.eclipse.chemclipse.xxd.process.comparators.CategoryComparator;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramExportTypeSupplierCSD;
@@ -49,6 +54,10 @@ import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakQuantitationTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -57,11 +66,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ProcessTypeSupport {
 
+	private static final String KEY_USE_SYSTEM_DEFAULTS = "useSystemDefaults";
+	private static final String KEY_USER_SETTINGS = "userSettings";
+	private static final String KEY_ASK_FOR_SETTINGS = "askForSettings";
+	private static final CategoryComparator CATEGORY_COMPARATOR = new CategoryComparator();
 	private static final Logger logger = Logger.getLogger(ProcessTypeSupport.class);
 	//
 	private Map<String, IProcessTypeSupplier<?>> processSupplierMap = new HashMap<>();
+	private IEclipsePreferences preferences;
 
 	public ProcessTypeSupport() {
+		this(null);
+	}
+
+	public ProcessTypeSupport(FilterFactory filterFactory) {
 		/*
 		 * Add all available process supplier here.
 		 * TODO: Test native settings composite via extension point resolution
@@ -89,6 +107,76 @@ public class ProcessTypeSupport {
 		addProcessSupplier(MassspectrumProcessTypeSupplier.createScanFilterSupplier());
 		// MassSpectrumFilter?
 		// NoiseCalculator?
+		if(filterFactory != null) {
+			// TODO
+		}
+	}
+
+	public ProcessorPreferences getPreferences(String processorId) {
+
+		if(preferences == null) {
+			preferences = InstanceScope.INSTANCE.getNode(ProcessTypeSupport.class.getName());
+		}
+		Preferences node = preferences.node(processorId);
+		return new ProcessorPreferences() {
+
+			@Override
+			public boolean isAskForSettings() {
+
+				return node.getBoolean(KEY_ASK_FOR_SETTINGS, true);
+			}
+
+			@Override
+			public void setAskForSettings(boolean askForSettings) {
+
+				node.putBoolean(KEY_ASK_FOR_SETTINGS, askForSettings);
+				flush();
+			}
+
+			public void flush() {
+
+				try {
+					node.flush();
+				} catch(BackingStoreException e) {
+				}
+			}
+
+			@Override
+			public String getUserSettings() {
+
+				return node.get(KEY_USER_SETTINGS, ProcessEntry.EMPTY_JSON_SETTINGS);
+			}
+
+			@Override
+			public void setUserSettings(String settings) {
+
+				node.put(KEY_USER_SETTINGS, settings);
+				flush();
+			}
+
+			@Override
+			public void reset() {
+
+				try {
+					node.clear();
+					flush();
+				} catch(BackingStoreException e) {
+				}
+			}
+
+			@Override
+			public boolean isUseSystemDefaults() {
+
+				return node.getBoolean(KEY_USE_SYSTEM_DEFAULTS, true);
+			}
+
+			@Override
+			public void setUseSystemDefaults(boolean useSystemDefaults) {
+
+				node.putBoolean(KEY_USE_SYSTEM_DEFAULTS, useSystemDefaults);
+				flush();
+			}
+		};
 	}
 
 	/**
@@ -112,21 +200,26 @@ public class ProcessTypeSupport {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	public List<IProcessTypeSupplier> getProcessorTypeSuppliers(List<DataType> dataTypes) {
+	/**
+	 * 
+	 * @param dataTypes
+	 * @return the matching {@link IProcessTypeSupplier} order by category name
+	 */
+	public List<IProcessTypeSupplier<?>> getProcessorTypeSuppliers(Collection<DataType> dataTypes) {
 
-		List<IProcessTypeSupplier> supplier = new ArrayList<>();
+		List<IProcessTypeSupplier<?>> supplier = new ArrayList<>();
 		for(IProcessTypeSupplier<?> processTypeSupplier : processSupplierMap.values()) {
-			exitloop:
+			List<DataType> types = processTypeSupplier.getSupportedDataTypes();
 			for(DataType dataType : dataTypes) {
-				if(processTypeSupplier.getSupportedDataTypes().contains(dataType)) {
+				if(types.contains(dataType)) {
 					if(!supplier.contains(processTypeSupplier)) {
 						supplier.add(processTypeSupplier);
-						break exitloop;
+						break;
 					}
 				}
 			}
 		}
+		Collections.sort(supplier, CATEGORY_COMPARATOR);
 		return supplier;
 	}
 

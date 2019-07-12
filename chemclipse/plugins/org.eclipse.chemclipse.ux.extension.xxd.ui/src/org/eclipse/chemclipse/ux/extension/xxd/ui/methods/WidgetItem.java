@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
@@ -75,7 +76,7 @@ public class WidgetItem {
 		return control;
 	}
 
-	public void initializeControl(Composite parent) throws Exception {
+	public void initializeControl(Composite parent) {
 
 		control = createControl(parent);
 		inputValidator = new InputValidator(inputValue);
@@ -161,7 +162,7 @@ public class WidgetItem {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Control createControl(Composite parent) throws Exception {
+	private Control createControl(Composite parent) {
 
 		Class<?> rawType = inputValue.getRawType();
 		if(rawType != null) {
@@ -189,7 +190,9 @@ public class WidgetItem {
 			} else if(rawType == File.class) {
 				return createFileWidget(parent);
 			} else {
-				throw new Exception("Unknown Raw Type: " + rawType);
+				Label label = new Label(parent, SWT.NONE);
+				label.setText("Unsupported Type: " + rawType);
+				return label;
 			}
 		}
 		return null;
