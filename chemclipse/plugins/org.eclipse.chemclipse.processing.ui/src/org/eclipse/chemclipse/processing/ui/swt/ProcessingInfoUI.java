@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,14 +9,15 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Janos Binder - cleanup
+ * Christoph Läubrich - use more generic interface to display messages
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.swt;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoContentProvider;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoLabelProvider;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoTableComparator;
@@ -137,9 +138,11 @@ public class ProcessingInfoUI {
 		tableViewer.getControl().setFocus();
 	}
 
-	public void update(IProcessingInfo processingInfo) {
+	public void update(MessageProvider messageProvider) {
 
-		tableViewer.setInput(processingInfo);
+		if(tableViewer.getInput() != messageProvider) {
+			tableViewer.setInput(messageProvider);
+		}
 	}
 
 	public TableViewer getTableViewer() {

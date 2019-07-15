@@ -8,34 +8,51 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - use {@link MessageProvider} interface
+ * Christoph Läubrich - use {@link MessageProvider} interface, add support for E4 DI
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.support;
 
+import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.MessageProvider;
+import org.eclipse.chemclipse.processing.ui.Activator;
 import org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
 
-@SuppressWarnings("restriction")
 public class ProcessingInfoViewSupport {
 
 	private final static String TITLE = "An error/some errors occured.";
 	private final static String MESSAGE = "Please check the 'Feedback' view.";
-	private static DynamicProcessingInfoUpdateNotifier dynamicUpdateNotifier;
 
-	private ProcessingInfoViewSupport() {
+	public ProcessingInfoViewSupport() {
+	}
+
+	public static void updateProcessingInfoError(String description, String message, Throwable e) {
+
+		DefaultProcessingResult<?> errorResult = new DefaultProcessingResult<>();
+		errorResult.addErrorMessage(description, message, e);
+		updateProcessingInfo(errorResult, true);
+	}
+
+	/**
+	 * Shows an error message reminder and tries to focus the part, if the processing info
+	 * instance contains error messages.
+	 * 
+	 * @param processingInfo
+	 */
+	public static void updateProcessingInfo(final MessageProvider processingInfo) {
+
+		if(processingInfo == null) {
+			return;
+		}
+		updateProcessingInfo(processingInfo, processingInfo.hasErrorMessages());
 	}
 
 	/**
@@ -46,21 +63,28 @@ public class ProcessingInfoViewSupport {
 	 */
 	public static void updateProcessingInfo(final MessageProvider processingInfo, final boolean focusProcessingInfoView) {
 
+		if(processingInfo == null) {
+			return;
+		}
 		Display display = DisplayUtils.getDisplay();
 		updateProcessingInfo(display, processingInfo, focusProcessingInfoView);
 	}
 
 	public static void updateProcessingInfo(final Display display, final MessageProvider processingInfo, final boolean focusProcessingInfoView) {
 
-		display.asyncExec(new Runnable() {
+		if(processingInfo == null) {
+			return;
+		}
+		IEclipseContext serviceContext = EclipseContextFactory.getServiceContext(Activator.getDefault().getBundle().getBundleContext());
+		DynamicProcessingInfoUpdateNotifier notifier = ContextInjectionFactory.make(DynamicProcessingInfoUpdateNotifier.class, serviceContext);
+		notifier.update(processingInfo);
+		// show popup if error occurred
+		if(processingInfo != null && processingInfo.hasErrorMessages()) {
+			display.asyncExec(new Runnable() {
 
-			@Override
-			public void run() {
+				@Override
+				public void run() {
 
-				/*
-				 * Show the message box.
-				 */
-				if(processingInfo != null && processingInfo.hasErrorMessages()) {
 					Shell shell = DisplayUtils.getShell();
 					if(shell != null) {
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
@@ -68,44 +92,12 @@ public class ProcessingInfoViewSupport {
 						messageBox.setMessage(MESSAGE);
 						messageBox.open();
 					}
+					// focus the view if requested, this will open the feedback view if required
+					if(focusProcessingInfoView) {
+						ModelSupportAddon.focusPart(ProcessingInfoPart.ID);
+					}
 				}
-				/*
-				 * Update the info view.
-				 * Focus the view.
-				 */
-				updateProcessingInfoView(processingInfo);
-				if(focusProcessingInfoView) {
-					/*
-					 * Focus this part.
-					 * Use the ProcessingInfoPart.ID in the Application.e4xmi
-					 */
-					ModelSupportAddon.focusPart(ProcessingInfoPart.ID);
-				}
-			}
-		});
-	}
-
-	/**
-	 * Updates the processing info view.
-	 * Call this method inside a Display.asyncExec run method.
-	 * 
-	 * @param processingInfo
-	 */
-	private static void updateProcessingInfoView(MessageProvider processingInfo) {
-
-		/*
-		 * Create the dynamic update notifier if it has been not created yet.
-		 */
-		if(dynamicUpdateNotifier == null) {
-			Bundle bundle = FrameworkUtil.getBundle(ProcessingInfoViewSupport.class);
-			BundleContext bundleContext = bundle.getBundleContext();
-			IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(bundleContext);
-			eclipseContext.set(Logger.class, null);
-			dynamicUpdateNotifier = ContextInjectionFactory.make(DynamicProcessingInfoUpdateNotifier.class, eclipseContext);
+			});
 		}
-		/*
-		 * Send an event using the event broker mechanism of e4.
-		 */
-		dynamicUpdateNotifier.update(processingInfo);
 	}
 }
