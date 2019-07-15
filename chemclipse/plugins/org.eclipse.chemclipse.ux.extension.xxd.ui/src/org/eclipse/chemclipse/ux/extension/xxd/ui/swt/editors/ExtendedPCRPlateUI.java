@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.pcr.model.core.IChannelSpecification;
+import org.eclipse.chemclipse.pcr.model.core.IDetectionFormat;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IPlateTableEntry;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
@@ -24,7 +26,8 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PlateListLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PlateListUI;
@@ -34,6 +37,7 @@ import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -43,6 +47,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
@@ -54,6 +59,10 @@ public class ExtendedPCRPlateUI {
 
 	private Label labelDataInfo;
 	private PlateListUI plateListUI;
+	private Combo comboSubsets;
+	private ComboViewer comboViewerChannels;
+	//
+	private IPlate plate;
 
 	public ExtendedPCRPlateUI(Composite parent) {
 		initialize(parent);
@@ -61,32 +70,8 @@ public class ExtendedPCRPlateUI {
 
 	public void update(IPlate plate) {
 
-		if(plate != null) {
-			/*
-			 * Label
-			 */
-			labelDataInfo.setText("Number of Wells: " + plate.getWells().size());
-			/*
-			 * Table
-			 */
-			Set<IWell> wells = plate.getWells();
-			List<IPlateTableEntry> plateTableEntries = new ArrayList<>();
-			for(int i = 65; i <= 72; i++) {
-				String row = Character.toString(((char)i));
-				IPlateTableEntry plateTableEntry = new PlateTableEntry(row);
-				for(IWell well : wells) {
-					Position position = well.getPosition();
-					if(position.getRow().equals(row)) {
-						plateTableEntry.getWells().put(position.getColumn(), well);
-					}
-				}
-				plateTableEntries.add(plateTableEntry);
-			}
-			plateListUI.setInput(plateTableEntries);
-		} else {
-			labelDataInfo.setText("");
-			plateListUI.clear();
-		}
+		this.plate = plate;
+		updateWidget();
 	}
 
 	private void initialize(Composite parent) {
@@ -102,9 +87,11 @@ public class ExtendedPCRPlateUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
 		createDataInfoLabel(composite);
+		comboSubsets = createComboSubsets(composite);
+		comboViewerChannels = createComboChannelSpecifications(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
 	}
@@ -116,6 +103,67 @@ public class ExtendedPCRPlateUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		labelDataInfo.setLayoutData(gridData);
+	}
+
+	private Combo createComboSubsets(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setToolTipText("Selection of the subsets");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				String activeSubset = combo.getText();
+				if(plate != null) {
+					plate.setActiveSubset(activeSubset);
+					plateListUI.refresh();
+				}
+			}
+		});
+		//
+		return combo;
+	}
+
+	private ComboViewer createComboChannelSpecifications(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(new ListContentProvider());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof IChannelSpecification) {
+					IChannelSpecification channelSpecification = (IChannelSpecification)element;
+					return channelSpecification.getName();
+				}
+				return null;
+			}
+		});
+		//
+		combo.setToolTipText("Select a channel specification.");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(plate != null) {
+					Object object = comboViewer.getStructuredSelection().getFirstElement();
+					if(object instanceof IChannelSpecification) {
+						plate.setActiveChannel(combo.getSelectionIndex());
+						plateListUI.refresh();
+					}
+				}
+			}
+		});
+		//
+		return comboViewer;
 	}
 
 	private void createResetButton(Composite parent) {
@@ -167,10 +215,12 @@ public class ExtendedPCRPlateUI {
 
 	private void applySettings() {
 
+		reset();
 	}
 
 	private void reset() {
 
+		updateWidget();
 	}
 
 	private void createPlateTable(Composite parent) {
@@ -198,7 +248,7 @@ public class ExtendedPCRPlateUI {
 					data = null;
 				}
 				//
-				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+				event.widget.getDisplay().asyncExec(new Runnable() {
 
 					@Override
 					public void run() {
@@ -244,5 +294,66 @@ public class ExtendedPCRPlateUI {
 		}
 		//
 		return null;
+	}
+
+	private void updateWidget() {
+
+		updateInfo();
+		updateWellPositions();
+		updateSubsetCombo();
+		updateChannelSpecifications();
+	}
+
+	private void updateInfo() {
+
+		if(plate != null) {
+			labelDataInfo.setText("Number of Wells: " + plate.getWells().size());
+		} else {
+			labelDataInfo.setText("");
+		}
+	}
+
+	private void updateWellPositions() {
+
+		if(plate != null) {
+			Set<IWell> wells = plate.getWells();
+			List<IPlateTableEntry> plateTableEntries = new ArrayList<>();
+			for(int i = 65; i <= 72; i++) {
+				String row = Character.toString(((char)i));
+				IPlateTableEntry plateTableEntry = new PlateTableEntry(row);
+				for(IWell well : wells) {
+					Position position = well.getPosition();
+					if(position.getRow().equals(row)) {
+						plateTableEntry.getWells().put(position.getColumn(), well);
+					}
+				}
+				plateTableEntries.add(plateTableEntry);
+			}
+			plateListUI.setInput(plateTableEntries);
+		} else {
+			plateListUI.clear();
+		}
+	}
+
+	private void updateSubsetCombo() {
+
+		if(plate != null) {
+			List<String> sampleSubsets = plate.getSampleSubsets();
+			comboSubsets.setItems(sampleSubsets.toArray(new String[sampleSubsets.size()]));
+		} else {
+			comboSubsets.setItems(new String[]{""});
+		}
+	}
+
+	private void updateChannelSpecifications() {
+
+		if(plate != null) {
+			IDetectionFormat detectionFormat = plate.getDetectionFormat();
+			if(detectionFormat != null) {
+				comboViewerChannels.setInput(detectionFormat.getChannelSpecifications());
+			}
+		} else {
+			comboViewerChannels.setInput(null);
+		}
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
-import java.util.Set;
+import java.util.List;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
@@ -23,15 +23,21 @@ public interface IPlate extends IMeasurementInfo {
 	String NOISEBAND = "Noiseband";
 	String THRESHOLD = "Threshold";
 
+	void setActiveChannel(int activeChannel);
+
+	void setActiveSubset(String activeSubset);
+
 	IDetectionFormat getDetectionFormat();
 
 	void setDetectionFormat(IDetectionFormat detectionFormat);
 
-	Set<IDetectionFormat> getDetectionFormats();
+	List<IDetectionFormat> getDetectionFormats();
 
 	TreeSet<IWell> getWells();
 
 	IWell getWell(int id);
 
 	String getName();
+
+	List<String> getSampleSubsets();
 }

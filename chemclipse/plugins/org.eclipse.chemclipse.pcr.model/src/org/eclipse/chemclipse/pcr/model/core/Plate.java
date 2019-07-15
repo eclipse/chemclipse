@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -22,8 +25,24 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 	private static final long serialVersionUID = -7209280707411376156L;
 	//
 	private IDetectionFormat detectionFormat = null;
-	private Set<IDetectionFormat> detectionFormats = new HashSet<>();
+	private List<IDetectionFormat> detectionFormats = new ArrayList<>();
 	private TreeSet<IWell> wells = new TreeSet<IWell>();
+
+	@Override
+	public void setActiveChannel(int activeChannel) {
+
+		for(IWell well : wells) {
+			well.setActiveChannel(activeChannel);
+		}
+	}
+
+	@Override
+	public void setActiveSubset(String activeSubset) {
+
+		for(IWell well : wells) {
+			well.setActiveSubset(activeSubset);
+		}
+	}
 
 	public IDetectionFormat getDetectionFormat() {
 
@@ -39,7 +58,7 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 	}
 
 	@Override
-	public Set<IDetectionFormat> getDetectionFormats() {
+	public List<IDetectionFormat> getDetectionFormats() {
 
 		return detectionFormats;
 	}
@@ -65,5 +84,17 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 	public String getName() {
 
 		return getHeaderDataOrDefault("name", "");
+	}
+
+	@Override
+	public List<String> getSampleSubsets() {
+
+		Set<String> subsets = new HashSet<>();
+		for(IWell well : wells) {
+			subsets.add(well.getSampleSubset());
+		}
+		List<String> sampleSubsets = new ArrayList<>(subsets);
+		Collections.sort(sampleSubsets);
+		return sampleSubsets;
 	}
 }

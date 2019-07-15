@@ -53,6 +53,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PLATE_CHARTS, PreferenceConstants.DEF_STACK_POSITION_PLATE_CHARTS);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_WELL_DATA, PreferenceConstants.DEF_STACK_POSITION_WELL_DATA);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_WELL_CHART, PreferenceConstants.DEF_STACK_POSITION_WELL_CHART);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_WELL_CHANNELS, PreferenceConstants.DEF_STACK_POSITION_WELL_CHANNELS);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PLATE_DATA, PreferenceConstants.DEF_STACK_POSITION_PLATE_DATA);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_CHART, PreferenceConstants.DEF_STACK_POSITION_QUANT_RESPONSE_CHART);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_LIST, PreferenceConstants.DEF_STACK_POSITION_QUANT_RESPONSE_LIST);

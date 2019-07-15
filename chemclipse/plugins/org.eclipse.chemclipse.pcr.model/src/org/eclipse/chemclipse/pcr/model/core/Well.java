@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,10 @@ public class Well extends AbstractDataModel implements IWell {
 
 	private static final Logger logger = Logger.getLogger(Well.class);
 	//
+	private static final String ALL_SUBSETS_SELECTED = "";
+	//
+	private IChannel activeChannel = null;
+	private String activeSubset = ALL_SUBSETS_SELECTED;
 	private Position position = new Position();
 	private Map<Integer, IChannel> channels = new HashMap<>();
 
@@ -31,6 +35,47 @@ public class Well extends AbstractDataModel implements IWell {
 		addProtectedKey(TARGET_NAME);
 		addProtectedKey(CROSSING_POINT);
 		addProtectedKey(SAMPLE_SUBSET);
+	}
+
+	@Override
+	public IChannel getActiveChannel() {
+
+		return activeChannel;
+	}
+
+	@Override
+	public void setActiveChannel(int activeChannel) {
+
+		if(channels.keySet().contains(activeChannel)) {
+			this.activeChannel = channels.get(activeChannel);
+		}
+	}
+
+	@Override
+	public void clearActiveChannel() {
+
+		this.activeChannel = null;
+	}
+
+	public boolean isActiveSubset() {
+
+		if(ALL_SUBSETS_SELECTED.equals(activeSubset)) {
+			return true;
+		} else {
+			return activeSubset.equals(getSampleSubset());
+		}
+	}
+
+	@Override
+	public void setActiveSubset(String activeSubset) {
+
+		this.activeSubset = activeSubset;
+	}
+
+	@Override
+	public void clearActiveSubset() {
+
+		this.activeSubset = ALL_SUBSETS_SELECTED;
 	}
 
 	@Override
@@ -95,10 +140,20 @@ public class Well extends AbstractDataModel implements IWell {
 	@Override
 	public boolean isPositiveMeasurement() {
 
-		for(IChannel channel : getChannels().values()) {
-			if(channel.getCrossingPoint() != null) {
-				return true;
+		if(activeChannel == null) {
+			/*
+			 * All channels
+			 */
+			for(IChannel channel : channels.values()) {
+				if(isChannelPositive(channel)) {
+					return true;
+				}
 			}
+		} else {
+			/*
+			 * Selected channel
+			 */
+			return isChannelPositive(activeChannel);
 		}
 		return false;
 	}
@@ -121,5 +176,10 @@ public class Well extends AbstractDataModel implements IWell {
 			//
 			channel.setDetectionName(detectionName);
 		}
+	}
+
+	private boolean isChannelPositive(IChannel channel) {
+
+		return (channel != null && channel.getCrossingPointCalculated() > 0.0d);
 	}
 }

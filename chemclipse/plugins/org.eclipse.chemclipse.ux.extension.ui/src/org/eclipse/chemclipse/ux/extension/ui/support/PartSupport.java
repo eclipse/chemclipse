@@ -78,6 +78,7 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_PlATE_CHARTS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.plateChartsPartDescriptor";
 	public static final String PARTDESCRIPTOR_WELL_DATA = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.wellDataPartDescriptor";
 	public static final String PARTDESCRIPTOR_WELL_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.wellChartPartDescriptor";
+	public static final String PARTDESCRIPTOR_WELL_CHANNELS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.wellChannelsPartDescriptor";
 	public static final String PARTDESCRIPTOR_PlATE_DATA = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.plateDataPartDescriptor";
 	public static final String PARTDESCRIPTOR_QUANT_RESPONSE_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantResponseChartPartDescriptor";
 	public static final String PARTDESCRIPTOR_QUANT_RESPONSE_LIST = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantResponseListPartDescriptor";

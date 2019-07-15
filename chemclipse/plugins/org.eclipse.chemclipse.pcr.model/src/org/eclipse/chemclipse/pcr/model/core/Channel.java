@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ public class Channel implements IChannel {
 	private List<Double> points = new ArrayList<>();
 	private IPoint crossingPoint = null;
 	private String detectionName = "";
+	private double crossingPointCalculated = 0.0d;
 
 	@Override
 	public int getId() {
@@ -121,5 +122,17 @@ public class Channel implements IChannel {
 	public void setDetectionName(String detectionName) {
 
 		this.detectionName = detectionName;
+	}
+
+	@Override
+	public double getCrossingPointCalculated() {
+
+		return (crossingPoint != null) ? crossingPoint.getX() : crossingPointCalculated;
+	}
+
+	@Override
+	public void setCrossingPointCalculated(double crossingPointCalculated) {
+
+		this.crossingPointCalculated = crossingPointCalculated;
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,28 @@ public interface IWell extends Comparable<IWell>, IDataModel {
 	String TARGET_NAME = "Target Name";
 	String CROSSING_POINT = "Crossing Point";
 	String SAMPLE_SUBSET = "Sample Subset";
+
+	/**
+	 * Returns null if no active channel is set.
+	 * 
+	 * @return {@link IChannel}
+	 */
+	IChannel getActiveChannel();
+
+	/**
+	 * Sets the active channel by id.
+	 * 
+	 * @param activeChannel
+	 */
+	void setActiveChannel(int activeChannel);
+
+	void clearActiveChannel();
+
+	boolean isActiveSubset();
+
+	void setActiveSubset(String activeSubset);
+
+	void clearActiveSubset();
 
 	Position getPosition();
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -448,6 +448,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PlATE_CHARTS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PLATE_CHARTS));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_WELL_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_DATA));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_WELL_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_CHART));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_WELL_CHANNELS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_CHANNELS));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PlATE_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PLATE_DATA));
 			}
 		});
@@ -455,6 +456,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_PlATE_CHARTS, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_WELL_DATA, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_WELL_CHART, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_WELL_CHANNELS, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_PlATE_DATA, button, imageActive, imageDefault);
 	}
 

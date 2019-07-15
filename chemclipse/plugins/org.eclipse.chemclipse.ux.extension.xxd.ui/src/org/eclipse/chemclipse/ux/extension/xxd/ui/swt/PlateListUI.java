@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -75,7 +75,7 @@ public class PlateListUI extends ExtendedTableViewer {
 						IWell well = plateTableEntry.getWells().get(column);
 						String text = PlateListLabelProvider.getCellText(well);
 						if(well != null) {
-							if(well.isEmptyMeasurement()) {
+							if(well.isEmptyMeasurement() || !well.isActiveSubset()) {
 								cell.setBackground(Colors.GRAY);
 								cell.setForeground(Colors.WHITE);
 							} else {

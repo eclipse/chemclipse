@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -50,4 +50,8 @@ public interface IChannel {
 	String getDetectionName();
 
 	void setDetectionName(String detectionName);
+
+	double getCrossingPointCalculated();
+
+	void setCrossingPointCalculated(double crossingPointCalculated);
 }
