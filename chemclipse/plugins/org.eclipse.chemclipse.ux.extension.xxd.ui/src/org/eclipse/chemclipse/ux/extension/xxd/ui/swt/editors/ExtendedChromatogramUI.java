@@ -82,10 +82,9 @@ import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
+import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
-import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
-import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -525,9 +524,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			}
 			cleanChartMenuEntries(chartSettings, chartMenuEntriesProcessorSupplier);
 			for(IProcessTypeSupplier<?> typeSupplier : processTypeSupport.getProcessorTypeSuppliers(Collections.singletonList(datatype))) {
-				List<ProcessorSupplier> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
+				List<IProcessSupplier> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
 				Collections.sort(list, new NameComparator());
-				for(ProcessorSupplier supplier : list) {
+				for(IProcessSupplier supplier : list) {
 					chartSettings.addMenuEntry(new ProcessorSupplierMenuEntry(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier, processTypeSupport.getPreferences(supplier)));
 				}
 			}
@@ -554,8 +553,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				@Override
 				public boolean isEnabled(ScrollableChart scrollableChart) {
 
-					Map<ProcessorSupplier, ProcessorPreferences> allPreferences = processTypeSupport.getAllPreferences();
-					return !allPreferences.isEmpty();
+					return !processTypeSupport.getAllPreferences().isEmpty();
 				}
 			});
 		}

@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
-import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -32,7 +32,7 @@ public class SettingsPreferencesWizard extends Wizard {
 		return true;
 	}
 
-	public static boolean openWizard(Shell shell, ProcessorPreferences preferences, ProcessorSupplier processorSupplier) {
+	public static boolean openWizard(Shell shell, ProcessorPreferences preferences, IProcessSupplier processorSupplier) {
 
 		try {
 			return openWizard(shell, InputValue.readJSON(processorSupplier.getSettingsClass(), preferences.getUserSettings()), preferences, processorSupplier);
@@ -41,7 +41,7 @@ public class SettingsPreferencesWizard extends Wizard {
 		}
 	}
 
-	public static boolean openWizard(Shell shell, List<InputValue> values, ProcessorPreferences preferences, ProcessorSupplier processorSupplier) {
+	public static boolean openWizard(Shell shell, List<InputValue> values, ProcessorPreferences preferences, IProcessSupplier processorSupplier) {
 
 		SettingsPreferencesWizard wizard = new SettingsPreferencesWizard();
 		wizard.setWindowTitle("Edit Processor Options");

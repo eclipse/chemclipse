@@ -32,17 +32,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
+	private static final DataType[] DATA_TYPES = new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD};
 	public static final String CATEGORY = "Chromatogram Reports";
 	private static final Logger logger = Logger.getLogger(ChromatogramReportTypeSupplier.class);
 
 	public ChromatogramReportTypeSupplier() {
-		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
+		super(CATEGORY);
 		try {
 			IChromatogramReportSupport support = ChromatogramReports.getChromatogramReportSupplierSupport();
 			for(String processorId : support.getAvailableProcessorIds()) {
 				IChromatogramReportSupplier supplier = support.getReportSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, DATA_TYPES);
 				processorSupplier.setName(supplier.getReportName());
 				processorSupplier.setDescription(supplier.getDescription());
 				Class<? extends IChromatogramReportSettings> settingsClass = supplier.getSettingsClass();

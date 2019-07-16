@@ -11,24 +11,34 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
 
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
 
-public class ProcessorSupplier {
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+import org.eclipse.chemclipse.model.types.DataType;
+
+public class ProcessorSupplier implements IProcessSupplier {
 
 	private String id = "";
 	private String name = "";
 	private String description = "";
 	private Class<? extends IProcessSettings> settingsClass = null;
+	private Set<DataType> dataTypes;
 
-	public ProcessorSupplier(String id) {
+	public ProcessorSupplier(String id, DataType[] dataTypes) {
 		this.id = id;
+		this.dataTypes = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(dataTypes)));
 	}
 
+	@Override
 	public String getId() {
 
 		return id;
 	}
 
+	@Override
 	public String getName() {
 
 		return name;
@@ -39,6 +49,7 @@ public class ProcessorSupplier {
 		this.name = name;
 	}
 
+	@Override
 	public String getDescription() {
 
 		return description;
@@ -49,6 +60,7 @@ public class ProcessorSupplier {
 		this.description = description;
 	}
 
+	@Override
 	public Class<? extends IProcessSettings> getSettingsClass() {
 
 		return settingsClass;
@@ -84,6 +96,12 @@ public class ProcessorSupplier {
 		} else if(!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public Set<DataType> getSupportedDataTypes() {
+
+		return dataTypes;
 	}
 
 	@Override

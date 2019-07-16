@@ -19,6 +19,7 @@ import java.util.TreeMap;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
@@ -75,7 +76,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 					}
 					Entry<ProcessorSupplier, ProcessorPreferences> entry = getEntry(element);
 					if(entry != null) {
-						ProcessorSupplier key = entry.getKey();
+						IProcessSupplier key = entry.getKey();
 						return key.getName();
 					}
 					return super.getText(element);
@@ -235,7 +236,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void updateTree() {
 
 		Map<String, TreeNode> categories = new TreeMap<>();
-		for(Entry<ProcessorSupplier, ProcessorPreferences> entry : processTypeSupport.getAllPreferences().entrySet()) {
+		for(Entry<IProcessSupplier, ProcessorPreferences> entry : processTypeSupport.getAllPreferences().entrySet()) {
 			IProcessTypeSupplier<?> supplier = processTypeSupport.getSupplier(entry.getKey().getId());
 			TreeNode processorNode = new TreeNode(entry);
 			String category = supplier.getCategory();

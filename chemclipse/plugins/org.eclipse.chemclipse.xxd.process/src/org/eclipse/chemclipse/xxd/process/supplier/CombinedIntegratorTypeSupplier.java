@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add datatypes to supplier
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
@@ -27,17 +28,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class CombinedIntegratorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
+	private static final DataType[] DATA_TYPES = new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD};
 	public static final String CATEGORY = "Combined Chromatogram and Peak Integrator";
 	private static final Logger logger = Logger.getLogger(CombinedIntegratorTypeSupplier.class);
 
 	public CombinedIntegratorTypeSupplier() {
-		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
+		super(CATEGORY);
 		try {
 			ICombinedIntegratorSupport support = CombinedIntegrator.getCombinedIntegratorSupport();
 			for(String processorId : support.getAvailableIntegratorIds()) {
 				ICombinedIntegratorSupplier supplier = support.getIntegratorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, DATA_TYPES);
 				processorSupplier.setName(supplier.getIntegratorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

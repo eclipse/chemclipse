@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add datatypes
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
@@ -27,17 +28,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramCalculatorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
+	private static final DataType[] DATA_TYPES = new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD};
 	public static final String CATEGORY = "Chromatogram Calculator";
 	private static final Logger logger = Logger.getLogger(ChromatogramCalculatorTypeSupplier.class);
 
 	public ChromatogramCalculatorTypeSupplier() {
-		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
+		super(CATEGORY);
 		try {
 			IChromatogramCalculatorSupport support = ChromatogramCalculator.getChromatogramCalculatorSupport();
 			for(String processorId : support.getAvailableCalculatorIds()) {
 				IChromatogramCalculatorSupplier supplier = support.getCalculatorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, DATA_TYPES);
 				processorSupplier.setName(supplier.getCalculatorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

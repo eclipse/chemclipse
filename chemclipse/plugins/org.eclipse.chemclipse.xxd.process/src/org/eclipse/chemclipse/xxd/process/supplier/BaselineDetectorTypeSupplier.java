@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add datatypes to supplier
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
@@ -27,17 +28,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class BaselineDetectorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
+	private static final DataType[] DATA_TYPES = new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD};
 	public static final String CATEGORY = "Baseline Detector";
 	private static final Logger logger = Logger.getLogger(BaselineDetectorTypeSupplier.class);
 
 	public BaselineDetectorTypeSupplier() {
-		super(CATEGORY, new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
+		super(CATEGORY);
 		try {
 			IBaselineDetectorSupport support = BaselineDetector.getBaselineDetectorSupport();
 			for(String processorId : support.getAvailableDetectorIds()) {
 				IBaselineDetectorSupplier supplier = support.getBaselineDetectorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, DATA_TYPES);
 				processorSupplier.setName(supplier.getDetectorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

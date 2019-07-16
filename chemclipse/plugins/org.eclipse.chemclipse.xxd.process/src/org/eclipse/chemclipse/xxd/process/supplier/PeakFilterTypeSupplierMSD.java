@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add datatypes to supplier
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
@@ -28,17 +29,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakFilterTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
+	private static final DataType[] DATA_TYPES = new DataType[]{DataType.MSD};
 	public static final String CATEGORY = "Peak Filter";
 	private static final Logger logger = Logger.getLogger(PeakFilterTypeSupplierMSD.class);
 
 	public PeakFilterTypeSupplierMSD() {
-		super(CATEGORY, new DataType[]{DataType.MSD});
+		super(CATEGORY);
 		try {
 			IPeakFilterSupport support = PeakFilter.getPeakFilterSupport();
 			for(String processorId : support.getAvailableFilterIds()) {
 				IPeakFilterSupplier supplier = support.getFilterSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, DATA_TYPES);
 				processorSupplier.setName(supplier.getFilterName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

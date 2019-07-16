@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,17 +8,18 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - use generic interface
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.comparators;
 
 import java.util.Comparator;
 
-import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
+import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 
-public class NameComparator implements Comparator<ProcessorSupplier> {
+public class NameComparator implements Comparator<IProcessSupplier> {
 
 	@Override
-	public int compare(ProcessorSupplier supplier1, ProcessorSupplier supplier2) {
+	public int compare(IProcessSupplier supplier1, IProcessSupplier supplier2) {
 
 		return supplier1.getName().compareTo(supplier2.getName());
 	}

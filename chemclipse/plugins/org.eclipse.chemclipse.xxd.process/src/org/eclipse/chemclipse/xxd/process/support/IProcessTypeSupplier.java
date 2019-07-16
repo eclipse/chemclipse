@@ -17,40 +17,24 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IProcessTypeSupplier<T> {
 
-	String NOT_AVAILABLE = "n.a.";
-
 	String getCategory();
 
-	List<DataType> getSupportedDataTypes();
+	List<IProcessSupplier> getProcessorSuppliers();
 
-	List<ProcessorSupplier> getProcessorSuppliers();
+	default IProcessSupplier getProcessorSupplier(String id) {
 
-	default ProcessorSupplier getProcessorSupplier(String id) {
-
-		try {
-			ProcessorSupplier supplier = new ProcessorSupplier(id);
-			supplier.setDescription(getProcessorDescription(id));
-			supplier.setName(getProcessorName(id));
-			supplier.setSettingsClass(getProcessSettingsClass(id));
-			return supplier;
-		} catch(Exception e) {
-			return null;
+		for(IProcessSupplier supplier : getProcessorSuppliers()) {
+			if(supplier.getId().equals(id)) {
+				return supplier;
+			}
 		}
+		return null;
 	}
-
-	Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception;
-
-	String getProcessorName(String processorId) throws Exception;
-
-	String getProcessorDescription(String processorId) throws Exception;
-
-	List<String> getProcessorIds() throws Exception;
 
 	IProcessingInfo<T> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor);
 }

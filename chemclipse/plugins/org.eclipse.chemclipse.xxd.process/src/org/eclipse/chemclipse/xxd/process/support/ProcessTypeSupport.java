@@ -115,9 +115,9 @@ public class ProcessTypeSupport {
 	 * 
 	 * @return all active preferences for this {@link ProcessTypeSupport}
 	 */
-	public Map<ProcessorSupplier, ProcessorPreferences> getAllPreferences() {
+	public Map<IProcessSupplier, ProcessorPreferences> getAllPreferences() {
 
-		HashMap<ProcessorSupplier, ProcessorPreferences> map = new HashMap<>();
+		HashMap<IProcessSupplier, ProcessorPreferences> map = new HashMap<>();
 		try {
 			IEclipsePreferences storage = getStorage();
 			String[] childrenNames = storage.childrenNames();
@@ -134,7 +134,7 @@ public class ProcessTypeSupport {
 						// not valid for this type support
 						continue;
 					}
-					ProcessorSupplier processorSupplier = typeSupplier.getProcessorSupplier(name);
+					IProcessSupplier processorSupplier = typeSupplier.getProcessorSupplier(name);
 					if(processorSupplier != null) {
 						map.put(processorSupplier, new NodeProcessorPreferences(node));
 					}
@@ -156,7 +156,7 @@ public class ProcessTypeSupport {
 	 * @param processorId
 	 * @return the preferences for this processor id
 	 */
-	public ProcessorPreferences getPreferences(ProcessorSupplier supplier) {
+	public ProcessorPreferences getPreferences(IProcessSupplier supplier) {
 
 		return new NodeProcessorPreferences(getStorage().node(supplier.getId()));
 	}
@@ -177,7 +177,8 @@ public class ProcessTypeSupport {
 	public void addProcessSupplier(IProcessTypeSupplier<?> processTypeSupplier) {
 
 		try {
-			for(String processorId : processTypeSupplier.getProcessorIds()) {
+			for(IProcessSupplier supplier : processTypeSupplier.getProcessorSuppliers()) {
+				String processorId = supplier.getId();
 				IProcessTypeSupplier<?> typeSupplier = getSupplier(processorId);
 				if(typeSupplier != null) {
 					logger.warn("The processor id " + processorId + " is already defined by " + typeSupplier.getClass().getSimpleName() + " and is ignored for redefining supplier " + processTypeSupplier.getClass().getSimpleName());
@@ -195,16 +196,19 @@ public class ProcessTypeSupport {
 	 * @param dataTypes
 	 * @return the matching {@link IProcessTypeSupplier} order by category name
 	 */
-	public List<IProcessTypeSupplier<?>> getProcessorTypeSuppliers(Collection<DataType> dataTypes) {
+	public List<IProcessTypeSupplier<?>> getProcessorTypeSuppliers(Collection<? extends DataType> dataTypes) {
 
 		List<IProcessTypeSupplier<?>> supplier = new ArrayList<>();
 		for(IProcessTypeSupplier<?> processTypeSupplier : processSupplierMap.values()) {
-			List<DataType> types = processTypeSupplier.getSupportedDataTypes();
-			for(DataType dataType : dataTypes) {
-				if(types.contains(dataType)) {
-					if(!supplier.contains(processTypeSupplier)) {
+			if(supplier.contains(processTypeSupplier)) {
+				continue;
+			}
+			outer:
+			for(IProcessSupplier processSupplier : processTypeSupplier.getProcessorSuppliers()) {
+				for(DataType dataType : dataTypes) {
+					if(processSupplier.getSupportedDataTypes().contains(dataType)) {
 						supplier.add(processTypeSupplier);
-						break;
+						break outer;
 					}
 				}
 			}

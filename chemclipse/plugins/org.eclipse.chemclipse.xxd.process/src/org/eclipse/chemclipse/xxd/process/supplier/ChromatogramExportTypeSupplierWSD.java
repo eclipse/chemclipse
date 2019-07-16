@@ -30,14 +30,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramExportTypeSupplierWSD extends AbstractProcessTypeSupplier<File> {
 
+	private static final DataType[] DATA_TYPES = new DataType[]{DataType.WSD};
 	public static final String CATEGORY = "Chromatogram Export";
 	private static final String PREFIX = "wsd.export.";
 
 	public ChromatogramExportTypeSupplierWSD() {
-		super(CATEGORY, new DataType[]{DataType.WSD});
+		super(CATEGORY);
 		IChromatogramConverterSupport support = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport();
 		for(ISupplier supplier : support.getExportSupplier()) {
-			ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX + supplier.getId());
+			ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX + supplier.getId(), DATA_TYPES);
 			processorSupplier.setName(supplier.getFilterName());
 			processorSupplier.setDescription(supplier.getDescription());
 			processorSupplier.setSettingsClass(ChromatogramExportSettings.class);

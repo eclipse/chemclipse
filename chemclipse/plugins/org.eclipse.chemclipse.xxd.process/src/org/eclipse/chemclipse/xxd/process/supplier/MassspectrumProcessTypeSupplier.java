@@ -30,19 +30,20 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassspectrumProcessTypeSupplier extends AbstractProcessTypeSupplier {
 
+	private static final DataType[] DATA_TYPES = new DataType[]{DataType.WSD};
 	public static final String CATEGORY_PEAK = "Peak Massspectrum Filter";
 	public static final String CATEGORY_SCAN = "Scan Massspectrum Filter";
 	private String prefix;
 	private static final IMassSpectrumFilterSupport FILTER_SUPPORT = MassSpectrumFilter.getMassSpectrumFilterSupport();
 
 	private MassspectrumProcessTypeSupplier(String category, String prefix) {
-		super(category, new DataType[]{DataType.WSD});
+		super(category);
 		this.prefix = prefix;
 		try {
 			List<String> ids = FILTER_SUPPORT.getAvailableFilterIds();
 			for(String id : ids) {
 				IMassSpectrumFilterSupplier supplier = FILTER_SUPPORT.getFilterSupplier(id);
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(prefix + id);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(prefix + id, DATA_TYPES);
 				processorSupplier.setName(supplier.getFilterName());
 				processorSupplier.setDescription(supplier.getDescription());
 				// TODO processorSupplier.setSettingsClass();

@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 
@@ -30,17 +30,14 @@ public abstract class AbstractProcessTypeSupplier<T> implements IProcessTypeSupp
 	private List<ProcessorSupplier> processorSuppliers = new ArrayList<>();
 	//
 	private String category = "";
-	private List<DataType> supportedDataTypes = new ArrayList<>();
 	private Map<String, Class<? extends IProcessSettings>> settingsClassMap = new HashMap<>();
 	private Map<String, String> nameMap = new HashMap<>();
 	private Map<String, String> descriptionMap = new HashMap<>();
 	private List<String> processorIds = new ArrayList<>();
+	private static final String NOT_AVAILABLE = "n/a";
 
-	public AbstractProcessTypeSupplier(String category, DataType[] dataTypes) {
+	public AbstractProcessTypeSupplier(String category) {
 		this.category = category;
-		for(DataType dataType : dataTypes) {
-			supportedDataTypes.add(dataType);
-		}
 	}
 
 	@Override
@@ -50,36 +47,26 @@ public abstract class AbstractProcessTypeSupplier<T> implements IProcessTypeSupp
 	}
 
 	@Override
-	public List<DataType> getSupportedDataTypes() {
-
-		return supportedDataTypes;
-	}
-
-	@Override
-	public List<ProcessorSupplier> getProcessorSuppliers() {
+	public List<IProcessSupplier> getProcessorSuppliers() {
 
 		return Collections.unmodifiableList(processorSuppliers);
 	}
 
-	@Override
 	public Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception {
 
 		return settingsClassMap.get(processorId);
 	}
 
-	@Override
 	public String getProcessorName(String processorId) throws Exception {
 
 		return nameMap.getOrDefault(processorId, NOT_AVAILABLE);
 	}
 
-	@Override
 	public String getProcessorDescription(String processorId) throws Exception {
 
 		return descriptionMap.getOrDefault(processorId, NOT_AVAILABLE);
 	}
 
-	@Override
 	public List<String> getProcessorIds() throws Exception {
 
 		return processorIds;

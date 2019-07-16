@@ -29,14 +29,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramExportTypeSupplierCSD extends AbstractProcessTypeSupplier<File> {
 
+	private static final DataType[] DATA_TYPES = new DataType[]{DataType.CSD};
 	private static final String PREFIX = "csd.export.";
 	public static final String CATEGORY = "Chromatogram Export";
 
 	public ChromatogramExportTypeSupplierCSD() {
-		super(CATEGORY, new DataType[]{DataType.CSD});
+		super(CATEGORY);
 		IChromatogramConverterSupport support = ChromatogramConverterCSD.getInstance().getChromatogramConverterSupport();
 		for(ISupplier supplier : support.getExportSupplier()) {
-			ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX + supplier.getId());
+			ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX + supplier.getId(), DATA_TYPES);
 			processorSupplier.setName(supplier.getFilterName());
 			processorSupplier.setDescription(supplier.getDescription());
 			processorSupplier.setSettingsClass(ChromatogramExportSettings.class);
