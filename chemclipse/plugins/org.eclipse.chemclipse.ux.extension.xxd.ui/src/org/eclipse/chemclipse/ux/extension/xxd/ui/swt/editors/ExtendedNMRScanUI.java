@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartNMR;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SeriesData;
@@ -231,7 +232,7 @@ public class ExtendedNMRScanUI implements Observer {
 	public void update(Observable o, Object arg) {
 
 		if(arg == ChangeType.SELECTION_CHANGED) {
-			updateScan();
+			Display.getDefault().asyncExec(this::updateScan);
 		}
 	}
 }

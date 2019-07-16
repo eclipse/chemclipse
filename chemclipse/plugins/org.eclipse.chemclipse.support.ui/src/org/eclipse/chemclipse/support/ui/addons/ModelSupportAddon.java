@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,155 +8,169 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - refactor code to use {@link PartSupport} and {@link PerspectiveSupport}, deprecate methods
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.addons;
 
-import java.util.Collection;
-import java.util.List;
-
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
+import org.eclipse.chemclipse.support.ui.workbench.PerspectiveSupport;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.MUIElement;
-import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
-import org.eclipse.e4.ui.model.application.ui.advanced.MPerspectiveStack;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
+/**
+ * @deprecated Using this class is unsave due to ist static nature and can lead to unexpected "Application does not have active window", use E4DI instead, maybe with helperclasses {@link PartSupport} and {@link PerspectiveSupport} injected.
+ *
+ */
+@Deprecated
 public class ModelSupportAddon {
 
-	private static MApplication mApplication;
-	private static EModelService eModelService;
-	private static EPartService ePartService;
-	private static IEventBroker eventBroker;
-	private static IEclipseContext eclipseContext;
+	private static ModelSupportAddon instance;
+	@Inject
+	private PartSupport partSupport;
+	@Inject
+	private PerspectiveSupport perspectiveSupport;
+	@Inject
+	private MApplication mApplication;
+	@Inject
+	private EModelService eModelService;
+	@Inject
+	private EPartService ePartService;
+	@Inject
+	private IEventBroker eventBroker;
+	@Inject
+	private IEclipseContext eclipseContext;
 
 	@PostConstruct
-	public void postConstruct(MApplication application, EModelService modelService, EPartService partService, IEventBroker broker, IEclipseContext context) {
+	public void postConstruct() {
 
-		mApplication = application;
-		eModelService = modelService;
-		ePartService = partService;
-		eventBroker = broker;
-		eclipseContext = context;
+		instance = this;
 	}
 
+	private static ModelSupportAddon getInstance() {
+
+		if(instance == null) {
+			throw new IllegalStateException("E4 not started!?!");
+		}
+		return instance;
+	}
+
+	/**
+	 * use E4-DI instead
+	 * 
+	 * @return
+	 */
 	public static MApplication getApplication() {
 
-		return mApplication;
+		return getInstance().mApplication;
 	}
 
+	/**
+	 * use E4-DI instead
+	 * 
+	 * @return
+	 */
 	public static EModelService getModelService() {
 
-		return eModelService;
+		return getInstance().eModelService;
 	}
 
+	/**
+	 * use E4-DI instead
+	 * 
+	 * @return
+	 */
 	public static EPartService getPartService() {
 
-		return ePartService;
+		return getInstance().ePartService;
 	}
 
+	/**
+	 * use E4-DI instead or Activator.getDefault().getEventBroker()
+	 * 
+	 * @return
+	 */
 	public static IEventBroker getEventBroker() {
 
-		return eventBroker;
+		return getInstance().eventBroker;
 	}
 
+	/**
+	 * use use E4-DI instead
+	 * 
+	 * @return
+	 */
 	public static IEclipseContext getEclipseContext() {
 
-		return eclipseContext;
+		return getInstance().eclipseContext;
 	}
 
+	/**
+	 * use {@link PartSupport}
+	 * 
+	 * @return
+	 */
 	public static void removeEditorsFromPartStack() {
 
-		if(mApplication != null && eModelService != null && ePartService != null) {
-			MPartStack partStack = (MPartStack)eModelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, mApplication);
-			Collection<MPart> parts = ePartService.getParts();
-			for(MPart part : parts) {
-				if(part.getObject() != null) {
-					part.setToBeRendered(false);
-					part.setVisible(false);
-					partStack.getChildren().remove(part);
-				}
-			}
-		}
+		getInstance().partSupport.removeEditorsFromPartStack();
 	}
 
+	/**
+	 * use {@link PartSupport}
+	 * 
+	 * @return
+	 */
 	public static boolean saveDirtyParts() {
 
-		return ePartService.saveAll(true);
+		return getInstance().partSupport.saveDirtyParts();
 	}
 
+	/**
+	 * use {@link PartSupport}
+	 * 
+	 * @return
+	 */
 	public static String getActivePerspectiveId() {
 
-		MPerspective perspective = getActiveMPerspective();
-		if(perspective != null) {
-			return perspective.getElementId();
-		} else {
-			return "";
-		}
+		return getInstance().perspectiveSupport.getActivePerspectiveId();
 	}
 
+	/**
+	 * use {@link PartSupport}
+	 * 
+	 * @return
+	 */
 	public static String getActivePerspective() {
 
-		MPerspective perspective = getActiveMPerspective();
-		if(perspective != null) {
-			String perspectiveName = perspective.getLabel();
-			perspectiveName = perspectiveName.replaceAll("<", "");
-			perspectiveName = perspectiveName.replaceAll(">", "");
-			return perspectiveName;
-		} else {
-			return "";
-		}
-	}
-
-	private static MPerspective getActiveMPerspective() {
-
-		List<MPerspectiveStack> perspectiveStacks = eModelService.findElements(mApplication, null, MPerspectiveStack.class, null);
-		if(perspectiveStacks.size() > 0) {
-			MPerspectiveStack perspectiveStack = perspectiveStacks.get(0);
-			return perspectiveStack.getSelectedElement();
-		}
-		return null;
+		return getInstance().perspectiveSupport.getActivePerspective();
 	}
 
 	/**
 	 * Try to load the perspective.
 	 * 
+	 * use {@link PartSupport}
+	 * 
 	 * @param perspectiveId
 	 */
 	public static void changePerspective(String perspectiveId) {
 
-		if(mApplication != null && eModelService != null && ePartService != null) {
-			MUIElement element = eModelService.find(perspectiveId, mApplication);
-			if(element instanceof MPerspective) {
-				MPerspective perspective = (MPerspective)element;
-				ePartService.switchPerspective(perspective);
-			}
-		}
+		getInstance().perspectiveSupport.changePerspective(perspectiveId);
 	}
 
 	/**
 	 * Load and show the part.
 	 * 
+	 * use {@link PartSupport}
+	 * 
 	 * @param partId
 	 */
 	public static void focusPart(String partId) {
 
-		if(mApplication != null && eModelService != null && ePartService != null) {
-			MUIElement element = eModelService.find(partId, mApplication);
-			if(element instanceof MPart) {
-				MPart part = (MPart)element;
-				if(!ePartService.getParts().contains(part)) {
-					ePartService.createPart(part.getElementId());
-				}
-				ePartService.showPart(part, PartState.ACTIVATE);
-			}
-		}
+		getInstance().partSupport.focusPart(partId);
 	}
 }

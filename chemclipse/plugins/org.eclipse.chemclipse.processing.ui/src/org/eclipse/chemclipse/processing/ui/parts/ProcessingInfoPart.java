@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,19 +9,21 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Janos Binder - cleanup
+ * Christoph Läubrich - use E4 DI to listen for topic changes, init view with current data on construction
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.parts;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageProvider;
+import org.eclipse.chemclipse.processing.ui.support.DynamicProcessingInfoUpdateNotifier;
 import org.eclipse.chemclipse.processing.ui.swt.ProcessingInfoUI;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -34,12 +36,10 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventHandler;
 
-public class ProcessingInfoPart implements EventHandler {
+public class ProcessingInfoPart {
 
-	public static String ID = "org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart";
+	public static String ID = IPerspectiveAndViewIds.VIEW_PROCESSING_INFO;
 	//
 	private static final String POPUP_MENU_ID = "#PopUpMenu"; // $NON-NLS-1$
 	private static final String POPUP_MENU_POSTFIX = "PopUpMenu"; // $NON-NLS-1$
@@ -47,13 +47,10 @@ public class ProcessingInfoPart implements EventHandler {
 	@Inject
 	private Composite parent;
 	@Inject
-	private EPartService partService;
-	@Inject
-	private MPart part;
+	private DynamicProcessingInfoUpdateNotifier updateNotifier;
 	/*
 	 * The info is static to display it on focus.
 	 */
-	private static IProcessingInfo processingInfo;
 	private ProcessingInfoUI processingInfoUI;
 
 	@PostConstruct
@@ -81,55 +78,13 @@ public class ProcessingInfoPart implements EventHandler {
 			}
 		});
 		initContextMenu();
-	}
-
-	@PreDestroy
-	private void preDestroy() {
-
+		processingInfoUI.update(updateNotifier.getProcessingInfo());
 	}
 
 	@Focus
 	public void setFocus() {
 
-		update(getProcessingInfo());
-	}
-
-	public void update(IProcessingInfo processingInfo) {
-
-		/*
-		 * Update the ui only if the actual view part is visible and the
-		 * selection is not null.
-		 */
-		if(doUpdate(processingInfo)) {
-			processingInfoUI.update(processingInfo);
-			processingInfoUI.setFocus();
-		}
-	}
-
-	public IProcessingInfo getProcessingInfo() {
-
-		return processingInfo;
-	}
-
-	public void setProcessingInfo(IProcessingInfo processingInfoNew) {
-
-		processingInfo = processingInfoNew;
-	}
-
-	public boolean doUpdate(IProcessingInfo processingInfo) {
-
-		if(isPartVisible() && processingInfo != null) {
-			return true;
-		}
-		return false;
-	}
-
-	public boolean isPartVisible() {
-
-		if(partService != null && partService.isPartVisible(part)) {
-			return true;
-		}
-		return false;
+		processingInfoUI.setFocus();
 	}
 
 	/*
@@ -162,13 +117,11 @@ public class ProcessingInfoPart implements EventHandler {
 		tableViewer.getTable().setMenu(menu);
 	}
 
-	@Override
-	public void handleEvent(Event event) {
+	@Inject
+	public void update(@Optional @UIEventTopic(IChemClipseEvents.TOPIC_PROCESSING_INFO_UPDATE) MessageProvider data) {
 
-		Object object = event.getProperty(IChemClipseEvents.PROPERTY_PROCESSING_INFO);
-		if(object instanceof IProcessingInfo) {
-			processingInfo = (IProcessingInfo)object;
-			update(processingInfo);
+		if(processingInfoUI != null) {
+			processingInfoUI.update(data);
 		}
 	}
 }
