@@ -24,9 +24,9 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsPreferencesWizard;
+import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
-import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
@@ -40,12 +40,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ProcessorSupplierMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
 
 	private IProcessTypeSupplier<?> typeSupplier;
-	private ProcessorSupplier processorSupplier;
+	private IProcessSupplier processorSupplier;
 	private Supplier<IChromatogramSelection<?, ?>> supplier;
 	private BiConsumer<IRunnableWithProgress, Shell> executionConsumer;
 	private ProcessorPreferences preferences;
 
-	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessTypeSupplier<?> typeSupplier, ProcessorSupplier processorSupplier, ProcessorPreferences processorPreferences) {
+	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessTypeSupplier<?> typeSupplier, IProcessSupplier processorSupplier, ProcessorPreferences processorPreferences) {
 		this.supplier = chromatogramSupplier;
 		this.executionConsumer = executionConsumer;
 		this.typeSupplier = typeSupplier;

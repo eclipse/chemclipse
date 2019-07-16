@@ -32,7 +32,6 @@ import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
-import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -86,7 +85,7 @@ public class ProcessingWizardPage extends WizardPage {
 	public IProcessEntry getProcessEntry() {
 
 		Object object = comboViewerProcessor.getStructuredSelection().getFirstElement();
-		if(object instanceof ProcessorSupplier) {
+		if(object instanceof IProcessSupplier) {
 			IProcessSupplier processorSupplier = (IProcessSupplier)object;
 			ProcessEntry processEntry = new ProcessEntry();
 			processEntry.setProcessorId(processorSupplier.getId());
@@ -94,6 +93,7 @@ public class ProcessingWizardPage extends WizardPage {
 			processEntry.setDescription(processorSupplier.getDescription());
 			processEntry.getSupportedDataTypes().addAll(processorSupplier.getSupportedDataTypes());
 			processEntry.setProcessSettingsClass(processorSupplier.getSettingsClass());
+			return processEntry;
 		}
 		return null;
 	}
