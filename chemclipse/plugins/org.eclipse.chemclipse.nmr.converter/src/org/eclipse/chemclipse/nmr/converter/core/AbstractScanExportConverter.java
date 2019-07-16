@@ -11,7 +11,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.converter.core;
 
-import org.eclipse.chemclipse.converter.core.AbstractExportConverter;
-
-public abstract class AbstractScanExportConverter<T> extends AbstractExportConverter implements IScanExportConverter<T> {
+public abstract class AbstractScanExportConverter<T> implements IScanExportConverter {
 }

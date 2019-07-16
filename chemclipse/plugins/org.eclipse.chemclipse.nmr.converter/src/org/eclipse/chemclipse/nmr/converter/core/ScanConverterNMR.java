@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.nmr.converter.core;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -97,20 +98,27 @@ public class ScanConverterNMR {
 		return getProcessingError(file);
 	}
 
-	public static <T> IProcessingInfo<T> convert(final File file, final IComplexSignalMeasurement<?> scan, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo<?> convert(final File file, final IComplexSignalMeasurement<?> measurement, final String converterId, final IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
-		/*
-		 * Do not use a safe runnable here, because an object must
-		 * be returned or null.
-		 */
-		IScanExportConverter<T> exportConverter = getScanExportConverter(converterId);
-		if(exportConverter != null) {
-			processingInfo = exportConverter.convert(file, scan, monitor);
-		} else {
-			processingInfo = getProcessingError(file);
+		try {
+			IScanExportConverter exportConverter = getScanExportConverter(converterId);
+			if(exportConverter != null) {
+				IProcessingInfo<File> validate = exportConverter.validate(file);
+				if(validate.hasErrorMessages()) {
+					return validate;
+				}
+				ProcessingInfo<Void> result = new ProcessingInfo<>();
+				try (FileOutputStream stream = new FileOutputStream(file)) {
+					exportConverter.convert(stream, measurement, result, monitor);
+				}
+				return result;
+			}
+			return getProcessingError(file);
+		} catch(Exception e) {
+			ProcessingInfo<Object> processingInfo = new ProcessingInfo<>();
+			processingInfo.addErrorMessage(converterId, "Failed to export", e);
+			return processingInfo;
 		}
-		return processingInfo;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -129,20 +137,13 @@ public class ScanConverterNMR {
 		return instance;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T> IScanExportConverter<T> getScanExportConverter(final String converterId) {
+	private static IScanExportConverter getScanExportConverter(final String converterId) throws CoreException {
 
-		IConfigurationElement element;
-		element = getConfigurationElement(converterId);
-		IScanExportConverter<T> instance = null;
+		IConfigurationElement element = getConfigurationElement(converterId);
 		if(element != null) {
-			try {
-				instance = (IScanExportConverter<T>)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
-			} catch(CoreException e) {
-				logger.error(e.getLocalizedMessage(), e);
-			}
+			return (IScanExportConverter)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 		}
-		return instance;
+		return null;
 	}
 
 	private static IConfigurationElement getConfigurationElement(final String converterId) {
