@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.AbstractChromatogramIntegrationSettings;
-import org.eclipse.chemclipse.support.settings.IonsSelectionSettingProperty;
+import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -21,7 +21,7 @@ public class ChromatogramIntegrationSettings extends AbstractChromatogramIntegra
 
 	@JsonProperty(value = "Ions To Integrate", defaultValue = "")
 	@JsonPropertyDescription(value = "List the ions to integrate, separated by a semicolon. Empty means TIC.")
-	@IonsSelectionSettingProperty
+	@StringSettingsProperty(regExp = "(^$|((\\d+;?)+))", isMultiLine = false)
 	private String selectedIons = "";
 
 	public String getSelectedIons() {
