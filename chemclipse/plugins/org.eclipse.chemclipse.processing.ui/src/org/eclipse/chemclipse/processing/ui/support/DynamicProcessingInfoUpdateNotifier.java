@@ -8,23 +8,34 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - use {@link MessageProvider} interface
+ * Christoph Läubrich - use {@link MessageProvider} interface, make a creatable singleton and store the current value
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.support;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.core.services.events.IEventBroker;
 
+@Creatable
+@Singleton
 public class DynamicProcessingInfoUpdateNotifier {
 
 	@Inject
 	private IEventBroker eventBroker;
+	private MessageProvider currentValue;
 
 	public void update(MessageProvider processingInfo) {
 
-		eventBroker.send(IChemClipseEvents.TOPIC_PROCESSING_INFO_UPDATE, processingInfo);
+		this.currentValue = processingInfo;
+		eventBroker.post(IChemClipseEvents.TOPIC_PROCESSING_INFO_UPDATE, processingInfo);
+	}
+
+	public MessageProvider getProcessingInfo() {
+
+		return currentValue;
 	}
 }
