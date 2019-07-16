@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntegerValidation;
-import org.eclipse.chemclipse.support.settings.IonsSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
 import com.fasterxml.jackson.databind.BeanDescription;
@@ -236,16 +235,9 @@ public class InputValue {
 						StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
 						inputValue.setRegularExpression(settingsProperty.regExp());
 						inputValue.setMultiLine(settingsProperty.isMultiLine());
-					} else if(annotation instanceof IonsSelectionSettingProperty) {
-						// IonsSelectionSettingProperty settingsProperty = (IonsSelectionSettingProperty)annotation;
-						/*
-						 * Find a better regex to match empty or 28;32 ...
-						 */
-						inputValue.setRegularExpression("(^$|\\d+;?)");
 					} else if(annotation instanceof FileSettingProperty) {
 						inputValue.setFileSettingProperty((FileSettingProperty)annotation);
 					}
-					// RetentionTimeMinutesProperty - remove?
 				}
 			}
 		}
