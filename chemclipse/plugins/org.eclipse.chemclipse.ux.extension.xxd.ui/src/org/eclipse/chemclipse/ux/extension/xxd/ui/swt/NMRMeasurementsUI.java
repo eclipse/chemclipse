@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
@@ -34,15 +36,17 @@ import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.FilterChain;
 import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.processing.filter.Filtered;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IElementComparer;
@@ -57,6 +61,7 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 
 public class NMRMeasurementsUI implements Observer {
@@ -218,15 +223,34 @@ public class NMRMeasurementsUI implements Observer {
 		@Override
 		public void run() {
 
-			// TODO show progressmonitor
-			applyFilter(filter, measurement, new DefaultProcessingResult<>(), new NullProgressMonitor());
+			DefaultProcessingResult<Object> consumer = new DefaultProcessingResult<>();
+			ProgressMonitorDialog monitorDialog = new ProgressMonitorDialog(treeViewer.getTree().getShell());
+			monitorDialog.setCancelable(true);
+			// monitorDialog.setOpenOnRun(false);
+			try {
+				monitorDialog.run(true, true, new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						applyFilter(filter, measurement, consumer, monitor);
+					}
+				});
+				ProcessingInfoViewSupport.updateProcessingInfo(consumer);
+			} catch(InvocationTargetException e) {
+				ProcessingInfoViewSupport.updateProcessingInfoError(filter.getName(), "Processing failed", e.getTargetException());
+			} catch(InterruptedException e) {
+				// user canceled
+				return;
+			}
 		}
 	}
 
 	private <T> void applyFilter(IMeasurementFilter<T> filter, IMeasurement measurement, MessageConsumer consumer, IProgressMonitor progressMonitor) {
 
-		T configuration = filter.createConfiguration(measurement);
-		Collection<? extends IMeasurement> filtered = filter.filterIMeasurements(Collections.singleton(measurement), configuration, FilterChain.returnResult(), consumer, progressMonitor);
+		Set<IMeasurement> singleton = Collections.singleton(measurement);
+		T configuration = filter.createConfiguration(singleton);
+		Collection<? extends IMeasurement> filtered = filter.filterIMeasurements(singleton, configuration, FilterChain.returnResult(), consumer, progressMonitor);
 		for(IMeasurement item : filtered) {
 			if(item instanceof IComplexSignalMeasurement<?>) {
 				if(selection != null) {
@@ -323,7 +347,7 @@ public class NMRMeasurementsUI implements Observer {
 	public void update(Observable o, Object arg) {
 
 		if(arg == ChangeType.NEW_ITEM || arg == ChangeType.REMOVED_ITEM) {
-			updateTree();
+			Display.getDefault().asyncExec(this::updateTree);
 		}
 	}
 }
