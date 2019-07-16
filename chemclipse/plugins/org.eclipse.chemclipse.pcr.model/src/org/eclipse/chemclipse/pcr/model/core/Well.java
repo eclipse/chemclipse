@@ -174,6 +174,9 @@ public class Well extends AbstractDataModel implements IWell {
 		Collections.sort(keys);
 		//
 		for(Integer key : keys) {
+			/*
+			 * Default detection Name
+			 */
 			IChannel channel = channels.get(key);
 			String detectionName = IChannel.CHANNEL + " " + key; // Default
 			//

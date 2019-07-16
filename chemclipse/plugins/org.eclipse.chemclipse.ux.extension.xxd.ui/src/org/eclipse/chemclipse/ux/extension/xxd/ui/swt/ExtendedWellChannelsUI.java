@@ -44,6 +44,9 @@ public class ExtendedWellChannelsUI {
 	private Label labelInfo;
 	private Composite toolbarInfo;
 	private Combo comboChannels;
+	//
+	private Text textId;
+	private Text textDetectionName;
 	private Text textName;
 	private Text textTime;
 	private Text textTemperature;
@@ -196,6 +199,12 @@ public class ExtendedWellChannelsUI {
 		/*
 		 * Data
 		 */
+		createLabel(composite, "ID:");
+		textId = createText(composite);
+		//
+		createLabel(composite, "Detection Name:");
+		textDetectionName = createText(composite);
+		//
 		createLabel(composite, "Name:");
 		textName = createText(composite);
 		//
@@ -225,13 +234,15 @@ public class ExtendedWellChannelsUI {
 
 	private void updateWidgets() {
 
-		updateComboItems();
+		updateChannelCombo();
 		updateLabel();
 		updateChannelData();
 	}
 
 	private void updateChannelData() {
 
+		textId.setText("");
+		textDetectionName.setText("");
 		textName.setText("");
 		textTime.setText("");
 		textTemperature.setText("");
@@ -241,27 +252,45 @@ public class ExtendedWellChannelsUI {
 			int index = comboChannels.getSelectionIndex();
 			if(index >= 0) {
 				IChannel channel = well.getChannels().get(index);
-				textName.setText(channel.getName());
-				textTime.setText(Integer.toString(channel.getTime()));
-				textTemperature.setText(Double.toString(channel.getTemperature()));
-				IPoint crossingPoint = channel.getCrossingPoint();
-				if(crossingPoint != null) {
-					textCrossingPoint.setText(Double.toString(crossingPoint.getX()));
+				if(channel != null) {
+					textId.setText(Integer.toString(channel.getId()));
+					textDetectionName.setText(channel.getDetectionName());
+					textName.setText(channel.getName());
+					textTime.setText(Integer.toString(channel.getTime()));
+					textTemperature.setText(Double.toString(channel.getTemperature()));
+					IPoint crossingPoint = channel.getCrossingPoint();
+					if(crossingPoint != null) {
+						textCrossingPoint.setText(Double.toString(crossingPoint.getX()));
+					}
 				}
 			}
 		}
 	}
 
-	private void updateComboItems() {
+	private void updateChannelCombo() {
 
-		if(well.isEmptyMeasurement()) {
-			comboChannels.setItems(new String[]{});
-		} else {
-			String[] items = getComboItems(well);
-			comboChannels.setItems(items);
-			if(items.length >= 1) {
-				comboChannels.select(0);
+		if(well != null) {
+			if(well.isEmptyMeasurement()) {
+				comboChannels.setItems(new String[]{});
+			} else {
+				comboChannels.setItems(getComboItems(well));
+				IChannel channel = well.getActiveChannel();
+				if(channel != null) {
+					String name = channel.getDetectionName();
+					String[] items = comboChannels.getItems();
+					exitloop:
+					for(int i = 0; i < items.length; i++) {
+						if(items[i].equals(name)) {
+							comboChannels.select(i);
+							break exitloop;
+						}
+					}
+				} else {
+					comboChannels.select(0);
+				}
 			}
+		} else {
+			comboChannels.setItems(new String[]{""});
 		}
 	}
 

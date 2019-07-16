@@ -243,7 +243,7 @@ public class ExtendedWellChartUI {
 					try {
 						updateChart();
 					} catch(Exception e1) {
-						System.out.println(e1);
+						logger.warn(e1);
 						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}

@@ -278,10 +278,19 @@ public class ExtendedPlateDataUI {
 
 	private void updateDetectionFormats() {
 
+		comboDetectionFormats.setInput(null);
+		updateChannelSpecification(null);
+		//
 		if(plate != null) {
+			/*
+			 * Available Formats
+			 */
 			List<IDetectionFormat> detectionFormats = new ArrayList<>(plate.getDetectionFormats());
 			Collections.sort(detectionFormats, detectionFormatComparator);
 			comboDetectionFormats.setInput(detectionFormats);
+			/*
+			 * Selected Format
+			 */
 			IDetectionFormat detectionFormat = plate.getDetectionFormat();
 			if(detectionFormat != null) {
 				String[] items = comboDetectionFormats.getCombo().getItems();
@@ -294,15 +303,13 @@ public class ExtendedPlateDataUI {
 					}
 				}
 			}
-		} else {
-			comboDetectionFormats.setInput(null);
-			updateChannelSpecification(null);
 		}
 	}
 
 	private void updateChannelSpecification(IDetectionFormat detectionFormat) {
 
 		IChannelSpecification channelSpecification = null;
+		comboChannelSpecifications.setInput(null);
 		//
 		if(detectionFormat != null) {
 			List<IChannelSpecification> channelSpecifications = detectionFormat.getChannelSpecifications();

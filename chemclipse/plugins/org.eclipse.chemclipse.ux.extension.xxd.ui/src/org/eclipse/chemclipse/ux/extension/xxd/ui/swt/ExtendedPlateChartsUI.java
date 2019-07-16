@@ -92,12 +92,23 @@ public class ExtendedPlateChartsUI {
 			IWell well = plate.getWells().first();
 			if(well != null) {
 				comboChannels.setItems(getComboItems(well));
-				if(plate.getWells().size() > 0) {
+				IChannel channel = well.getActiveChannel();
+				if(channel != null) {
+					String name = channel.getDetectionName();
+					String[] items = comboChannels.getItems();
+					exitloop:
+					for(int i = 0; i < items.length; i++) {
+						if(items[i].equals(name)) {
+							comboChannels.select(i);
+							break exitloop;
+						}
+					}
+				} else {
 					comboChannels.select(0);
 				}
 			}
 		} else {
-			comboChannels.setItems(getComboItems(null));
+			comboChannels.setItems(new String[]{""});
 		}
 	}
 
@@ -280,7 +291,6 @@ public class ExtendedPlateChartsUI {
 		 * Clear the chart and reset.
 		 */
 		chartPCR.deleteSeries();
-		//
 		if(plate != null) {
 			ColorCodes colorCodes = new ColorCodes();
 			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_COLOR_CODES));
