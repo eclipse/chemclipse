@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramF
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
-import org.eclipse.chemclipse.support.settings.IonsSelectionSettingProperty;
+import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -24,11 +24,11 @@ public class FilterSettings extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Ions To Remove", defaultValue = "18;28;84;207")
 	@JsonPropertyDescription(value = "List the ions to remove, separated by a semicolon..")
-	@IonsSelectionSettingProperty
+	@StringSettingsProperty(regExp = "(^$|((\\d+;?)+))", isMultiLine = false)
 	private String ionsToRemove = "18;28;84;207";
 	@JsonProperty(value = "Ions To Preserve", defaultValue = "103;104")
 	@JsonPropertyDescription(value = "List the ions to preserve, separated by a semicolon..")
-	@IonsSelectionSettingProperty
+	@StringSettingsProperty(regExp = "(^$|((\\d+;?)+))", isMultiLine = false)
 	private String ionsToPreserve = "103;104";
 	@JsonProperty(value = "Adjust Threshold Transitions", defaultValue = "true")
 	@JsonPropertyDescription(value = "Adjust zero threshold transitions.")
