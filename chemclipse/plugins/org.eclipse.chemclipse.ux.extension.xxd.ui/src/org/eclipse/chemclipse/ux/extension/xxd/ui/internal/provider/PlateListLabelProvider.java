@@ -14,15 +14,21 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 
+import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IPlateTableEntry;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Image;
 
 public class PlateListLabelProvider extends AbstractChemClipseLabelProvider {
 
+	private static IPreferenceStore preferences = Activator.getDefault().getPreferenceStore();
+	//
 	public static String[] TITLES = {//
 			"", //
 			"1", //
@@ -57,76 +63,82 @@ public class PlateListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static String getCellText(IWell well) {
 
-		DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		String text = "";
 		if(well != null) {
 			if(well.isEmptyMeasurement()) {
-				text = "Position " + (well.getPosition().getId() + 1);
+				text = "Position " + getPosition(well);
 			} else {
 				if(well.isActiveSubset()) {
 					StringBuilder builder = new StringBuilder();
-					/*
-					 * Sample ID
-					 */
 					builder.append(well.getSampleId());
-					/*
-					 * Sample Subset / Target Name
-					 */
-					String sampleSubset = well.getSampleSubset();
-					String targetName = well.getTargetName();
-					builder.append("\n");
-					builder.append(sampleSubset.equals("") ? "--" : sampleSubset);
-					builder.append(" | ");
-					builder.append(targetName.equals("") ? "--" : targetName);
-					/*
-					 * Crossing Point (System)
-					 */
-					builder.append("\n");
-					/*
-					 * Crossing Points
-					 */
-					IChannel activeChannel = well.getActiveChannel();
-					if(activeChannel == null) {
-						/*
-						 * All channels
-						 */
-						builder.append("[");
-						Iterator<IChannel> iterator = well.getChannels().values().iterator();
-						while(iterator.hasNext()) {
-							IChannel channel = iterator.next();
-							double crossingPointCalculated = channel.getCrossingPointCalculated();
-							if(crossingPointCalculated > 0.0d) {
-								builder.append(decimalFormat.format(crossingPointCalculated));
-							} else {
-								builder.append("--");
-							}
-							//
-							if(iterator.hasNext()) {
-								builder.append(" | ");
-							}
-						}
-						builder.append("]");
-					} else {
-						/*
-						 * Selected channel
-						 */
-						double crossingPointCalculated = activeChannel.getCrossingPointCalculated();
-						if(crossingPointCalculated > 0.0d) {
-							builder.append(decimalFormat.format(crossingPointCalculated));
-						} else {
-							builder.append("--");
-						}
-					}
-					//
+					appendHeaderInfo(well, builder);
+					appendCrossingPointInfo(well, builder);
 					text = builder.toString();
 				} else {
-					text = "<" + (well.getPosition().getId() + 1) + ">";
+					String sampleSubset = well.getSampleSubset();
+					text = sampleSubset.equals("") ? "--" : sampleSubset + " <" + getPosition(well) + ">";
+				}
+			}
+		}
+		return text;
+	}
+
+	private static void appendHeaderInfo(IWell well, StringBuilder builder) {
+
+		String sampleSubset = well.getSampleSubset();
+		String targetName = well.getTargetName();
+		builder.append("\n");
+		builder.append(sampleSubset.equals("") ? "--" : sampleSubset);
+		//
+		if(preferences.getBoolean(PreferenceConstants.P_PCR_SHOW_TARGET_NAME)) {
+			builder.append(" | ");
+			builder.append(targetName.equals("") ? "--" : targetName);
+		}
+	}
+
+	private static void appendCrossingPointInfo(IWell well, StringBuilder builder) {
+
+		builder.append("\n");
+		/*
+		 * Crossing Points
+		 */
+		IChannel activeChannel = well.getActiveChannel();
+		if(activeChannel == null) {
+			/*
+			 * All channels
+			 */
+			Iterator<IChannel> iterator = well.getChannels().values().iterator();
+			while(iterator.hasNext()) {
+				IChannel channel = iterator.next();
+				appendChannelCrossingPoint(channel, builder);
+				if(iterator.hasNext()) {
+					builder.append(" | ");
 				}
 			}
 		} else {
-			text = "n.v.";
+			/*
+			 * Active channel
+			 */
+			appendChannelCrossingPoint(activeChannel, builder);
 		}
-		return text;
+	}
+
+	private static void appendChannelCrossingPoint(IChannel channel, StringBuilder builder) {
+
+		if(channel != null) {
+			IPoint crossingPoint = channel.getCrossingPoint();
+			if(crossingPoint != null && crossingPoint.getX() > 0.0d) {
+				DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
+				builder.append(decimalFormat.format(crossingPoint.getX()));
+			} else {
+				builder.append("--");
+			}
+		}
+	}
+
+	private static int getPosition(IWell well) {
+
+		return well.getPosition().getId() + 1;
 	}
 
 	@Override

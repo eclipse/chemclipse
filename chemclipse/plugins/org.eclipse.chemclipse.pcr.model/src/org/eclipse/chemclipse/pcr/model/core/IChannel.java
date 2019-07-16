@@ -47,11 +47,9 @@ public interface IChannel {
 
 	void setCrossingPoint(IPoint crossingPoint);
 
+	void setCrossingPoint(double crossingPointX);
+
 	String getDetectionName();
 
 	void setDetectionName(String detectionName);
-
-	double getCrossingPointCalculated();
-
-	void setCrossingPointCalculated(double crossingPointCalculated);
 }

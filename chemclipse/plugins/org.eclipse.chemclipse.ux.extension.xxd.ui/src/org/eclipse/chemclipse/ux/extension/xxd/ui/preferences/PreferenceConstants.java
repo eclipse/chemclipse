@@ -656,4 +656,6 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_PCR_DEFAULT_COLOR = "192,192,192";
 	public static final String P_PCR_COLOR_CODES = "pcrColorCodes";
 	public static final String DEF_PCR_COLOR_CODES = "";
+	public static final String P_PCR_SHOW_TARGET_NAME = "pcrShowTargetName";
+	public static final boolean DEF_PCR_SHOW_TARGET_NAME = false;
 }

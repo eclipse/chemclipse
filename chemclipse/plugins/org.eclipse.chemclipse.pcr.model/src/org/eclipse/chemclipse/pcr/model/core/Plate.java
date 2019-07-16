@@ -29,16 +29,53 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 	private TreeSet<IWell> wells = new TreeSet<IWell>();
 
 	@Override
+	public List<String> getActiveChannels() {
+
+		List<String> channels = new ArrayList<>();
+		if(detectionFormat != null) {
+			for(IChannelSpecification channelSpecification : detectionFormat.getChannelSpecifications()) {
+				channels.add(channelSpecification.getName());
+			}
+		}
+		return channels;
+	}
+
+	@Override
 	public void setActiveChannel(int activeChannel) {
 
-		for(IWell well : wells) {
-			well.setActiveChannel(activeChannel);
+		if(activeChannel < 0) {
+			for(IWell well : wells) {
+				well.clearActiveChannel();
+			}
+		} else {
+			for(IWell well : wells) {
+				well.setActiveChannel(activeChannel);
+			}
 		}
+	}
+
+	@Override
+	public List<String> getSampleSubsets() {
+
+		Set<String> subsets = new HashSet<>();
+		for(IWell well : wells) {
+			subsets.add(well.getSampleSubset());
+		}
+		//
+		List<String> sampleSubsets = new ArrayList<>(subsets);
+		Collections.sort(sampleSubsets);
+		if(sampleSubsets.size() == 0 || !sampleSubsets.get(0).equals(ALL_SUBSETS)) {
+			sampleSubsets.set(0, ALL_SUBSETS); // All subsets
+		}
+		//
+		return sampleSubsets;
 	}
 
 	@Override
 	public void setActiveSubset(String activeSubset) {
 
+		activeSubset = (ALL_SUBSETS.equals(activeSubset)) ? "" : activeSubset;
+		//
 		for(IWell well : wells) {
 			well.setActiveSubset(activeSubset);
 		}
@@ -84,17 +121,5 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 	public String getName() {
 
 		return getHeaderDataOrDefault("name", "");
-	}
-
-	@Override
-	public List<String> getSampleSubsets() {
-
-		Set<String> subsets = new HashSet<>();
-		for(IWell well : wells) {
-			subsets.add(well.getSampleSubset());
-		}
-		List<String> sampleSubsets = new ArrayList<>(subsets);
-		Collections.sort(sampleSubsets);
-		return sampleSubsets;
 	}
 }

@@ -20,6 +20,8 @@ public interface IWell extends Comparable<IWell>, IDataModel {
 	String CROSSING_POINT = "Crossing Point";
 	String SAMPLE_SUBSET = "Sample Subset";
 
+	String getLabel();
+
 	/**
 	 * Returns null if no active channel is set.
 	 * 

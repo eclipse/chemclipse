@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.numeric.core.IPoint;
+import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.chemclipse.numeric.equations.Equations;
+import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 
 public class Channel implements IChannel {
 
@@ -26,7 +29,6 @@ public class Channel implements IChannel {
 	private List<Double> points = new ArrayList<>();
 	private IPoint crossingPoint = null;
 	private String detectionName = "";
-	private double crossingPointCalculated = 0.0d;
 
 	@Override
 	public int getId() {
@@ -113,6 +115,26 @@ public class Channel implements IChannel {
 	}
 
 	@Override
+	public void setCrossingPoint(double crossingPointX) {
+
+		int floor = (int)Math.floor(crossingPointX);
+		int ceil = (int)Math.ceil(crossingPointX);
+		//
+		if(floor >= 0 && floor < points.size() && ceil >= 0 && ceil < points.size()) {
+			if(floor == ceil) {
+				double y = points.get(floor);
+				crossingPoint = new Point(crossingPointX, y);
+			} else {
+				IPoint p1 = new Point(floor, points.get(floor));
+				IPoint p2 = new Point(ceil, points.get(ceil));
+				LinearEquation equation = Equations.createLinearEquation(p1, p2);
+				double y = equation.calculateY(crossingPointX);
+				crossingPoint = new Point(crossingPointX, y);
+			}
+		}
+	}
+
+	@Override
 	public String getDetectionName() {
 
 		return detectionName;
@@ -122,17 +144,5 @@ public class Channel implements IChannel {
 	public void setDetectionName(String detectionName) {
 
 		this.detectionName = detectionName;
-	}
-
-	@Override
-	public double getCrossingPointCalculated() {
-
-		return (crossingPoint != null) ? crossingPoint.getX() : crossingPointCalculated;
-	}
-
-	@Override
-	public void setCrossingPointCalculated(double crossingPointCalculated) {
-
-		this.crossingPointCalculated = crossingPointCalculated;
 	}
 }

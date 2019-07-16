@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
+import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -57,8 +58,6 @@ public class ExtendedWellChartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedWellChartUI.class);
 	//
-	private static final String ALL_CHANNELS = "Show all Channels";
-	//
 	private Label labelInfo;
 	private Composite toolbarInfo;
 	private Combo comboChannels;
@@ -75,21 +74,54 @@ public class ExtendedWellChartUI {
 	public void update(IWell well) {
 
 		this.well = well;
+		updateLabel();
+		updateChannelCombo();
+		updateChartData();
+	}
+
+	private void updateLabel() {
+
 		if(well != null) {
-			if(well.isEmptyMeasurement()) {
-				labelInfo.setText("Position: " + (well.getPosition().getId() + 1));
-				comboChannels.setItems(new String[]{});
-				chartPCR.deleteSeries();
-			} else {
-				labelInfo.setText("Position: " + (well.getPosition().getId() + 1) + ", Id:" + well.getSampleId());
-				comboChannels.setItems(getComboItems(well));
-				comboChannels.select(0);
-				updateChart();
-			}
+			labelInfo.setText(well.getLabel());
 		} else {
 			labelInfo.setText("No well data available.");
-			comboChannels.setItems(getComboItems(well));
-			chartPCR.deleteSeries();
+		}
+	}
+
+	private void updateChannelCombo() {
+
+		if(well != null) {
+			if(well.isEmptyMeasurement()) {
+				comboChannels.setItems(new String[]{});
+			} else {
+				comboChannels.setItems(getComboItems(well));
+				IChannel channel = well.getActiveChannel();
+				if(channel != null) {
+					String name = channel.getDetectionName();
+					String[] items = comboChannels.getItems();
+					exitloop:
+					for(int i = 0; i < items.length; i++) {
+						if(items[i].equals(name)) {
+							comboChannels.select(i);
+							break exitloop;
+						}
+					}
+				} else {
+					comboChannels.select(0);
+				}
+			}
+		} else {
+			comboChannels.setItems(new String[]{""});
+		}
+	}
+
+	private void updateChartData() {
+
+		chartPCR.deleteSeries();
+		if(well != null) {
+			if(!well.isEmptyMeasurement()) {
+				updateChart();
+			}
 		}
 	}
 
@@ -97,7 +129,7 @@ public class ExtendedWellChartUI {
 
 		if(well != null) {
 			List<String> items = new ArrayList<>();
-			items.add(ALL_CHANNELS);
+			items.add(IPlate.ALL_CHANNELS);
 			for(IChannel channel : well.getChannels().values()) {
 				items.add(channel.getDetectionName());
 			}

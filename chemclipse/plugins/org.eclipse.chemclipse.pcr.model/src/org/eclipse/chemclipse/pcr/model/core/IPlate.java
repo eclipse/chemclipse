@@ -18,12 +18,19 @@ import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 
 public interface IPlate extends IMeasurementInfo {
 
+	String ALL_SUBSETS = "All Subsets";
+	String ALL_CHANNELS = "All Channels";
+	//
 	String NAME = "name";
 	String DATE = "Date";
 	String NOISEBAND = "Noiseband";
 	String THRESHOLD = "Threshold";
 
+	List<String> getActiveChannels();
+
 	void setActiveChannel(int activeChannel);
+
+	List<String> getSampleSubsets();
 
 	void setActiveSubset(String activeSubset);
 
@@ -38,6 +45,4 @@ public interface IPlate extends IMeasurementInfo {
 	IWell getWell(int id);
 
 	String getName();
-
-	List<String> getSampleSubsets();
 }

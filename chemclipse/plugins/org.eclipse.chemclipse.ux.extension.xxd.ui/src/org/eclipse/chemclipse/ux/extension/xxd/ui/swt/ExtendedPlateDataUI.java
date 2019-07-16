@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -63,13 +63,8 @@ public class ExtendedPlateDataUI {
 	public void update(IPlate plate) {
 
 		this.plate = plate;
-		if(plate != null) {
-			labelInfo.setText("Plate: " + plate.getName());
-		} else {
-			labelInfo.setText("No plate data available.");
-		}
-		//
-		updateDetectionFormats(plate);
+		updateLabel();
+		updateDetectionFormats();
 	}
 
 	private void initialize(Composite parent) {
@@ -134,7 +129,7 @@ public class ExtendedPlateDataUI {
 
 				if(plate != null) {
 					plate.setDetectionFormat(null);
-					updateDetectionFormats(plate);
+					updateDetectionFormats();
 				}
 			}
 		});
@@ -272,24 +267,37 @@ public class ExtendedPlateDataUI {
 		return listUI;
 	}
 
-	private void updateDetectionFormats(IPlate plate) {
+	private void updateLabel() {
 
-		IDetectionFormat detectionFormat;
-		//
+		if(plate != null) {
+			labelInfo.setText("Plate: " + plate.getName());
+		} else {
+			labelInfo.setText("No plate data available.");
+		}
+	}
+
+	private void updateDetectionFormats() {
+
 		if(plate != null) {
 			List<IDetectionFormat> detectionFormats = new ArrayList<>(plate.getDetectionFormats());
 			Collections.sort(detectionFormats, detectionFormatComparator);
 			comboDetectionFormats.setInput(detectionFormats);
-			detectionFormat = plate.getDetectionFormat();
+			IDetectionFormat detectionFormat = plate.getDetectionFormat();
+			if(detectionFormat != null) {
+				String[] items = comboDetectionFormats.getCombo().getItems();
+				exitloop:
+				for(int i = 0; i < items.length; i++) {
+					if(items[i].equals(detectionFormat.getName())) {
+						comboDetectionFormats.getCombo().select(i);
+						updateChannelSpecification(detectionFormat);
+						break exitloop;
+					}
+				}
+			}
 		} else {
 			comboDetectionFormats.setInput(null);
-			detectionFormat = null;
+			updateChannelSpecification(null);
 		}
-		//
-		if(detectionFormat != null) {
-			comboDetectionFormats.getCombo().setText(detectionFormat.getName());
-		}
-		updateChannelSpecification(detectionFormat);
 	}
 
 	private void updateChannelSpecification(IDetectionFormat detectionFormat) {

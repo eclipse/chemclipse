@@ -38,6 +38,16 @@ public class Well extends AbstractDataModel implements IWell {
 	}
 
 	@Override
+	public String getLabel() {
+
+		if(isEmptyMeasurement()) {
+			return "Position: " + (getPosition().getId() + 1);
+		} else {
+			return "Position: " + (getPosition().getId() + 1) + " | ID:" + getSampleId();
+		}
+	}
+
+	@Override
 	public IChannel getActiveChannel() {
 
 		return activeChannel;
@@ -180,6 +190,6 @@ public class Well extends AbstractDataModel implements IWell {
 
 	private boolean isChannelPositive(IChannel channel) {
 
-		return (channel != null && channel.getCrossingPointCalculated() > 0.0d);
+		return (channel != null && channel.getCrossingPoint() != null && channel.getCrossingPoint().getX() > 0.0d);
 	}
 }

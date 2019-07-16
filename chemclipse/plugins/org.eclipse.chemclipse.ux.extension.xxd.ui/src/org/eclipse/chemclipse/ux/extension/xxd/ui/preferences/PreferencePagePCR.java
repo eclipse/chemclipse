@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.fieldeditors.ColorCodesFieldEditor;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -31,6 +32,7 @@ public class PreferencePagePCR extends FieldEditorPreferencePage implements IWor
 
 		addField(new ColorFieldEditor(PreferenceConstants.P_PCR_DEFAULT_COLOR, "Default Line Color:", getFieldEditorParent()));
 		addField(new ColorCodesFieldEditor(PreferenceConstants.P_PCR_COLOR_CODES, "Color Codes", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_PCR_SHOW_TARGET_NAME, "Show Target Name", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

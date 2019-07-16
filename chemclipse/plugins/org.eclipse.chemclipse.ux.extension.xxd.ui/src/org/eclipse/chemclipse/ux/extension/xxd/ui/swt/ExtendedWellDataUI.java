@@ -467,14 +467,13 @@ public class ExtendedWellDataUI {
 	private void updateLabel() {
 
 		if(well != null) {
-			String text = "Position: " + (well.getPosition().getId() + 1) + " | Id:" + well.getSampleId();
+			String text = well.getLabel();
 			String editInformation = wellDataListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
-			//
 			labelInfoTop.setText(text + " - " + editInformation);
 			labelInfoBottom.setText("Number of Entries: " + well.getData().size());
 			wellDataListUI.setInput(well);
 		} else {
-			labelInfoTop.setText("");
+			labelInfoTop.setText("No well data available.");
 			labelInfoBottom.setText("");
 			wellDataListUI.setInput(null);
 		}

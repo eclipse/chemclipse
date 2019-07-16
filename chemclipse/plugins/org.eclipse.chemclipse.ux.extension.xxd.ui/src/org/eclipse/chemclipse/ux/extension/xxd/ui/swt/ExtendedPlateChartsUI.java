@@ -72,6 +72,22 @@ public class ExtendedPlateChartsUI {
 	public void update(IPlate plate) {
 
 		this.plate = plate;
+		updateLabel();
+		updateComboChannels();
+		updateChartData();
+	}
+
+	private void updateLabel() {
+
+		if(plate != null) {
+			labelInfo.setText("Plate: " + plate.getName());
+		} else {
+			labelInfo.setText("No plate data available.");
+		}
+	}
+
+	private void updateComboChannels() {
+
 		if(plate != null) {
 			IWell well = plate.getWells().first();
 			if(well != null) {
@@ -80,12 +96,17 @@ public class ExtendedPlateChartsUI {
 					comboChannels.select(0);
 				}
 			}
-			labelInfo.setText("Plate: " + plate.getName());
-			updateChart();
 		} else {
 			comboChannels.setItems(getComboItems(null));
+		}
+	}
+
+	private void updateChartData() {
+
+		if(plate != null) {
+			updateChart();
+		} else {
 			chartPCR.deleteSeries();
-			labelInfo.setText("No plate data available.");
 		}
 	}
 

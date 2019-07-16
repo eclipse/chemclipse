@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.pcr.model.core.IChannelSpecification;
-import org.eclipse.chemclipse.pcr.model.core.IDetectionFormat;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IPlateTableEntry;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
@@ -25,11 +23,9 @@ import org.eclipse.chemclipse.pcr.model.core.Position;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
-import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
-import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PlateListLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PlateListUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -37,7 +33,6 @@ import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -49,6 +44,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -60,9 +56,10 @@ public class ExtendedPCRPlateUI {
 	private Label labelDataInfo;
 	private PlateListUI plateListUI;
 	private Combo comboSubsets;
-	private ComboViewer comboViewerChannels;
+	private Combo comboChannels;
 	//
 	private IPlate plate;
+	private IWell well = null;
 
 	public ExtendedPCRPlateUI(Composite parent) {
 		initialize(parent);
@@ -91,7 +88,7 @@ public class ExtendedPCRPlateUI {
 		//
 		createDataInfoLabel(composite);
 		comboSubsets = createComboSubsets(composite);
-		comboViewerChannels = createComboChannelSpecifications(composite);
+		comboChannels = createComboChannels(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
 	}
@@ -118,6 +115,7 @@ public class ExtendedPCRPlateUI {
 				String activeSubset = combo.getText();
 				if(plate != null) {
 					plate.setActiveSubset(activeSubset);
+					fireUpdate(e.widget.getDisplay(), well);
 					plateListUI.refresh();
 				}
 			}
@@ -126,24 +124,9 @@ public class ExtendedPCRPlateUI {
 		return combo;
 	}
 
-	private ComboViewer createComboChannelSpecifications(Composite parent) {
+	private Combo createComboChannels(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
-		Combo combo = comboViewer.getCombo();
-		comboViewer.setContentProvider(new ListContentProvider());
-		comboViewer.setLabelProvider(new AbstractLabelProvider() {
-
-			@Override
-			public String getText(Object element) {
-
-				if(element instanceof IChannelSpecification) {
-					IChannelSpecification channelSpecification = (IChannelSpecification)element;
-					return channelSpecification.getName();
-				}
-				return null;
-			}
-		});
-		//
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
 		combo.setToolTipText("Select a channel specification.");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
@@ -154,16 +137,19 @@ public class ExtendedPCRPlateUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(plate != null) {
-					Object object = comboViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof IChannelSpecification) {
-						plate.setActiveChannel(combo.getSelectionIndex());
-						plateListUI.refresh();
+					String selection = combo.getText();
+					if(IPlate.ALL_CHANNELS.equals(selection)) {
+						plate.setActiveChannel(-1);
+					} else {
+						plate.setActiveChannel(combo.getSelectionIndex() - 1);
 					}
+					fireUpdate(e.widget.getDisplay(), well);
+					plateListUI.refresh();
 				}
 			}
 		});
 		//
-		return comboViewer;
+		return combo;
 	}
 
 	private void createResetButton(Composite parent) {
@@ -193,8 +179,8 @@ public class ExtendedPCRPlateUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePageSWT();
-				preferencePage.setTitle("Settings (SWT)");
+				IPreferencePage preferencePage = new PreferencePagePCR();
+				preferencePage.setTitle("PCR");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
@@ -206,7 +192,8 @@ public class ExtendedPCRPlateUI {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						System.out.println(e1);
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}
@@ -236,29 +223,31 @@ public class ExtendedPCRPlateUI {
 				/*
 				 * Mouse click
 				 */
-				String topic;
-				Object data;
-				//
 				IWell well = getSelectedCell(event);
-				if(well != null) {
-					topic = IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION;
-					data = well;
-				} else {
-					topic = IChemClipseEvents.TOPIC_WELL_PCR_UNLOAD_SELECTION;
-					data = null;
-				}
-				//
-				event.widget.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-
-						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-						eventBroker.send(topic, data);
-					}
-				});
+				fireUpdate(event.widget.getDisplay(), well);
 			}
 		});
+	}
+
+	private void fireUpdate(Display display, Object data) {
+
+		if(display != null) {
+			//
+			String topic = (data instanceof IWell) ? IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION : IChemClipseEvents.TOPIC_WELL_PCR_UNLOAD_SELECTION;
+			display.asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+					eventBroker.send(topic, (data instanceof IWell) ? data : null);
+				}
+			});
+			//
+			if(data instanceof IWell) {
+				this.well = (IWell)data;
+			}
+		}
 	}
 
 	private IWell getSelectedCell(Event event) {
@@ -338,8 +327,10 @@ public class ExtendedPCRPlateUI {
 	private void updateSubsetCombo() {
 
 		if(plate != null) {
-			List<String> sampleSubsets = plate.getSampleSubsets();
-			comboSubsets.setItems(sampleSubsets.toArray(new String[sampleSubsets.size()]));
+			int selectionIndex = comboSubsets.getSelectionIndex();
+			List<String> subsets = plate.getSampleSubsets();
+			comboSubsets.setItems(subsets.toArray(new String[subsets.size()]));
+			setComboSelection(subsets, comboSubsets, selectionIndex);
 		} else {
 			comboSubsets.setItems(new String[]{""});
 		}
@@ -348,12 +339,29 @@ public class ExtendedPCRPlateUI {
 	private void updateChannelSpecifications() {
 
 		if(plate != null) {
-			IDetectionFormat detectionFormat = plate.getDetectionFormat();
-			if(detectionFormat != null) {
-				comboViewerChannels.setInput(detectionFormat.getChannelSpecifications());
-			}
+			int selectionIndex = comboChannels.getSelectionIndex();
+			List<String> channels = plate.getActiveChannels();
+			channels.add(0, IPlate.ALL_CHANNELS);
+			comboChannels.setItems(channels.toArray(new String[channels.size()]));
+			setComboSelection(channels, comboChannels, selectionIndex);
 		} else {
-			comboViewerChannels.setInput(null);
+			comboChannels.setItems(new String[]{""});
+		}
+	}
+
+	private void setComboSelection(List<String> items, Combo combo, int selectionIndex) {
+
+		/*
+		 * Set the last selection.
+		 */
+		if(items.size() > 0) {
+			if(selectionIndex < 0) {
+				combo.select(0);
+			} else {
+				if(selectionIndex < items.size()) {
+					combo.select(selectionIndex);
+				}
+			}
 		}
 	}
 }

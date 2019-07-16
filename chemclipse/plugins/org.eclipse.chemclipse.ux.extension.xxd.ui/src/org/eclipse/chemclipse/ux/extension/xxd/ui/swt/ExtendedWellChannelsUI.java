@@ -15,6 +15,7 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -243,7 +244,10 @@ public class ExtendedWellChannelsUI {
 				textName.setText(channel.getName());
 				textTime.setText(Integer.toString(channel.getTime()));
 				textTemperature.setText(Double.toString(channel.getTemperature()));
-				textCrossingPoint.setText(Double.toString(channel.getCrossingPointCalculated()));
+				IPoint crossingPoint = channel.getCrossingPoint();
+				if(crossingPoint != null) {
+					textCrossingPoint.setText(Double.toString(crossingPoint.getX()));
+				}
 			}
 		}
 	}
@@ -264,8 +268,7 @@ public class ExtendedWellChannelsUI {
 	private void updateLabel() {
 
 		if(well != null) {
-			String text = "Position: " + (well.getPosition().getId() + 1) + " | Id:" + well.getSampleId();
-			labelInfo.setText(text);
+			labelInfo.setText(well.getLabel());
 		} else {
 			labelInfo.setText("");
 		}
