@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakFilterTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	public static final String CATEGORY = "Peak Filter [MSD]";
+	public static final String CATEGORY = "Peak Filter";
 	private static final Logger logger = Logger.getLogger(PeakFilterTypeSupplierMSD.class);
 
 	public PeakFilterTypeSupplierMSD() {

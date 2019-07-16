@@ -30,7 +30,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramExportTypeSupplierWSD extends AbstractProcessTypeSupplier<File> {
 
-	public static final String CATEGORY = "Chromatogram Export [WSD]";
+	public static final String CATEGORY = "Chromatogram Export";
 	private static final String PREFIX = "wsd.export.";
 
 	public ChromatogramExportTypeSupplierWSD() {

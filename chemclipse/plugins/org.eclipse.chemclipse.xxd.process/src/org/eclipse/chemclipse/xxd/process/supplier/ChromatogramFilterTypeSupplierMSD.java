@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilterTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	public static final String CATEGORY = "Chromatogram Filter [MSD]";
+	public static final String CATEGORY = "Chromatogram Filter";
 	private static final Logger logger = Logger.getLogger(ChromatogramFilterTypeSupplierMSD.class);
 
 	public ChromatogramFilterTypeSupplierMSD() {
