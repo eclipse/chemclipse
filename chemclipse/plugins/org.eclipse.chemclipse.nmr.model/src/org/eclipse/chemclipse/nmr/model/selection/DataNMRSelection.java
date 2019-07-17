@@ -45,6 +45,7 @@ public class DataNMRSelection extends Observable implements IDataNMRSelection {
 		return measurement;
 	}
 
+	@Override
 	public synchronized void addMeasurement(IComplexSignalMeasurement<?> measurement) {
 
 		if(!measurements.contains(measurement)) {

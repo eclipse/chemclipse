@@ -40,6 +40,11 @@ public interface IDataNMRSelection {
 		throw new UnsupportedOperationException();
 	}
 
+	default void addMeasurement(IComplexSignalMeasurement<?> measurement) {
+
+		throw new UnsupportedOperationException();
+	}
+
 	/**
 	 * 
 	 * @return all measurements that belongs to this selection

@@ -52,6 +52,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
@@ -306,7 +307,7 @@ public class ExtendedNMROverlayUI implements Observer {
 	public void update(Observable o, Object arg) {
 
 		if(arg == ChangeType.SELECTION_CHANGED) {
-			refreshUpdateOverlayChart();
+			Display.getDefault().asyncExec(this::refreshUpdateOverlayChart);
 		}
 	}
 
@@ -361,6 +362,13 @@ public class ExtendedNMROverlayUI implements Observer {
 				setChanged();
 				notifyObservers(ChangeType.SELECTION_CHANGED);
 			}
+		}
+
+		@Override
+		public void addMeasurement(IComplexSignalMeasurement<?> selection) {
+
+			editor.getScanSelection().addMeasurement(selection);
+			setActiveMeasurement(selection);
 		}
 
 		@Override
