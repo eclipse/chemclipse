@@ -21,6 +21,15 @@ public class Position implements Comparable<Position> {
 	private int column = 0;
 	private Pattern pattern = Pattern.compile("([a-zA-Z]*)(\\d*)");
 
+	public Position() {
+		this("", 0);
+	}
+
+	public Position(String row, int column) {
+		this.row = row;
+		this.column = column;
+	}
+
 	/*
 	 * A1, H12
 	 */

@@ -44,5 +44,7 @@ public interface IPlate extends IMeasurementInfo {
 
 	IWell getWell(int id);
 
+	void setName(String name);
+
 	String getName();
 }

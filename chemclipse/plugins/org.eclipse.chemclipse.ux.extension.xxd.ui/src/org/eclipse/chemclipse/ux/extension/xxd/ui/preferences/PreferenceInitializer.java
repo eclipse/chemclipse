@@ -354,6 +354,5 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 */
 		store.setDefault(PreferenceConstants.P_PCR_DEFAULT_COLOR, PreferenceConstants.DEF_PCR_DEFAULT_COLOR);
 		store.setDefault(PreferenceConstants.P_PCR_COLOR_CODES, PreferenceConstants.DEF_PCR_COLOR_CODES);
-		store.setDefault(PreferenceConstants.P_PCR_SHOW_TARGET_NAME, PreferenceConstants.DEF_PCR_SHOW_TARGET_NAME);
 	}
 }

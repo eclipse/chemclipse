@@ -512,7 +512,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		if(processTypeSupport != null) {
 			/*
-			 * Data Type
+			 * 
 			 */
 			DataType datatype = DataType.AUTO_DETECT;
 			if(chromatogramSelection != null) {

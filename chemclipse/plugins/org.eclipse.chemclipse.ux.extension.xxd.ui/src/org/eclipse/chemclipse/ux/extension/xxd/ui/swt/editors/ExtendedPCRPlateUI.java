@@ -11,22 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
-import org.eclipse.chemclipse.pcr.model.core.IPlateTableEntry;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
-import org.eclipse.chemclipse.pcr.model.core.PlateTableEntry;
-import org.eclipse.chemclipse.pcr.model.core.Position;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PlateListLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PlateListUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PCRPlate;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -37,29 +31,22 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 
 public class ExtendedPCRPlateUI {
 
 	private Label labelDataInfo;
-	private PlateListUI plateListUI;
+	private PCRPlate pcrPlate;
 	private Combo comboSubsets;
 	private Combo comboChannels;
 	//
 	private IPlate plate;
-	private IWell well = null;
 
 	public ExtendedPCRPlateUI(Composite parent) {
 		initialize(parent);
@@ -76,7 +63,7 @@ public class ExtendedPCRPlateUI {
 		parent.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(parent);
-		createPlateTable(parent);
+		createPlateUI(parent);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -115,8 +102,8 @@ public class ExtendedPCRPlateUI {
 				String activeSubset = combo.getText();
 				if(plate != null) {
 					plate.setActiveSubset(activeSubset);
-					fireUpdate(e.widget.getDisplay(), well);
-					plateListUI.refresh();
+					fireUpdate(e.widget.getDisplay(), pcrPlate.getSelectedWell());
+					pcrPlate.refresh();
 				}
 			}
 		});
@@ -143,8 +130,8 @@ public class ExtendedPCRPlateUI {
 					} else {
 						plate.setActiveChannel(combo.getSelectionIndex() - 1);
 					}
-					fireUpdate(e.widget.getDisplay(), well);
-					plateListUI.refresh();
+					fireUpdate(e.widget.getDisplay(), pcrPlate.getSelectedWell());
+					pcrPlate.refresh();
 				}
 			}
 		});
@@ -210,23 +197,10 @@ public class ExtendedPCRPlateUI {
 		updateWidget();
 	}
 
-	private void createPlateTable(Composite parent) {
+	private void createPlateUI(Composite parent) {
 
-		plateListUI = new PlateListUI(parent, SWT.BORDER);
-		plateListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-		Table table = plateListUI.getTable();
-		//
-		table.addListener(SWT.MouseDown, new Listener() {
-
-			public void handleEvent(Event event) {
-
-				/*
-				 * Mouse click
-				 */
-				IWell well = getSelectedCell(event);
-				fireUpdate(event.widget.getDisplay(), well);
-			}
-		});
+		pcrPlate = new PCRPlate(parent, SWT.BORDER);
+		pcrPlate.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	private void fireUpdate(Display display, Object data) {
@@ -243,46 +217,7 @@ public class ExtendedPCRPlateUI {
 					eventBroker.send(topic, (data instanceof IWell) ? data : null);
 				}
 			});
-			//
-			if(data instanceof IWell) {
-				this.well = (IWell)data;
-			}
 		}
-	}
-
-	private IWell getSelectedCell(Event event) {
-
-		Table table = plateListUI.getTable();
-		Rectangle clientArea = table.getClientArea();
-		Point point = new Point(event.x, event.y);
-		int index = table.getTopIndex();
-		while(index < table.getItemCount()) {
-			boolean visible = false;
-			TableItem item = table.getItem(index);
-			for(int i = 1; i < PlateListLabelProvider.TITLES.length; i++) {
-				Rectangle rectangle = item.getBounds(i);
-				if(rectangle.contains(point)) {
-					TableItem[] tableItems = table.getSelection();
-					TableItem tableItem = tableItems[0];
-					Object object = tableItem.getData();
-					if(object instanceof PlateTableEntry) {
-						PlateTableEntry plateTableEntry = (PlateTableEntry)object;
-						return plateTableEntry.getWells().get(i);
-					}
-				}
-				//
-				if(!visible && rectangle.intersects(clientArea)) {
-					visible = true;
-				}
-			}
-			//
-			if(!visible) {
-				return null;
-			}
-			index++;
-		}
-		//
-		return null;
 	}
 
 	private void updateWidget() {
@@ -305,22 +240,9 @@ public class ExtendedPCRPlateUI {
 	private void updateWellPositions() {
 
 		if(plate != null) {
-			Set<IWell> wells = plate.getWells();
-			List<IPlateTableEntry> plateTableEntries = new ArrayList<>();
-			for(int i = 65; i <= 72; i++) {
-				String row = Character.toString(((char)i));
-				IPlateTableEntry plateTableEntry = new PlateTableEntry(row);
-				for(IWell well : wells) {
-					Position position = well.getPosition();
-					if(position.getRow().equals(row)) {
-						plateTableEntry.getWells().put(position.getColumn(), well);
-					}
-				}
-				plateTableEntries.add(plateTableEntry);
-			}
-			plateListUI.setInput(plateTableEntries);
+			pcrPlate.setPlate(plate);
 		} else {
-			plateListUI.clear();
+			pcrPlate.setPlate(null);
 		}
 	}
 

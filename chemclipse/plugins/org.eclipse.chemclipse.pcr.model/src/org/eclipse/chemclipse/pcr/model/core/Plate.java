@@ -24,6 +24,7 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 
 	private static final long serialVersionUID = -7209280707411376156L;
 	//
+	private String name = "";
 	private IDetectionFormat detectionFormat = null;
 	private List<IDetectionFormat> detectionFormats = new ArrayList<>();
 	private TreeSet<IWell> wells = new TreeSet<IWell>();
@@ -118,8 +119,14 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 	}
 
 	@Override
+	public void setName(String name) {
+
+		this.name = name;
+	}
+
+	@Override
 	public String getName() {
 
-		return getHeaderDataOrDefault("name", "");
+		return name;
 	}
 }
