@@ -511,6 +511,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		if(processTypeSupport != null) {
+			/*
+			 * Data Type
+			 */
 			DataType datatype = DataType.AUTO_DETECT;
 			if(chromatogramSelection != null) {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
@@ -522,6 +525,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 					datatype = DataType.CSD;
 				}
 			}
+			/*
+			 * Dynamic Menu Items
+			 */
 			cleanChartMenuEntries(chartSettings, chartMenuEntriesProcessorSupplier);
 			for(IProcessTypeSupplier<?> typeSupplier : processTypeSupport.getProcessorTypeSuppliers(Collections.singletonList(datatype))) {
 				List<IProcessSupplier> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
@@ -530,18 +536,21 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 					chartSettings.addMenuEntry(new ProcessorSupplierMenuEntry(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier, processTypeSupport.getPreferences(supplier)));
 				}
 			}
+			/*
+			 * Manage Item
+			 */
 			chartSettings.addMenuEntry(new IChartMenuEntry() {
 
 				@Override
 				public String getName() {
 
-					return "- manage processing settings -";
+					return "Manage Process Settings";
 				}
 
 				@Override
 				public String getCategory() {
 
-					return "";
+					return "Settings";
 				}
 
 				@Override

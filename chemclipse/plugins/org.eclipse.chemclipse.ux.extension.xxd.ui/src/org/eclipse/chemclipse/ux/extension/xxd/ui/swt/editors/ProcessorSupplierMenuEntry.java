@@ -92,14 +92,20 @@ public class ProcessorSupplierMenuEntry extends AbstractChartMenuEntry implement
 						}
 					}
 					if(preferences.isUseSystemDefaults()) {
-						settings = settingsClass.newInstance();
+						/*
+						 * Why should we not use "settings = settingsClass.newInstance();" here?
+						 * The IProcessSettings instance would be created, but without any meaningful values.
+						 * IProcessTypeSupplier explicitly calls the method without setting if applyProcessor with "IProcessSettings == null" is called.
+						 * The executing plugin then takes care to get the user specific system settings (Eclipse Preferences).
+						 */
+						settings = null;
 					} else {
 						String userSettings = preferences.getUserSettings();
 						ObjectMapper objectMapper = new ObjectMapper();
 						objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 						settings = objectMapper.readValue(userSettings, settingsClass);
 					}
-				} catch(IOException | ReflectiveOperationException e) {
+				} catch(IOException e) {
 					DefaultProcessingResult<Object> result = new DefaultProcessingResult<>();
 					result.addErrorMessage(getName(), "can't process settings", e);
 					return;

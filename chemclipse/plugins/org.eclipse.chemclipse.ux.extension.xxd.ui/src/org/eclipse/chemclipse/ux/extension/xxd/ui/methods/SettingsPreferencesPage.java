@@ -49,11 +49,11 @@ public class SettingsPreferencesPage extends WizardPage {
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		Button buttonDefault = new Button(composite, SWT.RADIO);
-		buttonDefault.setText("Use Default Options");
+		buttonDefault.setText("Use System Options");
 		Label titleBarSeparator = new Label(composite, SWT.HORIZONTAL | SWT.SEPARATOR);
 		titleBarSeparator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		Button buttonUser = new Button(composite, SWT.RADIO);
-		buttonUser.setText("Use Options selected below");
+		buttonUser.setText("Use Specific Options");
 		SettingsUI settingsUI = new SettingsUI(composite, values);
 		settingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		Listener validationListener = new Listener() {
