@@ -70,6 +70,7 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 		 * Create the input part and prepare it.
 		 */
 		MPart part = MBasicFactory.INSTANCE.createInputPart();
+		part.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
 		part.setElementId(elementId);
 		part.setContributionURI(contributionURI);
 		/*

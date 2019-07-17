@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,6 +22,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurement;
@@ -31,22 +31,16 @@ import org.eclipse.chemclipse.nmr.model.core.FIDMeasurement;
 import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.nmr.model.selection.DataNMRSelection;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection.ChangeType;
-import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
-import org.eclipse.chemclipse.processing.filter.FilterChain;
 import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.processing.filter.Filtered;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.actions.IMeasurementFilterAction;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IElementComparer;
@@ -151,18 +145,32 @@ public class NMRMeasurementsUI implements Observer {
 			@Override
 			public void menuAboutToShow(IMenuManager mgr) {
 
-				IComplexSignalMeasurement<?> measurement = selection.getMeasurement();
+				Set<IComplexSignalMeasurement<?>> measurements = Collections.singleton(selection.getMeasurement());
 				BiFunction<IMeasurementFilter<?>, Map<String, ?>, Boolean> acceptor = new BiFunction<IMeasurementFilter<?>, Map<String, ?>, Boolean>() {
 
 					@Override
 					public Boolean apply(IMeasurementFilter<?> filter, Map<String, ?> properties) {
 
-						return filter.acceptsIMeasurement(measurement);
+						return filter.acceptsIMeasurements(measurements);
 					}
 				};
 				Collection<IMeasurementFilter<?>> filters = filterFactory.getFilters(FilterFactory.genericClass(IMeasurementFilter.class), acceptor);
+				Consumer<Collection<? extends IMeasurement>> consumer = new Consumer<Collection<? extends IMeasurement>>() {
+
+					@Override
+					public void accept(Collection<? extends IMeasurement> filtered) {
+
+						for(IMeasurement item : filtered) {
+							if(item instanceof IComplexSignalMeasurement<?>) {
+								if(selection != null) {
+									selection.addMeasurement((IComplexSignalMeasurement<?>)item);
+								}
+							}
+						}
+					}
+				};
 				for(IMeasurementFilter<?> filter : filters) {
-					IAction action = new FilterAction(filter, measurement);
+					IAction action = new IMeasurementFilterAction(filter, measurements, consumer);
 					mgr.add(action);
 				}
 				mgr.add(new DeleteAction());
@@ -203,59 +211,6 @@ public class NMRMeasurementsUI implements Observer {
 		if(value instanceof IComplexSignalMeasurement<?>) {
 			if(value instanceof Filtered<?>) {
 				selection.removeMeasurement((IComplexSignalMeasurement<?>)value);
-			}
-		}
-	}
-
-	private class FilterAction extends Action {
-
-		private IMeasurement measurement;
-		private IMeasurementFilter<?> filter;
-
-		public FilterAction(IMeasurementFilter<?> filter, IMeasurement measurement) {
-			this.filter = filter;
-			this.measurement = measurement;
-			setToolTipText(filter.getDescription());
-			setId(filter.getID());
-			setText(filter.getName());
-		}
-
-		@Override
-		public void run() {
-
-			DefaultProcessingResult<Object> consumer = new DefaultProcessingResult<>();
-			ProgressMonitorDialog monitorDialog = new ProgressMonitorDialog(treeViewer.getTree().getShell());
-			monitorDialog.setCancelable(true);
-			// monitorDialog.setOpenOnRun(false);
-			try {
-				monitorDialog.run(true, true, new IRunnableWithProgress() {
-
-					@Override
-					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-						applyFilter(filter, measurement, consumer, monitor);
-					}
-				});
-				ProcessingInfoViewSupport.updateProcessingInfo(consumer);
-			} catch(InvocationTargetException e) {
-				ProcessingInfoViewSupport.updateProcessingInfoError(filter.getName(), "Processing failed", e.getTargetException());
-			} catch(InterruptedException e) {
-				// user canceled
-				return;
-			}
-		}
-	}
-
-	private <T> void applyFilter(IMeasurementFilter<T> filter, IMeasurement measurement, MessageConsumer consumer, IProgressMonitor progressMonitor) {
-
-		Set<IMeasurement> singleton = Collections.singleton(measurement);
-		T configuration = filter.createConfiguration(singleton);
-		Collection<? extends IMeasurement> filtered = filter.filterIMeasurements(singleton, configuration, FilterChain.returnResult(), consumer, progressMonitor);
-		for(IMeasurement item : filtered) {
-			if(item instanceof IComplexSignalMeasurement<?>) {
-				if(selection != null) {
-					selection.addMeasurement((IComplexSignalMeasurement<?>)item);
-				}
 			}
 		}
 	}
