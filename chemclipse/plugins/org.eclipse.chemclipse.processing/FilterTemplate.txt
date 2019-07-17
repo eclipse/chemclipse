@@ -19,17 +19,17 @@ public interface [ItemType]Filter<ConfigType> extends Filter<ConfigType> {
 	 * @param filterItems
 	 * @param configuration
 	 *            the configuration to apply or <code>null</code> if no special configuration is desired
-	 * @param nextFilter
-	 *            the next filter to invoke, implementors might allow further processing with other filters in the chain by calling {@link FilterChain#doFilter(Object, org.eclipse.chemclipse.processing.core.MessageConsumer)}
- 	 * @param messageConsumer
+	 * @param resultTransformer
+	 *            the transformer to invoke for producing the desired output result, filter might use this to produce results and then take some more actions with it or even produce alternative results or in msot cases simply return the result as is
+	 * @param messageConsumer
 	 *            Filters are meant to not throwing checked exceptions nor return no result if something goes wrong but report problems to the {@link MessageConsumer} this allows the upstream caller to decide what to do
 	 * @param monitor
 	 *            a {@link IProgressMonitor} to report progress of the filtering or <code>null</code> if no progress is desired
-	 * @return a {@link IProcessingResult} that describes the outcome of the filtering, the result will be {@link Boolean#TRUE} if any item in the list was filter or {@link Boolean#FALSE} if no item was filtered or there was an error. The messages of the {@link IProcessingResult} may contain further information
+	 * @return the result of the processing or <code>null</code> if processing was canceled
 	 * @throws IllegalArgumentException
-	 *             if any of the given {@link [ItemType]} are incompatible with this filter ({@link #accepts[ItemType]([ItemType])} returns <code>false</code> for them)
+	 *             if the given {@link [ItemType]}s are incompatible with this filter ({@link #accepts[ItemType]s([ItemType])} returns <code>false</code>)
 	 */
-	Collection<? extends [ItemType]> filter[ItemType]s(Collection<? extends [ItemType]> filterItems, ConfigType configuration, FilterChain<Collection<? extends [ItemType]>> nextFilter, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
+	<ResultType> ResultType filter[ItemType]s(Collection<? extends [ItemType]> filterItems, ConfigType configuration, Function<? super Collection<? extends [ItemType]>, ResultType> resultTransformer, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link [ItemType]} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}
@@ -38,17 +38,7 @@ public interface [ItemType]Filter<ConfigType> extends Filter<ConfigType> {
 	 *            the {@link [ItemType]} to check
 	 * @return <code>true</code> if this {@link [ItemType]} can be applied, <code>false</code> otherwise
 	 */
-	default boolean accepts[ItemType]s(Collection<? extends [ItemType]> items) {
-
-		for([ItemType] item : items) {
-			if(!accepts[ItemType](item)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	boolean accepts[ItemType]([ItemType] item);
+	boolean accepts[ItemType]s(Collection<? extends [ItemType]> items);
 
 	/**
 	 * Creates a new configuration that is specially suited for the given {@link [ItemType]} types
@@ -56,30 +46,22 @@ public interface [ItemType]Filter<ConfigType> extends Filter<ConfigType> {
 	 * @param item
 	 * @return a new configuration for this items or the default config if items is empty or no suitable configuration can be created
 	 * @throws IllegalArgumentException
-	 *             if any of the given {@link [ItemType]} are incompatible with this filter ({@link #accepts[ItemType]([ItemType])} returns <code>false</code> for them)
+	 *             if the given {@link [ItemType]}s are incompatible with this filter ({@link #accepts[ItemType]s([ItemType])} returns <code>false</code>)
 	 */
 	default ConfigType createConfiguration(Collection<? extends [ItemType]> items) throws IllegalArgumentException {
 
 		if(accepts[ItemType]s(items)) {
-			for([ItemType] item : items) {
-				return createConfiguration(item);
-			}
 			return createNewConfiguration();
 		} else {
 			throw new IllegalArgumentException("incompatible items in collection");
 		}
 	}
 
-	/**
-	 * Creates a configuration for this single item
-	 * 
-	 * @param item
-	 * @return a new configuration for this items or the default config if items is empty or no suitable configuration can be created
-	 * @throws IllegalArgumentException
-	 *             if any the given {@link [ItemType]} is incompatible with this filter ({@link #accepts[ItemType]([ItemType])} returns <code>false</code> for them)
-	 */
-	default ConfigType createConfiguration([ItemType] item) throws IllegalArgumentException {
+	default <ResultType> Function<Collection<? extends [ItemType]>, ResultType> create[ItemType]FilterFunction(IProgressMonitor progressMonitor, MessageConsumer messageConsumer, Function<Collection<? extends [ItemType]>, ResultType> nextFilter) {
 
-		return createNewConfiguration();
+		return (items) -> {
+			ConfigType configuration = createConfiguration(items);
+			return filter[ItemType]s(items, configuration, nextFilter, messageConsumer, progressMonitor);
+		};
 	}
 }

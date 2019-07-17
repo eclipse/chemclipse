@@ -1,12 +1,11 @@
 package org.eclipse.chemclipse.model.filter;
 
 import java.util.Collection;
+import java.util.function.Function;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
-import org.eclipse.chemclipse.processing.core.IProcessingResult;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.processing.filter.FilterChain;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -26,17 +25,17 @@ public interface IMeasurementFilter<ConfigType> extends Filter<ConfigType> {
 	 * @param filterItems
 	 * @param configuration
 	 *            the configuration to apply or <code>null</code> if no special configuration is desired
-	 * @param nextFilter
-	 *            the next filter to invoke, implementors might allow further processing with other filters in the chain by calling {@link FilterChain#doFilter(Object, org.eclipse.chemclipse.processing.core.MessageConsumer)}
+	 * @param resultTransformer
+	 *            the transformer to invoke for producing the desired output result, filter might use this to produce results and then take some more actions with it or even produce alternative results or in msot cases simply return the result as is
 	 * @param messageConsumer
 	 *            Filters are meant to not throwing checked exceptions nor return no result if something goes wrong but report problems to the {@link MessageConsumer} this allows the upstream caller to decide what to do
 	 * @param monitor
 	 *            a {@link IProgressMonitor} to report progress of the filtering or <code>null</code> if no progress is desired
-	 * @return a {@link IProcessingResult} that describes the outcome of the filtering, the result will be {@link Boolean#TRUE} if any item in the list was filter or {@link Boolean#FALSE} if no item was filtered or there was an error. The messages of the {@link IProcessingResult} may contain further information
+	 * @return the result of the processing or <code>null</code> if processing was canceled
 	 * @throws IllegalArgumentException
-	 *             if any of the given {@link IMeasurement} are incompatible with this filter ({@link #acceptsIMeasurement(IMeasurement)} returns <code>false</code> for them)
+	 *             if the given {@link IMeasurement}s are incompatible with this filter ({@link #acceptsIMeasurements(IMeasurement)} returns <code>false</code>)
 	 */
-	Collection<? extends IMeasurement> filterIMeasurements(Collection<? extends IMeasurement> filterItems, ConfigType configuration, FilterChain<Collection<? extends IMeasurement>> nextFilter, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
+	<ResultType> ResultType filterIMeasurements(Collection<? extends IMeasurement> filterItems, ConfigType configuration, Function<? super Collection<? extends IMeasurement>, ResultType> resultTransformer, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link IMeasurement} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}
@@ -45,17 +44,7 @@ public interface IMeasurementFilter<ConfigType> extends Filter<ConfigType> {
 	 *            the {@link IMeasurement} to check
 	 * @return <code>true</code> if this {@link IMeasurement} can be applied, <code>false</code> otherwise
 	 */
-	default boolean acceptsIMeasurements(Collection<? extends IMeasurement> items) {
-
-		for(IMeasurement item : items) {
-			if(!acceptsIMeasurement(item)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	boolean acceptsIMeasurement(IMeasurement item);
+	boolean acceptsIMeasurements(Collection<? extends IMeasurement> items);
 
 	/**
 	 * Creates a new configuration that is specially suited for the given {@link IMeasurement} types
@@ -63,30 +52,22 @@ public interface IMeasurementFilter<ConfigType> extends Filter<ConfigType> {
 	 * @param item
 	 * @return a new configuration for this items or the default config if items is empty or no suitable configuration can be created
 	 * @throws IllegalArgumentException
-	 *             if any of the given {@link IMeasurement} are incompatible with this filter ({@link #acceptsIMeasurement(IMeasurement)} returns <code>false</code> for them)
+	 *             if the given {@link IMeasurement}s are incompatible with this filter ({@link #acceptsIMeasurements(IMeasurement)} returns <code>false</code>)
 	 */
 	default ConfigType createConfiguration(Collection<? extends IMeasurement> items) throws IllegalArgumentException {
 
 		if(acceptsIMeasurements(items)) {
-			for(IMeasurement item : items) {
-				return createConfiguration(item);
-			}
 			return createNewConfiguration();
 		} else {
 			throw new IllegalArgumentException("incompatible items in collection");
 		}
 	}
 
-	/**
-	 * Creates a configuration for this single item
-	 * 
-	 * @param item
-	 * @return a new configuration for this items or the default config if items is empty or no suitable configuration can be created
-	 * @throws IllegalArgumentException
-	 *             if any the given {@link IMeasurement} is incompatible with this filter ({@link #acceptsIMeasurement(IMeasurement)} returns <code>false</code> for them)
-	 */
-	default ConfigType createConfiguration(IMeasurement item) throws IllegalArgumentException {
+	default <ResultType> Function<Collection<? extends IMeasurement>, ResultType> createIMeasurementFilterFunction(IProgressMonitor progressMonitor, MessageConsumer messageConsumer, Function<Collection<? extends IMeasurement>, ResultType> nextFilter) {
 
-		return createNewConfiguration();
+		return (items) -> {
+			ConfigType configuration = createConfiguration(items);
+			return filterIMeasurements(items, configuration, nextFilter, messageConsumer, progressMonitor);
+		};
 	}
 }
