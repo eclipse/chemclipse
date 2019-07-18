@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,10 +20,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class FilterSettingsRemover extends AbstractChromatogramFilterSettings {
 
-	@JsonProperty(value = "Scan Remover Pattern", defaultValue = "XO")
-	@JsonPropertyDescription(value = "The pattern which is used to remove scans.")
+	@JsonProperty(value = "Scan Remover Pattern", defaultValue = PreferenceSupplier.DEF_REMOVER_PATTERN)
+	@JsonPropertyDescription(value = "The pattern, which is used to remove scans.")
 	@StringSettingsProperty(regExp = PreferenceSupplier.CHECK_REMOVER_PATTERM)
-	private String scanRemoverPattern;
+	private String scanRemoverPattern = PreferenceSupplier.DEF_REMOVER_PATTERN;
+
+	@Override
+	public void setSystemSettings() {
+
+		scanRemoverPattern = PreferenceSupplier.getScanRemoverPattern();
+	}
 
 	public String getScanRemoverPattern() {
 
