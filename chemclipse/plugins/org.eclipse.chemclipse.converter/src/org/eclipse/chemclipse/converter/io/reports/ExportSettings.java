@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,7 @@ public class ExportSettings {
 	private boolean exportSequences = true;
 	private boolean exportReports = true;
 	private boolean exportBatches = true;
+	private boolean extendedFileRecognition = false;
 
 	public File getSourceDirectory() {
 
@@ -69,5 +70,15 @@ public class ExportSettings {
 	public void setExportBatches(boolean exportBatches) {
 
 		this.exportBatches = exportBatches;
+	}
+
+	public boolean isExtendedFileRecognition() {
+
+		return extendedFileRecognition;
+	}
+
+	public void setExtendedFileRecognition(boolean extendedFileRecognition) {
+
+		this.extendedFileRecognition = extendedFileRecognition;
 	}
 }
