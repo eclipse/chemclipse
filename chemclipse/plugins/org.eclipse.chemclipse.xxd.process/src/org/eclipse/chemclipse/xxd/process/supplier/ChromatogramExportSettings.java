@@ -13,13 +13,14 @@ package org.eclipse.chemclipse.xxd.process.supplier;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.xxd.process.preferences.PreferenceSupplier;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ChromatogramExportSettings implements IProcessSettings {
+public class ChromatogramExportSettings extends AbstractProcessSettings implements IProcessSettings {
 
 	public static final String VARIABLE_CHROMATOGRAM_NAME = "{chromatogram_name}";
 	public static final String VARIABLE_EXTENSION = "{extension}";

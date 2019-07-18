@@ -12,4 +12,9 @@
 package org.eclipse.chemclipse.model.settings;
 
 public abstract class AbstractProcessSettings implements IProcessSettings {
+
+	@Override
+	public void setSystemSettings() {
+
+	}
 }

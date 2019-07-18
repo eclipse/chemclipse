@@ -14,11 +14,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.report.settings;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public abstract class AbstractChromatogramReportSettings implements IChromatogramReportSettings {
+public abstract class AbstractChromatogramReportSettings extends AbstractProcessSettings implements IChromatogramReportSettings {
 
 	@JsonProperty(value = "Export Folder", defaultValue = "")
 	@FileSettingProperty(onlyDirectory = true)
