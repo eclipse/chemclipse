@@ -74,6 +74,19 @@ public class ChromatogramExportTypeSupplier extends AbstractProcessTypeSupplier 
 	}
 
 	@Override
+	protected String getBackCompatId(String id) {
+
+		if(extCSD.containsKey(id)) {
+			return PREFIX_CSD + id;
+		} else if(extMSD.containsKey(id)) {
+			return PREFIX_MSD + id;
+		} else if(extWSD.containsKey(id)) {
+			return PREFIX_WSD + id;
+		}
+		return super.getBackCompatId(id);
+	}
+
+	@Override
 	public IProcessingInfo<IChromatogramSelection<?, ?>> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		ChromatogramExportSettings settings;

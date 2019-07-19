@@ -140,7 +140,19 @@ public class ProcessTypeSupport {
 
 	public IProcessTypeSupplier getSupplier(String id) {
 
-		return processSupplierMap.get(id);
+		// check the map
+		IProcessTypeSupplier supplier = processSupplierMap.get(id);
+		if(supplier != null) {
+			return supplier;
+		}
+		// check the suppliers directly, this is needed if the supplier has some kind of backward compatibility
+		for(IProcessTypeSupplier supplier2 : processSupplierMap.values()) {
+			IProcessSupplier processSupplier = supplier2.getProcessorSupplier(id);
+			if(processSupplier != null) {
+				return supplier2;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -171,7 +183,7 @@ public class ProcessTypeSupport {
 		try {
 			for(IProcessSupplier supplier : processTypeSupplier.getProcessorSuppliers()) {
 				String processorId = supplier.getId();
-				IProcessTypeSupplier typeSupplier = getSupplier(processorId);
+				IProcessTypeSupplier typeSupplier = processSupplierMap.get(processorId);
 				if(typeSupplier != null) {
 					logger.warn("The processor id " + processorId + " is already defined by " + typeSupplier.getClass().getSimpleName() + " and is ignored for redefining supplier " + processTypeSupplier.getClass().getSimpleName());
 				} else {
@@ -283,25 +295,26 @@ public class ProcessTypeSupport {
 
 	public int validate(IProcessEntry processEntry) {
 
-		if(processEntry != null) {
-			if(processSupplierMap.containsKey(processEntry.getProcessorId())) {
-				if(processEntry.getJsonSettings().equals(IProcessEntry.EMPTY_JSON_SETTINGS)) {
-					return IStatus.INFO;
-				} else {
-					if(processEntry.getProcessSettingsClass() == null) {
-						return IStatus.WARNING;
-					} else {
-						return IStatus.OK;
-					}
-				}
-			} else {
-				return IStatus.ERROR;
-			}
+		if(processEntry == null) {
+			return IStatus.ERROR;
 		}
-		/*
-		 * Error if other checks failed.
-		 */
-		return IStatus.ERROR;
+		IProcessTypeSupplier supplier = getSupplier(processEntry.getProcessorId());
+		if(supplier != null) {
+			return validateSettings(processEntry);
+		} else {
+			return IStatus.ERROR;
+		}
+	}
+
+	private static int validateSettings(IProcessEntry processEntry) {
+
+		if(processEntry.getJsonSettings().equals(IProcessEntry.EMPTY_JSON_SETTINGS)) {
+			return IStatus.INFO;
+		} else if(processEntry.getProcessSettingsClass() == null) {
+			return IStatus.WARNING;
+		} else {
+			return IStatus.OK;
+		}
 	}
 
 	private static final class NodeProcessorPreferences implements ProcessorPreferences {

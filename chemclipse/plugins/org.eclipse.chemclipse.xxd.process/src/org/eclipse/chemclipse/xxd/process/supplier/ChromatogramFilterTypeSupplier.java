@@ -61,7 +61,7 @@ public class ChromatogramFilterTypeSupplier extends AbstractProcessTypeSupplier 
 			for(String processorId : support.getAvailableFilterIds()) {
 				IChromatogramFilterSupplierMSD supplier = support.getFilterSupplier(processorId);
 				backCompatMSD.add(processorId);
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, MSD_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(CHROMATOGRAMFILTER_MSD_PREFIX + processorId, MSD_DATA_TYPES);
 				processorSupplier.setName(supplier.getFilterName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());
@@ -70,6 +70,17 @@ public class ChromatogramFilterTypeSupplier extends AbstractProcessTypeSupplier 
 		} catch(NoChromatogramFilterSupplierAvailableException e) {
 			// don't need to add something here
 		}
+	}
+
+	@Override
+	protected String getBackCompatId(String id) {
+
+		if(backCompatAll.contains(id)) {
+			return CHROMATOGRAMFILTER_ALL_PREFIX + id;
+		} else if(backCompatMSD.contains(id)) {
+			return CHROMATOGRAMFILTER_MSD_PREFIX + id;
+		}
+		return super.getBackCompatId(id);
 	}
 
 	@Override

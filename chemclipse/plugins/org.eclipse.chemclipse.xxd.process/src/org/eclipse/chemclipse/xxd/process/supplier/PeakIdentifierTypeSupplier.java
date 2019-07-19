@@ -48,7 +48,7 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 			for(String processorId : support.getAvailableIdentifierIds()) {
 				IPeakIdentifierSupplierCSD supplier = support.getIdentifierSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, CSD_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_CSD + processorId, CSD_DATA_TYPES);
 				processorSupplier.setName(supplier.getIdentifierName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());
@@ -63,7 +63,7 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 			for(String processorId : support.getAvailableIdentifierIds()) {
 				IPeakIdentifierSupplierMSD supplier = support.getIdentifierSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, MSD_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_MSD + processorId, MSD_DATA_TYPES);
 				processorSupplier.setName(supplier.getIdentifierName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());
@@ -73,6 +73,17 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 		} catch(NoIdentifierAvailableException e) {
 			// nothing to do
 		}
+	}
+
+	@Override
+	protected String getBackCompatId(String id) {
+
+		if(backcompatCSD.contains(id)) {
+			return PREFIX_CSD + id;
+		} else if(backcompatMSD.contains(id)) {
+			return PREFIX_MSD + id;
+		}
+		return super.getBackCompatId(id);
 	}
 
 	@Override

@@ -13,8 +13,9 @@
 package org.eclipse.chemclipse.xxd.process.supplier;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -31,10 +32,9 @@ public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplie
 	protected static final DataType[] MSD_CSD_DATA_TYPES = new DataType[]{DataType.MSD, DataType.CSD};
 	protected static final DataType[] CSD_DATA_TYPES = new DataType[]{DataType.CSD};
 	protected static final DataType[] WSD_DATA_TYPES = new DataType[]{DataType.WSD};
-	private List<ProcessorSupplier> processorSuppliers = new ArrayList<>();
+	private Map<String, ProcessorSupplier> processorSuppliers = new HashMap<>();
 	//
 	private String category;
-	private List<String> processorIds = new ArrayList<>();
 
 	public AbstractProcessTypeSupplier(String category) {
 		this.category = category;
@@ -49,20 +49,30 @@ public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplie
 	@Override
 	public List<IProcessSupplier> getProcessorSuppliers() {
 
-		return Collections.unmodifiableList(processorSuppliers);
-	}
-
-	public List<String> getProcessorIds() throws Exception {
-
-		return processorIds;
+		return new ArrayList<>(processorSuppliers.values());
 	}
 
 	protected void addProcessorSupplier(ProcessorSupplier processorSupplier) {
 
-		processorSuppliers.add(processorSupplier);
-		//
-		String processorId = processorSupplier.getId();
-		processorIds.add(processorId);
+		processorSuppliers.put(processorSupplier.getId(), processorSupplier);
+	}
+
+	@Override
+	public final IProcessSupplier getProcessorSupplier(String id) {
+
+		ProcessorSupplier supplier = processorSuppliers.get(id);
+		if(supplier == null) {
+			String backCompatId = getBackCompatId(id);
+			if(backCompatId != null) {
+				return processorSuppliers.get(backCompatId);
+			}
+		}
+		return supplier;
+	}
+
+	protected String getBackCompatId(String id) {
+
+		return null;
 	}
 
 	protected <T> IProcessingInfo<T> getProcessingResult(MessageProvider messages, T result) {

@@ -74,6 +74,17 @@ public class PeakDetectorTypeSupplier extends AbstractProcessTypeSupplier implem
 	}
 
 	@Override
+	protected String getBackCompatId(String id) {
+
+		if(backcompatCSD.contains(id)) {
+			return PREFIX_CSD + id;
+		} else if(backcompatMSD.contains(id)) {
+			return PREFIX_MSD + id;
+		}
+		return super.getBackCompatId(id);
+	}
+
+	@Override
 	public IProcessingInfo<IChromatogramSelection<?, ?>> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		boolean startsWithCSD = processorId.startsWith(PREFIX_CSD);
