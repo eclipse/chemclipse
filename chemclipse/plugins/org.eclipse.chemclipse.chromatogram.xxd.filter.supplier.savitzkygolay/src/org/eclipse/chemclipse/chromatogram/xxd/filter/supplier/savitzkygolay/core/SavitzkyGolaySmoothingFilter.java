@@ -106,6 +106,12 @@ public class SavitzkyGolaySmoothingFilter implements IScanFilter<MassSpectrumFil
 	}
 
 	@Override
+	public Class<MassSpectrumFilterSettings> getConfigClass() {
+
+		return null;
+	}
+
+	@Override
 	public boolean acceptsITotalScanSignals(ITotalScanSignals item) {
 
 		return true;
