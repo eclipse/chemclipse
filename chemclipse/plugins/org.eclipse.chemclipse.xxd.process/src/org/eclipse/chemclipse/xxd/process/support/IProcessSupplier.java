@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.xxd.process.support;
 
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 
 public interface IProcessSupplier {
@@ -40,7 +39,7 @@ public interface IProcessSupplier {
 	 * 
 	 * @return the settingsclass
 	 */
-	Class<? extends IProcessSettings> getSettingsClass();
+	Class<?> getSettingsClass();
 
 	Set<DataType> getSupportedDataTypes();
 }

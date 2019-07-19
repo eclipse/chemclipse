@@ -25,10 +25,11 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MassspectrumProcessTypeSupplier extends AbstractProcessTypeSupplier {
+public class MassspectrumProcessTypeSupplier extends AbstractProcessTypeSupplier implements IChromatogramSelectionProcessTypeSupplier {
 
 	private static final DataType[] DATA_TYPES = new DataType[]{DataType.WSD};
 	public static final String CATEGORY_PEAK = "Peak Massspectrum Filter";
@@ -55,7 +56,7 @@ public class MassspectrumProcessTypeSupplier extends AbstractProcessTypeSupplier
 	}
 
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramSelection<?, ?>> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		if(processorId.startsWith(prefix)) {
 			processorId = processorId.substring(prefix.length());
@@ -82,7 +83,7 @@ public class MassspectrumProcessTypeSupplier extends AbstractProcessTypeSupplier
 				}
 			}
 		}
-		return MassSpectrumFilter.applyFilter(massspectras, massSpectrumFilterSettings, processorId, monitor);
+		return getProcessingResult(MassSpectrumFilter.applyFilter(massspectras, massSpectrumFilterSettings, processorId, monitor), chromatogramSelection);
 	}
 
 	public static final MassspectrumProcessTypeSupplier createPeakFilterSupplier() {

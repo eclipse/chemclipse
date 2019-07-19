@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
@@ -771,7 +770,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	private void modifyProcessEntry(Shell shell, IProcessEntry processEntry, boolean alwaysShow) {
 
-		Class<? extends IProcessSettings> processSettingsClass = processEntry.getProcessSettingsClass();
+		Class<?> processSettingsClass = processEntry.getProcessSettingsClass();
 		if(processSettingsClass != null) {
 			try {
 				String oldSettings = processEntry.getJsonSettings();

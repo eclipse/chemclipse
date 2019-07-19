@@ -17,20 +17,16 @@ import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineD
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineDetectorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.exceptions.NoBaselineDetectorAvailableException;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class BaselineDetectorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+public class BaselineDetectorTypeSupplier extends AbstractProcessTypeSupplier implements IChromatogramSelectionProcessTypeSupplier {
 
-	private static final DataType[] DATA_TYPES = new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD};
 	public static final String CATEGORY = "Baseline Detector";
-	private static final Logger logger = Logger.getLogger(BaselineDetectorTypeSupplier.class);
 
 	public BaselineDetectorTypeSupplier() {
 		super(CATEGORY);
@@ -39,25 +35,24 @@ public class BaselineDetectorTypeSupplier extends AbstractProcessTypeSupplier im
 			for(String processorId : support.getAvailableDetectorIds()) {
 				IBaselineDetectorSupplier supplier = support.getBaselineDetectorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES);
 				processorSupplier.setName(supplier.getDetectorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());
 				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoBaselineDetectorAvailableException e) {
-			logger.warn(e);
+			// dosen't matter here...
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramSelection<?, ?>> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		if(processSettings instanceof IBaselineDetectorSettings) {
-			return BaselineDetector.setBaseline(chromatogramSelection, (IBaselineDetectorSettings)processSettings, processorId, monitor);
+			return getProcessingResult(BaselineDetector.setBaseline(chromatogramSelection, (IBaselineDetectorSettings)processSettings, processorId, monitor), chromatogramSelection);
 		} else {
-			return BaselineDetector.setBaseline(chromatogramSelection, processorId, monitor);
+			return getProcessingResult(BaselineDetector.setBaseline(chromatogramSelection, processorId, monitor), chromatogramSelection);
 		}
 	}
 }

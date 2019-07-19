@@ -30,7 +30,7 @@ public class ProcessEntry implements IProcessEntry {
 	private String description = "";
 	private String jsonSettings = EMPTY_JSON_SETTINGS;
 	private List<DataType> supportedDataTypes = new ArrayList<>();
-	private Class<? extends IProcessSettings> processSettingsClass = null;
+	private Class<?> processSettingsClass = null;
 
 	public ProcessEntry() {
 	}
@@ -102,7 +102,7 @@ public class ProcessEntry implements IProcessEntry {
 	}
 
 	@Override
-	public Class<? extends IProcessSettings> getProcessSettingsClass() {
+	public Class<?> getProcessSettingsClass() {
 
 		return processSettingsClass;
 	}
@@ -125,7 +125,7 @@ public class ProcessEntry implements IProcessEntry {
 	}
 
 	@Override
-	public void setProcessSettingsClass(Class<? extends IProcessSettings> processSettingsClass) {
+	public void setProcessSettingsClass(Class<?> processSettingsClass) {
 
 		this.processSettingsClass = processSettingsClass;
 	}

@@ -17,20 +17,16 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.IChr
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.IChromatogramCalculatorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.exceptions.NoChromatogramCalculatorSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.IChromatogramCalculatorSettings;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramCalculatorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+public class ChromatogramCalculatorTypeSupplier extends AbstractProcessTypeSupplier implements IChromatogramSelectionProcessTypeSupplier {
 
-	private static final DataType[] DATA_TYPES = new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD};
 	public static final String CATEGORY = "Chromatogram Calculator";
-	private static final Logger logger = Logger.getLogger(ChromatogramCalculatorTypeSupplier.class);
 
 	public ChromatogramCalculatorTypeSupplier() {
 		super(CATEGORY);
@@ -39,25 +35,24 @@ public class ChromatogramCalculatorTypeSupplier extends AbstractProcessTypeSuppl
 			for(String processorId : support.getAvailableCalculatorIds()) {
 				IChromatogramCalculatorSupplier supplier = support.getCalculatorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES);
 				processorSupplier.setName(supplier.getCalculatorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());
 				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoChromatogramCalculatorSupplierAvailableException e) {
-			logger.warn(e);
+			// nothing to do here
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramSelection<?, ?>> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		if(processSettings instanceof IChromatogramCalculatorSettings) {
-			return ChromatogramCalculator.applyCalculator(chromatogramSelection, (IChromatogramCalculatorSettings)processSettings, processorId, monitor);
+			return getProcessingResult(ChromatogramCalculator.applyCalculator(chromatogramSelection, (IChromatogramCalculatorSettings)processSettings, processorId, monitor), chromatogramSelection);
 		} else {
-			return ChromatogramCalculator.applyCalculator(chromatogramSelection, processorId, monitor);
+			return getProcessingResult(ChromatogramCalculator.applyCalculator(chromatogramSelection, processorId, monitor), chromatogramSelection);
 		}
 	}
 }

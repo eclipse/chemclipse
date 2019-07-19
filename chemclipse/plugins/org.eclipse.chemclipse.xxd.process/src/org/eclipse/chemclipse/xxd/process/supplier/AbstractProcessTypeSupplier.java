@@ -14,27 +14,27 @@ package org.eclipse.chemclipse.xxd.process.supplier;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 
-public abstract class AbstractProcessTypeSupplier<T> implements IProcessTypeSupplier<T> {
+public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
+	protected static final DataType[] ALL_DATA_TYPES = new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD};
+	protected static final DataType[] MSD_DATA_TYPES = new DataType[]{DataType.MSD};
+	protected static final DataType[] MSD_CSD_DATA_TYPES = new DataType[]{DataType.MSD, DataType.CSD};
+	protected static final DataType[] CSD_DATA_TYPES = new DataType[]{DataType.CSD};
+	protected static final DataType[] WSD_DATA_TYPES = new DataType[]{DataType.WSD};
 	private List<ProcessorSupplier> processorSuppliers = new ArrayList<>();
 	//
-	private String category = "";
-	private Map<String, Class<? extends IProcessSettings>> settingsClassMap = new HashMap<>();
-	private Map<String, String> nameMap = new HashMap<>();
-	private Map<String, String> descriptionMap = new HashMap<>();
+	private String category;
 	private List<String> processorIds = new ArrayList<>();
-	private static final String NOT_AVAILABLE = "n/a";
 
 	public AbstractProcessTypeSupplier(String category) {
 		this.category = category;
@@ -52,21 +52,6 @@ public abstract class AbstractProcessTypeSupplier<T> implements IProcessTypeSupp
 		return Collections.unmodifiableList(processorSuppliers);
 	}
 
-	public Class<? extends IProcessSettings> getProcessSettingsClass(String processorId) throws Exception {
-
-		return settingsClassMap.get(processorId);
-	}
-
-	public String getProcessorName(String processorId) throws Exception {
-
-		return nameMap.getOrDefault(processorId, NOT_AVAILABLE);
-	}
-
-	public String getProcessorDescription(String processorId) throws Exception {
-
-		return descriptionMap.getOrDefault(processorId, NOT_AVAILABLE);
-	}
-
 	public List<String> getProcessorIds() throws Exception {
 
 		return processorIds;
@@ -78,17 +63,24 @@ public abstract class AbstractProcessTypeSupplier<T> implements IProcessTypeSupp
 		//
 		String processorId = processorSupplier.getId();
 		processorIds.add(processorId);
-		nameMap.put(processorId, processorSupplier.getName());
-		descriptionMap.put(processorId, processorSupplier.getDescription());
-		settingsClassMap.put(processorId, processorSupplier.getSettingsClass());
 	}
 
-	protected IProcessingInfo<T> getProcessingInfoError(String processorId) {
+	protected <T> IProcessingInfo<T> getProcessingResult(MessageProvider messages, T result) {
+
+		ProcessingInfo<T> processingInfo = new ProcessingInfo<T>();
+		processingInfo.setProcessingResult(result);
+		if(messages != null) {
+			processingInfo.addMessages(messages);
+		}
+		return processingInfo;
+	}
+
+	protected <T> IProcessingInfo<T> getProcessingInfoError(String processorId) {
 
 		return getProcessingInfoError(processorId, "The data is not supported by the processor.");
 	}
 
-	protected IProcessingInfo<T> getProcessingInfoError(String processorId, String message) {
+	protected <T> IProcessingInfo<T> getProcessingInfoError(String processorId, String message) {
 
 		IProcessingInfo<T> processingInfo = new ProcessingInfo<T>();
 		processingInfo.addErrorMessage(processorId, message);

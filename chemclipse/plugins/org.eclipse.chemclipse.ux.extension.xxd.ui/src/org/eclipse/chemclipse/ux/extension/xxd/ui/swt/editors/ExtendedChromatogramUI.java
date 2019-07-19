@@ -529,7 +529,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			 * Dynamic Menu Items
 			 */
 			cleanChartMenuEntries(chartSettings, chartMenuEntriesProcessorSupplier);
-			for(IProcessTypeSupplier<?> typeSupplier : processTypeSupport.getProcessorTypeSuppliers(Collections.singletonList(datatype))) {
+			for(IProcessTypeSupplier typeSupplier : processTypeSupport.getProcessorTypeSuppliers(Collections.singletonList(datatype))) {
 				List<IProcessSupplier> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
 				Collections.sort(list, new NameComparator());
 				for(IProcessSupplier supplier : list) {

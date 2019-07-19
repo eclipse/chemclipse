@@ -19,22 +19,18 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSu
 import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.report.exceptions.NoReportSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier implements IChromatogramSelectionProcessTypeSupplier {
 
-	private static final DataType[] DATA_TYPES = new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD};
 	public static final String CATEGORY = "Chromatogram Reports";
-	private static final Logger logger = Logger.getLogger(ChromatogramReportTypeSupplier.class);
 
 	public ChromatogramReportTypeSupplier() {
 		super(CATEGORY);
@@ -43,7 +39,7 @@ public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier 
 			for(String processorId : support.getAvailableProcessorIds()) {
 				IChromatogramReportSupplier supplier = support.getReportSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES);
 				processorSupplier.setName(supplier.getReportName());
 				processorSupplier.setDescription(supplier.getDescription());
 				Class<? extends IChromatogramReportSettings> settingsClass = supplier.getSettingsClass();
@@ -54,13 +50,12 @@ public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier 
 				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoReportSupplierAvailableException e) {
-			logger.warn(e);
+			// nothing to do then
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramSelection<?, ?>> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		IChromatogramReportSettings settings;
 		if(processSettings instanceof IChromatogramReportSettings) {
@@ -82,9 +77,9 @@ public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier 
 			if(exportFolder.exists() || exportFolder.mkdirs()) {
 				IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
 				File file = new File(exportFolder, settings.getFileNamePattern().replace(IChromatogramReportSettings.VARIABLE_CHROMATOGRAM_NAME, chromatogram.getName()).replace(IChromatogramReportSettings.VARIABLE_EXTENSION, extension));
-				IProcessingInfo info = ChromatogramReports.generate(file, settings.isAppend(), chromatogram, settings, processorId, monitor);
+				IProcessingInfo<?> info = ChromatogramReports.generate(file, settings.isAppend(), chromatogram, settings, processorId, monitor);
 				info.addInfoMessage(processorId, "Report written to " + file.getAbsolutePath());
-				return info;
+				return getProcessingResult(info, chromatogramSelection);
 			} else {
 				return getProcessingInfoError(processorId, "The specified outputfolder does not exits and can't be created");
 			}

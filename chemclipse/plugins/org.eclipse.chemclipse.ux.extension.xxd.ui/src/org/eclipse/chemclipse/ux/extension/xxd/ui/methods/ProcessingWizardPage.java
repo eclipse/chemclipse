@@ -135,9 +135,9 @@ public class ProcessingWizardPage extends WizardPage {
 		addSelectedTypeAndPersist(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_CSD, checkboxCSD, dataTypes, DataType.CSD);
 		addSelectedTypeAndPersist(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD, checkboxMSD, dataTypes, DataType.MSD);
 		addSelectedTypeAndPersist(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD, checkboxWSD, dataTypes, DataType.WSD);
-		List<IProcessTypeSupplier<?>> processTypeSuppliers = processTypeSupport.getProcessorTypeSuppliers(dataTypes);
+		List<IProcessTypeSupplier> processTypeSuppliers = processTypeSupport.getProcessorTypeSuppliers(dataTypes);
 		Map<String, ProcessCategory> categories = new TreeMap<>();
-		for(IProcessTypeSupplier<?> supplier : processTypeSuppliers) {
+		for(IProcessTypeSupplier supplier : processTypeSuppliers) {
 			String category = supplier.getCategory();
 			ProcessCategory processCategory = categories.get(category);
 			if(processCategory == null) {
@@ -252,7 +252,7 @@ public class ProcessingWizardPage extends WizardPage {
 			this.name = name;
 		}
 
-		public void addSupplier(IProcessTypeSupplier<?> supplier, Collection<DataType> dataTypes) {
+		public void addSupplier(IProcessTypeSupplier supplier, Collection<DataType> dataTypes) {
 
 			List<IProcessSupplier> suppliers = supplier.getProcessorSuppliers();
 			for(IProcessSupplier processSupplier : suppliers) {

@@ -16,22 +16,18 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram.Chromatog
 import org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram.IChromatogramIdentifierSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram.IChromatogramIdentifierSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IChromatogramIdentifierSettings;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSupplier implements IChromatogramSelectionProcessTypeSupplier {
 
-	private static final DataType[] DATA_TYPES = new DataType[]{DataType.MSD};
 	public static final String CATEGORY = "Chromatogram Identifier";
-	private static final Logger logger = Logger.getLogger(ChromatogramIdentifierTypeSupplier.class);
 
 	public ChromatogramIdentifierTypeSupplier() {
 		super(CATEGORY);
@@ -40,27 +36,26 @@ public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSuppl
 			for(String processorId : support.getAvailableIdentifierIds()) {
 				IChromatogramIdentifierSupplier supplier = support.getIdentifierSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, MSD_DATA_TYPES);
 				processorSupplier.setName(supplier.getIdentifierName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());
 				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoIdentifierAvailableException e) {
-			logger.warn(e);
+			// don't worry then...
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramSelection<?, ?>> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			if(processSettings instanceof IChromatogramIdentifierSettings) {
-				return ChromatogramIdentifier.identify(chromatogramSelectionMSD, (IChromatogramIdentifierSettings)processSettings, processorId, monitor);
+				return getProcessingResult(ChromatogramIdentifier.identify(chromatogramSelectionMSD, (IChromatogramIdentifierSettings)processSettings, processorId, monitor), chromatogramSelection);
 			} else {
-				return ChromatogramIdentifier.identify(chromatogramSelectionMSD, processorId, monitor);
+				return getProcessingResult(ChromatogramIdentifier.identify(chromatogramSelectionMSD, processorId, monitor), chromatogramSelection);
 			}
 		} else {
 			return getProcessingInfoError(processorId);

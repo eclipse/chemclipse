@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.model.methods;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 
 public interface IProcessEntry {
@@ -38,7 +37,7 @@ public interface IProcessEntry {
 
 	List<DataType> getSupportedDataTypes();
 
-	Class<? extends IProcessSettings> getProcessSettingsClass();
+	Class<?> getProcessSettingsClass();
 
 	/**
 	 * String symbolicName = FrameworkUtil.getBundle(processSettingsClass).getSymbolicName();
@@ -46,5 +45,5 @@ public interface IProcessEntry {
 	 */
 	void setProcessSettingsClass(String symbolicName, String className);
 
-	void setProcessSettingsClass(Class<? extends IProcessSettings> processSettingsClass);
+	void setProcessSettingsClass(Class<?> processSettingsClass);
 }

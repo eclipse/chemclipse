@@ -17,21 +17,17 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.IPeakFilterSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.IPeakFilterSupport;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.PeakFilter;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PeakFilterTypeSupplierMSD extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+public class PeakFilterTypeSupplierMSD extends AbstractProcessTypeSupplier implements IChromatogramSelectionProcessTypeSupplier {
 
-	private static final DataType[] DATA_TYPES = new DataType[]{DataType.MSD};
 	public static final String CATEGORY = "Peak Filter";
-	private static final Logger logger = Logger.getLogger(PeakFilterTypeSupplierMSD.class);
 
 	public PeakFilterTypeSupplierMSD() {
 		super(CATEGORY);
@@ -40,32 +36,29 @@ public class PeakFilterTypeSupplierMSD extends AbstractProcessTypeSupplier imple
 			for(String processorId : support.getAvailableFilterIds()) {
 				IPeakFilterSupplier supplier = support.getFilterSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, MSD_DATA_TYPES);
 				processorSupplier.setName(supplier.getFilterName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());
 				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoPeakFilterSupplierAvailableException e) {
-			logger.warn(e);
+			// nothing to do
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyProcessor(IChromatogramSelection chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramSelection<?, ?>> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			if(processSettings instanceof IPeakFilterSettings) {
-				processingInfo = PeakFilter.applyFilter(chromatogramSelectionMSD, (IPeakFilterSettings)processSettings, processorId, monitor);
+				return getProcessingResult(PeakFilter.applyFilter(chromatogramSelectionMSD, (IPeakFilterSettings)processSettings, processorId, monitor), chromatogramSelection);
 			} else {
-				processingInfo = PeakFilter.applyFilter(chromatogramSelectionMSD, processorId, monitor);
+				return getProcessingResult(PeakFilter.applyFilter(chromatogramSelectionMSD, processorId, monitor), chromatogramSelection);
 			}
 		} else {
-			processingInfo = getProcessingInfoError(processorId);
+			return getProcessingInfoError(processorId);
 		}
-		return processingInfo;
 	}
 }

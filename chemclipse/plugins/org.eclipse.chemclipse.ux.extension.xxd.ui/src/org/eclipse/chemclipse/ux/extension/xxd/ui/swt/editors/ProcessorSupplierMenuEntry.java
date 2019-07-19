@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsPreferencesWizard;
+import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
@@ -39,13 +40,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ProcessorSupplierMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
 
-	private IProcessTypeSupplier<?> typeSupplier;
+	private IProcessTypeSupplier typeSupplier;
 	private IProcessSupplier processorSupplier;
 	private Supplier<IChromatogramSelection<?, ?>> supplier;
 	private BiConsumer<IRunnableWithProgress, Shell> executionConsumer;
 	private ProcessorPreferences preferences;
 
-	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessTypeSupplier<?> typeSupplier, IProcessSupplier processorSupplier, ProcessorPreferences processorPreferences) {
+	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessTypeSupplier typeSupplier, IProcessSupplier processorSupplier, ProcessorPreferences processorPreferences) {
 		this.supplier = chromatogramSupplier;
 		this.executionConsumer = executionConsumer;
 		this.typeSupplier = typeSupplier;
@@ -76,8 +77,8 @@ public class ProcessorSupplierMenuEntry extends AbstractChartMenuEntry implement
 
 		IChromatogramSelection<?, ?> chromatogramSelection = supplier.get();
 		if(chromatogramSelection != null) {
-			Class<? extends IProcessSettings> settingsClass = processorSupplier.getSettingsClass();
-			IProcessSettings settings;
+			Class<?> settingsClass = processorSupplier.getSettingsClass();
+			Object settings;
 			if(settingsClass == null) {
 				settings = null;
 			} else {
@@ -116,8 +117,16 @@ public class ProcessorSupplierMenuEntry extends AbstractChartMenuEntry implement
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-					IProcessingInfo<?> result = typeSupplier.applyProcessor(chromatogramSelection, processorSupplier.getId(), settings, monitor);
-					updateResult(shell, result);
+					IProcessSettings processSettings;
+					if(settings instanceof IProcessSettings) {
+						processSettings = (IProcessSettings)settings;
+					} else {
+						processSettings = null;
+					}
+					if(typeSupplier instanceof IChromatogramSelectionProcessTypeSupplier) {
+						IProcessingInfo<?> result = ((IChromatogramSelectionProcessTypeSupplier)typeSupplier).applyProcessor(chromatogramSelection, processorSupplier.getId(), processSettings, monitor);
+						updateResult(shell, result);
+					}
 				}
 			}, shell);
 		}

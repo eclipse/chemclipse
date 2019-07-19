@@ -237,7 +237,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 
 		Map<String, TreeNode> categories = new TreeMap<>();
 		for(Entry<IProcessSupplier, ProcessorPreferences> entry : processTypeSupport.getAllPreferences().entrySet()) {
-			IProcessTypeSupplier<?> supplier = processTypeSupport.getSupplier(entry.getKey().getId());
+			IProcessTypeSupplier supplier = processTypeSupport.getSupplier(entry.getKey().getId());
 			TreeNode processorNode = new TreeNode(entry);
 			String category = supplier.getCategory();
 			TreeNode categoryNode = categories.get(category);
