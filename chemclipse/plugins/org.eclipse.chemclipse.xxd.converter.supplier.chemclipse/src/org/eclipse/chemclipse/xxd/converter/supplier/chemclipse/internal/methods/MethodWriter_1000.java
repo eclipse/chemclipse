@@ -23,7 +23,6 @@ import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
@@ -93,7 +92,7 @@ public class MethodWriter_1000 implements IMethodWriter {
 				writeString(dataOutputStream, dataType.toString());
 			}
 			//
-			Class<? extends IProcessSettings> clazz = processEntry.getProcessSettingsClass();
+			Class<?> clazz = processEntry.getProcessSettingsClass();
 			if(clazz != null) {
 				String symbolicName = FrameworkUtil.getBundle(clazz).getSymbolicName();
 				String className = clazz.getName();
