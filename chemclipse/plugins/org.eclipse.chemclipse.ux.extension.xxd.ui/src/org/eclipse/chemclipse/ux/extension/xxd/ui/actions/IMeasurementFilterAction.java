@@ -20,6 +20,7 @@ import java.util.function.Function;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.filter.IMeasurementFilter;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ProcessorSupplierMenuEntry;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
@@ -37,6 +38,7 @@ public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementF
 
 	private Collection<? extends IMeasurement> measurements;
 	private ProcessTypeSupport processTypeSupport;
+	private Object settings;
 
 	public IMeasurementFilterAction(IMeasurementFilter<?> filter, Collection<? extends IMeasurement> measurements, Consumer<Collection<? extends IMeasurement>> resultConsumer, ProcessTypeSupport processTypeSupport) {
 		super(filter, resultConsumer);
@@ -45,23 +47,27 @@ public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementF
 		setEnabled(filter.acceptsIMeasurements(measurements));
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	protected Collection<? extends IMeasurement> computeResult(Shell shell, MessageConsumer messageConsumer, IProgressMonitor progressMonitor) {
+	public void executeAction(Shell shell) {
 
 		if(processTypeSupport != null) {
 			IProcessTypeSupplier supplier = processTypeSupport.getSupplier(filter.getID());
 			IProcessSupplier processSupplier = supplier.getProcessorSupplier(filter.getID());
 			try {
-				Object settings = ProcessorSupplierMenuEntry.getSettings(shell, processSupplier);
-				((IMeasurementFilter)filter).filterIMeasurements(measurements, settings, Function.identity(), messageConsumer, progressMonitor);
+				settings = ProcessorSupplierMenuEntry.getSettings(shell, processSupplier);
 			} catch(IOException e) {
-				// logger.warn(e);
+				ProcessingInfoViewSupport.updateProcessingInfoError(filter.getName(), "Can't process settings", e);
 			} catch(CancellationException e) {
-				//
+				return;
 			}
-			System.out.println();
 		}
-		return filter.createIMeasurementFilterFunction(progressMonitor, messageConsumer, Function.identity()).apply(measurements);
+		super.executeAction(shell);
+	}
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	@Override
+	protected Collection<? extends IMeasurement> computeResult(MessageConsumer messageConsumer, IProgressMonitor progressMonitor) {
+
+		return (Collection<? extends IMeasurement>)((IMeasurementFilter)filter).filterIMeasurements(measurements, settings, Function.identity(), messageConsumer, progressMonitor);
 	}
 }

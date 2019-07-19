@@ -70,7 +70,7 @@ public abstract class AbstractFilterAction<FilterType extends Filter<?>, ResultT
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-					ResultType result = computeResult(shell, consumer, monitor);
+					ResultType result = computeResult(consumer, monitor);
 					if(result != null) {
 						resultConsumer.accept(result);
 					}
@@ -85,5 +85,5 @@ public abstract class AbstractFilterAction<FilterType extends Filter<?>, ResultT
 		}
 	}
 
-	protected abstract ResultType computeResult(Shell shell, MessageConsumer messageConsumer, IProgressMonitor progressMonitor);
+	protected abstract ResultType computeResult(MessageConsumer messageConsumer, IProgressMonitor progressMonitor);
 }

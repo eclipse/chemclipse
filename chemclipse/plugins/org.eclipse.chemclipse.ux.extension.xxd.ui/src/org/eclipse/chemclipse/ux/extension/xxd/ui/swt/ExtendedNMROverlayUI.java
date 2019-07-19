@@ -53,6 +53,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
@@ -242,6 +243,11 @@ public class ExtendedNMROverlayUI implements Observer {
 	private void createOverlayChart(Composite parent) {
 
 		chartNMR = new ChartNMR(parent, SWT.BORDER);
+		IChartSettings chartSettings = chartNMR.getChartSettings();
+		chartSettings.setCreateMenu(true);
+		chartSettings.setEnableRangeSelector(false);
+		chartSettings.setShowRangeSelectorInitially(false);
+		chartNMR.applySettings(chartSettings);
 		chartNMR.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
