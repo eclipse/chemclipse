@@ -60,10 +60,10 @@ public abstract class AbstractFilterFactoryProcessTypeSupplier<DT, FT extends Fi
 				case WSD:
 					types.add(DataType.WSD);
 					break;
+				case FID:
 				case NMR:
 					types.add(DataType.NMR);
 					break;
-				case FID:
 				default:
 					types.add(DataType.AUTO_DETECT);
 					break;
