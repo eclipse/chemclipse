@@ -34,7 +34,6 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.osgi.framework.FrameworkUtil;
@@ -204,7 +203,7 @@ public class JobWriter {
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_NAME, processEntry.getName()));
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_DESCRIPTION, processEntry.getDescription()));
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_JSON_SETTINGS, processEntry.getJsonSettings()));
-		Class<? extends IProcessSettings> clazz = processEntry.getProcessSettingsClass();
+		Class<?> clazz = processEntry.getProcessSettingsClass();
 		if(clazz != null) {
 			String symbolicName = FrameworkUtil.getBundle(clazz).getSymbolicName();
 			String className = clazz.getName();
