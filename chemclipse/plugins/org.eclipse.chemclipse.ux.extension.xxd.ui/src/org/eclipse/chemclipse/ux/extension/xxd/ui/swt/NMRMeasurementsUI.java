@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.processing.filter.Filtered;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.actions.IMeasurementFilterAction;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -66,9 +67,11 @@ public class NMRMeasurementsUI implements Observer {
 	private TreeViewer treeViewer;
 	private DataNMRSelection selection;
 	private FilterFactory filterFactory;
+	private ProcessTypeSupport processTypeSupport;
 
 	public NMRMeasurementsUI(Composite parent, FilterFactory filterFactory) {
 		this.filterFactory = filterFactory;
+		processTypeSupport = new ProcessTypeSupport(filterFactory);
 		treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
 		treeViewer.setUseHashlookup(true);
 		treeViewer.getTree().setLinesVisible(true);
@@ -170,7 +173,7 @@ public class NMRMeasurementsUI implements Observer {
 					}
 				};
 				for(IMeasurementFilter<?> filter : filters) {
-					IAction action = new IMeasurementFilterAction(filter, measurements, consumer);
+					IAction action = new IMeasurementFilterAction(filter, measurements, consumer, processTypeSupport);
 					mgr.add(action);
 				}
 				mgr.add(new DeleteAction());

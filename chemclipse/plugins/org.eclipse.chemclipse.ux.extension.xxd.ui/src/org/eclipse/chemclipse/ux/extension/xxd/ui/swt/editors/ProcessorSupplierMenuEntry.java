@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.concurrent.CancellationException;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
@@ -21,6 +22,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsPreferencesWizard;
@@ -44,14 +46,12 @@ public class ProcessorSupplierMenuEntry extends AbstractChartMenuEntry implement
 	private IProcessSupplier processorSupplier;
 	private Supplier<IChromatogramSelection<?, ?>> supplier;
 	private BiConsumer<IRunnableWithProgress, Shell> executionConsumer;
-	private ProcessorPreferences preferences;
 
-	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessTypeSupplier typeSupplier, IProcessSupplier processorSupplier, ProcessorPreferences processorPreferences) {
+	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessTypeSupplier typeSupplier, IProcessSupplier processorSupplier) {
 		this.supplier = chromatogramSupplier;
 		this.executionConsumer = executionConsumer;
 		this.typeSupplier = typeSupplier;
 		this.processorSupplier = processorSupplier;
-		this.preferences = processorPreferences;
 	}
 
 	@Override
@@ -77,62 +77,79 @@ public class ProcessorSupplierMenuEntry extends AbstractChartMenuEntry implement
 
 		IChromatogramSelection<?, ?> chromatogramSelection = supplier.get();
 		if(chromatogramSelection != null) {
-			Class<?> settingsClass = processorSupplier.getSettingsClass();
-			Object settings;
-			if(settingsClass == null) {
-				settings = null;
-			} else {
-				try {
-					if(preferences.isAskForSettings()) {
-						List<InputValue> values = InputValue.readJSON(settingsClass, preferences.getUserSettings());
-						if(!values.isEmpty()) {
-							if(!SettingsPreferencesWizard.openWizard(shell, values, preferences, processorSupplier)) {
-								// user has canceled the wizard so cancel the processing also
-								return;
-							}
+			try {
+				Object settings = getSettings(shell, processorSupplier);
+				executionConsumer.accept(new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						IProcessSettings processSettings;
+						if(settings instanceof IProcessSettings) {
+							processSettings = (IProcessSettings)settings;
+						} else {
+							processSettings = null;
+						}
+						if(typeSupplier instanceof IChromatogramSelectionProcessTypeSupplier) {
+							IProcessingInfo<?> result = ((IChromatogramSelectionProcessTypeSupplier)typeSupplier).applyProcessor(chromatogramSelection, processorSupplier.getId(), processSettings, monitor);
+							updateResult(shell, result);
 						}
 					}
-					if(preferences.isUseSystemDefaults()) {
-						/*
-						 * Why should we not use "settings = settingsClass.newInstance();" here?
-						 * The IProcessSettings instance would be created, but without any meaningful values.
-						 * IProcessTypeSupplier explicitly calls the method without setting if applyProcessor with "IProcessSettings == null" is called.
-						 * The executing plugin then takes care to get the user specific system settings (Eclipse Preferences).
-						 */
-						settings = null;
-					} else {
-						String userSettings = preferences.getUserSettings();
-						ObjectMapper objectMapper = new ObjectMapper();
-						objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-						settings = objectMapper.readValue(userSettings, settingsClass);
-					}
-				} catch(IOException e) {
-					DefaultProcessingResult<Object> result = new DefaultProcessingResult<>();
-					result.addErrorMessage(getName(), "can't process settings", e);
-					return;
-				}
+				}, shell);
+			} catch(CancellationException e) {
+				// user has canceld so cance the action as well
+				return;
+			} catch(IOException e) {
+				DefaultProcessingResult<Object> result = new DefaultProcessingResult<>();
+				result.addErrorMessage(processorSupplier.getName(), "can't process settings", e);
+				updateResult(shell, result);
 			}
-			executionConsumer.accept(new IRunnableWithProgress() {
-
-				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-					IProcessSettings processSettings;
-					if(settings instanceof IProcessSettings) {
-						processSettings = (IProcessSettings)settings;
-					} else {
-						processSettings = null;
-					}
-					if(typeSupplier instanceof IChromatogramSelectionProcessTypeSupplier) {
-						IProcessingInfo<?> result = ((IChromatogramSelectionProcessTypeSupplier)typeSupplier).applyProcessor(chromatogramSelection, processorSupplier.getId(), processSettings, monitor);
-						updateResult(shell, result);
-					}
-				}
-			}, shell);
 		}
 	}
 
-	public void updateResult(Shell shell, IProcessingInfo<?> result) {
+	/**
+	 * Obtain the settings from the user, maybe asking for input
+	 * 
+	 * @param shell
+	 * @param processorSupplier
+	 * @return
+	 * @throws IOException
+	 */
+	public static Object getSettings(Shell shell, IProcessSupplier processorSupplier) throws IOException {
+
+		Class<?> settingsClass = processorSupplier.getSettingsClass();
+		Object settings;
+		if(settingsClass == null) {
+			settings = null;
+		} else {
+			ProcessorPreferences preferences = processorSupplier.getPreferences();
+			if(preferences.isAskForSettings()) {
+				List<InputValue> values = InputValue.readJSON(settingsClass, preferences.getUserSettings());
+				if(!values.isEmpty()) {
+					if(!SettingsPreferencesWizard.openWizard(shell, values, preferences, processorSupplier)) {
+						throw new CancellationException("user has canceled the wizard");
+					}
+				}
+			}
+			if(preferences.isUseSystemDefaults()) {
+				/*
+				 * Why should we not use "settings = settingsClass.newInstance();" here?
+				 * The IProcessSettings instance would be created, but without any meaningful values.
+				 * IProcessTypeSupplier explicitly calls the method without setting if applyProcessor with "IProcessSettings == null" is called.
+				 * The executing plugin then takes care to get the user specific system settings (Eclipse Preferences).
+				 */
+				settings = null;
+			} else {
+				String userSettings = preferences.getUserSettings();
+				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+				settings = objectMapper.readValue(userSettings, settingsClass);
+			}
+		}
+		return settings;
+	}
+
+	public void updateResult(Shell shell, MessageProvider result) {
 
 		if(result != null) {
 			shell.getDisplay().asyncExec(() -> ProcessingInfoViewSupport.updateProcessingInfo(result, result.hasErrorMessages()));

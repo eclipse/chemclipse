@@ -69,7 +69,7 @@ public class ProcessTypeSupport {
 	private static final Logger logger = Logger.getLogger(ProcessTypeSupport.class);
 	//
 	private Map<String, IProcessTypeSupplier> processSupplierMap = new HashMap<>();
-	private IEclipsePreferences preferences;
+	private static IEclipsePreferences preferences;
 
 	public ProcessTypeSupport() {
 		this(null);
@@ -148,12 +148,12 @@ public class ProcessTypeSupport {
 	 * @param processorId
 	 * @return the preferences for this processor id
 	 */
-	public ProcessorPreferences getPreferences(IProcessSupplier supplier) {
+	public static ProcessorPreferences getWorkspacePreferences(IProcessSupplier supplier) {
 
 		return new NodeProcessorPreferences(getStorage().node(supplier.getId()));
 	}
 
-	private IEclipsePreferences getStorage() {
+	private static IEclipsePreferences getStorage() {
 
 		if(preferences == null) {
 			preferences = InstanceScope.INSTANCE.getNode(ProcessTypeSupport.class.getName());

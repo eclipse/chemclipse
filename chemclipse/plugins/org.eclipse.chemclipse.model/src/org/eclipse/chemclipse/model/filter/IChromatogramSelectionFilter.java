@@ -116,4 +116,10 @@ public interface IChromatogramSelectionFilter<ConfigType> extends Filter<ConfigT
 			}
 		};
 	}
+
+	@Override
+	default Class<ConfigType> getConfigClass() {
+
+		return null;
+	}
 }

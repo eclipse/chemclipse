@@ -533,7 +533,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				List<IProcessSupplier> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
 				Collections.sort(list, new NameComparator());
 				for(IProcessSupplier supplier : list) {
-					chartSettings.addMenuEntry(new ProcessorSupplierMenuEntry(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier, processTypeSupport.getPreferences(supplier)));
+					chartSettings.addMenuEntry(new ProcessorSupplierMenuEntry(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier));
 				}
 			}
 			/*

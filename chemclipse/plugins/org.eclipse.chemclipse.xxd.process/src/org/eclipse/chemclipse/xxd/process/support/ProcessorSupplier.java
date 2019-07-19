@@ -25,6 +25,7 @@ public class ProcessorSupplier implements IProcessSupplier {
 	private String description = "";
 	private Class<?> settingsClass;
 	private Set<DataType> dataTypes;
+	private ProcessorPreferences preferences;
 
 	public ProcessorSupplier(String id, DataType[] dataTypes) {
 		this.id = id;

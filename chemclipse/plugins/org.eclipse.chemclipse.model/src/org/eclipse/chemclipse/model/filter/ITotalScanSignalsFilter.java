@@ -60,4 +60,10 @@ public interface ITotalScanSignalsFilter<ConfigType> extends Filter<ConfigType> 
 
 		return createNewConfiguration();
 	}
+
+	@Override
+	default Class<ConfigType> getConfigClass() {
+
+		return null;
+	}
 }

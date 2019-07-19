@@ -60,7 +60,16 @@ public interface Processor<ConfigType> {
 	 * 
 	 * @return the default-config for this filter
 	 */
-	ConfigType createNewConfiguration();
+	default ConfigType createNewConfiguration() {
+
+		try {
+			return getConfigClass().newInstance();
+		} catch(InstantiationException | IllegalAccessException e) {
+			throw new UnsupportedOperationException("can't create default config class and the filter does not overrides createNewConfiguration");
+		}
+	}
+
+	Class<ConfigType> getConfigClass();
 
 	ProcessorCategory[] getProcessorCategories();
 }

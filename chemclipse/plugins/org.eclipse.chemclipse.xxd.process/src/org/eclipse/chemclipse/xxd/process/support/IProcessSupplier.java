@@ -42,4 +42,13 @@ public interface IProcessSupplier {
 	Class<?> getSettingsClass();
 
 	Set<DataType> getSupportedDataTypes();
+
+	/**
+	 * 
+	 * @return the preferences for this {@link IProcessSupplier}
+	 */
+	default ProcessorPreferences getPreferences() {
+
+		return ProcessTypeSupport.getWorkspacePreferences(this);
+	}
 }
