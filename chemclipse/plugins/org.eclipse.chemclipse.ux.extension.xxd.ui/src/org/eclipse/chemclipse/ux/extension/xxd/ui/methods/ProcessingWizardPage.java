@@ -54,6 +54,7 @@ public class ProcessingWizardPage extends WizardPage {
 	private Set<DataType> dataTypes = new HashSet<>();
 	private Function<Composite, Collection<Button>> dataCheckBoxCreationFunction;
 	private Collection<Button> dataTypeSelections;
+	private ProcessEntry processEntry;
 
 	protected ProcessingWizardPage(ProcessTypeSupport processTypeSupport, Function<Composite, Collection<Button>> dataCheckBoxCreationFunction) {
 		super("ProcessingWizardPage");
@@ -98,18 +99,7 @@ public class ProcessingWizardPage extends WizardPage {
 
 	public IProcessEntry getProcessEntry() {
 
-		Object object = comboViewerProcessor.getStructuredSelection().getFirstElement();
-		if(object instanceof IProcessSupplier) {
-			IProcessSupplier processorSupplier = (IProcessSupplier)object;
-			ProcessEntry processEntry = new ProcessEntry();
-			processEntry.setProcessorId(processorSupplier.getId());
-			processEntry.setName(processorSupplier.getName());
-			processEntry.setDescription(processorSupplier.getDescription());
-			processEntry.getSupportedDataTypes().addAll(processorSupplier.getSupportedDataTypes());
-			processEntry.setProcessSettingsClass(processorSupplier.getSettingsClass());
-			return processEntry;
-		}
-		return null;
+		return processEntry;
 	}
 
 	private void createLabel(Composite parent, String text) {
@@ -200,6 +190,7 @@ public class ProcessingWizardPage extends WizardPage {
 		} else {
 			comboViewerProcessor.setInput(new Object[0]);
 		}
+		updateEntry();
 	}
 
 	private ComboViewer createComboProcessor(Composite parent) {
@@ -234,10 +225,26 @@ public class ProcessingWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				updateEntry();
 			}
 		});
-		//
 		return comboViewer;
+	}
+
+	private void updateEntry() {
+
+		Object object = comboViewerProcessor.getStructuredSelection().getFirstElement();
+		if(object instanceof IProcessSupplier) {
+			IProcessSupplier processorSupplier = (IProcessSupplier)object;
+			processEntry = new ProcessEntry();
+			processEntry.setProcessorId(processorSupplier.getId());
+			processEntry.setName(processorSupplier.getName());
+			processEntry.setDescription(processorSupplier.getDescription());
+			processEntry.getSupportedDataTypes().addAll(processorSupplier.getSupportedDataTypes());
+			processEntry.setProcessSettingsClass(processorSupplier.getSettingsClass());
+		} else {
+			processEntry = null;
+		}
 	}
 
 	private void validate() {
