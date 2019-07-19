@@ -55,7 +55,6 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -486,21 +485,14 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				menu.setVisible(true);
 			} else {
 				if(processMethod != null) {
-					ProcessingWizard wizard = new ProcessingWizard(processingSupport);
-					WizardDialog wizardDialog = new WizardDialog(toolBar.getShell(), wizard);
-					wizardDialog.setMinimumPageSize(ProcessingWizard.DEFAULT_WIDTH, ProcessingWizard.DEFAULT_HEIGHT);
-					wizardDialog.create();
-					//
-					if(wizardDialog.open() == WizardDialog.OK) {
-						IProcessEntry processEntry = wizard.getProcessEntry();
-						if(processEntry != null) {
-							processMethod.add(processEntry);
-							if(showSettingsOnAdd) {
-								modifyProcessEntry(getShell(), processEntry, false);
-							}
-							updateProcessMethod();
-							select(Collections.singletonList(processEntry));
+					IProcessEntry processEntry = ProcessingWizard.open(getShell(), processingSupport, ProcessingWizard.MASSSPECTRUM_DATATYPES);
+					if(processEntry != null) {
+						processMethod.add(processEntry);
+						if(showSettingsOnAdd) {
+							modifyProcessEntry(getShell(), processEntry, false);
 						}
+						updateProcessMethod();
+						select(Collections.singletonList(processEntry));
 					}
 				}
 			}

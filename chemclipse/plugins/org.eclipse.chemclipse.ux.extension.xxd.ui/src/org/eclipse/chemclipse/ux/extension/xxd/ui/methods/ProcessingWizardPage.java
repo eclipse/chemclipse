@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - rework categories handling
+ * Christoph Läubrich - rework categories handling, support different datatype selections
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -21,24 +21,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -48,18 +48,17 @@ import org.eclipse.swt.widgets.Label;
 
 public class ProcessingWizardPage extends WizardPage {
 
-	private Button checkboxCSD;
-	private Button checkboxMSD;
-	private Button checkboxWSD;
 	private ComboViewer comboViewerCategory;
 	private ComboViewer comboViewerProcessor;
 	private ProcessTypeSupport processTypeSupport;
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private Set<DataType> dataTypes = new HashSet<>();
+	private Function<Composite, Collection<Button>> dataCheckBoxCreationFunction;
+	private Collection<Button> dataTypeSelections;
 
-	protected ProcessingWizardPage(ProcessTypeSupport processTypeSupport) {
+	protected ProcessingWizardPage(ProcessTypeSupport processTypeSupport, Function<Composite, Collection<Button>> dataCheckBoxCreationFunction) {
 		super("ProcessingWizardPage");
 		this.processTypeSupport = processTypeSupport;
+		this.dataCheckBoxCreationFunction = dataCheckBoxCreationFunction;
 		setTitle("Process Entry");
 		setDescription("Select a chromatogram filter, integrator, identifier ... .");
 	}
@@ -71,7 +70,22 @@ public class ProcessingWizardPage extends WizardPage {
 		composite.setLayout(new GridLayout(1, false));
 		//
 		createLabel(composite, "Data Types");
-		createDataTypeSelection(composite);
+		dataTypeSelections = dataCheckBoxCreationFunction.apply(composite);
+		for(Button button : dataTypeSelections) {
+			button.addSelectionListener(new SelectionListener() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					updateComboCategoryItems();
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+
+				}
+			});
+		}
 		createLabel(composite, "Process Category");
 		comboViewerCategory = createComboCategory(composite);
 		createLabel(composite, "Processor");
@@ -104,37 +118,23 @@ public class ProcessingWizardPage extends WizardPage {
 		label.setText(text);
 	}
 
-	private void createDataTypeSelection(Composite parent) {
-
-		checkboxCSD = createDataTypeCheckbox(parent, "CSD (FID, PPD, ...)", "Select the csd processor items", preferenceStore.getBoolean(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_CSD));
-		checkboxMSD = createDataTypeCheckbox(parent, "MSD (Quadrupole, IonTrap, ...)", "Select the msd processor items", preferenceStore.getBoolean(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD));
-		checkboxWSD = createDataTypeCheckbox(parent, "WSD (UV/Vis, DAD, ...)", "Select the wsd processor items", preferenceStore.getBoolean(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD));
-	}
-
-	private Button createDataTypeCheckbox(Composite parent, String text, String tooltip, boolean selection) {
-
-		Button button = new Button(parent, SWT.CHECK);
-		button.setText(text);
-		button.setToolTipText(tooltip);
-		button.setSelection(selection);
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				updateComboCategoryItems();
-			}
-		});
-		//
-		return button;
-	}
-
 	private void updateComboCategoryItems() {
 
+		if(dataTypeSelections == null) {
+			return;
+		}
 		dataTypes.clear();
-		addSelectedTypeAndPersist(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_CSD, checkboxCSD, dataTypes, DataType.CSD);
-		addSelectedTypeAndPersist(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD, checkboxMSD, dataTypes, DataType.MSD);
-		addSelectedTypeAndPersist(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD, checkboxWSD, dataTypes, DataType.WSD);
+		Button selected = null;
+		for(Button button : dataTypeSelections) {
+			button.setEnabled(true);
+			if(button.getSelection()) {
+				dataTypes.add((DataType)button.getData());
+				selected = button;
+			}
+		}
+		if(dataTypes.size() == 1 && selected != null) {
+			selected.setEnabled(false);
+		}
 		List<IProcessTypeSupplier> processTypeSuppliers = processTypeSupport.getProcessorTypeSuppliers(dataTypes);
 		Map<String, ProcessCategory> categories = new TreeMap<>();
 		for(IProcessTypeSupplier supplier : processTypeSuppliers) {
@@ -146,15 +146,13 @@ public class ProcessingWizardPage extends WizardPage {
 			}
 			processCategory.addSupplier(supplier, dataTypes);
 		}
-		comboViewerCategory.setInput(categories.values().toArray());
-	}
-
-	private void addSelectedTypeAndPersist(String name, Button checkbox, Collection<DataType> dataTypes, DataType dataType) {
-
-		preferenceStore.setValue(name, checkbox.getSelection());
-		if(checkbox.getSelection()) {
-			dataTypes.add(dataType);
+		Object[] objects = categories.values().toArray();
+		comboViewerCategory.setInput(objects);
+		if(objects.length == 1) {
+			comboViewerCategory.setSelection(new StructuredSelection(objects[0]));
 		}
+		comboViewerCategory.getControl().setEnabled(objects.length > 1);
+		updateCategory();
 	}
 
 	private ComboViewer createComboCategory(Composite parent) {
@@ -182,16 +180,26 @@ public class ProcessingWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof ProcessCategory) {
-					ProcessCategory category = (ProcessCategory)object;
-					comboViewerProcessor.setInput(category.processorSuppliers);
-				} else {
-					comboViewerProcessor.setInput(new Object[0]);
-				}
+				updateCategory();
 			}
 		});
 		return comboViewer;
+	}
+
+	private void updateCategory() {
+
+		Object object = comboViewerCategory.getStructuredSelection().getFirstElement();
+		if(object instanceof ProcessCategory) {
+			ProcessCategory category = (ProcessCategory)object;
+			List<IProcessSupplier> suppliers = category.processorSuppliers;
+			comboViewerProcessor.setInput(suppliers);
+			if(suppliers.size() == 1) {
+				comboViewerProcessor.setSelection(new StructuredSelection(suppliers.get(0)));
+			}
+			comboViewerProcessor.getCombo().setEnabled(suppliers.size() > 1);
+		} else {
+			comboViewerProcessor.setInput(new Object[0]);
+		}
 	}
 
 	private ComboViewer createComboProcessor(Composite parent) {

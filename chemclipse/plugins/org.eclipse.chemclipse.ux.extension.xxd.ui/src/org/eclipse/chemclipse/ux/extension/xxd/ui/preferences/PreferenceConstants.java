@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add NMR datatype
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -638,6 +639,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_SELECTED_METHOD_NAME = "";
 	public static final String P_METHOD_PROCESSOR_SELECTION_CSD = "methodProcessorSelectionCSD";
 	public static final boolean DEF_METHOD_PROCESSOR_SELECTION_CSD = true;
+	public static final String P_METHOD_PROCESSOR_SELECTION_NMR = "methodProcessorSelectionNMR";
+	public static final boolean DEF_METHOD_PROCESSOR_SELECTION_NMR = true;
 	public static final String P_METHOD_PROCESSOR_SELECTION_MSD = "methodProcessorSelectionMSD";
 	public static final boolean DEF_METHOD_PROCESSOR_SELECTION_MSD = true;
 	public static final String P_METHOD_PROCESSOR_SELECTION_WSD = "methodProcessorSelectionWSD";

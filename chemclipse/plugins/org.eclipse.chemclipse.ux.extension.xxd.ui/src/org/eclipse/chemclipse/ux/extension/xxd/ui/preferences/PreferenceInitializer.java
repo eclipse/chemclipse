@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add NMR datatype
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -344,6 +345,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_CSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_CSD);
 		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_MSD);
 		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_WSD);
+		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_NMR, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_NMR);
 		/*
 		 * Quantitation
 		 */
