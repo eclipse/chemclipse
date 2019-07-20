@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Jan Holy - initial API and implementation
- * Christoph Läubrich - support new lazy table model
+ * Christoph Läubrich - support new lazy table model, support NMR_SCANs as InputDataType
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
@@ -38,7 +38,7 @@ public class InputWizardSettings {
 		MSD_CHROMATOGRAM, //
 		MSD_PEAKS, //
 		CSD_CHROMATOGRAM, //
-		WSD_CHROMATOGRAM;
+		WSD_CHROMATOGRAM, NMR_SCANS;
 	}
 
 	private String title = "Title";
@@ -73,6 +73,9 @@ public class InputWizardSettings {
 					break;
 				case WSD_CHROMATOGRAM:
 					supplierFileIdentifierList.add(new EditorSupportFactory(DataType.WSD).getInstanceIdentifier());
+					break;
+				case NMR_SCANS:
+					supplierFileIdentifierList.add(new EditorSupportFactory(DataType.NMR).getInstanceIdentifier());
 					break;
 				default:
 					break;

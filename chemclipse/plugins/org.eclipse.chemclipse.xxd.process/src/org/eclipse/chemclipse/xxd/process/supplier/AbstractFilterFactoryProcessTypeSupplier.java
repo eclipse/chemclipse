@@ -42,7 +42,7 @@ public abstract class AbstractFilterFactoryProcessTypeSupplier<DT, FT extends Fi
 	protected FilterProcessSupplier<FT> createProcessorSupplier(FT filter) {
 
 		FilterProcessSupplier<FT> processorSupplier = new FilterProcessSupplier<FT>(filter);
-		suppliers.put(filter.getID(), processorSupplier);
+		suppliers.put(processorSupplier.getId(), processorSupplier);
 		return processorSupplier;
 	}
 
@@ -115,11 +115,7 @@ public abstract class AbstractFilterFactoryProcessTypeSupplier<DT, FT extends Fi
 		@Override
 		public Class<?> getSettingsClass() {
 
-			Object configuration = filter.createNewConfiguration();
-			if(configuration == null) {
-				return null;
-			}
-			return configuration.getClass();
+			return filter.getConfigClass();
 		}
 
 		@Override

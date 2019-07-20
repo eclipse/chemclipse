@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - make UI configurable, support selection of existing process methods
+ * Christoph Läubrich - make UI configurable, support selection of existing process methods, support for init with different datatypes
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
@@ -110,14 +111,22 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private Composite buttons;
 	protected boolean showSettingsOnAdd;
 	private ProcessTypeSupport processingSupport;
+	private DataType[] dataTypes;
 
+	@Deprecated
 	public ExtendedMethodUI(Composite parent, int style) {
 		this(parent, style, new ProcessTypeSupport());
 	}
 
+	@Deprecated
 	public ExtendedMethodUI(Composite parent, int style, ProcessTypeSupport processingSupport) {
+		this(parent, style, processingSupport, new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD});
+	}
+
+	public ExtendedMethodUI(Composite parent, int style, ProcessTypeSupport processingSupport, DataType[] dataTypes) {
 		super(parent, style);
 		this.processingSupport = processingSupport;
+		this.dataTypes = dataTypes;
 		createControl();
 	}
 
@@ -300,7 +309,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	private void createTable(Composite parent) {
 
-		listUI = new MethodListUI(parent, SWT.BORDER | SWT.MULTI);
+		listUI = new MethodListUI(parent, SWT.BORDER | SWT.MULTI, processingSupport);
 		Table table = listUI.getTable();
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		table.setLayoutData(gridData);
@@ -485,7 +494,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				menu.setVisible(true);
 			} else {
 				if(processMethod != null) {
-					IProcessEntry processEntry = ProcessingWizard.open(getShell(), processingSupport, ProcessingWizard.MASSSPECTRUM_DATATYPES);
+					IProcessEntry processEntry = ProcessingWizard.open(getShell(), processingSupport, dataTypes);
 					if(processEntry != null) {
 						processMethod.add(processEntry);
 						if(showSettingsOnAdd) {
