@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - use generic selection page
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.ui.wizards;
 
@@ -18,10 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.RawFileSelectionWizardPage;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -40,7 +43,6 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 	private ImportDirectoryWizardPage importDirectoryWizardPage;
 
 	public ChromatogramImportWizard() {
-
 		setNeedsProgressMonitor(true);
 		setWindowTitle("Chromatogram Import Wizard");
 	}
@@ -53,7 +55,7 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 	@Override
 	public void addPages() {
 
-		rawFileSelectionWizardPage = new RawFileSelectionWizardPage(DESCRIPTION, "Select the chromatograms to import.", null);
+		rawFileSelectionWizardPage = new RawFileSelectionWizardPage(DataType.MSD, "Select the chromatograms to import.", null);
 		addPage(rawFileSelectionWizardPage);
 		importDirectoryWizardPage = new ImportDirectoryWizardPage(DESCRIPTION, "Select the import folder", null);
 		addPage(importDirectoryWizardPage);

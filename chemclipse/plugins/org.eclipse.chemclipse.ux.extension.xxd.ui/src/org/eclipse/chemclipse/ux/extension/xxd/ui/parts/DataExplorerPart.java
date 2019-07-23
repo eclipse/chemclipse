@@ -21,13 +21,14 @@ import javax.inject.Named;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ProjectExplorerSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageFileExplorer;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DataExplorerUI;
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,11 +43,13 @@ import org.eclipse.swt.widgets.Shell;
 public class DataExplorerPart {
 
 	private DataExplorerUI dataExplorerUI;
+	@Inject
+	private IEventBroker broker;
 	//
 
 	@Inject
 	public DataExplorerPart(Composite parent) {
-		dataExplorerUI = new DataExplorerUI(parent);
+		dataExplorerUI = new DataExplorerUI(parent, broker);
 		setSupplierFileEditorSupport();
 	}
 
@@ -127,7 +130,8 @@ public class DataExplorerPart {
 			editorSupportList.add(new EditorSupportFactory(DataType.QDB).getInstanceEditorSupport());
 		}
 		//
-		dataExplorerUI.setSupplierFileEditorSupportList(editorSupportList);
+		dataExplorerUI.setSupplierFileIdentifier(editorSupportList);
+		dataExplorerUI.expandLastDirectoryPath();
 	}
 
 	public static final class DataExplorerSettingsHandler {
@@ -159,7 +163,7 @@ public class DataExplorerPart {
 		public void execute(MPart part) {
 
 			DataExplorerPart explorer = (DataExplorerPart)part.getObject();
-			explorer.setSupplierFileEditorSupport();
+			explorer.dataExplorerUI.expandLastDirectoryPath();
 		}
 	}
 }

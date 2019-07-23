@@ -40,20 +40,11 @@ import org.eclipse.swt.widgets.Display;
  */
 public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider, FileFilter {
 
+	private static final int MAX_CACHE_SIZE = Integer.parseInt(System.getProperty("fileexplorer.max_cache_size", "1000"));
 	private static final File[] NO_CHILD = new File[0];
 	private TreeViewer viewer;
 	private File[] roots;
-	private static final int MAX_CACHE_SIZE = 100;
-	private final Map<File, File[]> cache = new LinkedHashMap<File, File[]>(MAX_CACHE_SIZE, 0.75f, true) {
-
-		private static final long serialVersionUID = -5978638803700871374L;
-
-		@Override
-		public boolean removeEldestEntry(Map.Entry<File, File[]> eldest) {
-
-			return size() > MAX_CACHE_SIZE;
-		}
-	};
+	private final Map<File, File[]> cache = new FileCache<>();
 
 	@Override
 	public void updateElement(Object parent, int index) {
@@ -108,6 +99,21 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 		} else {
 			throw new IllegalArgumentException("Viewer must be a TreeViewer!");
 		}
+	}
+
+	public void refresh(File file) {
+
+		cache.remove(file);
+		if(viewer != null) {
+			viewer.refresh(file);
+		}
+	}
+
+	@Override
+	public void dispose() {
+
+		cache.clear();
+		ILazyTreeContentProvider.super.dispose();
 	}
 
 	@Override
@@ -200,6 +206,21 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 			return file.getCanonicalPath();
 		} catch(IOException e) {
 			return file.getAbsolutePath();
+		}
+	}
+
+	protected static final class FileCache<T> extends LinkedHashMap<File, T> {
+
+		private static final long serialVersionUID = -5978638803700871374L;
+
+		public FileCache() {
+			super(MAX_CACHE_SIZE, 0.75f, true);
+		}
+
+		@Override
+		public boolean removeEldestEntry(Map.Entry<File, T> eldest) {
+
+			return size() > MAX_CACHE_SIZE;
 		}
 	}
 }

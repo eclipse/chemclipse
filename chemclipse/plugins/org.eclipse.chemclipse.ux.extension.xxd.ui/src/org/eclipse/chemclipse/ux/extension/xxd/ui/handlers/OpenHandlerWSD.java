@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - set size of wizard
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.handlers;
 
@@ -40,6 +41,7 @@ public class OpenHandlerWSD {
 		//
 		InputEntriesWizard inputWizard = new InputEntriesWizard(inputWizardSettings);
 		WizardDialog wizardDialog = new WizardDialog(shell, inputWizard);
+		wizardDialog.setPageSize(InputWizardSettings.DEFAULT_WIDTH, InputWizardSettings.DEFAULT_HEIGHT);
 		wizardDialog.create();
 		//
 		if(wizardDialog.open() == WizardDialog.OK) {

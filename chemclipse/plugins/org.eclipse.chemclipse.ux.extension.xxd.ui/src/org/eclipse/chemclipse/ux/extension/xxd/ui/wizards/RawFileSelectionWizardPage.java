@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,40 +8,41 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - use {@link DataExplorerTreeUI}
+ * Christoph Läubrich - complete rework and move to generic package
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.msd.ui.wizards;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
 import java.util.Collections;
 
-import org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class LibraryInputEntriesWizardPage extends WizardPage {
+public class RawFileSelectionWizardPage extends WizardPage {
 
-	private TreeViewer libraryViewer;
+	private TreeViewer treeViewer;
+	private DataType dataType;
 
-	protected LibraryInputEntriesWizardPage(String pageName, String title, String description) {
-		super(pageName);
-		setTitle(title);
-		setDescription(description);
+	public RawFileSelectionWizardPage(DataType dataType, String title, ImageDescriptor titleImage) {
+		super(RawFileSelectionWizardPage.class.getName(), title, titleImage);
+		this.dataType = dataType;
 	}
 
 	/**
-	 * Returns the library viewer selection.
 	 * 
-	 * @return
+	 * @return the selected item
 	 */
-	public ISelection getSelection() {
+	public IStructuredSelection getSelection() {
 
-		return libraryViewer.getSelection();
+		return treeViewer.getStructuredSelection();
 	}
 
 	@Override
@@ -49,9 +50,9 @@ public class LibraryInputEntriesWizardPage extends WizardPage {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
-		DataExplorerTreeUI treeUI = new DataExplorerTreeUI(parent, DataExplorerTreeRoot.DRIVES, Collections.singleton(DatabaseSupport.getInstanceEditorSupport()));
+		DataExplorerTreeUI treeUI = new DataExplorerTreeUI(parent, DataExplorerTreeRoot.DRIVES, Collections.singleton(new SupplierFileIdentifier(dataType)));
 		treeUI.expandLastDirectoryPath();
-		libraryViewer = treeUI.getTreeViewer();
+		treeViewer = treeUI.getTreeViewer();
 		setControl(composite);
 	}
 }

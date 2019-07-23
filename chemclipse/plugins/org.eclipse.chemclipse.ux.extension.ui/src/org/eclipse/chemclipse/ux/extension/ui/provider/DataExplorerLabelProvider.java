@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,16 +8,20 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - query the content provider instead to participate in caching, use ResourceManager
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -25,14 +29,17 @@ import org.eclipse.ui.navigator.IDescriptionProvider;
 
 public class DataExplorerLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
 
-	private List<? extends ISupplierFileIdentifier> supplierFileIdentifierList;
+	private DataExplorerContentProvider contentProvider;
+	ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 
-	public DataExplorerLabelProvider(ISupplierFileIdentifier supplierFileIdentifier) {
-		this(ExplorerListSupport.getSupplierFileIdentifierList(supplierFileIdentifier));
+	public DataExplorerLabelProvider(DataExplorerContentProvider contentProvider) {
+		this.contentProvider = contentProvider;
 	}
 
-	public DataExplorerLabelProvider(List<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
-		this.supplierFileIdentifierList = supplierFileIdentifierList;
+	@Override
+	public void dispose() {
+
+		resourceManager.dispose();
 	}
 
 	@Override
@@ -54,71 +61,30 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 	@Override
 	public Image getImage(Object element) {
 
-		ImageDescriptor descriptor = null;
 		if(element instanceof File) {
 			File file = (File)element;
-			/*
-			 * Root, directory or file.
-			 */
-			if(file.getName().equals("")) {
+			ImageDescriptor descriptor = null;
+			if(file.getName().equals("") || file.getParent() == null) {
 				descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DRIVE, IApplicationImage.SIZE_16x16);
 			} else {
-				if(file.isDirectory()) {
-					/*
-					 * Check if the directory could be a registered file type.
-					 */
-					boolean isNormalDirectory = true;
-					exitloop:
-					for(ISupplierFileIdentifier supplierFileIdentifier : supplierFileIdentifierList) {
-						if(supplierFileIdentifier.isSupplierFileDirectory(file)) {
-							/*
-							 * Check and validate.
-							 */
-							if(supplierFileIdentifier.isMatchMagicNumber(file)) {
-								descriptor = getImageDescriptor(supplierFileIdentifier, file);
-								if(descriptor != null) {
-									isNormalDirectory = false;
-									break exitloop;
-								}
-							}
-						}
+				Collection<ISupplierFileIdentifier> identifier = contentProvider.getSupplierFileIdentifier(file);
+				for(ISupplierFileIdentifier fileIdentifier : identifier) {
+					descriptor = getImageDescriptor(fileIdentifier, file);
+					if(descriptor != null) {
+						break;
 					}
-					/*
-					 * Default dir.
-					 */
-					if(isNormalDirectory) {
+				}
+				if(descriptor == null) {
+					if(file.isDirectory()) {
 						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16);
-					}
-				} else {
-					/*
-					 * Check if the file could be a registered supplier file.
-					 */
-					boolean isNormalFile = true;
-					exitloop:
-					for(ISupplierFileIdentifier supplierFileIdentifier : supplierFileIdentifierList) {
-						if(supplierFileIdentifier.isSupplierFile(file)) {
-							/*
-							 * Check and validate.
-							 */
-							if(supplierFileIdentifier.isMatchMagicNumber(file)) {
-								descriptor = getImageDescriptor(supplierFileIdentifier, file);
-								if(descriptor != null) {
-									isNormalFile = false;
-									break exitloop;
-								}
-							}
-						}
-					}
-					/*
-					 * Default file.
-					 */
-					if(isNormalFile) {
+					} else {
 						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16);
 					}
 				}
 			}
-			Image image = descriptor.createImage();
-			return image;
+			if(descriptor != null) {
+				return (Image)resourceManager.get(descriptor);
+			}
 		}
 		return null;
 	}
@@ -162,9 +128,6 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DATABASE, IApplicationImage.SIZE_16x16);
 					break;
 				default:
-					/*
-					 * Default
-					 */
 					if(file.isDirectory()) {
 						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16);
 					} else if(file.isFile()) {

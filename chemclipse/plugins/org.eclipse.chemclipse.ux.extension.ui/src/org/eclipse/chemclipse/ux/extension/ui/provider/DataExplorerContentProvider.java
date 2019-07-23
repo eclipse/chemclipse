@@ -8,25 +8,34 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - adopt to new API
+ * Christoph Läubrich - adopt to new API, add caching/access of determined {@link ISupplierFileIdentifier}s
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.jface.viewers.Viewer;
 
 public class DataExplorerContentProvider extends LazyFileExplorerContentProvider {
 
-	private List<? extends ISupplierFileIdentifier> supplierFileIdentifierList;
+	private FileCache<Collection<ISupplierFileIdentifier>> supplierCache = new FileCache<>();
+	private Viewer viewer;
+	private ISupplierFileIdentifier[] fileIdentifiers;
 
-	public DataExplorerContentProvider(ISupplierFileIdentifier supplierFileIdentifier) {
-		this(ExplorerListSupport.getSupplierFileIdentifierList(supplierFileIdentifier));
+	public DataExplorerContentProvider(Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
+		setSupplierFileIdentifier(supplierFileIdentifierList);
 	}
 
-	public DataExplorerContentProvider(List<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
-		this.supplierFileIdentifierList = supplierFileIdentifierList;
+	public void setSupplierFileIdentifier(Collection<? extends ISupplierFileIdentifier> supplierFileIdentifier) {
+
+		fileIdentifiers = supplierFileIdentifier.toArray(new ISupplierFileIdentifier[0]);
+		if(viewer != null) {
+			viewer.refresh();
+		}
 	}
 
 	@Override
@@ -36,14 +45,57 @@ public class DataExplorerContentProvider extends LazyFileExplorerContentProvider
 			if(file.isDirectory()) {
 				return true;
 			}
-			for(ISupplierFileIdentifier supplierFileIdentifier : supplierFileIdentifierList) {
-				if(supplierFileIdentifier.isSupplierFile(file)) {
-					if(supplierFileIdentifier.isMatchMagicNumber(file)) {
-						return true;
+			return !getSupplierFileIdentifier(file).isEmpty();
+		}
+		return false;
+	}
+
+	@Override
+	public void inputChanged(Viewer newViewer, Object oldInput, Object newInput) {
+
+		this.viewer = newViewer;
+		super.inputChanged(newViewer, oldInput, newInput);
+		supplierCache.clear();
+	}
+
+	@Override
+	public void dispose() {
+
+		supplierCache.clear();
+	}
+
+	public Collection<ISupplierFileIdentifier> getSupplierFileIdentifier(File file) {
+
+		Collection<ISupplierFileIdentifier> list = supplierCache.get(file);
+		if(list == null) {
+			list = new ArrayList<>(1);
+			if(file.isDirectory()) {
+				for(ISupplierFileIdentifier supplierFileIdentifier : fileIdentifiers) {
+					if(supplierFileIdentifier.isSupplierFileDirectory(file)) {
+						if(supplierFileIdentifier.isMatchMagicNumber(file)) {
+							list.add(supplierFileIdentifier);
+						}
+					}
+				}
+			} else if(file.isFile()) {
+				for(ISupplierFileIdentifier supplierFileIdentifier : fileIdentifiers) {
+					if(supplierFileIdentifier.isSupplierFile(file)) {
+						if(supplierFileIdentifier.isMatchMagicNumber(file)) {
+							list.add(supplierFileIdentifier);
+						}
 					}
 				}
 			}
+			list = Collections.unmodifiableCollection(list);
+			supplierCache.put(file, list);
 		}
-		return false;
+		return list;
+	}
+
+	@Override
+	public void refresh(File file) {
+
+		supplierCache.remove(file);
+		super.refresh(file);
 	}
 }

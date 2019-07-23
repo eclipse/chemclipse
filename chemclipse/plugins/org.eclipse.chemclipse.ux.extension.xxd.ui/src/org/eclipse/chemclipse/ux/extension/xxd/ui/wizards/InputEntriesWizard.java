@@ -28,6 +28,7 @@ public class InputEntriesWizard extends Wizard {
 
 	public InputEntriesWizard(InputWizardSettings inputWizardSettings) {
 		setNeedsProgressMonitor(true);
+		setWindowTitle("Select data");
 		this.inputWizardSettings = inputWizardSettings;
 	}
 
@@ -46,7 +47,7 @@ public class InputEntriesWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 
-		inputWizardSettings.saveSelectedPath(inputEntriesPage.getTreeSelection());
+		// FIXME inputWizardSettings.saveSelectedPath(inputEntriesPage.getTreeSelection());
 		return true;
 	}
 }
