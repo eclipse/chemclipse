@@ -73,14 +73,17 @@ public interface AcquisitionParameter {
 	 * 
 	 * @return the spectral width aka 'sweep width' in <b>hz</b>
 	 */
-	double getSpectralWidth();
+	BigDecimal getSpectralWidth();
 
 	/**
 	 * [at]
 	 * 
 	 * @return the acquisition time in <b>seconds</b>
 	 */
-	BigDecimal getAcquisitionTime();
+	default BigDecimal getAcquisitionTime() {
+
+		return BigDecimal.valueOf(getNumberOfPoints()).divide(getSpectralWidth().multiply(getCarrierFrequency()), 10, BigDecimal.ROUND_HALF_EVEN);
+	}
 
 	/**
 	 * 
@@ -93,22 +96,30 @@ public interface AcquisitionParameter {
 	 * 
 	 * @return the spectrometer frequency in <b>MHz</b>
 	 */
-	double getSpectrometerFrequency();
+	BigDecimal getSpectrometerFrequency();
 
 	/**
 	 * [SF01]
 	 * 
 	 * @return the transmitter/carrier frequency in <b>MHz</b>
 	 */
-	double getCarrierFrequency();
+	BigDecimal getCarrierFrequency();
 
 	/**
 	 * 
 	 * @return the spectral offset in <b>hz</b>
 	 */
-	default double getSpectralOffset() {
+	default BigDecimal getSpectralOffset() {
 
-		return ppmToHz(getCarrierFrequency() / (getSpectrometerFrequency() - 1) * 1E6 + 0.5 * hzToPpm(getSpectralWidth()) + (getCarrierFrequency() / getSpectrometerFrequency()));
+		BigDecimal sfo1 = getCarrierFrequency();
+		BigDecimal sf = getSpectrometerFrequency();
+		BigDecimal sw = getSpectralWidth();
+		BigDecimal multiplicand = new BigDecimal("0.5");
+		BigDecimal fac1 = sfo1.divide(sf.subtract(BigDecimal.ONE), 10, BigDecimal.ROUND_HALF_EVEN);
+		BigDecimal halfWidthPPM = sw.multiply(multiplicand);
+		BigDecimal fac2 = sfo1.divide(sf, 10, BigDecimal.ROUND_HALF_EVEN);
+		// `OFFSET = (SFO1/SF-1) * 1.0e6 + 0.5 * SW * SFO1/SF
+		return toHz(fac1.multiply(new BigDecimal("1E6")).add(toHz(halfWidthPPM)).multiply(fac2));
 	}
 
 	/**
@@ -117,9 +128,9 @@ public interface AcquisitionParameter {
 	 *            ppm value to convert
 	 * @return
 	 */
-	default double ppmToHz(double ppm) {
+	default BigDecimal toHz(BigDecimal ppm) {
 
-		return ppm * getCarrierFrequency();
+		return ppm.multiply(getCarrierFrequency());
 	}
 
 	/**
@@ -128,8 +139,19 @@ public interface AcquisitionParameter {
 	 *            hz value to convert
 	 * @return
 	 */
-	default double hzToPpm(double hz) {
+	default BigDecimal toPPM(BigDecimal hz) {
 
-		return getCarrierFrequency() / hz;
+		BigDecimal cf = getCarrierFrequency();
+		return cf.divide(hz, Math.max(hz.scale(), cf.scale()), BigDecimal.ROUND_HALF_EVEN);
+	}
+
+	public static void print(AcquisitionParameter acquisitionParameter) {
+
+		System.out.println("CarrierFrequency:      " + acquisitionParameter.getCarrierFrequency());
+		System.out.println("NumberOfPoints:        " + acquisitionParameter.getNumberOfPoints());
+		System.out.println("SpectralOffset:        " + acquisitionParameter.getSpectralOffset());
+		System.out.println("SpectralWidth:         " + acquisitionParameter.getSpectralWidth());
+		System.out.println("SpectrometerFrequency: " + acquisitionParameter.getSpectrometerFrequency());
+		System.out.println("AcquisitionTime:       " + acquisitionParameter.getAcquisitionTime());
 	}
 }
