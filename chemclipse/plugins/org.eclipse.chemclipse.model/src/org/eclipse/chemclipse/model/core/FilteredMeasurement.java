@@ -56,7 +56,6 @@ public class FilteredMeasurement<FilteredType extends IMeasurement> implements I
 	private Map<String, IMeasurementResult> measurementResults = new HashMap<>(1);
 	private Map<String, String> headerMap = new HashMap<>(1);
 	private Date created = new Date();
-
 	private transient Filter<?> filter;
 
 	public FilteredMeasurement(FilteredType measurement) {
@@ -106,6 +105,10 @@ public class FilteredMeasurement<FilteredType extends IMeasurement> implements I
 	@Override
 	public <T> T getAdapter(Class<T> adapter) {
 
+		if(measurement.getClass().isAssignableFrom(adapter)) {
+			// if we can cast the filtered object itself we return it here, that way a filtered object can always be adapted to itself
+			return adapter.cast(measurement);
+		}
 		return measurement.getAdapter(adapter);
 	}
 

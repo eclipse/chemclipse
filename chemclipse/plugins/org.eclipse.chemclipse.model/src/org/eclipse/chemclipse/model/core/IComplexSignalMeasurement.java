@@ -11,8 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
-public interface IComplexSignalMeasurement<T extends IComplexSignal>
-extends IMeasurement, IComplexSignalMeasurementBody<T> {
+import java.util.List;
 
+public interface IComplexSignalMeasurement<T extends IComplexSignal> extends IMeasurement {
 
+	/**
+	 * 
+	 * @return the signals of this Measurement
+	 */
+	List<? extends T> getSignals();
 }

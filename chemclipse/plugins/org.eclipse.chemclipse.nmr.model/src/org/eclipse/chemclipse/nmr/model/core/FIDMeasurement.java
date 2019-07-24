@@ -15,15 +15,13 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 
-public interface FIDMeasurement extends IComplexSignalMeasurement<FIDSignal>, FIDMeasurementBody<FIDSignal> {
+public interface FIDMeasurement extends IComplexSignalMeasurement<FIDSignal> {
 
-	double getSweepWidth();
-
-	double getIrradiationCarrierFrequency();
-
-	double getAcquisitionTime();
-
-	double getFirstDataPointOffset();
+	/**
+	 * 
+	 * @return the acquisition parameter for thsi fid measurement
+	 */
+	FIDAcquisitionParameter getAcquisitionParameter();
 
 	/**
 	 * Contains the signals of this {@link FIDMeasurement}, ordered with the lowest data time first
@@ -32,4 +30,6 @@ public interface FIDMeasurement extends IComplexSignalMeasurement<FIDSignal>, FI
 	 */
 	@Override
 	List<? extends FIDSignal> getSignals();
+
+	DataDimension getDataDimension();
 }

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
+import java.math.BigDecimal;
+
 import org.eclipse.chemclipse.model.core.IComplexSignal;
 
 /**
@@ -23,9 +25,9 @@ public interface SpectrumSignal extends IComplexSignal {
 
 	/**
 	 *
-	 * @return the chemical shift in ppm
+	 * @return the frequency in Hz
 	 */
-	Number getChemicalShift();
+	BigDecimal getFrequency();
 
 	/**
 	 * The absorptive intensity (also known as the "real part" of the signal)
@@ -44,7 +46,7 @@ public interface SpectrumSignal extends IComplexSignal {
 	@Override
 	default double getX() {
 
-		return getChemicalShift().doubleValue();
+		return getFrequency().doubleValue();
 	}
 
 	@Override

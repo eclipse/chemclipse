@@ -18,10 +18,29 @@ import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 public interface SpectrumMeasurement extends IComplexSignalMeasurement<SpectrumSignal> {
 
 	/**
+	 * 
+	 * @return the Acquisition Parameter for this spectral measurement
+	 */
+	SpectrumAcquisitionParameter getAcquisitionParameter();
+
+	/**
 	 * Contains the signals of this {@link SpectrumMeasurement}, ordered with the highest ppm value first
 	 * 
 	 * @return the signals that makes up this {@link SpectrumMeasurement}
 	 */
 	@Override
 	List<? extends SpectrumSignal> getSignals();
+
+	/**
+	 * 
+	 * @param centerFrequency
+	 *            center frequency in megahertz
+	 * @param ppm
+	 *            ppm value to convert
+	 * @return
+	 */
+	default double ppmToHz(double ppm) {
+
+		return (getAcquisitionParameter().getSpectrometerFrequency() * 1000d * ppm) / 10E6;
+	}
 }

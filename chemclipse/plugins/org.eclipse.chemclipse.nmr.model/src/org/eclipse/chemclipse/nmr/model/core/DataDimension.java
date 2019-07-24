@@ -7,18 +7,22 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Alexander Kerner - initial API and implementation
+ * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.core;
+package org.eclipse.chemclipse.nmr.model.core;
 
-import java.util.Collection;
+public enum DataDimension {
+	ONE_DIMENSIONAL("1D"), TWO_DIMENSIONAL("2D"), THREE_DIMENSIONAL("3D"), FOUR_DIMENSIONAL("4D");
 
-public interface IComplexSignalMeasuremntBody<T extends IComplexSignal> {
+	private String name;
 
-	/**
-	 *
-	 * @return the signals that makes up this {@link IComplexSignalMeasurement}
-	 */
-	Collection<? extends T> getSignals();
+	DataDimension(String name) {
+		this.name = name;
+	}
 
+	@Override
+	public String toString() {
+
+		return name;
+	}
 }
