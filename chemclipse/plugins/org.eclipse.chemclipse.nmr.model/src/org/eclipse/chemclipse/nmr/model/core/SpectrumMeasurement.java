@@ -21,7 +21,7 @@ public interface SpectrumMeasurement extends IComplexSignalMeasurement<SpectrumS
 	 * 
 	 * @return the Acquisition Parameter for this spectral measurement
 	 */
-	SpectrumAcquisitionParameter getAcquisitionParameter();
+	AcquisitionParameter getAcquisitionParameter();
 
 	/**
 	 * Contains the signals of this {@link SpectrumMeasurement}, ordered with the highest ppm value first
@@ -30,17 +30,4 @@ public interface SpectrumMeasurement extends IComplexSignalMeasurement<SpectrumS
 	 */
 	@Override
 	List<? extends SpectrumSignal> getSignals();
-
-	/**
-	 * 
-	 * @param centerFrequency
-	 *            center frequency in megahertz
-	 * @param ppm
-	 *            ppm value to convert
-	 * @return
-	 */
-	default double ppmToHz(double ppm) {
-
-		return (getAcquisitionParameter().getSpectrometerFrequency() * 1000d * ppm) / 10E6;
-	}
 }

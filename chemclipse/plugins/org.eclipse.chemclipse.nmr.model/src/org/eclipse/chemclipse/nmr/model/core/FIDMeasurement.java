@@ -21,7 +21,7 @@ public interface FIDMeasurement extends IComplexSignalMeasurement<FIDSignal> {
 	 * 
 	 * @return the acquisition parameter for thsi fid measurement
 	 */
-	FIDAcquisitionParameter getAcquisitionParameter();
+	AcquisitionParameter getAcquisitionParameter();
 
 	/**
 	 * Contains the signals of this {@link FIDMeasurement}, ordered with the lowest data time first

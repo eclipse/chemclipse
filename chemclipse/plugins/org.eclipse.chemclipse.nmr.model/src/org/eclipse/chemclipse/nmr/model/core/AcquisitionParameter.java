@@ -45,18 +45,35 @@ import java.math.BigDecimal;
  *                                                                                  ................................
  *                                                                                           Number if points
  * </pre>
+ * <pre>                                                                                                
+ *                                            [sfrq]                                                
+ *                                               `                                                  
+ *                                               :                                                  
+ *                                               `                                                  
+ *                                               :                                                  
+ *      `                                        `                                         `        
+ *      /                                        :                                         /        
+ *      /                                        .                                         /        
+ *      /```````````````````````````````````````` `````````````````````````````````````````/        
+ * 
+ *     x ppm                                                                               0ppm              
+ *                                                                                                  
+ *                                                                                                  
+ *               
+ *     &lt;......................................sw (hz).............................&gt;         
+ * </pre>
  * 
  * @author Christoph Läubrich
  *
  */
-public interface FIDAcquisitionParameter {
+public interface AcquisitionParameter {
 
 	/**
-	 * [pw]
+	 * [sw]
 	 * 
-	 * @return The pulse width is in <b>microseconds</b>
+	 * @return the spectral width aka 'sweep width' in <b>hz</b>
 	 */
-	double getPulseWidth();
+	double getSpectralWidth();
 
 	/**
 	 * [at]
@@ -72,8 +89,47 @@ public interface FIDAcquisitionParameter {
 	int getNumberOfPoints();
 
 	/**
+	 * [SF]
 	 * 
-	 * @return the time before starting the pulse in <b>seconds</b>
+	 * @return the spectrometer frequency in <b>MHz</b>
 	 */
-	double getRecycleDelay();
+	double getSpectrometerFrequency();
+
+	/**
+	 * [SF01]
+	 * 
+	 * @return the transmitter/carrier frequency in <b>MHz</b>
+	 */
+	double getCarrierFrequency();
+
+	/**
+	 * 
+	 * @return the spectral offset in <b>hz</b>
+	 */
+	default double getSpectralOffset() {
+
+		return ppmToHz(getCarrierFrequency() / (getSpectrometerFrequency() - 1) * 1E6 + 0.5 * hzToPpm(getSpectralWidth()) + (getCarrierFrequency() / getSpectrometerFrequency()));
+	}
+
+	/**
+	 * 
+	 * @param ppm
+	 *            ppm value to convert
+	 * @return
+	 */
+	default double ppmToHz(double ppm) {
+
+		return ppm * getCarrierFrequency();
+	}
+
+	/**
+	 * 
+	 * @param hz
+	 *            hz value to convert
+	 * @return
+	 */
+	default double hzToPpm(double hz) {
+
+		return getCarrierFrequency() / hz;
+	}
 }

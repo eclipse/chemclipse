@@ -49,7 +49,7 @@ public class FilteredSpectrumMeasurement extends FilteredMeasurement<SpectrumMea
 	}
 
 	@Override
-	public SpectrumAcquisitionParameter getAcquisitionParameter() {
+	public AcquisitionParameter getAcquisitionParameter() {
 
 		return getFilteredObject().getAcquisitionParameter();
 	}

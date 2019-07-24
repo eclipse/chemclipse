@@ -136,7 +136,7 @@ public class ChartNMR extends LineChart {
 		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		primaryAxisSettingsX.setVisible(true);
-		// primaryAxisSettingsX.setReversed(true);
+		primaryAxisSettingsX.setReversed(true);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Intensity");

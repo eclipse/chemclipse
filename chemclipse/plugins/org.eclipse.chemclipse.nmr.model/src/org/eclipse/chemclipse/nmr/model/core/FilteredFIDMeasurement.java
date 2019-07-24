@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.AbstractMeasurement;
@@ -26,7 +25,7 @@ import org.eclipse.chemclipse.model.core.FilteredMeasurement;
  * @author Christoph Läubrich
  *
  */
-public class FilteredFIDMeasurement extends FilteredMeasurement<FIDMeasurement> implements FIDMeasurement, FIDAcquisitionParameter {
+public class FilteredFIDMeasurement extends FilteredMeasurement<FIDMeasurement> implements FIDMeasurement {
 
 	private static final long serialVersionUID = -4499531764775929976L;
 	private List<? extends FIDSignal> signals;
@@ -42,9 +41,10 @@ public class FilteredFIDMeasurement extends FilteredMeasurement<FIDMeasurement> 
 	}
 
 	@Override
-	public FIDAcquisitionParameter getAcquisitionParameter() {
+	public final AcquisitionParameter getAcquisitionParameter() {
 
-		return this;
+		// Aqusition parameter can't change!
+		return getFilteredObject().getAcquisitionParameter();
 	}
 
 	@Override
@@ -59,35 +59,5 @@ public class FilteredFIDMeasurement extends FilteredMeasurement<FIDMeasurement> 
 	public void setSignals(List<? extends FIDSignal> signals) {
 
 		this.signals = signals;
-	}
-
-	@Override
-	public double getPulseWidth() {
-
-		return getFilteredObject().getAcquisitionParameter().getPulseWidth();
-	}
-
-	@Override
-	public BigDecimal getAcquisitionTime() {
-
-		if(signals != null) {
-			return signals.get(signals.size() - 1).getSignalTime();
-		}
-		return getFilteredObject().getAcquisitionParameter().getAcquisitionTime();
-	}
-
-	@Override
-	public int getNumberOfPoints() {
-
-		if(signals != null) {
-			return signals.size();
-		}
-		return getFilteredObject().getAcquisitionParameter().getNumberOfPoints();
-	}
-
-	@Override
-	public double getRecycleDelay() {
-
-		return getFilteredObject().getAcquisitionParameter().getRecycleDelay();
 	}
 }
