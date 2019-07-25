@@ -142,7 +142,7 @@ public interface AcquisitionParameter {
 	default BigDecimal toPPM(BigDecimal hz) {
 
 		BigDecimal cf = getCarrierFrequency();
-		return cf.divide(hz, Math.max(hz.scale(), cf.scale()), BigDecimal.ROUND_HALF_EVEN);
+		return hz.divide(cf, Math.max(hz.scale(), cf.scale()), BigDecimal.ROUND_HALF_EVEN);
 	}
 
 	public static void print(AcquisitionParameter acquisitionParameter) {
