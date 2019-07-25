@@ -139,6 +139,11 @@ public class NMRMeasurementsUI implements Observer {
 		createContextMenu();
 	}
 
+	public TreeViewer getTreeViewer() {
+
+		return treeViewer;
+	}
+
 	private void createContextMenu() {
 
 		MenuManager contextMenu = new MenuManager("ViewerContextMenu"); //$NON-NLS-1$
@@ -250,6 +255,11 @@ public class NMRMeasurementsUI implements Observer {
 		} else {
 			treeViewer.setSelection(new StructuredSelection(measurement));
 		}
+	}
+
+	public IComplexSignalMeasurement<?> getSelection() {
+
+		return getMeasurement(treeViewer.getStructuredSelection().getFirstElement());
 	}
 
 	private List<TreeNode> createTreeNodes(DataNMRSelection selection) {

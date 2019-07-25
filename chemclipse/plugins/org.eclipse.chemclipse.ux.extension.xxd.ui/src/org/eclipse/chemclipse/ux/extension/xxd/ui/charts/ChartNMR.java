@@ -25,6 +25,7 @@ import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.axisconverter.PassThroughConverter;
 import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
+import org.eclipse.swtchart.extensions.core.IAxisScaleConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
@@ -35,10 +36,7 @@ import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
 public class ChartNMR extends LineChart {
 
-	public ChartNMR() {
-		super();
-		initialize();
-	}
+	private IAxisScaleConverter ppmconverter;
 
 	public ChartNMR(Composite parent, int style) {
 		super(parent, style);
@@ -52,6 +50,11 @@ public class ChartNMR extends LineChart {
 		} else {
 			modifyProcessed();
 		}
+	}
+
+	public void setPPMconverter(IAxisScaleConverter ppmconverter) {
+
+		this.ppmconverter = ppmconverter;
 	}
 
 	private void initialize() {
@@ -130,13 +133,13 @@ public class ChartNMR extends LineChart {
 
 	private void setPrimaryAxisSetProcessed(IChartSettings chartSettings) {
 
-		// TODO ppm!
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("Frequency [Hz]");
 		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		primaryAxisSettingsX.setVisible(true);
+		primaryAxisSettingsX.setVisible(ppmconverter == null);
 		primaryAxisSettingsX.setReversed(true);
+		primaryAxisSettingsX.setExtraSpaceTitle(10);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Intensity");
@@ -148,6 +151,16 @@ public class ChartNMR extends LineChart {
 	private void addSecondaryAxisSetProcessed(IChartSettings chartSettings) {
 
 		deleteSecondaryAxes(chartSettings);
+		if(ppmconverter != null) {
+			ISecondaryAxisSettings secondaryAxisSettingsX1 = new SecondaryAxisSettings("ppm", ppmconverter);
+			secondaryAxisSettingsX1.setPosition(Position.Primary);
+			secondaryAxisSettingsX1.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
+			secondaryAxisSettingsX1.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+			secondaryAxisSettingsX1.setVisible(true);
+			secondaryAxisSettingsX1.setReversed(true);
+			secondaryAxisSettingsX1.setExtraSpaceTitle(10);
+			chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX1);
+		}
 		/*
 		 * Y
 		 */
@@ -164,12 +177,12 @@ public class ChartNMR extends LineChart {
 		chartSettings.getSecondaryAxisSettingsListY().clear();
 	}
 
-	public static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals, boolean reverse) {
+	public static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals) {
 
-		return createSignalSeries(id, signals, reverse, 0.0d, 0.0d);
+		return createSignalSeries(id, signals, 0.0d, 0.0d);
 	}
 
-	public static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals, boolean reverse, double yOffset, double xOffset) {
+	public static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals, double yOffset, double xOffset) {
 
 		int size = signals.size();
 		double[] xSeries = new double[size];

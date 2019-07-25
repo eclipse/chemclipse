@@ -12,13 +12,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
+import org.eclipse.chemclipse.nmr.model.core.AcquisitionParameter;
 import org.eclipse.chemclipse.nmr.model.core.FIDMeasurement;
+import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection.ChangeType;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -27,9 +30,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtchart.extensions.core.AbstractAxisScaleConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
-import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
@@ -64,16 +67,39 @@ public class ExtendedNMRScanUI implements Observer {
 		chartNMR.deleteSeries();
 		if(dataNMRSelection != null) {
 			IComplexSignalMeasurement<?> measurement = getCurrentMeasurement();
-			boolean rawData = measurement instanceof FIDMeasurement;
-			chartNMR.modifyChart(rawData);
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-			ILineSeriesData lineSeriesData;
-			if(measurement == null) {
-				lineSeriesData = new LineSeriesData(new SeriesData(new double[0], new double[0], SERIES_ID));
+			AcquisitionParameter acquisitionParameter;
+			boolean enableArea;
+			if(measurement instanceof SpectrumMeasurement) {
+				acquisitionParameter = ((SpectrumMeasurement)measurement).getAcquisitionParameter();
+				chartNMR.setPPMconverter(new AbstractAxisScaleConverter() {
+
+					@Override
+					public double convertToSecondaryUnit(double primaryValue) {
+
+						return acquisitionParameter.toPPM(BigDecimal.valueOf(primaryValue)).doubleValue();
+					}
+
+					@Override
+					public double convertToPrimaryUnit(double secondaryValue) {
+
+						return acquisitionParameter.toHz(BigDecimal.valueOf(secondaryValue)).doubleValue();
+					}
+				});
+				chartNMR.modifyChart(false);
+				enableArea = true;
+			} else if(measurement instanceof FIDMeasurement) {
+				acquisitionParameter = ((FIDMeasurement)measurement).getAcquisitionParameter();
+				chartNMR.setPPMconverter(null);
+				chartNMR.modifyChart(true);
+				enableArea = false;
 			} else {
-				lineSeriesData = new LineSeriesData(ChartNMR.createSignalSeries(SERIES_ID, measurement.getSignals(), !rawData));
+				chartNMR.setPPMconverter(null);
+				return;
 			}
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
+			ILineSeriesData lineSeriesData = new LineSeriesData(ChartNMR.createSignalSeries(SERIES_ID, measurement.getSignals()));
 			if(Boolean.getBoolean("editor.nmr.debug.seriesdata")) {
+				AcquisitionParameter.print(acquisitionParameter);
 				ISeriesData data = lineSeriesData.getSeriesData();
 				double[] xSeries = data.getXSeries();
 				double[] ySeries = data.getYSeries();
@@ -82,7 +108,7 @@ public class ExtendedNMRScanUI implements Observer {
 				}
 			}
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
-			lineSeriesSettings.setEnableArea(!rawData);
+			lineSeriesSettings.setEnableArea(enableArea);
 			lineSeriesSettings.setLineColor(Colors.RED);
 			lineSeriesDataList.add(lineSeriesData);
 			chartNMR.addSeriesData(lineSeriesDataList);

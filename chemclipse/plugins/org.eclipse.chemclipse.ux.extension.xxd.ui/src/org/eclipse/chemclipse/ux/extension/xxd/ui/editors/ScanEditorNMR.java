@@ -16,6 +16,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -27,6 +29,7 @@ import org.eclipse.chemclipse.nmr.model.selection.DataNMRSelection;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.filter.FilterFactory;
+import org.eclipse.chemclipse.processing.filter.Filtered;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
@@ -35,6 +38,7 @@ import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DynamicSettingsUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.NMRMeasurementsUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedNMRScanUI;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,9 +52,14 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -230,6 +239,32 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 		right.setLayout(new FillLayout());
 		sashForm.setWeights(new int[]{800, 200});
 		extendedNMRScanUI = new ExtendedNMRScanUI(left);
-		measurementsUI = new NMRMeasurementsUI(right, filterFactory);
+		Composite composite = new Composite(right, SWT.NONE);
+		composite.setLayout(new GridLayout(1, false));
+		measurementsUI = new NMRMeasurementsUI(composite, filterFactory);
+		TreeViewer treeViewer = measurementsUI.getTreeViewer();
+		treeViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		DynamicSettingsUI settingsUI = new DynamicSettingsUI(composite, new GridData(SWT.FILL, SWT.FILL, true, false));
+		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				IComplexSignalMeasurement<?> measurement = measurementsUI.getSelection();
+				if(measurement instanceof Filtered) {
+					settingsUI.setActiveContext(((Filtered<?, ?>)measurement).getFilterContext(), new Observer() {
+
+						@Override
+						public void update(Observable o, Object arg) {
+
+							System.out.println("Updated: " + arg);
+						}
+					});
+					composite.layout();
+				} else {
+					settingsUI.setActiveContext(null, null);
+				}
+			}
+		});
 	}
 }

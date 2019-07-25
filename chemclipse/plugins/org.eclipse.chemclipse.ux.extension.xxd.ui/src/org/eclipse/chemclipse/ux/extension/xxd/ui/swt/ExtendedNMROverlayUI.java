@@ -304,7 +304,7 @@ public class ExtendedNMROverlayUI implements Observer {
 
 	private ILineSeriesData getLineSeriesData(SpectrumMeasurement spectrumMeasurement, String id, String label, double yOffset) {
 
-		ILineSeriesData lineSeriesData = new LineSeriesData(ChartNMR.createSignalSeries(id, spectrumMeasurement.getSignals(), true, yOffset, 0d));
+		ILineSeriesData lineSeriesData = new LineSeriesData(ChartNMR.createSignalSeries(id, spectrumMeasurement.getSignals(), yOffset, 0d));
 		lineSeriesData.getSettings().setDescription(label);
 		return lineSeriesData;
 	}
