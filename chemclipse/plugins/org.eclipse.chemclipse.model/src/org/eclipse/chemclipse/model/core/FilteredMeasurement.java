@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
-import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.filter.FilterContext;
 import org.eclipse.chemclipse.processing.filter.Filtered;
 
 /**
@@ -37,7 +37,7 @@ import org.eclipse.chemclipse.processing.filter.Filtered;
  * @author Christoph Läubrich
  *
  */
-public class FilteredMeasurement<FilteredType extends IMeasurement> implements IMeasurement, Filtered<FilteredType> {
+public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> implements IMeasurement, Filtered<FilteredType, ConfigType> {
 
 	private static final long serialVersionUID = 6780272617615462346L;
 	private FilteredType measurement;
@@ -55,43 +55,19 @@ public class FilteredMeasurement<FilteredType extends IMeasurement> implements I
 	private String operator;
 	private Map<String, IMeasurementResult> measurementResults = new HashMap<>(1);
 	private Map<String, String> headerMap = new HashMap<>(1);
-	private Date created = new Date();
-	private transient Filter<?> filter;
+	private FilterContext<FilteredType, ConfigType> context;
 
-	public FilteredMeasurement(FilteredType measurement) {
-		if(measurement == null) {
+	public FilteredMeasurement(FilterContext<FilteredType, ConfigType> context) {
+		this.context = context;
+		if(context == null) {
 			throw new IllegalArgumentException("filtered measurement can't be null!");
 		}
-		this.measurement = measurement;
+		measurement = context.getFilteredObject();
 	}
 
-	@Override
 	public FilteredType getFilteredObject() {
 
 		return measurement;
-	}
-
-	@Override
-	public Date getFilterTime() {
-
-		return created;
-	}
-
-	/**
-	 * <b>Note:</b> This field is transient.
-	 */
-	@Override
-	public Filter<?> getFilter() {
-
-		return filter;
-	}
-
-	/**
-	 * <b>Note:</b> This field is transient.
-	 */
-	public void setFilter(Filter<?> filter) {
-
-		this.filter = filter;
 	}
 
 	@Override
@@ -110,6 +86,12 @@ public class FilteredMeasurement<FilteredType extends IMeasurement> implements I
 			return adapter.cast(measurement);
 		}
 		return measurement.getAdapter(adapter);
+	}
+
+	@Override
+	public FilterContext<FilteredType, ConfigType> getFilterContext() {
+
+		return context;
 	}
 
 	@Override

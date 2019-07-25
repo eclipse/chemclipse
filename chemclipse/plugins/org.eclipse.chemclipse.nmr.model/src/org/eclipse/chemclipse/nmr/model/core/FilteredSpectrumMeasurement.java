@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.AbstractMeasurement;
 import org.eclipse.chemclipse.model.core.FilteredMeasurement;
+import org.eclipse.chemclipse.processing.filter.FilterContext;
 
 /**
  * This class is meant as a class for Filters that wants to filter some aspects of a {@link SpectrumMeasurement}, the class simply delegates to an original {@link SpectrumMeasurement} and returns all his data to the caller.
@@ -25,13 +26,13 @@ import org.eclipse.chemclipse.model.core.FilteredMeasurement;
  * @author Christoph Läubrich
  *
  */
-public class FilteredSpectrumMeasurement extends FilteredMeasurement<SpectrumMeasurement> implements SpectrumMeasurement {
+public class FilteredSpectrumMeasurement<ConfigType> extends FilteredMeasurement<SpectrumMeasurement, ConfigType> implements SpectrumMeasurement {
 
 	private static final long serialVersionUID = -4028057722405624626L;
 	private List<? extends SpectrumSignal> signals;
 
-	public FilteredSpectrumMeasurement(SpectrumMeasurement original) {
-		super(original);
+	public FilteredSpectrumMeasurement(FilterContext<SpectrumMeasurement, ConfigType> context) {
+		super(context);
 	}
 
 	@Override

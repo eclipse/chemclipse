@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.AbstractMeasurement;
 import org.eclipse.chemclipse.model.core.FilteredMeasurement;
+import org.eclipse.chemclipse.processing.filter.FilterContext;
 
 /**
  * This class is meant as a class for Filters that wants to filter some aspects of a {@link FIDMeasurement}, the class simply delegates to an original {@link FIDMeasurement} and returns all his data to the caller.
@@ -25,13 +26,13 @@ import org.eclipse.chemclipse.model.core.FilteredMeasurement;
  * @author Christoph Läubrich
  *
  */
-public class FilteredFIDMeasurement extends FilteredMeasurement<FIDMeasurement> implements FIDMeasurement {
+public class FilteredFIDMeasurement<ConfigType> extends FilteredMeasurement<FIDMeasurement, ConfigType> implements FIDMeasurement {
 
 	private static final long serialVersionUID = -4499531764775929976L;
 	private List<? extends FIDSignal> signals;
 
-	public FilteredFIDMeasurement(FIDMeasurement measurement) {
-		super(measurement);
+	public FilteredFIDMeasurement(FilterContext<FIDMeasurement, ConfigType> context) {
+		super(context);
 	}
 
 	@Override

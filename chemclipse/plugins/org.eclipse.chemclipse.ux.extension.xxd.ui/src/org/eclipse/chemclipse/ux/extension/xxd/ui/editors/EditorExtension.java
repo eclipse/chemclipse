@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,20 +9,25 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.processing.filter;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
+
+import java.util.Observable;
+
+import org.eclipse.swt.widgets.Composite;
 
 /**
- * Object can implement this interface to promote that they are filtered
+ * An editor extension allows the dynamic creation of a component that might be embedded inside another editor or component
  * 
  * @author Christoph Läubrich
  *
- * @param <FilteredType>
  */
-public interface Filtered<FilteredType, ConfigType> {
+public interface EditorExtension {
 
 	/**
+	 * Creates a new extension
 	 * 
-	 * @return the context that was responsible for filtering this object
+	 * @param parent
+	 * @return an Observable that can be used to monitor for changes in this extension
 	 */
-	FilterContext<FilteredType, ConfigType> getFilterContext();
+	public Observable createExtension(Composite parent);
 }

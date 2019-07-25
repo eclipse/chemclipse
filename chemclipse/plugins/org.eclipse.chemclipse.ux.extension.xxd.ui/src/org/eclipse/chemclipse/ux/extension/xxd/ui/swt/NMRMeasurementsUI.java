@@ -212,7 +212,7 @@ public class NMRMeasurementsUI implements Observer {
 		}
 		Object value = node.getValue();
 		if(value instanceof IComplexSignalMeasurement<?>) {
-			if(value instanceof Filtered<?>) {
+			if(value instanceof Filtered<?, ?>) {
 				selection.removeMeasurement((IComplexSignalMeasurement<?>)value);
 			}
 		}
@@ -276,9 +276,9 @@ public class NMRMeasurementsUI implements Observer {
 		List<TreeNode> children = new ArrayList<>();
 		for(Iterator<IComplexSignalMeasurement<?>> iterator = measurements.iterator(); iterator.hasNext();) {
 			IComplexSignalMeasurement<?> measurement = iterator.next();
-			if(measurement instanceof Filtered<?>) {
-				Filtered<?> filtered = (Filtered<?>)measurement;
-				if(filtered.getFilteredObject() == parent.getValue()) {
+			if(measurement instanceof Filtered<?, ?>) {
+				Filtered<?, ?> filtered = (Filtered<?, ?>)measurement;
+				if(filtered.getFilterContext().getFilteredObject() == parent.getValue()) {
 					iterator.remove();
 					TreeNode childNode = new TreeNode(filtered);
 					childNode.setParent(parent);
