@@ -62,56 +62,74 @@ public class ExtendedNMRScanUI implements Observer {
 		scanNMR.addObserver(this);
 	}
 
-	private void updateScan() {
+	public void suspendUpdate(boolean suspend) {
 
-		chartNMR.deleteSeries();
-		if(dataNMRSelection != null) {
-			IComplexSignalMeasurement<?> measurement = getCurrentMeasurement();
-			AcquisitionParameter acquisitionParameter;
-			boolean enableArea;
-			if(measurement instanceof SpectrumMeasurement) {
-				acquisitionParameter = ((SpectrumMeasurement)measurement).getAcquisitionParameter();
-				chartNMR.setPPMconverter(new AbstractAxisScaleConverter() {
+		chartNMR.getBaseChart().suspendUpdate(suspend);
+	}
 
-					@Override
-					public double convertToSecondaryUnit(double primaryValue) {
+	public void updateScan() {
 
-						return acquisitionParameter.toPPM(BigDecimal.valueOf(primaryValue)).doubleValue();
-					}
+		boolean wasSuspend = chartNMR.getBaseChart().isUpdateSuspended();
+		if(!wasSuspend) {
+			suspendUpdate(true);
+		}
+		try {
+			chartNMR.deleteSeries();
+			if(dataNMRSelection != null) {
+				IComplexSignalMeasurement<?> measurement = getCurrentMeasurement();
+				AcquisitionParameter acquisitionParameter;
+				boolean enableArea;
+				if(measurement instanceof SpectrumMeasurement) {
+					acquisitionParameter = ((SpectrumMeasurement)measurement).getAcquisitionParameter();
+					chartNMR.setPPMconverter(new AbstractAxisScaleConverter() {
 
-					@Override
-					public double convertToPrimaryUnit(double secondaryValue) {
+						@Override
+						public double convertToSecondaryUnit(double primaryValue) {
 
-						return acquisitionParameter.toHz(BigDecimal.valueOf(secondaryValue)).doubleValue();
-					}
-				});
-				chartNMR.modifyChart(false);
-				enableArea = true;
-			} else if(measurement instanceof FIDMeasurement) {
-				acquisitionParameter = ((FIDMeasurement)measurement).getAcquisitionParameter();
-				chartNMR.setPPMconverter(null);
-				chartNMR.modifyChart(true);
-				enableArea = false;
-			} else {
-				chartNMR.setPPMconverter(null);
-				return;
-			}
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-			ILineSeriesData lineSeriesData = new LineSeriesData(ChartNMR.createSignalSeries(SERIES_ID, measurement.getSignals()));
-			if(Boolean.getBoolean("editor.nmr.debug.seriesdata")) {
-				AcquisitionParameter.print(acquisitionParameter);
-				ISeriesData data = lineSeriesData.getSeriesData();
-				double[] xSeries = data.getXSeries();
-				double[] ySeries = data.getYSeries();
-				for(int i = 0; i < xSeries.length; i++) {
-					System.out.println("[" + i + "] time = " + xSeries[i] + ", signal = " + ySeries[i]);
+							return acquisitionParameter.toPPM(BigDecimal.valueOf(primaryValue)).doubleValue();
+						}
+
+						@Override
+						public double convertToPrimaryUnit(double secondaryValue) {
+
+							return acquisitionParameter.toHz(BigDecimal.valueOf(secondaryValue)).doubleValue();
+						}
+					});
+					chartNMR.modifyChart(false);
+					enableArea = true;
+				} else if(measurement instanceof FIDMeasurement) {
+					acquisitionParameter = ((FIDMeasurement)measurement).getAcquisitionParameter();
+					chartNMR.setPPMconverter(null);
+					chartNMR.modifyChart(true);
+					enableArea = false;
+				} else {
+					chartNMR.setPPMconverter(null);
+					return;
 				}
+				List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
+				ILineSeriesData lineSeriesData = new LineSeriesData(ChartNMR.createSignalSeries(SERIES_ID, measurement.getSignals()));
+				if(Boolean.getBoolean("editor.nmr.debug.seriesdata")) {
+					System.out.println("============ " + measurement.getDataName() + " ==================");
+					AcquisitionParameter.print(acquisitionParameter);
+					ISeriesData data = lineSeriesData.getSeriesData();
+					double[] xSeries = data.getXSeries();
+					double[] ySeries = data.getYSeries();
+					for(int i = 0; i < xSeries.length; i++) {
+						if(i < 100 || i > xSeries.length - 100) {
+							System.out.println("[" + i + "] time = " + xSeries[i] + ", signal = " + ySeries[i]);
+						}
+					}
+				}
+				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+				lineSeriesSettings.setEnableArea(enableArea);
+				lineSeriesSettings.setLineColor(Colors.RED);
+				lineSeriesDataList.add(lineSeriesData);
+				chartNMR.addSeriesData(lineSeriesDataList);
 			}
-			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
-			lineSeriesSettings.setEnableArea(enableArea);
-			lineSeriesSettings.setLineColor(Colors.RED);
-			lineSeriesDataList.add(lineSeriesData);
-			chartNMR.addSeriesData(lineSeriesDataList);
+		} finally {
+			if(!wasSuspend) {
+				suspendUpdate(false);
+			}
 		}
 	}
 

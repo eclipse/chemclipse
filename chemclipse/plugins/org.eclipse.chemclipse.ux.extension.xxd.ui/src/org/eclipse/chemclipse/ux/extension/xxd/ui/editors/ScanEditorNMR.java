@@ -14,20 +14,35 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
+import org.eclipse.chemclipse.model.core.IMeasurement;
+import org.eclipse.chemclipse.model.filter.IMeasurementFilter;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.nmr.model.core.FIDMeasurement;
+import org.eclipse.chemclipse.nmr.model.core.FilteredFIDMeasurement;
+import org.eclipse.chemclipse.nmr.model.core.FilteredSpectrumMeasurement;
+import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.nmr.model.selection.DataNMRSelection;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
+import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.filter.FilterContext;
 import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.processing.filter.Filtered;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -57,6 +72,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -70,6 +87,7 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR";
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/scan-nmr.gif";
 	public static final String TOOLTIP = "NMR Editor";
+	private ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(2));
 	//
 	private MPart part;
 	private MDirtyable dirtyable;
@@ -86,6 +104,14 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 	@Inject
 	public ScanEditorNMR(Composite parent, IEventBroker eventBroker, MPart part, MDirtyable dirtyable, Shell shell, FilterFactory filterFactory) {
 		super(part);
+		parent.addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+
+				executorService.shutdownNow();
+			}
+		});
 		//
 		this.part = part;
 		this.dirtyable = dirtyable;
@@ -247,24 +273,92 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 		DynamicSettingsUI settingsUI = new DynamicSettingsUI(composite, new GridData(SWT.FILL, SWT.FILL, true, false));
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
+			@SuppressWarnings({"rawtypes", "unchecked"})
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
+				System.out.println("ScanEditorNMR.createScanPage(...).new ISelectionChangedListener() {...}.selectionChanged()");
 				IComplexSignalMeasurement<?> measurement = measurementsUI.getSelection();
 				if(measurement instanceof Filtered) {
-					settingsUI.setActiveContext(((Filtered<?, ?>)measurement).getFilterContext(), new Observer() {
-
-						@Override
-						public void update(Observable o, Object arg) {
-
-							System.out.println("Updated: " + arg);
-						}
-					});
+					FilterContext<?, ?> context = ((Filtered<?, ?>)measurement).getFilterContext();
+					settingsUI.setActiveContext(context, new UpdatingObserver(context, measurement));
 					composite.layout();
 				} else {
 					settingsUI.setActiveContext(null, null);
 				}
 			}
 		});
+	}
+
+	private final class UpdatingObserver<FilteredType, ConfigType> implements Observer {
+
+		private FilterContext<FilteredType, ConfigType> context;
+		private IComplexSignalMeasurement<?> currentMeasurement;
+
+		public UpdatingObserver(FilterContext<FilteredType, ConfigType> context, IComplexSignalMeasurement<?> currentMeasurement) {
+			this.context = context;
+			this.currentMeasurement = currentMeasurement;
+		}
+
+		@Override
+		public void update(Observable o, Object arg) {
+
+			if(context == null) {
+				return;
+			}
+			Filter<ConfigType> filter = context.getFilter();
+			if(filter instanceof IMeasurementFilter<?>) {
+				IMeasurementFilter<ConfigType> measurementFilter = (IMeasurementFilter<ConfigType>)filter;
+				try {
+					executorService.submit(new Runnable() {
+
+						@Override
+						public void run() {
+
+							try {
+								DefaultProcessingResult<Object> result = new DefaultProcessingResult<>();
+								ConfigType config = context.getFilterConfig();
+								System.out.println("Filter with config " + config);
+								Collection<? extends IMeasurement> filterIMeasurements = measurementFilter.filterIMeasurements(Collections.singleton(currentMeasurement), config, Function.identity(), result, null);
+								if(!filterIMeasurements.isEmpty() && !result.hasErrorMessages()) {
+									for(IMeasurement measurement : filterIMeasurements) {
+										if(measurement instanceof IComplexSignalMeasurement<?>) {
+											IComplexSignalMeasurement<?> signalMeasurement = (IComplexSignalMeasurement<?>)measurement;
+											if(measurement instanceof Filtered<?, ?>) {
+												Filtered<?, ?> filtered = (Filtered<?, ?>)measurement;
+												if(filtered.getFilterContext().getFilteredObject() == currentMeasurement) {
+													copySignals(signalMeasurement, currentMeasurement);
+												}
+											}
+										}
+									}
+									Display.getDefault().asyncExec(ScanEditorNMR.this.extendedNMRScanUI::updateScan);
+								} else {
+									// TODO show an error decoration
+								}
+							} catch(Exception e) {
+								e.printStackTrace();
+							}
+						}
+					});
+				} catch(RejectedExecutionException e) {
+					// then we already have pending updates
+				}
+			}
+		}
+
+		@SuppressWarnings({"rawtypes", "unchecked"})
+		private void copySignals(IComplexSignalMeasurement<?> from, IComplexSignalMeasurement<?> to) {
+
+			if(to instanceof FilteredFIDMeasurement<?>) {
+				if(from instanceof FIDMeasurement) {
+					((FilteredFIDMeasurement)to).setSignals(from.getSignals());
+				}
+			} else if(to instanceof FilteredSpectrumMeasurement<?>) {
+				if(from instanceof SpectrumMeasurement) {
+					((FilteredSpectrumMeasurement)to).setSignals(from.getSignals());
+				}
+			}
+		}
 	}
 }

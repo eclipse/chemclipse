@@ -59,4 +59,9 @@ public interface IDataNMRSelection {
 	void addObserver(Observer observer);
 
 	void removeObserver(Observer observer);
+
+	default void replace(IComplexSignalMeasurement<?> measurement, IComplexSignalMeasurement<?> replacement) {
+
+		throw new UnsupportedOperationException();
+	}
 }

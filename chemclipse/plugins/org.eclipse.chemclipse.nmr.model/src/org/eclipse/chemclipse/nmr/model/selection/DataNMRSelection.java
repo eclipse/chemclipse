@@ -46,6 +46,18 @@ public class DataNMRSelection extends Observable implements IDataNMRSelection {
 	}
 
 	@Override
+	public void replace(IComplexSignalMeasurement<?> measurement, IComplexSignalMeasurement<?> replacement) {
+
+		int indexOf = measurements.indexOf(measurement);
+		if(indexOf > 0) {
+			measurements.set(indexOf, replacement);
+			if(this.measurement == measurement) {
+				setActiveMeasurement(replacement);
+			}
+		}
+	}
+
+	@Override
 	public synchronized void addMeasurement(IComplexSignalMeasurement<?> measurement) {
 
 		if(!measurements.contains(measurement)) {
