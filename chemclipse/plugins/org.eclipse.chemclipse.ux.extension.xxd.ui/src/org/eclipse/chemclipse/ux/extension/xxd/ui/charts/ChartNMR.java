@@ -36,6 +36,7 @@ import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
 public class ChartNMR extends LineChart {
 
+	private static final boolean PROCESSED_AXIS_REVERSED = true;
 	private IAxisScaleConverter ppmconverter;
 
 	public ChartNMR(Composite parent, int style) {
@@ -137,8 +138,15 @@ public class ChartNMR extends LineChart {
 		primaryAxisSettingsX.setTitle("Frequency [Hz]");
 		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		primaryAxisSettingsX.setVisible(ppmconverter == null);
-		primaryAxisSettingsX.setReversed(true);
+		primaryAxisSettingsX.setVisible(true);
+		primaryAxisSettingsX.setReversed(PROCESSED_AXIS_REVERSED);
+		if(ppmconverter == null) {
+			primaryAxisSettingsX.setPosition(Position.Primary);
+			primaryAxisSettingsX.setGridLineStyle(LineStyle.DASH);
+		} else {
+			primaryAxisSettingsX.setPosition(Position.Secondary);
+			primaryAxisSettingsX.setGridLineStyle(LineStyle.NONE);
+		}
 		primaryAxisSettingsX.setExtraSpaceTitle(10);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
@@ -157,7 +165,7 @@ public class ChartNMR extends LineChart {
 			secondaryAxisSettingsX1.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
 			secondaryAxisSettingsX1.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 			secondaryAxisSettingsX1.setVisible(true);
-			secondaryAxisSettingsX1.setReversed(true);
+			secondaryAxisSettingsX1.setReversed(PROCESSED_AXIS_REVERSED);
 			secondaryAxisSettingsX1.setExtraSpaceTitle(10);
 			chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX1);
 		}
