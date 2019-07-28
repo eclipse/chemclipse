@@ -44,7 +44,7 @@ public class ExtendedNMRScanUI implements Observer {
 	private IDataNMRSelection dataNMRSelection;
 
 	public ExtendedNMRScanUI(Composite parent) {
-		chartNMR = new ChartNMR(parent, SWT.NONE);
+		chartNMR = new ChartNMR(parent, SWT.NONE, () -> dataNMRSelection.getMeasurement());
 		IChartSettings chartSettings = chartNMR.getChartSettings();
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableRangeSelector(false);

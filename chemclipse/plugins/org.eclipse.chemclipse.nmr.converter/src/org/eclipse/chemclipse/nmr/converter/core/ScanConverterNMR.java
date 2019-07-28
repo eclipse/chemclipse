@@ -13,7 +13,6 @@
 package org.eclipse.chemclipse.nmr.converter.core;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -98,7 +97,7 @@ public class ScanConverterNMR {
 		return getProcessingError(file);
 	}
 
-	public static IProcessingInfo<?> convert(final File file, final IComplexSignalMeasurement<?> measurement, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo<?> export(final File file, final IComplexSignalMeasurement<?> measurement, final String converterId, final IProgressMonitor monitor) {
 
 		try {
 			IScanExportConverter exportConverter = getScanExportConverter(converterId);
@@ -108,9 +107,7 @@ public class ScanConverterNMR {
 					return validate;
 				}
 				ProcessingInfo<Void> result = new ProcessingInfo<>();
-				try (FileOutputStream stream = new FileOutputStream(file)) {
-					exportConverter.convert(stream, measurement, result, monitor);
-				}
+				exportConverter.convert(file, measurement, result, monitor);
 				return result;
 			}
 			return getProcessingError(file);

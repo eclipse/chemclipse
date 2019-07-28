@@ -12,15 +12,30 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
+import java.util.function.Supplier;
 
+import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.converter.scan.IScanConverterSupport;
+import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.model.core.ISignal;
+import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.axisconverter.PassThroughConverter;
@@ -30,9 +45,11 @@ import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
+import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
+import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
 public class ChartNMR extends LineChart {
 
@@ -40,8 +57,62 @@ public class ChartNMR extends LineChart {
 	private IAxisScaleConverter ppmconverter;
 
 	public ChartNMR(Composite parent, int style) {
+		this(parent, style, null);
+	}
+
+	public ChartNMR(Composite parent, int style, Supplier<IComplexSignalMeasurement<?>> measurementSupplier) {
 		super(parent, style);
 		initialize();
+		if(measurementSupplier != null) {
+			IChartSettings settings = getChartSettings();
+			IScanConverterSupport converterSupport = ScanConverterNMR.getScanConverterSupport();
+			List<ISupplier> exportSupplier = converterSupport.getExportSupplier();
+			for(ISupplier supplier : exportSupplier) {
+				settings.addMenuEntry(new IChartMenuEntry() {
+
+					@Override
+					public String getName() {
+
+						return supplier.getFilterName();
+					}
+
+					@Override
+					public String getCategory() {
+
+						return "Export";
+					}
+
+					@Override
+					public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+						FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+						fileDialog.setText("NMR Export");
+						fileDialog.setFilterExtensions(new String[]{"*" + supplier.getFileExtension()});
+						fileDialog.setFilterNames(new String[]{supplier.getFilterName()});
+						String pathname = fileDialog.open();
+						if(pathname != null) {
+							File file = new File(pathname);
+							ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+							try {
+								dialog.run(true, true, new IRunnableWithProgress() {
+
+									@Override
+									public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+										IProcessingInfo<?> export = ScanConverterNMR.export(file, measurementSupplier.get(), supplier.getId(), monitor);
+										ProcessingInfoViewSupport.updateProcessingInfo(export);
+									}
+								});
+							} catch(InvocationTargetException e) {
+								ProcessingInfoViewSupport.updateProcessingInfoError("NMR Export", "Export failed", e.getCause());
+							} catch(InterruptedException e) {
+								// nothing to do
+							}
+						}
+					}
+				});
+			}
+		}
 	}
 
 	public void modifyChart(boolean rawData) {

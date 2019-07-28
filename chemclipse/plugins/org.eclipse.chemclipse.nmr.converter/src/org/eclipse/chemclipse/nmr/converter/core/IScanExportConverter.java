@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.converter.core;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -22,6 +24,13 @@ import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IScanExportConverter extends IExportConverter {
+
+	default void convert(File file, IComplexSignalMeasurement<?> measurement, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IOException {
+
+		try (FileOutputStream fout = new FileOutputStream(file)) {
+			convert(fout, measurement, messageConsumer, monitor);
+		}
+	}
 
 	/**
 	 * Converts the given {@link IComplexSignalMeasurement} and writes them to the {@link OutputStream}
