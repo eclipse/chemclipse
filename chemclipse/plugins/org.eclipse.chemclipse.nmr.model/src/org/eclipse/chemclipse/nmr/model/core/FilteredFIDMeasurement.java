@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.AbstractMeasurement;
@@ -29,7 +33,7 @@ import org.eclipse.chemclipse.processing.filter.FilterContext;
 public class FilteredFIDMeasurement<ConfigType> extends FilteredMeasurement<FIDMeasurement, ConfigType> implements FIDMeasurement {
 
 	private static final long serialVersionUID = -4499531764775929976L;
-	private List<? extends FIDSignal> signals;
+	private transient List<? extends FIDSignal> signals;
 
 	public FilteredFIDMeasurement(FilterContext<FIDMeasurement, ConfigType> context) {
 		super(context);
@@ -44,7 +48,7 @@ public class FilteredFIDMeasurement<ConfigType> extends FilteredMeasurement<FIDM
 	@Override
 	public final AcquisitionParameter getAcquisitionParameter() {
 
-		// Aqusition parameter can't change!
+		// Acquisition parameter can't change!
 		return getFilteredObject().getAcquisitionParameter();
 	}
 
@@ -57,8 +61,66 @@ public class FilteredFIDMeasurement<ConfigType> extends FilteredMeasurement<FIDM
 		return getFilteredObject().getSignals();
 	}
 
-	public void setSignals(List<? extends FIDSignal> signals) {
+	public final void setSignals(List<? extends FIDSignal> signals) {
 
 		this.signals = signals;
+	}
+
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+
+		out.defaultWriteObject();
+		if(signals == null) {
+			out.writeObject(null);
+		} else {
+			ArrayList<FIDSignal> serList = new ArrayList<>(signals.size());
+			for(FIDSignal fidSignal : signals) {
+				if(fidSignal instanceof Serializable) {
+					// we can add it as is
+					serList.add(fidSignal);
+				} else {
+					serList.add(new SerializableFIDSignal(fidSignal));
+				}
+			}
+			out.writeObject(serList);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+		in.defaultReadObject();
+		signals = (List<? extends FIDSignal>)in.readObject();
+	}
+
+	private static final class SerializableFIDSignal implements FIDSignal, Serializable {
+
+		private static final long serialVersionUID = -2997689760733045361L;
+		private BigDecimal signalTime;
+		private Number realComponent;
+		private Number imaginaryComponent;
+
+		public SerializableFIDSignal(FIDSignal tocopy) {
+			signalTime = tocopy.getSignalTime();
+			realComponent = tocopy.getRealComponent();
+			imaginaryComponent = tocopy.getImaginaryComponent();
+		}
+
+		@Override
+		public BigDecimal getSignalTime() {
+
+			return signalTime;
+		}
+
+		@Override
+		public Number getRealComponent() {
+
+			return realComponent;
+		}
+
+		@Override
+		public Number getImaginaryComponent() {
+
+			return imaginaryComponent;
+		}
 	}
 }
