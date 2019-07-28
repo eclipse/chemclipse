@@ -12,16 +12,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
+import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.filter.FilterContext;
+import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.processing.filter.Filtered;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 /**
  * This class is meant as a class for Filters that wants to filter some aspects
@@ -39,7 +47,7 @@ import org.eclipse.chemclipse.processing.filter.Filtered;
  */
 public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> implements IMeasurement, Filtered<FilteredType, ConfigType> {
 
-	private static final long serialVersionUID = 6780272617615462346L;
+	private static final long serialVersionUID = 2L;
 	private FilteredType measurement;
 	private String dataName;
 	private String detailedInfo;
@@ -55,7 +63,7 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	private String operator;
 	private Map<String, IMeasurementResult> measurementResults = new HashMap<>(1);
 	private Map<String, String> headerMap = new HashMap<>(1);
-	private FilterContext<FilteredType, ConfigType> context;
+	private transient FilterContext<FilteredType, ConfigType> context;
 
 	public FilteredMeasurement(FilterContext<FilteredType, ConfigType> context) {
 		this.context = context;
@@ -359,5 +367,85 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	public void setDataName(String dataName) {
 
 		this.dataName = dataName;
+	}
+
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+
+		out.defaultWriteObject();
+		out.writeObject(context.getFilterTime());
+		out.writeObject(context.getFilteredObject());
+		ConfigType filterConfig = context.getFilterConfig();
+		if(filterConfig instanceof Serializable) {
+			out.writeObject(filterConfig);
+		} else {
+			out.writeObject(null);
+		}
+		Filter<ConfigType> filter = context.getFilter();
+		if(filter == null) {
+			out.writeObject(null);
+		} else {
+			out.writeObject(filter.getID());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+		in.defaultReadObject();
+		Date filterTime = (Date)in.readObject();
+		FilteredType filteredObject = (FilteredType)in.readObject();
+		ConfigType filterConfig = (ConfigType)in.readObject();
+		String filterID = (String)in.readObject();
+		this.context = new FilterContext<FilteredType, ConfigType>() {
+
+			private Filter<ConfigType> filter;
+
+			@Override
+			public FilteredType getFilteredObject() {
+
+				return filteredObject;
+			}
+
+			@Override
+			public Date getFilterTime() {
+
+				return filterTime;
+			}
+
+			@Override
+			public Filter<ConfigType> getFilter() {
+
+				if(filter == null && filterID != null) {
+					BundleContext bundleContext = FrameworkUtil.getBundle(getClass()).getBundleContext();
+					if(bundleContext != null) {
+						ServiceReference<FilterFactory> reference = bundleContext.getServiceReference(FilterFactory.class);
+						if(reference != null) {
+							FilterFactory service = bundleContext.getService(reference);
+							if(service != null) {
+								Collection<Filter<ConfigType>> filters = service.getFilters(FilterFactory.genericClass(Filter.class), new BiFunction<Filter<ConfigType>, Map<String, ?>, Boolean>() {
+
+									@Override
+									public Boolean apply(Filter<ConfigType> filter, Map<String, ?> properties) {
+
+										return filter.getID().equals(filterID);
+									}
+								});
+								for(Filter<ConfigType> filter : filters) {
+									this.filter = filter;
+								}
+								bundleContext.ungetService(reference);
+							}
+						}
+					}
+				}
+				return filter;
+			}
+
+			@Override
+			public ConfigType getFilterConfig() {
+
+				return filterConfig;
+			}
+		};
 	}
 }
