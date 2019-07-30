@@ -11,22 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings.InputDataType;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class PeakFilesInputPageWizard extends DataInputPageWizard {
-
-	private Shell shell = Display.getDefault().getActiveShell();
 
 	public PeakFilesInputPageWizard(String pageName) {
 		super(pageName);
@@ -37,28 +39,20 @@ public class PeakFilesInputPageWizard extends DataInputPageWizard {
 	@Override
 	protected void addFiles() {
 
-		InputWizardSettings inputWizardSettings = new InputWizardSettings(InputDataType.MSD_PEAKS);
+		InputWizardSettings inputWizardSettings = new InputWizardSettings(new ScopedPreferenceStore(InstanceScope.INSTANCE, ChromatogramMSDFilesPageWizard.class.getName()), Collections.singleton(new SupplierEditorSupport(DataType.MSD)));
 		inputWizardSettings.setTitle("Peak Input Files");
 		inputWizardSettings.setDescription("This wizard lets you select several peak input files.");
-		inputWizardSettings.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.N_INPUT_FILE);
-		//
-		InputEntriesWizard inputWizard = new InputEntriesWizard(inputWizardSettings);
-		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(shell, inputWizard);
-		wizardDialog.create();
-		//
-		if(wizardDialog.open() == Window.OK) {
-			List<String> selectedPeakFiles = inputWizard.getChromatogramWizardElements().getSelectedChromatograms();
-			List<IDataInputEntry> dataInputEntries = new ArrayList<>();
-			for(String selectedPeakFile : selectedPeakFiles) {
-				IDataInputEntry dataInputEntry = new DataInputEntry(selectedPeakFile);
-				String groupName = getGroupName().trim();
-				if(!groupName.isEmpty()) {
-					dataInputEntry.setGroupName(groupName);
-				}
-				dataInputEntries.add(dataInputEntry);
+		Map<File, Collection<ISupplierFileIdentifier>> map = InputEntriesWizard.openWizard(getShell(), inputWizardSettings);
+		List<IDataInputEntry> dataInputEntries = new ArrayList<>();
+		for(File file : map.keySet()) {
+			IDataInputEntry dataInputEntry = new DataInputEntry(file.getAbsolutePath());
+			String groupName = getGroupName().trim();
+			if(!groupName.isEmpty()) {
+				dataInputEntry.setGroupName(groupName);
 			}
-			addInputFiles(dataInputEntries);
+			dataInputEntries.add(dataInputEntry);
 		}
+		addInputFiles(dataInputEntries);
 		update();
 	}
 }
