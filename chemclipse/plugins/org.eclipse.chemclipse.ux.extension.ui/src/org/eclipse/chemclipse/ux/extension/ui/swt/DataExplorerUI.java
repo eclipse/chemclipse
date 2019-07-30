@@ -31,6 +31,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -45,10 +46,12 @@ import org.eclipse.swt.widgets.Menu;
 public class DataExplorerUI extends MultiDataExplorerTreeUI {
 
 	private IEventBroker eventBroker;
+	private IPreferenceStore preferenceStore;
 
-	public DataExplorerUI(Composite parent, IEventBroker eventBroker) {
-		super(parent, DataExplorerTreeRoot.DRIVES, DataExplorerTreeRoot.HOME, DataExplorerTreeRoot.USER_LOCATION);
+	public DataExplorerUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
+		super(parent, preferenceStore);
 		this.eventBroker = eventBroker;
+		this.preferenceStore = preferenceStore;
 	}
 
 	@Override
@@ -236,7 +239,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 	private boolean openEditor(File file, DataExplorerTreeUI treeUI) {
 
 		DataExplorerContentProvider contentProvider = (DataExplorerContentProvider)treeUI.getTreeViewer().getContentProvider();
-		treeUI.saveLastDirectoryPath();
+		treeUI.saveLastDirectoryPath(preferenceStore);
 		boolean success = false;
 		if(file != null) {
 			boolean openFirstDataMatchOnly = PreferenceSupplier.isOpenFirstDataMatchOnly();

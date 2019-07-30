@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -25,6 +26,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class RawFileSelectionWizardPage extends WizardPage {
 
@@ -51,7 +53,7 @@ public class RawFileSelectionWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		DataExplorerTreeUI treeUI = new DataExplorerTreeUI(parent, DataExplorerTreeRoot.DRIVES, Collections.singleton(new SupplierFileIdentifier(dataType)));
-		treeUI.expandLastDirectoryPath();
+		treeUI.expandLastDirectoryPath(new ScopedPreferenceStore(InstanceScope.INSTANCE, RawFileSelectionWizardPage.class.getName()));
 		treeViewer = treeUI.getTreeViewer();
 		setControl(composite);
 	}

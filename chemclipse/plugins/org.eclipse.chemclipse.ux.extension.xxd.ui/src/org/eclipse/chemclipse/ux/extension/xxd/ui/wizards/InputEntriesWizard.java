@@ -11,22 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
-import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
+import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Shell;
 
 public class InputEntriesWizard extends Wizard {
-
-	public enum TreeSelection {
-		DRIVES, //
-		HOME, //
-		USER_LOCATION, //
-		NONE;
-	}
 
 	private InputWizardSettings inputWizardSettings;
 	private InputEntriesWizardPage inputEntriesPage;
 
-	public InputEntriesWizard(InputWizardSettings inputWizardSettings) {
+	private InputEntriesWizard(InputWizardSettings inputWizardSettings) {
 		setNeedsProgressMonitor(true);
 		setWindowTitle("Select data");
 		this.inputWizardSettings = inputWizardSettings;
@@ -39,15 +39,28 @@ public class InputEntriesWizard extends Wizard {
 		addPage(inputEntriesPage);
 	}
 
-	public IChromatogramWizardElements getChromatogramWizardElements() {
-
-		return inputEntriesPage.getChromatogramWizardElements();
-	}
-
 	@Override
 	public boolean performFinish() {
 
-		// FIXME inputWizardSettings.saveSelectedPath(inputEntriesPage.getTreeSelection());
 		return true;
+	}
+
+	/**
+	 * 
+	 * @param shell
+	 * @param inputWizardSettings
+	 * @return a mapping between selected files and responsible {@link ISupplierFileIdentifier} or an empty map if user canceled the wizard
+	 */
+	public static Map<File, Collection<ISupplierFileIdentifier>> openWizard(Shell shell, InputWizardSettings inputWizardSettings) {
+
+		InputEntriesWizard inputWizard = new InputEntriesWizard(inputWizardSettings);
+		WizardDialog wizardDialog = new WizardDialog(shell, inputWizard);
+		wizardDialog.setPageSize(InputWizardSettings.DEFAULT_WIDTH, InputWizardSettings.DEFAULT_HEIGHT);
+		wizardDialog.create();
+		if(wizardDialog.open() == WizardDialog.OK) {
+			return inputWizard.inputEntriesPage.getSelectedItems();
+		} else {
+			return Collections.emptyMap();
+		}
 	}
 }

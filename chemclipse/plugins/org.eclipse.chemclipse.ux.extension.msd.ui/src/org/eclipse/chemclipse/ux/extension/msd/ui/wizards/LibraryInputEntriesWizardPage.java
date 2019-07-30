@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.wizards;
 
 import java.util.Collections;
 
+import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
@@ -50,7 +51,7 @@ public class LibraryInputEntriesWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		DataExplorerTreeUI treeUI = new DataExplorerTreeUI(parent, DataExplorerTreeRoot.DRIVES, Collections.singleton(DatabaseSupport.getInstanceEditorSupport()));
-		treeUI.expandLastDirectoryPath();
+		treeUI.expandLastDirectoryPath(Activator.getDefault().getPreferenceStore());
 		libraryViewer = treeUI.getTreeViewer();
 		setControl(composite);
 	}

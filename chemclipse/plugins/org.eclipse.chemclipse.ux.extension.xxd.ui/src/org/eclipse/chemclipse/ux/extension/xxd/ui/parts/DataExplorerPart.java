@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class DataExplorerPart {
 
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private DataExplorerUI dataExplorerUI;
 	@Inject
 	private IEventBroker broker;
@@ -49,13 +50,12 @@ public class DataExplorerPart {
 
 	@Inject
 	public DataExplorerPart(Composite parent) {
-		dataExplorerUI = new DataExplorerUI(parent, broker);
+		dataExplorerUI = new DataExplorerUI(parent, broker, preferenceStore);
 		setSupplierFileEditorSupport();
 	}
 
 	public void setSupplierFileEditorSupport() {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		List<ISupplierFileEditorSupport> editorSupportList = new ArrayList<ISupplierFileEditorSupport>();
 		/*
 		 * MSD

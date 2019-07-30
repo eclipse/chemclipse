@@ -16,10 +16,12 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.chemclipse.support.settings.UserManagement;
+import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -99,30 +101,15 @@ public class DataExplorerTreeUI {
 		return userLocation;
 	}
 
-	public void expandLastDirectoryPath() {
+	public void expandLastDirectoryPath(IPreferenceStore preferenceStore) {
 
-		String directoryPath;
-		switch(root) {
-			case DRIVES:
-				directoryPath = PreferenceSupplier.getSelectedDrivePath();
-				break;
-			case HOME:
-				directoryPath = PreferenceSupplier.getSelectedHomePath();
-				break;
-			case USER_LOCATION:
-				directoryPath = PreferenceSupplier.getSelectedUserLocationPath();
-				break;
-			case NONE:
-			default:
-				return;
-		}
-		File lastFile = new File(directoryPath);
+		File lastFile = new File(preferenceStore.getString(getSelectedPathPreference(root)));
 		if(lastFile.exists()) {
 			treeViewer.expandToLevel(lastFile, 1);
 		}
 	}
 
-	public void saveLastDirectoryPath() {
+	public void saveLastDirectoryPath(IPreferenceStore preferenceStore) {
 
 		File file = (File)treeViewer.getStructuredSelection().getFirstElement();
 		if(file != null) {
@@ -145,21 +132,23 @@ public class DataExplorerTreeUI {
 				directoryPath = file;
 			}
 			if(directoryPath != null) {
-				switch(root) {
-					case DRIVES:
-						PreferenceSupplier.setSelectedDrivePath(directoryPath.getAbsolutePath());
-						break;
-					case HOME:
-						PreferenceSupplier.setSelectedHomePath(directoryPath.getAbsolutePath());
-						break;
-					case USER_LOCATION:
-						PreferenceSupplier.setSelectedUserLocationPath(directoryPath.getAbsolutePath());
-						break;
-					case NONE:
-					default:
-						return;
-				}
+				preferenceStore.setValue(getSelectedPathPreference(root), directoryPath.getAbsolutePath());
 			}
+		}
+	}
+
+	private static final String getSelectedPathPreference(DataExplorerTreeRoot root) {
+
+		switch(root) {
+			case DRIVES:
+				return PreferenceConstants.P_SELECTED_DRIVE_PATH;
+			case HOME:
+				return PreferenceConstants.P_SELECTED_HOME_PATH;
+			case USER_LOCATION:
+				return PreferenceConstants.P_SELECTED_USER_LOCATION_PATH;
+			case NONE:
+			default:
+				return "selected" + root.name() + "path";
 		}
 	}
 

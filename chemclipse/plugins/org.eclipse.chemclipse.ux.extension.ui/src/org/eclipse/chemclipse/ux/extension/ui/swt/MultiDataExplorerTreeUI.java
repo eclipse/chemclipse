@@ -16,6 +16,7 @@ import java.util.Collection;
 
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -34,10 +35,20 @@ import org.eclipse.swt.widgets.TabItem;
 
 public class MultiDataExplorerTreeUI {
 
+	private static final DataExplorerTreeRoot[] DEFAULT_ROOTS = {DataExplorerTreeRoot.DRIVES, DataExplorerTreeRoot.HOME, DataExplorerTreeRoot.USER_LOCATION};
+	private static final String DEFAULT_KEY = "MultiDataExplorerTreeUI.selectedTab";
 	private TabFolder tabFolder;
 	private DataExplorerTreeUI[] treeUIs;
+	private IPreferenceStore preferenceStore;
+	private String preferenceKey;
 
-	public MultiDataExplorerTreeUI(Composite parent, DataExplorerTreeRoot... roots) {
+	public MultiDataExplorerTreeUI(Composite parent, IPreferenceStore preferenceStore) {
+		this(parent, DEFAULT_ROOTS, preferenceStore, DEFAULT_KEY);
+	}
+
+	public MultiDataExplorerTreeUI(Composite parent, DataExplorerTreeRoot[] roots, IPreferenceStore preferenceStore, String preferenceKey) {
+		this.preferenceStore = preferenceStore;
+		this.preferenceKey = preferenceKey;
 		tabFolder = new TabFolder(parent, SWT.NONE);
 		treeUIs = new DataExplorerTreeUI[roots.length];
 		for(int i = 0; i < roots.length; i++) {
@@ -55,8 +66,9 @@ public class MultiDataExplorerTreeUI {
 	public void expandLastDirectoryPath() {
 
 		for(DataExplorerTreeUI ui : treeUIs) {
-			ui.expandLastDirectoryPath();
+			ui.expandLastDirectoryPath(preferenceStore);
 		}
+		tabFolder.setSelection(preferenceStore.getInt(preferenceKey));
 	}
 
 	private DataExplorerTreeUI createTab(TabFolder tabFolder, DataExplorerTreeRoot root) {
@@ -104,6 +116,7 @@ public class MultiDataExplorerTreeUI {
 				for(TabItem item : selection) {
 					if(item == tab) {
 						selectionChangedListener.selectionChanged(null);
+						preferenceStore.setValue(preferenceKey, tabFolder.indexOf(tab));
 					}
 				}
 			}

@@ -14,13 +14,15 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
 import java.io.File;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.ux.extension.ui.swt.MultiDataExplorerTreeUI;
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -28,6 +30,7 @@ public class InputEntriesWizardPage extends WizardPage {
 
 	private InputWizardSettings inputWizardSettings;
 	private DataExplorerTreeRoot treeSelection = DataExplorerTreeRoot.NONE;
+	private Map<File, Collection<ISupplierFileIdentifier>> selectedItems = new HashMap<>();
 
 	public InputEntriesWizardPage(InputWizardSettings inputWizardSettings) {
 		//
@@ -41,8 +44,7 @@ public class InputEntriesWizardPage extends WizardPage {
 
 	private void validate() {
 
-		List<String> chromatograms = inputWizardSettings.getChromatogramWizardElements().getSelectedChromatograms();
-		if(chromatograms.isEmpty()) {
+		if(selectedItems.isEmpty()) {
 			setPageComplete(false);
 			setErrorMessage("Please select at least one valid data item");
 		} else {
@@ -51,33 +53,29 @@ public class InputEntriesWizardPage extends WizardPage {
 		}
 	}
 
-	public void saveSelectedPath() {
+	public Map<File, Collection<ISupplierFileIdentifier>> getSelectedItems() {
 
-		// FIXME
-		// inputWizardSettings.saveSelectedPath(getTreeSelection());
-	}
-
-	public IChromatogramWizardElements getChromatogramWizardElements() {
-
-		return inputWizardSettings.getChromatogramWizardElements();
+		return selectedItems;
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 
-		MultiDataExplorerTreeUI explorerTreeUI = new MultiDataExplorerTreeUI(parent, DataExplorerTreeRoot.DRIVES, DataExplorerTreeRoot.HOME, DataExplorerTreeRoot.USER_LOCATION) {
+		MultiDataExplorerTreeUI explorerTreeUI = new MultiDataExplorerTreeUI(parent, inputWizardSettings.getPreferenceStore()) {
 
 			@Override
 			protected void handleSelection(File[] files, DataExplorerTreeUI treeUI) {
 
 				treeSelection = treeUI.getRoot();
-				inputWizardSettings.getChromatogramWizardElements().clearSelectedChromatograms();
+				selectedItems.clear();
 				DataExplorerContentProvider contentProvider = treeUI.getContentProvider();
 				for(File file : files) {
-					if(!contentProvider.getSupplierFileIdentifier(file).isEmpty()) {
-						inputWizardSettings.getChromatogramWizardElements().addSelectedChromatogram(file.getAbsolutePath());
+					Collection<ISupplierFileIdentifier> identifier = contentProvider.getSupplierFileIdentifier(file);
+					if(!identifier.isEmpty()) {
+						selectedItems.put(file, identifier);
 					}
 				}
+				treeUI.saveLastDirectoryPath(inputWizardSettings.getPreferenceStore());
 				validate();
 			}
 		};

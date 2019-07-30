@@ -16,6 +16,7 @@ import java.util.Collections;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerUI;
 import org.eclipse.e4.ui.di.Focus;
@@ -27,7 +28,7 @@ public class MassSpectrumLibraryExplorer {
 
 	@Inject
 	public MassSpectrumLibraryExplorer(Composite parent) {
-		explorerUI = new DataExplorerUI(parent, null);
+		explorerUI = new DataExplorerUI(parent, null, Activator.getDefault().getPreferenceStore());
 		explorerUI.setSupplierFileIdentifier((Collections.singleton(DatabaseSupport.getInstanceEditorSupport())));
 		explorerUI.expandLastDirectoryPath();
 	}
