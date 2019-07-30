@@ -12,26 +12,30 @@
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.swt;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -220,27 +224,21 @@ public class ExtendedChromatogramListUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(batchProcessJob != null) {
-					InputWizardSettings inputWizardSettings = new InputWizardSettings(new InputWizardSettings.InputDataType[]{InputWizardSettings.InputDataType.MSD_CHROMATOGRAM, InputWizardSettings.InputDataType.CSD_CHROMATOGRAM, InputWizardSettings.InputDataType.WSD_CHROMATOGRAM});
+					// new SupplierEditorSupport
+					Collection<ISupplierFileIdentifier> list = new ArrayList<ISupplierFileIdentifier>();
+					list.add(new SupplierEditorSupport(DataType.MSD));
+					list.add(new SupplierEditorSupport(DataType.CSD));
+					list.add(new SupplierEditorSupport(DataType.WSD));
+					InputWizardSettings inputWizardSettings = new InputWizardSettings(Activator.getDefault().getPreferenceStore(), list);
 					inputWizardSettings.setTitle("Chromatogram");
 					inputWizardSettings.setDescription("Select chromatogram(s) to analyze.");
-					inputWizardSettings.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.P_FILTER_PATH_IMPORT_RECORDS);
-					//
-					InputEntriesWizard inputWizard = new InputEntriesWizard(inputWizardSettings);
-					WizardDialog wizardDialog = new WizardDialog(e.widget.getDisplay().getActiveShell(), inputWizard);
-					wizardDialog.setMinimumPageSize(InputWizardSettings.DEFAULT_WIDTH, InputWizardSettings.DEFAULT_HEIGHT);
-					wizardDialog.create();
-					//
-					if(wizardDialog.open() == WizardDialog.OK) {
-						IChromatogramWizardElements chromatogramWizardElements = inputWizard.getChromatogramWizardElements();
-						for(String selectedChromatogram : chromatogramWizardElements.getSelectedChromatograms()) {
-							File file = new File(selectedChromatogram);
-							if(file.exists()) {
-								if(batchProcessJob != null) {
-									batchProcessJob.getChromatogramInputEntries().add(new ChromatogramInputEntry(file.getAbsolutePath()));
-								}
-							}
+					Set<File> files = InputEntriesWizard.openWizard(getShell(), inputWizardSettings).keySet();
+					for(File file : files) {
+						if(batchProcessJob != null) {
+							batchProcessJob.getChromatogramInputEntries().add(new ChromatogramInputEntry(file.getAbsolutePath()));
 						}
-						//
+					}
+					if(!files.isEmpty()) {
 						setEditorDirty(true);
 						setProcessFiles();
 					}
