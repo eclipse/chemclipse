@@ -45,11 +45,10 @@ import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.filter.FilterContext;
 import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.processing.filter.Filtered;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
+import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
@@ -60,11 +59,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
-import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -100,10 +96,12 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 	private DataNMRSelection selection;
 	private NMRMeasurementsUI measurementsUI;
 	private FilterFactory filterFactory;
+	private PartSupport partSupport;
 
 	@Inject
-	public ScanEditorNMR(Composite parent, IEventBroker eventBroker, MPart part, MDirtyable dirtyable, Shell shell, FilterFactory filterFactory) {
+	public ScanEditorNMR(Composite parent, IEventBroker eventBroker, MPart part, MDirtyable dirtyable, Shell shell, FilterFactory filterFactory, PartSupport partSupport) {
 		super(part);
+		this.partSupport = partSupport;
 		parent.addDisposeListener(new DisposeListener() {
 
 			@Override
@@ -149,26 +147,6 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 	private void preDestroy() {
 
 		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_NMR_UNLOAD_SELECTION, null);
-		//
-		EModelService modelService = ModelSupportAddon.getModelService();
-		if(modelService != null) {
-			MApplication application = ModelSupportAddon.getApplication();
-			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
-			part.setToBeRendered(false);
-			part.setVisible(false);
-			DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					partStack.getChildren().remove(part);
-				}
-			});
-		}
-		/*
-		 * Run the garbage collector.
-		 */
-		System.gc();
 	}
 
 	@Persist
@@ -238,6 +216,16 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 
 									extendedNMRScanUI.update(selection);
 									measurementsUI.update(selection);
+								}
+							});
+						} else {
+							Display.getDefault().asyncExec(new Runnable() {
+
+								@Override
+								public void run() {
+
+									ProcessingInfoViewSupport.updateProcessingInfo(convert);
+									partSupport.closePart(part);
 								}
 							});
 						}

@@ -65,6 +65,7 @@ public class ScanConverterNMR {
 	@SuppressWarnings("unchecked")
 	public static IProcessingInfo<Collection<IComplexSignalMeasurement<?>>> convert(final File file, final IProgressMonitor monitor) {
 
+		IProcessingInfo<Collection<IComplexSignalMeasurement<?>>> error = getProcessingError(file);
 		IScanConverterSupport converterSupport = getScanConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
@@ -73,28 +74,31 @@ public class ScanConverterNMR {
 				IScanImportConverter<?> importConverter = getScanImportConverter(converterId);
 				if(importConverter != null) {
 					IProcessingInfo<?> processingInfo = importConverter.convert(file, subMonitor.split(1));
-					if(processingInfo != null && !processingInfo.hasErrorMessages()) {
-						Object object = processingInfo.getProcessingResult();
-						if(object instanceof IComplexSignalMeasurement<?>) {
-							IComplexSignalMeasurement<?> measurement = (IComplexSignalMeasurement<?>)object;
-							ProcessingInfo<Collection<IComplexSignalMeasurement<?>>> info = new ProcessingInfo<>();
-							info.setProcessingResult(Collections.singleton(measurement));
-							info.addMessages(processingInfo);
-							return info;
-						} else if(object instanceof Collection<?>) {
-							Collection<?> collection = (Collection<?>)object;
-							ProcessingInfo<Collection<IComplexSignalMeasurement<?>>> info = new ProcessingInfo<>();
-							info.setProcessingResult((Collection<IComplexSignalMeasurement<?>>)collection);
-							info.addMessages(processingInfo);
-							return info;
+					if(processingInfo != null) {
+						if(processingInfo.hasErrorMessages()) {
+							error.addMessages(processingInfo);
+						} else {
+							Object object = processingInfo.getProcessingResult();
+							if(object instanceof IComplexSignalMeasurement<?>) {
+								IComplexSignalMeasurement<?> measurement = (IComplexSignalMeasurement<?>)object;
+								ProcessingInfo<Collection<IComplexSignalMeasurement<?>>> info = new ProcessingInfo<>();
+								info.setProcessingResult(Collections.singleton(measurement));
+								info.addMessages(processingInfo);
+								return info;
+							} else if(object instanceof Collection<?>) {
+								Collection<?> collection = (Collection<?>)object;
+								ProcessingInfo<Collection<IComplexSignalMeasurement<?>>> info = new ProcessingInfo<>();
+								info.setProcessingResult((Collection<IComplexSignalMeasurement<?>>)collection);
+								info.addMessages(processingInfo);
+								return info;
+							}
 						}
 					}
 				}
 			}
 		} catch(NoConverterAvailableException e) {
-			logger.error(e.getLocalizedMessage(), e);
 		}
-		return getProcessingError(file);
+		return error;
 	}
 
 	public static IProcessingInfo<?> export(final File file, final IComplexSignalMeasurement<?> measurement, final String converterId, final IProgressMonitor monitor) {

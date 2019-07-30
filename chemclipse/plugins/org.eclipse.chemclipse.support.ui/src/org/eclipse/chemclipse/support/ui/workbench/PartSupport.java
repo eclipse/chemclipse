@@ -75,4 +75,19 @@ public class PartSupport {
 			ePartService.showPart(part, PartState.ACTIVATE);
 		}
 	}
+
+	public void closePart(MPart part) {
+
+		MPartStack partStack = (MPartStack)eModelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, mApplication);
+		part.setToBeRendered(false);
+		part.setVisible(false);
+		DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				partStack.getChildren().remove(part);
+			}
+		});
+	}
 }
