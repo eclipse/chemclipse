@@ -8,25 +8,24 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Christoph Läubrich - change to new Wizard API
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class PeakFilesInputPageWizard extends DataInputPageWizard {
 
@@ -39,7 +38,7 @@ public class PeakFilesInputPageWizard extends DataInputPageWizard {
 	@Override
 	protected void addFiles() {
 
-		InputWizardSettings inputWizardSettings = new InputWizardSettings(new ScopedPreferenceStore(InstanceScope.INSTANCE, ChromatogramMSDFilesPageWizard.class.getName()), Collections.singleton(new SupplierEditorSupport(DataType.MSD)));
+		InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.N_INPUT_FILE, DataType.MSD);
 		inputWizardSettings.setTitle("Peak Input Files");
 		inputWizardSettings.setDescription("This wizard lets you select several peak input files.");
 		Map<File, Collection<ISupplierFileIdentifier>> map = InputEntriesWizard.openWizard(getShell(), inputWizardSettings);
