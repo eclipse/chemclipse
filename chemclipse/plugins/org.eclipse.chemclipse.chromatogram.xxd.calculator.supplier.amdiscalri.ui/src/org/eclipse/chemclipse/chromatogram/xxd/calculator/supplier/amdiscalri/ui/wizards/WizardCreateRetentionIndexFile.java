@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to wizard API
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
@@ -16,18 +17,20 @@ import java.util.Date;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileWriter;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.Activator;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
+import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizardPage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings.InputDataType;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -67,15 +70,13 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 		/*
 		 * Pages must implement IExtendedWizardPage / extend AbstractExtendedWizardPage
 		 */
-		InputWizardSettings inputWizardSettingsMSD = new InputWizardSettings(InputDataType.MSD_CHROMATOGRAM);
+		InputWizardSettings inputWizardSettingsMSD = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_MODELS_MSD, DataType.MSD);
 		inputWizardSettingsMSD.setTitle("Open Chromatogram (MSD) File(s)");
 		inputWizardSettingsMSD.setDescription("Select a chromatogram/chromatograms file to open.");
-		inputWizardSettingsMSD.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.P_FILTER_PATH_MODELS_MSD);
 		//
-		InputWizardSettings inputWizardSettingsCSD = new InputWizardSettings(InputDataType.CSD_CHROMATOGRAM);
+		InputWizardSettings inputWizardSettingsCSD = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_MODELS_CSD, DataType.CSD);
 		inputWizardSettingsCSD.setTitle("Open Chromatogram (CSD) File(s)");
 		inputWizardSettingsCSD.setDescription("Select a chromatogram/chromatograms file to open.");
-		inputWizardSettingsCSD.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.P_FILTER_PATH_MODELS_CSD);
 		//
 		pageCalibrationSettings = new PageCalibrationSettings(wizardElements);
 		pageInputEntriesMSD = new InputEntriesWizardPage(inputWizardSettingsMSD);
@@ -109,13 +110,21 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 		} else if(page == pageInputEntriesMSD) {
 			nextPage = pagePeakSelection;
 			wizardElements.clearSelectedChromatograms();
-			wizardElements.addElements(pageInputEntriesMSD.getChromatogramWizardElements());
-			pageInputEntriesMSD.saveSelectedPath();
+			ChromatogramWizardElements elements = new ChromatogramWizardElements();
+			for(File file : pageInputEntriesMSD.getSelectedItems().keySet()) {
+				elements.addSelectedChromatogram(file.getAbsolutePath());
+			}
+			wizardElements.addElements(elements);
+			pageInputEntriesMSD.savePath();
 		} else if(page == pageInputEntriesCSD) {
 			nextPage = pagePeakSelection;
 			wizardElements.clearSelectedChromatograms();
-			wizardElements.addElements(pageInputEntriesCSD.getChromatogramWizardElements());
-			pageInputEntriesCSD.saveSelectedPath();
+			ChromatogramWizardElements elements = new ChromatogramWizardElements();
+			for(File file : pageInputEntriesCSD.getSelectedItems().keySet()) {
+				elements.addSelectedChromatogram(file.getAbsolutePath());
+			}
+			wizardElements.addElements(elements);
+			pageInputEntriesCSD.savePath();
 		} else if(page == pagePeakSelection) {
 			nextPage = pagePeakAssignment;
 		} else if(page == pagePeakAssignment) {
