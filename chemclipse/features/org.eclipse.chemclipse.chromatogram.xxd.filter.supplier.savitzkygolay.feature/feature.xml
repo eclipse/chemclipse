@@ -27,10 +27,6 @@ http://www.eclipse.org/legal/epl-v10.html
       <discovery label="SavitzkyGolayFilter" url="http://www.chemclipse.net/plugins/filter/savitzkygolay/"/>
    </url>
 
-   <requires>
-      <import feature="org.eclipse.chemclipse.thirdpartylibraries.apache.commons.math.feature" version="3.3.0.qualifier"/>
-   </requires>
-
    <plugin
          id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay"
          download-size="0"
