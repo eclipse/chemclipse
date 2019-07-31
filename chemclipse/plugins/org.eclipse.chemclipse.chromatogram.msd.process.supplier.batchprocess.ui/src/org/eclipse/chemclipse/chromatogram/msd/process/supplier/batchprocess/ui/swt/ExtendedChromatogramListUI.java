@@ -8,15 +8,15 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - change to new Wizard API
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.swt;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
@@ -26,10 +26,8 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
-import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -224,12 +222,7 @@ public class ExtendedChromatogramListUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(batchProcessJob != null) {
-					// new SupplierEditorSupport
-					Collection<ISupplierFileIdentifier> list = new ArrayList<ISupplierFileIdentifier>();
-					list.add(new SupplierEditorSupport(DataType.MSD));
-					list.add(new SupplierEditorSupport(DataType.CSD));
-					list.add(new SupplierEditorSupport(DataType.WSD));
-					InputWizardSettings inputWizardSettings = new InputWizardSettings(Activator.getDefault().getPreferenceStore(), list);
+					InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_IMPORT_RECORDS, DataType.MSD, DataType.CSD, DataType.WSD);
 					inputWizardSettings.setTitle("Chromatogram");
 					inputWizardSettings.setDescription("Select chromatogram(s) to analyze.");
 					Set<File> files = InputEntriesWizard.openWizard(getShell(), inputWizardSettings).keySet();
