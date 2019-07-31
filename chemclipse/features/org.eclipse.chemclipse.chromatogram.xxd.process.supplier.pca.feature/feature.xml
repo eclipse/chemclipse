@@ -21,10 +21,6 @@ v1.0 which accompanies this distribution, and is available at
 http://www.eclipse.org/legal/epl-v10.html
    </license>
 
-   <requires>
-      <import feature="org.eclipse.chemclipse.thirdpartylibraries.ejml.feature" version="0.24.0.qualifier"/>
-   </requires>
-
    <plugin
          id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca"
          download-size="0"
