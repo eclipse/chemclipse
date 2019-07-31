@@ -22,9 +22,11 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvid
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class DataExplorerTreeUI {
 
@@ -110,7 +112,19 @@ public class DataExplorerTreeUI {
 
 		File lastFile = new File(preferenceStore.getString(preferenceKey));
 		if(lastFile.exists()) {
+			// expand level
 			treeViewer.expandToLevel(lastFile, 1);
+			// select to scroll into view
+			treeViewer.setSelection(new StructuredSelection(lastFile), true);
+			// clear selection for unselected default view scrolled to last position
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					treeViewer.setSelection(StructuredSelection.EMPTY);
+				}
+			});
 		}
 	}
 

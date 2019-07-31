@@ -51,15 +51,13 @@ public class InputEntriesWizardPage extends WizardPage {
 		}
 
 		@Override
-		protected String getPreferenceKey(DataExplorerTreeRoot root) {
+		protected String getUserLocationPreferenceKey() {
 
-			if(root == DataExplorerTreeRoot.USER_LOCATION) {
-				String key = inputWizardSettings.getUserLocationPreferenceKey();
-				if(key != null) {
-					return key;
-				}
+			String key = inputWizardSettings.getUserLocationPreferenceKey();
+			if(key != null) {
+				return key;
 			}
-			return super.getPreferenceKey(root);
+			return super.getUserLocationPreferenceKey();
 		}
 	}
 

@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.action.Action;
@@ -40,27 +39,22 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Menu;
 
 public class DataExplorerUI extends MultiDataExplorerTreeUI {
 
 	private IEventBroker eventBroker;
-	private IPreferenceStore preferenceStore;
 
 	public DataExplorerUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
 		super(parent, preferenceStore);
 		this.eventBroker = eventBroker;
-		this.preferenceStore = preferenceStore;
 	}
 
 	@Override
 	protected void initTabComponent(Composite parent, DataExplorerTreeUI treeUI) {
 
+		super.initTabComponent(parent, treeUI);
 		createContextMenu(treeUI);
-		if(treeUI.getRoot() == DataExplorerTreeRoot.USER_LOCATION) {
-			addUserLocationButton(parent, treeUI);
-		}
 		addBatchOpenButton(parent, treeUI);
 	}
 
@@ -150,31 +144,6 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 		}
 		return opened;
 	};
-
-	private void addUserLocationButton(Composite parent, DataExplorerTreeUI treeUI) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Select User Location");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16));
-		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				DirectoryDialog directoryDialog = new DirectoryDialog(e.display.getActiveShell(), SWT.READ_ONLY);
-				directoryDialog.setText("Select a directory.");
-				String pathname = directoryDialog.open();
-				if(pathname != null) {
-					File directory = new File(pathname);
-					if(directory.exists()) {
-						PreferenceSupplier.setUserLocationPath(directory.getAbsolutePath());
-						treeUI.getTreeViewer().setInput(new File[]{directory});
-					}
-				}
-			}
-		});
-	}
 
 	private void addBatchOpenButton(Composite parent, DataExplorerTreeUI treeUI) {
 

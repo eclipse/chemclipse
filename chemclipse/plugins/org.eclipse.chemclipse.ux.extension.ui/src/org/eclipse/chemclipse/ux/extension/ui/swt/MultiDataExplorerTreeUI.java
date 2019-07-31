@@ -14,6 +14,9 @@ package org.eclipse.chemclipse.ux.extension.ui.swt;
 import java.io.File;
 import java.util.Collection;
 
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -24,12 +27,15 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
@@ -80,6 +86,16 @@ public class MultiDataExplorerTreeUI {
 	protected String getSelectedTabPreferenceKey() {
 
 		return getPreferenceKey(DataExplorerTreeRoot.USER_LOCATION) + TAB_KEY_SUFFIX;
+	}
+
+	protected String getUserLocationPreferenceKey() {
+
+		return PreferenceConstants.P_USER_LOCATION_PATH;
+	}
+
+	protected String getPreferenceKey(DataExplorerTreeRoot root) {
+
+		return DataExplorerTreeUI.getDefaultPathPreferenceKey(root);
 	}
 
 	private DataExplorerTreeUI createTab(TabFolder tabFolder, DataExplorerTreeRoot root) {
@@ -141,6 +157,38 @@ public class MultiDataExplorerTreeUI {
 
 	protected void initTabComponent(Composite parent, DataExplorerTreeUI treeUI) {
 
+		if(treeUI.getRoot() == DataExplorerTreeRoot.USER_LOCATION) {
+			addUserLocationButton(parent, treeUI);
+			File directory = new File(preferenceStore.getString(getUserLocationPreferenceKey()));
+			if(directory.exists()) {
+				treeUI.getTreeViewer().setInput(new File[]{directory});
+			}
+		}
+	}
+
+	private void addUserLocationButton(Composite parent, DataExplorerTreeUI treeUI) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("Select User Location");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16));
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				DirectoryDialog directoryDialog = new DirectoryDialog(e.display.getActiveShell(), SWT.READ_ONLY);
+				directoryDialog.setText("Select a directory.");
+				String pathname = directoryDialog.open();
+				if(pathname != null) {
+					File directory = new File(pathname);
+					if(directory.exists()) {
+						preferenceStore.setValue(getUserLocationPreferenceKey(), directory.getAbsolutePath());
+						treeUI.getTreeViewer().setInput(new File[]{directory});
+					}
+				}
+			}
+		});
 	}
 
 	protected void handleDoubleClick(File file, DataExplorerTreeUI treeUI) {
@@ -149,11 +197,6 @@ public class MultiDataExplorerTreeUI {
 
 	protected void handleSelection(File[] files, DataExplorerTreeUI treeUI) {
 
-	}
-
-	protected String getPreferenceKey(DataExplorerTreeRoot root) {
-
-		return DataExplorerTreeUI.getDefaultPathPreferenceKey(root);
 	}
 
 	public void setFocus() {
