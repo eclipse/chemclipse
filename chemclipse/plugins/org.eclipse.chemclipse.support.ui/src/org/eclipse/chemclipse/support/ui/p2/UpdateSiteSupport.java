@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -52,7 +52,7 @@ public class UpdateSiteSupport {
 		Map<String, String> updateSites = new HashMap<String, String>();
 		updateSites.put("Neon", "http://download.eclipse.org/releases/neon");
 		updateSites.put("The Eclipse Project Updates", "http://download.eclipse.org/eclipse/updates/4.6");
-		updateSites.put("Eclipse Orbit", "http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository");
+		updateSites.put("Eclipse Orbit", "http://download.eclipse.org/tools/orbit/downloads/drops/S20190726194335/repository");
 		/*
 		 * Add the additional p2 repositories.
 		 */

@@ -7,7 +7,7 @@ Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.numeric.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.logging;bundle-version="0.8.0",
- org.eclipse.chemclipse.thirdpartylibraries.apache.commons.math;bundle-version="3.5.0",
+ org.apache.commons.math3;bundle-version="3.5.0",
  org.eclipse.chemclipse.support;bundle-version="0.8.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
