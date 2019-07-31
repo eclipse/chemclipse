@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.statistics.ISample;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 
+@SuppressWarnings("restriction")
 public abstract class AbstractMultivariateCalculator implements IMultivariateCalculator {
 
 	private DenseMatrix64F loadings;
@@ -31,7 +32,6 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	private boolean computeSuccess;
 
 	public AbstractMultivariateCalculator(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
-
 		if(numComps > numObs) {
 			throw new MathIllegalArgumentException("Number of samples has to be equle or bigger than number of componets.");
 		}

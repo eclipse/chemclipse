@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,10 +21,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.Ma
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 
+@SuppressWarnings("restriction")
 public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 
 	public OplsCalculatorNipals(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
-
 		super(numObs, numVars, numComps);
 	}
 

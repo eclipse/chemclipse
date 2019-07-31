@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate Gmbh.
+ * Copyright (c) 2018, 2019 Lablicate Gmbh.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,10 +16,10 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 import org.ejml.ops.NormOps;
 
+@SuppressWarnings("restriction")
 public class PcaCalculatorNipals extends AbstractMultivariateCalculator {
 
 	public PcaCalculatorNipals(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
-
 		super(numObs, numVars, numComps);
 	}
 
