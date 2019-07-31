@@ -12,8 +12,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -25,19 +28,22 @@ public class InputWizardSettings {
 	private String description = "Description";
 	private Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList;
 	private IPreferenceStore preferenceStore;
+	private String userLocationPreferenceKey;
 
-	public InputWizardSettings(IPreferenceStore preferenceStore, Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
+	public InputWizardSettings(IPreferenceStore preferenceStore, String userLocationPreferenceKey, Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
 		this.preferenceStore = preferenceStore;
+		this.userLocationPreferenceKey = userLocationPreferenceKey;
 		this.supplierFileIdentifierList = supplierFileIdentifierList;
-		// for(DataType dataType : dataTypes) {
-		// supplierFileIdentifierList.add(new EditorSupportFactory(dataType).getInstanceIdentifier());
-		// supplierFileIdentifierList.add(new SupplierEditorSupport(DataType.CSD));
-		// }
 	}
 
 	public IPreferenceStore getPreferenceStore() {
 
 		return preferenceStore;
+	}
+
+	public String getUserLocationPreferenceKey() {
+
+		return userLocationPreferenceKey;
 	}
 
 	public Collection<? extends ISupplierFileIdentifier> getSupplierFileIdentifierList() {
@@ -63,5 +69,19 @@ public class InputWizardSettings {
 	public void setDescription(String description) {
 
 		this.description = description;
+	}
+
+	public static InputWizardSettings create(IPreferenceStore preferenceStore, DataType... dataTypes) {
+
+		return create(preferenceStore, null, dataTypes);
+	}
+
+	public static InputWizardSettings create(IPreferenceStore preferenceStore, String userLocationPreferenceKey, DataType... dataTypes) {
+
+		Collection<ISupplierFileIdentifier> list = new ArrayList<>();
+		for(DataType dataType : dataTypes) {
+			list.add(new SupplierEditorSupport(dataType));
+		}
+		return new InputWizardSettings(preferenceStore, userLocationPreferenceKey, list);
 	}
 }

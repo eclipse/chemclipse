@@ -103,13 +103,23 @@ public class DataExplorerTreeUI {
 
 	public void expandLastDirectoryPath(IPreferenceStore preferenceStore) {
 
-		File lastFile = new File(preferenceStore.getString(getSelectedPathPreference(root)));
+		expandLastDirectoryPath(preferenceStore, getDefaultPathPreferenceKey(root));
+	}
+
+	public void expandLastDirectoryPath(IPreferenceStore preferenceStore, String preferenceKey) {
+
+		File lastFile = new File(preferenceStore.getString(preferenceKey));
 		if(lastFile.exists()) {
 			treeViewer.expandToLevel(lastFile, 1);
 		}
 	}
 
 	public void saveLastDirectoryPath(IPreferenceStore preferenceStore) {
+
+		saveLastDirectoryPath(preferenceStore, getDefaultPathPreferenceKey(getRoot()));
+	}
+
+	public void saveLastDirectoryPath(IPreferenceStore preferenceStore, String preferenceKey) {
 
 		File file = (File)treeViewer.getStructuredSelection().getFirstElement();
 		if(file != null) {
@@ -132,12 +142,12 @@ public class DataExplorerTreeUI {
 				directoryPath = file;
 			}
 			if(directoryPath != null) {
-				preferenceStore.setValue(getSelectedPathPreference(root), directoryPath.getAbsolutePath());
+				preferenceStore.setValue(preferenceKey, directoryPath.getAbsolutePath());
 			}
 		}
 	}
 
-	private static final String getSelectedPathPreference(DataExplorerTreeRoot root) {
+	public static final String getDefaultPathPreferenceKey(DataExplorerTreeRoot root) {
 
 		switch(root) {
 			case DRIVES:

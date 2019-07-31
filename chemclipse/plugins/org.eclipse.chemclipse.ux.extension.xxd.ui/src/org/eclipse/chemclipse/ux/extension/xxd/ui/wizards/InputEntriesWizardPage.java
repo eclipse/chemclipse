@@ -23,14 +23,50 @@ import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.ux.extension.ui.swt.MultiDataExplorerTreeUI;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 public class InputEntriesWizardPage extends WizardPage {
 
+	private final class WizardMultiDataExplorerTreeUI extends MultiDataExplorerTreeUI {
+
+		private WizardMultiDataExplorerTreeUI(Composite parent, IPreferenceStore preferenceStore) {
+			super(parent, preferenceStore);
+		}
+
+		@Override
+		protected void handleSelection(File[] files, DataExplorerTreeUI treeUI) {
+
+			treeSelection = treeUI.getRoot();
+			selectedItems.clear();
+			DataExplorerContentProvider contentProvider = treeUI.getContentProvider();
+			for(File file : files) {
+				Collection<ISupplierFileIdentifier> identifier = contentProvider.getSupplierFileIdentifier(file);
+				if(!identifier.isEmpty()) {
+					selectedItems.put(file, identifier);
+				}
+			}
+			validate();
+		}
+
+		@Override
+		protected String getPreferenceKey(DataExplorerTreeRoot root) {
+
+			if(root == DataExplorerTreeRoot.USER_LOCATION) {
+				String key = inputWizardSettings.getUserLocationPreferenceKey();
+				if(key != null) {
+					return key;
+				}
+			}
+			return super.getPreferenceKey(root);
+		}
+	}
+
 	private InputWizardSettings inputWizardSettings;
 	private DataExplorerTreeRoot treeSelection = DataExplorerTreeRoot.NONE;
 	private Map<File, Collection<ISupplierFileIdentifier>> selectedItems = new HashMap<>();
+	private MultiDataExplorerTreeUI explorerTreeUI;
 
 	public InputEntriesWizardPage(InputWizardSettings inputWizardSettings) {
 		//
@@ -61,24 +97,7 @@ public class InputEntriesWizardPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		MultiDataExplorerTreeUI explorerTreeUI = new MultiDataExplorerTreeUI(parent, inputWizardSettings.getPreferenceStore()) {
-
-			@Override
-			protected void handleSelection(File[] files, DataExplorerTreeUI treeUI) {
-
-				treeSelection = treeUI.getRoot();
-				selectedItems.clear();
-				DataExplorerContentProvider contentProvider = treeUI.getContentProvider();
-				for(File file : files) {
-					Collection<ISupplierFileIdentifier> identifier = contentProvider.getSupplierFileIdentifier(file);
-					if(!identifier.isEmpty()) {
-						selectedItems.put(file, identifier);
-					}
-				}
-				treeUI.saveLastDirectoryPath(inputWizardSettings.getPreferenceStore());
-				validate();
-			}
-		};
+		explorerTreeUI = new WizardMultiDataExplorerTreeUI(parent, inputWizardSettings.getPreferenceStore());
 		explorerTreeUI.setSupplierFileIdentifier(inputWizardSettings.getSupplierFileIdentifierList());
 		explorerTreeUI.expandLastDirectoryPath();
 		setControl(explorerTreeUI.getControl());
@@ -87,5 +106,10 @@ public class InputEntriesWizardPage extends WizardPage {
 	public DataExplorerTreeRoot getTreeSelection() {
 
 		return treeSelection;
+	}
+
+	public void savePath() {
+
+		explorerTreeUI.saveLastDirectoryPath();
 	}
 }

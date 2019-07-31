@@ -239,7 +239,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 	private boolean openEditor(File file, DataExplorerTreeUI treeUI) {
 
 		DataExplorerContentProvider contentProvider = (DataExplorerContentProvider)treeUI.getTreeViewer().getContentProvider();
-		treeUI.saveLastDirectoryPath(preferenceStore);
+		saveLastDirectoryPath();
 		boolean success = false;
 		if(file != null) {
 			boolean openFirstDataMatchOnly = PreferenceSupplier.isOpenFirstDataMatchOnly();

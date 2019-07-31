@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.handlers;
 
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 
 public class OpenHandlerWSD extends AbstractOpenHandler {
 
@@ -20,5 +21,11 @@ public class OpenHandlerWSD extends AbstractOpenHandler {
 	protected DataType getDataType() {
 
 		return DataType.WSD;
+	}
+
+	@Override
+	protected String getPreferenceKey() {
+
+		return PreferenceSupplier.P_FILTER_PATH_CHROMATOGRAM_WSD;
 	}
 }

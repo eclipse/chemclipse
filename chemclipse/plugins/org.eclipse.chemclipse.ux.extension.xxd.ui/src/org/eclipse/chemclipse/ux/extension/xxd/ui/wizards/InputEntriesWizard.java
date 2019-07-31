@@ -42,6 +42,7 @@ public class InputEntriesWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 
+		inputEntriesPage.savePath();
 		return true;
 	}
 

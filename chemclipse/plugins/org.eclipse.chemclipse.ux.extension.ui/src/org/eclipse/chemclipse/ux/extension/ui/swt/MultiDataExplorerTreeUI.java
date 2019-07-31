@@ -36,19 +36,17 @@ import org.eclipse.swt.widgets.TabItem;
 public class MultiDataExplorerTreeUI {
 
 	private static final DataExplorerTreeRoot[] DEFAULT_ROOTS = {DataExplorerTreeRoot.DRIVES, DataExplorerTreeRoot.HOME, DataExplorerTreeRoot.USER_LOCATION};
-	private static final String DEFAULT_KEY = "MultiDataExplorerTreeUI.selectedTab";
+	private static final String TAB_KEY_SUFFIX = "selectedTab";
 	private TabFolder tabFolder;
 	private DataExplorerTreeUI[] treeUIs;
 	private IPreferenceStore preferenceStore;
-	private String preferenceKey;
 
 	public MultiDataExplorerTreeUI(Composite parent, IPreferenceStore preferenceStore) {
-		this(parent, DEFAULT_ROOTS, preferenceStore, DEFAULT_KEY);
+		this(parent, DEFAULT_ROOTS, preferenceStore);
 	}
 
-	public MultiDataExplorerTreeUI(Composite parent, DataExplorerTreeRoot[] roots, IPreferenceStore preferenceStore, String preferenceKey) {
+	public MultiDataExplorerTreeUI(Composite parent, DataExplorerTreeRoot[] roots, IPreferenceStore preferenceStore) {
 		this.preferenceStore = preferenceStore;
-		this.preferenceKey = preferenceKey;
 		tabFolder = new TabFolder(parent, SWT.NONE);
 		treeUIs = new DataExplorerTreeUI[roots.length];
 		for(int i = 0; i < roots.length; i++) {
@@ -66,9 +64,22 @@ public class MultiDataExplorerTreeUI {
 	public void expandLastDirectoryPath() {
 
 		for(DataExplorerTreeUI ui : treeUIs) {
-			ui.expandLastDirectoryPath(preferenceStore);
+			ui.expandLastDirectoryPath(preferenceStore, getPreferenceKey(ui.getRoot()));
 		}
-		tabFolder.setSelection(preferenceStore.getInt(preferenceKey));
+		tabFolder.setSelection(preferenceStore.getInt(getSelectedTabPreferenceKey()));
+	}
+
+	public void saveLastDirectoryPath() {
+
+		for(DataExplorerTreeUI ui : treeUIs) {
+			ui.saveLastDirectoryPath(preferenceStore, getPreferenceKey(ui.getRoot()));
+		}
+		preferenceStore.setValue(getSelectedTabPreferenceKey(), tabFolder.getSelectionIndex());
+	}
+
+	protected String getSelectedTabPreferenceKey() {
+
+		return getPreferenceKey(DataExplorerTreeRoot.USER_LOCATION) + TAB_KEY_SUFFIX;
 	}
 
 	private DataExplorerTreeUI createTab(TabFolder tabFolder, DataExplorerTreeRoot root) {
@@ -116,7 +127,6 @@ public class MultiDataExplorerTreeUI {
 				for(TabItem item : selection) {
 					if(item == tab) {
 						selectionChangedListener.selectionChanged(null);
-						preferenceStore.setValue(preferenceKey, tabFolder.indexOf(tab));
 					}
 				}
 			}
@@ -139,6 +149,11 @@ public class MultiDataExplorerTreeUI {
 
 	protected void handleSelection(File[] files, DataExplorerTreeUI treeUI) {
 
+	}
+
+	protected String getPreferenceKey(DataExplorerTreeRoot root) {
+
+		return DataExplorerTreeUI.getDefaultPathPreferenceKey(root);
 	}
 
 	public void setFocus() {

@@ -13,24 +13,20 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.handlers;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public abstract class AbstractOpenHandler {
 
@@ -38,8 +34,7 @@ public abstract class AbstractOpenHandler {
 	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
 
 		DataType dataType = getDataType();
-		ISupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(dataType);
-		InputWizardSettings inputWizardSettings = new InputWizardSettings(new ScopedPreferenceStore(InstanceScope.INSTANCE, getClass().getName()), Collections.singleton(supplierEditorSupport));
+		InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), getPreferenceKey(), getDataType());
 		inputWizardSettings.setTitle("Open " + dataType + " Files");
 		inputWizardSettings.setDescription("You can select one or more files to be opened.");
 		Map<File, Collection<ISupplierFileIdentifier>> selected = InputEntriesWizard.openWizard(shell, inputWizardSettings);
@@ -56,4 +51,6 @@ public abstract class AbstractOpenHandler {
 	}
 
 	protected abstract DataType getDataType();
+
+	protected abstract String getPreferenceKey();
 }
