@@ -12,15 +12,20 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.samplequant;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.core.SampleQuantProcessor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.ISampleQuantReport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.Activator;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
+import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizardPage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings.InputDataType;
+import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,11 +53,9 @@ public class WizardSampleQuant extends AbstractFileWizard {
 		/*
 		 * Pages must implement IExtendedWizardPage / extend AbstractExtendedWizardPage
 		 */
-		InputWizardSettings inputWizardSettings = new InputWizardSettings(InputDataType.MSD_CHROMATOGRAM);
+		InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM, DataType.MSD);
 		inputWizardSettings.setTitle("Open Chromatogram (MSD) File(s)");
 		inputWizardSettings.setDescription("Select a chromatogram/chromatograms file to open.");
-		inputWizardSettings.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.P_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM);
-		//
 		pageInputEntries = new InputEntriesWizardPage(inputWizardSettings);
 		pageReportDataSelection = new PageReportDataSelection(wizardElements);
 		pageDataVerification = new PageDataVerification(wizardElements);
@@ -69,8 +72,13 @@ public class WizardSampleQuant extends AbstractFileWizard {
 		//
 		if(page == pageInputEntries) {
 			wizardElements.clearSelectedChromatograms();
-			wizardElements.addElements(pageInputEntries.getChromatogramWizardElements());
-			pageInputEntries.saveSelectedPath();
+			Map<File, Collection<ISupplierFileIdentifier>> items = pageInputEntries.getSelectedItems();
+			ChromatogramWizardElements elements = new ChromatogramWizardElements();
+			for(File file : items.keySet()) {
+				elements.addSelectedChromatogram(file.getAbsolutePath());
+			}
+			wizardElements.addElements(elements);
+			pageInputEntries.savePath();
 		}
 		//
 		return nextPage;
