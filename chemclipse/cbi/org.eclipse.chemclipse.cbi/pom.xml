@@ -54,6 +54,7 @@
     <!--
 	Plug-ins
     -->
+    <module>../../plugins/org.eclipse.chemclipse.orbitdeps</module>
     <module>../../plugins/org.eclipse.chemclipse.logging</module>
     <module>../../plugins/org.eclipse.chemclipse.logging.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.rcp.ui.icons</module>
