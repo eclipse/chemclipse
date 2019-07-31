@@ -200,15 +200,11 @@ http://www.eclipse.org/legal/epl-v10.html
    <includes
          id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.feature"
          version="0.0.0"/>
-         
+
    <includes
          id="org.eclipse.chemclipse.msd.identifier.supplier.nist.feature"
          version="0.0.0"/>
-         
-   <includes
-         id="org.eclipse.chemclipse.thirdpartylibraries.apache.pdfbox.feature"
-         version="0.0.0"/>
-         
+
    <includes
          id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.feature"
          version="0.0.0"/>
@@ -228,7 +224,7 @@ http://www.eclipse.org/legal/epl-v10.html
    <includes
          id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.feature"
          version="0.0.0"/>
-         
+
    <includes
          id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.feature"
          version="0.0.0"/>
@@ -259,7 +255,7 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <includes
          id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.feature"
-         version="0.0.0"/>                                
+         version="0.0.0"/>
 
    <includes
          id="org.eclipse.ease.feature"
@@ -272,7 +268,7 @@ http://www.eclipse.org/legal/epl-v10.html
    <includes
          id="org.eclipse.ease.python.feature"
          version="0.0.0"/>
-         
+
    <includes
          id="org.eclipse.chemclipse.xxd.converter.supplier.gson.feature"
          version="0.0.0"/>
@@ -280,11 +276,11 @@ http://www.eclipse.org/legal/epl-v10.html
    <includes
          id="org.eclipse.chemclipse.xxd.converter.supplier.ascii.feature"
          version="0.0.0"/>
-         
+
    <includes
          id="org.eclipse.chemclipse.csd.converter.supplier.arw.feature"
          version="0.0.0"/>
-         
+
    <includes
          id="org.eclipse.chemclipse.xxd.converter.supplier.zip.feature"
          version="0.0.0"/>
@@ -292,9 +288,9 @@ http://www.eclipse.org/legal/epl-v10.html
    <includes
          id="org.eclipse.chemclipse.msd.converter.supplier.csv.feature"
          version="0.0.0"/>
-         
+
    <includes
          id="org.eclipse.chemclipse.msd.converter.supplier.excel.feature"
-         version="0.0.0"/>                                    
+         version="0.0.0"/>
 
 </feature>
