@@ -18,7 +18,6 @@ import org.ejml.interfaces.decomposition.SingularValueDecomposition;
 import org.ejml.ops.CommonOps;
 import org.ejml.ops.SingularOps;
 
-@SuppressWarnings("restriction")
 public class PcaCalculatorSvd extends AbstractMultivariateCalculator {
 
 	public PcaCalculatorSvd(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {

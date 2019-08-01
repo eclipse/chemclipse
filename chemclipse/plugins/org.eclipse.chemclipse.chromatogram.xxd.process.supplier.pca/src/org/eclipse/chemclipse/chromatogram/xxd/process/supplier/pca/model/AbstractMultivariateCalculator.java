@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.model.statistics.ISample;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 
-@SuppressWarnings("restriction")
 public abstract class AbstractMultivariateCalculator implements IMultivariateCalculator {
 
 	private DenseMatrix64F loadings;

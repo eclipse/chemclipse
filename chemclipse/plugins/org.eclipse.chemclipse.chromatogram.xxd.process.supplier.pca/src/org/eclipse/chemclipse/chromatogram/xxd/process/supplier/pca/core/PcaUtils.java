@@ -44,7 +44,6 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.factory.DecompositionFactory;
 import org.ejml.interfaces.decomposition.EigenDecomposition;
 
-@SuppressWarnings("restriction")
 public class PcaUtils {
 
 	/**

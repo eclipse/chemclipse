@@ -16,7 +16,6 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 import org.ejml.ops.NormOps;
 
-@SuppressWarnings("restriction")
 public class PcaCalculatorNipals extends AbstractMultivariateCalculator {
 
 	public PcaCalculatorNipals(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {

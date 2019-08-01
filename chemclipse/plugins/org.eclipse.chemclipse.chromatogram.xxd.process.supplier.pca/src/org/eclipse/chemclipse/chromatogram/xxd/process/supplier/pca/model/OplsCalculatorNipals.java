@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.Ma
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 
-@SuppressWarnings("restriction")
 public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 
 	public OplsCalculatorNipals(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
