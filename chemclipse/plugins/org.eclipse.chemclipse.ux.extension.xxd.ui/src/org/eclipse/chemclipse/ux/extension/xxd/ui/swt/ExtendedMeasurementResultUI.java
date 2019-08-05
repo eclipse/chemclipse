@@ -231,10 +231,14 @@ public class ExtendedMeasurementResultUI {
 		updateLabel(measurementResult);
 		Object adaptable = measurementResult == null ? null : measurementResult.getResult();
 		contentProvider.setProxy(Adapters.adapt(adaptable, IStructuredContentProvider.class));
-		labelProvider.setProxy(Adapters.adapt(adaptable, ITableLabelProvider.class));
 		selectionChangedListener.setProxy(Adapters.adapt(adaptable, ISelectionChangedListener.class));
 		resultTable.clearColumns();
 		resultTable.addColumns(Adapters.adapt(adaptable, ColumnDefinitionProvider.class));
+		ITableLabelProvider tableLabelProvider = Adapters.adapt(adaptable, ITableLabelProvider.class);
+		labelProvider.setProxy(tableLabelProvider);
+		if(tableLabelProvider != null) {
+			resultTable.setLabelProvider(tableLabelProvider);
+		}
 		resultTable.setInput(measurementResult);
 		resultTable.refresh();
 	}

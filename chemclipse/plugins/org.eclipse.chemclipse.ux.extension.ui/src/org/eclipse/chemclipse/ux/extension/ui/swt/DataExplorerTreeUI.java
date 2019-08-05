@@ -14,13 +14,16 @@ package org.eclipse.chemclipse.ux.extension.ui.swt;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.Function;
 
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.LazyFileExplorerContentProvider;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -54,13 +57,23 @@ public class DataExplorerTreeUI {
 	}
 
 	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot root, Collection<? extends ISupplierFileIdentifier> identifier) {
+		this(parent, root, createIdentifierCache(identifier));
+	}
+
+	private static SupplierFileIdentifierCache createIdentifierCache(Collection<? extends ISupplierFileIdentifier> identifier) {
+
+		SupplierFileIdentifierCache cache = new SupplierFileIdentifierCache(LazyFileExplorerContentProvider.MAX_CACHE_SIZE);
+		cache.setIdentifier(identifier);
+		return cache;
+	}
+
+	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot root, Function<File, Collection<ISupplierFileIdentifier>> supplierFunction) {
 		this.root = root;
 		treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.VIRTUAL);
 		treeViewer.setUseHashlookup(true);
 		treeViewer.setExpandPreCheckFilters(true);
-		DataExplorerContentProvider contentProvider = new DataExplorerContentProvider(identifier);
-		treeViewer.setContentProvider(contentProvider);
-		treeViewer.setLabelProvider(new DataExplorerLabelProvider(contentProvider));
+		treeViewer.setContentProvider(new DataExplorerContentProvider(supplierFunction));
+		treeViewer.setLabelProvider(new DataExplorerLabelProvider(supplierFunction));
 		switch(root) {
 			case DRIVES:
 				treeViewer.setInput(File.listRoots());
@@ -76,11 +89,6 @@ public class DataExplorerTreeUI {
 			default:
 				break;
 		}
-	}
-
-	public DataExplorerContentProvider getContentProvider() {
-
-		return (DataExplorerContentProvider)treeViewer.getContentProvider();
 	}
 
 	public DataExplorerTreeRoot getRoot() {

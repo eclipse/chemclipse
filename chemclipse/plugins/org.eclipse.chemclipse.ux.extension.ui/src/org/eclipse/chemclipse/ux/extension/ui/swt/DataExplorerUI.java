@@ -82,13 +82,12 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 			@Override
 			public void menuAboutToShow(IMenuManager mgr) {
 
-				DataExplorerContentProvider contentProvider = (DataExplorerContentProvider)treeViewer.getContentProvider();
 				Object[] selection = treeViewer.getStructuredSelection().toArray();
 				Set<ISupplierFileEditorSupport> suppliers = new LinkedHashSet<>();
 				for(Object object : selection) {
 					if(object instanceof File) {
 						File file = (File)object;
-						for(ISupplierFileIdentifier supplier : contentProvider.getSupplierFileIdentifier(file)) {
+						for(ISupplierFileIdentifier supplier : getIdentifierSupplier().apply(file)) {
 							if(supplier instanceof ISupplierFileEditorSupport) {
 								suppliers.add((ISupplierFileEditorSupport)supplier);
 							}
@@ -181,7 +180,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 	private void openOverview(File file, DataExplorerTreeUI treeUI) {
 
 		if(file != null) {
-			DataExplorerContentProvider contentProvider = treeUI.getContentProvider();
+			DataExplorerContentProvider contentProvider = (DataExplorerContentProvider)treeUI.getTreeViewer().getContentProvider();
 			/*
 			 * Update the directories content, until there is
 			 * actual no way to monitor the file system outside
@@ -191,7 +190,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 			if(file.isDirectory()) {
 				contentProvider.refresh(file);
 			}
-			Collection<ISupplierFileIdentifier> identifiers = contentProvider.getSupplierFileIdentifier(file);
+			Collection<ISupplierFileIdentifier> identifiers = getIdentifierSupplier().apply(file);
 			for(ISupplierFileIdentifier identifier : identifiers) {
 				if(identifier instanceof ISupplierFileEditorSupport) {
 					ISupplierFileEditorSupport fileEditorSupport = (ISupplierFileEditorSupport)identifier;
@@ -207,12 +206,11 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 
 	private boolean openEditor(File file, DataExplorerTreeUI treeUI) {
 
-		DataExplorerContentProvider contentProvider = (DataExplorerContentProvider)treeUI.getTreeViewer().getContentProvider();
 		saveLastDirectoryPath();
 		boolean success = false;
 		if(file != null) {
 			boolean openFirstDataMatchOnly = PreferenceSupplier.isOpenFirstDataMatchOnly();
-			Collection<ISupplierFileIdentifier> identifiers = contentProvider.getSupplierFileIdentifier(file);
+			Collection<ISupplierFileIdentifier> identifiers = getIdentifierSupplier().apply(file);
 			for(ISupplierFileIdentifier identifier : identifiers) {
 				if(identifier instanceof ISupplierFileEditorSupport) {
 					success = success | openEditorWithSupplier(file, (ISupplierFileEditorSupport)identifier);

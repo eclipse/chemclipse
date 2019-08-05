@@ -36,7 +36,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -482,11 +481,6 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		}
 		getTable().setHeaderVisible(true);
 		getTable().setLinesVisible(true);
-		IBaseLabelProvider provider = getLabelProvider();
-		if(provider != null) {
-			// for some stupid reasons, jface IGNORES the global labelprovider if it was set before adding columns... so we set it once again here...
-			setLabelProvider(provider);
-		}
 		return viewerColumn;
 	}
 

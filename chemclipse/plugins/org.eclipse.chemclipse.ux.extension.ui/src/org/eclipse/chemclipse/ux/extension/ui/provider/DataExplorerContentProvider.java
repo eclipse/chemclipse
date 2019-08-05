@@ -13,29 +13,17 @@
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.function.Function;
 
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
-import org.eclipse.jface.viewers.Viewer;
 
 public class DataExplorerContentProvider extends LazyFileExplorerContentProvider {
 
-	private FileCache<Collection<ISupplierFileIdentifier>> supplierCache = new FileCache<>();
-	private Viewer viewer;
-	private ISupplierFileIdentifier[] fileIdentifiers;
+	private Function<File, Collection<ISupplierFileIdentifier>> supplierFunction;
 
-	public DataExplorerContentProvider(Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
-		setSupplierFileIdentifier(supplierFileIdentifierList);
-	}
-
-	public void setSupplierFileIdentifier(Collection<? extends ISupplierFileIdentifier> supplierFileIdentifier) {
-
-		fileIdentifiers = supplierFileIdentifier.toArray(new ISupplierFileIdentifier[0]);
-		if(viewer != null) {
-			viewer.refresh();
-		}
+	public DataExplorerContentProvider(Function<File, Collection<ISupplierFileIdentifier>> supplierFunction) {
+		this.supplierFunction = supplierFunction;
 	}
 
 	@Override
@@ -45,57 +33,8 @@ public class DataExplorerContentProvider extends LazyFileExplorerContentProvider
 			if(file.isDirectory()) {
 				return true;
 			}
-			return !getSupplierFileIdentifier(file).isEmpty();
+			return !supplierFunction.apply(file).isEmpty();
 		}
 		return false;
-	}
-
-	@Override
-	public void inputChanged(Viewer newViewer, Object oldInput, Object newInput) {
-
-		this.viewer = newViewer;
-		super.inputChanged(newViewer, oldInput, newInput);
-		supplierCache.clear();
-	}
-
-	@Override
-	public void dispose() {
-
-		supplierCache.clear();
-	}
-
-	public Collection<ISupplierFileIdentifier> getSupplierFileIdentifier(File file) {
-
-		Collection<ISupplierFileIdentifier> list = supplierCache.get(file);
-		if(list == null) {
-			list = new ArrayList<>(1);
-			if(file.isDirectory()) {
-				for(ISupplierFileIdentifier supplierFileIdentifier : fileIdentifiers) {
-					if(supplierFileIdentifier.isSupplierFileDirectory(file)) {
-						if(supplierFileIdentifier.isMatchMagicNumber(file)) {
-							list.add(supplierFileIdentifier);
-						}
-					}
-				}
-			} else if(file.isFile()) {
-				for(ISupplierFileIdentifier supplierFileIdentifier : fileIdentifiers) {
-					if(supplierFileIdentifier.isSupplierFile(file)) {
-						if(supplierFileIdentifier.isMatchMagicNumber(file)) {
-							list.add(supplierFileIdentifier);
-						}
-					}
-				}
-			}
-			list = Collections.unmodifiableCollection(list);
-			supplierCache.put(file, list);
-		}
-		return list;
-	}
-
-	@Override
-	public void refresh(File file) {
-
-		supplierCache.remove(file);
-		super.refresh(file);
 	}
 }

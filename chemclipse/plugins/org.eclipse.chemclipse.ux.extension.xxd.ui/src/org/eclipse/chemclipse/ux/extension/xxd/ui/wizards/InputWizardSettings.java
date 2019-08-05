@@ -17,7 +17,10 @@ import java.util.Collection;
 
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.UserPathPreferencePage;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
+import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class InputWizardSettings {
@@ -26,14 +29,20 @@ public class InputWizardSettings {
 	public static final int DEFAULT_HEIGHT = 400;
 	private String title = "Title";
 	private String description = "Description";
-	private Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList;
 	private IPreferenceStore preferenceStore;
 	private String userLocationPreferenceKey;
+	private SupplierFileIdentifierCache identifierCache;
 
 	public InputWizardSettings(IPreferenceStore preferenceStore, String userLocationPreferenceKey, Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
 		this.preferenceStore = preferenceStore;
 		this.userLocationPreferenceKey = userLocationPreferenceKey;
-		this.supplierFileIdentifierList = supplierFileIdentifierList;
+		identifierCache = new SupplierFileIdentifierCache(500);
+		identifierCache.setIdentifier(supplierFileIdentifierList);
+	}
+
+	public IPreferencePage getPreferencePage() {
+
+		return new UserPathPreferencePage(getPreferenceStore(), getUserLocationPreferenceKey());
 	}
 
 	public IPreferenceStore getPreferenceStore() {
@@ -46,9 +55,9 @@ public class InputWizardSettings {
 		return userLocationPreferenceKey;
 	}
 
-	public Collection<? extends ISupplierFileIdentifier> getSupplierFileIdentifierList() {
+	public SupplierFileIdentifierCache getSupplierCache() {
 
-		return supplierFileIdentifierList;
+		return identifierCache;
 	}
 
 	public String getTitle() {

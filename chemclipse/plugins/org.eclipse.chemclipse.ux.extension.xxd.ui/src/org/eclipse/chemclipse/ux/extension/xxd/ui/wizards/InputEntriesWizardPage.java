@@ -18,11 +18,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.ux.extension.ui.swt.MultiDataExplorerTreeUI;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
@@ -31,8 +31,8 @@ public class InputEntriesWizardPage extends WizardPage {
 
 	private final class WizardMultiDataExplorerTreeUI extends MultiDataExplorerTreeUI {
 
-		private WizardMultiDataExplorerTreeUI(Composite parent, IPreferenceStore preferenceStore) {
-			super(parent, preferenceStore);
+		private WizardMultiDataExplorerTreeUI(Composite parent, SupplierFileIdentifierCache identifierCache, IPreferenceStore preferenceStore) {
+			super(parent, identifierCache, preferenceStore);
 		}
 
 		@Override
@@ -40,9 +40,8 @@ public class InputEntriesWizardPage extends WizardPage {
 
 			treeSelection = treeUI.getRoot();
 			selectedItems.clear();
-			DataExplorerContentProvider contentProvider = treeUI.getContentProvider();
 			for(File file : files) {
-				Collection<ISupplierFileIdentifier> identifier = contentProvider.getSupplierFileIdentifier(file);
+				Collection<ISupplierFileIdentifier> identifier = getIdentifierSupplier().apply(file);
 				if(!identifier.isEmpty()) {
 					selectedItems.put(file, identifier);
 				}
@@ -95,8 +94,7 @@ public class InputEntriesWizardPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		explorerTreeUI = new WizardMultiDataExplorerTreeUI(parent, inputWizardSettings.getPreferenceStore());
-		explorerTreeUI.setSupplierFileIdentifier(inputWizardSettings.getSupplierFileIdentifierList());
+		explorerTreeUI = new WizardMultiDataExplorerTreeUI(parent, inputWizardSettings.getSupplierCache(), inputWizardSettings.getPreferenceStore());
 		explorerTreeUI.expandLastDirectoryPath();
 		setControl(explorerTreeUI.getControl());
 	}

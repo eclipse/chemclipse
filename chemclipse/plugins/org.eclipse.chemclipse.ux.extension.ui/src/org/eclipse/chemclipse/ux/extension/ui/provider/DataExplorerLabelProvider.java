@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.function.Function;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -29,11 +30,11 @@ import org.eclipse.ui.navigator.IDescriptionProvider;
 
 public class DataExplorerLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
 
-	private DataExplorerContentProvider contentProvider;
 	ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
+	private Function<File, Collection<ISupplierFileIdentifier>> supplierFunction;
 
-	public DataExplorerLabelProvider(DataExplorerContentProvider contentProvider) {
-		this.contentProvider = contentProvider;
+	public DataExplorerLabelProvider(Function<File, Collection<ISupplierFileIdentifier>> supplierFunction) {
+		this.supplierFunction = supplierFunction;
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 			if(file.getName().equals("") || file.getParent() == null) {
 				descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DRIVE, IApplicationImage.SIZE_16x16);
 			} else {
-				Collection<ISupplierFileIdentifier> identifier = contentProvider.getSupplierFileIdentifier(file);
+				Collection<ISupplierFileIdentifier> identifier = supplierFunction.apply(file);
 				for(ISupplierFileIdentifier fileIdentifier : identifier) {
 					descriptor = getImageDescriptor(fileIdentifier, file);
 					if(descriptor != null) {

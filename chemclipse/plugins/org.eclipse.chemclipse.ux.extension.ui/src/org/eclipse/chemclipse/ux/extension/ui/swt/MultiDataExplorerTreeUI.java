@@ -13,12 +13,15 @@ package org.eclipse.chemclipse.ux.extension.ui.swt;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.function.Function;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.ui.provider.LazyFileExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -46,12 +49,18 @@ public class MultiDataExplorerTreeUI {
 	private TabFolder tabFolder;
 	private DataExplorerTreeUI[] treeUIs;
 	private IPreferenceStore preferenceStore;
+	private SupplierFileIdentifierCache identifierCache;
 
 	public MultiDataExplorerTreeUI(Composite parent, IPreferenceStore preferenceStore) {
-		this(parent, DEFAULT_ROOTS, preferenceStore);
+		this(parent, new SupplierFileIdentifierCache(LazyFileExplorerContentProvider.MAX_CACHE_SIZE), preferenceStore);
 	}
 
-	public MultiDataExplorerTreeUI(Composite parent, DataExplorerTreeRoot[] roots, IPreferenceStore preferenceStore) {
+	public MultiDataExplorerTreeUI(Composite parent, SupplierFileIdentifierCache identifierCache, IPreferenceStore preferenceStore) {
+		this(parent, identifierCache, DEFAULT_ROOTS, preferenceStore);
+	}
+
+	public MultiDataExplorerTreeUI(Composite parent, SupplierFileIdentifierCache identifierCache, DataExplorerTreeRoot[] roots, IPreferenceStore preferenceStore) {
+		this.identifierCache = identifierCache;
 		this.preferenceStore = preferenceStore;
 		tabFolder = new TabFolder(parent, SWT.NONE);
 		treeUIs = new DataExplorerTreeUI[roots.length];
@@ -60,10 +69,16 @@ public class MultiDataExplorerTreeUI {
 		}
 	}
 
+	protected Function<File, Collection<ISupplierFileIdentifier>> getIdentifierSupplier() {
+
+		return identifierCache;
+	}
+
 	public void setSupplierFileIdentifier(Collection<? extends ISupplierFileIdentifier> supplierFileEditorSupportList) {
 
+		identifierCache.setIdentifier(supplierFileEditorSupportList);
 		for(DataExplorerTreeUI ui : treeUIs) {
-			ui.getContentProvider().setSupplierFileIdentifier(supplierFileEditorSupportList);
+			ui.getTreeViewer().refresh();
 		}
 	}
 
@@ -106,7 +121,7 @@ public class MultiDataExplorerTreeUI {
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setLayout(new GridLayout());
-		DataExplorerTreeUI treeUI = new DataExplorerTreeUI(composite, root);
+		DataExplorerTreeUI treeUI = new DataExplorerTreeUI(composite, root, getIdentifierSupplier());
 		TreeViewer treeViewer = treeUI.getTreeViewer();
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		ISelectionChangedListener selectionChangedListener = new ISelectionChangedListener() {

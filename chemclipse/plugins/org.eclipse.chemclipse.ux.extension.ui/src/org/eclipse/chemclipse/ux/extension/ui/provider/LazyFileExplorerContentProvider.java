@@ -40,7 +40,7 @@ import org.eclipse.swt.widgets.Display;
  */
 public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider, FileFilter {
 
-	private static final int MAX_CACHE_SIZE = Integer.parseInt(System.getProperty("fileexplorer.max_cache_size", "1000"));
+	public static final int MAX_CACHE_SIZE = Integer.parseInt(System.getProperty("fileexplorer.max_cache_size", "1000"));
 	private static final File[] NO_CHILD = new File[0];
 	private TreeViewer viewer;
 	private File[] roots;

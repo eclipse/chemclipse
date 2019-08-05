@@ -38,6 +38,11 @@ public class ChromatogramInputEntry implements IChromatogramInputEntry {
 		}
 	}
 
+	public ChromatogramInputEntry(String inputFile, String name) {
+		this.inputFile = inputFile;
+		this.name = name;
+	}
+
 	@Override
 	public String getInputFile() {
 
