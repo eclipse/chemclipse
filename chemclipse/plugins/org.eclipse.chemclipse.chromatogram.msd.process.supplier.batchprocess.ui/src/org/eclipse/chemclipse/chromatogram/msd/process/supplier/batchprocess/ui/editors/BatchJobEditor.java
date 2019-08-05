@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018 , 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - rework dirty flag handling
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.editors;
 
@@ -25,6 +26,8 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
+import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
@@ -52,6 +55,7 @@ public class BatchJobEditor extends EditorPart {
 		if(file != null) {
 			JobWriter writer = new JobWriter();
 			try {
+				batchJobUI.doSave();
 				writer.writeBatchProcessJob(file, batchProcessJob, monitor);
 				updateDirtyStatus(false);
 			} catch(FileNotFoundException e) {
@@ -125,7 +129,7 @@ public class BatchJobEditor extends EditorPart {
 	public void createPartControl(Composite parent) {
 
 		parent.setLayout(new FillLayout());
-		batchJobUI = new BatchJobUI(parent, SWT.NONE);
+		batchJobUI = new BatchJobUI(parent, SWT.NONE, new ProcessTypeSupport(), new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD});
 		batchJobUI.setModificationHandler(new IModificationHandler() {
 
 			@Override
@@ -140,6 +144,6 @@ public class BatchJobEditor extends EditorPart {
 	public void setFocus() {
 
 		batchJobUI.setFocus();
-		batchJobUI.update(batchProcessJob);
+		batchJobUI.doLoad(batchProcessJob);
 	}
 }
