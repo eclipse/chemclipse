@@ -81,12 +81,12 @@ public class DisplayUtils {
 			try {
 				shell = display.getActiveShell();
 			} catch(Exception e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		//
 		if(shell == null) {
-			logger.warn("Shell is null!");
+			logger.error("Shell is null!");
 		}
 		//
 		return shell;
