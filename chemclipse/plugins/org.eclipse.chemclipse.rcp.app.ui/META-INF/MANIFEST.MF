@@ -52,3 +52,4 @@ Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
  org.osgi.framework;version="[1.0.0,2.0.0)",
  org.osgi.service.event;version="[1.0.0,2.0.0)"
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: org.eclipse.chemclipse.rcp.app.ui

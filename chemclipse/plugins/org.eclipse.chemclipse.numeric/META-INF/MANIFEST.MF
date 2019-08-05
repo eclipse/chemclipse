@@ -25,3 +25,4 @@ Import-Package: org.apache.commons.math3.stat,
  org.apache.commons.math3.stat.descriptive.moment,
  org.apache.commons.math3.stat.descriptive.rank,
  org.apache.commons.math3.stat.inference
+Automatic-Module-Name: org.eclipse.chemclipse.numeric
