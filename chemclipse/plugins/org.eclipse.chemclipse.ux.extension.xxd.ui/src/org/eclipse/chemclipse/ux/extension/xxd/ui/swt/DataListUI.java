@@ -74,6 +74,11 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		createToolbarBottom(control);
 	}
 
+	public ExtendedTableViewer getTableViewer() {
+
+		return tableViewer;
+	}
+
 	private void createTableViewer(Composite composite) {
 
 		tableViewer = new ExtendedTableViewer(composite, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
@@ -218,12 +223,22 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 				for(Object object : tableViewer.getStructuredSelection().toArray()) {
 					files.remove(object);
+					removed((File)object);
 				}
 				tableViewer.setSelection(StructuredSelection.EMPTY);
 				updateList(true);
 			}
 		});
 		return item;
+	}
+
+	protected void removed(File file) {
+
+	}
+
+	protected void addFiles(Collection<File> newFiles) {
+
+		files.addAll(newFiles);
 	}
 
 	private ToolItem createAddButton(ToolBar toolBar) {
@@ -238,7 +253,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 				Set<File> newFiles = InputEntriesWizard.openWizard(getControl().getShell(), inputWizardSettings).keySet();
 				if(!newFiles.isEmpty()) {
-					files.addAll(newFiles);
+					addFiles(newFiles);
 					updateList(true);
 				}
 			}

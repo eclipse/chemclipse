@@ -54,7 +54,7 @@ public class BatchJobUI {
 		ToolBar toolBar = new ToolBar(composite, SWT.FLAT);
 		initToolbar(toolBar, executionRunnable);
 		// left part with files
-		listUI = new DataListUI(composite, this::setEditorDirty, preferenceStore, userlocationPrefrenceKey, dataTypes);
+		listUI = createDataList(composite, preferenceStore, userlocationPrefrenceKey, dataTypes);
 		listUI.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		listUI.getConfig().setToolbarVisible(false);
 		// right part with methods
@@ -62,6 +62,11 @@ public class BatchJobUI {
 		extendedMethodUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		extendedMethodUI.setModificationHandler(this::setEditorDirty);
 		extendedMethodUI.getConfig().setToolbarVisible(false);
+	}
+
+	protected DataListUI createDataList(Composite parent, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataType[] dataTypes) {
+
+		return new DataListUI(parent, this::setEditorDirty, preferenceStore, userlocationPrefrenceKey, dataTypes);
 	}
 
 	private void initToolbar(ToolBar toolBar, IRunnableWithProgress executionRunnable) {
@@ -143,14 +148,14 @@ public class BatchJobUI {
 		}
 	}
 
-	public List<File> getFiles() {
+	public DataListUI getDataList() {
 
-		return listUI.getFiles();
+		return listUI;
 	}
 
-	public IProcessMethod getProcessMethod() {
+	public ExtendedMethodUI getMethod() {
 
-		return extendedMethodUI.getProcessMethod();
+		return extendedMethodUI;
 	}
 
 	public void setModificationHandler(IModificationHandler modificationHandler) {
@@ -158,7 +163,7 @@ public class BatchJobUI {
 		this.modificationHandler = modificationHandler;
 	}
 
-	private void setEditorDirty(boolean dirty) {
+	protected void setEditorDirty(boolean dirty) {
 
 		if(modificationHandler != null) {
 			modificationHandler.setDirty(dirty);
