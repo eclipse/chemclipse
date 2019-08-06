@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
@@ -29,6 +30,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryComparator;
@@ -50,6 +52,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakQuantitationTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
@@ -251,19 +254,35 @@ public class ProcessTypeSupport {
 					 * The applyProcessor method manages how to handle this situation.
 					 * By default, the system settings of the plugin shall be used instead.
 					 */
-					IProcessSettings processSettings = getProcessSettings(processEntry);
+					IProcessSettings processSettings;
+					Object settings = getProcessSettings(processEntry);
+					if(settings instanceof IProcessSettings) {
+						processSettings = (IProcessSettings)settings;
+					} else {
+						processSettings = null;
+					}
 					IProcessingInfo<?> processorResult = chromatogramSelectionProcessTypeSupplier.applyProcessor(chromatogramSelection, processorId, processSettings, monitor);
 					processingInfo.addMessages(processorResult);
-					if(processorResult.hasErrorMessages()) {
-						break;
-					}
 				}
 			}
 		}
 		return processingInfo;
 	}
 
-	public IProcessSettings getProcessSettings(IProcessEntry processEntry) {
+	public Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Processing files", processMethod.size() * 100);
+		for(IProcessEntry processEntry : processMethod) {
+			String processorId = processEntry.getProcessorId();
+			IProcessTypeSupplier processTypeSupplier = getSupplier(processorId);
+			if(processTypeSupplier instanceof IMeasurementProcessTypeSupplier) {
+				measurements = ((IMeasurementProcessTypeSupplier)processTypeSupplier).applyProcessor(measurements, processorId, getProcessSettings(processEntry), messageConsumer, subMonitor.split(100));
+			}
+		}
+		return measurements;
+	}
+
+	public Object getProcessSettings(IProcessEntry processEntry) {
 
 		if(processEntry != null) {
 			Class<?> clazz = processEntry.getProcessSettingsClass();
@@ -275,10 +294,7 @@ public class ProcessTypeSupport {
 					if(IProcessEntry.EMPTY_JSON_SETTINGS.equals(content)) {
 						logger.info("Process settings are empty. Default system settings are used instead.");
 					} else {
-						Object settings = objectMapper.readValue(content, clazz);
-						if(settings instanceof IProcessSettings) {
-							return (IProcessSettings)settings;
-						}
+						return objectMapper.readValue(content, clazz);
 					}
 				} catch(JsonParseException e) {
 					logger.warn(e);
@@ -289,7 +305,6 @@ public class ProcessTypeSupport {
 				}
 			}
 		}
-		//
 		return null;
 	}
 

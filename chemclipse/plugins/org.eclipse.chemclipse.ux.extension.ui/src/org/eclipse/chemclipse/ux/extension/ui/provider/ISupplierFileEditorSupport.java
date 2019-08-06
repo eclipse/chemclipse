@@ -17,9 +17,9 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
@@ -93,8 +93,8 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 					part.setLabel(((IMassSpectra)object).getName());
 				} else if(object instanceof IScanXIR) {
 					part.setLabel("FTIR");
-				} else if(object instanceof IDataNMRSelection) {
-					part.setLabel("NMR");
+				} else if(object instanceof IMeasurement) {
+					part.setLabel(((IMeasurement)object).getDataName());
 				}
 			} else {
 				part.setObject(null);

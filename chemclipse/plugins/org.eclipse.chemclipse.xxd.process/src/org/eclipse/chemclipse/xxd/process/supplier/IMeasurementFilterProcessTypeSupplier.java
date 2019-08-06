@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -22,12 +24,15 @@ import org.eclipse.chemclipse.model.filter.IMeasurementFilter;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.IMeasurementProcessTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
-public class IMeasurementFilterProcessTypeSupplier extends AbstractFilterFactoryProcessTypeSupplier<IMeasurement, IMeasurementFilter<?>> implements IChromatogramSelectionProcessTypeSupplier {
+public class IMeasurementFilterProcessTypeSupplier extends AbstractFilterFactoryProcessTypeSupplier<IMeasurement, IMeasurementFilter<?>> implements IChromatogramSelectionProcessTypeSupplier, IMeasurementProcessTypeSupplier {
 
 	public IMeasurementFilterProcessTypeSupplier(FilterFactory filterFactory) {
 		super(filterFactory);
@@ -62,5 +67,47 @@ public class IMeasurementFilterProcessTypeSupplier extends AbstractFilterFactory
 			return info;
 		}
 		return null;
+	}
+
+	@Override
+	public Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, String processorId, Object processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+
+		FilterProcessSupplier<IMeasurementFilter<?>> supplier = getProcessorSupplier(processorId);
+		if(supplier != null) {
+			IMeasurementFilter<?> filter = supplier.getFilter();
+			if(filter.acceptsIMeasurements(measurements)) {
+				// we can process them as a whole...
+				return apply(measurements, processSettings, messageConsumer, monitor, filter);
+			} else {
+				// check if we at least can process single items of the list...
+				List<IMeasurement> resultList = new ArrayList<>();
+				SubMonitor subMonitor = SubMonitor.convert(monitor, measurements.size());
+				for(IMeasurement measurement : measurements) {
+					Set<IMeasurement> singleItem = Collections.singleton(measurement);
+					if(filter.acceptsIMeasurements(singleItem)) {
+						// we can process this single item ...
+						resultList.addAll(apply(singleItem, processSettings, messageConsumer, subMonitor.split(1), filter));
+					} else {
+						// we can't process this item either...
+						resultList.add(measurement);
+						subMonitor.worked(1);
+					}
+				}
+				return resultList;
+			}
+		}
+		return measurements;
+	}
+
+	private <T> Collection<? extends IMeasurement> apply(Collection<? extends IMeasurement> measurements, Object processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor, IMeasurementFilter<T> filter) {
+
+		T configuration;
+		try {
+			configuration = filter.getConfigClass().cast(processSettings);
+		} catch(ClassCastException e) {
+			messageConsumer.addWarnMessage(filter.getName(), "Invalid Configuration, using default instead");
+			configuration = filter.createConfiguration(measurements);
+		}
+		return filter.filterIMeasurements(measurements, configuration, Function.identity(), messageConsumer, monitor);
 	}
 }

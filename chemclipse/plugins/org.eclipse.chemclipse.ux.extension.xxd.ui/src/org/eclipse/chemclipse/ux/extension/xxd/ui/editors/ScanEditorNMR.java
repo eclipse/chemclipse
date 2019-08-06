@@ -237,6 +237,33 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 				e.printStackTrace();
 			}
 		}
+		if(object instanceof IComplexSignalMeasurement<?>) {
+			selection = new DataNMRSelection();
+			String label = addToSelection((IComplexSignalMeasurement<?>)object, selection);
+			part.setLabel(label);
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					extendedNMRScanUI.update(selection);
+					measurementsUI.update(selection);
+				}
+			});
+		}
+	}
+
+	private static String addToSelection(IComplexSignalMeasurement<?> measurement, DataNMRSelection selection) {
+
+		String name = measurement.getDataName();
+		if(measurement instanceof Filtered) {
+			Object filteredObject = ((Filtered<?, ?>)measurement).getFilterContext().getFilteredObject();
+			if(filteredObject instanceof IComplexSignalMeasurement<?>) {
+				name = addToSelection((IComplexSignalMeasurement<?>)filteredObject, selection) + " > " + name;
+			}
+		}
+		selection.addMeasurement(measurement);
+		return name;
 	}
 
 	private void createEditorPages(Composite parent) {
