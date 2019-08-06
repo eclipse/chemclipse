@@ -146,6 +146,7 @@
   <handlers xmi:id="_53gfEEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.export" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.ExportHandler" command="_zmfM8EaqEeKL9t3RgmYB_g"/>
   <handlers xmi:id="_wRrJICaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.help" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.HelpHandler" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
   <handlers xmi:id="_NeEKMIgsEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.opensnippet" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler" command="_-eZF4IgrEemJaOKd7Cy7Ww"/>
+  <handlers xmi:id="_XLWkMLgWEemNgNx3khJk0g" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.opentoolmenu" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.OpenMenuHandler" command="_mZc7gLgVEemNgNx3khJk0g"/>
   <bindingTables xmi:id="_h0A1PDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.bindingtable" bindingContext="_h0A1MTLzEeKMEOdllHiEaA">
     <bindings xmi:id="_h0A1PTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.keybinding.quit" keySequence="M1+Q" command="_h0A1OjLzEeKMEOdllHiEaA"/>
     <bindings xmi:id="_h0A1RjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.keybinding.about" keySequence="M1+A" command="_h0A1RDLzEeKMEOdllHiEaA"/>
@@ -168,6 +169,7 @@
   <commands xmi:id="_-eZF4IgrEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.command.opensnippet" commandName="Open Snippet" description="Open the given Snippet in the editor area">
     <parameters xmi:id="_-eZF4YgrEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.commandparameter.opensnippet.snippetid" name="snippetid" optional="false"/>
   </commands>
+  <commands xmi:id="_mZc7gLgVEemNgNx3khJk0g" elementId="chemclipse.command.opentoolmenu" commandName="Open Tool Menu" description="Open the Tool menu"/>
   <addons xmi:id="_h0A1NDLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_h0A1NTLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_h0A1NjLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
