@@ -166,9 +166,9 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 
 	private BatchProcessJob getBatchProcessJob() {
 
-		BatchProcessJob job = new BatchProcessJob(batchJobUI.getProcessMethod());
+		BatchProcessJob job = new BatchProcessJob(batchJobUI.getMethod().getProcessMethod());
 		List<IChromatogramInputEntry> entries = job.getChromatogramInputEntries();
-		for(File file : batchJobUI.getFiles()) {
+		for(File file : batchJobUI.getDataList().getFiles()) {
 			entries.add(new ChromatogramInputEntry(file.getAbsolutePath()));
 		}
 		return job;
