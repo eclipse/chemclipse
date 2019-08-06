@@ -11,7 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-public interface MethodUIConfig extends ToolbarConfig, TableConfig, PreferencesConfig {
+import org.eclipse.jface.preference.IPreferencePage;
 
-	void setShowSettingsOnAdd(boolean showSettingsOnAdd);
+/**
+ * Interface an UI can implement to state that it has a preference pages
+ * 
+ * @author Christoph Läubrich
+ *
+ */
+public interface PreferencesConfig {
+
+	IPreferencePage[] getPreferencePages();
+
+	void applySettings();
 }

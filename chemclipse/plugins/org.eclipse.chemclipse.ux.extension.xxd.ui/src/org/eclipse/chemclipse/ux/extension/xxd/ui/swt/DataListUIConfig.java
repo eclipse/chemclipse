@@ -11,7 +11,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-public interface MethodUIConfig extends ToolbarConfig, TableConfig, PreferencesConfig {
-
-	void setShowSettingsOnAdd(boolean showSettingsOnAdd);
+public interface DataListUIConfig extends ToolbarConfig, PreferencesConfig {
 }

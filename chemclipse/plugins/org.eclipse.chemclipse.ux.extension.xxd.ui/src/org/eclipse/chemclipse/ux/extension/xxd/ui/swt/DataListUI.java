@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.columns.SimpleColumnDefinition;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -52,13 +53,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-public class DataListUI {
+public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 	private ExtendedTableViewer tableViewer;
 	private List<File> files = new ArrayList<File>();
 	private Consumer<Boolean> dirtyListener;
 	private Composite control;
 	private InputWizardSettings inputWizardSettings;
+	private Composite toolbarMain;
 
 	public DataListUI(Composite parent, Consumer<Boolean> dirtyListener, IPreferenceStore preferenceStore, String userPathKey, DataType... dataTypes) {
 		this.dirtyListener = dirtyListener;
@@ -120,12 +122,12 @@ public class DataListUI {
 
 	private void createToolbarTop(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
+		toolbarMain = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
-		Button button = new Button(composite, SWT.PUSH);
+		toolbarMain.setLayoutData(gridData);
+		toolbarMain.setLayout(new GridLayout(1, false));
+		Button button = new Button(toolbarMain, SWT.PUSH);
 		button.setToolTipText("Open the Settings");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -218,7 +220,7 @@ public class DataListUI {
 					files.remove(object);
 				}
 				tableViewer.setSelection(StructuredSelection.EMPTY);
-				updateList(false);
+				updateList(true);
 			}
 		});
 		return item;
@@ -252,7 +254,9 @@ public class DataListUI {
 	public void setFiles(Collection<File> files) {
 
 		this.files.clear();
-		this.files.addAll(files);
+		if(files != null) {
+			this.files.addAll(files);
+		}
 		updateList(false);
 	}
 
@@ -284,5 +288,36 @@ public class DataListUI {
 	public List<File> getFiles() {
 
 		return Collections.unmodifiableList(files);
+	}
+
+	@Override
+	public DataListUIConfig getConfig() {
+
+		return new DataListUIConfig() {
+
+			@Override
+			public void setToolbarVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolbarMain, visible);
+			}
+
+			@Override
+			public boolean isToolbarVisible() {
+
+				return toolbarMain.isVisible();
+			}
+
+			@Override
+			public IPreferencePage[] getPreferencePages() {
+
+				return new IPreferencePage[]{inputWizardSettings.getPreferencePage()};
+			}
+
+			@Override
+			public void applySettings() {
+
+				// nothing to do
+			}
+		};
 	}
 }

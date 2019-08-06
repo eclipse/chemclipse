@@ -136,6 +136,11 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		updateProcessMethod();
 	}
 
+	public IProcessMethod getProcessMethod() {
+
+		return processMethod;
+	}
+
 	public void setModificationHandler(IModificationHandler modificationHandler) {
 
 		this.modificationHandler = modificationHandler;
@@ -217,17 +222,13 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageProcessing = new PreferencePage();
-				preferencePageProcessing.setTitle("Processing");
-				//
-				IPreferencePage preferencePageMethods = new PreferencePageMethods();
-				preferencePageMethods.setTitle("Methods");
-				//
+				IPreferencePage[] preferencePages = getConfig().getPreferencePages();
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageProcessing));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageMethods));
+				for(int i = 0; i < preferencePages.length; i++) {
+					preferenceManager.addToRoot(new PreferenceNode(String.valueOf(i + 1), preferencePages[i]));
+				}
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(parent.getShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
@@ -753,6 +754,23 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			public void setShowSettingsOnAdd(boolean showSettingsOnAdd) {
 
 				ExtendedMethodUI.this.showSettingsOnAdd = showSettingsOnAdd;
+			}
+
+			@Override
+			public IPreferencePage[] getPreferencePages() {
+
+				IPreferencePage preferencePageProcessing = new PreferencePage();
+				preferencePageProcessing.setTitle("Processing");
+				//
+				IPreferencePage preferencePageMethods = new PreferencePageMethods();
+				preferencePageMethods.setTitle("Methods");
+				return new IPreferencePage[]{preferencePageProcessing, preferencePageMethods};
+			}
+
+			@Override
+			public void applySettings() {
+
+				ExtendedMethodUI.this.applySettings();
 			}
 		};
 	}
