@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.model.core;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.function.Function;
 
 /**
  * Interface that supplies a stream of {@link PeakPosition}s
@@ -43,5 +45,32 @@ public interface PeakList extends Iterable<PeakPosition> {
 
 		Collection<PeakPosition> unmodifiableCollection = Collections.unmodifiableCollection(Arrays.asList(peakPositions));
 		return unmodifiableCollection::iterator;
+	}
+
+	public static <From> PeakList transform(Iterable<From> iterable, Function<From, PeakPosition> transformer) {
+
+		return new PeakList() {
+
+			@Override
+			public Iterator<PeakPosition> iterator() {
+
+				Iterator<From> iterator = iterable.iterator();
+				return new Iterator<PeakPosition>() {
+
+					@Override
+					public boolean hasNext() {
+
+						return iterator.hasNext();
+					}
+
+					@Override
+					public PeakPosition next() {
+
+						From next = iterator.next();
+						return transformer.apply(next);
+					}
+				};
+			}
+		};
 	}
 }

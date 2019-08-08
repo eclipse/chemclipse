@@ -33,7 +33,7 @@ public interface IMeasurementPeakDetector<ConfigType> extends Detector<ConfigTyp
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	<T extends IMeasurement> Map<T, PeakList> detectIMeasurementPeaks(Collection<? extends IMeasurement> detectorInputItems, ConfigType configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
+	<T extends IMeasurement> Map<T, PeakList> detectIMeasurementPeaks(Collection<T> detectorInputItems, ConfigType configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link IMeasurement} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}

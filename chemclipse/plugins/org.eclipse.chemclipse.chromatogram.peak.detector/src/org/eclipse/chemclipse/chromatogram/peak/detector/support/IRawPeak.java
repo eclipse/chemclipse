@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.support;
 
-public interface IRawPeak {
+import org.eclipse.chemclipse.model.core.PeakPosition;
+import org.eclipse.chemclipse.model.core.PeakType;
+
+public interface IRawPeak extends PeakPosition {
 
 	/**
 	 * Returns the start scan of the raw peak.
@@ -48,4 +51,28 @@ public interface IRawPeak {
 	 * @return int
 	 */
 	int getStopScan();
+
+	@Override
+	default PeakType getPeakType() {
+
+		return PeakType.DEFAULT;
+	}
+
+	@Override
+	default int getPeakStart() {
+
+		return getStartScan() - 1;
+	}
+
+	@Override
+	default int getPeakMaximum() {
+
+		return getMaximumScan() - 1;
+	}
+
+	@Override
+	default int getPeakEnd() {
+
+		return getStopScan() - 1;
+	}
 }
