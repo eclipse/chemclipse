@@ -21,8 +21,8 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 
@@ -30,7 +30,7 @@ public abstract class AbstractFilterFactoryProcessTypeSupplier<DT, FT extends Fi
 
 	private Map<String, FilterProcessSupplier<FT>> suppliers = new HashMap<>();
 
-	public AbstractFilterFactoryProcessTypeSupplier(FilterFactory filterFactory) {
+	public AbstractFilterFactoryProcessTypeSupplier(ProcessorFactory filterFactory) {
 	}
 
 	@Override

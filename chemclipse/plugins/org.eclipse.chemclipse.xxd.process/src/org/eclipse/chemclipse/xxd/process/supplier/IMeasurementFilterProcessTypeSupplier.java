@@ -23,10 +23,10 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.filter.IMeasurementFilter;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
+import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IMeasurementProcessTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -34,9 +34,9 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class IMeasurementFilterProcessTypeSupplier extends AbstractFilterFactoryProcessTypeSupplier<IMeasurement, IMeasurementFilter<?>> implements IChromatogramSelectionProcessTypeSupplier, IMeasurementProcessTypeSupplier {
 
-	public IMeasurementFilterProcessTypeSupplier(FilterFactory filterFactory) {
+	public IMeasurementFilterProcessTypeSupplier(ProcessorFactory filterFactory) {
 		super(filterFactory);
-		Collection<IMeasurementFilter<?>> filters = filterFactory.getFilters(FilterFactory.genericClass(IMeasurementFilter.class), null);
+		Collection<IMeasurementFilter<?>> filters = filterFactory.getProcessors(ProcessorFactory.genericClass(IMeasurementFilter.class), null);
 		for(IMeasurementFilter<?> filter : filters) {
 			createProcessorSupplier(filter);
 		}
@@ -45,7 +45,7 @@ public class IMeasurementFilterProcessTypeSupplier extends AbstractFilterFactory
 	@Override
 	public String getCategory() {
 
-		return "Measurement Filter";
+		return "Filter";
 	}
 
 	@Override
@@ -59,8 +59,8 @@ public class IMeasurementFilterProcessTypeSupplier extends AbstractFilterFactory
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			Set<IChromatogram<?>> chromatograms = Collections.singleton(chromatogram);
 			if(filter.acceptsIMeasurements(chromatograms)) {
-				// TODO currently the caller always assume that the chromatogram is modified directly, we might want to change this in the future but keep it here for backward compat
-				filter.createIMeasurementFilterFunction(monitor, info, Function.identity()).apply(chromatograms);
+				// TODO currently the caller always assume that the chromatogram is modified directly, we might want to change this in the future but keep it here for backward compat in fact there is also no way to set the selected chromatogram anyways
+				apply(chromatograms, processSettings, info, monitor, filter);
 			} else {
 				info.addErrorMessage(filter.getName(), "This Filter can't handle a Chromatogram of type " + chromatogram.getClass().getSimpleName());
 			}

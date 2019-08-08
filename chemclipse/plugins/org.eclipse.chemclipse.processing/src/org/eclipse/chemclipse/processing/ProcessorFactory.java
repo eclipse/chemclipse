@@ -9,30 +9,31 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.processing.filter;
+package org.eclipse.chemclipse.processing;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 
 /**
- * A {@link FilterFactory} service allows access to all currently known {@link Filter} in the system
+ * A {@link ProcessorFactory} service allows access to all currently known {@link Filter} in the system
  * 
  * @author Christoph Läubrich
  *
  */
-public interface FilterFactory {
+public interface ProcessorFactory {
 
 	/**
-	 * Returns all filter know to this {@link FilterFactory} that match the given acceptor (if given) and given FilterType
+	 * Returns all processors know to this {@link ProcessorFactory} that match the given processorType and acceptor (if given)
 	 * 
-	 * @param filterType
-	 *            the subtype of the filter or {@link Filter}.class to fetch any filter that is know to the factory
+	 * @param processorType
+	 *            the subtype of the {@link Processor} to fetch
 	 * @param acceptor
-	 *            an acceptor function that can narrow the result or <code>null</code> if all Filters should be returned
+	 *            an acceptor function that can narrow the result or <code>null</code> if all {@link Processor}s should be returned
 	 * @return the filters that are matched
 	 */
-	<FilterType extends Filter<?>> Collection<FilterType> getFilters(Class<FilterType> filterType, BiFunction<FilterType, Map<String, ?>, Boolean> acceptor);
+	<T extends Processor<?>> Collection<T> getProcessors(Class<T> processorType, BiPredicate<? super T, Map<String, ?>> acceptor);
 
 	/**
 	 * Helper method to create generic Class types for subinterfaces that satisfy the {@link #getFilters(Class, BiFunction)} method, e.g.

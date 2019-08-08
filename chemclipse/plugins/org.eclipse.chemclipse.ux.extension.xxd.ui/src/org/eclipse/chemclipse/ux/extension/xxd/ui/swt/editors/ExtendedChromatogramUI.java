@@ -40,8 +40,8 @@ import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -195,11 +195,11 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private ProcessTypeSupport processTypeSupport;
 
-	public ExtendedChromatogramUI(Composite parent, int style, FilterFactory filterFactory) {
+	public ExtendedChromatogramUI(Composite parent, int style, ProcessorFactory filterFactory) {
 		this(parent, style, null, new ProcessTypeSupport(filterFactory));
 	}
 
-	public ExtendedChromatogramUI(Composite parent, int style, FilterFactory filterFactory, ProcessTypeSupport processTypeSupport) {
+	public ExtendedChromatogramUI(Composite parent, int style, ProcessorFactory filterFactory, ProcessTypeSupport processTypeSupport) {
 		this.processTypeSupport = processTypeSupport;
 		initialize(parent, style);
 	}
