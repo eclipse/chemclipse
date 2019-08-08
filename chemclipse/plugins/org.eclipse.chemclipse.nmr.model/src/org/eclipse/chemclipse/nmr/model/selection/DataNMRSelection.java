@@ -100,6 +100,12 @@ public class DataNMRSelection extends Observable implements IDataNMRSelection {
 	}
 
 	@Override
+	public synchronized void setChanged() {
+
+		super.setChanged();
+	}
+
+	@Override
 	public void removeObserver(Observer observer) {
 
 		deleteObserver(observer);

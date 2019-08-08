@@ -192,6 +192,8 @@ public class NMRMeasurementsUI implements Observer {
 							for(Entry<IComplexSignalMeasurement<?>, PeakList> entries : peaks.entrySet()) {
 								entries.getKey().addMeasurementResult(entries.getValue());
 							}
+							selection.setChanged();
+							selection.notifyObservers(ChangeType.SELECTION_CHANGED);
 						};
 					});
 				}
