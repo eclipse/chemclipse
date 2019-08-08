@@ -9,21 +9,18 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
+ * Christoph Läubrich - extract common methods to base class
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.AbstractPeakDetectorMSD;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
-import org.eclipse.chemclipse.chromatogram.peak.detector.support.IDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
-import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.Threshold;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlope;
@@ -38,27 +35,23 @@ import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
 import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.TotalIonSignalExtractor;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
-import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
+import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
+public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMSD {
 
 	private static final Logger logger = Logger.getLogger(PeakDetectorMSD.class);
 	//
 	private static final String DETECTOR_DESCRIPTION = "Peak Detector First Derivative";
-	//
-	private static float NORMALIZATION_BASE = 100000.0f;
-	private static int CONSECUTIVE_SCAN_STEPS = 3;
 
 	@Override
 	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD detectorSettings, IProgressMonitor monitor) {
@@ -106,8 +99,8 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 */
 	private void detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
-		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings);
-		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings, monitor);
+		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize());
+		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
 		buildAndStorePeaks(rawPeaks, chromatogramSelection.getChromatogramMSD(), peakDetectorSettings);
 	}
 
@@ -163,9 +156,10 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	 * Initializes the slope values.
 	 * 
 	 * @param chromatogramSelection
+	 * @param windowSize
 	 * @return {@link IFirstDerivativeDetectorSlopes}
 	 */
-	private IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings) {
+	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, WindowSize windowSize) {
 
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
 		try {
@@ -191,103 +185,12 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 					slopes.add(slope);
 				}
 			}
-			slopes.calculateMovingAverage(peakDetectorSettings.getMovingAverageWindowSize());
+			slopes.calculateMovingAverage(windowSize);
 			return slopes;
 		} catch(ChromatogramIsNullException e) {
 			logger.warn(e);
 			return null;
 		}
-	}
-
-	private static List<IRawPeak> getRawPeaks(IFirstDerivativeDetectorSlopes slopes, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
-
-		return getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
-	}
-
-	/**
-	 * Marks the peaks with start, stop and max.
-	 * 
-	 * @param slopeList
-	 */
-	public static List<IRawPeak> getRawPeaks(IFirstDerivativeDetectorSlopes slopes, Threshold thresholdSetting, IProgressMonitor monitor) {
-
-		double threshold;
-		switch(thresholdSetting) {
-			case OFF:
-				threshold = 0.0005d;
-				break;
-			case LOW:
-				threshold = 0.005d;
-				break;
-			case MEDIUM:
-				threshold = 0.05d;
-				break;
-			case HIGH:
-				threshold = 0.5d;
-				break;
-			default:
-				threshold = 0.005d;
-				break;
-		}
-		/*
-		 * It should be also possible to detect peaks in a selected retention
-		 * time area of the chromatogram.<br/> The value for scan in the for
-		 * loop is by default 1 (detector array), but the slopes are storing
-		 * start and end point of selection (scans).<br/> E.g. the selection is
-		 * from scan 850 to scan 1000, then the loop starts at >
-		 * slopes.getDetectorSlope(1 + 849);
-		 */
-		int size = slopes.size();
-		int scanOffset = slopes.getStartScan() - 1;
-		int peaks = 1;
-		IRawPeak rawPeak;
-		List<IRawPeak> rawPeaks = new ArrayList<IRawPeak>();
-		for(int i = 1; i <= size - CONSECUTIVE_SCAN_STEPS; i++) {
-			/*
-			 * Get the scan numbers without offset.<br/> Why? To not get out of
-			 * borders of the slopes list.
-			 */
-			int peakStart = detectPeakStart(slopes, i, scanOffset, threshold);
-			int peakMaximum = detectPeakMaximum(slopes, peakStart, scanOffset);
-			int peakStop = detectPeakStop(slopes, peakMaximum, scanOffset);
-			/*
-			 * Begin the detection of the next peak at the end of the actual
-			 * peak.
-			 */
-			i = peakStop;
-			/*
-			 * Adjust the peak to their real positions (scan numbers) in the
-			 * chromatogram.<br/> Keep in mind, the slopes list starts at
-			 * position and not at the position of the scan.
-			 */
-			peakStart += scanOffset;
-			peakMaximum += scanOffset;
-			peakStop += scanOffset;
-			//
-			rawPeak = new RawPeak(peakStart, peakMaximum, peakStop);
-			if(isValidRawPeak(rawPeak)) {
-				monitor.subTask("Add peak " + peaks++);
-				rawPeaks.add(rawPeak);
-			}
-		}
-		return rawPeaks;
-	}
-
-	/**
-	 * Checks if the peak is a valid raw peak.<br/>
-	 * For example if it contains not less than the needed amount of scans.
-	 * 
-	 * @param rawPeak
-	 * @return boolean
-	 */
-	private static boolean isValidRawPeak(IRawPeak rawPeak) {
-
-		boolean isValid = false;
-		int width = rawPeak.getStopScan() - rawPeak.getStartScan() + 1;
-		if(width >= IPeakModelMSD.MINIMUM_SCANS) {
-			isValid = true;
-		}
-		return isValid;
 	}
 
 	/**
@@ -303,87 +206,5 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Detects the peak start.
-	 * 
-	 * @param slope
-	 * @param startScan
-	 * @param scanOffset
-	 * @return int
-	 */
-	private static int detectPeakStart(IFirstDerivativeDetectorSlopes slopes, int startScan, int scanOffset, double threshold) {
-
-		int size = slopes.size();
-		int peakStart = size - 1;
-		IDetectorSlope slope;
-		double[] values = new double[CONSECUTIVE_SCAN_STEPS];
-		exitloop:
-		for(int scan = startScan; scan <= size - CONSECUTIVE_SCAN_STEPS; scan++) {
-			slope = slopes.getDetectorSlope(scan + scanOffset);
-			if(slope.getSlope() > threshold) {
-				/*
-				 * Get the actual and the next slope values.
-				 */
-				for(int j = 0; j < CONSECUTIVE_SCAN_STEPS; j++) {
-					values[j] = slopes.getDetectorSlope(scan + j + scanOffset).getSlope();
-				}
-				if(Evaluation.valuesAreGreaterThanThreshold(values, threshold) && Evaluation.valuesAreIncreasing(values)) {
-					peakStart = scan;
-					break exitloop;
-				}
-			}
-		}
-		return peakStart;
-	}
-
-	/**
-	 * Detects the peak maxima.<br/>
-	 * The peak start and stops needs to be detected previously.
-	 * 
-	 * @param slope
-	 * @param startScan
-	 * @param scanOffset
-	 * @return int
-	 */
-	private static int detectPeakMaximum(IFirstDerivativeDetectorSlopes slopes, int startScan, int scanOffset) {
-
-		int size = slopes.size();
-		IDetectorSlope slope;
-		int peakMaximum = startScan;
-		exitloop:
-		for(int scan = startScan; scan <= size - CONSECUTIVE_SCAN_STEPS; scan++) {
-			slope = slopes.getDetectorSlope(scan + scanOffset);
-			if(slope.getSlope() < 0.0d) {
-				peakMaximum = scan;
-				break exitloop;
-			}
-		}
-		return peakMaximum;
-	}
-
-	/**
-	 * Detects the peak stops.
-	 * 
-	 * @param slope
-	 * @param startScan
-	 * @param scanOffset
-	 * @return int
-	 */
-	private static int detectPeakStop(IFirstDerivativeDetectorSlopes slopes, int startScan, int scanOffset) {
-
-		int size = slopes.size();
-		int peakStop = size - CONSECUTIVE_SCAN_STEPS;
-		IDetectorSlope slope;
-		exitloop:
-		for(int scan = startScan; scan <= size - CONSECUTIVE_SCAN_STEPS; scan++) {
-			slope = slopes.getDetectorSlope(scan + scanOffset);
-			if(slope.getSlope() > 0.0d) {
-				peakStop = scan;
-				break exitloop;
-			}
-		}
-		return peakStop;
 	}
 }
