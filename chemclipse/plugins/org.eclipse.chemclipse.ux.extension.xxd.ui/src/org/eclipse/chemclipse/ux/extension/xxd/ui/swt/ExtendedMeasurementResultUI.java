@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -73,7 +74,12 @@ public class ExtendedMeasurementResultUI {
 		}
 		comboMeasurementResults.setInput(results);
 		comboMeasurementResults.refresh();
-		updateMeasurementResult((IMeasurementResult)comboMeasurementResults.getStructuredSelection().getFirstElement());
+		IMeasurementResult element = (IMeasurementResult)comboMeasurementResults.getStructuredSelection().getFirstElement();
+		if(element == null && results.size() == 1) {
+			element = results.iterator().next();
+			comboMeasurementResults.setSelection(new StructuredSelection(element));
+		}
+		updateMeasurementResult(element);
 	}
 
 	private void initialize(Composite parent) {

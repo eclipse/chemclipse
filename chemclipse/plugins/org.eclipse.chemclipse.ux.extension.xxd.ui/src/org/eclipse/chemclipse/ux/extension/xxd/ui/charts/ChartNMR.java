@@ -20,11 +20,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.scan.IScanConverterSupport;
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.model.core.ISignal;
+import org.eclipse.chemclipse.model.core.PeakPosition;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
@@ -259,6 +262,28 @@ public class ChartNMR extends LineChart {
 	public static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals) {
 
 		return createSignalSeries(id, signals, 0.0d, 0.0d);
+	}
+
+	public static ISeriesData createPeakSeries(String id, List<? extends ISignal> signals, Iterable<PeakPosition> iterable, double yOffset, double xOffset) {
+
+		List<PeakPosition> list = StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
+		int size = list.size();
+		double[] xSeries = new double[size];
+		double[] ySeries = new double[size];
+		int index = 0;
+		for(PeakPosition position : list) {
+			int maximum = position.getPeakMaximum();
+			if(maximum > -1) {
+				ISignal signal = signals.get(maximum);
+				xSeries[index] = signal.getX() + xOffset;
+				ySeries[index] = signal.getY() + yOffset;
+			} else {
+				xSeries[index] = Double.NaN;
+				ySeries[index] = Double.NaN;
+			}
+			index++;
+		}
+		return new SeriesData(xSeries, ySeries, id);
 	}
 
 	public static ISeriesData createSignalSeries(String id, Collection<? extends ISignal> signals, double yOffset, double xOffset) {

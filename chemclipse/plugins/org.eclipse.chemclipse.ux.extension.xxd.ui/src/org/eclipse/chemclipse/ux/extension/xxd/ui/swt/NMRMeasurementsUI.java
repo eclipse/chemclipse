@@ -17,19 +17,25 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurement;
+import org.eclipse.chemclipse.model.core.PeakList;
+import org.eclipse.chemclipse.model.detector.IMeasurementPeakDetector;
 import org.eclipse.chemclipse.model.filter.IMeasurementFilter;
 import org.eclipse.chemclipse.nmr.model.core.FIDMeasurement;
 import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.nmr.model.selection.DataNMRSelection;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection.ChangeType;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
+import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.filter.Filtered;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -40,6 +46,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IElementComparer;
@@ -152,6 +159,48 @@ public class NMRMeasurementsUI implements Observer {
 			public void menuAboutToShow(IMenuManager mgr) {
 
 				Set<IComplexSignalMeasurement<?>> measurements = Collections.singleton(selection.getMeasurement());
+				addFilter(mgr, measurements);
+				mgr.add(new Separator());
+				addDetectors(mgr, measurements);
+				mgr.add(new Separator());
+				mgr.add(new DeleteAction());
+			}
+
+			private void addDetectors(IMenuManager mgr, Set<IComplexSignalMeasurement<?>> measurements) {
+
+				Collection<IMeasurementPeakDetector<?>> detectors = filterFactory.getProcessors(ProcessorFactory.genericClass(IMeasurementPeakDetector.class), new BiPredicate<IMeasurementPeakDetector<?>, Map<String, ?>>() {
+
+					@Override
+					public boolean test(IMeasurementPeakDetector<?> detector, Map<String, ?> u) {
+
+						return detector.acceptsIMeasurements(measurements);
+					}
+				});
+				for(IMeasurementPeakDetector<?> peakDetector : detectors) {
+					mgr.add(new Action() {
+
+						@Override
+						public String getText() {
+
+							return peakDetector.getName();
+						};
+
+						@Override
+						public void run() {
+
+							Map<IComplexSignalMeasurement<?>, PeakList> peaks = peakDetector.detectIMeasurementPeaks(measurements, null, new DefaultProcessingResult<>(), null);
+							for(Entry<IComplexSignalMeasurement<?>, PeakList> entries : peaks.entrySet()) {
+								entries.getKey().addMeasurementResult(entries.getValue());
+							}
+							selection.setChanged();
+							selection.notifyObservers(ChangeType.SELECTION_CHANGED);
+						};
+					});
+				}
+			}
+
+			private void addFilter(IMenuManager mgr, Set<IComplexSignalMeasurement<?>> measurements) {
+
 				Collection<IMeasurementFilter<?>> filters = filterFactory.getProcessors(ProcessorFactory.genericClass(IMeasurementFilter.class), (filter, properties) -> filter.acceptsIMeasurements(measurements));
 				Consumer<Collection<? extends IMeasurement>> consumer = new Consumer<Collection<? extends IMeasurement>>() {
 
@@ -171,7 +220,6 @@ public class NMRMeasurementsUI implements Observer {
 					IAction action = new IMeasurementFilterAction(filter, measurements, consumer, processTypeSupport);
 					mgr.add(action);
 				}
-				mgr.add(new DeleteAction());
 			}
 		});
 		Menu menu = contextMenu.createContextMenu(treeViewer.getControl());

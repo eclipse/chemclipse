@@ -53,6 +53,7 @@ import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DynamicSettingsUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedMeasurementResultUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.NMRMeasurementsUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedNMRScanUI;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -97,6 +98,7 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 	private NMRMeasurementsUI measurementsUI;
 	private ProcessorFactory filterFactory;
 	private PartSupport partSupport;
+	private ExtendedMeasurementResultUI extendedMeasurementResultUI;
 
 	@Inject
 	public ScanEditorNMR(Composite parent, IEventBroker eventBroker, MPart part, MDirtyable dirtyable, Shell shell, ProcessorFactory filterFactory, PartSupport partSupport) {
@@ -209,15 +211,7 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 									break;
 								}
 							}
-							Display.getDefault().asyncExec(new Runnable() {
-
-								@Override
-								public void run() {
-
-									extendedNMRScanUI.update(selection);
-									measurementsUI.update(selection);
-								}
-							});
+							Display.getDefault().asyncExec(ScanEditorNMR.this::updateSelection);
 						} else {
 							Display.getDefault().asyncExec(new Runnable() {
 
@@ -241,16 +235,22 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 			selection = new DataNMRSelection();
 			String label = addToSelection((IComplexSignalMeasurement<?>)object, selection);
 			part.setLabel(label);
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					extendedNMRScanUI.update(selection);
-					measurementsUI.update(selection);
-				}
-			});
+			Display.getDefault().asyncExec(this::updateSelection);
 		}
+	}
+
+	private void updateSelection() {
+
+		extendedNMRScanUI.update(selection);
+		measurementsUI.update(selection);
+		// selection.addObserver(new Observer() {
+		//
+		// @Override
+		// public void update(Observable o, Object arg) {
+		//
+		// extendedMeasurementResultUI.update(selection.getMeasurement().getMeasurementResults(), "");
+		// }
+		// });
 	}
 
 	private static String addToSelection(IComplexSignalMeasurement<?> measurement, DataNMRSelection selection) {
@@ -292,7 +292,6 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
-				System.out.println("ScanEditorNMR.createScanPage(...).new ISelectionChangedListener() {...}.selectionChanged()");
 				IComplexSignalMeasurement<?> measurement = measurementsUI.getSelection();
 				if(measurement instanceof Filtered) {
 					FilterContext<?, ?> context = ((Filtered<?, ?>)measurement).getFilterContext();
@@ -303,6 +302,7 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 				}
 			}
 		});
+		// extendedMeasurementResultUI = new ExtendedMeasurementResultUI(composite);
 	}
 
 	private final class UpdatingObserver<FilteredType, ConfigType> implements Observer {

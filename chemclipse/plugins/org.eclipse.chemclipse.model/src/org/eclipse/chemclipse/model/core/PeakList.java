@@ -11,66 +11,47 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.function.Function;
-
 /**
  * Interface that supplies a stream of {@link PeakPosition}s
  * 
  * @author Christoph Läubrich
  *
  */
-public interface PeakList extends Iterable<PeakPosition> {
+public class PeakList implements IMeasurementResult<Iterable<PeakPosition>> {
 
-	/**
-	 * 
-	 * @param collection
-	 * @return an unmodifiable {@link PeakList} <b>backed by</b> the given collection
-	 */
-	public static PeakList fromCollection(Collection<? extends PeakPosition> collection) {
+	private Iterable<PeakPosition> peakPositions;
+	private String name;
+	private String identfier;
+	private String description;
 
-		Collection<PeakPosition> unmodifiableCollection = Collections.unmodifiableCollection(collection);
-		return unmodifiableCollection::iterator;
+	public PeakList(Iterable<PeakPosition> peakPositions, String identfier, String name, String description) {
+		this.peakPositions = peakPositions;
+		this.name = name;
+		this.identfier = identfier;
+		this.description = description;
 	}
 
-	/**
-	 * 
-	 * @param peakPositions
-	 * @return an unmodifiable {@link PeakList} <b>copied from</b> the given positions
-	 */
-	public static PeakList fromArray(PeakPosition... peakPositions) {
+	@Override
+	public Iterable<PeakPosition> getResult() {
 
-		Collection<PeakPosition> unmodifiableCollection = Collections.unmodifiableCollection(Arrays.asList(peakPositions));
-		return unmodifiableCollection::iterator;
+		return peakPositions;
 	}
 
-	public static <From> PeakList transform(Iterable<From> iterable, Function<From, PeakPosition> transformer) {
+	@Override
+	public String getName() {
 
-		return new PeakList() {
+		return name;
+	}
 
-			@Override
-			public Iterator<PeakPosition> iterator() {
+	@Override
+	public String getIdentifier() {
 
-				Iterator<From> iterator = iterable.iterator();
-				return new Iterator<PeakPosition>() {
+		return identfier;
+	}
 
-					@Override
-					public boolean hasNext() {
+	@Override
+	public String getDescription() {
 
-						return iterator.hasNext();
-					}
-
-					@Override
-					public PeakPosition next() {
-
-						From next = iterator.next();
-						return transformer.apply(next);
-					}
-				};
-			}
-		};
+		return description;
 	}
 }

@@ -19,6 +19,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
+import org.eclipse.chemclipse.model.core.PeakList;
 import org.eclipse.chemclipse.nmr.model.core.AcquisitionParameter;
 import org.eclipse.chemclipse.nmr.model.core.FIDMeasurement;
 import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
@@ -30,6 +31,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
+import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.core.AbstractAxisScaleConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
@@ -79,8 +82,10 @@ public class ExtendedNMRScanUI implements Observer {
 				IComplexSignalMeasurement<?> measurement = getCurrentMeasurement();
 				AcquisitionParameter acquisitionParameter;
 				boolean enableArea;
+				ISeriesData peakSeriesData = null;
 				if(measurement instanceof SpectrumMeasurement) {
-					acquisitionParameter = ((SpectrumMeasurement)measurement).getAcquisitionParameter();
+					SpectrumMeasurement spectrumMeasurement = (SpectrumMeasurement)measurement;
+					acquisitionParameter = spectrumMeasurement.getAcquisitionParameter();
 					chartNMR.setPPMconverter(new AbstractAxisScaleConverter() {
 
 						@Override
@@ -97,6 +102,10 @@ public class ExtendedNMRScanUI implements Observer {
 					});
 					chartNMR.modifyChart(false);
 					enableArea = true;
+					PeakList peakList = spectrumMeasurement.getMeasurementResult(PeakList.class);
+					if(peakList != null) {
+						peakSeriesData = ChartNMR.createPeakSeries(SERIES_ID + ".peaks", spectrumMeasurement.getSignals(), peakList.getResult(), 0, 0);
+					}
 				} else if(measurement instanceof FIDMeasurement) {
 					acquisitionParameter = ((FIDMeasurement)measurement).getAcquisitionParameter();
 					chartNMR.setPPMconverter(null);
@@ -124,6 +133,15 @@ public class ExtendedNMRScanUI implements Observer {
 				lineSeriesSettings.setEnableArea(enableArea);
 				lineSeriesSettings.setLineColor(Colors.RED);
 				lineSeriesDataList.add(lineSeriesData);
+				if(peakSeriesData != null) {
+					LineSeriesData peakSeries = new LineSeriesData(peakSeriesData);
+					lineSeriesDataList.add(peakSeries);
+					ILineSeriesSettings settings = peakSeries.getLineSeriesSettings();
+					settings.setLineStyle(LineStyle.NONE);
+					settings.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
+					settings.setSymbolColor(Colors.BLACK);
+					settings.setSymbolSize(3);
+				}
 				chartNMR.addSeriesData(lineSeriesDataList);
 			}
 		} finally {
