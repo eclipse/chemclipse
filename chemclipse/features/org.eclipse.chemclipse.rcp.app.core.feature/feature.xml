@@ -885,7 +885,7 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.osgi"
          download-size="0"
          install-size="0"
-         version="3.11.3.v20170209-1843"
+         version="0"
          unpack="false"/>
 
    <plugin
