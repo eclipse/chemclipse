@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add constructor
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.support;
 
@@ -28,14 +29,12 @@ public class DetectorSlopes implements IDetectorSlopes {
 	private int stopScan;
 
 	public DetectorSlopes(ITotalScanSignals totalIonSignals) {
-		startScan = totalIonSignals.getStartScan();
-		stopScan = totalIonSignals.getStopScan() - 1; // Why -1? Because the
-														// slope will be
-														// calculated between
-														// the actual and the
-														// next scan. So the
-														// last scan will be
-														// dropped.
+		this(totalIonSignals.getStartScan(), totalIonSignals.getStopScan() - 1);
+	}
+
+	protected DetectorSlopes(int startScan, int stopScan) {
+		this.startScan = startScan;
+		this.stopScan = stopScan;
 		int amount = stopScan - startScan + 1;
 		slopes = new ArrayList<IDetectorSlope>(amount);
 	}
