@@ -9,6 +9,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,9 +96,15 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 				throw new IllegalArgumentException();
 			}
 			List<IRawPeak> rawPeaks = BasePeakDetector.getRawPeaks(slopes, configuration.getThreshold(), convert.split(100));
-			result.put(measurement, PeakList.fromCollection(rawPeaks));
+			result.put(measurement, new PeakList(Collections.unmodifiableCollection(rawPeaks), getID(), getName(), getDescription()));
 		}
 		return result;
+	}
+
+	@Override
+	public String getDescription() {
+
+		return "Implementation of a first derivative peak detector.";
 	}
 
 	private static IFirstDerivativeDetectorSlopes getSignalSlopes(List<? extends ISignal> signals) {
