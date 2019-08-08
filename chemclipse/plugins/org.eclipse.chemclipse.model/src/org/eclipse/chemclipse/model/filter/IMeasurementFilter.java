@@ -62,12 +62,4 @@ public interface IMeasurementFilter<ConfigType> extends Filter<ConfigType> {
 			throw new IllegalArgumentException("incompatible items in collection");
 		}
 	}
-
-	default <ResultType> Function<Collection<? extends IMeasurement>, ResultType> createIMeasurementFilterFunction(IProgressMonitor progressMonitor, MessageConsumer messageConsumer, Function<Collection<? extends IMeasurement>, ResultType> nextFilter) {
-
-		return (items) -> {
-			ConfigType configuration = createConfiguration(items);
-			return filterIMeasurements(items, configuration, nextFilter, messageConsumer, progressMonitor);
-		};
-	}
 }

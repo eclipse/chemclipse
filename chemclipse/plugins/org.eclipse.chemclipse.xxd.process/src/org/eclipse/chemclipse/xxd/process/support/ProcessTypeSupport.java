@@ -29,10 +29,10 @@ import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryComparator;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
@@ -78,7 +78,7 @@ public class ProcessTypeSupport {
 		this(null);
 	}
 
-	public ProcessTypeSupport(FilterFactory filterFactory) {
+	public ProcessTypeSupport(ProcessorFactory filterFactory) {
 		/*
 		 * Add all available process supplier here.
 		 * TODO: Test native settings composite via extension point resolution

@@ -39,9 +39,9 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
-import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.settings.UserManagement;
@@ -98,9 +98,9 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private Shell shell;
-	private FilterFactory filterFactory;
+	private ProcessorFactory filterFactory;
 
-	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, FilterFactory filterFactory, Shell shell) {
+	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessorFactory filterFactory, Shell shell) {
 		super(part);
 		//
 		this.dataType = dataType;

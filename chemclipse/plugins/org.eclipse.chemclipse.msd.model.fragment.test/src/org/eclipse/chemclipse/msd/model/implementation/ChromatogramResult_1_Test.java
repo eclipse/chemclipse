@@ -104,7 +104,7 @@ public class ChromatogramResult_1_Test extends TestCase {
 
 		chromatogramResult = new MeasurementResult("name", "result1.id", "Description 1", "TestObject 1");
 		chromatogram.addMeasurementResult(chromatogramResult);
-		chromatogramResult = chromatogram.getMeasurementResult(null);
+		chromatogramResult = chromatogram.getMeasurementResult((String)null);
 		assertNull(chromatogramResult);
 	}
 

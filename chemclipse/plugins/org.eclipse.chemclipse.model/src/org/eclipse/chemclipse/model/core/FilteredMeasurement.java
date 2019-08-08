@@ -20,12 +20,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
+import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.filter.FilterContext;
-import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.processing.filter.Filtered;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -418,18 +417,11 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 				if(filter == null && filterID != null) {
 					BundleContext bundleContext = FrameworkUtil.getBundle(getClass()).getBundleContext();
 					if(bundleContext != null) {
-						ServiceReference<FilterFactory> reference = bundleContext.getServiceReference(FilterFactory.class);
+						ServiceReference<ProcessorFactory> reference = bundleContext.getServiceReference(ProcessorFactory.class);
 						if(reference != null) {
-							FilterFactory service = bundleContext.getService(reference);
+							ProcessorFactory service = bundleContext.getService(reference);
 							if(service != null) {
-								Collection<Filter<ConfigType>> filters = service.getFilters(FilterFactory.genericClass(Filter.class), new BiFunction<Filter<ConfigType>, Map<String, ?>, Boolean>() {
-
-									@Override
-									public Boolean apply(Filter<ConfigType> filter, Map<String, ?> properties) {
-
-										return filter.getID().equals(filterID);
-									}
-								});
+								Collection<Filter<ConfigType>> filters = service.getProcessors(ProcessorFactory.genericClass(Filter.class), (filter, properties) -> filter.getID().equals(filterID));
 								for(Filter<ConfigType> filter : filters) {
 									this.filter = filter;
 								}

@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add the PeakPostion interface
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -20,7 +21,7 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
 import org.eclipse.core.runtime.IAdaptable;
 
-public interface IPeak extends ITargetSupplier, IAdaptable {
+public interface IPeak extends ITargetSupplier, IAdaptable, PeakPosition {
 
 	/**
 	 * This comparator compares peaks based on the RT at the maximum of the intensity of the peak model
@@ -253,5 +254,26 @@ public interface IPeak extends ITargetSupplier, IAdaptable {
 	default <T> T getAdapter(Class<T> adapter) {
 
 		return null;
+	}
+
+	@Override
+	default int getPeakEnd() {
+
+		IPeakModel peakModel = getPeakModel();
+		return peakModel.getPeakScan(peakModel.getStopRetentionTime()).getScanNumber() - 1;
+	}
+
+	@Override
+	default int getPeakStart() {
+
+		IPeakModel peakModel = getPeakModel();
+		return peakModel.getPeakScan(peakModel.getStartRetentionTime()).getScanNumber() - 1;
+	}
+
+	@Override
+	default int getPeakMaximum() {
+
+		IPeakModel peakModel = getPeakModel();
+		return peakModel.getPeakMaximum().getScanNumber() - 1;
 	}
 }

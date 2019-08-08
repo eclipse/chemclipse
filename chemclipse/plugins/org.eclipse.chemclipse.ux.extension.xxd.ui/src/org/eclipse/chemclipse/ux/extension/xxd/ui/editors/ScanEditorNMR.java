@@ -39,11 +39,11 @@ import org.eclipse.chemclipse.nmr.model.core.FilteredSpectrumMeasurement;
 import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.nmr.model.selection.DataNMRSelection;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
+import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.filter.FilterContext;
-import org.eclipse.chemclipse.processing.filter.FilterFactory;
 import org.eclipse.chemclipse.processing.filter.Filtered;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -95,11 +95,11 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 	private Shell shell;
 	private DataNMRSelection selection;
 	private NMRMeasurementsUI measurementsUI;
-	private FilterFactory filterFactory;
+	private ProcessorFactory filterFactory;
 	private PartSupport partSupport;
 
 	@Inject
-	public ScanEditorNMR(Composite parent, IEventBroker eventBroker, MPart part, MDirtyable dirtyable, Shell shell, FilterFactory filterFactory, PartSupport partSupport) {
+	public ScanEditorNMR(Composite parent, IEventBroker eventBroker, MPart part, MDirtyable dirtyable, Shell shell, ProcessorFactory filterFactory, PartSupport partSupport) {
 		super(part);
 		this.partSupport = partSupport;
 		parent.addDisposeListener(new DisposeListener() {
