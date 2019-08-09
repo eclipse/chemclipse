@@ -1,1 +1,2 @@
-chemclipse/plugins/org.eclipse.chemclipse.rcp.app.test/bin/
+bin/
+target/
