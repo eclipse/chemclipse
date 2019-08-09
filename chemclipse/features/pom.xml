@@ -9,7 +9,7 @@
     <relativePath>../cbi/org.eclipse.chemclipse.cbi/pom.xml</relativePath>
   </parent>
 
-  <artifactId>org.eclipse.chemclipse.plugins.parent</artifactId>
+  <artifactId>org.eclipse.chemclipse.features.parent</artifactId>
   <packaging>pom</packaging>
   <name>ChemClipse::Core::Features</name>
 
