@@ -10,3 +10,5 @@ chemclipse/features/net.openchrom.chromatogram.msd.baseline.detector.supplier.sm
 chemclipse/plugins/net.openchrom.chromatogram.msd.baseline.detector.supplier.smoothed.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.msd.baseline.detector.supplier.smoothed/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.baseline.detector.supplier.smoothed.updateSite/target/
+bin/
+target/
