@@ -13,3 +13,5 @@ chemclipse/features/org.eclipse.chemclipse.msd.converter.supplier.csv.feature/ta
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.csv.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.csv/target/
 chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.csv.updateSite/target/
+bin/
+target/
