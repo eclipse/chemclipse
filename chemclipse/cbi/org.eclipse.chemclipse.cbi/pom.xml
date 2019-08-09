@@ -1,217 +1,193 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-  <modelVersion>4.0.0</modelVersion>
-  <!--
-	PARENT
-  -->
-  <parent>
-    <groupId>org.eclipse.chemclipse</groupId>
-    <artifactId>master</artifactId>
-    <version>BUILD-VERSION</version>
-    <relativePath>../../pom.xml</relativePath>
-  </parent>
-  <!--
-	ARTIFACT
-  -->
-  <groupId>org.eclipse.chemclipse</groupId>
-  <artifactId>parent</artifactId>
-  <packaging>pom</packaging>
-  <!--
-	DESCRIPTION
-  -->
-  <name>ChemClipse</name>
-  <description>
+	<modelVersion>4.0.0</modelVersion>
+	<!-- PARENT -->
+	<parent>
+		<groupId>org.eclipse.chemclipse</groupId>
+		<artifactId>master</artifactId>
+		<version>0.8.0-SNAPSHOT</version>
+	</parent>
+	<!-- ARTIFACT -->
+	<groupId>org.eclipse.chemclipse</groupId>
+	<artifactId>core</artifactId>
+	<packaging>pom</packaging>
+	<!-- DESCRIPTION -->
+	<name>ChemClipse</name>
+	<description>
 	ChemClipse is an open source workbench to edit and modify chromatographic data.
   </description>
-  <url>http://sourceforge.net/projects/chemclipse</url>
-  <!--
-	LICENSES
-  -->
-  <licenses>
-    <license>
-      <name>EPL v1.0</name>
-      <url>http://www.eclipse.org/legal/epl-v10.html</url>
-    </license> 
-  </licenses>
-  <!--
-	DEVELOPERS
-  -->
-  <developers>
-    <developer>
-      <id>eselmeister</id>
-      <name>Philip Wenig</name>
-      <email>philip.wenig [at] openchrom.net</email>
-      <timezone>+1</timezone>
-      <roles>
-        <role>Developer</role>
-      </roles>
-    </developer>
-  </developers>
-  <!--
-	MODULES
-  -->
-  <modules>
-    <!--
-	Plug-ins
-    -->
-    <module>../../plugins/org.eclipse.chemclipse.orbitdeps</module>
-    <module>../../plugins/org.eclipse.chemclipse.logging</module>
-    <module>../../plugins/org.eclipse.chemclipse.logging.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.rcp.ui.icons</module>
-    <module>../../plugins/org.eclipse.chemclipse.support</module>
-    <module>../../plugins/org.eclipse.chemclipse.support.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.processing</module>
-    <module>../../plugins/org.eclipse.chemclipse.processing.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.numeric</module>
-    <module>../../plugins/org.eclipse.chemclipse.progress</module>
-    <module>../../plugins/org.eclipse.chemclipse.progress.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.keystore</module>
-    <module>../../plugins/org.eclipse.chemclipse.model</module>
-    <module>../../plugins/org.eclipse.chemclipse.csd.model</module>
-    <module>../../plugins/org.eclipse.chemclipse.wsd.model</module>
-    <module>../../plugins/org.eclipse.chemclipse.msd.model</module>
-    <module>../../plugins/org.eclipse.chemclipse.nmr.model</module>
-    <module>../../plugins/org.eclipse.chemclipse.pcr.model</module>
-    <module>../../plugins/org.eclipse.chemclipse.xir.model</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.alignment.model</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.alignment.converter</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.method.model</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.comparison</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.converter</module>
-    <module>../../plugins/org.eclipse.chemclipse.converter.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.filter</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.filter.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.csd.converter</module>
-    <module>../../plugins/org.eclipse.chemclipse.csd.converter.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.wsd.converter</module>
-    <module>../../plugins/org.eclipse.chemclipse.wsd.converter.ui</module>    
-    <module>../../plugins/org.eclipse.chemclipse.msd.converter</module>
-    <module>../../plugins/org.eclipse.chemclipse.msd.converter.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.nmr.converter</module>
-    <module>../../plugins/org.eclipse.chemclipse.nmr.converter.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.nmr.processor</module>
-    <module>../../plugins/org.eclipse.chemclipse.nmr.processor.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.pcr.converter</module>
-    <module>../../plugins/org.eclipse.chemclipse.pcr.converter.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.pdfbox.extensions</module>
-    <module>../../plugins/org.eclipse.chemclipse.xir.converter</module>
-    <module>../../plugins/org.eclipse.chemclipse.xir.converter.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.classifier</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.classifier.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.filter</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.filter.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.filter</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.filter.ui</module>        
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.identifier</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.identifier</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.identifier.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.peak.detector</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.peak.detector.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.peak.detector</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.peak.detector.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.peak.detector</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.peak.detector.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.quantitation</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.quantitation.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.quantitation</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.quantitation.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.quantitation</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.quantitation.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.swt.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.csd.swt.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.wsd.swt.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.msd.swt.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.rcp.app</module>
-    <module>../../plugins/org.eclipse.chemclipse.rcp.app.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.pyrolysis.model</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.batchprocess</module>
-    <module>../../plugins/org.eclipse.chemclipse.xxd.model</module>
-    <module>../../plugins/org.eclipse.chemclipse.xxd.model.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.xxd.process</module>
-    <module>../../plugins/org.eclipse.chemclipse.xxd.process.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.report</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.report.ui</module>
-    <!--
-	UX components        
-    -->
-    <module>../../plugins/org.eclipse.chemclipse.ux.extension.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.ux.extension.msd.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.ux.extension.csd.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.ux.extension.wsd.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.ux.extension.xxd.ui</module>
-    <module>../../plugins/org.eclipse.chemclipse.ux.fx.ui</module>
-    <!--
-	JUnit Tests        
-    -->
-    <module>../../plugins/org.eclipse.chemclipse.logging.fragment.test</module>
-    <module>../../plugins/org.eclipse.chemclipse.support.fragment.test</module>
-    <module>../../plugins/org.eclipse.chemclipse.processing.fragment.test</module>
-    <module>../../plugins/org.eclipse.chemclipse.numeric.fragment.test</module>
-    <module>../../plugins/org.eclipse.chemclipse.progress.fragment.test</module>
-    <module>../../plugins/org.eclipse.chemclipse.keystore.fragment.test</module>
-    <module>../../plugins/org.eclipse.chemclipse.model.fragment.test</module>
-    <module>../../plugins/org.eclipse.chemclipse.pdfbox.extensions.fragment.test</module>
-    <!--
-	JUnit UI Tests        
-    -->        
-    <!--<module>../../plugins/org.eclipse.chemclipse.msd.swt.ui.fragment.test</module>-->
-    <!--
-	Other        
-    -->    
-    <!--<module>../../plugins/org.eclipse.chemclipse.csd.model.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.wsd.model.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.msd.model.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.nmr.model.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.pcr.model.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.xir.model.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatoram.alignment.model.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.alignment.converter.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.method.model.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.converter.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.csd.converter.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.wsd.converter.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.msd.converter.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.nmr.converter.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.nmr.processor.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.pcr.converter.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.xir.converter.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.classifier.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.filter.fragment.test</module>-->  
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.filter.fragment.test</module>-->        
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.identifier.fragment.test</module>-->    
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.peak.detector.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.peak.detector.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.pyrolysis.model.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.batchprocess.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.xxd.model.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.xxd.process.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.report.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.rcp.app.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.quantitation.fragment.test</module>-->
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.fragment.test</module>-->  
-    <!--
-	Feature
-    -->
-    <module>../../features/org.eclipse.chemclipse.rcp.app.core.feature</module>
-    <module>../../features/org.eclipse.chemclipse.rcp.app.base.feature</module>
-    <module>../../features/org.eclipse.chemclipse.ux.feature</module>
-  </modules>
+	<url>http://sourceforge.net/projects/chemclipse</url>
+	<!-- LICENSES -->
+	<licenses>
+		<license>
+			<name>EPL v1.0</name>
+			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+		</license>
+	</licenses>
+	<!-- DEVELOPERS -->
+	<developers>
+		<developer>
+			<id>eselmeister</id>
+			<name>Philip Wenig</name>
+			<email>philip.wenig [at] openchrom.net</email>
+			<timezone>+1</timezone>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+	<!-- MODULES -->
+	<modules>
+		<!-- Plug-ins -->
+		<module>../../plugins/org.eclipse.chemclipse.orbitdeps</module>
+		<module>../../plugins/org.eclipse.chemclipse.logging</module>
+		<module>../../plugins/org.eclipse.chemclipse.logging.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.rcp.ui.icons</module>
+		<module>../../plugins/org.eclipse.chemclipse.support</module>
+		<module>../../plugins/org.eclipse.chemclipse.support.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.processing</module>
+		<module>../../plugins/org.eclipse.chemclipse.processing.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.numeric</module>
+		<module>../../plugins/org.eclipse.chemclipse.progress</module>
+		<module>../../plugins/org.eclipse.chemclipse.progress.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.keystore</module>
+		<module>../../plugins/org.eclipse.chemclipse.model</module>
+		<module>../../plugins/org.eclipse.chemclipse.csd.model</module>
+		<module>../../plugins/org.eclipse.chemclipse.wsd.model</module>
+		<module>../../plugins/org.eclipse.chemclipse.msd.model</module>
+		<module>../../plugins/org.eclipse.chemclipse.nmr.model</module>
+		<module>../../plugins/org.eclipse.chemclipse.pcr.model</module>
+		<module>../../plugins/org.eclipse.chemclipse.xir.model</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.alignment.model</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.alignment.converter</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.method.model</module>
+		<module>../../plugins/org.eclipse.chemclipse.swt.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.csd.swt.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.wsd.swt.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.msd.swt.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.comparison</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.converter</module>
+		<module>../../plugins/org.eclipse.chemclipse.converter.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.filter</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.filter.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.csd.converter</module>
+		<module>../../plugins/org.eclipse.chemclipse.csd.converter.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.wsd.converter</module>
+		<module>../../plugins/org.eclipse.chemclipse.wsd.converter.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.msd.converter</module>
+		<module>../../plugins/org.eclipse.chemclipse.msd.converter.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.nmr.converter</module>
+		<module>../../plugins/org.eclipse.chemclipse.nmr.converter.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.nmr.processor</module>
+		<module>../../plugins/org.eclipse.chemclipse.nmr.processor.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.pcr.converter</module>
+		<module>../../plugins/org.eclipse.chemclipse.pcr.converter.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.pdfbox.extensions</module>
+		<module>../../plugins/org.eclipse.chemclipse.xir.converter</module>
+		<module>../../plugins/org.eclipse.chemclipse.xir.converter.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.classifier</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.classifier.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.filter</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.filter.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.filter</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.filter.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.identifier</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.identifier</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.identifier.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.peak.detector</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.peak.detector.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.peak.detector</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.peak.detector.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.peak.detector</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.peak.detector.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.quantitation</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.quantitation.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.quantitation</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.quantitation.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.quantitation</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.quantitation.ui</module>
+	
+		<module>../../plugins/org.eclipse.chemclipse.rcp.app</module>
+		<module>../../plugins/org.eclipse.chemclipse.rcp.app.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.pyrolysis.model</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.batchprocess</module>
+		<module>../../plugins/org.eclipse.chemclipse.xxd.model</module>
+		<module>../../plugins/org.eclipse.chemclipse.xxd.model.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.xxd.process</module>
+		<module>../../plugins/org.eclipse.chemclipse.xxd.process.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.report</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.report.ui</module>
+		<!-- UX components -->
+		<module>../../plugins/org.eclipse.chemclipse.ux.extension.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.ux.extension.msd.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.ux.extension.csd.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.ux.extension.wsd.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.ux.extension.xxd.ui</module>
+		<module>../../plugins/org.eclipse.chemclipse.ux.fx.ui</module>
+		<!-- JUnit Tests -->
+		<module>../../plugins/org.eclipse.chemclipse.logging.fragment.test</module>
+		<module>../../plugins/org.eclipse.chemclipse.support.fragment.test</module>
+		<module>../../plugins/org.eclipse.chemclipse.processing.fragment.test</module>
+		<module>../../plugins/org.eclipse.chemclipse.numeric.fragment.test</module>
+		<module>../../plugins/org.eclipse.chemclipse.progress.fragment.test</module>
+		<module>../../plugins/org.eclipse.chemclipse.keystore.fragment.test</module>
+		<module>../../plugins/org.eclipse.chemclipse.model.fragment.test</module>
+		<module>../../plugins/org.eclipse.chemclipse.pdfbox.extensions.fragment.test</module>
+		<!-- JUnit UI Tests -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.msd.swt.ui.fragment.test</module> -->
+		<!-- Other -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.csd.model.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.wsd.model.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.msd.model.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.nmr.model.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.pcr.model.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.xir.model.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatoram.alignment.model.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.alignment.converter.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.method.model.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.converter.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.csd.converter.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.wsd.converter.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.msd.converter.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.nmr.converter.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.nmr.processor.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.pcr.converter.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.xir.converter.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.classifier.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.filter.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.filter.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.identifier.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.peak.detector.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.peak.detector.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.pyrolysis.model.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.batchprocess.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.xxd.model.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.xxd.process.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.report.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.rcp.app.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.quantitation.fragment.test</module> -->
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.fragment.test</module> -->
+		<!-- Feature -->
+		<module>../../features/org.eclipse.chemclipse.rcp.app.core.feature</module>
+		<module>../../features/org.eclipse.chemclipse.rcp.app.base.feature</module>
+		<module>../../features/org.eclipse.chemclipse.ux.feature</module>
+	</modules>
 </project>
