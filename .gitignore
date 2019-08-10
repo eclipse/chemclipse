@@ -14,3 +14,5 @@ chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.triplequad/tar
 chemclipse/sites/org.eclipse.chemclipse.msd.identifier.supplier.triplequad.updateSite/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.triplequad.fragment.test/*.log
 
+bin/
+target/
