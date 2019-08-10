@@ -12,3 +12,5 @@ chemclipse/features/net.openchrom.msd.converter.supplier.mzml.feature/target/
 chemclipse/plugins/net.openchrom.msd.converter.supplier.mzml.ui/target/
 chemclipse/plugins/net.openchrom.msd.converter.supplier.mzml/target/
 chemclipse/sites/net.openchrom.msd.converter.supplier.mzml.updateSite/target/
+bin/
+target/
