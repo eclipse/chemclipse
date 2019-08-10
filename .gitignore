@@ -6,3 +6,5 @@ chemclipse/features/net.openchrom.rcp.connector.supplier.microsoft.office.featur
 chemclipse/plugins/net.openchrom.rcp.connector.supplier.microsoft.office.ui/target/
 chemclipse/plugins/net.openchrom.rcp.connector.supplier.microsoft.office/target/
 chemclipse/sites/net.openchrom.rcp.connector.supplier.microsoft.office.updateSite/target/
+bin/
+target/
