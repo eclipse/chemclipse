@@ -10,3 +10,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.suppli
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.updateSite/target/
+bin/
+target/
