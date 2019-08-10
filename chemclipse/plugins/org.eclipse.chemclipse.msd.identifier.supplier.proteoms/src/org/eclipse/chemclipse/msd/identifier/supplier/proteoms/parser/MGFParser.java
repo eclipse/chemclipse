@@ -21,7 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ProteomsUtil;
@@ -152,11 +151,11 @@ public class MGFParser {
 		// ms.setAllPeaks(new ArrayList<Peak>(175));
 		SpectrumMSMS currentMSMS = null;
 		for(String line : lines) {
-			if(StringUtils.isEmpty(line)) {
+			if(line == null || line.isEmpty()) {
 				continue;
 			}
 			if(firstLine) { // 1
-				final String msName = StringUtils.trimToEmpty(findInFirstLineMSname(line));
+				final String msName = findInFirstLineMSname(line).trim();
 				ms.setName(msName);
 				ms.setId(ProteomsUtil.nextUniqueID());
 				startMSpeaks = true;
@@ -212,7 +211,7 @@ public class MGFParser {
 
 	private Peak getPeaks(String line) {
 
-		final String[] split = StringUtils.split(line, '\t');
+		final String[] split = line.split("\t");
 		double mass = Double.parseDouble(split[0]);
 		double intensity = Double.parseDouble(split[1]);
 		return new Peak(mass, intensity);

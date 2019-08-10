@@ -12,3 +12,5 @@ chemclipse/features/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.feat
 chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.proteoms/target/
 chemclipse/sites/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.updateSite/target/
+bin/
+target/

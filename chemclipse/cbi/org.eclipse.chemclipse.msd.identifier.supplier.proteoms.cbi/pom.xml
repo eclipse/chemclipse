@@ -4,22 +4,21 @@
   <!--
 	PARENT
   -->
-  <parent>
-    <groupId>org.eclipse.chemclipse</groupId>
-    <artifactId>master</artifactId>
-    <version>BUILD-VERSION</version>
-    <relativePath>../../pom.xml</relativePath>
-  </parent>
+          <parent>
+              <groupId>org.eclipse.chemclipse</groupId>
+              <artifactId>master</artifactId>
+              <version>0.8.0-SNAPSHOT</version>
+          </parent>
   <!--
 	ARTIFACT
   -->
   <groupId>org.eclipse.chemclipse</groupId>
-  <artifactId>parent</artifactId>
+<artifactId>proteoms</artifactId>
   <packaging>pom</packaging>
   <!--
 	DESCRIPTION
   --> 
-  <name>OpenChrom ProteoMS</name>
+<name>ChemClipse::proteoms::Aggregator</name>
   <description>
 	Open Source Proteo MS spectra analysis
   </description>
@@ -29,7 +28,7 @@
   -->
   <licenses>
     <license>
-      <name>EPL v1.0</name>
+<name>ChemClipse::proteoms::Aggregator</name>
       <url>http://www.eclipse.org/legal/epl-v10.html</url>
     </license> 
   </licenses>
@@ -39,7 +38,7 @@
   <developers>
     <developer>
       <id>jankod</id>
-      <name>Janko Diminic</name>
+<name>ChemClipse::proteoms::Aggregator</name>
       <email>jdiminic [at] gmail.com</email>
       <timezone>+1</timezone>
       <roles>
@@ -48,7 +47,7 @@
     </developer>
     <developer>
       <id>eselmeister</id>
-      <name>Philip Wenig</name>
+<name>ChemClipse::proteoms::Aggregator</name>
       <email>philip.wenig [at] openchrom.net</email>
       <timezone>+1</timezone>
       <roles>
