@@ -12,3 +12,5 @@ openchrom/features/org.eclipse.chemclipse.csd.converter.supplier.arw.feature/tar
 openchrom/plugins/org.eclipse.chemclipse.csd.converter.supplier.arw.ui/target/
 openchrom/plugins/org.eclipse.chemclipse.csd.converter.supplier.arw/target/
 openchrom/sites/org.eclipse.chemclipse.csd.converter.supplier.arw.updateSite/target/
+bin/
+target/
