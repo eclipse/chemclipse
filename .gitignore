@@ -12,3 +12,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unit
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.updateSite/target/
+bin/
+target/
