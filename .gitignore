@@ -12,3 +12,5 @@ chemclipse/plugins/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui/tar
 chemclipse/plugins/org.eclipse.chemclipse.msd.classifier.supplier.molpeak/target/
 chemclipse/sites/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.updateSite/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.classifier.supplier.molpeak/*.ucls
+bin/
+target/
