@@ -13,3 +13,5 @@ chemclipse/features/org.eclipse.chemclipse.msd.converter.supplier.massbank.featu
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank/target/
 chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.massbank.updateSite/target/
+bin/
+target/
