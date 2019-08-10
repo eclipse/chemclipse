@@ -12,3 +12,5 @@ chemclipse/features/net.openchrom.msd.converter.supplier.svg.feature/target/
 chemclipse/plugins/net.openchrom.msd.converter.supplier.svg.ui/target/
 chemclipse/plugins/net.openchrom.msd.converter.supplier.svg/target/
 chemclipse/sites/net.openchrom.msd.converter.supplier.svg.updateSite/target/
+bin/
+target/
