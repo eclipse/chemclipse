@@ -10,3 +10,5 @@ chemclipse/features/net.openchrom.chromatogram.xxd.edit.supplier.snip.feature/ta
 chemclipse/plugins/net.openchrom.chromatogram.xxd.edit.supplier.snip.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.xxd.edit.supplier.snip/target/
 chemclipse/sites/net.openchrom.chromatogram.xxd.edit.supplier.snip.updateSite/target/
+target/
+bin/
