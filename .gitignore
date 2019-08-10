@@ -14,3 +14,5 @@ chemclipse/plugins/net.openchrom.msd.converter.supplier.amdis.ui/target/
 chemclipse/plugins/net.openchrom.msd.converter.supplier.amdis/target/
 chemclipse/sites/net.openchrom.msd.converter.supplier.amdis.updateSite/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.amdis.fragment.test/testData/files/export/DB.msl
+bin/
+target/
