@@ -12,3 +12,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.wor
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.updateSite/target/
+bin/
+target/
