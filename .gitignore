@@ -12,3 +12,5 @@ chemclipse/features/net.openchrom.csd.converter.supplier.xy.feature/target/
 chemclipse/plugins/net.openchrom.csd.converter.supplier.xy.ui/target/
 chemclipse/plugins/net.openchrom.csd.converter.supplier.xy/target/
 chemclipse/sites/net.openchrom.csd.converter.supplier.xy.updateSite/target/
+bin/
+target/
