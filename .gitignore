@@ -10,3 +10,5 @@ chemclipse/features/net.openchrom.chromatogram.xxd.peak.detector.supplier.manual
 chemclipse/plugins/net.openchrom.chromatogram.xxd.peak.detector.supplier.manual.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.xxd.peak.detector.supplier.manual/target/
 chemclipse/sites/net.openchrom.chromatogram.xxd.peak.detector.supplier.manual.updateSite/target/
+bin/
+target/
