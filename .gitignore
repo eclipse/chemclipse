@@ -12,3 +12,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.updateSite/target/
+bin/
+target/

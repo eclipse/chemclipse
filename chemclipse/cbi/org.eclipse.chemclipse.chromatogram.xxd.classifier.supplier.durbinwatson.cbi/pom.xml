@@ -4,22 +4,21 @@
   <!--
 	PARENT
   -->
-  <parent>
-    <groupId>org.eclipse.chemclipse</groupId>
-    <artifactId>master</artifactId>
-    <version>BUILD-VERSION</version>
-    <relativePath>../../pom.xml</relativePath>
-  </parent>
+          <parent>
+              <groupId>org.eclipse.chemclipse</groupId>
+              <artifactId>master</artifactId>
+              <version>0.8.0-SNAPSHOT</version>
+          </parent>
   <!--
 	ARTIFACT
   -->
   <groupId>org.eclipse.chemclipse</groupId>
-  <artifactId>parent</artifactId>
+<artifactId>classifierdurbinwatson</artifactId>
   <packaging>pom</packaging>
   <!--
 	DESCRIPTION
   --> 
-  <name>Filter Durbin Watson Classifier</name>
+<name>ChemClipse::classifierdurbinwatson::Aggregator</name>
   <description>
 	The filter uses the Durbin-Watson algorithm to determine the best smoothing algorithm. It extends the functionality of the ChemClipse Rich Client Platform (RCP).
   </description>
@@ -29,7 +28,7 @@
   -->
   <licenses>
     <license>
-      <name>EPL v1.0</name>
+<name>ChemClipse::classifierdurbinwatson::Aggregator</name>
       <url>http://www.eclipse.org/legal/epl-v10.html</url>
     </license> 
   </licenses>
@@ -39,7 +38,7 @@
   <developers>
     <developer>
       <id>eselmeister</id>
-      <name>Philip Wenig</name>
+<name>ChemClipse::classifierdurbinwatson::Aggregator</name>
       <email>philip.wenig [at] openchrom.net</email>
       <timezone>+1</timezone>
       <roles>
