@@ -4,22 +4,21 @@
   <!--
 	PARENT
   -->
-  <parent>
-    <groupId>org.eclipse.chemclipse</groupId>
-    <artifactId>master</artifactId>
-    <version>BUILD-VERSION</version>
-    <relativePath>../../pom.xml</relativePath>
-  </parent>
+          <parent>
+              <groupId>org.eclipse.chemclipse</groupId>
+              <artifactId>master</artifactId>
+              <version>0.8.0-SNAPSHOT</version>
+          </parent>
   <!--
 	ARTIFACT
   -->
   <groupId>org.eclipse.chemclipse</groupId>
-  <artifactId>parent</artifactId>
+<artifactId>chemclipsebatchj</artifactId>
   <packaging>pom</packaging>
   <!--
 	DESCRIPTION
   --> 
-  <name>ChemClipse Batch Process Plug-in</name>
+<name>ChemClipse::chemclipsebatchj::Aggregator</name>
   <description>
 	The ChemClipse Batch Job plug-in offers a solution batch process chromatograms. It extends the functionality of the ChemClipse Rich Client Platform (RCP).
   </description>
@@ -29,7 +28,7 @@
   -->
   <licenses>
     <license>
-      <name>EPL v1.0</name>
+<name>ChemClipse::chemclipsebatchj::Aggregator</name>
       <url>http://www.eclipse.org/legal/epl-v10.html</url>
     </license> 
   </licenses>
@@ -39,7 +38,7 @@
   <developers>
     <developer>
       <id>eselmeister</id>
-      <name>Philip Wenig</name>
+<name>ChemClipse::chemclipsebatchj::Aggregator</name>
       <email>philip.wenig [at] openchrom.net</email>
       <timezone>+1</timezone>
       <roles>
