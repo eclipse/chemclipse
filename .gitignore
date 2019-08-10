@@ -12,3 +12,5 @@ chemclipse/features/net.openchrom.chromatogram.msd.filter.supplier.coda.feature/
 chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.coda.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.coda/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.filter.supplier.coda.updateSite/target/
+bin/
+target/
