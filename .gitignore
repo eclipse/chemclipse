@@ -12,3 +12,5 @@ openchrom/features/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.basel
 openchrom/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.ui/target/
 openchrom/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract/target/
 openchrom/sites/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.updateSite/target/
+bin/
+target/
