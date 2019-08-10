@@ -11,3 +11,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpas
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.updateSite/target/
+bin/
+target/
