@@ -13,3 +13,4 @@ chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.pca.ui/target
 chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.pca/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.pca.updateSite/target/
 target/
+bin/

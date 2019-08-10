@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
@@ -52,6 +51,7 @@ public class SamplesSelectionTree {
 				groupTreeItem.setText(groupName);
 			} else {
 				groupTreeItem.setText("----");
+				groupName = "";
 			}
 			treeItem = new TreeItem(groupTreeItem, SWT.None);
 			setSampleTreeItem(pcaResult, treeItem);
@@ -59,7 +59,7 @@ public class SamplesSelectionTree {
 			groupTreeItem.setExpanded(true);
 			while(it.hasNext()) {
 				pcaResult = it.next();
-				if(ObjectUtils.compare(pcaResult.getGroupName(), groupName) == 0) {
+				if(groupName.equals(pcaResult.getGroupName())) {
 					treeItem = new TreeItem(groupTreeItem, SWT.None);
 					setSampleTreeItem(pcaResult, treeItem);
 					isSelectSample = isSelectSample || pcaResult.isDisplayed();

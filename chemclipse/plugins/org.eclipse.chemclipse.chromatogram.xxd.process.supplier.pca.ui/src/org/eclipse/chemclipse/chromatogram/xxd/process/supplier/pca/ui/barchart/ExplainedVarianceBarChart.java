@@ -15,14 +15,12 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
@@ -60,7 +58,6 @@ public class ExplainedVarianceBarChart {
 	private Optional<IPcaResults<IPcaResultVisualization, IVariableVisualization>> pcaResults = Optional.empty();
 
 	public ExplainedVarianceBarChart(Composite parent, Object layoutData) {
-
 		/*
 		 * JavaFX init
 		 */
@@ -228,9 +225,9 @@ public class ExplainedVarianceBarChart {
 		 */
 		this.pcaResults = Optional.of(pcaResults);
 		removeData();
-		Double[] doubleArray = ArrayUtils.toObject(pcaResults.getCumulativeExplainedVariances());
-		List<Double> list = Arrays.asList(doubleArray);
-		data2.addAll(list);
+		for(double d : pcaResults.getCumulativeExplainedVariances()) {
+			data2.add(d);
+		}
 		data.addAll(pcaResults.getPcaResultList());
 		/*
 		 * create scene this method support resize windows
