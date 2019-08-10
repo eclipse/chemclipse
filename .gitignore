@@ -11,3 +11,4 @@ chemclipse/plugins/net.openchrom.chromatogram.xxd.peak.detector.supplier.firstde
 chemclipse/plugins/net.openchrom.chromatogram.xxd.peak.detector.supplier.firstderivative/target/
 chemclipse/sites/net.openchrom.chromatogram.xxd.peak.detector.supplier.firstderivative.updateSite/target/
 target/
+bin/
