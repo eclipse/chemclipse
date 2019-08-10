@@ -12,3 +12,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mult
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.updateSite/target/
+bin/
+target/
