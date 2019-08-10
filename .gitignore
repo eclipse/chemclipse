@@ -10,3 +10,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.updateSite/target/
+bin/
+target/
