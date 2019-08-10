@@ -25,3 +25,5 @@ chemclipse/plugins/org.eclipse.chemclipse.xxd.converter.supplier.chemclipse/src/
 chemclipse/plugins/org.eclipse.chemclipse.xxd.converter.supplier.chemclipse/src/org/eclipse/chemclipse/xxd/converter/.DS_Store
 chemclipse/plugins/org.eclipse.chemclipse.xxd.converter.supplier.chemclipse/src/org/eclipse/chemclipse/xxd/converter/supplier/.DS_Store
 chemclipse/plugins/org.eclipse.chemclipse.xxd.converter.supplier.chemclipse/src/org/eclipse/chemclipse/xxd/converter/supplier/chemclipse/.DS_Store
+bin/
+target/
