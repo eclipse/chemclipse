@@ -18,3 +18,5 @@ chemclipse/sites/net.openchrom.msd.converter.supplier.matlab.parafac.updateSite/
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.fragment.test/Openchrom.log*
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.fragment.test/*.log
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.fragment.test/*.log*
+bin/
+target/
