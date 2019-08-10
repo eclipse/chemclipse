@@ -12,3 +12,5 @@ chemclipse/features/net.openchrom.chromatogram.msd.process.supplier.peakidentifi
 chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.peakidentification.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.peakidentification/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.peakidentification.updateSite/target/
+bin/
+target/
