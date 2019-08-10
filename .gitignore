@@ -13,3 +13,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.updateSite/target/
+bin/
+target/
