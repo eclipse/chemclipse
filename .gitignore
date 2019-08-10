@@ -10,3 +10,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.msd.peak.detector.suppli
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.updateSite/target/
+bin/
+target/
