@@ -11,3 +11,5 @@ chemclipse/features/org.eclipse.chemclipse.msd.identifier.supplier.nist.feature/
 chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.nist.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.nist/target/
 chemclipse/sites/org.eclipse.chemclipse.msd.identifier.supplier.nist.updateSite/target/
+bin/
+target/
