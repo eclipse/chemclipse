@@ -12,3 +12,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.updateSite/target/
+bin/
+target/
