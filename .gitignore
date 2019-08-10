@@ -10,3 +10,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.su
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.updateSite/target/
+bin/
+target/
