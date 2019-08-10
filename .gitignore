@@ -12,3 +12,5 @@ chemclipse/features/org.eclipse.chemclipse.xxd.converter.supplier.gson.feature/t
 chemclipse/plugins/org.eclipse.chemclipse.xxd.converter.supplier.gson.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.xxd.converter.supplier.gson/target/
 chemclipse/sites/org.eclipse.chemclipse.xxd.converter.supplier.gson.updateSite/target/
+bin/
+target/
