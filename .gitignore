@@ -13,3 +13,5 @@ chemclipse/features/net.openchrom.chromatogram.xxd.integrator.supplier.trapezoid
 chemclipse/plugins/net.openchrom.chromatogram.xxd.integrator.supplier.trapezoid.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.xxd.integrator.supplier.trapezoid/target/
 chemclipse/sites/net.openchrom.chromatogram.xxd.integrator.supplier.trapezoid.updateSite/target/
+bin/
+target/
