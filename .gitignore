@@ -12,3 +12,5 @@ chemclipse/features/net.chemclipse.xxd.converter.supplier.jcampdx.feature/target
 chemclipse/plugins/net.chemclipse.xxd.converter.supplier.jcampdx.ui/target/
 chemclipse/plugins/net.chemclipse.xxd.converter.supplier.jcampdx/target/
 chemclipse/sites/net.chemclipse.xxd.converter.supplier.jcampdx.updateSite/target/
+bin/
+target/
