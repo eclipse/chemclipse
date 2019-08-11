@@ -12,3 +12,5 @@ chemclipse/features/net.openchrom.chromatogram.msd.quantitation.supplier.chemcli
 chemclipse/plugins/net.openchrom.chromatogram.msd.quantitation.supplier.chemclipse.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.msd.quantitation.supplier.chemclipse/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.quantitation.supplier.chemclipse.updateSite/target/
+bin/
+target/
