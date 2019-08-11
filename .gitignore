@@ -10,3 +10,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mean
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.updateSite/target/
+bin/
+target/
