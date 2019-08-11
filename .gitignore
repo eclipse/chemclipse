@@ -10,3 +10,5 @@ chemclipse/features/org.eclipse.chemclipse.xxd.converter.supplier.zip.feature/ta
 chemclipse/plugins/org.eclipse.chemclipse.xxd.converter.supplier.zip.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.xxd.converter.supplier.zip/target/
 chemclipse/sites/org.eclipse.chemclipse.xxd.converter.supplier.zip.updateSite/target/
+bin/
+target/
