@@ -15,3 +15,5 @@ chemclipse/sites/net.openchrom.chromatogram.msd.comparison.supplier.distance.upd
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.fragment.test/Openchrom.log
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.fragment.test/Openchrom.log*
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.fragment.test/*.log*
+bin/
+target/
