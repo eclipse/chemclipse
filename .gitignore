@@ -12,3 +12,5 @@ chemclipse/features/org.eclipse.chemclipse.msd.converter.supplier.mz5.feature/ta
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.mz5.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.mz5/target/
 chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.mz5.updateSite/target/
+bin/
+target/
