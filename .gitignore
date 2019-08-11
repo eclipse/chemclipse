@@ -12,3 +12,5 @@ chemclipse/features/org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zero
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset/target/
 chemclipse/sites/org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.updateSite/target/
+bin/
+target/
