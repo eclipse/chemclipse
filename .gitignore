@@ -10,3 +10,5 @@ chemclipse/features/net.openchrom.chromatogram.msd.filter.supplier.backfolding.f
 chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.backfolding.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.backfolding/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.filter.supplier.backfolding.updateSite/target/
+bin/
+target/
