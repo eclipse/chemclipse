@@ -12,3 +12,5 @@ chemclipse/features/net.openchrom.chromatogram.xxd.filter.supplier.rtshifter.fea
 chemclipse/plugins/net.openchrom.chromatogram.xxd.filter.supplier.rtshifter.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.xxd.filter.supplier.rtshifter/target/
 chemclipse/sites/net.openchrom.chromatogram.xxd.filter.supplier.rtshifter.updateSite/target/
+bin/
+target/

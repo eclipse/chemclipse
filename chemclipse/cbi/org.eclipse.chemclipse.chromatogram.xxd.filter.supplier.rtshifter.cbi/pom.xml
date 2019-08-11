@@ -4,22 +4,21 @@
   <!--
 	PARENT
   -->
-  <parent>
-    <groupId>org.eclipse.chemclipse</groupId>
-    <artifactId>master</artifactId>
-    <version>BUILD-VERSION</version>
-    <relativePath>../../pom.xml</relativePath>
-  </parent>
+          <parent>
+              <groupId>org.eclipse.chemclipse</groupId>
+              <artifactId>master</artifactId>
+              <version>0.8.0-SNAPSHOT</version>
+          </parent>
   <!--
 	ARTIFACT
   -->
   <groupId>org.eclipse.chemclipse</groupId>
-  <artifactId>parent</artifactId>
+<artifactId>rtshifter</artifactId>
   <packaging>pom</packaging>
   <!--
 	DESCRIPTION
   --> 
-  <name>ChemClipse RT Shifter Filter Plug-in</name>
+<name>ChemClipse::rtshifter::Aggregator</name>
   <description>
 	The ChemClipse RT Shifter filter plug-in offers a solution to shift and adjust retention times in mass spectrometric chromatographic data. It extends the functionality of the ChemClipse Rich Client Platform (RCP).
   </description>
@@ -28,7 +27,7 @@
   -->
   <licenses>
     <license>
-      <name>EPL v1.0</name>
+<name>ChemClipse::rtshifter::Aggregator</name>
       <url>http://www.eclipse.org/legal/epl-v10.html</url>
     </license> 
   </licenses>
@@ -38,7 +37,7 @@
   <developers>
     <developer>
       <id>eselmeister</id>
-      <name>Philip Wenig</name>
+<name>ChemClipse::rtshifter::Aggregator</name>
       <email>philip.wenig [at] openchrom.net</email>
       <timezone>+1</timezone>
       <roles>
