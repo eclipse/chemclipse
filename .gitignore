@@ -10,3 +10,5 @@ chemclipse/features/net.openchrom.msd.converter.supplier.mzxml.feature/target/
 chemclipse/plugins/net.openchrom.msd.converter.supplier.mzxml.ui/target/
 chemclipse/plugins/net.openchrom.msd.converter.supplier.mzxml/target/
 chemclipse/sites/net.openchrom.msd.converter.supplier.mzxml.updateSite/target/
+bin/
+target/
