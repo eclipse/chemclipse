@@ -11,3 +11,5 @@ chemclipse/plugins/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvo
 chemclipse/plugins/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.updateSite/target/
 chemclipse/plugins/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.fragment.test/*.log
+bin/
+target/
