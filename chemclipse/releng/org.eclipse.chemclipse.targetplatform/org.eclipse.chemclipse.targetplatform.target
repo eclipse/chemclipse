@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="ChemClipse Target (Neon)" sequenceNumber="15">
+<?pde version="3.8"?><target name="ChemClipse Target (Neon)" sequenceNumber="16">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.sdk.ide" version="4.6.3.M20170301-0400"/>
@@ -8,6 +8,7 @@
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.gef.sdk.feature.group" version="3.11.0.201606061308"/>
 <unit id="org.eclipse.epp.mpc.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/releases/neon"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
@@ -23,6 +24,13 @@
 <repository location="http://download.eclipse.org/nattable/releases/1.5.0/repository"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.ease.python.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.ui.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.modules.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/ease/update/release"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="javax.ws.rs" version="2.0.1.v201504171603"/>
 <unit id="com.sun.jersey" version="1.17.0.v201503170330"/>
 <unit id="com.fasterxml.jackson.core.jackson-core" version="2.9.2.v20180207-1730"/>
@@ -32,6 +40,7 @@
 <unit id="org.slf4j.api" version="1.7.10.v20170428-1633"/>
 <unit id="org.json" version="1.0.0.v201011060100"/>
 <unit id="org.apache.poi.ooxml.schemas" version="3.9.0.v201405241750"/>
+<unit id="org.hamcrest.core" version="1.3.0.v20180420-1519"/>
 <unit id="org.apache.commons.csv" version="1.4.0.v20190617-1333"/>
 <unit id="org.bouncycastle.bcpg" version="1.61.0.v20190602-1335"/>
 <unit id="org.apache.pdfbox.fontbox" version="2.0.6.v20190617-1333"/>
@@ -43,6 +52,7 @@
 <unit id="org.apache.batik.i18n" version="1.11.0.v20190515-0436"/>
 <unit id="org.apache.pdfbox" version="2.0.6.v20190617-1333"/>
 <unit id="org.apache.batik.dom" version="1.9.1.v20181015-1528"/>
+<unit id="org.hamcrest.library" version="1.3.0.v20180524-2246"/>
 <unit id="org.apache.log4j" version="1.2.15.v201012070815"/>
 <unit id="org.apache.xalan" version="2.7.1.v201005080400"/>
 <unit id="org.apache.commons.math3" version="3.5.0.v20190611-1023"/>
@@ -69,13 +79,6 @@
 <unit id="org.apache.commons.cli" version="1.2.0.v201404270220"/>
 <unit id="org.apache.poi" version="3.9.0.v201405241750"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/S20190726194335/repository"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.ease.python.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ease.ui.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ease.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ease.modules.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/ease/update/release"/>
 </location>
 </locations>
 </target>
