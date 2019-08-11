@@ -11,3 +11,5 @@ chemclipse/features/net.openchrom.chromatogram.xxd.identifier.supplier.manual.fe
 chemclipse/plugins/net.openchrom.chromatogram.xxd.identifier.supplier.manual.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.xxd.identifier.supplier.manual/target/
 chemclipse/sites/net.openchrom.chromatogram.xxd.identifier.supplier.manual.updateSite/target/
+bin/
+target/
