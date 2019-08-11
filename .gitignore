@@ -12,3 +12,5 @@ openchrom/features/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.a
 openchrom/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.ui/target/
 openchrom/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi/target/
 openchrom/sites/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.updateSite/target/
+bin/
+target/
