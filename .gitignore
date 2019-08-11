@@ -13,3 +13,5 @@ chemclipse/features/org.eclipse.chemclipse.msd.converter.supplier.animl.feature/
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.animl.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.animl/target/
 chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.animl.updateSite/target/
+bin/
+target/
