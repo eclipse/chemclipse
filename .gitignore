@@ -1,1 +1,3 @@
 chemclipse/plugins/org.eclipse.chemclipse.rcp.app.compilation.marketplace.ui/bin/
+bin/
+target/
