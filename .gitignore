@@ -13,3 +13,5 @@ chemclipse/features/net.openchrom.chromatogram.msd.integrator.supplier.peakmax.f
 chemclipse/plugins/net.openchrom.chromatogram.msd.integrator.supplier.peakmax.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.msd.integrator.supplier.peakmax/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.integrator.supplier.peakmax.updateSite/target/
+bin/
+target/
