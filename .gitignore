@@ -12,3 +12,5 @@ chemclipse/features/net.openchrom.chromatogram.msd.integrator.supplier.sumarea.f
 chemclipse/plugins/net.openchrom.chromatogram.msd.integrator.supplier.sumarea.ui/target/
 chemclipse/plugins/net.openchrom.chromatogram.msd.integrator.supplier.sumarea/target/
 chemclipse/sites/net.openchrom.chromatogram.msd.integrator.supplier.sumarea.updateSite/target/
+bin/
+target/
