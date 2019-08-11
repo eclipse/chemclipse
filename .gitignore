@@ -12,3 +12,5 @@ chemclipse/features/org.eclipse.chemclipse.xxd.converter.supplier.ascii.feature/
 chemclipse/plugins/org.eclipse.chemclipse.xxd.converter.supplier.ascii.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.xxd.converter.supplier.ascii/target/
 chemclipse/sites/org.eclipse.chemclipse.xxd.converter.supplier.ascii.updateSite/target/
+bin/
+target/
