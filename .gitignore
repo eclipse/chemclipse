@@ -10,3 +10,5 @@ chemclipse/features/org.eclipse.chemclipse.msd.converter.supplier.excel.feature/
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.excel.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.excel/target/
 chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.excel.updateSite/target/
+bin/
+target/
