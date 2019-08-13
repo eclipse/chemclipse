@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderiv
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 public class BasePeakDetector extends AbstractPeakDetector {
 
@@ -64,10 +65,11 @@ public class BasePeakDetector extends AbstractPeakDetector {
 		 */
 		int size = slopes.size();
 		int scanOffset = slopes.getStartScan() - 1;
-		int peaks = 1;
 		IRawPeak rawPeak;
 		List<IRawPeak> rawPeaks = new ArrayList<IRawPeak>();
-		for(int i = 1; i <= size - CONSECUTIVE_SCAN_STEPS; i++) {
+		int limit = size - CONSECUTIVE_SCAN_STEPS;
+		SubMonitor subMonitor = SubMonitor.convert(monitor, limit);
+		for(int i = 1; i <= limit; i++) {
 			/*
 			 * Get the scan numbers without offset.<br/> Why? To not get out of
 			 * borders of the slopes list.
@@ -91,9 +93,9 @@ public class BasePeakDetector extends AbstractPeakDetector {
 			//
 			rawPeak = new RawPeak(peakStart, peakMaximum, peakStop);
 			if(isValidRawPeak(rawPeak)) {
-				monitor.subTask("Add peak " + peaks++);
 				rawPeaks.add(rawPeak);
 			}
+			subMonitor.worked(1);
 		}
 		return rawPeaks;
 	}
