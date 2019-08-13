@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -35,7 +35,7 @@ public class FirstDerivativePeakDetector_2_Test extends FirstDerivativeSlopesTes
 
 		super.setUp();
 		firstDerivativePeakDetector = new PeakDetectorMSD();
-		firstDerivativePeakDetectorClass = PeakDetectorMSD.class;
+		firstDerivativePeakDetectorClass = BasePeakDetector.class;
 		slopes = getFirstDerivativeSlopes();
 		slopes.calculateMovingAverage(WindowSize.WIDTH_5);
 	}
