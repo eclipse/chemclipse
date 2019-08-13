@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add SlopesAbs Function
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.equations;
 
@@ -70,6 +71,23 @@ public class Equations {
 			a = (p2.getY() - p1.getY()) / divider;
 		}
 		return a;
+	}
+
+	/**
+	 * Calculates the slope which can be determined by the given two points, but with an absolute X value
+	 * 
+	 * @param p1
+	 * @param p2
+	 * @return the slope with absolute x values
+	 */
+	public static double calculateSlopeAbs(IPoint p1, IPoint p2) {
+
+		double divider = Math.abs(p2.getX() - p1.getX());
+		if(divider == 0) {
+			return 0;
+		} else {
+			return (p2.getY() - p1.getY()) / divider;
+		}
 	}
 
 	/**
