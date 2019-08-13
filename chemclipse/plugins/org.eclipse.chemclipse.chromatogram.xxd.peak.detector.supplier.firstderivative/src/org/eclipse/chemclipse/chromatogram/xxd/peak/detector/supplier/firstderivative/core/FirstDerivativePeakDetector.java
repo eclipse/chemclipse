@@ -16,7 +16,6 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlopes;
@@ -32,6 +31,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.detector.Detector;
@@ -91,7 +91,7 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 				} else {
 					configuration = globalConfiguration;
 				}
-				slopes = getSignalSlopes(((SpectrumMeasurement)measurement).getSignals());
+				slopes = getSignalSlopes(((SpectrumMeasurement)measurement).getSignals(), configuration.getMovingAverageWindowSize());
 			} else {
 				throw new IllegalArgumentException();
 			}
@@ -107,18 +107,16 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 		return "Implementation of a first derivative peak detector.";
 	}
 
-	private static IFirstDerivativeDetectorSlopes getSignalSlopes(List<? extends ISignal> signals) {
+	private static IFirstDerivativeDetectorSlopes getSignalSlopes(List<? extends ISignal> signals, WindowSize windowSize) {
 
 		IFirstDerivativeDetectorSlopes firstDerivativeSlopes = new FirstDerivativeDetectorSlopes(signals);
 		for(int i = 1; i < signals.size(); i++) {
 			ISignal signal = signals.get(i - 1);
 			ISignal signalNext = signals.get(i);
-			IPoint p1 = new Point(signal.getX(), signal.getY());
-			IPoint p2 = new Point(signalNext.getX(), signalNext.getY());
-			IFirstDerivativeDetectorSlope slope = new FirstDerivativeDetectorSlope(p1, p2, i);
+			IFirstDerivativeDetectorSlope slope = new SignalSlope(signal, signalNext);
 			firstDerivativeSlopes.add(slope);
 		}
-		firstDerivativeSlopes.calculateMovingAverage(WindowSize.WIDTH_45);
+		firstDerivativeSlopes.calculateMovingAverage(windowSize);
 		return firstDerivativeSlopes;
 	}
 
@@ -148,5 +146,40 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 			return true;
 		}
 		return false;
+	}
+
+	private static final class SignalSlope implements IFirstDerivativeDetectorSlope {
+
+		private double slope;
+
+		public SignalSlope(ISignal signal, ISignal signalNext) {
+			IPoint p1 = new Point(signal.getX(), signal.getY());
+			IPoint p2 = new Point(signalNext.getX(), signalNext.getY());
+			slope = Equations.calculateSlopeAbs(p1, p2);
+		}
+
+		@Override
+		public void setSlope(double slope) {
+
+			this.slope = slope;
+		}
+
+		@Override
+		public double getSlope() {
+
+			return slope;
+		}
+
+		@Override
+		public int getRetentionTime() {
+
+			return -1;
+		}
+
+		@Override
+		public String getDrift() {
+
+			return "";
+		}
 	}
 }
