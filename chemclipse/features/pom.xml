@@ -21,6 +21,7 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.feature</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.feature</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv.feature</module>

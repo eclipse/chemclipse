@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter enables to remove a series of scans."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.core.FilterRemover"
+            filterName="Scan Remover Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsRemover"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover">
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filters removes empty scans."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.core.FilterCleaner"
+            filterName="Remove Empty Scans Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsCleaner"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.removeemptyscans">
+      </ChromatogramFilterSupplier>      
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
