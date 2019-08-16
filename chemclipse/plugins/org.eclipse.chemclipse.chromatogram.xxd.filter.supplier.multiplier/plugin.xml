@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter multiplies all signals of a chromatogram."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.core.ChromatogramFilter"
+            filterName="Multiplier Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.FilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
