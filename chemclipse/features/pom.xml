@@ -45,6 +45,7 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.feature</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.feature</module>
