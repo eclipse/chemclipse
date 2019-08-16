@@ -103,6 +103,9 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.quantitation.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.quantitation.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.quantitation</module>
 <module>org.eclipse.chemclipse.chromatogram.peak.detector.fragment.test</module>
