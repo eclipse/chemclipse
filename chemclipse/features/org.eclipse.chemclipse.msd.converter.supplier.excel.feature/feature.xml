@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.chemclipse.msd.converter.supplier.excel.feature"
       label="Excel Converter"
-      version="1.2.0.qualifier"
+      version="0.8.0.qualifier"
       provider-name="http://www.openchrom.net">
 
    <description url="http://www.openchrom.net/plugins/converter/excel/">

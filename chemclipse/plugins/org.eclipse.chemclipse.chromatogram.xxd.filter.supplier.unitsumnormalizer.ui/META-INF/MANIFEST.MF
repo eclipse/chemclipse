@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ui
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.ui;singleton:=true
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.ui.Activator
 Bundle-Vendor: OpenChrom
 Require-Bundle: org.eclipse.ui,
@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.msd.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.progress;bundle-version="0.8.0",
  org.eclipse.chemclipse.chromatogram.msd.filter;bundle-version="0.8.0",
- org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer;bundle-version="1.2.0",
+ org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer;bundle-version="0.8.0",
  org.eclipse.chemclipse.processing;bundle-version="0.8.0",
  org.eclipse.chemclipse.processing.ui;bundle-version="0.8.0",
  org.eclipse.chemclipse.support;bundle-version="0.8.0",

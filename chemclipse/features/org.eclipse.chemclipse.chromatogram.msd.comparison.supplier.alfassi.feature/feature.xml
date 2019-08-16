@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.feature"
       label="Alfassi Comparison Support"
-      version="1.2.0.qualifier">
+      version="0.8.0.qualifier">
 
    <description url="http://www.openchrom.net">
       This is a MS comparison supplier Alfassi.

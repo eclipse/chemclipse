@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.chemclipse.msd.identifier.supplier.nist.feature"
       label="NIST-DB Identifier"
-      version="1.2.0.qualifier"
+      version="0.8.0.qualifier"
       provider-name="http://www.openchrom.net">
 
    <description url="https://www.openchrom.net">

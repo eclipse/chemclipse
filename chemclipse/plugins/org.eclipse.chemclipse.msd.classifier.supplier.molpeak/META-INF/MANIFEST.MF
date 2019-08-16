@@ -3,7 +3,7 @@ Eclipse-BundleShape: dir
 Bundle-ManifestVersion: 2
 Bundle-Name: Molpeak
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.classifier.supplier.molpeak;singleton:=true
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.msd.classifier.supplier.molpeak.Activator
 Bundle-Vendor: OpenChrom
 Require-Bundle: org.eclipse.core.runtime,

@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.chemclipse.xxd.converter.supplier.gson.feature"
       label="GSON Converter"
-      version="1.2.0.qualifier"
+      version="0.8.0.qualifier"
       provider-name="OpenChrom">
 
    <description url="http://www.openchrom.net">
