@@ -23,6 +23,7 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.feature</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.feature</module>

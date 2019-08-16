@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.modelContribution"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.editors.EditorCalibration"
+            extensions="cal"
+            icon="icons/16x16/report.gif"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.editors.editorCalibration"
+            name="Retention Index Calibration">
+      </editor>
+   </extension>      
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.chromatogram.xxd.calculator.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.preferences.PreferencePageCalculator"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.preferences.preferencePageCalculator"
+            name="Retention Index Settings">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.preferences.identifierPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.preferences.PreferencePageIdentifier"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.preferences.preferencePageIdentifier"
+            name="Alkane Identifier Settings">
+      </page>      
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc_filter.xml">
+      </toc>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Processors"
+            id="org.eclipse.chemclipse.processors">
+      </category>
+      <wizard
+            name="Retention Index Calculator"
+            icon="icons/16x16/chromatogram.gif"
+            category="org.eclipse.chemclipse.processors"
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards.WizardCreateRetentionIndexFile"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards.WizardCreateRetentionIndexFile">
+      </wizard>
+   </extension>    
+</plugin>
