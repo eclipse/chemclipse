@@ -13,6 +13,7 @@
 	<name>ChemClipse::Features</name>
 
 	<modules>
+<module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.feature</module>
 <module>org.eclipse.chemclipse.rcp.app.base.feature</module>
 <module>org.eclipse.chemclipse.rcp.app.core.feature</module>
 <module>org.eclipse.chemclipse.rcp.app.test.feature</module>
