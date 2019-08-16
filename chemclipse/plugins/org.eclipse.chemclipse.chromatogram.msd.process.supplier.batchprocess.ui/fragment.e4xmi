@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_IjGZAECFEeKMcNE1hx3pmQ">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_PCOtsECHEeKMcNE1hx3pmQ" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_QPXPMECHEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.command.batchProcess" commandName="Chromatogram Batch Process"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ZRcTsECHEeKMcNE1hx3pmQ" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_atcXoECHEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.handler.batchProcess" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui/org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.handlers.BatchProcessHandler" command="_QPXPMECHEeKMcNE1hx3pmQ"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_iZxxMECHEeKMcNE1hx3pmQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_rYQvIECHEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.handledmenuitem.batchProcess" label="Chromatogram Batch Process" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_QPXPMECHEeKMcNE1hx3pmQ"/>
+  </fragments>
+</fragment:ModelFragments>
