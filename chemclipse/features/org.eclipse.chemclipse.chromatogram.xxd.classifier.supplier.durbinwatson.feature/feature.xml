@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.feature"
+      label="Durbin-Watson Classifier"
+      version="0.8.0.qualifier"
+      provider-name="ChemClipse">
+
+   <description url="http://www.chemclipse.net">
+      This is a Durbin-Watson filter.
+   </description>
+
+   <copyright url="http://www.chemclipse.net">
+      Copyright (c) 2014, 2018 Lablicate GmbH.
+   </copyright>
+
+   <license url="http://www.chemclipse.net">
+      Copyright (c) 2014, 2018 Lablicate GmbH.
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License
+v1.0 which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+   </license>
+
+   <url>
+      <discovery label="Durbin-Watson" url="http://www.chemclipse.net"/>
+   </url>
+
+   <requires>
+      <import feature="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature" version="0.8.0.qualifier"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
