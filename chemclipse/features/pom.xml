@@ -34,6 +34,7 @@
 <module>org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.feature</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.mzml.feature</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.svg.feature</module>
+<module>org.eclipse.chemclipse.msd.identifier.supplier.nist.feature</module>
 <module>org.eclipse.chemclipse.msd.identifier.supplier.triplequad.feature</module>
 <module>org.eclipse.chemclipse.rcp.app.base.feature</module>
 <module>org.eclipse.chemclipse.rcp.app.core.feature</module>

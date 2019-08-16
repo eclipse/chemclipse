@@ -1,0 +1,639 @@
+Unknown:                                                             Compound in Library Factor = -684
+Hit 1  : <<Ethylene>>;<<C2H4>>; MF: 421; RMF: 504; Prob: 83.90; CAS:74-85-1; Mw: 28; Lib: <<mainlib>>; Id: 926.
+Hit 2  : <<Ethane>>;<<C2H6>>; MF: 332; RMF: 435; Prob: 7.24; CAS:74-84-0; Mw: 30; Lib: <<mainlib>>; Id: 819.
+Unknown:                                                             Compound in Library Factor = -282
+Hit 1  : <<2-Butene>>;<<C4H8>>; MF: 776; RMF: 875; Prob: 71.42; CAS:107-01-7; Mw: 56; Lib: <<mainlib>>; Id: 112.
+Hit 2  : <<1-Butene>>;<<C4H8>>; MF: 733; RMF: 781; Prob: 15.75; CAS:106-98-9; Mw: 56; Lib: <<mainlib>>; Id: 2195.
+Unknown:                                                             Compound in Library Factor = -642
+Hit 1  : <<1,3-Cyclopentadiene>>;<<C5H6>>; MF: 692; RMF: 738; Prob: 63.93; CAS:542-92-7; Mw: 66; Lib: <<mainlib>>; Id: 1938.
+Hit 2  : <<1,3-Butadiene, 2-methyl->>;<<C5H8>>; MF: 669; RMF: 725; Prob: 23.35; CAS:78-79-5; Mw: 68; Lib: <<mainlib>>; Id: 1898.
+Unknown:                                                             Compound in Library Factor = -1660
+Hit 1  : <<Nonanal>>;<<C9H18O>>; MF: 656; RMF: 657; Prob: 10.00; CAS:124-19-6; Mw: 142; Lib: <<mainlib>>; Id: 361.
+Hit 2  : <<1-Hexanol, 2-ethyl->>;<<C8H18O>>; MF: 653; RMF: 661; Prob: 8.84; CAS:104-76-7; Mw: 130; Lib: <<mainlib>>; Id: 587.
+Unknown:                                                             Compound in Library Factor = -330
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 661; RMF: 663; Prob: 65.80; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<Cyclohexanone, 2-nitro->>;<<C6H9NO3>>; MF: 555; RMF: 564; Prob: 4.42; CAS:4883-67-4; Mw: 143; Lib: <<mainlib>>; Id: 2032.
+Unknown:                                                             Compound in Library Factor = -334
+Hit 1  : <<1,3,5-Cycloheptatriene>>;<<C7H8>>; MF: 829; RMF: 880; Prob: 47.83; CAS:544-25-2; Mw: 92; Lib: <<mainlib>>; Id: 2335.
+Hit 2  : <<Toluene>>;<<C7H8>>; MF: 815; RMF: 853; Prob: 29.94; CAS:108-88-3; Mw: 92; Lib: <<mainlib>>; Id: 770.
+Unknown:                                                             Compound in Library Factor = -343
+Hit 1  : <<1-Octene>>;<<C8H16>>; MF: 765; RMF: 792; Prob: 61.14; CAS:111-66-0; Mw: 112; Lib: <<mainlib>>; Id: 432.
+Hit 2  : <<1-Octanol>>;<<C8H18O>>; MF: 709; RMF: 727; Prob: 11.65; CAS:111-87-5; Mw: 130; Lib: <<mainlib>>; Id: 38.
+Unknown:                                                             Compound in Library Factor = -760
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 572; RMF: 593; Prob: 63.70; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<1,2-Benzenediol, 4-(2-amino-1-hydroxypropyl)->>;<<C9H13NO3>>; MF: 511; RMF: 511; Prob: 11.09; CAS:6539-57-7; Mw: 183; Lib: <<mainlib>>; Id: 536.
+Unknown:                                                             Compound in Library Factor = -483
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 609; RMF: 620; Prob: 62.31; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<Cyclohexanone, 2-nitro->>;<<C6H9NO3>>; MF: 523; RMF: 535; Prob: 5.55; CAS:4883-67-4; Mw: 143; Lib: <<mainlib>>; Id: 2032.
+Unknown:                                                             Compound in Library Factor = -1558
+Hit 1  : <<6-Methyl-6-hepten-4-yn-2-ol>>;<<C8H12O>>; MF: 473; RMF: 598; Prob: 13.06; CAS:20937-57-9; Mw: 124; Lib: <<mainlib>>; Id: 1002.
+Hit 2  : <<1,2-Benzenediol, 4-(2-amino-1-hydroxypropyl)->>;<<C9H13NO3>>; MF: 473; RMF: 477; Prob: 13.06; CAS:6539-57-7; Mw: 183; Lib: <<mainlib>>; Id: 536.
+Unknown:                                                             Compound in Library Factor = -630
+Hit 1  : <<Hydrazinecarboxylic acid, phenylmethyl ester>>;<<C8H10N2O2>>; MF: 671; RMF: 686; Prob: 45.98; CAS:5331-43-1; Mw: 166; Lib: <<mainlib>>; Id: 2140.
+Hit 2  : <<Ethylbenzene>>;<<C8H10>>; MF: 662; RMF: 808; Prob: 33.38; CAS:100-41-4; Mw: 106; Lib: <<mainlib>>; Id: 576.
+Unknown:                                                             Compound in Library Factor = -830
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 623; RMF: 645; Prob: 47.31; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<Cyclohexanol>>;<<C6H12O>>; MF: 574; RMF: 653; Prob: 9.71; CAS:108-93-0; Mw: 100; Lib: <<mainlib>>; Id: 1222.
+Unknown:                                                             Compound in Library Factor = -1296
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 599; RMF: 614; Prob: 21.48; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<Cyclohexanone, 2-nitro->>;<<C6H9NO3>>; MF: 573; RMF: 582; Prob: 6.43; CAS:4883-67-4; Mw: 143; Lib: <<mainlib>>; Id: 2032.
+Unknown:                                                             Compound in Library Factor = 481
+Hit 1  : <<Styrene>>;<<C8H8>>; MF: 961; RMF: 965; Prob: 81.38; CAS:100-42-5; Mw: 104; Lib: <<mainlib>>; Id: 685.
+Hit 2  : <<1,3,5,7-Cyclooctatetraene>>;<<C8H8>>; MF: 917; RMF: 917; Prob: 17.64; CAS:629-20-9; Mw: 104; Lib: <<mainlib>>; Id: 2023.
+Unknown:                                                             Compound in Library Factor = -871
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 559; RMF: 627; Prob: 57.05; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<1,2-Benzenediol, 4-(2-amino-1-hydroxypropyl)->>;<<C9H13NO3>>; MF: 508; RMF: 511; Prob: 11.50; CAS:6539-57-7; Mw: 183; Lib: <<mainlib>>; Id: 536.
+Unknown:                                                             Compound in Library Factor = -1709
+Hit 1  : <<1,2-Benzenediol, 4-(2-amino-1-hydroxypropyl)->>;<<C9H13NO3>>; MF: 510; RMF: 510; Prob: 23.73; CAS:6539-57-7; Mw: 183; Lib: <<mainlib>>; Id: 536.
+Hit 2  : <<Benzeneethanamine, N-methyl->>;<<C9H13N>>; MF: 491; RMF: 560; Prob: 11.52; CAS:589-08-2; Mw: 135; Lib: <<mainlib>>; Id: 269.
+Unknown:                                                             Compound in Library Factor = -1709
+Hit 1  : <<1-Hexyn-3-ol, 3-methyl->>;<<C7H12O>>; MF: 497; RMF: 574; Prob: 16.68; CAS:4339-05-3; Mw: 112; Lib: <<mainlib>>; Id: 1020.
+Hit 2  : <<1,2-Benzenediol, 4-(2-amino-1-hydroxypropyl)->>;<<C9H13NO3>>; MF: 482; RMF: 485; Prob: 10.11; CAS:6539-57-7; Mw: 183; Lib: <<mainlib>>; Id: 536.
+Unknown:                                                             Compound in Library Factor = -746
+Hit 1  : <<Phenprobamate>>;<<C10H13NO2>>; MF: 668; RMF: 691; Prob: 34.24; CAS:673-31-4; Mw: 179; Lib: <<mainlib>>; Id: 341.
+Hit 2  : <<Azetidine, 3-methyl-3-phenyl->>;<<C10H13N>>; MF: 657; RMF: 767; Prob: 23.49; CAS:5961-33-1; Mw: 147; Lib: <<mainlib>>; Id: 1082.
+Unknown:                                                             Compound in Library Factor = -1210
+Hit 1  : <<Hydrazinecarboxylic acid, phenylmethyl ester>>;<<C8H10N2O2>>; MF: 589; RMF: 683; Prob: 45.06; CAS:5331-43-1; Mw: 166; Lib: <<mainlib>>; Id: 2140.
+Hit 2  : <<Benzeneethanamine, à-methyl->>;<<C9H13N>>; MF: 577; RMF: 665; Prob: 30.01; CAS:60-15-1; Mw: 135; Lib: <<mainlib>>; Id: 2289.
+Unknown:                                                             Compound in Library Factor = -1774
+Hit 1  : <<dl-Homoserine>>;<<C4H9NO3>>; MF: 470; RMF: 496; Prob: 13.24; CAS:1927-25-9; Mw: 119; Lib: <<mainlib>>; Id: 859.
+Hit 2  : <<1,2-Benzenediol, 4-(2-amino-1-hydroxypropyl)->>;<<C9H13NO3>>; MF: 457; RMF: 472; Prob: 8.55; CAS:6539-57-7; Mw: 183; Lib: <<mainlib>>; Id: 536.
+Unknown:                                                             Compound in Library Factor = -903
+Hit 1  : <<1,2-Benzenediol, 4-(2-amino-1-hydroxypropyl)->>;<<C9H13NO3>>; MF: 514; RMF: 525; Prob: 37.25; CAS:6539-57-7; Mw: 183; Lib: <<mainlib>>; Id: 536.
+Hit 2  : <<3-Pyridinecarboxaldehyde, oxime>>;<<C6H6N2O>>; MF: 458; RMF: 514; Prob: 7.10; CAS:1193-92-6; Mw: 122; Lib: <<mainlib>>; Id: 1854.
+Unknown:                                                             Compound in Library Factor = 191
+Hit 1  : <<à-Methylstyrene>>;<<C9H10>>; MF: 887; RMF: 912; Prob: 60.88; CAS:98-83-9; Mw: 118; Lib: <<mainlib>>; Id: 229.
+Hit 2  : <<Azetidine, 3-methyl-3-phenyl->>;<<C10H13N>>; MF: 863; RMF: 903; Prob: 20.40; CAS:5961-33-1; Mw: 147; Lib: <<mainlib>>; Id: 1082.
+Unknown:                                                             Compound in Library Factor = -501
+Hit 1  : <<1-Dodecene>>;<<C12H24>>; MF: 803; RMF: 822; Prob: 25.33; CAS:112-41-4; Mw: 168; Lib: <<mainlib>>; Id: 317.
+Hit 2  : <<1-Decanol>>;<<C10H22O>>; MF: 784; RMF: 799; Prob: 12.30; CAS:112-30-1; Mw: 158; Lib: <<mainlib>>; Id: 1622.
+Unknown:                                                             Compound in Library Factor = -897
+Hit 1  : <<Decane>>;<<C10H22>>; MF: 704; RMF: 863; Prob: 52.28; CAS:124-18-5; Mw: 142; Lib: <<mainlib>>; Id: 257.
+Hit 2  : <<Tridecane>>;<<C13H28>>; MF: 679; RMF: 805; Prob: 15.94; CAS:629-50-5; Mw: 184; Lib: <<mainlib>>; Id: 15.
+Unknown:                                                             Compound in Library Factor = -1589
+Hit 1  : <<1,3-Cyclohexadiene, 1-methyl-4-(1-methylethyl)->>;<<C10H16>>; MF: 569; RMF: 604; Prob: 15.71; CAS:99-86-5; Mw: 136; Lib: <<mainlib>>; Id: 252.
+Hit 2  : <<Cyclohexene, 1-methyl-4-(1-methylethylidene)->>;<<C10H16>>; MF: 568; RMF: 644; Prob: 15.10; CAS:586-62-9; Mw: 136; Lib: <<mainlib>>; Id: 1258.
+Unknown:                                                             Compound in Library Factor = -1589
+Hit 1  : <<Bicyclo[4.1.0]hept-2-ene, 3,7,7-trimethyl->>;<<C10H16>>; MF: 576; RMF: 590; Prob: 17.16; CAS:554-61-0; Mw: 136; Lib: <<mainlib>>; Id: 1066.
+Hit 2  : <<3-Cyclohexene-1-acetaldehyde, à,4-dimethyl->>;<<C10H16O>>; MF: 573; RMF: 701; Prob: 15.17; CAS:29548-14-9; Mw: 152; Lib: <<mainlib>>; Id: 1105.
+Unknown:                                                             Compound in Library Factor = -361
+Hit 1  : <<Phenprobamate>>;<<C10H13NO2>>; MF: 744; RMF: 756; Prob: 54.24; CAS:673-31-4; Mw: 179; Lib: <<mainlib>>; Id: 341.
+Hit 2  : <<Benzene, 1-propenyl->>;<<C9H10>>; MF: 713; RMF: 790; Prob: 14.78; CAS:637-50-3; Mw: 118; Lib: <<mainlib>>; Id: 589.
+Unknown:                                                             Compound in Library Factor = -471
+Hit 1  : <<Phenprobamate>>;<<C10H13NO2>>; MF: 705; RMF: 713; Prob: 77.78; CAS:673-31-4; Mw: 179; Lib: <<mainlib>>; Id: 341.
+Hit 2  : <<Azetidine, 3-methyl-3-phenyl->>;<<C10H13N>>; MF: 636; RMF: 756; Prob: 11.55; CAS:5961-33-1; Mw: 147; Lib: <<mainlib>>; Id: 1082.
+Unknown:                                                             Compound in Library Factor = -1647
+Hit 1  : <<Benzene, 1-ethynyl-4-methyl->>;<<C9H8>>; MF: 513; RMF: 838; Prob: 13.74; CAS:766-97-2; Mw: 116; Lib: <<mainlib>>; Id: 2338.
+Hit 2  : <<Undecanal>>;<<C11H22O>>; MF: 501; RMF: 727; Prob: 9.15; CAS:112-44-7; Mw: 170; Lib: <<mainlib>>; Id: 588.
+Unknown:                                                             Compound in Library Factor = -1008
+Hit 1  : <<Phenprobamate>>;<<C10H13NO2>>; MF: 614; RMF: 640; Prob: 49.07; CAS:673-31-4; Mw: 179; Lib: <<mainlib>>; Id: 341.
+Hit 2  : <<Benzenepropanol>>;<<C9H12O>>; MF: 584; RMF: 719; Prob: 13.64; CAS:122-97-4; Mw: 136; Lib: <<mainlib>>; Id: 886.
+Unknown:                                                             Compound in Library Factor = -905
+Hit 1  : <<Cyclohexene, 1-methyl-4-(1-methylethylidene)->>;<<C10H16>>; MF: 670; RMF: 693; Prob: 39.55; CAS:586-62-9; Mw: 136; Lib: <<mainlib>>; Id: 1258.
+Hit 2  : <<Bicyclo[4.1.0]hept-2-ene, 3,7,7-trimethyl->>;<<C10H16>>; MF: 657; RMF: 662; Prob: 25.55; CAS:554-61-0; Mw: 136; Lib: <<mainlib>>; Id: 1066.
+Unknown:                                                             Compound in Library Factor = -830
+Hit 1  : <<Cyclohexene, 1-methyl-4-(1-methylethylidene)->>;<<C10H16>>; MF: 626; RMF: 642; Prob: 47.84; CAS:586-62-9; Mw: 136; Lib: <<mainlib>>; Id: 1258.
+Hit 2  : <<Bicyclo[4.1.0]hept-2-ene, 3,7,7-trimethyl->>;<<C10H16>>; MF: 579; RMF: 583; Prob: 10.00; CAS:554-61-0; Mw: 136; Lib: <<mainlib>>; Id: 1066.
+Unknown:                                                             Compound in Library Factor = -385
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 741; RMF: 791; Prob: 68.25; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<11-Hexadecen-1-ol, (Z)->>;<<C16H32O>>; MF: 673; RMF: 753; Prob: 10.35; CAS:56683-54-6; Mw: 240; Lib: <<mainlib>>; Id: 267.
+Unknown:                                                             Compound in Library Factor = -825
+Hit 1  : <<1-Dodecene>>;<<C12H24>>; MF: 722; RMF: 762; Prob: 18.87; CAS:112-41-4; Mw: 168; Lib: <<mainlib>>; Id: 317.
+Hit 2  : <<1-Undecene>>;<<C11H22>>; MF: 719; RMF: 786; Prob: 16.68; CAS:821-95-4; Mw: 154; Lib: <<mainlib>>; Id: 1812.
+Unknown:                                                             Compound in Library Factor = -284
+Hit 1  : <<Undecane>>;<<C11H24>>; MF: 824; RMF: 869; Prob: 46.83; CAS:1120-21-4; Mw: 156; Lib: <<mainlib>>; Id: 1995.
+Hit 2  : <<Decane>>;<<C10H22>>; MF: 797; RMF: 887; Prob: 13.77; CAS:124-18-5; Mw: 142; Lib: <<mainlib>>; Id: 257.
+Unknown:                                                             Compound in Library Factor = -1032
+Hit 1  : <<1-Tridecene>>;<<C13H26>>; MF: 684; RMF: 709; Prob: 20.82; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Hit 2  : <<Nonanal>>;<<C9H18O>>; MF: 673; RMF: 721; Prob: 14.28; CAS:124-19-6; Mw: 142; Lib: <<mainlib>>; Id: 361.
+Unknown:                                                             Compound in Library Factor = -1502
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 545; RMF: 559; Prob: 31.24; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Bicyclo[2.2.1]hept-5-en-2-ol>>;<<C7H10O>>; MF: 523; RMF: 601; Prob: 12.35; CAS:13080-90-5; Mw: 110; Lib: <<mainlib>>; Id: 686.
+Unknown:                                                             Compound in Library Factor = -1449
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 551; RMF: 632; Prob: 28.22; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<3-Cyclohexene-1-acetaldehyde, à,4-dimethyl->>;<<C10H16O>>; MF: 547; RMF: 622; Prob: 23.84; CAS:29548-14-9; Mw: 152; Lib: <<mainlib>>; Id: 1105.
+Unknown:                                                             Compound in Library Factor = -1224
+Hit 1  : <<1-Pentadecene>>;<<C15H30>>; MF: 641; RMF: 672; Prob: 18.99; CAS:13360-61-7; Mw: 210; Lib: <<mainlib>>; Id: 2163.
+Hit 2  : <<1-Dodecene>>;<<C12H24>>; MF: 627; RMF: 678; Prob: 11.88; CAS:112-41-4; Mw: 168; Lib: <<mainlib>>; Id: 317.
+Unknown:                                                             Compound in Library Factor = -1230
+Hit 1  : <<Dodecanal>>;<<C12H24O>>; MF: 571; RMF: 658; Prob: 29.55; CAS:112-54-9; Mw: 184; Lib: <<mainlib>>; Id: 1551.
+Hit 2  : <<Undecanal>>;<<C11H22O>>; MF: 539; RMF: 709; Prob: 7.89; CAS:112-44-7; Mw: 170; Lib: <<mainlib>>; Id: 588.
+Unknown:                                                             Compound in Library Factor = -871
+Hit 1  : <<Phenprobamate>>;<<C10H13NO2>>; MF: 570; RMF: 639; Prob: 42.40; CAS:673-31-4; Mw: 179; Lib: <<mainlib>>; Id: 341.
+Hit 2  : <<1(2H)-Naphthalenone, 3,4-dihydro-5,7-dimethyl->>;<<C12H14O>>; MF: 517; RMF: 530; Prob: 8.38; CAS:13621-25-5; Mw: 174; Lib: <<mainlib>>; Id: 92.
+Unknown:                                                             Compound in Library Factor = -1502
+Hit 1  : <<3-Cyclohexene-1-acetaldehyde, à,4-dimethyl->>;<<C10H16O>>; MF: 550; RMF: 650; Prob: 41.66; CAS:29548-14-9; Mw: 152; Lib: <<mainlib>>; Id: 1105.
+Hit 2  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 522; RMF: 614; Prob: 12.03; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Unknown:                                                             Compound in Library Factor = -2343
+Hit 1  : <<Naphthalene, 1-(1-methylethyl)->>;<<C13H14>>; MF: 481; RMF: 485; Prob: 10.43; CAS:6158-45-8; Mw: 170; Lib: <<mainlib>>; Id: 1154.
+Hit 2  : <<Hexanedioic acid, dioctyl ester>>;<<C22H42O4>>; MF: 479; RMF: 493; Prob: 9.62; CAS:123-79-5; Mw: 370; Lib: <<mainlib>>; Id: 1380.
+Unknown:                                                             Compound in Library Factor = -1647
+Hit 1  : <<Hexane, 2,4-dimethyl->>;<<C8H18>>; MF: 515; RMF: 693; Prob: 10.01; CAS:589-43-5; Mw: 114; Lib: <<mainlib>>; Id: 1160.
+Hit 2  : <<Dodecanal>>;<<C12H24O>>; MF: 509; RMF: 624; Prob: 7.87; CAS:112-54-9; Mw: 184; Lib: <<mainlib>>; Id: 1551.
+Unknown:                                                             Compound in Library Factor = -585
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 602; RMF: 614; Prob: 34.79; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Benzene, 1-methyl-4-(1-methylethyl)->>;<<C10H14>>; MF: 532; RMF: 550; Prob: 5.06; CAS:99-87-6; Mw: 134; Lib: <<mainlib>>; Id: 359.
+Unknown:                                                             Compound in Library Factor = -744
+Hit 1  : <<1-Dodecene>>;<<C12H24>>; MF: 732; RMF: 749; Prob: 22.45; CAS:112-41-4; Mw: 168; Lib: <<mainlib>>; Id: 317.
+Hit 2  : <<1-Decanol>>;<<C10H22O>>; MF: 717; RMF: 743; Prob: 13.60; CAS:112-30-1; Mw: 158; Lib: <<mainlib>>; Id: 1622.
+Unknown:                                                             Compound in Library Factor = -219
+Hit 1  : <<1-Dodecene>>;<<C12H24>>; MF: 852; RMF: 889; Prob: 38.17; CAS:112-41-4; Mw: 168; Lib: <<mainlib>>; Id: 317.
+Hit 2  : <<1-Tridecene>>;<<C13H26>>; MF: 828; RMF: 868; Prob: 12.79; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Unknown:                                                             Compound in Library Factor = -458
+Hit 1  : <<Dodecane>>;<<C12H26>>; MF: 778; RMF: 860; Prob: 41.95; CAS:112-40-3; Mw: 170; Lib: <<mainlib>>; Id: 190.
+Hit 2  : <<Decane>>;<<C10H22>>; MF: 741; RMF: 868; Prob: 10.21; CAS:124-18-5; Mw: 142; Lib: <<mainlib>>; Id: 257.
+Unknown:                                                             Compound in Library Factor = -1589
+Hit 1  : <<Dodecanal>>;<<C12H24O>>; MF: 576; RMF: 642; Prob: 13.45; CAS:112-54-9; Mw: 184; Lib: <<mainlib>>; Id: 1551.
+Hit 2  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 572; RMF: 634; Prob: 11.36; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Unknown:                                                             Compound in Library Factor = -1449
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 567; RMF: 649; Prob: 30.63; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<Undecanoic acid, hydroxy-, lactone>>;<<C11H20O2>>; MF: 539; RMF: 578; Prob: 8.84; CAS:39282-36-5; Mw: 184; Lib: <<mainlib>>; Id: 1760.
+Unknown:                                                             Compound in Library Factor = -680
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 594; RMF: 624; Prob: 68.32; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<1,2-Benzenediol, 4-(2-amino-1-hydroxypropyl)->>;<<C9H13NO3>>; MF: 533; RMF: 544; Prob: 11.90; CAS:6539-57-7; Mw: 183; Lib: <<mainlib>>; Id: 536.
+Unknown:                                                             Compound in Library Factor = -781
+Hit 1  : <<Benzene, hexyl->>;<<C12H18>>; MF: 641; RMF: 699; Prob: 66.62; CAS:1077-16-3; Mw: 162; Lib: <<mainlib>>; Id: 1600.
+Hit 2  : <<7-Phenyl-1-heptyl chloride>>;<<C13H19Cl>>; MF: 604; RMF: 687; Prob: 16.21; CAS:71434-47-4; Mw: 210; Lib: <<mainlib>>; Id: 2164.
+Unknown:                                                             Compound in Library Factor = -1051
+Hit 1  : <<1,2-Benzenediol, 4-(2-amino-1-hydroxypropyl)->>;<<C9H13NO3>>; MF: 525; RMF: 539; Prob: 32.11; CAS:6539-57-7; Mw: 183; Lib: <<mainlib>>; Id: 536.
+Hit 2  : <<Phenprobamate>>;<<C10H13NO2>>; MF: 483; RMF: 507; Prob: 7.20; CAS:673-31-4; Mw: 179; Lib: <<mainlib>>; Id: 341.
+Unknown:                                                             Compound in Library Factor = -1647
+Hit 1  : <<1-Pentadecene>>;<<C15H30>>; MF: 516; RMF: 564; Prob: 13.10; CAS:13360-61-7; Mw: 210; Lib: <<mainlib>>; Id: 2163.
+Hit 2  : <<1-Tridecene>>;<<C13H26>>; MF: 507; RMF: 568; Prob: 9.51; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Unknown:                                                             Compound in Library Factor = -610
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 638; RMF: 740; Prob: 56.07; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<11-Hexadecen-1-ol, (Z)->>;<<C16H32O>>; MF: 572; RMF: 707; Prob: 8.85; CAS:56683-54-6; Mw: 240; Lib: <<mainlib>>; Id: 267.
+Unknown:                                                             Compound in Library Factor = -1230
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 579; RMF: 696; Prob: 48.82; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<Cyclohexanone, 2-nitro->>;<<C6H9NO3>>; MF: 548; RMF: 611; Prob: 13.31; CAS:4883-67-4; Mw: 143; Lib: <<mainlib>>; Id: 2032.
+Unknown:                                                             Compound in Library Factor = -1210
+Hit 1  : <<1-Tridecene>>;<<C13H26>>; MF: 660; RMF: 706; Prob: 15.81; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Hit 2  : <<1-Pentadecene>>;<<C15H30>>; MF: 652; RMF: 685; Prob: 11.79; CAS:13360-61-7; Mw: 210; Lib: <<mainlib>>; Id: 2163.
+Unknown:                                                             Compound in Library Factor = -284
+Hit 1  : <<n-Tridecan-1-ol>>;<<C13H28O>>; MF: 829; RMF: 889; Prob: 23.85; CAS:112-70-9; Mw: 200; Lib: <<mainlib>>; Id: 646.
+Hit 2  : <<1-Tridecene>>;<<C13H26>>; MF: 828; RMF: 854; Prob: 22.92; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Unknown:                                                             Compound in Library Factor = -897
+Hit 1  : <<Tridecane>>;<<C13H28>>; MF: 706; RMF: 833; Prob: 32.48; CAS:629-50-5; Mw: 184; Lib: <<mainlib>>; Id: 15.
+Hit 2  : <<Pentadecane>>;<<C15H32>>; MF: 681; RMF: 755; Prob: 9.90; CAS:629-62-9; Mw: 212; Lib: <<mainlib>>; Id: 1170.
+Unknown:                                                             Compound in Library Factor = -1558
+Hit 1  : <<Dodecanal>>;<<C12H24O>>; MF: 474; RMF: 552; Prob: 20.18; CAS:112-54-9; Mw: 184; Lib: <<mainlib>>; Id: 1551.
+Hit 2  : <<Glycyl-dl-alanine>>;<<C5H10N2O3>>; MF: 452; RMF: 490; Prob: 7.97; CAS:926-77-2; Mw: 146; Lib: <<mainlib>>; Id: 491.
+Unknown:                                                             Compound in Library Factor = -350
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 630; RMF: 666; Prob: 68.87; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Undecanoic acid, hydroxy-, lactone>>;<<C11H20O2>>; MF: 520; RMF: 573; Prob: 4.40; CAS:39282-36-5; Mw: 184; Lib: <<mainlib>>; Id: 1760.
+Unknown:                                                             Compound in Library Factor = -1785
+Hit 1  : <<Pentadecane, 2-methyl->>;<<C16H34>>; MF: 602; RMF: 652; Prob: 12.13; CAS:1560-93-6; Mw: 226; Lib: <<mainlib>>; Id: 974.
+Hit 2  : <<1-Pentadecene>>;<<C15H30>>; MF: 598; RMF: 626; Prob: 10.25; CAS:13360-61-7; Mw: 210; Lib: <<mainlib>>; Id: 2163.
+Unknown:                                                             Compound in Library Factor = -1709
+Hit 1  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 499; RMF: 499; Prob: 18.07; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Hit 2  : <<Digitoxin>>;<<C41H64O13>>; MF: 492; RMF: 492; Prob: 13.84; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Unknown:                                                             Compound in Library Factor = -350
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 615; RMF: 646; Prob: 77.39; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 499; RMF: 499; Prob: 4.52; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -1709
+Hit 1  : <<Bicyclo[2.2.1]hept-5-en-2-ol>>;<<C7H10O>>; MF: 509; RMF: 598; Prob: 10.73; CAS:13080-90-5; Mw: 110; Lib: <<mainlib>>; Id: 686.
+Hit 2  : <<Benzenemethanol, 4-ethyl->>;<<C9H12O>>; MF: 508; RMF: 546; Prob: 10.31; CAS:768-59-2; Mw: 136; Lib: <<mainlib>>; Id: 744.
+Unknown:                                                             Compound in Library Factor = -781
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 648; RMF: 747; Prob: 38.46; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<Undecanoic acid, hydroxy-, lactone>>;<<C11H20O2>>; MF: 604; RMF: 654; Prob: 8.33; CAS:39282-36-5; Mw: 184; Lib: <<mainlib>>; Id: 1760.
+Unknown:                                                             Compound in Library Factor = -278
+Hit 1  : <<n-Tridecan-1-ol>>;<<C13H28O>>; MF: 833; RMF: 896; Prob: 19.92; CAS:112-70-9; Mw: 200; Lib: <<mainlib>>; Id: 646.
+Hit 2  : <<1-Tridecene>>;<<C13H26>>; MF: 828; RMF: 858; Prob: 16.05; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Unknown:                                                             Compound in Library Factor = -825
+Hit 1  : <<Tetradecane>>;<<C14H30>>; MF: 726; RMF: 803; Prob: 24.64; CAS:629-59-4; Mw: 198; Lib: <<mainlib>>; Id: 847.
+Hit 2  : <<Pentadecane>>;<<C15H32>>; MF: 714; RMF: 785; Prob: 16.41; CAS:629-62-9; Mw: 212; Lib: <<mainlib>>; Id: 1170.
+Unknown:                                                             Compound in Library Factor = -180
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 699; RMF: 738; Prob: 89.16; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<1,2,3,4,5,6-Hexahydro-1,1,5,5-tetramethyl-2,4a-methanonaphthalen-7(4aH)-one>>;<<C15H22O>>; MF: 530; RMF: 554; Prob: 1.99; CAS:23747-14-0; Mw: 218; Lib: <<mainlib>>; Id: 630.
+Unknown:                                                             Compound in Library Factor = -1589
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 559; RMF: 664; Prob: 12.37; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<Undecanoic acid, hydroxy-, lactone>>;<<C11H20O2>>; MF: 555; RMF: 604; Prob: 10.45; CAS:39282-36-5; Mw: 184; Lib: <<mainlib>>; Id: 1760.
+Unknown:                                                             Compound in Library Factor = -642
+Hit 1  : <<Pentadecane, 2-methyl->>;<<C16H34>>; MF: 694; RMF: 751; Prob: 41.43; CAS:1560-93-6; Mw: 226; Lib: <<mainlib>>; Id: 974.
+Hit 2  : <<Hexadecane>>;<<C16H34>>; MF: 645; RMF: 697; Prob: 8.51; CAS:544-76-3; Mw: 226; Lib: <<mainlib>>; Id: 2324.
+Unknown:                                                             Compound in Library Factor = -2259
+Hit 1  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 520; RMF: 627; Prob: 11.44; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Hit 2  : <<Undecanoic acid, hydroxy-, lactone>>;<<C11H20O2>>; MF: 514; RMF: 558; Prob: 8.99; CAS:39282-36-5; Mw: 184; Lib: <<mainlib>>; Id: 1760.
+Unknown:                                                             Compound in Library Factor = -1709
+Hit 1  : <<N,N-Bis(2-hydroxyethyl)-2-aminoethanesulfonic acid>>;<<C6H15NO5S>>; MF: 490; RMF: 490; Prob: 14.35; CAS:10191-18-1; Mw: 213; Lib: <<mainlib>>; Id: 716.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 482; RMF: 487; Prob: 10.70; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -871
+Hit 1  : <<Acetamide, 2,2-dichloro-N-(á-hydroxy-à-(hydroxymethyl)-p-(methylsulfonyl)phenethyl)-,D-threo-(+)>>;<<C12H15Cl2NO5S>>; MF: 551; RMF: 564; Prob: 46.58; CAS:90-91-5; Mw: 355; Lib: <<mainlib>>; Id: 350.
+Hit 2  : <<Ergocalciferol>>;<<C28H44O>>; MF: 533; RMF: 544; Prob: 24.02; CAS:50-14-6; Mw: 396; Lib: <<mainlib>>; Id: 2095.
+Unknown:                                                             Compound in Library Factor = -431
+Hit 1  : <<9-Hexadecen-1-ol, (Z)->>;<<C16H32O>>; MF: 621; RMF: 624; Prob: 85.62; CAS:10378-01-5; Mw: 240; Lib: <<mainlib>>; Id: 321.
+Hit 2  : <<9-Tetradecen-1-ol, (E)->>;<<C14H28O>>; MF: 522; RMF: 533; Prob: 6.49; CAS:52957-16-1; Mw: 212; Lib: <<mainlib>>; Id: 2155.
+Unknown:                                                             Compound in Library Factor = -733
+Hit 1  : <<Pentadecane>>;<<C15H32>>; MF: 743; RMF: 782; Prob: 29.95; CAS:629-62-9; Mw: 212; Lib: <<mainlib>>; Id: 1170.
+Hit 2  : <<Pentadecane, 2-methyl->>;<<C16H34>>; MF: 727; RMF: 764; Prob: 17.24; CAS:1560-93-6; Mw: 226; Lib: <<mainlib>>; Id: 974.
+Unknown:                                                             Compound in Library Factor = -623
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 616; RMF: 674; Prob: 74.93; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Hydrazinecarboxylic acid, phenylmethyl ester>>;<<C8H10N2O2>>; MF: 548; RMF: 680; Prob: 11.36; CAS:5331-43-1; Mw: 166; Lib: <<mainlib>>; Id: 2140.
+Unknown:                                                             Compound in Library Factor = -1502
+Hit 1  : <<Adenosine 3',5'-cyclic monophosphate>>;<<C10H12N5O6P>>; MF: 546; RMF: 590; Prob: 23.54; CAS:60-92-4; Mw: 329; Lib: <<mainlib>>; Id: 2345.
+Hit 2  : <<6-tert-Butyl-2,4-dimethylphenol>>;<<C12H18O>>; MF: 520; RMF: 608; Prob: 7.05; CAS:1879-09-0; Mw: 178; Lib: <<mainlib>>; Id: 479.
+Unknown:                                                             Compound in Library Factor = -549
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 673; RMF: 747; Prob: 73.55; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 612; RMF: 612; Prob: 12.81; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -223
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 710; RMF: 753; Prob: 86.55; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<1,4-Methanoazulen-7(1H)-one, octahydro-1,5,5,8a-tetramethyl->>;<<C15H24O>>; MF: 587; RMF: 608; Prob: 4.15; CAS:65437-70-9; Mw: 220; Lib: <<mainlib>>; Id: 141.
+Unknown:                                                             Compound in Library Factor = -1008
+Hit 1  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 615; RMF: 617; Prob: 52.14; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Hit 2  : <<Digitoxin>>;<<C41H64O13>>; MF: 586; RMF: 586; Prob: 14.77; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Unknown:                                                             Compound in Library Factor = -641
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 663; RMF: 704; Prob: 69.54; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 611; RMF: 611; Prob: 13.88; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -1048
+Hit 1  : <<1-Tridecene>>;<<C13H26>>; MF: 679; RMF: 729; Prob: 27.45; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Hit 2  : <<1-Tetradecanol>>;<<C14H30O>>; MF: 653; RMF: 687; Prob: 8.22; CAS:112-72-1; Mw: 214; Lib: <<mainlib>>; Id: 758.
+Unknown:                                                             Compound in Library Factor = -752
+Hit 1  : <<1-Tridecene>>;<<C13H26>>; MF: 723; RMF: 778; Prob: 23.49; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Hit 2  : <<1-Tetradecanol>>;<<C14H30O>>; MF: 708; RMF: 756; Prob: 14.23; CAS:112-72-1; Mw: 214; Lib: <<mainlib>>; Id: 758.
+Unknown:                                                             Compound in Library Factor = -1302
+Hit 1  : <<Hexadecane>>;<<C16H34>>; MF: 601; RMF: 731; Prob: 16.96; CAS:544-76-3; Mw: 226; Lib: <<mainlib>>; Id: 2324.
+Hit 2  : <<Pentadecane>>;<<C15H32>>; MF: 588; RMF: 738; Prob: 10.96; CAS:629-62-9; Mw: 212; Lib: <<mainlib>>; Id: 1170.
+Unknown:                                                             Compound in Library Factor = -714
+Hit 1  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 625; RMF: 626; Prob: 44.06; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 572; RMF: 574; Prob: 8.71; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -988
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 634; RMF: 773; Prob: 51.43; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 595; RMF: 619; Prob: 12.12; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -559
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 665; RMF: 703; Prob: 49.56; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 603; RMF: 609; Prob: 8.47; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Unknown:                                                             Compound in Library Factor = -1187
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 625; RMF: 677; Prob: 52.86; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Triaziquone>>;<<C12H13N3O2>>; MF: 598; RMF: 605; Prob: 15.55; CAS:68-76-8; Mw: 231; Lib: <<mainlib>>; Id: 1489.
+Unknown:                                                             Compound in Library Factor = -1210
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 585; RMF: 675; Prob: 31.22; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<7-Phenyl-1-heptyl chloride>>;<<C13H19Cl>>; MF: 578; RMF: 724; Prob: 23.91; CAS:71434-47-4; Mw: 210; Lib: <<mainlib>>; Id: 2164.
+Unknown:                                                             Compound in Library Factor = -297
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 717; RMF: 780; Prob: 84.72; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 620; RMF: 625; Prob: 6.64; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -1163
+Hit 1  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 637; RMF: 643; Prob: 32.05; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 620; RMF: 621; Prob: 17.49; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -1032
+Hit 1  : <<1-Tridecene>>;<<C13H26>>; MF: 690; RMF: 773; Prob: 13.78; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Hit 2  : <<Undecanoic acid, hydroxy-, lactone>>;<<C11H20O2>>; MF: 690; RMF: 754; Prob: 13.78; CAS:39282-36-5; Mw: 184; Lib: <<mainlib>>; Id: 1760.
+Unknown:                                                             Compound in Library Factor = -1424
+Hit 1  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 583; RMF: 591; Prob: 20.14; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 579; RMF: 580; Prob: 17.01; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -1187
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 615; RMF: 718; Prob: 37.21; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 605; RMF: 606; Prob: 26.27; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -326
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 702; RMF: 763; Prob: 80.34; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 603; RMF: 604; Prob: 6.09; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -297
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 720; RMF: 802; Prob: 87.13; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 628; RMF: 628; Prob: 7.29; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -333
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 699; RMF: 780; Prob: 88.63; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 601; RMF: 602; Prob: 6.83; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -187
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 726; RMF: 787; Prob: 82.10; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 600; RMF: 600; Prob: 3.63; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -984
+Hit 1  : <<1-Tridecene>>;<<C13H26>>; MF: 709; RMF: 797; Prob: 18.05; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Hit 2  : <<1-Tetradecanol>>;<<C14H30O>>; MF: 706; RMF: 765; Prob: 15.95; CAS:112-72-1; Mw: 214; Lib: <<mainlib>>; Id: 758.
+Unknown:                                                             Compound in Library Factor = -1302
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 607; RMF: 607; Prob: 17.73; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<9-Hexadecen-1-ol, (Z)->>;<<C16H32O>>; MF: 588; RMF: 599; Prob: 8.61; CAS:10378-01-5; Mw: 240; Lib: <<mainlib>>; Id: 321.
+Unknown:                                                             Compound in Library Factor = -1296
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 600; RMF: 608; Prob: 34.96; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 580; RMF: 593; Prob: 15.92; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -1187
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 628; RMF: 758; Prob: 37.38; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 621; RMF: 622; Prob: 28.63; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -1008
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 622; RMF: 753; Prob: 61.59; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 600; RMF: 600; Prob: 24.34; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -714
+Hit 1  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 609; RMF: 609; Prob: 61.67; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Hit 2  : <<Digitoxin>>;<<C41H64O13>>; MF: 550; RMF: 550; Prob: 11.15; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Unknown:                                                             Compound in Library Factor = -907
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 596; RMF: 599; Prob: 38.58; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 595; RMF: 595; Prob: 37.08; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -1101
+Hit 1  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 593; RMF: 593; Prob: 31.29; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Hit 2  : <<9-Hexadecen-1-ol, (Z)->>;<<C16H32O>>; MF: 578; RMF: 599; Prob: 18.96; CAS:10378-01-5; Mw: 240; Lib: <<mainlib>>; Id: 321.
+Unknown:                                                             Compound in Library Factor = -1224
+Hit 1  : <<9-Hexadecen-1-ol, (Z)->>;<<C16H32O>>; MF: 647; RMF: 662; Prob: 24.38; CAS:10378-01-5; Mw: 240; Lib: <<mainlib>>; Id: 321.
+Hit 2  : <<Cyclopentadecanol>>;<<C15H30O>>; MF: 628; RMF: 756; Prob: 11.84; CAS:4727-17-7; Mw: 226; Lib: <<mainlib>>; Id: 1278.
+Unknown:                                                             Compound in Library Factor = -825
+Hit 1  : <<1-Tridecene>>;<<C13H26>>; MF: 730; RMF: 798; Prob: 18.56; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Hit 2  : <<1-Nonadecene>>;<<C19H38>>; MF: 727; RMF: 787; Prob: 16.40; CAS:18435-45-5; Mw: 266; Lib: <<mainlib>>; Id: 1183.
+Unknown:                                                             Compound in Library Factor = -1224
+Hit 1  : <<1-Pentadecene>>;<<C15H30>>; MF: 641; RMF: 711; Prob: 19.10; CAS:13360-61-7; Mw: 210; Lib: <<mainlib>>; Id: 2163.
+Hit 2  : <<1-Tridecene>>;<<C13H26>>; MF: 636; RMF: 709; Prob: 15.40; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Unknown:                                                             Compound in Library Factor = -194
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 705; RMF: 764; Prob: 90.90; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Digitoxin>>;<<C41H64O13>>; MF: 570; RMF: 581; Prob: 3.45; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Unknown:                                                             Compound in Library Factor = -174
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 718; RMF: 779; Prob: 84.75; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 573; RMF: 573; Prob: 2.54; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -180
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 699; RMF: 764; Prob: 93.76; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<9-Hexadecen-1-ol, (Z)->>;<<C16H32O>>; MF: 521; RMF: 542; Prob: 1.76; CAS:10378-01-5; Mw: 240; Lib: <<mainlib>>; Id: 321.
+Unknown:                                                             Compound in Library Factor = -177
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 712; RMF: 772; Prob: 90.08; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 580; RMF: 580; Prob: 3.61; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -333
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 696; RMF: 764; Prob: 83.21; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Digitoxin>>;<<C41H64O13>>; MF: 599; RMF: 612; Prob: 6.52; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Unknown:                                                             Compound in Library Factor = -1116
+Hit 1  : <<1-Tridecene>>;<<C13H26>>; MF: 645; RMF: 722; Prob: 18.61; CAS:2437-56-1; Mw: 182; Lib: <<mainlib>>; Id: 1724.
+Hit 2  : <<9-Hexadecen-1-ol, (Z)->>;<<C16H32O>>; MF: 640; RMF: 662; Prob: 15.00; CAS:10378-01-5; Mw: 240; Lib: <<mainlib>>; Id: 321.
+Unknown:                                                             Compound in Library Factor = -1187
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 608; RMF: 612; Prob: 28.04; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 600; RMF: 600; Prob: 20.92; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -333
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 718; RMF: 786; Prob: 81.64; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 632; RMF: 632; Prob: 7.27; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -241
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 713; RMF: 765; Prob: 80.26; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Ergocalciferol>>;<<C28H44O>>; MF: 594; RMF: 623; Prob: 4.33; CAS:50-14-6; Mw: 396; Lib: <<mainlib>>; Id: 2095.
+Unknown:                                                             Compound in Library Factor = -227
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 747; RMF: 806; Prob: 90.53; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 641; RMF: 644; Prob: 6.08; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -270
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 731; RMF: 810; Prob: 90.20; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 637; RMF: 641; Prob: 7.38; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -216
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 745; RMF: 808; Prob: 87.11; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 631; RMF: 633; Prob: 5.29; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -361
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 744; RMF: 818; Prob: 82.44; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 668; RMF: 677; Prob: 10.38; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -948
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 646; RMF: 659; Prob: 38.20; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 627; RMF: 641; Prob: 18.55; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -695
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 711; RMF: 796; Prob: 50.70; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 672; RMF: 682; Prob: 11.95; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -779
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 692; RMF: 793; Prob: 38.57; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 658; RMF: 668; Prob: 9.89; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -1048
+Hit 1  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 677; RMF: 687; Prob: 22.83; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Hit 2  : <<Prasterone>>;<<C19H28O2>>; MF: 676; RMF: 683; Prob: 21.95; CAS:53-43-0; Mw: 288; Lib: <<mainlib>>; Id: 1706.
+Unknown:                                                             Compound in Library Factor = -762
+Hit 1  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 701; RMF: 716; Prob: 31.98; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 692; RMF: 802; Prob: 23.21; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -1032
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 689; RMF: 771; Prob: 24.01; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 684; RMF: 695; Prob: 19.35; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Unknown:                                                             Compound in Library Factor = -941
+Hit 1  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 681; RMF: 697; Prob: 29.38; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 677; RMF: 754; Prob: 24.82; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -799
+Hit 1  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 682; RMF: 696; Prob: 36.39; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Hit 2  : <<Retinol, acetate>>;<<C22H32O2>>; MF: 677; RMF: 678; Prob: 29.33; CAS:127-47-9; Mw: 328; Lib: <<mainlib>>; Id: 2290.
+Unknown:                                                             Compound in Library Factor = -628
+Hit 1  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 707; RMF: 722; Prob: 34.82; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 700; RMF: 783; Prob: 26.67; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -890
+Hit 1  : <<Retinol, acetate>>;<<C22H32O2>>; MF: 673; RMF: 674; Prob: 29.44; CAS:127-47-9; Mw: 328; Lib: <<mainlib>>; Id: 2290.
+Hit 2  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 672; RMF: 692; Prob: 28.29; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Unknown:                                                             Compound in Library Factor = -918
+Hit 1  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 694; RMF: 710; Prob: 35.79; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 681; RMF: 785; Prob: 23.12; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -573
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 716; RMF: 805; Prob: 55.29; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 670; RMF: 687; Prob: 11.67; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Unknown:                                                             Compound in Library Factor = -897
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 701; RMF: 824; Prob: 34.94; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 687; RMF: 711; Prob: 21.87; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Unknown:                                                             Compound in Library Factor = -905
+Hit 1  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 670; RMF: 696; Prob: 22.26; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 668; RMF: 791; Prob: 20.53; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -1006
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 694; RMF: 822; Prob: 29.08; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 684; RMF: 715; Prob: 20.53; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Unknown:                                                             Compound in Library Factor = -762
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 702; RMF: 838; Prob: 49.82; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 667; RMF: 689; Prob: 12.50; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -1116
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 648; RMF: 670; Prob: 40.90; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 630; RMF: 654; Prob: 21.09; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -642
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 699; RMF: 824; Prob: 46.99; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Digitoxin>>;<<C41H64O13>>; MF: 669; RMF: 689; Prob: 13.06; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Unknown:                                                             Compound in Library Factor = -454
+Hit 1  : <<Dibenzyl ketoxime>>;<<C15H15NO>>; MF: 644; RMF: 663; Prob: 62.85; CAS:1788-31-4; Mw: 225; Lib: <<mainlib>>; Id: 1440.
+Hit 2  : <<Phenprobamate>>;<<C10H13NO2>>; MF: 563; RMF: 685; Prob: 6.66; CAS:673-31-4; Mw: 179; Lib: <<mainlib>>; Id: 341.
+Unknown:                                                             Compound in Library Factor = -367
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 734; RMF: 831; Prob: 80.15; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Digitoxin>>;<<C41H64O13>>; MF: 660; RMF: 675; Prob: 10.66; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Unknown:                                                             Compound in Library Factor = -905
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 663; RMF: 678; Prob: 49.98; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 633; RMF: 652; Prob: 13.89; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -452
+Hit 1  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 729; RMF: 831; Prob: 73.36; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Hit 2  : <<Digitoxin>>;<<C41H64O13>>; MF: 677; RMF: 696; Prob: 14.65; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Unknown:                                                             Compound in Library Factor = -695
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 712; RMF: 728; Prob: 41.56; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 707; RMF: 822; Prob: 33.49; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -658
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 686; RMF: 707; Prob: 57.21; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 642; RMF: 665; Prob: 12.40; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -819
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 717; RMF: 744; Prob: 42.58; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 706; RMF: 834; Prob: 29.21; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -628
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 705; RMF: 735; Prob: 44.26; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 696; RMF: 834; Prob: 32.13; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -642
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 696; RMF: 732; Prob: 43.11; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 682; RMF: 826; Prob: 26.98; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -897
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 708; RMF: 748; Prob: 48.59; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 684; RMF: 723; Prob: 16.28; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -658
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 685; RMF: 732; Prob: 26.03; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Pregn-4-ene-3,20-dione, 11-hydroxy-, (11à)->>;<<C21H30O3>>; MF: 683; RMF: 720; Prob: 24.01; CAS:80-75-1; Mw: 330; Lib: <<mainlib>>; Id: 1039.
+Unknown:                                                             Compound in Library Factor = -918
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 695; RMF: 744; Prob: 25.09; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Pregn-4-ene-3,20-dione, 11-hydroxy-, (11à)->>;<<C21H30O3>>; MF: 690; RMF: 729; Prob: 20.22; CAS:80-75-1; Mw: 330; Lib: <<mainlib>>; Id: 1039.
+Unknown:                                                             Compound in Library Factor = -1006
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 692; RMF: 740; Prob: 19.03; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Pregn-4-ene-3,20-dione, 11-hydroxy-, (11à)->>;<<C21H30O3>>; MF: 685; RMF: 722; Prob: 14.58; CAS:80-75-1; Mw: 330; Lib: <<mainlib>>; Id: 1039.
+Unknown:                                                             Compound in Library Factor = -1048
+Hit 1  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 671; RMF: 719; Prob: 17.89; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Hit 2  : <<Digitoxin>>;<<C41H64O13>>; MF: 670; RMF: 720; Prob: 17.20; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Unknown:                                                             Compound in Library Factor = -1149
+Hit 1  : <<Pregn-4-ene-3,20-dione, 11-hydroxy-, (11à)->>;<<C21H30O3>>; MF: 672; RMF: 715; Prob: 13.37; CAS:80-75-1; Mw: 330; Lib: <<mainlib>>; Id: 1039.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 664; RMF: 720; Prob: 9.97; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -1149
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 673; RMF: 725; Prob: 13.56; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Pregn-4-ene-3,20-dione, 11-hydroxy-, (11à)->>;<<C21H30O3>>; MF: 672; RMF: 711; Prob: 13.03; CAS:80-75-1; Mw: 330; Lib: <<mainlib>>; Id: 1039.
+Unknown:                                                             Compound in Library Factor = -1149
+Hit 1  : <<Pregn-4-ene-3,20-dione, 11-hydroxy-, (11à)->>;<<C21H30O3>>; MF: 674; RMF: 719; Prob: 12.58; CAS:80-75-1; Mw: 330; Lib: <<mainlib>>; Id: 1039.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 671; RMF: 730; Prob: 11.11; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -1103
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 657; RMF: 702; Prob: 14.64; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 648; RMF: 694; Prob: 10.63; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -890
+Hit 1  : <<Pregn-4-ene-3,20-dione, 11-hydroxy-, (11à)->>;<<C21H30O3>>; MF: 675; RMF: 720; Prob: 17.30; CAS:80-75-1; Mw: 330; Lib: <<mainlib>>; Id: 1039.
+Hit 2  : <<Hydrocortisone Acetate>>;<<C23H32O6>>; MF: 672; RMF: 694; Prob: 15.28; CAS:50-03-3; Mw: 404; Lib: <<mainlib>>; Id: 1060.
+Unknown:                                                             Compound in Library Factor = -937
+Hit 1  : <<Pregn-4-ene-3,20-dione, 11-hydroxy-, (11à)->>;<<C21H30O3>>; MF: 656; RMF: 692; Prob: 14.92; CAS:80-75-1; Mw: 330; Lib: <<mainlib>>; Id: 1039.
+Hit 2  : <<Hydrocortisone Acetate>>;<<C23H32O6>>; MF: 652; RMF: 670; Prob: 12.60; CAS:50-03-3; Mw: 404; Lib: <<mainlib>>; Id: 1060.
+Unknown:                                                             Compound in Library Factor = -1066
+Hit 1  : <<Gamabufotalin>>;<<C24H34O5>>; MF: 663; RMF: 663; Prob: 13.05; CAS:465-11-2; Mw: 402; Lib: <<mainlib>>; Id: 2010.
+Hit 2  : <<Hydrocortisone Acetate>>;<<C23H32O6>>; MF: 662; RMF: 675; Prob: 12.55; CAS:50-03-3; Mw: 404; Lib: <<mainlib>>; Id: 1060.
+Unknown:                                                             Compound in Library Factor = -1066
+Hit 1  : <<Gamabufotalin>>;<<C24H34O5>>; MF: 663; RMF: 666; Prob: 18.39; CAS:465-11-2; Mw: 402; Lib: <<mainlib>>; Id: 2010.
+Hit 2  : <<Hydrocortisone Acetate>>;<<C23H32O6>>; MF: 651; RMF: 668; Prob: 12.25; CAS:50-03-3; Mw: 404; Lib: <<mainlib>>; Id: 1060.
+Unknown:                                                             Compound in Library Factor = -937
+Hit 1  : <<Retinal, 9-cis->>;<<C20H28O>>; MF: 653; RMF: 725; Prob: 15.61; CAS:514-85-2; Mw: 284; Lib: <<mainlib>>; Id: 360.
+Hit 2  : <<Hydrocortisone Acetate>>;<<C23H32O6>>; MF: 651; RMF: 662; Prob: 14.40; CAS:50-03-3; Mw: 404; Lib: <<mainlib>>; Id: 1060.
+Unknown:                                                             Compound in Library Factor = -1210
+Hit 1  : <<Hydrocortisone Acetate>>;<<C23H32O6>>; MF: 655; RMF: 667; Prob: 13.90; CAS:50-03-3; Mw: 404; Lib: <<mainlib>>; Id: 1060.
+Hit 2  : <<Gamabufotalin>>;<<C24H34O5>>; MF: 651; RMF: 652; Prob: 11.74; CAS:465-11-2; Mw: 402; Lib: <<mainlib>>; Id: 2010.
+Unknown:                                                             Compound in Library Factor = -1149
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 673; RMF: 740; Prob: 15.64; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 669; RMF: 847; Prob: 13.21; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -905
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 666; RMF: 748; Prob: 25.20; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gamabufotalin>>;<<C24H34O5>>; MF: 656; RMF: 665; Prob: 17.79; CAS:465-11-2; Mw: 402; Lib: <<mainlib>>; Id: 2010.
+Unknown:                                                             Compound in Library Factor = -905
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 670; RMF: 746; Prob: 29.48; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 649; RMF: 829; Prob: 12.54; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -566
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 686; RMF: 758; Prob: 74.23; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 633; RMF: 708; Prob: 14.68; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -941
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 682; RMF: 749; Prob: 52.18; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 653; RMF: 720; Prob: 14.78; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -516
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 680; RMF: 748; Prob: 70.50; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 608; RMF: 679; Prob: 9.82; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -746
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 667; RMF: 734; Prob: 60.53; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 627; RMF: 820; Prob: 14.04; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -733
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 680; RMF: 761; Prob: 51.46; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Pregn-4-ene-3,20-dione, 11-hydroxy-, (11à)->>;<<C21H30O3>>; MF: 633; RMF: 696; Prob: 10.76; CAS:80-75-1; Mw: 330; Lib: <<mainlib>>; Id: 1039.
+Unknown:                                                             Compound in Library Factor = -383
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 686; RMF: 763; Prob: 77.02; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 598; RMF: 673; Prob: 6.72; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -516
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 678; RMF: 756; Prob: 71.70; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 604; RMF: 681; Prob: 9.54; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -890
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 680; RMF: 770; Prob: 55.12; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Pregn-4-ene-3,20-dione, 11-hydroxy-, (11à)->>;<<C21H30O3>>; MF: 645; RMF: 713; Prob: 13.83; CAS:80-75-1; Mw: 330; Lib: <<mainlib>>; Id: 1039.
+Unknown:                                                             Compound in Library Factor = -733
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 672; RMF: 760; Prob: 60.23; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 632; RMF: 717; Prob: 13.97; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -658
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 683; RMF: 776; Prob: 48.45; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gamabufotalin>>;<<C24H34O5>>; MF: 643; RMF: 672; Prob: 11.24; CAS:465-11-2; Mw: 402; Lib: <<mainlib>>; Id: 2010.
+Unknown:                                                             Compound in Library Factor = -549
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 678; RMF: 772; Prob: 69.93; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 610; RMF: 704; Prob: 10.60; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -905
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 669; RMF: 766; Prob: 57.26; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gamabufotalin>>;<<C24H34O5>>; MF: 638; RMF: 670; Prob: 15.60; CAS:465-11-2; Mw: 402; Lib: <<mainlib>>; Id: 2010.
+Unknown:                                                             Compound in Library Factor = -1103
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 658; RMF: 765; Prob: 27.63; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gamabufotalin>>;<<C24H34O5>>; MF: 643; RMF: 674; Prob: 16.74; CAS:465-11-2; Mw: 402; Lib: <<mainlib>>; Id: 2010.
+Unknown:                                                             Compound in Library Factor = -1103
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 659; RMF: 759; Prob: 39.63; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gamabufotalin>>;<<C24H34O5>>; MF: 635; RMF: 668; Prob: 13.28; CAS:465-11-2; Mw: 402; Lib: <<mainlib>>; Id: 2010.
+Unknown:                                                             Compound in Library Factor = -937
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 656; RMF: 767; Prob: 26.52; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Hydrocortisone Acetate>>;<<C23H32O6>>; MF: 653; RMF: 690; Prob: 23.43; CAS:50-03-3; Mw: 404; Lib: <<mainlib>>; Id: 1060.
+Unknown:                                                             Compound in Library Factor = -746
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 661; RMF: 765; Prob: 60.39; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Prednisolone Acetate>>;<<C23H30O6>>; MF: 617; RMF: 665; Prob: 13.09; CAS:52-21-1; Mw: 402; Lib: <<mainlib>>; Id: 2259.
+Unknown:                                                             Compound in Library Factor = -772
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 660; RMF: 765; Prob: 53.69; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 617; RMF: 836; Prob: 11.84; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -937
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 659; RMF: 759; Prob: 33.25; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gamabufotalin>>;<<C24H34O5>>; MF: 638; RMF: 674; Prob: 14.14; CAS:465-11-2; Mw: 402; Lib: <<mainlib>>; Id: 2010.
+Unknown:                                                             Compound in Library Factor = -641
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 667; RMF: 767; Prob: 64.68; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 614; RMF: 716; Prob: 12.79; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -948
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 649; RMF: 758; Prob: 38.64; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gamabufotalin>>;<<C24H34O5>>; MF: 645; RMF: 688; Prob: 32.64; CAS:465-11-2; Mw: 402; Lib: <<mainlib>>; Id: 2010.
+Unknown:                                                             Compound in Library Factor = -772
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 654; RMF: 761; Prob: 58.26; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Prednisolone Acetate>>;<<C23H30O6>>; MF: 610; RMF: 667; Prob: 12.63; CAS:52-21-1; Mw: 402; Lib: <<mainlib>>; Id: 2259.
+Unknown:                                                             Compound in Library Factor = -948
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 648; RMF: 756; Prob: 35.45; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gamabufotalin>>;<<C24H34O5>>; MF: 635; RMF: 678; Prob: 22.90; CAS:465-11-2; Mw: 402; Lib: <<mainlib>>; Id: 2010.
+Unknown:                                                             Compound in Library Factor = -641
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 661; RMF: 768; Prob: 64.22; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 605; RMF: 712; Prob: 12.24; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -781
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 648; RMF: 754; Prob: 46.26; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 606; RMF: 818; Prob: 10.38; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -671
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 647; RMF: 757; Prob: 61.63; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 597; RMF: 705; Prob: 12.54; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -781
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 647; RMF: 756; Prob: 51.96; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 602; RMF: 711; Prob: 11.06; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -664
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 653; RMF: 762; Prob: 66.16; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 597; RMF: 703; Prob: 12.61; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -544
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 652; RMF: 757; Prob: 61.49; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<á Carotene>>;<<C40H56>>; MF: 582; RMF: 666; Prob: 8.94; CAS:7235-40-7; Mw: 536; Lib: <<mainlib>>; Id: 729.
+Unknown:                                                             Compound in Library Factor = -585
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 644; RMF: 756; Prob: 61.69; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 579; RMF: 688; Prob: 9.93; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -700
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 637; RMF: 747; Prob: 60.98; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<á Carotene>>;<<C40H56>>; MF: 586; RMF: 676; Prob: 12.29; CAS:7235-40-7; Mw: 536; Lib: <<mainlib>>; Id: 729.
+Unknown:                                                             Compound in Library Factor = -585
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 648; RMF: 761; Prob: 64.42; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<á Carotene>>;<<C40H56>>; MF: 581; RMF: 670; Prob: 9.97; CAS:7235-40-7; Mw: 536; Lib: <<mainlib>>; Id: 729.
+Unknown:                                                             Compound in Library Factor = -671
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 644; RMF: 761; Prob: 66.55; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<á Carotene>>;<<C40H56>>; MF: 590; RMF: 683; Prob: 13.03; CAS:7235-40-7; Mw: 536; Lib: <<mainlib>>; Id: 729.
+Unknown:                                                             Compound in Library Factor = -585
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 646; RMF: 758; Prob: 56.58; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<á Carotene>>;<<C40H56>>; MF: 582; RMF: 671; Prob: 9.29; CAS:7235-40-7; Mw: 536; Lib: <<mainlib>>; Id: 729.
+Unknown:                                                             Compound in Library Factor = -671
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 641; RMF: 760; Prob: 67.66; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<á Carotene>>;<<C40H56>>; MF: 591; RMF: 686; Prob: 13.77; CAS:7235-40-7; Mw: 536; Lib: <<mainlib>>; Id: 729.
+Unknown:                                                             Compound in Library Factor = -700
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 639; RMF: 758; Prob: 55.83; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 587; RMF: 822; Prob: 11.15; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -781
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 646; RMF: 756; Prob: 58.23; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Cholest-5-en-3-ol (3á)-, tetradecanoate>>;<<C41H72O2>>; MF: 598; RMF: 707; Prob: 12.07; CAS:1989-52-2; Mw: 596; Lib: <<mainlib>>; Id: 1365.
+Unknown:                                                             Compound in Library Factor = -781
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 646; RMF: 762; Prob: 47.37; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 598; RMF: 837; Prob: 9.82; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -948
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 650; RMF: 759; Prob: 52.96; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 613; RMF: 716; Prob: 12.89; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -988
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 639; RMF: 746; Prob: 50.69; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Gibberellic acid>>;<<C19H22O6>>; MF: 612; RMF: 717; Prob: 14.91; CAS:77-06-5; Mw: 346; Lib: <<mainlib>>; Id: 108.
+Unknown:                                                             Compound in Library Factor = -937
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 652; RMF: 755; Prob: 55.61; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 617; RMF: 849; Prob: 13.95; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -772
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 654; RMF: 765; Prob: 55.90; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 610; RMF: 843; Prob: 12.11; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -937
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 653; RMF: 748; Prob: 55.91; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 618; RMF: 847; Prob: 14.03; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -1116
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 647; RMF: 730; Prob: 43.56; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 633; RMF: 849; Prob: 27.26; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -1210
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 652; RMF: 726; Prob: 41.15; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 635; RMF: 848; Prob: 22.46; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
+Unknown:                                                             Compound in Library Factor = -1116
+Hit 1  : <<Digitoxin>>;<<C41H64O13>>; MF: 645; RMF: 717; Prob: 37.58; CAS:71-63-6; Mw: 764; Lib: <<mainlib>>; Id: 1974.
+Hit 2  : <<Vitamin A aldehyde>>;<<C20H28O>>; MF: 636; RMF: 845; Prob: 27.28; CAS:116-31-4; Mw: 284; Lib: <<mainlib>>; Id: 850.
