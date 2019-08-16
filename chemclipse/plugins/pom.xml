@@ -161,6 +161,9 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay</module>
