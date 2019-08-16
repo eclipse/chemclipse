@@ -91,6 +91,9 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.peak.detector</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.fragment.test</module>

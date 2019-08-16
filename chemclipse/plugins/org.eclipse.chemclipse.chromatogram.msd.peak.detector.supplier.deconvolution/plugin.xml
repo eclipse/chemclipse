@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.peak.detector.peakDetectorSupplier">
+      <PeakDetector
+            description="This extension point tries to implement a deconvolution peak detector."
+            id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution"
+            peakDetector="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.core.PeakDetector"
+            peakDetectorName="Deconvolution Detector">
+      </PeakDetector>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

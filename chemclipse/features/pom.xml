@@ -27,6 +27,7 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.feature</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.feature</module>
