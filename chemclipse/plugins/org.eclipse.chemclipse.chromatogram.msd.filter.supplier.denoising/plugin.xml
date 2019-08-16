@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter tries to denoise a chromatogram selection."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.core.ChromatogramFilter"
+            filterName="Denoising Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.FilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

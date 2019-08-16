@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.modelContribution"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.chromatogram.msd.filter.ui.preferences.filterPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.preferences.preferencePage"
+            name="Denoising">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc_filter.xml">
+      </toc>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.IDenoisingFilterResult"
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider.DenoisingAdapterFactory">
+         <adapter
+               type="org.eclipse.jface.viewers.IStructuredContentProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.jface.viewers.ITableLabelProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.jface.viewers.ISelectionChangedListener">
+         </adapter>
+      </factory>
+   </extension>   
+</plugin>
