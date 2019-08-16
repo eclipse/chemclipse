@@ -1,0 +1,63 @@
+Found a 14 line (41 tokens) duplication in the following files: 
+Starting at line 345 of /home/wenigmedia/Daten/Firmendaten/Verwaltung/Projekte/www.chemclipse.net/SourceCode/branches/Source/org.eclipse.chemclipse.chromatogram.alignment.model/src/net/chemclipse/chromatogram/alignment/model/base/RetentionIndices.java
+Starting at line 365 of /home/wenigmedia/Daten/Firmendaten/Verwaltung/Projekte/www.chemclipse.net/SourceCode/branches/Source/org.eclipse.chemclipse.chromatogram.alignment.model/src/net/chemclipse/chromatogram/alignment/model/base/RetentionIndices.java
+
+			if(actIndex.getRetentionTime() <= retentionTime) {
+				if(i == this.retentionIndices.size()) {
+					throw new NoRetentionIndexAvailableException();
+				} else {
+					return getRetentionIndex(++i);
+				}
+			}
+		}
+		// This state should never be entered.
+		throw new NoRetentionIndexAvailableException();			
+	}
+			
+	@Override
+	public void removeRetentionIndex(final float index) {
+=====================================================================
+Found a 14 line (36 tokens) duplication in the following files: 
+Starting at line 304 of /home/wenigmedia/Daten/Firmendaten/Verwaltung/Projekte/www.chemclipse.net/SourceCode/branches/Source/org.eclipse.chemclipse.chromatogram.alignment.model/src/net/chemclipse/chromatogram/alignment/model/base/RetentionIndices.java
+Starting at line 325 of /home/wenigmedia/Daten/Firmendaten/Verwaltung/Projekte/www.chemclipse.net/SourceCode/branches/Source/org.eclipse.chemclipse.chromatogram.alignment.model/src/net/chemclipse/chromatogram/alignment/model/base/RetentionIndices.java
+
+			if(actIndex.getRetentionTime() >= retentionTime) {
+				if(i == 1) {
+					throw new NoRetentionIndexAvailableException();
+				} else {
+					return getRetentionIndex(--i);
+				}
+			}
+		}
+		// This state should never be entered.
+		throw new NoRetentionIndexAvailableException();
+	}
+	
+	@Override
+	public IRetentionIndex getNextRetentionIndex(final float index) throws NoRetentionIndexAvailableException {
+=====================================================================
+Found a 8 line (35 tokens) duplication in the following files: 
+Starting at line 338 of /home/wenigmedia/Daten/Firmendaten/Verwaltung/Projekte/www.chemclipse.net/SourceCode/branches/Source/org.eclipse.chemclipse.chromatogram.alignment.model/src/net/chemclipse/chromatogram/alignment/model/base/RetentionIndices.java
+Starting at line 358 of /home/wenigmedia/Daten/Firmendaten/Verwaltung/Projekte/www.chemclipse.net/SourceCode/branches/Source/org.eclipse.chemclipse.chromatogram.alignment.model/src/net/chemclipse/chromatogram/alignment/model/base/RetentionIndices.java
+
+	public IRetentionIndex getNextRetentionIndex(final int retentionTime) throws NoRetentionIndexAvailableException {
+
+		IRetentionIndex actIndex;
+		
+		// The list needs not to be sorted, cause it's still sorted ascending by index values.
+		for(int i = this.retentionIndices.size(); i >= 1 ; i--) {
+			actIndex = getRetentionIndex(i);
+			if(actIndex.getRetentionTime() <= retentionTime) {
+=====================================================================
+Found a 8 line (35 tokens) duplication in the following files: 
+Starting at line 297 of /home/wenigmedia/Daten/Firmendaten/Verwaltung/Projekte/www.chemclipse.net/SourceCode/branches/Source/org.eclipse.chemclipse.chromatogram.alignment.model/src/net/chemclipse/chromatogram/alignment/model/base/RetentionIndices.java
+Starting at line 318 of /home/wenigmedia/Daten/Firmendaten/Verwaltung/Projekte/www.chemclipse.net/SourceCode/branches/Source/org.eclipse.chemclipse.chromatogram.alignment.model/src/net/chemclipse/chromatogram/alignment/model/base/RetentionIndices.java
+
+	public IRetentionIndex getPreviousRetentionIndex(final int retentionTime) throws NoRetentionIndexAvailableException {
+
+		IRetentionIndex actIndex;
+		
+		// The list needs not to be sorted, cause it's still sorted ascending by index values.
+		for(int i = 1; i <= this.retentionIndices.size(); i++) {
+			actIndex = getRetentionIndex(i);
+			if(actIndex.getRetentionTime() >= retentionTime) {

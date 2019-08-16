@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_tMC6gKxUEei9xI3mJ6Fvzw">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Bvd7QKxVEei9xI3mJ6Fvzw" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_yV6h4KxVEei9xI3mJ6Fvzw" elementId="org.eclipse.chemclipse.chromatogram.csd.identifier.ui.command.deleteUnidentifiedPeaks" commandName="Delete Unidentified Peaks"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tqeGcKxVEei9xI3mJ6Fvzw" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_2DlGcKxVEei9xI3mJ6Fvzw" elementId="org.eclipse.chemclipse.chromatogram.csd.identifier.ui.handler.deleteUnidentifiedPeaks" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.csd.identifier.ui/org.eclipse.chemclipse.chromatogram.csd.identifier.ui.handlers.DeleteUnidentifiedPeaksHandler" command="_yV6h4KxVEei9xI3mJ6Fvzw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_uy6VMKxVEei9xI3mJ6Fvzw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_6_JBgKxVEei9xI3mJ6Fvzw" elementId="org.eclipse.chemclipse.chromatogram.csd.identifier.ui.handledmenuitem.deleteUnidentifiedPeaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_unidentified_peaks.gif" command="_yV6h4KxVEei9xI3mJ6Fvzw">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_9vwvAKxVEei9xI3mJ6Fvzw" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeCSD"/>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

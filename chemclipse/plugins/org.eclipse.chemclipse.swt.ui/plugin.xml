@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.swt.ui.preferences.PreferencePageChromatogram"
+            id="org.eclipse.chemclipse.chromatogram.ui.swt.preferencePageChromatogram"
+            name="Chromatogram Settings">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT"
+            id="org.eclipse.chemclipse.chromatogram.ui.swt.preferencePageSWT"
+            name="Settings (SWT)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.swt.ui.preferences.PreferencePageIdentifier"
+            id="org.eclipse.chemclipse.chromatogram.ui.swt.preferencePageIdentifier"
+            name="Identifier">
+      </page>                   
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.swt.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

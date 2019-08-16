@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Converter Plug-in
+Bundle-SymbolicName: org.eclipse.chemclipse.msd.converter;singleton:=true
+Bundle-Version: 0.8.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.msd.converter.Activator
+Bundle-Vendor: ChemClipse
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.logging;bundle-version="0.8.0",
+ org.eclipse.chemclipse.processing;bundle-version="0.8.0",
+ org.eclipse.chemclipse.converter;bundle-version="0.8.0",
+ org.eclipse.chemclipse.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.support;bundle-version="0.8.0",
+ org.eclipse.chemclipse.msd.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.chromatogram.xxd.calculator;bundle-version="0.8.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.chemclipse.msd.converter.chromatogram,
+ org.eclipse.chemclipse.msd.converter.core,
+ org.eclipse.chemclipse.msd.converter.database,
+ org.eclipse.chemclipse.msd.converter.exceptions,
+ org.eclipse.chemclipse.msd.converter.io,
+ org.eclipse.chemclipse.msd.converter.massspectrum,
+ org.eclipse.chemclipse.msd.converter.peak,
+ org.eclipse.chemclipse.msd.converter.preferences,
+ org.eclipse.chemclipse.msd.converter.support

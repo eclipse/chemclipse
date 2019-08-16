@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.chemclipse.converter" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.eclipse.chemclipse.converter" id="org.eclipse.chemclipse.converter.sequenceImportSupplier" name="Sequence Import Supplier"/>
+      </appinfo>
+      <documentation>
+         This extension point enables other plugins to register a sequence import converter.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="SequenceSupplier"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="SequenceSupplier">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Set a unique suppliers id, e.g. &quot;org.eclipse.chemclipse.csd.converter.agilent&quot;.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Describe in short words the intention of the supplier.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="filterName" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The filter name is used to show in the corresponding FileDialog. Give a short description of the filter e.g. &quot;Agilent Chromatogram (.D)&quot;.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="fileExtension" type="string" use="required">
+            <annotation>
+               <documentation>
+                  For example agilent &quot;.CH&quot;.
+
+The value must not contain unallowed file system characters like: \/:*?&quot;&lt;&gt;|
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="fileName" type="string">
+            <annotation>
+               <documentation>
+                  For example Agilent &quot;FID1A&quot;. Leave the field empty if the chromatogram has no default file name.
+
+The value must not contain unallowed file system characters like: \/:*?&quot;&lt;&gt;|
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="importConverter" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.converter.sequence.AbstractSequenceImportConverter:org.eclipse.chemclipse.converter.sequence.ISequenceImportConverter"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="importMagicNumberMatcher" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher:org.eclipse.chemclipse.converter.core.IMagicNumberMatcher"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         0.8.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         /*******************************************************************************
+ * Copyright (c) 2018 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Dr. Philip Wenig - initial API and implementation
+*******************************************************************************/
+      </documentation>
+   </annotation>
+
+</schema>

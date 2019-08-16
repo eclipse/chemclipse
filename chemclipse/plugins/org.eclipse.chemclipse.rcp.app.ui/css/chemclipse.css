@@ -1,0 +1,67 @@
+/*******************************************************************************
+ * Copyright (c) 2013, 2017 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Dr. Philip Wenig - initial API and implementation
+ *******************************************************************************/
+.MWindow {
+	background-color:#F2F1F0;
+}
+
+.MTrimmedWindow {  
+	margin-top:2px;
+	margin-bottom:2px;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+.MTrimmedWindow.topLevel { 
+	margin-top:8px;
+	margin-bottom:2px;
+	margin-left:12px;
+	margin-right:12px;
+}
+
+.MPartStack {
+	swt-tab-renderer: url('bundleclass://org.eclipse.e4.ui.workbench.renderers.swt/org.eclipse.e4.ui.workbench.renderers.swt.CTabRendering');
+	swt-outer-keyline-color:#B4B4B4;
+	swt-inner-keyline-color:#F0F0F0;
+	swt-tab-outline:#F2F1F0;
+	swt-tab-height:30px;
+	padding:0px 5px 7px;
+	background-color:#FFFFFF;
+	swt-selected-tab-fill:#FFFFFF;
+}
+
+.MPartStack.active {
+	swt-selected-tab-fill:#E0E0E0;
+}
+
+.MPartStack.active.noFocus {
+	swt-selected-tab-fill:#FFFFFF;
+}
+
+.MPartStack.active.noFocus > CTabItem:selected {
+	swt-selected-tab-fill:#FFFFFF;
+}
+
+Composite#org-eclipse-chemclipse-ux-extension-ui-views-welcomeview-background {
+	background-color:gradient linear #909090 #FFFFFF 70%;
+	background-image:none;
+	swt-background-mode:force;
+	text-transform:none;
+	visibility:visible;
+}
+
+#PerspectiveSwitcher { 
+	eclipse-perspective-keyline-color: #f2f1f0;
+}
+
+#SearchField {
+	visibility:visible; /* hidden */
+}

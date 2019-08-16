@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_JrUvIFEJEeK_26wVgj44vg">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_s2QTML7jEeKcwbn54SGPtA" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_wELAsL7jEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.command.openChromatogram" commandName="Open Chromatogram(s) [CSD]"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_0_ymIL7jEeKcwbn54SGPtA" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_3sbykL7jEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.handler.openChromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.handlers.OpenHandlerCSD" command="_wELAsL7jEeKcwbn54SGPtA"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8TAVEL7jEeKcwbn54SGPtA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menuseparator.openChromatogram">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_BNjjgL7kEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.handledmenuitem.openChromatogram" label="Open Chromatogram (CSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/importChromatogramCSD.gif" command="_wELAsL7jEeKcwbn54SGPtA"/>
+  </fragments>
+</fragment:ModelFragments>

@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.chemclipse.msd.converter" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.eclipse.chemclipse.msd.converter" id="org.eclipse.chemclipse.msd.converter.massSpectrumSupplier" name="Mass Spectrum Supplier"/>
+      </appInfo>
+      <documentation>
+         This extension point enables other plugins to register a mass spectrum converter. A converter is responsible to read a mass spectrum list and give back an implementation of IMassSpectrum/IMassSpectra. The converter is also responsible to write a valid IMassSpectrum/IMassSpectra instance to a vendor specific file format.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+      </annotation>
+      <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="MassSpectrumSupplier"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="MassSpectrumSupplier">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Set a unique suppliers id, e.g. &quot;org.eclipse.chemclipse.msd.converter.amdis&quot;.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Describe in short words the intention of the supplier.
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="filterName" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The filter name is used to show in the corresponding FileDialog. Give a short description of the filter e.g. &quot;AMDIS Mass Spectra (.msl)&quot;.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="fileExtension" type="string" use="required">
+            <annotation>
+               <documentation>
+                  For example agilent &quot;.msl&quot;.
+
+The value must not contain unallowed file system characters like: \/:*?&quot;&lt;&gt;|
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="fileName" type="string">
+            <annotation>
+               <documentation>
+                  For example Agilent &quot;MASSSPECTRA&quot;. Leave the field empty if the chromatogram has no default file name.
+
+The value must not contain unallowed file system characters like: \/:*?&quot;&lt;&gt;|
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="directoryExtension" type="string">
+            <annotation>
+               <documentation>
+                  For example Agilent &quot;.MS&quot;. Leave the field empty if the chromatogram is not stored in a default directory.
+
+The value must not contain unallowed file system characters like: \/:*?&quot;&lt;&gt;|
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="exportConverter" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.msd.converter.massspectrum.AbstractMassSpectrumExportConverter:"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="importConverter" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.msd.converter.massspectrum.AbstractMassSpectrumImportConverter:"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="isExportable" type="boolean" use="required">
+            <annotation>
+               <documentation>
+                  Select whether this format is exportable or not. It is possible that a mass spectrum / list can be parsed for import but not be written for export.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="isImportable" type="boolean" use="required">
+            <annotation>
+               <documentation>
+                  Select whether this format is importable or not. It is possible that a mass spectrum / list can be written for export but not be parsed for import.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="importMagicNumberMatcher" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher:org.eclipse.chemclipse.converter.core.IMagicNumberMatcher"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         0.1.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         /*******************************************************************************
+ * Copyright (c) 2011, 2018 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Dr. Philip Wenig - initial API and implementation
+*******************************************************************************/
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiinfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         /*******************************************************************************
+ * Copyright (c) 2008, 2018 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Dr. Philip Wenig - initial API and implementation
+*******************************************************************************/
+      </documentation>
+   </annotation>
+
+</schema>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.eclipse.chemclipse.ux.extension.msd.ui.modelContribution"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.ux.extension.msd.ui.preferencePage"
+            name="Mass Selective Detector (MSD)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.overlayPreferencePage"
+            class="org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferencePageOverlay"
+            id="org.eclipse.chemclipse.ux.extension.msd.ui.overlayPreferencePage"
+            name="MSD Overlay">
+      </page> 
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

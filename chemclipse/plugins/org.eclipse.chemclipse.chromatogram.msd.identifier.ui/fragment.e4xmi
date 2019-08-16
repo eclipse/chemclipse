@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_3DSoQEUfEeatnaVBaz9omw">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_6b_pcEUfEeatnaVBaz9omw" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_-FL9sEUfEeatnaVBaz9omw" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.command.deleteUnidentifiedPeaks" commandName="Delete Unidentified Peaks"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_6vwS8EUfEeatnaVBaz9omw" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_MJe-4EUgEeatnaVBaz9omw" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.handler.deleteUnidentifiedPeaks" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.identifier.ui/org.eclipse.chemclipse.chromatogram.msd.identifier.ui.handlers.DeleteUnidentifiedPeaksHandler" command="_-FL9sEUfEeatnaVBaz9omw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_6_2kcEUfEeatnaVBaz9omw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier" positionInList="">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_GYBrsEUiEeatnaVBaz9omw" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.handledmenuitem.deleteUnidentifiedPeaks" label="Delete Unidentified Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_unidentified_peaks.gif" command="_-FL9sEUfEeatnaVBaz9omw">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_RjoBcEUiEeatnaVBaz9omw" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+      		category="org.eclipse.chemclipse.chromatogram.filter.ui.preferences.filterPreferencePage"      
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.ui.preferences.FilterPreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.ui.preferences.filterPreferencePage"
+            name="Filter MSD">
+      </page>
+   </extension>
+
+</plugin>

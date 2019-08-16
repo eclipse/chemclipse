@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Quantitation
+Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.csd.quantitation
+Bundle-Version: 0.8.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.chromatogram.csd.quantitation.Activator
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: ChemClipse

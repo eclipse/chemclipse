@@ -1,0 +1,46 @@
+/*******************************************************************************
+ * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.support.settings;
+
+import junit.framework.TestCase;
+
+public class OperatingSystemUtils_1_Test extends TestCase {
+
+	@Override
+	protected void setUp() throws Exception {
+
+		super.setUp();
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+
+		super.tearDown();
+	}
+
+	public void testGetLineDelimiter_1() {
+
+		String delimiter = OperatingSystemUtils.getLineDelimiter();
+		String os = System.getProperty("os.name").toLowerCase();
+		if(os.startsWith("windows")) {
+			assertEquals("\r\n", delimiter);
+		} else if(os.startsWith("mac")) {
+			assertEquals("\r", delimiter);
+		} else if(os.startsWith("unix")) {
+			assertEquals("\n", delimiter);
+		} else if(os.startsWith("linux")) {
+			assertEquals("\n", delimiter);
+		} else {
+			assertEquals("\r\n", delimiter);
+		}
+	}
+}

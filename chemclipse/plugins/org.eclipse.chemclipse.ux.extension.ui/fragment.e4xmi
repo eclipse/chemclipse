@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_Jm8iUDL1EeKMEOdllHiEaA">
+  <imports xsi:type="advanced:Area" xmi:id="_I3_u0KuOEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_WF1aADL3EeKMEOdllHiEaA" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_hheJ4DhoEeKHL-DfrT7KNQ" elementId="org.eclipse.chemclipse.ux.extension.ui.command.createSnapshot" commandName="Create Snapshot"/>
+    <elements xsi:type="commands:Command" xmi:id="_Sf8MsNyxEeKWl9EwadOLIw" elementId="org.eclipse.chemclipse.ux.extension.ui.command.saveAs" commandName="Save As..."/>
+    <elements xsi:type="commands:Command" xmi:id="_OfJloFxGEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.command.previousChromatogram" commandName="Previous Chromatogram"/>
+    <elements xsi:type="commands:Command" xmi:id="_x1FVQFxCEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.command.nextChromatogram" commandName="Next Chromatogram"/>
+    <elements xsi:type="commands:Command" xmi:id="_0cbDwMCDEeOvhYBWy9aiDQ" elementId="org.eclipse.chemclipse.ux.extension.ui.command.unzoomChromatogram" commandName="Unzoom Chromatogram"/>
+    <elements xsi:type="commands:Command" xmi:id="_XpYx4NQ6EeOqJuPuL0y2ew" elementId="org.eclipse.chemclipse.ux.extension.ui.command.deleteAllPeaks" commandName="Delete All Peaks"/>
+    <elements xsi:type="commands:Command" xmi:id="_YP-30NQ6EeOqJuPuL0y2ew" elementId="org.eclipse.chemclipse.ux.extension.ui.command.deleteSelectedPeak" commandName="Delete Selected Peak"/>
+    <elements xsi:type="commands:Command" xmi:id="_6h99sBZOEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.command.deleteAllPeakIntegrations" commandName="Delete All Peak Integrations"/>
+    <elements xsi:type="commands:Command" xmi:id="_68YBwBZOEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.command.deleteChromatogramIntegrations" commandName="Delete Chromatogram Integrations"/>
+    <elements xsi:type="commands:Command" xmi:id="_F7hAgENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.command.infoSpectra" commandName="Info Spectra"/>
+    <elements xsi:type="commands:Command" xmi:id="_JZm4AENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.command.infoControls" commandName="Info Controls"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_gmcSADL3EeKMEOdllHiEaA" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_lUw1UDhoEeKHL-DfrT7KNQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.createSnapshot" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.CreateSnapshotHandler" command="_hheJ4DhoEeKHL-DfrT7KNQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_W2TwANyxEeKWl9EwadOLIw" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.file.saveAs" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.SaveAsHandler" command="_Sf8MsNyxEeKWl9EwadOLIw"/>
+    <elements xsi:type="commands:Handler" xmi:id="_UNlvIFxGEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.previousChromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.PreviousChromatogramHandler" command="_OfJloFxGEeOAeeYL1z-yzQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_5k-ZIFxCEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.nextChromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.NextChromatogramHandler" command="_x1FVQFxCEeOAeeYL1z-yzQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_5_TdgMCDEeOvhYBWy9aiDQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.unzoomChromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.UnzoomChromatogramHandler" command="_0cbDwMCDEeOvhYBWy9aiDQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_g6yEwNQ6EeOqJuPuL0y2ew" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.deleteAllPeaks" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.DeleteAllPeaksHandler" command="_XpYx4NQ6EeOqJuPuL0y2ew"/>
+    <elements xsi:type="commands:Handler" xmi:id="_hfU8QNQ6EeOqJuPuL0y2ew" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.deleteSelectedPeak" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.DeleteSelectedPeakHandler" command="_YP-30NQ6EeOqJuPuL0y2ew"/>
+    <elements xsi:type="commands:Handler" xmi:id="_FL80IBZPEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.deleteAllPeakIntegrations" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.DeleteAllPeakIntegrationsHandler" command="_6h99sBZOEeSk0dq6nce8LA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_FvMrIBZPEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.deleteAllChromatogramIntegrations" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.DeleteChromatogramIntegrationsHandler" command="_68YBwBZOEeSk0dq6nce8LA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_MpzdcENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.infoSpectra" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.InfoSpectraHandler" command="_F7hAgENOEeaHxO-Ahlk0cA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_NPzGcENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.infoControls" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.InfoControlsHandler" command="_JZm4AENOEeaHxO-Ahlk0cA"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_yuL6gDL3EeKMEOdllHiEaA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menu.file">
+    <elements xsi:type="menu:Menu" xmi:id="_QKMFgDL4EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu" label="Chromatogram">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_SszSAMCEEeOvhYBWy9aiDQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.unzoomChromatogram" label="Unzoom Chromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/unzoomChromatogram.gif" command="_0cbDwMCDEeOvhYBWy9aiDQ">
+        <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_7RFO8CaBEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+      </children>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_3b4mcDL8EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.1"/>
+      <children xsi:type="menu:Menu" xmi:id="_6R6_cDL8EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.classifier" label="Classifier"/>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_fmoWoDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.2"/>
+      <children xsi:type="menu:Menu" xmi:id="_d5hUkDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter" label="Filter">
+        <children xsi:type="menu:MenuSeparator" xmi:id="_V9Q6sMucEeOtT4qEJiN-Qw" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.0"/>
+        <children xsi:type="menu:Menu" xmi:id="_tcotcAPsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram" label="Chromatogram"/>
+        <children xsi:type="menu:Menu" xmi:id="_vrBQkAPsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.peaks" label="Peaks"/>
+      </children>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_DEcqwAPqEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.1"/>
+      <children xsi:type="menu:Menu" xmi:id="_BJuDcAPqEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.calculators" label="Calculators">
+        <children xsi:type="menu:Menu" xmi:id="_xaKS8APsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.calculators.chromatogram" label="Chromatogram"/>
+        <children xsi:type="menu:Menu" xmi:id="_32iggAPsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.calculators.peaks" label="Peaks"/>
+      </children>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_mX-uoDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.3"/>
+      <children xsi:type="menu:Menu" xmi:id="_eTFrIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector" label="Baseline Detectors"/>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_oB89IDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.4"/>
+      <children xsi:type="menu:Menu" xmi:id="_eoc3IDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors" label="Peak Detectors">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_EadVsPTnEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.deleteSelectedPeak" label="Delete Selected Peak" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_peak.gif" command="_YP-30NQ6EeOqJuPuL0y2ew">
+          <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_zjek8PT7EeWJxMXPMOexOQ" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+        </children>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_nmc-0PTmEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.deleteallpeaks" label="Delete All Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_peaks.gif" command="_XpYx4NQ6EeOqJuPuL0y2ew">
+          <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_YO5hwCaFEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+        </children>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_RUrE4MIBEeKzppesdjCSCQ" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.separator.misc"/>
+      </children>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_pQOuIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.5"/>
+      <children xsi:type="menu:Menu" xmi:id="_fGgsIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.integrators" label="Integrators">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_8u1b4PToEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.deleteallpeakintegrations" label="Delete All Peak Integrations" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/deletePeakIntegrations.gif" command="_6h99sBZOEeSk0dq6nce8LA">
+          <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_DEVhICaIEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+        </children>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_ioauoBZOEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.integrators.separator.misc"/>
+      </children>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_FqiyoDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.6"/>
+      <children xsi:type="menu:Menu" xmi:id="_59QsIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier" label="Identifier">
+        <children xsi:type="menu:MenuSeparator" xmi:id="_jcXzwBZREeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier.separator.misc"/>
+      </children>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_m-uNMJVkEeK9SdEQujNeFg" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.identifier"/>
+      <children xsi:type="menu:Menu" xmi:id="_j0o20JVkEeK9SdEQujNeFg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.quantifier" label="Quantifier">
+        <children xsi:type="menu:MenuSeparator" xmi:id="_U9T_gMIBEeKzppesdjCSCQ" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.quantifier.separator.misc"/>
+      </children>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_K5F7IDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.9"/>
+      <children xsi:type="menu:Menu" xmi:id="_AxvQoDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.reports" label="Reports"/>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_OxxwkExJEeOWprdBMj2r0w" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.10"/>
+      <children xsi:type="menu:Menu" xmi:id="_VC2tEExJEeOWprdBMj2r0w" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.miscellaneous" label="Miscellaneous"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_0O4XkDL_EeKMEOdllHiEaA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.top" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
+    <elements xsi:type="menu:ToolBar" xmi:id="_AKvFkDMAEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.operations">
+      <children xsi:type="menu:ToolBarSeparator" xmi:id="_blu0oINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.ux.extension.ui.toolbarseparator.1"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_fX4dUFxGEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.1" label="Previous Chromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/arrowBackward.gif" command="_OfJloFxGEeOAeeYL1z-yzQ"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_-t6B0FxCEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.0" label="Next Chromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/arrowForward.gif" command="_x1FVQFxCEeOAeeYL1z-yzQ"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_qw_0gDhoEeKHL-DfrT7KNQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.createSnapshot" label="Create Snapshot" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/create_snapshot.png" command="_hheJ4DhoEeKHL-DfrT7KNQ"/>
+      <children xsi:type="menu:ToolBarSeparator" xmi:id="_LQEasMCEEeOvhYBWy9aiDQ" elementId="org.eclipse.chemclipse.ux.extension.ui.toolbarseparator.15"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_nUgn0NyxEeKWl9EwadOLIw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.saveAll">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_swyDQNyxEeKWl9EwadOLIw" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.saveAs" label="Save As..." iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/saveas.gif" command="_Sf8MsNyxEeKWl9EwadOLIw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_7wPFINyxEeKWl9EwadOLIw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="__3wUINyxEeKWl9EwadOLIw" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.saveAs" label="Save As..." iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/saveas.gif" command="_Sf8MsNyxEeKWl9EwadOLIw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_mLKEkMxrEeOp3IEcthiWqQ" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
+    <elements xsi:type="basic:Part" xmi:id="_sEZv4MxrEeOp3IEcthiWqQ" elementId="org.eclipse.chemclipse.ux.extension.ui.part.welcomeView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.views.WelcomeView" label="Welcome" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_90Lq8I0MEeWqFMLk2l0O1w" elementId="org.eclipse.chemclipse.ux.extension.ui.part.editHistory" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.views.ChromatogramEditHistory" label="Edit History" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_mmvNUMxrEeOp3IEcthiWqQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
+    <elements xsi:type="advanced:Perspective" xmi:id="_0k-CwMxrEeOp3IEcthiWqQ" elementId="org.eclipse.chemclipse.ux.extension.ui.perspective.welcome" label="Welcome" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif">
+      <children xsi:type="advanced:Placeholder" xmi:id="_BNUDUMxsEeOp3IEcthiWqQ" elementId="org.eclipse.chemclipse.ux.extension.ui.placeholder.welcome.0" ref="_sEZv4MxrEeOp3IEcthiWqQ" closeable="true"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_O4wL0ENPEeaHxO-Ahlk0cA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.menu">
+    <elements xsi:type="menu:Menu" xmi:id="_mMBv8ENNEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.spectra.menu" label="Spectrum" mnemonics="">
+      <children xsi:type="menu:Menu" xmi:id="_16DXMPB9Eeev9sLsv2ZXcQ" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.spectrum.baselinecorrection" label="Baseline Correction"/>
+      <children xsi:type="menu:Menu" xmi:id="_GRIXQBDTEei3erbzL7KMaw" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.spectrum.filter" label="Filter"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_bX07oENPEeaHxO-Ahlk0cA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.spectra.menu">
+    <elements xsi:type="menu:Menu" xmi:id="_OE3pEE8xEeWZpNQ-SxTOqA" elementId="org.eclipse.chemclipse.ux.extension.ui.controls.menu" label="Controls">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_8trigENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.infoControls" label="Info" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif" command="_JZm4AENOEeaHxO-Ahlk0cA"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_9O66YK1-EeeOj_frlqyeaw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.menu">
+    <elements xsi:type="menu:Menu" xmi:id="_9qTloDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.process" label="Processors"/>
+  </fragments>
+</fragment:ModelFragments>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.eclipse.chemclipse.converter.ui.importCategory"
+            name="Chromatogram Import">
+      </category>
+      <wizard
+            category="org.eclipse.chemclipse.converter.ui.importCategory"
+            class="org.eclipse.chemclipse.csd.converter.ui.wizards.ChromatogramImportWizard"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif"
+            id="org.eclipse.chemclipse.csd.converter.ui.chromatogramImportWizard"
+            name="Convert FID, ECD ... chromatograms to *.xy or *.ocb format">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"      
+            class="org.eclipse.chemclipse.csd.converter.ui.preferences.ConverterPreferencePage"
+            id="org.eclipse.chemclipse.csd.converter.ui.converterPreferencePage"
+            name="Converter CSD">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.csd.converter.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>   
+
+</plugin>

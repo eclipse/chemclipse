@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.eclipse.chemclipse.converter.ui.importCategory"
+            name="Chromatogram Import">
+      </category>
+      <wizard
+            category="org.eclipse.chemclipse.converter.ui.importCategory"
+            class="org.eclipse.chemclipse.msd.converter.ui.wizards.ChromatogramImportWizard"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif"
+            id="org.eclipse.chemclipse.msd.converter.ui.chromatogramImportWizard"
+            name="Convert MSD chromatograms to *.ocb format">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"      
+            class="org.eclipse.chemclipse.msd.converter.ui.preferences.ConverterPreferencePage"
+            id="org.eclipse.chemclipse.msd.converter.ui.converterPreferencePage"
+            name="Converter MSD">
+      </page>
+   </extension>
+
+</plugin>

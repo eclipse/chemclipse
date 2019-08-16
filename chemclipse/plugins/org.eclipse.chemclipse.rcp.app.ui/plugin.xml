@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+   <extension-point id="commandLineProcessor" name="ChemClipse Command Line Executable" schema="schema/org.eclipse.chemclipse.rcp.app.ui.commandLineProcessor.exsd"/>
+   <extension
+         id="org.eclipse.chemclipse.rcp.application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="org.eclipse.chemclipse.rcp.app.ui.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.chemclipse.rcp.app.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
+            name="A) Chromatography/Spectrometry">
+      </page>   
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.rcp.app.ui.preferences.DevicesPreferencePage"
+            id="org.eclipse.chemclipse.rcp.app.ui.preferences.devicesPreferencePage"
+            name="Devices">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.rcp.app.ui.preferences.SettingsPreferencePage"
+            id="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            name="Settings">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.rcp.app.ui.preferences.OverlayPreferencePage"
+            id="org.eclipse.chemclipse.rcp.app.ui.preferences.overlayPreferencePage"
+            name="Overlay">
+      </page>      
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.rcp.app.ui.preferences.AdditionalUpdateSitesPreferencePage"
+            id="org.eclipse.chemclipse.rcp.app.ui.preferences.additionalUpdateSitesPreferencePage"
+            name="Additional Update Sites">
+      </page> 
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.rcp.app.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="true">
+      </toc>
+      <toc
+            file="toc_overview.xml">
+      </toc>     
+   </extension>
+
+</plugin>

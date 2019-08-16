@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: org.eclipse.chemclipse.logging
+Bundle-Version: 0.8.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.logging.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.apache.log4j;bundle-version="1.2.15"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.eclipse.chemclipse.logging.core,
+ org.eclipse.chemclipse.logging.support
+Bundle-Vendor: %Bundle-Vendor

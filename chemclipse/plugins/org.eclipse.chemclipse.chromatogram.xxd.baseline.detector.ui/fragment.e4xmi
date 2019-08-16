@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_JDzXoNQxEeOqJuPuL0y2ew">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_jmYecNQxEeOqJuPuL0y2ew" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_xfNPcNQxEeOqJuPuL0y2ew" elementId="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.command.deleteBaseline" commandName="Delete Baseline"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_j80ogNQxEeOqJuPuL0y2ew" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_yNHeUNQxEeOqJuPuL0y2ew" elementId="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.handler.deleteBaseline" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.handlers.DeleteBaselineHandler" command="_xfNPcNQxEeOqJuPuL0y2ew"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kNTUgNQxEeOqJuPuL0y2ew" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector" positionInList="">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_y8zO0NQxEeOqJuPuL0y2ew" elementId="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.handledmenuitem.deleteBaseline" label="Delete Baseline" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/baselineDelete.gif" command="_xfNPcNQxEeOqJuPuL0y2ew">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_f34MsCaCEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

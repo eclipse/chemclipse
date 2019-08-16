@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="org.eclipse.chemclipse.chromatogram.xxd.integrator.combinedIntegratorSupplier" name="Combined Chromatogram and Peak Integrator" schema="schema/org.eclipse.chemclipse.chromatogram.xxd.integrator.combinedIntegratorSupplier.exsd"/>
+   <extension-point id="org.eclipse.chemclipse.chromatogram.xxd.integrator.peakIntegratorSupplier" name="Peak Integrator" schema="schema/org.eclipse.chemclipse.chromatogram.xxd.integrator.peakIntegratorSupplier.exsd"/>
+   <extension-point id="org.eclipse.chemclipse.chromatogram.xxd.integrator.chromatogramIntegratorSupplier" name="Chromatogram Integrator" schema="schema/org.eclipse.chemclipse.chromatogram.xxd.integrator.chromatogramIntegratorSupplier.exsd"/>
+
+</plugin>

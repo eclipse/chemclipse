@@ -1,0 +1,67 @@
+All Filters for a specific itemtype should comply with the following pattern where
+
+[ItemType] is the type of the item to be filtered
+
+/**
+ * A {@link Filter} Extension interface for filters that can work on {@link [ItemType]}s.
+ * This is part of the Chemclipse FilterFramework, to make the Filter available simply register it with the OSGi Servicefactory under the {@link Filter} interface, implementors are encouraged to also register each filter under all sub(filter) interface.
+ * 
+ * @author Christoph Läubrich
+ *
+ * @param <ConfigType>
+ */
+public interface [ItemType]Filter<ConfigType> extends Filter<ConfigType> {
+
+	/**
+	 * Filters the given Collection of {@link [ItemType]}s with this filter and returns the result.
+	 * The resulting Collection could either be the same or a new collection, might have more or less items
+	 * 
+	 * @param filterItems
+	 * @param configuration
+	 *            the configuration to apply or <code>null</code> if no special configuration is desired
+	 * @param resultTransformer
+	 *            the transformer to invoke for producing the desired output result, filter might use this to produce results and then take some more actions with it or even produce alternative results or in msot cases simply return the result as is
+	 * @param messageConsumer
+	 *            Filters are meant to not throwing checked exceptions nor return no result if something goes wrong but report problems to the {@link MessageConsumer} this allows the upstream caller to decide what to do
+	 * @param monitor
+	 *            a {@link IProgressMonitor} to report progress of the filtering or <code>null</code> if no progress is desired
+	 * @return the result of the processing or <code>null</code> if processing was canceled
+	 * @throws IllegalArgumentException
+	 *             if the given {@link [ItemType]}s are incompatible with this filter ({@link #accepts[ItemType]s([ItemType])} returns <code>false</code>)
+	 */
+	<ResultType> ResultType filter[ItemType]s(Collection<? extends [ItemType]> filterItems, ConfigType configuration, Function<? super Collection<? extends [ItemType]>, ResultType> resultTransformer, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
+
+	/**
+	 * Checks if the given {@link [ItemType]} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}
+	 * 
+	 * @param item
+	 *            the {@link [ItemType]} to check
+	 * @return <code>true</code> if this {@link [ItemType]} can be applied, <code>false</code> otherwise
+	 */
+	boolean accepts[ItemType]s(Collection<? extends [ItemType]> items);
+
+	/**
+	 * Creates a new configuration that is specially suited for the given {@link [ItemType]} types
+	 * 
+	 * @param item
+	 * @return a new configuration for this items or the default config if items is empty or no suitable configuration can be created
+	 * @throws IllegalArgumentException
+	 *             if the given {@link [ItemType]}s are incompatible with this filter ({@link #accepts[ItemType]s([ItemType])} returns <code>false</code>)
+	 */
+	default ConfigType createConfiguration(Collection<? extends [ItemType]> items) throws IllegalArgumentException {
+
+		if(accepts[ItemType]s(items)) {
+			return createNewConfiguration();
+		} else {
+			throw new IllegalArgumentException("incompatible items in collection");
+		}
+	}
+
+	default <ResultType> Function<Collection<? extends [ItemType]>, ResultType> create[ItemType]FilterFunction(IProgressMonitor progressMonitor, MessageConsumer messageConsumer, Function<Collection<? extends [ItemType]>, ResultType> nextFilter) {
+
+		return (items) -> {
+			ConfigType configuration = createConfiguration(items);
+			return filter[ItemType]s(items, configuration, nextFilter, messageConsumer, progressMonitor);
+		};
+	}
+}

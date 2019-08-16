@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="Identifier (MSD)"
+            category="org.eclipse.chemclipse.chromatogram.ui.swt.preferencePageIdentifier"
+            class="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.preferences.identifierPreferencePage">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            name="Database"
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.export.database.export.category">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            name="Database"
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.import.database.import.category">
+      </category>
+   </extension>
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+
+</plugin>

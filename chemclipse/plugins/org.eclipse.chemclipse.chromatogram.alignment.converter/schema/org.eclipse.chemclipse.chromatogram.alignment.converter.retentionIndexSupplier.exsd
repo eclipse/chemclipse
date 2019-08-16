@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.chemclipse.chromatogram.alignment.converter" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.eclipse.chemclipse.chromatogram.alignment.converter" id="org.eclipse.chemclipse.chromatogram.alignment.converter.retentionIndexSupplier" name="Retention Index Supplier"/>
+      </appinfo>
+      <documentation>
+         This extension point enables other plugins to register a retention index converter. The retention indices are not fixed to mass spectra. They can be used for example in fid or pnd measurements. A specific mass spectral retention index could store for example the appropiate mass spectrum. This could be one of the homologous series of the alkenes, for example.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="RetentionIndexSupplier"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="RetentionIndexSupplier">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Set a unique suppliers id, e.g. &quot;org.eclipse.chemclipse.chromatogram.msd.alignment.alkenes&quot;.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Describe in short words the intention of the supplier.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="filterName" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The filter name is used to show in the corresponding FileDialog. Give a short description of the filter e.g. &quot;Alkene Retention Index (.ari)&quot;.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="fileExtension" type="string" use="required">
+            <annotation>
+               <documentation>
+                  For example alkene retention indices &quot;.ari&quot;.
+
+The value must not contain unallowed file system characters like: \/:*?&quot;&lt;&gt;|
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="exportConverter" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="importConverter" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="isExportable" type="boolean" use="required">
+            <annotation>
+               <documentation>
+                  Select whether this format is exportable or not. It is possible that a index file can be parsed for import but not be written for export.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="isImportable" type="boolean" use="required">
+            <annotation>
+               <documentation>
+                  Select whether this format is importable or not. It is possible that a index file can be written for export but not be parsed for import.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         0.0.1
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         /*******************************************************************************
+ * Copyright (c) 2008, 2018 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Dr. Philip Wenig - initial API and implementation
+*******************************************************************************/
+      </documentation>
+   </annotation>
+
+</schema>

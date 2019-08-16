@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_h0A1MDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.ide.application" bindingContexts="_h0A1MTLzEeKMEOdllHiEaA">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_h0BcQDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main" selectedElement="_6h3_kDPDEeKN2qL8NSaklg" label="org.eclipse.chemclipse.rcp.app.ui" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/defaultview_misc.gif" width="800" height="600">
+    <tags>shellMaximized</tags>
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_6h3_kDPDEeKN2qL8NSaklg" elementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
+      <children xsi:type="advanced:Perspective" xmi:id="_L8vjcFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.perspective.main" label="Logging" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_S0qdgFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partsashcontainer.main.0" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_WjeRkFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.files" containerData="2000"/>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_YOgQAFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partsashcontainer.main.1" containerData="8000">
+            <children xsi:type="advanced:Placeholder" xmi:id="_bnx48FeLEeWJDdTjy0i2HA" elementId="org.eclipse.ui.editorss" containerData="15000" ref="_Jqg8MEnJEeKP49-EnXatSw"/>
+            <children xsi:type="basic:PartStack" xmi:id="_jR9WYFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.consoles" containerData="5000">
+              <children xsi:type="advanced:Placeholder" xmi:id="_lQTSYFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.placeholder.main.1" ref="_Sq1foEd4EeKhRMzT2OpX0g"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_0jDjAHcBEeWs9YprkfnL3Q" elementId="org.eclipse.chemclipse.rcp.app.ui.placeholder.0" ref="_V3EBsHb_EeWs9YprkfnL3Q"/>
+            </children>
+          </children>
+        </children>
+      </children>
+    </children>
+    <mainMenu xmi:id="_h0BcQTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.main">
+      <children xsi:type="menu:Menu" xmi:id="_h0BcQjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" label="File">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_k-VQwDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.save" label="Save" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/save.gif" command="_SkvDQDgEEeKBGer45Yb2dA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_padd0DgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.saveAll" label="Save All" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/saveall.gif" command="_ZgJ9QDgEEeKBGer45Yb2dA"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_ouvAQEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.0"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_cPBJQL7lEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.openChromatogram"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_08BOgL7lEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.1"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_q2y48EaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.import" label="Import" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/import.png" command="_w-HcgEaqEeKL9t3RgmYB_g"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_tZ1dcEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.export" label="Export" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/export.png" command="_zmfM8EaqEeKL9t3RgmYB_g"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_pliscEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.2"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_h0BcRTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.quit" label="Quit" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/quit.gif" command="_h0A1OjLzEeKMEOdllHiEaA"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_QrQhQDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.plugins" label="Plug-ins">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_WAg5QDiWEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.updates" label="Check for Updates" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_DSko4DiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.window" label="Window">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_lA-LQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.perspectiveSwitcher" label="Perspective Switcher" command="_XUgbQDiXEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_MBtwADilEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.selectView" label="Select View" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/view.gif" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_nz0_UDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.preferences" label="Preferences" command="_XevnQDiVEeKDEdWQrkwLnQ"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_h0BcRjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.help" label="Help">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_h0BcRzLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.about" label="About" command="_h0A1RDLzEeKMEOdllHiEaA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_-y9BQCaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.help" label="Documentation" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
+      </children>
+    </mainMenu>
+    <sharedElements xsi:type="basic:Part" xmi:id="_Sq1foEd4EeKhRMzT2OpX0g" elementId="org.eclipse.ui.console.ConsoleView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Console" iconURI="platform:/plugin/org.eclipse.ui.console/icons/full/cview16/console_view.gif">
+      <tags>View</tags>
+      <tags>categoryTag:General</tags>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_hwsHoEd8EeKxr87RO7WY0w" elementId="org.eclipse.ui.navigator.ProjectExplorer" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Project Explorer" iconURI="platform:/plugin/org.eclipse.ui.navigator.resources/icons/full/eview16/resource_persp.gif">
+      <tags>View</tags>
+      <tags>categoryTag:General</tags>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_twQ-EEjnEeKCXsBuXeeyZA" elementId="org.eclipse.ui.views.PropertySheet" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Property Sheet" iconURI="platform:/plugin/org.eclipse.ui.views/icons/full/eview16/prop_ps.gif">
+      <tags>View</tags>
+      <tags>categoryTag:General</tags>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_3Ep6kEjnEeKCXsBuXeeyZA" elementId="org.eclipse.ui.views.ContentOutline" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Content Outline" iconURI="platform:/plugin/org.eclipse.ui.views/icons/full/eview16/outline_co.gif">
+      <tags>View</tags>
+      <tags>categoryTag:General</tags>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_AZfjAEjoEeKCXsBuXeeyZA" elementId="org.eclipse.ui.views.BookmarkView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Bookmark View" iconURI="platform:/plugin/org.eclipse.ui.ide/icons/full/eview16/bkmrk_nav.gif">
+      <tags>View</tags>
+      <tags>categoryTag:General</tags>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_F-2pAEjoEeKCXsBuXeeyZA" elementId="org.eclipse.ui.views.ProblemView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Problem View" iconURI="platform:/plugin/org.eclipse.ui.ide/icons/full/eview16/problems_view.gif">
+      <tags>View</tags>
+      <tags>categoryTag:General</tags>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_Il8nEEjoEeKCXsBuXeeyZA" elementId="org.eclipse.ui.views.ProgressView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Progress View" iconURI="platform:/plugin/org.eclipse.ui.ide/icons/full/eview16/pview.gif">
+      <tags>View</tags>
+      <tags>categoryTag:General</tags>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_LyVDgEjoEeKCXsBuXeeyZA" elementId="org.eclipse.ui.views.TaskList" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Task List" iconURI="platform:/plugin/org.eclipse.ui.ide/icons/full/eview16/tasks_tsk.gif">
+      <tags>View</tags>
+      <tags>categoryTag:General</tags>
+    </sharedElements>
+    <sharedElements xsi:type="advanced:Area" xmi:id="_Jqg8MEnJEeKP49-EnXatSw" elementId="org.eclipse.chemclipse.rcp.app.ui.editor" selectedElement="_N2AsQEnJEeKP49-EnXatSw" label="Editor Area">
+      <children xsi:type="basic:PartStack" xmi:id="_N2AsQEnJEeKP49-EnXatSw" elementId="org.eclipse.e4.primaryDataStack">
+        <tags>newtablook</tags>
+        <tags>org.eclipse.e4.primaryDataStack</tags>
+        <tags>EditorStack</tags>
+        <tags>NoAutoCollapse</tags>
+      </children>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_FpFY0H9YEeKoCe-SGRyJ_w" elementId="org.eclipse.ui.views.PropertySheet" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Properties" iconURI="platform:/plugin/org.eclipse.ui.views//icons/full/eview16/prop_ps.gif" closeable="true">
+      <tags>View</tags>
+      <tags>categoryTag:General</tags>
+      <menus xmi:id="_Q1OhIH9YEeKoCe-SGRyJ_w" elementId="org.eclipse.ui.views.PropertySheet">
+        <tags>ViewMenu</tags>
+        <tags>menuContribution:menu</tags>
+      </menus>
+      <toolbar xmi:id="_JJI_MH9YEeKoCe-SGRyJ_w" elementId="org.eclipse.ui.views.PropertySheet"/>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_KwDYQI1yEeKgaYcpx_IhbQ" elementId="org.eclipse.ui.internal.introview" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Welcome" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/defaultview_misc.gif" closeable="true">
+      <persistedState key="memento" value="&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?>&amp;#xD;&amp;#xA;&amp;lt;view>&amp;#xD;&amp;#xA;&amp;lt;presentation currentPage=&amp;quot;root&amp;quot; restore=&amp;quot;true&amp;quot;/>&amp;#xD;&amp;#xA;&amp;lt;standbyPart/>&amp;#xD;&amp;#xA;&amp;lt;/view>"/>
+      <tags>View</tags>
+      <tags>categoryTag:General</tags>
+      <menus xmi:id="_c9busI1yEeKgaYcpx_IhbQ" elementId="org.eclipse.ui.internal.introview">
+        <tags>ViewMenu</tags>
+        <tags>menuContribution:menu</tags>
+      </menus>
+      <toolbar xmi:id="_hl6gQI1zEeKgaYcpx_IhbQ" elementId="org.eclipse.ui.internal.introview" visible="false"/>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_T2mREFeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" contributionURI="bundleclass://org.eclipse.chemclipse.processing.ui/org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" label="Feedback" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
+    <sharedElements xsi:type="basic:Part" xmi:id="_qY-R0FeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.LogFileView" contributionURI="bundleclass://org.eclipse.chemclipse.logging.ui/org.eclipse.chemclipse.logging.ui.views.LogFileView" label="Log Files" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif"/>
+    <sharedElements xsi:type="basic:Part" xmi:id="_W8FzsFuuEeWKQYKM0-fotA" elementId="org.eclipse.chemclipse.rcp.app.ui.part.editHistory" contributionURI="bundleclass://org.eclipse.chemclipse.support.ui/org.eclipse.chemclipse.support.ui.parts.EditHistoryPart" label="Edit History" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
+    <sharedElements xsi:type="basic:Part" xmi:id="_V3EBsHb_EeWs9YprkfnL3Q" elementId="org.eclipse.ease.ui.views.scriptShell" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Script Shell" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/script_shell.png"/>
+    <trimBars xmi:id="_h0BcTDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.top">
+      <children xsi:type="menu:ToolBar" xmi:id="_h0BcTTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_nIMLMINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.3"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_h0BcTjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.exit" label="Quit" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/quit.gif" command="_h0A1OjLzEeKMEOdllHiEaA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_tL2EwDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.save" label="Save" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/save.gif" command="_SkvDQDgEEeKBGer45Yb2dA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_vo3g0DgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.saveAll" label="Save All" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/saveall.gif" command="_ZgJ9QDgEEeKBGer45Yb2dA"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_rJYIsINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.4"/>
+      </children>
+      <children xsi:type="menu:ToolBar" xmi:id="_y11CQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.perspectives">
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_lwvQEINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.1"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_G9eogOToEeK3p9M57zVYqQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.updates" label="Updates" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/updates.gif" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_0oR3UDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.perspectiveSwitcher" label="Perspective Switcher" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/perspectives.gif" command="_XUgbQDiXEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_dnrPMDinEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.selectView" label="Select View" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/view.gif" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_wvMhsINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.5"/>
+      </children>
+      <children xsi:type="menu:ToolBar" xmi:id="_2GIJsMDJEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.window">
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_5R6wQMDJEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.6"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_oQ91EDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.about" label="About" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif" command="_h0A1RDLzEeKMEOdllHiEaA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_4hjDQMDJEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.preferences" label="Preferences" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif" command="_XevnQDiVEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_ULurUMDKEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.help" label="Help" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/question.gif" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
+      </children>
+    </trimBars>
+    <trimBars xmi:id="_jEP4kDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.bottom" side="Bottom">
+      <children xsi:type="menu:ToolBar" xmi:id="_ksnkkDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.bottom">
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_kOkSsINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.0"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_ZDn1MDinEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.selectView" label="Select View" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/view.gif" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:ToolControl" xmi:id="_NDGRMEKHEeWHOc5lcHTqLQ" elementId="org.eclipse.chemclipse.rcp.app.ui.toolcontrol.activePerspective" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.toolcontrols.ActivePerspective"/>
+      </children>
+    </trimBars>
+  </children>
+  <handlers xmi:id="_h0A1OzLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.quit" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.QuitHandler" command="_h0A1OjLzEeKMEOdllHiEaA"/>
+  <handlers xmi:id="_h0A1RTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.about" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.AboutHandler" command="_h0A1RDLzEeKMEOdllHiEaA"/>
+  <handlers xmi:id="_Z6GHQDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.save" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.SaveHandler" command="_SkvDQDgEEeKBGer45Yb2dA"/>
+  <handlers xmi:id="_aMoBsDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.saveAll" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.SaveAllHandler" command="_ZgJ9QDgEEeKBGer45Yb2dA"/>
+  <handlers xmi:id="_aH8eIDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.preferences" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.PreferencesHandler" command="_XevnQDiVEeKDEdWQrkwLnQ"/>
+  <handlers xmi:id="_PcJNUDiWEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.updates" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.UpdatesHandler" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
+  <handlers xmi:id="_aXIewDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.perspectiveSwitcher" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler" command="_XUgbQDiXEeKDEdWQrkwLnQ"/>
+  <handlers xmi:id="_E4KTYDilEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.selectView" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.SelectViewHandler" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
+  <handlers xmi:id="_2GedcEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.import" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.ImportHandler" command="_w-HcgEaqEeKL9t3RgmYB_g"/>
+  <handlers xmi:id="_53gfEEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.export" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.ExportHandler" command="_zmfM8EaqEeKL9t3RgmYB_g"/>
+  <handlers xmi:id="_wRrJICaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.help" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.HelpHandler" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
+  <handlers xmi:id="_NeEKMIgsEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.opensnippet" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler" command="_-eZF4IgrEemJaOKd7Cy7Ww"/>
+  <handlers xmi:id="_XLWkMLgWEemNgNx3khJk0g" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.opentoolmenu" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.OpenMenuHandler" command="_mZc7gLgVEemNgNx3khJk0g"/>
+  <bindingTables xmi:id="_h0A1PDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.bindingtable" bindingContext="_h0A1MTLzEeKMEOdllHiEaA">
+    <bindings xmi:id="_h0A1PTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.keybinding.quit" keySequence="M1+Q" command="_h0A1OjLzEeKMEOdllHiEaA"/>
+    <bindings xmi:id="_h0A1RjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.keybinding.about" keySequence="M1+A" command="_h0A1RDLzEeKMEOdllHiEaA"/>
+  </bindingTables>
+  <rootContext xmi:id="_h0A1MTLzEeKMEOdllHiEaA" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog and Windows">
+    <children xmi:id="_h0A1MjLzEeKMEOdllHiEaA" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>
+    <children xmi:id="_h0A1MzLzEeKMEOdllHiEaA" elementId="org.eclipse.ui.contexts.dialog" name="In Dialogs"/>
+  </rootContext>
+  <commands xmi:id="_h0A1OjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.command.quit" commandName="Quit"/>
+  <commands xmi:id="_h0A1RDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.command.about" commandName="About"/>
+  <commands xmi:id="_SkvDQDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.command.save" commandName="Save"/>
+  <commands xmi:id="_ZgJ9QDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.command.saveAll" commandName="Save All"/>
+  <commands xmi:id="_XevnQDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.command.preferences" commandName="Preferences"/>
+  <commands xmi:id="_LrC6QDiWEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.command.updates" commandName="Updates"/>
+  <commands xmi:id="_XUgbQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.command.perspectiveSwitcher" commandName="Perspective Switcher"/>
+  <commands xmi:id="_ASbeYDilEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.command.selectView" commandName="Select View"/>
+  <commands xmi:id="_w-HcgEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.command.import" commandName="Import"/>
+  <commands xmi:id="_zmfM8EaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.command.export" commandName="Export"/>
+  <commands xmi:id="_zeEzsCaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.command.help" commandName="Help"/>
+  <commands xmi:id="_-eZF4IgrEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.command.opensnippet" commandName="Open Snippet" description="Open the given Snippet in the editor area">
+    <parameters xmi:id="_-eZF4YgrEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.commandparameter.opensnippet.snippetid" name="snippetid" optional="false"/>
+  </commands>
+  <commands xmi:id="_mZc7gLgVEemNgNx3khJk0g" elementId="chemclipse.command.opentoolmenu" commandName="Open Tool Menu" description="Open the Tool menu"/>
+  <addons xmi:id="_h0A1NDLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_h0A1NTLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_h0A1NjLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_h0A1NzLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_h0A1ODLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_iO2gkEm8EeKP49-EnXatSw" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+  <addons xmi:id="_JynPoEnGEeKP49-EnXatSw" elementId="org.eclipse.e4.ui.workbench.addons.cleanupaddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.cleanupaddon.CleanupAddon"/>
+  <addons xmi:id="_L3IsIEnGEeKP49-EnXatSw" elementId="org.eclipse.e4.ui.workbench.addons.dndaddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.dndaddon.DnDAddon"/>
+  <addons xmi:id="_RG1EIEnGEeKP49-EnXatSw" elementId="org.eclipse.e4.ui.workbench.addons.minmax" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
+  <addons xmi:id="_0gTyoH9aEeKE1OxK--sJmg" elementId="org.eclipse.e4.ui.internal.workbench.addons.handlerprocessingaddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+  <addons xmi:id="_9QiAYJMJEeKS0dEiOP1gSw" elementId="org.eclipse.chemclipse.rcp.app.ui.addon.perspectiveAddon" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.addons.PerspectiveApplicationAddon"/>
+  <addons xmi:id="_Z9jhkM1jEeOfr-UwE6wy8g" elementId="org.eclipse.chemclipse.rcp.app.ui.addon.modelSupport" contributionURI="bundleclass://org.eclipse.chemclipse.support.ui/org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon"/>
+</application:Application>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Chromatography/Spectrometry" topic="html/toc.html">
+   <topic label="Overview">
+      <anchor id="overview"/>
+   </topic>
+   <topic label="Baseline Detectors">
+      <anchor id="baselinedetectors"/>
+   </topic>
+   <topic label="Classifier">
+      <anchor id="classifier"/>
+   </topic>
+   <topic label="Filter">
+      <anchor id="filter"/>
+   </topic>
+   <topic label="Peak Detectors">
+      <anchor id="peakdetectors"/>
+   </topic>
+   <topic label="Integrators">
+      <anchor id="integrators"/>
+   </topic>   
+   <topic label="Identifier">
+      <anchor id="identifier"/>
+   </topic>
+   <topic label="Quantifier">
+      <anchor id="quantifier"/>
+   </topic>
+   <topic label="Process">
+      <anchor id="process"/>
+   </topic>  
+   <topic label="Miscellaneous">
+      <anchor id="miscellaneous"/>
+   </topic>  
+   <topic label="Legal">
+      <anchor id="legal"/>
+   </topic>   
+</toc>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+      		category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.converter.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.converter.ui.converterPreferencePage"
+            name="Converter">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.eclipse.chemclipse.converter.ui.sequenceReportExtractorCategory"
+            name="Sequence/Report Extractor">
+      </category>
+   </extension>     
+</plugin>

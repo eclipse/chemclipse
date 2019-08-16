@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier" name="Chromatogram Filter MSD" schema="schema/org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilter.exsd"/>
+   <extension-point id="org.eclipse.chemclipse.chromatogram.msd.filter.peakFilterSupplier" name="Peak Filter" schema="schema/org.eclipse.chemclipse.chromatogram.msd.filter.peakFilter.exsd"/>
+   <extension-point id="org.eclipse.chemclipse.chromatogram.msd.filter.massSpectrumFilterSupplier" name="Mass Spectrum Filter" schema="schema/org.eclipse.chemclipse.chromatogram.msd.filter.massSpectrumFilter.exsd"/>
+</plugin>

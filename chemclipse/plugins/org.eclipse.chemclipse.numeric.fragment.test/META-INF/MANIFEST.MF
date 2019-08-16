@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Fragment
+Bundle-SymbolicName: org.eclipse.chemclipse.numeric.fragment.test
+Bundle-Version: 0.8.0.qualifier
+Fragment-Host: org.eclipse.chemclipse.numeric;bundle-version="0.8.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.junit;bundle-version="4.11.0"
+Export-Package: org.eclipse.chemclipse.numeric.core.suite,
+ org.eclipse.chemclipse.numeric.geometry
+Bundle-Vendor: ChemClipse
+Import-Package: org.apache.commons.math3.stat.regression
+Automatic-Module-Name: org.eclipse.chemclipse.numeric.fragment.test

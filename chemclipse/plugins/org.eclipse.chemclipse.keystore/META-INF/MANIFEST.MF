@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Keystore
+Bundle-SymbolicName: org.eclipse.chemclipse.keystore
+Bundle-Version: 0.8.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.keystore.Activator
+Bundle-Vendor: ChemClipse
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.logging;bundle-version="0.8.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.chemclipse.keystore.core,
+ org.eclipse.chemclipse.keystore.exceptions

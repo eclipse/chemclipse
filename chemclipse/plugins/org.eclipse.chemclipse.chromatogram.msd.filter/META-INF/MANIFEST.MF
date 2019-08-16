@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Filter Plug-in
+Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.msd.filter;singleton:=true
+Bundle-Version: 0.8.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.chromatogram.msd.filter.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.msd.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.logging;bundle-version="0.8.0",
+ org.eclipse.chemclipse.processing;bundle-version="0.8.0",
+ org.eclipse.chemclipse.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.chromatogram.filter;bundle-version="0.8.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram,
+ org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum,
+ org.eclipse.chemclipse.chromatogram.msd.filter.core.peak,
+ org.eclipse.chemclipse.chromatogram.msd.filter.exceptions,
+ org.eclipse.chemclipse.chromatogram.msd.filter.result,
+ org.eclipse.chemclipse.chromatogram.msd.filter.settings
+Bundle-Vendor: ChemClipse

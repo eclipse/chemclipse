@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: PDFBox Extensions Tests
+Bundle-SymbolicName: org.eclipse.chemclipse.pdfbox.extensions.fragment.test
+Bundle-Version: 0.8.0.qualifier
+Bundle-Vendor: ChemClipse
+Fragment-Host: org.eclipse.chemclipse.pdfbox.extensions
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.junit;bundle-version="4.12.0"
