@@ -40,6 +40,9 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.classifier.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.classifier</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.comparison.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos</module>

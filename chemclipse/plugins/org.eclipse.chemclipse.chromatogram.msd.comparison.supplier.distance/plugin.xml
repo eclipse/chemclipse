@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.comparison.massSpectrumComparisonSupplier">
+      <ComparisonSupplier
+            comparatorName="Euclidean Distance"
+            description="This comparator calculates the similarity between two mass spectra with the Euclidean distance algorithm."
+            id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.euclidean"
+            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.EuclideanMassSpectrumComparator"
+            nominalMS="true"
+            tandemMS="false"
+            highResolutionMS="false">
+      </ComparisonSupplier>   
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.comparison.massSpectrumComparisonSupplier">
+      <ComparisonSupplier
+            comparatorName="Cosine"
+            description="This comparator calculates the similarity between two mass spectra with the Cosine value."
+            id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.cosine"
+            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.CosineMassSpectrumComparator"
+            nominalMS="true"
+            tandemMS="false"
+            highResolutionMS="false">
+      </ComparisonSupplier>   
+   </extension>   
+
+</plugin>
