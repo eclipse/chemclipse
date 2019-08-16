@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.rcp.app.ui.commandLineProcessor">
+      <CommandLineProcessor
+            description="Automate the peak integration and identification."
+            hasArguments="true"
+            id="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.commandLineProcessor"
+            option="peakidentbatchfile"
+            processor="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.cli.Processor">
+      </CommandLineProcessor>
+   </extension>
+
+</plugin>
