@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter normalizes all signals of a chromatogram."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.core.ChromatogramFilter"
+            filterName="Normalizer"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.FilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

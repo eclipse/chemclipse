@@ -134,6 +134,9 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay</module>
