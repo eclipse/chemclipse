@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.classifier.chromatogramClassifierSupplier">
+      <ChromatogramClassifierSupplier
+            classifier="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.core.Classifier"
+            classifierName="WNC Classifier"
+            classifierSettings="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.ClassifierSettings"
+            description="This classifier detects the water, nitrogene and carbon dioxide ratios in a chromatogram."
+            id="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc">
+      </ChromatogramClassifierSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
