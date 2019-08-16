@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads and writes OpenChrom XML chromatograms"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.openchromx.converter.ChromatogramExportConverter"
+            fileExtension=".chrom"
+            filterName="OpenChrom XML Chromatogram (*.chrom)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.openchromx"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.openchromx.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.openchromx.converter.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="true">
+      </ChromatogramSupplier>
+   </extension>
+
+</plugin>

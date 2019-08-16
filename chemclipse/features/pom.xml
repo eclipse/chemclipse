@@ -51,6 +51,7 @@
 <module>org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.feature</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.mzdata.feature</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.mzml.feature</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.openchromx.feature</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.svg.feature</module>
 <module>org.eclipse.chemclipse.msd.identifier.supplier.nist.feature</module>
 <module>org.eclipse.chemclipse.msd.identifier.supplier.proteoms.feature</module>
