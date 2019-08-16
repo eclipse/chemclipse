@@ -26,6 +26,7 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.feature</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.feature</module>

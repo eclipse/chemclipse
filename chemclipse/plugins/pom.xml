@@ -114,6 +114,9 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.integrator.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.integrator.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.integrator</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.fragment.test</module>
