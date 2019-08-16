@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.modelContribution"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui.preferences.peakDetectorPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePage"
+            name="First Derivative Peak Detector">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.PreferencePageMSD"
+            id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePageMSD"
+            name="MSD">
+      </page>     
+      <page
+            category="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.PreferencePageCSD"
+            id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePageCSD"
+            name="CSD">
+      </page>     
+      <page
+            category="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.PreferencePageWSD"
+            id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences.firstDerivativePeakDetectorPreferencePageWSD"
+            name="WSD">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc_peakdetector.xml">
+      </toc>
+   </extension>
+
+</plugin>

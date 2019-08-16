@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.peak.detector.peakDetectorSupplier">
+      <PeakDetector
+            description="Implementation of a first derivative peak detector."
+            id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.firstderivative"
+            peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorMSD"
+            peakDetectorName="Peak Detector First Derivative (MSD)"
+            peakDetectorSettings="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD">
+      </PeakDetector>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.csd.peak.detector.peakDetectorSupplier">
+      <PeakDetector
+            description="Implementation of a first derivative peak detector."
+            id="org.eclipse.chemclipse.chromatogram.csd.peak.detector.supplier.firstderivative"
+            peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorCSD"
+            peakDetectorName="Peak Detector First Derivative (CSD)"
+            peakDetectorSettings="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsCSD">
+      </PeakDetector>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.peakDetectorSupplier">
+      <PeakDetector
+            description="Implementation of a first derivative peak detector."
+            id="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.supplier.firstderivative"
+            peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorWSD"
+            peakDetectorName="Peak Detector First Derivative (WSD)">
+      </PeakDetector>
+   </extension>   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

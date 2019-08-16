@@ -128,6 +128,9 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.integrator.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.integrator</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative</module>
