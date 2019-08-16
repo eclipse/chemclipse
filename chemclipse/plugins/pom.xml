@@ -143,6 +143,9 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative</module>

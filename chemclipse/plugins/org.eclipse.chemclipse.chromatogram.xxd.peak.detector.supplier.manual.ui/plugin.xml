@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui.preferences.peakDetectorPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.preferences.manualPeakDetectorPreferencePage"
+            name="Manual Peak Detector">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc_peakdetector.xml">
+      </toc>
+   </extension>
+</plugin>
