@@ -202,6 +202,9 @@
 <module>org.eclipse.chemclipse.msd.converter.supplier.amdis.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.amdis.ui</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.amdis</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.animl.fragment.test</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.animl.ui</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.animl</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv.ui</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv</module>
