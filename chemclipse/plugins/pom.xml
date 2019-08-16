@@ -108,6 +108,9 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein</module>

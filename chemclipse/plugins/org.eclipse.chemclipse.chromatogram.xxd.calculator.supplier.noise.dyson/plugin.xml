@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.xxd.calculator.noiseCalculationSupplier">
+      <NoiseCalculationSupplier
+            description="This supplier implements the S/N calculation by Dyson."
+            calculatorName="Dyson"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson"
+            noiseCalculator="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.core.NoiseCalculator">
+      </NoiseCalculationSupplier>
+   </extension>
+
+</plugin>
