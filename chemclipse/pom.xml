@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2012, 2018 Lablicate GmbH. All rights reserved. This program 
+	and the accompanying materials are made available under the terms of the 
+	Eclipse Public License v1.0 which accompanies this distribution, and is available 
+	at http://www.eclipse.org/legal/epl-v10.html Contributors: Dr. Philip Wenig 
+	- created the pom to build the plug-ins -->
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.eclipse.chemclipse</groupId>
+	<artifactId>master</artifactId>
+	<version>0.8.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<!-- USE MAVEN 3.0 -->
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+	<!-- PROPERTIES -->
+	<properties>
+		<!-- VERSIONS -->
+		<tycho.version>1.1.0</tycho.version>
+		<tycho-extras.version>1.1.0</tycho-extras.version>
+		<pmd.version>2.7.1</pmd.version>
+		<checkstyle.version>2.9.1</checkstyle.version>
+		<!-- IDS -->
+		<tycho.groupid>org.eclipse.tycho</tycho.groupid>
+		<maven.groupid>org.apache.maven.plugins</maven.groupid>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- definition of the target to use -->
+		<tycho.target.groupId>org.eclipse.chemclipse</tycho.target.groupId>
+		<tycho.target.artifactId>org.eclipse.chemclipse.targetplatform</tycho.target.artifactId>
+		<tycho.target.version>${project.version}</tycho.target.version>
+	</properties>
+	<build>
+		<!-- PLUGINS -->
+		<plugins>
+			<plugin>
+				<groupId>${tycho.groupid}</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>${tycho.groupid}</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>${tycho.groupid}</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<target>
+						<artifact>
+							<groupId>${tycho.target.groupId}</groupId>
+							<artifactId>${tycho.target.artifactId}</artifactId>
+							<version>${tycho.target.version}</version>
+						</artifact>
+					</target>
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>${tycho.groupid}</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>plugin-source</id>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<extraClasspathElements>
+						<extraClasspathElement>
+							<groupId>com.oracle</groupId>
+							<artifactId>javafx</artifactId>
+							<version>8.0.0-SNAPSHOT</version>
+							<systemPath>${java.home}/lib/jfxswt.jar</systemPath>
+							<scope>system</scope>
+						</extraClasspathElement>
+					</extraClasspathElements>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>${tycho.groupid}</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>${maven.groupid}</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>${pmd.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>${maven.groupid}</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${checkstyle.version}</version>
+				<configuration>
+					<enableRulesSummary>false</enableRulesSummary>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
