@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.baselineDetectorSupplier">
+      <BaselineDetectorSupplier
+            baselineDetector="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core.BaselineDetector"
+            description="This baseline detector uses the SNIP algorithm."
+            detectorName="SNIP Baseline Detector"
+            detectorSettings="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.BaselineDetectorSettings"
+            id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.snip">
+      </BaselineDetectorSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.peakFilterSupplier">
+      <PeakFilterSupplier
+            description="This is a SNIP Peak MS optimization filter."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core.PeakFilter"
+            filterName="SNIP Peak Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.PeakFilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.snip.peak">
+      </PeakFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.massSpectrumFilterSupplier">
+      <MassSpectrumFilterSupplier
+            description="This is a SNIP Mass Spectrum optimization filter."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core.MassSpectrumFilter"
+            filterName="SNIP MassSpectrum Filter"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.snip.massspectrum">
+      </MassSpectrumFilterSupplier>
+   </extension>   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

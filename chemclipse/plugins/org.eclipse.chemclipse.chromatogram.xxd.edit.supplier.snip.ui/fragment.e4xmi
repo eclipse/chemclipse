@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_ZuPKQK9dEeK8N6YSg9UECw">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_SQTfcK9lEeK8N6YSg9UECw" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_gm_4MK9lEeK8N6YSg9UECw" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.command.detector" commandName="SNIP Baseline Detector"/>
+    <elements xsi:type="commands:Command" xmi:id="_ozZRwGN_EeSTIbm1OKHvbA" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.command.filterSelectedPeak" commandName="SNIP Filter Selected Peak"/>
+    <elements xsi:type="commands:Command" xmi:id="_QtWsIGP-EeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.command.filterAllPeaks" commandName="SNIP Filter All Peaks"/>
+    <elements xsi:type="commands:Command" xmi:id="_OlHfkPB6Eeev9sLsv2ZXcQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.command.filterMassSpectrum" commandName="SNIP Filter Mass Spectrum"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_StsmEK9lEeK8N6YSg9UECw" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_xeidEK9lEeK8N6YSg9UECw" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handler.detector" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui/org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handlers.DetectorHandler" command="_gm_4MK9lEeK8N6YSg9UECw"/>
+    <elements xsi:type="commands:Handler" xmi:id="_wRFLUGN_EeSTIbm1OKHvbA" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handler.filterSelectedPeak" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui/org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handlers.FilterHandlerSelectedPeak" command="_ozZRwGN_EeSTIbm1OKHvbA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_ZXKakGP-EeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handler.filterAllPeaks" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui/org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handlers.FilterHandlerAllPeaks" command="_QtWsIGP-EeSlDuFT8RyH7A"/>
+    <elements xsi:type="commands:Handler" xmi:id="_WKDQoPB6Eeev9sLsv2ZXcQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handler.filterMassSpectrum" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui/org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handlers.FilterHandlerMassSpectrum" command="_OlHfkPB6Eeev9sLsv2ZXcQ"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_TBYXEK9lEeK8N6YSg9UECw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_42HuoK9lEeK8N6YSg9UECw" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handledmenuitem.detector" label="SNIP Baseline Detector" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/baselineSnip.gif" command="_gm_4MK9lEeK8N6YSg9UECw">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_4ysAkAVpEea6VKKU8xZa-Q" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_5k7VQGN_EeSTIbm1OKHvbA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.peak">
+    <elements xsi:type="menu:Menu" xmi:id="_jaCqMGP9EeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.menu.filter" label="SNIP">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_N6-zYASCEeaL1b-1PIqZow" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_7SQZwGN_EeSTIbm1OKHvbA" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handledmenuitem.filterSelectedPeak" label="SNIP Filter Selected Peak" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/snipMassSpectrumPeak.gif" command="_ozZRwGN_EeSTIbm1OKHvbA"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_pM6yUGP-EeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handledmenuitem.filterAllPeaks" label="SNIP Filter All Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/snipMassSpectrumPeaks.gif" command="_QtWsIGP-EeSlDuFT8RyH7A"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Aoa-YPB-Eeev9sLsv2ZXcQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.spectrum.baselinecorrection">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_sVeJ8PB6Eeev9sLsv2ZXcQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handledmenuitem.filterMassSpectrum" label="SNIP Filter Mass Spectrum" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/baselineSnip.gif" command="_OlHfkPB6Eeev9sLsv2ZXcQ"/>
+  </fragments>
+</fragment:ModelFragments>
