@@ -63,6 +63,7 @@
 <module>org.eclipse.chemclipse.rcp.app.test.feature</module>
 <module>org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.feature</module>
 <module>org.eclipse.chemclipse.ux.feature</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.ascii.feature</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.feature</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.gson.feature</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.feature</module>

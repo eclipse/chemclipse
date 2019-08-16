@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.massSpectrumSupplier">
+      <MassSpectrumSupplier
+            description="Reads an writes ASCII mass spectra."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.ascii.core.MassSpectrumExportConverter"
+            fileExtension=".ascii"
+            filterName="ASCII Mass Spectra (*.ascii)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.ascii"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.ascii.core.MassSpectrumImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.ascii.io.MagicNumberMatcher"
+            isExportable="false"
+            isImportable="true">
+      </MassSpectrumSupplier>
+   </extension>
+</plugin>

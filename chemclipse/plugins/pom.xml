@@ -291,6 +291,9 @@
 <module>org.eclipse.chemclipse.xir.converter</module>
 <module>org.eclipse.chemclipse.xir.model.fragment.test</module>
 <module>org.eclipse.chemclipse.xir.model</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.ascii.fragment.test</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.ascii.ui</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.ascii</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.fragment.test</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.chemclipse</module>
