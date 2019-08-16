@@ -20,6 +20,9 @@
 <module>org.eclipse.chemclipse.chromatogram.batchprocess.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.batchprocess</module>
 <module>org.eclipse.chemclipse.chromatogram.csd.filter.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset</module>
 <module>org.eclipse.chemclipse.chromatogram.csd.filter.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.csd.filter</module>
 <module>org.eclipse.chemclipse.chromatogram.csd.identifier.fragment.test</module>

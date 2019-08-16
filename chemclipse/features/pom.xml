@@ -13,6 +13,7 @@
 	<name>ChemClipse::Features</name>
 
 	<modules>
+<module>org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.feature</module>
