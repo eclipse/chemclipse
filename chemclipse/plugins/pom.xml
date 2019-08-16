@@ -103,6 +103,9 @@
 <module>org.eclipse.chemclipse.model.fragment.test</module>
 <module>org.eclipse.chemclipse.model</module>
 <module>org.eclipse.chemclipse.msd.converter.fragment.test</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.csv.fragment.test</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.csv.ui</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.csv</module>
 <module>org.eclipse.chemclipse.msd.converter.ui</module>
 <module>org.eclipse.chemclipse.msd.converter</module>
 <module>org.eclipse.chemclipse.msd.model.fragment.test</module>
