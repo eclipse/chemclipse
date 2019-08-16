@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Exports Chromatograms to SVG format."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.svg.converter.ChromatogramExportConverter"
+            fileExtension=".svg"
+            filterName="SVG Chromatogram (*.svg)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.svg"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.svg.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.svg.converter.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>
+
+</plugin>
