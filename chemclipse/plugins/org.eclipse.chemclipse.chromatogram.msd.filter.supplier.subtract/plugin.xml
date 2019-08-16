@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter applies the Subtract filter to a chromatogram."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.core.ChromatogramFilter"
+            filterName="Subtract Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ChromatogramFilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.chromatogram">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.peakFilterSupplier">
+      <PeakFilterSupplier
+            description="This filter applies the Subtract filter to a list of peaks."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.core.PeakFilter"
+            filterName="Subtract Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.PeakFilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.peak">
+      </PeakFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.massSpectrumFilterSupplier">
+      <MassSpectrumFilterSupplier
+            description="This filter applies the Subtract filter to a list of mass spectra."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.core.MassSpectrumFilter"
+            filterName="Subtract Filter"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.massspectrum">
+      </MassSpectrumFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>   
+</plugin>

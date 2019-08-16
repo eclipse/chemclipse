@@ -64,6 +64,9 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass</module>
