@@ -10,10 +10,9 @@
 
 	<artifactId>org.eclipse.chemclipse.utils.plugins</artifactId>
 	<packaging>pom</packaging>
-	<name>ChemClipse::Utils::Plugins</name>
+	<name>ChemClipse::Plugins</name>
 
 	<modules>
-<module>org.eclipse.chemclipse.rcp.app.test</module>
-<module>org.eclipse.chemclipse.utils</module>
+		<module>org.eclipse.chemclipse.rcp.app.test</module>
 	</modules>
 </project>

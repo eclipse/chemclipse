@@ -10,9 +10,9 @@
 
 	<artifactId>org.eclipse.chemclipse.utils.features</artifactId>
 	<packaging>pom</packaging>
-	<name>ChemClipse::Utils::Features</name>
+	<name>ChemClipse::Features</name>
 
 	<modules>
-<module>org.eclipse.chemclipse.rcp.app.test.feature</module>
+		<module>org.eclipse.chemclipse.rcp.app.test.feature</module>
 	</modules>
 </project>

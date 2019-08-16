@@ -12,25 +12,25 @@
 	<artifactId>master</artifactId>
 	<version>0.8.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<!-- USE MAVEN 3.0 -->
 	<prerequisites>
 		<maven>3.0</maven>
 	</prerequisites>
-	<!-- PROPERTIES -->
 	<properties>
-		<!-- VERSIONS -->
-		<tycho.version>1.1.0</tycho.version>
-		<tycho-extras.version>1.1.0</tycho-extras.version>
-		<pmd.version>2.7.1</pmd.version>
-		<checkstyle.version>2.9.1</checkstyle.version>
-		<!-- IDS -->
-		<tycho.groupid>org.eclipse.tycho</tycho.groupid>
-		<maven.groupid>org.apache.maven.plugins</maven.groupid>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- versions for plugins to use -->
+		<tycho.version>1.4.0</tycho.version>
+		<tycho-extras.version>1.4.0</tycho-extras.version>
+		<pmd.version>3.12.0</pmd.version>
+		<checkstyle.version>3.1.0</checkstyle.version>
+		<maven-install-plugin.version>2.5.2</maven-install-plugin.version>
 		<!-- definition of the target to use -->
 		<tycho.target.groupId>org.eclipse.chemclipse</tycho.target.groupId>
 		<tycho.target.artifactId>org.eclipse.chemclipse.targetplatform</tycho.target.artifactId>
 		<tycho.target.version>${project.version}</tycho.target.version>
+		<!-- other settings -->
+		<tycho.groupid>org.eclipse.tycho</tycho.groupid>
+		<maven.groupid>org.apache.maven.plugins</maven.groupid>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<skip.install>false</skip.install>
 	</properties>
 	<build>
 		<!-- PLUGINS -->
@@ -130,6 +130,14 @@
 					<enableRulesSummary>false</enableRulesSummary>
 				</configuration>
 			</plugin>
+			<plugin>
+            <groupId>${maven.groupid}</groupId>
+            <artifactId>maven-install-plugin</artifactId>
+            <version>${maven-install-plugin.version}</version>
+            <configuration>
+                <skip>${skip.install}</skip>
+            </configuration>
+        </plugin>
 		</plugins>
 	</build>
 </project>
