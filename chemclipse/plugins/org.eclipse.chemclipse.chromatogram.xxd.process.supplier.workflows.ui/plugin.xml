@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.editors.EditorSampleQuant"
+            extensions="sqr"
+            icon="icons/16x16/report.gif"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.editors.editorSampleQuant"
+            name="Sample Quant Report">
+      </editor>  
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+      		category="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePage"
+            name="Workflow Preferences">
+      </page>
+      <page
+      		category="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.PreferencePageSampleQuant"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePageSampleQuant"
+            name="Sample Quant">
+      </page>           
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Processors"
+            id="org.eclipse.chemclipse.processors">
+      </category>
+      <wizard
+            name="Sample Quant Report"
+            icon="icons/16x16/chromatogram.gif"
+            category="org.eclipse.chemclipse.processors"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.samplequant.WizardSampleQuant"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.samplequant.WizardSampleQuant">
+      </wizard>
+   </extension>
+</plugin>

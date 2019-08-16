@@ -1,0 +1,5 @@
+#NAME	CAS
+Dodekan	000112-40-3
+Bisphenyl	000092-52-4
+4-Chlorobiphenyl	002051-62-9
+Methylpalmiate	000112-39-0
