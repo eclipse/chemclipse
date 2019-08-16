@@ -98,6 +98,9 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover</module>

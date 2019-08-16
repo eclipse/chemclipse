@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="__FTU8DlJEeKPNuw33USp1w">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_qV-z8DlOEeKPNuw33USp1w" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_r9I_ADlOEeKPNuw33USp1w" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.command.filter" commandName="Savitzky-Golay Smoother"/>
+    <elements xsi:type="commands:Command" xmi:id="_RfVKgBDSEei3erbzL7KMaw" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.command.ms.filter" commandName="Savitzky-Golay Mass Spectra Smoother"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_4btYgDlOEeKPNuw33USp1w" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_86kwgDlOEeKPNuw33USp1w" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handler.filterMSD" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handlers.FilterHandler" command="_r9I_ADlOEeKPNuw33USp1w"/>
+    <elements xsi:type="commands:Handler" xmi:id="_dKz6MBDSEei3erbzL7KMaw" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handler.0" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handlers.FilterHandlerMassSpectrum" command="_RfVKgBDSEei3erbzL7KMaw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_H-RugDlPEeKPNuw33USp1w" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_KK4wADlPEeKPNuw33USp1w" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handledmenuitem.filterMSD" label="Savitzky-Golay Smoother" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/savitzkygolay.gif" command="_r9I_ADlOEeKPNuw33USp1w">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_OBoPYAP9Eea988xguwzXfA" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_z7KskBDSEei3erbzL7KMaw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.spectrum.filter">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_jC2roBDSEei3erbzL7KMaw" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handledmenuitem.filterMS" label="Savitzky-Golay Smoother" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/savitzkygolay.gif" command="_RfVKgBDSEei3erbzL7KMaw"/>
+  </fragments>
+</fragment:ModelFragments>

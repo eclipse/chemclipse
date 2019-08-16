@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature"
+      label="Savitzky-Golay Filter"
+      version="0.8.0.qualifier"
+      provider-name="ChemClipse">
+
+   <description url="http://www.chemclipse.net/plugins/filter/savitzkygolay">
+      This filter enables to apply a Savitzky-Golay smoothing on the selected
+range of a chromatogram.
+   </description>
+
+   <copyright url="http://www.chemclipse.net/plugins/filter/savitzkygolay">
+      This feature is published under the Eclispe Public License v1.0.
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      Copyright (c) 2015, 2018 Lablicate GmbH.
+
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License
+v1.0 which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+   </license>
+
+   <url>
+      <discovery label="SavitzkyGolayFilter" url="http://www.chemclipse.net/plugins/filter/savitzkygolay/"/>
+   </url>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

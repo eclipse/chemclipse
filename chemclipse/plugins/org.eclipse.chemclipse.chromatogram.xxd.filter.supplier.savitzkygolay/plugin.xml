@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter applies the Savitzky-Golay filter."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.ChromatogramFilter"
+            filterName="Savitzky-Golay Smoothing"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.massSpectrumFilterSupplier">
+      <MassSpectrumFilterSupplier
+            description="This is a Savitzky-Golay Mass Spectrum optimization filter."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.MassSpectrumFilter"
+            filterName="Savitzky-Golay MassSpectrum Filter"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.savitzkygolay.massspectrum">
+      </MassSpectrumFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
