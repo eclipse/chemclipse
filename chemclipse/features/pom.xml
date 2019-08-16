@@ -24,6 +24,7 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.feature</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.feature</module>
