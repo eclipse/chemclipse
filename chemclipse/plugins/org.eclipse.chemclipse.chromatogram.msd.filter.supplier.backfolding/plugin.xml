@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter applies the backfolding algorithm."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.core.ChromatogramFilter"
+            filterName="Backfolding Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ChromatogramFilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

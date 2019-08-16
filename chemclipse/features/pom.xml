@@ -17,6 +17,7 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.feature</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.feature</module>
