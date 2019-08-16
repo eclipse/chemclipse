@@ -19,6 +19,7 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.feature</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.feature</module>

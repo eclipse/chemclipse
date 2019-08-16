@@ -67,6 +67,9 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.identifier.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.identifier</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.peak.detector</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.fragment.test</module>
