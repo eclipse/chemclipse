@@ -1,0 +1,23 @@
+/*
+ * Copyright (c) 2016, 2017 Dr. Philip Wenig.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
+ */
+#pcaButton {
+	-fx-background-color: 
+		linear-gradient(#FF0000 0%, #A50000 20%, #710000 80%, #330000 100%);
+	-fx-background-insets: 0,1,4,5,6;
+	-fx-background-radius: 9,8,5,4,3;
+	-fx-padding: 15 30 15 30;
+	-fx-font-family: "Arial";
+	-fx-font-size: 16px;
+	-fx-font-weight: bold;
+	-fx-text-fill: white;
+	-fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
+}

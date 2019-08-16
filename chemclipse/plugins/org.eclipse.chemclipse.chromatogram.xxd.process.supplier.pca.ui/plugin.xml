@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.modelContribution"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+      		category="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferencePage"
+            name="PCA Preferences">
+      </page> 
+      <page
+      		category="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceScorePlot2DPage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferenceScorePlot2DPage"
+            name="Score plot 2D Preferences">
+      </page>
+      <page
+      		category="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceLoadingPlot2DPage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferenceLoadingPlot2DPage"
+            name="Loading plot 2D Preferences">
+      </page>
+      </extension>
+   <extension
+         point="org.eclipse.chemclipse.ux.extension.ui.welcometile">
+      <WelcomeTile
+            Description="Starts a new PCA Analysis"
+            PerspectiveId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective"
+            Section="PCA Analysis"
+            defaultShow="false">
+      </WelcomeTile>         
+   </extension>   
+</plugin>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="292.0" prefWidth="428.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PreprocessingController">
+   <children>
+      <BorderPane prefHeight="385.0" prefWidth="428.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <ScrollPane fitToWidth="true" prefHeight="349.0" prefWidth="428.0" BorderPane.alignment="CENTER">
+               <content>
+                  <VBox minWidth="300.0" prefHeight="283.0" prefWidth="422.0">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <children>
+                        <TitledPane animated="false" collapsible="false" prefHeight="219.0" prefWidth="396.0" text="Data Preprocessing">
+                           <content>
+                              <GridPane style="-fx-background-color: white;">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0" prefWidth="200.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="675.0" minWidth="10.0" prefWidth="202.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints maxHeight="-Infinity" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <ComboBox fx:id="cReplaceEmptyValue" prefHeight="20.0" prefWidth="203.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label text="Replace empty value with" GridPane.rowIndex="1" />
+                                    <CheckBox fx:id="bTransformData" mnemonicParsing="false" text="Transform Data" GridPane.rowIndex="2" />
+                                    <ComboBox fx:id="cTransformData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <CheckBox fx:id="bCenterData" mnemonicParsing="false" text="Center Data" GridPane.rowIndex="3" />
+                                    <ComboBox fx:id="cCenterData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <CheckBox fx:id="bScaleData" mnemonicParsing="false" text="Scale Data" GridPane.rowIndex="4" />
+                                    <ComboBox fx:id="cScaleData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <ComboBox fx:id="cNormalizeData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" />
+                                    <CheckBox fx:id="bNormalizeData" mnemonicParsing="false" text="Normalize Data" />
+                                 </children>
+                              </GridPane>
+                           </content>
+                        </TitledPane>
+                        <TitledPane animated="false" collapsible="false" prefHeight="113.0" prefWidth="432.0" text="Settings">
+                           <content>
+                              <GridPane prefHeight="57.0" prefWidth="426.0" style="-fx-background-color: white;" vgap="5.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0" prefWidth="200.0" />
+                                    <ColumnConstraints />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <CheckBox fx:id="bRemoveVariables" mnemonicParsing="false" text="Remove Variables, which contains none or one value" GridPane.columnSpan="2" />
+                                    <CheckBox fx:id="bUseOnlySelectedVariables" mnemonicParsing="false" text="Use only selected Variables for data preprocessing" GridPane.rowIndex="1" />
+                                 </children>
+                              </GridPane>
+                           </content>
+                        </TitledPane>
+                     </children>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
