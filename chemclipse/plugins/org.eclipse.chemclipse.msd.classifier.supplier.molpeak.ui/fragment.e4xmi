@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_Fs5iADyFEeavHq4qdUJ53g">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_x-z74DyGEeavHq4qdUJ53g" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_5o7H4DyGEeavHq4qdUJ53g" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.command.identifyAllPeaks" commandName="Identify All Peaks"/>
+    <elements xsi:type="commands:Command" xmi:id="_9YtMUDyGEeavHq4qdUJ53g" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.command.identifySelectedPeak" commandName="Identify Selected Peak"/>
+    <elements xsi:type="commands:Command" xmi:id="_9u1NUDyGEeavHq4qdUJ53g" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.command.identifySelectedMassSpectrum" commandName="Identify Selected Mass Spectrum"/>
+    <elements xsi:type="commands:Command" xmi:id="_OglbYD0YEeaAOYzL9Ma4Eg" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.command.classifier" commandName="BasePeak Classifier"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_yT4M8DyGEeavHq4qdUJ53g" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_EazWEDyHEeavHq4qdUJ53g" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handler.identifyAllPeaks" contributionURI="bundleclass://org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handlers.IdentifyAllPeaksHandler" command="_5o7H4DyGEeavHq4qdUJ53g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_FDo3sDyHEeavHq4qdUJ53g" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handler.identifySelectedPeak" contributionURI="bundleclass://org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handlers.IdentifySelectedPeakHandler" command="_9YtMUDyGEeavHq4qdUJ53g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_F1iOsDyHEeavHq4qdUJ53g" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handler.identifySelectedMassSpectrum" contributionURI="bundleclass://org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handlers.IdentifySelectedMassSpectrumHandler" command="_9u1NUDyGEeavHq4qdUJ53g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_SV78UD0YEeaAOYzL9Ma4Eg" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handler.classifier" contributionURI="bundleclass://org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handlers.ClassifierHandler" command="_OglbYD0YEeaAOYzL9Ma4Eg"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ykDW8DyGEeavHq4qdUJ53g" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier">
+    <elements xsi:type="menu:Menu" xmi:id="_TCO5gDyHEeavHq4qdUJ53g" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.menu.molpeak" label="BasePeakIdent">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_mPgmsDyHEeavHq4qdUJ53g" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_b8qd4DyHEeavHq4qdUJ53g" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handledmenuitem.identifyallpeaks" label="Identify All Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/nist_peaks.gif" command="_5o7H4DyGEeavHq4qdUJ53g"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_cTb_IDyHEeavHq4qdUJ53g" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handledmenuitem.identifyselectedpeak" label="Identify Selected Peak" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/nist_peak.gif" command="_9YtMUDyGEeavHq4qdUJ53g"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_cm670DyHEeavHq4qdUJ53g" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handledmenuitem.identifyselectedmassspectrum" label="Identify Selected Mass Spectrum" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/nist_massSpectrum.gif" command="_9u1NUDyGEeavHq4qdUJ53g"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_XiCNwD0YEeaAOYzL9Ma4Eg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.classifier">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_adUTID0YEeaAOYzL9Ma4Eg" elementId="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.handledmenuitem.molpeakclassifier" label="BasePeak Classifier" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/wnc.gif" command="_OglbYD0YEeaAOYzL9Ma4Eg">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_eWFUcD0YEeaAOYzL9Ma4Eg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

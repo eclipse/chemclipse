@@ -1,0 +1,1860 @@
+NAME: Toluene
+RI: 0.000
+RT: 0.000
+COMMENTS: P
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(91 1000) (92 680) (65 110) (90 100) (39 90) 
+(51 70) (45 50) (63 50) (93 50) (89 30) 
+
+
+NAME: Phenol
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(94 1000) (39 210) (66 200) (65 180) (47 80) 
+(55 80) (95 70) (38 60) (37 40) (63 40) 
+
+
+NAME: Styrene
+RI: 0.000
+RT: 0.000
+COMMENTS: P
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(104 1000) (103 400) (78 320) (51 260) (77 290) 
+(50 120) (43 90) (52 90) (39 80) (102 80) 
+
+
+NAME: Benzene, ethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: P
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(91 1000) (106 270) (51 120) (39 80) (65 80) 
+(77 80) (78 80) (92 70) (43 60) (50 50) 
+
+
+NAME: Benzene, 1,3-/1,4-dimethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: P
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(91 1000) (106 560) (105 260) (39 150) (51 150) 
+(77 130) (65 80) (78 80) (92 70) (50 60) 
+
+
+NAME: Benzene, 1,2-dimethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: P
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(91 1000) (106 480) (105 220) (39 150) (51 150) 
+(77 130) (43 100) (65 80) (78 80) (92 70) 
+
+
+NAME: Benzaldehyde
+RI: 0.000
+RT: 0.000
+COMMENTS: P
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(77 1000) (105 880) (106 880) (51 410) (50 280) 
+(78 180) (52 120) (74 90) (39 80) (37 60) 
+
+
+NAME: Anisol = Benzene, methoxy-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(108 1000) (78 320) (65 300) (77 110) (93 110) 
+(39 60) (79 60) (109 60) (51 50) (50 30) 
+
+
+NAME: Benzylalcohol
+RI: 0.000
+RT: 0.000
+COMMENTS: P
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(108 1000) (79 960) (107 760) (77 520) (51 170) 
+(91 170) (78 130) (80 90) (90 90) (50 80) 
+
+
+NAME: o-Cresol
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(108 1000) (107 720) (79 250) (77 240) (90 220) 
+(39 170) (53 150) (51 130) (80 80) (89 80) 
+
+
+NAME: m-/p-Cresol
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(107 1000) (118 880) (77 200) (79 150) (39 140) 
+(53 140) (51 120) (50 70) (90 70) (52 60) 
+
+
+NAME: Catechol
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(110 1000) (64 300) (63 110) (92 90) (55 70) 
+(81 70) (53 60) (111 60) (39 40) (51 30) 
+
+
+NAME: Acetophenone
+RI: 0.000
+RT: 0.000
+COMMENTS: P
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(105 1000) (77 800) (120 310) (51 280) (43 230) 
+(50 120) (78 80) (39 60) (106 60) (52 40) 
+
+
+NAME: Phenol, 4-vinyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(120 1000) (91 480) (119 290) (39 250) (65 210) 
+(63 130) (51 110) (121 110) (94 100) (38 60) 
+
+
+NAME: Anisol, 3-/4-methyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(122 1000) (121 440) (107 260) (77 230) (79 180) 
+(91 170) (123 80) (51 70) (78 70) (39 50) 
+
+
+NAME: Phenol, 2,6-dimethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(122 1000) (107 720) (121 360) (77 240) (91 160) 
+(39 150) (79 150) (51 120) (78 120) (53 90) 
+
+
+NAME: Phenol, 2-ethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(107 1000) (122 360) (77 220) (39 100) (79 90) 
+(51 80) (108 70) (53 50) (78 50) (65 40) 
+
+
+NAME: Phenol, 2,4-/2,5-dimethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(122 1000) (107 800) (121 440) (77 230) (39 130) 
+(91 130) (79 120) (51 110) (53 810) (78 80) 
+
+
+NAME: Phenol, 2,3-dimethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(122 1000) (107 960) (121 360) (77 260) (39 160) 
+(79 150) (91 140) (51 120) (78 100) (53 80) 
+
+
+NAME: Phenol, 3-ethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(107 1000) (122 440) (77 190) (39 120) (94 70) 
+(108 70) (51 60) (53 50) (91 50) (121 50) 
+
+
+NAME: Phenol, 3,5-dimethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(122 1000) (107 840) (121 320) (77 160) (45 80) 
+(79 80) (91 80) (123 80) (39 70) (51 60) 
+
+
+NAME: Phenol, 4-ethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(107 1000) (122 290) (77 120) (108 80) (39 70) 
+(51 40) (53 40) (65 30) (91 30) (121 30) 
+
+
+NAME: Benzaldehyde, 4-hydroxy-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(121 1000) (122 800) (93 320) (65 270) (39 210) 
+(123 70) (63 60) (38 40) (50 40) (53 40) 
+
+
+NAME: Guaiacol
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(109 1000) (124 840) (81 480) (53 160) (39 110) 
+(52 100) (51 80) (65 60) (110 60) (125 60) 
+
+
+NAME: Catechol, 3-methyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(124 1000) (78 400) (123 360) (77 130) (39 110) 
+(51 110) (105 100) (106 90) (125 90) (107 80) 
+
+
+NAME: Catechol, 4-methyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(124 1000) (123 560) (78 400) (51 200) (39 190) 
+(77 180) (110 140) (107 110) (55 100) (52 90) 
+
+
+NAME: Phenol, 4-allyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(134 1000) (133 360) (91 360) (119 320) (115 280) 
+(77 270) (107 260) (105 190) (39 180) 
+
+
+NAME: Phenol, 4-propenyl- (cis)
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(134 1000) (133 360) (91 210) (135 120) (77 100) 
+(115 100) (105 90) (107 80) (51 70) (39 60) 
+
+
+NAME: Phenol, 4-propenyl- (trans)
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(134 1000) (133 800) (107 360) (77 210) (105 200) 
+(39 150) (51 150) (43 120) (65 110) 
+
+
+NAME: Anisol, 2,4-/2,5-dimethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(136 1000) (121 720) (91 200) (77 170) (135 150) 
+(105 80) (137 80) (122 70) (93 50) (65 40) 
+
+
+NAME: Phenol, 2-propyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(107 1000) (136 270) (77 150) (108 90) (79 80) 
+(39 70) (51 50) (53 30) (78 30) (91 30) 
+
+
+NAME: Phenol, 4-propyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(107 1000) (136 180) (77 80) (108 80) (39 40) 
+(51 30) (53 20) (65 20) (78 20) (40 10) 
+
+
+NAME: Guaiacol, 3-methyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(123 1000) (138 840) (43 200) (77 120) (67 100) 
+(95 100) (39 90) (40 90) (124 80) (51 60) 
+
+
+NAME: Guaiacol, 4-methyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(138 1000) (123 880) (95 360) (55 200) (77 190) 
+(39 180) (67 160) (51 130) (41 100) (65 100) 
+
+
+NAME: unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: U
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(138 1000) (107 290) (109 240) (69 130) (108 120) 
+(67 100) (39 90) (66 80) (95 80) (77 70) 
+
+
+NAME: Benzoic acid, 4-hydroxy-
+RI: 0.000
+RT: 0.000
+COMMENTS: H
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(121 1000) (138 800) (93 260) (65 250) (39 200) 
+(43 140) (55 100) (63 80) (122 70) (53 60) 
+
+
+NAME: Catechol, 3-methoxy-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(140 1000) (125 760) (97 360) (51 130) (79 90) 
+(107 90) (141 80) (53 50) (126 50) (39 40) 
+
+
+NAME: Guaiacol, 4-vinyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(150 1000) (135 680) (107 270) (77 250) (39 120) 
+(51 120) (53 100) (151 100) (52 80) (78 80) 
+
+
+NAME: Guaiacol, 3-ethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(152 1000) (137 920) (109 250) (91 120) (77 110) 
+(53 100) (65 100) (79 100) (39 90) (138 90) 
+
+
+NAME: Guaiacol, 4-ethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(137 1000) (152 440) (122 90) (138 90) (53 50) 
+(39 40) (91 40) (94 40) (107 40) (109 40) 
+
+
+NAME: Vanillin
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(151 1000) (152 920) (82 240) (109 190) (53 150) 
+(123 140) (51 130) (52 130) (153 90) (39 80) 
+
+
+NAME: Syringol
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(154 1000) (139 440) (111 230) (96 200) (39 140) 
+(93 130) (65 120) (51 110) (53 90) (68 90) 
+
+
+NAME: C10.H10.02.
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(162 1000) (147 920) (151 360) (152 320) (91 270) 
+(130 240) (119 180) (163 160) (65 150) 
+
+
+NAME: C10.H10.02.
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(162 1000) (147 960) (91 440) (119 280) (51 230) 
+(65 230) (102 220) (89 200) (151 200) 
+
+
+NAME: Eugenol
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(164 1000) (149 320) (77 300) (55 260) (103 230) 
+(137 210) (91 200) (39 190) (51 170) 
+
+
+NAME: Isoeugenol (cis)
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(164 1000) (149 250) (55 140) (77 130) (131 130) 
+(103 120) (165 100) (91 90) (104 90) (39 80) 
+
+
+NAME: Isoeugenol (trans)
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(164 1000) (149 300) (77 250) (55 230) (103 190) 
+(121 180) (91 170) (131 170) (39 140) 
+
+
+NAME: Guaiacol, 4-propyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(137 1000) (166 280) (138 100) (122 70) (77 40) 
+(94 40) (51 30) (167 30) (39 20) (53 20) 
+
+
+NAME: Homovanillin
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(137 1000) (166 240) (122 150) (39 120) (94 120) 
+(51 110) (138 90) (77 80) (65 70) (66 60) 
+
+
+NAME: Acetoguaiacone
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(151 1000) (166 400) (123 170) (43 110) (152 90) 
+(52 80) (118 80) (51 70) (65 60) (77 50) 
+
+
+NAME: Syringol, 4-methyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(168 1000) (153 400) (125 190) (53 100) (39 90) 
+(65 90) (169 90) (107 70) (79 60) (110 60) 
+
+
+NAME: Vanillic acid
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(168 1000) (153 680) (97 310) (151 280) (51 210) 
+(52 190) (125 190) (53 160) (79 130) 
+
+
+NAME: Guaiacol, 4-(oxy-allyl)-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(151 1000) (178 520) (137 200) (55 150) (123 140) 
+(52 120) (51 100) (180 100) (108 90) 
+
+
+NAME: Coniferaldehyde
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(178 1000) (135 400) (77 320) (147 320) (107 320) 
+(51 290) (177 230) (89 200) (124 190) 
+
+
+NAME: Syringol, 4-vinyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(180 1000) (165 300) (137 180) (77 110) (122 110) 
+(181 100) (65 80) (39 70) (51 70) (151 70) 
+
+
+NAME: Guaiacyl acetone
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(137 1000) (180 260) (43 190) (122 110) (94 100) 
+(138 90) (51 80) (39 70) (77 610) (65 50) 
+
+
+NAME: Propioguaiacone
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(151 1000) (180 230) (123 150) (52 140) (51 90) 
+(152 90) (65 80) (108 80) (53 60) (55 60) 
+
+
+NAME: Coniferyl alcohol structure isomer
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(137 1000) (180 400) (124 360) (51 280) (55 240) 
+(77 230) (52 220) (65 220) (39 200) (53 190) 
+
+
+NAME: Coniferyl alcohol (cis)
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(137 1000) (180 560) (124 360) (91 390) (77 210) 
+(119 200) (55 190) (151 190) (131 160) 
+
+
+NAME: Coniferyl alcohol (trans)
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(137 1000) (180 800) (124 400) (91 230) (119 190) 
+(55 120) (138 120) (77 110) (103 100) 
+
+
+NAME: Syringol, 3-ethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(182 1000) (167 440) (139 220) (43 140) (124 140) 
+(168 130) (152 120) (183 110) (153 80) 
+
+
+NAME: Syringol, 4-ethyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(167 1000) (182 600) (53 120) (107 120) (77 110) 
+(39 100) (168 100) (79 90) (183 70) (51 60) 
+
+
+NAME: Dihydroconiferyl alcohol
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(137 1000) (182 400) (138 310) (122 80) (77 60) 
+(107 60) (123 60) (91 50) (106 50) (94 40) 
+
+
+NAME: Syringaldehyde
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(182 1000) (181 520) (39 120) (167 120) (111 110) 
+(65 100) (183 100) (51 90) (53 90) (79 80) 
+
+
+NAME: C11.H12.03.
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(192 1000) (177 320) (43 320) (57 280) (131 200) 
+(71 180) (55 170) (132 160) (89 150) 
+
+
+NAME: C11.H12.03.
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(192 1000) (57 400) (43 400) (177 320) (71 270) 
+(131 210) (55 200) (132 180) (85 150) 
+
+
+NAME: Syringol, 4-allyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(194 1000) (167 270) (91 170) (43 140) (119 140) 
+(57 130) (179 110) (195 110) (131 100) 
+
+
+NAME: Propioguaiacone, alpha-oxy-
+RI: 0.000
+RT: 0.000
+COMMENTS: G
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(151 1000) (123 170) (152 100) (43 80) (108 80) 
+(52 70) (65 50) (194 50) (51 40) (77 40) 
+
+
+NAME: Syringol, 4-propenyl- (cis)
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(194 1000) (91 280) (179 200) (77 180) (151 180) 
+(39 170) (65 150) (53 140) (119 140) 
+
+
+NAME: Syringol, 4-propenyl- (trans)
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(194 1000) (91 170) (179 160) (195 120) (77 110) 
+(119 110) (131 100) (151 90) (79 80) 
+
+
+NAME: Syringol, 4-propyl-
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(167 1000) (196 360) (168 110) (197 40) (122 30) 
+(123 30) (53 20) (77 20) (195 20) (181 10) 
+
+
+NAME: Homosyringaldehyde 
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(167 1000) (196 280) (53 100) (168 100) (39 80) 
+(123 80) (122 70) (51 60) (151 60) (106 50) 
+
+
+NAME: Acetosyringone
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(181 1000) (196 520) (43 110) (182 100) (153 70) 
+(197 60) (67 40) (93 30) (108 30) (138 30) 
+
+
+NAME: Syringol, 4-(oxy-allyl)-
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(181 1000) (208 640) (55 320) (43 150) (67 120) 
+(182 120) (65 110) (53 100) (153 100) (39 90) 
+
+
+NAME: Sinapaldehyde
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(208 1000) (165 320) (180 320) (137 230) (167 200) 
+(77 160) (177 160) (51 130) (65 130) 
+
+
+NAME: Syringyl acetone
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(167 1000) (43 240) (210 210) (168 100) (53 50) 
+(123 50) (55 40) (57 40) (122 40) (69 30) 
+
+
+NAME: Propiosyringone
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(181 1000) (210 270) (182 130) (65 70) (39 60) 
+(67 60) (153 60) (53 50) (77 50) (123 40) 
+
+
+NAME: Sinapyl alcohol structure isomer
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(167 1000) (181 760) (210 440) (182 440) (208 440) 
+(153 260) (55 250) (77 180) (107 170) 
+
+
+NAME: Sinapyl alcohol (cis)
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(149 1000) (192 640) (106 440) (77 440) (167 440) 
+(78 400) (91 360) (210 360) (121 320) 
+
+
+NAME: Sinapyl alcohol (trans)
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(210 1000) (167 600) (154 230) (149 220) (182 190) 
+(181 170) (77 120) (211 110) (121 100) 
+
+
+NAME: Dihydrosinapyl alcohol
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(167 1000) (168 960) (212 680) (181 250) (153 170) 
+(77 140) (137 120) (213 110) (123 90) 
+
+
+NAME: Propiosyringone, alpha-oxy-
+RI: 0.000
+RT: 0.000
+COMMENTS: S
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(181 1000) (43 200) (182 120) (67 80) (55 70) 
+(57 70) (65 70) (69 70) (153 70) (224 60) 
+
+
+NAME: Formaldehyde
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 3
+(29 1000) (30 950) (28 450) 
+
+
+
+NAME: Carbon dioxide
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 3
+(44 1000) (45 20) (43 10) 
+
+
+
+NAME: Acetaldehyde
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(29 1000) (44 920) (28 880) (43 850) (42 560) 
+(32 350) (27 270) (41 270) (45 190) 
+
+
+NAME: Methanol
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 6
+(31 1000) (32 750) (29 450) (30 100) (28 20) 
+(33 10) 
+
+
+NAME: Furan
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 8
+(68 1000) (39 960) (58 290) (38 120) (37 80) 
+(42 20) (56 20) (69 20) 
+
+
+NAME: 2-Propenal
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(56 1000) (55 720) (37 130) (38 110) (39 100) 
+(53 100) (36 50) (41 30) (57 30) (45 20) 
+
+
+NAME: Propanal-2-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 11
+(43 1000) (42 150) (72 50) (41 40) (56 30) 
+(37 20) (44 20) (38 10) (39 10) (55 10) 
+(58 10) 
+
+NAME: 2-Methylfuran
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(82 1000) (53 800) (81 720) (39 560) (43 360) 
+(54 200) (51 190) (50 170) (52 100) 
+
+
+NAME: Butyraldehyde = Butanal
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (42 150) (72 110) (41 40) (37 20) 
+(39 20) (57 20) (38 10) (53 10) (56 10) 
+
+
+NAME: Unknown: similar to 1-Penten-3-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(55 1000) (43 60) (70 40) (84 40) (56 30) 
+(37 20) (42 10) (49 10) (53 10) 
+
+
+NAME: 2,3-Butanedione
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 8
+(43 1000) (86 100) (42 80) (45 80) (55 40) 
+(41 20) (70 10) (72 10) 
+
+
+NAME: Unknown: similar to 3-Pentanone
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 8
+(57 1000) (86 110) (55 70) (58 60) (56 40) 
+(42 30) (37 20) (39 10) 
+
+
+NAME: 2-Butanone
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (72 560) (57 220) (42 180) (44 90) 
+(39 70) (41 50) (40 30) (45 30) (73 30) 
+
+
+NAME: Hydroxyacetaldehyde
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(31 1000) (29 580) (32 550) (60 500) (30 480) 
+(42 320) (58 210) (41 110) (34 80) 
+
+
+NAME: Formic acid
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 7
+(46 1000) (45 800) (44 440) (40 70) (43 70) 
+(47 10) (58 10) 
+
+
+NAME: 2-Butenal (cis or trans)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(41 1000) (70 920) (39 640) (69 440) (42 150) 
+(38 110) (37 90) (71 50) (46 30) (58 20) 
+
+
+NAME: 2-Hydroxypropanal (isomer of compound no. 19)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(45 1000) (43 800) (46 260) (42 130) (41 70) 
+(58 50) (74 50) (39 40) (60 30) (70 30) 
+
+
+NAME: Acetic acid
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(45 1000) (43 880) (60 760) (42 270) (41 140) 
+(44 130) (46 50) (40 40) (61 30) (39 20) 
+
+
+NAME: Hydroxypropanone
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 8
+(43 1000) (42 80) (74 50) (40 40) (44 30) 
+(45 30) (41 20) (39 10) 
+
+
+NAME: 1,2-Dihydroxyethene
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(31 1000) (42 380) (60 270) (43 30) (41 20) 
+(45 20) (55 20) (37 10) (39 10) (47 10) 
+
+
+NAME: Acetic anhydride or 2-Oxo-propanoic acid methyl ester
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 5
+(43 1000) (102 90) (42 20) (59 20) (58 10) 
+
+
+
+NAME: 3-Methylfuran
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(82 1000) (53 760) (81 360) (39 360) (54 200) 
+(50 150) (51 140) (49 60) (83 40) (52 30) 
+
+
+NAME: 2-Propenoic acid methyl ester
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(55 1000) (58 100) (86 70) (57 60) (56 50) 
+(43 30) (37 20) (39 20) (60 10) (69 10) 
+
+
+NAME: 1-Hydroxy-2-butanone
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 11
+(57 1000) (55 90) (56 70) (42 60) (88 60) 
+(41 50) (43 50) (58 50) (38 40) (45 30) 
+(72 30) 
+
+NAME: 1,2-Dihydroxyethane
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (62 480) (42 360) (44 320) (61 180) 
+(45 140) (41 70) (34 70) (58 50) (56 30) 
+
+
+NAME: 3-Hydroxypropanal (isomer of compound no. 19)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(43 1000) (42 520) (73 400) (74 300) (44 40) 
+(45 30) (41 20) (56 10) (60 10) 
+
+
+NAME: 3-Butenal-2-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(84 1000) (55 560) (56 270) (43 130) (53 130) 
+(83 120) (37 90) (38 80) (39 70) (54 70) 
+
+
+NAME: (3H)-Furan-2-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(84 1000) (55 960) (56 110) (54 90) (39 80) 
+(37 40) (38 40) (42 40) (85 30) (53 20) 
+
+
+NAME: (2H)-Furan-3-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(84 1000) (54 840) (55 310) (42 120) (53 70) 
+(41 60) (37 50) (43 50) (58 50) (85 50) 
+
+
+NAME: 3-Furaldehyde
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(95 1000) (39 920) (96 880) (40 320) (38 280) 
+(37 170) (67 100) (94 50) (97 50) 
+
+
+NAME: Isomer of compound no. 33
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (42 100) (41 30) (39 20) (55 20) 
+(72 20) (74 20) (45 10) (54 10) (56 10) 
+
+
+NAME: Butanedial
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(58 1000) (43 600) (57 560) (39 260) (42 200) 
+(55 110) (44 100) (38 70) (41 70) (37 50) 
+
+
+NAME: 2-Hydroxy-3-oxobutanal (isomer of compound no. 31)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 6
+(43 1000) (42 80) (102 70) (39 10) (41 10) 
+(45 10) 
+
+
+NAME: 2-Furaldehyde
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(96 1000) (95 920) (39 600) (38 180) (37 110) 
+(42 50) (94 50) (97 50) (67 40) (41 20) 
+
+
+NAME: Propylfuran (and unknown)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(43 1000) (81 800) (53 450) (110 320) (42 300) 
+(58 300) (60 280) (95 200) (96 180) 
+
+
+NAME: 2,3-Dihydro-5-methylfuran-2-one (= alpha-Angelicalactone)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(55 1000) (43 920) (98 760) (42 220) (39 200) 
+(70 110) (41 100) (53 80) (54 80) (40 70) 
+
+
+NAME: 2-Furfuryl alcohol
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(98 1000) (39 640) (81 640) (41 560) (42 480) 
+(97 480) (53 440) (69 400) (70 310) 
+
+
+NAME: 1-Acetyloxypropane-2-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (42 50) (86 50) (116 30) (73 20) 
+(39 10) (41 10) (53 10) (57 10) (81 10) 
+
+
+NAME: Tetrahydro-4-methyl-3-furanone or 2-Ethyl-butanal
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (72 260) (57 90) (42 70) (39 60) 
+(58 50) (41 40) (55 40) (53 20) (71 20) 
+
+
+NAME: Dihydro-methyl-furanone or Dimethyl-dihydro-furan
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (83 400) (55 360) (98 360) (69 150) 
+(42 110) (39 90) (53 70) (41 50) (70 50) 
+
+
+NAME: 2-Acetylfuran
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(95 1000) (110 560) (39 440) (43 310) (38 140) 
+(96 90) (37 80) (53 60) (42 50) (51 50) 
+
+
+NAME: 2-Butenoic acid methyl ester or Methoxy-dihydrofuran
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(69 1000) (41 720) (39 520) (37 60) (38 50) 
+(70 50) (55 40) (68 40) (58 30) (42 20) 
+
+
+NAME: 3-Furfuryl alcohol
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(41 1000) (98 960) (39 760) (69 560) (97 520) 
+(42 480) (53 360) (81 360) (70 250) 
+
+
+NAME: 4-Cyclopentene-1,3-dione
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(42 1000) (96 640) (68 480) (54 440) (39 400) 
+(57 180) (38 110) (41 110) (37 100) 
+
+
+NAME: 2- or 3-Pentenoic acid methyl ester
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(55 1000) (68 100) (39 70) (42 70) (56 50) 
+(41 30) (57 30) (86 30) (37 20) (58 20) 
+
+
+NAME: Similar to compound no. 89
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(44 1000) (43 800) (42 120) (74 90) (102 80) 
+(45 60) (34 50) (72 30) (54 10) (100 10) 
+
+
+NAME: Dihydro-methyl-furanone (isomer of compound no. 36)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(98 1000) (55 520) (42 400) (69 240) (41 230) 
+(43 230) (39 180) (70 100) (56 50) 
+
+
+NAME: Dihydro-methyl-furanone (isomer of compound no. 36 or 47)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(39 1000) (42 950) (70 780) (43 530) (41 510) 
+(68 460) (98 400) (69 350) (55 350) 
+
+
+NAME: Unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(73 1000) (58 720) (43 520) (42 360) (55 290) 
+(39 240) (57 220) (69 150) (98 130) 
+
+
+NAME: 5-Methyl-2-furaldehyde
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(110 1000) (109 880) (53 640) (51 150) (81 140) 
+(50 110) (60 110) (58 90) (111 90) 
+
+
+NAME: Isomer of compound no. 57: unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(55 1000) (43 680) (86 560) (114 520) (56 480) 
+(58 360) (42 320) (57 180) (44 130) 
+
+
+NAME: 2,3-Dihydroxyhex-1-ene-4-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (57 720) (42 140) (56 110) (41 100) 
+(69 80) (73 60) (112 60) (97 40) (110 40) 
+
+
+NAME: gamma-Butyrolactone
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(42 1000) (41 440) (56 240) (86 240) (39 150) 
+(43 70) (85 70) (55 60) (57 40) (38 40) 
+
+
+NAME: (5H)-Furan-2-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(55 1000) (84 400) (54 220) (39 170) (37 60) 
+(38 60) (53 40) (56 40) (41 20) (43 20) 
+
+
+NAME: Overlapping spectra (with Mw 128)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(57 1000) (69 800) (39 640) (41 600) (43 440) 
+(55 400) (42 290) (58 280) (86 260) 
+
+
+NAME: Overlapping spectra (gamma-Lactone and unknown)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(43 1000) (43 960) (39 640) (42 520) (85 520) 
+(68 270) (54 210) (38 160) (55 160) 
+
+
+NAME: 4-Hydroxy-5,6-dihydro-(2H)-pyran-2-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(114 1000) (58 760) (57 440) (42 150) (55 130) 
+(43 110) (39 80) (85 70) (115 60) (53 30) 
+
+
+NAME: Overlapping spectra
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(43 1000) (42 650) (60 350) (85 350) (55 300) 
+(72 300) (58 290) (114 250) (53 210) 
+
+
+NAME: 3-Methyl-(5H)-furan-2-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(41 1000) (40 760) (69 680) (98 520) (43 400) 
+(45 400) (60 110) (58 80) (85 70) (72 60) 
+
+
+NAME: Methyl-dihydro-(2H)-pyran-2-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(55 1000) (112 760) (84 600) (56 320) (39 320) 
+(42 180) (43 150) (41 140) (69 130) 
+
+
+NAME: 2-Hydroxy-1-methyl-1-cyclopentene-3-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(112 1000) (55 480) (69 400) (41 300) (84 270) 
+(43 260) (56 260) (39 210) (83 210) 
+
+
+NAME: Homol. product, to no. 58 (OH-methyl-dihydropyranone)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (42 320) (72 220) (60 210) (55 110) 
+(128 110) (57 100) (58 90) (61 90) (87 60) 
+
+
+NAME: Unknown (possibly:  3-Methyl-tetrahydrofuran-2,4-dione)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(43 1000) (114 240) (42 190) (55 180) (39 160) 
+(41 100) (54 80) (57 80) (53 170) 
+
+
+NAME: Unknown  (overlapped  with Mw  98,  114, 128)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(81 1000) (82 720) (43 560) (55 480) (39 400) 
+(53 400) (54 360) (42 210) (57 210) 
+
+
+NAME: 2-Furoic acid methyl ester
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(95 1000) (39 270) (126 120) (38 80) (96 70) 
+(37 40) (124 40) (67 30) (68 30) (42 20) 
+
+
+NAME: 3-Hydroxy-2-methyl-pyran-4-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(126 1000) (43 680) (71 480) (55 360) (42 270) 
+(69 230) (39 160) (41 150) (97 120) 
+
+
+NAME: Methyl-butyraldehyde derivative (overlapping spectra)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(57 1000) (58 520) (43 360) (55 160) (45 150) 
+(39 130) (85 130) (42 110) (56 90) 
+
+
+NAME: Compound similar to no. 59
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(69 1000) (41 560) (43 320) (98 320) (57 130) 
+(68 120) (53 90) (55 90) (81 40) (61 40) 
+
+
+NAME: Unknown (overlapping spectra)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (42 90) (57 80) (45 70) (61 70) 
+(102 60) (58 40) (69 30) (41 30) (81 20) 
+
+
+NAME: gamma-Lactone derivative: unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(85 1000) (57 240) (42 170) (39 130) (43 130) 
+(41 110) (55 110) (86 80) (58 50) (98 50) 
+
+
+NAME: Overlapping spectra (Mw  98, 126)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(42 1000) (43 600) (39 290) (55 290) (85 230) 
+(98 210) (70 180) (41 150) (53 130) 
+
+
+NAME: Anhydrosugar: unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(44 1000) (57 640) (43 360) (41 220) (42 220) 
+(39 170) (45 70) (55 60) (58 60) (53 30) 
+
+
+NAME: Unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(55 1000) (43 360) (56 160) (44 150) (45 130) 
+(85 120) (42 110) (101 110) (73 30) 
+
+
+NAME: 3,5-Dihydroxy-2-methyl-(4H)-pyran-4-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(142 1000) (43 680) (85 360) (55 290) (68 280) 
+(39 230) (42 210) (71 180) (96 120) 
+
+
+NAME: 1,4:3,6-Dianhydro-mannofuranose
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(68 1000) (39 560) (42 220) (43 200) (55 180) 
+(41 170) (85 160) (96 110) (38 100) 
+
+
+NAME: gamma-Lactone derivative: unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(85 1000) (57 230) (39 220) (42 210) (55 140) 
+(68 120) (41 100) (69 100) (96 100) 
+
+
+NAME: Overlapping spectra (Mw 116, 128, 144)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(43 1000) (41 840) (69 560) (57 360) (70 320) 
+(42 300) (58 280) (85 240) (82 170) 
+
+
+NAME: Unknown (overlapped with compound no. 79)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (56 260) (42 190) (114 180) (55 160) 
+(84 90) (86 60) (156 50) (126 20) (85 20) 
+
+
+NAME: 4-Hydroxy-3-methyl-(5H)-furanone or 3-Methyl-2,4-furandione
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(56 1000) (114 840) (42 560) (84 480) (43 220) 
+(55 170) (86 140) (57 60) (85 50) (68 20) 
+
+
+NAME: Unknown (overlapped with Mw 144)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(41 1000) (42 820) (98 550) (43 540) (58 400) 
+(69 300) (73 280) (71 270) (57 270) 
+
+
+NAME: Unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(42 1000) (41 240) (39 210) (56 190) (55 130) 
+(70 130) (128 90) (98 70) (43 60) (68 60) 
+
+
+NAME: Furan derivative: unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(68 1000) (43 560) (39 210) (41 210) (97 170) 
+(69 110) (42 100) (85 40) (55 30) (126 10) 
+
+
+NAME: 1,4: 3,6-Dianhydro-glucopyranose
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(69 1000) (57 400) (41 320) (70 220) (98 160) 
+(55 150) (60 140) (86 120) (144 80) 
+
+
+NAME: 1,5-Anhydro-arabinofuranose
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(57 1000) (73 400) (55 280) (43 250) (58 210) 
+(60 200) (69 140) (86 120) (101 20) 
+
+
+NAME: Unknown (overlapped with phenolic compound)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(126 1000) (43 360) (79 320) (109 210) (53 90) 
+(97 90) (125 60) (127 60) (39 50) (51 50) 
+
+
+NAME: 5-Hydroxymethyl-2-furaldehyde
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(41 1000) (97 840) (39 680) (126 520) (69 320) 
+(53 220) (124 170) (109 90) (81 60) 
+
+
+NAME: gamma-Lactone derivative: unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(85 1000) (41 360) (39 300) (57 170) (55 150) 
+(68 100) (126 60) (124 60) (125 50) 
+
+
+NAME: Unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(43 1000) (69 270) (73 170) (57 120) (68 100) 
+(86 100) (85 90) (71 70) (115 70) (98 30) 
+
+
+NAME: 2-Hydroxy-butanedial
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(44 1000) (43 640) (74 230) (42 200) (55 130) 
+(39 80) (45 80) (102 80) (84 50) (69 20) 
+
+
+NAME: Overlapping spectra (with Mw 126, 128)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(43 1000) (55 960) (114 960) (56 520) (42 520) 
+(84 520) (39 440) (112 290) (128 250) 
+
+
+NAME: 2-Hydroxymethyl-5-hydroxy-2,3-dihydro-(4H)-pyran-4-one
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(87 1000) (144 840) (43 800) (41 720) (57 720) 
+(59 560) (97 520) (69 320) (113 210) 
+
+
+NAME: Anhydro-pento-furanose: unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(57 1000) (43 640) (55 600) (39 400) (85 400) 
+(69 360) (58 250) (144 230) (73 220) 
+
+
+NAME: 1,5-Anhydro-beta-D-xylofuranose
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(57 1000) (73 440) (43 280) (55 230) (60 230) 
+(72 210) (58 200) (86 160) (103 20) 
+
+
+NAME: Overlapping spectra (with Mw 152, 186)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(43 1000) (85 680) (41 220) (126 220) (55 150) 
+(69 120) (97 110) (57 110) (98 60) 
+
+
+NAME: Unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(59 1000) (87 640) (58 600) (172 560) (98 520) 
+(55 520) (39 360) (85 320) (71 290) 
+
+
+NAME: Anhydrosugar: unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(45 1000) (57 680) (42 560) (73 560) (43 250) 
+(55 230) (70 150) (102 90) (84 60) (85 50) 
+
+
+NAME: 1,6-Anhydro-alpha-D-galactopyranose
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(60 1000) (57 480) (73 480) (43 250) (42 190) 
+(56 190) (71 120) (69 80) (89 50) (98 50) 
+
+
+NAME: Anhydrosugar: unknown
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(45 1000) (43 880) (57 640) (42 520) (73 440) 
+(55 440) (58 240) (69 220) (85 140) 
+
+
+NAME: Anhydro-hexo-furanose: unknown (overl. with phenolic comp.)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(73 1000) (56 520) (45 400) (43 320) (57 270) 
+(55 220) (60 200) (69 100) (86 100) 
+
+
+NAME: 1,6-Anhydro-beta-D-mannopyranose
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(60 1000) (57 480) (73 320) (56 170) (43 160) 
+(55 110) (70 110) (69 80) (98 60) (61 50) 
+
+
+NAME: 1,6-Anhydro-beta-D-glucopyranose  = Levoglucosan
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(60 1000) (57 480) (73 310) (43 260) (56 180) 
+(70 130) (45 120) (41 110) (47 90) (98 60) 
+
+
+NAME: Anhydrosugar: unknown 
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(45 1000) (41 800) (69 680) (73 640) (91 440) 
+(43 320) (63 110) (115 110) (143 100) 
+
+
+NAME: 1,6-Anhydro-beta-D-glucofuranose (overlapped with phenolic comp.)
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 9
+(73 1000) (43 400) (69 320) (57 230) (60 220) 
+(45 190) (61 180) (55 170) (85 150) 
+
+
+NAME: 1,6-Anhydro-alpha-D-galactofuranose
+RI: 0.000
+RT: 0.000
+COMMENTS: C
+SOURCE: Gerber et al. 2012
+NUM PEAKS: 10
+(73 1000) (43 320) (69 310) (61 200) (45 180) 
+(60 180) (85 150) (70 140) (115 70) (98 50) 
+
+

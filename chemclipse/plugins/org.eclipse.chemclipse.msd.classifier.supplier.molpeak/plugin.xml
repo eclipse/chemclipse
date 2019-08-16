@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.identifier.peakIdentifier">
+      <PeakIdentificationSupplier
+            description="This is a base peak identifier."
+            id="org.eclipse.chemclipse.msd.identifier.supplier.basepeak.peak"
+            identifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.PeakIdentifier"
+            identifierName="BasePeak Peak Identifier"
+            identifierSettings="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.PeakIdentifierSettings">
+      </PeakIdentificationSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.identifier.massSpectrumIdentifier">
+      <MassSpectrumIdentificationSupplier
+            description="This is a base peak identifier."
+            id="org.eclipse.chemclipse.msd.identifier.supplier.basepeak.massSpectrum"
+            identifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.MassSpectrumIdentifier"
+            identifierName="BasePeak MS Identifier">
+      </MassSpectrumIdentificationSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.identifier.libraryService">
+      <LibraryServiceSupplier
+            description="This plugin tries to identify library mass spectra given by the target."
+            id="org.eclipse.chemclipse.msd.identifier.supplier.molpeak.libraryservice"
+            identifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.LibraryService"
+            identifierName="BasePeak Library Service">
+      </LibraryServiceSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.classifier.chromatogramClassifierSupplier">
+      <ChromatogramClassifierSupplier
+            classifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.Classifier"
+            classifierName="BasePeak Classifier"
+            classifierSettings="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.ClassifierSettings"
+            description="This classifier calculates the lignin ratio in a chromatogram."
+            id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak">
+      </ChromatogramClassifierSupplier>
+   </extension>         
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

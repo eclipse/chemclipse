@@ -159,6 +159,9 @@
 <module>org.eclipse.chemclipse.logging</module>
 <module>org.eclipse.chemclipse.model.fragment.test</module>
 <module>org.eclipse.chemclipse.model</module>
+<module>org.eclipse.chemclipse.msd.classifier.supplier.molpeak.fragment.test</module>
+<module>org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui</module>
+<module>org.eclipse.chemclipse.msd.classifier.supplier.molpeak</module>
 <module>org.eclipse.chemclipse.msd.converter.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv.ui</module>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.feature"
+      label="BasePeak Classifier"
+      version="1.2.0.qualifier"
+      provider-name="OpenChrom">
+
+   <description url="https://www.openchrom.net">
+      This plugin uses the mol peak for identification.
+   </description>
+
+   <copyright url="http://www.openchrom.net">
+      Copyright (c) 2016, 2018 Dr. Lorenz Gerber, Dr. Philip Wenig.
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      Copyright (c) 2016, 2018 Dr. Lorenz Gerber, Dr. Philip Wenig.
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License
+v1.0 which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+   </license>
+
+   <requires>
+      <import feature="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.feature" version="0.8.0.qualifier"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
