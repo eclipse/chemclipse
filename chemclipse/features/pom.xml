@@ -13,6 +13,7 @@
 	<name>ChemClipse::Features</name>
 
 	<modules>
+<module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.feature</module>

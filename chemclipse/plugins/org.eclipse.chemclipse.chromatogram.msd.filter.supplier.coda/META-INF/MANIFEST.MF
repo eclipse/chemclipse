@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Coda Plug-in
+Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda;singleton:=true
+Bundle-Version: 0.8.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.chromatogram.msd.filter;bundle-version="0.8.0",
+ org.eclipse.chemclipse.msd.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.logging;bundle-version="0.8.0",
+ org.eclipse.chemclipse.processing;bundle-version="0.8.0",
+ org.eclipse.chemclipse.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.support;bundle-version="0.8.0",
+ org.eclipse.chemclipse.numeric;bundle-version="0.8.0",
+ org.eclipse.chemclipse.chromatogram.filter;bundle-version="0.8.0",
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.calculator,
+ org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.core,
+ org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.exceptions,
+ org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.preferences,
+ org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings
+Bundle-Vendor: ChemClipse
