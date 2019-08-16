@@ -208,6 +208,9 @@
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv.ui</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.excel.fragment.test</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.excel.ui</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.excel</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.massbank.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.massbank.ui</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.massbank</module>
