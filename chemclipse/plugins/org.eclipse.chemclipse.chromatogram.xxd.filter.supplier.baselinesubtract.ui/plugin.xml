@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.ui.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.chromatogram.filter.ui.preferences.filterPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.ui.preferences.preferencePage"
+            name="Baseline Subtract">
+      </page>
+   </extension>
+</plugin>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filters enables to remove the baseline from the chromatogram."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.core.ChromatogramFilter"
+            filterName="Chromatogram Baseline Subtract Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.settings.FilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

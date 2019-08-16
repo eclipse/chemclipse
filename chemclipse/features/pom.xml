@@ -15,6 +15,7 @@
 	<modules>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.feature</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.feature</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.feature</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv.feature</module>
 <module>org.eclipse.chemclipse.rcp.app.base.feature</module>
 <module>org.eclipse.chemclipse.rcp.app.core.feature</module>
