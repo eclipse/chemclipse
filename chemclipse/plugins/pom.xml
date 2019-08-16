@@ -152,6 +152,9 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer</module>
