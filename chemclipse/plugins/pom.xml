@@ -297,6 +297,9 @@
 <module>org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.fragment.test</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.ui</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.jcampdx</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.zip.fragment.test</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.zip.ui</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.zip</module>
 <module>org.eclipse.chemclipse.xxd.model.fragment.test</module>
 <module>org.eclipse.chemclipse.xxd.model.ui</module>
 <module>org.eclipse.chemclipse.xxd.model</module>

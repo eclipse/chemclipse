@@ -65,5 +65,6 @@
 <module>org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.feature</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.gson.feature</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.feature</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.zip.feature</module>
 	</modules>
 </project>
