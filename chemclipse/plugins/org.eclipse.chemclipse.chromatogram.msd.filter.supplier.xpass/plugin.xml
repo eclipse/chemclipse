@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.massSpectrumFilterSupplier">
+      <MassSpectrumFilterSupplier
+            description="This filter preserves the n highest ions."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.HighPassMassSpectrumFilter"
+            filterName="High Pass Ion Filter"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.high">
+      </MassSpectrumFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.massSpectrumFilterSupplier">
+      <MassSpectrumFilterSupplier
+            description="This filter preserves the n lowest ions."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.LowPassMassSpectrumFilter"
+            filterName="Low Pass Ion Filter"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.low">
+      </MassSpectrumFilterSupplier>
+   </extension>   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
