@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Exports JSON Chromatograms"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.gson.core.ChromatogramExportConverter"
+            fileExtension=".json"
+            filterName="JSON Chromatogram (*.json)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.json"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.gson.core.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.gson.core.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>
+</plugin>
