@@ -96,6 +96,9 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.integrator.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.integrator</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.report.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.report.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.report</module>
 <module>org.eclipse.chemclipse.converter.fragment.test</module>

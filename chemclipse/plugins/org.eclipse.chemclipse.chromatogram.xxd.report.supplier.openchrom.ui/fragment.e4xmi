@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_ZexmQEChEeK82cMaCHU4uA">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_j_sK0ECiEeKJW-dxxi4EOQ" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_lipLUECiEeKJW-dxxi4EOQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui.command.report" commandName="OpenChrom Report"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_pl4-UECiEeKJW-dxxi4EOQ" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_reEA4ECiEeKJW-dxxi4EOQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui.handler.report" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui/org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui.handlers.ReportHandler" command="_lipLUECiEeKJW-dxxi4EOQ"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_wYFq4ECiEeKJW-dxxi4EOQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.reports">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_0BsO0ECiEeKJW-dxxi4EOQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui.handledmenuitem.report" label="OpenChrom Report" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/report.gif" command="_lipLUECiEeKJW-dxxi4EOQ">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_t5_K0Bp0EeaJ_cQU-Sy13Q" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>
