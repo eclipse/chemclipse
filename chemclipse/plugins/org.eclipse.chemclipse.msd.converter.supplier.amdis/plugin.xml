@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.databaseSupplier">
+      <DatabaseSupplier
+            description="Reads an writes AMDIS (MSL) mass spectra."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLDatabaseExportConverter"
+            fileExtension=".msl"
+            filterName="AMDIS Mass Spectra (*.msl)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLDatabaseImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="true">
+      </DatabaseSupplier>
+      <DatabaseSupplier
+            description="Reads and writes NIST Text  (MSP) mass spectra."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPDatabaseExportConverter"
+            fileExtension=".msp"
+            filterName="NIST Text (*.msp)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msp"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPDatabaseImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="true">
+      </DatabaseSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.peakSupplier">
+      <PeakSupplier
+            description="Writes AMDIS (MSL) mass spectra."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLPeakExportConverter"
+            fileExtension=".msl"
+            filterName="AMDIS Mass Spectra (*.msl)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.peak.msl"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLPeakImportConverter"
+            isExportable="true"
+            isImportable="false">
+      </PeakSupplier>
+      <PeakSupplier
+            description="Writes NIST Text  (MSP) mass spectra."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPPeakExportConverter"
+            fileExtension=".msp"
+            filterName="NIST Text (*.msp)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.peak.msp"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPPeakImportConverter"
+            isExportable="true"
+            isImportable="false">
+      </PeakSupplier>
+      <PeakSupplier
+            description="Reads (AMDIS) ELU peaks."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.elu.ELUPeakExportConverter"
+            fileExtension=".ELU"
+            filterName="AMDIS Peaks (*.ELU)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.peak.elu"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.elu.ELUPeakImportConverter"
+            isExportable="false"
+            isImportable="true">
+      </PeakSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Exports Chromatogram Peaks in MSP format"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.ChromatogramPeakExportConverter"
+            fileExtension=".msp"
+            filterName="Chromatogram Peak NIST Text (*.msp)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.peak.msp"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.ChromatogramPeakImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+      <ChromatogramSupplier
+            description="Exports Chromatogram Peaks in MSL format"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.ChromatogramPeakExportConverter"
+            fileExtension=".msl"
+            filterName="Chromatogram Peaks AMDIS (*.msl)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.peak.msl"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.ChromatogramPeakImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

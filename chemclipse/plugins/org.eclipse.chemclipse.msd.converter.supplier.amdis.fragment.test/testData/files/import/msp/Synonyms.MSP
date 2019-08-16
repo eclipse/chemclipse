@@ -1,0 +1,18 @@
+Name: Hydrogen
+Synon: test1
+Synon: test2
+Synon: test4
+Synon: test6
+Synon: UN 500
+Synon: UN 600
+Formula: H2C20
+MW: 2
+CASNO: 808183
+Comment: This is a comment
+Num peaks: 5
+   1   21;
+   2  999;
+   3  50;
+   4  150;
+   5  40;
+	
