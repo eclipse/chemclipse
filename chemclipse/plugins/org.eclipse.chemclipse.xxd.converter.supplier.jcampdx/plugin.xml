@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads and Writes JCAMP-DX Chromatograms."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.ChromatogramExportConverter"
+            fileExtension=".JDX"
+            filterName="JCAMP-DX Chromatogram (*.JDX)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io.MagicNumberMatcherChromatogram"
+            isExportable="true"
+            isImportable="true">
+      </ChromatogramSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.databaseSupplier">
+      <DatabaseSupplier
+            description="Reads an writes JCAMP-DX (JDX) library."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.DatabaseExportConverter"
+            fileExtension=".jdx"
+            filterName="JCAMP-DX Library (*.jdx)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library.jdx"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.DatabaseImportConverterJDX"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io.MagicNumberMatcherMassSpectrum"
+            isExportable="false"
+            isImportable="true">
+      </DatabaseSupplier>
+   </extension>    
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.databaseSupplier">
+      <DatabaseSupplier
+            description="Reads JDL library."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.DatabaseExportConverter"
+            fileExtension=".jdl"
+            filterName="JDL Library (*.jdl)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library.jdl"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.DatabaseImportConverterJDL"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io.MagicNumberMatcherMassSpectrum"
+            isExportable="false"
+            isImportable="true">
+      </DatabaseSupplier>
+   </extension>         
+   <extension
+         point="org.eclipse.chemclipse.csd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads and Writes JCAMP-DX Chromatograms."
+            exportConverter="org.eclipse.chemclipse.csd.converter.supplier.jcampdx.converter.ChromatogramExportConverter"
+            fileExtension=".JDX"
+            filterName="JCAMP-DX Chromatogram (*.JDX)"
+            id="org.eclipse.chemclipse.csd.converter.supplier.jcampdx"
+            importConverter="org.eclipse.chemclipse.csd.converter.supplier.jcampdx.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io.MagicNumberMatcherChromatogram"
+            isExportable="false"
+            isImportable="true">
+      </ChromatogramSupplier>
+   </extension>
+</plugin>

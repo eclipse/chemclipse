@@ -258,6 +258,9 @@
 <module>org.eclipse.chemclipse.xxd.converter.supplier.gson.fragment.test</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.gson.ui</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.gson</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.fragment.test</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.ui</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.jcampdx</module>
 <module>org.eclipse.chemclipse.xxd.model.fragment.test</module>
 <module>org.eclipse.chemclipse.xxd.model.ui</module>
 <module>org.eclipse.chemclipse.xxd.model</module>
