@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_En-WsBNuEeW1SvTJfA3-rA">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_crqjwBNvEeW1SvTJfA3-rA" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_oBZs8BNvEeW1SvTJfA3-rA" elementId="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.ui.command.detector" commandName="Threshold (TIC) Baseline"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_c8i4YBNvEeW1SvTJfA3-rA" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_tj0zsBNvEeW1SvTJfA3-rA" elementId="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.ui.handler.detector" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.ui/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.ui.handlers.DetectorHandler" command="_oBZs8BNvEeW1SvTJfA3-rA"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_dLMYYBNvEeW1SvTJfA3-rA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_xHP3IBNvEeW1SvTJfA3-rA" elementId="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.ui.handledmenuitem.ticBaselineDetector" label="Threshold (TIC) Baseline" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/baseline.gif" command="_oBZs8BNvEeW1SvTJfA3-rA">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Dnb2MAViEea6VKKU8xZa-Q" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

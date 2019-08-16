@@ -78,6 +78,9 @@
 <module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.baseline.detector</module>
 <module>org.eclipse.chemclipse.chromatogram.xxd.calculator.fragment.test</module>

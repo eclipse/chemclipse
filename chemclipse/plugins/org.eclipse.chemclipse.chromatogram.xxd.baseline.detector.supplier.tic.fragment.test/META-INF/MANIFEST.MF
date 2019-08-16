@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Fragment
+Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.fragment.test
+Bundle-Version: 1.2.0.qualifier
+Fragment-Host: org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic;bundle-version="1.2.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.junit;bundle-version="4.11.0",
+ org.eclipse.chemclipse.msd.converter;bundle-version="0.8.0",
+ org.eclipse.chemclipse.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.converter;bundle-version="0.8.0"
+Bundle-Vendor: OpenChrom
