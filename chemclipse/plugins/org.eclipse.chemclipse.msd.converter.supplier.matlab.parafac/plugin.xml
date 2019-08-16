@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.peakSupplier">
+      <PeakSupplier
+            description="Reads an writes model peak loadings."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter.MatlabParafacPeakExportConverter"
+            fileExtension=".mpl"
+            filterName="Model Peak Loadings (*.mpl)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter.MatlabParafacPeakImportConverter"
+            isExportable="true"
+            isImportable="true">
+      </PeakSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Exports Chromatogram Peaks in MPL format"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter.ChromatogramPeakExportConverter"
+            fileExtension=".mpl"
+            filterName="Chromatogram Peak Loadings (*.mpl)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.chromatogram"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter.ChromatogramPeakImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>
+
+</plugin>
