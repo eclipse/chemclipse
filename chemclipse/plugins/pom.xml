@@ -114,6 +114,9 @@
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv</module>
 <module>org.eclipse.chemclipse.msd.converter.ui</module>
 <module>org.eclipse.chemclipse.msd.converter</module>
+<module>org.eclipse.chemclipse.msd.identifier.supplier.triplequad.fragment.test</module>
+<module>org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui</module>
+<module>org.eclipse.chemclipse.msd.identifier.supplier.triplequad</module>
 <module>org.eclipse.chemclipse.msd.model.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.model</module>
 <module>org.eclipse.chemclipse.msd.swt.ui.fragment.test</module>

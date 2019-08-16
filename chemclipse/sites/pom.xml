@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+          <parent>
+              <groupId>org.eclipse.chemclipse</groupId>
+              <artifactId>triplequadidentifier</artifactId>
+              <version>0.8.0-SNAPSHOT</version>
+              <relativePath>../cbi/org.eclipse.chemclipse.msd.identifier.supplier.triplequad.cbi/pom.xml</relativePath>
+          </parent>
+
+<artifactId>org.eclipse.chemclipse.triplequadidentifier.sites</artifactId>
+  <packaging>pom</packaging>
+<name>ChemClipse::triplequadidentifier::Sites</name>
+
+</project>
