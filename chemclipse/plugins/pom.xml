@@ -253,6 +253,9 @@
 <module>org.eclipse.chemclipse.msd.converter.supplier.mzml.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.mzml.ui</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.mzml</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.mzxml.fragment.test</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.mzxml.ui</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.mzxml</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.openchromx.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.openchromx.ui</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.openchromx</module>

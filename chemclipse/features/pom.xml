@@ -65,6 +65,7 @@
 <module>org.eclipse.chemclipse.msd.converter.supplier.mz5.feature</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.mzdata.feature</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.mzml.feature</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.mzxml.feature</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.openchromx.feature</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.svg.feature</module>
 <module>org.eclipse.chemclipse.msd.identifier.supplier.nist.feature</module>
