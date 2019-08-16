@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.identifier.peakIdentifier">
+      <PeakIdentificationSupplier
+            description="This plugin uses a file library to identify peaks."
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.peak"
+            identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifier"
+            identifierName="File MS Identifier"
+            identifierSettings="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings">
+      </PeakIdentificationSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.identifier.massSpectrumIdentifier">
+      <MassSpectrumIdentificationSupplier
+            description="This plugin uses a file library to identify mass spectra."
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.massSpectrum"
+            identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifier"
+            identifierName="File MS Identifier">
+      </MassSpectrumIdentificationSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.identifier.libraryService">
+      <LibraryServiceSupplier
+            description="This plugin tries to identify library mass spectra given by the target."
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.libraryservice"
+            identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.LibraryService"
+            identifierName="File MS Library Service">
+      </LibraryServiceSupplier>
+   </extension>
+</plugin>
