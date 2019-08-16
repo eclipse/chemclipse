@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.chemclipse.rcp.app.compilation.core.feature"
+      label="ChemClipse Core"
+      version="0.8.0.qualifier"
+      provider-name="ChemClipse">
+
+   <description url="http://www.chemclipse.net">
+      This is the ChemClipse core feature.
+   </description>
+
+   <copyright url="http://www.chemclipse.net">
+      Copyright (c) 2014, 2018 Lablicate GmbH.
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      Copyright (c) 2014, 2018 Lablicate GmbH.
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License
+v1.0 which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+   </license>
+
+   <includes
+         id="org.eclipse.chemclipse.rcp.app.compilation.base.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.mzxml.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.amdis.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.openchromx.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.csd.converter.supplier.xy.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.mzml.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.svg.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.animl.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.massbank.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.mzdata.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.mz5.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.identifier.supplier.nist.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.ease.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.ease.ui.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.ease.python.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.xxd.converter.supplier.gson.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.xxd.converter.supplier.ascii.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.csd.converter.supplier.arw.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.xxd.converter.supplier.zip.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.csv.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.excel.feature"
+         version="0.0.0"/>
+
+</feature>

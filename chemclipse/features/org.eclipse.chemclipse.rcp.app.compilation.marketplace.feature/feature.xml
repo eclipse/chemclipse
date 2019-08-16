@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.chemclipse.rcp.app.compilation.marketplace.feature"
+      label="Marketplace Support"
+      version="0.8.0.qualifier"
+      provider-name="ChemClipse">
+
+   <description url="http://www.chemclipse.net">
+      This is the ChemClipse Marketplace feature.
+      It allows to access the OpenChrom Marketplace to fetch additional plugins.
+   </description>
+
+   <copyright url="http://www.chemclipse.net">
+      Copyright (c) 2014, 2018 Lablicate GmbH.
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      Copyright (c) 2014, 2018 Lablicate GmbH.
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License
+v1.0 which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+   </license>
+
+   <plugin
+         id="org.eclipse.epp.mpc.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.epp.mpc.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.rcp.app.compilation.marketplace.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.httpcomponents.httpclient"
+         download-size="0"
+         install-size="0"
+         version="4.3.6.v201511171540"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.userstorage"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.userstorage.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

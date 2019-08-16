@@ -75,6 +75,9 @@
 <module>org.eclipse.chemclipse.msd.identifier.supplier.proteoms.feature</module>
 <module>org.eclipse.chemclipse.msd.identifier.supplier.triplequad.feature</module>
 <module>org.eclipse.chemclipse.rcp.app.base.feature</module>
+<module>org.eclipse.chemclipse.rcp.app.compilation.base.feature</module>
+<module>org.eclipse.chemclipse.rcp.app.compilation.core.feature</module>
+<module>org.eclipse.chemclipse.rcp.app.compilation.marketplace.feature</module>
 <module>org.eclipse.chemclipse.rcp.app.core.feature</module>
 <module>org.eclipse.chemclipse.rcp.app.test.feature</module>
 <module>org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.feature</module>

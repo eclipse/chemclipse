@@ -310,6 +310,7 @@
 <module>org.eclipse.chemclipse.progress.fragment.test</module>
 <module>org.eclipse.chemclipse.progress.ui</module>
 <module>org.eclipse.chemclipse.progress</module>
+<module>org.eclipse.chemclipse.rcp.app.compilation.marketplace.ui</module>
 <module>org.eclipse.chemclipse.rcp.app.fragment.test</module>
 <module>org.eclipse.chemclipse.rcp.app.test</module>
 <module>org.eclipse.chemclipse.rcp.app.ui</module>
