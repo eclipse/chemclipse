@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.peak.detector.peakDetectorSupplier">
+      <PeakDetector
+            description="This extension point tries to implement a Third Derivative peak detector."
+            id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative"
+            peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.core.PeakDetector"
+            peakDetectorName="Peak Detector ThirdDerivative">
+      </PeakDetector>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
