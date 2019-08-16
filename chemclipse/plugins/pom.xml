@@ -219,6 +219,9 @@
 <module>org.eclipse.chemclipse.msd.identifier.supplier.nist.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.identifier.supplier.nist.ui</module>
 <module>org.eclipse.chemclipse.msd.identifier.supplier.nist</module>
+<module>org.eclipse.chemclipse.msd.identifier.supplier.proteoms.fragment.test</module>
+<module>org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui</module>
+<module>org.eclipse.chemclipse.msd.identifier.supplier.proteoms</module>
 <module>org.eclipse.chemclipse.msd.identifier.supplier.triplequad.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui</module>
 <module>org.eclipse.chemclipse.msd.identifier.supplier.triplequad</module>
