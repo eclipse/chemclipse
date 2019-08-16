@@ -153,6 +153,9 @@
 <module>org.eclipse.chemclipse.converter.ui</module>
 <module>org.eclipse.chemclipse.converter</module>
 <module>org.eclipse.chemclipse.csd.converter.fragment.test</module>
+<module>org.eclipse.chemclipse.csd.converter.supplier.arw.fragment.test</module>
+<module>org.eclipse.chemclipse.csd.converter.supplier.arw.ui</module>
+<module>org.eclipse.chemclipse.csd.converter.supplier.arw</module>
 <module>org.eclipse.chemclipse.csd.converter.supplier.xy.fragment.test</module>
 <module>org.eclipse.chemclipse.csd.converter.supplier.xy.ui</module>
 <module>org.eclipse.chemclipse.csd.converter.supplier.xy</module>

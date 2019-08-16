@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.csd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads Arw FID Chromatograms."
+            fileExtension=".arw"
+            filterName="ARW Chromatogram (*.arw)"
+            id="org.eclipse.chemclipse.csd.converter.supplier.arw"
+            importConverter="org.eclipse.chemclipse.csd.converter.supplier.arw.core.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.csd.converter.supplier.arw.core.MagicNumberMatcher"
+            isExportable="false"
+            isImportable="true">
+      </ChromatogramSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.csd.converter.supplier.arw.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
