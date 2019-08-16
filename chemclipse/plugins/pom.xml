@@ -43,6 +43,9 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.comparison.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.comparison</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.fragment.test</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui</module>
+<module>org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.filter</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.identifier.fragment.test</module>
