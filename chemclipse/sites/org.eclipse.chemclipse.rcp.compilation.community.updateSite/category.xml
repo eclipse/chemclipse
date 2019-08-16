@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.chemclipse.rcp.compilation.testing.feature_0.8.0.qualifier.jar" id="org.eclipse.chemclipse.rcp.compilation.testing.feature" version="0.8.0.qualifier">
+      <category name="org.eclipse.chemclipse.chemclipse"/>
+   </feature>
+   <feature url="features/org.eclipse.chemclipse.rcp.compilation.community.feature_0.8.0.qualifier.jar" id="org.eclipse.chemclipse.rcp.compilation.community.feature" version="0.8.0.qualifier">
+      <category name="org.eclipse.chemclipse.chemclipse"/>
+   </feature>
+   <feature url="features/org.eclipse.equinox.sdk_3.12.0.v20170209-1843.jar" id="org.eclipse.equinox.sdk" version="3.12.0.v20170209-1843">
+      <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
+   </feature>
+   <feature url="features/org.eclipse.gemini.jpa.feature_1.2.0.M1.jar" id="org.eclipse.gemini.jpa.feature" version="1.2.0.M1">
+      <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
+   </feature>
+   <feature url="features/org.eclipse.persistence.sdk_2.7.1.v20171221-bd47e8f.jar" id="org.eclipse.persistence.sdk" version="2.7.1.v20171221-bd47e8f">
+      <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
+   </feature>
+   <feature url="features/org.eclipse.equinox.executable_3.6.300.v20161122-1740.jar" id="org.eclipse.equinox.executable" version="3.6.300.v20161122-1740">
+      <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
+   </feature>
+   <category-def name="org.eclipse.chemclipse.chemclipse" label="Chemclipse">
+      <description>
+         The parts of chemclipse
+      </description>
+   </category-def>
+   <category-def name="org.eclipse.chemclipse.chemclipse.libraries" label="Libraries">
+      <description>
+         Contains libraries usefull for projects that like to enhance chemclipse.
+To make sure that all extensions are consitent and we do not end up with several versions we provide here these so extension developers can use one unique update site.
+      </description>
+   </category-def>
+</site>

@@ -8,11 +8,11 @@
 		<version>0.8.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>org.eclipse.chemclipse.sites</artifactId>
+	<artifactId>org.eclipse.chemclipse.products</artifactId>
 	<packaging>pom</packaging>
-	<name>ChemClipse::Sites</name>
+	<name>ChemClipse::Products</name>
 
 	<modules>
-		<module>org.eclipse.chemclipse.rcp.compilation.community.updateSite</module>
+		<module>org.eclipse.chemclipse.rcp.compilation.community.product</module>
 	</modules>
 </project>

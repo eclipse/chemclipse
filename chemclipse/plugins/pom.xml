@@ -8,7 +8,7 @@
 		<version>0.8.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>org.eclipse.chemclipse.utils.plugins</artifactId>
+	<artifactId>org.eclipse.chemclipse.plugins</artifactId>
 	<packaging>pom</packaging>
 	<name>ChemClipse::Plugins</name>
 
@@ -361,5 +361,6 @@
 		<module>org.eclipse.chemclipse.xxd.process.fragment.test</module>
 		<module>org.eclipse.chemclipse.xxd.process.ui</module>
 		<module>org.eclipse.chemclipse.xxd.process</module>
+		<module>org.eclipse.chemclipse.rcp.compilation.community.ui</module>
 	</modules>
 </project>

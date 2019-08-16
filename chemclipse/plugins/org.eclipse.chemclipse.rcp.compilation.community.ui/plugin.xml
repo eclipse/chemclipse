@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.chemclipse.rcp.app.ui.org.eclipse.chemclipse.rcp.application"
+            name="ChemClipse">
+         <property
+               name="windowImages"
+               value="icons/logo_16x16.png,icons/logo_32x32.png,icons/logo_48x48.png,icons/logo_64x64.png,icons/logo_128x128.png">
+         </property>
+         <property
+               name="aboutText"
+               value="ChemClipse - chemistry software for the masses">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/about_250x330.png">
+         </property>
+         <property
+               name="appName"
+               value="ChemClipse">
+         </property>
+         <property
+               name="applicationXMI"
+               value="org.eclipse.chemclipse.rcp.app.ui/Application.e4xmi">
+         </property>
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/org.eclipse.chemclipse.rcp.app.ui/css/chemclipse.css">
+         </property>           
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.splashHandlers">
+      <splashHandler
+            class="org.eclipse.chemclipse.rcp.compilation.community.ui.splash.EnhancedSplashHandler"
+            id="org.eclipse.chemclipse.rcp.compilation.community.ui.splash.enhancedSplashHandler">
+      </splashHandler>         
+      <splashHandlerProductBinding
+            productId="org.eclipse.chemclipse.rcp.compilation.community.ui.product"
+            splashId="org.eclipse.chemclipse.rcp.compilation.community.ui.splash.enhancedSplashHandler">
+      </splashHandlerProductBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.eclipse.chemclipse.rcp.compilation.community.ui.PluginStartup"></startup>
+   </extension>
+
+</plugin>

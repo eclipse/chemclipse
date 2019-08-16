@@ -25,5 +25,7 @@
 		<module>../org.eclipse.chemclipse.targetplatform</module>
 		<module>../../plugins</module>
 		<module>../../features</module>
+		<module>../../sites</module>
+		<module>../../products</module>
 	</modules>
 </project>
