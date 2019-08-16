@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.ExcelEditorXlsx"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="xlsx"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/excel_document.gif"
+            id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.MicrosoftExcelEditor2007"
+            name="Microsoft Excel Editor xlsx">
+      </editor>
+      <editor
+            class="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.ExcelEditorXls"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="xls"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/excel_document.gif"
+            id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.MicrosoftExcelEditor2003"
+            name="Microsoft Excel Editor xls">
+      </editor>
+      <editor
+            class="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.WordEditorDocx"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="docx"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/word_document.gif"
+            id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.MicrosoftWordEditor2007"
+            name="Microsoft Word Editor docx">
+      </editor>
+      <editor
+            class="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.WordEditorDoc"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="doc"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/word_document.gif"
+            id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.MicrosoftWordEditor2003"
+            name="Microsoft Word Editor doc">
+      </editor>              
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc_plugin.xml">
+      </toc>
+   </extension>  
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui"
+            name="Microsoft Office Files">
+      </category>
+      <wizard
+            category="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui"
+            class="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.wizards.ExcelFileXlsxWizard"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/excel_document.gif"
+            id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.wizards.ExcelFileXlsxWizard"
+            name="Microsoft Excel File (*.xlsx)">
+      </wizard>
+      <wizard
+            category="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui"
+            class="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.wizards.ExcelFileXlsWizard"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/excel_document.gif"
+            id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.wizards.ExcelFileXlsWizard"
+            name="Microsoft Excel File (*.xls)">
+      </wizard>
+      <wizard
+            category="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui"
+            class="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.wizards.WordFileDocxWizard"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/word_document.gif"
+            id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.wizards.WordFileDocxWizard"
+            name="Microsoft Word File (*.docx)">
+      </wizard>
+      <wizard
+            category="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui"
+            class="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.wizards.WordFileDocWizard"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/word_document.gif"
+            id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.wizards.WordFileDocWizard"
+            name="Microsoft Word File (*.doc)">
+      </wizard>
+   </extension>   
+
+</plugin>

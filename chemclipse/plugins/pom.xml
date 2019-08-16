@@ -200,6 +200,9 @@
 <module>org.eclipse.chemclipse.rcp.app.test</module>
 <module>org.eclipse.chemclipse.rcp.app.ui</module>
 <module>org.eclipse.chemclipse.rcp.app</module>
+<module>org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.fragment.test</module>
+<module>org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui</module>
+<module>org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office</module>
 <module>org.eclipse.chemclipse.rcp.ui.icons</module>
 <module>org.eclipse.chemclipse.support.fragment.test</module>
 <module>org.eclipse.chemclipse.support.ui</module>
