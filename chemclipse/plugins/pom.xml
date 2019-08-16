@@ -157,6 +157,9 @@
 <module>org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.ui</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.mzdata.fragment.test</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.mzdata.ui</module>
+<module>org.eclipse.chemclipse.msd.converter.supplier.mzdata</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.mzml.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.mzml.ui</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.mzml</module>
