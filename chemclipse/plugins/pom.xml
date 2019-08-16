@@ -276,6 +276,9 @@
 <module>org.eclipse.chemclipse.xir.converter</module>
 <module>org.eclipse.chemclipse.xir.model.fragment.test</module>
 <module>org.eclipse.chemclipse.xir.model</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.fragment.test</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui</module>
+<module>org.eclipse.chemclipse.xxd.converter.supplier.chemclipse</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.gson.fragment.test</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.gson.ui</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.gson</module>
