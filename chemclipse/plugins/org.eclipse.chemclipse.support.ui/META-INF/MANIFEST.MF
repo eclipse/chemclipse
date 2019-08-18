@@ -52,4 +52,4 @@ Export-Package: org.eclipse.chemclipse.support.ui.activator,
  org.eclipse.chemclipse.support.ui.workbench
 Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
  org.osgi.service.event;version="[1.0.0,2.0.0)",
- org.slf4j
+ org.slf4j;version="[1.7.0,2.0.0)"
