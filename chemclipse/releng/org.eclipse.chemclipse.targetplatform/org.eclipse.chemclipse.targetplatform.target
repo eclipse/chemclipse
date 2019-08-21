@@ -129,7 +129,10 @@
 <unit id="org.bouncycastle.bcpkix" version="0.0.0"/>
 <unit id="org.bouncycastle.bcprov" version="0.0.0"/>
 <unit id="org.objectweb.asm" version="3.3.1.v201105211655"/>
-<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/S20190726194335/repository"/>
+<unit id="org.apache.batik.svggen" version="0.0.0"/> 
+<unit id="org.apache.batik.ext.awt" version="0.0.0"/> 
+<unit id="org.apache.batik.dom" version="0.0.0"/> 
+<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/S20190819183153/repository"/> 
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.knime.features.base.filehandling.feature.group" version="0.0.0"/>
