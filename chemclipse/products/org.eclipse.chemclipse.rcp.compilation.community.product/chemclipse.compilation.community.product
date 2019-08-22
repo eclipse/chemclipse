@@ -73,7 +73,7 @@ Contributors:
    </plugins>
 
    <features>
-      <feature id="org.eclipse.chemclipse.rcp.compilation.community.feature" version="0.8.0.qualifier"/>
+      <feature id="org.eclipse.chemclipse.rcp.compilation.community.feature"/>
    </features>
 
    <configurations>
