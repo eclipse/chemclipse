@@ -66,14 +66,6 @@ http://www.eclipse.org/legal/epl-v10.html
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.ecf.filetransfer.httpclient4.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.ecf.filetransfer.ssl.feature"
          version="0.0.0"/>
 
@@ -161,13 +153,6 @@ http://www.eclipse.org/legal/epl-v10.html
          unpack="false"/>
 
    <plugin
-         id="org.apache.batik.util.gui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.apache.commons.codec"
          download-size="0"
          install-size="0"
@@ -197,13 +182,6 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <plugin
          id="org.apache.log4j"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.lucene.analysis"
          download-size="0"
          install-size="0"
          version="0.0.0"
