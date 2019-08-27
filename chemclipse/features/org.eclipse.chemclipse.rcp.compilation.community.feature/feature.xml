@@ -169,13 +169,35 @@ http://www.eclipse.org/legal/epl-v10.html
          version="0.0.0"/>
 
    <plugin
-         id="javax.xml.soap"
+         id="javax.xml.stream"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
-         id="javax.xml.stream"
+         id="org.apache.httpcomponents.httpclient"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.httpcomponents.httpcore"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.userstorage.oauth"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.epp.mpc.ui.css"
          download-size="0"
          install-size="0"
          version="0.0.0"
