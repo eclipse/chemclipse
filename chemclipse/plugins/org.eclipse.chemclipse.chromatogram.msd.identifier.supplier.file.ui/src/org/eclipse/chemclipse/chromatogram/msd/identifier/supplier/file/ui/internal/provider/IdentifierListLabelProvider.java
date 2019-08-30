@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -45,9 +45,7 @@ public class IdentifierListLabelProvider extends AbstractChemClipseLabelProvider
 
 		String text = "";
 		if(element instanceof IdentifierFile) {
-			//
 			IdentifierFile identifierFile = (IdentifierFile)element;
-			//
 			switch(columnIndex) {
 				case 0:
 					text = identifierFile.getSeparationColumn().getName();

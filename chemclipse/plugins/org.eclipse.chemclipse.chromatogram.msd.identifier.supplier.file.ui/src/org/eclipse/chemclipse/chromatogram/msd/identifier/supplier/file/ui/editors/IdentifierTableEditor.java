@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,6 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.model.IdentifierFile;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.swt.IdentifierFileListUI;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.SWT;
@@ -31,6 +30,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
@@ -197,7 +197,7 @@ public class IdentifierTableEditor extends FieldEditor {
 
 					Widget widget = event.widget;
 					if(widget == buttonAdd) {
-						addPressed();
+						addPressed(buttonAdd.getDisplay().getActiveShell());
 					} else if(widget == buttonRemove) {
 						removePressed();
 					} else if(widget == buttonClear) {
@@ -211,10 +211,10 @@ public class IdentifierTableEditor extends FieldEditor {
 		return selectionListener;
 	}
 
-	private void addPressed() {
+	private void addPressed(Shell shell) {
 
 		setPresentsDefaultValue(false);
-		IdentifierFile calibrationFile = selectCalibrationFile();
+		IdentifierFile calibrationFile = selectCalibrationFile(shell);
 		if(calibrationFile != null) {
 			identifierFileListUI.add(calibrationFile);
 			selectionChanged();
@@ -246,11 +246,11 @@ public class IdentifierTableEditor extends FieldEditor {
 		buttonClear.setEnabled(index >= 0);
 	}
 
-	private IdentifierFile selectCalibrationFile() {
+	private IdentifierFile selectCalibrationFile(Shell shell) {
 
 		IdentifierFile identifierFile = null;
 		//
-		FileDialog fileDialog = new FileDialog(DisplayUtils.getShell(buttonAdd), SWT.OPEN);
+		FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
 		fileDialog.setText("Select New Identifier File");
 		fileDialog.setFilterPath(PreferenceSupplier.getFilterPathIdentifierFiles());
 		//
