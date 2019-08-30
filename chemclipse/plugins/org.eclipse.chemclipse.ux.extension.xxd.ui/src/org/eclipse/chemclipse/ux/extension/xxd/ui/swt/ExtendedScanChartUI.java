@@ -39,8 +39,6 @@ import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
@@ -51,7 +49,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -78,6 +75,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -85,6 +83,8 @@ import org.eclipse.swt.widgets.Text;
 public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 	private static final Logger logger = Logger.getLogger(ScanChartPart.class);
+	//
+	private IEventBroker eventBroker; // Could be null
 	//
 	private Composite toolbarInfo;
 	private Composite toolbarIdentify;
@@ -151,7 +151,8 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	}
 
 	@Inject
-	public ExtendedScanChartUI(Composite parent) {
+	public ExtendedScanChartUI(Composite parent, IEventBroker eventBroker) {
+		this.eventBroker = eventBroker;
 		initializeSettings();
 		initialize(parent);
 	}
@@ -323,7 +324,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				selectReferenceScan(-1);
+				selectReferenceScan(-1, e.display);
 			}
 		});
 		return button;
@@ -385,7 +386,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				selectReferenceScan(0);
+				selectReferenceScan(0, e.display);
 			}
 		});
 		return comboViewer;
@@ -402,7 +403,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				selectReferenceScan(1);
+				selectReferenceScan(1, e.display);
 			}
 		});
 		return button;
@@ -462,8 +463,9 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 						}
 					}
 					//
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+					if(eventBroker != null) {
+						eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+					}
 				}
 			}
 		});
@@ -545,17 +547,18 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 						 */
 						String identifierId = scanIdentifierIds.get(index);
 						IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(optimizedScan, identifierId);
-						ProgressMonitorDialog monitor = new ProgressMonitorDialog(DisplayUtils.getShell());
+						ProgressMonitorDialog monitor = new ProgressMonitorDialog(e.display.getActiveShell());
 						try {
 							monitor.run(true, true, runnable);
 							originalScan.setOptimizedMassSpectrum(optimizedScan);
-							DisplayUtils.getDisplay().asyncExec(new Runnable() {
+							e.display.asyncExec(new Runnable() {
 
 								@Override
 								public void run() {
 
-									IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-									eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, optimizedScan);
+									if(eventBroker != null) {
+										eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, optimizedScan);
+									}
 								}
 							});
 						} catch(InvocationTargetException e1) {
@@ -781,11 +784,11 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 				try {
 					if(originalScan != null) {
-						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), originalScan, "OriginalScan");
+						DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), originalScan, "OriginalScan");
 					}
 					//
 					if(optimizedScan != null) {
-						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), optimizedScan, "OptimizedScan");
+						DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), optimizedScan, "OptimizedScan");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
@@ -809,8 +812,9 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 					IScanMSD scanMSD = (IScanMSD)scan;
 					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 					if(optimizedMassSpectrum != null) {
-						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-						eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, optimizedMassSpectrum);
+						if(eventBroker != null) {
+							eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, optimizedMassSpectrum);
+						}
 					}
 				}
 			}
@@ -1003,7 +1007,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		};
 	}
 
-	private void selectReferenceScan(int moveIndex) {
+	private void selectReferenceScan(int moveIndex, Display display) {
 
 		/*
 		 * Select the combo item.
@@ -1036,13 +1040,14 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			int scanNumber = chromatogram.getScanNumber(masterRetentionTime);
 			IScan referenceScan = chromatogram.getScan(scanNumber);
 			//
-			DisplayUtils.getDisplay().asyncExec(new Runnable() {
+			display.asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
 
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-					eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, referenceScan);
+					if(eventBroker != null) {
+						eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, referenceScan);
+					}
 				}
 			});
 		}

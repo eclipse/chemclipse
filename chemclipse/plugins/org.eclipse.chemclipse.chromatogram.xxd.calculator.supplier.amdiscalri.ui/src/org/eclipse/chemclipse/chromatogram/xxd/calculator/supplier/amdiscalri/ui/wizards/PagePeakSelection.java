@@ -146,7 +146,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		massSpectrumComposite = new Composite(parent, SWT.NONE);
 		massSpectrumComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		massSpectrumComposite.setLayout(new FillLayout());
-		extendedScanChartUI = new ExtendedScanChartUI(massSpectrumComposite);
+		extendedScanChartUI = new ExtendedScanChartUI(massSpectrumComposite, null);
 	}
 
 	private void createPeakTableField(Composite parent) {
