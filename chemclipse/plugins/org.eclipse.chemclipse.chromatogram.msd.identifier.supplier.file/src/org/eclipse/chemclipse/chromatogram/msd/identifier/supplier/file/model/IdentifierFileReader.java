@@ -92,7 +92,7 @@ public class IdentifierFileReader {
 	private boolean isSeparationColumnFile(File file) {
 
 		boolean isSeparationColumnFile = false;
-		if(file != null) {
+		if(file != null && file.exists()) {
 			String name = file.getName().toLowerCase();
 			if(name.endsWith(".msl") || name.endsWith(".msp")) {
 				isSeparationColumnFile = true;

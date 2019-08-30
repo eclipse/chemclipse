@@ -127,17 +127,19 @@ public class IdentifierTableEditor extends FieldEditor {
 	protected void doStore() {
 
 		TableItem[] tableItems = identifierFileListUI.getTable().getItems();
-		String[] items = new String[tableItems.length];
+		List<String> files = new ArrayList<>();
 		for(int i = 0; i < tableItems.length; i++) {
 			Object object = tableItems[i].getData();
-			String file = "";
 			if(object instanceof IdentifierFile) {
 				IdentifierFile calibrationFile = (IdentifierFile)object;
-				file = calibrationFile.getFile().getAbsolutePath();
+				File file = calibrationFile.getFile();
+				if(file != null && file.exists()) {
+					files.add(file.getAbsolutePath());
+				}
 			}
-			items[i] = file;
 		}
 		//
+		String[] items = files.toArray(new String[files.size()]);
 		String storedContent = identifierFileListUtil.createList(items);
 		if(storedContent != null) {
 			getPreferenceStore().setValue(getPreferenceName(), storedContent);
@@ -288,7 +290,10 @@ public class IdentifierTableEditor extends FieldEditor {
 		String[] files = identifierFileListUtil.parseString(storedContent);
 		List<IdentifierFile> identifierFiles = new ArrayList<>();
 		for(String file : files) {
-			identifierFiles.add(new IdentifierFile(new File(file)));
+			File database = new File(file);
+			if(database.exists()) {
+				identifierFiles.add(new IdentifierFile(database));
+			}
 		}
 		return identifierFiles;
 	}
