@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,11 @@ public class IdentifierFileReader {
 
 	public ISeparationColumn parse(File file) {
 
-		ISeparationColumn separationColumn = null;
+		/*
+		 * Extract the separation column if the library contains the info, e.g. in a *.msl or *.msp file.
+		 * Otherwise, create a default column.
+		 */
+		ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnFactory.TYPE_DEFAULT);
 		if(isSeparationColumnFile(file)) {
 			separationColumn = extractSeparationColumn(file);
 		}
@@ -38,11 +42,12 @@ public class IdentifierFileReader {
 
 	private ISeparationColumn extractSeparationColumn(File file) {
 
-		ISeparationColumn separationColumn = null;
 		/*
 		 * Restrict to *.msl and *.msp files at the moment.
-		 * Binary files may crash this thing.
+		 * Otherwise use default.
 		 */
+		ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnFactory.TYPE_DEFAULT);
+		//
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 			/*
@@ -87,7 +92,7 @@ public class IdentifierFileReader {
 	private boolean isSeparationColumnFile(File file) {
 
 		boolean isSeparationColumnFile = false;
-		if(file != null) {
+		if(file != null && file.exists()) {
 			String name = file.getName().toLowerCase();
 			if(name.endsWith(".msl") || name.endsWith(".msp")) {
 				isSeparationColumnFile = true;

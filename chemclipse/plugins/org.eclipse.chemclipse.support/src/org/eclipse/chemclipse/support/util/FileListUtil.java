@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +49,10 @@ public class FileListUtil {
 			String[] items = parseString(preferenceEntry);
 			if(items.length > 0) {
 				for(String item : items) {
-					files.add(item);
+					File file = new File(item);
+					if(file.exists()) {
+						files.add(item);
+					}
 				}
 			}
 		}
@@ -62,7 +66,10 @@ public class FileListUtil {
 		if(items != null) {
 			int size = items.length;
 			for(int i = 0; i < size; i++) {
-				files.add(items[i]);
+				File file = new File(items[i]);
+				if(file.exists()) {
+					files.add(items[i]);
+				}
 			}
 		}
 		return files;
