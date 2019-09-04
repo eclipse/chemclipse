@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -51,7 +51,6 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 	private static final int Ion_COLUMN_START = 3;
 
 	public ChromatogramReader() {
-
 	}
 
 	@Override
@@ -88,34 +87,39 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 
 	private IChromatogramMSD readChromatogram(File file, boolean overview) throws IOException {
 
-		FileReader reader = new FileReader(file);
-		CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL);
-		IChromatogramMSD chromatogram = new VendorChromatogram();
-		if(!overview) {
+		IChromatogramMSD chromatogram = null;
+		//
+		try (FileReader reader = new FileReader(file)) {
+			CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());
+			chromatogram = new VendorChromatogram();
+			if(!overview) {
+				/*
+				 * If the chromatogram shall be exportable, set the id otherwise it is null or "".
+				 */
+				chromatogram.setConverterId("");
+				chromatogram.setFile(file);
+			}
 			/*
-			 * If the chromatogram shall be exportable, set the id otherwise it is null or "".
+			 * Get the header inclusive ion description.
 			 */
-			chromatogram.setConverterId("");
-			chromatogram.setFile(file);
+			Map<Integer, Float> ionsMap = getIonMap(parser);
+			for(CSVRecord record : parser.getRecords()) {
+				IVendorMassSpectrum supplierMassSpectrum = getScan(record, ionsMap, overview);
+				chromatogram.addScan(supplierMassSpectrum);
+			}
+			//
+			int scanDelay = chromatogram.getScan(1).getRetentionTime();
+			chromatogram.setScanDelay(scanDelay);
+			parser.close();
 		}
-		/*
-		 * Get the header inclusive ion description.
-		 */
-		Map<Integer, Float> ionsMap = getIonMap(csvParser);
-		for(CSVRecord csvRecord : csvParser.getRecords()) {
-			IVendorMassSpectrum supplierMassSpectrum = getScan(csvRecord, ionsMap, overview);
-			chromatogram.addScan(supplierMassSpectrum);
-		}
-		int scanDelay = chromatogram.getScan(1).getRetentionTime();
-		chromatogram.setScanDelay(scanDelay);
 		return chromatogram;
 	}
 
-	private Map<Integer, Float> getIonMap(CSVParser csvParser) {
+	private Map<Integer, Float> getIonMap(CSVParser parser) {
 
 		Map<Integer, Float> ions = new HashMap<Integer, Float>();
-		Map<String, Integer> csvHeaderMap = csvParser.getHeaderMap();
-		for(Map.Entry<String, Integer> entry : csvHeaderMap.entrySet()) {
+		Map<String, Integer> headerMap = parser.getHeaderMap();
+		for(Map.Entry<String, Integer> entry : headerMap.entrySet()) {
 			int index = entry.getValue();
 			try {
 				ions.put(index, Float.valueOf(entry.getKey()));
