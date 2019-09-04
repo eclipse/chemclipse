@@ -16,7 +16,6 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.msd.converter.supplier.csv.internal.converter.SpecificationValidator;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.ChromatogramReader;
 
 public class MagicNumberMatcherChromatogram extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
@@ -24,17 +23,9 @@ public class MagicNumberMatcherChromatogram extends AbstractMagicNumberMatcher i
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		boolean isValidFormat = false;
-		try {
-			file = SpecificationValidator.validateSpecification(file, "csv");
-			if(file.exists() && readTest(file)) {
-				isValidFormat = true;
-				if(isValidFormat) {
-					int wait = 0;
-				}
-			}
-		} catch(Exception e) {
-			// Print no exception.
+		boolean isValidFormat = checkFileExtension(file, ".csv");
+		if(isValidFormat) {
+			isValidFormat = (file.exists() && readTest(file));
 		}
 		return isValidFormat;
 	}
