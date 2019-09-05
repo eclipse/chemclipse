@@ -47,7 +47,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
@@ -110,6 +109,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.IAxis.Position;
@@ -177,8 +177,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private Composite heatmapArea;
 	//
 	private IChromatogramSelection<?, ?> chromatogramSelection = null;
-	//
-	private List<IChartMenuEntry> chartMenuEntriesProcessorSupplier = new ArrayList<>();
+	private List<IChartMenuEntry> cachedMenuEntries = new ArrayList<>();
 	//
 	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<>();
 	private Map<String, IdentificationLabelMarker> scanLabelMarkerMap = new HashMap<>();
@@ -194,13 +193,16 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private boolean suspendUpdate = false;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private ProcessTypeSupport processTypeSupport;
+	//
+	private IEventBroker eventBroker;
 
-	public ExtendedChromatogramUI(Composite parent, int style, ProcessorFactory filterFactory) {
-		this(parent, style, null, new ProcessTypeSupport(filterFactory));
+	public ExtendedChromatogramUI(Composite parent, int style, ProcessorFactory filterFactory, IEventBroker eventBroker) {
+		this(parent, style, null, new ProcessTypeSupport(filterFactory), eventBroker);
 	}
 
-	public ExtendedChromatogramUI(Composite parent, int style, ProcessorFactory filterFactory, ProcessTypeSupport processTypeSupport) {
+	public ExtendedChromatogramUI(Composite parent, int style, ProcessorFactory filterFactory, ProcessTypeSupport processTypeSupport, IEventBroker eventBroker) {
 		this.processTypeSupport = processTypeSupport;
+		this.eventBroker = eventBroker;
 		initialize(parent, style);
 	}
 
@@ -216,18 +218,18 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		return toolbarMain.isVisible();
 	}
 
-	public void fireUpdate() {
+	public void fireUpdate(Display display) {
 
-		fireUpdateChromatogram();
-		if(!fireUpdatePeak()) {
-			fireUpdateScan();
+		fireUpdateChromatogram(display);
+		if(!fireUpdatePeak(display)) {
+			fireUpdateScan(display);
 		}
 	}
 
-	public boolean fireUpdateChromatogram() {
+	public boolean fireUpdateChromatogram(Display display) {
 
 		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
-		if(chromatogramSelection != null) {
+		if(chromatogramSelection != null && eventBroker != null && display != null) {
 			/*
 			 * Will be removed as soon as the topics
 			 * IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION
@@ -235,15 +237,14 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			 * are removed.
 			 */
 			if(preferenceStore.getBoolean(PreferenceConstants.P_LEGACY_UPDATE_CHROMATOGRAM_MODUS)) {
-				fireUpdateChromatogramLegacy();
+				fireUpdateChromatogramLegacy(display);
 			}
 			//
-			DisplayUtils.getDisplay().asyncExec(new Runnable() {
+			display.asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
 
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
 				}
 			});
@@ -251,7 +252,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		return chromatogramSelection != null ? true : false;
 	}
 
-	private void fireUpdateChromatogramLegacy() {
+	private void fireUpdateChromatogramLegacy(Display display) {
 
 		Map<String, Object> map = new HashMap<>();
 		map.put(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION, chromatogramSelection);
@@ -268,24 +269,23 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			topic = null;
 		}
 		//
-		if(topic != null) {
-			DisplayUtils.getDisplay().asyncExec(new Runnable() {
+		if(topic != null && eventBroker != null && display != null) {
+			display.asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
 
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					eventBroker.post(topic, map);
 				}
 			});
 		}
 	}
 
-	public boolean fireUpdatePeak() {
+	public boolean fireUpdatePeak(Display display) {
 
 		boolean update = false;
 		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
-		if(chromatogramSelection != null) {
+		if(chromatogramSelection != null && eventBroker != null && display != null) {
 			final IPeak peak = chromatogramSelection.getSelectedPeak();
 			if(peak != null) {
 				/*
@@ -295,16 +295,15 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				 * are removed.
 				 */
 				if(preferenceStore.getBoolean(PreferenceConstants.P_LEGACY_UPDATE_PEAK_MODUS)) {
-					fireUpdatePeakLegacy(peak);
+					fireUpdatePeakLegacy(peak, display);
 				}
 				//
 				update = true;
-				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+				display.asyncExec(new Runnable() {
 
 					@Override
 					public void run() {
 
-						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 						eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
 					}
 				});
@@ -313,9 +312,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		return update;
 	}
 
-	private void fireUpdatePeakLegacy(IPeak peak) {
+	private void fireUpdatePeakLegacy(IPeak peak, Display display) {
 
-		if(peak != null) {
+		if(peak != null && eventBroker != null && display != null) {
 			Map<String, Object> map = new HashMap<>();
 			map.put(IChemClipseEvents.PROPERTY_PEAK_MSD, peak);
 			map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, true);
@@ -332,12 +331,11 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			}
 			//
 			if(topic != null) {
-				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+				display.asyncExec(new Runnable() {
 
 					@Override
 					public void run() {
 
-						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 						eventBroker.post(topic, map);
 					}
 				});
@@ -345,20 +343,19 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		}
 	}
 
-	public boolean fireUpdateScan() {
+	public boolean fireUpdateScan(Display display) {
 
 		boolean update = false;
 		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
-		if(chromatogramSelection != null) {
+		if(chromatogramSelection != null && eventBroker != null && display != null) {
 			final IScan scan = chromatogramSelection.getSelectedScan();
 			if(scan != null) {
 				update = true;
-				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+				display.asyncExec(new Runnable() {
 
 					@Override
 					public void run() {
 
-						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 						eventBroker.post(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
 					}
 				});
@@ -478,7 +475,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			monitor.run(true, true, runnable);
 			updateChromatogram();
 			updateSelection();
-			fireUpdate();
+			fireUpdate(shell.getDisplay());
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		}
@@ -509,10 +506,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private void addChartMenuEntries() {
 
-		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		if(processTypeSupport != null) {
 			/*
-			 * 
+			 * Type
 			 */
 			DataType datatype = DataType.AUTO_DETECT;
 			if(chromatogramSelection != null) {
@@ -526,56 +522,68 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				}
 			}
 			/*
+			 * Clean the Menu
+			 */
+			IChartSettings chartSettings = chromatogramChart.getChartSettings();
+			for(IChartMenuEntry cachedEntry : cachedMenuEntries) {
+				chartSettings.removeMenuEntry(cachedEntry);
+			}
+			cachedMenuEntries.clear();
+			/*
 			 * Dynamic Menu Items
 			 */
-			cleanChartMenuEntries(chartSettings, chartMenuEntriesProcessorSupplier);
 			for(IProcessTypeSupplier typeSupplier : processTypeSupport.getProcessorTypeSuppliers(Collections.singletonList(datatype))) {
 				List<IProcessSupplier> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
 				Collections.sort(list, new NameComparator());
 				for(IProcessSupplier supplier : list) {
 					if(supplier.getSupportedDataTypes().contains(datatype)) {
-						chartSettings.addMenuEntry(new ProcessorSupplierMenuEntry(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier));
+						IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier);
+						cachedMenuEntries.add(cachedEntry);
+						chartSettings.addMenuEntry(cachedEntry);
 					}
 				}
 			}
 			/*
 			 * Manage Item
 			 */
-			chartSettings.addMenuEntry(new IChartMenuEntry() {
-
-				@Override
-				public String getName() {
-
-					return "Manage Process Settings";
-				}
-
-				@Override
-				public String getCategory() {
-
-					return "Settings";
-				}
-
-				@Override
-				public void execute(Shell shell, ScrollableChart scrollableChart) {
-
-					SettingsPreferencesWizard.openEditWizard(shell, processTypeSupport);
-				}
-
-				@Override
-				public boolean isEnabled(ScrollableChart scrollableChart) {
-
-					return !processTypeSupport.getAllPreferences().isEmpty();
-				}
-			});
+			IChartMenuEntry cachedEntry = createProcessSettingsMenuEntry();
+			cachedMenuEntries.add(cachedEntry);
+			chartSettings.addMenuEntry(cachedEntry);
+			/*
+			 * Apply the menu items.
+			 */
+			chromatogramChart.applySettings(chartSettings);
 		}
 	}
 
-	private void cleanChartMenuEntries(IChartSettings chartSettings, List<IChartMenuEntry> chartMenuEntries) {
+	private IChartMenuEntry createProcessSettingsMenuEntry() {
 
-		for(IChartMenuEntry chartMenuEntry : chartMenuEntries) {
-			chartSettings.removeMenuEntry(chartMenuEntry);
-		}
-		chartMenuEntries.clear();
+		return new IChartMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Manage Process Settings";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return "Settings";
+			}
+
+			@Override
+			public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+				SettingsPreferencesWizard.openEditWizard(shell, processTypeSupport);
+			}
+
+			@Override
+			public boolean isEnabled(ScrollableChart scrollableChart) {
+
+				return !processTypeSupport.getAllPreferences().isEmpty();
+			}
+		};
 	}
 
 	private void updateChromatogram() {
@@ -938,7 +946,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			public void update(IChromatogramSelection chromatogramSelection) {
 
 				updateChromatogramSelection(chromatogramSelection);
-				fireUpdate();
+				fireUpdate(chromatogramReferencesUI.getDisplay());
 			}
 		});
 	}
