@@ -356,4 +356,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	//
 	String IMAGE_CHROMATOGRAM_BLANK = "chromatogramBlank.gif";
 	String IMAGE_INTERPOLATE = "interpolate.png";
+	//
+	String IMAGE_OFFSET_DEFAULT = "offsetDefault.gif";
+	String IMAGE_OFFSET_ACTIVE = "offsetActive.gif";
 }
