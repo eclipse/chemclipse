@@ -43,6 +43,7 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 		addField(new SpinnerFieldEditor(PreferenceConstants.P_SCAN_LABEL_HIGHEST_INTENSITIES, "Label Intensities:", PreferenceConstants.MIN_SCAN_LABEL_HIGHEST_INTENSITIES, PreferenceConstants.MAX_SCAN_LABEL_HIGHEST_INTENSITIES, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SCAN_LABEL_MODULO_INTENSITIES, "Add additional intensity labels", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_AUTOFOCUS_SUBTRACT_SCAN_PART, "Autofocus subtract scan part", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SCAN_CHART_ENABLE_COMPRESS, "Enable Compress", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

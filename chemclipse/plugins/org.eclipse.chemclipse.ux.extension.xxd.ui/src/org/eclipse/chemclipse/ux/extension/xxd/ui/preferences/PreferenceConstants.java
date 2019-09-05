@@ -206,6 +206,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_SCAN_LABEL_MODULO_INTENSITIES = false;
 	public static final String P_AUTOFOCUS_SUBTRACT_SCAN_PART = "autofocusSubtractScanPart";
 	public static final boolean DEF_AUTOFOCUS_SUBTRACT_SCAN_PART = true;
+	public static final String P_SCAN_CHART_ENABLE_COMPRESS = "scanChartEnableCompress";
+	public static final boolean DEF_SCAN_CHART_ENABLE_COMPRESS = false;
 	/*
 	 * Peaks
 	 */
