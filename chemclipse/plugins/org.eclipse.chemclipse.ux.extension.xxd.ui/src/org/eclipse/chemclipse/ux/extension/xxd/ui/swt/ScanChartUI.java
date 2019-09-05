@@ -255,8 +255,12 @@ public class ScanChartUI extends ScrollableChart {
 				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
 				IBarSeriesData barSeriesDataScan1 = scanChartSupport.getBarSeriesData(scan1, labelScan1, false);
 				IBarSeriesData barSeriesDataScan2 = scanChartSupport.getBarSeriesData(scan2, labelScan2, mirrored);
-				barSeriesDataScan1.getSettings().setBarColor(colorScan1);
-				barSeriesDataScan2.getSettings().setBarColor(colorScan2);
+				IBarSeriesSettings barSeriesSettings1 = barSeriesDataScan1.getSettings();
+				IBarSeriesSettings barSeriesSettings2 = barSeriesDataScan2.getSettings();
+				barSeriesSettings1.setBarColor(colorScan1);
+				barSeriesSettings1.setBarOverlay(true);
+				barSeriesSettings2.setBarColor(colorScan2);
+				barSeriesSettings2.setBarOverlay(true);
 				barSeriesDataList.add(barSeriesDataScan1);
 				barSeriesDataList.add(barSeriesDataScan2);
 				addBarSeriesData(barSeriesDataList);
@@ -441,11 +445,13 @@ public class ScanChartUI extends ScrollableChart {
 		//
 		labelHighestIntensities = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_HIGHEST_INTENSITIES);
 		addModuloLabels = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_LABEL_MODULO_INTENSITIES);
+		boolean enableCompress = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_CHART_ENABLE_COMPRESS);
 		/*
 		 * Settings
 		 */
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setCreateMenu(true);
+		chartSettings.setEnableCompress(enableCompress);
 		//
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		rangeRestriction.setRestrictZoom(true);
@@ -677,7 +683,7 @@ public class ScanChartUI extends ScrollableChart {
 
 		List<BarSeriesValue> barSeriesIons = new ArrayList<BarSeriesValue>();
 		//
-		int widthPlotArea = getBaseChart().getPlotArea().getBounds().width;
+		int widthPlotArea = getBaseChart().getPlotArea().getSize().x;
 		ISeries[] series = getBaseChart().getSeriesSet().getSeries();
 		for(ISeries barSeries : series) {
 			if(barSeries != null) {
