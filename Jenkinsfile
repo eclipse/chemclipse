@@ -12,7 +12,7 @@ pipeline {
     }
     tools {
 		maven 'apache-maven-latest'
-		jdk 'adoptopenjdk-hotspot-jdk8-latest'
+		jdk   'oracle-jdk8-latest'
 	}
 	stages {
 		stage ('clear workspace') {
