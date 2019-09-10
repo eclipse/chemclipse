@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.xxd.process.support;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.xxd.process.Activator;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryComparator;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
@@ -71,7 +73,7 @@ public class ProcessTypeSupport {
 	private static final CategoryComparator CATEGORY_COMPARATOR = new CategoryComparator();
 	private static final Logger logger = Logger.getLogger(ProcessTypeSupport.class);
 	//
-	private Map<String, IProcessTypeSupplier> processSupplierMap = new HashMap<>();
+	private Map<String, IProcessTypeSupplier> localProcessSupplier = new HashMap<>();
 	private static IEclipsePreferences preferences;
 
 	public ProcessTypeSupport() {
@@ -80,23 +82,30 @@ public class ProcessTypeSupport {
 
 	public ProcessTypeSupport(ProcessorFactory filterFactory) {
 		/*
-		 * Add all available process supplier here.
-		 * TODO: Test native settings composite via extension point resolution
+		 * Add all available process supplier here. TODO: Test native settings
+		 * composite via extension point resolution
 		 */
 		addProcessSupplier(new BaselineDetectorTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramIdentifierTypeSupplier()); // OK - Improve settings
+		addProcessSupplier(new ChromatogramIdentifierTypeSupplier()); // OK -
+																		// Improve
+																		// settings
 		addProcessSupplier(new ChromatogramIntegratorTypeSupplier()); // OK
-		addProcessSupplier(new ClassifierTypeSupplier()); // OK - Improve settings
-		addProcessSupplier(new CombinedIntegratorTypeSupplier()); // OK - Nested Settings
+		addProcessSupplier(new ClassifierTypeSupplier()); // OK - Improve
+															// settings
+		addProcessSupplier(new CombinedIntegratorTypeSupplier()); // OK - Nested
+																	// Settings
 		addProcessSupplier(new ChromatogramFilterTypeSupplier()); // OK
 		addProcessSupplier(new PeakFilterTypeSupplierMSD()); // OK
 		addProcessSupplier(new PeakDetectorTypeSupplier()); // OK
 		addProcessSupplier(new PeakIdentifierTypeSupplier()); // OK
-		addProcessSupplier(new PeakIntegratorTypeSupplier()); // OK - Improve settings
+		addProcessSupplier(new PeakIntegratorTypeSupplier()); // OK - Improve
+																// settings
 		addProcessSupplier(new PeakQuantitationTypeSupplier()); // OK
 		addProcessSupplier(new ChromatogramCalculatorTypeSupplier()); // OK
 		addProcessSupplier(new ChromatogramReportTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramExportTypeSupplier()); // OK - Improve settings
+		addProcessSupplier(new ChromatogramExportTypeSupplier()); // OK -
+																	// Improve
+																	// settings
 		addProcessSupplier(MassspectrumProcessTypeSupplier.createPeakFilterSupplier());
 		addProcessSupplier(MassspectrumProcessTypeSupplier.createScanFilterSupplier());
 		// NoiseCalculator?
@@ -144,15 +153,22 @@ public class ProcessTypeSupport {
 	public IProcessTypeSupplier getSupplier(String id) {
 
 		// check the map
-		IProcessTypeSupplier supplier = processSupplierMap.get(id);
+		IProcessTypeSupplier supplier = localProcessSupplier.get(id);
 		if(supplier != null) {
 			return supplier;
 		}
-		// check the suppliers directly, this is needed if the supplier has some kind of backward compatibility
-		for(IProcessTypeSupplier supplier2 : processSupplierMap.values()) {
+		// check the suppliers directly, this is needed if the supplier has some
+		// kind of backward compatibility
+		for(IProcessTypeSupplier supplier2 : localProcessSupplier.values()) {
 			IProcessSupplier processSupplier = supplier2.getProcessorSupplier(id);
 			if(processSupplier != null) {
 				return supplier2;
+			}
+		}
+		IProcessTypeSupplier[] dynamic = Activator.geIProcessTypeSuppliers();
+		for(IProcessTypeSupplier typeSupplier : dynamic) {
+			if(typeSupplier.getProcessorSupplier(id) != null) {
+				return typeSupplier;
 			}
 		}
 		return null;
@@ -177,7 +193,8 @@ public class ProcessTypeSupport {
 	}
 
 	/**
-	 * Adds the given {@link IProcessTypeSupplier} to this {@link ProcessTypeSupport} this allows for adding non standard supplier
+	 * Adds the given {@link IProcessTypeSupplier} to this
+	 * {@link ProcessTypeSupport} this allows for adding non standard supplier
 	 * 
 	 * @param processTypeSupplier
 	 */
@@ -186,11 +203,11 @@ public class ProcessTypeSupport {
 		try {
 			for(IProcessSupplier supplier : processTypeSupplier.getProcessorSuppliers()) {
 				String processorId = supplier.getId();
-				IProcessTypeSupplier typeSupplier = processSupplierMap.get(processorId);
+				IProcessTypeSupplier typeSupplier = localProcessSupplier.get(processorId);
 				if(typeSupplier != null) {
 					logger.warn("The processor id " + processorId + " is already defined by " + typeSupplier.getClass().getSimpleName() + " and is ignored for redefining supplier " + processTypeSupplier.getClass().getSimpleName());
 				} else {
-					processSupplierMap.put(processorId, processTypeSupplier);
+					localProcessSupplier.put(processorId, processTypeSupplier);
 				}
 			}
 		} catch(Exception e) {
@@ -206,7 +223,15 @@ public class ProcessTypeSupport {
 	public List<IProcessTypeSupplier> getProcessorTypeSuppliers(Collection<? extends DataType> dataTypes) {
 
 		List<IProcessTypeSupplier> supplier = new ArrayList<>();
-		for(IProcessTypeSupplier processTypeSupplier : processSupplierMap.values()) {
+		addMatchingSupplier(dataTypes, supplier, localProcessSupplier.values());
+		addMatchingSupplier(dataTypes, supplier, Arrays.asList(Activator.geIProcessTypeSuppliers()));
+		Collections.sort(supplier, CATEGORY_COMPARATOR);
+		return supplier;
+	}
+
+	private void addMatchingSupplier(Collection<? extends DataType> dataTypes, List<IProcessTypeSupplier> supplier, Iterable<IProcessTypeSupplier> candidates) {
+
+		for(IProcessTypeSupplier processTypeSupplier : candidates) {
 			if(supplier.contains(processTypeSupplier)) {
 				continue;
 			}
@@ -220,8 +245,6 @@ public class ProcessTypeSupport {
 				}
 			}
 		}
-		Collections.sort(supplier, CATEGORY_COMPARATOR);
-		return supplier;
 	}
 
 	public <T> IProcessingInfo<T> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessMethod processMethod, IProgressMonitor monitor) {
@@ -238,10 +261,10 @@ public class ProcessTypeSupport {
 		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		for(IChromatogramSelection<?, ?> chromatogramSelection : chromatogramSelections) {
 			/*
-			 * Process referenced chromatograms?
-			 * Will make things more complex. Discussion needed.
-			 * Think of RI calculation. Are the RIs of the master taken or the RIs of the selected reference?
-			 * What about the column?
+			 * Process referenced chromatograms? Will make things more complex.
+			 * Discussion needed. Think of RI calculation. Are the RIs of the
+			 * master taken or the RIs of the selected reference? What about the
+			 * column?
 			 */
 			for(IProcessEntry processEntry : processMethod) {
 				String processorId = processEntry.getProcessorId();
@@ -249,10 +272,11 @@ public class ProcessTypeSupport {
 				if(processTypeSupplier instanceof IChromatogramSelectionProcessTypeSupplier) {
 					IChromatogramSelectionProcessTypeSupplier chromatogramSelectionProcessTypeSupplier = (IChromatogramSelectionProcessTypeSupplier)processTypeSupplier;
 					/*
-					 * If processEntry.getJsonSettings() == {} (IProcessEntry.EMPTY_JSON_SETTINGS),
-					 * the processSettings class will be null.
-					 * The applyProcessor method manages how to handle this situation.
-					 * By default, the system settings of the plugin shall be used instead.
+					 * If processEntry.getJsonSettings() == {}
+					 * (IProcessEntry.EMPTY_JSON_SETTINGS), the processSettings
+					 * class will be null. The applyProcessor method manages how
+					 * to handle this situation. By default, the system settings
+					 * of the plugin shall be used instead.
 					 */
 					IProcessSettings processSettings;
 					Object settings = getProcessSettings(processEntry);
