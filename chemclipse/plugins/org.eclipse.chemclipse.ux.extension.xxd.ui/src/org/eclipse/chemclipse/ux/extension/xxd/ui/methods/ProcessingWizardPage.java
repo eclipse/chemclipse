@@ -340,8 +340,7 @@ public class ProcessingWizardPage extends WizardPage {
 
 		public void addSupplier(IProcessTypeSupplier supplier, Collection<DataType> dataTypes) {
 
-			List<IProcessSupplier> suppliers = supplier.getProcessorSuppliers();
-			for(IProcessSupplier processSupplier : suppliers) {
+			for(IProcessSupplier processSupplier : supplier.getProcessorSuppliers()) {
 				for(DataType dataType : dataTypes) {
 					if(processSupplier.getSupportedDataTypes().contains(dataType)) {
 						processorSuppliers.add(processSupplier);
