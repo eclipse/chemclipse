@@ -291,7 +291,6 @@ public class ProcessingWizardPage extends WizardPage {
 			processEntry.setName(processorSupplier.getName());
 			processEntry.setDescription(processorSupplier.getDescription());
 			processEntry.getSupportedDataTypes().addAll(processorSupplier.getSupportedDataTypes());
-			processEntry.setProcessSettingsClass(processorSupplier.getSettingsClass());
 			setMessage(processorSupplier.getDescription());
 		} else {
 			processEntry = null;

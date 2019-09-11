@@ -337,6 +337,9 @@ public class ProcessTypeSupport {
 
 	private static int validateSettings(IProcessEntry processEntry, IProcessSupplier<?> supplier) {
 
+		if(supplier.getSettingsClass() == null) {
+			return IStatus.WARNING;
+		}
 		try {
 			supplier.getPreferences().getSettings(processEntry.getJsonSettings());
 		} catch(IOException e) {
@@ -344,8 +347,6 @@ public class ProcessTypeSupport {
 		}
 		if(processEntry.getJsonSettings().equals(IProcessEntry.EMPTY_JSON_SETTINGS)) {
 			return IStatus.INFO;
-		} else if(processEntry.getProcessSettingsClass() == null) {
-			return IStatus.WARNING;
 		} else {
 			return IStatus.OK;
 		}

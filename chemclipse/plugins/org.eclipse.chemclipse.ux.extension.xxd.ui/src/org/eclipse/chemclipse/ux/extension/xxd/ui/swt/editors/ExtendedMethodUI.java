@@ -47,6 +47,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMeth
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ConfigurableUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodListUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodUIConfig;
+import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePage;
 import org.eclipse.core.runtime.Adapters;
@@ -794,35 +795,41 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, boolean alwaysShow) {
 
-		Class<?> processSettingsClass = processEntry.getProcessSettingsClass();
-		if(processSettingsClass != null) {
-			try {
-				String oldSettings = processEntry.getJsonSettings();
-				SettingsClassParser parser = new SettingsClassParser(processSettingsClass);
-				if(parser.getInputValues().isEmpty() && !alwaysShow) {
-					return true;
+		IProcessSupplier<?> supplier = processingSupport.getSupplier(processEntry.getProcessorId());
+		if(supplier != null) {
+			Class<?> processSettingsClass = supplier.getSettingsClass();
+			if(processSettingsClass != null) {
+				try {
+					String oldSettings = processEntry.getJsonSettings();
+					SettingsClassParser parser = new SettingsClassParser(processSettingsClass);
+					if(parser.getInputValues().isEmpty() && !alwaysShow) {
+						return true;
+					}
+					Map<InputValue, Object> content = SettingsWizard.openEditValuesWizard(shell, parser, METHOD_SETTINGS_SERIALIZATION.fromString(parser.getInputValues(), oldSettings));
+					if(content != null) {
+						processEntry.setJsonSettings(METHOD_SETTINGS_SERIALIZATION.toString(content));
+						return true;
+					}
+				} catch(IOException e1) {
+					logger.warn(e1);
 				}
-				Map<InputValue, Object> content = SettingsWizard.openEditValuesWizard(shell, parser, METHOD_SETTINGS_SERIALIZATION.fromString(parser.getInputValues(), oldSettings));
-				if(content != null) {
-					processEntry.setJsonSettings(METHOD_SETTINGS_SERIALIZATION.toString(content));
-					return true;
-				}
-			} catch(IOException e1) {
-				logger.warn(e1);
+			} else {
+				logger.debug("Settings class is null: " + processEntry);
+				return true;
 			}
-		} else {
-			logger.debug("Settings class is null: " + processEntry);
-			return true;
 		}
 		return false;
 	}
 
 	private boolean requireUserSettings(IProcessEntry processEntry) {
 
-		Class<?> processSettingsClass = processEntry.getProcessSettingsClass();
-		if(processSettingsClass != null) {
-			SettingsClassParser parser = new SettingsClassParser(processSettingsClass);
-			return parser.requiresUserSettings();
+		IProcessSupplier<Object> supplier = processingSupport.getSupplier(processEntry.getProcessorId());
+		if(supplier != null) {
+			Class<?> processSettingsClass = supplier.getSettingsClass();
+			if(processSettingsClass != null) {
+				SettingsClassParser parser = new SettingsClassParser(processSettingsClass);
+				return parser.requiresUserSettings();
+			}
 		}
 		return false;
 	}

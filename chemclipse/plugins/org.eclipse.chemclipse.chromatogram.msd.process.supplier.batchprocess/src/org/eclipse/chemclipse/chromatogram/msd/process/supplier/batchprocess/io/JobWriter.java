@@ -36,7 +36,6 @@ import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.osgi.framework.FrameworkUtil;
 
 public class JobWriter {
 
@@ -203,16 +202,9 @@ public class JobWriter {
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_NAME, processEntry.getName()));
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_DESCRIPTION, processEntry.getDescription()));
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_JSON_SETTINGS, processEntry.getJsonSettings()));
-		Class<?> clazz = processEntry.getProcessSettingsClass();
-		if(clazz != null) {
-			String symbolicName = FrameworkUtil.getBundle(clazz).getSymbolicName();
-			String className = clazz.getName();
-			eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_SYMBOLIC_NAME, symbolicName));
-			eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_CLASS_NAME, className));
-		} else {
-			eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_SYMBOLIC_NAME, ""));
-			eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_CLASS_NAME, ""));
-		}
+		// not used, only for backward compat
+		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_SYMBOLIC_NAME, ""));
+		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_CLASS_NAME, ""));
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_DATA_TYPES, getDataTypes(processEntry.getSupportedDataTypes())));
 		eventWriter.add(entryEnd);
 	}
