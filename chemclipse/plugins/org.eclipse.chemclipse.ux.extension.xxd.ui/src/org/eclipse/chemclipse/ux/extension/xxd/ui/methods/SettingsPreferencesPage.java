@@ -13,7 +13,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.IOException;
+import java.util.Map;
 
+import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
 import org.eclipse.jface.wizard.WizardPage;
@@ -33,7 +35,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	private ProcessorPreferences<T> preferences;
 	private boolean isDontAskAgain;
 	private boolean isUseSystemDefaults;
-	private String jsonSettings;
+	private Map<InputValue, Object> jsonSettings;
 	private SettingsParser settingsParser;
 
 	public SettingsPreferencesPage(SettingsParser settings, ProcessorPreferences<T> preferences) {
@@ -61,7 +63,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		buttonUser.setText("Use Specific Options");
 		SettingsUI settingsUI;
 		try {
-			settingsUI = new SettingsUI(composite, preferences.getSerialization().fromString(settingsParser.getInputValues(), preferences.getUserSettingsAsString()), preferences.getSerialization());
+			settingsUI = new SettingsUI(composite, preferences.getSerialization().fromString(settingsParser.getInputValues(), preferences.getUserSettingsAsString()));
 		} catch(IOException e1) {
 			throw new RuntimeException("reading settings failed", e1);
 		}
@@ -71,6 +73,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 			@Override
 			public void handleEvent(Event event) {
 
+				jsonSettings = null;
 				if(buttonUser.getSelection()) {
 					String validate = settingsUI.validate();
 					setErrorMessage(validate);
@@ -80,9 +83,8 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 					setPageComplete(true);
 				}
 				try {
-					jsonSettings = settingsUI.getJsonSettings();
-				} catch(Exception e) {
-					jsonSettings = null;
+					jsonSettings = settingsUI.getSettings();
+				} catch(IOException e) {
 				}
 			}
 		};
@@ -135,7 +137,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		return isDontAskAgain;
 	}
 
-	public String getJsonSettingsEdited() {
+	public Map<InputValue, Object> getJsonSettingsEdited() {
 
 		return jsonSettings;
 	}

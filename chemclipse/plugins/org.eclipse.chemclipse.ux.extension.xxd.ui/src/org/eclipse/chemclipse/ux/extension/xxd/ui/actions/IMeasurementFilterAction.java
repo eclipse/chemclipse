@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.filter.IMeasurementFilter;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ProcessorSupplierMenuEntry;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
@@ -52,9 +52,9 @@ public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementF
 
 		if(processTypeSupport != null) {
 			IProcessTypeSupplier supplier = processTypeSupport.getSupplier(filter.getID());
-			IProcessSupplier processSupplier = supplier.getProcessorSupplier(filter.getID());
+			IProcessSupplier<?> processSupplier = supplier.getProcessorSupplier(filter.getID());
 			try {
-				settings = ProcessorSupplierMenuEntry.getSettings(shell, processSupplier);
+				settings = SettingsWizard.getSettings(shell, processSupplier);
 			} catch(IOException e) {
 				ProcessingInfoViewSupport.updateProcessingInfoError(filter.getName(), "Can't process settings", e);
 			} catch(CancellationException e) {

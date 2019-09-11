@@ -220,7 +220,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 		ITreeSelection selection = treeViewer.getStructuredSelection();
 		ProcessorPreferences<Object> entry = getEntry(selection.getFirstElement());
 		if(entry != null) {
-			if(SettingsPreferencesWizard.openWizard(getShell(), entry.getSupplier())) {
+			if(SettingsWizard.openWizard(getShell(), entry.getSupplier())) {
 				updateTree();
 			}
 		}

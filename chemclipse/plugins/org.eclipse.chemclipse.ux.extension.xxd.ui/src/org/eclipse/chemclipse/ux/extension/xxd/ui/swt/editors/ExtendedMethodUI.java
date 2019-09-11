@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
@@ -28,6 +29,7 @@ import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
 import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
@@ -799,9 +801,9 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 					return true;
 				}
 				JSONSerialization jsonSerialization = new JSONSerialization();
-				String content = SettingsWizard.executeWizard(shell, jsonSerialization, jsonSerialization.fromString(parser.getInputValues(), oldSettings));
+				Map<InputValue, Object> content = SettingsWizard.executeWizard(shell, jsonSerialization.fromString(parser.getInputValues(), oldSettings));
 				if(content != null) {
-					processEntry.setJsonSettings(content);
+					processEntry.setJsonSettings(jsonSerialization.toString(content));
 					return true;
 				}
 			} catch(IOException e1) {

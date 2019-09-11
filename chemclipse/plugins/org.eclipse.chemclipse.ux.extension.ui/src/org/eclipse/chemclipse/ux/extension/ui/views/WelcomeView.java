@@ -46,6 +46,8 @@ public class WelcomeView {
 	public static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
 	private static final String PERSPECTIVE_PCA = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	private static final String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
+	private static final int NUMBER_OF_COLUMNS = Integer.getInteger("chemclipse.welcome.columns", 4);
+	private static final boolean EXTENSIONS_ONLY = Boolean.getBoolean("chemclipse.welcome.simple");
 	//
 	// private static final String CSS_ID = "org-eclipse-chemclipse-ux-extension-ui-views-welcomeview-background";
 	/*
@@ -99,30 +101,26 @@ public class WelcomeView {
 		Composite composite = new Composite(parent, SWT.NONE);
 		// composite.setData(CSSSWTConstants.CSS_ID_KEY, CSS_ID);
 		// composite.setBackground(Colors.WHITE);
-		composite.setLayout(new GridLayout(4, false));
-		//
-		createContent(composite);
-	}
-
-	private void createContent(Composite parent) {
-
+		composite.setLayout(new GridLayout(NUMBER_OF_COLUMNS, false));
 		/*
 		 * Important for a transparent background
 		 * of the contained components.
 		 */
-		parent.setBackgroundMode(SWT.INHERIT_FORCE);
-		/*
-		 * Default Tiles
-		 */
-		Image imageDataAnalysis = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_DATA_ANALYSIS, IApplicationImage.SIZE_128x128);
-		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 2, 2, new Component(PERSPECTIVE_DATA_ANALYSIS), imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.");
-		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_PCA), null, "PCA", "Used for principal component analysis");
-		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_LOGGING), null, "Logging", "Have a look at the log files.");
-		initializeTile(new TaskTile(parent, TaskTile.HIGHLIGHT), 2, 1, new DemoWelcomeTile(this), null, "Demo", "Load a demo chromatogram.");
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
+		if(!EXTENSIONS_ONLY) {
+			/*
+			 * Default Tiles
+			 */
+			Image imageDataAnalysis = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_DATA_ANALYSIS, IApplicationImage.SIZE_128x128);
+			initializeTile(new TaskTile(composite, TaskTile.HIGHLIGHT), 2, 2, new Component(PERSPECTIVE_DATA_ANALYSIS), imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.");
+			initializeTile(new TaskTile(composite, TaskTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_PCA), null, "PCA", "Used for principal component analysis");
+			initializeTile(new TaskTile(composite, TaskTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_LOGGING), null, "Logging", "Have a look at the log files.");
+			initializeTile(new TaskTile(composite, TaskTile.HIGHLIGHT), 2, 1, new DemoWelcomeTile(this), null, "Demo", "Load a demo chromatogram.");
+		}
 		/*
 		 * Registered Tiles
 		 */
-		new WelcomeViewExtensionHandler(parent, this);
+		new WelcomeViewExtensionHandler(composite, this);
 	}
 
 	private void initializeTile(TaskTile welcomeTile, int horizontalSpan, int verticalSpan, ISelectionHandler selectionHandler, Image image, String section, String description) {

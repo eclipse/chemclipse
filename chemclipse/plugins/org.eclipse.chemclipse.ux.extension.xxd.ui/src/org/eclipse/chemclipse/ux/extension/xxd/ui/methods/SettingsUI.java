@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
-import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -33,11 +32,9 @@ public class SettingsUI extends Composite {
 
 	private List<WidgetItem> widgetItems = new ArrayList<>();
 	private List<Label> labels = new ArrayList<>();
-	private SettingsSerialization serialization;
 
-	public SettingsUI(Composite parent, Map<InputValue, ?> inputValues, SettingsSerialization serialization) {
+	public SettingsUI(Composite parent, Map<InputValue, ?> inputValues) {
 		super(parent, SWT.NONE);
-		this.serialization = serialization;
 		setLayout(new GridLayout(2, false));
 		if(inputValues != null) {
 			for(Entry<InputValue, ?> entry : inputValues.entrySet()) {
@@ -107,13 +104,13 @@ public class SettingsUI extends Composite {
 		return null;
 	}
 
-	public String getJsonSettings() throws IOException {
+	public Map<InputValue, Object> getSettings() throws IOException {
 
 		Map<InputValue, Object> values = new HashMap<>();
 		for(WidgetItem widgetItem : widgetItems) {
 			InputValue inputValue = widgetItem.getInputValue();
 			values.put(inputValue, widgetItem.getValue());
 		}
-		return serialization.toString(values);
+		return values;
 	}
 }
