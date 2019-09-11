@@ -35,7 +35,7 @@ public class ChromatogramCalculatorTypeSupplier extends AbstractProcessTypeSuppl
 			for(String processorId : support.getAvailableCalculatorIds()) {
 				IChromatogramCalculatorSupplier supplier = support.getCalculatorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getCalculatorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

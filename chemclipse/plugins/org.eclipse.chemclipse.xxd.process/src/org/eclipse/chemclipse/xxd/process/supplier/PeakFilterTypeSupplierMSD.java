@@ -36,7 +36,7 @@ public class PeakFilterTypeSupplierMSD extends AbstractProcessTypeSupplier imple
 			for(String processorId : support.getAvailableFilterIds()) {
 				IPeakFilterSupplier supplier = support.getFilterSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, MSD_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, MSD_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getFilterName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

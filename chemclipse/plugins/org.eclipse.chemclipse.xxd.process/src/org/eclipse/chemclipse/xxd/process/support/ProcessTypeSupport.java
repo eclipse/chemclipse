@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurement;
@@ -61,11 +63,6 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ProcessTypeSupport {
 
@@ -134,17 +131,9 @@ public class ProcessTypeSupport {
 					// empty default node
 					continue;
 				}
-				IProcessTypeSupplier supplier = getSupplier(name);
-				if(supplier != null) {
-					IProcessTypeSupplier typeSupplier = getSupplier(name);
-					if(typeSupplier == null) {
-						// not valid for this type support
-						continue;
-					}
-					IProcessSupplier<?> processorSupplier = typeSupplier.getProcessorSupplier(name);
-					if(processorSupplier != null) {
-						result.add(new NodeProcessorPreferences<>(processorSupplier, node));
-					}
+				IProcessSupplier<?> processorSupplier = getSupplier(name);
+				if(processorSupplier != null) {
+					result.add(new NodeProcessorPreferences<>(processorSupplier, node));
 				}
 			}
 		} catch(BackingStoreException e) {
@@ -153,25 +142,19 @@ public class ProcessTypeSupport {
 		return result;
 	}
 
-	public IProcessTypeSupplier getSupplier(String id) {
+	public <SettingType> IProcessSupplier<SettingType> getSupplier(String processorId) {
 
-		// check the map
-		IProcessTypeSupplier supplier = localProcessSupplier.get(id);
-		if(supplier != null) {
-			return supplier;
-		}
-		// check the suppliers directly, this is needed if the supplier has some
-		// kind of backward compatibility
-		for(IProcessTypeSupplier supplier2 : localProcessSupplier.values()) {
-			IProcessSupplier<?> processSupplier = supplier2.getProcessorSupplier(id);
+		for(IProcessTypeSupplier supplier : localProcessSupplier.values()) {
+			IProcessSupplier<SettingType> processSupplier = supplier.getProcessorSupplier(processorId);
 			if(processSupplier != null) {
-				return supplier2;
+				return processSupplier;
 			}
 		}
 		IProcessTypeSupplier[] dynamic = Activator.geIProcessTypeSuppliers();
 		for(IProcessTypeSupplier typeSupplier : dynamic) {
-			if(typeSupplier.getProcessorSupplier(id) != null) {
-				return typeSupplier;
+			IProcessSupplier<SettingType> supplier = typeSupplier.getProcessorSupplier(processorId);
+			if(supplier != null) {
+				return supplier;
 			}
 		}
 		return null;
@@ -259,8 +242,9 @@ public class ProcessTypeSupport {
 		return applyProcessor(chromatogramSelections, processMethod, monitor);
 	}
 
-	public <T> IProcessingInfo<T> applyProcessor(List<? extends IChromatogramSelection<?, ?>> chromatogramSelections, IProcessMethod processMethod, IProgressMonitor monitor) {
+	public <T, X> IProcessingInfo<T> applyProcessor(List<? extends IChromatogramSelection<?, ?>> chromatogramSelections, IProcessMethod processMethod, IProgressMonitor monitor) {
 
+		SubMonitor subMonitor = SubMonitor.convert(monitor, chromatogramSelections.size());
 		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		for(IChromatogramSelection<?, ?> chromatogramSelection : chromatogramSelections) {
 			/*
@@ -269,70 +253,73 @@ public class ProcessTypeSupport {
 			 * master taken or the RIs of the selected reference? What about the
 			 * column?
 			 */
-			for(IProcessEntry processEntry : processMethod) {
-				String processorId = processEntry.getProcessorId();
-				IProcessTypeSupplier processTypeSupplier = getSupplier(processorId);
-				if(processTypeSupplier instanceof IChromatogramSelectionProcessTypeSupplier) {
-					IChromatogramSelectionProcessTypeSupplier chromatogramSelectionProcessTypeSupplier = (IChromatogramSelectionProcessTypeSupplier)processTypeSupplier;
-					/*
-					 * If processEntry.getJsonSettings() == {}
-					 * (IProcessEntry.EMPTY_JSON_SETTINGS), the processSettings
-					 * class will be null. The applyProcessor method manages how
-					 * to handle this situation. By default, the system settings
-					 * of the plugin shall be used instead.
-					 */
-					IProcessSettings processSettings;
-					Object settings = getProcessSettings(processEntry);
-					if(settings instanceof IProcessSettings) {
-						processSettings = (IProcessSettings)settings;
-					} else {
-						processSettings = null;
+			applyProcessor(processMethod, new BiConsumer<IProcessSupplier<X>, X>() {
+
+				@Override
+				public void accept(IProcessSupplier<X> processSupplier, X settings) {
+
+					IProcessTypeSupplier processTypeSupplier = processSupplier.getTypeSupplier();
+					if(processTypeSupplier instanceof IChromatogramSelectionProcessTypeSupplier) {
+						IChromatogramSelectionProcessTypeSupplier chromatogramSelectionProcessTypeSupplier = (IChromatogramSelectionProcessTypeSupplier)processTypeSupplier;
+						/*
+						 * If processEntry.getJsonSettings() == {}
+						 * (IProcessEntry.EMPTY_JSON_SETTINGS), the processSettings
+						 * class will be null. The applyProcessor method manages how
+						 * to handle this situation. By default, the system settings
+						 * of the plugin shall be used instead.
+						 */
+						IProcessSettings processSettings;
+						if(settings instanceof IProcessSettings) {
+							processSettings = (IProcessSettings)settings;
+						} else {
+							processSettings = null;
+						}
+						IProcessingInfo<?> processorResult = chromatogramSelectionProcessTypeSupplier.applyProcessor(chromatogramSelection, processSupplier.getId(), processSettings, monitor);
+						processingInfo.addMessages(processorResult);
 					}
-					IProcessingInfo<?> processorResult = chromatogramSelectionProcessTypeSupplier.applyProcessor(chromatogramSelection, processorId, processSettings, monitor);
-					processingInfo.addMessages(processorResult);
 				}
-			}
+			}, processingInfo);
+			subMonitor.worked(1);
 		}
 		return processingInfo;
 	}
 
-	public Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+	public <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, MessageConsumer messageConsumer, IProgressMonitor monitor) {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Processing files", processMethod.size() * 100);
-		for(IProcessEntry processEntry : processMethod) {
-			String processorId = processEntry.getProcessorId();
-			IProcessTypeSupplier processTypeSupplier = getSupplier(processorId);
-			if(processTypeSupplier instanceof IMeasurementProcessTypeSupplier) {
-				measurements = ((IMeasurementProcessTypeSupplier)processTypeSupplier).applyProcessor(measurements, processorId, getProcessSettings(processEntry), messageConsumer, subMonitor.split(100));
-			}
-		}
-		return measurements;
-	}
+		AtomicReference<Collection<? extends IMeasurement>> result = new AtomicReference<Collection<? extends IMeasurement>>(measurements);
+		applyProcessor(processMethod, new BiConsumer<IProcessSupplier<X>, X>() {
 
-	public Object getProcessSettings(IProcessEntry processEntry) {
+			@Override
+			public void accept(IProcessSupplier<X> processor, X settings) {
 
-		if(processEntry != null) {
-			Class<?> clazz = processEntry.getProcessSettingsClass();
-			if(clazz != null) {
-				ObjectMapper objectMapper = new ObjectMapper();
-				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-				try {
-					String content = processEntry.getJsonSettings();
-					if(IProcessEntry.EMPTY_JSON_SETTINGS.equals(content)) {
-						logger.info("Process settings are empty. Default system settings are used instead.");
-					} else {
-						return objectMapper.readValue(content, clazz);
-					}
-				} catch(JsonParseException e) {
-					logger.warn(e);
-				} catch(JsonMappingException e) {
-					logger.warn(e);
-				} catch(IOException e) {
-					logger.warn(e);
+				IProcessTypeSupplier processTypeSupplier = processor.getTypeSupplier();
+				if(processTypeSupplier instanceof IMeasurementProcessTypeSupplier) {
+					result.set(((IMeasurementProcessTypeSupplier)processTypeSupplier).applyProcessor(result.get(), processor.getId(), settings, messageConsumer, subMonitor.split(100)));
 				}
 			}
+		}, messageConsumer);
+		return result.get();
+	}
+
+	private <X> void applyProcessor(IProcessMethod processMethod, BiConsumer<IProcessSupplier<X>, X> consumer, MessageConsumer messages) {
+
+		for(IProcessEntry processEntry : processMethod) {
+			String processorId = processEntry.getProcessorId();
+			IProcessSupplier<X> processSupplier = getSupplier(processorId);
+			if(processSupplier == null) {
+				messages.addWarnMessage(getClass().getSimpleName(), "Processor with id '" + processorId + " was not found and will be skipped");
+				continue;
+			}
+			X settings;
+			try {
+				settings = processSupplier.getPreferences().getSettings(processEntry.getJsonSettings());
+			} catch(IOException e) {
+				messages.addWarnMessage(processorId, "the settings can't be read", e);
+				continue;
+			}
+			consumer.accept(processSupplier, settings);
 		}
-		return null;
 	}
 
 	public int validate(IProcessEntry processEntry) {
@@ -340,16 +327,21 @@ public class ProcessTypeSupport {
 		if(processEntry == null) {
 			return IStatus.ERROR;
 		}
-		IProcessTypeSupplier supplier = getSupplier(processEntry.getProcessorId());
+		IProcessSupplier<?> supplier = getSupplier(processEntry.getProcessorId());
 		if(supplier != null) {
-			return validateSettings(processEntry);
+			return validateSettings(processEntry, supplier);
 		} else {
 			return IStatus.ERROR;
 		}
 	}
 
-	private static int validateSettings(IProcessEntry processEntry) {
+	private static int validateSettings(IProcessEntry processEntry, IProcessSupplier<?> supplier) {
 
+		try {
+			supplier.getPreferences().getSettings(processEntry.getJsonSettings());
+		} catch(IOException e) {
+			return IStatus.ERROR;
+		}
 		if(processEntry.getJsonSettings().equals(IProcessEntry.EMPTY_JSON_SETTINGS)) {
 			return IStatus.INFO;
 		} else if(processEntry.getProcessSettingsClass() == null) {
@@ -443,7 +435,7 @@ public class ProcessTypeSupport {
 		@Override
 		public T getUserSettings() throws IOException {
 
-			return getSerialization().fromString(getSupplier().getSettingsClass(), getUserSettingsAsString());
+			return getSettings(getUserSettingsAsString());
 		}
 
 		@Override
@@ -457,6 +449,16 @@ public class ProcessTypeSupport {
 		public IProcessSupplier<T> getSupplier() {
 
 			return supplier;
+		}
+
+		@Override
+		public T getSettings(String serializedString) throws IOException {
+
+			Class<T> settingsClass = getSupplier().getSettingsClass();
+			if(serializedString == null || settingsClass == null) {
+				return null;
+			}
+			return getSerialization().fromString(settingsClass, serializedString);
 		}
 	}
 }

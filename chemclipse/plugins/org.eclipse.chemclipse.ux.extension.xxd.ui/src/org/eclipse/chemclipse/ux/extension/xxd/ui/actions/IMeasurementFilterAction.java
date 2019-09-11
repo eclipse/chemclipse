@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
-import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Shell;
@@ -51,14 +50,15 @@ public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementF
 	public void executeAction(Shell shell) {
 
 		if(processTypeSupport != null) {
-			IProcessTypeSupplier supplier = processTypeSupport.getSupplier(filter.getID());
-			IProcessSupplier<?> processSupplier = supplier.getProcessorSupplier(filter.getID());
-			try {
-				settings = SettingsWizard.getSettings(shell, processSupplier);
-			} catch(IOException e) {
-				ProcessingInfoViewSupport.updateProcessingInfoError(filter.getName(), "Can't process settings", e);
-			} catch(CancellationException e) {
-				return;
+			IProcessSupplier<?> processSupplier = processTypeSupport.getSupplier(filter.getID());
+			if(processSupplier != null) {
+				try {
+					settings = SettingsWizard.getSettings(shell, processSupplier);
+				} catch(IOException e) {
+					ProcessingInfoViewSupport.updateProcessingInfoError(filter.getName(), "Can't process settings", e);
+				} catch(CancellationException e) {
+					return;
+				}
 			}
 		}
 		super.executeAction(shell);

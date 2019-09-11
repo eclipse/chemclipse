@@ -35,7 +35,7 @@ public class ChromatogramIntegratorTypeSupplier extends AbstractProcessTypeSuppl
 			for(String processorId : support.getAvailableIntegratorIds()) {
 				IChromatogramIntegratorSupplier supplier = support.getIntegratorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getIntegratorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

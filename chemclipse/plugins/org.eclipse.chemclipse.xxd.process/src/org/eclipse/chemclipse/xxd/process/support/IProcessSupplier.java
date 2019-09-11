@@ -41,6 +41,10 @@ public interface IProcessSupplier<SettingType> {
 	 */
 	Class<SettingType> getSettingsClass();
 
+	/**
+	 * 
+	 * @return a set of supported datatypes
+	 */
 	Set<DataType> getSupportedDataTypes();
 
 	/**
@@ -51,4 +55,10 @@ public interface IProcessSupplier<SettingType> {
 
 		return ProcessTypeSupport.getWorkspacePreferences(this);
 	}
+
+	/**
+	 * 
+	 * @return the {@link IProcessTypeSupplier} this {@link IProcessSupplier} belongs to
+	 */
+	IProcessTypeSupplier getTypeSupplier();
 }

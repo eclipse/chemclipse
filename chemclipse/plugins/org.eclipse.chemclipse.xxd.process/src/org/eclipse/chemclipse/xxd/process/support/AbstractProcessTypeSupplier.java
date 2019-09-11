@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
 public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-	private Map<String, IProcessSupplier> processorSuppliers = new HashMap<>();
+	private Map<String, IProcessSupplier<?>> processorSuppliers = new HashMap<>();
 	private String category;
 
 	public AbstractProcessTypeSupplier(String category) {
@@ -36,14 +36,14 @@ public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplie
 	}
 
 	@Override
-	public Collection<IProcessSupplier> getProcessorSuppliers() {
+	public Collection<IProcessSupplier<?>> getProcessorSuppliers() {
 
 		return Collections.unmodifiableCollection(processorSuppliers.values());
 	}
 
-	protected IProcessSupplier addProcessorSupplier(String id, String name, String description, Class<?> settingsClass, DataType... dataTypes) {
+	protected <T> IProcessSupplier<T> addProcessorSupplier(String id, String name, String description, Class<T> settingsClass, DataType... dataTypes) {
 
-		ProcessorSupplier supplier = new ProcessorSupplier(id, dataTypes);
+		ProcessorSupplier<T> supplier = new ProcessorSupplier<T>(id, dataTypes, this);
 		supplier.setDescription(description);
 		supplier.setName(name);
 		supplier.setSettingsClass(settingsClass);
@@ -51,15 +51,16 @@ public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplie
 		return supplier;
 	}
 
-	protected void addProcessorSupplier(IProcessSupplier processorSupplier) {
+	protected void addProcessorSupplier(IProcessSupplier<?> processorSupplier) {
 
 		processorSuppliers.put(processorSupplier.getId(), processorSupplier);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public final IProcessSupplier getProcessorSupplier(String id) {
+	public final <SettingsClass> IProcessSupplier<SettingsClass> getProcessorSupplier(String id) {
 
-		return processorSuppliers.get(id);
+		return (IProcessSupplier<SettingsClass>)processorSuppliers.get(id);
 	}
 
 	protected <T> IProcessingInfo<T> invalidId(String processorId) {

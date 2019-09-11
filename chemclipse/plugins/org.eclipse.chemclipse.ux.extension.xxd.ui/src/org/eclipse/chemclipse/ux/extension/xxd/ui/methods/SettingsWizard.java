@@ -53,7 +53,7 @@ public class SettingsWizard extends Wizard {
 	 * @return the edited value in JSON format or <code>null</code> if edit was canceled
 	 * @throws IOException
 	 */
-	public static Map<InputValue, Object> executeWizard(Shell shell, Map<InputValue, ?> inputValues) throws IOException {
+	public static Map<InputValue, Object> openEditValuesWizard(Shell shell, SettingsParser settings, Map<InputValue, ?> inputValues) throws IOException {
 
 		SettingsWizard wizard = new SettingsWizard("Settings");
 		SettingsWizardPage page = new SettingsWizardPage(inputValues);
@@ -66,12 +66,6 @@ public class SettingsWizard extends Wizard {
 		} else {
 			return null;
 		}
-	}
-
-	public static <T> boolean openWizard(Shell shell, IProcessSupplier<T> processorSupplier) {
-
-		SettingsClassParser settings = new SettingsClassParser(processorSupplier.getSettingsClass());
-		return openWizard(shell, settings, processorSupplier);
 	}
 
 	public static <T> boolean openWizard(Shell shell, SettingsParser settings, IProcessSupplier<T> processorSupplier) {
@@ -103,7 +97,13 @@ public class SettingsWizard extends Wizard {
 		}
 	}
 
-	public static void openEditWizard(Shell shell, ProcessTypeSupport processTypeSupport) {
+	/**
+	 * Opens a wizard to edit the preferences stored inside the given {@link ProcessTypeSupport}
+	 * 
+	 * @param shell
+	 * @param processTypeSupport
+	 */
+	public static void openEditPreferencesWizard(Shell shell, ProcessTypeSupport processTypeSupport) {
 
 		SettingsWizard wizard = new SettingsWizard("Manage Processor Options");
 		SettingsPreferencesEditPage page = new SettingsPreferencesEditPage(processTypeSupport);

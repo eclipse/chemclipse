@@ -44,7 +44,7 @@ public class MassspectrumProcessTypeSupplier extends AbstractProcessTypeSupplier
 			List<String> ids = FILTER_SUPPORT.getAvailableFilterIds();
 			for(String id : ids) {
 				IMassSpectrumFilterSupplier supplier = FILTER_SUPPORT.getFilterSupplier(id);
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(prefix + id, DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(prefix + id, DATA_TYPES, this);
 				processorSupplier.setName(supplier.getFilterName());
 				processorSupplier.setDescription(supplier.getDescription());
 				// TODO processorSupplier.setSettingsClass();

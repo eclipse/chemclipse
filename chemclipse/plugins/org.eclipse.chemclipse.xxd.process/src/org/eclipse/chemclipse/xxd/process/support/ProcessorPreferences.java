@@ -67,5 +67,17 @@ public interface ProcessorPreferences<SettingType> {
 	 */
 	IProcessSupplier<SettingType> getSupplier();
 
+	/**
+	 * 
+	 * @return the user settings serialized as a string suitable for use with {@link #getSettings(String)}
+	 */
 	String getUserSettingsAsString();
+
+	/**
+	 * 
+	 * @param serializedString
+	 * @return the instance of settings representing the given string
+	 * @throws IOException
+	 */
+	SettingType getSettings(String serializedString) throws IOException;
 }

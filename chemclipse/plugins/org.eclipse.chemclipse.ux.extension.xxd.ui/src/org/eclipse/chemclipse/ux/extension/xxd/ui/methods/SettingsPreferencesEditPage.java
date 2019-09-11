@@ -18,6 +18,8 @@ import java.util.TreeMap;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
+import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
@@ -218,9 +220,10 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void doEdit() {
 
 		ITreeSelection selection = treeViewer.getStructuredSelection();
-		ProcessorPreferences<Object> entry = getEntry(selection.getFirstElement());
+		ProcessorPreferences<?> entry = getEntry(selection.getFirstElement());
 		if(entry != null) {
-			if(SettingsWizard.openWizard(getShell(), entry.getSupplier())) {
+			IProcessSupplier<?> supplier = entry.getSupplier();
+			if(SettingsWizard.openWizard(getShell(), new SettingsClassParser(supplier.getSettingsClass()), supplier)) {
 				updateTree();
 			}
 		}
@@ -230,7 +233,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 
 		Map<String, TreeNode> categories = new TreeMap<>();
 		for(ProcessorPreferences<?> entry : processTypeSupport.getAllPreferences()) {
-			IProcessTypeSupplier supplier = processTypeSupport.getSupplier(entry.getSupplier().getId());
+			IProcessTypeSupplier supplier = entry.getSupplier().getTypeSupplier();
 			TreeNode processorNode = new TreeNode(entry.getSupplier());
 			String category = supplier.getCategory();
 			TreeNode categoryNode = categories.get(category);

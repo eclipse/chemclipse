@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
 import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
+import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -91,6 +92,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private static final Logger logger = Logger.getLogger(ExtendedMethodUI.class);
 	//
 	private static final String MENU_CATEGORY_STEPS = "Steps";
+	private static final SettingsSerialization METHOD_SETTINGS_SERIALIZATION = new JSONSerialization();
 	//
 	private Composite toolbarHeader;
 	private Label labelDataInfo;
@@ -800,10 +802,9 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				if(parser.getInputValues().isEmpty() && !alwaysShow) {
 					return true;
 				}
-				JSONSerialization jsonSerialization = new JSONSerialization();
-				Map<InputValue, Object> content = SettingsWizard.executeWizard(shell, jsonSerialization.fromString(parser.getInputValues(), oldSettings));
+				Map<InputValue, Object> content = SettingsWizard.openEditValuesWizard(shell, parser, METHOD_SETTINGS_SERIALIZATION.fromString(parser.getInputValues(), oldSettings));
 				if(content != null) {
-					processEntry.setJsonSettings(jsonSerialization.toString(content));
+					processEntry.setJsonSettings(METHOD_SETTINGS_SERIALIZATION.toString(content));
 					return true;
 				}
 			} catch(IOException e1) {
@@ -811,6 +812,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			}
 		} else {
 			logger.debug("Settings class is null: " + processEntry);
+			return true;
 		}
 		return false;
 	}

@@ -38,7 +38,7 @@ public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier im
 			for(String processorId : support.getAvailablePeakQuantifierIds()) {
 				IPeakQuantifierSupplier supplier = support.getPeakQuantifierSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, MSD_CSD_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, MSD_CSD_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getPeakQuantifierName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

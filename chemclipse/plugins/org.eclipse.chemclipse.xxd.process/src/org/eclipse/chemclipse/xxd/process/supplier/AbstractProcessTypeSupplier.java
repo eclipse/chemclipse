@@ -32,7 +32,7 @@ public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplie
 	protected static final DataType[] MSD_CSD_DATA_TYPES = new DataType[]{DataType.MSD, DataType.CSD};
 	protected static final DataType[] CSD_DATA_TYPES = new DataType[]{DataType.CSD};
 	protected static final DataType[] WSD_DATA_TYPES = new DataType[]{DataType.WSD};
-	private Map<String, ProcessorSupplier> processorSuppliers = new HashMap<>();
+	private Map<String, IProcessSupplier<?>> processorSuppliers = new HashMap<>();
 	//
 	private String category;
 
@@ -47,7 +47,7 @@ public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplie
 	}
 
 	@Override
-	public List<IProcessSupplier> getProcessorSuppliers() {
+	public List<IProcessSupplier<?>> getProcessorSuppliers() {
 
 		return new ArrayList<>(processorSuppliers.values());
 	}
@@ -57,17 +57,18 @@ public abstract class AbstractProcessTypeSupplier implements IProcessTypeSupplie
 		processorSuppliers.put(processorSupplier.getId(), processorSupplier);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public final IProcessSupplier getProcessorSupplier(String id) {
+	public final <ConfigType> IProcessSupplier<ConfigType> getProcessorSupplier(String id) {
 
-		ProcessorSupplier supplier = processorSuppliers.get(id);
+		IProcessSupplier<?> supplier = processorSuppliers.get(id);
 		if(supplier == null) {
 			String backCompatId = getBackCompatId(id);
 			if(backCompatId != null) {
-				return processorSuppliers.get(backCompatId);
+				return (IProcessSupplier<ConfigType>)processorSuppliers.get(backCompatId);
 			}
 		}
-		return supplier;
+		return (IProcessSupplier<ConfigType>)supplier;
 	}
 
 	protected String getBackCompatId(String id) {

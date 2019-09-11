@@ -575,7 +575,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			@Override
 			public void execute(Shell shell, ScrollableChart scrollableChart) {
 
-				SettingsWizard.openEditWizard(shell, processTypeSupport);
+				SettingsWizard.openEditPreferencesWizard(shell, processTypeSupport);
 			}
 
 			@Override

@@ -19,13 +19,14 @@ public interface IProcessTypeSupplier {
 
 	String getCategory();
 
-	Collection<IProcessSupplier> getProcessorSuppliers();
+	Collection<IProcessSupplier<?>> getProcessorSuppliers();
 
-	default IProcessSupplier getProcessorSupplier(String id) {
+	@SuppressWarnings("unchecked")
+	default <ConfigType> IProcessSupplier<ConfigType> getProcessorSupplier(String id) {
 
-		for(IProcessSupplier supplier : getProcessorSuppliers()) {
+		for(IProcessSupplier<?> supplier : getProcessorSuppliers()) {
 			if(supplier.getId().equals(id)) {
-				return supplier;
+				return (IProcessSupplier<ConfigType>)supplier;
 			}
 		}
 		return null;
