@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
+import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
@@ -32,26 +30,20 @@ public class SettingsPreferencesWizard extends Wizard {
 		return true;
 	}
 
-	public static boolean openWizard(Shell shell, ProcessorPreferences preferences, IProcessSupplier processorSupplier) {
+	public static <T> boolean openWizard(Shell shell, IProcessSupplier<T> processorSupplier) {
 
-		try {
-			return openWizard(shell, InputValue.readJSON(processorSupplier.getSettingsClass(), preferences.getUserSettings()), preferences, processorSupplier);
-		} catch(IOException e) {
-			return false;
-		}
+		SettingsClassParser settings = new SettingsClassParser(processorSupplier.getSettingsClass());
+		return openWizard(shell, settings, processorSupplier);
 	}
 
-	public static boolean openWizard(Shell shell, List<InputValue> values, ProcessorPreferences preferences, IProcessSupplier processorSupplier) {
+	public static <T> boolean openWizard(Shell shell, SettingsParser settings, IProcessSupplier<T> processorSupplier) {
 
+		ProcessorPreferences<T> preferences = processorSupplier.getPreferences();
 		SettingsPreferencesWizard wizard = new SettingsPreferencesWizard();
 		wizard.setWindowTitle("Edit Processor Options");
-		SettingsPreferencesPage page = new SettingsPreferencesPage(values, preferences);
-		if(processorSupplier == null) {
-			page.setTitle("Edit preferences");
-		} else {
-			page.setTitle("Select options to use for " + processorSupplier.getName());
-			page.setMessage(processorSupplier.getDescription());
-		}
+		SettingsPreferencesPage<T> page = new SettingsPreferencesPage<>(settings, preferences);
+		page.setTitle("Select options to use for " + processorSupplier.getName());
+		page.setMessage(processorSupplier.getDescription());
 		wizard.addPage(page);
 		WizardDialog wizardDialog = new WizardDialog(shell, wizard);
 		wizardDialog.setMinimumPageSize(SettingsWizard.DEFAULT_WIDTH, SettingsWizard.DEFAULT_HEIGHT);

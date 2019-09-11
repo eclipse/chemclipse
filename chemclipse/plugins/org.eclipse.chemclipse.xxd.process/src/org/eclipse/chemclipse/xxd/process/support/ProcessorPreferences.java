@@ -11,13 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
 
+import java.io.IOException;
+
+import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
+
 /**
  * Represents user preference for a processor
  * 
  * @author Christoph Läubrich
  *
  */
-public interface ProcessorPreferences {
+public interface ProcessorPreferences<SettingType> {
 
 	/**
 	 * 
@@ -26,12 +30,6 @@ public interface ProcessorPreferences {
 	boolean isAskForSettings();
 
 	void setAskForSettings(boolean askForSettings);
-
-	/**
-	 * 
-	 * @return the currently stored usersettings for this processor
-	 */
-	String getUserSettings();
 
 	void setUserSettings(String settings);
 
@@ -47,4 +45,27 @@ public interface ProcessorPreferences {
 	 * reset this preferences deleting all saved values
 	 */
 	void reset();
+
+	/**
+	 * 
+	 * @return the serialization used for the user settings
+	 */
+	SettingsSerialization getSerialization();
+
+	/**
+	 * constructs a new settings instance from the current user settings
+	 * 
+	 * @param settingsClass
+	 * @return the currently stored usersettings for this processor
+	 * @throws IOException
+	 */
+	SettingType getUserSettings() throws IOException;
+
+	/**
+	 * 
+	 * @return the corresponding supplier
+	 */
+	IProcessSupplier<SettingType> getSupplier();
+
+	String getUserSettingsAsString();
 }

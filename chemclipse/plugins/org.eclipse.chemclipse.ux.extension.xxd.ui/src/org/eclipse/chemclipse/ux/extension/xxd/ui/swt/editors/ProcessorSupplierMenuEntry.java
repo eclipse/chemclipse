@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -24,7 +23,9 @@ import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
-import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
+import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
+import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsPreferencesWizard;
 import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
@@ -37,17 +38,14 @@ import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.menu.AbstractChartMenuEntry;
 import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 public class ProcessorSupplierMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
 
 	private IProcessTypeSupplier typeSupplier;
-	private IProcessSupplier processorSupplier;
+	private IProcessSupplier<?> processorSupplier;
 	private Supplier<IChromatogramSelection<?, ?>> supplier;
 	private BiConsumer<IRunnableWithProgress, Shell> executionConsumer;
 
-	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessTypeSupplier typeSupplier, IProcessSupplier processorSupplier) {
+	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessTypeSupplier typeSupplier, IProcessSupplier<?> processorSupplier) {
 		this.supplier = chromatogramSupplier;
 		this.executionConsumer = executionConsumer;
 		this.typeSupplier = typeSupplier;
@@ -115,38 +113,35 @@ public class ProcessorSupplierMenuEntry extends AbstractChartMenuEntry implement
 	 * @return
 	 * @throws IOException
 	 */
-	public static Object getSettings(Shell shell, IProcessSupplier processorSupplier) throws IOException {
+	public static <T> T getSettings(Shell shell, IProcessSupplier<T> processorSupplier) throws IOException {
 
-		Class<?> settingsClass = processorSupplier.getSettingsClass();
-		Object settings;
+		Class<T> settingsClass = processorSupplier.getSettingsClass();
 		if(settingsClass == null) {
-			settings = null;
+			return null;
 		} else {
-			ProcessorPreferences preferences = processorSupplier.getPreferences();
+			SettingsParser parser = new SettingsClassParser(settingsClass);
+			ProcessorPreferences<T> preferences = processorSupplier.getPreferences();
 			if(preferences.isAskForSettings()) {
-				List<InputValue> values = InputValue.readJSON(settingsClass, preferences.getUserSettings());
-				if(!values.isEmpty()) {
-					if(!SettingsPreferencesWizard.openWizard(shell, values, preferences, processorSupplier)) {
+				if(!parser.getInputValues().isEmpty()) {
+					if(!SettingsPreferencesWizard.openWizard(shell, parser, processorSupplier)) {
 						throw new CancellationException("user has canceled the wizard");
 					}
 				}
 			}
 			if(preferences.isUseSystemDefaults()) {
-				/*
-				 * Why should we not use "settings = settingsClass.newInstance();" here?
-				 * The IProcessSettings instance would be created, but without any meaningful values.
-				 * IProcessTypeSupplier explicitly calls the method without setting if applyProcessor with "IProcessSettings == null" is called.
-				 * The executing plugin then takes care to get the user specific system settings (Eclipse Preferences).
-				 */
-				settings = null;
+				if(parser.getSystemSettingsStrategy() == SystemSettingsStrategy.NEW_INSTANCE) {
+					try {
+						return settingsClass.newInstance();
+					} catch(InstantiationException | IllegalAccessException e) {
+						throw new IOException("can't create new instance", e);
+					}
+				} else {
+					return null;
+				}
 			} else {
-				String userSettings = preferences.getUserSettings();
-				ObjectMapper objectMapper = new ObjectMapper();
-				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-				settings = objectMapper.readValue(userSettings, settingsClass);
+				return preferences.getUserSettings();
 			}
 		}
-		return settings;
 	}
 
 	public void updateResult(Shell shell, MessageProvider result) {

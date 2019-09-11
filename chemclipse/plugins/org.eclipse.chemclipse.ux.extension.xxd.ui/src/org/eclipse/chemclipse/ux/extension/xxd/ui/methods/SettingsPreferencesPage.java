@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
-import java.util.List;
+import java.io.IOException;
 
-import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -28,33 +28,43 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
-public class SettingsPreferencesPage extends WizardPage {
+public class SettingsPreferencesPage<T> extends WizardPage {
 
-	private List<InputValue> values;
-	private ProcessorPreferences preferences;
+	private ProcessorPreferences<T> preferences;
 	private boolean isDontAskAgain;
 	private boolean isUseSystemDefaults;
 	private String jsonSettings;
+	private SettingsParser settingsParser;
 
-	public SettingsPreferencesPage(List<InputValue> values, ProcessorPreferences preferences) {
+	public SettingsPreferencesPage(SettingsParser settings, ProcessorPreferences<T> preferences) {
 		super(SettingsPreferencesPage.class.getName());
-		this.values = values;
+		this.settingsParser = settings;
 		this.preferences = preferences;
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 
+		boolean requiresUserSettings = settingsParser.requiresUserSettings();
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		Button buttonDefault = new Button(composite, SWT.RADIO);
 		buttonDefault.setText("Use System Options");
+		if(requiresUserSettings) {
+			buttonDefault.setEnabled(false);
+			buttonDefault.setToolTipText("This processor does not offer System options or they are not applicable at the moment");
+		}
 		Label titleBarSeparator = new Label(composite, SWT.HORIZONTAL | SWT.SEPARATOR);
 		titleBarSeparator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		Button buttonUser = new Button(composite, SWT.RADIO);
 		buttonUser.setText("Use Specific Options");
-		SettingsUI settingsUI = new SettingsUI(composite, values);
+		SettingsUI settingsUI;
+		try {
+			settingsUI = new SettingsUI(composite, preferences.getSerialization().fromString(settingsParser.getInputValues(), preferences.getUserSettingsAsString()), preferences.getSerialization());
+		} catch(IOException e1) {
+			throw new RuntimeException("reading settings failed", e1);
+		}
 		settingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		Listener validationListener = new Listener() {
 
@@ -109,7 +119,7 @@ public class SettingsPreferencesPage extends WizardPage {
 
 			}
 		});
-		if(preferences.isUseSystemDefaults()) {
+		if(preferences.isUseSystemDefaults() && !requiresUserSettings) {
 			buttonDefault.setSelection(true);
 		} else {
 			buttonUser.setSelection(true);

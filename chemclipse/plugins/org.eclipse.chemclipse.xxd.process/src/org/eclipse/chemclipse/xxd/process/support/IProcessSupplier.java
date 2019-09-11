@@ -15,7 +15,7 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.model.types.DataType;
 
-public interface IProcessSupplier {
+public interface IProcessSupplier<SettingType> {
 
 	/**
 	 * 
@@ -39,7 +39,7 @@ public interface IProcessSupplier {
 	 * 
 	 * @return the settingsclass
 	 */
-	Class<?> getSettingsClass();
+	Class<SettingType> getSettingsClass();
 
 	Set<DataType> getSupportedDataTypes();
 
@@ -47,7 +47,7 @@ public interface IProcessSupplier {
 	 * 
 	 * @return the preferences for this {@link IProcessSupplier}
 	 */
-	default ProcessorPreferences getPreferences() {
+	default ProcessorPreferences<SettingType> getPreferences() {
 
 		return ProcessTypeSupport.getWorkspacePreferences(this);
 	}

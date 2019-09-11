@@ -13,9 +13,10 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -23,10 +24,12 @@ import org.eclipse.swt.widgets.Listener;
 
 public class SettingsWizardPage extends WizardPage {
 
-	private List<InputValue> inputValues;
+	private Map<InputValue, ?> inputValues;
+	private SettingsSerialization serialization;
 
-	protected SettingsWizardPage(List<InputValue> inputValues) {
+	protected SettingsWizardPage(SettingsSerialization serialization, Map<InputValue, ?> inputValues) {
 		super("SettingsWizardPage");
+		this.serialization = serialization;
 		this.inputValues = inputValues;
 		setTitle("Process Settings");
 		setDescription("Modify the process settings.");
@@ -35,7 +38,7 @@ public class SettingsWizardPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		SettingsUI settingsUI = new SettingsUI(parent, inputValues);
+		SettingsUI settingsUI = new SettingsUI(parent, inputValues, serialization);
 		setControl(settingsUI);
 		settingsUI.addWidgetListener(new Listener() {
 

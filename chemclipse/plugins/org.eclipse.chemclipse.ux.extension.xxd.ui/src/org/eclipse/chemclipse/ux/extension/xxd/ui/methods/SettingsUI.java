@@ -16,9 +16,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -28,19 +29,19 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 public class SettingsUI extends Composite {
 
 	private List<WidgetItem> widgetItems = new ArrayList<>();
 	private List<Label> labels = new ArrayList<>();
+	private SettingsSerialization serialization;
 
-	public SettingsUI(Composite parent, List<InputValue> inputValues) {
+	public SettingsUI(Composite parent, Map<InputValue, ?> inputValues, SettingsSerialization serialization) {
 		super(parent, SWT.NONE);
+		this.serialization = serialization;
 		setLayout(new GridLayout(2, false));
 		if(inputValues != null) {
-			for(InputValue inputValue : inputValues) {
-				widgetItems.add(new WidgetItem(inputValue));
+			for(Entry<InputValue, ?> entry : inputValues.entrySet()) {
+				widgetItems.add(new WidgetItem(entry.getKey(), entry.getValue()));
 			}
 		}
 		if(widgetItems.size() > 0) {
@@ -108,14 +109,11 @@ public class SettingsUI extends Composite {
 
 	public String getJsonSettings() throws IOException {
 
-		String settings = IProcessEntry.EMPTY_JSON_SETTINGS;
-		Map<String, Object> values = new HashMap<>();
+		Map<InputValue, Object> values = new HashMap<>();
 		for(WidgetItem widgetItem : widgetItems) {
 			InputValue inputValue = widgetItem.getInputValue();
-			values.put(inputValue.getName(), widgetItem.getValue());
+			values.put(inputValue, widgetItem.getValue());
 		}
-		ObjectMapper mapper = new ObjectMapper();
-		settings = mapper.writeValueAsString(values);
-		return settings;
+		return serialization.toString(values);
 	}
 }

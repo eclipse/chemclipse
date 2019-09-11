@@ -28,7 +28,8 @@ import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
+import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -82,9 +83,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class ExtendedMethodUI extends Composite implements ConfigurableUI<MethodUIConfig> {
 
@@ -497,10 +495,13 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				if(processMethod != null) {
 					IProcessEntry processEntry = ProcessingWizard.open(getShell(), processingSupport, dataTypes);
 					if(processEntry != null) {
-						processMethod.add(processEntry);
-						if(showSettingsOnAdd) {
-							modifyProcessEntry(getShell(), processEntry, false);
+						if(showSettingsOnAdd || requireUserSettings(processEntry)) {
+							boolean edit = modifyProcessEntry(getShell(), processEntry, false);
+							if(!edit) {
+								return;
+							}
 						}
+						processMethod.add(processEntry);
 						updateProcessMethod();
 						select(Collections.singletonList(processEntry));
 					}
@@ -787,29 +788,38 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		}
 	}
 
-	private void modifyProcessEntry(Shell shell, IProcessEntry processEntry, boolean alwaysShow) {
+	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, boolean alwaysShow) {
 
 		Class<?> processSettingsClass = processEntry.getProcessSettingsClass();
 		if(processSettingsClass != null) {
 			try {
 				String oldSettings = processEntry.getJsonSettings();
-				List<InputValue> inputValues = InputValue.readJSON(processSettingsClass, oldSettings);
-				if(inputValues.isEmpty() && !alwaysShow) {
-					return;
+				SettingsClassParser parser = new SettingsClassParser(processSettingsClass);
+				if(parser.getInputValues().isEmpty() && !alwaysShow) {
+					return true;
 				}
-				String content = SettingsWizard.executeWizard(shell, inputValues);
+				JSONSerialization jsonSerialization = new JSONSerialization();
+				String content = SettingsWizard.executeWizard(shell, jsonSerialization, jsonSerialization.fromString(parser.getInputValues(), oldSettings));
 				if(content != null) {
 					processEntry.setJsonSettings(content);
+					return true;
 				}
-			} catch(JsonParseException e1) {
-				logger.warn(e1);
-			} catch(JsonMappingException e1) {
-				logger.warn(e1);
 			} catch(IOException e1) {
 				logger.warn(e1);
 			}
 		} else {
-			logger.warn("Settings class is null: " + processEntry);
+			logger.debug("Settings class is null: " + processEntry);
 		}
+		return false;
+	}
+
+	private boolean requireUserSettings(IProcessEntry processEntry) {
+
+		Class<?> processSettingsClass = processEntry.getProcessSettingsClass();
+		if(processSettingsClass != null) {
+			SettingsClassParser parser = new SettingsClassParser(processSettingsClass);
+			return parser.requiresUserSettings();
+		}
+		return false;
 	}
 }

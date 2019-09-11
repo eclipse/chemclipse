@@ -34,6 +34,8 @@ import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
+import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 import org.eclipse.chemclipse.xxd.process.Activator;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryComparator;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
@@ -67,6 +69,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ProcessTypeSupport {
 
+	private static final SettingsSerialization SETTINGS_SERIALIZATION = new JSONSerialization();
 	private static final String KEY_USE_SYSTEM_DEFAULTS = "useSystemDefaults";
 	private static final String KEY_USER_SETTINGS = "userSettings";
 	private static final String KEY_ASK_FOR_SETTINGS = "askForSettings";
@@ -119,9 +122,9 @@ public class ProcessTypeSupport {
 	 * 
 	 * @return all active preferences for this {@link ProcessTypeSupport}
 	 */
-	public Map<IProcessSupplier, ProcessorPreferences> getAllPreferences() {
+	public Collection<ProcessorPreferences<?>> getAllPreferences() {
 
-		HashMap<IProcessSupplier, ProcessorPreferences> map = new HashMap<>();
+		List<ProcessorPreferences<?>> result = new ArrayList<>();
 		try {
 			IEclipsePreferences storage = getStorage();
 			String[] childrenNames = storage.childrenNames();
@@ -138,16 +141,16 @@ public class ProcessTypeSupport {
 						// not valid for this type support
 						continue;
 					}
-					IProcessSupplier processorSupplier = typeSupplier.getProcessorSupplier(name);
+					IProcessSupplier<?> processorSupplier = typeSupplier.getProcessorSupplier(name);
 					if(processorSupplier != null) {
-						map.put(processorSupplier, new NodeProcessorPreferences(node));
+						result.add(new NodeProcessorPreferences<>(processorSupplier, node));
 					}
 				}
 			}
 		} catch(BackingStoreException e) {
 			// can't load it then
 		}
-		return map;
+		return result;
 	}
 
 	public IProcessTypeSupplier getSupplier(String id) {
@@ -160,7 +163,7 @@ public class ProcessTypeSupport {
 		// check the suppliers directly, this is needed if the supplier has some
 		// kind of backward compatibility
 		for(IProcessTypeSupplier supplier2 : localProcessSupplier.values()) {
-			IProcessSupplier processSupplier = supplier2.getProcessorSupplier(id);
+			IProcessSupplier<?> processSupplier = supplier2.getProcessorSupplier(id);
 			if(processSupplier != null) {
 				return supplier2;
 			}
@@ -179,9 +182,9 @@ public class ProcessTypeSupport {
 	 * @param processorId
 	 * @return the preferences for this processor id
 	 */
-	public static ProcessorPreferences getWorkspacePreferences(IProcessSupplier supplier) {
+	public static <T> ProcessorPreferences<T> getWorkspacePreferences(IProcessSupplier<T> supplier) {
 
-		return new NodeProcessorPreferences(getStorage().node(supplier.getId()));
+		return new NodeProcessorPreferences<T>(supplier);
 	}
 
 	private static IEclipsePreferences getStorage() {
@@ -201,7 +204,7 @@ public class ProcessTypeSupport {
 	public void addProcessSupplier(IProcessTypeSupplier processTypeSupplier) {
 
 		try {
-			for(IProcessSupplier supplier : processTypeSupplier.getProcessorSuppliers()) {
+			for(IProcessSupplier<?> supplier : processTypeSupplier.getProcessorSuppliers()) {
 				String processorId = supplier.getId();
 				IProcessTypeSupplier typeSupplier = localProcessSupplier.get(processorId);
 				if(typeSupplier != null) {
@@ -236,7 +239,7 @@ public class ProcessTypeSupport {
 				continue;
 			}
 			outer:
-			for(IProcessSupplier processSupplier : processTypeSupplier.getProcessorSuppliers()) {
+			for(IProcessSupplier<?> processSupplier : processTypeSupplier.getProcessorSuppliers()) {
 				for(DataType dataType : dataTypes) {
 					if(processSupplier.getSupportedDataTypes().contains(dataType)) {
 						supplier.add(processTypeSupplier);
@@ -356,11 +359,17 @@ public class ProcessTypeSupport {
 		}
 	}
 
-	private static final class NodeProcessorPreferences implements ProcessorPreferences {
+	private static final class NodeProcessorPreferences<T> implements ProcessorPreferences<T> {
 
 		private Preferences node;
+		private IProcessSupplier<T> supplier;
 
-		public NodeProcessorPreferences(Preferences node) {
+		public NodeProcessorPreferences(IProcessSupplier<T> supplier) {
+			this(supplier, getStorage().node(supplier.getId()));
+		}
+
+		public NodeProcessorPreferences(IProcessSupplier<T> supplier, Preferences node) {
+			this.supplier = supplier;
 			this.node = node;
 		}
 
@@ -395,13 +404,6 @@ public class ProcessTypeSupport {
 		}
 
 		@Override
-		public String getUserSettings() {
-
-			trySync();
-			return node.get(KEY_USER_SETTINGS, ProcessEntry.EMPTY_JSON_SETTINGS);
-		}
-
-		@Override
 		public void setUserSettings(String settings) {
 
 			node.put(KEY_USER_SETTINGS, settings);
@@ -430,6 +432,31 @@ public class ProcessTypeSupport {
 
 			node.putBoolean(KEY_USE_SYSTEM_DEFAULTS, useSystemDefaults);
 			tryFlush();
+		}
+
+		@Override
+		public SettingsSerialization getSerialization() {
+
+			return SETTINGS_SERIALIZATION;
+		}
+
+		@Override
+		public T getUserSettings() throws IOException {
+
+			return getSerialization().fromString(getSupplier().getSettingsClass(), getUserSettingsAsString());
+		}
+
+		@Override
+		public String getUserSettingsAsString() {
+
+			trySync();
+			return node.get(KEY_USER_SETTINGS, ProcessEntry.EMPTY_JSON_SETTINGS);
+		}
+
+		@Override
+		public IProcessSupplier<T> getSupplier() {
+
+			return supplier;
 		}
 	}
 }
