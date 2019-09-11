@@ -308,7 +308,7 @@ public class ProcessTypeSupport {
 			String processorId = processEntry.getProcessorId();
 			IProcessSupplier<X> processSupplier = getSupplier(processorId);
 			if(processSupplier == null) {
-				messages.addWarnMessage(getClass().getSimpleName(), "Processor with id '" + processorId + " was not found and will be skipped");
+				messages.addWarnMessage(processEntry.getName(), "processor not found, will be skipped");
 				continue;
 			}
 			X settings;
