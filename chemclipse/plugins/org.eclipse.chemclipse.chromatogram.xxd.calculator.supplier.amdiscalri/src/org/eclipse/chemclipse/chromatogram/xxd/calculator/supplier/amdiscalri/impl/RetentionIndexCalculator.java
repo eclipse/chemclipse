@@ -166,24 +166,33 @@ public class RetentionIndexCalculator {
 			int retentionTimeLow = floorIndex.getRetentionTime();
 			float retentionIndexHigh = ceilingIndex.getRetentionIndex();
 			int retentionTimeHigh = ceilingIndex.getRetentionTime();
-			if(retentionTimeLow == retentionTimeHigh) {
-				/*
-				 * We are at an exact value, return simply the RI, otherwise it will fail at if(denominatorRT != 0)
-				 */
-				return retentionIndexLow;
-			}
+			retentionIndex = calculateRetentionIndex(retentionTime, retentionTimeLow, retentionTimeHigh, retentionIndexLow, retentionIndexHigh);
+		}
+		//
+		return retentionIndex;
+	}
+
+	public float calculateRetentionIndex(int retentionTime, int retentionTimeLow, int retentionTimeHigh, float retentionIndexLow, float retentionIndexHigh) {
+
+		float retentionIndex = 0;
+		//
+		if(retentionTimeLow == retentionTimeHigh) {
 			/*
-			 * Execute the calculation.
+			 * We are at an exact value, return simply the RI, otherwise it will fail at if(denominatorRT != 0)
 			 */
-			float factorRetentionIndex = retentionIndexHigh - retentionIndexLow;
-			float nominatorRT = retentionTime - retentionTimeLow;
-			float denominatorRT = retentionTimeHigh - retentionTimeLow;
-			if(denominatorRT != 0) {
-				/*
-				 * Calculate the retention index.
-				 */
-				retentionIndex = retentionIndexLow + factorRetentionIndex * nominatorRT / denominatorRT;
-			}
+			return retentionIndexLow;
+		}
+		/*
+		 * Execute the calculation.
+		 */
+		float factorRetentionIndex = retentionIndexHigh - retentionIndexLow;
+		float nominatorRT = retentionTime - retentionTimeLow;
+		float denominatorRT = retentionTimeHigh - retentionTimeLow;
+		if(denominatorRT != 0) {
+			/*
+			 * Calculate the retention index.
+			 */
+			retentionIndex = retentionIndexLow + factorRetentionIndex * nominatorRT / denominatorRT;
 		}
 		//
 		return retentionIndex;
