@@ -251,7 +251,7 @@ public class ProcessTypeSupport {
 
 	public <T, X> IProcessingInfo<T> applyProcessor(List<? extends IChromatogramSelection<?, ?>> chromatogramSelections, IProcessMethod processMethod, IProgressMonitor monitor) {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, chromatogramSelections.size());
+		SubMonitor subMonitor = SubMonitor.convert(monitor, chromatogramSelections.size() * 100);
 		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		for(IChromatogramSelection<?, ?> chromatogramSelection : chromatogramSelections) {
 			/*
@@ -260,6 +260,8 @@ public class ProcessTypeSupport {
 			 * master taken or the RIs of the selected reference? What about the
 			 * column?
 			 */
+			SubMonitor split = subMonitor.split(100);
+			SubMonitor convert = SubMonitor.convert(split, processMethod.size());
 			applyProcessor(processMethod, new BiConsumer<IProcessSupplier<X>, X>() {
 
 				@Override
@@ -281,12 +283,11 @@ public class ProcessTypeSupport {
 						} else {
 							processSettings = null;
 						}
-						IProcessingInfo<?> processorResult = chromatogramSelectionProcessTypeSupplier.applyProcessor(chromatogramSelection, processSupplier.getId(), processSettings, monitor);
+						IProcessingInfo<?> processorResult = chromatogramSelectionProcessTypeSupplier.applyProcessor(chromatogramSelection, processSupplier.getId(), processSettings, convert.split(1));
 						processingInfo.addMessages(processorResult);
 					}
 				}
 			}, processingInfo);
-			subMonitor.worked(1);
 		}
 		return processingInfo;
 	}
