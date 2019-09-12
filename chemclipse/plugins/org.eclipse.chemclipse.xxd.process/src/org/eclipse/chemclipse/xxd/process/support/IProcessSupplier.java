@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.xxd.process.support;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 
 public interface IProcessSupplier<SettingType> {
 
@@ -47,14 +48,19 @@ public interface IProcessSupplier<SettingType> {
 	 */
 	Set<DataType> getSupportedDataTypes();
 
+	// /**
+	// *
+	// * @return the preferences for this {@link IProcessSupplier}
+	// */
+	// default ProcessorPreferences<SettingType> getPreferences() {
+	//
+	// return ProcessTypeSupport.getWorkspacePreferences(this);
+	// }
 	/**
 	 * 
-	 * @return the preferences for this {@link IProcessSupplier}
+	 * @return the settingsparser for this supplier
 	 */
-	default ProcessorPreferences<SettingType> getPreferences() {
-
-		return ProcessTypeSupport.getWorkspacePreferences(this);
-	}
+	SettingsParser getSettingsParser();
 
 	/**
 	 * 

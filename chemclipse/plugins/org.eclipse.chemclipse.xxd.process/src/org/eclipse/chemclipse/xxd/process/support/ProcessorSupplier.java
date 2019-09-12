@@ -17,6 +17,8 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
+import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 
 public class ProcessorSupplier<SettingsClass> implements IProcessSupplier<SettingsClass> {
 
@@ -26,6 +28,7 @@ public class ProcessorSupplier<SettingsClass> implements IProcessSupplier<Settin
 	private Class<SettingsClass> settingsClass;
 	private Set<DataType> dataTypes;
 	private IProcessTypeSupplier parent;
+	private SettingsClassParser classParser;
 
 	public ProcessorSupplier(String id, DataType[] dataTypes, IProcessTypeSupplier parent) {
 		this.id = id;
@@ -70,6 +73,7 @@ public class ProcessorSupplier<SettingsClass> implements IProcessSupplier<Settin
 	public void setSettingsClass(Class<SettingsClass> settingsClass) {
 
 		this.settingsClass = settingsClass;
+		classParser = null;
 	}
 
 	@Override
@@ -115,5 +119,14 @@ public class ProcessorSupplier<SettingsClass> implements IProcessSupplier<Settin
 	public IProcessTypeSupplier getTypeSupplier() {
 
 		return parent;
+	}
+
+	@Override
+	public SettingsParser getSettingsParser() {
+
+		if(classParser == null) {
+			classParser = new SettingsClassParser(getSettingsClass());
+		}
+		return classParser;
 	}
 }

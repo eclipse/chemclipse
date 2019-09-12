@@ -53,7 +53,7 @@ public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementF
 			IProcessSupplier<?> processSupplier = processTypeSupport.getSupplier(filter.getID());
 			if(processSupplier != null) {
 				try {
-					settings = SettingsWizard.getSettings(shell, processSupplier);
+					settings = SettingsWizard.getSettings(shell, ProcessTypeSupport.getWorkspacePreferences(processSupplier));
 				} catch(IOException e) {
 					ProcessingInfoViewSupport.updateProcessingInfoError(filter.getName(), "Can't process settings", e);
 				} catch(CancellationException e) {

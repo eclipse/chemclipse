@@ -13,16 +13,14 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.Collection;
 import java.util.concurrent.CancellationException;
+import java.util.function.Supplier;
 
-import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
-import org.eclipse.chemclipse.support.settings.parser.InputValue;
-import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
-import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences.DialogBehavior;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -46,33 +44,18 @@ public class SettingsWizard extends Wizard {
 	}
 
 	/**
-	 * Open a wizard to edit the given {@link InputValue}s and returns the result
+	 * Opens a wizard to edit the given preferences if the user confirms the given {@link ProcessorPreferences} are updated via the public set methods
 	 * 
 	 * @param shell
-	 * @param inputValues
-	 * @return the edited value in JSON format or <code>null</code> if edit was canceled
+	 * @param preferences
+	 * @return <code>true</code> if user has confirmed, <code>false</code> otherwise
 	 * @throws IOException
 	 */
-	public static Map<InputValue, Object> openEditValuesWizard(Shell shell, SettingsParser settings, Map<InputValue, ?> inputValues) throws IOException {
+	public static <T> boolean openEditPreferencesWizard(Shell shell, ProcessorPreferences<T> preferences) throws IOException {
 
-		SettingsWizard wizard = new SettingsWizard("Settings");
-		SettingsWizardPage page = new SettingsWizardPage(inputValues);
-		wizard.addPage(page);
-		WizardDialog wizardDialog = new WizardDialog(shell, wizard);
-		wizardDialog.setMinimumPageSize(SettingsWizard.DEFAULT_WIDTH, SettingsWizard.DEFAULT_HEIGHT);
-		wizardDialog.create();
-		if(wizardDialog.open() == WizardDialog.OK) {
-			return page.getSettingsUI().getSettings();
-		} else {
-			return null;
-		}
-	}
-
-	public static <T> boolean openWizard(Shell shell, SettingsParser settings, IProcessSupplier<T> processorSupplier) {
-
-		ProcessorPreferences<T> preferences = processorSupplier.getPreferences();
+		IProcessSupplier<T> processorSupplier = preferences.getSupplier();
 		SettingsWizard wizard = new SettingsWizard("Edit Processor Options");
-		SettingsPreferencesPage<T> page = new SettingsPreferencesPage<>(settings, preferences);
+		SettingsPreferencesPage<T> page = new SettingsPreferencesPage<>(preferences);
 		page.setTitle("Select options to use for " + processorSupplier.getName());
 		page.setMessage(processorSupplier.getDescription());
 		wizard.addPage(page);
@@ -85,11 +68,7 @@ public class SettingsWizard extends Wizard {
 				preferences.setUseSystemDefaults(true);
 			} else {
 				preferences.setUseSystemDefaults(false);
-				try {
-					preferences.setUserSettings(preferences.getSerialization().toString(page.getJsonSettingsEdited()));
-				} catch(IOException e) {
-					throw new RuntimeException("writing settings failed", e);
-				}
+				preferences.setUserSettings(page.getSettingsEdited());
 			}
 			return true;
 		} else {
@@ -103,10 +82,10 @@ public class SettingsWizard extends Wizard {
 	 * @param shell
 	 * @param processTypeSupport
 	 */
-	public static void openEditPreferencesWizard(Shell shell, ProcessTypeSupport processTypeSupport) {
+	public static void openManagePreferencesWizard(Shell shell, Supplier<Collection<ProcessorPreferences<?>>> preferenceSupplier) {
 
 		SettingsWizard wizard = new SettingsWizard("Manage Processor Options");
-		SettingsPreferencesEditPage page = new SettingsPreferencesEditPage(processTypeSupport);
+		SettingsPreferencesEditPage page = new SettingsPreferencesEditPage(preferenceSupplier);
 		page.setTitle("Manage Preferences");
 		page.setDescription("Below you find all currently stored processor Options, select one to manage or remove the stored state");
 		wizard.addPage(page);
@@ -134,41 +113,31 @@ public class SettingsWizard extends Wizard {
 	}
 
 	/**
-	 * Obtain the settings from the user, maybe asking for input
+	 * Obtain the settings from the preferences, maybe asking the user for input
 	 * 
 	 * @param shell
 	 * @param processorSupplier
 	 * @return
 	 * @throws IOException
+	 *             if reading the settings failed
+	 * @throws CancellationException
+	 *             if user canceled the wizard
 	 */
-	public static <T> T getSettings(Shell shell, IProcessSupplier<T> processorSupplier) throws IOException {
+	public static <T> T getSettings(Shell shell, ProcessorPreferences<T> preferences) throws IOException, CancellationException {
 
-		Class<T> settingsClass = processorSupplier.getSettingsClass();
+		IProcessSupplier<T> processSupplier = preferences.getSupplier();
+		Class<T> settingsClass = processSupplier.getSettingsClass();
 		if(settingsClass == null) {
 			return null;
 		} else {
-			SettingsParser parser = new SettingsClassParser(settingsClass);
-			ProcessorPreferences<T> preferences = processorSupplier.getPreferences();
-			if(preferences.isAskForSettings()) {
-				if(!parser.getInputValues().isEmpty()) {
-					if(!openWizard(shell, parser, processorSupplier)) {
+			if(preferences.getDialogBehaviour() == DialogBehavior.SHOW) {
+				if(!processSupplier.getSettingsParser().getInputValues().isEmpty()) {
+					if(!openEditPreferencesWizard(shell, preferences)) {
 						throw new CancellationException("user has canceled the wizard");
 					}
 				}
 			}
-			if(preferences.isUseSystemDefaults()) {
-				if(parser.getSystemSettingsStrategy() == SystemSettingsStrategy.NEW_INSTANCE) {
-					try {
-						return settingsClass.newInstance();
-					} catch(InstantiationException | IllegalAccessException e) {
-						throw new IOException("can't create new instance", e);
-					}
-				} else {
-					return null;
-				}
-			} else {
-				return preferences.getUserSettings();
-			}
+			return preferences.getSettings();
 		}
 	}
 }

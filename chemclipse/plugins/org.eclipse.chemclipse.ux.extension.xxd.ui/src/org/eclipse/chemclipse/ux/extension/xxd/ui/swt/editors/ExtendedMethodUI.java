@@ -17,11 +17,9 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
@@ -29,10 +27,6 @@ import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.settings.parser.InputValue;
-import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
-import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
-import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -47,8 +41,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMeth
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ConfigurableUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodListUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodUIConfig;
-import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePage;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -90,10 +84,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public class ExtendedMethodUI extends Composite implements ConfigurableUI<MethodUIConfig> {
 
-	private static final Logger logger = Logger.getLogger(ExtendedMethodUI.class);
-	//
 	private static final String MENU_CATEGORY_STEPS = "Steps";
-	private static final SettingsSerialization METHOD_SETTINGS_SERIALIZATION = new JSONSerialization();
 	//
 	private Composite toolbarHeader;
 	private Label labelDataInfo;
@@ -105,7 +96,6 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private ToolItem buttonMoveUp;
 	private ToolItem buttonMoveDown;
 	private ToolItem buttonModifySettings;
-	private ToolItem buttonResetSettings;
 	private MethodListUI listUI;
 	//
 	private IProcessMethod processMethod = null;
@@ -422,7 +412,6 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		buttonMoveUp = createMoveUpButton(toolBar);
 		buttonMoveDown = createMoveDownButton(toolBar);
 		buttonModifySettings = createModifySettingsButton(toolBar);
-		buttonResetSettings = createResetSettingsButton(toolBar);
 		return toolBar;
 	}
 
@@ -500,11 +489,9 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				if(processMethod != null) {
 					IProcessEntry processEntry = ProcessingWizard.open(getShell(), processingSupport, dataTypes);
 					if(processEntry != null) {
-						if(showSettingsOnAdd || requireUserSettings(processEntry)) {
-							boolean edit = modifyProcessEntry(getShell(), processEntry, false);
-							if(!edit) {
-								return;
-							}
+						boolean edit = modifyProcessEntry(getShell(), processEntry, false);
+						if(!edit) {
+							return;
 						}
 						processMethod.add(processEntry);
 						updateProcessMethod();
@@ -657,31 +644,6 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		return item;
 	}
 
-	private ToolItem createResetSettingsButton(ToolBar toolBar) {
-
-		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Reset the process method settings.");
-		item.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				if(processMethod != null) {
-					for(Object object : listUI.getStructuredSelection().toArray()) {
-						if(object instanceof IProcessEntry) {
-							IProcessEntry processEntry = (IProcessEntry)object;
-							processEntry.setJsonSettings(IProcessEntry.EMPTY_JSON_SETTINGS);
-						}
-					}
-					updateProcessMethod();
-				}
-			}
-		});
-		//
-		return item;
-	}
-
 	private void updateProcessMethod() {
 
 		if(processMethod != null) {
@@ -707,7 +669,6 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		buttonMoveUp.setEnabled(enabled);
 		buttonMoveDown.setEnabled(enabled);
 		buttonModifySettings.setEnabled(enabled);
-		buttonResetSettings.setEnabled(enabled);
 	}
 
 	@Override
@@ -793,44 +754,25 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		}
 	}
 
-	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, boolean alwaysShow) {
+	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, boolean showHint) {
 
-		IProcessSupplier<?> supplier = processingSupport.getSupplier(processEntry.getProcessorId());
-		if(supplier != null) {
-			Class<?> processSettingsClass = supplier.getSettingsClass();
-			if(processSettingsClass != null) {
-				try {
-					String oldSettings = processEntry.getJsonSettings();
-					SettingsClassParser parser = new SettingsClassParser(processSettingsClass);
-					if(parser.getInputValues().isEmpty() && !alwaysShow) {
-						return true;
-					}
-					Map<InputValue, Object> content = SettingsWizard.openEditValuesWizard(shell, parser, METHOD_SETTINGS_SERIALIZATION.fromString(parser.getInputValues(), oldSettings));
-					if(content != null) {
-						processEntry.setJsonSettings(METHOD_SETTINGS_SERIALIZATION.toString(content));
-						return true;
-					}
-				} catch(IOException e1) {
-					logger.warn(e1);
-				}
-			} else {
-				logger.debug("Settings class is null: " + processEntry);
-				return true;
-			}
+		ProcessorPreferences<?> preferences = processingSupport.getProcessEntryPreferences(processEntry);
+		if(preferences == null) {
+			// handle like cancel
+			return false;
 		}
-		return false;
-	}
-
-	private boolean requireUserSettings(IProcessEntry processEntry) {
-
-		IProcessSupplier<Object> supplier = processingSupport.getSupplier(processEntry.getProcessorId());
-		if(supplier != null) {
-			Class<?> processSettingsClass = supplier.getSettingsClass();
-			if(processSettingsClass != null) {
-				SettingsClassParser parser = new SettingsClassParser(processSettingsClass);
-				return parser.requiresUserSettings();
+		if(preferences.getSupplier().getSettingsParser().getInputValues().isEmpty()) {
+			if(showHint) {
+				MessageDialog.openInformation(shell, "No Settings avaiable", "This processor does not offer any options");
 			}
+			// nothing to do then, like ok
+			return true;
 		}
-		return false;
+		try {
+			return SettingsWizard.openEditPreferencesWizard(shell, preferences);
+		} catch(IOException e) {
+			// like cancel...
+			return false;
+		}
 	}
 }

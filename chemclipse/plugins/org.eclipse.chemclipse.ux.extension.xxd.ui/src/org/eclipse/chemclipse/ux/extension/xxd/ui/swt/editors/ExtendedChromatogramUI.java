@@ -533,11 +533,11 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			 * Dynamic Menu Items
 			 */
 			for(IProcessTypeSupplier typeSupplier : processTypeSupport.getProcessorTypeSuppliers(Collections.singletonList(datatype))) {
-				List<IProcessSupplier> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
+				List<IProcessSupplier<?>> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
 				Collections.sort(list, new NameComparator());
-				for(IProcessSupplier supplier : list) {
+				for(IProcessSupplier<?> supplier : list) {
 					if(supplier.getSupportedDataTypes().contains(datatype)) {
-						IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier);
+						IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier);
 						cachedMenuEntries.add(cachedEntry);
 						chartSettings.addMenuEntry(cachedEntry);
 					}
@@ -575,7 +575,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			@Override
 			public void execute(Shell shell, ScrollableChart scrollableChart) {
 
-				SettingsWizard.openEditPreferencesWizard(shell, processTypeSupport);
+				SettingsWizard.openManagePreferencesWizard(shell, processTypeSupport::getAllPreferences);
 			}
 
 			@Override

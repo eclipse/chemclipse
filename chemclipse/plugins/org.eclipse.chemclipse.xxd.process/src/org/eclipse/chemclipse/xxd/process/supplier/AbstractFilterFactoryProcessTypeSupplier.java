@@ -23,6 +23,8 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
+import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 
@@ -90,6 +92,7 @@ public abstract class AbstractFilterFactoryProcessTypeSupplier<DT, FT extends Fi
 		private FilterType filter;
 		private Set<DataType> dataTypes;
 		private IProcessTypeSupplier parent;
+		private SettingsClassParser parser;
 
 		public FilterProcessSupplier(FilterType filter, IProcessTypeSupplier parent) {
 			this.filter = filter;
@@ -137,6 +140,15 @@ public abstract class AbstractFilterFactoryProcessTypeSupplier<DT, FT extends Fi
 		public IProcessTypeSupplier getTypeSupplier() {
 
 			return parent;
+		}
+
+		@Override
+		public SettingsParser getSettingsParser() {
+
+			if(parser == null) {
+				parser = new SettingsClassParser(getSettingsClass());
+			}
+			return parser;
 		}
 	}
 }

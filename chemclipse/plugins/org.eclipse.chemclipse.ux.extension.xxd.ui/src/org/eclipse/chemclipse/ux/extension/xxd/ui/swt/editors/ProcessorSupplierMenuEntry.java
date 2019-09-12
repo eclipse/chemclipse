@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
@@ -34,14 +35,14 @@ import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.menu.AbstractChartMenuEntry;
 import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
-public class ProcessorSupplierMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
+public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implements IChartMenuEntry {
 
 	private IProcessTypeSupplier typeSupplier;
-	private IProcessSupplier<?> processorSupplier;
+	private IProcessSupplier<T> processorSupplier;
 	private Supplier<IChromatogramSelection<?, ?>> supplier;
 	private BiConsumer<IRunnableWithProgress, Shell> executionConsumer;
 
-	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessTypeSupplier typeSupplier, IProcessSupplier<?> processorSupplier) {
+	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessTypeSupplier typeSupplier, IProcessSupplier<T> processorSupplier) {
 		this.supplier = chromatogramSupplier;
 		this.executionConsumer = executionConsumer;
 		this.typeSupplier = typeSupplier;
@@ -72,7 +73,7 @@ public class ProcessorSupplierMenuEntry extends AbstractChartMenuEntry implement
 		IChromatogramSelection<?, ?> chromatogramSelection = supplier.get();
 		if(chromatogramSelection != null) {
 			try {
-				Object settings = SettingsWizard.getSettings(shell, processorSupplier);
+				T settings = SettingsWizard.getSettings(shell, ProcessTypeSupport.getWorkspacePreferences(processorSupplier));
 				executionConsumer.accept(new IRunnableWithProgress() {
 
 					@Override
