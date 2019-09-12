@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences.DialogBehavior;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -71,15 +72,20 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 
 				jsonSettings = null;
 				if(buttonUser.getSelection()) {
-					String validate = settingsUI.validate();
-					setErrorMessage(validate);
-					setPageComplete(validate == null);
+					IStatus validate = settingsUI.getControl().validate();
+					if(validate.isOK()) {
+						setErrorMessage(null);
+						setPageComplete(true);
+					} else {
+						setErrorMessage(validate.getMessage());
+						setPageComplete(false);
+					}
 				} else {
 					setErrorMessage(null);
 					setPageComplete(true);
 				}
 				try {
-					jsonSettings = settingsUI.getSettings();
+					jsonSettings = settingsUI.getControl().getSettings();
 				} catch(IOException e) {
 					setErrorMessage(e.toString());
 					setPageComplete(false);
@@ -130,7 +136,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 			buttonUser.setSelection(true);
 		}
 		radioButtonListener.widgetSelected(null);
-		settingsUI.addWidgetListener(validationListener);
+		settingsUI.getControl().addChangeListener(validationListener);
 		setControl(composite);
 	}
 
