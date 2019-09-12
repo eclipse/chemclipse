@@ -62,56 +62,59 @@ public class SettingsClassParser implements SettingsParser {
 	public List<InputValue> getInputValues() {
 
 		if(inputValues == null) {
-			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 			inputValues = new ArrayList<>();
-			JavaType javaType = objectMapper.getSerializationConfig().constructType(getSettingclass());
-			BeanDescription beanDescription = objectMapper.getSerializationConfig().introspect(javaType);
-			List<BeanPropertyDefinition> properties = beanDescription.findProperties();
-			//
-			for(BeanPropertyDefinition property : properties) {
-				AnnotatedField annotatedField = property.getField();
-				if(annotatedField != null) {
-					//
-					InputValue inputValue = new InputValue();
-					inputValue.setRawType(annotatedField.getRawType());
-					inputValue.setName((property.getName() == null) ? "" : property.getName());
-					PropertyMetadata propertyMetadata = property.getMetadata();
-					inputValue.setDescription((propertyMetadata.getDescription() == null) ? "" : propertyMetadata.getDescription());
-					inputValue.setDefaultValue((propertyMetadata.getDefaultValue() == null) ? "" : propertyMetadata.getDefaultValue());
-					inputValues.add(inputValue);
-					/*
-					 * SettingsProperty ...
-					 */
-					@SuppressWarnings("deprecation")
-					Iterable<Annotation> annotations = annotatedField.annotations();
-					for(Annotation annotation : annotations) {
-						if(annotation instanceof IntSettingsProperty) {
-							IntSettingsProperty settingsProperty = (IntSettingsProperty)annotation;
-							inputValue.setMinValue(settingsProperty.minValue());
-							inputValue.setMaxValue(settingsProperty.maxValue());
-							switch(settingsProperty.validation()) {
-								case ODD_NUMBER:
-									inputValue.setIntegerValidation(IntegerValidation.ODD);
-									break;
-								default:
-									inputValue.setIntegerValidation(null);
-									break;
+			Class<?> clazz = getSettingclass();
+			if(clazz != null) {
+				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+				JavaType javaType = objectMapper.getSerializationConfig().constructType(clazz);
+				BeanDescription beanDescription = objectMapper.getSerializationConfig().introspect(javaType);
+				List<BeanPropertyDefinition> properties = beanDescription.findProperties();
+				//
+				for(BeanPropertyDefinition property : properties) {
+					AnnotatedField annotatedField = property.getField();
+					if(annotatedField != null) {
+						//
+						InputValue inputValue = new InputValue();
+						inputValue.setRawType(annotatedField.getRawType());
+						inputValue.setName((property.getName() == null) ? "" : property.getName());
+						PropertyMetadata propertyMetadata = property.getMetadata();
+						inputValue.setDescription((propertyMetadata.getDescription() == null) ? "" : propertyMetadata.getDescription());
+						inputValue.setDefaultValue((propertyMetadata.getDefaultValue() == null) ? "" : propertyMetadata.getDefaultValue());
+						inputValues.add(inputValue);
+						/*
+						 * SettingsProperty ...
+						 */
+						@SuppressWarnings("deprecation")
+						Iterable<Annotation> annotations = annotatedField.annotations();
+						for(Annotation annotation : annotations) {
+							if(annotation instanceof IntSettingsProperty) {
+								IntSettingsProperty settingsProperty = (IntSettingsProperty)annotation;
+								inputValue.setMinValue(settingsProperty.minValue());
+								inputValue.setMaxValue(settingsProperty.maxValue());
+								switch(settingsProperty.validation()) {
+									case ODD_NUMBER:
+										inputValue.setIntegerValidation(IntegerValidation.ODD);
+										break;
+									default:
+										inputValue.setIntegerValidation(null);
+										break;
+								}
+							} else if(annotation instanceof FloatSettingsProperty) {
+								FloatSettingsProperty settingsProperty = (FloatSettingsProperty)annotation;
+								inputValue.setMinValue(settingsProperty.minValue());
+								inputValue.setMaxValue(settingsProperty.maxValue());
+							} else if(annotation instanceof DoubleSettingsProperty) {
+								DoubleSettingsProperty settingsProperty = (DoubleSettingsProperty)annotation;
+								inputValue.setMinValue(settingsProperty.minValue());
+								inputValue.setMaxValue(settingsProperty.maxValue());
+							} else if(annotation instanceof StringSettingsProperty) {
+								StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
+								inputValue.setRegularExpression(settingsProperty.regExp());
+								inputValue.setMultiLine(settingsProperty.isMultiLine());
+							} else if(annotation instanceof FileSettingProperty) {
+								inputValue.setFileSettingProperty((FileSettingProperty)annotation);
 							}
-						} else if(annotation instanceof FloatSettingsProperty) {
-							FloatSettingsProperty settingsProperty = (FloatSettingsProperty)annotation;
-							inputValue.setMinValue(settingsProperty.minValue());
-							inputValue.setMaxValue(settingsProperty.maxValue());
-						} else if(annotation instanceof DoubleSettingsProperty) {
-							DoubleSettingsProperty settingsProperty = (DoubleSettingsProperty)annotation;
-							inputValue.setMinValue(settingsProperty.minValue());
-							inputValue.setMaxValue(settingsProperty.maxValue());
-						} else if(annotation instanceof StringSettingsProperty) {
-							StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
-							inputValue.setRegularExpression(settingsProperty.regExp());
-							inputValue.setMultiLine(settingsProperty.isMultiLine());
-						} else if(annotation instanceof FileSettingProperty) {
-							inputValue.setFileSettingProperty((FileSettingProperty)annotation);
 						}
 					}
 				}
@@ -124,6 +127,9 @@ public class SettingsClassParser implements SettingsParser {
 	public SystemSettingsStrategy getSystemSettingsStrategy() {
 
 		Class<?> clazz = getSettingclass();
+		if(clazz == null) {
+			return SystemSettingsStrategy.NULL;
+		}
 		SystemSettings annotation = clazz.getAnnotation(SystemSettings.class);
 		if(annotation != null) {
 			String checkMethod = annotation.dynamicCheckMethod();

@@ -11,18 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
-import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences.DialogBehavior;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -45,12 +45,12 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public class SettingsPreferencesEditPage extends WizardPage {
 
-	private ProcessTypeSupport processTypeSupport;
 	private TreeViewer treeViewer;
+	private Supplier<Collection<ProcessorPreferences<?>>> preferenceSupplier;
 
-	public SettingsPreferencesEditPage(ProcessTypeSupport processTypeSupport) {
+	public SettingsPreferencesEditPage(Supplier<Collection<ProcessorPreferences<?>>> preferenceSupplier) {
 		super(SettingsPreferencesEditPage.class.getName());
-		this.processTypeSupport = processTypeSupport;
+		this.preferenceSupplier = preferenceSupplier;
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 
 					ProcessorPreferences<Object> preferences = getEntry(element);
 					if(preferences != null) {
-						if(preferences.isAskForSettings()) {
+						if(preferences.getDialogBehaviour() == DialogBehavior.SHOW) {
 							return "yes";
 						} else {
 							return "no";
@@ -135,7 +135,10 @@ public class SettingsPreferencesEditPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				doEdit();
+				try {
+					doEdit();
+				} catch(IOException e1) {
+				}
 			}
 
 			@Override
@@ -174,8 +177,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Collection<ProcessorPreferences<?>> values = processTypeSupport.getAllPreferences();
-				for(ProcessorPreferences<?> preferences : values) {
+				for(ProcessorPreferences<?> preferences : preferenceSupplier.get()) {
 					preferences.reset();
 				}
 				updateTree();
@@ -210,20 +212,22 @@ public class SettingsPreferencesEditPage extends WizardPage {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
 
-				doEdit();
+				try {
+					doEdit();
+				} catch(IOException e) {
+				}
 			}
 		});
 		updateTree();
 		setControl(composite);
 	}
 
-	private void doEdit() {
+	private void doEdit() throws IOException {
 
 		ITreeSelection selection = treeViewer.getStructuredSelection();
 		ProcessorPreferences<?> entry = getEntry(selection.getFirstElement());
 		if(entry != null) {
-			IProcessSupplier<?> supplier = entry.getSupplier();
-			if(SettingsWizard.openWizard(getShell(), new SettingsClassParser(supplier.getSettingsClass()), supplier)) {
+			if(SettingsWizard.openEditPreferencesWizard(getShell(), entry)) {
 				updateTree();
 			}
 		}
@@ -232,7 +236,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void updateTree() {
 
 		Map<String, TreeNode> categories = new TreeMap<>();
-		for(ProcessorPreferences<?> entry : processTypeSupport.getAllPreferences()) {
+		for(ProcessorPreferences<?> entry : preferenceSupplier.get()) {
 			IProcessTypeSupplier supplier = entry.getSupplier().getTypeSupplier();
 			TreeNode processorNode = new TreeNode(entry.getSupplier());
 			String category = supplier.getCategory();

@@ -36,8 +36,6 @@ import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
-import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 import org.eclipse.chemclipse.xxd.process.Activator;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryComparator;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
@@ -56,6 +54,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.PeakFilterTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakQuantitationTypeSupplier;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SubMonitor;
@@ -66,7 +65,6 @@ import org.osgi.service.prefs.Preferences;
 
 public class ProcessTypeSupport {
 
-	private static final SettingsSerialization SETTINGS_SERIALIZATION = new JSONSerialization();
 	private static final String KEY_USE_SYSTEM_DEFAULTS = "useSystemDefaults";
 	private static final String KEY_USER_SETTINGS = "userSettings";
 	private static final String KEY_ASK_FOR_SETTINGS = "askForSettings";
@@ -168,6 +166,15 @@ public class ProcessTypeSupport {
 	public static <T> ProcessorPreferences<T> getWorkspacePreferences(IProcessSupplier<T> supplier) {
 
 		return new NodeProcessorPreferences<T>(supplier);
+	}
+
+	public <T> ProcessorPreferences<T> getProcessEntryPreferences(IProcessEntry entry) {
+
+		IProcessSupplier<T> supplier = getSupplier(entry.getProcessorId());
+		if(supplier == null) {
+			return null;
+		}
+		return new ProcessEntryProcessorPreferences<>(supplier, entry);
 	}
 
 	private static IEclipsePreferences getStorage() {
@@ -305,50 +312,107 @@ public class ProcessTypeSupport {
 	private <X> void applyProcessor(IProcessMethod processMethod, BiConsumer<IProcessSupplier<X>, X> consumer, MessageConsumer messages) {
 
 		for(IProcessEntry processEntry : processMethod) {
-			String processorId = processEntry.getProcessorId();
-			IProcessSupplier<X> processSupplier = getSupplier(processorId);
-			if(processSupplier == null) {
+			ProcessorPreferences<X> preferences = getProcessEntryPreferences(processEntry);
+			if(preferences == null) {
 				messages.addWarnMessage(processEntry.getName(), "processor not found, will be skipped");
 				continue;
 			}
-			X settings;
 			try {
-				settings = processSupplier.getPreferences().getSettings(processEntry.getJsonSettings());
+				X settings = preferences.getSettings();
+				consumer.accept(preferences.getSupplier(), settings);
 			} catch(IOException e) {
-				messages.addWarnMessage(processorId, "the settings can't be read", e);
+				messages.addWarnMessage(processEntry.getName(), "the settings can't be read, will be skipped", e);
 				continue;
 			}
-			consumer.accept(processSupplier, settings);
 		}
 	}
 
-	public int validate(IProcessEntry processEntry) {
+	public IStatus validate(IProcessEntry processEntry) {
 
 		if(processEntry == null) {
-			return IStatus.ERROR;
+			return ValidationStatus.error("Entry is null");
 		}
-		IProcessSupplier<?> supplier = getSupplier(processEntry.getProcessorId());
-		if(supplier != null) {
-			return validateSettings(processEntry, supplier);
+		ProcessorPreferences<?> preferences = getProcessEntryPreferences(processEntry);
+		if(preferences == null) {
+			return ValidationStatus.error("Processor " + processEntry.getName() + " not avaiable");
+		}
+		if(preferences.getSupplier().getSettingsClass() == null) {
+			return ValidationStatus.warning("Processor " + processEntry.getName() + " has no settingsclass");
+		}
+		if(preferences.isUseSystemDefaults()) {
+			return ValidationStatus.info("Processor " + processEntry.getName() + " uses system default settings");
 		} else {
-			return IStatus.ERROR;
+			try {
+				preferences.getUserSettings();
+			} catch(IOException e) {
+				return ValidationStatus.error("Loading settings for Processor " + processEntry.getName() + "failed", e);
+			}
+			return ValidationStatus.ok();
 		}
 	}
 
-	private static int validateSettings(IProcessEntry processEntry, IProcessSupplier<?> supplier) {
+	private static final class ProcessEntryProcessorPreferences<T> implements ProcessorPreferences<T> {
 
-		if(supplier.getSettingsClass() == null) {
-			return IStatus.WARNING;
+		private IProcessEntry processEntry;
+		private IProcessSupplier<T> supplier;
+
+		public ProcessEntryProcessorPreferences(IProcessSupplier<T> supplier, IProcessEntry processEntry) {
+			this.supplier = supplier;
+			this.processEntry = processEntry;
 		}
-		try {
-			supplier.getPreferences().getSettings(processEntry.getJsonSettings());
-		} catch(IOException e) {
-			return IStatus.ERROR;
+
+		@Override
+		public DialogBehavior getDialogBehaviour() {
+
+			return DialogBehavior.NONE;
 		}
-		if(processEntry.getJsonSettings().equals(IProcessEntry.EMPTY_JSON_SETTINGS)) {
-			return IStatus.INFO;
-		} else {
-			return IStatus.OK;
+
+		@Override
+		public void setAskForSettings(boolean askForSettings) {
+
+			// no-op
+		}
+
+		@Override
+		public void setUserSettings(String settings) {
+
+			processEntry.setJsonSettings(settings);
+		}
+
+		@Override
+		public boolean isUseSystemDefaults() {
+
+			if(supplier.getSettingsClass() == null) {
+				return true;
+			}
+			String jsonSettings = processEntry.getJsonSettings();
+			return jsonSettings == null || jsonSettings.isEmpty() || ProcessEntry.EMPTY_JSON_SETTINGS.equals(jsonSettings);
+		}
+
+		@Override
+		public void setUseSystemDefaults(boolean useSystemDefaults) {
+
+			if(useSystemDefaults) {
+				processEntry.setJsonSettings(ProcessEntry.EMPTY_JSON_SETTINGS);
+			}
+		}
+
+		@Override
+		public void reset() {
+
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public IProcessSupplier<T> getSupplier() {
+
+			return supplier;
+		}
+
+		@Override
+		public String getUserSettingsAsString() {
+
+			return processEntry.getJsonSettings();
 		}
 	}
 
@@ -367,10 +431,18 @@ public class ProcessTypeSupport {
 		}
 
 		@Override
-		public boolean isAskForSettings() {
+		public DialogBehavior getDialogBehaviour() {
 
+			if(supplier.getSettingsClass() == null) {
+				return DialogBehavior.NONE;
+			}
 			trySync();
-			return node.getBoolean(KEY_ASK_FOR_SETTINGS, true);
+			boolean askForSettings = node.getBoolean(KEY_ASK_FOR_SETTINGS, true);
+			if(askForSettings) {
+				return DialogBehavior.SHOW;
+			} else {
+				return DialogBehavior.SAVED_DEFAULTS;
+			}
 		}
 
 		public void trySync() {
@@ -416,6 +488,9 @@ public class ProcessTypeSupport {
 		@Override
 		public boolean isUseSystemDefaults() {
 
+			if(supplier.getSettingsClass() == null) {
+				return true;
+			}
 			trySync();
 			return node.getBoolean(KEY_USE_SYSTEM_DEFAULTS, true);
 		}
@@ -425,18 +500,6 @@ public class ProcessTypeSupport {
 
 			node.putBoolean(KEY_USE_SYSTEM_DEFAULTS, useSystemDefaults);
 			tryFlush();
-		}
-
-		@Override
-		public SettingsSerialization getSerialization() {
-
-			return SETTINGS_SERIALIZATION;
-		}
-
-		@Override
-		public T getUserSettings() throws IOException {
-
-			return getSettings(getUserSettingsAsString());
 		}
 
 		@Override
@@ -450,16 +513,6 @@ public class ProcessTypeSupport {
 		public IProcessSupplier<T> getSupplier() {
 
 			return supplier;
-		}
-
-		@Override
-		public T getSettings(String serializedString) throws IOException {
-
-			Class<T> settingsClass = getSupplier().getSettingsClass();
-			if(serializedString == null || settingsClass == null) {
-				return null;
-			}
-			return getSerialization().fromString(settingsClass, serializedString);
 		}
 	}
 }

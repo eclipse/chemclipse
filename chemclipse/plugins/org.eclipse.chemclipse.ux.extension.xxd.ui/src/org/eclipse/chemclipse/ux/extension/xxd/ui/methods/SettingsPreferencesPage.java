@@ -13,11 +13,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.IOException;
-import java.util.Map;
 
-import org.eclipse.chemclipse.support.settings.parser.InputValue;
-import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences.DialogBehavior;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -32,22 +30,20 @@ import org.eclipse.swt.widgets.Listener;
 
 public class SettingsPreferencesPage<T> extends WizardPage {
 
-	private ProcessorPreferences<T> preferences;
 	private boolean isDontAskAgain;
 	private boolean isUseSystemDefaults;
-	private Map<InputValue, Object> jsonSettings;
-	private SettingsParser settingsParser;
+	private String jsonSettings;
+	private ProcessorPreferences<T> preferences;
 
-	public SettingsPreferencesPage(SettingsParser settings, ProcessorPreferences<T> preferences) {
+	public SettingsPreferencesPage(ProcessorPreferences<T> preferences) {
 		super(SettingsPreferencesPage.class.getName());
-		this.settingsParser = settings;
 		this.preferences = preferences;
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 
-		boolean requiresUserSettings = settingsParser.requiresUserSettings();
+		boolean requiresUserSettings = preferences.getSupplier().getSettingsParser().requiresUserSettings();
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -61,9 +57,9 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		titleBarSeparator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		Button buttonUser = new Button(composite, SWT.RADIO);
 		buttonUser.setText("Use Specific Options");
-		SettingsUI settingsUI;
+		SettingsUI<?> settingsUI;
 		try {
-			settingsUI = new SettingsUI(composite, preferences.getSerialization().fromString(settingsParser.getInputValues(), preferences.getUserSettingsAsString()));
+			settingsUI = new SettingsUI<>(composite, preferences);
 		} catch(IOException e1) {
 			throw new RuntimeException("reading settings failed", e1);
 		}
@@ -85,6 +81,8 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 				try {
 					jsonSettings = settingsUI.getSettings();
 				} catch(IOException e) {
+					setErrorMessage(e.toString());
+					setPageComplete(false);
 				}
 			}
 		};
@@ -105,28 +103,32 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		};
 		buttonDefault.addSelectionListener(radioButtonListener);
 		buttonUser.addSelectionListener(radioButtonListener);
-		Button buttonDontAskAgain = new Button(composite, SWT.CHECK);
-		buttonDontAskAgain.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, true));
-		buttonDontAskAgain.setText("Remeber my decision and don't ask again");
-		buttonDontAskAgain.addSelectionListener(new SelectionListener() {
+		if(preferences.getDialogBehaviour() == DialogBehavior.NONE) {
+			isDontAskAgain = false;
+		} else {
+			Button buttonDontAskAgain = new Button(composite, SWT.CHECK);
+			buttonDontAskAgain.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, true));
+			buttonDontAskAgain.setText("Remeber my decision and don't ask again");
+			buttonDontAskAgain.addSelectionListener(new SelectionListener() {
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
 
-				isDontAskAgain = buttonDontAskAgain.getSelection();
-			}
+					isDontAskAgain = buttonDontAskAgain.getSelection();
+				}
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
 
-			}
-		});
+				}
+			});
+			buttonDontAskAgain.setSelection(isDontAskAgain = !(preferences.getDialogBehaviour() == DialogBehavior.SHOW));
+		}
 		if(preferences.isUseSystemDefaults() && !requiresUserSettings) {
 			buttonDefault.setSelection(true);
 		} else {
 			buttonUser.setSelection(true);
 		}
-		buttonDontAskAgain.setSelection(isDontAskAgain = !preferences.isAskForSettings());
 		radioButtonListener.widgetSelected(null);
 		settingsUI.addWidgetListener(validationListener);
 		setControl(composite);
@@ -137,7 +139,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		return isDontAskAgain;
 	}
 
-	public Map<InputValue, Object> getJsonSettingsEdited() {
+	public String getSettingsEdited() throws IOException {
 
 		return jsonSettings;
 	}

@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -28,16 +29,19 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
-public class SettingsUI extends Composite {
+public class SettingsUI<T> extends Composite {
 
 	private List<WidgetItem> widgetItems = new ArrayList<>();
 	private List<Label> labels = new ArrayList<>();
+	private ProcessorPreferences<T> preferences;
 
-	public SettingsUI(Composite parent, Map<InputValue, ?> inputValues) {
+	public SettingsUI(Composite parent, ProcessorPreferences<T> preferences) throws IOException {
 		super(parent, SWT.NONE);
+		this.preferences = preferences;
 		setLayout(new GridLayout(2, false));
-		if(inputValues != null) {
-			for(Entry<InputValue, ?> entry : inputValues.entrySet()) {
+		Map<InputValue, Object> valuesMap = preferences.getSerialization().fromString(preferences.getSupplier().getSettingsParser().getInputValues(), preferences.getUserSettingsAsString());
+		if(valuesMap != null) {
+			for(Entry<InputValue, ?> entry : valuesMap.entrySet()) {
 				widgetItems.add(new WidgetItem(entry.getKey(), entry.getValue()));
 			}
 		}
@@ -104,13 +108,13 @@ public class SettingsUI extends Composite {
 		return null;
 	}
 
-	public Map<InputValue, Object> getSettings() throws IOException {
+	public String getSettings() throws IOException {
 
 		Map<InputValue, Object> values = new HashMap<>();
 		for(WidgetItem widgetItem : widgetItems) {
 			InputValue inputValue = widgetItem.getInputValue();
 			values.put(inputValue, widgetItem.getValue());
 		}
-		return values;
+		return preferences.getSerialization().toString(values);
 	}
 }
