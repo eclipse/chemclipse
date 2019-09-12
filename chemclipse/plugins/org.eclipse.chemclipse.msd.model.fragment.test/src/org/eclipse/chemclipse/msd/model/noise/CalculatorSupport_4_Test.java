@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -9,9 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.internal.core.support;
-
-import org.eclipse.core.runtime.NullProgressMonitor;
+package org.eclipse.chemclipse.msd.model.noise;
 
 import org.eclipse.chemclipse.model.support.AnalysisSegment;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
@@ -23,6 +21,7 @@ import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignals;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 

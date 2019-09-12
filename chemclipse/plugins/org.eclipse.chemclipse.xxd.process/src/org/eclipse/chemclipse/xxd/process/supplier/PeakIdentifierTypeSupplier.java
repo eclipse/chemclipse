@@ -48,7 +48,7 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 			for(String processorId : support.getAvailableIdentifierIds()) {
 				IPeakIdentifierSupplierCSD supplier = support.getIdentifierSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_CSD + processorId, CSD_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_CSD + processorId, CSD_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getIdentifierName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());
@@ -63,7 +63,7 @@ public class PeakIdentifierTypeSupplier extends AbstractProcessTypeSupplier impl
 			for(String processorId : support.getAvailableIdentifierIds()) {
 				IPeakIdentifierSupplierMSD supplier = support.getIdentifierSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_MSD + processorId, MSD_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_MSD + processorId, MSD_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getIdentifierName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

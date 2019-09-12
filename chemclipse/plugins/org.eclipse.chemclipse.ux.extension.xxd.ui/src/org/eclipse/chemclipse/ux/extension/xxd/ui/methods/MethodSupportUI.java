@@ -258,7 +258,7 @@ public class MethodSupportUI extends Composite {
 				if(object instanceof File) {
 					File file = (File)object;
 					if(file.exists()) {
-						runMethod(file);
+						runMethod(file, e.display.getActiveShell());
 					}
 				}
 			}
@@ -408,11 +408,11 @@ public class MethodSupportUI extends Composite {
 		}
 	}
 
-	private void runMethod(File file) {
+	private void runMethod(File file, Shell shell) {
 
 		if(methodListener != null && file != null) {
 			try {
-				ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+				ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 				dialog.run(false, false, new IRunnableWithProgress() {
 
 					@Override
@@ -428,7 +428,7 @@ public class MethodSupportUI extends Composite {
 								logger.warn(e);
 							}
 						} else {
-							ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, hasErrorMessages);
+							ProcessingInfoViewSupport.updateProcessingInfo(shell.getDisplay(), processingInfo, hasErrorMessages);
 						}
 					}
 				});

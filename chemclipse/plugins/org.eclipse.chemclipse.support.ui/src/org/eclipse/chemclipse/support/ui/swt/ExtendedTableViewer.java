@@ -47,12 +47,15 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -254,6 +257,67 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	public void setEditEnabled(boolean editEnabled) {
 
 		this.editEnabled = editEnabled;
+	}
+
+	/**
+	 * Checks if the cell of the given column was selected.
+	 * ColumnIndex is 0 based.
+	 * 
+	 * @param event
+	 * @param columnLabel
+	 * @return boolean
+	 */
+	public boolean isColumnSelected(Event event, String columnLabel) {
+
+		for(int i = 0; i < tableViewerColumns.size(); i++) {
+			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
+			String label = tableViewerColumn.getColumn().getText();
+			if(label.endsWith(columnLabel)) {
+				return isColumnSelected(event, i);
+			}
+		}
+		//
+		return false;
+	}
+
+	/**
+	 * Checks if the cell of the given column was selected.
+	 * ColumnIndex is 0 based.
+	 * 
+	 * @param event
+	 * @param columnIndex
+	 * @return boolean
+	 */
+	public boolean isColumnSelected(Event event, int columnIndex) {
+
+		Table table = getTable();
+		Rectangle clientArea = table.getClientArea();
+		Point point = new Point(event.x, event.y);
+		//
+		int index = table.getTopIndex();
+		while(index < table.getItemCount()) {
+			boolean visible = false;
+			TableItem item = table.getItem(index);
+			for(int i = 0; i < table.getColumnCount(); i++) {
+				Rectangle rectangle = item.getBounds(i);
+				if(rectangle.contains(point)) {
+					if(i == columnIndex) {
+						return true;
+					}
+				}
+				//
+				if(!visible && rectangle.intersects(clientArea)) {
+					visible = true;
+				}
+			}
+			//
+			if(!visible) {
+				return false;
+			}
+			index++;
+		}
+		//
+		return false;
 	}
 
 	private void createKeyListener() {

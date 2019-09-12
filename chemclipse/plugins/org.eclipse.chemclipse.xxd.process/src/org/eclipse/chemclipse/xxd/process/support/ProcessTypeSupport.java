@@ -15,11 +15,14 @@ package org.eclipse.chemclipse.xxd.process.support;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurement;
@@ -33,6 +36,7 @@ import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.xxd.process.Activator;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryComparator;
 import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
@@ -50,6 +54,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.PeakFilterTypeSupplierMSD;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.PeakQuantitationTypeSupplier;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SubMonitor;
@@ -57,11 +62,6 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ProcessTypeSupport {
 
@@ -71,7 +71,7 @@ public class ProcessTypeSupport {
 	private static final CategoryComparator CATEGORY_COMPARATOR = new CategoryComparator();
 	private static final Logger logger = Logger.getLogger(ProcessTypeSupport.class);
 	//
-	private Map<String, IProcessTypeSupplier> processSupplierMap = new HashMap<>();
+	private Map<String, IProcessTypeSupplier> localProcessSupplier = new HashMap<>();
 	private static IEclipsePreferences preferences;
 
 	public ProcessTypeSupport() {
@@ -80,23 +80,30 @@ public class ProcessTypeSupport {
 
 	public ProcessTypeSupport(ProcessorFactory filterFactory) {
 		/*
-		 * Add all available process supplier here.
-		 * TODO: Test native settings composite via extension point resolution
+		 * Add all available process supplier here. TODO: Test native settings
+		 * composite via extension point resolution
 		 */
 		addProcessSupplier(new BaselineDetectorTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramIdentifierTypeSupplier()); // OK - Improve settings
+		addProcessSupplier(new ChromatogramIdentifierTypeSupplier()); // OK -
+																		// Improve
+																		// settings
 		addProcessSupplier(new ChromatogramIntegratorTypeSupplier()); // OK
-		addProcessSupplier(new ClassifierTypeSupplier()); // OK - Improve settings
-		addProcessSupplier(new CombinedIntegratorTypeSupplier()); // OK - Nested Settings
+		addProcessSupplier(new ClassifierTypeSupplier()); // OK - Improve
+															// settings
+		addProcessSupplier(new CombinedIntegratorTypeSupplier()); // OK - Nested
+																	// Settings
 		addProcessSupplier(new ChromatogramFilterTypeSupplier()); // OK
 		addProcessSupplier(new PeakFilterTypeSupplierMSD()); // OK
 		addProcessSupplier(new PeakDetectorTypeSupplier()); // OK
 		addProcessSupplier(new PeakIdentifierTypeSupplier()); // OK
-		addProcessSupplier(new PeakIntegratorTypeSupplier()); // OK - Improve settings
+		addProcessSupplier(new PeakIntegratorTypeSupplier()); // OK - Improve
+																// settings
 		addProcessSupplier(new PeakQuantitationTypeSupplier()); // OK
 		addProcessSupplier(new ChromatogramCalculatorTypeSupplier()); // OK
 		addProcessSupplier(new ChromatogramReportTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramExportTypeSupplier()); // OK - Improve settings
+		addProcessSupplier(new ChromatogramExportTypeSupplier()); // OK -
+																	// Improve
+																	// settings
 		addProcessSupplier(MassspectrumProcessTypeSupplier.createPeakFilterSupplier());
 		addProcessSupplier(MassspectrumProcessTypeSupplier.createScanFilterSupplier());
 		// NoiseCalculator?
@@ -110,9 +117,9 @@ public class ProcessTypeSupport {
 	 * 
 	 * @return all active preferences for this {@link ProcessTypeSupport}
 	 */
-	public Map<IProcessSupplier, ProcessorPreferences> getAllPreferences() {
+	public Collection<ProcessorPreferences<?>> getAllPreferences() {
 
-		HashMap<IProcessSupplier, ProcessorPreferences> map = new HashMap<>();
+		List<ProcessorPreferences<?>> result = new ArrayList<>();
 		try {
 			IEclipsePreferences storage = getStorage();
 			String[] childrenNames = storage.childrenNames();
@@ -122,37 +129,30 @@ public class ProcessTypeSupport {
 					// empty default node
 					continue;
 				}
-				IProcessTypeSupplier supplier = getSupplier(name);
-				if(supplier != null) {
-					IProcessTypeSupplier typeSupplier = getSupplier(name);
-					if(typeSupplier == null) {
-						// not valid for this type support
-						continue;
-					}
-					IProcessSupplier processorSupplier = typeSupplier.getProcessorSupplier(name);
-					if(processorSupplier != null) {
-						map.put(processorSupplier, new NodeProcessorPreferences(node));
-					}
+				IProcessSupplier<?> processorSupplier = getSupplier(name);
+				if(processorSupplier != null) {
+					result.add(new NodeProcessorPreferences<>(processorSupplier, node));
 				}
 			}
 		} catch(BackingStoreException e) {
 			// can't load it then
 		}
-		return map;
+		return result;
 	}
 
-	public IProcessTypeSupplier getSupplier(String id) {
+	public <SettingType> IProcessSupplier<SettingType> getSupplier(String processorId) {
 
-		// check the map
-		IProcessTypeSupplier supplier = processSupplierMap.get(id);
-		if(supplier != null) {
-			return supplier;
-		}
-		// check the suppliers directly, this is needed if the supplier has some kind of backward compatibility
-		for(IProcessTypeSupplier supplier2 : processSupplierMap.values()) {
-			IProcessSupplier processSupplier = supplier2.getProcessorSupplier(id);
+		for(IProcessTypeSupplier supplier : localProcessSupplier.values()) {
+			IProcessSupplier<SettingType> processSupplier = supplier.getProcessorSupplier(processorId);
 			if(processSupplier != null) {
-				return supplier2;
+				return processSupplier;
+			}
+		}
+		IProcessTypeSupplier[] dynamic = Activator.geIProcessTypeSuppliers();
+		for(IProcessTypeSupplier typeSupplier : dynamic) {
+			IProcessSupplier<SettingType> supplier = typeSupplier.getProcessorSupplier(processorId);
+			if(supplier != null) {
+				return supplier;
 			}
 		}
 		return null;
@@ -163,9 +163,18 @@ public class ProcessTypeSupport {
 	 * @param processorId
 	 * @return the preferences for this processor id
 	 */
-	public static ProcessorPreferences getWorkspacePreferences(IProcessSupplier supplier) {
+	public static <T> ProcessorPreferences<T> getWorkspacePreferences(IProcessSupplier<T> supplier) {
 
-		return new NodeProcessorPreferences(getStorage().node(supplier.getId()));
+		return new NodeProcessorPreferences<T>(supplier);
+	}
+
+	public <T> ProcessorPreferences<T> getProcessEntryPreferences(IProcessEntry entry) {
+
+		IProcessSupplier<T> supplier = getSupplier(entry.getProcessorId());
+		if(supplier == null) {
+			return null;
+		}
+		return new ProcessEntryProcessorPreferences<>(supplier, entry);
 	}
 
 	private static IEclipsePreferences getStorage() {
@@ -177,20 +186,21 @@ public class ProcessTypeSupport {
 	}
 
 	/**
-	 * Adds the given {@link IProcessTypeSupplier} to this {@link ProcessTypeSupport} this allows for adding non standard supplier
+	 * Adds the given {@link IProcessTypeSupplier} to this
+	 * {@link ProcessTypeSupport} this allows for adding non standard supplier
 	 * 
 	 * @param processTypeSupplier
 	 */
 	public void addProcessSupplier(IProcessTypeSupplier processTypeSupplier) {
 
 		try {
-			for(IProcessSupplier supplier : processTypeSupplier.getProcessorSuppliers()) {
+			for(IProcessSupplier<?> supplier : processTypeSupplier.getProcessorSuppliers()) {
 				String processorId = supplier.getId();
-				IProcessTypeSupplier typeSupplier = processSupplierMap.get(processorId);
+				IProcessTypeSupplier typeSupplier = localProcessSupplier.get(processorId);
 				if(typeSupplier != null) {
 					logger.warn("The processor id " + processorId + " is already defined by " + typeSupplier.getClass().getSimpleName() + " and is ignored for redefining supplier " + processTypeSupplier.getClass().getSimpleName());
 				} else {
-					processSupplierMap.put(processorId, processTypeSupplier);
+					localProcessSupplier.put(processorId, processTypeSupplier);
 				}
 			}
 		} catch(Exception e) {
@@ -206,12 +216,20 @@ public class ProcessTypeSupport {
 	public List<IProcessTypeSupplier> getProcessorTypeSuppliers(Collection<? extends DataType> dataTypes) {
 
 		List<IProcessTypeSupplier> supplier = new ArrayList<>();
-		for(IProcessTypeSupplier processTypeSupplier : processSupplierMap.values()) {
+		addMatchingSupplier(dataTypes, supplier, localProcessSupplier.values());
+		addMatchingSupplier(dataTypes, supplier, Arrays.asList(Activator.geIProcessTypeSuppliers()));
+		Collections.sort(supplier, CATEGORY_COMPARATOR);
+		return supplier;
+	}
+
+	private void addMatchingSupplier(Collection<? extends DataType> dataTypes, List<IProcessTypeSupplier> supplier, Iterable<IProcessTypeSupplier> candidates) {
+
+		for(IProcessTypeSupplier processTypeSupplier : candidates) {
 			if(supplier.contains(processTypeSupplier)) {
 				continue;
 			}
 			outer:
-			for(IProcessSupplier processSupplier : processTypeSupplier.getProcessorSuppliers()) {
+			for(IProcessSupplier<?> processSupplier : processTypeSupplier.getProcessorSuppliers()) {
 				for(DataType dataType : dataTypes) {
 					if(processSupplier.getSupportedDataTypes().contains(dataType)) {
 						supplier.add(processTypeSupplier);
@@ -220,8 +238,6 @@ public class ProcessTypeSupport {
 				}
 			}
 		}
-		Collections.sort(supplier, CATEGORY_COMPARATOR);
-		return supplier;
 	}
 
 	public <T> IProcessingInfo<T> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessMethod processMethod, IProgressMonitor monitor) {
@@ -233,118 +249,201 @@ public class ProcessTypeSupport {
 		return applyProcessor(chromatogramSelections, processMethod, monitor);
 	}
 
-	public <T> IProcessingInfo<T> applyProcessor(List<? extends IChromatogramSelection<?, ?>> chromatogramSelections, IProcessMethod processMethod, IProgressMonitor monitor) {
+	public <T, X> IProcessingInfo<T> applyProcessor(List<? extends IChromatogramSelection<?, ?>> chromatogramSelections, IProcessMethod processMethod, IProgressMonitor monitor) {
 
+		SubMonitor subMonitor = SubMonitor.convert(monitor, chromatogramSelections.size() * 100);
 		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		for(IChromatogramSelection<?, ?> chromatogramSelection : chromatogramSelections) {
 			/*
-			 * Process referenced chromatograms?
-			 * Will make things more complex. Discussion needed.
-			 * Think of RI calculation. Are the RIs of the master taken or the RIs of the selected reference?
-			 * What about the column?
+			 * Process referenced chromatograms? Will make things more complex.
+			 * Discussion needed. Think of RI calculation. Are the RIs of the
+			 * master taken or the RIs of the selected reference? What about the
+			 * column?
 			 */
-			for(IProcessEntry processEntry : processMethod) {
-				String processorId = processEntry.getProcessorId();
-				IProcessTypeSupplier processTypeSupplier = getSupplier(processorId);
-				if(processTypeSupplier instanceof IChromatogramSelectionProcessTypeSupplier) {
-					IChromatogramSelectionProcessTypeSupplier chromatogramSelectionProcessTypeSupplier = (IChromatogramSelectionProcessTypeSupplier)processTypeSupplier;
-					/*
-					 * If processEntry.getJsonSettings() == {} (IProcessEntry.EMPTY_JSON_SETTINGS),
-					 * the processSettings class will be null.
-					 * The applyProcessor method manages how to handle this situation.
-					 * By default, the system settings of the plugin shall be used instead.
-					 */
-					IProcessSettings processSettings;
-					Object settings = getProcessSettings(processEntry);
-					if(settings instanceof IProcessSettings) {
-						processSettings = (IProcessSettings)settings;
-					} else {
-						processSettings = null;
+			SubMonitor split = subMonitor.split(100);
+			SubMonitor convert = SubMonitor.convert(split, processMethod.size());
+			applyProcessor(processMethod, new BiConsumer<IProcessSupplier<X>, X>() {
+
+				@Override
+				public void accept(IProcessSupplier<X> processSupplier, X settings) {
+
+					IProcessTypeSupplier processTypeSupplier = processSupplier.getTypeSupplier();
+					if(processTypeSupplier instanceof IChromatogramSelectionProcessTypeSupplier) {
+						IChromatogramSelectionProcessTypeSupplier chromatogramSelectionProcessTypeSupplier = (IChromatogramSelectionProcessTypeSupplier)processTypeSupplier;
+						/*
+						 * If processEntry.getJsonSettings() == {}
+						 * (IProcessEntry.EMPTY_JSON_SETTINGS), the processSettings
+						 * class will be null. The applyProcessor method manages how
+						 * to handle this situation. By default, the system settings
+						 * of the plugin shall be used instead.
+						 */
+						IProcessSettings processSettings;
+						if(settings instanceof IProcessSettings) {
+							processSettings = (IProcessSettings)settings;
+						} else {
+							processSettings = null;
+						}
+						IProcessingInfo<?> processorResult = chromatogramSelectionProcessTypeSupplier.applyProcessor(chromatogramSelection, processSupplier.getId(), processSettings, convert.split(1));
+						processingInfo.addMessages(processorResult);
 					}
-					IProcessingInfo<?> processorResult = chromatogramSelectionProcessTypeSupplier.applyProcessor(chromatogramSelection, processorId, processSettings, monitor);
-					processingInfo.addMessages(processorResult);
 				}
-			}
+			}, processingInfo);
 		}
 		return processingInfo;
 	}
 
-	public Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+	public <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, MessageConsumer messageConsumer, IProgressMonitor monitor) {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Processing files", processMethod.size() * 100);
-		for(IProcessEntry processEntry : processMethod) {
-			String processorId = processEntry.getProcessorId();
-			IProcessTypeSupplier processTypeSupplier = getSupplier(processorId);
-			if(processTypeSupplier instanceof IMeasurementProcessTypeSupplier) {
-				measurements = ((IMeasurementProcessTypeSupplier)processTypeSupplier).applyProcessor(measurements, processorId, getProcessSettings(processEntry), messageConsumer, subMonitor.split(100));
-			}
-		}
-		return measurements;
-	}
+		AtomicReference<Collection<? extends IMeasurement>> result = new AtomicReference<Collection<? extends IMeasurement>>(measurements);
+		applyProcessor(processMethod, new BiConsumer<IProcessSupplier<X>, X>() {
 
-	public Object getProcessSettings(IProcessEntry processEntry) {
+			@Override
+			public void accept(IProcessSupplier<X> processor, X settings) {
 
-		if(processEntry != null) {
-			Class<?> clazz = processEntry.getProcessSettingsClass();
-			if(clazz != null) {
-				ObjectMapper objectMapper = new ObjectMapper();
-				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-				try {
-					String content = processEntry.getJsonSettings();
-					if(IProcessEntry.EMPTY_JSON_SETTINGS.equals(content)) {
-						logger.info("Process settings are empty. Default system settings are used instead.");
-					} else {
-						return objectMapper.readValue(content, clazz);
-					}
-				} catch(JsonParseException e) {
-					logger.warn(e);
-				} catch(JsonMappingException e) {
-					logger.warn(e);
-				} catch(IOException e) {
-					logger.warn(e);
+				IProcessTypeSupplier processTypeSupplier = processor.getTypeSupplier();
+				if(processTypeSupplier instanceof IMeasurementProcessTypeSupplier) {
+					result.set(((IMeasurementProcessTypeSupplier)processTypeSupplier).applyProcessor(result.get(), processor.getId(), settings, messageConsumer, subMonitor.split(100)));
 				}
 			}
-		}
-		return null;
+		}, messageConsumer);
+		return result.get();
 	}
 
-	public int validate(IProcessEntry processEntry) {
+	private <X> void applyProcessor(IProcessMethod processMethod, BiConsumer<IProcessSupplier<X>, X> consumer, MessageConsumer messages) {
+
+		for(IProcessEntry processEntry : processMethod) {
+			ProcessorPreferences<X> preferences = getProcessEntryPreferences(processEntry);
+			if(preferences == null) {
+				messages.addWarnMessage(processEntry.getName(), "processor not found, will be skipped");
+				continue;
+			}
+			try {
+				X settings = preferences.getSettings();
+				consumer.accept(preferences.getSupplier(), settings);
+			} catch(IOException e) {
+				messages.addWarnMessage(processEntry.getName(), "the settings can't be read, will be skipped", e);
+				continue;
+			}
+		}
+	}
+
+	public IStatus validate(IProcessEntry processEntry) {
 
 		if(processEntry == null) {
-			return IStatus.ERROR;
+			return ValidationStatus.error("Entry is null");
 		}
-		IProcessTypeSupplier supplier = getSupplier(processEntry.getProcessorId());
-		if(supplier != null) {
-			return validateSettings(processEntry);
+		ProcessorPreferences<?> preferences = getProcessEntryPreferences(processEntry);
+		if(preferences == null) {
+			return ValidationStatus.error("Processor " + processEntry.getName() + " not avaiable");
+		}
+		if(preferences.getSupplier().getSettingsClass() == null) {
+			return ValidationStatus.warning("Processor " + processEntry.getName() + " has no settingsclass");
+		}
+		if(preferences.isUseSystemDefaults()) {
+			return ValidationStatus.info("Processor " + processEntry.getName() + " uses system default settings");
 		} else {
-			return IStatus.ERROR;
+			try {
+				preferences.getUserSettings();
+			} catch(IOException e) {
+				return ValidationStatus.error("Loading settings for Processor " + processEntry.getName() + "failed", e);
+			}
+			return ValidationStatus.ok();
 		}
 	}
 
-	private static int validateSettings(IProcessEntry processEntry) {
+	private static final class ProcessEntryProcessorPreferences<T> implements ProcessorPreferences<T> {
 
-		if(processEntry.getJsonSettings().equals(IProcessEntry.EMPTY_JSON_SETTINGS)) {
-			return IStatus.INFO;
-		} else if(processEntry.getProcessSettingsClass() == null) {
-			return IStatus.WARNING;
-		} else {
-			return IStatus.OK;
+		private IProcessEntry processEntry;
+		private IProcessSupplier<T> supplier;
+
+		public ProcessEntryProcessorPreferences(IProcessSupplier<T> supplier, IProcessEntry processEntry) {
+			this.supplier = supplier;
+			this.processEntry = processEntry;
+		}
+
+		@Override
+		public DialogBehavior getDialogBehaviour() {
+
+			return DialogBehavior.NONE;
+		}
+
+		@Override
+		public void setAskForSettings(boolean askForSettings) {
+
+			// no-op
+		}
+
+		@Override
+		public void setUserSettings(String settings) {
+
+			processEntry.setJsonSettings(settings);
+		}
+
+		@Override
+		public boolean isUseSystemDefaults() {
+
+			if(supplier.getSettingsClass() == null) {
+				return true;
+			}
+			String jsonSettings = processEntry.getJsonSettings();
+			return jsonSettings == null || jsonSettings.isEmpty() || ProcessEntry.EMPTY_JSON_SETTINGS.equals(jsonSettings);
+		}
+
+		@Override
+		public void setUseSystemDefaults(boolean useSystemDefaults) {
+
+			if(useSystemDefaults) {
+				processEntry.setJsonSettings(ProcessEntry.EMPTY_JSON_SETTINGS);
+			}
+		}
+
+		@Override
+		public void reset() {
+
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public IProcessSupplier<T> getSupplier() {
+
+			return supplier;
+		}
+
+		@Override
+		public String getUserSettingsAsString() {
+
+			return processEntry.getJsonSettings();
 		}
 	}
 
-	private static final class NodeProcessorPreferences implements ProcessorPreferences {
+	private static final class NodeProcessorPreferences<T> implements ProcessorPreferences<T> {
 
 		private Preferences node;
+		private IProcessSupplier<T> supplier;
 
-		public NodeProcessorPreferences(Preferences node) {
+		public NodeProcessorPreferences(IProcessSupplier<T> supplier) {
+			this(supplier, getStorage().node(supplier.getId()));
+		}
+
+		public NodeProcessorPreferences(IProcessSupplier<T> supplier, Preferences node) {
+			this.supplier = supplier;
 			this.node = node;
 		}
 
 		@Override
-		public boolean isAskForSettings() {
+		public DialogBehavior getDialogBehaviour() {
 
+			if(supplier.getSettingsClass() == null) {
+				return DialogBehavior.NONE;
+			}
 			trySync();
-			return node.getBoolean(KEY_ASK_FOR_SETTINGS, true);
+			boolean askForSettings = node.getBoolean(KEY_ASK_FOR_SETTINGS, true);
+			if(askForSettings) {
+				return DialogBehavior.SHOW;
+			} else {
+				return DialogBehavior.SAVED_DEFAULTS;
+			}
 		}
 
 		public void trySync() {
@@ -371,13 +470,6 @@ public class ProcessTypeSupport {
 		}
 
 		@Override
-		public String getUserSettings() {
-
-			trySync();
-			return node.get(KEY_USER_SETTINGS, ProcessEntry.EMPTY_JSON_SETTINGS);
-		}
-
-		@Override
 		public void setUserSettings(String settings) {
 
 			node.put(KEY_USER_SETTINGS, settings);
@@ -397,6 +489,9 @@ public class ProcessTypeSupport {
 		@Override
 		public boolean isUseSystemDefaults() {
 
+			if(supplier.getSettingsClass() == null) {
+				return true;
+			}
 			trySync();
 			return node.getBoolean(KEY_USE_SYSTEM_DEFAULTS, true);
 		}
@@ -406,6 +501,19 @@ public class ProcessTypeSupport {
 
 			node.putBoolean(KEY_USE_SYSTEM_DEFAULTS, useSystemDefaults);
 			tryFlush();
+		}
+
+		@Override
+		public String getUserSettingsAsString() {
+
+			trySync();
+			return node.get(KEY_USER_SETTINGS, ProcessEntry.EMPTY_JSON_SETTINGS);
+		}
+
+		@Override
+		public IProcessSupplier<T> getSupplier() {
+
+			return supplier;
 		}
 	}
 }

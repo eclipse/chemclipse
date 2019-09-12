@@ -15,22 +15,15 @@ package org.eclipse.chemclipse.model.methods;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.core.runtime.Platform;
-import org.osgi.framework.Bundle;
 
 public class ProcessEntry implements IProcessEntry {
 
-	private static final Logger logger = Logger.getLogger(ProcessEntry.class);
-	//
 	private String processorId = "";
 	private String name = "";
 	private String description = "";
 	private String jsonSettings = EMPTY_JSON_SETTINGS;
 	private List<DataType> supportedDataTypes = new ArrayList<>();
-	private Class<?> processSettingsClass = null;
 
 	public ProcessEntry() {
 	}
@@ -41,7 +34,6 @@ public class ProcessEntry implements IProcessEntry {
 		description = processEntry.getDescription();
 		jsonSettings = processEntry.getJsonSettings();
 		supportedDataTypes = processEntry.getSupportedDataTypes();
-		processSettingsClass = processEntry.getProcessSettingsClass();
 	}
 
 	@Override
@@ -102,35 +94,6 @@ public class ProcessEntry implements IProcessEntry {
 	}
 
 	@Override
-	public Class<?> getProcessSettingsClass() {
-
-		return processSettingsClass;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setProcessSettingsClass(String symbolicName, String className) {
-
-		if(symbolicName != null && className != null) {
-			if(!symbolicName.equals("") && !className.equals("")) {
-				try {
-					Bundle bundle = Platform.getBundle(symbolicName);
-					Class<IProcessSettings> clazz = (Class<IProcessSettings>)bundle.loadClass(className);
-					setProcessSettingsClass(clazz);
-				} catch(ClassNotFoundException e) {
-					logger.warn(e);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void setProcessSettingsClass(Class<?> processSettingsClass) {
-
-		this.processSettingsClass = processSettingsClass;
-	}
-
-	@Override
 	public int hashCode() {
 
 		final int prime = 31;
@@ -166,6 +129,6 @@ public class ProcessEntry implements IProcessEntry {
 	@Override
 	public String toString() {
 
-		return "ProcessMethod [processorId=" + processorId + ", name=" + name + ", description=" + description + ", jsonSettings=" + jsonSettings + ", supportedDataTypes=" + supportedDataTypes + ", processSettingsClass=" + processSettingsClass + "]";
+		return "ProcessMethod [processorId=" + processorId + ", name=" + name + ", description=" + description + ", jsonSettings=" + jsonSettings + ", supportedDataTypes=" + supportedDataTypes + "]";
 	}
 }

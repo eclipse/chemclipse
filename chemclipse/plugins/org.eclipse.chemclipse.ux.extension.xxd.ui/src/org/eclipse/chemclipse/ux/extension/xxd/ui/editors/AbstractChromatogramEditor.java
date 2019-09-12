@@ -33,7 +33,6 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -41,7 +40,6 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.settings.UserManagement;
@@ -107,7 +105,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		this.part = part;
 		this.dirtyable = dirtyable;
 		this.filterFactory = filterFactory;
-		this.eventBroker = ModelSupportAddon.getEventBroker();
+		this.eventBroker = Activator.getDefault().getEventBroker();
 		this.shell = shell;
 		//
 		initialize(parent);
@@ -128,7 +126,9 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	@Focus
 	public void onFocus() {
 
-		extendedChromatogramUI.fireUpdate();
+		if(shell != null) {
+			extendedChromatogramUI.fireUpdate(shell.getDisplay());
+		}
 	}
 
 	@Override
@@ -155,32 +155,34 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	@PreDestroy
 	private void preDestroy() {
 
-		DisplayUtils.getDisplay().asyncExec(new Runnable() {
+		if(eventBroker != null) {
+			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
-			@Override
-			public void run() {
+				@Override
+				public void run() {
 
-				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, null);
-			}
-		});
-		//
-		DisplayUtils.getDisplay().asyncExec(new Runnable() {
+					eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, null);
+				}
+			});
+			//
+			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
-			@Override
-			public void run() {
+				@Override
+				public void run() {
 
-				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, null);
-			}
-		});
-		//
-		DisplayUtils.getDisplay().asyncExec(new Runnable() {
+					eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, null);
+				}
+			});
+			//
+			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
-			@Override
-			public void run() {
+				@Override
+				public void run() {
 
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, null);
-			}
-		});
+					eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, null);
+				}
+			});
+		}
 		//
 		EModelService modelService = ModelSupportAddon.getModelService();
 		if(modelService != null) {
@@ -312,7 +314,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 						IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, monitor);
 						if(!processingInfo.hasErrorMessages()) {
 							try {
-								IProcessMethod processMethod = processingInfo.getProcessingResult(ProcessMethod.class);
+								IProcessMethod processMethod = processingInfo.getProcessingResult();
 								ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 								processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
 							} catch(Exception e) {
@@ -408,11 +410,9 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 				}
 				//
 				if(processingInfo != null) {
-					try {
-						processingInfo.getProcessingResult(File.class);
+					Object object = processingInfo.getProcessingResult();
+					if(object instanceof File) {
 						dirtyable.setDirty(false);
-					} catch(TypeCastException e) {
-						throw new NoChromatogramConverterAvailableException();
 					}
 				} else {
 					throw new NoChromatogramConverterAvailableException();
@@ -430,6 +430,6 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 	private void createChromatogramPage(Composite parent) {
 
-		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.BORDER, filterFactory);
+		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.BORDER, filterFactory, eventBroker);
 	}
 }

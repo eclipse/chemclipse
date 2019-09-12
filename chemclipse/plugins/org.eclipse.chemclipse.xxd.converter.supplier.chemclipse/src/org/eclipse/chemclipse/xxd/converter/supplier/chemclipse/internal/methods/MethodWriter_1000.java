@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.osgi.framework.FrameworkUtil;
 
 public class MethodWriter_1000 implements IMethodWriter {
 
@@ -91,17 +90,9 @@ public class MethodWriter_1000 implements IMethodWriter {
 			for(DataType dataType : supportedDataTypes) {
 				writeString(dataOutputStream, dataType.toString());
 			}
-			//
-			Class<?> clazz = processEntry.getProcessSettingsClass();
-			if(clazz != null) {
-				String symbolicName = FrameworkUtil.getBundle(clazz).getSymbolicName();
-				String className = clazz.getName();
-				writeString(dataOutputStream, symbolicName);
-				writeString(dataOutputStream, className);
-			} else {
-				writeString(dataOutputStream, "");
-				writeString(dataOutputStream, "");
-			}
+			// obsolete, just write for backward compat
+			writeString(dataOutputStream, "");
+			writeString(dataOutputStream, "");
 		}
 		//
 		dataOutputStream.flush();

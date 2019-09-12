@@ -64,4 +64,11 @@ http://www.eclipse.org/legal/epl-v10.html
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.apache.httpcomponents.httpcore"
+         download-size="0"
+         install-size="0"
+         version="4.3.3.v201411290715"
+         unpack="false"/>
+
 </feature>

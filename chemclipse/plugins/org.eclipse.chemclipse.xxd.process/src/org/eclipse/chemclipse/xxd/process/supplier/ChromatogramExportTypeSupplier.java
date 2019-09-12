@@ -46,7 +46,7 @@ public class ChromatogramExportTypeSupplier extends AbstractProcessTypeSupplier 
 		super(CATEGORY);
 		for(ISupplier supplier : ChromatogramConverterCSD.getInstance().getChromatogramConverterSupport().getExportSupplier()) {
 			String id = supplier.getId();
-			ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_CSD + id, CSD_DATA_TYPES);
+			ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_CSD + id, CSD_DATA_TYPES, this);
 			processorSupplier.setName(supplier.getFilterName());
 			processorSupplier.setDescription(supplier.getDescription());
 			processorSupplier.setSettingsClass(ChromatogramExportSettings.class);
@@ -55,7 +55,7 @@ public class ChromatogramExportTypeSupplier extends AbstractProcessTypeSupplier 
 		}
 		for(ISupplier supplier : ChromatogramConverterMSD.getInstance().getChromatogramConverterSupport().getExportSupplier()) {
 			String id = supplier.getId();
-			ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_MSD + id, MSD_DATA_TYPES);
+			ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_MSD + id, MSD_DATA_TYPES, this);
 			processorSupplier.setName(supplier.getFilterName());
 			processorSupplier.setDescription(supplier.getDescription());
 			processorSupplier.setSettingsClass(ChromatogramExportSettings.class);
@@ -64,7 +64,7 @@ public class ChromatogramExportTypeSupplier extends AbstractProcessTypeSupplier 
 		}
 		for(ISupplier supplier : ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport().getExportSupplier()) {
 			String id = supplier.getId();
-			ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_WSD + id, WSD_DATA_TYPES);
+			ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_WSD + id, WSD_DATA_TYPES, this);
 			processorSupplier.setName(supplier.getFilterName());
 			processorSupplier.setDescription(supplier.getDescription());
 			processorSupplier.setSettingsClass(ChromatogramExportSettings.class);

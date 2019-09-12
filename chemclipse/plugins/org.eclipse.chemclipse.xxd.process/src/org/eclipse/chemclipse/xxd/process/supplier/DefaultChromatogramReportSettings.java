@@ -12,13 +12,31 @@
 package org.eclipse.chemclipse.xxd.process.supplier;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.AbstractChromatogramReportSettings;
+import org.eclipse.chemclipse.support.settings.SystemSettings;
+import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 import org.eclipse.chemclipse.xxd.process.preferences.PreferenceSupplier;
 
+@SystemSettings(value = SystemSettingsStrategy.DYNAMIC, dynamicCheckMethod = "getSystemSettingsStrategy")
 public class DefaultChromatogramReportSettings extends AbstractChromatogramReportSettings {
 
 	@Override
 	protected String getDefaultFolder() {
 
 		return PreferenceSupplier.getReportExportFolder();
+	}
+
+	/**
+	 * Method that check if systemsettings are available, this is used in conjunction with the SystemSettings annotation but can also be called by user code
+	 * 
+	 * @return
+	 */
+	public static SystemSettingsStrategy getSystemSettingsStrategy() {
+
+		String folder = PreferenceSupplier.getReportExportFolder();
+		if(folder != null && !folder.isEmpty()) {
+			return SystemSettingsStrategy.NEW_INSTANCE;
+		} else {
+			return SystemSettingsStrategy.NONE;
+		}
 	}
 }

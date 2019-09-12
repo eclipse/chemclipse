@@ -35,7 +35,7 @@ public class BaselineDetectorTypeSupplier extends AbstractProcessTypeSupplier im
 			for(String processorId : support.getAvailableDetectorIds()) {
 				IBaselineDetectorSupplier supplier = support.getBaselineDetectorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getDetectorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

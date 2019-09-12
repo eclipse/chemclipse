@@ -17,18 +17,22 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
+import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 
-public class ProcessorSupplier implements IProcessSupplier {
+public class ProcessorSupplier<SettingsClass> implements IProcessSupplier<SettingsClass> {
 
 	private String id = "";
 	private String name = "";
 	private String description = "";
-	private Class<?> settingsClass;
+	private Class<SettingsClass> settingsClass;
 	private Set<DataType> dataTypes;
-	private ProcessorPreferences preferences;
+	private IProcessTypeSupplier parent;
+	private SettingsClassParser classParser;
 
-	public ProcessorSupplier(String id, DataType[] dataTypes) {
+	public ProcessorSupplier(String id, DataType[] dataTypes, IProcessTypeSupplier parent) {
 		this.id = id;
+		this.parent = parent;
 		this.dataTypes = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(dataTypes)));
 	}
 
@@ -61,14 +65,15 @@ public class ProcessorSupplier implements IProcessSupplier {
 	}
 
 	@Override
-	public Class<?> getSettingsClass() {
+	public Class<SettingsClass> getSettingsClass() {
 
 		return settingsClass;
 	}
 
-	public void setSettingsClass(Class<?> settingsClass) {
+	public void setSettingsClass(Class<SettingsClass> settingsClass) {
 
 		this.settingsClass = settingsClass;
+		classParser = null;
 	}
 
 	@Override
@@ -89,7 +94,7 @@ public class ProcessorSupplier implements IProcessSupplier {
 			return false;
 		if(getClass() != obj.getClass())
 			return false;
-		ProcessorSupplier other = (ProcessorSupplier)obj;
+		ProcessorSupplier<?> other = (ProcessorSupplier<?>)obj;
 		if(id == null) {
 			if(other.id != null)
 				return false;
@@ -108,5 +113,20 @@ public class ProcessorSupplier implements IProcessSupplier {
 	public String toString() {
 
 		return "ProcessorSupplier [id=" + id + ", name=" + name + ", description=" + description + ", settingsClass=" + settingsClass + "]";
+	}
+
+	@Override
+	public IProcessTypeSupplier getTypeSupplier() {
+
+		return parent;
+	}
+
+	@Override
+	public SettingsParser getSettingsParser() {
+
+		if(classParser == null) {
+			classParser = new SettingsClassParser(getSettingsClass());
+		}
+		return classParser;
 	}
 }

@@ -77,11 +77,9 @@ public class MethodReader_1000 implements IMethodReader {
 				DataType dataType = DataType.valueOf(readString(dataInputStream));
 				processEntry.getSupportedDataTypes().add(dataType);
 			}
-			//
-			String symbolicName = readString(dataInputStream);
-			String className = readString(dataInputStream);
-			processEntry.setProcessSettingsClass(symbolicName, className);
-			//
+			// read but ignore for backward compat
+			readString(dataInputStream);
+			readString(dataInputStream);
 			processMethod.add(processEntry);
 		}
 		//

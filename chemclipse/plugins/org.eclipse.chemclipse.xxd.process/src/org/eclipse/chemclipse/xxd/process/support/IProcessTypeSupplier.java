@@ -9,23 +9,24 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
- * Christoph Läubrich - add getProcessorSupplier method
+ * Christoph Läubrich - add getProcessorSupplier method, relax return type of getProcessorSuppliers
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface IProcessTypeSupplier {
 
 	String getCategory();
 
-	List<IProcessSupplier> getProcessorSuppliers();
+	Collection<IProcessSupplier<?>> getProcessorSuppliers();
 
-	default IProcessSupplier getProcessorSupplier(String id) {
+	@SuppressWarnings("unchecked")
+	default <ConfigType> IProcessSupplier<ConfigType> getProcessorSupplier(String id) {
 
-		for(IProcessSupplier supplier : getProcessorSuppliers()) {
+		for(IProcessSupplier<?> supplier : getProcessorSuppliers()) {
 			if(supplier.getId().equals(id)) {
-				return supplier;
+				return (IProcessSupplier<ConfigType>)supplier;
 			}
 		}
 		return null;

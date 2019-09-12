@@ -23,12 +23,14 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
+import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 
 public abstract class AbstractFilterFactoryProcessTypeSupplier<DT, FT extends Filter<?>> implements IProcessTypeSupplier {
 
-	private Map<String, FilterProcessSupplier<FT>> suppliers = new HashMap<>();
+	private Map<String, FilterProcessSupplier<FT, ?>> suppliers = new HashMap<>();
 
 	public AbstractFilterFactoryProcessTypeSupplier(ProcessorFactory filterFactory) {
 	}
@@ -39,9 +41,9 @@ public abstract class AbstractFilterFactoryProcessTypeSupplier<DT, FT extends Fi
 		return "Measurement Filter";
 	}
 
-	protected FilterProcessSupplier<FT> createProcessorSupplier(FT filter) {
+	protected <X> FilterProcessSupplier<FT, X> createProcessorSupplier(FT filter) {
 
-		FilterProcessSupplier<FT> processorSupplier = new FilterProcessSupplier<FT>(filter);
+		FilterProcessSupplier<FT, X> processorSupplier = new FilterProcessSupplier<FT, X>(filter, this);
 		suppliers.put(processorSupplier.getId(), processorSupplier);
 		return processorSupplier;
 	}
@@ -73,24 +75,28 @@ public abstract class AbstractFilterFactoryProcessTypeSupplier<DT, FT extends Fi
 	}
 
 	@Override
-	public List<IProcessSupplier> getProcessorSuppliers() {
+	public List<IProcessSupplier<?>> getProcessorSuppliers() {
 
 		return new ArrayList<>(suppliers.values());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public FilterProcessSupplier<FT> getProcessorSupplier(String id) {
+	public <X> FilterProcessSupplier<FT, X> getProcessorSupplier(String id) {
 
-		return suppliers.get(id);
+		return (FilterProcessSupplier<FT, X>)suppliers.get(id);
 	}
 
-	protected static class FilterProcessSupplier<FilterType extends Filter<?>> implements IProcessSupplier {
+	protected static class FilterProcessSupplier<FilterType extends Filter<?>, X> implements IProcessSupplier<X> {
 
 		private FilterType filter;
 		private Set<DataType> dataTypes;
+		private IProcessTypeSupplier parent;
+		private SettingsClassParser parser;
 
-		public FilterProcessSupplier(FilterType filter) {
+		public FilterProcessSupplier(FilterType filter, IProcessTypeSupplier parent) {
 			this.filter = filter;
+			this.parent = parent;
 			dataTypes = Collections.unmodifiableSet(EnumSet.copyOf(convertDataTypes(filter.getDataCategories())));
 		}
 
@@ -112,10 +118,11 @@ public abstract class AbstractFilterFactoryProcessTypeSupplier<DT, FT extends Fi
 			return filter.getDescription();
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
-		public Class<?> getSettingsClass() {
+		public Class<X> getSettingsClass() {
 
-			return filter.getConfigClass();
+			return (Class<X>)filter.getConfigClass();
 		}
 
 		@Override
@@ -127,6 +134,21 @@ public abstract class AbstractFilterFactoryProcessTypeSupplier<DT, FT extends Fi
 		public FilterType getFilter() {
 
 			return filter;
+		}
+
+		@Override
+		public IProcessTypeSupplier getTypeSupplier() {
+
+			return parent;
+		}
+
+		@Override
+		public SettingsParser getSettingsParser() {
+
+			if(parser == null) {
+				parser = new SettingsClassParser(getSettingsClass());
+			}
+			return parser;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.exceptions.FilterException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
@@ -26,9 +25,12 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.exceptions.FilterException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
+import org.eclipse.chemclipse.msd.model.noise.Calculator;
+import org.eclipse.chemclipse.msd.model.noise.INoiseSegment;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalsModifier;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -37,6 +39,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 public class Denoising {
 
@@ -58,63 +61,72 @@ public class Denoising {
 	 */
 	public static List<ICombinedMassSpectrum> applyDenoisingFilter(IChromatogramSelectionMSD chromatogramSelection, IMarkedIons ionsToRemove, IMarkedIons ionsToPreserve, boolean adjustThresholdTransitions, int numberOfUsedIonsForCoefficient, int segmentWidth, IProgressMonitor monitor) throws FilterException {
 
-		/*
-		 * Test if there are ions to remove.
-		 */
-		if(ionsToRemove == null) {
-			throw new FilterException("The ions to remove instance was null.");
-		}
-		/*
-		 * Test if there are ions to preserve.
-		 */
-		if(ionsToPreserve == null) {
-			throw new FilterException("The ions to preserve instance was null.");
-		}
-		/*
-		 * Get the extracted ion signals and the calculator instance.
-		 */
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
-		IExtractedIonSignalExtractor extractedIonSignalExtractor;
+		List<ICombinedMassSpectrum> noiseMassSpectra = new ArrayList<ICombinedMassSpectrum>();
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Denoising", 8);
 		try {
-			extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
-		} catch(ChromatogramIsNullException e1) {
-			throw new FilterException("The chromatogram must be not null.");
-		}
-		IExtractedIonSignals extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals(chromatogramSelection);
-		Calculator calculator = new Calculator();
-		// ------------------------------------algorithm
-		/*
-		 * A -> Remove the predefined ions.
-		 */
-		monitor.subTask("Remove selected ions.");
-		extractedIonSignals = removeIonsInScanRange(extractedIonSignals, ionsToRemove, monitor);
-		/*
-		 * B -> Adjust zero values (see Stein et al.)
-		 */
-		if(adjustThresholdTransitions) {
-			try {
-				monitor.subTask("Adjust threshold transitions.");
-				ExtractedIonSignalsModifier.adjustThresholdTransitions(extractedIonSignals);
-			} catch(AnalysisSupportException e) {
-				logger.warn(e);
+			/*
+			 * Test if there are ions to remove.
+			 */
+			if(ionsToRemove == null) {
+				throw new FilterException("The ions to remove instance was null.");
 			}
+			subMonitor.worked(1);
+			/*
+			 * Test if there are ions to preserve.
+			 */
+			if(ionsToPreserve == null) {
+				throw new FilterException("The ions to preserve instance was null.");
+			}
+			subMonitor.worked(1);
+			/*
+			 * Get the extracted ion signals and the calculator instance.
+			 */
+			IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
+			IExtractedIonSignalExtractor extractedIonSignalExtractor;
+			try {
+				extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
+			} catch(ChromatogramIsNullException e1) {
+				throw new FilterException("The chromatogram must be not null.");
+			}
+			subMonitor.worked(1);
+			/*
+			 * A -> Remove the predefined ions.
+			 */
+			IExtractedIonSignals extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals(chromatogramSelection);
+			extractedIonSignals = removeIonsInScanRange(extractedIonSignals, ionsToRemove, monitor);
+			subMonitor.worked(1);
+			/*
+			 * B -> Adjust zero values (see Stein et al.)
+			 */
+			if(adjustThresholdTransitions) {
+				try {
+					ExtractedIonSignalsModifier.adjustThresholdTransitions(extractedIonSignals);
+				} catch(AnalysisSupportException e) {
+					logger.warn(e);
+				}
+			}
+			subMonitor.worked(1);
+			/*
+			 * C -> Calculate the noise segments and remove the noise sequentially.
+			 */
+			Calculator calculator = new Calculator();
+			List<INoiseSegment> noiseSegments = calculator.getNoiseSegments(extractedIonSignals, ionsToPreserve, segmentWidth, monitor);
+			subMonitor.worked(1);
+			/*
+			 * D -> Iterate through all noise segments and remove the noise between
+			 * the segments. Subtract the noise mass spectrum from scan in the
+			 * segment
+			 */
+			noiseMassSpectra.addAll(subtractNoiseMassSpectraFromSegments(extractedIonSignals, noiseSegments, ionsToPreserve, numberOfUsedIonsForCoefficient, monitor));
+			subMonitor.worked(1);
+			/*
+			 * E -> Writes the results back to the chromatogram.
+			 */
+			writeExtractedIonSignalsBackToChromatogram(chromatogram, extractedIonSignals, monitor);
+			subMonitor.worked(1);
+		} finally {
+			subMonitor.done();
 		}
-		/*
-		 * C -> Calculate the noise segments and remove the noise sequentially.
-		 */
-		List<INoiseSegment> noiseSegments = calculator.getNoiseSegments(extractedIonSignals, ionsToPreserve, segmentWidth, monitor);
-		/*
-		 * D -> Iterate through all noise segments and remove the noise between
-		 * the segments. Subtract the noise mass spectrum from scan in the
-		 * segment
-		 */
-		List<ICombinedMassSpectrum> noiseMassSpectra = subtractNoiseMassSpectraFromSegments(extractedIonSignals, noiseSegments, ionsToPreserve, numberOfUsedIonsForCoefficient, monitor);
-		/*
-		 * E -> Writes the results back to the chromatogram.
-		 */
-		monitor.subTask("Write the results.");
-		writeExtractedIonSignalsBackToChromatogram(chromatogram, extractedIonSignals, monitor);
-		// ------------------------------------algorithm
 		/*
 		 * Return the noise mass spectrum. It will be displayed in a view in the
 		 * user interface.
@@ -138,7 +150,6 @@ public class Denoising {
 		int stopScan = extractedIonSignals.getStopScan();
 		IExtractedIonSignal extractedIonSignal;
 		for(int scan = startScan; scan <= stopScan; scan++) {
-			monitor.subTask("Remove calculated noise from scan: " + scan);
 			try {
 				extractedIonSignal = extractedIonSignals.getExtractedIonSignal(scan);
 				removeIons(extractedIonSignal, ionsToRemove);
@@ -433,7 +444,6 @@ public class Denoising {
 			noiseMassSpectrum.setStartRetentionTime(extractedIonSignals.getChromatogram().getScan(startScan).getRetentionTime());
 			noiseMassSpectrum.setStopRetentionTime(extractedIonSignals.getChromatogram().getScan(stopScan).getRetentionTime());
 			noiseMassSpectra.add(noiseMassSpectrum);
-			monitor.subTask("Substract the noise mass spectrum from the scans: " + startScan + " - " + stopScan);
 			subtractNoiseMassSpectrumFromScanRange(extractedIonSignals, noiseMassSpectrum, startScan, stopScan, numberOfUsedIonsForCoefficient, monitor);
 		}
 		return noiseMassSpectra;

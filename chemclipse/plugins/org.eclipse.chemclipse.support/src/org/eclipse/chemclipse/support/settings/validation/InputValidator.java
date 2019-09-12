@@ -42,7 +42,7 @@ public class InputValidator implements IValidator {
 		} else {
 			Class<?> rawType = inputValue.getRawType();
 			if(rawType != null) {
-				message = parse(rawType, (String)value);
+				message = parse(rawType, value.toString());
 			}
 		}
 		//

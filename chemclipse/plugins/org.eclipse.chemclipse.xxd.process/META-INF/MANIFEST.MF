@@ -46,3 +46,4 @@ Export-Package: org.eclipse.chemclipse.xxd.process.comparators,
  org.eclipse.chemclipse.xxd.process.preferences,
  org.eclipse.chemclipse.xxd.process.supplier,
  org.eclipse.chemclipse.xxd.process.support
+Import-Package: org.eclipse.core.databinding.validation

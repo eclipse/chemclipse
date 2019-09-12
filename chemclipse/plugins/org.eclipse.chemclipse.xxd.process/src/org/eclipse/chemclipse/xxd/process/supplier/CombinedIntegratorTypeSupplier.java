@@ -35,7 +35,7 @@ public class CombinedIntegratorTypeSupplier extends AbstractProcessTypeSupplier 
 			for(String processorId : support.getAvailableIntegratorIds()) {
 				ICombinedIntegratorSupplier supplier = support.getIntegratorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getIntegratorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

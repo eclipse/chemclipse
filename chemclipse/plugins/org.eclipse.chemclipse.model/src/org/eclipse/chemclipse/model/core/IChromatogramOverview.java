@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,6 +23,7 @@ import java.io.File;
  */
 public interface IChromatogramOverview extends IMeasurementInfo {
 
+	double SECOND_CORRELATION_FACTOR = 1000.0d; // 1ms * 1000 = 1s;
 	double MINUTE_CORRELATION_FACTOR = 60000.0d; // 1ms * 1000 = 1s; 1s * 60 = 1min
 
 	/**

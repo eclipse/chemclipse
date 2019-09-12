@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -9,10 +9,11 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.internal.core.support;
+package org.eclipse.chemclipse.msd.model.noise;
 
 import org.eclipse.chemclipse.model.support.ScanRange;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.exceptions.FilterException;
+import org.eclipse.chemclipse.msd.model.exceptions.FilterException;
+
 import junit.framework.TestCase;
 
 public class CalculatorSupport_3_Test extends TestCase {

@@ -231,7 +231,7 @@ public class ProcessingWizardPage extends WizardPage {
 		Object object = comboViewerCategory.getStructuredSelection().getFirstElement();
 		if(object instanceof ProcessCategory) {
 			ProcessCategory category = (ProcessCategory)object;
-			List<IProcessSupplier> suppliers = category.processorSuppliers;
+			List<IProcessSupplier<?>> suppliers = category.processorSuppliers;
 			comboViewerProcessor.setInput(suppliers);
 			if(suppliers.size() == 1) {
 				comboViewerProcessor.setSelection(new StructuredSelection(suppliers.get(0)));
@@ -254,7 +254,7 @@ public class ProcessingWizardPage extends WizardPage {
 			public String getText(Object element) {
 
 				if(element instanceof IProcessSupplier) {
-					IProcessSupplier supplier = (IProcessSupplier)element;
+					IProcessSupplier<?> supplier = (IProcessSupplier<?>)element;
 					StringBuilder sb = new StringBuilder();
 					sb.append(supplier.getName());
 					if(selectedDataTypes.size() > 1 && !supplier.getSupportedDataTypes().containsAll(selectedDataTypes)) {
@@ -285,13 +285,12 @@ public class ProcessingWizardPage extends WizardPage {
 
 		Object object = comboViewerProcessor.getStructuredSelection().getFirstElement();
 		if(object instanceof IProcessSupplier) {
-			IProcessSupplier processorSupplier = (IProcessSupplier)object;
+			IProcessSupplier<?> processorSupplier = (IProcessSupplier<?>)object;
 			processEntry = new ProcessEntry();
 			processEntry.setProcessorId(processorSupplier.getId());
 			processEntry.setName(processorSupplier.getName());
 			processEntry.setDescription(processorSupplier.getDescription());
 			processEntry.getSupportedDataTypes().addAll(processorSupplier.getSupportedDataTypes());
-			processEntry.setProcessSettingsClass(processorSupplier.getSettingsClass());
 			setMessage(processorSupplier.getDescription());
 		} else {
 			processEntry = null;
@@ -332,7 +331,7 @@ public class ProcessingWizardPage extends WizardPage {
 
 		private static final NameComparator COMPARATOR = new NameComparator();
 		private String name;
-		List<IProcessSupplier> processorSuppliers = new ArrayList<>();
+		List<IProcessSupplier<?>> processorSuppliers = new ArrayList<>();
 
 		public ProcessCategory(String name) {
 			this.name = name;
@@ -340,8 +339,7 @@ public class ProcessingWizardPage extends WizardPage {
 
 		public void addSupplier(IProcessTypeSupplier supplier, Collection<DataType> dataTypes) {
 
-			List<IProcessSupplier> suppliers = supplier.getProcessorSuppliers();
-			for(IProcessSupplier processSupplier : suppliers) {
+			for(IProcessSupplier<?> processSupplier : supplier.getProcessorSuppliers()) {
 				for(DataType dataType : dataTypes) {
 					if(processSupplier.getSupportedDataTypes().contains(dataType)) {
 						processorSuppliers.add(processSupplier);

@@ -32,6 +32,11 @@ public abstract class AbstractMagicNumberMatcher implements IMagicNumberMatcher 
 		return fileExtension.endsWith((caseSensitive) ? extension : extension.toLowerCase());
 	}
 
+	protected boolean checkFileName(File file, String regex) {
+
+		return file.getName().matches(regex);
+	}
+
 	protected boolean checkMagicCode(File file, byte[] magicCode) {
 
 		if(magicCode.length == 0 || file.length() < magicCode.length) {
