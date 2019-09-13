@@ -35,7 +35,7 @@ public class PeakIntegratorTypeSupplier extends AbstractProcessTypeSupplier impl
 			for(String processorId : support.getAvailableIntegratorIds()) {
 				IPeakIntegratorSupplier supplier = support.getIntegratorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, MSD_CSD_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, MSD_CSD_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getIntegratorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

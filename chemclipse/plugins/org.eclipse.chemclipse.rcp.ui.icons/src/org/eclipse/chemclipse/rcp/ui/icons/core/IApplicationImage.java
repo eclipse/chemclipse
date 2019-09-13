@@ -359,4 +359,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	//
 	String IMAGE_OFFSET_DEFAULT = "offsetDefault.gif";
 	String IMAGE_OFFSET_ACTIVE = "offsetActive.gif";
+	//
+	String IMAGE_MERGE = "merge.gif";
 }

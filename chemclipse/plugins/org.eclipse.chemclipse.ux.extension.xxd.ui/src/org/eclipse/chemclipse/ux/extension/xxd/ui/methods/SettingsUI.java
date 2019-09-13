@@ -16,10 +16,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider.SettingsUIControl;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
+import org.eclipse.core.databinding.validation.ValidationStatus;
+import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -28,94 +34,151 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+public class SettingsUI<T> extends Composite {
 
-public class SettingsUI extends Composite {
+	private SettingsUIControl control;
 
-	private List<WidgetItem> widgetItems = new ArrayList<>();
-	private List<Label> labels = new ArrayList<>();
-
-	public SettingsUI(Composite parent, List<InputValue> inputValues) {
+	public SettingsUI(Composite parent, ProcessorPreferences<T> preferences) throws IOException {
 		super(parent, SWT.NONE);
-		setLayout(new GridLayout(2, false));
-		if(inputValues != null) {
-			for(InputValue inputValue : inputValues) {
-				widgetItems.add(new WidgetItem(inputValue));
-			}
-		}
-		if(widgetItems.size() > 0) {
-			createOptionWidgets(this);
-		} else {
-			createNoOptionsMessage(this);
-		}
-	}
-
-	private void createOptionWidgets(Composite parent) {
-
-		for(WidgetItem widgetItem : widgetItems) {
-			Label label = new Label(parent, SWT.NONE);
-			label.setText(widgetItem.getInputValue().getName());
-			label.setToolTipText(widgetItem.getInputValue().getDescription());
-			labels.add(label);
-			widgetItem.initializeControl(parent);
-		}
+		setLayout(new FillLayout());
+		control = loadSettingsUIProvider(preferences).createUI(this, preferences);
 	}
 
 	@Override
 	public void setEnabled(boolean enabled) {
 
-		for(WidgetItem widgetItem : widgetItems) {
-			widgetItem.getControl().setEnabled(enabled);
-		}
-		for(Label label : labels) {
-			label.setEnabled(enabled);
-		}
+		control.setEnabled(enabled);
 		super.setEnabled(enabled);
 	}
 
-	public void addWidgetListener(Listener listener) {
+	public SettingsUIControl getControl() {
 
-		for(WidgetItem widgetItem : widgetItems) {
-			Control control = widgetItem.getControl();
-			control.addListener(SWT.Selection, listener);
-			control.addListener(SWT.KeyUp, listener);
-			control.addListener(SWT.MouseUp, listener);
-			control.addListener(SWT.MouseDoubleClick, listener);
+		return control;
+	}
+
+	private SettingsUIProvider<T> loadSettingsUIProvider(ProcessorPreferences<T> preferences) {
+
+		try {
+			T settings = preferences.getUserSettings();
+			if(settings == null) {
+				// check if there are system settings
+				settings = preferences.getSystemSettings();
+				if(settings == null) {
+					// last resort, create a new instance instead
+					settings = preferences.getSupplier().getSettingsClass().newInstance();
+				}
+			}
+			@SuppressWarnings("unchecked")
+			SettingsUIProvider<T> uiProvider = Adapters.adapt(settings, SettingsUIProvider.class);
+			if(uiProvider != null) {
+				return uiProvider;
+			}
+		} catch(InstantiationException | IllegalAccessException
+				| IOException e) {
+			// can't use it then ... must use default provider
 		}
-		Event event = new Event();
-		event.display = getShell().getDisplay();
-		event.widget = this;
-		listener.handleEvent(event);
+		return new DefaultSettingsUIProvider<T>();
 	}
 
-	private void createNoOptionsMessage(Composite parent) {
+	private static final class DefaultSettingsUIProvider<T> implements SettingsUIProvider<T> {
 
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("This processor offers no options.");
-		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		@Override
+		public SettingsUIControl createUI(Composite parent, ProcessorPreferences<T> preferences) throws IOException {
+
+			return new SettingsUIControlImplementation<T>(parent, preferences);
+		}
 	}
 
-	public String validate() {
+	private final static class SettingsUIControlImplementation<T> implements SettingsUIControl {
 
-		for(WidgetItem widgetItem : widgetItems) {
-			String message = widgetItem.validate();
-			if(message != null) {
-				return message;
+		private List<WidgetItem> widgetItems = new ArrayList<>();
+		private List<Label> labels = new ArrayList<>();
+		private ProcessorPreferences<T> preferences;
+		private Composite parent;
+
+		public SettingsUIControlImplementation(Composite parent, ProcessorPreferences<T> preferences) throws IOException {
+			this.parent = parent;
+			this.preferences = preferences;
+			parent.setLayout(new GridLayout(2, false));
+			Map<InputValue, Object> valuesMap = preferences.getSerialization().fromString(preferences.getSupplier().getSettingsParser().getInputValues(), preferences.getUserSettingsAsString());
+			if(valuesMap != null) {
+				for(Entry<InputValue, ?> entry : valuesMap.entrySet()) {
+					widgetItems.add(new WidgetItem(entry.getKey(), entry.getValue()));
+				}
+			}
+			if(widgetItems.size() > 0) {
+				createOptionWidgets(parent);
+			} else {
+				createNoOptionsMessage(parent);
 			}
 		}
-		return null;
-	}
 
-	public String getJsonSettings() throws IOException {
+		@Override
+		public void setEnabled(boolean enabled) {
 
-		String settings = IProcessEntry.EMPTY_JSON_SETTINGS;
-		Map<String, Object> values = new HashMap<>();
-		for(WidgetItem widgetItem : widgetItems) {
-			InputValue inputValue = widgetItem.getInputValue();
-			values.put(inputValue.getName(), widgetItem.getValue());
+			for(WidgetItem widgetItem : widgetItems) {
+				widgetItem.getControl().setEnabled(enabled);
+			}
+			for(Label label : labels) {
+				label.setEnabled(enabled);
+			}
 		}
-		ObjectMapper mapper = new ObjectMapper();
-		settings = mapper.writeValueAsString(values);
-		return settings;
+
+		private void createOptionWidgets(Composite parent) {
+
+			for(WidgetItem widgetItem : widgetItems) {
+				Label label = new Label(parent, SWT.NONE);
+				label.setText(widgetItem.getInputValue().getName());
+				label.setToolTipText(widgetItem.getInputValue().getDescription());
+				labels.add(label);
+				widgetItem.initializeControl(parent);
+			}
+		}
+
+		private void createNoOptionsMessage(Composite parent) {
+
+			Label label = new Label(parent, SWT.NONE);
+			label.setText("This processor offers no options.");
+			label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		}
+
+		@Override
+		public IStatus validate() {
+
+			for(WidgetItem widgetItem : widgetItems) {
+				String message = widgetItem.validate();
+				if(message != null) {
+					return ValidationStatus.error(message);
+				}
+			}
+			return ValidationStatus.ok();
+		}
+
+		@Override
+		public String getSettings() throws IOException {
+
+			Map<InputValue, Object> values = new HashMap<>();
+			for(WidgetItem widgetItem : widgetItems) {
+				InputValue inputValue = widgetItem.getInputValue();
+				values.put(inputValue, widgetItem.getValue());
+			}
+			return preferences.getSerialization().toString(values);
+		}
+
+		@Override
+		public void addChangeListener(Listener listener) {
+
+			for(WidgetItem widgetItem : widgetItems) {
+				Control control = widgetItem.getControl();
+				control.addListener(SWT.Selection, listener);
+				control.addListener(SWT.KeyUp, listener);
+				control.addListener(SWT.MouseUp, listener);
+				control.addListener(SWT.MouseDoubleClick, listener);
+			}
+			Event event = new Event();
+			event.display = parent.getShell().getDisplay();
+			event.widget = parent;
+			listener.handleEvent(event);
+		}
 	}
 }

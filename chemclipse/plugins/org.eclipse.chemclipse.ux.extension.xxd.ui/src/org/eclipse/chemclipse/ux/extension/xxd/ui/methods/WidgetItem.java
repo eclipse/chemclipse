@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - support file selection
+ * Christoph Läubrich - support file selection, refactor for new settings model
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -49,11 +49,11 @@ public class WidgetItem {
 	private InputValidator inputValidator;
 	private ControlDecoration controlDecoration;
 	private Control control;
-	private String currentSelection;
+	private Object currentSelection;
 
-	public WidgetItem(InputValue inputValue) {
+	public WidgetItem(InputValue inputValue, Object currentSelection) {
 		this.inputValue = inputValue;
-		currentSelection = inputValue.getValue();
+		this.currentSelection = currentSelection;
 	}
 
 	public InputValue getInputValue() {
@@ -89,7 +89,7 @@ public class WidgetItem {
 		/*
 		 * Get the input.
 		 */
-		String input = currentSelection;
+		Object input = currentSelection;
 		if(control instanceof Text) {
 			input = ((Text)control).getText().trim();
 		} else if(control instanceof Button) {
@@ -119,10 +119,7 @@ public class WidgetItem {
 		Class<?> rawType = inputValue.getRawType();
 		if(rawType != null) {
 			if(rawType == File.class) {
-				if(currentSelection == null || currentSelection.isEmpty()) {
-					return null;
-				}
-				return new File(currentSelection);
+				return currentSelection;
 			}
 			if(control instanceof Text) {
 				/*
@@ -208,10 +205,7 @@ public class WidgetItem {
 		composite.setLayout(layout);
 		CLabel label = new CLabel(composite, SWT.NONE);
 		label.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
-		String value = inputValue.getValue();
-		if(value == null || value.isEmpty()) {
-			value = inputValue.getDefaultValue();
-		}
+		String value = getValueAsString();
 		if(value == null || value.isEmpty()) {
 			label.setText("Please choose a location ...");
 		} else {
@@ -253,14 +247,14 @@ public class WidgetItem {
 					String open = dialog.open();
 					if(open != null) {
 						label.setText(open);
-						currentSelection = open;
+						currentSelection = new File(open);
 					}
 				} else {
 					DirectoryDialog dialog = new DirectoryDialog(button.getShell(), style);
 					String open = dialog.open();
 					if(open != null) {
 						label.setText(open);
-						currentSelection = open;
+						currentSelection = new File(open);
 					}
 				}
 				Listener[] listeners = composite.getListeners(SWT.Selection);
@@ -290,7 +284,7 @@ public class WidgetItem {
 	private Control createTextWidget(Composite parent, int style, GridData gridData) {
 
 		Text text = new Text(parent, style);
-		text.setText(inputValue.getValue());
+		text.setText(getValueAsString());
 		text.setToolTipText(inputValue.getDescription());
 		text.setLayoutData(gridData);
 		return text;
@@ -300,7 +294,7 @@ public class WidgetItem {
 
 		Button button = new Button(parent, SWT.CHECK);
 		button.setText("");
-		button.setSelection(Boolean.parseBoolean(inputValue.getValue()));
+		button.setSelection(getValueAsBoolean());
 		button.setToolTipText(inputValue.getDescription());
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return button;
@@ -326,8 +320,31 @@ public class WidgetItem {
 		combo.setLayoutData(gridData);
 		//
 		comboViewer.setInput(input);
-		combo.setText(inputValue.getValue());
+		combo.setText(getValueAsString());
 		//
 		return combo;
+	}
+
+	private boolean getValueAsBoolean() {
+
+		if(currentSelection instanceof Boolean) {
+			return ((Boolean)currentSelection).booleanValue();
+		}
+		if(currentSelection instanceof String) {
+			return Boolean.valueOf((String)currentSelection);
+		}
+		return false;
+	}
+
+	private String getValueAsString() {
+
+		if(currentSelection == null) {
+			return "";
+		}
+		if(currentSelection instanceof String) {
+			return (String)currentSelection;
+		} else {
+			return currentSelection.toString();
+		}
 	}
 }

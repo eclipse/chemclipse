@@ -60,7 +60,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsPreferencesWizard;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramAxes;
@@ -533,11 +533,11 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			 * Dynamic Menu Items
 			 */
 			for(IProcessTypeSupplier typeSupplier : processTypeSupport.getProcessorTypeSuppliers(Collections.singletonList(datatype))) {
-				List<IProcessSupplier> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
+				List<IProcessSupplier<?>> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
 				Collections.sort(list, new NameComparator());
-				for(IProcessSupplier supplier : list) {
+				for(IProcessSupplier<?> supplier : list) {
 					if(supplier.getSupportedDataTypes().contains(datatype)) {
-						IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier);
+						IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier);
 						cachedMenuEntries.add(cachedEntry);
 						chartSettings.addMenuEntry(cachedEntry);
 					}
@@ -575,7 +575,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			@Override
 			public void execute(Shell shell, ScrollableChart scrollableChart) {
 
-				SettingsPreferencesWizard.openEditWizard(shell, processTypeSupport);
+				SettingsWizard.openManagePreferencesWizard(shell, processTypeSupport::getAllPreferences);
 			}
 
 			@Override

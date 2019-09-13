@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - don't use private ProcessTypeSupport
+ * Christoph Läubrich - don't use private ProcessTypeSupport, add tooltip message in case of error
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -48,29 +48,31 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 
 		if(columnIndex == 0) {
 			if(element instanceof IProcessEntry) {
-				Image image;
-				int status = processTypeSupport.validate((IProcessEntry)element);
-				switch(status) {
-					case IStatus.ERROR:
-						image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_ERROR, IApplicationImage.SIZE_16x16);
-						break;
-					case IStatus.WARNING:
-						image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_WARN, IApplicationImage.SIZE_16x16);
-						break;
-					case IStatus.INFO:
-						image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_EMPTY, IApplicationImage.SIZE_16x16);
-						break;
-					case IStatus.OK:
-						image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_OK, IApplicationImage.SIZE_16x16);
-						break;
-					default:
-						image = null;
-						break;
+				IStatus status = processTypeSupport.validate((IProcessEntry)element);
+				if(status.matches(IStatus.ERROR)) {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_ERROR, IApplicationImage.SIZE_16x16);
+				} else if(status.matches(IStatus.WARNING)) {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_WARN, IApplicationImage.SIZE_16x16);
+				} else if(status.matches(IStatus.INFO)) {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_EMPTY, IApplicationImage.SIZE_16x16);
+				} else if(status.isOK()) {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_OK, IApplicationImage.SIZE_16x16);
 				}
-				return image;
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public String getToolTipText(Object element) {
+
+		if(element instanceof IProcessEntry) {
+			IStatus status = processTypeSupport.validate((IProcessEntry)element);
+			if(!status.isOK()) {
+				return status.getMessage();
+			}
+		}
+		return super.getToolTipText(element);
 	}
 
 	private final ProcessTypeSupport processTypeSupport;

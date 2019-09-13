@@ -39,7 +39,7 @@ public class ChromatogramReportTypeSupplier extends AbstractProcessTypeSupplier 
 			for(String processorId : support.getAvailableProcessorIds()) {
 				IChromatogramReportSupplier supplier = support.getReportSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(processorId, ALL_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getReportName());
 				processorSupplier.setDescription(supplier.getDescription());
 				Class<? extends IChromatogramReportSettings> settingsClass = supplier.getSettingsClass();

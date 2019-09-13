@@ -52,12 +52,12 @@ public class PeakBuilderMSD {
 	 * 
 	 * @param chromatogram
 	 * @param scanRange
-	 * @param calculatePeakIncludedBackground
+	 * @param includedBackground
 	 * @param includedIons
 	 * @return IChromatogramPeakMSD
 	 * @throws PeakException
 	 */
-	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean calculatePeakIncludedBackground, Set<Integer> includedIons) throws PeakException {
+	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean includedBackground, Set<Integer> includedIons) throws PeakException {
 
 		validateChromatogram(chromatogram);
 		validateScanRange(scanRange);
@@ -85,7 +85,7 @@ public class PeakBuilderMSD {
 		float stopBackgroundAbundance = totalScanSignal.getTotalSignal();
 		//
 		IBackgroundAbundanceRange backgroundAbundanceRange;
-		if(calculatePeakIncludedBackground) {
+		if(includedBackground) {
 			backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
 		} else {
 			float base = Math.min(startBackgroundAbundance, stopBackgroundAbundance);

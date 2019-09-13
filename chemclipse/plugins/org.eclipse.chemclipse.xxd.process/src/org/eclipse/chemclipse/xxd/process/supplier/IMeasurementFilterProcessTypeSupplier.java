@@ -51,7 +51,7 @@ public class IMeasurementFilterProcessTypeSupplier extends AbstractFilterFactory
 	@Override
 	public IProcessingInfo<IChromatogramSelection<?, ?>> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, String processorId, IProcessSettings processSettings, IProgressMonitor monitor) {
 
-		FilterProcessSupplier<IMeasurementFilter<?>> supplier = getProcessorSupplier(processorId);
+		FilterProcessSupplier<IMeasurementFilter<?>, ?> supplier = getProcessorSupplier(processorId);
 		if(supplier != null) {
 			ProcessingInfo<IChromatogramSelection<?, ?>> info = new ProcessingInfo<>();
 			info.setProcessingResult(chromatogramSelection);
@@ -72,7 +72,7 @@ public class IMeasurementFilterProcessTypeSupplier extends AbstractFilterFactory
 	@Override
 	public Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, String processorId, Object processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-		FilterProcessSupplier<IMeasurementFilter<?>> supplier = getProcessorSupplier(processorId);
+		FilterProcessSupplier<IMeasurementFilter<?>, ?> supplier = getProcessorSupplier(processorId);
 		if(supplier != null) {
 			IMeasurementFilter<?> filter = supplier.getFilter();
 			if(filter.acceptsIMeasurements(measurements)) {

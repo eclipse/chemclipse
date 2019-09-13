@@ -46,7 +46,7 @@ public class PeakDetectorTypeSupplier extends AbstractProcessTypeSupplier implem
 			for(String processorId : support.getAvailablePeakDetectorIds()) {
 				IPeakDetectorSupplier supplier = support.getPeakDetectorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_CSD + processorId, CSD_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_CSD + processorId, CSD_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getPeakDetectorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());
@@ -61,7 +61,7 @@ public class PeakDetectorTypeSupplier extends AbstractProcessTypeSupplier implem
 			for(String processorId : support.getAvailablePeakDetectorIds()) {
 				IPeakDetectorSupplier supplier = support.getPeakDetectorSupplier(processorId);
 				//
-				ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_MSD + processorId, MSD_DATA_TYPES);
+				ProcessorSupplier processorSupplier = new ProcessorSupplier(PREFIX_MSD + processorId, MSD_DATA_TYPES, this);
 				processorSupplier.setName(supplier.getPeakDetectorName());
 				processorSupplier.setDescription(supplier.getDescription());
 				processorSupplier.setSettingsClass(supplier.getSettingsClass());

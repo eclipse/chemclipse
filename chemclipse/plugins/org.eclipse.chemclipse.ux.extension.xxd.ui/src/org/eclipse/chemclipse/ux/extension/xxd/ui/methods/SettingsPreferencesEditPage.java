@@ -11,19 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
 import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
-import org.eclipse.chemclipse.xxd.process.support.ProcessorSupplier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences.DialogBehavior;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -46,12 +45,12 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public class SettingsPreferencesEditPage extends WizardPage {
 
-	private ProcessTypeSupport processTypeSupport;
 	private TreeViewer treeViewer;
+	private Supplier<Collection<ProcessorPreferences<?>>> preferenceSupplier;
 
-	public SettingsPreferencesEditPage(ProcessTypeSupport processTypeSupport) {
+	public SettingsPreferencesEditPage(Supplier<Collection<ProcessorPreferences<?>>> preferenceSupplier) {
 		super(SettingsPreferencesEditPage.class.getName());
-		this.processTypeSupport = processTypeSupport;
+		this.preferenceSupplier = preferenceSupplier;
 	}
 
 	@Override
@@ -74,10 +73,9 @@ public class SettingsPreferencesEditPage extends WizardPage {
 					if(element instanceof TreeNode) {
 						element = ((TreeNode)element).getValue();
 					}
-					Entry<ProcessorSupplier, ProcessorPreferences> entry = getEntry(element);
+					ProcessorPreferences<Object> entry = getEntry(element);
 					if(entry != null) {
-						IProcessSupplier key = entry.getKey();
-						return key.getName();
+						return entry.getSupplier().getName();
 					}
 					return super.getText(element);
 				}
@@ -92,10 +90,9 @@ public class SettingsPreferencesEditPage extends WizardPage {
 				@Override
 				public String getText(Object element) {
 
-					Entry<ProcessorSupplier, ProcessorPreferences> entry = getEntry(element);
-					if(entry != null) {
-						ProcessorPreferences preferences = entry.getValue();
-						if(preferences.isAskForSettings()) {
+					ProcessorPreferences<Object> preferences = getEntry(element);
+					if(preferences != null) {
+						if(preferences.getDialogBehaviour() == DialogBehavior.SHOW) {
 							return "yes";
 						} else {
 							return "no";
@@ -117,13 +114,12 @@ public class SettingsPreferencesEditPage extends WizardPage {
 					if(element instanceof TreeNode) {
 						element = ((TreeNode)element).getValue();
 					}
-					Entry<ProcessorSupplier, ProcessorPreferences> entry = getEntry(element);
-					if(entry != null) {
-						ProcessorPreferences preferences = entry.getValue();
+					ProcessorPreferences<Object> preferences = getEntry(element);
+					if(preferences != null) {
 						if(preferences.isUseSystemDefaults()) {
 							return "(System Default)";
 						} else {
-							return preferences.getUserSettings();
+							return preferences.getUserSettingsAsString();
 						}
 					}
 					return "";
@@ -139,7 +135,10 @@ public class SettingsPreferencesEditPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				doEdit();
+				try {
+					doEdit();
+				} catch(IOException e1) {
+				}
 			}
 
 			@Override
@@ -157,8 +156,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 
 				Object[] array = treeViewer.getStructuredSelection().toArray();
 				for(Object object : array) {
-					Entry<ProcessorSupplier, ProcessorPreferences> entry = getEntry(object);
-					entry.getValue().reset();
+					getEntry(object).reset();
 				}
 				updateTree();
 			}
@@ -179,8 +177,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Collection<ProcessorPreferences> values = processTypeSupport.getAllPreferences().values();
-				for(ProcessorPreferences preferences : values) {
+				for(ProcessorPreferences<?> preferences : preferenceSupplier.get()) {
 					preferences.reset();
 				}
 				updateTree();
@@ -215,19 +212,22 @@ public class SettingsPreferencesEditPage extends WizardPage {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
 
-				doEdit();
+				try {
+					doEdit();
+				} catch(IOException e) {
+				}
 			}
 		});
 		updateTree();
 		setControl(composite);
 	}
 
-	private void doEdit() {
+	private void doEdit() throws IOException {
 
 		ITreeSelection selection = treeViewer.getStructuredSelection();
-		Entry<ProcessorSupplier, ProcessorPreferences> entry = getEntry(selection.getFirstElement());
+		ProcessorPreferences<?> entry = getEntry(selection.getFirstElement());
 		if(entry != null) {
-			if(SettingsPreferencesWizard.openWizard(getShell(), entry.getValue(), entry.getKey())) {
+			if(SettingsWizard.openEditPreferencesWizard(getShell(), entry)) {
 				updateTree();
 			}
 		}
@@ -236,9 +236,9 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void updateTree() {
 
 		Map<String, TreeNode> categories = new TreeMap<>();
-		for(Entry<IProcessSupplier, ProcessorPreferences> entry : processTypeSupport.getAllPreferences().entrySet()) {
-			IProcessTypeSupplier supplier = processTypeSupport.getSupplier(entry.getKey().getId());
-			TreeNode processorNode = new TreeNode(entry);
+		for(ProcessorPreferences<?> entry : preferenceSupplier.get()) {
+			IProcessTypeSupplier supplier = entry.getSupplier().getTypeSupplier();
+			TreeNode processorNode = new TreeNode(entry.getSupplier());
 			String category = supplier.getCategory();
 			TreeNode categoryNode = categories.get(category);
 			if(categoryNode == null) {
@@ -258,18 +258,14 @@ public class SettingsPreferencesEditPage extends WizardPage {
 		treeViewer.expandAll();
 	}
 
-	protected void edit(Entry<String, ProcessorPreferences> element) {
-
-	}
-
 	@SuppressWarnings("unchecked")
-	private static Entry<ProcessorSupplier, ProcessorPreferences> getEntry(Object element) {
+	private static <T> ProcessorPreferences<T> getEntry(Object element) {
 
 		if(element instanceof TreeNode) {
 			element = ((TreeNode)element).getValue();
 		}
-		if(element instanceof Entry<?, ?>) {
-			return (Entry<ProcessorSupplier, ProcessorPreferences>)element;
+		if(element instanceof ProcessorPreferences<?>) {
+			return (ProcessorPreferences<T>)element;
 		}
 		return null;
 	}

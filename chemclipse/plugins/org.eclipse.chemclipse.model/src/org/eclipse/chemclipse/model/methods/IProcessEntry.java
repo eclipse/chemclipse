@@ -36,14 +36,4 @@ public interface IProcessEntry {
 	void setJsonSettings(String jsonSettings);
 
 	List<DataType> getSupportedDataTypes();
-
-	Class<?> getProcessSettingsClass();
-
-	/**
-	 * String symbolicName = FrameworkUtil.getBundle(processSettingsClass).getSymbolicName();
-	 * String className = processSettingsClass.getName();
-	 */
-	void setProcessSettingsClass(String symbolicName, String className);
-
-	void setProcessSettingsClass(Class<?> processSettingsClass);
 }
