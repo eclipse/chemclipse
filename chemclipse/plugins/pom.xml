@@ -328,7 +328,6 @@
 		<module>org.eclipse.chemclipse.ux.extension.ui</module>
 		<module>org.eclipse.chemclipse.ux.extension.wsd.ui</module>
 		<module>org.eclipse.chemclipse.ux.extension.xxd.ui</module>
-		<module>org.eclipse.chemclipse.ux.fx.ui</module>
 		<module>org.eclipse.chemclipse.wsd.converter.fragment.test</module>
 		<module>org.eclipse.chemclipse.wsd.converter.ui</module>
 		<module>org.eclipse.chemclipse.wsd.converter</module>

@@ -10,8 +10,6 @@ package org.eclipse.chemclipse.ux.fx.ui;
 
 import java.util.function.Consumer;
 
-import org.apache.log4j.Logger;
-
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -51,7 +49,6 @@ public class ProgressForm {
 		return cancelButton;
 	}
 
-	private final static Logger logger = Logger.getLogger(ProgressForm.class);
 	public final static int DEFAULT_WIDTH = 500;
 	public final static int DEFAULT_HEIGHT = 120;
 
@@ -92,7 +89,6 @@ public class ProgressForm {
 				f.dialogStage.close();
 			});
 			s.setOnFailed(e -> {
-				logger.error(t.getException().getLocalizedMessage(), t.getException());
 				f.label.textProperty().unbind();
 				f.label.setText("An unexpected error occoured");
 				f.dialogStage.setOnCloseRequest(event -> event.isConsumed());
@@ -102,7 +98,6 @@ public class ProgressForm {
 				f.cancelButton.setOnAction(event -> f.dialogStage.close());
 			});
 			s.setOnCancelled(e -> {
-				logger.debug(t.getException());
 				f.dialogStage.close();
 			});
 			f.progressBar.progressProperty().bind(s.progressProperty());
@@ -135,12 +130,10 @@ public class ProgressForm {
 				f.dialogStage.close();
 			});
 			s.setOnFailed(e -> {
-				logger.error(t.getException().getLocalizedMessage(), t.getException());
 				f.label.setText(t.getException().getLocalizedMessage());
 				f.dialogStage.setOnCloseRequest(event -> event.isConsumed());
 			});
 			s.setOnCancelled(e -> {
-				logger.debug(t.getException());
 				f.dialogStage.close();
 			});
 			f.progressBar.progressProperty().bind(s.progressProperty());
@@ -160,7 +153,6 @@ public class ProgressForm {
 				r.run();
 				f.dialogStage.close();
 			} catch(final Throwable e) {
-				logger.error(e.getLocalizedMessage(), e);
 				f.label.setText(e.getLocalizedMessage());
 				f.dialogStage.setOnCloseRequest(event -> event.isConsumed());
 			} finally {
@@ -174,12 +166,10 @@ public class ProgressForm {
 	final Button cancelButton = new Button();
 
 	public ProgressForm(final String text) {
-
 		this(text, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
 
 	private ProgressForm(final String text, final int width, final int height) {
-
 		// Form
 		dialogStage = new Stage();
 		dialogStage.setTitle(text);
