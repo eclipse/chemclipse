@@ -12,26 +12,29 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.AbstractPeakIdentifierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.PeakIdentifierSettings;
+import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
+import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PeakIdentifierRemoveUnidentified<T> extends AbstractPeakIdentifierMSD<T> {
+public class PeakIdentifierRemoveUnidentified extends AbstractPeakIdentifierMSD<IPeakIdentificationResults> {
 
 	@Override
-	public IProcessingInfo<T> identify(List<? extends IPeakMSD> peaks, IPeakIdentifierSettingsMSD peakIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IPeakIdentificationResults> identify(List<? extends IPeakMSD> peaks, IPeakIdentifierSettingsMSD peakIdentifierSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
+		if(peakIdentifierSettings == null) {
+			peakIdentifierSettings = new PeakIdentifierSettings();
+		}
+		IProcessingInfo<IPeakIdentificationResults> processingInfo = new ProcessingInfo<>(new PeakIdentificationResults());
 		/*
 		 * Remove all unidentified peaks.
 		 */
@@ -52,45 +55,5 @@ public class PeakIdentifierRemoveUnidentified<T> extends AbstractPeakIdentifierM
 			processingInfo.addErrorMessage("Identifier", "Something has gone wrong.");
 		}
 		return processingInfo;
-	}
-
-	@Override
-	public IProcessingInfo<T> identify(IPeakMSD peak, IPeakIdentifierSettingsMSD peakIdentifierSettings, IProgressMonitor monitor) {
-
-		List<IPeakMSD> peaks = new ArrayList<>();
-		peaks.add(peak);
-		return identify(peaks, peakIdentifierSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo<T> identify(IPeakMSD peak, IProgressMonitor monitor) {
-
-		IPeakIdentifierSettingsMSD peakIdentifierSettings = new PeakIdentifierSettings();
-		return identify(peak, peakIdentifierSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo<T> identify(List<? extends IPeakMSD> peaks, IProgressMonitor monitor) {
-
-		PeakIdentifierSettings peakIdentifierSettings = new PeakIdentifierSettings();
-		return identify(peaks, peakIdentifierSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo<T> identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IProgressMonitor monitor) {
-
-		PeakIdentifierSettings peakIdentifierSettings = new PeakIdentifierSettings();
-		return identify(chromatogramSelectionMSD, peakIdentifierSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo<T> identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IPeakIdentifierSettingsMSD peakIdentifierSettings, IProgressMonitor monitor) {
-
-		IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogram();
-		List<IChromatogramPeakMSD> peaks = new ArrayList<>();
-		for(IChromatogramPeakMSD chromatogramPeakMSD : chromatogramMSD.getPeaks(chromatogramSelectionMSD)) {
-			peaks.add(chromatogramPeakMSD);
-		}
-		return identify(peaks, peakIdentifierSettings, monitor);
 	}
 }
