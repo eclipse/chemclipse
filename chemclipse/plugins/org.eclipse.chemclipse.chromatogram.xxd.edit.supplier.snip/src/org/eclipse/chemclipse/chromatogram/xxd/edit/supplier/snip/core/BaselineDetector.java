@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 public class BaselineDetector extends AbstractBaselineDetector {
 
@@ -118,27 +119,34 @@ public class BaselineDetector extends AbstractBaselineDetector {
 
 		ITotalScanSignal actualTotalIonSignal;
 		ITotalScanSignal nextTotalIonSignal;
-		/*
-		 * Why scan < numberOfScans instead of scan <= numberOfScans? Because of
-		 * .getNextTotalIonSignal();
-		 */
-		for(int scan = startScan; scan < stopScan; scan++) {
-			//
-			monitor.subTask("Apply baseline to scan: " + scan);
-			actualTotalIonSignal = totalIonSignals.getTotalScanSignal(scan);
-			nextTotalIonSignal = totalIonSignals.getNextTotalScanSignal(scan);
+		//
+		int size = stopScan - startScan;
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Apply baseline", size);
+		try {
 			/*
-			 * Retention times and background abundances.
+			 * Why scan < numberOfScans instead of scan <= numberOfScans? Because of
+			 * .getNextTotalIonSignal();
 			 */
-			int startRetentionTime = actualTotalIonSignal.getRetentionTime();
-			float startBackgroundAbundance = actualTotalIonSignal.getTotalSignal();
-			int stopRetentionTime = nextTotalIonSignal.getRetentionTime();
-			float stopBackgroundAbundance = nextTotalIonSignal.getTotalSignal();
-			/*
-			 * Set the baseline.
-			 * It is validate == false, cause we know that the segments are calculated without overlap.
-			 */
-			baselineModel.addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
+			for(int scan = startScan; scan < stopScan; scan++) {
+				//
+				actualTotalIonSignal = totalIonSignals.getTotalScanSignal(scan);
+				nextTotalIonSignal = totalIonSignals.getNextTotalScanSignal(scan);
+				/*
+				 * Retention times and background abundances.
+				 */
+				int startRetentionTime = actualTotalIonSignal.getRetentionTime();
+				float startBackgroundAbundance = actualTotalIonSignal.getTotalSignal();
+				int stopRetentionTime = nextTotalIonSignal.getRetentionTime();
+				float stopBackgroundAbundance = nextTotalIonSignal.getTotalSignal();
+				/*
+				 * Set the baseline.
+				 * It is validate == false, cause we know that the segments are calculated without overlap.
+				 */
+				baselineModel.addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
+				subMonitor.worked(1);
+			}
+		} finally {
+			SubMonitor.done(subMonitor);
 		}
 	}
 }
