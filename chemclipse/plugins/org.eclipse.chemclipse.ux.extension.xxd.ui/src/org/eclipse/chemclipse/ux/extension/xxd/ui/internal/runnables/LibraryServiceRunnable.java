@@ -28,7 +28,6 @@ public class LibraryServiceRunnable implements IRunnableWithProgress {
 	private IScanMSD libraryMassSpectrum;
 
 	public LibraryServiceRunnable(IIdentificationTarget identificationTarget) {
-
 		this.identificationTarget = identificationTarget;
 	}
 
@@ -45,7 +44,7 @@ public class LibraryServiceRunnable implements IRunnableWithProgress {
 			try {
 				IProcessingInfo processingInfo = LibraryService.identify(identificationTarget, monitor);
 				IMassSpectra massSpectra = (IMassSpectra)processingInfo.getProcessingResult();
-				if(massSpectra.size() > 0) {
+				if(massSpectra != null && massSpectra.size() > 0) {
 					libraryMassSpectrum = massSpectra.getMassSpectrum(1);
 				}
 			} catch(Exception e) {
