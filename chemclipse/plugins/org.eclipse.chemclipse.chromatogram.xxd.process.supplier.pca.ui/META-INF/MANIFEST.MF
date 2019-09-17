@@ -5,6 +5,22 @@ Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pc
 Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator
 Bundle-Vendor: ChemClipse
+Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca;bundle-version="0.8.0",
@@ -51,21 +67,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.core.contexts;bundle-version="1.5.1",
  org.eclipse.e4.core.commands
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
+ javax.inject;version="1.0.0"
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility,
- org.eclipse.chemclipse.ux.fx.ui
