@@ -44,7 +44,6 @@
         <children xsi:type="basic:PartSashContainer" xmi:id="_J7oIoPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.partsashcontainer.2" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_PJ0EwPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.partstack.2">
             <children xsi:type="advanced:Placeholder" xmi:id="_uQXGAPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.5" ref="_pUF1wPRuEeeapKw7g2Cagg"/>
-            <children xsi:type="advanced:Placeholder" xmi:id="_yyAsQPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.6" ref="_0om28PRuEeeapKw7g2Cagg"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_Pvp8wPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.partstack.3">
             <children xsi:type="advanced:Placeholder" xmi:id="_3G8FIPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.7" ref="_yHnWUPRtEeeapKw7g2Cagg"/>
