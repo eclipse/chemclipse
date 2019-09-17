@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.xxd.process.support;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
-import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
 import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 
 /**
