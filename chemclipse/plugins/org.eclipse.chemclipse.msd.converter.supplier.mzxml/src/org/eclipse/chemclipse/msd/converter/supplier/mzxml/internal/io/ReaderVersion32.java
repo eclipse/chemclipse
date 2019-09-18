@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,7 +38,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Ms
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Peaks;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Scan;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorChromatogram;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorScan;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
@@ -77,6 +76,9 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 			MsRun msrun = (MsRun)unmarshaller.unmarshal(nodeList.item(0));
 			//
 			chromatogram = new VendorChromatogram();
+			// IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
+			boolean isTandemMeasurement = isTandemMeasurement(msrun);
+			int cycleNumber = isTandemMeasurement ? 1 : 0;
 			//
 			for(Scan scan : msrun.getScan()) {
 				/*
@@ -84,6 +86,24 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 				 */
 				IVendorScan massSpectrum = new VendorScan();
 				int retentionTime = scan.getRetentionTime().multiply(1000).getSeconds(); // milliseconds
+				// MS, MS/MS
+				short msLevel = scan.getMsLevel().shortValue();
+				massSpectrum.setMassSpectrometer(msLevel);
+				// float collisionEnergy = 0.0f;
+				// double filter1Ion = 0.0d;
+				//
+				if(msLevel >= 2) {
+					// collisionEnergy = scan.getCollisionEnergy();
+					// if(scan.getPrecursorMz().size() >= 1) {
+					// filter1Ion = AbstractIon.getIon(scan.getPrecursorMz().get(0).getValue(), 2);
+					// }
+				} else {
+					cycleNumber++;
+				}
+				//
+				if(cycleNumber >= 1) {
+					massSpectrum.setCycleNumber(cycleNumber);
+				}
 				massSpectrum.setRetentionTime(retentionTime);
 				/*
 				 * Get the ions.
@@ -136,8 +156,21 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 						float intensity = (float)values[peakIndex + 1];
 						try {
 							if(intensity >= VendorIon.MIN_ABUNDANCE && intensity <= VendorIon.MAX_ABUNDANCE) {
-								IVendorIon ion = new VendorIon(mz, intensity);
-								massSpectrum.addIon(ion);
+								// if(msLevel >= 2) {
+								// try {
+								// double filter3Ion = mz; // daughter m/z start
+								// double filter1Resolution = 1.0d; // q1 resolution
+								// double filter3Resolution = 1.0d; // q3 resolution
+								// int transitionGroup = 1; // transition group
+								// IIonTransition ionTransition = ionTransitionSettings.getIonTransition(filter1Ion, filter3Ion, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
+								// massSpectrum.addIon(new VendorIon(mz, intensity, ionTransition));
+								// } catch(IonTransitionIsNullException e) {
+								// logger.warn(e);
+								// }
+								// } else {
+								// massSpectrum.addIon(new VendorIon(mz, intensity));
+								// }
+								massSpectrum.addIon(new VendorIon(mz, intensity));
 							}
 						} catch(AbundanceLimitExceededException e) {
 							logger.warn(e);
@@ -161,5 +194,15 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 		chromatogram.setConverterId("");
 		chromatogram.setFile(file);
 		return chromatogram;
+	}
+
+	private boolean isTandemMeasurement(MsRun msrun) {
+
+		for(Scan scan : msrun.getScan()) {
+			if(scan.getMsLevel().shortValue() > 1) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
