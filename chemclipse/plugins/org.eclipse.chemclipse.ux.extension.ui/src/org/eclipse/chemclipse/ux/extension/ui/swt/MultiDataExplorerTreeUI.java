@@ -12,16 +12,21 @@
 package org.eclipse.chemclipse.ux.extension.ui.swt;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.function.Function;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.provider.LazyFileExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -85,9 +90,11 @@ public class MultiDataExplorerTreeUI {
 	public void expandLastDirectoryPath() {
 
 		for(DataExplorerTreeUI ui : treeUIs) {
-			ui.expandLastDirectoryPath(preferenceStore, getPreferenceKey(ui.getRoot()));
+			String preferenceKey = getPreferenceKey(ui.getRoot());
+			ui.expandLastDirectoryPath(preferenceStore, preferenceKey);
 		}
-		tabFolder.setSelection(preferenceStore.getInt(getSelectedTabPreferenceKey()));
+		int index = preferenceStore.getInt(getSelectedTabPreferenceKey());
+		tabFolder.setSelection(index);
 	}
 
 	public void saveLastDirectoryPath() {
@@ -95,7 +102,17 @@ public class MultiDataExplorerTreeUI {
 		for(DataExplorerTreeUI ui : treeUIs) {
 			ui.saveLastDirectoryPath(preferenceStore, getPreferenceKey(ui.getRoot()));
 		}
-		preferenceStore.setValue(getSelectedTabPreferenceKey(), tabFolder.getSelectionIndex());
+		int index = tabFolder.getSelectionIndex();
+		preferenceStore.setValue(getSelectedTabPreferenceKey(), index);
+		if(preferenceStore.needsSaving()) {
+			if(preferenceStore instanceof IPersistentPreferenceStore) {
+				try {
+					((IPersistentPreferenceStore)preferenceStore).save();
+				} catch(IOException e) {
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), "Storing preferences failed", e));
+				}
+			}
+		}
 	}
 
 	protected String getSelectedTabPreferenceKey() {

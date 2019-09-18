@@ -14,9 +14,10 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.peak;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.model.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.IIdentificationResults;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 
-public abstract class AbstractPeakIdentifierMSD<T> implements IPeakIdentifierMSD<T> {
+public abstract class AbstractPeakIdentifierMSD<T extends IIdentificationResults> implements IPeakIdentifierMSD<T> {
 
 	/**
 	 * Validates that the peak is not null.<br/>

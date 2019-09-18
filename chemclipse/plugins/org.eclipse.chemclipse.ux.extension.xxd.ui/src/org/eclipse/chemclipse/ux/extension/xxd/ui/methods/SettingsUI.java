@@ -19,11 +19,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider.SettingsUIControl;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -76,6 +78,7 @@ public class SettingsUI<T> extends Composite {
 		} catch(InstantiationException | IllegalAccessException
 				| IOException e) {
 			// can't use it then ... must use default provider
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, "SettingsUI", "can't get user-settings for processor " + preferences.getSupplier().getId() + " with settingsclass " + preferences.getSupplier().getSettingsClass(), e));
 		}
 		return new DefaultSettingsUIProvider<T>();
 	}

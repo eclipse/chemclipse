@@ -30,7 +30,6 @@ public class SnipCalculator {
 		int size = intensityValues.length;
 		float[] tmp = new float[size];
 		for(int i = 1; i <= iterations; ++i) {
-			monitor.subTask("Iteration: " + i);
 			for(int j = i; j < size - i; ++j) {
 				float a = intensityValues[j];
 				float b = (intensityValues[j - i] + intensityValues[j + i]) / 2;

@@ -37,6 +37,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.LibraryServ
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -154,21 +156,27 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 			scan1Optimized = null;
 			scan2Optimized = null;
 			buttonOptimizedScan.setEnabled(true);
-			//
-			LibraryServiceRunnable runnable = new LibraryServiceRunnable(identificationTarget);
-			ProgressMonitorDialog monitor = new ProgressMonitorDialog(DisplayUtils.getShell());
 			try {
-				monitor.run(true, true, runnable);
 				scan1 = unknownMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
-				IScanMSD referenceMassSpectrum = runnable.getLibraryMassSpectrum();
-				if(referenceMassSpectrum != null) {
-					scan2 = referenceMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+				IScanMSD adaptedTarget = Adapters.adapt(identificationTarget, IScanMSD.class);
+				if(adaptedTarget != null) {
+					scan2 = adaptedTarget.makeDeepCopy().normalize();
+				} else {
+					//
+					LibraryServiceRunnable runnable = new LibraryServiceRunnable(identificationTarget);
+					ProgressMonitorDialog monitor = new ProgressMonitorDialog(scanChartUI.getShell());
+					monitor.run(true, true, runnable);
+					IScanMSD referenceMassSpectrum = runnable.getLibraryMassSpectrum();
+					if(referenceMassSpectrum != null) {
+						scan2 = referenceMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+					}
 				}
 				updateChart();
 			} catch(InvocationTargetException e) {
 				logger.warn(e);
 			} catch(InterruptedException e) {
-				logger.warn(e);
+				Thread.currentThread().interrupt();
+				return;
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 			}
