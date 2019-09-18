@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,11 +8,18 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - refactor to use a TileDefinition as model
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.swt;
 
+import java.util.function.Consumer;
+
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -35,21 +42,24 @@ public class TaskTile extends Composite {
 	private Color colorInactive = Colors.getColor(74, 142, 142);
 	private Color colorActive = Colors.getColor(5, 100, 100);
 	//
-	private ISelectionHandler selectionHandler;
-	//
 	private Label labelImage;
 	private Label textSection;
 	private Label textDesciption;
 	//
 	private Cursor handCursor;
 	private Cursor waitCursor;
+	private final TileDefinition definition;
+	private final Consumer<TileDefinition> definitionConsumer;
 
-	public TaskTile(Composite parent, int style) {
+	public TaskTile(Composite parent, int style, TileDefinition definition, Consumer<TileDefinition> definitionConsumer) {
 		super(parent, SWT.NONE);
+		this.definition = definition;
+		this.definitionConsumer = definitionConsumer;
 		initialize();
 		waitCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_WAIT);
 		handCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
 		updateStyle(style);
+		updateFromDefinition();
 	}
 
 	@Override
@@ -70,12 +80,12 @@ public class TaskTile extends Composite {
 		textDesciption.setBackground(colorInactive);
 	}
 
-	public void setSelectionHandler(ISelectionHandler selectionHandler) {
+	public TileDefinition getDefinition() {
 
-		this.selectionHandler = selectionHandler;
+		return definition;
 	}
 
-	public void setContent(Image image, String section, String description) {
+	private void setContent(Image image, String section, String description) {
 
 		labelImage.setImage(image);
 		if(image == null) {
@@ -84,7 +94,7 @@ public class TaskTile extends Composite {
 			modifyLabelImage(false);
 		}
 		textSection.setText(section);
-		textDesciption.setText(description);
+		textDesciption.setText(description == null ? "" : description);
 		this.layout(true);
 		this.redraw();
 	}
@@ -194,8 +204,12 @@ public class TaskTile extends Composite {
 		Cursor oldCursor = getCursor();
 		try {
 			setCursor(waitCursor);
-			if(selectionHandler != null) {
-				selectionHandler.handleEvent();
+			if(definition != null) {
+				try {
+					definitionConsumer.accept(definition);
+				} catch(RuntimeException e) {
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, "TaskTile", "invoke of consumer failed", e));
+				}
 			}
 		} finally {
 			setCursor(oldCursor);
@@ -220,5 +234,12 @@ public class TaskTile extends Composite {
 		Font font = new Font(DisplayUtils.getDisplay(), "Arial", fontSize, SWT.BOLD);
 		textSection.setFont(font);
 		font.dispose();
+	}
+
+	public void updateFromDefinition() {
+
+		if(definition != null) {
+			setContent(definition.getIcon(), definition.getTitle(), definition.getDescription());
+		}
 	}
 }
