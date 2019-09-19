@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - add support for loading the demo chromatogram directly
+ * Christoph Läubrich - add support for loading the demo chromatogram directly, refactor for using the TileDefinition
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.views;
 
@@ -22,22 +22,26 @@ import java.util.concurrent.Executors;
 
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.swt.ISelectionHandler;
+import org.eclipse.chemclipse.support.ui.workbench.PerspectiveSupport;
+import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
+import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
+import org.eclipse.swt.graphics.Image;
 
-public class DemoWelcomeTile implements ISelectionHandler {
+public class DemoWelcomeTile implements TileDefinition {
 
-	private WelcomeView welcomeView;
 	private File chromatogramFile;
 
-	public DemoWelcomeTile(WelcomeView welcomeView) {
-		this.welcomeView = welcomeView;
-	}
+	@Execute
+	public void handleEvent(EModelService modelService, MApplication application, EPartService partService, PerspectiveSupport perspectiveSupport) {
 
-	@Override
-	public void handleEvent() {
-
-		welcomeView.switchPerspective(WelcomeView.PERSPECTIVE_DATA_ANALYSIS);
+		perspectiveSupport.changePerspective(WelcomeView.PERSPECTIVE_DATA_ANALYSIS);
 		Executors.defaultThreadFactory().newThread(new Runnable() {
 
 			@Override
@@ -68,14 +72,14 @@ public class DemoWelcomeTile implements ISelectionHandler {
 
 							try {
 								if(chromatogramFile != null && chromatogramFile.exists()) {
-									MPart part = welcomeView.createChromatogramPart();
+									MPart part = createChromatogramPart();
 									part.setLabel("DemoChromatogram.ocb");
 									Map<String, Object> map = new HashMap<String, Object>();
 									map.put(EditorSupport.MAP_FILE, chromatogramFile.getAbsolutePath());
 									map.put(EditorSupport.MAP_BATCH, false);
 									part.setObject(map);
 									part.setTooltip("Demo Chromatogram (MSD)");
-									welcomeView.showEditorPart(part);
+									showEditorPart(part, modelService, application, partService);
 								}
 							} catch(Exception e) {
 								e.printStackTrace();
@@ -86,6 +90,32 @@ public class DemoWelcomeTile implements ISelectionHandler {
 				}
 			}
 		}).start();
+	}
+
+	void showEditorPart(MPart part, EModelService modelService, MApplication application, EPartService partService) {
+
+		/*
+		 * Get the editor part stack.
+		 */
+		MPartStack partStack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
+		/*
+		 * Add it to the stack and show it.
+		 */
+		partStack.getChildren().add(part);
+		partService.showPart(part, PartState.ACTIVATE);
+	}
+
+	MPart createChromatogramPart() {
+
+		/*
+		 * Create the input part and prepare it.
+		 */
+		MPart part = MBasicFactory.INSTANCE.createInputPart();
+		part.setElementId("org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramEditorMSD");
+		part.setContributionURI("bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD");
+		part.setIconURI("platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif");
+		part.setCloseable(true);
+		return part;
 	}
 
 	private void copyChromatogram(File file) throws IOException {
@@ -100,5 +130,35 @@ public class DemoWelcomeTile implements ISelectionHandler {
 				fout.flush();
 			}
 		}
+	}
+
+	@Override
+	public String getTitle() {
+
+		return "Demo";
+	}
+
+	@Override
+	public String getDescription() {
+
+		return "Load a demo chromatogram.";
+	}
+
+	@Override
+	public Image getIcon() {
+
+		return null;
+	}
+
+	@Override
+	public boolean isDefaultShow() {
+
+		return false;
+	}
+
+	@Override
+	public String getContext() {
+
+		return WelcomeView.WELCOME_MAIN_CONTEXT;
 	}
 }

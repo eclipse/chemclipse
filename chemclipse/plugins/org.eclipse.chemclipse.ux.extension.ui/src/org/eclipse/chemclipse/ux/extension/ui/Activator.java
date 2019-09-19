@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,12 +8,14 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add support for tracking TileDefinitions
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui;
 
 import java.net.URL;
 import java.util.MissingResourceException;
 
+import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -23,6 +25,7 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -33,6 +36,7 @@ public class Activator extends AbstractUIPlugin {
 	public static final String PATH_PERSPECTIVES_INFO = "files/images/perspectives.png";
 	// The shared instance
 	private static Activator plugin;
+	private ServiceTracker<TileDefinition, TileDefinition> tileServiceTracker;
 
 	/**
 	 * The constructor
@@ -44,21 +48,27 @@ public class Activator extends AbstractUIPlugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 
 		super.start(context);
 		plugin = this;
 		initializeImageRegistry();
+		tileServiceTracker = new ServiceTracker<>(context, TileDefinition.class, null);
+		tileServiceTracker.open();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 
 		plugin = null;
 		super.stop(context);
+		tileServiceTracker.close();
+		tileServiceTracker = null;
 	}
 
 	/**
@@ -69,6 +79,15 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 
 		return plugin;
+	}
+
+	public TileDefinition[] getTileDefinitions() {
+
+		TileDefinition[] array = new TileDefinition[0];
+		if(tileServiceTracker == null) {
+			return array;
+		}
+		return tileServiceTracker.getServices(array);
 	}
 
 	private void initializeImageRegistry() {

@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.msd.converter.supplier.mzxml.model;
 
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractScanIon;
+import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 
 public class VendorIon extends AbstractScanIon implements IVendorIon {
 
@@ -40,6 +42,10 @@ public class VendorIon extends AbstractScanIon implements IVendorIon {
 
 	public VendorIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
 		super(ion, abundance);
+	}
+
+	public VendorIon(double ion, float abundance, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+		super(ion, abundance, ionTransition);
 	}
 
 	@Override

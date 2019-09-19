@@ -12,11 +12,13 @@
 package org.eclipse.chemclipse.ux.extension.ui.swt;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Function;
 
 import org.eclipse.chemclipse.support.settings.UserManagement;
+import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
@@ -24,6 +26,9 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider
 import org.eclipse.chemclipse.ux.extension.ui.provider.LazyFileExplorerContentProvider;
 import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -165,6 +170,16 @@ public class DataExplorerTreeUI {
 			}
 			if(directoryPath != null) {
 				preferenceStore.setValue(preferenceKey, directoryPath.getAbsolutePath());
+			}
+		}
+		if(preferenceStore.needsSaving()) {
+			if(preferenceStore instanceof IPersistentPreferenceStore) {
+				try {
+					IPersistentPreferenceStore persistentPreferenceStore = (IPersistentPreferenceStore)preferenceStore;
+					persistentPreferenceStore.save();
+				} catch(IOException e) {
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), "Storing preferences failed", e));
+				}
 			}
 		}
 	}

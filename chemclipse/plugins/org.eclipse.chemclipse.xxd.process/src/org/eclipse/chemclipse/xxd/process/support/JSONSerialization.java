@@ -9,7 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.settings.serialization;
+package org.eclipse.chemclipse.xxd.process.support;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -18,10 +18,22 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.chemclipse.model.methods.IProcessEntry;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
+import org.eclipse.chemclipse.model.methods.ProcessEntry;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIon;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class JSONSerialization implements SettingsSerialization {
 
@@ -32,11 +44,9 @@ public class JSONSerialization implements SettingsSerialization {
 		for(InputValue inputValue : inputValues) {
 			result.put(inputValue, inputValue.getDefaultValue());
 		}
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		if(content != null) {
 			@SuppressWarnings("unchecked")
-			Map<String, Object> map = objectMapper.readValue(content, HashMap.class);
+			Map<String, Object> map = createMapper().readValue(content, HashMap.class);
 			for(Map.Entry<String, Object> entry : map.entrySet()) {
 				for(InputValue inputValue : inputValues) {
 					if(inputValue.getName().equals(entry.getKey())) {
@@ -58,8 +68,23 @@ public class JSONSerialization implements SettingsSerialization {
 		for(Entry<InputValue, Object> entry : values.entrySet()) {
 			result.put(entry.getKey().getName(), entry.getValue());
 		}
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = createMapper();
 		return mapper.writeValueAsString(result);
+	}
+
+	private ObjectMapper createMapper() {
+
+		ObjectMapper mapper = new ObjectMapper();
+		SimpleModule module = new SimpleModule("ChemClipse", Version.unknownVersion());
+		SimpleAbstractTypeResolver resolver = new SimpleAbstractTypeResolver();
+		resolver.addMapping(IMarkedIons.class, MarkedIons.class);
+		resolver.addMapping(IMarkedIon.class, MarkedIon.class);
+		resolver.addMapping(IProcessMethod.class, ProcessMethod.class);
+		resolver.addMapping(IProcessEntry.class, ProcessEntry.class);
+		module.setAbstractTypes(resolver);
+		mapper.registerModule(module);
+		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		return mapper;
 	}
 
 	@Override
@@ -68,9 +93,7 @@ public class JSONSerialization implements SettingsSerialization {
 		if(content == null) {
 			return null;
 		}
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		return objectMapper.readValue(content, settingsClass);
+		return createMapper().readValue(content, settingsClass);
 	}
 
 	@Override

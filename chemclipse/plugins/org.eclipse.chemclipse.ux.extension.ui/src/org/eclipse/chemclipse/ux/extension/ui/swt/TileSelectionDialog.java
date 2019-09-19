@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.swt;
 
-import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -28,13 +28,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-public class ExtensionsTileSelectionDialog extends Dialog {
+public class TileSelectionDialog extends Dialog {
 
-	private IConfigurationElement[] elements;
+	private TileDefinition[] elements;
 	private CellLabelProvider labelProvider;
-	private IConfigurationElement selectedElement;
+	private TileDefinition selectedElement;
 
-	public ExtensionsTileSelectionDialog(Shell parentShell, IConfigurationElement[] elements, CellLabelProvider labelProvider) {
+	public TileSelectionDialog(Shell parentShell, TileDefinition[] elements, CellLabelProvider labelProvider) {
 		super(parentShell);
 		this.elements = elements;
 		this.labelProvider = labelProvider;
@@ -61,8 +61,8 @@ public class ExtensionsTileSelectionDialog extends Dialog {
 				ISelection selection = event.getSelection();
 				if(selection instanceof IStructuredSelection) {
 					Object selected = ((IStructuredSelection)selection).getFirstElement();
-					if(selected instanceof IConfigurationElement) {
-						selectedElement = (IConfigurationElement)selected;
+					if(selected instanceof TileDefinition) {
+						selectedElement = (TileDefinition)selected;
 					} else {
 						selectedElement = null;
 					}
@@ -72,7 +72,7 @@ public class ExtensionsTileSelectionDialog extends Dialog {
 		return composite;
 	}
 
-	public IConfigurationElement getSelectedElement() {
+	public TileDefinition getSelectedElement() {
 
 		return selectedElement;
 	}

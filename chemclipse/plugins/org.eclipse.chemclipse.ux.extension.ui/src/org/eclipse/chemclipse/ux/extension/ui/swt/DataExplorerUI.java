@@ -206,7 +206,6 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 
 	private boolean openEditor(File file, DataExplorerTreeUI treeUI) {
 
-		saveLastDirectoryPath();
 		boolean success = false;
 		if(file != null) {
 			boolean openFirstDataMatchOnly = PreferenceSupplier.isOpenFirstDataMatchOnly();
@@ -225,6 +224,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 
 	public boolean openEditorWithSupplier(File file, ISupplierFileEditorSupport identifier) {
 
+		saveLastDirectoryPath();
 		return identifier.openEditor(file);
 	}
 }
