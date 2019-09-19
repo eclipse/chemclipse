@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.PcaContext;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
@@ -25,38 +26,39 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
-import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
 public class CreatePcaEvaluation {
 
+	private static final String EDITOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.compositepart.editor";
 	private static final String PCA_PERSPECTIVE = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	public static final String PCA_CREATE_NEW_EDITOR = "CREATE_NEW_EDITOR";
 
-	public static void createPart(ISamplesVisualization<?, ?> samplesVisualization, MApplication application, EModelService modelService, EPartService partService, IEclipseContext context) {
+	public static void createPart(ISamplesVisualization<?, ?> samplesVisualization, IEclipseContext context, String title) {
 
-		OpenSnippetHandler.openCompositeSnippet("org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.compositepart.editor", context, eclipseContext -> {
+		OpenSnippetHandler.openCompositeSnippet(EDITOR_ID, context, (eclipseContext, part) -> {
 			eclipseContext.set(PcaContext.class, new PcaContext(samplesVisualization));
+			eclipseContext.set(SelectionManagerSamples.class, new SelectionManagerSamples());
+			if(title != null) {
+				part.setLabel(title);
+			}
 			return null;
 		});
 	}
 
 	@Inject
 	@Optional
-	public void createNewEditor(@UIEventTopic(PCA_CREATE_NEW_EDITOR) ISamplesVisualization<?, ?> samplesVisualization, MApplication application, EModelService modelService, EPartService partService, IEclipseContext context) {
+	public void createNewEditor(@UIEventTopic(PCA_CREATE_NEW_EDITOR) ISamplesVisualization<?, ?> samplesVisualization, IEclipseContext context) {
 
 		switchPespective();
-		createPart(samplesVisualization, application, modelService, partService, context);
+		createPart(samplesVisualization, context, null);
 	}
 
 	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part, MApplication application, EModelService modelService, EPartService partService, IEclipseContext context) {
+	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part, IEclipseContext context) {
 
 		switchPespective();
-		createPart(null, application, modelService, partService, context);
 	}
 
 	private void switchPespective() {

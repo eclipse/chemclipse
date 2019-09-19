@@ -60,7 +60,7 @@ public abstract class PcaWizardTile implements TileDefinition {
 			Samples samples = runnable.getSamples();
 			samples.setDefaultPcaSettings(wizard.getPcaSettingsVisualization());
 			SamplesVisualization samplesVisualisation = new SamplesVisualization(samples);
-			CreatePcaEvaluation.createPart(samplesVisualisation, application, modelService, partService, context);
+			CreatePcaEvaluation.createPart(samplesVisualisation, context, null);
 		}
 	}
 

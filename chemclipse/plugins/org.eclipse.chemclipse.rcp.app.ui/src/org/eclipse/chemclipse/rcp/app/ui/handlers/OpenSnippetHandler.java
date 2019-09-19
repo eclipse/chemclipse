@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.rcp.app.ui.handlers;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import javax.inject.Named;
 
@@ -85,7 +85,7 @@ public class OpenSnippetHandler {
 				.accept(cloneSnippet(snippetId, modelService, application));
 	}
 
-	public static void openSnippet(String snippetId, IEclipseContext eclipseContext, Function<IEclipseContext, Runnable> childContextInitializer) {
+	public static void openSnippet(String snippetId, IEclipseContext eclipseContext, BiFunction<IEclipseContext, MPart, Runnable> childContextInitializer) {
 
 		MApplication application = eclipseContext.get(MApplication.class);
 		EModelService modelService = eclipseContext.get(EModelService.class);
@@ -96,7 +96,7 @@ public class OpenSnippetHandler {
 				.accept(cloneSnippet(snippetId, modelService, application));
 	}
 
-	public static void openCompositeSnippet(String snippetId, IEclipseContext eclipseContext, Function<IEclipseContext, Runnable> childContextInitializer) {
+	public static void openCompositeSnippet(String snippetId, IEclipseContext eclipseContext, BiFunction<IEclipseContext, MPart, Runnable> childContextInitializer) {
 
 		MApplication application = eclipseContext.get(MApplication.class);
 		EModelService modelService = eclipseContext.get(EModelService.class);
@@ -149,7 +149,7 @@ public class OpenSnippetHandler {
 		};
 	}
 
-	public static Consumer<MUIElement> withEclipseContext(IEclipseContext parent, Function<IEclipseContext, Runnable> childContextInitializer) {
+	public static Consumer<MUIElement> withEclipseContext(IEclipseContext parent, BiFunction<IEclipseContext, MPart, Runnable> childContextInitializer) {
 
 		return new Consumer<MUIElement>() {
 
@@ -158,10 +158,11 @@ public class OpenSnippetHandler {
 
 				IEclipseContext child = parent.createChild(element.getElementId() + ".composite");
 				if(element instanceof MPart) {
-					((MPart)element).setContext(child);
+					MPart part = (MPart)element;
+					part.setContext(child);
 					Runnable runnable;
 					if(childContextInitializer != null) {
-						runnable = childContextInitializer.apply(child);
+						runnable = childContextInitializer.apply(child, part);
 					} else {
 						runnable = null;
 					}
