@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers.CreatePcaEvaluation;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.PcaContext;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
@@ -67,6 +67,8 @@ public class PCAEditorFX {
 	@SuppressWarnings("restriction")
 	@Inject
 	private EHandlerService handlerService;
+	@Inject
+	private PcaContext pcaContext;
 	private static String ID_COMMAND_SETTINGS = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.command.settingspcaeditor";
 
 	public PCAEditorFX() {
@@ -103,16 +105,9 @@ public class PCAEditorFX {
 			});
 			final Scene scene = new Scene(root);
 			fxCanvas.setScene(scene);
-			Object object = part.getTransientData().get(CreatePcaEvaluation.DATA_SAMPLES);
-			if(object instanceof ISamplesVisualization) {
-				ISamplesVisualization samples = (ISamplesVisualization)object;
-				controller.setSamples(samples);
-				pcaController.evaluatePCA();
-			}
-			Object laodData = part.getTransientData().get(CreatePcaEvaluation.ALLOW_DATALOAD);
-			if(laodData instanceof Boolean) {
-				controller.setLoadButtonVisible((Boolean)laodData);
-			}
+			controller.setSamples(pcaContext.getVisualization());
+			pcaController.evaluatePCA();
+			controller.setLoadButtonVisible(false);
 			setFocus();
 		} catch(final Exception e) {
 			logger.error(e.getLocalizedMessage(), e);

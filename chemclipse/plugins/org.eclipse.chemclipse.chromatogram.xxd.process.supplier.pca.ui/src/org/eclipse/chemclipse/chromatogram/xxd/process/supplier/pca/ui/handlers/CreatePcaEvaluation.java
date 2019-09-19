@@ -17,57 +17,46 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.PcaContext;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
+import org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
 public class CreatePcaEvaluation {
 
-	private static final String PCA_EDITOR_PART_STACK_ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.stackId.pcaeditorStack";
-	private static final String PCA_EDITOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcaeditorfx";
 	private static final String PCA_PERSPECTIVE = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	public static final String PCA_CREATE_NEW_EDITOR = "CREATE_NEW_EDITOR";
-	public static final String DATA_SAMPLES = "DATA_SAMPLES";
-	public static final String ALLOW_DATALOAD = "ALLOW_DATALOAD";
 
-	public static void createPart(ISamplesVisualization<?, ?> samplesVisualization, MApplication application, EModelService modelService, EPartService partService) {
+	public static void createPart(ISamplesVisualization<?, ?> samplesVisualization, MApplication application, EModelService modelService, EPartService partService, IEclipseContext context) {
 
-		MPartStack partStack = (MPartStack)modelService.find(PCA_EDITOR_PART_STACK_ID, application);
-		/*
-		 * Create the input part and prepare it.
-		 */
-		MPart inputPart = partService.createPart(PCA_EDITOR_ID);
-		inputPart.getTransientData().put(DATA_SAMPLES, samplesVisualization);
-		inputPart.getTransientData().put(ALLOW_DATALOAD, false);
-		/*
-		 * Add it to the stack and show it.
-		 */
-		partStack.getChildren().add(inputPart);
-		partService.showPart(inputPart, PartState.ACTIVATE);
+		OpenSnippetHandler.openCompositeSnippet("org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.compositepart.editor", context, eclipseContext -> {
+			eclipseContext.set(PcaContext.class, new PcaContext(samplesVisualization));
+			return null;
+		});
 	}
 
 	@Inject
 	@Optional
-	public void createNewEditor(@UIEventTopic(PCA_CREATE_NEW_EDITOR) ISamplesVisualization<?, ?> samplesVisualization, MApplication application, EModelService modelService, EPartService partService) {
+	public void createNewEditor(@UIEventTopic(PCA_CREATE_NEW_EDITOR) ISamplesVisualization<?, ?> samplesVisualization, MApplication application, EModelService modelService, EPartService partService, IEclipseContext context) {
 
 		switchPespective();
-		createPart(samplesVisualization, application, modelService, partService);
+		createPart(samplesVisualization, application, modelService, partService, context);
 	}
 
 	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part, MApplication application, EModelService modelService, EPartService partService) {
+	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part, MApplication application, EModelService modelService, EPartService partService, IEclipseContext context) {
 
 		switchPespective();
-		createPart(null, application, modelService, partService);
+		createPart(null, application, modelService, partService, context);
 	}
 
 	private void switchPespective() {

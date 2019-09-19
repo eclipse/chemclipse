@@ -43,7 +43,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaContext {
 
-	public static final PcaContext GLOBAL = new PcaContext();
 	private Map<ISamples<? extends IVariable, ? extends ISample>, PcaPreprocessingData> preprocessings = new HashMap<>();
 	private Map<ISamples<? extends IVariable, ? extends ISample>, IPcaSettingsVisualization> settings = new HashMap<>();
 	private Set<PcaContextListener> listeners = new LinkedHashSet<>();
@@ -59,8 +58,15 @@ public class PcaContext {
 	// variables
 	private AtomicReference<IVariable> variableSelection = new AtomicReference<>();
 	private List<IVariable> variablesList = new CopyOnWriteArrayList<>();
+	private ISamplesVisualization<?, ?> visualization;
 
-	public PcaContext() {
+	public PcaContext(ISamplesVisualization<?, ?> samplesVisualization) {
+		this.visualization = samplesVisualization;
+	}
+
+	public ISamplesVisualization<?, ?> getVisualization() {
+
+		return visualization;
 	}
 
 	public <V extends IVariableVisualization, S extends ISampleVisualization> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaVisualization pcaVisualization, IProgressMonitor monitor, boolean setSelected) {

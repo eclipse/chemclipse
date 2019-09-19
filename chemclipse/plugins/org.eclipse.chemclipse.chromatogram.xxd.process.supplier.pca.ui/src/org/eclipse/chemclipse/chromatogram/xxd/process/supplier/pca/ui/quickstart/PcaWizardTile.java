@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IPcaInputWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.SamplesVisualization;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -38,7 +39,7 @@ import org.eclipse.swt.widgets.Shell;
 public abstract class PcaWizardTile implements TileDefinition {
 
 	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell, MApplication application, EModelService modelService, EPartService partService) throws InvocationTargetException, InterruptedException {
+	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell, MApplication application, EModelService modelService, EPartService partService, IEclipseContext context) throws InvocationTargetException, InterruptedException {
 
 		IPcaInputWizard wizard = createWizard();
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(shell, wizard);
@@ -59,7 +60,7 @@ public abstract class PcaWizardTile implements TileDefinition {
 			Samples samples = runnable.getSamples();
 			samples.setDefaultPcaSettings(wizard.getPcaSettingsVisualization());
 			SamplesVisualization samplesVisualisation = new SamplesVisualization(samples);
-			CreatePcaEvaluation.createPart(samplesVisualisation, application, modelService, partService);
+			CreatePcaEvaluation.createPart(samplesVisualisation, application, modelService, partService, context);
 		}
 	}
 

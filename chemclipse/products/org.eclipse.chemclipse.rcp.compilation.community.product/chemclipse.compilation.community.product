@@ -17,16 +17,17 @@
       <programArgs>-clearPersistedState
       </programArgs>
       <programArgsLin>--launcher.GTK_version
-2
+3
       </programArgsLin>
-      <vmArgs>-Xms256M
--Xmx512M
+      <vmArgs>-Xms512M
+-Xmx2G
 -Dosgi.framework.extensions=org.eclipse.fx.osgi
 -Dapplication.name=ChemClipse
 -Dapplication.version=0.8.x
 -Denable.cli.support=false
 -Dosgi.instance.area=@user.home/ChemClipse/0.8.x
 -Dosgi.user.area=@user.home/.chemclipse/0.8.x
+-XX:-UseGCOverheadLimit
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
