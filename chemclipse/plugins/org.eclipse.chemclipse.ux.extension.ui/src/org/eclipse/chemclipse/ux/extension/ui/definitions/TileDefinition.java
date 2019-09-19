@@ -53,11 +53,31 @@ public interface TileDefinition {
 	}
 
 	/**
+	 * Describes the context in which this tile should be shown, this is only a hint and might be implementation specific or ignored at all,
+	 * the default implementation assumes that a comma separated list of names is returned.
+	 * If an implementation overrides {@link #getContext()} it should also override {@link #matches(String)} if it does not follow these assumption
 	 * 
-	 * @return the context in which this tile should be shown, this is only a hint and might be implementation specific or ignored at all
+	 * @return the context
 	 */
 	default String getContext() {
 
 		return "";
+	}
+
+	default boolean matches(String subContext) {
+
+		if(subContext == null) {
+			return getContext() == null;
+		}
+		String context = getContext();
+		if(context != null) {
+			String[] split = context.split(",");
+			for(String string : split) {
+				if(subContext.equals(string.trim())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

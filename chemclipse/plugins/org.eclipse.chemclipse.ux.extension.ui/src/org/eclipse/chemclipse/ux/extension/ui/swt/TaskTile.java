@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.ui.swt;
 
 import java.util.function.Consumer;
 
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
@@ -29,6 +28,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -39,22 +39,24 @@ public class TaskTile extends Composite {
 
 	public static final int LARGE_TITLE = (1 << 1);
 	public static final int HIGHLIGHT = (1 << 2);
-	private Color colorInactive = Colors.getColor(74, 142, 142);
-	private Color colorActive = Colors.getColor(5, 100, 100);
+	private Color colorInactive;
+	private Color colorActive;
 	//
 	private Label labelImage;
 	private Label textSection;
 	private Label textDesciption;
 	//
-	private Cursor handCursor;
-	private Cursor waitCursor;
+	private final Cursor handCursor;
+	private final Cursor waitCursor;
 	private final TileDefinition definition;
 	private final Consumer<TileDefinition> definitionConsumer;
+	private final Color[] colors;
 
-	public TaskTile(Composite parent, int style, TileDefinition definition, Consumer<TileDefinition> definitionConsumer) {
+	public TaskTile(Composite parent, int style, TileDefinition definition, Consumer<TileDefinition> definitionConsumer, Color[] colors) {
 		super(parent, SWT.NONE);
 		this.definition = definition;
 		this.definitionConsumer = definitionConsumer;
+		this.colors = colors;
 		initialize();
 		waitCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_WAIT);
 		handCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
@@ -68,16 +70,6 @@ public class TaskTile extends Composite {
 		super.dispose();
 		handCursor.dispose();
 		waitCursor.dispose();
-	}
-
-	public void setColors(Color colorActive, Color colorInactive) {
-
-		this.colorActive = colorActive;
-		this.colorInactive = colorInactive;
-		//
-		setBackground(colorInactive);
-		textSection.setBackground(colorInactive);
-		textDesciption.setBackground(colorInactive);
 	}
 
 	public TileDefinition getDefinition() {
@@ -112,7 +104,6 @@ public class TaskTile extends Composite {
 	private void initialize() {
 
 		setLayout(new GridLayout(1, true));
-		setBackground(colorInactive);
 		//
 		setLayout(new GridLayout(2, true));
 		addControlListener(this);
@@ -134,7 +125,6 @@ public class TaskTile extends Composite {
 
 		Label label = new Label(parent, SWT.NONE);
 		label.setForeground(Colors.WHITE);
-		label.setBackground(colorInactive);
 		label.setText("");
 		label.setLayoutData(getGridData(SWT.BEGINNING, SWT.END, 1));
 		addControlListener(label);
@@ -144,7 +134,6 @@ public class TaskTile extends Composite {
 	private Label addTextDescription(Composite parent) {
 
 		Label label = new Label(parent, SWT.CENTER | SWT.WRAP);
-		label.setBackground(colorInactive);
 		label.setText("");
 		label.setLayoutData(getGridData(SWT.CENTER, SWT.BEGINNING, 2));
 		addControlListener(label);
@@ -183,10 +172,28 @@ public class TaskTile extends Composite {
 
 		control.addMouseListener(new MouseAdapter() {
 
+			private boolean active;
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+
+				if(e.button == 1) {
+					active = true;
+				}
+			}
+
 			@Override
 			public void mouseUp(MouseEvent e) {
 
-				handleSelection();
+				if(active && matches(e)) {
+					handleSelection();
+				}
+			}
+
+			private boolean matches(MouseEvent e) {
+
+				Point size = control.getSize();
+				return e.x >= 0 && e.x <= size.x && e.y >= 0 && e.y <= size.y;
 			}
 		});
 		control.addKeyListener(new KeyAdapter() {
@@ -194,7 +201,9 @@ public class TaskTile extends Composite {
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				handleSelection();
+				if(e.keyCode == SWT.CR) {
+					handleSelection();
+				}
 			}
 		});
 	}
@@ -220,10 +229,12 @@ public class TaskTile extends Composite {
 
 		if((style & HIGHLIGHT) != 0) {
 			setCursor(handCursor);
-			colorActive = Colors.getColor(5, 100, 100);
+			colorActive = colors[0];
+			colorInactive = colors[1];
 		} else {
 			setCursor(null);
-			colorActive = colorInactive;
+			colorActive = colors[1];
+			colorInactive = colors[1];
 		}
 		int fontSize;
 		if((style & LARGE_TITLE) != 0) {
@@ -231,9 +242,10 @@ public class TaskTile extends Composite {
 		} else {
 			fontSize = 18;
 		}
-		Font font = new Font(DisplayUtils.getDisplay(), "Arial", fontSize, SWT.BOLD);
+		Font font = new Font(getDisplay(), "Arial", fontSize, SWT.BOLD);
 		textSection.setFont(font);
 		font.dispose();
+		setInactive();
 	}
 
 	public void updateFromDefinition() {
