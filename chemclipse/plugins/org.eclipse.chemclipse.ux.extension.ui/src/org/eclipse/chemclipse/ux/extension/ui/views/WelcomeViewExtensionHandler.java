@@ -259,6 +259,7 @@ public class WelcomeViewExtensionHandler {
 				extensionTileDefinition.addshortcut = true;
 				hasShortcut = true;
 			} else {
+				tile.updateStyle(SWT.NONE);
 				extensionTileDefinition.addshortcut = false;
 			}
 		}

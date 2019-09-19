@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - remove ModelAddon dependency
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers;
 
@@ -18,7 +19,6 @@ import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
@@ -39,17 +39,15 @@ public class CreatePcaEvaluation {
 	public static final String DATA_SAMPLES = "DATA_SAMPLES";
 	public static final String ALLOW_DATALOAD = "ALLOW_DATALOAD";
 
-	public static void createPart(ISamplesVisualization<?, ?> samplesVisualization) {
+	public static void createPart(ISamplesVisualization<?, ?> samplesVisualization, MApplication application, EModelService modelService, EPartService partService) {
 
-		MApplication application = ModelSupportAddon.getApplication();
-		EModelService modelService = ModelSupportAddon.getModelService();
-		EPartService partService = ModelSupportAddon.getPartService();
 		MPartStack partStack = (MPartStack)modelService.find(PCA_EDITOR_PART_STACK_ID, application);
 		/*
 		 * Create the input part and prepare it.
 		 */
 		MPart inputPart = partService.createPart(PCA_EDITOR_ID);
 		inputPart.getTransientData().put(DATA_SAMPLES, samplesVisualization);
+		inputPart.getTransientData().put(ALLOW_DATALOAD, false);
 		/*
 		 * Add it to the stack and show it.
 		 */
@@ -59,17 +57,17 @@ public class CreatePcaEvaluation {
 
 	@Inject
 	@Optional
-	public void createNewEditor(@UIEventTopic(PCA_CREATE_NEW_EDITOR) ISamplesVisualization<?, ?> samplesVisualization) {
+	public void createNewEditor(@UIEventTopic(PCA_CREATE_NEW_EDITOR) ISamplesVisualization<?, ?> samplesVisualization, MApplication application, EModelService modelService, EPartService partService) {
 
 		switchPespective();
-		createPart(samplesVisualization);
+		createPart(samplesVisualization, application, modelService, partService);
 	}
 
 	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
+	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part, MApplication application, EModelService modelService, EPartService partService) {
 
 		switchPespective();
-		createPart(null);
+		createPart(null, application, modelService, partService);
 	}
 
 	private void switchPespective() {
