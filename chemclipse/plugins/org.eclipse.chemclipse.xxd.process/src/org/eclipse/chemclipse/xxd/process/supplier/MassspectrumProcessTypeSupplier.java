@@ -33,7 +33,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassspectrumProcessTypeSupplier extends AbstractProcessTypeSupplier implements IChromatogramSelectionProcessTypeSupplier {
 
-	private static final DataType[] DATA_TYPES = new DataType[]{DataType.WSD};
+	private static final DataType[] DATA_TYPES = new DataType[]{DataType.MSD};
 	public static final String CATEGORY_PEAK = "Peak Massspectrum Filter";
 	public static final String CATEGORY_SCAN = "Scan Massspectrum Filter";
 	private String prefix;
