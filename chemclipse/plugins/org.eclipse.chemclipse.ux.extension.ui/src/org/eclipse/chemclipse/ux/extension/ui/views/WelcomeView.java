@@ -107,6 +107,7 @@ public class WelcomeView {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		preferenceStore.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES, DEFAULT_NUMBER_OF_COLUMNS);
+		preferenceStore.setDefault(WelcomeViewExtensionHandler.PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE, true);
 		int cols = preferenceStore.getInt(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES);
 		TaskTileContainer tileContainer = new TaskTileContainer(parent, cols, () -> eclipseContext);
 		parent.setLayout(new FillLayout());

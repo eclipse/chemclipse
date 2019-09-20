@@ -80,4 +80,14 @@ public interface TileDefinition {
 		}
 		return false;
 	}
+
+	/**
+	 * A tile can proclaim that it wants to be executed in a a given perspective, if the perspective is really switched might depend on the implementor
+	 * 
+	 * @return the preferred perspective for this tile or <code>null</code> if there is no preference
+	 */
+	default String getPreferredPerspective() {
+
+		return null;
+	}
 }

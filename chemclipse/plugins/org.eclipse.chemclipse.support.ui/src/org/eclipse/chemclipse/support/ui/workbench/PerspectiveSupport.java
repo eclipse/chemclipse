@@ -84,6 +84,10 @@ public class PerspectiveSupport {
 
 		MPerspective perspectiveModel = getPerspectiveModel(perspectiveId);
 		if(perspectiveModel != null) {
+			MPerspective activePerspective = getActiveMPerspective();
+			if(perspectiveModel.equals(activePerspective)) {
+				return;
+			}
 			ePartService.switchPerspective(perspectiveModel);
 			eventBroker.post(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, perspectiveModel.getLabel());
 		}

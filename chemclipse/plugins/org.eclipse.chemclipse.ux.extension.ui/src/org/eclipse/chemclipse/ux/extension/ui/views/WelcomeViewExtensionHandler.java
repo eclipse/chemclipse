@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveChooserDialog;
 import org.eclipse.chemclipse.support.ui.workbench.PerspectiveSupport;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
@@ -66,6 +67,7 @@ public class WelcomeViewExtensionHandler {
 
 	public static final String PREFERENCE_MIN_TILES = "WelcomeViewExtensionHandler.minTiles";
 	public static final String PREFERENCE_MAX_TILES = "WelcomeViewExtensionHandler.maxTiles";
+	public static final String PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE = "WelcomeViewExtensionHandler.changePerspective";
 	private static final String PREFERENCE_ADDED = "WelcomeViewExtensionHandler.addedTiles";
 	private static final String PREFERENCE_REMOVED = "WelcomeViewExtensionHandler.removedTiles";
 	private static final String DATA_POPUP_MENU = "WelcomeViewExtensionHandler.POPUP";
@@ -438,6 +440,18 @@ public class WelcomeViewExtensionHandler {
 			}
 			return false;
 		}
+
+		@Override
+		public String getPreferredPerspective() {
+
+			return element.getAttribute(ATTRIBUTE_PERSPECTIVE_ID);
+		}
+
+		@Execute
+		public void dummyexecute() {
+
+			// nothing to do here
+		}
 	}
 
 	private final class ExtensionTileDefinition implements TileDefinition {
@@ -497,10 +511,20 @@ public class WelcomeViewExtensionHandler {
 		@Execute
 		public void execute(PerspectiveSupport perspectiveSupport, @Named(IServiceConstants.ACTIVE_SHELL) Shell shell, IEclipseContext context) {
 
-			if(delegate instanceof ConfigurationElementTileDefinition) {
-				ConfigurationElementTileDefinition configurationElementTileDefinition = (ConfigurationElementTileDefinition)delegate;
-				perspectiveSupport.changePerspective(configurationElementTileDefinition.element.getAttribute(ATTRIBUTE_PERSPECTIVE_ID));
-			} else if(delegate != null) {
+			if(delegate != null) {
+				String preferredPerspective = delegate.getPreferredPerspective();
+				MPerspective model;
+				if(preferredPerspective != null && !preferredPerspective.isEmpty() && (model = perspectiveSupport.getPerspectiveModel(preferredPerspective)) != null) {
+					boolean changePerspective = (delegate instanceof ConfigurationElementTileDefinition) || preferenceStore.getBoolean(PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE);
+					if(!changePerspective) {
+						// ask the user then...
+						PerspectiveChooserDialog dialog = new PerspectiveChooserDialog(shell, "Change Perspective?", "Perspectives offer the best user experience and special views to optimize the workflow. This task is associated with the " + model.getLabel() + " perspective do you like to change? ", preferenceStore, PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE);
+						changePerspective = dialog.open() == Window.OK;
+					}
+					if(changePerspective) {
+						perspectiveSupport.changePerspective(preferredPerspective);
+					}
+				}
 				ContextInjectionFactory.invoke(delegate, Execute.class, context);
 			} else if(addshortcut) {
 				selectExtensionForTile(this, shell, perspectiveSupport);
