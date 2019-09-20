@@ -24,6 +24,10 @@ public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefin
 	private Comparator<ColumnType> comparator;
 	private Function<DataType, ColumnType> mapper;
 
+	public SimpleColumnDefinition(String title, int width, ColumnLabelProvider labelProvider) {
+		this(title, width, labelProvider, null, null);
+	}
+
 	public SimpleColumnDefinition(String title, int width, ColumnLabelProvider labelProvider, Comparator<ColumnType> comparator, Function<DataType, ColumnType> mapper) {
 		this.title = title;
 		this.width = width;
@@ -35,7 +39,11 @@ public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefin
 	@Override
 	public ColumnType apply(DataType t) {
 
-		return mapper.apply(t);
+		if(mapper != null) {
+			return mapper.apply(t);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

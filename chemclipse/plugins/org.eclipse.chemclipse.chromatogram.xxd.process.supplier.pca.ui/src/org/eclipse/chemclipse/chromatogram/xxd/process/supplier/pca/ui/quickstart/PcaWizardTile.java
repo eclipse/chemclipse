@@ -65,4 +65,10 @@ public abstract class PcaWizardTile implements TileDefinition {
 	}
 
 	protected abstract IPcaInputWizard createWizard();
+
+	@Override
+	public String getPreferredPerspective() {
+
+		return CreatePcaEvaluation.PCA_PERSPECTIVE;
+	}
 }

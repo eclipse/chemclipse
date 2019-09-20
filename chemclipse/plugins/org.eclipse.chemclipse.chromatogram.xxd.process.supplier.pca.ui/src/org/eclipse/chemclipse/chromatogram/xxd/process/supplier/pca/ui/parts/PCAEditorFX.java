@@ -105,7 +105,7 @@ public class PCAEditorFX {
 			});
 			final Scene scene = new Scene(root);
 			fxCanvas.setScene(scene);
-			controller.setSamples(pcaContext.getVisualization());
+			controller.setSamples(pcaContext.getSamples());
 			pcaController.evaluatePCA();
 			controller.setLoadButtonVisible(false);
 			setFocus();

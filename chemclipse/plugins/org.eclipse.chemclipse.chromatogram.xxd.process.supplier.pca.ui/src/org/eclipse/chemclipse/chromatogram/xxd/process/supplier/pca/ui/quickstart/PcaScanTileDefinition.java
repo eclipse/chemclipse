@@ -13,7 +13,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quicksta
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IPcaInputWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaChromatogramsMSDInputWizard;
+import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
+import org.osgi.service.component.annotations.Component;
 
+@Component(service = TileDefinition.class)
 public class PcaScanTileDefinition extends PcaWizardTile {
 
 	@Override

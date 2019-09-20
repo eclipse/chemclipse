@@ -32,14 +32,15 @@ import org.eclipse.e4.ui.services.IServiceConstants;
 public class CreatePcaEvaluation {
 
 	private static final String EDITOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.compositepart.editor";
-	private static final String PCA_PERSPECTIVE = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
+	public static final String PCA_PERSPECTIVE = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	public static final String PCA_CREATE_NEW_EDITOR = "CREATE_NEW_EDITOR";
 
 	public static void createPart(ISamplesVisualization<?, ?> samplesVisualization, IEclipseContext context, String title) {
 
 		OpenSnippetHandler.openCompositeSnippet(EDITOR_ID, context, (eclipseContext, part) -> {
-			eclipseContext.set(PcaContext.class, new PcaContext(samplesVisualization));
-			eclipseContext.set(SelectionManagerSamples.class, new SelectionManagerSamples());
+			SelectionManagerSamples managerSamples = new SelectionManagerSamples();
+			eclipseContext.set(PcaContext.class, new PcaContext(samplesVisualization, managerSamples));
+			eclipseContext.set(SelectionManagerSamples.class, managerSamples);
 			if(title != null) {
 				part.setLabel(title);
 			}

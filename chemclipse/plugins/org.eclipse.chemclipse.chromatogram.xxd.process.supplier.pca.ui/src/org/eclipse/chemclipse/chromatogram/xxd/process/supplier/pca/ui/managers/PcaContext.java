@@ -41,6 +41,11 @@ import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+
 public class PcaContext {
 
 	private Map<ISamples<? extends IVariable, ? extends ISample>, PcaPreprocessingData> preprocessings = new HashMap<>();
@@ -49,22 +54,42 @@ public class PcaContext {
 	// pca selection
 	private Map<ISamples<? extends IVariable, ? extends ISample>, IPcaResultsVisualization> pcaResults = new HashMap<>();
 	private AtomicReference<IPcaResultsVisualization> pcaSelection = new AtomicReference<>();
-	// samples
-	private List<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samplesList = new CopyOnWriteArrayList<>();
-	private AtomicReference<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samplesSelection = new AtomicReference<>();
 	// sample
-	private List<ISample> sampleList = new CopyOnWriteArrayList<>();
 	private AtomicReference<ISample> sampleSelection = new AtomicReference<>();
 	// variables
 	private AtomicReference<IVariable> variableSelection = new AtomicReference<>();
 	private List<IVariable> variablesList = new CopyOnWriteArrayList<>();
+	// samples
 	private ISamplesVisualization<?, ?> visualization;
+	private SelectionManagerSamples managerSamples;
 
-	public PcaContext(ISamplesVisualization<?, ?> samplesVisualization) {
+	public PcaContext(ISamplesVisualization<?, ?> samplesVisualization, SelectionManagerSamples managerSamples) {
 		this.visualization = samplesVisualization;
+		this.managerSamples = managerSamples;
+		managerSamples.getActualSelectedPcaResults().addListener(new ChangeListener<IPcaResultsVisualization>() {
+
+			@Override
+			public void changed(ObservableValue<? extends IPcaResultsVisualization> observable, IPcaResultsVisualization oldValue, IPcaResultsVisualization newValue) {
+
+				setPcaSelection(newValue);
+			}
+		});
+		managerSamples.getSelectionManagerSample().getSelection().addListener(new ListChangeListener<ISample>() {
+
+			@Override
+			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample> c) {
+
+				ObservableList<? extends ISample> list = c.getList();
+				if(list.isEmpty()) {
+					setSampleSelection(null);
+				} else {
+					setSampleSelection(list.get(0));
+				}
+			}
+		});
 	}
 
-	public ISamplesVisualization<?, ?> getVisualization() {
+	public ISamplesVisualization<?, ?> getSamples() {
 
 		return visualization;
 	}
@@ -84,7 +109,7 @@ public class PcaContext {
 			r.copyVisualizationProperties(sample.get());
 		});
 		monitor.setTaskName("Add samples");
-		addSamplesVisualization(samples);
+		// addSamplesVisualization(samples);
 		synchronized(pcaResults) {
 			pcaResults.put(samples, pcaResultsVisualization);
 		}
@@ -139,11 +164,6 @@ public class PcaContext {
 		}
 	}
 
-	public List<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> getSamplesList() {
-
-		return Collections.unmodifiableList(samplesList);
-	}
-
 	public List<IVariable> getVariablesList() {
 
 		return Collections.unmodifiableList(variablesList);
@@ -166,31 +186,22 @@ public class PcaContext {
 		}
 	}
 
-	public ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> getSamplesSelection() {
-
-		return samplesSelection.get();
-	}
-
-	public void setSamplesSelection(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samplesSelection) {
-
-		if(samplesSelection == null || samplesList.contains(samplesSelection)) {
-			this.samplesSelection.set(samplesSelection);
-			synchronized(listeners) {
-				for(PcaContextListener listener : listeners) {
-					listener.samplesSelectionChanged(samplesSelection, this);
-				}
-			}
-		}
-	}
-
 	public ISample getSampleSelection() {
 
-		return sampleSelection.get();
+		ISample sample = sampleSelection.get();
+		if(sample == null) {
+			ObservableList<ISample> list = managerSamples.getSelectionManagerSample().getSelection();
+			if(list.isEmpty()) {
+				return null;
+			}
+			return list.get(0);
+		}
+		return sample;
 	}
 
 	public void setSampleSelection(ISample sampleSelection) {
 
-		if(sampleSelection == null || sampleList.contains(sampleSelection)) {
+		if(sampleSelection == null || visualization.getSampleList().contains(sampleSelection)) {
 			this.sampleSelection.set(sampleSelection);
 			synchronized(listeners) {
 				for(PcaContextListener listener : listeners) {
@@ -200,9 +211,13 @@ public class PcaContext {
 		}
 	}
 
-	public IPcaResultsVisualization getPcaSelection() {
+	public IPcaResultsVisualization getPcaResultSelection() {
 
-		return pcaSelection.get();
+		IPcaResultsVisualization resultsVisualization = pcaSelection.get();
+		if(resultsVisualization == null) {
+			return managerSamples.getActualSelectedPcaResults().get();
+		}
+		return resultsVisualization;
 	}
 
 	public void setPcaSelection(IPcaResultsVisualization pcaSelection) {
@@ -215,33 +230,17 @@ public class PcaContext {
 		}
 	}
 
-	public void addSamplesVisualization(ISamplesVisualization<? extends IVariableVisualization, ? extends ISample> s) {
-
-		if(!samplesList.contains(s)) {
-			samplesList.add(s);
-			synchronized(listeners) {
-				List<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> list = getSamplesList();
-				for(PcaContextListener listener : listeners) {
-					listener.samplesHasBeenUpdated(list, this);
-				}
-			}
-		}
-	}
-
 	public void addListener(PcaContextListener contextListener) {
 
 		synchronized(listeners) {
 			listeners.add(contextListener);
-			// samples
-			contextListener.samplesHasBeenUpdated(getSamplesList(), this);
-			contextListener.samplesSelectionChanged(getSamplesSelection(), this);
 			// sample
 			contextListener.sampleSelectionChanged(getSampleSelection(), this);
 			// variables
 			contextListener.variablesHasBeenUpdated(getVariablesList(), this);
 			contextListener.variableSelectionChanged(variableSelection.get(), this);
 			// pca result
-			contextListener.pcaSelectionChanged(getPcaSelection(), this);
+			contextListener.pcaSelectionChanged(getPcaResultSelection(), this);
 		}
 	}
 
@@ -250,9 +249,6 @@ public class PcaContext {
 		synchronized(listeners) {
 			listeners.remove(contextListener);
 		}
-		// samples
-		contextListener.samplesHasBeenUpdated(Collections.emptyList(), this);
-		contextListener.samplesSelectionChanged(null, this);
 		// sample
 		contextListener.sampleSelectionChanged(null, this);
 		// variables
