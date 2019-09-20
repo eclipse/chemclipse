@@ -37,6 +37,7 @@ public class MassSpectrumFilter {
 	private static final String DESCRIPTION = "description";
 	private static final String FILTER_NAME = "filterName";
 	private static final String FILTER = "filter";
+	private static final String FILTER_CONFIG = "config";
 	//
 	private static final String PROCESSING_DESCRIPTION = "Mass Spectrum Filter";
 	private static final String NO_MASS_SPECTRUM_FILTER_AVAILABLE = "There is no mass spectrum filter available.";
@@ -135,6 +136,11 @@ public class MassSpectrumFilter {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setFilterName(element.getAttribute(FILTER_NAME));
+			try {
+				supplier.setConfigClass(element.createExecutableExtension(FILTER_CONFIG).getClass().asSubclass(IMassSpectrumFilterSettings.class));
+			} catch(Exception e) {
+				// can't use it then
+			}
 			filterSupport.add(supplier);
 		}
 		return filterSupport;

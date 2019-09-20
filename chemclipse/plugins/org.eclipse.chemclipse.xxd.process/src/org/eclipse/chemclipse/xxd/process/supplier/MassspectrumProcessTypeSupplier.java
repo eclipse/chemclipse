@@ -19,6 +19,8 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.IMassSpe
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.MassSpectrumFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.exceptions.NoMassSpectrumFilterSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -37,6 +39,7 @@ public class MassspectrumProcessTypeSupplier extends AbstractProcessTypeSupplier
 	private String prefix;
 	private static final IMassSpectrumFilterSupport FILTER_SUPPORT = MassSpectrumFilter.getMassSpectrumFilterSupport();
 
+	@SuppressWarnings("unchecked")
 	private MassspectrumProcessTypeSupplier(String category, String prefix) {
 		super(category);
 		this.prefix = prefix;
@@ -44,10 +47,11 @@ public class MassspectrumProcessTypeSupplier extends AbstractProcessTypeSupplier
 			List<String> ids = FILTER_SUPPORT.getAvailableFilterIds();
 			for(String id : ids) {
 				IMassSpectrumFilterSupplier supplier = FILTER_SUPPORT.getFilterSupplier(id);
+				@SuppressWarnings("rawtypes")
 				ProcessorSupplier processorSupplier = new ProcessorSupplier(prefix + id, DATA_TYPES, this);
 				processorSupplier.setName(supplier.getFilterName());
 				processorSupplier.setDescription(supplier.getDescription());
-				// TODO processorSupplier.setSettingsClass();
+				processorSupplier.setSettingsClass(supplier.getConfigClass());
 				addProcessorSupplier(processorSupplier);
 			}
 		} catch(NoMassSpectrumFilterSupplierAvailableException e) {
@@ -76,10 +80,14 @@ public class MassspectrumProcessTypeSupplier extends AbstractProcessTypeSupplier
 				}
 			}
 		} else {
-			List<?> scans = chromatogramSelection.getChromatogram().getScans();
-			for(Object object : scans) {
-				if(object instanceof IScanMSD) {
-					massspectras.add((IScanMSD)object);
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+			int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
+			int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
+			for(int scanIndex = startScan; scanIndex <= stopScan; scanIndex++) {
+				monitor.subTask("Remove ions from scan: " + scanIndex);
+				IScan scan = chromatogram.getScan(scanIndex);
+				if(scan instanceof IScanMSD) {
+					massspectras.add((IScanMSD)scan);
 				}
 			}
 		}

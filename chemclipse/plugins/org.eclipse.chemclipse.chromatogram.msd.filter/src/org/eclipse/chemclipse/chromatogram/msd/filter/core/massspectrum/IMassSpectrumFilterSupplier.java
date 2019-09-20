@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,8 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - config class support
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum;
+
+import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
 
 public interface IMassSpectrumFilterSupplier {
 
@@ -34,4 +37,10 @@ public interface IMassSpectrumFilterSupplier {
 	 * @return String
 	 */
 	String getFilterName();
+
+	/**
+	 * 
+	 * @return the config class for this supplier
+	 */
+	Class<? extends IMassSpectrumFilterSettings> getConfigClass();
 }
