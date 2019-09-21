@@ -60,7 +60,7 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.swtchart.feature.feature.group" version="0.0.0"/>
-<repository location="https://update.openchrom.net/repositories/swtchart/latest/"/>
+<repository location="https://download.eclipse.org/swtchart/develop/repository/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="javax.ws.rs" version="2.0.1.v201504171603"/>
