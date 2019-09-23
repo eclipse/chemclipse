@@ -21,4 +21,3 @@ Export-Package: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremov
  org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings
 Bundle-Vendor: ChemClipse
 Import-Package: org.osgi.service.component.annotations;version="[1.2.0,2.0.0)"
-Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core.IonRemoverScanFilter.xml

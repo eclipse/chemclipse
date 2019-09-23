@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,16 +8,36 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add support for IonMarkMode
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
 public class MarkedIons extends AbstractMarkedIons implements IMarkedIons {
 
+	private IonMarkMode mode;
+
+	@Deprecated
 	public MarkedIons(int[] ionsList) {
-		super(ionsList);
+		this(ionsList, IonMarkMode.INCLUDE);
 	}
 
+	@Deprecated
 	public MarkedIons() {
-		super();
+		this(null, IonMarkMode.INCLUDE);
+	}
+
+	public MarkedIons(int[] ionsList, IonMarkMode mode) {
+		super(ionsList);
+		this.mode = mode;
+	}
+
+	public MarkedIons(IonMarkMode mode) {
+		this(null, mode);
+	}
+
+	@Override
+	public IonMarkMode getMode() {
+
+		return mode;
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add mode to interface
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
@@ -28,7 +29,28 @@ import org.eclipse.chemclipse.model.core.IMarkedSignals;
  */
 public interface IMarkedIons extends IMarkedSignals<IMarkedIon> {
 
+	enum IonMarkMode {
+		/**
+		 * in this mode, all ions in the list are considered as an exclusion, that means apply the given function to all except the given ions
+		 */
+		EXCLUDE,
+		/**
+		 * in this mode, all ions in the list are considered as an inclusion, that means apply the given function to all ions given
+		 */
+		INCLUDE,
+		/**
+		 * in this mode, all ions in the list are considered as an intersection, that means apply the given function to all ions that are in the list and in set of all ions
+		 */
+		INTERSECT;
+	}
+
 	Set<Integer> getIonsNominal();
+
+	/**
+	 * 
+	 * @return the mode for this ions list
+	 */
+	IonMarkMode getMode();
 
 	/**
 	 * Adds the ion range with magnification factor = 1.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
+ * Christoph Läubrich - honor the mark mode
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -27,6 +28,7 @@ import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonCombinedComparator;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonComparatorMode;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonIsNullException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
@@ -79,9 +81,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		super();
 		init();
 	}
-	
-	public AbstractScanMSD(final Collection<? extends IIon> ions) {
 
+	public AbstractScanMSD(final Collection<? extends IIon> ions) {
 		super();
 		init();
 		this.ionsList = new ArrayList<>(ions);
@@ -260,8 +261,22 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			// TODO maybe log warning?
 			return this;
 		}
-		Set<Integer> ions = excludedIons.getIonsNominal();
-		removeIons(ions);
+		Set<Integer> markedIons = excludedIons.getIonsNominal();
+		IonMarkMode mode = excludedIons.getMode();
+		if(mode == IonMarkMode.INCLUDE || mode == IonMarkMode.INTERSECT) {
+			// remove all ions as is ...
+			removeIons(markedIons);
+		} else if(mode == IonMarkMode.EXCLUDE) {
+			// remove all ions except the given ones
+			Set<Integer> removeIons = new HashSet<>();
+			for(IIon ion : ionsList) {
+				int nominal = AbstractIon.getIon(ion.getIon());
+				if(!markedIons.contains(nominal)) {
+					removeIons.add(nominal);
+				}
+			}
+			removeIons(removeIons);
+		}
 		return this;
 	}
 

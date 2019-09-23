@@ -15,9 +15,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.di.annotations.Creatable;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspectiveStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -38,6 +39,8 @@ public class PerspectiveSupport {
 	private EPartService ePartService;
 	@Inject
 	private MApplication mApplication;
+	@Inject
+	private IEventBroker eventBroker;
 
 	public String getActivePerspectiveId() {
 
@@ -79,10 +82,31 @@ public class PerspectiveSupport {
 	 */
 	public void changePerspective(String perspectiveId) {
 
-		MUIElement element = eModelService.find(perspectiveId, mApplication);
-		if(element instanceof MPerspective) {
-			MPerspective perspective = (MPerspective)element;
-			ePartService.switchPerspective(perspective);
+		MPerspective perspectiveModel = getPerspectiveModel(perspectiveId);
+		if(perspectiveModel != null) {
+			MPerspective activePerspective = getActiveMPerspective();
+			if(perspectiveModel.equals(activePerspective)) {
+				return;
+			}
+			ePartService.switchPerspective(perspectiveModel);
+			eventBroker.post(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, perspectiveModel.getLabel());
 		}
+	}
+
+	public MPerspective getPerspectiveModel(String perspectiveId) {
+
+		if(perspectiveId != null) {
+			List<MPerspective> elements = eModelService.findElements(mApplication, null, MPerspective.class, null);
+			if(elements != null && !elements.isEmpty()) {
+				for(MPerspective perspective : elements) {
+					String elementId = perspective.getElementId();
+					String elementLabel = perspective.getLabel();
+					if(perspectiveId.equals(elementId) || elementId.equals(perspectiveId + "." + elementLabel)) {
+						return perspective;
+					}
+				}
+			}
+		}
+		return null;
 	}
 }

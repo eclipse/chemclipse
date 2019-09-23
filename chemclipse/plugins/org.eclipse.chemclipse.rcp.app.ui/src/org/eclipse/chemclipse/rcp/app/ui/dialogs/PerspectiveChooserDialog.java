@@ -11,8 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.dialogs;
 
+import java.io.IOException;
+
+import org.eclipse.chemclipse.rcp.app.ui.Activator;
+import org.eclipse.chemclipse.rcp.app.ui.preferences.PreferenceConstants;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.preference.IPersistentPreferenceStore;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -21,18 +29,23 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import org.eclipse.chemclipse.rcp.app.ui.internal.preferences.PreferenceSupplier;
-
 public class PerspectiveChooserDialog extends Dialog {
 
 	private String title = "";
 	private String message = "";
 	private Label messageLabel;
-	private Button showPerspectiveDialog;
 	private Button changePerspectiveAutomatically;
+	private IPreferenceStore preferenceStore;
+	private String preferenceKey;
 
 	public PerspectiveChooserDialog(Shell parentShell, String title, String message) {
+		this(parentShell, title, message, Activator.getDefault().getPreferenceStore(), PreferenceConstants.P_CHANGE_PERSPECTIVE_AUTOMATICALLY);
+	}
+
+	public PerspectiveChooserDialog(Shell parentShell, String title, String message, IPreferenceStore preferenceStore, String preferenceKey) {
 		super(parentShell);
+		this.preferenceStore = preferenceStore;
+		this.preferenceKey = preferenceKey;
 		if(title != null) {
 			this.title = title;
 		}
@@ -47,6 +60,7 @@ public class PerspectiveChooserDialog extends Dialog {
 	 * org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
 	 * .Shell)
 	 */
+	@Override
 	protected void configureShell(Shell shell) {
 
 		super.configureShell(shell);
@@ -58,6 +72,7 @@ public class PerspectiveChooserDialog extends Dialog {
 	/*
 	 * (non-Javadoc) Method declared on Dialog.
 	 */
+	@Override
 	protected void buttonPressed(int buttonId) {
 
 		/*
@@ -67,8 +82,17 @@ public class PerspectiveChooserDialog extends Dialog {
 			/*
 			 * Check if the user would like to see the message again.
 			 */
-			PreferenceSupplier.setShowPerspectiveDialog(showPerspectiveDialog.getSelection());
-			PreferenceSupplier.setChangePerspectiveAutomatically(changePerspectiveAutomatically.getSelection());
+			preferenceStore.setValue(preferenceKey, changePerspectiveAutomatically.getSelection());
+			if(preferenceStore instanceof IPersistentPreferenceStore) {
+				IPersistentPreferenceStore store = (IPersistentPreferenceStore)preferenceStore;
+				if(store.needsSaving()) {
+					try {
+						store.save();
+					} catch(IOException e) {
+						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, getClass().getName(), "Saving preferences failed", e));
+					}
+				}
+			}
 		}
 		super.buttonPressed(buttonId);
 	}
@@ -76,6 +100,7 @@ public class PerspectiveChooserDialog extends Dialog {
 	/*
 	 * (non-Javadoc) Method declared on Dialog.
 	 */
+	@Override
 	protected Control createDialogArea(Composite parent) {
 
 		Composite composite = (Composite)super.createDialogArea(parent);
@@ -110,13 +135,9 @@ public class PerspectiveChooserDialog extends Dialog {
 	 */
 	private void createCheckboxes(Composite parent, GridData layoutData) {
 
-		showPerspectiveDialog = new Button(parent, SWT.CHECK);
-		showPerspectiveDialog.setText("Show this dialog.");
-		showPerspectiveDialog.setLayoutData(layoutData);
-		showPerspectiveDialog.setSelection(PreferenceSupplier.getShowPerspectiveDialog());
 		changePerspectiveAutomatically = new Button(parent, SWT.CHECK);
-		changePerspectiveAutomatically.setText("Change perspectives and views automatically.");
+		changePerspectiveAutomatically.setText("Change perspectives automatically and don't ask again");
 		changePerspectiveAutomatically.setLayoutData(layoutData);
-		changePerspectiveAutomatically.setSelection(PreferenceSupplier.getChangePerspectiveAutomatically());
+		changePerspectiveAutomatically.setSelection(preferenceStore.getBoolean(preferenceKey));
 	}
 }

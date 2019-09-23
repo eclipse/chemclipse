@@ -26,6 +26,7 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
@@ -57,15 +58,15 @@ public class PerspectiveSwitchHandler {
 	public static void focusPerspectiveAndView(String perspectiveId, List<String> viewIds) {
 
 		/*
-		 * Try to get the user preferences.
-		 */
-		if(PreferenceSupplier.getShowPerspectiveDialog()) {
-			showPerspectiveDialog();
-		}
-		/*
 		 * Try to change the perspective and activate the requested view.
 		 */
-		if(PreferenceSupplier.getChangePerspectiveAutomatically()) {
+		boolean changePerspectiveAutomatically = PreferenceSupplier.getChangePerspectiveAutomatically();
+		if(!changePerspectiveAutomatically) {
+			if(showPerspectiveDialog() != Window.OK) {
+				return;
+			}
+		}
+		if(changePerspectiveAutomatically) {
 			/*
 			 * Create the switcher if null.
 			 */
@@ -104,12 +105,12 @@ public class PerspectiveSwitchHandler {
 	 * Show a dialog if requested. The boolean values: P_SHOW_PERSPECTIVE_DIALOG
 	 * P_CHANGE_PERSPECTIVE_AUTOMATICALLY can be edited by the user.
 	 */
-	private static void showPerspectiveDialog() {
+	private static int showPerspectiveDialog() {
 
 		Shell shell = Display.getCurrent().getActiveShell();
 		String title = "Change Perspective";
 		String message = "The program changes the perspectives and views automatically on certain tasks. You can select whether you would like to change perspectives automatically. If not, you are responsible by your own to select the needed perspective and views.";
 		PerspectiveChooserDialog dialog = new PerspectiveChooserDialog(shell, title, message);
-		dialog.open();
+		return dialog.open();
 	}
 }

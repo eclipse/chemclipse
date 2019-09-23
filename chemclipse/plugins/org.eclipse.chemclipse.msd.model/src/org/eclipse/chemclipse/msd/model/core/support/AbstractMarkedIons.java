@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - make real abstract
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
@@ -18,13 +19,9 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 
-public class AbstractMarkedIons implements IMarkedIons {
+public abstract class AbstractMarkedIons implements IMarkedIons {
 
 	private Set<IMarkedIon> markedIons;
-
-	public AbstractMarkedIons() {
-		this(null);
-	}
 
 	/**
 	 * Parse the ions string list.
@@ -32,7 +29,7 @@ public class AbstractMarkedIons implements IMarkedIons {
 	 * 
 	 * @param ions
 	 */
-	public AbstractMarkedIons(int[] ionsList) {
+	protected AbstractMarkedIons(int[] ionsList) {
 		markedIons = new HashSet<IMarkedIon>();
 		if(ionsList != null) {
 			for(int ion : ionsList) {

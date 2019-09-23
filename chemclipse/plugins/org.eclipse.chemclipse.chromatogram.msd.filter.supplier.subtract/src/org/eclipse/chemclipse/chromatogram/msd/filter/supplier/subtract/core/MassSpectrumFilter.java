@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,10 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add generics, remove obsolete methods
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
@@ -33,9 +33,12 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 	private static final String DESCRIPTION = "Subtract Filter Mass Spectrum";
 
 	@Override
-	public IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings filterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectrumFilterResult> applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings filterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(massSpectra, filterSettings);
+		if(filterSettings == null) {
+			filterSettings = PreferenceSupplier.getMassSpectrumFilterSettings();
+		}
+		IProcessingInfo<IMassSpectrumFilterResult> processingInfo = validate(massSpectra, filterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			if(filterSettings instanceof MassSpectrumFilterSettings) {
 				MassSpectrumFilterSettings massSpectrumFilterSettings = (MassSpectrumFilterSettings)filterSettings;
@@ -50,27 +53,5 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 		}
 		//
 		return processingInfo;
-	}
-
-	@Override
-	public IProcessingInfo applyFilter(IScanMSD massSpectrum, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor) {
-
-		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
-		massSpectra.add(massSpectrum);
-		return applyFilter(massSpectra, massSpectrumFilterSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo applyFilter(IScanMSD massSpectrum, IProgressMonitor monitor) {
-
-		MassSpectrumFilterSettings massSpectrumFilterSettings = PreferenceSupplier.getMassSpectrumFilterSettings();
-		return applyFilter(massSpectrum, massSpectrumFilterSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
-
-		MassSpectrumFilterSettings massSpectrumFilterSettings = PreferenceSupplier.getMassSpectrumFilterSettings();
-		return applyFilter(massSpectra, massSpectrumFilterSettings, monitor);
 	}
 }

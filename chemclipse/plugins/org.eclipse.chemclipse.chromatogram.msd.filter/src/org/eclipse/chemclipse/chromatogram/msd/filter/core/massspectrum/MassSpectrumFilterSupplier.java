@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
+
 public class MassSpectrumFilterSupplier implements IMassSpectrumFilterSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String filterName = "";
+	private Class<? extends IMassSpectrumFilterSettings> configClass;
 
 	@Override
 	public String getDescription() {
@@ -110,4 +113,15 @@ public class MassSpectrumFilterSupplier implements IMassSpectrumFilterSupplier {
 		return builder.toString();
 	}
 	// ------------------------------------hashCode, equals, toString
+
+	@Override
+	public Class<? extends IMassSpectrumFilterSettings> getConfigClass() {
+
+		return configClass;
+	}
+
+	public void setConfigClass(Class<? extends IMassSpectrumFilterSettings> configClass) {
+
+		this.configClass = configClass;
+	}
 }

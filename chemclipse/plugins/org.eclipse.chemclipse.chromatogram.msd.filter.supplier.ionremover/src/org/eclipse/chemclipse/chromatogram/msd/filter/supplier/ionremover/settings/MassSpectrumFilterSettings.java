@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.AbstractMassSpectrumFilterSettings;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,10 +21,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettings {
 
-	@JsonProperty(value = "Ions To Remove", defaultValue = "18;28;84;207")
-	@JsonPropertyDescription(value = "List the ions to remove, separated by a semicolon.")
+	@JsonProperty(value = "Ions", defaultValue = "18;28;84;207")
+	@JsonPropertyDescription(value = "List the ions, separated by a semicolon.")
 	@StringSettingsProperty(regExp = "(\\d+;?)+", isMultiLine = false)
 	private String ionsToRemove = "18;28;84;207";
+	@JsonProperty(value = "Mode", defaultValue = "INCLUDE")
+	@JsonPropertyDescription(value = "Gives the mode to use (include = remove all ions given in the list, exclude = remove all ions not in the list)")
+	private IMarkedIons.IonMarkMode markMode = IonMarkMode.INCLUDE;
 
 	public String getIonsToRemove() {
 
@@ -32,5 +37,15 @@ public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettin
 	public void setIonsToRemove(String ionsToRemove) {
 
 		this.ionsToRemove = ionsToRemove;
+	}
+
+	public IMarkedIons.IonMarkMode getMarkMode() {
+
+		return markMode;
+	}
+
+	public void setMarkMode(IMarkedIons.IonMarkMode markMode) {
+
+		this.markMode = markMode;
 	}
 }

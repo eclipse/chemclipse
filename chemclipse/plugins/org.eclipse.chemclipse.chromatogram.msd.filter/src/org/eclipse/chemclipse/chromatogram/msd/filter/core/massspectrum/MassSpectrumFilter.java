@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.result.IMassSpectrumFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -35,6 +37,7 @@ public class MassSpectrumFilter {
 	private static final String DESCRIPTION = "description";
 	private static final String FILTER_NAME = "filterName";
 	private static final String FILTER = "filter";
+	private static final String FILTER_CONFIG = "config";
 	//
 	private static final String PROCESSING_DESCRIPTION = "Mass Spectrum Filter";
 	private static final String NO_MASS_SPECTRUM_FILTER_AVAILABLE = "There is no mass spectrum filter available.";
@@ -55,17 +58,9 @@ public class MassSpectrumFilter {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(IScanMSD massSpectrum, IMassSpectrumFilterSettings massSpectrumFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectrumFilterResult> applyFilter(IScanMSD massSpectrum, IMassSpectrumFilterSettings massSpectrumFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IMassSpectrumFilter massSpectrumFilter = getMassSpectrumFilter(filterId);
-		if(massSpectrumFilter != null) {
-			processingInfo = massSpectrumFilter.applyFilter(massSpectrum, massSpectrumFilterSettings, monitor);
-		} else {
-			processingInfo = new ProcessingInfo();
-			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_MASS_SPECTRUM_FILTER_AVAILABLE);
-		}
-		return processingInfo;
+		return applyFilter(Collections.singletonList(massSpectrum), massSpectrumFilterSettings, filterId, monitor);
 	}
 
 	/**
@@ -77,17 +72,9 @@ public class MassSpectrumFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(IScanMSD massSpectrum, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectrumFilterResult> applyFilter(IScanMSD massSpectrum, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IMassSpectrumFilter massSpectrumFilter = getMassSpectrumFilter(filterId);
-		if(massSpectrumFilter != null) {
-			processingInfo = massSpectrumFilter.applyFilter(massSpectrum, monitor);
-		} else {
-			processingInfo = new ProcessingInfo();
-			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_MASS_SPECTRUM_FILTER_AVAILABLE);
-		}
-		return processingInfo;
+		return applyFilter(Collections.singletonList(massSpectrum), null, filterId, monitor);
 	}
 
 	/**
@@ -101,14 +88,14 @@ public class MassSpectrumFilter {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings massSpectraFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectrumFilterResult> applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings massSpectraFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IMassSpectrumFilterResult> processingInfo;
 		IMassSpectrumFilter massSpectrumFilter = getMassSpectrumFilter(filterId);
 		if(massSpectrumFilter != null) {
 			processingInfo = massSpectrumFilter.applyFilter(massSpectra, massSpectraFilterSettings, monitor);
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_MASS_SPECTRUM_FILTER_AVAILABLE);
 		}
 		return processingInfo;
@@ -124,17 +111,9 @@ public class MassSpectrumFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(List<IScanMSD> massSpectra, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectrumFilterResult> applyFilter(List<IScanMSD> massSpectra, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IMassSpectrumFilter massSpectrumFilter = getMassSpectrumFilter(filterId);
-		if(massSpectrumFilter != null) {
-			processingInfo = massSpectrumFilter.applyFilter(massSpectra, monitor);
-		} else {
-			processingInfo = new ProcessingInfo();
-			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_MASS_SPECTRUM_FILTER_AVAILABLE);
-		}
-		return processingInfo;
+		return applyFilter(massSpectra, null, filterId, monitor);
 	}
 
 	/**
@@ -157,6 +136,11 @@ public class MassSpectrumFilter {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setFilterName(element.getAttribute(FILTER_NAME));
+			try {
+				supplier.setConfigClass(element.createExecutableExtension(FILTER_CONFIG).getClass().asSubclass(IMassSpectrumFilterSettings.class));
+			} catch(Exception e) {
+				// can't use it then
+			}
 			filterSupport.add(supplier);
 		}
 		return filterSupport;

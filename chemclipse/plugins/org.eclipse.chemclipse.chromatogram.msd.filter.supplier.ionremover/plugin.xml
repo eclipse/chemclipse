@@ -2,28 +2,9 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier">
-      <ChromatogramFilterSupplier
-            description="This filter removes all specified ions from a chromatogram."
-            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core.ChromatogramFilter"
-            filterName="Ion Remover Filter"
-            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings"
-            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.chromatogram">
-      </ChromatogramFilterSupplier>
-   </extension>
-   <extension
-         point="org.eclipse.chemclipse.chromatogram.msd.filter.peakFilterSupplier">
-      <PeakFilterSupplier
-            description="This filter removes all specified ions from a peak mass spectrum."
-            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core.PeakFilter"
-            filterName="Ion Remover Filter"
-            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.PeakFilterSettings"
-            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.peak">
-      </PeakFilterSupplier>
-   </extension>
-   <extension
          point="org.eclipse.chemclipse.chromatogram.msd.filter.massSpectrumFilterSupplier">
       <MassSpectrumFilterSupplier
+            config="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.MassSpectrumFilterSettings"
             description="This filter removes all specified ions from a mass spectrum."
             filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core.MassSpectrumFilter"
             filterName="Ion Remover Filter"

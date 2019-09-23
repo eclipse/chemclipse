@@ -30,13 +30,4 @@
             name="Loading plot 2D Preferences">
       </page>
       </extension>
-   <extension
-         point="org.eclipse.chemclipse.ux.extension.ui.welcometile">
-      <WelcomeTile
-            Description="Starts a new PCA Analysis"
-            PerspectiveId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective"
-            Section="PCA Analysis"
-            defaultShow="false">
-      </WelcomeTile>         
-   </extension>   
 </plugin>
