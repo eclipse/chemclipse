@@ -6,4 +6,4 @@ The Eclipse Chemclipse project offers functionality for data reading and process
 
 [Chemclipse](https://projects.eclipse.org/projects/science.chemclipse) is part of the [Eclipse Science](https://science.eclipse.org/) working group and is the basis for [OpenChrom®](https://github.com/Openchrom/openchrom).
 
-For user- and developer **documentation**, have a look at our [wiki](https://github.com/eclipse/chemclipse/wiki).
+For user- and developer documentation, have a look at our [wiki](https://github.com/eclipse/chemclipse/wiki).
