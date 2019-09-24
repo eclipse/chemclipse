@@ -15,8 +15,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,11 +47,13 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	private Map<String, String> headerDataMap;
 	private DateFormat dateFormat = ValueFormat.getDateFormatEnglish(ValueFormat.FULL_DATE_PATTERN);
 
-	public AbstractMeasurementInfo() {
-		/*
-		 * Initialize the header map.
-		 */
-		headerDataMap = new HashMap<String, String>();
+	public AbstractMeasurementInfo(Map<String, String> headerData) {
+
+		if(headerData != null)
+			headerDataMap = new LinkedHashMap<>(headerData);
+		else {
+			headerDataMap = new LinkedHashMap<>();
+		}
 		//
 		headerDataMap.put(OPERATOR, "");
 		headerDataMap.put(DATE, dateFormat.format(new Date()));
@@ -67,6 +69,11 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 		headerDataMap.put(DATA_NAME, "");
 		//
 		protectKeys = new HashSet<String>(headerDataMap.keySet());
+	}
+
+	public AbstractMeasurementInfo() {
+
+		this(null);
 	}
 
 	@Override
@@ -107,6 +114,11 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	public Map<String, String> getHeaderDataMap() {
 
 		return Collections.unmodifiableMap(headerDataMap);
+	}
+
+	protected void setHeaderDataMap(Map<String, String> headerDataMap) {
+
+		this.headerDataMap = headerDataMap;
 	}
 
 	@Override
@@ -272,6 +284,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 		}
 	}
 
+	@Override
 	public void setSampleWeight(double sampleWeight) {
 
 		if(sampleWeight >= 0) {

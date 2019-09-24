@@ -22,10 +22,14 @@ import org.eclipse.chemclipse.model.core.FilteredMeasurement;
 import org.eclipse.chemclipse.processing.filter.FilterContext;
 
 /**
- * This class is meant as a class for Filters that wants to filter some aspects of a {@link SpectrumMeasurement}, the class simply delegates to an original {@link SpectrumMeasurement} and returns all his data to the caller.
- * A filter can now extend this class and return for example a filtered set of signals.
+ * This class is meant as a class for Filters that wants to filter some aspects
+ * of a {@link SpectrumMeasurement}, the class simply delegates to an original
+ * {@link SpectrumMeasurement} and returns all his data to the caller. A filter
+ * can now extend this class and return for example a filtered set of signals.
  * 
- * <b>Important</b> This class is not meant for format readers, these should extend {@link AbstractMeasurement} instead and implement the interface on a reader specific class
+ * <b>Important</b> This class is not meant for format readers, these should
+ * extend {@link AbstractMeasurement} instead and implement the interface on a
+ * reader specific class
  * 
  * @author Christoph Läubrich
  *
@@ -36,7 +40,14 @@ public class FilteredSpectrumMeasurement<ConfigType> extends FilteredMeasurement
 	private transient List<? extends SpectrumSignal> signals;
 
 	public FilteredSpectrumMeasurement(FilterContext<SpectrumMeasurement, ConfigType> context) {
+
 		super(context);
+	}
+
+	@Override
+	public FIDMeasurement getParent() {
+
+		return getFilteredObject().getParent();
 	}
 
 	@Override
@@ -93,6 +104,7 @@ public class FilteredSpectrumMeasurement<ConfigType> extends FilteredMeasurement
 		private Number dispersiveIntensity;
 
 		public SerializableSpectrumSignal(SpectrumSignal copyfrom) {
+
 			frequency = copyfrom.getFrequency();
 			absorptiveIntensity = copyfrom.getAbsorptiveIntensity();
 			dispersiveIntensity = copyfrom.getDispersiveIntensity();

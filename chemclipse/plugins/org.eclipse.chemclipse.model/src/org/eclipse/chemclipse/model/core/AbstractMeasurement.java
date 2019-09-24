@@ -21,6 +21,16 @@ public abstract class AbstractMeasurement extends AbstractMeasurementInfo implem
 	//
 	private Map<String, IMeasurementResult> measurementResults = new HashMap<String, IMeasurementResult>();
 
+	public AbstractMeasurement() {
+
+		super();
+	}
+
+	public AbstractMeasurement(Map<String, String> headerData) {
+
+		super(headerData);
+	}
+
 	@Override
 	public void addMeasurementResult(IMeasurementResult chromatogramResult) {
 
