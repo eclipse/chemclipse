@@ -93,7 +93,7 @@ public class WidgetItem {
 		if(control instanceof Text) {
 			input = ((Text)control).getText().trim();
 		} else if(control instanceof Button) {
-			input = Boolean.toString(((Button)control).getSelection());
+			input = ((Button)control).getSelection();
 		} else if(control instanceof Combo) {
 			input = ((Combo)control).getText().trim();
 		}
