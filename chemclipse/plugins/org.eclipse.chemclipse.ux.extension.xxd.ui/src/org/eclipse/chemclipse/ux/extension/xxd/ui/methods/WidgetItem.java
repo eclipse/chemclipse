@@ -115,7 +115,6 @@ public class WidgetItem {
 
 	public Object getValue() {
 
-		Object value = null;
 		Class<?> rawType = inputValue.getRawType();
 		if(rawType != null) {
 			if(rawType == File.class) {
@@ -129,33 +128,40 @@ public class WidgetItem {
 				String textValue = text.getText().trim();
 				//
 				if(rawType == int.class || rawType == Integer.class) {
-					value = Integer.parseInt(textValue);
+					if(textValue.isEmpty()) {
+						return 0;
+					}
+					return Integer.parseInt(textValue);
 				} else if(rawType == float.class || rawType == Float.class) {
-					value = Float.parseFloat(textValue);
+					if(textValue.isEmpty()) {
+						return 0f;
+					}
+					return Float.parseFloat(textValue);
 				} else if(rawType == double.class || rawType == Double.class) {
-					value = Double.parseDouble(textValue);
-				} else if(rawType == String.class) {
-					value = textValue;
+					if(textValue.isEmpty()) {
+						return 0d;
+					}
+					return Double.parseDouble(textValue);
+				} else {
+					return textValue;
 				}
 			} else if(control instanceof Button) {
 				/*
 				 * Checkbox
 				 */
 				Button button = (Button)control;
-				if(rawType == boolean.class || rawType == Boolean.class) {
-					value = Boolean.toString(button.getSelection());
-				}
+				return button.getSelection();
 			} else if(control instanceof Combo) {
 				/*
 				 * Combo
 				 */
 				Combo combo = (Combo)control;
 				if(rawType.isEnum()) {
-					value = combo.getText().trim();
+					return combo.getText().trim();
 				}
 			}
 		}
-		return value;
+		return null;
 	}
 
 	@SuppressWarnings("rawtypes")
