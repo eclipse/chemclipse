@@ -16,15 +16,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
-import org.eclipse.chemclipse.support.settings.IntegerValidation;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
+import org.eclipse.chemclipse.support.settings.validation.EvenOddValidator;
+import org.eclipse.chemclipse.support.settings.validation.MinMaxValidator;
+import org.eclipse.chemclipse.support.settings.validation.RegularExpressionValidator;
 
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -104,33 +107,21 @@ public class SettingsClassParser implements SettingsParser {
 						/*
 						 * SettingsProperty ...
 						 */
-						@SuppressWarnings("deprecation")
-						Iterable<Annotation> annotations = annotatedField.annotations();
+						Iterable<Annotation> annotations = annotatedField.getAllAnnotations().annotations();
 						for(Annotation annotation : annotations) {
 							if(annotation instanceof IntSettingsProperty) {
 								IntSettingsProperty settingsProperty = (IntSettingsProperty)annotation;
-								inputValue.setMinValue(settingsProperty.minValue());
-								inputValue.setMaxValue(settingsProperty.maxValue());
-								switch(settingsProperty.validation()) {
-									case ODD_NUMBER:
-										inputValue.setIntegerValidation(IntegerValidation.ODD);
-										break;
-									default:
-										inputValue.setIntegerValidation(null);
-										break;
-								}
+								inputValue.addValidator(new MinMaxValidator<Integer>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Integer.class));
+								inputValue.addValidator(new EvenOddValidator(property.getName(), settingsProperty.validation()));
 							} else if(annotation instanceof FloatSettingsProperty) {
 								FloatSettingsProperty settingsProperty = (FloatSettingsProperty)annotation;
-								inputValue.setMinValue(settingsProperty.minValue());
-								inputValue.setMaxValue(settingsProperty.maxValue());
+								inputValue.addValidator(new MinMaxValidator<Float>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Float.class));
 							} else if(annotation instanceof DoubleSettingsProperty) {
 								DoubleSettingsProperty settingsProperty = (DoubleSettingsProperty)annotation;
-								inputValue.setMinValue(settingsProperty.minValue());
-								inputValue.setMaxValue(settingsProperty.maxValue());
+								inputValue.addValidator(new MinMaxValidator<Double>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Double.class));
 							} else if(annotation instanceof StringSettingsProperty) {
 								StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
-								inputValue.setRegularExpression(settingsProperty.regExp());
-								inputValue.setMultiLine(settingsProperty.isMultiLine());
+								inputValue.addValidator(new RegularExpressionValidator(property.getName(), Pattern.compile(settingsProperty.regExp()), settingsProperty.isMultiLine()));
 							} else if(annotation instanceof FileSettingProperty) {
 								inputValue.setFileSettingProperty((FileSettingProperty)annotation);
 							}

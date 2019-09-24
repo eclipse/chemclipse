@@ -57,58 +57,7 @@ public class InputValidator implements IValidator {
 
 		String message = null;
 		try {
-			if(rawType == int.class || rawType == Integer.class) {
-				int parsedValue = Integer.parseInt(value);
-				if(inputValue.hasIntegerValidation()) {
-					switch(inputValue.getIntegerValidation()) {
-						case ODD:
-							if(parsedValue % 2 == 0) {
-								message = "The value must be odd.";
-							}
-							break;
-						case EVEN:
-							if(parsedValue % 2 == 1) {
-								message = "The value must be even.";
-							}
-							break;
-						default:
-							break;
-					}
-				}
-			} else if(rawType == float.class || rawType == Float.class) {
-				float parsedValue = Float.parseFloat(value);
-				if(inputValue.hasMinMaxConstraint()) {
-					if(parsedValue < (float)inputValue.getMinValue() || parsedValue > (float)inputValue.getMaxValue()) {
-						message = "The value must be >= " + inputValue.getMinValue() + " and <= " + inputValue.getMaxValue();
-					}
-				}
-			} else if(rawType == double.class || rawType == Double.class) {
-				double parsedValue = Double.parseDouble(value);
-				if(inputValue.hasMinMaxConstraint()) {
-					if(parsedValue < (double)inputValue.getMinValue() || parsedValue > (double)inputValue.getMaxValue()) {
-						message = "The value must be >= " + inputValue.getMinValue() + " and <= " + inputValue.getMaxValue();
-					}
-				}
-			} else if(rawType == String.class) {
-				if(inputValue.hasRegexConstraint()) {
-					if(inputValue.isMultiLine()) {
-						String[] lines = value.split("[\r\n]+");
-						int n = 1;
-						exitloop:
-						for(String line : lines) {
-							if(!line.matches(inputValue.getRegularExpression())) {
-								message = "Line #" + n + " is not formatted correctly.";
-								break exitloop;
-							}
-							n++;
-						}
-					} else {
-						if(!value.matches(inputValue.getRegularExpression())) {
-							message = "The value must match the expression: " + inputValue.getRegularExpression();
-						}
-					}
-				}
-			} else if(rawType == boolean.class || rawType == Boolean.class) {
+			if(rawType == boolean.class || rawType == Boolean.class) {
 				Boolean.parseBoolean(value);
 			} else if(rawType.isEnum()) {
 				if("".equals(value)) {
@@ -121,8 +70,6 @@ public class InputValidator implements IValidator {
 						return "Location does not exits, please choose a valid location";
 					}
 				}
-			} else {
-				logger.info("Unknown Raw Type: " + rawType);
 			}
 		} catch(NumberFormatException e) {
 			message = ERROR;

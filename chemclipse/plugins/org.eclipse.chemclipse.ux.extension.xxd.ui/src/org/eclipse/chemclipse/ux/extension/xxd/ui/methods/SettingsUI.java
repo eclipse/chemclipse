@@ -149,9 +149,9 @@ public class SettingsUI<T> extends Composite {
 		public IStatus validate() {
 
 			for(WidgetItem widgetItem : widgetItems) {
-				String message = widgetItem.validate();
-				if(message != null) {
-					return ValidationStatus.error(message);
+				IStatus status = widgetItem.validate();
+				if(!status.isOK()) {
+					return status;
 				}
 			}
 			return ValidationStatus.ok();

@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - support file selection, refactor for new settings model
+ * Christoph Läubrich - support file selection, refactor for new settings model, use validators
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.settings.validation.InputValidator;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
@@ -61,11 +62,6 @@ public class WidgetItem {
 		return inputValue;
 	}
 
-	public InputValidator getInputValidator() {
-
-		return inputValidator;
-	}
-
 	public ControlDecoration getControlDecoration() {
 
 		return controlDecoration;
@@ -83,34 +79,34 @@ public class WidgetItem {
 		controlDecoration = new ControlDecoration(control, SWT.LEFT | SWT.TOP);
 	}
 
-	public String validate() {
+	public IStatus validate() {
 
-		String message = null;
-		/*
-		 * Get the input.
-		 */
-		Object input = currentSelection;
-		if(control instanceof Text) {
-			input = ((Text)control).getText().trim();
-		} else if(control instanceof Button) {
-			input = ((Button)control).getSelection();
-		} else if(control instanceof Combo) {
-			input = ((Combo)control).getText().trim();
-		}
-		/*
-		 * Validate
-		 */
-		IStatus status = inputValidator.validate(input);
+		IStatus status = getStatus();
 		if(status.isOK()) {
 			controlDecoration.hide();
 		} else {
-			message = status.getMessage();
 			controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
 			controlDecoration.showHoverText(status.getMessage());
 			controlDecoration.show();
 		}
-		//
-		return message;
+		return status;
+	}
+
+	private IStatus getStatus() {
+
+		Object currentValue;
+		try {
+			currentValue = getValue();
+		} catch(RuntimeException e) {
+			currentValue = null;
+		}
+		for(IValidator validator : inputValue.getValidators()) {
+			IStatus validate = validator.validate(currentValue);
+			if(!validate.isOK()) {
+				return validate;
+			}
+		}
+		return inputValidator.validate(currentValue);
 	}
 
 	public Object getValue() {

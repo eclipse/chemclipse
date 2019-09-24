@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add even number value
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings;
 
@@ -32,6 +33,6 @@ public @interface IntSettingsProperty {
 	Validation validation() default Validation.NONE;
 
 	public enum Validation {
-		ODD_NUMBER, NONE;
+		ODD_NUMBER, EVEN_NUMBER, NONE;
 	}
 }

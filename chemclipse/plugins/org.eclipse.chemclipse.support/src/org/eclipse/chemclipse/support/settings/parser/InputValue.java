@@ -8,12 +8,17 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - support FileSettingProperty, move static helper method into class
+ * Christoph Läubrich - support FileSettingProperty, move static helper method into class, add validator support
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings.parser;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
-import org.eclipse.chemclipse.support.settings.IntegerValidation;
+import org.eclipse.core.databinding.validation.IValidator;
 
 public class InputValue {
 
@@ -21,29 +26,14 @@ public class InputValue {
 	private String name = "";
 	private String description = "";
 	private Object defaultValue;
-	/*
-	 * SettingsProperty ...
-	 */
-	private Object minValue = null;
-	private Object maxValue = null;
 	private String regularExpression = null;
-	private IntegerValidation integerValidation = null;
-	private boolean isMultiLine = false; // StringSettingsProperty
+	private boolean isMultiLine = false;
 	private FileSettingProperty fileSettingProperty;
-
-	public boolean hasMinMaxConstraint() {
-
-		return (minValue != null) && (maxValue != null);
-	}
+	private List<IValidator> validators = new ArrayList<>();
 
 	public boolean hasRegexConstraint() {
 
 		return (regularExpression != null && !"".equals(regularExpression));
-	}
-
-	public boolean hasIntegerValidation() {
-
-		return (integerValidation != null);
 	}
 
 	public Class<?> getRawType() {
@@ -89,46 +79,6 @@ public class InputValue {
 		this.defaultValue = defaultValue;
 	}
 
-	public Object getMinValue() {
-
-		return minValue;
-	}
-
-	public void setMinValue(Object minValue) {
-
-		this.minValue = minValue;
-	}
-
-	public Object getMaxValue() {
-
-		return maxValue;
-	}
-
-	public void setMaxValue(Object maxValue) {
-
-		this.maxValue = maxValue;
-	}
-
-	public String getRegularExpression() {
-
-		return regularExpression;
-	}
-
-	public void setRegularExpression(String regularExpression) {
-
-		this.regularExpression = regularExpression;
-	}
-
-	public IntegerValidation getIntegerValidation() {
-
-		return integerValidation;
-	}
-
-	public void setIntegerValidation(IntegerValidation integerValidation) {
-
-		this.integerValidation = integerValidation;
-	}
-
 	public boolean isMultiLine() {
 
 		return isMultiLine;
@@ -147,5 +97,15 @@ public class InputValue {
 	public FileSettingProperty getFileSettingProperty() {
 
 		return fileSettingProperty;
+	}
+
+	public void addValidator(IValidator validator) {
+
+		validators.add(validator);
+	}
+
+	public Collection<IValidator> getValidators() {
+
+		return Collections.unmodifiableCollection(validators);
 	}
 }
