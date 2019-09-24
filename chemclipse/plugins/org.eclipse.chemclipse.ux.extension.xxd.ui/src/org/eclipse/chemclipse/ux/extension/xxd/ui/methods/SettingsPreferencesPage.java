@@ -86,7 +86,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 				}
 				try {
 					jsonSettings = settingsUI.getControl().getSettings();
-				} catch(IOException e) {
+				} catch(Exception e) {
 					setErrorMessage(e.toString());
 					setPageComplete(false);
 				}

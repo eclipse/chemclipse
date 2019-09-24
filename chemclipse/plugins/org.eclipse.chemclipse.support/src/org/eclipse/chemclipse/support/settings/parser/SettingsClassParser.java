@@ -64,6 +64,8 @@ public class SettingsClassParser implements SettingsParser {
 		if(inputValues == null) {
 			inputValues = new ArrayList<>();
 			Class<?> clazz = getSettingclass();
+			SystemSettingsStrategy settingsStrategy = null;
+			Object defaultInstance = null;
 			if(clazz != null) {
 				ObjectMapper objectMapper = new ObjectMapper();
 				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -80,7 +82,24 @@ public class SettingsClassParser implements SettingsParser {
 						inputValue.setName((property.getName() == null) ? "" : property.getName());
 						PropertyMetadata propertyMetadata = property.getMetadata();
 						inputValue.setDescription((propertyMetadata.getDescription() == null) ? "" : propertyMetadata.getDescription());
-						inputValue.setDefaultValue((propertyMetadata.getDefaultValue() == null) ? "" : propertyMetadata.getDefaultValue());
+						Object defaultValue = propertyMetadata.getDefaultValue();
+						if(defaultValue == null) {
+							if(settingsStrategy == null) {
+								settingsStrategy = getSystemSettingsStrategy();
+							}
+							if(settingsStrategy == SystemSettingsStrategy.NEW_INSTANCE) {
+								if(defaultInstance == null) {
+									try {
+										defaultInstance = clazz.newInstance();
+									} catch(InstantiationException
+											| IllegalAccessException e) {
+										throw new RuntimeException("settingscalss " + clazz + " is annotated with SystemSettingsStrategy.NEW_INSTANCE but can't be instantiated as such!", e);
+									}
+								}
+								defaultValue = property.getGetter().getValue(defaultInstance);
+							}
+						}
+						inputValue.setDefaultValue((defaultValue == null) ? "" : defaultValue);
 						inputValues.add(inputValue);
 						/*
 						 * SettingsProperty ...
