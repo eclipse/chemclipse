@@ -24,13 +24,10 @@ public interface SpectrumMeasurement extends IComplexSignalMeasurement<SpectrumS
 	AcquisitionParameter getAcquisitionParameter();
 
 	/**
-	 * Contains the signals of this {@link SpectrumMeasurement}, ordered with the
-	 * highest ppm value first
+	 * Contains the signals of this {@link SpectrumMeasurement}, ordered with the highest ppm value first
 	 * 
 	 * @return the signals that makes up this {@link SpectrumMeasurement}
 	 */
 	@Override
 	List<? extends SpectrumSignal> getSignals();
-
-	FIDMeasurement getParent();
 }
