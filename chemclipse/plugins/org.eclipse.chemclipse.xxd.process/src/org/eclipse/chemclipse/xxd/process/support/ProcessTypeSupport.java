@@ -261,7 +261,7 @@ public class ProcessTypeSupport {
 			 * column?
 			 */
 			SubMonitor split = subMonitor.split(100);
-			SubMonitor convert = SubMonitor.convert(split, processMethod.size());
+			SubMonitor convert = SubMonitor.convert(split, processMethod.getNumberOfEntries());
 			applyProcessor(processMethod, new BiConsumer<IProcessSupplier<X>, X>() {
 
 				@Override
@@ -294,7 +294,7 @@ public class ProcessTypeSupport {
 
 	public <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, MessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Processing files", processMethod.size() * 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Processing files", processMethod.getNumberOfEntries() * 100);
 		AtomicReference<Collection<? extends IMeasurement>> result = new AtomicReference<Collection<? extends IMeasurement>>(measurements);
 		applyProcessor(processMethod, new BiConsumer<IProcessSupplier<X>, X>() {
 

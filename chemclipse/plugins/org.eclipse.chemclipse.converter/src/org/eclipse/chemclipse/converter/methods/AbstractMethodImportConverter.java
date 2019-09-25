@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,10 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - generic
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
 import org.eclipse.chemclipse.converter.core.AbstractImportConverter;
 
-public abstract class AbstractMethodImportConverter extends AbstractImportConverter implements IMethodImportConverter {
+public abstract class AbstractMethodImportConverter<T> extends AbstractImportConverter implements IMethodImportConverter<T> {
 }

@@ -51,7 +51,8 @@ public interface IFormat {
 	int METHOD_COMPRESSION_TYPE = ZipOutputStream.DEFLATED;
 	//
 	String METHOD_VERSION_0001 = "0.0.0.1";
-	String METHOD_VERSION_LATEST = METHOD_VERSION_0001;
+	String METHOD_VERSION_0002 = "0.0.0.2";
+	String METHOD_VERSION_LATEST = METHOD_VERSION_0002;
 	/*
 	 * Quantitation DB (*.ocq)
 	 */

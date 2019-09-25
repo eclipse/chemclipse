@@ -21,18 +21,20 @@ import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 
-public class MethodReader_1000 extends AbstractMethodReader {
+public class MethodReader_1001 extends AbstractMethodReader {
 
-	public MethodReader_1000() {
-		super(IFormat.METHOD_VERSION_0001);
+	public MethodReader_1001() {
+		super(IFormat.METHOD_VERSION_0002);
 	}
 
 	@Override
 	protected IProcessMethod deserialize(DataInputStream dataInputStream) throws IOException {
 
 		ProcessMethod processMethod = new ProcessMethod();
+		processMethod.setName(readString(dataInputStream));
 		processMethod.setOperator(readString(dataInputStream));
 		processMethod.setDescription(readString(dataInputStream));
+		processMethod.setCategory(readString(dataInputStream));
 		int processEntries = dataInputStream.readInt();
 		for(int i = 0; i < processEntries; i++) {
 			IProcessEntry processEntry = new ProcessEntry();
@@ -46,9 +48,6 @@ public class MethodReader_1000 extends AbstractMethodReader {
 				DataType dataType = DataType.valueOf(readString(dataInputStream));
 				processEntry.getSupportedDataTypes().add(dataType);
 			}
-			// read but ignore for backward compat
-			readString(dataInputStream);
-			readString(dataInputStream);
 			processMethod.addProcessEntry(processEntry);
 		}
 		return processMethod;

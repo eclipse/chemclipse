@@ -142,7 +142,7 @@ public class BatchJobUI {
 	public void doLoad(List<File> files, IProcessMethod processMethod) {
 
 		listUI.setFiles(files);
-		extendedMethodUI.update(processMethod);
+		extendedMethodUI.setProcessMethod(processMethod);
 		if(modificationHandler != null) {
 			modificationHandler.setDirty(false);
 		}

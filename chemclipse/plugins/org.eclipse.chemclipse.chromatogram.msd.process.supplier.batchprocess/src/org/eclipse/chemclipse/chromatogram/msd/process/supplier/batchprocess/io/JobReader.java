@@ -207,7 +207,7 @@ public class JobReader {
 				}
 			}
 			//
-			batchProcessJob.getProcessMethod().add(processEntry);
+			batchProcessJob.getProcessMethod().addProcessEntry(processEntry);
 		}
 		/*
 		 * Close the streams.

@@ -16,32 +16,37 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.methods.AbstractMethodImportConverter;
-import org.eclipse.chemclipse.converter.methods.IMethodImportConverter;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.IMethodReader;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodReader_1000;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodReader_1001;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
-public class MethodImportConverter extends AbstractMethodImportConverter implements IMethodImportConverter {
+public class MethodImportConverter extends AbstractMethodImportConverter<IProcessMethod> {
 
-	private static final Logger logger = Logger.getLogger(MethodImportConverter.class);
+	private static IMethodReader[] READER = new IMethodReader[]{new MethodReader_1001(), new MethodReader_1000()};
 
 	@Override
-	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IProcessMethod> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		SubMonitor subMonitor = SubMonitor.convert(monitor, READER.length * 100);
 		try {
-			IMethodReader reader = new MethodReader_1000();
-			IProcessMethod processMethod = reader.convert(file, monitor);
-			processingInfo.setProcessingResult(processMethod);
+			for(IMethodReader reader : READER) {
+				IProcessMethod processMethod = reader.convert(file, subMonitor.split(100));
+				if(processMethod != null) {
+					return new ProcessingInfo<IProcessMethod>(processMethod);
+				}
+			}
 		} catch(IOException e) {
-			processingInfo.addErrorMessage("Method Converter (*.ocm)", "Something has gone wrong to read the file: " + file);
-			logger.warn("Error reading file '" + file.getAbsolutePath() + "': " + e);
+			ProcessingInfo<IProcessMethod> info = new ProcessingInfo<>();
+			info.addErrorMessage("Method Converter (*.ocm)", "Something has gone wrong to read the file: " + file, e);
+			return info;
 		}
-		//
-		return processingInfo;
+		ProcessingInfo<IProcessMethod> info = new ProcessingInfo<>();
+		info.addErrorMessage("Method Converter (*.ocm)", "No avaiable converter could read: " + file);
+		return info;
 	}
 }

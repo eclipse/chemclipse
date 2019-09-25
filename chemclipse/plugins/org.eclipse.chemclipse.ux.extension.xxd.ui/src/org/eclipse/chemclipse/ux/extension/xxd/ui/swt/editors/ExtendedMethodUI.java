@@ -14,16 +14,19 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -46,6 +49,11 @@ import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePage;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ContentProposal;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.IContentProposal;
+import org.eclipse.jface.fieldassist.IContentProposalProvider;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -88,6 +96,8 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	//
 	private Composite toolbarHeader;
 	private Label labelDataInfo;
+	private Text textName;
+	private Text textCategory;
 	private Text textOperator;
 	private Text textDescription;
 	private ToolItem buttonAdd;
@@ -98,23 +108,13 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private ToolItem buttonModifySettings;
 	private MethodListUI listUI;
 	//
-	private IProcessMethod processMethod = null;
+	private ProcessMethod processMethod;
 	private IModificationHandler modificationHandler = null;
 	private Composite toolbarMain;
 	private Composite buttons;
 	protected boolean showSettingsOnAdd;
 	private ProcessTypeSupport processingSupport;
 	private DataType[] dataTypes;
-
-	@Deprecated
-	public ExtendedMethodUI(Composite parent, int style) {
-		this(parent, style, new ProcessTypeSupport());
-	}
-
-	@Deprecated
-	public ExtendedMethodUI(Composite parent, int style, ProcessTypeSupport processingSupport) {
-		this(parent, style, processingSupport, new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD});
-	}
 
 	public ExtendedMethodUI(Composite parent, int style, ProcessTypeSupport processingSupport, DataType[] dataTypes) {
 		super(parent, style);
@@ -123,9 +123,10 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		createControl();
 	}
 
-	public void update(IProcessMethod processMethod) {
+	public void setProcessMethod(IProcessMethod processMethod) {
 
-		this.processMethod = processMethod;
+		// we work on a copy here
+		this.processMethod = new ProcessMethod(processMethod);
 		updateProcessMethod();
 	}
 
@@ -240,6 +241,94 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		setDirty(true);
 	}
 
+	private Text createNameSection(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("Name:");
+		//
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");
+		text.setToolTipText("The name of this method that is used for display");
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+
+				if(processMethod != null) {
+					processMethod.setName(text.getText().trim());
+					setDirty(true);
+				}
+			}
+		});
+		//
+		return text;
+	}
+
+	private Text createCategorySection(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("Category:");
+		//
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");
+		text.setToolTipText("The category groups similar methods under a common name");
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+
+				if(processMethod != null) {
+					processMethod.setCategory(text.getText().trim());
+					setDirty(true);
+				}
+			}
+		});
+		ContentProposalAdapter adapter = new ContentProposalAdapter(text, new TextContentAdapter(), new IContentProposalProvider() {
+
+			private String[] knownCategories;
+
+			@Override
+			public IContentProposal[] getProposals(String contents, int position) {
+
+				List<ContentProposal> list = new ArrayList<>();
+				if(contents != null) {
+					String[] items = getItems();
+					for(String item : items) {
+						if(item.toLowerCase().contains(contents.toLowerCase())) {
+							list.add(new ContentProposal(item));
+						}
+					}
+				}
+				return list.toArray(new IContentProposal[0]);
+			}
+
+			private String[] getItems() {
+
+				if(knownCategories == null) {
+					Set<String> categories = new TreeSet<>();
+					List<File> files = MethodSupportUI.getMethodFiles(Activator.getDefault().getPreferenceStore());
+					for(File file : files) {
+						IProcessMethod method = Adapters.adapt(file, IProcessMethod.class);
+						if(method != null) {
+							String category = method.getCategory();
+							if(category != null && !category.isEmpty()) {
+								categories.add(category);
+							}
+						}
+					}
+					knownCategories = categories.toArray(new String[0]);
+				}
+				return knownCategories;
+			}
+		}, null, null);
+		adapter.setPropagateKeys(true);
+		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		//
+		return text;
+	}
+
 	private Text createOperatorSection(Composite parent) {
 
 		Label label = new Label(parent, SWT.NONE);
@@ -247,7 +336,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		//
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
-		text.setToolTipText("Operator");
+		text.setToolTipText("The operator is the person who has created / currently manages this method");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.addModifyListener(new ModifyListener() {
 
@@ -295,8 +384,10 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(2, false));
 		//
+		textName = createNameSection(composite);
 		textOperator = createOperatorSection(composite);
 		textDescription = createDescriptionSection(composite);
+		textCategory = createCategorySection(composite);
 		//
 		return composite;
 	}
@@ -382,7 +473,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private void deleteStep(IProcessEntry processEntry) {
 
 		if(processMethod != null) {
-			processMethod.remove(processEntry);
+			processMethod.removeProcessEntry(processEntry);
 		}
 	}
 
@@ -493,7 +584,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 						if(!edit) {
 							return;
 						}
-						processMethod.add(processEntry);
+						processMethod.addProcessEntry(processEntry);
 						updateProcessMethod();
 						select(Collections.singletonList(processEntry));
 					}
@@ -507,15 +598,17 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 		IProcessMethod method = Adapters.adapt(file, IProcessMethod.class);
 		if(method != null) {
-			processMethod.addAll(method);
+			method.forEach(processMethod::addProcessEntry);
 			updateProcessMethod();
 			select(method);
 		}
 	}
 
-	private void select(List<? extends IProcessEntry> entries) {
+	private void select(Iterable<? extends IProcessEntry> entries) {
 
-		listUI.setSelection(new StructuredSelection(entries));
+		ArrayList<IProcessEntry> list = new ArrayList<>();
+		entries.forEach(list::add);
+		listUI.setSelection(new StructuredSelection(list));
 	}
 
 	private ToolItem createCopyButton(ToolBar toolBar) {
@@ -536,7 +629,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 						if(object instanceof IProcessEntry) {
 							IProcessEntry processEntry = (IProcessEntry)object;
 							IProcessEntry processEntryCopy = new ProcessEntry(processEntry);
-							processMethod.add(index, processEntryCopy);
+							processMethod.getEntries().add(index, processEntryCopy);
 							updateProcessMethod();
 						}
 					}
@@ -562,7 +655,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 						for(Object object : listUI.getStructuredSelection().toArray()) {
 							if(object instanceof IProcessEntry) {
 								IProcessEntry processEntry = (IProcessEntry)object;
-								processMethod.remove(processEntry);
+								processMethod.removeProcessEntry(processEntry);
 							}
 						}
 						updateProcessMethod();
@@ -589,7 +682,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 					Table table = listUI.getTable();
 					ISelection selection = listUI.getSelection();
 					for(int index : table.getSelectionIndices()) {
-						Collections.swap(processMethod, index, index - 1);
+						Collections.swap(processMethod.getEntries(), index, index - 1);
 					}
 					updateProcessMethod();
 					listUI.setSelection(selection);
@@ -616,7 +709,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 					ISelection selection = listUI.getSelection();
 					for(int i = indices.length - 1; i >= 0; i--) {
 						int index = indices[i];
-						Collections.swap(processMethod, index, index + 1);
+						Collections.swap(processMethod.getEntries(), index, index + 1);
 					}
 					updateProcessMethod();
 					listUI.setSelection(selection);
@@ -649,9 +742,13 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		if(processMethod != null) {
 			textOperator.setText(processMethod.getOperator());
 			textDescription.setText(processMethod.getDescription());
+			textCategory.setText(processMethod.getCategory());
+			textName.setText(processMethod.getName());
 		} else {
 			textOperator.setText("");
 			textDescription.setText("");
+			textCategory.setText("");
+			textName.setText("");
 		}
 		//
 		listUI.setInput(processMethod);
