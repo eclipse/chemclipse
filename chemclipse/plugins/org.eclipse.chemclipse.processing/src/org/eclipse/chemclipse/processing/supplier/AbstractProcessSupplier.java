@@ -37,7 +37,11 @@ public abstract class AbstractProcessSupplier<SettingsClass> implements IProcess
 		this.description = description;
 		this.settingsClass = settingsClass;
 		this.parent = parent;
-		this.dataTypes = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(dataTypes)));
+		if(dataTypes.length == 0) {
+			this.dataTypes = EnumSet.of(DataCategory.AUTO_DETECT);
+		} else {
+			this.dataTypes = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(dataTypes)));
+		}
 	}
 
 	@Override

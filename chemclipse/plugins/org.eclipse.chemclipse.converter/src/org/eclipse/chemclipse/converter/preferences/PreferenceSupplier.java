@@ -87,7 +87,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void setListPathImport(String filterPath) {
 
-		setFilterPath(P_LIST_PATH_IMPORT, filterPath);
+		setSettings(P_LIST_PATH_IMPORT, filterPath);
 	}
 
 	public static String getListPathExport() {
@@ -97,7 +97,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void setListPathExport(String filterPath) {
 
-		setFilterPath(P_LIST_PATH_EXPORT, filterPath);
+		setSettings(P_LIST_PATH_EXPORT, filterPath);
 	}
 
 	private static String getFilterPath(String key, String def) {
@@ -106,20 +106,19 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return preferences.get(key, def);
 	}
 
-	private static void setFilterPath(String key, String filterPath) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.put(key, filterPath);
-			preferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
-	}
-
 	public static String getChromatogramExportFolder() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.get(P_CHROMATOGRAM_EXPORT_FOLDER, DEF_CHROMATOGRAM_EXPORT_FOLDER);
+	}
+
+	public static void setSettings(String key, String value) {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		preferences.put(key, value);
+		try {
+			preferences.flush();
+		} catch(BackingStoreException e) {
+		}
 	}
 }

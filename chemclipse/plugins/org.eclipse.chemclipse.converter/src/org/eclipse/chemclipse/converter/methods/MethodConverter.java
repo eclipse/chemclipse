@@ -232,11 +232,12 @@ public class MethodConverter {
 
 	public static File getUserMethodDirectory() {
 
-		return new File(PreferenceSupplier.getSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, PreferenceSupplier.DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER));
+		String settings = PreferenceSupplier.getSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, PreferenceSupplier.DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER);
+		return new File(settings);
 	}
 
 	public static void setUserMethodDirectory(File file) {
 
-		PreferenceSupplier.getSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, file.getAbsolutePath());
+		PreferenceSupplier.setSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, file.getAbsolutePath());
 	}
 }
