@@ -43,11 +43,10 @@ public class RegularExpressionValidator implements IValidator {
 					}
 					n++;
 				}
-			} else {
-				if(!regExp.matcher(string).matches()) {
-					return ValidationStatus.error(fieldName + " must match " + regExp.pattern());
-				}
+			} else if(!regExp.matcher(string).matches()) {
+				return ValidationStatus.error(fieldName + " must match " + regExp.pattern());
 			}
+			return ValidationStatus.ok();
 		}
 		return ValidationStatus.error("A value is required for " + fieldName);
 	}
