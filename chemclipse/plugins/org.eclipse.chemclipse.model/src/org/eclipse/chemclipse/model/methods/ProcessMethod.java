@@ -19,6 +19,7 @@ import java.util.List;
 
 public class ProcessMethod implements IProcessMethod {
 
+	private String UUID = java.util.UUID.randomUUID().toString();
 	private String operator = "";
 	private String description = "";
 	private String name = "";
@@ -29,7 +30,7 @@ public class ProcessMethod implements IProcessMethod {
 	}
 
 	/**
-	 * Copies all data from other into a new process method
+	 * Copies all data from other into a new process method. This does <b>NOT</b> copies the UUID but generates a new one!
 	 * 
 	 * @param other
 	 */
@@ -173,5 +174,16 @@ public class ProcessMethod implements IProcessMethod {
 		} else if(!operator.equals(other.operator))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String getUUID() {
+
+		return UUID;
+	}
+
+	public void setUUID(String UUID) {
+
+		this.UUID = UUID;
 	}
 }

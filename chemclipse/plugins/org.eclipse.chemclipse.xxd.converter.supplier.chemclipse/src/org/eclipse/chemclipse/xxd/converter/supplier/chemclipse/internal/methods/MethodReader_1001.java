@@ -31,6 +31,7 @@ public class MethodReader_1001 extends AbstractMethodReader {
 	protected IProcessMethod deserialize(DataInputStream dataInputStream) throws IOException {
 
 		ProcessMethod processMethod = new ProcessMethod();
+		processMethod.setUUID(readString(dataInputStream));
 		processMethod.setName(readString(dataInputStream));
 		processMethod.setOperator(readString(dataInputStream));
 		processMethod.setDescription(readString(dataInputStream));

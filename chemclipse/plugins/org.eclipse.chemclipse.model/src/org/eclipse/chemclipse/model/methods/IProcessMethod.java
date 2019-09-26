@@ -17,6 +17,12 @@ import java.util.Iterator;
 public interface IProcessMethod extends Iterable<IProcessEntry> {
 
 	/**
+	 * 
+	 * @return returns the methods UUID to identify the method across file-systems
+	 */
+	String getUUID();
+
+	/**
 	 * The name is used to display a label to the user
 	 * 
 	 * @return the human readable label/name
@@ -202,6 +208,12 @@ public interface IProcessMethod extends Iterable<IProcessEntry> {
 			public int hashCode() {
 
 				return delegate.hashCode();
+			}
+
+			@Override
+			public String getUUID() {
+
+				return delegate.getUUID();
 			}
 		};
 	}

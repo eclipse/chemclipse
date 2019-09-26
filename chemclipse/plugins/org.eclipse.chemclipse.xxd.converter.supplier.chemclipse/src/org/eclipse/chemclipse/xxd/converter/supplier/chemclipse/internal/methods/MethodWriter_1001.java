@@ -29,6 +29,7 @@ public class MethodWriter_1001 extends AbstractMethodWriter {
 	@Override
 	protected void serializeData(IProcessMethod processMethod, DataOutputStream dataOutputStream) throws IOException {
 
+		writeString(dataOutputStream, processMethod.getUUID());
 		writeString(dataOutputStream, processMethod.getName());
 		writeString(dataOutputStream, processMethod.getOperator());
 		writeString(dataOutputStream, processMethod.getDescription());
