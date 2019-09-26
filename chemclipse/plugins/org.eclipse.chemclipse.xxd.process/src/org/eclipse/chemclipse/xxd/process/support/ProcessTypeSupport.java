@@ -16,7 +16,6 @@ package org.eclipse.chemclipse.xxd.process.support;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -24,9 +23,6 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
-import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
@@ -34,16 +30,14 @@ import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.supplier.IMeasurementProcessSupplier;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
-import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 import org.eclipse.chemclipse.xxd.process.Activator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -56,6 +50,7 @@ import org.osgi.service.prefs.Preferences;
 
 public class ProcessTypeSupport {
 
+	public static final SettingsSerialization DEFAULT_SETTINGS_SERIALIZATION = new JSONSerialization();
 	private static final String KEY_USE_SYSTEM_DEFAULTS = "useSystemDefaults";
 	private static final String KEY_USER_SETTINGS = "userSettings";
 	private static final String KEY_ASK_FOR_SETTINGS = "askForSettings";
@@ -198,7 +193,7 @@ public class ProcessTypeSupport {
 				@Override
 				public void accept(IProcessSupplier<X> processSupplier, X settings) {
 
-					applyProcessor(chromatogramSelection, processSupplier, settings, processingInfo, convert.split(1));
+					IChromatogramSelectionProcessSupplier.applyProcessor(chromatogramSelection, processSupplier, settings, processingInfo, convert.split(1));
 				}
 			}, processingInfo);
 		}
@@ -214,7 +209,7 @@ public class ProcessTypeSupport {
 			@Override
 			public void accept(IProcessSupplier<X> processor, X settings) {
 
-				result.set(applyProcessor(result.get(), processor, settings, messageConsumer, subMonitor.split(100)));
+				result.set(IMeasurementProcessSupplier.applyProcessor(result.get(), processor, settings, messageConsumer, subMonitor.split(100)));
 			}
 		}, messageConsumer);
 		return result.get();
@@ -260,40 +255,6 @@ public class ProcessTypeSupport {
 			}
 			return ValidationStatus.ok();
 		}
-	}
-
-	public static <T> IChromatogramSelection<?, ?> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessSupplier<T> supplier, T processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
-
-		if(supplier instanceof IChromatogramSelectionProcessSupplier<?>) {
-			IChromatogramSelectionProcessSupplier<T> chromatogramSelectionProcessSupplier = (IChromatogramSelectionProcessSupplier<T>)supplier;
-			return chromatogramSelectionProcessSupplier.apply(chromatogramSelection, processSettings, messageConsumer, monitor);
-		}
-		if(supplier instanceof IMeasurementProcessSupplier<?>) {
-			IMeasurementProcessSupplier<T> measurementProcessSupplier = (IMeasurementProcessSupplier<T>)supplier;
-			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-			Collection<? extends IMeasurement> collection = measurementProcessSupplier.applyProcessor(Collections.singleton(chromatogram), processSettings, messageConsumer, monitor);
-			for(IMeasurement measurement : collection) {
-				if(measurement == chromatogram) {
-					return chromatogramSelection;
-				} else if(measurement instanceof IChromatogramMSD) {
-					return new ChromatogramSelectionMSD((IChromatogramMSD)measurement);
-				} else if(measurement instanceof IChromatogramCSD) {
-					return new ChromatogramSelectionCSD((IChromatogramCSD)measurement);
-				} else if(measurement instanceof IChromatogramWSD) {
-					return new ChromatogramSelectionWSD((IChromatogramWSD)measurement);
-				}
-			}
-		}
-		return chromatogramSelection;
-	}
-
-	public static <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessSupplier<X> supplier, X processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
-
-		if(supplier instanceof IMeasurementProcessSupplier<?>) {
-			IMeasurementProcessSupplier<X> measurementProcessSupplier = (IMeasurementProcessSupplier<X>)supplier;
-			return measurementProcessSupplier.applyProcessor(measurements, processSettings, messageConsumer, monitor);
-		}
-		return measurements;
 	}
 
 	private static final class ProcessEntryProcessorPreferences<T> implements ProcessorPreferences<T> {
@@ -358,6 +319,12 @@ public class ProcessTypeSupport {
 		public String getUserSettingsAsString() {
 
 			return processEntry.getJsonSettings();
+		}
+
+		@Override
+		public SettingsSerialization getSerialization() {
+
+			return DEFAULT_SETTINGS_SERIALIZATION;
 		}
 	}
 
@@ -458,6 +425,12 @@ public class ProcessTypeSupport {
 		public IProcessSupplier<T> getSupplier() {
 
 			return supplier;
+		}
+
+		@Override
+		public SettingsSerialization getSerialization() {
+
+			return DEFAULT_SETTINGS_SERIALIZATION;
 		}
 	}
 }

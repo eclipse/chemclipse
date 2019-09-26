@@ -11,7 +11,9 @@ Export-Package: org.eclipse.chemclipse.processing;version="1.0.0",
  org.eclipse.chemclipse.processing.detector;version="1.0.0",
  org.eclipse.chemclipse.processing.filter;version="1.0.0",
  org.eclipse.chemclipse.processing.supplier;version="1.0.0"
-Import-Package: org.eclipse.chemclipse.support.settings.parser,
+Import-Package: org.eclipse.chemclipse.support.settings,
+ org.eclipse.chemclipse.support.settings.parser,
+ org.eclipse.chemclipse.support.settings.serialization,
  org.osgi.service.component.annotations;version="[1.0.0,2.0.0)"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiFilterFactory.xml
 Bundle-ActivationPolicy: lazy

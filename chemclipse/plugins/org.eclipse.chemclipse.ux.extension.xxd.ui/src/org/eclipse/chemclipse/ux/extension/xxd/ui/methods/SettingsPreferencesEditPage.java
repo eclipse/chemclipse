@@ -19,10 +19,10 @@ import java.util.TreeMap;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences.DialogBehavior;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
-import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences.DialogBehavior;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;

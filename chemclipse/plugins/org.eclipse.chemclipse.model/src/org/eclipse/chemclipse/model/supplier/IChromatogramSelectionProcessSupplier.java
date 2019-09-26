@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.supplier;
 
+import java.util.Collections;
+
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
@@ -30,4 +33,18 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 	 * @return the processed {@link IChromatogramSelection}
 	 */
 	IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, SettingType processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor);
+
+	public static <T> IChromatogramSelection<?, ?> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessSupplier<T> supplier, T processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+
+		if(supplier instanceof IChromatogramSelectionProcessSupplier<?>) {
+			IChromatogramSelectionProcessSupplier<T> chromatogramSelectionProcessSupplier = (IChromatogramSelectionProcessSupplier<T>)supplier;
+			return chromatogramSelectionProcessSupplier.apply(chromatogramSelection, processSettings, messageConsumer, monitor);
+		}
+		if(supplier instanceof IMeasurementProcessSupplier<?>) {
+			IMeasurementProcessSupplier<T> measurementProcessSupplier = (IMeasurementProcessSupplier<T>)supplier;
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+			measurementProcessSupplier.applyProcessor(Collections.singleton(chromatogram), processSettings, messageConsumer, monitor);
+		}
+		return chromatogramSelection;
+	}
 }

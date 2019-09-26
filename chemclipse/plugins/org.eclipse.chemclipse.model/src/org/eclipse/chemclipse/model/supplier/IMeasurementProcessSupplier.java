@@ -36,4 +36,13 @@ public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplie
 	 * @return the collection of processed measurements
 	 */
 	Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, ConfigType processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor);
+
+	public static <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessSupplier<X> supplier, X processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+
+		if(supplier instanceof IMeasurementProcessSupplier<?>) {
+			IMeasurementProcessSupplier<X> measurementProcessSupplier = (IMeasurementProcessSupplier<X>)supplier;
+			return measurementProcessSupplier.applyProcessor(measurements, processSettings, messageConsumer, monitor);
+		}
+		return measurements;
+	}
 }

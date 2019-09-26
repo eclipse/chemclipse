@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.IOException;
 
-import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Listener;

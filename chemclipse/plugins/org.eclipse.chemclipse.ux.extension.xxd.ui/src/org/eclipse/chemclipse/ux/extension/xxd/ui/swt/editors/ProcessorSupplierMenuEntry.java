@@ -18,6 +18,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
@@ -74,7 +75,7 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 						DefaultProcessingResult<Object> msgs = new DefaultProcessingResult<>();
-						ProcessTypeSupport.applyProcessor(chromatogramSelection, processorSupplier, settings, msgs, monitor);
+						IChromatogramSelectionProcessSupplier.applyProcessor(chromatogramSelection, processorSupplier, settings, msgs, monitor);
 						updateResult(shell, msgs);
 					}
 				}, shell);

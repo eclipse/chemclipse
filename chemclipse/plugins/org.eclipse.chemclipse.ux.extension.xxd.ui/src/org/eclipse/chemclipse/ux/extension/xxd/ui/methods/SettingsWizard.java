@@ -18,9 +18,9 @@ import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences.DialogBehavior;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
-import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
-import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences.DialogBehavior;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
