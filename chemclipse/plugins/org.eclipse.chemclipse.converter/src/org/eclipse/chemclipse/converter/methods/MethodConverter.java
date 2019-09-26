@@ -12,13 +12,19 @@
 package org.eclipse.chemclipse.converter.methods;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -64,13 +70,11 @@ public class MethodConverter {
 		MethodConverterSupport converterSupport = getMethodConverterSupport();
 		for(ISupplier supplier : converterSupport.getSupplier()) {
 			//
-
 			IProcessingInfo<IProcessMethod> processinInfo = convert(file, supplier.getId(), monitor);
 			IProcessMethod processMethod = processinInfo.getProcessingResult();
 			if(processMethod != null) {
 				return processinInfo;
 			}
-
 		}
 		//
 		return getNoImportConverterAvailableProcessingInfo(file);
@@ -93,13 +97,13 @@ public class MethodConverter {
 		IProcessingInfo processingInfo = null;
 		MethodConverterSupport converterSupport = getMethodConverterSupport();
 		exitloop:
-			for(ISupplier supplier : converterSupport.getSupplier()) {
-				if(supplier.isExportable() && supplier.getId().equals(converterId)) {
-					IMethodExportConverter exportConverter = getMethodExportConverter(converterId);
-					processingInfo = exportConverter.convert(file, processMethod, monitor);
-					break exitloop;
-				}
+		for(ISupplier supplier : converterSupport.getSupplier()) {
+			if(supplier.isExportable() && supplier.getId().equals(converterId)) {
+				IMethodExportConverter exportConverter = getMethodExportConverter(converterId);
+				processingInfo = exportConverter.convert(file, processMethod, monitor);
+				break exitloop;
 			}
+		}
 		//
 		if(processingInfo == null) {
 			processingInfo = getNoExportConverterAvailableProcessingInfo(file);
@@ -201,5 +205,38 @@ public class MethodConverter {
 			magicNumberMatcher = null;
 		}
 		return magicNumberMatcher;
+	}
+
+	public static Collection<IProcessMethod> getUserMethods() {
+
+		List<IProcessMethod> methodFiles = new ArrayList<>();
+		File directory = getUserMethodDirectory();
+		if(directory.exists() && directory.isDirectory()) {
+			try {
+				String[] extensions = MethodConverter.getMethodConverterSupport().getFilterExtensions();
+				for(File file : directory.listFiles()) {
+					for(String extension : extensions) {
+						if(file.getName().toLowerCase().endsWith(extension.toLowerCase())) {
+							IProcessMethod adapt = Adapters.adapt(file, IProcessMethod.class);
+							if(adapt != null) {
+								methodFiles.add(adapt);
+							}
+						}
+					}
+				}
+			} catch(NoConverterAvailableException e) {
+			}
+		}
+		return methodFiles;
+	}
+
+	public static File getUserMethodDirectory() {
+
+		return new File(PreferenceSupplier.getSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, PreferenceSupplier.DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER));
+	}
+
+	public static void setUserMethodDirectory(File file) {
+
+		PreferenceSupplier.getSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, file.getAbsolutePath());
 	}
 }

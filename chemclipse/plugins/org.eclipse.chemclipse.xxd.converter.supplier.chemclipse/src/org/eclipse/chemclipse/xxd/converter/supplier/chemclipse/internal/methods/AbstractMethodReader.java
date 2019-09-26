@@ -36,7 +36,7 @@ public abstract class AbstractMethodReader implements IMethodReader {
 
 		try (ZipFile zipFile = new ZipFile(file)) {
 			if(isValidFileFormat(zipFile)) {
-				return readData(zipFile);
+				return readData(zipFile, file);
 			}
 		}
 		return null;
@@ -54,10 +54,10 @@ public abstract class AbstractMethodReader implements IMethodReader {
 		return isValid;
 	}
 
-	private IProcessMethod readData(ZipFile zipFile) throws IOException {
+	private IProcessMethod readData(ZipFile zipFile, File file) throws IOException {
 
 		try (DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_PROCESS_METHOD)) {
-			return deserialize(dataInputStream);
+			return deserialize(dataInputStream, file);
 		}
 	}
 
@@ -89,5 +89,5 @@ public abstract class AbstractMethodReader implements IMethodReader {
 		return builder.toString();
 	}
 
-	protected abstract IProcessMethod deserialize(DataInputStream dataInputStream) throws IOException;
+	protected abstract IProcessMethod deserialize(DataInputStream dataInputStream, File file) throws IOException;
 }

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.methods;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -25,6 +26,7 @@ public class ProcessMethod implements IProcessMethod {
 	private String name = "";
 	private String category = "";
 	private List<IProcessEntry> entries = new ArrayList<>();
+	private File sourceFile;
 
 	public ProcessMethod() {
 	}
@@ -77,6 +79,11 @@ public class ProcessMethod implements IProcessMethod {
 	@Override
 	public String getName() {
 
+		if(name.isEmpty()) {
+			if(sourceFile != null) {
+				return sourceFile.getName();
+			}
+		}
 		return name;
 	}
 
@@ -136,6 +143,16 @@ public class ProcessMethod implements IProcessMethod {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((operator == null) ? 0 : operator.hashCode());
 		return result;
+	}
+
+	public void setSourceFile(File sourceFile) {
+
+		this.sourceFile = sourceFile;
+	}
+
+	public File getSourceFile() {
+
+		return sourceFile;
 	}
 
 	@Override

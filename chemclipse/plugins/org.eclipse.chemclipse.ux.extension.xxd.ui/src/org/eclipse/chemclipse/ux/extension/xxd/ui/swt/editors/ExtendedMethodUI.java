@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -35,9 +36,7 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
@@ -308,14 +307,10 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 				if(knownCategories == null) {
 					Set<String> categories = new TreeSet<>();
-					List<File> files = MethodSupportUI.getMethodFiles(Activator.getDefault().getPreferenceStore());
-					for(File file : files) {
-						IProcessMethod method = Adapters.adapt(file, IProcessMethod.class);
-						if(method != null) {
-							String category = method.getCategory();
-							if(category != null && !category.isEmpty()) {
-								categories.add(category);
-							}
+					for(IProcessMethod method : MethodConverter.getUserMethods()) {
+						String category = method.getCategory();
+						if(category != null && !category.isEmpty()) {
+							categories.add(category);
 						}
 					}
 					knownCategories = categories.toArray(new String[0]);
@@ -528,16 +523,16 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				for(MenuItem menuItem : menu.getItems()) {
 					menuItem.dispose();
 				}
-				List<File> files = MethodSupportUI.getMethodFiles(Activator.getDefault().getPreferenceStore());
-				for(File file : files) {
+				Collection<IProcessMethod> userMethods = MethodConverter.getUserMethods();
+				for(IProcessMethod method : userMethods) {
 					MenuItem menuItem = new MenuItem(menu, SWT.NONE);
-					menuItem.setText(file.getName());
+					menuItem.setText(method.getName());
 					menuItem.addSelectionListener(new SelectionListener() {
 
 						@Override
 						public void widgetSelected(SelectionEvent e) {
 
-							loadMethodFile(file);
+							loadMethodFile(method);
 						}
 
 						@Override
@@ -546,7 +541,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 						}
 					});
 				}
-				if(!files.isEmpty()) {
+				if(!userMethods.isEmpty()) {
 					new MenuItem(menu, SWT.SEPARATOR);
 				}
 				MenuItem loadItem = new MenuItem(menu, SWT.NONE);
@@ -565,7 +560,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 						String filePath = fileDialog.open();
 						if(filePath != null) {
 							File file = new File(filePath);
-							loadMethodFile(file);
+							loadMethodFile(Adapters.adapt(file, IProcessMethod.class));
 						}
 					}
 
@@ -594,9 +589,8 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		return item;
 	}
 
-	public void loadMethodFile(File file) {
+	public void loadMethodFile(IProcessMethod method) {
 
-		IProcessMethod method = Adapters.adapt(file, IProcessMethod.class);
 		if(method != null) {
 			method.forEach(processMethod::addProcessEntry);
 			updateProcessMethod();

@@ -32,6 +32,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_LIST_PATH_EXPORT = "";
 	public static final String P_CHROMATOGRAM_EXPORT_FOLDER = "chromatogramExportFolder";
 	public static final String DEF_CHROMATOGRAM_EXPORT_FOLDER = "";
+	public static final String P_METHOD_EXPLORER_PATH_ROOT_FOLDER = "methodExplorerPathRootFolder";
+	public static final String DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER = "";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -62,6 +64,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 		defaultValues.put(P_CHROMATOGRAM_EXPORT_FOLDER, DEF_CHROMATOGRAM_EXPORT_FOLDER);
+		defaultValues.put(P_METHOD_EXPLORER_PATH_ROOT_FOLDER, DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER);
 		return defaultValues;
 	}
 

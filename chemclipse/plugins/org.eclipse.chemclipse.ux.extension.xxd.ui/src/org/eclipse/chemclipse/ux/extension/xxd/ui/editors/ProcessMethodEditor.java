@@ -79,6 +79,7 @@ public class ProcessMethodEditor implements IModificationHandler {
 		if(processMethodFile != null) {
 			IProcessMethod oldMethod = currentProcessMethod;
 			ProcessMethod newMethod = new ProcessMethod(extendedMethodUI.getProcessMethod());
+			newMethod.setSourceFile(processMethodFile);
 			// copy the UUID from the old method to keep the file consistent
 			newMethod.setUUID(oldMethod.getUUID());
 			IProcessingInfo<?> info = MethodConverter.convert(processMethodFile, newMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());

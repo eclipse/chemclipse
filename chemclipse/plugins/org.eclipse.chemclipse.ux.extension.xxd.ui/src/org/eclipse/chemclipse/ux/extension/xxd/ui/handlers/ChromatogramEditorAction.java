@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.handlers;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -44,44 +44,41 @@ public class ChromatogramEditorAction<T> extends AbstractChromatogramEditorActio
 	@Override
 	public IProcessingInfo<T> applyAction(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		//
-		String directoryPath = preferenceStore.getString(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER);
 		String selectedMethod = preferenceStore.getString(PreferenceConstants.P_SELECTED_METHOD_NAME);
-		File file = new File(directoryPath + File.separator + selectedMethod);
-		if(file.exists()) {
-			try {
-				ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
-				dialog.run(false, false, new IRunnableWithProgress() {
+		Collection<IProcessMethod> userMethods = MethodConverter.getUserMethods();
+		for(IProcessMethod method : userMethods) {
+			if(method.getName().equals(selectedMethod)) {
+				IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
+				try {
+					ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
+					dialog.run(false, false, new IRunnableWithProgress() {
 
-					@Override
-					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						@Override
+						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, monitor);
-						if(!processingInfo.hasErrorMessages()) {
 							try {
-								IProcessMethod processMethod = processingInfo.getProcessingResult();
-								IProcessingInfo<IProcessMethod> processorInfo = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+								IProcessingInfo<IProcessMethod> processorInfo = processTypeSupport.applyProcessor(chromatogramSelection, method, monitor);
 								if(processorInfo.hasErrorMessages()) {
 									processingInfo.addMessages(processorInfo);
 								} else {
-									processingInfo.addInfoMessage(DESCRIPTION, "Success processing file: " + file);
+									processingInfo.addInfoMessage(DESCRIPTION, "Success processing file: " + method.getName());
 								}
 							} catch(Exception e) {
 								logger.error(e.getLocalizedMessage(), e);
 							}
 						}
-					}
-				});
-			} catch(InvocationTargetException e) {
-				logger.error(e.getLocalizedMessage(), e);
-			} catch(InterruptedException e) {
-				logger.error(e.getLocalizedMessage(), e);
+					});
+				} catch(InvocationTargetException e) {
+					logger.error(e.getLocalizedMessage(), e);
+				} catch(InterruptedException e) {
+					logger.error(e.getLocalizedMessage(), e);
+				}
+				return processingInfo;
 			}
-		} else {
-			processingInfo.addErrorMessage(DESCRIPTION, "It seems that no method has been selected yet.");
 		}
-		//
-		return processingInfo;
+		ProcessingInfo<T> errorInfo = new ProcessingInfo<>();
+		errorInfo.addErrorMessage(DESCRIPTION, "It seems that no method has been selected yet.");
+		return errorInfo;
 	}
 }

@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods;
 
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
@@ -28,9 +29,10 @@ public class MethodReader_1000 extends AbstractMethodReader {
 	}
 
 	@Override
-	protected IProcessMethod deserialize(DataInputStream dataInputStream) throws IOException {
+	protected IProcessMethod deserialize(DataInputStream dataInputStream, File file) throws IOException {
 
 		ProcessMethod processMethod = new ProcessMethod();
+		processMethod.setSourceFile(file);
 		processMethod.setOperator(readString(dataInputStream));
 		processMethod.setDescription(readString(dataInputStream));
 		int processEntries = dataInputStream.readInt();

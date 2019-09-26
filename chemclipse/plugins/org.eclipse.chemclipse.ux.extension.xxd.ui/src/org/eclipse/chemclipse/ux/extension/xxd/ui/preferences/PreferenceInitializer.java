@@ -341,7 +341,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		/*
 		 * Methods
 		 */
-		store.setDefault(PreferenceConstants.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, PreferenceConstants.DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER);
 		store.setDefault(PreferenceConstants.P_SELECTED_METHOD_NAME, PreferenceConstants.DEF_SELECTED_METHOD_NAME);
 		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_CSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_CSD);
 		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_MSD);
