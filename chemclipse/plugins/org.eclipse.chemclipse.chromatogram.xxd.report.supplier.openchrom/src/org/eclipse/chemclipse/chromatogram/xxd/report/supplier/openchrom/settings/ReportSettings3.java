@@ -12,13 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings;
 
-import org.eclipse.chemclipse.chromatogram.xxd.report.settings.AbstractChromatogramReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.settings.DefaultChromatogramReportSettings;
 
-public class ReportSettings3 extends AbstractChromatogramReportSettings {
-
-	@Override
-	protected String getDefaultFolder() {
-
-		return org.eclipse.chemclipse.xxd.process.preferences.PreferenceSupplier.getReportExportFolder();
-	}
+public class ReportSettings3 extends DefaultChromatogramReportSettings {
 }

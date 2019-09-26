@@ -14,12 +14,12 @@ package org.eclipse.chemclipse.xxd.process.comparators;
 
 import java.util.Comparator;
 
-import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 
-public class NameComparator implements Comparator<IProcessSupplier> {
+public class NameComparator implements Comparator<IProcessSupplier<?>> {
 
 	@Override
-	public int compare(IProcessSupplier supplier1, IProcessSupplier supplier2) {
+	public int compare(IProcessSupplier<?> supplier1, IProcessSupplier<?> supplier2) {
 
 		return supplier1.getName().compareTo(supplier2.getName());
 	}

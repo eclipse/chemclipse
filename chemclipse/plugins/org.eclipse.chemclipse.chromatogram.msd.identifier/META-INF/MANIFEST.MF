@@ -23,3 +23,6 @@ Export-Package: org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram,
  org.eclipse.chemclipse.chromatogram.msd.identifier.settings,
  org.eclipse.chemclipse.chromatogram.msd.identifier.support
 Bundle-Vendor: ChemClipse
+Import-Package: org.osgi.service.component.annotations;version="1.2.0"
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifierMSDProcessTypeSupplier.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram.ChromatogramIdentifierProcessTypeSupplier.xml

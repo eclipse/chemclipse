@@ -16,3 +16,6 @@ Export-Package: org.eclipse.chemclipse.chromatogram.msd.classifier.core,
  org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions,
  org.eclipse.chemclipse.chromatogram.msd.classifier.result,
  org.eclipse.chemclipse.chromatogram.msd.classifier.settings
+Import-Package: org.eclipse.chemclipse.support.settings.parser,
+ org.osgi.service.component.annotations;version="1.2.0"
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.msd.classifier.core.ChromatogramClassifierProcessTypeSupport.xml

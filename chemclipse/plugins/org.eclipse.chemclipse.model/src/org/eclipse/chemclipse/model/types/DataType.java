@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.types;
 
+import org.eclipse.chemclipse.processing.DataCategory;
+
 public enum DataType {
 	AUTO_DETECT, // Auto-Detect
 	MSD_NOMINAL, // Quadrupole, Ion Trap
@@ -26,4 +28,38 @@ public enum DataType {
 	SEQ, // Sequences
 	MTH, // Methods
 	QDB // Quantitation Databases
+	;
+
+	public static DataType fromDataCategory(DataCategory category) {
+
+		switch(category) {
+			case MSD:
+				return DataType.MSD;
+			case WSD:
+				return DataType.WSD;
+			case CSD:
+				return DataType.CSD;
+			case FID:
+			case NMR:
+				return DataType.NMR;
+			default:
+				return DataType.AUTO_DETECT;
+		}
+	}
+
+	public DataCategory toDataCategory() {
+
+		switch(this) {
+			case MSD:
+				return DataCategory.MSD;
+			case WSD:
+				return DataCategory.WSD;
+			case CSD:
+				return DataCategory.CSD;
+			case NMR:
+				return DataCategory.NMR;
+			default:
+				return DataCategory.AUTO_DETECT;
+		}
+	}
 }

@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.xxd.process;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;

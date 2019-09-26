@@ -46,7 +46,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodListUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodUIConfig;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
-import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ContentProposal;
@@ -823,7 +823,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public IPreferencePage[] getPreferencePages() {
 
-				IPreferencePage preferencePageProcessing = new PreferencePage();
+				IPreferencePage preferencePageProcessing = new PreferencePageReportExport();
 				preferencePageProcessing.setTitle("Processing");
 				//
 				IPreferencePage preferencePageMethods = new PreferencePageMethods();

@@ -5,9 +5,15 @@
          point="org.eclipse.ui.preferencePages">
       <page
       		category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"      
-            class="org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePage"
+            class="org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport"
             id="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
-            name="Process">
+            name="Chromatogram Report Export Path">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatogramExport"
+            id="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
+            name="Chromatogram Export Path">
       </page>
    </extension>
    

@@ -17,3 +17,6 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core,
  org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.exceptions,
  org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings
 Bundle-Vendor: ChemClipse
+Import-Package: org.eclipse.chemclipse.support.settings.parser,
+ org.osgi.service.component.annotations;version="1.2.0"
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetectorProcessTypeSupplier.xml

@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +25,12 @@ import java.util.TreeMap;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
-import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
-import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -54,7 +54,7 @@ public class ProcessingWizardPage extends WizardPage {
 	private ComboViewer comboViewerCategory;
 	private ComboViewer comboViewerProcessor;
 	private ProcessTypeSupport processTypeSupport;
-	private Set<DataType> selectedDataTypes = new HashSet<>();
+	private Set<DataCategory> selectedDataTypes = new HashSet<>();
 	private List<Button> dataTypeSelections = new ArrayList<>();
 	private ProcessEntry processEntry;
 	private DataType[] dataTypes;
@@ -166,18 +166,18 @@ public class ProcessingWizardPage extends WizardPage {
 		}
 		selectedDataTypes.clear();
 		if(dataTypes.length == 1) {
-			selectedDataTypes.add(dataTypes[0]);
+			selectedDataTypes.add(dataTypes[0].toDataCategory());
 		} else {
 			for(Button button : dataTypeSelections) {
 				button.setEnabled(true);
 				if(button.getSelection()) {
-					selectedDataTypes.add((DataType)button.getData());
+					selectedDataTypes.add(((DataType)button.getData()).toDataCategory());
 				}
 			}
 		}
-		List<IProcessTypeSupplier> processTypeSuppliers = processTypeSupport.getProcessorTypeSuppliers(selectedDataTypes);
+		Set<IProcessSupplier<?>> processTypeSuppliers = processTypeSupport.getSupplier(EnumSet.copyOf(selectedDataTypes));
 		Map<String, ProcessCategory> categories = new TreeMap<>();
-		for(IProcessTypeSupplier supplier : processTypeSuppliers) {
+		for(IProcessSupplier<?> supplier : processTypeSuppliers) {
 			String category = supplier.getCategory();
 			ProcessCategory processCategory = categories.get(category);
 			if(processCategory == null) {
@@ -290,7 +290,9 @@ public class ProcessingWizardPage extends WizardPage {
 			processEntry.setProcessorId(processorSupplier.getId());
 			processEntry.setName(processorSupplier.getName());
 			processEntry.setDescription(processorSupplier.getDescription());
-			processEntry.getSupportedDataTypes().addAll(processorSupplier.getSupportedDataTypes());
+			for(DataCategory category : processorSupplier.getSupportedDataTypes()) {
+				processEntry.getSupportedDataTypes().add(DataType.fromDataCategory(category));
+			}
 			setMessage(processorSupplier.getDescription());
 		} else {
 			processEntry = null;
@@ -337,17 +339,15 @@ public class ProcessingWizardPage extends WizardPage {
 			this.name = name;
 		}
 
-		public void addSupplier(IProcessTypeSupplier supplier, Collection<DataType> dataTypes) {
+		public void addSupplier(IProcessSupplier<?> supplier, Set<DataCategory> selectedDataTypes) {
 
-			for(IProcessSupplier<?> processSupplier : supplier.getProcessorSuppliers()) {
-				for(DataType dataType : dataTypes) {
-					if(processSupplier.getSupportedDataTypes().contains(dataType)) {
-						processorSuppliers.add(processSupplier);
-						break;
-					}
+			for(DataCategory dataType : selectedDataTypes) {
+				if(supplier.getSupportedDataTypes().contains(dataType)) {
+					processorSuppliers.add(supplier);
+					Collections.sort(processorSuppliers, COMPARATOR);
+					return;
 				}
 			}
-			Collections.sort(processorSuppliers, COMPARATOR);
 		}
 	}
 }

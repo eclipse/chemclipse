@@ -5,10 +5,7 @@ Bundle-SymbolicName: org.eclipse.chemclipse.support;singleton:=true
 Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.support.Activator
 Bundle-Vendor: %Bundle-Vendor
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.chemclipse.logging;bundle-version="0.8.0",
- org.eclipse.e4.core.services;bundle-version="1.1.0",
- org.eclipse.core.databinding;bundle-version="1.6.0"
+Require-Bundle: org.eclipse.chemclipse.logging;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.support.comparator,
@@ -31,4 +28,9 @@ Import-Package: com.fasterxml.jackson.annotation;version="2.5.0",
  com.fasterxml.jackson.core;version="2.5.0",
  com.fasterxml.jackson.databind;version="2.5.0",
  com.fasterxml.jackson.databind.cfg;version="2.7.1",
- com.fasterxml.jackson.databind.introspect;version="2.7.1"
+ com.fasterxml.jackson.databind.introspect;version="2.7.1",
+ org.eclipse.core.databinding.validation,
+ org.eclipse.core.runtime;version="3.5.0",
+ org.eclipse.core.runtime.preferences;version="3.3.0",
+ org.osgi.framework;version="1.8.0",
+ org.osgi.service.prefs;version="1.1.1"

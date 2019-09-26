@@ -18,15 +18,11 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageProvider;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
-import org.eclipse.chemclipse.xxd.process.support.IChromatogramSelectionProcessTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
-import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -37,22 +33,20 @@ import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
 public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implements IChartMenuEntry {
 
-	private IProcessTypeSupplier typeSupplier;
-	private IProcessSupplier<T> processorSupplier;
-	private Supplier<IChromatogramSelection<?, ?>> supplier;
-	private BiConsumer<IRunnableWithProgress, Shell> executionConsumer;
+	private final IProcessSupplier<T> processorSupplier;
+	private final Supplier<IChromatogramSelection<?, ?>> supplier;
+	private final BiConsumer<IRunnableWithProgress, Shell> executionConsumer;
 
-	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessTypeSupplier typeSupplier, IProcessSupplier<T> processorSupplier) {
+	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessSupplier<T> processorSupplier) {
 		this.supplier = chromatogramSupplier;
 		this.executionConsumer = executionConsumer;
-		this.typeSupplier = typeSupplier;
 		this.processorSupplier = processorSupplier;
 	}
 
 	@Override
 	public String getCategory() {
 
-		return typeSupplier.getCategory();
+		return processorSupplier.getCategory();
 	}
 
 	@Override
@@ -79,20 +73,13 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						IProcessSettings processSettings;
-						if(settings instanceof IProcessSettings) {
-							processSettings = (IProcessSettings)settings;
-						} else {
-							processSettings = null;
-						}
-						if(typeSupplier instanceof IChromatogramSelectionProcessTypeSupplier) {
-							IProcessingInfo<?> result = ((IChromatogramSelectionProcessTypeSupplier)typeSupplier).applyProcessor(chromatogramSelection, processorSupplier.getId(), processSettings, monitor);
-							updateResult(shell, result);
-						}
+						DefaultProcessingResult<Object> msgs = new DefaultProcessingResult<>();
+						ProcessTypeSupport.applyProcessor(chromatogramSelection, processorSupplier, settings, msgs, monitor);
+						updateResult(shell, msgs);
 					}
 				}, shell);
 			} catch(CancellationException e) {
-				// user has canceld so cance the action as well
+				// user has canceled so cancel the action as well
 				return;
 			} catch(IOException e) {
 				DefaultProcessingResult<Object> result = new DefaultProcessingResult<>();

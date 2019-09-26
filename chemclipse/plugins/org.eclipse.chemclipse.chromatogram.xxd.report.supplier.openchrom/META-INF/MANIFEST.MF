@@ -20,5 +20,4 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchro
  org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.io,
  org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences,
  org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings
-Import-Package: com.fasterxml.jackson.annotation;version="2.7.1",
- org.eclipse.chemclipse.xxd.process.preferences
+Import-Package: com.fasterxml.jackson.annotation;version="2.7.1"

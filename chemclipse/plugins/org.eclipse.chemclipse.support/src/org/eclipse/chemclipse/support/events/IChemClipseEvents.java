@@ -8,37 +8,38 @@
  * 
  * Contributors:
  * chemclipse - initial API and implementation
+ * Christoph Läubrich - remove dependency on IEventbroker
  *******************************************************************************/
 package org.eclipse.chemclipse.support.events;
 
-import org.eclipse.e4.core.services.events.IEventBroker;
-
 public interface IChemClipseEvents {
 
+	// copied from IEventBroker to prevent dependency on E4
+	public static String IEVENTBROKER_DATA = "org.eclipse.e4.data";
 	/*
 	 * Properties
 	 */
-	String PROPERTY_PERSPECTIVE_NAME = IEventBroker.DATA; // String
-	String PROPERTY_VIEW_NAME = IEventBroker.DATA; // String
+	String PROPERTY_PERSPECTIVE_NAME = IEVENTBROKER_DATA; // String
+	String PROPERTY_VIEW_NAME = IEVENTBROKER_DATA; // String
 	//
-	String PROPERTY_CHROMATOGRAM_MSD_RAWFILE = IEventBroker.DATA; // File
-	String PROPERTY_CHROMATOGRAM_CSD_RAWFILE = IEventBroker.DATA; // File
-	String PROPERTY_CHROMATOGRAM_WSD_RAWFILE = IEventBroker.DATA; // File
-	String PROPERTY_CHROMATOGRAM_XXD_RAWFILE = IEventBroker.DATA; // File
-	String PROPERTY_SCAN_NMR_RAWFILE = IEventBroker.DATA; // File
-	String PROPERTY_SCAN_XIR_RAWFILE = IEventBroker.DATA; // File
+	String PROPERTY_CHROMATOGRAM_MSD_RAWFILE = IEVENTBROKER_DATA; // File
+	String PROPERTY_CHROMATOGRAM_CSD_RAWFILE = IEVENTBROKER_DATA; // File
+	String PROPERTY_CHROMATOGRAM_WSD_RAWFILE = IEVENTBROKER_DATA; // File
+	String PROPERTY_CHROMATOGRAM_XXD_RAWFILE = IEVENTBROKER_DATA; // File
+	String PROPERTY_SCAN_NMR_RAWFILE = IEVENTBROKER_DATA; // File
+	String PROPERTY_SCAN_XIR_RAWFILE = IEVENTBROKER_DATA; // File
 	//
-	String PROPERTY_CHROMATOGRAM_MSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map
-	String PROPERTY_CHROMATOGRAM_CSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map
-	String PROPERTY_CHROMATOGRAM_WSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map
-	String PROPERTY_SCAN_NMR_OVERVIEW = IEventBroker.DATA;
-	String PROPERTY_SCAN_XIR_OVERVIEW = IEventBroker.DATA;
+	String PROPERTY_CHROMATOGRAM_MSD_OVERVIEW = IEVENTBROKER_DATA; // IChromatogramOverview - no map
+	String PROPERTY_CHROMATOGRAM_CSD_OVERVIEW = IEVENTBROKER_DATA; // IChromatogramOverview - no map
+	String PROPERTY_CHROMATOGRAM_WSD_OVERVIEW = IEVENTBROKER_DATA; // IChromatogramOverview - no map
+	String PROPERTY_SCAN_NMR_OVERVIEW = IEVENTBROKER_DATA;
+	String PROPERTY_SCAN_XIR_OVERVIEW = IEVENTBROKER_DATA;
 	//
 	String PROPERTY_CHROMATOGRAM_SELECTION = "ChromatogramSelection"; // IChromatogramSelection (MSD, CSD, WSD)
-	String PROPERTY_CHROMATOGRAM_SELECTION_XXD = IEventBroker.DATA; // IChromatogramSelection
-	String PROPERTY_LIBRARY_SELECTION = IEventBroker.DATA; // IMassSpectra
-	String PROPERTY_SCAN_SELECTION = IEventBroker.DATA; // IScanMSD, ...
-	String PROPERTY_PEAK_SELECTION = IEventBroker.DATA; // IPeakMSD, ...
+	String PROPERTY_CHROMATOGRAM_SELECTION_XXD = IEVENTBROKER_DATA; // IChromatogramSelection
+	String PROPERTY_LIBRARY_SELECTION = IEVENTBROKER_DATA; // IMassSpectra
+	String PROPERTY_SCAN_SELECTION = IEVENTBROKER_DATA; // IScanMSD, ...
+	String PROPERTY_PEAK_SELECTION = IEVENTBROKER_DATA; // IPeakMSD, ...
 	//
 	String PROPERTY_CHROMATOGRAM_OVERVIEW = "ChromatogramOverview"; // IChromatogramOverview
 	String PROPERTY_CHROMATOGRAM_PEAK_MSD = "ChromatogramPeakMSD"; // IChromatogramPeakMSD
@@ -52,19 +53,19 @@ public interface IChemClipseEvents {
 	String PROPERTY_PEAK_CSD = "PeakCSD"; // IPeakCSD
 	String PROPERTY_PEAKS_CSD = "PeaksCSD"; // IPeaksCSD
 	//
-	String PROPERTY_SELECTED_ION = IEventBroker.DATA; // double ion
-	String PROPERTY_SELECTED_SCAN = IEventBroker.DATA; // IScan
-	String PROPERTY_SELECTED_PEAK = IEventBroker.DATA; // IPeak
+	String PROPERTY_SELECTED_ION = IEVENTBROKER_DATA; // double ion
+	String PROPERTY_SELECTED_SCAN = IEVENTBROKER_DATA; // IScan
+	String PROPERTY_SELECTED_PEAK = IEVENTBROKER_DATA; // IPeak
 	//
 	String PROPERTY_FORCE_RELOAD = "ForceReload";
-	String PROPERTY_PROCESSING_INFO = IEventBroker.DATA;
+	String PROPERTY_PROCESSING_INFO = IEVENTBROKER_DATA;
 	//
-	String PROPERTY_IDENTIFICATION_TARGET = IEventBroker.DATA;
+	String PROPERTY_IDENTIFICATION_TARGET = IEVENTBROKER_DATA;
 	String PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN = "MassSpectrumUnknown";
 	String PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_LIBRARY = "MassSpectrumLibrary";
 	String PROPERTY_IDENTIFICATION_TARGET_ENTRY = "IdentificationTarget";
 	//
-	String PROPERTY_QUANT_DB_COMPOUND = IEventBroker.DATA; // IQuantitationCompound
+	String PROPERTY_QUANT_DB_COMPOUND = IEVENTBROKER_DATA; // IQuantitationCompound
 	/*
 	 * Topics
 	 */
@@ -86,7 +87,7 @@ public interface IChemClipseEvents {
 	 * UNLOAD
 	 * Close the chromatogram editor.
 	 */
-	String TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION = "chromatogram/xxd/load/chromatogramselection"; // IEventBroker.DATA
+	String TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION = "chromatogram/xxd/load/chromatogramselection"; // DATA
 	String TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION = "chromatogram/xxd/unload/chromatogramselection";
 	String TOPIC_SCAN_XXD_UPDATE_SELECTION = "scan/xxd/update/selection";
 	String TOPIC_SCAN_XXD_UNLOAD_SELECTION = "scan/xxd/unload/selection";
@@ -166,31 +167,31 @@ public interface IChemClipseEvents {
 	 * Converter
 	 */
 	String TOPIC_CHROMATOGRAM_CONVERTER = "chromatogram/update/converter/status";
-	String PROPERTY_CHROMATOGRAM_CONVERTER_INFO = IEventBroker.DATA; // String
+	String PROPERTY_CHROMATOGRAM_CONVERTER_INFO = IEVENTBROKER_DATA; // String
 	/*
 	 * Event Broker: Edit History
 	 */
-	String PROPERTY_EDIT_HISTORY = IEventBroker.DATA; // IEditHistory
+	String PROPERTY_EDIT_HISTORY = IEVENTBROKER_DATA; // IEditHistory
 	String TOPIC_EDIT_HISTORY_UPDATE = "edithistory/update"; // $NON-NLS-1$
 	//
-	String PROPERTY_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM = IEventBroker.DATA; // Always true
+	String PROPERTY_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM = IEVENTBROKER_DATA; // Always true
 	String TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM = "filter/supplier/subtract/update/session/subtractmassspectrum";
 	/*
 	 * MSD Library
 	 */
-	String PROPERTY_DB_SEARCH_LIBRARY = IEventBroker.DATA; // File
+	String PROPERTY_DB_SEARCH_LIBRARY = IEVENTBROKER_DATA; // File
 	String TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH = "library/msd/add/dbsearch";
 	String TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH = "library/msd/remove/dbsearch";
 	/*
 	 * RI Library
 	 */
-	String PROPERTY_RI_CALIBRATION_LIBRARY = IEventBroker.DATA; // File
+	String PROPERTY_RI_CALIBRATION_LIBRARY = IEVENTBROKER_DATA; // File
 	String TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS = "ri/library/add/process";
 	String TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS = "ri/library/remove/process";
 	/*
 	 * Toggle Part Visibility
 	 */
-	String PROPERTY_TOGGLE_PART_VISIBILITY = IEventBroker.DATA;
+	String PROPERTY_TOGGLE_PART_VISIBILITY = IEVENTBROKER_DATA;
 	String TOPIC_TOGGLE_PART_VISIBILITY_TRUE = "toggle/part/visibility/true"; // $NON-NLS-1$
 	String TOPIC_TOGGLE_PART_VISIBILITY_FALSE = "toggle/part/visibility/false"; // $NON-NLS-1$
 	/*
@@ -198,5 +199,5 @@ public interface IChemClipseEvents {
 	 */
 	String TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION = "identification/targets/update/selection";
 	String TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION = "identification/targets/unload/selection";
-	String PROPERTY_SELECTED_IDENTIFICATION_TARGET_SUPPLIER = IEventBroker.DATA; // ITargetSupplier
+	String PROPERTY_SELECTED_IDENTIFICATION_TARGET_SUPPLIER = IEVENTBROKER_DATA; // ITargetSupplier
 }

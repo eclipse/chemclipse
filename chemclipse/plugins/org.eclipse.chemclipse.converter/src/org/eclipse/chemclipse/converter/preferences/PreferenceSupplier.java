@@ -30,6 +30,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_LIST_PATH_IMPORT = "";
 	public static final String P_LIST_PATH_EXPORT = "listPathExport";
 	public static final String DEF_LIST_PATH_EXPORT = "";
+	public static final String P_CHROMATOGRAM_EXPORT_FOLDER = "chromatogramExportFolder";
+	public static final String DEF_CHROMATOGRAM_EXPORT_FOLDER = "";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -59,6 +61,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+		defaultValues.put(P_CHROMATOGRAM_EXPORT_FOLDER, DEF_CHROMATOGRAM_EXPORT_FOLDER);
 		return defaultValues;
 	}
 
@@ -109,5 +112,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		} catch(BackingStoreException e) {
 			logger.warn(e);
 		}
+	}
+
+	public static String getChromatogramExportFolder() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(P_CHROMATOGRAM_EXPORT_FOLDER, DEF_CHROMATOGRAM_EXPORT_FOLDER);
 	}
 }

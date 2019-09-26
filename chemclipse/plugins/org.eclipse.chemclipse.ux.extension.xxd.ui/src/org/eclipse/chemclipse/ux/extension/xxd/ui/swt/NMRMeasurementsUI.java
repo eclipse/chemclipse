@@ -76,7 +76,7 @@ public class NMRMeasurementsUI implements Observer {
 
 	public NMRMeasurementsUI(Composite parent, ProcessorFactory filterFactory) {
 		this.filterFactory = filterFactory;
-		processTypeSupport = new ProcessTypeSupport(filterFactory);
+		processTypeSupport = new ProcessTypeSupport();
 		treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
 		treeViewer.setUseHashlookup(true);
 		treeViewer.getTree().setLinesVisible(true);

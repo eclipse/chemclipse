@@ -11,7 +11,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.logging;bundle-version="0.8.0",
  org.eclipse.chemclipse.support;bundle-version="0.8.0",
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2",
- org.eclipse.chemclipse.numeric;bundle-version="0.8.0",
  org.eclipse.chemclipse.msd.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.wsd.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.csd.model;bundle-version="0.8.0"
@@ -24,3 +23,5 @@ Export-Package: org.eclipse.chemclipse.chromatogram.filter.core.chromatogram,
  org.eclipse.chemclipse.chromatogram.filter.impl.settings,
  org.eclipse.chemclipse.chromatogram.filter.result,
  org.eclipse.chemclipse.chromatogram.filter.settings
+Import-Package: org.osgi.service.component.annotations;version="1.2.0"
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilterProcessSupplier.xml

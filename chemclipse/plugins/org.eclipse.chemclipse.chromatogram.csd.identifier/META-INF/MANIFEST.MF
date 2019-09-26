@@ -15,3 +15,6 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.csd.identifier.impl,
  org.eclipse.chemclipse.chromatogram.csd.identifier.peak,
  org.eclipse.chemclipse.chromatogram.csd.identifier.settings
+Import-Package: org.eclipse.chemclipse.support.settings.parser,
+ org.osgi.service.component.annotations;version="1.2.0"
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.csd.identifier.peak.PeakIdentifierCSDProcessTypeSupplier.xml

@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.xxd.process.support;
 
 import java.io.IOException;
 
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 

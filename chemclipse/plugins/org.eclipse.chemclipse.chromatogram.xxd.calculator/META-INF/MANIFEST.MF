@@ -9,7 +9,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.logging;bundle-version="0.8.0",
  org.eclipse.chemclipse.processing;bundle-version="0.8.0",
  org.eclipse.chemclipse.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.numeric;bundle-version="0.8.0",
  org.eclipse.chemclipse.support;bundle-version="0.8.0",
  org.apache.commons.io;bundle-version="2.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -20,3 +19,5 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromato
  org.eclipse.chemclipse.chromatogram.xxd.calculator.io,
  org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences,
  org.eclipse.chemclipse.chromatogram.xxd.calculator.settings
+Import-Package: org.osgi.service.component.annotations;version="1.2.0"
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.ChromatogramCalculatorProcessTypeSupplier.xml

@@ -17,6 +17,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -40,8 +41,8 @@ import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -80,9 +81,7 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
-import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
-import org.eclipse.chemclipse.xxd.process.support.IProcessSupplier;
-import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.xxd.process.comparators.CategoryNameComparator;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -191,16 +190,13 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private DisplayType displayType = DisplayType.TIC;
 	//
 	private boolean suspendUpdate = false;
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private IPreferenceStore preferenceStore;
 	private ProcessTypeSupport processTypeSupport;
 	//
 	private IEventBroker eventBroker;
 
-	public ExtendedChromatogramUI(Composite parent, int style, ProcessorFactory filterFactory, IEventBroker eventBroker) {
-		this(parent, style, null, new ProcessTypeSupport(filterFactory), eventBroker);
-	}
-
-	public ExtendedChromatogramUI(Composite parent, int style, ProcessorFactory filterFactory, ProcessTypeSupport processTypeSupport, IEventBroker eventBroker) {
+	public ExtendedChromatogramUI(Composite parent, int style, IPreferenceStore preferenceStore, ProcessTypeSupport processTypeSupport, IEventBroker eventBroker) {
+		this.preferenceStore = preferenceStore;
 		this.processTypeSupport = processTypeSupport;
 		this.eventBroker = eventBroker;
 		initialize(parent, style);
@@ -532,16 +528,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			/*
 			 * Dynamic Menu Items
 			 */
-			for(IProcessTypeSupplier typeSupplier : processTypeSupport.getProcessorTypeSuppliers(Collections.singletonList(datatype))) {
-				List<IProcessSupplier<?>> list = new ArrayList<>(typeSupplier.getProcessorSuppliers());
-				Collections.sort(list, new NameComparator());
-				for(IProcessSupplier<?> supplier : list) {
-					if(supplier.getSupportedDataTypes().contains(datatype)) {
-						IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> getChromatogramSelection(), this::processChromatogram, typeSupplier, supplier);
-						cachedMenuEntries.add(cachedEntry);
-						chartSettings.addMenuEntry(cachedEntry);
-					}
-				}
+			List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(EnumSet.of(datatype.toDataCategory())));
+			Collections.sort(suplierList, new CategoryNameComparator());
+			for(IProcessSupplier<?> supplier : suplierList) {
+				IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> getChromatogramSelection(), this::processChromatogram, supplier);
+				cachedMenuEntries.add(cachedEntry);
+				chartSettings.addMenuEntry(cachedEntry);
 			}
 			/*
 			 * Manage Item

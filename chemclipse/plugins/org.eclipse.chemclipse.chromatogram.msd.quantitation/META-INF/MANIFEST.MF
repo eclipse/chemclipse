@@ -6,7 +6,6 @@ Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.msd.quantitation.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.msd.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.logging;bundle-version="0.8.0",
  org.eclipse.chemclipse.processing;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -15,3 +14,6 @@ Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.quantitation.core,
  org.eclipse.chemclipse.chromatogram.msd.quantitation.exceptions,
  org.eclipse.chemclipse.chromatogram.msd.quantitation.settings
+Import-Package: org.eclipse.chemclipse.support.settings.parser,
+ org.osgi.service.component.annotations;version="1.2.0"
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.msd.quantitation.core.PeakQuantifierProcessTypeSupplier.xml

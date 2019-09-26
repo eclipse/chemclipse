@@ -15,45 +15,36 @@ package org.eclipse.chemclipse.xxd.process.support;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.model.settings.IProcessSettings;
-import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.processing.ProcessorFactory;
+import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
+import org.eclipse.chemclipse.model.supplier.IMeasurementProcessSupplier;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.xxd.process.Activator;
-import org.eclipse.chemclipse.xxd.process.comparators.CategoryComparator;
-import org.eclipse.chemclipse.xxd.process.supplier.BaselineDetectorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramCalculatorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramExportTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramFilterTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramIdentifierTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramIntegratorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ChromatogramReportTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.ClassifierTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.CombinedIntegratorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.IMeasurementFilterProcessTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.MassspectrumProcessTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakDetectorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakFilterTypeSupplierMSD;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakIdentifierTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakIntegratorTypeSupplier;
-import org.eclipse.chemclipse.xxd.process.supplier.PeakQuantitationTypeSupplier;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -68,50 +59,9 @@ public class ProcessTypeSupport {
 	private static final String KEY_USE_SYSTEM_DEFAULTS = "useSystemDefaults";
 	private static final String KEY_USER_SETTINGS = "userSettings";
 	private static final String KEY_ASK_FOR_SETTINGS = "askForSettings";
-	private static final CategoryComparator CATEGORY_COMPARATOR = new CategoryComparator();
-	private static final Logger logger = Logger.getLogger(ProcessTypeSupport.class);
 	//
-	private Map<String, IProcessTypeSupplier> localProcessSupplier = new HashMap<>();
+	private List<IProcessTypeSupplier> localProcessSupplier = new ArrayList<>();
 	private static IEclipsePreferences preferences;
-
-	public ProcessTypeSupport() {
-		this(null);
-	}
-
-	public ProcessTypeSupport(ProcessorFactory filterFactory) {
-		/*
-		 * Add all available process supplier here. TODO: Test native settings
-		 * composite via extension point resolution
-		 */
-		addProcessSupplier(new BaselineDetectorTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramIdentifierTypeSupplier()); // OK -
-																		// Improve
-																		// settings
-		addProcessSupplier(new ChromatogramIntegratorTypeSupplier()); // OK
-		addProcessSupplier(new ClassifierTypeSupplier()); // OK - Improve
-															// settings
-		addProcessSupplier(new CombinedIntegratorTypeSupplier()); // OK - Nested
-																	// Settings
-		addProcessSupplier(new ChromatogramFilterTypeSupplier()); // OK
-		addProcessSupplier(new PeakFilterTypeSupplierMSD()); // OK
-		addProcessSupplier(new PeakDetectorTypeSupplier()); // OK
-		addProcessSupplier(new PeakIdentifierTypeSupplier()); // OK
-		addProcessSupplier(new PeakIntegratorTypeSupplier()); // OK - Improve
-																// settings
-		addProcessSupplier(new PeakQuantitationTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramCalculatorTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramReportTypeSupplier()); // OK
-		addProcessSupplier(new ChromatogramExportTypeSupplier()); // OK -
-																	// Improve
-																	// settings
-		addProcessSupplier(MassspectrumProcessTypeSupplier.createPeakFilterSupplier());
-		addProcessSupplier(MassspectrumProcessTypeSupplier.createScanFilterSupplier());
-		// NoiseCalculator?
-		if(filterFactory != null) {
-			// TODO
-			addProcessSupplier(new IMeasurementFilterProcessTypeSupplier(filterFactory));
-		}
-	}
 
 	/**
 	 * 
@@ -140,22 +90,53 @@ public class ProcessTypeSupport {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public <SettingType> IProcessSupplier<SettingType> getSupplier(String processorId) {
 
-		for(IProcessTypeSupplier supplier : localProcessSupplier.values()) {
-			IProcessSupplier<SettingType> processSupplier = supplier.getProcessorSupplier(processorId);
-			if(processSupplier != null) {
-				return processSupplier;
+		for(IProcessTypeSupplier typeSupplier : localProcessSupplier) {
+			for(IProcessSupplier<?> supplier : typeSupplier.getProcessorSuppliers()) {
+				if(supplier.matchesId(processorId)) {
+					return (IProcessSupplier<SettingType>)supplier;
+				}
 			}
 		}
 		IProcessTypeSupplier[] dynamic = Activator.geIProcessTypeSuppliers();
 		for(IProcessTypeSupplier typeSupplier : dynamic) {
-			IProcessSupplier<SettingType> supplier = typeSupplier.getProcessorSupplier(processorId);
-			if(supplier != null) {
-				return supplier;
+			for(IProcessSupplier<?> supplier : typeSupplier.getProcessorSuppliers()) {
+				if(supplier.matchesId(processorId)) {
+					return (IProcessSupplier<SettingType>)supplier;
+				}
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Get all suppliers matching a given set of datacategories
+	 * 
+	 * @param dataTypes
+	 * @return the matching {@link IProcessSupplier}
+	 */
+	public Set<IProcessSupplier<?>> getSupplier(EnumSet<DataCategory> dataTypes) {
+
+		Set<IProcessSupplier<?>> supplier = new TreeSet<>((o1, o2) -> o1.getId().compareTo(o2.getId()));
+		addMatchingSupplier(dataTypes, supplier, localProcessSupplier.toArray(new IProcessTypeSupplier[0]));
+		addMatchingSupplier(dataTypes, supplier, Activator.geIProcessTypeSuppliers());
+		return supplier;
+	}
+
+	private void addMatchingSupplier(EnumSet<DataCategory> dataTypes, Set<IProcessSupplier<?>> supplier, IProcessTypeSupplier[] processTypeSuppliers) {
+
+		for(IProcessTypeSupplier processTypeSupplier : processTypeSuppliers) {
+			for(IProcessSupplier<?> processSupplier : processTypeSupplier.getProcessorSuppliers()) {
+				for(DataCategory category : dataTypes) {
+					if(processSupplier.getSupportedDataTypes().contains(category)) {
+						supplier.add(processSupplier);
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -193,51 +174,7 @@ public class ProcessTypeSupport {
 	 */
 	public void addProcessSupplier(IProcessTypeSupplier processTypeSupplier) {
 
-		try {
-			for(IProcessSupplier<?> supplier : processTypeSupplier.getProcessorSuppliers()) {
-				String processorId = supplier.getId();
-				IProcessTypeSupplier typeSupplier = localProcessSupplier.get(processorId);
-				if(typeSupplier != null) {
-					logger.warn("The processor id " + processorId + " is already defined by " + typeSupplier.getClass().getSimpleName() + " and is ignored for redefining supplier " + processTypeSupplier.getClass().getSimpleName());
-				} else {
-					localProcessSupplier.put(processorId, processTypeSupplier);
-				}
-			}
-		} catch(Exception e) {
-			logger.warn(e);
-		}
-	}
-
-	/**
-	 * 
-	 * @param dataTypes
-	 * @return the matching {@link IProcessTypeSupplier} order by category name
-	 */
-	public List<IProcessTypeSupplier> getProcessorTypeSuppliers(Collection<? extends DataType> dataTypes) {
-
-		List<IProcessTypeSupplier> supplier = new ArrayList<>();
-		addMatchingSupplier(dataTypes, supplier, localProcessSupplier.values());
-		addMatchingSupplier(dataTypes, supplier, Arrays.asList(Activator.geIProcessTypeSuppliers()));
-		Collections.sort(supplier, CATEGORY_COMPARATOR);
-		return supplier;
-	}
-
-	private void addMatchingSupplier(Collection<? extends DataType> dataTypes, List<IProcessTypeSupplier> supplier, Iterable<IProcessTypeSupplier> candidates) {
-
-		for(IProcessTypeSupplier processTypeSupplier : candidates) {
-			if(supplier.contains(processTypeSupplier)) {
-				continue;
-			}
-			outer:
-			for(IProcessSupplier<?> processSupplier : processTypeSupplier.getProcessorSuppliers()) {
-				for(DataType dataType : dataTypes) {
-					if(processSupplier.getSupportedDataTypes().contains(dataType)) {
-						supplier.add(processTypeSupplier);
-						break outer;
-					}
-				}
-			}
-		}
+		localProcessSupplier.add(processTypeSupplier);
 	}
 
 	public <T> IProcessingInfo<T> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessMethod processMethod, IProgressMonitor monitor) {
@@ -254,12 +191,6 @@ public class ProcessTypeSupport {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, chromatogramSelections.size() * 100);
 		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		for(IChromatogramSelection<?, ?> chromatogramSelection : chromatogramSelections) {
-			/*
-			 * Process referenced chromatograms? Will make things more complex.
-			 * Discussion needed. Think of RI calculation. Are the RIs of the
-			 * master taken or the RIs of the selected reference? What about the
-			 * column?
-			 */
 			SubMonitor split = subMonitor.split(100);
 			SubMonitor convert = SubMonitor.convert(split, processMethod.getNumberOfEntries());
 			applyProcessor(processMethod, new BiConsumer<IProcessSupplier<X>, X>() {
@@ -267,25 +198,7 @@ public class ProcessTypeSupport {
 				@Override
 				public void accept(IProcessSupplier<X> processSupplier, X settings) {
 
-					IProcessTypeSupplier processTypeSupplier = processSupplier.getTypeSupplier();
-					if(processTypeSupplier instanceof IChromatogramSelectionProcessTypeSupplier) {
-						IChromatogramSelectionProcessTypeSupplier chromatogramSelectionProcessTypeSupplier = (IChromatogramSelectionProcessTypeSupplier)processTypeSupplier;
-						/*
-						 * If processEntry.getJsonSettings() == {}
-						 * (IProcessEntry.EMPTY_JSON_SETTINGS), the processSettings
-						 * class will be null. The applyProcessor method manages how
-						 * to handle this situation. By default, the system settings
-						 * of the plugin shall be used instead.
-						 */
-						IProcessSettings processSettings;
-						if(settings instanceof IProcessSettings) {
-							processSettings = (IProcessSettings)settings;
-						} else {
-							processSettings = null;
-						}
-						IProcessingInfo<?> processorResult = chromatogramSelectionProcessTypeSupplier.applyProcessor(chromatogramSelection, processSupplier.getId(), processSettings, convert.split(1));
-						processingInfo.addMessages(processorResult);
-					}
+					applyProcessor(chromatogramSelection, processSupplier, settings, processingInfo, convert.split(1));
 				}
 			}, processingInfo);
 		}
@@ -301,10 +214,7 @@ public class ProcessTypeSupport {
 			@Override
 			public void accept(IProcessSupplier<X> processor, X settings) {
 
-				IProcessTypeSupplier processTypeSupplier = processor.getTypeSupplier();
-				if(processTypeSupplier instanceof IMeasurementProcessTypeSupplier) {
-					result.set(((IMeasurementProcessTypeSupplier)processTypeSupplier).applyProcessor(result.get(), processor.getId(), settings, messageConsumer, subMonitor.split(100)));
-				}
+				result.set(applyProcessor(result.get(), processor, settings, messageConsumer, subMonitor.split(100)));
 			}
 		}, messageConsumer);
 		return result.get();
@@ -350,6 +260,40 @@ public class ProcessTypeSupport {
 			}
 			return ValidationStatus.ok();
 		}
+	}
+
+	public static <T> IChromatogramSelection<?, ?> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessSupplier<T> supplier, T processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+
+		if(supplier instanceof IChromatogramSelectionProcessSupplier<?>) {
+			IChromatogramSelectionProcessSupplier<T> chromatogramSelectionProcessSupplier = (IChromatogramSelectionProcessSupplier<T>)supplier;
+			return chromatogramSelectionProcessSupplier.apply(chromatogramSelection, processSettings, messageConsumer, monitor);
+		}
+		if(supplier instanceof IMeasurementProcessSupplier<?>) {
+			IMeasurementProcessSupplier<T> measurementProcessSupplier = (IMeasurementProcessSupplier<T>)supplier;
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+			Collection<? extends IMeasurement> collection = measurementProcessSupplier.applyProcessor(Collections.singleton(chromatogram), processSettings, messageConsumer, monitor);
+			for(IMeasurement measurement : collection) {
+				if(measurement == chromatogram) {
+					return chromatogramSelection;
+				} else if(measurement instanceof IChromatogramMSD) {
+					return new ChromatogramSelectionMSD((IChromatogramMSD)measurement);
+				} else if(measurement instanceof IChromatogramCSD) {
+					return new ChromatogramSelectionCSD((IChromatogramCSD)measurement);
+				} else if(measurement instanceof IChromatogramWSD) {
+					return new ChromatogramSelectionWSD((IChromatogramWSD)measurement);
+				}
+			}
+		}
+		return chromatogramSelection;
+	}
+
+	public static <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessSupplier<X> supplier, X processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+
+		if(supplier instanceof IMeasurementProcessSupplier<?>) {
+			IMeasurementProcessSupplier<X> measurementProcessSupplier = (IMeasurementProcessSupplier<X>)supplier;
+			return measurementProcessSupplier.applyProcessor(measurements, processSettings, messageConsumer, monitor);
+		}
+		return measurements;
 	}
 
 	private static final class ProcessEntryProcessorPreferences<T> implements ProcessorPreferences<T> {

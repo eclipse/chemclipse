@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.ui;
 
+import org.eclipse.chemclipse.chromatogram.xxd.report.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
-import org.eclipse.chemclipse.xxd.process.preferences.PreferenceSupplier;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -29,6 +29,7 @@ public class Activator extends AbstractActivatorUI {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 
 		super.start(context);
@@ -40,6 +41,7 @@ public class Activator extends AbstractActivatorUI {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 
 		plugin = null;

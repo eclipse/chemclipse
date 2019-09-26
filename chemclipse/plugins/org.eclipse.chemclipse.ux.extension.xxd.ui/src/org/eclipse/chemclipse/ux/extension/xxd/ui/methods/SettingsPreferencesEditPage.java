@@ -18,9 +18,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Supplier;
 
+import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.xxd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences;
 import org.eclipse.chemclipse.xxd.process.support.ProcessorPreferences.DialogBehavior;
 import org.eclipse.jface.viewers.ColumnLabelProvider;

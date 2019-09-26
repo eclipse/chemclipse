@@ -37,7 +37,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
-import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -278,7 +278,7 @@ public class MethodSupportUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageProcessing = new PreferencePage();
+				IPreferencePage preferencePageProcessing = new PreferencePageReportExport();
 				preferencePageProcessing.setTitle("Processing");
 				//
 				IPreferencePage preferencePageMethods = new PreferencePageMethods();
