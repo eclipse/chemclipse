@@ -53,7 +53,7 @@ public abstract class AbstractMassspectrumFilterProcessTypeSupplier implements I
 			IMassSpectrumFilterSupport filterSupport = MassSpectrumFilter.getMassSpectrumFilterSupport();
 			List<IProcessSupplier<?>> list = new ArrayList<IProcessSupplier<?>>();
 			for(String id : filterSupport.getAvailableFilterIds()) {
-				list.add(new MassSpectrumFilterProcessorSupplier(filterSupport.getFilterSupplier(id), extractionFunction, this));
+				list.add(new MassSpectrumFilterProcessorSupplier(prefix, filterSupport.getFilterSupplier(id), extractionFunction, this));
 			}
 			return list;
 		} catch(NoMassSpectrumFilterSupplierAvailableException e) {
@@ -67,8 +67,8 @@ public abstract class AbstractMassspectrumFilterProcessTypeSupplier implements I
 		private Function<IChromatogramSelection<?, ?>, List<IScanMSD>> extractionFunction;
 
 		@SuppressWarnings("unchecked")
-		public MassSpectrumFilterProcessorSupplier(IMassSpectrumFilterSupplier supplier, Function<IChromatogramSelection<?, ?>, List<IScanMSD>> extractionFunction, IProcessTypeSupplier parent) {
-			super(supplier.getId(), supplier.getFilterName(), supplier.getDescription(), (Class<IMassSpectrumFilterSettings>)supplier.getConfigClass(), parent, DataType.MSD);
+		public MassSpectrumFilterProcessorSupplier(String prefix, IMassSpectrumFilterSupplier supplier, Function<IChromatogramSelection<?, ?>, List<IScanMSD>> extractionFunction, IProcessTypeSupplier parent) {
+			super(prefix + supplier.getId(), supplier.getFilterName(), supplier.getDescription(), (Class<IMassSpectrumFilterSettings>)supplier.getConfigClass(), parent, DataType.MSD);
 			this.supplier = supplier;
 			this.extractionFunction = extractionFunction;
 		}
