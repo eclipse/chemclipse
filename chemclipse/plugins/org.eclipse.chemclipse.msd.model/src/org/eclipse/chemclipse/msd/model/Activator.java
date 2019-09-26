@@ -12,7 +12,12 @@
 package org.eclipse.chemclipse.msd.model;
 
 import org.eclipse.chemclipse.model.versioning.PathHelper;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIon;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -29,8 +34,11 @@ public class Activator implements BundleActivator {
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 
+		JSONSerialization.addMapping(IMarkedIons.class, MarkedIons.class);
+		JSONSerialization.addMapping(IMarkedIon.class, MarkedIon.class);
 		Activator.context = bundleContext;
 		PathHelper.cleanStoragePath();
 		PreferenceSupplier.loadSessionSubtractMassSpectrum();
@@ -40,8 +48,11 @@ public class Activator implements BundleActivator {
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext bundleContext) throws Exception {
 
+		JSONSerialization.removeMapping(IMarkedIons.class, MarkedIons.class);
+		JSONSerialization.removeMapping(IMarkedIon.class, MarkedIon.class);
 		PathHelper.cleanStoragePath();
 		Activator.context = null;
 	}

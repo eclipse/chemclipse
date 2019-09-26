@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
+import org.eclipse.chemclipse.model.methods.ProcessEntryProcessorPreferences;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.supplier.IMeasurementProcessSupplier;
@@ -36,8 +37,8 @@ import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
-import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 import org.eclipse.chemclipse.xxd.process.Activator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,9 +49,8 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
-public class ProcessTypeSupport {
+public class ProcessTypeSupport implements ProcessSupplierContext {
 
-	public static final SettingsSerialization DEFAULT_SETTINGS_SERIALIZATION = new JSONSerialization();
 	private static final String KEY_USE_SYSTEM_DEFAULTS = "useSystemDefaults";
 	private static final String KEY_USER_SETTINGS = "userSettings";
 	private static final String KEY_ASK_FOR_SETTINGS = "askForSettings";
@@ -85,6 +85,7 @@ public class ProcessTypeSupport {
 		return result;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <SettingType> IProcessSupplier<SettingType> getSupplier(String processorId) {
 
@@ -257,77 +258,6 @@ public class ProcessTypeSupport {
 		}
 	}
 
-	private static final class ProcessEntryProcessorPreferences<T> implements ProcessorPreferences<T> {
-
-		private IProcessEntry processEntry;
-		private IProcessSupplier<T> supplier;
-
-		public ProcessEntryProcessorPreferences(IProcessSupplier<T> supplier, IProcessEntry processEntry) {
-			this.supplier = supplier;
-			this.processEntry = processEntry;
-		}
-
-		@Override
-		public DialogBehavior getDialogBehaviour() {
-
-			return DialogBehavior.NONE;
-		}
-
-		@Override
-		public void setAskForSettings(boolean askForSettings) {
-
-			// no-op
-		}
-
-		@Override
-		public void setUserSettings(String settings) {
-
-			processEntry.setJsonSettings(settings);
-		}
-
-		@Override
-		public boolean isUseSystemDefaults() {
-
-			if(supplier.getSettingsClass() == null) {
-				return true;
-			}
-			String jsonSettings = processEntry.getJsonSettings();
-			return jsonSettings == null || jsonSettings.isEmpty() || ProcessEntry.EMPTY_JSON_SETTINGS.equals(jsonSettings);
-		}
-
-		@Override
-		public void setUseSystemDefaults(boolean useSystemDefaults) {
-
-			if(useSystemDefaults) {
-				processEntry.setJsonSettings(ProcessEntry.EMPTY_JSON_SETTINGS);
-			}
-		}
-
-		@Override
-		public void reset() {
-
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public IProcessSupplier<T> getSupplier() {
-
-			return supplier;
-		}
-
-		@Override
-		public String getUserSettingsAsString() {
-
-			return processEntry.getJsonSettings();
-		}
-
-		@Override
-		public SettingsSerialization getSerialization() {
-
-			return DEFAULT_SETTINGS_SERIALIZATION;
-		}
-	}
-
 	private static final class NodeProcessorPreferences<T> implements ProcessorPreferences<T> {
 
 		private Preferences node;
@@ -425,12 +355,6 @@ public class ProcessTypeSupport {
 		public IProcessSupplier<T> getSupplier() {
 
 			return supplier;
-		}
-
-		@Override
-		public SettingsSerialization getSerialization() {
-
-			return DEFAULT_SETTINGS_SERIALIZATION;
 		}
 	}
 }

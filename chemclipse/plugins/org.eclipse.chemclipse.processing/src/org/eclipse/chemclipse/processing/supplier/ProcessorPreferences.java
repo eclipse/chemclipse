@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.processing.supplier;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
+import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
 import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 
 /**
@@ -23,6 +24,8 @@ import org.eclipse.chemclipse.support.settings.serialization.SettingsSerializati
  *
  */
 public interface ProcessorPreferences<SettingType> {
+
+	public static final SettingsSerialization DEFAULT_SETTINGS_SERIALIZATION = new JSONSerialization();
 
 	public enum DialogBehavior {
 		/**
@@ -66,7 +69,10 @@ public interface ProcessorPreferences<SettingType> {
 	 * 
 	 * @return the serialization used for the user settings
 	 */
-	SettingsSerialization getSerialization();
+	default SettingsSerialization getSerialization() {
+
+		return DEFAULT_SETTINGS_SERIALIZATION;
+	}
 
 	/**
 	 * constructs a new settings instance from the current user settings
