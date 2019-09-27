@@ -12,12 +12,17 @@
 package org.eclipse.chemclipse.model.supplier;
 
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 public interface IChromatogramSelectionProcessSupplier<SettingType> extends IProcessSupplier<SettingType> {
 
@@ -34,7 +39,7 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 	 */
 	IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, SettingType processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor);
 
-	public static <T> IChromatogramSelection<?, ?> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessSupplier<T> supplier, T processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+	static <T> IChromatogramSelection<?, ?> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessSupplier<T> supplier, T processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
 
 		if(supplier instanceof IChromatogramSelectionProcessSupplier<?>) {
 			IChromatogramSelectionProcessSupplier<T> chromatogramSelectionProcessSupplier = (IChromatogramSelectionProcessSupplier<T>)supplier;
@@ -46,5 +51,20 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 			measurementProcessSupplier.applyProcessor(Collections.singleton(chromatogram), processSettings, messageConsumer, monitor);
 		}
 		return chromatogramSelection;
+	}
+
+	static <X> IChromatogramSelection<?, ?> applyProcessMethod(IChromatogramSelection<?, ?> chromatogramSelection, IProcessMethod processMethod, ProcessSupplierContext context, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+
+		SubMonitor subMonitor = SubMonitor.convert(monitor, processMethod.getNumberOfEntries() * 100);
+		AtomicReference<IChromatogramSelection<?, ?>> result = new AtomicReference<IChromatogramSelection<?, ?>>(chromatogramSelection);
+		IProcessMethod.applyProcessors(processMethod, context, new BiConsumer<IProcessSupplier<X>, X>() {
+
+			@Override
+			public void accept(IProcessSupplier<X> processSupplier, X settings) {
+
+				result.set(applyProcessor(result.get(), processSupplier, settings, messageConsumer, subMonitor.split(100)));
+			}
+		}, messageConsumer);
+		return result.get();
 	}
 }

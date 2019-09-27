@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
@@ -68,7 +67,7 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 		IChromatogramSelection<?, ?> chromatogramSelection = supplier.get();
 		if(chromatogramSelection != null) {
 			try {
-				T settings = SettingsWizard.getSettings(shell, ProcessTypeSupport.getWorkspacePreferences(processorSupplier));
+				T settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processorSupplier));
 				executionConsumer.accept(new IRunnableWithProgress() {
 
 					@Override

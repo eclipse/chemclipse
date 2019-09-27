@@ -12,13 +12,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.graphics.Image;
 
@@ -48,7 +51,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 
 		if(columnIndex == 0) {
 			if(element instanceof IProcessEntry) {
-				IStatus status = processTypeSupport.validate((IProcessEntry)element);
+				IStatus status = validate((IProcessEntry)element);
 				if(status.matches(IStatus.ERROR)) {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_ERROR, IApplicationImage.SIZE_16x16);
 				} else if(status.matches(IStatus.WARNING)) {
@@ -67,7 +70,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	public String getToolTipText(Object element) {
 
 		if(element instanceof IProcessEntry) {
-			IStatus status = processTypeSupport.validate((IProcessEntry)element);
+			IStatus status = validate((IProcessEntry)element);
 			if(!status.isOK()) {
 				return status.getMessage();
 			}
@@ -122,5 +125,29 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PROCESS_CONTROL, IApplicationImage.SIZE_16x16);
+	}
+
+	public IStatus validate(IProcessEntry processEntry) {
+
+		if(processEntry == null) {
+			return ValidationStatus.error("Entry is null");
+		}
+		ProcessorPreferences<?> preferences = IProcessEntry.getProcessEntryPreferences(processEntry, processTypeSupport);
+		if(preferences == null) {
+			return ValidationStatus.error("Processor " + processEntry.getName() + " not avaiable");
+		}
+		if(preferences.getSupplier().getSettingsClass() == null) {
+			return ValidationStatus.warning("Processor " + processEntry.getName() + " has no settingsclass");
+		}
+		if(preferences.isUseSystemDefaults()) {
+			return ValidationStatus.info("Processor " + processEntry.getName() + " uses system default settings");
+		} else {
+			try {
+				preferences.getUserSettings();
+			} catch(IOException e) {
+				return ValidationStatus.error("Loading settings for Processor " + processEntry.getName() + "failed", e);
+			}
+			return ValidationStatus.ok();
+		}
 	}
 }

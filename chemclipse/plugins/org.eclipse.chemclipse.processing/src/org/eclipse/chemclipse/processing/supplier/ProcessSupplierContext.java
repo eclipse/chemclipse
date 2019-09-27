@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.supplier;
 
+import java.util.Set;
+
+import org.eclipse.chemclipse.processing.DataCategory;
+
 public interface ProcessSupplierContext {
 
 	/**
@@ -20,4 +24,11 @@ public interface ProcessSupplierContext {
 	 * @return
 	 */
 	<T> IProcessSupplier<T> getSupplier(String id);
+
+	/**
+	 * 
+	 * @param dataTypes
+	 * @return all suppliers for the given {@link DataCategory}s
+	 */
+	Set<IProcessSupplier<?>> getSupplier(Iterable<DataCategory> dataCategory);
 }

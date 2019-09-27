@@ -55,7 +55,7 @@ public class JSONSerialization implements SettingsSerialization {
 		for(InputValue inputValue : inputValues) {
 			result.put(inputValue, inputValue.getDefaultValue());
 		}
-		if(content != null) {
+		if(content != null && !content.isEmpty()) {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> map = createMapper().readValue(content, HashMap.class);
 			for(Map.Entry<String, Object> entry : map.entrySet()) {
@@ -96,7 +96,7 @@ public class JSONSerialization implements SettingsSerialization {
 	@Override
 	public <Settings> Settings fromString(Class<Settings> settingsClass, String content) throws IOException {
 
-		if(content == null) {
+		if(content == null || content.isEmpty()) {
 			return null;
 		}
 		return createMapper().readValue(content, settingsClass);

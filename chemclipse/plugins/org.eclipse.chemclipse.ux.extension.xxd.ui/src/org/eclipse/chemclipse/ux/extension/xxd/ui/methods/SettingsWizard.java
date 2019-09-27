@@ -13,19 +13,27 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.NodeProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences.DialogBehavior;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 
 public class SettingsWizard extends Wizard {
 
@@ -139,5 +147,52 @@ public class SettingsWizard extends Wizard {
 			}
 			return preferences.getSettings();
 		}
+	}
+
+	/**
+	 * 
+	 * @param processorId
+	 * @return the preferences for this processor id
+	 */
+	public static <T> ProcessorPreferences<T> getWorkspacePreferences(IProcessSupplier<T> supplier) {
+
+		return new NodeProcessorPreferences<T>(supplier, getStorage().node(supplier.getId()));
+	}
+
+	private static IEclipsePreferences preferences;
+
+	/**
+	 * 
+	 * @return all active preferences for this {@link ProcessTypeSupport}
+	 */
+	public static Collection<ProcessorPreferences<?>> getAllPreferences(ProcessSupplierContext context) {
+
+		List<ProcessorPreferences<?>> result = new ArrayList<>();
+		try {
+			IEclipsePreferences storage = getStorage();
+			String[] childrenNames = storage.childrenNames();
+			for(String name : childrenNames) {
+				Preferences node = storage.node(name);
+				if(node.keys().length == 0) {
+					// empty default node
+					continue;
+				}
+				IProcessSupplier<?> processorSupplier = context.getSupplier(name);
+				if(processorSupplier != null) {
+					result.add(new NodeProcessorPreferences<>(processorSupplier, node));
+				}
+			}
+		} catch(BackingStoreException e) {
+			// can't load it then
+		}
+		return result;
+	}
+
+	private static IEclipsePreferences getStorage() {
+
+		if(preferences == null) {
+			preferences = InstanceScope.INSTANCE.getNode(IProcessSupplier.class.getName());
+		}
+		return preferences;
 	}
 }

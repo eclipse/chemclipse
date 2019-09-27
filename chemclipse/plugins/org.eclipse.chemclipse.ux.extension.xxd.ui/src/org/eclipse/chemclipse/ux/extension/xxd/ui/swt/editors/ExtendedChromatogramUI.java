@@ -36,12 +36,14 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -567,13 +569,13 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			@Override
 			public void execute(Shell shell, ScrollableChart scrollableChart) {
 
-				SettingsWizard.openManagePreferencesWizard(shell, processTypeSupport::getAllPreferences);
+				SettingsWizard.openManagePreferencesWizard(shell, () -> SettingsWizard.getAllPreferences(processTypeSupport));
 			}
 
 			@Override
 			public boolean isEnabled(ScrollableChart scrollableChart) {
 
-				return !processTypeSupport.getAllPreferences().isEmpty();
+				return !SettingsWizard.getAllPreferences(processTypeSupport).isEmpty();
 			}
 		};
 	}
@@ -976,7 +978,8 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			public void execute(IProcessMethod processMethod, IProgressMonitor monitor) {
 
 				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
-				IProcessingInfo<?> processingInfo = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+				IChromatogramSelectionProcessSupplier.applyProcessMethod(chromatogramSelection, processMethod, processTypeSupport, processingInfo, monitor);
 				chromatogramSelection.update(false);
 				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, processingInfo.hasErrorMessages());
 			}
