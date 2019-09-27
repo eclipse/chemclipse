@@ -380,7 +380,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				 * Adjust
 				 */
 				adjustAxisSettings();
-				addChartMenuEntries();
+				updateMenu();
 				updateChromatogram();
 				setSeparationColumnSelection();
 				chromatogramReferencesUI.updateChromatogramSelection(chromatogramSelection);
@@ -503,7 +503,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		}
 	}
 
-	private void addChartMenuEntries() {
+	public void updateMenu() {
 
 		if(processTypeSupport != null) {
 			/*
