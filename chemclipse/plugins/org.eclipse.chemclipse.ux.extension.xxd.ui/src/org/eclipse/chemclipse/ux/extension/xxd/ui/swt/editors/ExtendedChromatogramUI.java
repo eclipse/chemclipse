@@ -45,6 +45,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -533,7 +534,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(EnumSet.of(datatype.toDataCategory())));
 			Collections.sort(suplierList, new CategoryNameComparator());
 			for(IProcessSupplier<?> supplier : suplierList) {
-				IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> getChromatogramSelection(), this::processChromatogram, supplier);
+				IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> getChromatogramSelection(), this::processChromatogram, supplier, processTypeSupport);
 				cachedMenuEntries.add(cachedEntry);
 				chartSettings.addMenuEntry(cachedEntry);
 			}
@@ -979,7 +980,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-				IChromatogramSelectionProcessSupplier.applyProcessMethod(chromatogramSelection, processMethod, processTypeSupport, processingInfo, monitor);
+				IChromatogramSelectionProcessSupplier.applyProcessMethod(chromatogramSelection, processMethod, ProcessExecutionContext.create(processTypeSupport, processingInfo, monitor));
 				chromatogramSelection.update(false);
 				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, processingInfo.hasErrorMessages());
 			}

@@ -22,6 +22,8 @@ import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSuppli
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,11 +38,13 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 	private final IProcessSupplier<T> processorSupplier;
 	private final Supplier<IChromatogramSelection<?, ?>> supplier;
 	private final BiConsumer<IRunnableWithProgress, Shell> executionConsumer;
+	private ProcessSupplierContext context;
 
-	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessSupplier<T> processorSupplier) {
+	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessSupplier<T> processorSupplier, ProcessSupplierContext context) {
 		this.supplier = chromatogramSupplier;
 		this.executionConsumer = executionConsumer;
 		this.processorSupplier = processorSupplier;
+		this.context = context;
 	}
 
 	@Override
@@ -74,7 +78,7 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 						DefaultProcessingResult<Object> msgs = new DefaultProcessingResult<>();
-						IChromatogramSelectionProcessSupplier.applyProcessor(chromatogramSelection, processorSupplier, settings, msgs, monitor);
+						IChromatogramSelectionProcessSupplier.applyProcessor(chromatogramSelection, processorSupplier, settings, ProcessExecutionContext.create(context, msgs, monitor));
 						updateResult(shell, msgs);
 					}
 				}, shell);

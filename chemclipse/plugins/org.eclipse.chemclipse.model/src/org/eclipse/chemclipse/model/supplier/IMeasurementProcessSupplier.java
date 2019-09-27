@@ -17,10 +17,8 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.core.runtime.SubMonitor;
 
 public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplier<ConfigType> {
@@ -40,29 +38,29 @@ public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplie
 	 *            the monitor to use to report progress
 	 * @return the collection of processed measurements
 	 */
-	Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, ConfigType processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor);
+	Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, ConfigType processSettings, ProcessExecutionContext context);
 
-	static <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessSupplier<X> supplier, X processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+	static <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessSupplier<X> supplier, X processSettings, ProcessExecutionContext context) {
 
 		if(supplier instanceof IMeasurementProcessSupplier<?>) {
 			IMeasurementProcessSupplier<X> measurementProcessSupplier = (IMeasurementProcessSupplier<X>)supplier;
-			return measurementProcessSupplier.applyProcessor(measurements, processSettings, messageConsumer, monitor);
+			return measurementProcessSupplier.applyProcessor(measurements, processSettings, context);
 		}
 		return measurements;
 	}
 
-	static <X> Collection<? extends IMeasurement> applyProcessMethod(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, ProcessSupplierContext context, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+	static <X> Collection<? extends IMeasurement> applyProcessMethod(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, ProcessExecutionContext context) {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Processing files", processMethod.getNumberOfEntries() * 100);
+		SubMonitor subMonitor = SubMonitor.convert(context.getProgressMonitor(), "Processing files", processMethod.getNumberOfEntries() * 100);
 		AtomicReference<Collection<? extends IMeasurement>> result = new AtomicReference<Collection<? extends IMeasurement>>(measurements);
 		IProcessMethod.applyProcessors(processMethod, context, new BiConsumer<IProcessSupplier<X>, X>() {
 
 			@Override
 			public void accept(IProcessSupplier<X> processor, X settings) {
 
-				result.set(applyProcessor(result.get(), processor, settings, messageConsumer, subMonitor.split(100)));
+				result.set(applyProcessor(result.get(), processor, settings, context.withMonitor(subMonitor.split(100))));
 			}
-		}, messageConsumer);
+		});
 		return result.get();
 	}
 }

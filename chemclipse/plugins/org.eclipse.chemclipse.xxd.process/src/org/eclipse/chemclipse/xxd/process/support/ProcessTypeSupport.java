@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.xxd.process.Activator;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -67,6 +68,7 @@ public class ProcessTypeSupport implements ProcessSupplierContext {
 	 * @param dataTypes
 	 * @return the matching {@link IProcessSupplier}
 	 */
+	@Override
 	public Set<IProcessSupplier<?>> getSupplier(Iterable<DataCategory> dataTypes) {
 
 		Set<IProcessSupplier<?>> supplier = new TreeSet<>((o1, o2) -> o1.getId().compareTo(o2.getId()));
@@ -104,7 +106,7 @@ public class ProcessTypeSupport implements ProcessSupplierContext {
 	public <T> IProcessingInfo<T> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessMethod processMethod, IProgressMonitor monitor) {
 
 		ProcessingInfo<T> processingInfo = new ProcessingInfo<>();
-		IChromatogramSelectionProcessSupplier.applyProcessMethod(chromatogramSelection, processMethod, this, processingInfo, monitor);
+		IChromatogramSelectionProcessSupplier.applyProcessMethod(chromatogramSelection, processMethod, ProcessExecutionContext.create(this, processingInfo, monitor));
 		return processingInfo;
 	}
 
@@ -114,7 +116,7 @@ public class ProcessTypeSupport implements ProcessSupplierContext {
 		ProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		SubMonitor subMonitor = SubMonitor.convert(monitor, chromatogramSelections.size() * 100);
 		for(IChromatogramSelection<?, ?> selection : chromatogramSelections) {
-			IChromatogramSelectionProcessSupplier.applyProcessMethod(selection, processMethod, this, processingInfo, subMonitor.split(100));
+			IChromatogramSelectionProcessSupplier.applyProcessMethod(selection, processMethod, ProcessExecutionContext.create(this, processingInfo, subMonitor.split(100)));
 		}
 		return processingInfo;
 	}
@@ -122,6 +124,6 @@ public class ProcessTypeSupport implements ProcessSupplierContext {
 	@Deprecated
 	public <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, MessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-		return IMeasurementProcessSupplier.applyProcessMethod(measurements, processMethod, this, messageConsumer, monitor);
+		return IMeasurementProcessSupplier.applyProcessMethod(measurements, processMethod, ProcessExecutionContext.create(this, messageConsumer, monitor));
 	}
 }

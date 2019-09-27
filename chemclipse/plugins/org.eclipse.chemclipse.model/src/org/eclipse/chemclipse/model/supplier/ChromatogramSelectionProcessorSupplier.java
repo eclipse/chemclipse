@@ -14,10 +14,14 @@ package org.eclipse.chemclipse.model.supplier;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class ChromatogramSelectionProcessorSupplier<SettingsClass> extends AbstractProcessSupplier<SettingsClass> implements IChromatogramSelectionProcessSupplier<SettingsClass> {
 
@@ -28,6 +32,14 @@ public abstract class ChromatogramSelectionProcessorSupplier<SettingsClass> exte
 	public ChromatogramSelectionProcessorSupplier(String id, String name, String description, Class<SettingsClass> settingsClass, IProcessTypeSupplier parent, DataCategory... dataTypes) {
 		super(id, name, description, settingsClass, parent, dataTypes);
 	}
+
+	@Override
+	public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, SettingsClass processSettings, ProcessExecutionContext context) {
+
+		return apply(chromatogramSelection, processSettings, context, context.getProgressMonitor());
+	}
+
+	protected abstract IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, SettingsClass processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor);
 
 	private static DataCategory[] convert(DataType[] dataTypes) {
 

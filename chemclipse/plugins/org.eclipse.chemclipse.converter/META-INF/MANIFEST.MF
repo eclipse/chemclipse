@@ -30,5 +30,7 @@ Export-Package: org.eclipse.chemclipse.converter.chromatogram,
  org.eclipse.chemclipse.converter.scan,
  org.eclipse.chemclipse.converter.sequence,
  org.eclipse.chemclipse.converter.support
-Import-Package: com.fasterxml.jackson.annotation;version="2.9.2"
+Import-Package: com.fasterxml.jackson.annotation;version="2.9.2",
+ org.osgi.service.component.annotations;version="1.2.0"
+Service-Component: OSGI-INF/org.eclipse.chemclipse.converter.methods.MethodProcessTypeSupplier.xml
 
