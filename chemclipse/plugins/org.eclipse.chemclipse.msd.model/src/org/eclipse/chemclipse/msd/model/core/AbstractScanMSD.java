@@ -39,17 +39,16 @@ import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 
 /**
- * The class {@code AbstractScanMSD} controls the basic operations for all types of
- * mass spectra.<br/>
+ * The class {@code AbstractScanMSD} controls the basic operations for all types
+ * of mass spectra.<br/>
  * Two kinds of mass spectra inherit from AbstractMassSpectrum:
  * <ol>
- * <li>{@link AbstractRegularMassSpectrum} implements a normal mass spectrum, for
- * example an scan with a retention time, a retention index and a scan number.
- * </li>
- * <li>
- * {@link AbstractCombinedMassSpectrum} implements a mass spectrum, which has
- * been created for example by combination of a mass spectrum range. It has no
- * specific retention time but a start and stop retention time and so on.
+ * <li>{@link AbstractRegularMassSpectrum} implements a normal mass spectrum,
+ * for example an scan with a retention time, a retention index and a scan
+ * number.</li>
+ * <li>{@link AbstractCombinedMassSpectrum} implements a mass spectrum, which
+ * has been created for example by combination of a mass spectrum range. It has
+ * no specific retention time but a start and stop retention time and so on.
  * </li>
  * </ol>
  *
@@ -61,8 +60,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 
 	/**
-	 * Renew the serialVersionUID any time you have changed some fields or
-	 * methods.
+	 * Renew the serialVersionUID any time you have changed some fields or methods.
 	 */
 	private static final long serialVersionUID = -5705437012632871946L;
 	//
@@ -78,24 +76,27 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private IScanMSD optimizedMassSpectrum;
 
 	public AbstractScanMSD() {
+
 		super();
 		init();
 	}
 
 	public AbstractScanMSD(final Collection<? extends IIon> ions) {
+
 		super();
 		init();
 		this.ionsList = new ArrayList<>(ions);
 	}
 
 	/**
-	 * Creates a new instance of {@code AbstractScanMSD} by creating a
-	 * shallow copy of provided {@code templateScan}.
+	 * Creates a new instance of {@code AbstractScanMSD} by creating a shallow copy
+	 * of provided {@code templateScan}.
 	 * 
 	 * @param templateScan
 	 *            {@link IScanMSD scan} that is used as a template
 	 */
 	public AbstractScanMSD(IScanMSD templateScan) {
+
 		super(templateScan);
 		init();
 		this.ionsList = new ArrayList<>(templateScan.getIons());
@@ -111,11 +112,9 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private void init() {
 
 		/*
-		 * If mass spectrum will be cloned, the ion list will be
-		 * created as a new instance in the method
-		 * createNewIonList().<br/> The ions of the object to
-		 * be cloned will be stored in the new object again by each implementing
-		 * class.
+		 * If mass spectrum will be cloned, the ion list will be created as a new
+		 * instance in the method createNewIonList().<br/> The ions of the object to be
+		 * cloned will be stored in the new object again by each implementing class.
 		 */
 		createNewIonList();
 		try {
@@ -159,10 +158,9 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		for(IIon actualIon : ionsList) {
 			if(checkIon(ion, actualIon)) {
 				/*
-				 * Check whether the intensity should be added or only the
-				 * higher intensity should be taken.<br/> Replace the abundance
-				 * only, if the abundance is higher than the older one otherwise
-				 * do nothing
+				 * Check whether the intensity should be added or only the higher intensity
+				 * should be taken.<br/> Replace the abundance only, if the abundance is higher
+				 * than the older one otherwise do nothing
 				 */
 				if(addIntensity) {
 					addIntensities(actualIon, ion);
@@ -281,8 +279,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	/**
-	 * Use this list only to iterate through the ions of this mass
-	 * spectrum.<br/>
+	 * Use this list only to iterate through the ions of this mass spectrum.<br/>
 	 * To add and remove ions, use the methods of this class.
 	 */
 	@Override
@@ -308,15 +305,27 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		} else {
 			IIon ion;
 			Iterator<IIon> iterator = ionsList.iterator();
-			Set<Integer> excludedIonsNominal = excludedIons.getIonsNominal();
 			while(iterator.hasNext()) {
 				ion = iterator.next();
-				if(!excludedIonsNominal.contains(AbstractIon.getIon(ion.getIon()))) {
+				if(filterIon(ion, excludedIons)) {
 					totalSignal += ion.getAbundance();
 				}
 			}
 		}
 		return totalSignal;
+	}
+
+	private static boolean filterIon(IIon ion, IMarkedIons filterIons) {
+
+		Set<Integer> excludedIonsNominal = filterIons.getIonsNominal();
+		switch(filterIons.getMode()) {
+			case EXCLUDE:
+				return !excludedIonsNominal.contains(AbstractIon.getIon(ion.getIon()));
+			case INCLUDE:
+				return excludedIonsNominal.contains(AbstractIon.getIon(ion.getIon()));
+			default:
+				return true;
+		}
 	}
 
 	@Override
@@ -353,9 +362,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			extractedIonSignal = new ExtractedIonSignal(startIon, stopIon);
 			for(IIon ion : getIons()) {
 				/*
-				 * The ion.getIon() will be tested in the IExtractedIonSignal
-				 * instance if it is valid (that means between startIon and
-				 * stopIon).
+				 * The ion.getIon() will be tested in the IExtractedIonSignal instance if it is
+				 * valid (that means between startIon and stopIon).
 				 */
 				extractedIonSignal.setAbundance(ion);
 			}
@@ -535,8 +543,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public void adjustTotalSignal(float totalSignal) {
 
 		/*
-		 * If the total signal is 0 there would be no ion stored in
-		 * the list.<br/> That's not what we want.
+		 * If the total signal is 0 there would be no ion stored in the list.<br/>
+		 * That's not what we want.
 		 */
 		if(totalSignal <= 0.0f || Float.isNaN(totalSignal) || Float.isInfinite(totalSignal)) {
 			return;
@@ -618,9 +626,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public void enforceLoadScanProxy() {
 
 		/*
-		 * Normally, no action is required.
-		 * The vendor proxy overrides this
-		 * method by default.
+		 * Normally, no action is required. The vendor proxy overrides this method by
+		 * default.
 		 */
 	}
 
@@ -658,15 +665,15 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			return this;
 		}
 		/*
-		 * There is at least 1 ion stored in the list otherwise the
-		 * code would not have reached this point.
+		 * There is at least 1 ion stored in the list otherwise the code would not have
+		 * reached this point.
 		 */
 		List<IIon> ions = getIons();
 		Comparator<IIon> comparator = new IonCombinedComparator(IonComparatorMode.ABUNDANCE_FIRST);
 		double highestAbundance = Collections.max(ions, comparator).getAbundance();
 		/*
-		 * Return if the highest abundance == 0.<br/> If yes a division through
-		 * 0 would throw a ArithmeticException.
+		 * Return if the highest abundance == 0.<br/> If yes a division through 0 would
+		 * throw a ArithmeticException.
 		 */
 		double factor;
 		if(highestAbundance == 0) {
@@ -875,9 +882,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	/**
-	 * This method is used only to create a new ion list. The list has
-	 * to be filled by the implementation specific ions of each
-	 * implementing class.
+	 * This method is used only to create a new ion list. The list has to be filled
+	 * by the implementation specific ions of each implementing class.
 	 */
 	private void createNewIonList() {
 
@@ -885,8 +891,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	/**
-	 * Checks if the given ion mass over charge ratio (ion) should be
-	 * removed.
+	 * Checks if the given ion mass over charge ratio (ion) should be removed.
 	 * 
 	 * @param ions
 	 * @param actualIon
@@ -907,8 +912,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	/**
-	 * Removes all ions stored in the list from the actual mass
-	 * spectrum.
+	 * Removes all ions stored in the list from the actual mass spectrum.
 	 * 
 	 * @param ionsToRemove
 	 */
@@ -928,8 +932,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		if(ion1 != null && ion2 != null) {
 			if(ion1.getIon() == ion2.getIon()) {
 				/*
-				 * If it is the same ion, the ion transitions could
-				 * be different.
+				 * If it is the same ion, the ion transitions could be different.
 				 */
 				IIonTransition ionTransition1 = ion1.getIonTransition();
 				IIonTransition ionTransition2 = ion2.getIonTransition();
