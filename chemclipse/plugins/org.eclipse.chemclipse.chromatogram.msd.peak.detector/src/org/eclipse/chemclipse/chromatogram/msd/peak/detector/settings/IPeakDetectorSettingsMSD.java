@@ -11,7 +11,25 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings;
 
+import java.util.Collection;
+
 import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
+import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 public interface IPeakDetectorSettingsMSD extends IPeakDetectorSettings {
+
+	enum FilterMode {
+		INCLUDE, EXCLUDE
+	}
+
+	float getMinimumSignalToNoiseRatio();
+
+	boolean isIncludeBackground();
+
+	WindowSize getMovingAverageWindowSize();
+
+	Collection<Number> getFilterIon();
+
+	FilterMode getFilterMode();
+
 }

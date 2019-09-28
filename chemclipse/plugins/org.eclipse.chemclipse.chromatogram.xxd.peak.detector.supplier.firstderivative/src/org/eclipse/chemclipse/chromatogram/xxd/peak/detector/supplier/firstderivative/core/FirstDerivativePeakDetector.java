@@ -70,7 +70,7 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 				} else {
 					configuration = globalConfiguration;
 				}
-				slopes = PeakDetectorMSD.getFirstDerivativeSlopes(new ChromatogramSelectionMSD((IChromatogramMSD)measurement), configuration.getMovingAverageWindowSize());
+				slopes = PeakDetectorMSD.getFirstDerivativeSlopes(new ChromatogramSelectionMSD((IChromatogramMSD)measurement), configuration);
 			} else if(measurement instanceof IChromatogramCSD) {
 				if(globalConfiguration == null) {
 					configuration = new FirstDerivativePeakDetectorSettings(DataType.CSD);

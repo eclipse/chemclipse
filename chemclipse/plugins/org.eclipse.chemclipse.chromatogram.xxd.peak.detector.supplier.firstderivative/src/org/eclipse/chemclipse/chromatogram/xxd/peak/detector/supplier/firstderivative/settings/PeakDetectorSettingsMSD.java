@@ -11,18 +11,26 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
+import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 
+	private static final Logger logger = Logger.getLogger(PeakDetectorSettingsMSD.class);
 	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
 	@EnumSelectionRadioButtonsSettingProperty
 	Threshold threshold = Threshold.MEDIUM;
@@ -35,6 +43,22 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
 	@EnumSelectionSettingProperty
 	private WindowSize windowSize = WindowSize.WIDTH_5;
+	@JsonProperty(value = "Ion Filter Mode", defaultValue = "EXCLUDE")
+	@EnumSelectionRadioButtonsSettingProperty
+	FilterMode filterMode = FilterMode.EXCLUDE;
+	@JsonProperty(value = "Filter Ions", defaultValue = "")
+	@StringSettingsProperty(regExp = "")
+	String filterIonsString;
+
+	public String getFilterIonsString() {
+
+		return filterIonsString;
+	}
+
+	public void setFilterIonsString(String filterIonsString) {
+
+		this.filterIonsString = filterIonsString;
+	}
 
 	public Threshold getThreshold() {
 
@@ -46,26 +70,42 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 		this.threshold = threshold;
 	}
 
+	@Override
+	public FilterMode getFilterMode() {
+
+		return filterMode;
+	}
+
+	public void setFilterMode(FilterMode filterMode) {
+
+		this.filterMode = filterMode;
+	}
+
+	@Override
 	public boolean isIncludeBackground() {
 
 		return includeBackground;
 	}
 
+	@Override
 	public void setIncludeBackground(boolean includeBackground) {
 
 		this.includeBackground = includeBackground;
 	}
 
+	@Override
 	public float getMinimumSignalToNoiseRatio() {
 
 		return minimumSignalToNoiseRatio;
 	}
 
+	@Override
 	public void setMinimumSignalToNoiseRatio(float minimumSignalToNoiseRatio) {
 
 		this.minimumSignalToNoiseRatio = minimumSignalToNoiseRatio;
 	}
 
+	@Override
 	public WindowSize getMovingAverageWindowSize() {
 
 		return windowSize;
@@ -74,5 +114,25 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	public void setMovingAverageWindowSize(WindowSize windowSize) {
 
 		this.windowSize = windowSize;
+	}
+
+	@Override
+	public Collection<Number> getFilterIon() {
+
+		return parseIons(filterIonsString);
+	}
+
+	static Collection<Number> parseIons(String filterIonsString) {
+
+		List<Number> ionNumbers = new ArrayList<>();
+		String[] split = filterIonsString.trim().split("[\\s.,;]+");
+		for(String s : split) {
+			try {
+				ionNumbers.add(new BigDecimal(s));
+			} catch(NumberFormatException e) {
+				logger.debug("Failed to parse valid input from " + s);
+			}
+		}
+		return ionNumbers;
 	}
 }
