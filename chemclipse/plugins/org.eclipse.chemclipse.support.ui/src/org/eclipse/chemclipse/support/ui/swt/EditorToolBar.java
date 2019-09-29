@@ -15,6 +15,7 @@ import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContain
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -22,6 +23,7 @@ import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.preferences.ToolbarPreferencePage;
 import org.eclipse.jface.action.AbstractGroupMarker;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -93,15 +95,17 @@ public class EditorToolBar {
 		if(parent != null) {
 			parent.setShowText(showText);
 		} else {
-			this.showText = showText;
-			for(ActionContributionItem item : actionContributions) {
-				if(showText) {
-					item.setMode(ActionContributionItem.MODE_FORCE_TEXT);
-				} else {
-					item.setMode(0);
+			if(this.showText != showText) {
+				this.showText = showText;
+				for(ActionContributionItem item : actionContributions) {
+					if(showText) {
+						item.setMode(ActionContributionItem.MODE_FORCE_TEXT);
+					} else {
+						item.setMode(0);
+					}
 				}
+				update();
 			}
-			update();
 		}
 	}
 
@@ -221,16 +225,45 @@ public class EditorToolBar {
 					super.setChecked(checked);
 				}
 			};
-			boolean checked;
-			if(preferenceStore != null) {
-				preferenceStore.setDefault(key, true);
-				checked = preferenceStore.getBoolean(key);
-				setShowText(checked);
-			} else {
-				checked = isShowText();
-			}
+			boolean checked = updateShowTextByPreference(preferenceStore, key);
 			action.setChecked(checked);
 			config.getConfigChild().addAction(action);
+			update();
+		}
+	}
+
+	private boolean updateShowTextByPreference(IPreferenceStore preferenceStore, String key) {
+
+		boolean checked;
+		if(preferenceStore != null) {
+			preferenceStore.setDefault(key, true);
+			checked = preferenceStore.getBoolean(key);
+			setShowText(checked);
+		} else {
+			checked = isShowText();
+		}
+		return checked;
+	}
+
+	/**
+	 * enables a Settingspage where the user can choose to show text
+	 * 
+	 * @param preferenceStore
+	 * @param key
+	 * @return
+	 */
+	public ToolbarPreferencePage enableToolbarTextPage(IPreferenceStore preferenceStore, String key) {
+
+		if(parent != null) {
+			return parent.enableToolbarTextPage(preferenceStore, key);
+		} else {
+			updateShowTextByPreference(preferenceStore, key);
+			ToolbarPreferencePage preferencePage = new ToolbarPreferencePage(preferenceStore, key);
+			config.addPreferencePageContainer(new PreferencePageContainer(() -> {
+				return Collections.singleton(preferencePage);
+			}, () -> updateShowTextByPreference(preferenceStore, key)));
+			update();
+			return preferencePage;
 		}
 	}
 
@@ -239,9 +272,10 @@ public class EditorToolBar {
 		if(parent != null) {
 			parent.addPreferencePages(pageSupplier, settingsChangedRunnable);
 			return;
+		} else {
+			config.addPreferencePageContainer(new PreferencePageContainer(pageSupplier, settingsChangedRunnable));
+			update();
 		}
-		config.addPreferencePageContainer(new PreferencePageContainer(pageSupplier, settingsChangedRunnable));
-		update();
 	}
 
 	public boolean isVisible() {
@@ -293,7 +327,7 @@ public class EditorToolBar {
 						ToolBar parent = widget.getParent();
 						PreferenceDialog preferenceDialog = new PreferenceDialog(parent.getShell(), preferenceManager);
 						preferenceDialog.create();
-						preferenceDialog.setMessage("Settings");
+						preferenceDialog.getShell().setText("Settings");
 						if(preferenceDialog.open() == Window.OK) {
 							for(PreferencePageContainer container : preferencePages) {
 								if(container.runnable != null) {
