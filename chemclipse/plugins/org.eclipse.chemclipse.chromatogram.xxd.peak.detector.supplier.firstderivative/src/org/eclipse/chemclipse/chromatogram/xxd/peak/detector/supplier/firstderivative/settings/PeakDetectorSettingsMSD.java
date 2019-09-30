@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
-import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -47,7 +46,6 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@EnumSelectionRadioButtonsSettingProperty
 	FilterMode filterMode = FilterMode.EXCLUDE;
 	@JsonProperty(value = "Filter Ions", defaultValue = "")
-	@StringSettingsProperty(regExp = "")
 	String filterIonsString;
 
 	public String getFilterIonsString() {
