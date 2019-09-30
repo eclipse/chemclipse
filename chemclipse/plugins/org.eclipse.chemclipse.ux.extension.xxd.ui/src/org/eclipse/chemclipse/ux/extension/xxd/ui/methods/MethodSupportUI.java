@@ -17,7 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -64,8 +63,6 @@ import org.eclipse.swt.widgets.Shell;
 
 public class MethodSupportUI extends Composite implements PreferencesConfig {
 
-	private static final Logger logger = Logger.getLogger(MethodSupportUI.class);
-	//
 	private ComboViewer comboViewerMethods;
 	private Button buttonAddMethod;
 	private Button buttonEditMethod;
@@ -191,8 +188,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-				if(object instanceof File) {
-					File file = (File)object;
+				File file = getProcessMethodFile(object);
+				if(file != null) {
 					supplierEditorSupport.openEditor(file);
 				}
 			}
@@ -214,24 +211,21 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
 				if(object instanceof IProcessMethod) {
-					ProcessMethod processMethod = (ProcessMethod)object;
+					IProcessMethod processMethod = (IProcessMethod)object;
 					if(processMethod.isReadOnly()) {
 						MessageDialog.openInformation(e.display.getActiveShell(), "Delete Method", "You can't delete this method because it is read only");
 						return;
 					}
-					if(object instanceof ProcessMethod) {
-						// we must check here for ProcessMethod instead of the interface because only those files can be deleted!
-						File file = ((ProcessMethod)object).getSourceFile();
-						if(file.exists()) {
-							if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Method", "Do you want to delete the method: " + file.getName() + "?")) {
-								file.delete();
-								preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, "");
-								computeMethodComboItems();
-							}
-							return;
+					File file = getProcessMethodFile(object);
+					if(file != null && file.exists()) {
+						if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Method", "Do you want to delete the method: " + file.getName() + "?")) {
+							file.delete();
+							preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, "");
+							computeMethodComboItems();
 						}
+						return;
 					}
-					MessageDialog.openInformation(e.display.getActiveShell(), "Delete Method", "Can't determine the file for deletion, maybe it was already deleted?");
+					MessageDialog.openInformation(e.display.getActiveShell(), "Delete Method", "Can't determine the file for deletion, maybe it was already deleted or you don't have sufficient rights?");
 				}
 			}
 		});
@@ -251,11 +245,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-				if(object instanceof File) {
-					File file = (File)object;
-					if(file.exists()) {
-						runMethod(file, e.display.getActiveShell());
-					}
+				if(object instanceof IProcessMethod) {
+					runMethod((IProcessMethod)object, e.display.getActiveShell());
 				}
 			}
 		});
@@ -369,9 +360,9 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		}
 	}
 
-	private void runMethod(File file, Shell shell) {
+	private void runMethod(IProcessMethod processMethod, Shell shell) {
 
-		if(methodListener != null && file != null) {
+		if(methodListener != null && processMethod != null) {
 			try {
 				ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 				dialog.run(false, false, new IRunnableWithProgress() {
@@ -379,24 +370,13 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, monitor);
-						boolean hasErrorMessages = processingInfo.hasErrorMessages();
-						if(!hasErrorMessages) {
-							try {
-								IProcessMethod processMethod = processingInfo.getProcessingResult();
-								methodListener.execute(processMethod, monitor);
-							} catch(Exception e) {
-								logger.warn(e);
-							}
-						} else {
-							ProcessingInfoViewSupport.updateProcessingInfo(shell.getDisplay(), processingInfo, hasErrorMessages);
-						}
+						methodListener.execute(processMethod, monitor);
 					}
 				});
 			} catch(InvocationTargetException e) {
-				logger.warn(e);
+				ProcessingInfoViewSupport.updateProcessingInfoError(processMethod.getName(), "Execution failed", e.getCause());
 			} catch(InterruptedException e) {
-				logger.warn(e);
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
@@ -409,14 +389,21 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		buttonExecuteMethod.setEnabled(false);
 		//
 		Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-		if(object instanceof File) {
-			File file = (File)object;
-			if(file.exists()) {
-				buttonEditMethod.setEnabled(true);
-				buttonDeleteMethod.setEnabled(true);
-				buttonExecuteMethod.setEnabled(true);
-			}
+		if(object instanceof IProcessMethod) {
+			IProcessMethod method = (IProcessMethod)object;
+			boolean editable = getProcessMethodFile(object) != null && !method.isReadOnly();
+			buttonEditMethod.setEnabled(editable);
+			buttonDeleteMethod.setEnabled(editable);
+			buttonExecuteMethod.setEnabled(true);
 		}
+	}
+
+	private File getProcessMethodFile(Object object) {
+
+		if(object instanceof ProcessMethod) {
+			return ((ProcessMethod)object).getSourceFile();
+		}
+		return null;
 	}
 
 	@Override
