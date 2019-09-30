@@ -49,6 +49,10 @@ public class ControlBuilder {
 		layout.marginHeight = 0;
 		layout.horizontalSpacing = 0;
 		layout.verticalSpacing = 0;
+		layout.marginBottom = 0;
+		layout.marginLeft = 0;
+		layout.marginTop = 0;
+		layout.marginRight = 0;
 		composite.setLayout(layout);
 		return fill(composite);
 	}
