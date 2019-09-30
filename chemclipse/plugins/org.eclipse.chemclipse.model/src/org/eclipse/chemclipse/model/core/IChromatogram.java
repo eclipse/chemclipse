@@ -149,24 +149,21 @@ public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatog
 	 * 
 	 * @return {@link IChromatogram}
 	 */
-	@SuppressWarnings("rawtypes")
-	List<IChromatogram> getReferencedChromatograms();
+	List<IChromatogram<?>> getReferencedChromatograms();
 
 	/**
 	 * Add a referenced chromatogram.
 	 * 
 	 * @param chromatogram
 	 */
-	@SuppressWarnings("rawtypes")
-	void addReferencedChromatogram(IChromatogram chromatogram);
+	void addReferencedChromatogram(IChromatogram<?> chromatogram);
 
 	/**
 	 * Removes a referenced chromatogram.
 	 * 
 	 * @param chromatogram
 	 */
-	@SuppressWarnings("rawtypes")
-	void removeReferencedChromatogram(IChromatogram chromatogram);
+	void removeReferencedChromatogram(IChromatogram<?> chromatogram);
 
 	void removeAllReferencedChromatograms();
 

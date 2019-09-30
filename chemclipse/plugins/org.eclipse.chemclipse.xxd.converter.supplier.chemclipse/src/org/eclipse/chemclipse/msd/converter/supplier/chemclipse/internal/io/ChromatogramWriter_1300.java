@@ -103,7 +103,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		/*
 		 * Referenced Chromatograms
 		 */
-		List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
+		List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 		writeChromatogramReferenceInfo(zipOutputStream, directoryPrefix, referencedChromatograms, monitor);
 		writeReferencedChromatograms(zipOutputStream, directoryPrefix, referencedChromatograms, monitor);
 	}
@@ -654,7 +654,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		ISeparationColumnIndices separationColumnIndices = chromatogram.getSeparationColumnIndices();
 		dataOutputStream.writeInt(separationColumnIndices.size());
 		for(Map.Entry<Integer, IRetentionIndexEntry> entry : separationColumnIndices.entrySet()) {
-			IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)entry.getValue();
+			IRetentionIndexEntry retentionIndexEntry = entry.getValue();
 			writeString(dataOutputStream, retentionIndexEntry.getName());
 			dataOutputStream.writeInt(retentionIndexEntry.getRetentionTime());
 			dataOutputStream.writeFloat(retentionIndexEntry.getRetentionIndex());
@@ -671,7 +671,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void writeChromatogramReferenceInfo(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram> referencedChromatograms, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramReferenceInfo(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram<?>> referencedChromatograms, IProgressMonitor monitor) throws IOException {
 
 		ZipEntry zipEntryType = new ZipEntry(directoryPrefix + IFormat.FILE_REFERENCE_INFO);
 		zipOutputStream.putNextEntry(zipEntryType);
@@ -681,7 +681,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void writeReferencedChromatograms(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram> referencedChromatograms, IProgressMonitor monitor) throws IOException {
+	private void writeReferencedChromatograms(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram<?>> referencedChromatograms, IProgressMonitor monitor) throws IOException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Chromatogram", referencedChromatograms.size() * 20);
 		try {

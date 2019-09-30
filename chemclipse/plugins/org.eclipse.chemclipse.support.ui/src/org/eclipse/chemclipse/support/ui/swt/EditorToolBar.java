@@ -198,10 +198,10 @@ public class EditorToolBar {
 	 * @param key
 	 *            the key under that the setting should be stored
 	 */
-	public void enableToolbarTextButton(IPreferenceStore preferenceStore, String key) {
+	public IAction enableToolbarTextButton(IPreferenceStore preferenceStore, String key) {
 
 		if(parent != null) {
-			parent.enableToolbarTextButton(preferenceStore, key);
+			return parent.enableToolbarTextButton(preferenceStore, key);
 		} else {
 			Action action = new Action("Show Text", Action.AS_CHECK_BOX) {
 
@@ -229,6 +229,7 @@ public class EditorToolBar {
 			action.setChecked(checked);
 			config.getConfigChild().addAction(action);
 			update();
+			return action;
 		}
 	}
 
