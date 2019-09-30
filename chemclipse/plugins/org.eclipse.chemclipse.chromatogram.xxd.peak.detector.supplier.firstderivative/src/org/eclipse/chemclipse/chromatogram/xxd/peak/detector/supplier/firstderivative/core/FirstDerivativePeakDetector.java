@@ -70,7 +70,7 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 				} else {
 					configuration = globalConfiguration;
 				}
-				slopes = PeakDetectorMSD.getFirstDerivativeSlopes(new ChromatogramSelectionMSD((IChromatogramMSD)measurement), configuration);
+				slopes = PeakDetectorMSD.getFirstDerivativeSlopes(new ChromatogramSelectionMSD((IChromatogramMSD)measurement), configuration.getMovingAverageWindowSize(), configuration.getFilterIon(), configuration.getFilterMode());
 			} else if(measurement instanceof IChromatogramCSD) {
 				if(globalConfiguration == null) {
 					configuration = new FirstDerivativePeakDetectorSettings(DataType.CSD);
@@ -153,6 +153,7 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 		private double slope;
 
 		public SignalSlope(ISignal signal, ISignal signalNext) {
+
 			IPoint p1 = new Point(signal.getX(), signal.getY());
 			IPoint p2 = new Point(signalNext.getX(), signalNext.getY());
 			slope = Equations.calculateSlopeAbs(p1, p2);
