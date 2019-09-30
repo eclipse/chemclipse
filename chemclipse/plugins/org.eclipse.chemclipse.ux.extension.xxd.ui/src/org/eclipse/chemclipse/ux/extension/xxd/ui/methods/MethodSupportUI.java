@@ -34,6 +34,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PreferencesConfig;
+import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatogramExport;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -60,7 +62,7 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
-public class MethodSupportUI extends Composite {
+public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 	private static final Logger logger = Logger.getLogger(MethodSupportUI.class);
 	//
@@ -73,9 +75,15 @@ public class MethodSupportUI extends Composite {
 	private IMethodListener methodListener = null;
 	private ISupplierEditorSupport supplierEditorSupport = new EditorSupportFactory(DataType.MTH).getInstanceEditorSupport();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private boolean showsettings;
 
 	public MethodSupportUI(Composite parent, int style) {
+		this(parent, style, true);
+	}
+
+	public MethodSupportUI(Composite parent, int style, boolean showSettingsInToolbar) {
 		super(parent, style);
+		this.showsettings = showSettingsInToolbar;
 		createControl();
 	}
 
@@ -89,7 +97,7 @@ public class MethodSupportUI extends Composite {
 		setLayout(new FillLayout());
 		//
 		Composite composite = new Composite(this, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(6, false);
+		GridLayout gridLayout = new GridLayout(showsettings ? 6 : 5, false);
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
@@ -99,7 +107,9 @@ public class MethodSupportUI extends Composite {
 		buttonEditMethod = createButtonEditMethod(composite);
 		buttonDeleteMethod = createButtonDeleteMethod(composite);
 		buttonExecuteMethod = createButtonExecuteMethod(composite);
-		createButtonSettings(composite);
+		if(showsettings) {
+			createButtonSettings(composite);
+		}
 		//
 		computeMethodComboItems();
 	}
@@ -264,16 +274,11 @@ public class MethodSupportUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageProcessing = new PreferencePageReportExport();
-				preferencePageProcessing.setTitle("Processing");
-				//
-				IPreferencePage preferencePageMethods = new PreferencePageMethods();
-				preferencePageMethods.setTitle("Methods");
-				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageProcessing));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageMethods));
-				//
+				IPreferencePage[] pages = getPreferencePages();
+				for(int i = 0; i < pages.length; i++) {
+					preferenceManager.addToRoot(new PreferenceNode("page." + i, pages[i]));
+				}
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
@@ -288,11 +293,6 @@ public class MethodSupportUI extends Composite {
 		});
 		//
 		return button;
-	}
-
-	private void applySettings() {
-
-		computeMethodComboItems();
 	}
 
 	private boolean selectMethodDirectory(Shell shell) {
@@ -326,7 +326,7 @@ public class MethodSupportUI extends Composite {
 			processMethod.setOperator(UserManagement.getCurrentUser());
 			processMethod.setDescription("This is an empty process method. Please modify.");
 			//
-			IProcessingInfo processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
+			IProcessingInfo<?> processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
 			if(!processingInfo.hasErrorMessages()) {
 				preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
 				computeMethodComboItems();
@@ -417,5 +417,23 @@ public class MethodSupportUI extends Composite {
 				buttonExecuteMethod.setEnabled(true);
 			}
 		}
+	}
+
+	@Override
+	public IPreferencePage[] getPreferencePages() {
+
+		IPreferencePage preferencePageReportExport = new PreferencePageReportExport();
+		preferencePageReportExport.setTitle("Report Export");
+		IPreferencePage preferencePageChromatogramExport = new PreferencePageChromatogramExport();
+		preferencePageChromatogramExport.setTitle("Chromatogram Export");
+		IPreferencePage preferencePageMethods = new PreferencePageMethods();
+		preferencePageMethods.setTitle("Methods");
+		return new IPreferencePage[]{preferencePageReportExport, preferencePageChromatogramExport, preferencePageMethods};
+	}
+
+	@Override
+	public void applySettings() {
+
+		computeMethodComboItems();
 	}
 }

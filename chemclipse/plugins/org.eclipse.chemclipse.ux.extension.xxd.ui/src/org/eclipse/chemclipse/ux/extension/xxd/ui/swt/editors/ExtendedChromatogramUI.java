@@ -1016,7 +1016,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private Composite createToolbarMethod(Composite parent) {
 
-		MethodSupportUI methodSupportUI = new MethodSupportUI(parent, SWT.NONE);
+		MethodSupportUI methodSupportUI = new MethodSupportUI(parent, SWT.NONE, false);
 		methodSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
@@ -1030,6 +1030,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, processingInfo.hasErrorMessages());
 			}
 		});
+		toolbarMain.addPreferencePages(() -> Arrays.asList(methodSupportUI.getPreferencePages()), methodSupportUI::applySettings);
 		//
 		return methodSupportUI;
 	}
