@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -175,7 +174,7 @@ public class ProcessingWizardPage extends WizardPage {
 				}
 			}
 		}
-		Set<IProcessSupplier<?>> processTypeSuppliers = processTypeSupport.getSupplier(EnumSet.copyOf(selectedDataTypes));
+		Set<IProcessSupplier<?>> processTypeSuppliers = processTypeSupport.getSupplier(selectedDataTypes);
 		Map<String, ProcessCategory> categories = new TreeMap<>();
 		for(IProcessSupplier<?> supplier : processTypeSuppliers) {
 			String category = supplier.getCategory();

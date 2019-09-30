@@ -4,16 +4,22 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-      		category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"      
+      		category="org.eclipse.chemclipse.chromatogram.xxd.report.ui.preferences.reportPreferencePage"      
             class="org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport"
-            id="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
+            id="org.eclipse.chemclipse.xxd.process.ui.preferences.processReportExport"
             name="Chromatogram Report Export Path">
       </page>
       <page
-            category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
+            category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"
             class="org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatogramExport"
-            id="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
+            id="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePageExportChromatogram"
             name="Chromatogram Export Path">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.xxd.process.ui.preferences.ProcessCategoryPage"
+            id="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
+            name="Process">
       </page>
    </extension>
    

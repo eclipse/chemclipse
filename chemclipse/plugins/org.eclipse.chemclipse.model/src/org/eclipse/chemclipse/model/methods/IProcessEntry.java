@@ -14,6 +14,9 @@ package org.eclipse.chemclipse.model.methods;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 
 public interface IProcessEntry {
 
@@ -36,4 +39,13 @@ public interface IProcessEntry {
 	void setJsonSettings(String jsonSettings);
 
 	List<DataType> getSupportedDataTypes();
+
+	public static <T> ProcessorPreferences<T> getProcessEntryPreferences(IProcessEntry entry, ProcessSupplierContext context) {
+
+		IProcessSupplier<T> supplier = context.getSupplier(entry.getProcessorId());
+		if(supplier == null) {
+			return null;
+		}
+		return new ProcessEntryProcessorPreferences<>(supplier, entry);
+	}
 }

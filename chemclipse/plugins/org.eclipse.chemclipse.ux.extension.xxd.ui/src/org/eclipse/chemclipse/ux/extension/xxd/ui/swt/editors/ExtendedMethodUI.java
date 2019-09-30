@@ -847,7 +847,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, boolean showHint) {
 
-		ProcessorPreferences<?> preferences = processingSupport.getProcessEntryPreferences(processEntry);
+		ProcessorPreferences<?> preferences = IProcessEntry.getProcessEntryPreferences(processEntry, processingSupport);
 		if(preferences == null) {
 			// handle like cancel
 			return false;

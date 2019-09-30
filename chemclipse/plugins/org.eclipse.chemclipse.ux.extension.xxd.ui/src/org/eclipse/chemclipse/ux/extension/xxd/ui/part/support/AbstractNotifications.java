@@ -57,7 +57,11 @@ public abstract class AbstractNotifications<T> {
 	public void select(T selection) {
 
 		T object = getSelection();
-		selectedObject = new SoftReference<T>(selection);
+		if(selection == null) {
+			selectedObject = null;
+		} else {
+			selectedObject = new SoftReference<T>(selection);
+		}
 		for(ObjectChangedListener<? super T> listener : listeners) {
 			listener.objectChanged(ChangeType.CHANGED, selection, object);
 		}
@@ -65,6 +69,9 @@ public abstract class AbstractNotifications<T> {
 
 	public T getSelection() {
 
+		if(selectedObject == null) {
+			return null;
+		}
 		return selectedObject.get();
 	}
 }

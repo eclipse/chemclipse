@@ -18,12 +18,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
-import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
@@ -34,24 +34,28 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.settings.UserManagement;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
+import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ObjectChangedListener;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ProcessMethodNotifications;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
@@ -59,21 +63,18 @@ import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWS
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
-import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 @SuppressWarnings("rawtypes")
@@ -83,7 +84,6 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	public static final String TOOLTIP = "Chromatogram Editor";
 	//
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramEditor.class);
-	private static final Runnable runGC = () -> System.gc();
 	//
 	private DataType dataType;
 	private MPart part;
@@ -96,7 +96,16 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private Shell shell;
-	private ProcessorFactory filterFactory;
+	private ObjectChangedListener<Object> updateMenuListener = new ObjectChangedListener<Object>() {
+
+		@Override
+		public void objectChanged(ChangeType type, Object newObject, Object oldObject) {
+
+			if(extendedChromatogramUI != null) {
+				extendedChromatogramUI.updateMenu();
+			}
+		}
+	};
 
 	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessorFactory filterFactory, Shell shell) {
 		super(part);
@@ -104,7 +113,6 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		this.dataType = dataType;
 		this.part = part;
 		this.dirtyable = dirtyable;
-		this.filterFactory = filterFactory;
 		this.eventBroker = Activator.getDefault().getEventBroker();
 		this.shell = shell;
 		//
@@ -152,9 +160,16 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		}
 	}
 
-	@PreDestroy
-	private void preDestroy() {
+	@PostConstruct
+	private void postConstruct(ProcessMethodNotifications notification) {
 
+		notification.addObjectChangedListener(updateMenuListener);
+	}
+
+	@PreDestroy
+	private void preDestroy(ProcessMethodNotifications notifications, PartSupport partSupport) {
+
+		notifications.removeObjectChangedListener(updateMenuListener);
 		if(eventBroker != null) {
 			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -183,31 +198,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 				}
 			});
 		}
-		//
-		EModelService modelService = ModelSupportAddon.getModelService();
-		if(modelService != null) {
-			MApplication application = ModelSupportAddon.getApplication();
-			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
-			part.setToBeRendered(false);
-			part.setVisible(false);
-			DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					partStack.getChildren().remove(part);
-				}
-			});
-		}
-		/*
-		 * Run the garbage collector.
-		 */
-		Display display = DisplayUtils.getDisplay();
-		if(display != null) {
-			display.timerExec(200, runGC);
-		} else {
-			runGC.run();
-		}
+		partSupport.closePart(part);
 	}
 
 	@Persist
@@ -311,15 +302,10 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, monitor);
-						if(!processingInfo.hasErrorMessages()) {
-							try {
-								IProcessMethod processMethod = processingInfo.getProcessingResult();
-								ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
-								processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
-							} catch(Exception e) {
-								logger.warn(e);
-							}
+						IProcessMethod processMethod = Adapters.adapt(file, IProcessMethod.class);
+						if(processMethod != null) {
+							ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
+							IChromatogramSelectionProcessSupplier.applyProcessMethod(chromatogramSelection, processMethod, ProcessExecutionContext.create(processTypeSupport, new ProcessingInfo<>(), monitor));
 						}
 					}
 				});

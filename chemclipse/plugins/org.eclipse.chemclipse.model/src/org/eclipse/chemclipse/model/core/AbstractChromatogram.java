@@ -95,8 +95,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	/*
 	 * Some vendors store several chromatograms in one file.
 	 */
-	@SuppressWarnings("rawtypes")
-	private List<IChromatogram> referencedChromatograms;
+	private List<IChromatogram<?>> referencedChromatograms;
 	/*
 	 * Integration entries.
 	 */
@@ -125,7 +124,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		editHistory = new EditHistory();
 		baselineModel = new BaselineModel(this);
 		scans = new ArrayList<IScan>();
-		referencedChromatograms = new ArrayList<IChromatogram>();
+		referencedChromatograms = new ArrayList<IChromatogram<?>>();
 		chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		method = new TripleQuadMethod();
@@ -701,9 +700,8 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		return nameDefault;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public List<IChromatogram> getReferencedChromatograms() {
+	public List<IChromatogram<?>> getReferencedChromatograms() {
 
 		return referencedChromatograms;
 	}

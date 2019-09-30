@@ -47,7 +47,6 @@ public class SettingsClassParser implements SettingsParser {
 	private List<InputValue> inputValues;
 
 	public SettingsClassParser(Class<?> settingclass) {
-
 		this.settingclass = settingclass;
 	}
 
@@ -121,9 +120,11 @@ public class SettingsClassParser implements SettingsParser {
 								DoubleSettingsProperty settingsProperty = (DoubleSettingsProperty)annotation;
 								inputValue.addValidator(new MinMaxValidator<Double>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Double.class));
 							} else if(annotation instanceof StringSettingsProperty) {
-								StringSettingsProperty stringSettingsProperty = (StringSettingsProperty)annotation;
-								if(stringSettingsProperty.regExp() != null && !stringSettingsProperty.regExp().isEmpty())
-									inputValue.addValidator(new RegularExpressionValidator(property.getName(), Pattern.compile(stringSettingsProperty.regExp()), stringSettingsProperty.isMultiLine()));
+								StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
+								String regExp = settingsProperty.regExp();
+								if(regExp != null && !regExp.isEmpty()) {
+									inputValue.addValidator(new RegularExpressionValidator(property.getName(), Pattern.compile(regExp), settingsProperty.isMultiLine()));
+								}
 							} else if(annotation instanceof FileSettingProperty) {
 								inputValue.setFileSettingProperty((FileSettingProperty)annotation);
 							}

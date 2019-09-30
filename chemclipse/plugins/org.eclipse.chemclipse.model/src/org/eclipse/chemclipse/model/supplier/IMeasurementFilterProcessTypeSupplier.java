@@ -21,11 +21,10 @@ import java.util.function.Function;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.filter.IMeasurementFilter;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -68,31 +67,31 @@ public class IMeasurementFilterProcessTypeSupplier implements IProcessTypeSuppli
 		}
 
 		@Override
-		public Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, SettingsClass processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+		public Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, SettingsClass processSettings, ProcessExecutionContext context) {
 
 			// first try to process all at once
 			if(filter.acceptsIMeasurements(measurements)) {
-				return filter.filterIMeasurements(measurements, processSettings, Function.identity(), messageConsumer, monitor);
+				return filter.filterIMeasurements(measurements, processSettings, Function.identity(), context, context.getProgressMonitor());
 			} else {
 				// try individual ones
 				List<IMeasurement> resultList = new ArrayList<>();
-				SubMonitor subMonitor = SubMonitor.convert(monitor, measurements.size());
+				SubMonitor subMonitor = SubMonitor.convert(context.getProgressMonitor(), measurements.size());
 				int unprocessed = 0;
 				for(IMeasurement measurement : measurements) {
 					Set<IMeasurement> singleItem = Collections.singleton(measurement);
 					if(filter.acceptsIMeasurements(singleItem)) {
 						// we can process this single item ...
-						resultList.addAll(filter.filterIMeasurements(singleItem, processSettings, Function.identity(), messageConsumer, subMonitor.split(1)));
+						resultList.addAll(filter.filterIMeasurements(singleItem, processSettings, Function.identity(), context, subMonitor.split(1)));
 					} else {
 						// we can't process this item either...
 						resultList.add(measurement);
 						subMonitor.worked(1);
-						messageConsumer.addWarnMessage(getName(), "measurement " + measurement.getDataName() + " is incompatible with this filter");
+						context.addWarnMessage(getName(), "measurement " + measurement.getDataName() + " is incompatible with this filter");
 						unprocessed++;
 					}
 				}
 				if(unprocessed > 0) {
-					messageConsumer.addWarnMessage(getName(), unprocessed + " measurement(s) are skipped because they are incompatible with this filter");
+					context.addWarnMessage(getName(), unprocessed + " measurement(s) are skipped because they are incompatible with this filter");
 				}
 				return resultList;
 			}
