@@ -125,6 +125,7 @@ public class SettingsClassParser implements SettingsParser {
 								if(regExp != null && !regExp.isEmpty()) {
 									inputValue.addValidator(new RegularExpressionValidator(property.getName(), Pattern.compile(regExp), settingsProperty.isMultiLine()));
 								}
+								inputValue.setMultiLine(settingsProperty.isMultiLine());
 							} else if(annotation instanceof FileSettingProperty) {
 								inputValue.setFileSettingProperty((FileSettingProperty)annotation);
 							}
