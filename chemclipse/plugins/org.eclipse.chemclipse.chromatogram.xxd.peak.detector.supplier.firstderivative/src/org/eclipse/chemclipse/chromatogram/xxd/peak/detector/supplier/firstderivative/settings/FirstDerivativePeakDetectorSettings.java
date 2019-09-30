@@ -12,13 +12,11 @@
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
-import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -41,7 +39,7 @@ public class FirstDerivativePeakDetectorSettings extends PeakDetectorSettingsMSD
 	@EnumSelectionRadioButtonsSettingProperty
 	FilterMode filterMode = FilterMode.EXCLUDE;
 	@JsonPropertyDescription(value = "Ions to filter: 16, 18, ...")
-	@StringSettingsProperty
+	@JsonProperty
 	String filterIonsString;
 
 	public FirstDerivativePeakDetectorSettings() {
