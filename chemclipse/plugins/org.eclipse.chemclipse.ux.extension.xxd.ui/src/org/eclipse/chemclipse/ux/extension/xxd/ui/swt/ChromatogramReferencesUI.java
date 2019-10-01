@@ -350,7 +350,6 @@ public class ChromatogramReferencesUI {
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
 
-			System.out.println("ChromatogramReferencesUI.ComboContainer.selectionChanged()");
 			selection = (IStructuredSelection)event.getSelection();
 			listener.accept((IChromatogramSelection<?, ?>)selection.getFirstElement());
 		}

@@ -65,7 +65,7 @@ public class EditorToolBar {
 	public EditorToolBar(Composite parent) {
 		this.parent = null;
 		actionContributions = new ArrayList<>();
-		ToolBarManager toolbarManagerSWT = new ToolBarManager(SWT.FLAT);
+		ToolBarManager toolbarManagerSWT = new ToolBarManager(SWT.FLAT | SWT.WRAP);
 		mainGroup = new GroupMarker(GROUP_MAIN);
 		toolbarManagerSWT.add(mainGroup);
 		config = new ConfigSection(this);
