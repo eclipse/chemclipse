@@ -105,7 +105,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 */
 	private void detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
-		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize(), peakDetectorSettings.getFilterIon(), peakDetectorSettings.getFilterMode());
+		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize(), getIonFilter(peakDetectorSettings.getFilterIon(), peakDetectorSettings.getFilterMode()));
 		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
 		buildAndStorePeaks(rawPeaks, chromatogramSelection.getChromatogramMSD(), peakDetectorSettings);
 	}
@@ -165,12 +165,12 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 * @param windowSize
 	 * @return {@link IFirstDerivativeDetectorSlopes}
 	 */
-	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, WindowSize movingAverageWindowSize, Collection<Number> filterIons, FilterMode mode) {
+	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, WindowSize movingAverageWindowSize, IMarkedIons filterIons) {
 
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
 		try {
 			ITotalIonSignalExtractor totalIonSignalExtractor = new TotalIonSignalExtractor(chromatogram);
-			ITotalScanSignals signals = totalIonSignalExtractor.getTotalIonSignals(chromatogramSelection, getIonFilter(filterIons, mode));
+			ITotalScanSignals signals = totalIonSignalExtractor.getTotalIonSignals(chromatogramSelection, filterIons);
 			TotalScanSignalsModifier.normalize(signals, NORMALIZATION_BASE);
 			/*
 			 * Get the start and stop scan of the chromatogram selection.
