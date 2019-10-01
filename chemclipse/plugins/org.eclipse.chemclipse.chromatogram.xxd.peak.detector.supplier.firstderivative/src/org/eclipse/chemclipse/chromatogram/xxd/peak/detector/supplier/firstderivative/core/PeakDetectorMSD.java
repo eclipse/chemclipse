@@ -199,7 +199,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 		}
 	}
 
-	private static IMarkedIons getIonFilter(Collection<Number> filterIons, FilterMode mode) {
+	static IMarkedIons getIonFilter(Collection<Number> filterIons, FilterMode mode) {
 
 		MarkedIons result = new MarkedIons(buildIons(filterIons), buildFilterMode(mode));
 		return result;
