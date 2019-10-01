@@ -1059,9 +1059,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			}
 		});
 		combo.setToolTipText("Select a chromatogram column.");
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.widthHint = 150;
-		combo.setLayoutData(gridData);
+		// GridData gridData = new GridData(GridData.FILL_BOTH);
+		// gridData.widthHint = 150;
+		// combo.setLayoutData(gridData);
 		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
