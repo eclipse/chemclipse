@@ -26,6 +26,7 @@ public class ToolbarPreferencePage extends FieldEditorPreferencePage implements 
 		setTitle("Toolbar");
 		this.keyShowText = keyShowText;
 		setPreferenceStore(preferenceStore);
+		noDefaultAndApplyButton();
 	}
 
 	@Override

@@ -253,18 +253,18 @@ public class EditorToolBar {
 	 * @param key
 	 * @return
 	 */
-	public ToolbarPreferencePage enableToolbarTextPage(IPreferenceStore preferenceStore, String key) {
+	public void enableToolbarTextPage(IPreferenceStore preferenceStore, String key) {
 
-		if(parent != null) {
-			return parent.enableToolbarTextPage(preferenceStore, key);
-		} else {
-			updateShowTextByPreference(preferenceStore, key);
-			ToolbarPreferencePage preferencePage = new ToolbarPreferencePage(preferenceStore, key);
-			config.addPreferencePageContainer(new PreferencePageContainer(() -> {
-				return Collections.singleton(preferencePage);
-			}, () -> updateShowTextByPreference(preferenceStore, key)));
-			update();
-			return preferencePage;
+		if(preferenceStore != null) {
+			if(parent != null) {
+				parent.enableToolbarTextPage(preferenceStore, key);
+			} else {
+				updateShowTextByPreference(preferenceStore, key);
+				config.addPreferencePageContainer(new PreferencePageContainer(() -> {
+					return Collections.singleton(new ToolbarPreferencePage(preferenceStore, key));
+				}, () -> updateShowTextByPreference(preferenceStore, key)));
+				update();
+			}
 		}
 	}
 
@@ -355,5 +355,10 @@ public class EditorToolBar {
 			this.supplier = supplier;
 			this.runnable = runnable;
 		}
+	}
+
+	public void clear() {
+
+		toolBarManager.removeAll();
 	}
 }

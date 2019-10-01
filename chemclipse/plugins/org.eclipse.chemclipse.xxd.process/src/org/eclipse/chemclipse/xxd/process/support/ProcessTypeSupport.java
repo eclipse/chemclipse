@@ -79,6 +79,14 @@ public class ProcessTypeSupport implements ProcessSupplierContext {
 
 	private void addMatchingSupplier(Iterable<DataCategory> dataTypes, Set<IProcessSupplier<?>> supplier, IProcessTypeSupplier[] processTypeSuppliers) {
 
+		if(dataTypes == null) {
+			for(IProcessTypeSupplier processTypeSupplier : processTypeSuppliers) {
+				for(IProcessSupplier<?> processSupplier : processTypeSupplier.getProcessorSuppliers()) {
+					supplier.add(processSupplier);
+				}
+			}
+			return;
+		}
 		for(IProcessTypeSupplier processTypeSupplier : processTypeSuppliers) {
 			for(IProcessSupplier<?> processSupplier : processTypeSupplier.getProcessorSuppliers()) {
 				for(DataCategory category : dataTypes) {

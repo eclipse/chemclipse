@@ -133,6 +133,7 @@ public class SettingsUI<T> extends Composite {
 				Label label = new Label(parent, SWT.NONE);
 				label.setText(widgetItem.getInputValue().getName());
 				label.setToolTipText(widgetItem.getInputValue().getDescription());
+				label.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 				labels.add(label);
 				widgetItem.initializeControl(parent);
 			}

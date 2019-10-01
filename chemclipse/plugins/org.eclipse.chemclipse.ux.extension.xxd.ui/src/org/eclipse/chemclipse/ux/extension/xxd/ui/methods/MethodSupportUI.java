@@ -17,7 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -34,6 +33,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PreferencesConfig;
+import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatogramExport;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -60,10 +61,8 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
-public class MethodSupportUI extends Composite {
+public class MethodSupportUI extends Composite implements PreferencesConfig {
 
-	private static final Logger logger = Logger.getLogger(MethodSupportUI.class);
-	//
 	private ComboViewer comboViewerMethods;
 	private Button buttonAddMethod;
 	private Button buttonEditMethod;
@@ -73,9 +72,15 @@ public class MethodSupportUI extends Composite {
 	private IMethodListener methodListener = null;
 	private ISupplierEditorSupport supplierEditorSupport = new EditorSupportFactory(DataType.MTH).getInstanceEditorSupport();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private boolean showsettings;
 
 	public MethodSupportUI(Composite parent, int style) {
+		this(parent, style, true);
+	}
+
+	public MethodSupportUI(Composite parent, int style, boolean showSettingsInToolbar) {
 		super(parent, style);
+		this.showsettings = showSettingsInToolbar;
 		createControl();
 	}
 
@@ -89,7 +94,7 @@ public class MethodSupportUI extends Composite {
 		setLayout(new FillLayout());
 		//
 		Composite composite = new Composite(this, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(6, false);
+		GridLayout gridLayout = new GridLayout(showsettings ? 6 : 5, false);
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
@@ -99,7 +104,9 @@ public class MethodSupportUI extends Composite {
 		buttonEditMethod = createButtonEditMethod(composite);
 		buttonDeleteMethod = createButtonDeleteMethod(composite);
 		buttonExecuteMethod = createButtonExecuteMethod(composite);
-		createButtonSettings(composite);
+		if(showsettings) {
+			createButtonSettings(composite);
+		}
 		//
 		computeMethodComboItems();
 	}
@@ -181,8 +188,8 @@ public class MethodSupportUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-				if(object instanceof File) {
-					File file = (File)object;
+				File file = getProcessMethodFile(object);
+				if(file != null) {
 					supplierEditorSupport.openEditor(file);
 				}
 			}
@@ -204,24 +211,21 @@ public class MethodSupportUI extends Composite {
 
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
 				if(object instanceof IProcessMethod) {
-					ProcessMethod processMethod = (ProcessMethod)object;
+					IProcessMethod processMethod = (IProcessMethod)object;
 					if(processMethod.isReadOnly()) {
 						MessageDialog.openInformation(e.display.getActiveShell(), "Delete Method", "You can't delete this method because it is read only");
 						return;
 					}
-					if(object instanceof ProcessMethod) {
-						// we must check here for ProcessMethod instead of the interface because only those files can be deleted!
-						File file = ((ProcessMethod)object).getSourceFile();
-						if(file.exists()) {
-							if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Method", "Do you want to delete the method: " + file.getName() + "?")) {
-								file.delete();
-								preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, "");
-								computeMethodComboItems();
-							}
-							return;
+					File file = getProcessMethodFile(object);
+					if(file != null && file.exists()) {
+						if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Method", "Do you want to delete the method: " + file.getName() + "?")) {
+							file.delete();
+							preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, "");
+							computeMethodComboItems();
 						}
+						return;
 					}
-					MessageDialog.openInformation(e.display.getActiveShell(), "Delete Method", "Can't determine the file for deletion, maybe it was already deleted?");
+					MessageDialog.openInformation(e.display.getActiveShell(), "Delete Method", "Can't determine the file for deletion, maybe it was already deleted or you don't have sufficient rights?");
 				}
 			}
 		});
@@ -241,11 +245,8 @@ public class MethodSupportUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-				if(object instanceof File) {
-					File file = (File)object;
-					if(file.exists()) {
-						runMethod(file, e.display.getActiveShell());
-					}
+				if(object instanceof IProcessMethod) {
+					runMethod((IProcessMethod)object, e.display.getActiveShell());
 				}
 			}
 		});
@@ -264,16 +265,11 @@ public class MethodSupportUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageProcessing = new PreferencePageReportExport();
-				preferencePageProcessing.setTitle("Processing");
-				//
-				IPreferencePage preferencePageMethods = new PreferencePageMethods();
-				preferencePageMethods.setTitle("Methods");
-				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageProcessing));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageMethods));
-				//
+				IPreferencePage[] pages = getPreferencePages();
+				for(int i = 0; i < pages.length; i++) {
+					preferenceManager.addToRoot(new PreferenceNode("page." + i, pages[i]));
+				}
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
@@ -288,11 +284,6 @@ public class MethodSupportUI extends Composite {
 		});
 		//
 		return button;
-	}
-
-	private void applySettings() {
-
-		computeMethodComboItems();
 	}
 
 	private boolean selectMethodDirectory(Shell shell) {
@@ -326,7 +317,7 @@ public class MethodSupportUI extends Composite {
 			processMethod.setOperator(UserManagement.getCurrentUser());
 			processMethod.setDescription("This is an empty process method. Please modify.");
 			//
-			IProcessingInfo processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
+			IProcessingInfo<?> processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
 			if(!processingInfo.hasErrorMessages()) {
 				preferenceStore.putValue(PreferenceConstants.P_SELECTED_METHOD_NAME, file.getName());
 				computeMethodComboItems();
@@ -369,9 +360,9 @@ public class MethodSupportUI extends Composite {
 		}
 	}
 
-	private void runMethod(File file, Shell shell) {
+	private void runMethod(IProcessMethod processMethod, Shell shell) {
 
-		if(methodListener != null && file != null) {
+		if(methodListener != null && processMethod != null) {
 			try {
 				ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 				dialog.run(false, false, new IRunnableWithProgress() {
@@ -379,24 +370,13 @@ public class MethodSupportUI extends Composite {
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, monitor);
-						boolean hasErrorMessages = processingInfo.hasErrorMessages();
-						if(!hasErrorMessages) {
-							try {
-								IProcessMethod processMethod = processingInfo.getProcessingResult();
-								methodListener.execute(processMethod, monitor);
-							} catch(Exception e) {
-								logger.warn(e);
-							}
-						} else {
-							ProcessingInfoViewSupport.updateProcessingInfo(shell.getDisplay(), processingInfo, hasErrorMessages);
-						}
+						methodListener.execute(processMethod, monitor);
 					}
 				});
 			} catch(InvocationTargetException e) {
-				logger.warn(e);
+				ProcessingInfoViewSupport.updateProcessingInfoError(processMethod.getName(), "Execution failed", e.getCause());
 			} catch(InterruptedException e) {
-				logger.warn(e);
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
@@ -409,13 +389,38 @@ public class MethodSupportUI extends Composite {
 		buttonExecuteMethod.setEnabled(false);
 		//
 		Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-		if(object instanceof File) {
-			File file = (File)object;
-			if(file.exists()) {
-				buttonEditMethod.setEnabled(true);
-				buttonDeleteMethod.setEnabled(true);
-				buttonExecuteMethod.setEnabled(true);
-			}
+		if(object instanceof IProcessMethod) {
+			IProcessMethod method = (IProcessMethod)object;
+			boolean editable = getProcessMethodFile(object) != null && !method.isReadOnly();
+			buttonEditMethod.setEnabled(editable);
+			buttonDeleteMethod.setEnabled(editable);
+			buttonExecuteMethod.setEnabled(true);
 		}
+	}
+
+	private File getProcessMethodFile(Object object) {
+
+		if(object instanceof ProcessMethod) {
+			return ((ProcessMethod)object).getSourceFile();
+		}
+		return null;
+	}
+
+	@Override
+	public IPreferencePage[] getPreferencePages() {
+
+		IPreferencePage preferencePageReportExport = new PreferencePageReportExport();
+		preferencePageReportExport.setTitle("Report Export");
+		IPreferencePage preferencePageChromatogramExport = new PreferencePageChromatogramExport();
+		preferencePageChromatogramExport.setTitle("Chromatogram Export");
+		IPreferencePage preferencePageMethods = new PreferencePageMethods();
+		preferencePageMethods.setTitle("Methods");
+		return new IPreferencePage[]{preferencePageReportExport, preferencePageChromatogramExport, preferencePageMethods};
+	}
+
+	@Override
+	public void applySettings() {
+
+		computeMethodComboItems();
 	}
 }
