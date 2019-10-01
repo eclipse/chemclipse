@@ -65,7 +65,7 @@ public class ControlBuilder {
 			if(layoutData instanceof GridData) {
 				gridData = (GridData)layoutData;
 			} else {
-				gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+				gridData = new GridData(SWT.FILL, SWT.CENTER, true, true);
 				control.setLayoutData(gridData);
 			}
 			gridData.grabExcessHorizontalSpace = true;
