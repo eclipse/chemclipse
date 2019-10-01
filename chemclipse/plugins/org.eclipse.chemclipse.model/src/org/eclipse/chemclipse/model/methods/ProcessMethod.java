@@ -42,7 +42,7 @@ public class ProcessMethod implements IProcessMethod {
 			this.description = other.getDescription();
 			this.category = other.getCategory();
 			this.name = other.getName();
-			other.forEach(entries::add);
+			other.forEach(otherEntry -> entries.add(new ProcessEntry(otherEntry)));
 		}
 	}
 
