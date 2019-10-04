@@ -103,6 +103,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 			if(extendedChromatogramUI != null) {
 				extendedChromatogramUI.updateMenu();
+				extendedChromatogramUI.updateMethods();
 			}
 		}
 	};

@@ -14,7 +14,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
@@ -328,8 +331,16 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 	private void computeMethodComboItems() {
 
-		Collection<IProcessMethod> methods = MethodConverter.getUserMethods();
+		List<IProcessMethod> methods = new ArrayList<IProcessMethod>(MethodConverter.getUserMethods());
 		if(methods.size() > 0) {
+			Collections.sort(methods, new Comparator<IProcessMethod>() {
+
+				@Override
+				public int compare(IProcessMethod o1, IProcessMethod o2) {
+
+					return o1.getName().compareToIgnoreCase(o2.getName());
+				}
+			});
 			comboViewerMethods.setInput(methods);
 			if(comboViewerMethods.getCombo().getItemCount() > 0) {
 				setSelectedMethod();

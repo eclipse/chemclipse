@@ -203,6 +203,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private ProcessTypeSupport processTypeSupport;
 	//
 	private IEventBroker eventBroker;
+	private MethodSupportUI methodSupportUI;
 
 	public ExtendedChromatogramUI(Composite parent, int style, IPreferenceStore preferenceStore, ProcessTypeSupport processTypeSupport, IEventBroker eventBroker) {
 		this.preferenceStore = preferenceStore;
@@ -1016,7 +1017,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private Composite createToolbarMethod(Composite parent) {
 
-		MethodSupportUI methodSupportUI = new MethodSupportUI(parent, SWT.NONE, false);
+		methodSupportUI = new MethodSupportUI(parent, SWT.NONE, false);
 		methodSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
@@ -1434,5 +1435,10 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			IChromatogramSelectionUpdateListener listener = (IChromatogramSelectionUpdateListener)composite;
 			listener.update(chromatogramSelection);
 		}
+	}
+
+	public void updateMethods() {
+
+		methodSupportUI.applySettings();
 	}
 }
