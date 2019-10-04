@@ -13,8 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.settings.AbstractPeakDetectorSettings;
 
-public abstract class AbstractPeakDetectorSettingsMSD extends AbstractPeakDetectorSettings
-		implements IPeakDetectorSettingsMSD {
+public abstract class AbstractPeakDetectorSettingsMSD extends AbstractPeakDetectorSettings implements IPeakDetectorSettingsMSD {
 
 	private boolean includeBackground = false;
 	private float minimumSignalToNoiseRatio = 0;
