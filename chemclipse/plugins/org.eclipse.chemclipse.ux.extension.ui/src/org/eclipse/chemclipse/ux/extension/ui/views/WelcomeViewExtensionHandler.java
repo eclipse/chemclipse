@@ -452,6 +452,12 @@ public class WelcomeViewExtensionHandler {
 
 			// nothing to do here
 		}
+
+		@Override
+		public String getContext() {
+
+			return "perspective-switch," + getPreferredPerspective();
+		}
 	}
 
 	private final class ExtensionTileDefinition implements TileDefinition {
