@@ -13,10 +13,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
@@ -36,6 +39,9 @@ import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
 import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.TotalIonSignalExtractor;
@@ -99,7 +105,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 */
 	private void detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
-		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize());
+		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize(), getIonFilter(peakDetectorSettings.getFilterIon(), peakDetectorSettings.getFilterMode()));
 		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
 		buildAndStorePeaks(rawPeaks, chromatogramSelection.getChromatogramMSD(), peakDetectorSettings);
 	}
@@ -111,7 +117,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 * @param rawPeaks
 	 * @param chromatogram
 	 */
-	private void buildAndStorePeaks(List<IRawPeak> rawPeaks, IChromatogramMSD chromatogram, PeakDetectorSettingsMSD peakDetectorSettings) {
+	private void buildAndStorePeaks(List<IRawPeak> rawPeaks, IChromatogramMSD chromatogram, IPeakDetectorSettingsMSD peakDetectorSettings) {
 
 		IChromatogramPeakMSD peak = null;
 		IScanRange scanRange = null;
@@ -159,12 +165,12 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 * @param windowSize
 	 * @return {@link IFirstDerivativeDetectorSlopes}
 	 */
-	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, WindowSize windowSize) {
+	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, WindowSize movingAverageWindowSize, IMarkedIons filterIons) {
 
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
 		try {
 			ITotalIonSignalExtractor totalIonSignalExtractor = new TotalIonSignalExtractor(chromatogram);
-			ITotalScanSignals signals = totalIonSignalExtractor.getTotalIonSignals(chromatogramSelection);
+			ITotalScanSignals signals = totalIonSignalExtractor.getTotalIonSignals(chromatogramSelection, filterIons);
 			TotalScanSignalsModifier.normalize(signals, NORMALIZATION_BASE);
 			/*
 			 * Get the start and stop scan of the chromatogram selection.
@@ -185,12 +191,40 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 					slopes.add(slope);
 				}
 			}
-			slopes.calculateMovingAverage(windowSize);
+			slopes.calculateMovingAverage(movingAverageWindowSize);
 			return slopes;
 		} catch(ChromatogramIsNullException e) {
-			logger.warn(e);
+			logger.warn(e.getLocalizedMessage(), e);
 			return null;
 		}
+	}
+
+	static IMarkedIons getIonFilter(Collection<Number> filterIons, FilterMode mode) {
+
+		MarkedIons result = new MarkedIons(buildIons(filterIons), buildFilterMode(mode));
+		return result;
+	}
+
+	private static int[] buildIons(Collection<Number> filterIons) {
+
+		int[] result = new int[filterIons.size()];
+		int cnt = 0;
+		Iterator<Number> it = filterIons.iterator();
+		while(it.hasNext()) {
+			result[cnt++] = it.next().intValue();
+		}
+		return result;
+	}
+
+	private static IonMarkMode buildFilterMode(FilterMode mode) {
+
+		switch(mode) {
+			case EXCLUDE:
+				return IonMarkMode.EXCLUDE;
+			case INCLUDE:
+				return IonMarkMode.INCLUDE;
+		}
+		throw new IllegalArgumentException("Unknown mode " + mode);
 	}
 
 	/**
@@ -200,7 +234,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 * @param peak
 	 * @return boolean
 	 */
-	private boolean isValidPeak(IChromatogramPeakMSD peak, PeakDetectorSettingsMSD peakDetectorSettings) {
+	private boolean isValidPeak(IChromatogramPeakMSD peak, IPeakDetectorSettingsMSD peakDetectorSettings) {
 
 		if(peak != null && peak.getSignalToNoiseRatio() >= peakDetectorSettings.getMinimumSignalToNoiseRatio()) {
 			return true;

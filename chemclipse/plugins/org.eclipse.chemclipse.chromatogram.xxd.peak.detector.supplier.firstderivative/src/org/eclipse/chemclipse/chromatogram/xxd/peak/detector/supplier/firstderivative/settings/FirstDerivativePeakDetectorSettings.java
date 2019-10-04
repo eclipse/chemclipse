@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
@@ -22,7 +21,7 @@ import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class FirstDerivativePeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
+public class FirstDerivativePeakDetectorSettings extends PeakDetectorSettingsMSD {
 
 	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
 	@EnumSelectionRadioButtonsSettingProperty
@@ -36,52 +35,20 @@ public class FirstDerivativePeakDetectorSettings extends AbstractPeakDetectorSet
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
 	@EnumSelectionSettingProperty
 	private WindowSize windowSize = WindowSize.WIDTH_5;
+	@JsonProperty(value = "IonFilter", defaultValue = "EXCLUDE")
+	@EnumSelectionRadioButtonsSettingProperty
+	FilterMode filterMode = FilterMode.EXCLUDE;
+	@JsonPropertyDescription(value = "Ions to filter: 16, 18, ...")
+	@JsonProperty
+	String filterIonsString;
 
 	public FirstDerivativePeakDetectorSettings() {
+
 		this(DataType.MSD);
 	}
 
 	public FirstDerivativePeakDetectorSettings(DataType dataType) {
+
 		// we could load optimized settings depending on datatype here
-	}
-
-	public Threshold getThreshold() {
-
-		return threshold;
-	}
-
-	public void setThreshold(Threshold threshold) {
-
-		this.threshold = threshold;
-	}
-
-	public boolean isIncludeBackground() {
-
-		return includeBackground;
-	}
-
-	public void setIncludeBackground(boolean includeBackground) {
-
-		this.includeBackground = includeBackground;
-	}
-
-	public float getMinimumSignalToNoiseRatio() {
-
-		return minimumSignalToNoiseRatio;
-	}
-
-	public void setMinimumSignalToNoiseRatio(float minimumSignalToNoiseRatio) {
-
-		this.minimumSignalToNoiseRatio = minimumSignalToNoiseRatio;
-	}
-
-	public WindowSize getMovingAverageWindowSize() {
-
-		return windowSize;
-	}
-
-	public void setMovingAverageWindowSize(WindowSize windowSize) {
-
-		this.windowSize = windowSize;
 	}
 }
