@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2018 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,20 +9,12 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings;
+package org.eclipse.chemclipse.chromatogram.msd.peak.detector;
 
-public enum Threshold implements IThreshold {
-	OFF(1), LOW(2), MEDIUM(3), HIGH(4);
+/**
+ * @author eselmeister
+ */
+public interface IThreshold {
 
-	private int threshold;
-
-	private Threshold(int threshold) {
-		this.threshold = threshold;
-	}
-
-	@Override
-	public int getThreshold() {
-
-		return threshold;
-	}
+	int getThreshold();
 }

@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings;
 
 import junit.framework.TestCase;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.Threshold;
 
 public class BackfoldingPeakDetectorSettings_1_Test extends TestCase {
 

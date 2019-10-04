@@ -20,7 +20,6 @@ public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
 
 	@JsonIgnore
 	private Sensitivity sensitivity = Sensitivity.MEDIUM;
-	private double minimumSignalToNoiseRatio;
 	private int minPeakRising; // between 1,4
 	private int minimalPeakWidth;
 	private int baselineIterations;
@@ -37,11 +36,6 @@ public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
 		if(sensitivity != null) {
 			this.sensitivity = sensitivity;
 		}
-	}
-
-	public void setMinimumSignalToNoiseRatio(double minimumSignalToNoiseRatio) {
-
-		this.minimumSignalToNoiseRatio = minimumSignalToNoiseRatio;
 	}
 
 	public void setMinimumPeakRising(int minPeakRising) {
@@ -67,14 +61,6 @@ public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
 	public void setSensitivityOfDeconvolution(int sensitivityDeconvolution) {
 
 		this.sensitivityOfDeconvolution = sensitivityDeconvolution;
-	}
-
-	/*
-	 * Getter
-	 */
-	public double getMinimumSignalToNoiseRatio() {
-
-		return minimumSignalToNoiseRatio;
 	}
 
 	public int getMinimumPeakRising() {

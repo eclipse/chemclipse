@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
+package org.eclipse.chemclipse.chromatogram.msd.peak.detector;
 
 public enum Threshold implements IThreshold {
 	OFF(1), LOW(2), MEDIUM(3), HIGH(4);
@@ -17,6 +17,7 @@ public enum Threshold implements IThreshold {
 	private int threshold;
 
 	private Threshold(int threshold) {
+
 		this.threshold = threshold;
 	}
 

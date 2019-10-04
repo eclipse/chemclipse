@@ -19,8 +19,8 @@ import java.util.TreeMap;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.PeakDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.Threshold;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.support.IBackfoldingDetectorSlopes;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.Threshold;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.logging.core.Logger;
