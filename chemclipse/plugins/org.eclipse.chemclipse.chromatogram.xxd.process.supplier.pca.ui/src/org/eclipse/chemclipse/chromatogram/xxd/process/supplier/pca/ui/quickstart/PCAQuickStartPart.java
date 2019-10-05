@@ -29,14 +29,14 @@ public class PCAQuickStartPart {
 	@PostConstruct
 	public void create(Composite parent) {
 
-		TaskTileContainer tileContainer = new TaskTileContainer(parent, 1, () -> context);
+		TaskTileContainer tileContainer = new TaskTileContainer(parent, 2, () -> context);
 		// add default tiles
 		tileContainer.addTaskTile(new PcaPeakTileDefinition());
 		tileContainer.addTaskTile(new PcaScanTileDefinition());
 		// support enhancements
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MAX_TILES, 15);
-		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES, 3);
+		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MAX_TILES, 8);
+		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES, 2);
 		new WelcomeViewExtensionHandler(tileContainer, store, definition -> definition.matches("pca-quickstart"));
 	}
 }

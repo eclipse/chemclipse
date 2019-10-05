@@ -80,29 +80,44 @@ public class OpenSnippetHandler {
 	 */
 	public static void openSnippet(String snippetId, MApplication application, EModelService modelService, EPartService partService) {
 
-		addToEditorStack(modelService, application)//
+		openSnippet(snippetId, application, modelService, partService, IPerspectiveAndViewIds.EDITOR_PART_STACK_ID);
+	}
+
+	public static void openSnippet(String snippetId, MApplication application, EModelService modelService, EPartService partService, String stackId) {
+
+		addToEditorStack(modelService, stackId, application)//
 				.andThen(openPart(partService))//
 				.accept(cloneSnippet(snippetId, modelService, application));
 	}
 
 	public static void openSnippet(String snippetId, IEclipseContext eclipseContext, BiFunction<IEclipseContext, MPart, Runnable> childContextInitializer) {
 
+		openSnippet(snippetId, eclipseContext, IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, childContextInitializer);
+	}
+
+	public static void openSnippet(String snippetId, IEclipseContext eclipseContext, String stackId, BiFunction<IEclipseContext, MPart, Runnable> childContextInitializer) {
+
 		MApplication application = eclipseContext.get(MApplication.class);
 		EModelService modelService = eclipseContext.get(EModelService.class);
 		EPartService partService = eclipseContext.get(EPartService.class);
 		withEclipseContext(eclipseContext, childContextInitializer)//
-				.andThen(addToEditorStack(modelService, application))//
+				.andThen(addToEditorStack(modelService, stackId, application))//
 				.andThen(openPart(partService))//
 				.accept(cloneSnippet(snippetId, modelService, application));
 	}
 
 	public static void openCompositeSnippet(String snippetId, IEclipseContext eclipseContext, BiFunction<IEclipseContext, MPart, Runnable> childContextInitializer) {
 
+		openCompositeSnippet(snippetId, eclipseContext, IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, childContextInitializer);
+	}
+
+	public static void openCompositeSnippet(String snippetId, IEclipseContext eclipseContext, String stackId, BiFunction<IEclipseContext, MPart, Runnable> childContextInitializer) {
+
 		MApplication application = eclipseContext.get(MApplication.class);
 		EModelService modelService = eclipseContext.get(EModelService.class);
 		EPartService partService = eclipseContext.get(EPartService.class);
 		withEclipseContext(eclipseContext, childContextInitializer)//
-				.andThen(addToEditorStack(modelService, application))//
+				.andThen(addToEditorStack(modelService, stackId, application))//
 				.andThen(disableMove())//
 				.andThen(openPart(partService))//
 				.andThen(activateAll(partService))//
@@ -118,12 +133,12 @@ public class OpenSnippetHandler {
 	 *            the root to search for the part stack, normally this is an {@link MApplication}
 	 * @return
 	 */
-	public static Consumer<MUIElement> addToEditorStack(EModelService modelService, MUIElement searchRoot) {
+	public static Consumer<MUIElement> addToEditorStack(EModelService modelService, String stackID, MUIElement searchRoot) {
 
 		return element -> {
 			if(element instanceof MStackElement) {
 				MStackElement stackElement = (MStackElement)element;
-				MUIElement partStack = modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, searchRoot);
+				MUIElement partStack = modelService.find(stackID, searchRoot);
 				if(partStack instanceof MPartStack) {
 					((MPartStack)partStack).getChildren().add(stackElement);
 				}
@@ -160,6 +175,7 @@ public class OpenSnippetHandler {
 				if(element instanceof MPart) {
 					MPart part = (MPart)element;
 					part.setContext(child);
+					child.set(MPart.class, part);
 					Runnable runnable;
 					if(childContextInitializer != null) {
 						runnable = childContextInitializer.apply(child, part);

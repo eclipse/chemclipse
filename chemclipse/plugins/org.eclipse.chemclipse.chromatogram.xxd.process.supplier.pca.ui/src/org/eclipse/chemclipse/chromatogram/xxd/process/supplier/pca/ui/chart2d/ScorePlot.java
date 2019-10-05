@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,6 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
- * Christoph Läubrich - refactor / remove FX dependencies
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d;
 
@@ -16,11 +15,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.SeriesConverter;
 import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
+import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 import org.eclipse.swtchart.extensions.events.MouseDownEvent;
 import org.eclipse.swtchart.extensions.events.MouseMoveCursorEvent;
 import org.eclipse.swtchart.extensions.events.MouseMoveSelectionEvent;
@@ -30,14 +35,91 @@ import org.eclipse.swtchart.extensions.events.ResetSeriesEvent;
 import org.eclipse.swtchart.extensions.events.UndoRedoEvent;
 import org.eclipse.swtchart.extensions.events.ZoomEvent;
 
+import javafx.collections.ObservableList;
+
 public class ScorePlot extends PCA2DPlot {
 
-	private final Map<String, IPcaResult> extractedResults = new HashMap<>();
+	private class SelectActualSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
-	public ScorePlot(Composite parent) {
+		@Override
+		public int getButton() {
+
+			return BaseChart.BUTTON_LEFT;
+		}
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.NONE;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			String selectedSeriesId = baseChart.getSelectedseriesId(event);
+			if(!selectedSeriesId.equals("")) {
+				ISample sample = extractedResults.get(selectedSeriesId).getSample();
+				ObservableList<ISample> selection = selectionManagerSample.getSelection();
+				if(!selection.contains(sample)) {
+					selection.setAll(sample);
+				} else {
+					selection.remove(sample);
+				}
+			}
+		}
+	}
+
+	private class SelectSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getButton() {
+
+			return BaseChart.BUTTON_LEFT;
+		}
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.CTRL;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			String selectedSeriesId = baseChart.getSelectedseriesId(event);
+			if(!selectedSeriesId.equals("")) {
+				ISample sample = extractedResults.get(selectedSeriesId).getSample();
+				if(sample.isSelected()) {
+					sample.setSelected(false);
+				} else {
+					sample.setSelected(true);
+				}
+			}
+		}
+	}
+
+	private final Map<String, IPcaResult> extractedResults = new HashMap<>();
+	private SelectionManagerSample selectionManagerSample;
+
+	public ScorePlot(Composite parent, SelectionManagerSample selectionManagerSample) {
 		super(parent, "Score Plot");
+		this.selectionManagerSample = selectionManagerSample;
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.clearHandledEventProcessors();
+		chartSettings.addHandledEventProcessor(new SelectSeriesEvent());
+		chartSettings.addHandledEventProcessor(new SelectActualSeriesEvent());
 		chartSettings.addHandledEventProcessor(new ResetSeriesEvent());
 		chartSettings.addHandledEventProcessor(new ZoomEvent());
 		chartSettings.addHandledEventProcessor(new MouseDownEvent());
@@ -49,22 +131,21 @@ public class ScorePlot extends PCA2DPlot {
 		applySettings(chartSettings);
 	}
 
-	public void update(IPcaResultsVisualization pcaResults, ISample selectedSample) {
+	public Map<String, IPcaResult> getExtractedResults() {
+
+		return extractedResults;
+	}
+
+	public void update(IPcaResultsVisualization pcaResults) {
 
 		deleteSeries();
 		addSeriesData(SeriesConverter.sampleToSeries(pcaResults, pcaResults.getPcaVisualization().getPcX(), pcaResults.getPcaVisualization().getPcY(), extractedResults));
-		selectSample(selectedSample);
-		update(pcaResults.getPcaVisualization().getPcX(), pcaResults.getPcaVisualization().getPcY());
-		redraw();
-	}
-
-	public void selectSample(ISample sample) {
-
-		getBaseChart().resetSeriesSettings();
 		extractedResults.entrySet().forEach(e -> {
-			if(e.getValue().getSample() == sample) {
+			if(selectionManagerSample.getSelection().contains(e.getValue().getSample())) {
 				getBaseChart().selectSeries(e.getKey());
 			}
 		});
+		update(pcaResults.getPcaVisualization().getPcX(), pcaResults.getPcaVisualization().getPcY());
+		redraw();
 	}
 }

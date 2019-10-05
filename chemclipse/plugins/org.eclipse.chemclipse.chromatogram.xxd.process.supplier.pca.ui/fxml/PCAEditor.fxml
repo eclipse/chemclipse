@@ -44,14 +44,6 @@
 					</columns>
 				</TableView>
 			</center>
-			<right>
-				<VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="146.0" prefWidth="95.0" spacing="5.0" BorderPane.alignment="TOP_CENTER">
-					<children>
-						<Button fx:id="loadPeaksButton" mnemonicParsing="false" onAction="#handlerLoadPeaks" prefHeight="49.0" prefWidth="100.0" text="Load Peaks&#10;from File" wrapText="true" />
-						<Button fx:id="loadScansButton" mnemonicParsing="false" onAction="#handlerLoadScans" prefHeight="52.0" prefWidth="101.0" text="Load Scans&#10;from File" wrapText="true" />
-					</children>
-				</VBox>
-			</right>
 			<bottom>
 				<HBox prefHeight="25.0" prefWidth="874.0" spacing="10.0" BorderPane.alignment="CENTER">
 					<children>

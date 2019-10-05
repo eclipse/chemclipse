@@ -18,7 +18,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.PcaContext;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
@@ -64,11 +63,12 @@ public class PCAEditorFX {
 	@Inject
 	@org.eclipse.e4.core.di.annotations.Optional
 	private SelectionManagerSamples managerSamples;
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	private ISamplesVisualization<?, ?> predefinedData;
 	@SuppressWarnings("restriction")
 	@Inject
 	private EHandlerService handlerService;
-	@Inject
-	private PcaContext pcaContext;
 	private static String ID_COMMAND_SETTINGS = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.command.settingspcaeditor";
 
 	public PCAEditorFX() {
@@ -105,9 +105,10 @@ public class PCAEditorFX {
 			});
 			final Scene scene = new Scene(root);
 			fxCanvas.setScene(scene);
-			controller.setSamples(pcaContext.getSamples());
-			pcaController.evaluatePCA();
-			controller.setLoadButtonVisible(false);
+			if(predefinedData != null) {
+				controller.setSamples(predefinedData);
+				pcaController.evaluatePCA();
+			}
 			setFocus();
 		} catch(final Exception e) {
 			logger.error(e.getLocalizedMessage(), e);

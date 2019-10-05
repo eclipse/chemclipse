@@ -50,7 +50,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -84,17 +83,7 @@ public class PCAEditorController {
 	private ResourceBundle resources;
 	private ListChangeListener<ISample> sampleChangeSelectionListener;
 	private Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samples;
-	@FXML()
-	private Button loadPeaksButton;
-	@FXML()
-	private Button loadScansButton;
 	private SelectionManagerSamples selectionManagerSamples;
-
-	public void setLoadButtonVisible(boolean visible) {
-
-		loadPeaksButton.setVisible(visible);
-		loadScansButton.setVisible(visible);
-	}
 
 	public PCAEditorController() {
 		samples = Optional.empty();
