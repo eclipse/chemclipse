@@ -215,15 +215,15 @@ public class OpenSnippetHandler {
 	 *            the {@link MSnippetContainer} to clone the snippet from, you would most likely use the {@link MApplication} here
 	 * @return the created object
 	 */
-	public static <T extends MUIElement> T cloneSnippet(String snippetId, EModelService modelService, MSnippetContainer application) {
+	public static <T extends MUIElement> T cloneSnippet(String snippetId, EModelService modelService, MSnippetContainer snippetContainer) {
 
 		@SuppressWarnings("unchecked")
-		T snippet = (T)modelService.cloneSnippet(application, snippetId, null);
+		T snippet = (T)modelService.cloneSnippet(snippetContainer, snippetId, null);
 		if(snippet != null) {
 			snippet.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
 			snippet.setElementId(snippetId + "." + UUID.randomUUID().toString());
 		} else {
-			throw new IllegalArgumentException("snippet with id " + snippetId + " was not found in container " + application);
+			throw new IllegalArgumentException("snippet with id " + snippetId + " was not found in container " + snippetContainer);
 		}
 		return snippet;
 	}
