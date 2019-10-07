@@ -88,7 +88,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		PeakDetectorSettings peakDetectorSettings = new PeakDetectorSettings();
 		peakDetectorSettings.setSensitivity(Sensitivity.valueOf(preferences.get(P_SENSITIVITY, DEF_SENSITIVITY)));
-		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getDouble(P_MIN_SNR, DEF_MIN_SNR));
+		peakDetectorSettings.setMinimumSignalToNoiseRatio((float)preferences.getDouble(P_MIN_SNR, DEF_MIN_SNR));
 		peakDetectorSettings.setMinimumPeakWidth(preferences.getInt(P_MIN_PEAKWIDTH, DEF_MIN_PEAKWIDTH));
 		peakDetectorSettings.setMinimumPeakRising(preferences.getInt(P_MIN_PEAKRISING, DEF_MIN_PEAKRISING));
 		peakDetectorSettings.setBaselineIterations(preferences.getInt(P_SNIP_ITERATIONS, DEF_SNIP_ITERATIONS));
@@ -107,10 +107,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return Sensitivity.valueOf(sensitivity);
 	}
 
-	public static double getMinimumSignalToNoiseRatio() {
+	public static float getMinimumSignalToNoiseRatio() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getDouble(P_MIN_SNR, DEF_MIN_SNR);
+		return (float)preferences.getDouble(P_MIN_SNR, DEF_MIN_SNR);
 	}
 
 	public static int getMinimumPeakWidth() {

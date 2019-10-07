@@ -81,11 +81,6 @@ public abstract class AbstractPeakDetectorSettingsMSD extends AbstractPeakDetect
 		this.minimumSignalToNoiseRatio = minimumSignalToNoiseRatio;
 	}
 
-	public void setMinimumSignalToNoiseRatio(double minimumSignalToNoiseRatio) {
-
-		this.minimumSignalToNoiseRatio = (float)minimumSignalToNoiseRatio;
-	}
-
 	@Override
 	public WindowSize getMovingAverageWindowSize() {
 
