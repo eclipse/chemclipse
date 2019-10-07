@@ -212,7 +212,7 @@ public class OpenSnippetHandler {
 	 * @param modelService
 	 *            the modelservice to query, take care that this is a recent, injected and not static cached one or you will get "Application has no active Window" in certain circumstances!
 	 * @param application
-	 *            the {@link MSnippetContainer} to clone the snippet from, you would most likely use the {@link MApplication} here. For special cases it would be possible to NOT pass the {@link MApplication} here but a wrapper, then the part won't be added to the editors partstack
+	 *            the {@link MSnippetContainer} to clone the snippet from, you would most likely use the {@link MApplication} here
 	 * @return the created object
 	 */
 	public static <T extends MUIElement> T cloneSnippet(String snippetId, EModelService modelService, MSnippetContainer application) {
@@ -222,6 +222,8 @@ public class OpenSnippetHandler {
 		if(snippet != null) {
 			snippet.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
 			snippet.setElementId(snippetId + "." + UUID.randomUUID().toString());
+		} else {
+			throw new IllegalArgumentException("snippet with id " + snippetId + " was not found in container " + application);
 		}
 		return snippet;
 	}
