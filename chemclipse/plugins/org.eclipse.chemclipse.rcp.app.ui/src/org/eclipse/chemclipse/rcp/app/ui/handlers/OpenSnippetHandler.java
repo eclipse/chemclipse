@@ -166,6 +166,9 @@ public class OpenSnippetHandler {
 
 	public static Consumer<MUIElement> withEclipseContext(IEclipseContext parent, BiFunction<IEclipseContext, MPart, Runnable> childContextInitializer) {
 
+		if(parent == null) {
+			throw new IllegalArgumentException("IEclipseContext can't be null");
+		}
 		return new Consumer<MUIElement>() {
 
 			@Override
