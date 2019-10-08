@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -106,7 +106,6 @@ public class ExtractedIonSignalsModifier {
 		}
 	}
 
-	// --------------------------------------------------------private methods
 	private static int calculateSegmentWidth(IScanRange scanRange) {
 
 		/*
@@ -308,5 +307,4 @@ public class ExtractedIonSignalsModifier {
 		}
 		return isZero;
 	}
-	// --------------------------------------------------------private methods
 }

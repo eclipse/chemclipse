@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -39,7 +39,6 @@ import org.eclipse.chemclipse.msd.model.implementation.RegularMassSpectrum;
  * This class stores {@link ExtractedIonSignal} objects from each scan of a
  * chromatogram.
  * 
- * @author eselmeister
  */
 public class ExtractedIonSignals implements IExtractedIonSignals {
 
@@ -117,7 +116,6 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 		this.chromatogram = chromatogram;
 	}
 
-	// ---------------------------------------------IExtractedIonSignals
 	@Override
 	public IChromatogramMSD getChromatogram() {
 
@@ -158,15 +156,30 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	@Override
 	public IExtractedIonSignal getExtractedIonSignal(int scan) throws NoExtractedIonSignalStoredException {
 
+		/*
+		 * Scan is 1 based.
+		 */
 		if(scan <= 0) {
 			throw new NoExtractedIonSignalStoredException("The requested scan: " + scan + " is not available.");
 		}
+		/*
+		 * The requested scan is outside of this range.
+		 */
 		if(scan < startScan || scan > stopScan) {
 			throw new NoExtractedIonSignalStoredException("The requested scan: " + scan + " is not available.");
 		}
+		/*
+		 * Correct the offset.
+		 */
 		int correction = startScan - 1;
 		scan -= correction;
-		return signals.get(--scan);
+		int index = scan - 1;
+		//
+		if(index < 0 || index >= signals.size()) {
+			throw new NoExtractedIonSignalStoredException("The requested scan: " + scan + " is not available.");
+		}
+		//
+		return signals.get(index);
 	}
 
 	// TODO JUnit
@@ -179,7 +192,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	@Override
 	public IScanMSD getScan(int scan) {
 
-		IMarkedIons excludedIons = new MarkedIons();
+		IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		return getScan(scan, excludedIons);
 	}
 
@@ -344,8 +357,6 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 		return extractedIonSignals;
 	}
 
-	// ---------------------------------------------IExtractedIonSignals
-	// ---------------------------------------------private methods
 	/**
 	 * Sets the ion value as the new start ion if its value is lower
 	 * than the actual start ion.
@@ -354,7 +365,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	 */
 	private void setStartIon(int ion) {
 
-		if(ion < startIon) {
+		if(ion != IExtractedIonSignal.ION_NOT_SET && ion < startIon) {
 			startIon = ion;
 		}
 	}
@@ -367,7 +378,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	 */
 	private void setStopIon(int ion) {
 
-		if(ion > stopIon) {
+		if(ion != IExtractedIonSignal.ION_NOT_SET && ion > stopIon) {
 			stopIon = ion;
 		}
 	}
@@ -385,5 +396,4 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 		}
 		return chromatogram.getScanNumber(retentionTime);
 	}
-	// ---------------------------------------------private methods
 }

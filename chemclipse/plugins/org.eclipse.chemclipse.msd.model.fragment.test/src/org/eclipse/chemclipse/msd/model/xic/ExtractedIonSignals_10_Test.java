@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -74,40 +74,44 @@ public class ExtractedIonSignals_10_Test extends TestCase {
 
 	public void testSize_1() {
 
-		assertEquals("Size", 100, extractedIonSignals.size());
+		/*
+		 * It was 100 before, but 5 is correct as the extractor stops
+		 * as soon as a zero scan is detected.
+		 */
+		assertEquals("Size", 5, extractedIonSignals.size());
 	}
 
 	public void testSize_2() throws NoExtractedIonSignalStoredException {
 
-		assertEquals("Size", 100, extractedIonSignals.size());
+		assertEquals("Size", 5, extractedIonSignals.size());
 		extractedIonSignal = extractedIonSignals.getExtractedIonSignal(1);
 		assertEquals("Abundance", 25.0f, extractedIonSignal.getAbundance(25));
 		extractedIonSignals.add(25, 250.0f, 1, true);
-		assertEquals("Size", 100, extractedIonSignals.size());
+		assertEquals("Size", 5, extractedIonSignals.size());
 		extractedIonSignal = extractedIonSignals.getExtractedIonSignal(1);
 		assertEquals("Abundance", 250.0f, extractedIonSignal.getAbundance(25));
 	}
 
 	public void testSize_3() throws NoExtractedIonSignalStoredException {
 
-		assertEquals("Size", 100, extractedIonSignals.size());
+		assertEquals("Size", 5, extractedIonSignals.size());
 		extractedIonSignal = extractedIonSignals.getExtractedIonSignal(1);
 		assertEquals("Abundance", 25.0f, extractedIonSignal.getAbundance(25));
 		extractedIonSignals.add(25, 250, 1, false);
-		assertEquals("Size", 100, extractedIonSignals.size());
+		assertEquals("Size", 5, extractedIonSignals.size());
 		extractedIonSignal = extractedIonSignals.getExtractedIonSignal(1);
 		assertEquals("Abundance", 275.0f, extractedIonSignal.getAbundance(25));
 	}
 
 	public void testSize_4() throws NoExtractedIonSignalStoredException {
 
-		assertEquals("Size", 100, extractedIonSignals.size());
+		assertEquals("Size", 5, extractedIonSignals.size());
 		extractedIonSignal = extractedIonSignals.getExtractedIonSignal(1);
 		assertEquals("Abundance", 25.0f, extractedIonSignal.getAbundance(25));
 		extractedIonSignals.add(31, 600.0f, 101, false);
-		assertEquals("Size", 100, extractedIonSignals.size());
+		assertEquals("Size", 5, extractedIonSignals.size());
 		try {
-			extractedIonSignal = extractedIonSignals.getExtractedIonSignal(101);
+			extractedIonSignal = extractedIonSignals.getExtractedIonSignal(6);
 		} catch(NoExtractedIonSignalStoredException e) {
 			assertTrue("NoExtractedIonSignalStoredException", true);
 		}

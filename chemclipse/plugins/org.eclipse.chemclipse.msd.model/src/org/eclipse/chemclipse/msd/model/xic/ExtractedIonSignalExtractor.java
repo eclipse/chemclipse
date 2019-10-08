@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.msd.model.xic;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 
 public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor {
@@ -37,35 +37,31 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 	@Override
 	public IExtractedIonSignals getExtractedIonSignals(float startIon, float stopIon) {
 
-		IExtractedIonSignals signals = new ExtractedIonSignals(getNumberOfScansWithIons(chromatogram), chromatogram);
-		IExtractedIonSignal extractedIonSignal;
+		IExtractedIonSignals extractedSignals = new ExtractedIonSignals(getNumberOfScansWithIons(chromatogram), chromatogram);
+		exitloop:
 		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scan;
-				if(massSpectrum.getNumberOfIons() > 0) {
-					extractedIonSignal = massSpectrum.getExtractedIonSignal(startIon, stopIon);
-					signals.add(extractedIonSignal);
+			if(scan instanceof IScanMSD) {
+				if(!extractSignals(extractedSignals, (IScanMSD)scan, startIon, stopIon)) {
+					break exitloop;
 				}
 			}
 		}
-		return signals;
+		return extractedSignals;
 	}
 
 	@Override
 	public IExtractedIonSignals getExtractedIonSignals() {
 
-		IExtractedIonSignals signals = new ExtractedIonSignals(getNumberOfScansWithIons(chromatogram), chromatogram);
-		IExtractedIonSignal extractedIonSignal;
+		IExtractedIonSignals extractedSignals = new ExtractedIonSignals(getNumberOfScansWithIons(chromatogram), chromatogram);
+		exitloop:
 		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scan;
-				if(massSpectrum.getNumberOfIons() > 0) {
-					extractedIonSignal = massSpectrum.getExtractedIonSignal();
-					signals.add(extractedIonSignal);
+			if(scan instanceof IScanMSD) {
+				if(!extractSignals(extractedSignals, (IScanMSD)scan, 0, 0)) {
+					break exitloop;
 				}
 			}
 		}
-		return signals;
+		return extractedSignals;
 	}
 
 	@Override
@@ -90,21 +86,41 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 			startScan = stopScan;
 			stopScan = tmp;
 		}
+		//
 		if(startScan < 1 && stopScan > getNumberOfScansWithIons(chromatogram)) {
 			return new ExtractedIonSignals(0, chromatogram);
 		}
-		IVendorMassSpectrum massSpectrum;
-		IExtractedIonSignals extractedIonSignals = new ExtractedIonSignals(startScan, stopScan, chromatogram);
+		/*
+		 * Get the start without empty scans.
+		 */
+		exitloop:
 		for(int scan = startScan; scan <= stopScan; scan++) {
-			massSpectrum = chromatogram.getSupplierScan(scan);
-			if(massSpectrum.getNumberOfIons() > 0) {
-				extractedIonSignals.add(massSpectrum.getExtractedIonSignal());
+			if(chromatogram.getSupplierScan(scan).getNumberOfIons() > 0) {
+				startScan = scan;
+				break exitloop;
 			}
 		}
+		/*
+		 * Get the stop without empty scans.
+		 */
+		exitloop:
+		for(int scan = startScan; scan <= stopScan; scan++) {
+			if(chromatogram.getSupplierScan(scan).getNumberOfIons() == 0) {
+				stopScan = scan;
+				break exitloop;
+			}
+		}
+		//
+		IExtractedIonSignals extractedIonSignals = new ExtractedIonSignals(startScan, stopScan, chromatogram);
+		for(int scan = startScan; scan <= stopScan; scan++) {
+			extractSignals(extractedIonSignals, chromatogram.getSupplierScan(scan), 0, 0);
+		}
+		//
 		return extractedIonSignals;
 	}
 
 	/**
+	 * Calculates the number of scans until one scan without ions is detected.
 	 * 
 	 * @param chromatogram
 	 * @return int
@@ -112,14 +128,30 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 	private int getNumberOfScansWithIons(IChromatogramMSD chromatogram) {
 
 		int counter = 0;
+		exitloop:
 		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scan;
+			if(scan instanceof IScanMSD) {
+				IScanMSD massSpectrum = (IScanMSD)scan;
 				if(massSpectrum.getNumberOfIons() > 0) {
 					counter++;
+				} else {
+					break exitloop;
 				}
 			}
 		}
 		return counter;
+	}
+
+	private boolean extractSignals(IExtractedIonSignals extractedIonSignals, IScanMSD scanMSD, float startIon, float stopIon) {
+
+		if(scanMSD.getNumberOfIons() > 0) {
+			if(startIon == 0 && stopIon == 0) {
+				extractedIonSignals.add(scanMSD.getExtractedIonSignal());
+			} else {
+				extractedIonSignals.add(scanMSD.getExtractedIonSignal(startIon, stopIon));
+			}
+			return true;
+		}
+		return false;
 	}
 }

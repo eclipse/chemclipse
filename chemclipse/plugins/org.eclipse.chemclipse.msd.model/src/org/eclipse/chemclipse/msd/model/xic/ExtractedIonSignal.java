@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,11 +29,11 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	//
 	private static final float NORMALIZATION_BASE = 1000.0f;
 	//
-	private float[] abundanceValues;
-	private int startIon;
-	private int stopIon;
-	private int retentionTime;
-	private float retentionIndex;
+	private float[] abundanceValues = null;
+	private int startIon = ION_NOT_SET;
+	private int stopIon = ION_NOT_SET;
+	private int retentionTime = 0;
+	private float retentionIndex = 0;
 
 	/**
 	 * The values startIon and stopIon must be positive.<br/>
