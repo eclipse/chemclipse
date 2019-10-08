@@ -130,7 +130,7 @@ public class ExtractedIonSignals_6_Test extends TestCase {
 
 	public void testGetScan_1() {
 
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		massSpectrum = extractedIonSignals.getScan(26, excludedIons);
 		assertEquals("Ions", 6, massSpectrum.getIons().size());
 		assertEquals("TotalSignal", 4290.0f, massSpectrum.getTotalSignal());
@@ -145,7 +145,7 @@ public class ExtractedIonSignals_6_Test extends TestCase {
 
 	public void testGetScan_3() {
 
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		excludedIons.add(new MarkedIon(25));
 		excludedIons.add(new MarkedIon(30));
 		massSpectrum = extractedIonSignals.getScan(26, excludedIons);
@@ -155,7 +155,7 @@ public class ExtractedIonSignals_6_Test extends TestCase {
 
 	public void testGetScan_4() {
 
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		excludedIons.add(new MarkedIon(25));
 		excludedIons.add(new MarkedIon(26));
 		excludedIons.add(new MarkedIon(27));
@@ -168,7 +168,7 @@ public class ExtractedIonSignals_6_Test extends TestCase {
 
 	public void testGetScan_5() {
 
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		excludedIons.add(new MarkedIon(25));
 		excludedIons.add(new MarkedIon(26));
 		excludedIons.add(new MarkedIon(27));

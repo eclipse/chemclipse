@@ -47,7 +47,7 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 		/*
 		 * Create a new excluded ions object.
 		 */
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		calculateMassChromatographicQuality(chromatogramSelection, codaThreshold, windowSize, excludedIons);
 	}
 

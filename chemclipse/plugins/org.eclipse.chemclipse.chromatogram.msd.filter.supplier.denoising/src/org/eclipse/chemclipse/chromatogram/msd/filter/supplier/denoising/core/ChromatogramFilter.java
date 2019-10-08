@@ -43,8 +43,8 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 				try {
 					FilterSettings filterSettings = (FilterSettings)chromatogramFilterSettings;
 					IonSettingUtil ionSettingsUtil = new IonSettingUtil();
-					IMarkedIons ionsToRemove = new MarkedIons(ionSettingsUtil.extractIons(ionSettingsUtil.deserialize(filterSettings.getIonsToRemove())));
-					IMarkedIons ionsToPreserve = new MarkedIons(ionSettingsUtil.extractIons(ionSettingsUtil.deserialize(filterSettings.getIonsToPreserve())));
+					IMarkedIons ionsToRemove = new MarkedIons(ionSettingsUtil.extractIons(ionSettingsUtil.deserialize(filterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
+					IMarkedIons ionsToPreserve = new MarkedIons(ionSettingsUtil.extractIons(ionSettingsUtil.deserialize(filterSettings.getIonsToPreserve())), IMarkedIons.IonMarkMode.INCLUDE);
 					boolean adjustThresholdTransitions = filterSettings.isAdjustThresholdTransitions();
 					int numberOfUsedIonsForCoefficient = filterSettings.getNumberOfUsedIonsForCoefficient();
 					int segmentWidth = filterSettings.getSegmentWidth();

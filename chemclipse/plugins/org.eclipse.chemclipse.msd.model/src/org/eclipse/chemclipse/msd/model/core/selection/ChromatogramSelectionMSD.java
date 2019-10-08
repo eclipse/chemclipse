@@ -57,7 +57,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 		 * Create instances of selected and excluded ions.
 		 */
 		selectedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		/*
 		 * Marked ion transitions.
 		 */

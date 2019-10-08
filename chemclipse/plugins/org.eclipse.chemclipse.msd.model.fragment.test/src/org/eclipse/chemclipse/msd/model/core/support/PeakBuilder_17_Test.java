@@ -47,7 +47,7 @@ public class PeakBuilder_17_Test extends TestCase {
 
 		super.setUp();
 		scanRange = new ScanRange(1, 20);
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		backgroundAbundanceRange = new BackgroundAbundanceRange(20.0f, 40.0f);
 		peakMassSpectrum = new PeakMassSpectrum();
 		totalIonSignals = new TotalScanSignals(200);

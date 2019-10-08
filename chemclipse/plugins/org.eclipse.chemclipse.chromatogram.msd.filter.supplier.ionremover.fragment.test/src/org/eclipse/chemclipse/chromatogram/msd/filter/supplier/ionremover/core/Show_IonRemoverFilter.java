@@ -55,7 +55,7 @@ public class Show_IonRemoverFilter extends ChromatogramImporterTestCase {
 		chromatogramFilter = new ChromatogramFilter();
 		chromatogramFilterSettings = new ChromatogramFilterSettings();
 		IonSettingUtil settingIon = new IonSettingUtil();
-		excludedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(chromatogramFilterSettings.getIonsToRemove())));
+		excludedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(chromatogramFilterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
 		excludedIons.add(new MarkedIon(28));
 		excludedIons.add(new MarkedIon(32));
 		excludedIons.add(new MarkedIon(207));

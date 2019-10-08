@@ -142,7 +142,7 @@ public class FilterSupport {
 		 * Test excludedIons.<br/> If null create a new instance.
 		 */
 		if(excludedIons == null) {
-			excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+			excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		}
 		return excludedIons;
 	}

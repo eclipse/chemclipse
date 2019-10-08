@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,7 +47,7 @@ public class PeakFilter extends AbstractPeakFilter {
 			if(filterSettings instanceof PeakFilterSettings) {
 				PeakFilterSettings peakFilterSettings = (PeakFilterSettings)filterSettings;
 				IonSettingUtil settingIon = new IonSettingUtil();
-				IMarkedIons ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(peakFilterSettings.getIonsToRemove())));
+				IMarkedIons ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(peakFilterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
 				for(IPeakMSD peak : peaks) {
 					peak.getTargets().clear();
 					IPeakMassSpectrum peakMassSpectrum = peak.getPeakModel().getPeakMassSpectrum();

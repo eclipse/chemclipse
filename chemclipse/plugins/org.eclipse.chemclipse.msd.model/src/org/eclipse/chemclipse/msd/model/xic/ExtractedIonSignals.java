@@ -192,7 +192,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	@Override
 	public IScanMSD getScan(int scan) {
 
-		IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		return getScan(scan, excludedIons);
 	}
 

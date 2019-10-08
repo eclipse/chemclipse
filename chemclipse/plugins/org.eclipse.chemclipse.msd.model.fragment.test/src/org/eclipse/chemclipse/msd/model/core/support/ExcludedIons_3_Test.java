@@ -26,7 +26,7 @@ public class ExcludedIons_3_Test extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 	}
 
 	@Override

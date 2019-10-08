@@ -29,7 +29,7 @@ public class Denoising_1_ITest extends ChromatogramImporterTestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		ionsToRemove = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		ionsToRemove = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		ionsToRemove.add(new MarkedIon(18));
 		ionsToRemove.add(new MarkedIon(28));
 		ionsToRemove.add(new MarkedIon(32));

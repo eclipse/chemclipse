@@ -90,7 +90,7 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		 */
 		ChromatogramFilterSettings rFilterSettings = new ChromatogramFilterSettings();
 		IonSettingUtil settingIon = new IonSettingUtil();
-		excludedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(rFilterSettings.getIonsToRemove())));
+		excludedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(rFilterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
 		excludedIons.add(new MarkedIon(28));
 		excludedIons.add(new MarkedIon(32));
 		excludedIons.add(new MarkedIon(207));
@@ -145,7 +145,7 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		 */
 		ChromatogramFilterSettings rFilterSettings = new ChromatogramFilterSettings();
 		IonSettingUtil settingIon = new IonSettingUtil();
-		excludedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(rFilterSettings.getIonsToRemove())));
+		excludedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(rFilterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
 		excludedIons.add(new MarkedIon(28));
 		excludedIons.add(new MarkedIon(32));
 		excludedIons.add(new MarkedIon(207));

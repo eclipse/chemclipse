@@ -43,7 +43,7 @@ public class MassSpectrum_20_Test extends TestCase {
 		massSpectrum.addIon(ion);
 		ion = new Ion(28.2f, 33000.5f);
 		massSpectrum.addIon(ion);
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 	}
 
 	@Override

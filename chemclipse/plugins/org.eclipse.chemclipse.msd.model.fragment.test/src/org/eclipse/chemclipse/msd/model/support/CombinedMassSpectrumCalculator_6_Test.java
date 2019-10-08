@@ -32,7 +32,7 @@ public class CombinedMassSpectrumCalculator_6_Test extends TestCase {
 		combinedMassSpectrumCalculator.addIon(104.0f, 5300.0f);
 		combinedMassSpectrumCalculator.addIon(28.0f, 5400.0f);
 		combinedMassSpectrumCalculator.addIon(103.0f, 5500.0f);
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 	}
 
 	@Override

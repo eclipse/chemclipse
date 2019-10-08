@@ -22,7 +22,7 @@ public class AbstractIdentifierSettingsMSD extends AbstractIdentifierSettings im
 	@JsonIgnore
 	private String massSpectrumComparatorId = "";
 	@JsonIgnore
-	private IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+	private IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 
 	@Override
 	public String getMassSpectrumComparatorId() {

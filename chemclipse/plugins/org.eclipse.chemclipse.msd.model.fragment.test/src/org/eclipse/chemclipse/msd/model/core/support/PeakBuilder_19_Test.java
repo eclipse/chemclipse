@@ -35,7 +35,7 @@ public class PeakBuilder_19_Test extends PeakBuilderTestCase {
 		super.setUp();
 		totalIonSignalExtractor = new TotalScanSignalExtractor(chromatogram);
 		totalIonSignals = totalIonSignalExtractor.getTotalScanSignals(2, 16);
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 	}
 
 	@Override
