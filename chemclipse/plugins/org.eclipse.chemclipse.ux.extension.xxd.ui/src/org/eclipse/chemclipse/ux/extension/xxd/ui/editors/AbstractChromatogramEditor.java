@@ -417,6 +417,6 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 	private void createChromatogramPage(Composite parent) {
 
-		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.BORDER, Activator.getDefault().getPreferenceStore(), new ProcessTypeSupport(), eventBroker);
+		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.BORDER, eventBroker);
 	}
 }

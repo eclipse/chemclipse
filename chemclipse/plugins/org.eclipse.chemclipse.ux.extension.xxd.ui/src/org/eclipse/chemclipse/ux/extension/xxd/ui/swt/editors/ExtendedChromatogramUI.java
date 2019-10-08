@@ -13,8 +13,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -26,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -52,8 +49,6 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -84,7 +79,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramCha
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramActionUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramReferencesUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeatmapUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarConfig;
@@ -180,7 +174,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private RetentionIndexUI retentionIndexUI;
 	private ChromatogramChart chromatogramChart;
 	private ComboViewer comboViewerSeparationColumn;
-	// private ChromatogramActionUI chromatogramActionUI;
 	private HeatmapUI heatmapUI;
 	private Composite heatmapArea;
 	//
@@ -199,15 +192,13 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private DisplayType displayType = DisplayType.TIC;
 	//
 	private boolean suspendUpdate = false;
-	private IPreferenceStore preferenceStore;
-	private ProcessTypeSupport processTypeSupport;
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 	//
 	private IEventBroker eventBroker;
 	private MethodSupportUI methodSupportUI;
 
-	public ExtendedChromatogramUI(Composite parent, int style, IPreferenceStore preferenceStore, ProcessTypeSupport processTypeSupport, IEventBroker eventBroker) {
-		this.preferenceStore = preferenceStore;
-		this.processTypeSupport = processTypeSupport;
+	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
 		this.eventBroker = eventBroker;
 		initialize(parent, style);
 	}
@@ -917,8 +908,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_METHOD), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_RETENTION_INDICES), false);
 		PartSupport.setCompositeVisibility(heatmapArea, false);
-		//
-		// chromatogramActionUI.setChromatogramActionMenu(chromatogramSelection);
 	}
 
 	private EditorToolBar createToolbarMain(Composite parent) {
@@ -930,22 +919,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		editorToolBar.addAction(createToggleToolbarAction("Edit", "Toggle the edit toolbar.", IApplicationImage.IMAGE_EDIT, TOOLBAR_EDIT));
 		editorToolBar.addAction(createToggleToolbarAction("Alignment", "Toggle the chromatogram alignment toolbar.", IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, TOOLBAR_CHROMATOGRAM_ALIGNMENT));
 		editorToolBar.addAction(createToggleToolbarAction("Methods", "Toggle the method toolbar.", IApplicationImage.IMAGE_METHOD, TOOLBAR_METHOD));
-		// ProcessorToolbar processorToolbar = new ProcessorToolbar(editorToolBar, processTypeSupport, new BiConsumer<IProcessSupplier<?>, ProcessSupplierContext>() {
 		//
-		// @Override
-		// public void accept(IProcessSupplier<?> supplier, ProcessSupplierContext context) {
-		//
-		// try {
-		// IProcessingInfo<IChromatogramSelection<?, ?>> info = apply(SettingsWizard.getWorkspacePreferences(supplier), context, getChromatogramSelection(), getChromatogramChart().getShell());
-		// ProcessingInfoViewSupport.updateProcessingInfo(info);
-		// } catch(CancellationException e) {
-		// // user canceled
-		// }
-		// }
-		// });
 		createResetButton(editorToolBar);
 		editorToolBar.enableToolbarTextPage(preferenceStore, "ChromatogramUI.showToolbarText");
-		// processorToolbar.enablePreferencePage(preferenceStore, "ChromatogramUI.toolbarProcessorActions");
 		editorToolBar.addPreferencePages(new Supplier<Collection<? extends IPreferencePage>>() {
 
 			@Override
@@ -965,31 +941,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			}
 		}, this::applySettings);
 		return editorToolBar;
-	}
-
-	private static <T> IProcessingInfo<IChromatogramSelection<?, ?>> applyToolProcessor(ProcessorPreferences<T> preferences, ProcessSupplierContext context, IChromatogramSelection<?, ?> selection, Shell shell) {
-
-		ProcessingInfo<IChromatogramSelection<?, ?>> info = new ProcessingInfo<>();
-		try {
-			T settings = SettingsWizard.getSettings(shell, preferences);
-			ProgressMonitorDialog monitorDialog = new ProgressMonitorDialog(shell);
-			monitorDialog.run(false, true, new IRunnableWithProgress() {
-
-				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-					info.setProcessingResult(IChromatogramSelectionProcessSupplier.applyProcessor(selection, preferences.getSupplier(), settings, ProcessExecutionContext.create(context, info, monitor)));
-				}
-			});
-		} catch(IOException e) {
-			info.addErrorMessage(preferences.getSupplier().getName(), "Reading settings failed", e);
-		} catch(InvocationTargetException e) {
-			info.addErrorMessage(preferences.getSupplier().getName(), "Processing failed", e);
-		} catch(InterruptedException e) {
-			Thread.currentThread().interrupt();
-			throw new CancellationException("interrupted");
-		}
-		return info;
 	}
 
 	private Composite createToolbarInfo(Composite parent) {
@@ -1275,11 +1226,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				chromatogramChart.toggleRangeSelectorVisibility();
 			}
 		});
-	}
-
-	private ChromatogramActionUI createChromatogramActionUI(Composite parent) {
-
-		return new ChromatogramActionUI(parent, SWT.NONE);
 	}
 
 	private void createResetButton(EditorToolBar editorToolBar) {

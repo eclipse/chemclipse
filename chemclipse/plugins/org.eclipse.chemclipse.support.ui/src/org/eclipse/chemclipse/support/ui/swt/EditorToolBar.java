@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - fix layout
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
@@ -55,6 +56,7 @@ public class EditorToolBar {
 
 	private static final String GROUP_SETTING = "group.setting";
 	private static final String GROUP_MAIN = "group.main";
+	//
 	private final IToolBarManager toolBarManager;
 	private final AbstractGroupMarker mainGroup;
 	private final EditorToolBar parent;
@@ -130,7 +132,24 @@ public class EditorToolBar {
 		if(toolBarManager instanceof SubContributionManager) {
 			((SubContributionManager)toolBarManager).setVisible(visible);
 		} else if(toolBarManager instanceof ToolBarManager) {
-			((ToolBarManager)toolBarManager).getControl().setVisible(visible);
+			Control control = ((ToolBarManager)toolBarManager).getControl();
+			control.setVisible(visible);
+			/*
+			 * Resize the layout.
+			 */
+			Object object = control.getLayoutData();
+			if(object instanceof GridData) {
+				GridData gridData = (GridData)control.getLayoutData();
+				if(gridData != null) {
+					gridData.exclude = !visible;
+				}
+			}
+			/*
+			 * Redraw needed!
+			 */
+			Composite parent = control.getParent();
+			parent.layout(true);
+			parent.redraw();
 		}
 		update();
 	}
