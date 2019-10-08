@@ -68,7 +68,7 @@ public class Calculator_1_Test extends TestCase {
 		noiseMassSpectrum.addIon(new Ion(104.0f, 15000.0f));
 		noiseMassSpectrum.addIon(new Ion(201.0f, 8900.0f));
 		noiseMassSpectra.add(noiseMassSpectrum);
-		ionsToPreserve = new MarkedIons();
+		ionsToPreserve = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		// ionsToPreserve.add(103);
 		// ionsToPreserve.add(104);
 		// ionsToPreserve.add(201);

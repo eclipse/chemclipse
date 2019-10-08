@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -10,9 +10,6 @@
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
-
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 
 import junit.framework.TestCase;
 
@@ -27,7 +24,7 @@ public class SelectedIons_5_Test extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		selectedIons = new MarkedIons();
+		selectedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		selectedIons.add(new MarkedIon(28.78749204f));
 	}
 

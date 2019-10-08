@@ -37,11 +37,7 @@ public interface IMarkedIons extends IMarkedSignals<IMarkedIon> {
 		/**
 		 * in this mode, all ions in the list are considered as an inclusion, that means apply the given function to all ions given
 		 */
-		INCLUDE,
-		/**
-		 * in this mode, all ions in the list are considered as an intersection, that means apply the given function to all ions that are in the list and in set of all ions
-		 */
-		INTERSECT;
+		INCLUDE;
 	}
 
 	Set<Integer> getIonsNominal();

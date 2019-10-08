@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.model.core.support;
 import java.util.Set;
 
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 
 import junit.framework.TestCase;
 
@@ -29,7 +28,7 @@ public class ExcludedIons_2_Test extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		excludedIons = new MarkedIons();
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 	}
 
 	@Override

@@ -48,18 +48,16 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	private IMarkedIonTransitions markedIonTransitions;
 
 	public ChromatogramSelectionMSD(IChromatogramMSD chromatogram) throws ChromatogramIsNullException {
-
 		this(chromatogram, true);
 	}
 
 	public ChromatogramSelectionMSD(IChromatogramMSD chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
-
 		super(chromatogram, fireUpdate);
 		/*
 		 * Create instances of selected and excluded ions.
 		 */
-		selectedIons = new MarkedIons();
-		excludedIons = new MarkedIons();
+		selectedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		/*
 		 * Marked ion transitions.
 		 */

@@ -37,7 +37,7 @@ public class Calculator_3_ITest extends ChromatogramImporterTestCase {
 
 		super.setUp();
 		calculator = new Calculator();
-		ionsToPreserve = new MarkedIons();
+		ionsToPreserve = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		ionsToPreserve.add(new MarkedIon(103));
 		ionsToPreserve.add(new MarkedIon(104));
 		extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);

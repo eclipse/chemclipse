@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.msd.model.core.support;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
@@ -24,8 +22,6 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
@@ -36,6 +32,8 @@ import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
+
+import junit.framework.TestCase;
 
 /**
  * Test the peak exceptions.
@@ -100,7 +98,7 @@ public class PeakBuilder_29_Test extends TestCase {
 		/*
 		 * Excluded ions
 		 */
-		excludedIons = new MarkedIons();
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 	}
 
 	@Override

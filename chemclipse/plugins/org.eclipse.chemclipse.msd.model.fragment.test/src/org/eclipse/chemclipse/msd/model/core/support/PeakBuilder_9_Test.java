@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,12 +16,10 @@ import org.eclipse.chemclipse.model.support.IBackgroundAbundanceRange;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 /**
  * The chromatogram and peak will be initialized in DefaultPeakTestCase.<br/>
@@ -44,7 +42,7 @@ public class PeakBuilder_9_Test extends PeakBuilderTestCase {
 
 		super.setUp();
 		scanRange = new ScanRange(2, 16);
-		excludedExcludedIons = new MarkedIons();
+		excludedExcludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		excludedExcludedIons.add(new MarkedIon(43));
 		excludedExcludedIons.add(new MarkedIon(18));
 		excludedExcludedIons.add(new MarkedIon(28));

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -50,7 +50,7 @@ public class Chromatogram_15_Test extends TestCase {
 			chromatogram.addScan(supplierMassSpectrum);
 		}
 		// ------------------------------Scan 1-100
-		excludedIons = new MarkedIons();
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		//
 		totalIonSignalExtractor = new TotalIonSignalExtractor(chromatogram);
 	}

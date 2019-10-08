@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,11 +22,7 @@ public class AbstractIdentifierSettingsMSD extends AbstractIdentifierSettings im
 	@JsonIgnore
 	private String massSpectrumComparatorId = "";
 	@JsonIgnore
-	private IMarkedIons excludedIons;
-
-	public AbstractIdentifierSettingsMSD() {
-		excludedIons = new MarkedIons();
-	}
+	private IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 
 	@Override
 	public String getMassSpectrumComparatorId() {

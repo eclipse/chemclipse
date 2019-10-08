@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.msd.model.support;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.msd.model.support.CombinedMassSpectrumCalculator;
-import org.eclipse.chemclipse.msd.model.support.ICombinedMassSpectrumCalculator;
 
 import junit.framework.TestCase;
 
@@ -34,7 +32,7 @@ public class CombinedMassSpectrumCalculator_4_Test extends TestCase {
 		combinedMassSpectrumCalculator.addIon(104.0f, 5300.0f);
 		combinedMassSpectrumCalculator.addIon(28.0f, 5400.0f);
 		combinedMassSpectrumCalculator.addIon(103.0f, 5500.0f);
-		excludedIons = new MarkedIons();
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 	}
 
 	@Override

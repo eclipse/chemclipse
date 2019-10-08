@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,7 +30,7 @@ public class PreferenceSupplier {
 	public static final int DEF_MAGNIFICATION_FACTOR_MIN = 1;
 	public static final int DEF_MAGNIFICATION_FACTOR_MAX = 50;
 	//
-	private static IMarkedIons compoundIonsEmpty = new MarkedIons();
+	private static IMarkedIons compoundIonsEmpty = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 	private static int magnificationFactor = -1;
 	private static IMarkedIons compoundIonsHydrocarbons = null;
 	private static IMarkedIons compoundIonsFattyAcids = null;
@@ -79,7 +79,7 @@ public class PreferenceSupplier {
 			 * Hydrocarbons
 			 */
 			if(compoundIonsHydrocarbons == null) {
-				compoundIonsHydrocarbons = new MarkedIons();
+				compoundIonsHydrocarbons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 				compoundIonsHydrocarbons.add(new MarkedIon(57, magnificationFactor));
 				compoundIonsHydrocarbons.add(new MarkedIon(71, magnificationFactor));
 				compoundIonsHydrocarbons.add(new MarkedIon(85, magnificationFactor));
@@ -90,7 +90,7 @@ public class PreferenceSupplier {
 			 * Fatty acids
 			 */
 			if(compoundIonsFattyAcids == null) {
-				compoundIonsFattyAcids = new MarkedIons();
+				compoundIonsFattyAcids = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 				compoundIonsFattyAcids.add(new MarkedIon(74, magnificationFactor));
 				compoundIonsFattyAcids.add(new MarkedIon(87, magnificationFactor));
 			}
@@ -100,7 +100,7 @@ public class PreferenceSupplier {
 			 * FAME
 			 */
 			if(compoundIonsFame == null) {
-				compoundIonsFame = new MarkedIons();
+				compoundIonsFame = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 				compoundIonsFame.add(new MarkedIon(79, magnificationFactor));
 				compoundIonsFame.add(new MarkedIon(81, magnificationFactor));
 			}

@@ -70,7 +70,7 @@ public class CalculatorSupport_4_Test extends TestCase {
 		// ---------------------------
 		// Mass fragments to preserve will be removed from the noise mass
 		// spectrum.
-		ionsToPreserve = new MarkedIons();
+		ionsToPreserve = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		ionsToPreserve.add(new MarkedIon(104));
 		ionsToPreserve.add(new MarkedIon(103));
 		noiseMassSpectrum = calculatorSupport.getNoiseMassSpectrum(combinedMassSpectrumCalculator, ionsToPreserve, new NullProgressMonitor());

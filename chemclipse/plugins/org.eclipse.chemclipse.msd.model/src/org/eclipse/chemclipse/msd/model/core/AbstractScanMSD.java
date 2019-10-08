@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonCombinedComparator;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonComparatorMode;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonIsNullException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
@@ -76,13 +75,11 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private IScanMSD optimizedMassSpectrum;
 
 	public AbstractScanMSD() {
-
 		super();
 		init();
 	}
 
 	public AbstractScanMSD(final Collection<? extends IIon> ions) {
-
 		super();
 		init();
 		this.ionsList = new ArrayList<>(ions);
@@ -96,7 +93,6 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	 *            {@link IScanMSD scan} that is used as a template
 	 */
 	public AbstractScanMSD(IScanMSD templateScan) {
-
 		super(templateScan);
 		init();
 		this.ionsList = new ArrayList<>(templateScan.getIons());
@@ -126,7 +122,6 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		}
 	}
 
-	// -----------------------------IMassSpectrum
 	@Override
 	public AbstractScanMSD addIons(List<IIon> ions, boolean addIntensities) {
 
@@ -239,6 +234,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			// TODO maybe log warning?
 			return this;
 		}
+		//
 		List<IIon> ionsToRemove = new ArrayList<IIon>();
 		/*
 		 * Get the list of ions for removal.
@@ -253,28 +249,16 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	@Override
-	public AbstractScanMSD removeIons(IMarkedIons excludedIons) {
+	public AbstractScanMSD removeIons(IMarkedIons markedIons) {
 
-		if(excludedIons == null) {
+		if(markedIons == null || !markedIons.getMode().equals(IMarkedIons.IonMarkMode.EXCLUDE)) {
 			// TODO maybe log warning?
 			return this;
 		}
-		Set<Integer> markedIons = excludedIons.getIonsNominal();
-		IonMarkMode mode = excludedIons.getMode();
-		if(mode == IonMarkMode.INCLUDE || mode == IonMarkMode.INTERSECT) {
-			// remove all ions as is ...
-			removeIons(markedIons);
-		} else if(mode == IonMarkMode.EXCLUDE) {
-			// remove all ions except the given ones
-			Set<Integer> removeIons = new HashSet<>();
-			for(IIon ion : ionsList) {
-				int nominal = AbstractIon.getIon(ion.getIon());
-				if(!markedIons.contains(nominal)) {
-					removeIons.add(nominal);
-				}
-			}
-			removeIons(removeIons);
-		}
+		//
+		Set<Integer> nominalIons = markedIons.getIonsNominal();
+		removeIons(nominalIons);
+		//
 		return this;
 	}
 
@@ -591,7 +575,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private IScanMSD createNewMassSpectrum(IMarkedIons excludedIons) {
 
 		if(excludedIons == null) {
-			excludedIons = new MarkedIons();
+			excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		}
 		IScanMSD massSpectrum = new ScanMSD();
 		IIon ion;

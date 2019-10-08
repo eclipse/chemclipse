@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -219,7 +219,7 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * @param excludedIons
 	 * @return {@code this}
 	 */
-	IScanMSD removeIons(IMarkedIons excludedIons);
+	IScanMSD removeIons(IMarkedIons markedIons);
 
 	/**
 	 * Removes all ions from the actual mass spectrum with the given

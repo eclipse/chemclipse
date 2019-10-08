@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -356,7 +356,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	 */
 	private IMarkedIons getSystemOutputAndExcludedIons(IAllIonSignals allIonSignals) {
 
-		IMarkedIons excludedIons = new MarkedIons();
+		IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		for(IIonSignals ionSignal : allIonSignals.getIonSignals()) {
 			if(giveOutput) {
 				System.out.print("Ion " + ionSignal.getIon() + " SteinYes: " + ionSignal.getCounterSteinAccepted() + " SteinNo: " + ionSignal.getCounterSteinDenied() + " ");
@@ -415,7 +415,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 				System.out.println("----------------------------------------------");
 				System.out.println("Peak: " + counterPeak + " TIC-Signal peak: ScanMax: " + peakFromPeakDetection.getScanMax() + " Peak Abundance: " + peakFromPeakDetection.getPeakModel().getPeakAbundance());
 			}
-			IMarkedIons excludedIons = new MarkedIons();
+			IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 			IScanRange scanRange = new ScanRange(peakRanges.getPeakRange(counterPeak).getPeakStartPoint() + peakRanges.getStartScan(), peakRanges.getPeakRange(counterPeak).getPeakEndPoint() + peakRanges.getStartScan());
 			List<IIon> listIons = getCopyOfIonListFromPeak(peakFromPeakDetection);
 			excludedIons = getExcludedIons(scanRange);
@@ -479,7 +479,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 		for(List<IPeakModelDeconv> listModelPeaks : allModelPeaks) {
 			for(IPeakModelDeconv modelPeaks : listModelPeaks) {
-				IMarkedIons excludedIons = new MarkedIons();
+				IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 				excludedIons = getExcludedIons(modelPeaks.getScanRange());
 				for(IPeakModelDeconvIon ionsInModelPeak : modelPeaks.getAllIonsInModel()) {
 					excludedIons.remove(new MarkedIon(ionsInModelPeak.getIon()));
@@ -505,7 +505,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 
 	private IMarkedIons getExcludedIons(IScanRange scanRange) {
 
-		IMarkedIons excludedIons = new MarkedIons();
+		IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		try {
 			IExtractedIonSignalExtractor extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
 			IExtractedIonSignals extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals(scanRange.getStartScan(), scanRange.getStopScan());
@@ -573,13 +573,13 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			peak.getExtractedMassSpectrum().addIon(Iontest);
 		}
 		//
-		IMarkedIons excludedIons = new MarkedIons();
-		IMarkedIons excludedIons2 = new MarkedIons();
-		IMarkedIons excludedIons3 = new MarkedIons();
-		IMarkedIons excludedIons4 = new MarkedIons();
-		IMarkedIons excludedIons5 = new MarkedIons();
-		IMarkedIons excludedIonsPeak2_1 = new MarkedIons();
-		IMarkedIons excludedIonsPeak2_2 = new MarkedIons();
+		IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		IMarkedIons excludedIons2 = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		IMarkedIons excludedIons3 = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		IMarkedIons excludedIons4 = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		IMarkedIons excludedIons5 = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		IMarkedIons excludedIonsPeak2_1 = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		IMarkedIons excludedIonsPeak2_2 = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		for(IIonSignals ionSignal : allIonSignals.getIonSignals()) {
 			if(ionSignal.getIon() == 137 || ionSignal.getIon() == 15 || ionSignal.getIon() == 26 || ionSignal.getIon() == 27 || ionSignal.getIon() == 29 || ionSignal.getIon() == 31 || ionSignal.getIon() == 37 || ionSignal.getIon() == 38 || ionSignal.getIon() == 39 || ionSignal.getIon() == 40 || ionSignal.getIon() == 41 || ionSignal.getIon() == 42 || ionSignal.getIon() == 49 || ionSignal.getIon() == 50 || ionSignal.getIon() == 51 || ionSignal.getIon() == 52 || ionSignal.getIon() == 53 || ionSignal.getIon() == 55 || ionSignal.getIon() == 62 || ionSignal.getIon() == 63 || ionSignal.getIon() == 64 || ionSignal.getIon() == 65 || ionSignal.getIon() == 66 || ionSignal.getIon() == 67 || ionSignal.getIon() == 68 || ionSignal.getIon() == 69 || ionSignal.getIon() == 75 || ionSignal.getIon() == 76 || ionSignal.getIon() == 77 || ionSignal.getIon() == 78 || ionSignal.getIon() == 79 || ionSignal.getIon() == 80 || ionSignal.getIon() == 81 || ionSignal.getIon() == 82 || ionSignal.getIon() == 86 || ionSignal.getIon() == 91 || ionSignal.getIon() == 92 || ionSignal.getIon() == 93 || ionSignal.getIon() == 94 || ionSignal.getIon() == 95 || ionSignal.getIon() == 105 || ionSignal.getIon() == 106 || ionSignal.getIon() == 107 || ionSignal.getIon() == 108 || ionSignal.getIon() == 109 || ionSignal.getIon() == 119 || ionSignal.getIon() == 121 || ionSignal.getIon() == 123 || ionSignal.getIon() == 124 || ionSignal.getIon() == 125 || ionSignal.getIon() == 134 || ionSignal.getIon() == 135 || ionSignal.getIon() == 138 || ionSignal.getIon() == 139 || ionSignal.getIon() == 140 || ionSignal.getIon() == 145 || ionSignal.getIon() == 147 || ionSignal.getIon() == 166 || ionSignal.getIon() == 168 || ionSignal.getIon() == 181 || ionSignal.getIon() == 183) {
 			} else {

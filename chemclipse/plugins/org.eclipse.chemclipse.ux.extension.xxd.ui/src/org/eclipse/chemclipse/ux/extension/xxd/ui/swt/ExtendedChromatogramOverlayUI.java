@@ -982,7 +982,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 								availableSeriesIds.add(seriesId);
 								selectionSeries.add(seriesId);
 								if(!baseChart.isSeriesContained(seriesId)) {
-									IMarkedIons markedIons = new MarkedIons();
+									IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 									markedIons.add(ion);
 									lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, markedIons, false));
 								}
@@ -1002,7 +1002,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 										availableSeriesIds.add(seriesId);
 										selectionSeries.add(seriesId);
 										if(!baseChart.isSeriesContained(seriesId)) {
-											IMarkedIons markedIons = new MarkedIons();
+											IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 											markedIons.add(ion);
 											lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, markedIons, false));
 										}
@@ -1108,7 +1108,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 							/*
 							 * BPC, XIC, TSC
 							 */
-							IMarkedIons markedIons = new MarkedIons();
+							IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 							List<Integer> ions = getSelectedIons();
 							markedIons.add(ions);
 							//

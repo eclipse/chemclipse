@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,8 +15,6 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignals;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 
@@ -37,7 +35,7 @@ public class PeakBuilder_19_Test extends PeakBuilderTestCase {
 		super.setUp();
 		totalIonSignalExtractor = new TotalScanSignalExtractor(chromatogram);
 		totalIonSignals = totalIonSignalExtractor.getTotalScanSignals(2, 16);
-		excludedIons = new MarkedIons();
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 	}
 
 	@Override

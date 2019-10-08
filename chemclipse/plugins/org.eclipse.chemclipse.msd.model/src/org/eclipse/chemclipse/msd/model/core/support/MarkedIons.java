@@ -21,11 +21,10 @@ public class MarkedIons extends AbstractMarkedIons implements IMarkedIons {
 		this(ionsList, IonMarkMode.INCLUDE);
 	}
 
-	@Deprecated
-	public MarkedIons() {
-		this(null, IonMarkMode.INCLUDE);
-	}
-
+	// @Deprecated
+	// public MarkedIons() {
+	// this(null, IonMarkMode.INCLUDE);
+	// }
 	public MarkedIons(int[] ionsList, IonMarkMode mode) {
 		super(ionsList);
 		this.mode = mode;

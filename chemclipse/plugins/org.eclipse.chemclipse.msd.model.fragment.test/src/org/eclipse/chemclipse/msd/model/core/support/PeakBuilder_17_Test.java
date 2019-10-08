@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignals;
@@ -23,10 +21,10 @@ import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
+
+import junit.framework.TestCase;
 
 /**
  * Test the peak exceptions.
@@ -49,7 +47,7 @@ public class PeakBuilder_17_Test extends TestCase {
 
 		super.setUp();
 		scanRange = new ScanRange(1, 20);
-		excludedIons = new MarkedIons();
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		backgroundAbundanceRange = new BackgroundAbundanceRange(20.0f, 40.0f);
 		peakMassSpectrum = new PeakMassSpectrum();
 		totalIonSignals = new TotalScanSignals(200);

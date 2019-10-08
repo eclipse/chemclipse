@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -29,13 +29,13 @@ public class Denoising_1_ITest extends ChromatogramImporterTestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		ionsToRemove = new MarkedIons();
+		ionsToRemove = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		ionsToRemove.add(new MarkedIon(18));
 		ionsToRemove.add(new MarkedIon(28));
 		ionsToRemove.add(new MarkedIon(32));
 		ionsToRemove.add(new MarkedIon(84));
 		ionsToRemove.add(new MarkedIon(207));
-		ionsToPreserve = new MarkedIons();
+		ionsToPreserve = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		ionsToPreserve.add(new MarkedIon(103));
 		ionsToPreserve.add(new MarkedIon(103));
 		noiseMassSpectra = Denoising.applyDenoisingFilter(chromatogramSelection, ionsToRemove, ionsToPreserve, true, 1, 13, new NullProgressMonitor());

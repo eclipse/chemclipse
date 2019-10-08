@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -48,7 +48,7 @@ public class MassSpectrum_22_Test extends TestCase {
 		massSpectrum.addIon(ion);
 		ion = new Ion(28.2f, 33000.5f);
 		massSpectrum.addIon(ion);
-		excludedIons = new MarkedIons();
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 	}
 
 	@Override

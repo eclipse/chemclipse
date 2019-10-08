@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -142,7 +142,7 @@ public class FilterSupport {
 		 * Test excludedIons.<br/> If null create a new instance.
 		 */
 		if(excludedIons == null) {
-			excludedIons = new MarkedIons();
+			excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		}
 		return excludedIons;
 	}

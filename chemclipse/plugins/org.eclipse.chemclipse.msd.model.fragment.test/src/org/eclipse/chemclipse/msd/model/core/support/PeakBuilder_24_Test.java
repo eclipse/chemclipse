@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
@@ -21,11 +19,11 @@ import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
+
+import junit.framework.TestCase;
 
 /**
  * Test the peak exceptions.
@@ -59,7 +57,7 @@ public class PeakBuilder_24_Test extends TestCase {
 			chromatogram.addScan(massSpectrum);
 		}
 		chromatogram.recalculateRetentionTimes();
-		excludedIons = new MarkedIons();
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		excludedIons.add(new MarkedIon(34));
 		excludedIons.add(new MarkedIon(36));
 	}
