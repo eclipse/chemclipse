@@ -116,4 +116,16 @@ public class ExtractedIonSignals_10_Test extends TestCase {
 			assertTrue("NoExtractedIonSignalStoredException", true);
 		}
 	}
+
+	public void testSize_5() throws NoExtractedIonSignalStoredException {
+
+		assertEquals(1, extractedIonSignals.getStartScan());
+		assertEquals(5, extractedIonSignals.getStopScan());
+	}
+
+	public void testSize_6() throws NoExtractedIonSignalStoredException {
+
+		assertEquals(25, extractedIonSignals.getStartIon());
+		assertEquals(30, extractedIonSignals.getStopIon());
+	}
 }

@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.model.xic;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
@@ -73,5 +74,17 @@ public class ExtractedIonSignals_11_Test extends TestCase {
 	public void testSize_1() {
 
 		assertEquals("Size", 0, extractedIonSignals.size());
+	}
+
+	public void testSize_2() throws NoExtractedIonSignalStoredException {
+
+		assertEquals(0, extractedIonSignals.getStartScan());
+		assertEquals(0, extractedIonSignals.getStopScan());
+	}
+
+	public void testSize_3() throws NoExtractedIonSignalStoredException {
+
+		assertEquals(0, extractedIonSignals.getStartIon());
+		assertEquals(0, extractedIonSignals.getStopIon());
 	}
 }
