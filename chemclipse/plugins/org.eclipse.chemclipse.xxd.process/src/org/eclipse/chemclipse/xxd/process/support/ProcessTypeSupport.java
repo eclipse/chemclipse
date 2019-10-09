@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
@@ -38,7 +39,7 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class ProcessTypeSupport implements ProcessSupplierContext {
 
-	private List<IProcessTypeSupplier> localProcessSupplier = new ArrayList<>();
+	private final List<IProcessTypeSupplier> localProcessSupplier = new ArrayList<>();
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -65,16 +66,28 @@ public class ProcessTypeSupport implements ProcessSupplierContext {
 	/**
 	 * Get all suppliers matching a given set of datacategories
 	 * 
+	 * @deprecated use {@link #visitSupplier(Consumer)} instead
 	 * @param dataTypes
 	 * @return the matching {@link IProcessSupplier}
 	 */
-	@Override
+	@Deprecated
 	public Set<IProcessSupplier<?>> getSupplier(Iterable<DataCategory> dataTypes) {
 
 		Set<IProcessSupplier<?>> supplier = new TreeSet<>((o1, o2) -> o1.getId().compareTo(o2.getId()));
 		addMatchingSupplier(dataTypes, supplier, localProcessSupplier.toArray(new IProcessTypeSupplier[0]));
 		addMatchingSupplier(dataTypes, supplier, Activator.geIProcessTypeSuppliers());
 		return supplier;
+	}
+
+	@Override
+	public void visitSupplier(Consumer<? super IProcessSupplier<?>> consumer) {
+
+		for(IProcessTypeSupplier typeSupplier : localProcessSupplier) {
+			typeSupplier.getProcessorSuppliers().forEach(consumer);
+		}
+		for(IProcessTypeSupplier typeSupplier : Activator.geIProcessTypeSuppliers()) {
+			typeSupplier.getProcessorSuppliers().forEach(consumer);
+		}
 	}
 
 	private void addMatchingSupplier(Iterable<DataCategory> dataTypes, Set<IProcessSupplier<?>> supplier, IProcessTypeSupplier[] processTypeSuppliers) {

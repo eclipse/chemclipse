@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.stream.XMLEventFactory;
@@ -34,7 +33,6 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class JobWriter {
@@ -205,22 +203,7 @@ public class JobWriter {
 		// not used, only for backward compat
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_SYMBOLIC_NAME, ""));
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_CLASS_NAME, ""));
-		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_DATA_TYPES, getDataTypes(processEntry.getSupportedDataTypes())));
+		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_DATA_TYPES, ""));
 		eventWriter.add(entryEnd);
-	}
-
-	private String getDataTypes(List<DataType> dataTypes) {
-
-		StringBuilder builder = new StringBuilder();
-		Iterator<DataType> iterator = dataTypes.iterator();
-		while(iterator.hasNext()) {
-			DataType dataType = iterator.next();
-			builder.append(dataType.toString());
-			if(iterator.hasNext()) {
-				builder.append(JobTags.DELIMITER_DATA_TYPE);
-			}
-		}
-		//
-		return builder.toString();
 	}
 }

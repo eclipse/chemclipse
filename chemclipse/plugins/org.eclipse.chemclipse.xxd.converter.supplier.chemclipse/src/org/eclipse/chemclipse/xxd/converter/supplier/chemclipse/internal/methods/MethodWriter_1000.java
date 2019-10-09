@@ -14,11 +14,9 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.method
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 
 @Deprecated
@@ -40,13 +38,8 @@ public class MethodWriter_1000 extends AbstractMethodWriter {
 			writeString(dataOutputStream, processEntry.getName());
 			writeString(dataOutputStream, processEntry.getDescription());
 			writeString(dataOutputStream, processEntry.getJsonSettings());
-			//
-			List<DataType> supportedDataTypes = processEntry.getSupportedDataTypes();
-			dataOutputStream.writeInt(supportedDataTypes.size());
-			for(DataType dataType : supportedDataTypes) {
-				writeString(dataOutputStream, dataType.toString());
-			}
 			// obsolete, just write for backward compat
+			dataOutputStream.writeInt(0);
 			writeString(dataOutputStream, "");
 			writeString(dataOutputStream, "");
 		}

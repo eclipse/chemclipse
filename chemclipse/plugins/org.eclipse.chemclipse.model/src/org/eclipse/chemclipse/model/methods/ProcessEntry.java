@@ -12,18 +12,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.methods;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.chemclipse.model.types.DataType;
-
 public class ProcessEntry implements IProcessEntry {
 
 	private String processorId = "";
 	private String name = "";
 	private String description = "";
 	private String jsonSettings = EMPTY_JSON_SETTINGS;
-	private List<DataType> supportedDataTypes = new ArrayList<>();
 
 	public ProcessEntry() {
 	}
@@ -33,7 +27,6 @@ public class ProcessEntry implements IProcessEntry {
 		name = processEntry.getName();
 		description = processEntry.getDescription();
 		jsonSettings = processEntry.getJsonSettings();
-		supportedDataTypes = processEntry.getSupportedDataTypes();
 	}
 
 	@Override
@@ -88,12 +81,6 @@ public class ProcessEntry implements IProcessEntry {
 	}
 
 	@Override
-	public List<DataType> getSupportedDataTypes() {
-
-		return supportedDataTypes;
-	}
-
-	@Override
 	public int hashCode() {
 
 		final int prime = 31;
@@ -106,29 +93,36 @@ public class ProcessEntry implements IProcessEntry {
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj)
+		if(this == obj) {
 			return true;
-		if(obj == null)
+		}
+		if(obj == null) {
 			return false;
-		if(getClass() != obj.getClass())
+		}
+		if(getClass() != obj.getClass()) {
 			return false;
+		}
 		ProcessEntry other = (ProcessEntry)obj;
 		if(processorId == null) {
-			if(other.processorId != null)
+			if(other.processorId != null) {
 				return false;
-		} else if(!processorId.equals(other.processorId))
+			}
+		} else if(!processorId.equals(other.processorId)) {
 			return false;
+		}
 		if(jsonSettings == null) {
-			if(other.jsonSettings != null)
+			if(other.jsonSettings != null) {
 				return false;
-		} else if(!jsonSettings.equals(other.jsonSettings))
+			}
+		} else if(!jsonSettings.equals(other.jsonSettings)) {
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
 
-		return "ProcessMethod [processorId=" + processorId + ", name=" + name + ", description=" + description + ", jsonSettings=" + jsonSettings + ", supportedDataTypes=" + supportedDataTypes + "]";
+		return "ProcessMethod [processorId=" + processorId + ", name=" + name + ", description=" + description + ", jsonSettings=" + jsonSettings + "]";
 	}
 }
