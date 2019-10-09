@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.ux.extension.ui.swt;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
@@ -51,16 +52,17 @@ public class TaskTile extends Composite {
 	private final TileDefinition definition;
 	private final Consumer<TileDefinition> definitionConsumer;
 	private final Color[] colors;
+	private Function<TileDefinition, Integer> styleFunction;
 
-	public TaskTile(Composite parent, int style, TileDefinition definition, Consumer<TileDefinition> definitionConsumer, Color[] colors) {
+	public TaskTile(Composite parent, TileDefinition definition, Consumer<TileDefinition> definitionConsumer, Function<TileDefinition, Integer> styleFunction, Color[] colors) {
 		super(parent, SWT.NONE);
 		this.definition = definition;
 		this.definitionConsumer = definitionConsumer;
+		this.styleFunction = styleFunction;
 		this.colors = colors;
 		initialize();
 		waitCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_WAIT);
 		handCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
-		updateStyle(style);
 		updateFromDefinition();
 	}
 
@@ -87,8 +89,6 @@ public class TaskTile extends Composite {
 		}
 		textSection.setText(section);
 		textDesciption.setText(description == null ? "" : description);
-		this.layout(true);
-		this.redraw();
 	}
 
 	public void setActive() {
@@ -225,7 +225,7 @@ public class TaskTile extends Composite {
 		}
 	}
 
-	public void updateStyle(int style) {
+	private void updateStyle(int style) {
 
 		if((style & HIGHLIGHT) != 0) {
 			setCursor(handCursor);
@@ -252,6 +252,10 @@ public class TaskTile extends Composite {
 
 		if(definition != null) {
 			setContent(definition.getIcon(), definition.getTitle(), definition.getDescription());
+			Integer style = styleFunction.apply(definition);
+			updateStyle(style != null ? style.intValue() : 0);
+			layout(true);
+			redraw();
 		}
 	}
 }

@@ -41,6 +41,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -248,7 +249,7 @@ public class WelcomeViewExtensionHandler {
 		return hasShortcut;
 	}
 
-	private boolean setTile(TaskTile tile, TileDefinition extension, boolean hasShortcut) {
+	private static boolean setTile(TaskTile tile, TileDefinition extension, boolean hasShortcut) {
 
 		if(tile == null) {
 			return false;
@@ -256,23 +257,14 @@ public class WelcomeViewExtensionHandler {
 		ExtensionTileDefinition extensionTileDefinition = (ExtensionTileDefinition)tile.getDefinition();
 		extensionTileDefinition.delegate = extension;
 		if(extension != null) {
-			int style = TaskTile.HIGHLIGHT;
-			if(extension instanceof ConfigurationElementTileDefinition) {
-				String attribute = ((ConfigurationElementTileDefinition)extension).element.getAttribute(ATTRIBUTE_PERSPECTIVE_ID);
-				if(attribute == null || attribute.isEmpty()) {
-					style = SWT.NONE;
-				}
-			}
-			tile.updateStyle(style);
 			tile.setMenu((Menu)tile.getData(DATA_POPUP_MENU));
+			extensionTileDefinition.addshortcut = false;
 		} else {
 			tile.setMenu(null);
 			if(!hasShortcut) {
-				tile.updateStyle(TaskTile.HIGHLIGHT | TaskTile.LARGE_TITLE);
 				extensionTileDefinition.addshortcut = true;
 				hasShortcut = true;
 			} else {
-				tile.updateStyle(SWT.NONE);
 				extensionTileDefinition.addshortcut = false;
 			}
 		}
@@ -460,16 +452,21 @@ public class WelcomeViewExtensionHandler {
 			return element.getAttribute(ATTRIBUTE_PERSPECTIVE_ID);
 		}
 
-		@Execute
-		public void dummyexecute() {
-
-			// nothing to do here
-		}
-
 		@Override
 		public String getContext() {
 
 			return "perspective-switch," + getPreferredPerspective();
+		}
+
+		@CanExecute
+		public boolean canExecute(PerspectiveSupport perspectiveSupport) {
+
+			String perspectiveId = getPreferredPerspective();
+			if(perspectiveId == null || perspectiveId.isEmpty()) {
+				return false;
+			} else {
+				return perspectiveSupport.getPerspectiveModel(perspectiveId) != null;
+			}
 		}
 	}
 
@@ -548,6 +545,19 @@ public class WelcomeViewExtensionHandler {
 			} else if(addshortcut) {
 				selectExtensionForTile(this, shell, perspectiveSupport);
 			}
+		}
+
+		@CanExecute
+		public boolean canExecute(IEclipseContext context) {
+
+			if(delegate != null) {
+				Object invoke = ContextInjectionFactory.invoke(delegate, CanExecute.class, context, Boolean.TRUE);
+				if(invoke instanceof Boolean) {
+					return ((Boolean)invoke).booleanValue();
+				}
+				return true;
+			}
+			return addshortcut;
 		}
 	}
 }
