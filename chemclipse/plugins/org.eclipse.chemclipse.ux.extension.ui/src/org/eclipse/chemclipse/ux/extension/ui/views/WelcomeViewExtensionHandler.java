@@ -41,6 +41,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -79,12 +80,13 @@ public class WelcomeViewExtensionHandler {
 	private static final Comparator<TileDefinition> EXTENSION_COMPARATOR = (c1, c2) -> c1.getTitle().compareToIgnoreCase(c2.getTitle());
 	private final Set<String> removedTiles;
 	private final Set<String> addedTiles;
-	private TaskTileContainer tileContainer;
-	private int minTiles;
-	private int maxTiles;
-	int tiles;
-	private IPreferenceStore preferenceStore;
-	private Predicate<TileDefinition> definitionAcceptor;
+	private final Set<TileDefinition> privateTileDefinitions = new HashSet<>();
+	private final TaskTileContainer tileContainer;
+	private final int minTiles;
+	private final int maxTiles;
+	private int tiles;
+	private final IPreferenceStore preferenceStore;
+	private final Predicate<TileDefinition> definitionAcceptor;
 
 	/**
 	 * Constructs a {@link WelcomeViewExtensionHandler} with the given parameters
@@ -121,7 +123,7 @@ public class WelcomeViewExtensionHandler {
 
 	public TaskTile createTile() {
 
-		if(tiles <= maxTiles) {
+		if(tiles < maxTiles) {
 			ExtensionTileDefinition definition = new ExtensionTileDefinition();
 			TaskTile tile = tileContainer.addTaskTile(definition);
 			Menu popupMenu = new Menu(tile);
@@ -160,7 +162,19 @@ public class WelcomeViewExtensionHandler {
 		}
 	}
 
-	protected String getExtensionId(TileDefinition extension) {
+	public void addTileDefinition(TileDefinition definition) {
+
+		privateTileDefinitions.add(definition);
+		updateTiles();
+	}
+
+	public void removeTileDefinition(TileDefinition definition) {
+
+		privateTileDefinitions.remove(definition);
+		updateTiles();
+	}
+
+	private String getExtensionId(TileDefinition extension) {
 
 		if(extension instanceof ConfigurationElementTileDefinition) {
 			ConfigurationElementTileDefinition elementTileDefinition = (ConfigurationElementTileDefinition)extension;
@@ -237,7 +251,7 @@ public class WelcomeViewExtensionHandler {
 		return hasShortcut;
 	}
 
-	private boolean setTile(TaskTile tile, TileDefinition extension, boolean hasShortcut) {
+	private static boolean setTile(TaskTile tile, TileDefinition extension, boolean hasShortcut) {
 
 		if(tile == null) {
 			return false;
@@ -245,23 +259,14 @@ public class WelcomeViewExtensionHandler {
 		ExtensionTileDefinition extensionTileDefinition = (ExtensionTileDefinition)tile.getDefinition();
 		extensionTileDefinition.delegate = extension;
 		if(extension != null) {
-			int style = TaskTile.HIGHLIGHT;
-			if(extension instanceof ConfigurationElementTileDefinition) {
-				String attribute = ((ConfigurationElementTileDefinition)extension).element.getAttribute(ATTRIBUTE_PERSPECTIVE_ID);
-				if(attribute == null || attribute.isEmpty()) {
-					style = SWT.NONE;
-				}
-			}
-			tile.updateStyle(style);
 			tile.setMenu((Menu)tile.getData(DATA_POPUP_MENU));
+			extensionTileDefinition.addshortcut = false;
 		} else {
 			tile.setMenu(null);
 			if(!hasShortcut) {
-				tile.updateStyle(TaskTile.HIGHLIGHT | TaskTile.LARGE_TITLE);
 				extensionTileDefinition.addshortcut = true;
 				hasShortcut = true;
 			} else {
-				tile.updateStyle(SWT.NONE);
 				extensionTileDefinition.addshortcut = false;
 			}
 		}
@@ -382,6 +387,8 @@ public class WelcomeViewExtensionHandler {
 				result.add(definition);
 			}
 		}
+		// now add the private ones
+		result.addAll(privateTileDefinitions);
 		return result;
 	}
 
@@ -447,16 +454,21 @@ public class WelcomeViewExtensionHandler {
 			return element.getAttribute(ATTRIBUTE_PERSPECTIVE_ID);
 		}
 
-		@Execute
-		public void dummyexecute() {
-
-			// nothing to do here
-		}
-
 		@Override
 		public String getContext() {
 
 			return "perspective-switch," + getPreferredPerspective();
+		}
+
+		@CanExecute
+		public boolean canExecute(PerspectiveSupport perspectiveSupport) {
+
+			String perspectiveId = getPreferredPerspective();
+			if(perspectiveId == null || perspectiveId.isEmpty()) {
+				return false;
+			} else {
+				return perspectiveSupport.getPerspectiveModel(perspectiveId) != null;
+			}
 		}
 	}
 
@@ -531,10 +543,23 @@ public class WelcomeViewExtensionHandler {
 						perspectiveSupport.changePerspective(preferredPerspective);
 					}
 				}
-				ContextInjectionFactory.invoke(delegate, Execute.class, context);
+				ContextInjectionFactory.invoke(delegate, Execute.class, context, null);
 			} else if(addshortcut) {
 				selectExtensionForTile(this, shell, perspectiveSupport);
 			}
+		}
+
+		@CanExecute
+		public boolean canExecute(IEclipseContext context) {
+
+			if(delegate != null) {
+				Object invoke = ContextInjectionFactory.invoke(delegate, CanExecute.class, context, Boolean.TRUE);
+				if(invoke instanceof Boolean) {
+					return ((Boolean)invoke).booleanValue();
+				}
+				return true;
+			}
+			return addshortcut;
 		}
 	}
 }

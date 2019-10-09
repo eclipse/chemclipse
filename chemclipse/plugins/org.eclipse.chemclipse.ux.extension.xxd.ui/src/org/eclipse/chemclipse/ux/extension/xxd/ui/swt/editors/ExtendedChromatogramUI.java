@@ -169,7 +169,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private static final String TOOLBAR_METHOD = "TOOLBAR_METHOD";
 	private static final String TOOLBAR_CHROMATOGRAM_ALIGNMENT = "TOOLBAR_CHROMATOGRAM_ALIGNMENT";
 	private static final String TOOLBAR_EDIT = "TOOLBAR_EDIT";
-	private Map<String, Composite> toolbars = new HashMap<>();
+	private final Map<String, Composite> toolbars = new HashMap<>();
 	//
 	private EditorToolBar toolbarMain;
 	private Label labelChromatogramInfo;
@@ -181,28 +181,34 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private Composite heatmapArea;
 	//
 	private IChromatogramSelection<?, ?> chromatogramSelection = null;
-	private List<IChartMenuEntry> cachedMenuEntries = new ArrayList<>();
+	private final List<IChartMenuEntry> cachedMenuEntries = new ArrayList<>();
 	//
-	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<>();
-	private Map<String, IdentificationLabelMarker> scanLabelMarkerMap = new HashMap<>();
+	private final Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<>();
+	private final Map<String, IdentificationLabelMarker> scanLabelMarkerMap = new HashMap<>();
 	//
-	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
-	private PeakChartSupport peakChartSupport = new PeakChartSupport();
-	private ScanChartSupport scanChartSupport = new ScanChartSupport();
-	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
-	private ChartSupport chartSupport = new ChartSupport(Activator.getDefault().getPreferenceStore());
+	private final PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
+	private final PeakChartSupport peakChartSupport = new PeakChartSupport();
+	private final ScanChartSupport scanChartSupport = new ScanChartSupport();
+	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
+	private final ChartSupport chartSupport;
 	//
 	private DisplayType displayType = DisplayType.TIC;
 	//
 	private boolean suspendUpdate = false;
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
+	private final IPreferenceStore preferenceStore;
+	private final ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 	//
-	private IEventBroker eventBroker;
+	private final IEventBroker eventBroker;
 	private MethodSupportUI methodSupportUI;
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
+		this(parent, style, eventBroker, Activator.getDefault().getPreferenceStore());
+	}
+
+	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, IPreferenceStore store) {
 		this.eventBroker = eventBroker;
+		preferenceStore = store;
+		chartSupport = new ChartSupport(store);
 		initialize(parent, style);
 	}
 

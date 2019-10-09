@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
@@ -32,8 +33,9 @@ import org.eclipse.swt.widgets.Composite;
 
 public class TaskTileContainer {
 
-	private static final Color DEFAULT_COLOR_INACTIVE = Colors.getColor(74, 142, 142);
-	private static final Color DEFAULT_COLOR_ACTIVE = Colors.getColor(5, 100, 100);
+	public static final Color DEFAULT_COLOR_TEXT = Colors.WHITE;
+	public static final Color DEFAULT_COLOR_INACTIVE = Colors.getColor(74, 142, 142);
+	public static final Color DEFAULT_COLOR_ACTIVE = Colors.getColor(5, 100, 100);
 	private final List<TaskTile> tiles = new ArrayList<TaskTile>();
 	private final Composite container;
 	private final Supplier<IEclipseContext> contextSupplier;
@@ -49,14 +51,14 @@ public class TaskTileContainer {
 	private Color[] colors;
 
 	public TaskTileContainer(Composite parent, int columns, Supplier<IEclipseContext> contextSupplier) {
-		this(parent, columns, contextSupplier, new Color[]{DEFAULT_COLOR_ACTIVE, DEFAULT_COLOR_INACTIVE});
+		this(parent, columns, contextSupplier, new Color[]{DEFAULT_COLOR_ACTIVE, DEFAULT_COLOR_INACTIVE, DEFAULT_COLOR_TEXT});
 	}
 
 	public TaskTileContainer(Composite parent, int columns, Supplier<IEclipseContext> contextSupplier, Color[] colors) {
 		this.contextSupplier = contextSupplier;
 		this.colors = colors;
 		container = new Composite(parent, SWT.NONE);
-		container.setLayout(new GridLayout(columns, false));
+		container.setLayout(new GridLayout(columns, true));
 		container.setBackgroundMode(SWT.INHERIT_FORCE);
 		MouseTrackAdapter trackAdapter = new MouseTrackAdapter() {
 
@@ -75,7 +77,7 @@ public class TaskTileContainer {
 	public TaskTile addTaskTile(TileDefinition definition) {
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		TaskTile taskTile = new TaskTile(container, TaskTile.HIGHLIGHT, definition, this::executeHandler, colors);
+		TaskTile taskTile = new TaskTile(container, definition, this::executeHandler, this::computeStyle, colors);
 		taskTile.setLayoutData(gridData);
 		taskTile.addMouseMoveListener(tileMouseMoveListener);
 		tiles.add(taskTile);
@@ -85,7 +87,29 @@ public class TaskTileContainer {
 
 	private void executeHandler(TileDefinition tileDefinition) {
 
-		ContextInjectionFactory.invoke(tileDefinition, Execute.class, contextSupplier.get());
+		ContextInjectionFactory.invoke(tileDefinition, Execute.class, contextSupplier.get(), null);
+	}
+
+	protected int computeStyle(TileDefinition tileDefinition) {
+
+		boolean largeText = tileDefinition.getIcon() == null && tileDefinition.getTitle().length() == 1;
+		int style = SWT.NONE;
+		if(canExecute(tileDefinition)) {
+			style |= TaskTile.HIGHLIGHT;
+		}
+		if(largeText) {
+			style |= TaskTile.LARGE_TITLE;
+		}
+		return style;
+	}
+
+	private boolean canExecute(TileDefinition tileDefinition) {
+
+		Object invoke = ContextInjectionFactory.invoke(tileDefinition, CanExecute.class, contextSupplier.get(), Boolean.TRUE);
+		if(invoke instanceof Boolean) {
+			return ((Boolean)invoke).booleanValue();
+		}
+		return true;
 	}
 
 	public void removeTaskTile(TaskTile tile) {
