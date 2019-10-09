@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.supplier;
 
-import java.util.Set;
-
-import org.eclipse.chemclipse.processing.DataCategory;
+import java.util.function.Consumer;
 
 public interface ProcessSupplierContext {
 
@@ -27,8 +25,7 @@ public interface ProcessSupplierContext {
 
 	/**
 	 * 
-	 * @param dataTypes
-	 * @return all suppliers for the given {@link DataCategory}s
+	 * iterates all available {@link IProcessSupplier}
 	 */
-	Set<IProcessSupplier<?>> getSupplier(Iterable<DataCategory> dataCategory);
+	void visitSupplier(Consumer<? super IProcessSupplier<?>> consumer);
 }
