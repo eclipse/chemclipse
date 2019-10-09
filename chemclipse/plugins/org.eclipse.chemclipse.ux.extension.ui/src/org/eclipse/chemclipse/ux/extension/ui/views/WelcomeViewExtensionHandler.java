@@ -123,7 +123,7 @@ public class WelcomeViewExtensionHandler {
 
 	public TaskTile createTile() {
 
-		if(tiles <= maxTiles) {
+		if(tiles < maxTiles) {
 			ExtensionTileDefinition definition = new ExtensionTileDefinition();
 			TaskTile tile = tileContainer.addTaskTile(definition);
 			Menu popupMenu = new Menu(tile);
