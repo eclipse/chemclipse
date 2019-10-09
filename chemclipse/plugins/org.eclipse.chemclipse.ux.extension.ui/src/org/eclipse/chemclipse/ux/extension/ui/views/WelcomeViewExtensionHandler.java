@@ -81,12 +81,12 @@ public class WelcomeViewExtensionHandler {
 	private final Set<String> removedTiles;
 	private final Set<String> addedTiles;
 	private final Set<TileDefinition> privateTileDefinitions = new HashSet<>();
-	private TaskTileContainer tileContainer;
+	private final TaskTileContainer tileContainer;
 	private final int minTiles;
 	private final int maxTiles;
 	private int tiles;
-	private IPreferenceStore preferenceStore;
-	private Predicate<TileDefinition> definitionAcceptor;
+	private final IPreferenceStore preferenceStore;
+	private final Predicate<TileDefinition> definitionAcceptor;
 
 	/**
 	 * Constructs a {@link WelcomeViewExtensionHandler} with the given parameters
@@ -165,11 +165,13 @@ public class WelcomeViewExtensionHandler {
 	public void addTileDefinition(TileDefinition definition) {
 
 		privateTileDefinitions.add(definition);
+		updateTiles();
 	}
 
 	public void removeTileDefinition(TileDefinition definition) {
 
 		privateTileDefinitions.remove(definition);
+		updateTiles();
 	}
 
 	private String getExtensionId(TileDefinition extension) {
@@ -541,7 +543,7 @@ public class WelcomeViewExtensionHandler {
 						perspectiveSupport.changePerspective(preferredPerspective);
 					}
 				}
-				ContextInjectionFactory.invoke(delegate, Execute.class, context);
+				ContextInjectionFactory.invoke(delegate, Execute.class, context, null);
 			} else if(addshortcut) {
 				selectExtensionForTile(this, shell, perspectiveSupport);
 			}

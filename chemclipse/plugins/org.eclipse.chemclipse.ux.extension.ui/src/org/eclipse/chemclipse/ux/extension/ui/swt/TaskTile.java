@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.ux.extension.ui.swt;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
 import org.eclipse.core.runtime.IStatus;
@@ -40,6 +39,7 @@ public class TaskTile extends Composite {
 
 	public static final int LARGE_TITLE = (1 << 1);
 	public static final int HIGHLIGHT = (1 << 2);
+	public static final int WRAP_IMAGE = (1 << 3);
 	private Color colorInactive;
 	private Color colorActive;
 	//
@@ -79,13 +79,13 @@ public class TaskTile extends Composite {
 		return definition;
 	}
 
-	private void setContent(Image image, String section, String description) {
+	private void setContent(Image image, String section, String description, boolean wrapImage) {
 
 		labelImage.setImage(image);
 		if(image == null) {
-			modifyLabelImage(true);
+			modifyLabelImage(true, wrapImage);
 		} else {
-			modifyLabelImage(false);
+			modifyLabelImage(false, wrapImage);
 		}
 		textSection.setText(section);
 		textDesciption.setText(description == null ? "" : description);
@@ -104,13 +104,15 @@ public class TaskTile extends Composite {
 	private void initialize() {
 
 		setLayout(new GridLayout(1, true));
-		//
-		setLayout(new GridLayout(2, true));
+		Composite composite = new Composite(this, SWT.NONE);
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
+		composite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
+		// composite.setBackground(Colors.CYAN);
+		composite.setLayout(new GridLayout(2, true));
 		addControlListener(this);
-		//
-		labelImage = addLabelImage(this);
-		textSection = addTextSection(this);
-		textDesciption = addTextDescription(this);
+		labelImage = addLabelImage(composite);
+		textSection = addTextSection(composite);
+		textDesciption = addTextDescription(composite);
 	}
 
 	private Label addLabelImage(Composite parent) {
@@ -124,7 +126,7 @@ public class TaskTile extends Composite {
 	private Label addTextSection(Composite parent) {
 
 		Label label = new Label(parent, SWT.NONE);
-		label.setForeground(Colors.WHITE);
+		label.setForeground(colors[2]);
 		label.setText("");
 		label.setLayoutData(getGridData(SWT.BEGINNING, SWT.END, 1));
 		addControlListener(label);
@@ -158,14 +160,17 @@ public class TaskTile extends Composite {
 		textDesciption.setBackground(color);
 	}
 
-	private void modifyLabelImage(boolean exclude) {
+	private void modifyLabelImage(boolean exclude, boolean wrap) {
 
 		GridData gridDataLabel = (GridData)labelImage.getLayoutData();
 		gridDataLabel.exclude = exclude;
+		gridDataLabel.horizontalSpan = wrap ? 2 : 1;
+		gridDataLabel.horizontalAlignment = wrap ? SWT.CENTER : SWT.END;
+		gridDataLabel.grabExcessVerticalSpace = !wrap;
 		labelImage.setVisible(!exclude);
 		GridData gridDataText = (GridData)textSection.getLayoutData();
-		gridDataText.horizontalAlignment = (exclude) ? SWT.CENTER : SWT.BEGINNING;
-		gridDataText.horizontalSpan = (exclude) ? 2 : 1;
+		gridDataText.horizontalAlignment = (exclude || wrap) ? SWT.CENTER : SWT.BEGINNING;
+		gridDataText.horizontalSpan = (exclude || wrap) ? 2 : 1;
 	}
 
 	private void addControlListener(Control control) {
@@ -231,10 +236,12 @@ public class TaskTile extends Composite {
 			setCursor(handCursor);
 			colorActive = colors[0];
 			colorInactive = colors[1];
+			labelImage.setEnabled(true);
 		} else {
 			setCursor(null);
 			colorActive = colors[1];
 			colorInactive = colors[1];
+			labelImage.setEnabled(false);
 		}
 		int fontSize;
 		if((style & LARGE_TITLE) != 0) {
@@ -245,15 +252,15 @@ public class TaskTile extends Composite {
 		Font font = new Font(getDisplay(), "Arial", fontSize, SWT.BOLD);
 		textSection.setFont(font);
 		font.dispose();
-		setInactive();
 	}
 
 	public void updateFromDefinition() {
 
 		if(definition != null) {
-			setContent(definition.getIcon(), definition.getTitle(), definition.getDescription());
 			Integer style = styleFunction.apply(definition);
 			updateStyle(style != null ? style.intValue() : 0);
+			setContent(definition.getIcon(), definition.getTitle(), definition.getDescription(), (style & WRAP_IMAGE) != 0);
+			setInactive();
 			layout(true);
 			redraw();
 		}
