@@ -70,6 +70,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.Identification
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceInitializer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramAxes;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
@@ -135,6 +136,8 @@ import org.eclipse.swtchart.extensions.menu.ResetChartHandler;
 @SuppressWarnings("rawtypes")
 public class ExtendedChromatogramUI implements ToolbarConfig {
 
+	// this is a private preference
+	private static final String PREFERENCE_CHROMATOGRAM_UI_SHOW_TOOLBAR_TEXT = "ChromatogramUI.showToolbarText";
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
 	//
 	protected static final String TYPE_GENERIC = "TYPE_GENERIC";
@@ -921,7 +924,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		editorToolBar.addAction(createToggleToolbarAction("Methods", "Toggle the method toolbar.", IApplicationImage.IMAGE_METHOD, TOOLBAR_METHOD));
 		//
 		createResetButton(editorToolBar);
-		editorToolBar.enableToolbarTextPage(preferenceStore, "ChromatogramUI.showToolbarText");
+		editorToolBar.enableToolbarTextPage(preferenceStore, PREFERENCE_CHROMATOGRAM_UI_SHOW_TOOLBAR_TEXT);
 		editorToolBar.addPreferencePages(new Supplier<Collection<? extends IPreferencePage>>() {
 
 			@Override
@@ -1360,14 +1363,13 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private void setScanAxisSettings(IAxisSettings axisSettings) {
 
-		ChartSupport chartSupport = new ChartSupport(Activator.getDefault().getPreferenceStore());
+		ChartSupport chartSupport = new ChartSupport(preferenceStore);
 		Position position = Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SCANS));
 		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_X_AXIS_SCANS));
 		LineStyle gridLineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SCANS));
 		Color gridColor = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SCANS));
 		chartSupport.setAxisSettings(axisSettings, position, "0", color, gridLineStyle, gridColor);
 		//
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_SCANS);
 		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_SCANS);
 		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_X_AXIS_SCANS);
@@ -1386,5 +1388,18 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	public void updateMethods() {
 
 		methodSupportUI.applySettings();
+	}
+
+	/**
+	 * Initializes a store with required defaults so it can be used with the {@link ExtendedChromatogramUI}
+	 * 
+	 * @param preferenceStore
+	 */
+	public static void initializeChartDefaults(IPreferenceStore preferenceStore) {
+
+		// we delegate here to PreferenceInitializer
+		PreferenceInitializer.initializeChromatogramDefaults(preferenceStore);
+		// and set our private preference also
+		preferenceStore.setDefault(PREFERENCE_CHROMATOGRAM_UI_SHOW_TOOLBAR_TEXT, true);
 	}
 }

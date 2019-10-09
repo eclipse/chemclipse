@@ -166,6 +166,88 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_TARGET_LIST, PreferenceConstants.DEF_TARGET_LIST);
 		store.setDefault(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE, PreferenceConstants.DEF_PROPAGATE_TARGET_ON_UPDATE);
 		store.setDefault(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, PreferenceConstants.DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER);
+		initializeChromatogramDefaults(store);
+		/*
+		 * Calibration Chart
+		 */
+		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_CALIBRATION, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_CALIBRATION);
+		//
+		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_SHOW_X_AXIS_CONCENTRATION_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_POSITION_X_AXIS_CONCENTRATION_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_COLOR_X_AXIS_CONCENTRATION_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_CONCENTRATION_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_CONCENTRATION_CALIBRATION);
+		//
+		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_SHOW_Y_AXIS_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_POSITION_Y_AXIS_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_COLOR_Y_AXIS_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_RESPONSE_CALIBRATION);
+		//
+		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_SHOW_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_POSITION_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
+		/*
+		 * File Explorer
+		 */
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_MSD, PreferenceConstants.DEF_SHOW_DATA_MSD);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_CSD, PreferenceConstants.DEF_SHOW_DATA_CSD);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_WSD, PreferenceConstants.DEF_SHOW_DATA_WSD);
+		store.setDefault(PreferenceConstants.P_SHOW_LIBRARY_MSD, PreferenceConstants.DEF_SHOW_LIBRARY_MSD);
+		store.setDefault(PreferenceConstants.P_SHOW_SCANS_MSD, PreferenceConstants.DEF_SHOW_SCANS_MSD);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_XIR, PreferenceConstants.DEF_SHOW_DATA_XIR);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_NMR, PreferenceConstants.DEF_SHOW_DATA_NMR);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_CAL, PreferenceConstants.DEF_SHOW_DATA_CAL);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_PCR, PreferenceConstants.DEF_SHOW_DATA_PCR);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_SEQUENCE, PreferenceConstants.DEF_SHOW_DATA_SEQUENCE);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_METHOD, PreferenceConstants.DEF_SHOW_DATA_METHOD);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_QUANT_DB, PreferenceConstants.DEF_SHOW_DATA_QUANT_DB);
+		/*
+		 * Lists
+		 */
+		store.setDefault(PreferenceConstants.P_SHOW_PEAKS_IN_LIST, PreferenceConstants.DEF_SHOW_PEAKS_IN_LIST);
+		store.setDefault(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE, PreferenceConstants.DEF_SHOW_PEAKS_IN_SELECTED_RANGE);
+		store.setDefault(PreferenceConstants.P_SHOW_SCANS_IN_LIST, PreferenceConstants.DEF_SHOW_SCANS_IN_LIST);
+		store.setDefault(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE, PreferenceConstants.DEF_SHOW_SCANS_IN_SELECTED_RANGE);
+		store.setDefault(PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST, PreferenceConstants.DEF_COLUMN_ORDER_TARGET_LIST);
+		/*
+		 * Baseline
+		 */
+		store.setDefault(PreferenceConstants.P_BASELINE_CHART_COMPRESSION_TYPE, PreferenceConstants.DEF_BASELINE_CHART_COMPRESSION_TYPE);
+		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_BASELINE, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_BASELINE);
+		/*
+		 * Sequences
+		 */
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_USE_SUBFOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_USE_SUBFOLDER);
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_SORT_DATA, PreferenceConstants.DEF_SEQUENCE_EXPLORER_SORT_DATA);
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER);
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER);
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_SUB_FOLDER);
+		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER);
+		/*
+		 * Methods
+		 */
+		store.setDefault(PreferenceConstants.P_SELECTED_METHOD_NAME, PreferenceConstants.DEF_SELECTED_METHOD_NAME);
+		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_CSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_CSD);
+		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_MSD);
+		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_WSD);
+		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_NMR, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_NMR);
+		/*
+		 * Quantitation
+		 */
+		store.setDefault(PreferenceConstants.P_USE_QUANTITATION_REFERENCE_LIST, PreferenceConstants.DEF_USE_QUANTITATION_REFERENCE_LIST);
+		store.setDefault(PreferenceConstants.P_QUANTITATION_REFERENCE_LIST, PreferenceConstants.DEF_QUANTITATION_REFERENCE_LIST);
+		/*
+		 * PCR
+		 */
+		store.setDefault(PreferenceConstants.P_PCR_DEFAULT_COLOR, PreferenceConstants.DEF_PCR_DEFAULT_COLOR);
+		store.setDefault(PreferenceConstants.P_PCR_COLOR_CODES, PreferenceConstants.DEF_PCR_COLOR_CODES);
+	}
+
+	public static void initializeChromatogramDefaults(IPreferenceStore store) {
+
 		/*
 		 * Chromatogram
 		 */
@@ -279,82 +361,5 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SAVE_AS_FOLDER, PreferenceConstants.DEF_CHROMATOGRAM_SAVE_AS_FOLDER);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_LOAD_PROCESS_METHOD, PreferenceConstants.DEF_CHROMATOGRAM_LOAD_PROCESS_METHOD);
 		store.setDefault(PreferenceConstants.P_DELTA_MILLISECONDS_PEAK_SELECTION, PreferenceConstants.DEF_DELTA_MILLISECONDS_PEAK_SELECTION);
-		/*
-		 * Calibration Chart
-		 */
-		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_CALIBRATION, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_CALIBRATION);
-		//
-		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_SHOW_X_AXIS_CONCENTRATION_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_POSITION_X_AXIS_CONCENTRATION_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_COLOR_X_AXIS_CONCENTRATION_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_CONCENTRATION_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_CONCENTRATION_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_CONCENTRATION_CALIBRATION);
-		//
-		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_SHOW_Y_AXIS_RESPONSE_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_POSITION_Y_AXIS_RESPONSE_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_COLOR_Y_AXIS_RESPONSE_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_RESPONSE_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_RESPONSE_CALIBRATION);
-		//
-		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_SHOW_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_POSITION_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
-		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_RELATIVE_RESPONSE_CALIBRATION);
-		/*
-		 * File Explorer
-		 */
-		store.setDefault(PreferenceConstants.P_SHOW_DATA_MSD, PreferenceConstants.DEF_SHOW_DATA_MSD);
-		store.setDefault(PreferenceConstants.P_SHOW_DATA_CSD, PreferenceConstants.DEF_SHOW_DATA_CSD);
-		store.setDefault(PreferenceConstants.P_SHOW_DATA_WSD, PreferenceConstants.DEF_SHOW_DATA_WSD);
-		store.setDefault(PreferenceConstants.P_SHOW_LIBRARY_MSD, PreferenceConstants.DEF_SHOW_LIBRARY_MSD);
-		store.setDefault(PreferenceConstants.P_SHOW_SCANS_MSD, PreferenceConstants.DEF_SHOW_SCANS_MSD);
-		store.setDefault(PreferenceConstants.P_SHOW_DATA_XIR, PreferenceConstants.DEF_SHOW_DATA_XIR);
-		store.setDefault(PreferenceConstants.P_SHOW_DATA_NMR, PreferenceConstants.DEF_SHOW_DATA_NMR);
-		store.setDefault(PreferenceConstants.P_SHOW_DATA_CAL, PreferenceConstants.DEF_SHOW_DATA_CAL);
-		store.setDefault(PreferenceConstants.P_SHOW_DATA_PCR, PreferenceConstants.DEF_SHOW_DATA_PCR);
-		store.setDefault(PreferenceConstants.P_SHOW_DATA_SEQUENCE, PreferenceConstants.DEF_SHOW_DATA_SEQUENCE);
-		store.setDefault(PreferenceConstants.P_SHOW_DATA_METHOD, PreferenceConstants.DEF_SHOW_DATA_METHOD);
-		store.setDefault(PreferenceConstants.P_SHOW_DATA_QUANT_DB, PreferenceConstants.DEF_SHOW_DATA_QUANT_DB);
-		/*
-		 * Lists
-		 */
-		store.setDefault(PreferenceConstants.P_SHOW_PEAKS_IN_LIST, PreferenceConstants.DEF_SHOW_PEAKS_IN_LIST);
-		store.setDefault(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE, PreferenceConstants.DEF_SHOW_PEAKS_IN_SELECTED_RANGE);
-		store.setDefault(PreferenceConstants.P_SHOW_SCANS_IN_LIST, PreferenceConstants.DEF_SHOW_SCANS_IN_LIST);
-		store.setDefault(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE, PreferenceConstants.DEF_SHOW_SCANS_IN_SELECTED_RANGE);
-		store.setDefault(PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST, PreferenceConstants.DEF_COLUMN_ORDER_TARGET_LIST);
-		/*
-		 * Baseline
-		 */
-		store.setDefault(PreferenceConstants.P_BASELINE_CHART_COMPRESSION_TYPE, PreferenceConstants.DEF_BASELINE_CHART_COMPRESSION_TYPE);
-		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_BASELINE, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_BASELINE);
-		/*
-		 * Sequences
-		 */
-		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_USE_SUBFOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_USE_SUBFOLDER);
-		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_SORT_DATA, PreferenceConstants.DEF_SEQUENCE_EXPLORER_SORT_DATA);
-		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER);
-		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER);
-		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_SUB_FOLDER);
-		store.setDefault(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER, PreferenceConstants.DEF_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER);
-		/*
-		 * Methods
-		 */
-		store.setDefault(PreferenceConstants.P_SELECTED_METHOD_NAME, PreferenceConstants.DEF_SELECTED_METHOD_NAME);
-		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_CSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_CSD);
-		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_MSD);
-		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_WSD);
-		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_NMR, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_NMR);
-		/*
-		 * Quantitation
-		 */
-		store.setDefault(PreferenceConstants.P_USE_QUANTITATION_REFERENCE_LIST, PreferenceConstants.DEF_USE_QUANTITATION_REFERENCE_LIST);
-		store.setDefault(PreferenceConstants.P_QUANTITATION_REFERENCE_LIST, PreferenceConstants.DEF_QUANTITATION_REFERENCE_LIST);
-		/*
-		 * PCR
-		 */
-		store.setDefault(PreferenceConstants.P_PCR_DEFAULT_COLOR, PreferenceConstants.DEF_PCR_DEFAULT_COLOR);
-		store.setDefault(PreferenceConstants.P_PCR_COLOR_CODES, PreferenceConstants.DEF_PCR_COLOR_CODES);
 	}
 }
