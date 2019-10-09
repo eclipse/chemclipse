@@ -79,10 +79,11 @@ public class WelcomeViewExtensionHandler {
 	private static final Comparator<TileDefinition> EXTENSION_COMPARATOR = (c1, c2) -> c1.getTitle().compareToIgnoreCase(c2.getTitle());
 	private final Set<String> removedTiles;
 	private final Set<String> addedTiles;
+	private final Set<TileDefinition> privateTileDefinitions = new HashSet<>();
 	private TaskTileContainer tileContainer;
-	private int minTiles;
-	private int maxTiles;
-	int tiles;
+	private final int minTiles;
+	private final int maxTiles;
+	private int tiles;
 	private IPreferenceStore preferenceStore;
 	private Predicate<TileDefinition> definitionAcceptor;
 
@@ -160,7 +161,17 @@ public class WelcomeViewExtensionHandler {
 		}
 	}
 
-	protected String getExtensionId(TileDefinition extension) {
+	public void addTileDefinition(TileDefinition definition) {
+
+		privateTileDefinitions.add(definition);
+	}
+
+	public void removeTileDefinition(TileDefinition definition) {
+
+		privateTileDefinitions.remove(definition);
+	}
+
+	private String getExtensionId(TileDefinition extension) {
 
 		if(extension instanceof ConfigurationElementTileDefinition) {
 			ConfigurationElementTileDefinition elementTileDefinition = (ConfigurationElementTileDefinition)extension;
@@ -382,6 +393,8 @@ public class WelcomeViewExtensionHandler {
 				result.add(definition);
 			}
 		}
+		// now add the private ones
+		result.addAll(privateTileDefinitions);
 		return result;
 	}
 
