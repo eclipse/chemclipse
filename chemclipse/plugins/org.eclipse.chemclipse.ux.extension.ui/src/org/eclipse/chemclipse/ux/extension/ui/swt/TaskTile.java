@@ -54,8 +54,11 @@ public class TaskTile extends Composite {
 	private final Color[] colors;
 	private Function<TileDefinition, Integer> styleFunction;
 
-	public TaskTile(Composite parent, TileDefinition definition, Consumer<TileDefinition> definitionConsumer, Function<TileDefinition, Integer> styleFunction, Color[] colors) {
+	TaskTile(Composite parent, TileDefinition definition, Consumer<TileDefinition> definitionConsumer, Function<TileDefinition, Integer> styleFunction, Color[] colors) {
 		super(parent, SWT.NONE);
+		if(colors.length < 3) {
+			throw new IllegalArgumentException("must suplly three colors");
+		}
 		this.definition = definition;
 		this.definitionConsumer = definitionConsumer;
 		this.styleFunction = styleFunction;
@@ -107,7 +110,6 @@ public class TaskTile extends Composite {
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 		composite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
-		// composite.setBackground(Colors.CYAN);
 		composite.setLayout(new GridLayout(2, true));
 		addControlListener(this);
 		labelImage = addLabelImage(composite);
@@ -126,9 +128,9 @@ public class TaskTile extends Composite {
 	private Label addTextSection(Composite parent) {
 
 		Label label = new Label(parent, SWT.NONE);
-		label.setForeground(colors[2]);
 		label.setText("");
 		label.setLayoutData(getGridData(SWT.BEGINNING, SWT.END, 1));
+		label.setForeground(colors[2]);
 		addControlListener(label);
 		return label;
 	}
@@ -237,11 +239,15 @@ public class TaskTile extends Composite {
 			colorActive = colors[0];
 			colorInactive = colors[1];
 			labelImage.setEnabled(true);
+			textSection.setEnabled(true);
+			textDesciption.setEnabled(true);
 		} else {
 			setCursor(null);
 			colorActive = colors[1];
 			colorInactive = colors[1];
 			labelImage.setEnabled(false);
+			textSection.setEnabled(false);
+			textDesciption.setEnabled(false);
 		}
 		int fontSize;
 		if((style & LARGE_TITLE) != 0) {
