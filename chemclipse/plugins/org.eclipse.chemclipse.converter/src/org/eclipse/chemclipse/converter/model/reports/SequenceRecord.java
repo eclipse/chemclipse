@@ -221,6 +221,6 @@ public class SequenceRecord implements ISequenceRecord {
 	@Override
 	public String toString() {
 
-		return "SequenceRecord [substance=" + substance + ", method=" + processMethod + ", vial=" + vial + ", sampleName=" + sampleName + ", multiplier=" + multiplier + ", dataFile=" + dataFile + "]";
+		return "SequenceRecord [substance=" + substance + ", processMethod=" + processMethod + ", vial=" + vial + ", sampleName=" + sampleName + ", multiplier=" + multiplier + ", dataFile=" + dataFile + "]";
 	}
 }
