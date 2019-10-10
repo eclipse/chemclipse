@@ -11,7 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.supplier;
 
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import org.eclipse.chemclipse.processing.DataCategory;
 
 public interface ProcessSupplierContext {
 
@@ -28,4 +33,35 @@ public interface ProcessSupplierContext {
 	 * iterates all available {@link IProcessSupplier}
 	 */
 	void visitSupplier(Consumer<? super IProcessSupplier<?>> consumer);
+
+	default Set<IProcessSupplier<?>> getSupplier(Predicate<IProcessSupplier<?>> predicate) {
+
+		Set<IProcessSupplier<?>> supplier = new TreeSet<>((o1, o2) -> o1.getId().compareTo(o2.getId()));
+		visitSupplier(processSupplier -> {
+			if(predicate.test(processSupplier)) {
+				supplier.add(processSupplier);
+			}
+		});
+		return supplier;
+	}
+
+	static Predicate<IProcessSupplier<?>> forDataTypes(Iterable<DataCategory> dataTypes) {
+
+		if(dataTypes == null) {
+			return test -> true;
+		}
+		return new Predicate<IProcessSupplier<?>>() {
+
+			@Override
+			public boolean test(IProcessSupplier<?> processSupplier) {
+
+				for(DataCategory category : dataTypes) {
+					if(processSupplier.getSupportedDataTypes().contains(category)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		};
+	}
 }

@@ -23,7 +23,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -36,6 +39,7 @@ import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -46,7 +50,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ConfigurableUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodUIConfig;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -91,8 +94,6 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public class ExtendedMethodUI extends Composite implements ConfigurableUI<MethodUIConfig> {
 
-	private static final String MENU_CATEGORY_STEPS = "Steps";
-	//
 	private Composite toolbarHeader;
 	private Label labelDataInfo;
 	private Text textName;
@@ -112,10 +113,10 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private Composite toolbarMain;
 	private Composite buttons;
 	protected boolean showSettingsOnAdd;
-	private final ProcessTypeSupport processingSupport;
+	private final ProcessSupplierContext processingSupport;
 	private final DataType[] dataTypes;
 
-	public ExtendedMethodUI(Composite parent, int style, ProcessTypeSupport processingSupport, DataType[] dataTypes) {
+	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, DataType[] dataTypes) {
 		super(parent, style);
 		this.processingSupport = processingSupport;
 		this.dataTypes = dataTypes;
@@ -403,7 +404,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 					IProcessEntry entry = (IProcessEntry)element;
 					IProcessSupplier<?> supplier = processingSupport.getSupplier(entry.getProcessorId());
 					if(supplier instanceof ProcessEntryContainer) {
-						return true;
+						return ((ProcessEntryContainer)supplier).getNumberOfEntries() > 0;
 					}
 				}
 				return false;
@@ -533,15 +534,37 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				menu.setVisible(true);
 			} else {
 				if(processMethod != null) {
-					IProcessEntry processEntry = ProcessingWizard.open(getShell(), processingSupport, dataTypes);
-					if(processEntry != null) {
-						boolean edit = modifyProcessEntry(getShell(), processEntry, false);
-						if(!edit) {
-							return;
+					Map<ProcessSupplierContext, String> contextList = new LinkedHashMap<>();
+					Object element = listUI.getStructuredSelection().getFirstElement();
+					IProcessEntry subEntry = null;
+					if(element instanceof IProcessEntry) {
+						subEntry = (IProcessEntry)element;
+						String id = subEntry.getProcessorId();
+						IProcessSupplier<?> supplier = processingSupport.getSupplier(id);
+						if(supplier instanceof ProcessSupplierContext) {
+							contextList.put((ProcessSupplierContext)supplier, supplier.getName());
 						}
-						processMethod.addProcessEntry(processEntry);
-						updateProcessMethod();
-						select(Collections.singletonList(processEntry));
+					}
+					contextList.put(processingSupport, processMethod.getName());
+					Map<ProcessSupplierContext, IProcessEntry> map = ProcessingWizard.open(getShell(), contextList, dataTypes);
+					if(map != null) {
+						for(Entry<ProcessSupplierContext, IProcessEntry> entry : map.entrySet()) {
+							ProcessSupplierContext supplierContext = entry.getKey();
+							IProcessEntry processEntry = entry.getValue();
+							boolean edit = modifyProcessEntry(getShell(), processEntry, supplierContext, false);
+							if(!edit) {
+								continue;
+							}
+							if(supplierContext == processingSupport) {
+								// add to global context
+								processMethod.addProcessEntry(processEntry);
+							} else {
+								// TODO
+								// must add to subcontext!
+							}
+							updateProcessMethod();
+							select(Collections.singletonList(processEntry));
+						}
 					}
 				}
 			}
@@ -813,15 +836,16 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			Object object = listUI.getStructuredSelection().getFirstElement();
 			if(object instanceof IProcessEntry) {
 				IProcessEntry processEntry = (IProcessEntry)object;
-				modifyProcessEntry(shell, processEntry, true);
+				// TODO... subentries
+				modifyProcessEntry(shell, processEntry, processingSupport, true);
 				updateProcessMethod();
 			}
 		}
 	}
 
-	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, boolean showHint) {
+	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, ProcessSupplierContext supplierContext, boolean showHint) {
 
-		ProcessorPreferences<?> preferences = IProcessEntry.getProcessEntryPreferences(processEntry, processingSupport);
+		ProcessorPreferences<?> preferences = IProcessEntry.getProcessEntryPreferences(processEntry, supplierContext);
 		if(preferences == null) {
 			// handle like cancel
 			return false;
