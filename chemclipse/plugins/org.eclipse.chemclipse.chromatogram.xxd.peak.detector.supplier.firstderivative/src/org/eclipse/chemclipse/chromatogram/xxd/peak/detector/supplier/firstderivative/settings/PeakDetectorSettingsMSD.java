@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.Threshold;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
@@ -44,11 +43,11 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
 	@EnumSelectionSettingProperty
 	private WindowSize windowSize = WindowSize.WIDTH_5;
-	@JsonProperty(value = "Ion Filter Mode", defaultValue = "EXCLUDE")
-	@EnumSelectionRadioButtonsSettingProperty
-	private FilterMode filterMode = FilterMode.EXCLUDE;
-	@JsonProperty(value = "Filter Ions", defaultValue = "")
-	private String filterIonsString;
+	// @JsonProperty(value = "Ion Filter Mode", defaultValue = "EXCLUDE")
+	// @EnumSelectionRadioButtonsSettingProperty
+	// private FilterMode filterMode = FilterMode.EXCLUDE;
+	// @JsonProperty(value = "Filter Ions", defaultValue = "")
+	// private String filterIonsString;
 
 	public boolean isIncludeBackground() {
 
@@ -90,31 +89,30 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 		this.windowSize = windowSize;
 	}
 
-	public FilterMode getFilterMode() {
-
-		return filterMode;
-	}
-
-	public void setFilterMode(FilterMode filterMode) {
-
-		this.filterMode = filterMode;
-	}
-
-	public String getFilterIonsString() {
-
-		return filterIonsString;
-	}
-
-	public void setFilterIonsString(String filterIonsString) {
-
-		this.filterIonsString = filterIonsString;
-	}
-
-	public Collection<Number> getFilterIon() {
-
-		return parseIons(filterIonsString);
-	}
-
+	// public FilterMode getFilterMode() {
+	//
+	// return filterMode;
+	// }
+	//
+	// public void setFilterMode(FilterMode filterMode) {
+	//
+	// this.filterMode = filterMode;
+	// }
+	//
+	// public String getFilterIonsString() {
+	//
+	// return filterIonsString;
+	// }
+	//
+	// public void setFilterIonsString(String filterIonsString) {
+	//
+	// this.filterIonsString = filterIonsString;
+	// }
+	//
+	// public Collection<Number> getFilterIon() {
+	//
+	// return parseIons(filterIonsString);
+	// }
 	static Collection<Number> parseIons(String filterIonsString) {
 
 		List<Number> ionNumbers = new ArrayList<>();

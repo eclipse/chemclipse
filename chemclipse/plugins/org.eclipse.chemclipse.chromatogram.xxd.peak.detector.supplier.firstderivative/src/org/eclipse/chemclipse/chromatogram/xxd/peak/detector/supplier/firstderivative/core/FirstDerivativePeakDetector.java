@@ -28,6 +28,8 @@ import org.eclipse.chemclipse.model.detector.IMeasurementPeakDetector;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
@@ -70,7 +72,7 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 				} else {
 					configuration = globalConfiguration;
 				}
-				slopes = PeakDetectorMSD.getFirstDerivativeSlopes(new ChromatogramSelectionMSD((IChromatogramMSD)measurement), configuration.getMovingAverageWindowSize(), PeakDetectorMSD.getIonFilter(configuration.getFilterIon(), configuration.getFilterMode()));
+				slopes = PeakDetectorMSD.getFirstDerivativeSlopes(new ChromatogramSelectionMSD((IChromatogramMSD)measurement), configuration.getMovingAverageWindowSize(), new MarkedIons(IonMarkMode.EXCLUDE));
 			} else if(measurement instanceof IChromatogramCSD) {
 				if(globalConfiguration == null) {
 					configuration = new FirstDerivativePeakDetectorSettings(DataType.CSD);
