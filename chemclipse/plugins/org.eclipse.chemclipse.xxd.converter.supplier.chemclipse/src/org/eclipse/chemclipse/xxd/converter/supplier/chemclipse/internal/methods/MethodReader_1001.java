@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 
 public class MethodReader_1001 extends AbstractMethodReader {
@@ -48,8 +47,8 @@ public class MethodReader_1001 extends AbstractMethodReader {
 			//
 			int dataTypes = dataInputStream.readInt();
 			for(int j = 0; j < dataTypes; j++) {
-				DataType dataType = DataType.valueOf(readString(dataInputStream));
-				processEntry.getSupportedDataTypes().add(dataType);
+				// back compat
+				readString(dataInputStream);
 			}
 			processMethod.addProcessEntry(processEntry);
 		}

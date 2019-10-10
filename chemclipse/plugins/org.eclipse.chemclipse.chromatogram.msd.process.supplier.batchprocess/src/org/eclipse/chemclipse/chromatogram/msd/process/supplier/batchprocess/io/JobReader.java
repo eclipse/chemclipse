@@ -36,7 +36,6 @@ import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class JobReader {
@@ -154,7 +153,6 @@ public class JobReader {
 		String name = "";
 		String description = "";
 		String jsonSettings = IProcessEntry.EMPTY_JSON_SETTINGS;
-		String dataTypes = "";
 		/*
 		 * Open the streams.
 		 */
@@ -187,8 +185,6 @@ public class JobReader {
 					description = attribute.getValue();
 				} else if(attributeName.equals(JobTags.PROCESSOR_JSON_SETTINGS)) {
 					jsonSettings = attribute.getValue();
-				} else if(attributeName.equals(JobTags.PROCESSOR_DATA_TYPES)) {
-					dataTypes = attribute.getValue();
 				}
 			}
 			/*
@@ -199,14 +195,6 @@ public class JobReader {
 			processEntry.setName(name);
 			processEntry.setDescription(description);
 			processEntry.setJsonSettings(jsonSettings);
-			String[] types = dataTypes.split(JobTags.DELIMITER_DATA_TYPE);
-			for(String type : types) {
-				DataType dataType = DataType.valueOf(type.trim());
-				if(dataType != null) {
-					processEntry.getSupportedDataTypes().add(dataType);
-				}
-			}
-			//
 			batchProcessJob.getProcessMethod().addProcessEntry(processEntry);
 		}
 		/*

@@ -16,11 +16,12 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.eclipse.chemclipse.model.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.graphics.Image;
@@ -78,9 +79,9 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		return super.getToolTipText(element);
 	}
 
-	private final ProcessTypeSupport processTypeSupport;
+	private final ProcessSupplierContext processTypeSupport;
 
-	public MethodListLabelProvider(ProcessTypeSupport processTypeSupport) {
+	public MethodListLabelProvider(ProcessSupplierContext processTypeSupport) {
 		this.processTypeSupport = processTypeSupport;
 	}
 
@@ -100,8 +101,14 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 				case 2:
 					text = entry.getDescription();
 					break;
-				case 3:
-					text = Arrays.toString(entry.getSupportedDataTypes().toArray());
+				case 3: {
+					IProcessSupplier<?> supplier = processTypeSupport.getSupplier(entry.getProcessorId());
+					if(supplier != null) {
+						text = Arrays.toString(supplier.getSupportedDataTypes().toArray());
+					} else {
+						text = "[]";
+					}
+				}
 					break;
 				case 4:
 					String jsonSettings = entry.getJsonSettings();

@@ -52,11 +52,11 @@ public class ProcessingWizardPage extends WizardPage {
 
 	private ComboViewer comboViewerCategory;
 	private ComboViewer comboViewerProcessor;
-	private ProcessTypeSupport processTypeSupport;
-	private Set<DataCategory> selectedDataTypes = new HashSet<>();
-	private List<Button> dataTypeSelections = new ArrayList<>();
+	private final ProcessTypeSupport processTypeSupport;
+	private final Set<DataCategory> selectedDataTypes = new HashSet<>();
+	private final List<Button> dataTypeSelections = new ArrayList<>();
 	private ProcessEntry processEntry;
-	private DataType[] dataTypes;
+	private final DataType[] dataTypes;
 
 	protected ProcessingWizardPage(ProcessTypeSupport processTypeSupport, DataType[] dataTypes) {
 		super("ProcessingWizardPage");
@@ -289,9 +289,6 @@ public class ProcessingWizardPage extends WizardPage {
 			processEntry.setProcessorId(processorSupplier.getId());
 			processEntry.setName(processorSupplier.getName());
 			processEntry.setDescription(processorSupplier.getDescription());
-			for(DataCategory category : processorSupplier.getSupportedDataTypes()) {
-				processEntry.getSupportedDataTypes().add(DataType.fromDataCategory(category));
-			}
 			setMessage(processorSupplier.getDescription());
 		} else {
 			processEntry = null;
@@ -331,7 +328,7 @@ public class ProcessingWizardPage extends WizardPage {
 	private static final class ProcessCategory {
 
 		private static final NameComparator COMPARATOR = new NameComparator();
-		private String name;
+		private final String name;
 		List<IProcessSupplier<?>> processorSuppliers = new ArrayList<>();
 
 		public ProcessCategory(String name) {

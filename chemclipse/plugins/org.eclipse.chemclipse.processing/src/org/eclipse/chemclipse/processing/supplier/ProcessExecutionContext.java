@@ -11,9 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.supplier;
 
-import java.util.Set;
+import java.util.function.Consumer;
 
-import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,12 +34,6 @@ public interface ProcessExecutionContext extends ProcessSupplierContext, Message
 			}
 
 			@Override
-			public Set<IProcessSupplier<?>> getSupplier(Iterable<DataCategory> dataCategory) {
-
-				return context.getSupplier(dataCategory);
-			}
-
-			@Override
 			public <T> IProcessSupplier<T> getSupplier(String id) {
 
 				return context.getSupplier(id);
@@ -56,6 +49,12 @@ public interface ProcessExecutionContext extends ProcessSupplierContext, Message
 			public ProcessExecutionContext withMonitor(IProgressMonitor monitor) {
 
 				return ProcessExecutionContext.create(context, consumer, monitor);
+			}
+
+			@Override
+			public void visitSupplier(Consumer<? super IProcessSupplier<?>> consumer) {
+
+				context.visitSupplier(consumer);
 			}
 		};
 	}
