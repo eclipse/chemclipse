@@ -33,6 +33,8 @@ public interface IProcessEntry {
 
 	void setJsonSettings(String jsonSettings);
 
+	ProcessEntryContainer getParent();
+
 	public static <T> ProcessorPreferences<T> getProcessEntryPreferences(IProcessEntry entry, ProcessSupplierContext context) {
 
 		IProcessSupplier<T> supplier = context.getSupplier(entry.getProcessorId());

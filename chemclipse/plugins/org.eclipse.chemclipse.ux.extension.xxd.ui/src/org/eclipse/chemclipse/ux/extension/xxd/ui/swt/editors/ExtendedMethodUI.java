@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.methods.SubProcessEntry;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
@@ -400,6 +401,9 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public boolean hasChildren(Object element) {
 
+				if(element instanceof ProcessEntryContainer) {
+					return ((ProcessEntryContainer)element).getNumberOfEntries() > 0;
+				}
 				if(element instanceof IProcessEntry) {
 					IProcessEntry entry = (IProcessEntry)element;
 					IProcessSupplier<?> supplier = processingSupport.getSupplier(entry.getProcessorId());
@@ -431,6 +435,9 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public Object[] getChildren(Object parentElement) {
 
+				if(parentElement instanceof ProcessEntryContainer) {
+					return getElements(parentElement);
+				}
 				if(parentElement instanceof IProcessEntry) {
 					IProcessEntry entry = (IProcessEntry)parentElement;
 					IProcessSupplier<?> supplier = processingSupport.getSupplier(entry.getProcessorId());
@@ -536,10 +543,10 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				if(processMethod != null) {
 					Map<ProcessSupplierContext, String> contextList = new LinkedHashMap<>();
 					Object element = listUI.getStructuredSelection().getFirstElement();
-					IProcessEntry subEntry = null;
+					IProcessEntry selectedEntry = null;
 					if(element instanceof IProcessEntry) {
-						subEntry = (IProcessEntry)element;
-						String id = subEntry.getProcessorId();
+						selectedEntry = (IProcessEntry)element;
+						String id = selectedEntry.getProcessorId();
 						IProcessSupplier<?> supplier = processingSupport.getSupplier(id);
 						if(supplier instanceof ProcessSupplierContext) {
 							contextList.put((ProcessSupplierContext)supplier, supplier.getName());
@@ -550,20 +557,29 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 					if(map != null) {
 						for(Entry<ProcessSupplierContext, IProcessEntry> entry : map.entrySet()) {
 							ProcessSupplierContext supplierContext = entry.getKey();
-							IProcessEntry processEntry = entry.getValue();
-							boolean edit = modifyProcessEntry(getShell(), processEntry, supplierContext, false);
+							ProcessEntry newEntry = new ProcessEntry(entry.getValue());
+							boolean edit = modifyProcessEntry(getShell(), newEntry, supplierContext, false);
 							if(!edit) {
 								continue;
 							}
 							if(supplierContext == processingSupport) {
 								// add to global context
-								processMethod.addProcessEntry(processEntry);
+								processMethod.addProcessEntry(newEntry);
 							} else {
-								// TODO
 								// must add to subcontext!
+								SubProcessEntry subEntry;
+								if(selectedEntry instanceof SubProcessEntry) {
+									subEntry = (SubProcessEntry)selectedEntry;
+								} else {
+									subEntry = new SubProcessEntry(selectedEntry);
+									List<IProcessEntry> entries = processMethod.getEntries();
+									entries.set(entries.indexOf(selectedEntry), subEntry);
+								}
+								newEntry.setParent(subEntry);
+								subEntry.getSubEntries().add(newEntry);
 							}
 							updateProcessMethod();
-							select(Collections.singletonList(processEntry));
+							select(Collections.singletonList(newEntry));
 						}
 					}
 				}
@@ -585,7 +601,12 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 		ArrayList<IProcessEntry> list = new ArrayList<>();
 		entries.forEach(list::add);
-		listUI.setSelection(new StructuredSelection(list));
+		StructuredSelection structuredSelection = new StructuredSelection(list);
+		listUI.setSelection(structuredSelection);
+		Object firstElement = structuredSelection.getFirstElement();
+		if(firstElement != null) {
+			listUI.reveal(firstElement);
+		}
 	}
 
 	private ToolItem createCopyButton(ToolBar toolBar) {
@@ -737,6 +758,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		}
 		//
 		listUI.setInput(processMethod);
+		listUI.refresh();
 		updateTableButtons();
 		setDirty(true);
 	}

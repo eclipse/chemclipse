@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
@@ -88,25 +89,20 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
-		String text = "";
 		if(element instanceof IProcessEntry) {
 			IProcessEntry entry = (IProcessEntry)element;
-			IProcessSupplier<?> supplier = processTypeSupport.getSupplier(entry.getProcessorId());
+			ProcessSupplierContext supplierContext = getContext(entry);
+			IProcessSupplier<?> supplier = supplierContext.getSupplier(entry.getProcessorId());
 			switch(columnIndex) {
 				case 0:
-					text = ""; // Validation
-					break;
+					return "";
 				case 1:
-					text = entry.getName();
-					break;
+					return entry.getName();
 				case 2:
-					text = entry.getDescription();
-					break;
+					return entry.getDescription();
 				case 3: {
 					if(supplier != null) {
-						text = Arrays.toString(supplier.getSupportedDataTypes().toArray());
-					} else {
-						text = "n/a";
+						return Arrays.toString(supplier.getSupportedDataTypes().toArray());
 					}
 				}
 					break;
@@ -115,25 +111,42 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 						if(supplier.getSettingsParser().getInputValues().isEmpty()) {
 							return "not configurable";
 						} else {
-							ProcessorPreferences<Object> preferences = IProcessEntry.getProcessEntryPreferences(entry, processTypeSupport);
+							ProcessorPreferences<Object> preferences = IProcessEntry.getProcessEntryPreferences(entry, supplierContext);
 							if(preferences.isUseSystemDefaults()) {
-								text = "system defaults";
+								return "system defaults";
 							} else {
-								text = preferences.getUserSettingsAsString();
+								String text = preferences.getUserSettingsAsString();
+								if(text.startsWith("{")) {
+									text = text.substring(1);
+								}
+								if(text.endsWith("}")) {
+									text = text.substring(0, text.length() - 1);
+								}
+								return text.replace("\"", "");
 							}
 						}
-					} else {
-						text = "n/a";
 					}
 					break;
 				case 5:
-					text = entry.getProcessorId();
-					break;
+					return entry.getProcessorId();
 				default:
 					break;
 			}
 		}
-		return text;
+		return "n/a";
+	}
+
+	private ProcessSupplierContext getContext(IProcessEntry entry) {
+
+		ProcessEntryContainer container = entry.getParent();
+		if(container instanceof IProcessEntry) {
+			IProcessEntry parent = (IProcessEntry)container;
+			IProcessSupplier<?> supplier = getContext(parent).getSupplier(parent.getProcessorId());
+			if(supplier instanceof ProcessSupplierContext) {
+				return (ProcessSupplierContext)supplier;
+			}
+		}
+		return processTypeSupport;
 	}
 
 	@Override
@@ -142,12 +155,12 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PROCESS_CONTROL, IApplicationImage.SIZE_16x16);
 	}
 
-	public IStatus validate(IProcessEntry processEntry) {
+	private IStatus validate(IProcessEntry processEntry) {
 
 		if(processEntry == null) {
 			return ValidationStatus.error("Entry is null");
 		}
-		ProcessorPreferences<?> preferences = IProcessEntry.getProcessEntryPreferences(processEntry, processTypeSupport);
+		ProcessorPreferences<?> preferences = IProcessEntry.getProcessEntryPreferences(processEntry, getContext(processEntry));
 		if(preferences == null) {
 			return ValidationStatus.error("Processor " + processEntry.getName() + " not avaiable");
 		}

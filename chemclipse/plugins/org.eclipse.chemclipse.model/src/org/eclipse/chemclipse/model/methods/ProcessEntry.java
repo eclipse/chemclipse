@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.model.methods;
 
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 
 public class ProcessEntry implements IProcessEntry {
 
@@ -20,15 +21,18 @@ public class ProcessEntry implements IProcessEntry {
 	private String name = "";
 	private String description = "";
 	private String jsonSettings = "";
+	private ProcessEntryContainer parent;
 
 	public ProcessEntry() {
 	}
 
 	public ProcessEntry(IProcessEntry processEntry) {
-		processorId = processEntry.getProcessorId();
-		name = processEntry.getName();
-		description = processEntry.getDescription();
-		jsonSettings = processEntry.getJsonSettings();
+		if(processEntry != null) {
+			processorId = processEntry.getProcessorId();
+			name = processEntry.getName();
+			description = processEntry.getDescription();
+			jsonSettings = processEntry.getJsonSettings();
+		}
 	}
 
 	@Override
@@ -126,5 +130,16 @@ public class ProcessEntry implements IProcessEntry {
 	public String toString() {
 
 		return "ProcessMethod [processorId=" + processorId + ", name=" + name + ", description=" + description + ", jsonSettings=" + jsonSettings + "]";
+	}
+
+	@Override
+	public ProcessEntryContainer getParent() {
+
+		return parent;
+	}
+
+	public void setParent(ProcessEntryContainer parent) {
+
+		this.parent = parent;
 	}
 }

@@ -26,6 +26,14 @@ public class SubProcessEntry extends ProcessEntry implements ProcessEntryContain
 
 	private final List<IProcessEntry> subEntries = new ArrayList<>();
 
+	public SubProcessEntry() {
+		super();
+	}
+
+	public SubProcessEntry(IProcessEntry processEntry) {
+		super(processEntry);
+	}
+
 	@Override
 	public Iterator<IProcessEntry> iterator() {
 
@@ -41,5 +49,32 @@ public class SubProcessEntry extends ProcessEntry implements ProcessEntryContain
 	public List<IProcessEntry> getSubEntries() {
 
 		return subEntries;
+	}
+
+	@Override
+	public int hashCode() {
+
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((subEntries == null) ? 0 : subEntries.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if(this == obj)
+			return true;
+		if(!super.equals(obj))
+			return false;
+		if(getClass() != obj.getClass())
+			return false;
+		SubProcessEntry other = (SubProcessEntry)obj;
+		if(subEntries == null) {
+			if(other.subEntries != null)
+				return false;
+		} else if(!subEntries.equals(other.subEntries))
+			return false;
+		return true;
 	}
 }
