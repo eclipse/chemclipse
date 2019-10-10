@@ -9,7 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.methods;
+package org.eclipse.chemclipse.processing.methods;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;

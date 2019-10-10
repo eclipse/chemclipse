@@ -15,11 +15,11 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.co
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.process.support.ChromatogramTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;

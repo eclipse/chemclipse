@@ -19,12 +19,12 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.supplier.IMeasurementProcessSupplier;
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;

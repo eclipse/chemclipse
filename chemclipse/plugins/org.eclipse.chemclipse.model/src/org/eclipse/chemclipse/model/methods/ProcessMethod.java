@@ -18,6 +18,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+
 public class ProcessMethod implements IProcessMethod {
 
 	private String UUID = java.util.UUID.randomUUID().toString();

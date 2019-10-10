@@ -20,10 +20,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;

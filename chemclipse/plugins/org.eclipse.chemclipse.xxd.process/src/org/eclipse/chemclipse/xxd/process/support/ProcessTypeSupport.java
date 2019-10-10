@@ -21,7 +21,6 @@ import java.util.TreeSet;
 import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.supplier.IMeasurementProcessSupplier;
@@ -29,6 +28,7 @@ import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;

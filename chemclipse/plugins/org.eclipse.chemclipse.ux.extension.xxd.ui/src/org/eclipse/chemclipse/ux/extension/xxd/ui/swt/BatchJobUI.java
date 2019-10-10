@@ -17,8 +17,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;

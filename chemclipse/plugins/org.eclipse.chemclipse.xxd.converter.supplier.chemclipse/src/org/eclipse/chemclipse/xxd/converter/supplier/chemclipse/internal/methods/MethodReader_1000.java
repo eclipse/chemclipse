@@ -15,10 +15,10 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 
 public class MethodReader_1000 extends AbstractMethodReader {

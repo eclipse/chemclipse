@@ -15,8 +15,8 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.method
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 
 @Deprecated

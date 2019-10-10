@@ -17,9 +17,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.eclipse.chemclipse.converter.core.IExportConverter;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMethodExportConverter<R> extends IExportConverter {

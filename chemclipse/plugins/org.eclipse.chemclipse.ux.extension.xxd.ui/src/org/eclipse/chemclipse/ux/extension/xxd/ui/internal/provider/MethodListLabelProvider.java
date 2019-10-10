@@ -15,7 +15,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;

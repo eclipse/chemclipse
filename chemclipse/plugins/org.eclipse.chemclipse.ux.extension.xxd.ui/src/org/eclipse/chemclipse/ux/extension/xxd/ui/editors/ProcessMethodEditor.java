@@ -22,10 +22,10 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.support.ui.workbench.PartSupport;

@@ -31,8 +31,8 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.int
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class JobWriter {

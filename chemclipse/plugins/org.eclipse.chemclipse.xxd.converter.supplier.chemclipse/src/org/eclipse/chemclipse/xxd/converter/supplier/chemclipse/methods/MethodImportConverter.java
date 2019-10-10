@@ -16,9 +16,9 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.methods.AbstractMethodImportConverter;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.IMethodReader;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodReader_1000;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodReader_1001;

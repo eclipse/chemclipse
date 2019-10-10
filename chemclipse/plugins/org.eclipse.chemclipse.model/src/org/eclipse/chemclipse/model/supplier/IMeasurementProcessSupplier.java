@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.core.runtime.SubMonitor;

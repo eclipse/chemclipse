@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.wizard.Wizard;

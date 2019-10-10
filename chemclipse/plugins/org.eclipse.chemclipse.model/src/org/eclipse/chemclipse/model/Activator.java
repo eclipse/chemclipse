@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model;
 
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

@@ -21,10 +21,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;

@@ -14,9 +14,9 @@ package org.eclipse.chemclipse.converter.adapters;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.IPath;

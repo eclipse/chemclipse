@@ -19,7 +19,7 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
 

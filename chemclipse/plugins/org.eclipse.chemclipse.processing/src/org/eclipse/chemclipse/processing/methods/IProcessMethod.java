@@ -10,7 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - enhance method definition, add readonly support
  *******************************************************************************/
-package org.eclipse.chemclipse.model.methods;
+package org.eclipse.chemclipse.processing.methods;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 
-public interface IProcessMethod extends Iterable<IProcessEntry> {
+public interface IProcessMethod extends ProcessEntryContainer {
 
 	/**
 	 * 
@@ -120,6 +120,7 @@ public interface IProcessMethod extends Iterable<IProcessEntry> {
 		return false;
 	}
 
+	@Override
 	int getNumberOfEntries();
 
 	static <X> void applyProcessors(IProcessMethod processMethod, ProcessExecutionContext context, BiConsumer<IProcessSupplier<X>, X> consumer) {

@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.methods;
 
+import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+
 public class ProcessEntry implements IProcessEntry {
 
 	private String processorId = "";

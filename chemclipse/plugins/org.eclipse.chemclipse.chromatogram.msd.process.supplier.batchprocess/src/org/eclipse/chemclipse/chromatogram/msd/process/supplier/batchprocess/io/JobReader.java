@@ -34,8 +34,8 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
-import org.eclipse.chemclipse.model.methods.IProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
+import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class JobReader {

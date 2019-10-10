@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 
 public class BatchProcessJob {
 

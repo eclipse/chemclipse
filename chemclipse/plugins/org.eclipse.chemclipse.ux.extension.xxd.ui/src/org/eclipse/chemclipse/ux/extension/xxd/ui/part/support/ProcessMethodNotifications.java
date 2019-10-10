@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
 import javax.inject.Singleton;
 
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.e4.core.di.annotations.Creatable;
 
 @Creatable

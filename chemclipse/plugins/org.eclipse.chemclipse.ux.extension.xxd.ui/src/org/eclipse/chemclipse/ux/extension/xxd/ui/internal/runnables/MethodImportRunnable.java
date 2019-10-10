@@ -17,8 +17,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
