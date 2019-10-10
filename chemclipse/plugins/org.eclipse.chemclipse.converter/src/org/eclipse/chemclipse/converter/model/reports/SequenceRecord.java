@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,8 +16,10 @@ import java.io.File;
 public class SequenceRecord implements ISequenceRecord {
 
 	private String substance = "";
-	private String method = "";
+	private String processMethod = "";
+	private String reportMethod = "";
 	private int vial = 0;
+	private double injectionVolume = 0.0d;
 	private String sampleName = ""; // Sample Name/Keyword Text
 	private double multiplier = 1;
 	private String dataPath = "";
@@ -38,15 +40,27 @@ public class SequenceRecord implements ISequenceRecord {
 	}
 
 	@Override
-	public String getMethod() {
+	public String getProcessMethod() {
 
-		return method;
+		return processMethod;
 	}
 
 	@Override
-	public void setMethod(String method) {
+	public String getReportMethod() {
 
-		this.method = method;
+		return reportMethod;
+	}
+
+	@Override
+	public void setReportMethod(String reportMethod) {
+
+		this.reportMethod = reportMethod;
+	}
+
+	@Override
+	public void setProcessMethod(String processMethod) {
+
+		this.processMethod = processMethod;
 	}
 
 	@Override
@@ -59,6 +73,18 @@ public class SequenceRecord implements ISequenceRecord {
 	public void setVial(int vial) {
 
 		this.vial = vial;
+	}
+
+	@Override
+	public double getInjectionVolume() {
+
+		return injectionVolume;
+	}
+
+	@Override
+	public void setInjectionVolume(double injectionVolume) {
+
+		this.injectionVolume = injectionVolume;
 	}
 
 	@Override
@@ -135,7 +161,7 @@ public class SequenceRecord implements ISequenceRecord {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dataFile == null) ? 0 : dataFile.hashCode());
-		result = prime * result + ((method == null) ? 0 : method.hashCode());
+		result = prime * result + ((processMethod == null) ? 0 : processMethod.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(multiplier);
 		result = prime * result + (int)(temp ^ (temp >>> 32));
@@ -170,10 +196,10 @@ public class SequenceRecord implements ISequenceRecord {
 				return false;
 		} else if(!dataFile.equals(other.dataFile))
 			return false;
-		if(method == null) {
-			if(other.method != null)
+		if(processMethod == null) {
+			if(other.processMethod != null)
 				return false;
-		} else if(!method.equals(other.method))
+		} else if(!processMethod.equals(other.processMethod))
 			return false;
 		if(Double.doubleToLongBits(multiplier) != Double.doubleToLongBits(other.multiplier))
 			return false;
@@ -195,6 +221,6 @@ public class SequenceRecord implements ISequenceRecord {
 	@Override
 	public String toString() {
 
-		return "SequenceRecord [substance=" + substance + ", method=" + method + ", vial=" + vial + ", sampleName=" + sampleName + ", multiplier=" + multiplier + ", dataFile=" + dataFile + "]";
+		return "SequenceRecord [substance=" + substance + ", method=" + processMethod + ", vial=" + vial + ", sampleName=" + sampleName + ", multiplier=" + multiplier + ", dataFile=" + dataFile + "]";
 	}
 }

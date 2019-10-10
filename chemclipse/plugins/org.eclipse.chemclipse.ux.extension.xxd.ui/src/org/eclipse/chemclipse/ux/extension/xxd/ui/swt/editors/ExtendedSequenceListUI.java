@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -162,7 +162,6 @@ public class ExtendedSequenceListUI {
 		methodSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
-
 			@Override
 			public void execute(IProcessMethod processMethod, IProgressMonitor monitor) {
 
@@ -206,7 +205,7 @@ public class ExtendedSequenceListUI {
 
 		if(sequenceRecord != null && measurement != null) {
 			measurement.putHeaderData("Sequence Description", sequenceRecord.getDescription());
-			measurement.putHeaderData("Sequence Method", sequenceRecord.getMethod());
+			measurement.putHeaderData("Sequence Method", sequenceRecord.getProcessMethod());
 			measurement.putHeaderData("Sequence Sample Name", sequenceRecord.getSampleName());
 			measurement.putHeaderData("Sequence Substance", sequenceRecord.getSubstance());
 			measurement.putHeaderData("Sequence Multiplier", Double.toString(sequenceRecord.getMultiplier()));

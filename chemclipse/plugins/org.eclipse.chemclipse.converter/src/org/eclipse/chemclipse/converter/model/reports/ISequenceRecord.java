@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,13 +17,21 @@ public interface ISequenceRecord {
 
 	void setSubstance(String substance);
 
-	String getMethod();
+	String getProcessMethod();
 
-	void setMethod(String method);
+	void setProcessMethod(String processMethod);
+
+	String getReportMethod();
+
+	void setReportMethod(String reportMethod);
 
 	int getVial();
 
 	void setVial(int vial);
+
+	double getInjectionVolume();
+
+	void setInjectionVolume(double injectionVolume);
 
 	String getSampleName();
 

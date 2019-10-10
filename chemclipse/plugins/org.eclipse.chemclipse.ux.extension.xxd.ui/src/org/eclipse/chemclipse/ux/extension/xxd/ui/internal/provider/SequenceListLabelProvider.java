@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,8 +28,10 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String VIAL = "Vial";
 	public static final String SUBSTANCE = "Substance";
 	public static final String DESCRIPTION = "Description";
-	public static final String METHOD = "Method";
+	public static final String PROCESS_METHOD = "Process Method";
 	public static final String MULTIPLIER = "Multiplier";
+	public static final String INJECTION_VOLUME = "Injection Volume";
+	public static final String REPORT_METHOD = "Report Method";
 	//
 	public static String[] TITLES = {//
 			SAMPLE_NAME, //
@@ -39,8 +41,10 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 			VIAL, //
 			SUBSTANCE, //
 			DESCRIPTION, //
-			METHOD, //
-			MULTIPLIER //
+			PROCESS_METHOD, //
+			REPORT_METHOD, //
+			MULTIPLIER, //
+			INJECTION_VOLUME //
 	};
 	//
 	public static int[] BOUNDS = {//
@@ -52,6 +56,8 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 			150, //
 			150, //
 			150, //
+			150, //
+			60, //
 			60 //
 	};
 
@@ -107,10 +113,16 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 					text = sequenceRecord.getDescription();
 					break;
 				case 7:
-					text = sequenceRecord.getMethod();
+					text = sequenceRecord.getProcessMethod();
 					break;
 				case 8:
+					text = sequenceRecord.getReportMethod();
+					break;
+				case 9:
 					text = decimalFormat.format(sequenceRecord.getMultiplier());
+					break;
+				case 10:
+					text = decimalFormat.format(sequenceRecord.getInjectionVolume());
 					break;
 			}
 		}

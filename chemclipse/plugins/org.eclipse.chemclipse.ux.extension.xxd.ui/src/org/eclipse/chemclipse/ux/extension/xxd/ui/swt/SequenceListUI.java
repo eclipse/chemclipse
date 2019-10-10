@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,18 +24,22 @@ import org.eclipse.swt.widgets.Composite;
 
 public class SequenceListUI extends ExtendedTableViewer {
 
-	private SequenceListTableComparator sequenceListTableComparator;
-	private SequenceListFilter sequenceListFilter;
+	private static final String[] LABELS = SequenceListLabelProvider.TITLES;
+	private static final int[] BOUNDS = SequenceListLabelProvider.BOUNDS;
+	//
+	private SequenceListLabelProvider labelProvider = new SequenceListLabelProvider();
+	private ListContentProvider contentProvider = new ListContentProvider();
+	private SequenceListTableComparator comparator = new SequenceListTableComparator();
+	private SequenceListFilter listFilter = new SequenceListFilter();
 
 	public SequenceListUI(Composite parent, int style) {
 		super(parent, style);
-		sequenceListTableComparator = new SequenceListTableComparator();
 		createColumns();
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
 
-		sequenceListFilter.setSearchText(searchText, caseSensitive);
+		listFilter.setSearchText(searchText, caseSensitive);
 		refresh();
 	}
 
@@ -48,7 +52,7 @@ public class SequenceListUI extends ExtendedTableViewer {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SEQUENCE_EXPLORER_SORT_DATA)) {
-			setComparator(sequenceListTableComparator);
+			setComparator(comparator);
 		} else {
 			setComparator(null);
 		}
@@ -56,11 +60,10 @@ public class SequenceListUI extends ExtendedTableViewer {
 
 	private void createColumns() {
 
-		createColumns(SequenceListLabelProvider.TITLES, SequenceListLabelProvider.BOUNDS);
-		setLabelProvider(new SequenceListLabelProvider());
-		setContentProvider(new ListContentProvider());
+		createColumns(LABELS, BOUNDS);
+		setLabelProvider(labelProvider);
+		setContentProvider(contentProvider);
 		setComparator();
-		sequenceListFilter = new SequenceListFilter();
-		setFilters(new ViewerFilter[]{sequenceListFilter});
+		setFilters(new ViewerFilter[]{listFilter});
 	}
 }

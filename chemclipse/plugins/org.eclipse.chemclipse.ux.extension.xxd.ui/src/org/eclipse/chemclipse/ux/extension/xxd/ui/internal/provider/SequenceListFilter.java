@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,7 +41,8 @@ public class SequenceListFilter extends ViewerFilter {
 			ISequenceRecord sequenceRecord = (ISequenceRecord)element;
 			//
 			String dataFile = sequenceRecord.getDataFile();
-			String method = sequenceRecord.getMethod();
+			String processMethod = sequenceRecord.getProcessMethod();
+			String reportMethod = sequenceRecord.getReportMethod();
 			String sampleName = sequenceRecord.getSampleName();
 			String substance = sequenceRecord.getSubstance();
 			String description = sequenceRecord.getDescription();
@@ -49,7 +50,8 @@ public class SequenceListFilter extends ViewerFilter {
 			if(!caseSensitive) {
 				searchText = searchText.toLowerCase();
 				dataFile = dataFile.toLowerCase();
-				method = method.toLowerCase();
+				processMethod = processMethod.toLowerCase();
+				reportMethod = reportMethod.toLowerCase();
 				sampleName = sampleName.toLowerCase();
 				substance = substance.toLowerCase();
 				description = description.toLowerCase();
@@ -63,7 +65,11 @@ public class SequenceListFilter extends ViewerFilter {
 				return true;
 			}
 			//
-			if(method.matches(searchText)) {
+			if(processMethod.matches(searchText)) {
+				return true;
+			}
+			//
+			if(reportMethod.matches(searchText)) {
 				return true;
 			}
 			//

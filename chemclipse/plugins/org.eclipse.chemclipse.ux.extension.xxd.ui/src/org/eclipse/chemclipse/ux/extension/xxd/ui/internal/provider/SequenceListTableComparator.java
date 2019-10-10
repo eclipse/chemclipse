@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,10 +49,16 @@ public class SequenceListTableComparator extends AbstractRecordTableComparator i
 					sortOrder = sequenceRecord2.getDescription().compareTo(sequenceRecord1.getDescription());
 					break;
 				case 7:
-					sortOrder = sequenceRecord2.getMethod().compareTo(sequenceRecord1.getMethod());
+					sortOrder = sequenceRecord2.getProcessMethod().compareTo(sequenceRecord1.getProcessMethod());
 					break;
 				case 8:
+					sortOrder = sequenceRecord2.getReportMethod().compareTo(sequenceRecord1.getReportMethod());
+					break;
+				case 9:
 					sortOrder = Double.compare(sequenceRecord2.getMultiplier(), sequenceRecord1.getMultiplier());
+					break;
+				case 10:
+					sortOrder = Double.compare(sequenceRecord2.getInjectionVolume(), sequenceRecord1.getInjectionVolume());
 					break;
 			}
 		}
