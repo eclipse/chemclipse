@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
-import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.core.runtime.SubMonitor;
@@ -44,16 +44,20 @@ public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplie
 
 		if(supplier instanceof IMeasurementProcessSupplier<?>) {
 			IMeasurementProcessSupplier<X> measurementProcessSupplier = (IMeasurementProcessSupplier<X>)supplier;
-			return measurementProcessSupplier.applyProcessor(measurements, processSettings, context);
+			measurements = measurementProcessSupplier.applyProcessor(measurements, processSettings, context);
+		}
+		if(supplier instanceof ProcessEntryContainer) {
+			ProcessEntryContainer container = (ProcessEntryContainer)supplier;
+			measurements = applyProcessMethod(measurements, container, context);
 		}
 		return measurements;
 	}
 
-	static <X> Collection<? extends IMeasurement> applyProcessMethod(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, ProcessExecutionContext context) {
+	static <X> Collection<? extends IMeasurement> applyProcessMethod(Collection<? extends IMeasurement> measurements, ProcessEntryContainer processMethod, ProcessExecutionContext context) {
 
 		SubMonitor subMonitor = SubMonitor.convert(context.getProgressMonitor(), "Processing files", processMethod.getNumberOfEntries() * 100);
 		AtomicReference<Collection<? extends IMeasurement>> result = new AtomicReference<Collection<? extends IMeasurement>>(measurements);
-		IProcessMethod.applyProcessors(processMethod, context, new BiConsumer<IProcessSupplier<X>, X>() {
+		ProcessEntryContainer.applyProcessors(processMethod, context, new BiConsumer<IProcessSupplier<X>, X>() {
 
 			@Override
 			public void accept(IProcessSupplier<X> processor, X settings) {

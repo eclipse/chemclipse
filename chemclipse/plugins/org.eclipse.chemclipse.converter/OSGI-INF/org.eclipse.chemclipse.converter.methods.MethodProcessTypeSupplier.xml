@@ -3,6 +3,6 @@
    <service>
       <provide interface="org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier"/>
    </service>
-   <reference bind="setProcessSupplierContext" cardinality="0..1" interface="org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext" name="ProcessSupplierContext" policy="dynamic" unbind="unsetProcessSupplierContext"/>
+   <reference bind="setProcessSupplierContext" cardinality="1..1" interface="org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext" name="ProcessSupplierContext" policy="dynamic" unbind="unsetProcessSupplierContext"/>
    <implementation class="org.eclipse.chemclipse.converter.methods.MethodProcessTypeSupplier"/>
 </scr:component>

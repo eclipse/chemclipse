@@ -14,21 +14,18 @@ package org.eclipse.chemclipse.converter.methods;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.chemclipse.model.core.IMeasurement;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
-import org.eclipse.chemclipse.model.supplier.IMeasurementProcessSupplier;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -57,7 +54,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier {
 		return list;
 	}
 
-	@Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
+	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
 	public void setProcessSupplierContext(ProcessSupplierContext supplierContext) {
 
 		this.supplierContext.set(supplierContext);
@@ -68,7 +65,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier {
 		this.supplierContext.compareAndSet(supplierContext, null);
 	}
 
-	private static final class MethodProcessSupplier extends AbstractProcessSupplier<Void> implements IMeasurementProcessSupplier<Void>, IChromatogramSelectionProcessSupplier<Void> {
+	private static final class MethodProcessSupplier extends AbstractProcessSupplier<Void> implements ProcessEntryContainer {
 
 		private final IProcessMethod method;
 
@@ -78,21 +75,21 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier {
 		}
 
 		@Override
-		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, Void processSettings, ProcessExecutionContext context) {
-
-			return IChromatogramSelectionProcessSupplier.applyProcessMethod(chromatogramSelection, method, context);
-		}
-
-		@Override
-		public Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, Void processSettings, ProcessExecutionContext context) {
-
-			return IMeasurementProcessSupplier.applyProcessMethod(measurements, method, context);
-		}
-
-		@Override
 		public MethodProcessTypeSupplier getTypeSupplier() {
 
 			return (MethodProcessTypeSupplier)super.getTypeSupplier();
+		}
+
+		@Override
+		public Iterator<IProcessEntry> iterator() {
+
+			return method.iterator();
+		}
+
+		@Override
+		public int getNumberOfEntries() {
+
+			return method.getNumberOfEntries();
 		}
 	}
 

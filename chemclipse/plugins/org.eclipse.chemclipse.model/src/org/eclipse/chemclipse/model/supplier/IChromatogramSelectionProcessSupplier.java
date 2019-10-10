@@ -17,7 +17,7 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.core.runtime.SubMonitor;
@@ -41,20 +41,24 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 
 		if(supplier instanceof IChromatogramSelectionProcessSupplier<?>) {
 			IChromatogramSelectionProcessSupplier<T> chromatogramSelectionProcessSupplier = (IChromatogramSelectionProcessSupplier<T>)supplier;
-			return chromatogramSelectionProcessSupplier.apply(chromatogramSelection, processSettings, context);
+			chromatogramSelection = chromatogramSelectionProcessSupplier.apply(chromatogramSelection, processSettings, context);
 		} else if(supplier instanceof IMeasurementProcessSupplier<?>) {
 			IMeasurementProcessSupplier<T> measurementProcessSupplier = (IMeasurementProcessSupplier<T>)supplier;
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			measurementProcessSupplier.applyProcessor(Collections.singleton(chromatogram), processSettings, context);
 		}
+		if(supplier instanceof ProcessEntryContainer) {
+			ProcessEntryContainer container = (ProcessEntryContainer)supplier;
+			chromatogramSelection = applyProcessMethod(chromatogramSelection, container, context);
+		}
 		return chromatogramSelection;
 	}
 
-	static <X> IChromatogramSelection<?, ?> applyProcessMethod(IChromatogramSelection<?, ?> chromatogramSelection, IProcessMethod processMethod, ProcessExecutionContext context) {
+	static <X> IChromatogramSelection<?, ?> applyProcessMethod(IChromatogramSelection<?, ?> chromatogramSelection, ProcessEntryContainer processMethod, ProcessExecutionContext context) {
 
 		SubMonitor subMonitor = SubMonitor.convert(context.getProgressMonitor(), processMethod.getNumberOfEntries() * 100);
 		AtomicReference<IChromatogramSelection<?, ?>> result = new AtomicReference<IChromatogramSelection<?, ?>>(chromatogramSelection);
-		IProcessMethod.applyProcessors(processMethod, context, new BiConsumer<IProcessSupplier<X>, X>() {
+		ProcessEntryContainer.applyProcessors(processMethod, context, new BiConsumer<IProcessSupplier<X>, X>() {
 
 			@Override
 			public void accept(IProcessSupplier<X> processSupplier, X settings) {
