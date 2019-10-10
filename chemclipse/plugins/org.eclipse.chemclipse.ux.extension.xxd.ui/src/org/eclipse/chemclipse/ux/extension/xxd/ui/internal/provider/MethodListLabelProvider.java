@@ -29,8 +29,8 @@ import org.eclipse.swt.graphics.Image;
 public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	//
-	public static String[] TITLES = {//
-			"Status", //
+	public static final String[] TITLES = {//
+			"", //
 			"Name", //
 			"Description", //
 			"Type", //
@@ -38,8 +38,8 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 			"ID" //
 	};
 	//
-	public static int[] BOUNDS = {//
-			30, //
+	public static final int[] BOUNDS = {//
+			50, //
 			250, //
 			250, //
 			160, //
@@ -106,7 +106,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 					if(supplier != null) {
 						text = Arrays.toString(supplier.getSupportedDataTypes().toArray());
 					} else {
-						text = "[]";
+						text = "n/a";
 					}
 				}
 					break;
