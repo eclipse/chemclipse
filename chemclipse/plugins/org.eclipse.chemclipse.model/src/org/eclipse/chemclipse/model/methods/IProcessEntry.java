@@ -17,8 +17,6 @@ import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 
 public interface IProcessEntry {
 
-	String EMPTY_JSON_SETTINGS = "{}";
-
 	String getProcessorId();
 
 	void setProcessorId(String processorId);

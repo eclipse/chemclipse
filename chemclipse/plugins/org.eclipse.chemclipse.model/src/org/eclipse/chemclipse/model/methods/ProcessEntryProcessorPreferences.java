@@ -16,8 +16,8 @@ import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 
 public final class ProcessEntryProcessorPreferences<T> implements ProcessorPreferences<T> {
 
-	private IProcessEntry processEntry;
-	private IProcessSupplier<T> supplier;
+	private final IProcessEntry processEntry;
+	private final IProcessSupplier<T> supplier;
 
 	public ProcessEntryProcessorPreferences(IProcessSupplier<T> supplier, IProcessEntry processEntry) {
 		this.supplier = supplier;
@@ -49,14 +49,14 @@ public final class ProcessEntryProcessorPreferences<T> implements ProcessorPrefe
 			return true;
 		}
 		String jsonSettings = processEntry.getJsonSettings();
-		return jsonSettings == null || jsonSettings.isEmpty() || ProcessEntry.EMPTY_JSON_SETTINGS.equals(jsonSettings);
+		return jsonSettings == null || jsonSettings.isEmpty() || "{}".equals(jsonSettings);
 	}
 
 	@Override
 	public void setUseSystemDefaults(boolean useSystemDefaults) {
 
 		if(useSystemDefaults) {
-			processEntry.setJsonSettings(ProcessEntry.EMPTY_JSON_SETTINGS);
+			processEntry.setJsonSettings(null);
 		}
 	}
 

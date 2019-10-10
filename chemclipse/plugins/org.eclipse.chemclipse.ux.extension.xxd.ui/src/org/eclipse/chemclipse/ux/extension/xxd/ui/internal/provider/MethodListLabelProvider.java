@@ -91,6 +91,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		String text = "";
 		if(element instanceof IProcessEntry) {
 			IProcessEntry entry = (IProcessEntry)element;
+			IProcessSupplier<?> supplier = processTypeSupport.getSupplier(entry.getProcessorId());
 			switch(columnIndex) {
 				case 0:
 					text = ""; // Validation
@@ -102,7 +103,6 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 					text = entry.getDescription();
 					break;
 				case 3: {
-					IProcessSupplier<?> supplier = processTypeSupport.getSupplier(entry.getProcessorId());
 					if(supplier != null) {
 						text = Arrays.toString(supplier.getSupportedDataTypes().toArray());
 					} else {
@@ -111,11 +111,19 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 				}
 					break;
 				case 4:
-					String jsonSettings = entry.getJsonSettings();
-					if(jsonSettings.equals(IProcessEntry.EMPTY_JSON_SETTINGS)) {
-						text = "System Settings";
+					if(supplier != null) {
+						if(supplier.getSettingsParser().getInputValues().isEmpty()) {
+							return "not configurable";
+						} else {
+							ProcessorPreferences<Object> preferences = IProcessEntry.getProcessEntryPreferences(entry, processTypeSupport);
+							if(preferences.isUseSystemDefaults()) {
+								text = "system defaults";
+							} else {
+								text = preferences.getUserSettingsAsString();
+							}
+						}
 					} else {
-						text = jsonSettings;
+						text = "n/a";
 					}
 					break;
 				case 5:

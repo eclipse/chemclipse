@@ -152,7 +152,7 @@ public class JobReader {
 		String id = "";
 		String name = "";
 		String description = "";
-		String jsonSettings = IProcessEntry.EMPTY_JSON_SETTINGS;
+		String jsonSettings = "{}";
 		/*
 		 * Open the streams.
 		 */

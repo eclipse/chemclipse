@@ -17,7 +17,7 @@ public class ProcessEntry implements IProcessEntry {
 	private String processorId = "";
 	private String name = "";
 	private String description = "";
-	private String jsonSettings = EMPTY_JSON_SETTINGS;
+	private String jsonSettings = "";
 
 	public ProcessEntry() {
 	}
@@ -69,7 +69,7 @@ public class ProcessEntry implements IProcessEntry {
 	public String getJsonSettings() {
 
 		if(jsonSettings == null) {
-			return EMPTY_JSON_SETTINGS;
+			return "";
 		}
 		return jsonSettings;
 	}
