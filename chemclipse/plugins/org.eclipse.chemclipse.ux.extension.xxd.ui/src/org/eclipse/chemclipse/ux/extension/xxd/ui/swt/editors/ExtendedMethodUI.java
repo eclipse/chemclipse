@@ -37,7 +37,6 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
@@ -59,8 +58,9 @@ import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -105,15 +105,15 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private ToolItem buttonMoveUp;
 	private ToolItem buttonMoveDown;
 	private ToolItem buttonModifySettings;
-	private MethodListUI listUI;
+	private StructuredViewer listUI;
 	//
 	private ProcessMethod processMethod;
-	private IModificationHandler modificationHandler = null;
+	private IModificationHandler modificationHandler;
 	private Composite toolbarMain;
 	private Composite buttons;
 	protected boolean showSettingsOnAdd;
-	private ProcessTypeSupport processingSupport;
-	private DataType[] dataTypes;
+	private final ProcessTypeSupport processingSupport;
+	private final DataType[] dataTypes;
 
 	public ExtendedMethodUI(Composite parent, int style, ProcessTypeSupport processingSupport, DataType[] dataTypes) {
 		super(parent, style);
@@ -389,8 +389,8 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	private void createTable(Composite parent) {
 
-		listUI = new MethodListUI(parent, SWT.BORDER | SWT.MULTI, processingSupport);
-		Table table = listUI.getTable();
+		MethodListUI ui = new MethodListUI(parent, SWT.BORDER | SWT.MULTI, processingSupport);
+		Table table = ui.getTable();
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		table.setLayoutData(gridData);
 		table.addSelectionListener(new SelectionAdapter() {
@@ -402,13 +402,13 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			}
 		});
 		//
-		Shell shell = listUI.getTable().getShell();
-		ITableSettings tableSettings = listUI.getTableSettings();
+		Shell shell = ui.getTable().getShell();
+		ITableSettings tableSettings = ui.getTableSettings();
 		addDeleteMenuEntry(shell, tableSettings);
 		addKeyEventProcessors(shell, tableSettings);
-		listUI.applySettings(tableSettings);
+		ui.applySettings(tableSettings);
 		//
-		listUI.addDoubleClickListener(new IDoubleClickListener() {
+		ui.addDoubleClickListener(new IDoubleClickListener() {
 
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
@@ -418,6 +418,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				}
 			}
 		});
+		listUI = ui;
 	}
 
 	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
@@ -616,17 +617,18 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			public void widgetSelected(SelectionEvent e) {
 
 				if(processMethod != null) {
-					Table table = listUI.getTable();
-					int index = table.getSelectionIndex();
-					if(index > -1) {
-						Object object = table.getItem(index).getData();
-						if(object instanceof IProcessEntry) {
-							IProcessEntry processEntry = (IProcessEntry)object;
+					Iterator<?> selection = listUI.getStructuredSelection().iterator();
+					List<IProcessEntry> entries = processMethod.getEntries();
+					while(selection.hasNext()) {
+						Object object = selection.next();
+						int index = entries.indexOf(object);
+						if(index > -1) {
+							IProcessEntry processEntry = entries.get(index);
 							IProcessEntry processEntryCopy = new ProcessEntry(processEntry);
-							processMethod.getEntries().add(index, processEntryCopy);
-							updateProcessMethod();
+							entries.add(index, processEntryCopy);
 						}
 					}
+					updateProcessMethod();
 				}
 			}
 		});
@@ -673,10 +675,15 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			public void widgetSelected(SelectionEvent e) {
 
 				if(processMethod != null) {
-					Table table = listUI.getTable();
-					ISelection selection = listUI.getSelection();
-					for(int index : table.getSelectionIndices()) {
-						Collections.swap(processMethod.getEntries(), index, index - 1);
+					IStructuredSelection selection = listUI.getStructuredSelection();
+					List<IProcessEntry> entries = processMethod.getEntries();
+					Iterator<?> iterator = selection.iterator();
+					while(iterator.hasNext()) {
+						Object object = iterator.next();
+						int index = entries.indexOf(object);
+						if(index > 0) {
+							Collections.swap(entries, index, index - 1);
+						}
 					}
 					updateProcessMethod();
 					listUI.setSelection(selection);
@@ -698,12 +705,15 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			public void widgetSelected(SelectionEvent e) {
 
 				if(processMethod != null) {
-					Table table = listUI.getTable();
-					int[] indices = table.getSelectionIndices();
-					ISelection selection = listUI.getSelection();
-					for(int i = indices.length - 1; i >= 0; i--) {
-						int index = indices[i];
-						Collections.swap(processMethod.getEntries(), index, index + 1);
+					IStructuredSelection selection = listUI.getStructuredSelection();
+					List<IProcessEntry> entries = processMethod.getEntries();
+					Iterator<?> iterator = selection.iterator();
+					while(iterator.hasNext()) {
+						Object object = iterator.next();
+						int index = entries.indexOf(object);
+						if(index > -1 && index < entries.size() - 1) {
+							Collections.swap(entries, index, index + 1);
+						}
 					}
 					updateProcessMethod();
 					listUI.setSelection(selection);
@@ -754,7 +764,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 		buttonAdd.setEnabled(processMethod != null);
 		//
-		boolean enabled = (listUI.getTable().getSelectionIndex() > -1) ? true : false;
+		boolean enabled = !listUI.getSelection().isEmpty();
 		buttonCopy.setEnabled(enabled);
 		buttonRemove.setEnabled(enabled);
 		buttonMoveUp.setEnabled(enabled);
@@ -782,8 +792,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 		return new MethodUIConfig() {
 
-			TableConfigSupport tabelConfig = new TableConfigSupport(listUI);
-
+			// TableConfigSupport tabelConfig = new TableConfigSupport(listUI);
 			@Override
 			public void setToolbarVisible(boolean visible) {
 
@@ -799,13 +808,13 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void setVisibleColumns(Set<String> visibleColumns) {
 
-				tabelConfig.setVisibleColumns(visibleColumns);
+				// tabelConfig.setVisibleColumns(visibleColumns);
 			}
 
 			@Override
 			public Set<String> getColumns() {
 
-				return tabelConfig.getColumns();
+				return Collections.emptySet();// tabelConfig.getColumns();
 			}
 
 			@Override
