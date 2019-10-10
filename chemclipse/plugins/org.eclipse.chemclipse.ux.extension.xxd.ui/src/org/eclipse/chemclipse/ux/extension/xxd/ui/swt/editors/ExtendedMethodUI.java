@@ -12,11 +12,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createColumn;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createTreeTable;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -29,19 +34,17 @@ import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
-import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.MethodListLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ConfigurableUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodListUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodUIConfig;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
@@ -56,16 +59,15 @@ import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -82,9 +84,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -152,7 +152,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		buttons = createToolbarBottom(composite);
 		//
 		PartSupport.setCompositeVisibility(toolbarHeader, false);
-		enableTableButtons();
+		updateTableButtons();
 	}
 
 	public Composite getToolbarMain() {
@@ -389,102 +389,61 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	private void createTable(Composite parent) {
 
-		MethodListUI ui = new MethodListUI(parent, SWT.BORDER | SWT.MULTI, processingSupport);
-		Table table = ui.getTable();
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		table.setLayoutData(gridData);
-		table.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				enableTableButtons();
-			}
-		});
-		//
-		Shell shell = ui.getTable().getShell();
-		ITableSettings tableSettings = ui.getTableSettings();
-		addDeleteMenuEntry(shell, tableSettings);
-		addKeyEventProcessors(shell, tableSettings);
-		ui.applySettings(tableSettings);
-		//
-		ui.addDoubleClickListener(new IDoubleClickListener() {
-
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-
-				if(isEnabled() && buttonModifySettings.isEnabled()) {
-					executeModifySettings(getShell());
-				}
-			}
-		});
-		listUI = ui;
-	}
-
-	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
-
-		tableSettings.addMenuEntry(new ITableMenuEntry() {
-
-			@Override
-			public String getName() {
-
-				return "Delete Step(s)";
-			}
-
-			@Override
-			public String getCategory() {
-
-				return MENU_CATEGORY_STEPS;
-			}
-
-			@Override
-			public void execute(ExtendedTableViewer extendedTableViewer) {
-
-				deleteSteps(shell);
-			}
-		});
-	}
-
-	@SuppressWarnings("rawtypes")
-	private void deleteSteps(Shell shell) {
-
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Delete Processing Step(s)");
-		messageBox.setMessage("Would you like to delete the selected processing step(s)?");
-		if(messageBox.open() == SWT.YES) {
-			/*
-			 * Delete Step(s)
-			 */
-			Iterator iterator = listUI.getStructuredSelection().iterator();
-			while(iterator.hasNext()) {
-				Object object = iterator.next();
-				if(object instanceof IProcessEntry) {
-					deleteStep((IProcessEntry)object);
-				}
-			}
-			updateProcessMethod();
+		TreeViewer treeViewer = createTreeTable(parent, false);
+		for(int i = 0; i < MethodListLabelProvider.TITLES.length; i++) {
+			createColumn(treeViewer, MethodListLabelProvider.TITLES[i], MethodListLabelProvider.BOUNDS[i], null);
 		}
-	}
-
-	private void deleteStep(IProcessEntry processEntry) {
-
-		if(processMethod != null) {
-			processMethod.removeProcessEntry(processEntry);
-		}
-	}
-
-	private void addKeyEventProcessors(Shell shell, ITableSettings tableSettings) {
-
-		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
+		treeViewer.setLabelProvider(new MethodListLabelProvider(processingSupport));
+		treeViewer.setContentProvider(new ITreeContentProvider() {
 
 			@Override
-			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
+			public boolean hasChildren(Object element) {
 
-				if(e.keyCode == SWT.DEL) {
-					deleteSteps(shell);
+				if(element instanceof IProcessEntry) {
+					IProcessEntry entry = (IProcessEntry)element;
+					IProcessSupplier<?> supplier = processingSupport.getSupplier(entry.getProcessorId());
+					if(supplier instanceof ProcessEntryContainer) {
+						return true;
+					}
 				}
+				return false;
+			}
+
+			@Override
+			public Object getParent(Object element) {
+
+				return null;
+			}
+
+			@Override
+			public Object[] getElements(Object inputElement) {
+
+				if(inputElement instanceof Iterable<?>) {
+					Iterable<?> iterable = (Iterable<?>)inputElement;
+					List<Object> list = new ArrayList<>();
+					iterable.forEach(list::add);
+					return list.toArray();
+				}
+				return new Object[0];
+			}
+
+			@Override
+			public Object[] getChildren(Object parentElement) {
+
+				if(parentElement instanceof IProcessEntry) {
+					IProcessEntry entry = (IProcessEntry)parentElement;
+					IProcessSupplier<?> supplier = processingSupport.getSupplier(entry.getProcessorId());
+					if(supplier instanceof ProcessEntryContainer) {
+						return getElements(supplier);
+					}
+				}
+				return new Object[0];
 			}
 		});
+		treeViewer.getTree();
+		treeViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+		treeViewer.addSelectionChangedListener(event -> updateTableButtons());
+		listUI = treeViewer;
 	}
 
 	private ToolBar createToolbarBottom(Composite parent) {
@@ -660,7 +619,6 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				}
 			}
 		});
-		//
 		return item;
 	}
 
@@ -756,15 +714,24 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		}
 		//
 		listUI.setInput(processMethod);
-		enableTableButtons();
+		updateTableButtons();
 		setDirty(true);
 	}
 
-	private void enableTableButtons() {
+	private void updateTableButtons() {
 
 		buttonAdd.setEnabled(processMethod != null);
 		//
-		boolean enabled = !listUI.getSelection().isEmpty();
+		IStructuredSelection selection = listUI.getStructuredSelection();
+		boolean enabled = processMethod != null && !selection.isEmpty();
+		Iterator<?> iterator = selection.iterator();
+		while(iterator.hasNext() && enabled) {
+			Object object = iterator.next();
+			// we can only edit/delete direct process method items
+			if(processMethod.getEntries().indexOf(object) < 0) {
+				enabled = false;
+			}
+		}
 		buttonCopy.setEnabled(enabled);
 		buttonRemove.setEnabled(enabled);
 		buttonMoveUp.setEnabled(enabled);
@@ -792,7 +759,6 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 		return new MethodUIConfig() {
 
-			// TableConfigSupport tabelConfig = new TableConfigSupport(listUI);
 			@Override
 			public void setToolbarVisible(boolean visible) {
 
@@ -808,13 +774,12 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void setVisibleColumns(Set<String> visibleColumns) {
 
-				// tabelConfig.setVisibleColumns(visibleColumns);
 			}
 
 			@Override
 			public Set<String> getColumns() {
 
-				return Collections.emptySet();// tabelConfig.getColumns();
+				return new HashSet<>(Arrays.asList(MethodListLabelProvider.TITLES));
 			}
 
 			@Override

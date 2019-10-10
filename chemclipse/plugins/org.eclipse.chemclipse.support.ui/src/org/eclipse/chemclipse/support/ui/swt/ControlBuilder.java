@@ -11,6 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -71,5 +77,40 @@ public class ControlBuilder {
 			gridData.grabExcessHorizontalSpace = true;
 		}
 		return control;
+	}
+
+	public static TreeViewer createTreeTable(Composite parent, boolean enableTooltips) {
+
+		TreeViewer treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
+		treeViewer.setUseHashlookup(true);
+		treeViewer.setExpandPreCheckFilters(true);
+		treeViewer.getTree().setLinesVisible(true);
+		treeViewer.getTree().setHeaderVisible(true);
+		if(enableTooltips) {
+			ColumnViewerToolTipSupport.enableFor(treeViewer, ToolTip.NO_RECREATE);
+		}
+		return treeViewer;
+	}
+
+	public static TreeViewerColumn createEmptyColumn(TreeViewer treeViewer) {
+
+		return createColumn(treeViewer, "", 1, new CellLabelProvider() {
+
+			@Override
+			public void update(ViewerCell cell) {
+
+			}
+		});
+	}
+
+	public static TreeViewerColumn createColumn(TreeViewer treeViewer, String text, int width, CellLabelProvider labelProvider) {
+
+		TreeViewerColumn column = new TreeViewerColumn(treeViewer, SWT.NONE);
+		column.getColumn().setText(text);
+		column.getColumn().setWidth(width);
+		if(labelProvider != null) {
+			column.setLabelProvider(labelProvider);
+		}
+		return column;
 	}
 }
