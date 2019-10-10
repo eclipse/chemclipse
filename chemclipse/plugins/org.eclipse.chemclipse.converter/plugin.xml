@@ -11,14 +11,14 @@
             adaptableType="org.eclipse.core.resources.IResource"
             class="org.eclipse.chemclipse.converter.adapters.MethodAdapterFactory">
          <adapter
-               type="org.eclipse.chemclipse.model.methods.IProcessMethod">
+               type="org.eclipse.chemclipse.processing.methods.IProcessMethod">
          </adapter>
       </factory>
       <factory
             adaptableType="java.io.File"
             class="org.eclipse.chemclipse.converter.adapters.MethodAdapterFactory">
          <adapter
-               type="org.eclipse.chemclipse.model.methods.IProcessMethod">
+               type="org.eclipse.chemclipse.processing.methods.IProcessMethod">
          </adapter>
       </factory>
    </extension>
