@@ -16,24 +16,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -52,16 +57,18 @@ public class ProcessingWizardPage extends WizardPage {
 
 	private ComboViewer comboViewerCategory;
 	private ComboViewer comboViewerProcessor;
-	private final ProcessTypeSupport processTypeSupport;
+	private final Map<ProcessSupplierContext, String> processSupplierContextMap;
 	private final Set<DataCategory> selectedDataTypes = new HashSet<>();
 	private final List<Button> dataTypeSelections = new ArrayList<>();
 	private ProcessEntry processEntry;
 	private final DataType[] dataTypes;
+	private ProcessSupplierContext processContext;
 
-	protected ProcessingWizardPage(ProcessTypeSupport processTypeSupport, DataType[] dataTypes) {
+	protected ProcessingWizardPage(Map<ProcessSupplierContext, String> contexts, DataType[] dataTypes) {
 		super("ProcessingWizardPage");
-		this.processTypeSupport = processTypeSupport;
+		this.processSupplierContextMap = contexts;
 		this.dataTypes = dataTypes;
+		processContext = contexts.entrySet().iterator().next().getKey();
 		setTitle("Process Entry");
 		setDescription("Select a chromatogram filter, integrator, identifier ... .");
 	}
@@ -108,6 +115,10 @@ public class ProcessingWizardPage extends WizardPage {
 				});
 			}
 		}
+		if(processSupplierContextMap.size() > 1) {
+			createLabel(composite, "Context");
+			createComboContext(composite);
+		}
 		createLabel(composite, "Category");
 		comboViewerCategory = createComboCategory(composite);
 		createLabel(composite, "Processor");
@@ -116,6 +127,32 @@ public class ProcessingWizardPage extends WizardPage {
 		updateComboCategoryItems();
 		setControl(composite);
 		validate();
+	}
+
+	private void createComboContext(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		comboViewer.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new LabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				return processSupplierContextMap.get(element);
+			}
+		});
+		comboViewer.setInput(processSupplierContextMap.keySet());
+		comboViewer.setSelection(new StructuredSelection(getProcessSupplierContext()));
+		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				processContext = (ProcessSupplierContext)comboViewer.getStructuredSelection().getFirstElement();
+				updateComboCategoryItems();
+			}
+		});
 	}
 
 	private static Button createDataTypeCheckbox(Composite parent, DataType dataType, String text, String tooltip, String preferenceKey) {
@@ -174,7 +211,20 @@ public class ProcessingWizardPage extends WizardPage {
 				}
 			}
 		}
-		Set<IProcessSupplier<?>> processTypeSuppliers = processTypeSupport.getSupplier(selectedDataTypes);
+		Set<IProcessSupplier<?>> processTypeSuppliers = new LinkedHashSet<>();
+		getProcessSupplierContext().visitSupplier(new Consumer<IProcessSupplier<?>>() {
+
+			@Override
+			public void accept(IProcessSupplier<?> supplier) {
+
+				for(DataCategory category : supplier.getSupportedDataTypes()) {
+					if(selectedDataTypes.contains(category)) {
+						processTypeSuppliers.add(supplier);
+						return;
+					}
+				}
+			}
+		});
 		Map<String, ProcessCategory> categories = new TreeMap<>();
 		for(IProcessSupplier<?> supplier : processTypeSuppliers) {
 			String category = supplier.getCategory();
@@ -345,5 +395,10 @@ public class ProcessingWizardPage extends WizardPage {
 				}
 			}
 		}
+	}
+
+	public ProcessSupplierContext getProcessSupplierContext() {
+
+		return processContext;
 	}
 }

@@ -14,10 +14,29 @@
 package org.eclipse.chemclipse.processing.supplier;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
-public interface IProcessTypeSupplier {
+public interface IProcessTypeSupplier extends ProcessSupplierContext {
 
 	String getCategory();
 
 	Collection<IProcessSupplier<?>> getProcessorSuppliers();
+
+	@SuppressWarnings("unchecked")
+	@Override
+	default <T> IProcessSupplier<T> getSupplier(String id) {
+
+		for(IProcessSupplier<?> supplier : getProcessorSuppliers()) {
+			if(supplier.getId().equals(id)) {
+				return (IProcessSupplier<T>)supplier;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	default void visitSupplier(Consumer<? super IProcessSupplier<?>> consumer) {
+
+		getProcessorSuppliers().forEach(consumer);
+	}
 }

@@ -12,8 +12,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.wizard.Wizard;
@@ -39,18 +43,23 @@ public class ProcessingWizard extends Wizard {
 		return true;
 	}
 
+	@Deprecated
 	public static IProcessEntry open(Shell shell, ProcessTypeSupport processingSupport, DataType[] datatypes) {
 
+		return open(shell, Collections.singletonMap(processingSupport, "global"), datatypes).get(processingSupport);
+	}
+
+	public static Map<ProcessSupplierContext, IProcessEntry> open(Shell shell, Map<ProcessSupplierContext, String> contexts, DataType[] datatypes) {
+
 		ProcessingWizard wizard = new ProcessingWizard();
-		ProcessingWizardPage wizardPage = new ProcessingWizardPage(processingSupport, datatypes);
+		ProcessingWizardPage wizardPage = new ProcessingWizardPage(contexts, datatypes);
 		wizard.addPage(wizardPage);
 		WizardDialog wizardDialog = new WizardDialog(shell, wizard);
 		wizardDialog.setMinimumPageSize(ProcessingWizard.DEFAULT_WIDTH, ProcessingWizard.DEFAULT_HEIGHT);
 		wizardDialog.create();
 		//
 		if(wizardDialog.open() == WizardDialog.OK) {
-			// TODO show preferences dialog if necessary?
-			return wizardPage.getProcessEntry();
+			return Collections.singletonMap(wizardPage.getProcessSupplierContext(), wizardPage.getProcessEntry());
 		}
 		return null;
 	}
