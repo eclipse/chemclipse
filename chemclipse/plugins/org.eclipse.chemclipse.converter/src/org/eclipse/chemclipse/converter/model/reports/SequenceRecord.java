@@ -46,6 +46,12 @@ public class SequenceRecord implements ISequenceRecord {
 	}
 
 	@Override
+	public void setProcessMethod(String processMethod) {
+
+		this.processMethod = processMethod;
+	}
+
+	@Override
 	public String getReportMethod() {
 
 		return reportMethod;
@@ -55,12 +61,6 @@ public class SequenceRecord implements ISequenceRecord {
 	public void setReportMethod(String reportMethod) {
 
 		this.reportMethod = reportMethod;
-	}
-
-	@Override
-	public void setProcessMethod(String processMethod) {
-
-		this.processMethod = processMethod;
 	}
 
 	@Override
