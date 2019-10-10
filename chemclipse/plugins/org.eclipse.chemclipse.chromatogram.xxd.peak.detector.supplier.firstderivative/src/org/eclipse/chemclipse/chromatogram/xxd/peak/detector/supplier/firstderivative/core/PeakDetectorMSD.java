@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD.FilterMode;
+import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
@@ -117,7 +117,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 * @param rawPeaks
 	 * @param chromatogram
 	 */
-	private void buildAndStorePeaks(List<IRawPeak> rawPeaks, IChromatogramMSD chromatogram, IPeakDetectorSettingsMSD peakDetectorSettings) {
+	private void buildAndStorePeaks(List<IRawPeak> rawPeaks, IChromatogramMSD chromatogram, PeakDetectorSettingsMSD peakDetectorSettings) {
 
 		IChromatogramPeakMSD peak = null;
 		IScanRange scanRange = null;
@@ -234,7 +234,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 * @param peak
 	 * @return boolean
 	 */
-	private boolean isValidPeak(IChromatogramPeakMSD peak, IPeakDetectorSettingsMSD peakDetectorSettings) {
+	private boolean isValidPeak(IChromatogramPeakMSD peak, PeakDetectorSettingsMSD peakDetectorSettings) {
 
 		if(peak != null && peak.getSignalToNoiseRatio() >= peakDetectorSettings.getMinimumSignalToNoiseRatio()) {
 			return true;

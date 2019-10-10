@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,11 +7,11 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - initial API and implementation
+ * 
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings;
+package org.eclipse.chemclipse.chromatogram.peak.detector.core;
 
-import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
-
-public interface IPeakDetectorSettingsMSD extends IPeakDetectorSettings {
+public enum FilterMode {
+	INCLUDE, EXCLUDE
 }

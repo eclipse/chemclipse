@@ -13,13 +13,18 @@
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
+import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
 
 	@JsonIgnore
 	private Sensitivity sensitivity = Sensitivity.MEDIUM;
+	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
+	@FloatSettingsProperty(minValue = 0f, maxValue = Float.MAX_VALUE)
+	private float minimumSignalToNoiseRatio;
 	private int minPeakRising; // between 1,4
 	private int minimalPeakWidth;
 	private int baselineIterations;
@@ -86,5 +91,15 @@ public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
 	public int getSensitivityOfDeconvolution() {
 
 		return sensitivityOfDeconvolution;
+	}
+
+	public float getMinimumSignalToNoiseRatio() {
+
+		return minimumSignalToNoiseRatio;
+	}
+
+	public void setMinimumSignalToNoiseRatio(float minimumSignalToNoiseRatio) {
+
+		this.minimumSignalToNoiseRatio = minimumSignalToNoiseRatio;
 	}
 }
