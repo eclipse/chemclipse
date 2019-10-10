@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -195,20 +195,20 @@ public class Chromatogram_18_Test extends TestCase {
 	public void testGetExtractedIonSignals_5() {
 
 		extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals(0, 180);
-		assertEquals("StartScan", 0, extractedIonSignals.getStartScan());
-		assertEquals("StopScan", 0, extractedIonSignals.getStopScan());
+		assertEquals("StartScan", 1, extractedIonSignals.getStartScan());
+		assertEquals("StopScan", 100, extractedIonSignals.getStopScan());
 		int scan;
 		scan = extractedIonSignals.getStartScan();
 		try {
 			extractedIonSignal = extractedIonSignals.getExtractedIonSignal(scan);
 		} catch(NoExtractedIonSignalStoredException e) {
-			assertTrue("NoExtractedIonSignalStoredException", true);
+			assertFalse("NoExtractedIonSignalStoredException", true);
 		}
 		scan = extractedIonSignals.getStopScan();
 		try {
 			extractedIonSignal = extractedIonSignals.getExtractedIonSignal(scan);
 		} catch(NoExtractedIonSignalStoredException e) {
-			assertTrue("NoExtractedIonSignalStoredException", true);
+			assertFalse("NoExtractedIonSignalStoredException", true);
 		}
 	}
 

@@ -43,9 +43,10 @@ import org.eclipse.chemclipse.msd.model.implementation.RegularMassSpectrum;
 public class ExtractedIonSignals implements IExtractedIonSignals {
 
 	private static final Logger logger = Logger.getLogger(ExtractedIonSignals.class);
+	//
 	private List<IExtractedIonSignal> signals;
-	private int startIon = Integer.MAX_VALUE;
-	private int stopIon = 0;
+	private int startIon = IExtractedIonSignal.ION_NOT_SET;
+	private int stopIon = IExtractedIonSignal.ION_NOT_SET;
 	private int startScan = 0;
 	private int stopScan = 0;
 	private IChromatogramMSD chromatogram = null;
@@ -365,8 +366,10 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	 */
 	private void setStartIon(int ion) {
 
-		if(ion != IExtractedIonSignal.ION_NOT_SET && ion < startIon) {
-			startIon = ion;
+		if(ion != IExtractedIonSignal.ION_NOT_SET) {
+			if(startIon == IExtractedIonSignal.ION_NOT_SET || ion < startIon) {
+				startIon = ion;
+			}
 		}
 	}
 

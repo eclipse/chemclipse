@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.xic;
 
-import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -37,31 +36,17 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 	@Override
 	public IExtractedIonSignals getExtractedIonSignals(float startIon, float stopIon) {
 
-		IExtractedIonSignals extractedSignals = new ExtractedIonSignals(getNumberOfScansWithIons(chromatogram), chromatogram);
-		exitloop:
-		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IScanMSD) {
-				if(!extractSignals(extractedSignals, (IScanMSD)scan, startIon, stopIon)) {
-					break exitloop;
-				}
-			}
-		}
-		return extractedSignals;
+		int startScan = 1;
+		int stopScan = chromatogram.getNumberOfScans();
+		return getExtractedIonSignals(startScan, stopScan, startIon, stopIon);
 	}
 
 	@Override
 	public IExtractedIonSignals getExtractedIonSignals() {
 
-		IExtractedIonSignals extractedSignals = new ExtractedIonSignals(getNumberOfScansWithIons(chromatogram), chromatogram);
-		exitloop:
-		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IScanMSD) {
-				if(!extractSignals(extractedSignals, (IScanMSD)scan, 0, 0)) {
-					break exitloop;
-				}
-			}
-		}
-		return extractedSignals;
+		int startScan = 1;
+		int stopScan = chromatogram.getNumberOfScans();
+		return getExtractedIonSignals(startScan, stopScan);
 	}
 
 	@Override
@@ -81,20 +66,33 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 	@Override
 	public IExtractedIonSignals getExtractedIonSignals(int startScan, int stopScan) {
 
+		return getExtractedIonSignals(startScan, stopScan, 0, 0);
+	}
+
+	private IExtractedIonSignals getExtractedIonSignals(int startScan, int stopScan, float startIon, float stopIon) {
+
+		if(chromatogram.getNumberOfScans() == 0) {
+			return new ExtractedIonSignals(0, chromatogram);
+		}
+		/*
+		 * Adjust the range.
+		 */
 		if(startScan > stopScan) {
 			int tmp = startScan;
 			startScan = stopScan;
 			stopScan = tmp;
 		}
-		//
-		if(startScan < 1 && stopScan > getNumberOfScansWithIons(chromatogram)) {
-			return new ExtractedIonSignals(0, chromatogram);
-		}
+		/*
+		 * Do additional checks.
+		 */
+		stopScan = (stopScan > chromatogram.getNumberOfScans()) ? chromatogram.getNumberOfScans() : stopScan;
+		int start = (startScan < 1) ? 1 : startScan;
+		int stop = stopScan;
 		/*
 		 * Get the start without empty scans.
 		 */
 		exitloop:
-		for(int scan = startScan; scan <= stopScan; scan++) {
+		for(int scan = start; scan <= stop; scan++) {
 			if(chromatogram.getSupplierScan(scan).getNumberOfIons() > 0) {
 				startScan = scan;
 				break exitloop;
@@ -103,43 +101,20 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 		/*
 		 * Get the stop without empty scans.
 		 */
-		exitloop:
-		for(int scan = startScan; scan <= stopScan; scan++) {
+		for(int scan = stop; scan > startScan; scan--) {
 			if(chromatogram.getSupplierScan(scan).getNumberOfIons() == 0) {
-				stopScan = scan;
-				break exitloop;
+				stopScan = scan - 1;
 			}
 		}
-		//
+		/*
+		 * Extract the signals.
+		 */
 		IExtractedIonSignals extractedIonSignals = new ExtractedIonSignals(startScan, stopScan, chromatogram);
 		for(int scan = startScan; scan <= stopScan; scan++) {
-			extractSignals(extractedIonSignals, chromatogram.getSupplierScan(scan), 0, 0);
+			extractSignals(extractedIonSignals, chromatogram.getSupplierScan(scan), startIon, stopIon);
 		}
 		//
 		return extractedIonSignals;
-	}
-
-	/**
-	 * Calculates the number of scans until one scan without ions is detected.
-	 * 
-	 * @param chromatogram
-	 * @return int
-	 */
-	private int getNumberOfScansWithIons(IChromatogramMSD chromatogram) {
-
-		int counter = 0;
-		exitloop:
-		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IScanMSD) {
-				IScanMSD massSpectrum = (IScanMSD)scan;
-				if(massSpectrum.getNumberOfIons() > 0) {
-					counter++;
-				} else {
-					break exitloop;
-				}
-			}
-		}
-		return counter;
 	}
 
 	private boolean extractSignals(IExtractedIonSignals extractedIonSignals, IScanMSD scanMSD, float startIon, float stopIon) {
