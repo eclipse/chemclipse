@@ -75,12 +75,6 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier {
 		}
 
 		@Override
-		public MethodProcessTypeSupplier getTypeSupplier() {
-
-			return (MethodProcessTypeSupplier)super.getTypeSupplier();
-		}
-
-		@Override
 		public Iterator<IProcessEntry> iterator() {
 
 			return method.iterator();

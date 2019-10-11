@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
+import org.eclipse.chemclipse.model.methods.ListProcessEntryContainer;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -73,9 +74,9 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 	private Button buttonDeleteMethod;
 	//
 	private IMethodListener methodListener = null;
-	private ISupplierEditorSupport supplierEditorSupport = new EditorSupportFactory(DataType.MTH).getInstanceEditorSupport();
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private boolean showsettings;
+	private final ISupplierEditorSupport supplierEditorSupport = new EditorSupportFactory(DataType.MTH).getInstanceEditorSupport();
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private final boolean showsettings;
 
 	public MethodSupportUI(Composite parent, int style) {
 		this(parent, style, true);
@@ -215,9 +216,11 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
 				if(object instanceof IProcessMethod) {
 					IProcessMethod processMethod = (IProcessMethod)object;
-					if(processMethod.isReadOnly()) {
-						MessageDialog.openInformation(e.display.getActiveShell(), "Delete Method", "You can't delete this method because it is read only");
-						return;
+					if(processMethod instanceof ListProcessEntryContainer) {
+						if(((ListProcessEntryContainer)processMethod).isReadOnly()) {
+							MessageDialog.openInformation(e.display.getActiveShell(), "Delete Method", "You can't delete this method because it is read only");
+							return;
+						}
 					}
 					File file = getProcessMethodFile(object);
 					if(file != null && file.exists()) {
@@ -401,8 +404,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		//
 		Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
 		if(object instanceof IProcessMethod) {
-			IProcessMethod method = (IProcessMethod)object;
-			boolean editable = getProcessMethodFile(object) != null && !method.isReadOnly();
+			boolean editable = getProcessMethodFile(object) != null;
 			buttonEditMethod.setEnabled(editable);
 			buttonDeleteMethod.setEnabled(editable);
 			buttonExecuteMethod.setEnabled(true);

@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -335,7 +336,7 @@ public class ProcessingWizardPage extends WizardPage {
 		Object object = comboViewerProcessor.getStructuredSelection().getFirstElement();
 		if(object instanceof IProcessSupplier) {
 			IProcessSupplier<?> processorSupplier = (IProcessSupplier<?>)object;
-			processEntry = new ProcessEntry();
+			processEntry = new ProcessEntry((ProcessEntryContainer)null);
 			processEntry.setProcessorId(processorSupplier.getId());
 			processEntry.setName(processorSupplier.getName());
 			processEntry.setDescription(processorSupplier.getDescription());

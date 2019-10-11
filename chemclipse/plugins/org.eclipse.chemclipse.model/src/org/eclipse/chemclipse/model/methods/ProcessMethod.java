@@ -13,23 +13,18 @@
 package org.eclipse.chemclipse.model.methods;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
-import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 
-public class ProcessMethod implements IProcessMethod {
+public class ProcessMethod extends ListProcessEntryContainer implements IProcessMethod {
 
 	private String UUID = java.util.UUID.randomUUID().toString();
-	private String operator = "";
-	private String description = "";
-	private String name = "";
-	private String category = "";
-	private List<IProcessEntry> entries = new ArrayList<>();
+	private String operator;
+	private String description;
+	private String name;
+	private String category;
 	private File sourceFile;
+	private boolean readonly = false;
 
 	public ProcessMethod() {
 	}
@@ -45,17 +40,19 @@ public class ProcessMethod implements IProcessMethod {
 			this.description = other.getDescription();
 			this.category = other.getCategory();
 			this.name = other.getName();
-			other.forEach(otherEntry -> entries.add(new ProcessEntry(otherEntry)));
+			other.forEach(otherEntry -> getEntries().add(new ProcessEntry(otherEntry, this)));
 		}
 	}
 
 	@Override
 	public String getOperator() {
 
+		if(operator == null) {
+			return "";
+		}
 		return operator;
 	}
 
-	@Override
 	public void setOperator(String operator) {
 
 		this.operator = operator;
@@ -64,33 +61,29 @@ public class ProcessMethod implements IProcessMethod {
 	@Override
 	public String getDescription() {
 
+		if(description == null) {
+			return "";
+		}
 		return description;
 	}
 
-	@Override
 	public void setDescription(String description) {
 
 		this.description = description;
 	}
 
 	@Override
-	public Iterator<IProcessEntry> iterator() {
-
-		return Collections.unmodifiableCollection(entries).iterator();
-	}
-
-	@Override
 	public String getName() {
 
-		if(name.isEmpty()) {
+		if(name == null || name.isEmpty()) {
 			if(sourceFile != null) {
 				return sourceFile.getName();
 			}
+			return "";
 		}
 		return name;
 	}
 
-	@Override
 	public void setName(String name) throws IllegalStateException {
 
 		this.name = name;
@@ -99,53 +92,15 @@ public class ProcessMethod implements IProcessMethod {
 	@Override
 	public String getCategory() {
 
+		if(category == null) {
+			return "";
+		}
 		return category;
 	}
 
-	@Override
 	public void setCategory(String category) throws IllegalStateException {
 
 		this.category = category;
-	}
-
-	@Override
-	public void addProcessEntry(IProcessEntry processEntry) throws IllegalStateException {
-
-		entries.add(processEntry);
-	}
-
-	@Override
-	public void removeProcessEntry(IProcessEntry processEntry) throws IllegalStateException {
-
-		entries.remove(processEntry);
-	}
-
-	@Override
-	public int getNumberOfEntries() {
-
-		return entries.size();
-	}
-
-	/**
-	 * 
-	 * @return a modifiable view of the entries, handle with care!
-	 */
-	public List<IProcessEntry> getEntries() {
-
-		return entries;
-	}
-
-	@Override
-	public int hashCode() {
-
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((category == null) ? 0 : category.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((entries == null) ? 0 : entries.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((operator == null) ? 0 : operator.hashCode());
-		return result;
 	}
 
 	public void setSourceFile(File sourceFile) {
@@ -159,41 +114,14 @@ public class ProcessMethod implements IProcessMethod {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean isReadOnly() {
 
-		if(this == obj)
-			return true;
-		if(obj == null)
-			return false;
-		if(getClass() != obj.getClass())
-			return false;
-		ProcessMethod other = (ProcessMethod)obj;
-		if(category == null) {
-			if(other.category != null)
-				return false;
-		} else if(!category.equals(other.category))
-			return false;
-		if(description == null) {
-			if(other.description != null)
-				return false;
-		} else if(!description.equals(other.description))
-			return false;
-		if(entries == null) {
-			if(other.entries != null)
-				return false;
-		} else if(!entries.equals(other.entries))
-			return false;
-		if(name == null) {
-			if(other.name != null)
-				return false;
-		} else if(!name.equals(other.name))
-			return false;
-		if(operator == null) {
-			if(other.operator != null)
-				return false;
-		} else if(!operator.equals(other.operator))
-			return false;
-		return true;
+		return readonly;
+	}
+
+	public void setReadonly(boolean readonly) {
+
+		this.readonly = readonly;
 	}
 
 	@Override
@@ -205,5 +133,81 @@ public class ProcessMethod implements IProcessMethod {
 	public void setUUID(String UUID) {
 
 		this.UUID = UUID;
+	}
+
+	@Override
+	public int hashCode() {
+
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((UUID == null) ? 0 : UUID.hashCode());
+		result = prime * result + ((category == null) ? 0 : category.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((operator == null) ? 0 : operator.hashCode());
+		result = prime * result + (readonly ? 1231 : 1237);
+		result = prime * result + ((sourceFile == null) ? 0 : sourceFile.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if(this == obj) {
+			return true;
+		}
+		if(!super.equals(obj)) {
+			return false;
+		}
+		if(getClass() != obj.getClass()) {
+			return false;
+		}
+		ProcessMethod other = (ProcessMethod)obj;
+		if(UUID == null) {
+			if(other.UUID != null) {
+				return false;
+			}
+		} else if(!UUID.equals(other.UUID)) {
+			return false;
+		}
+		if(category == null) {
+			if(other.category != null) {
+				return false;
+			}
+		} else if(!category.equals(other.category)) {
+			return false;
+		}
+		if(description == null) {
+			if(other.description != null) {
+				return false;
+			}
+		} else if(!description.equals(other.description)) {
+			return false;
+		}
+		if(name == null) {
+			if(other.name != null) {
+				return false;
+			}
+		} else if(!name.equals(other.name)) {
+			return false;
+		}
+		if(operator == null) {
+			if(other.operator != null) {
+				return false;
+			}
+		} else if(!operator.equals(other.operator)) {
+			return false;
+		}
+		if(readonly != other.readonly) {
+			return false;
+		}
+		if(sourceFile == null) {
+			if(other.sourceFile != null) {
+				return false;
+			}
+		} else if(!sourceFile.equals(other.sourceFile)) {
+			return false;
+		}
+		return true;
 	}
 }

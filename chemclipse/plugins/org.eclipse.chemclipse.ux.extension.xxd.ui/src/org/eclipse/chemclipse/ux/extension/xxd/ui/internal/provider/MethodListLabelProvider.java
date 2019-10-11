@@ -16,13 +16,13 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
-import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.graphics.Image;
@@ -91,7 +91,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 
 		if(element instanceof IProcessEntry) {
 			IProcessEntry entry = (IProcessEntry)element;
-			ProcessSupplierContext supplierContext = getContext(entry);
+			ProcessSupplierContext supplierContext = ExtendedMethodUI.getContext(entry, processTypeSupport);
 			IProcessSupplier<?> supplier = supplierContext.getSupplier(entry.getProcessorId());
 			switch(columnIndex) {
 				case 0:
@@ -136,19 +136,6 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		return "n/a";
 	}
 
-	private ProcessSupplierContext getContext(IProcessEntry entry) {
-
-		ProcessEntryContainer container = entry.getParent();
-		if(container instanceof IProcessEntry) {
-			IProcessEntry parent = (IProcessEntry)container;
-			IProcessSupplier<?> supplier = getContext(parent).getSupplier(parent.getProcessorId());
-			if(supplier instanceof ProcessSupplierContext) {
-				return (ProcessSupplierContext)supplier;
-			}
-		}
-		return processTypeSupport;
-	}
-
 	@Override
 	public Image getImage(Object element) {
 
@@ -160,7 +147,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		if(processEntry == null) {
 			return ValidationStatus.error("Entry is null");
 		}
-		ProcessorPreferences<?> preferences = IProcessEntry.getProcessEntryPreferences(processEntry, getContext(processEntry));
+		ProcessorPreferences<?> preferences = IProcessEntry.getProcessEntryPreferences(processEntry, ExtendedMethodUI.getContext(processEntry, processTypeSupport));
 		if(preferences == null) {
 			return ValidationStatus.error("Processor " + processEntry.getName() + " not avaiable");
 		}

@@ -39,7 +39,7 @@ public final class ProcessEntryProcessorPreferences<T> implements ProcessorPrefe
 	@Override
 	public void setUserSettings(String settings) {
 
-		processEntry.setJsonSettings(settings);
+		processEntry.setSettings(settings);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public final class ProcessEntryProcessorPreferences<T> implements ProcessorPrefe
 		if(supplier.getSettingsClass() == null) {
 			return true;
 		}
-		String jsonSettings = processEntry.getJsonSettings();
+		String jsonSettings = processEntry.getSettings();
 		return jsonSettings == null || jsonSettings.isEmpty() || "{}".equals(jsonSettings);
 	}
 
@@ -56,7 +56,7 @@ public final class ProcessEntryProcessorPreferences<T> implements ProcessorPrefe
 	public void setUseSystemDefaults(boolean useSystemDefaults) {
 
 		if(useSystemDefaults) {
-			processEntry.setJsonSettings(null);
+			processEntry.setSettings(null);
 		}
 	}
 
@@ -75,6 +75,6 @@ public final class ProcessEntryProcessorPreferences<T> implements ProcessorPrefe
 	@Override
 	public String getUserSettingsAsString() {
 
-		return processEntry.getJsonSettings();
+		return processEntry.getSettings();
 	}
 }

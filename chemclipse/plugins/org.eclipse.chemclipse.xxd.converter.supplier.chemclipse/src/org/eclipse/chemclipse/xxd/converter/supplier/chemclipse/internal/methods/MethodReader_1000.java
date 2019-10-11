@@ -17,7 +17,6 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
-import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 
@@ -31,16 +30,17 @@ public class MethodReader_1000 extends AbstractMethodReader {
 	protected IProcessMethod deserialize(DataInputStream dataInputStream, File file) throws IOException {
 
 		ProcessMethod processMethod = new ProcessMethod();
+		processMethod.setUUID(file.getCanonicalPath());
 		processMethod.setSourceFile(file);
 		processMethod.setOperator(readString(dataInputStream));
 		processMethod.setDescription(readString(dataInputStream));
 		int processEntries = dataInputStream.readInt();
 		for(int i = 0; i < processEntries; i++) {
-			IProcessEntry processEntry = new ProcessEntry();
+			ProcessEntry processEntry = new ProcessEntry(processMethod);
 			processEntry.setProcessorId(readString(dataInputStream));
 			processEntry.setName(readString(dataInputStream));
 			processEntry.setDescription(readString(dataInputStream));
-			processEntry.setJsonSettings(readString(dataInputStream));
+			processEntry.setSettings(readString(dataInputStream));
 			//
 			int dataTypes = dataInputStream.readInt();
 			for(int j = 0; j < dataTypes; j++) {

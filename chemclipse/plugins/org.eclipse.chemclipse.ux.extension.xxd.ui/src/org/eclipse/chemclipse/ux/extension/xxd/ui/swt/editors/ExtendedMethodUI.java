@@ -29,12 +29,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
+import org.eclipse.chemclipse.model.methods.ListProcessEntryContainer;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
-import org.eclipse.chemclipse.model.methods.SubProcessEntry;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
@@ -63,6 +64,9 @@ import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -401,9 +405,6 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public boolean hasChildren(Object element) {
 
-				if(element instanceof ProcessEntryContainer) {
-					return ((ProcessEntryContainer)element).getNumberOfEntries() > 0;
-				}
 				if(element instanceof IProcessEntry) {
 					IProcessEntry entry = (IProcessEntry)element;
 					IProcessSupplier<?> supplier = processingSupport.getSupplier(entry.getProcessorId());
@@ -411,46 +412,96 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 						return ((ProcessEntryContainer)supplier).getNumberOfEntries() > 0;
 					}
 				}
+				if(element instanceof ProcessEntryContainer) {
+					return ((ProcessEntryContainer)element).getNumberOfEntries() > 0;
+				}
 				return false;
 			}
 
 			@Override
 			public Object getParent(Object element) {
 
+				if(element instanceof IProcessEntry) {
+					return ((IProcessEntry)element).getParent();
+				}
 				return null;
 			}
 
 			@Override
 			public Object[] getElements(Object inputElement) {
 
-				if(inputElement instanceof Iterable<?>) {
-					Iterable<?> iterable = (Iterable<?>)inputElement;
-					List<Object> list = new ArrayList<>();
-					iterable.forEach(list::add);
-					return list.toArray();
+				if(inputElement instanceof ProcessEntryContainer) {
+					ProcessEntryContainer container = (ProcessEntryContainer)inputElement;
+					return entryList(container, false);
 				}
 				return new Object[0];
+			}
+
+			private Object[] entryList(Iterable<? extends IProcessEntry> iterable, boolean detatch) {
+
+				List<Object> list = new ArrayList<>();
+				if(detatch) {
+					iterable.forEach(new Consumer<IProcessEntry>() {
+
+						@Override
+						public void accept(IProcessEntry entry) {
+
+							list.add(new ProcessEntry(entry, null));
+						}
+					});
+				} else {
+					iterable.forEach(list::add);
+				}
+				return list.toArray();
 			}
 
 			@Override
 			public Object[] getChildren(Object parentElement) {
 
-				if(parentElement instanceof ProcessEntryContainer) {
-					return getElements(parentElement);
-				}
 				if(parentElement instanceof IProcessEntry) {
 					IProcessEntry entry = (IProcessEntry)parentElement;
 					IProcessSupplier<?> supplier = processingSupport.getSupplier(entry.getProcessorId());
 					if(supplier instanceof ProcessEntryContainer) {
-						return getElements(supplier);
+						return entryList((ProcessEntryContainer)supplier, true);
 					}
 				}
+				if(parentElement instanceof ProcessEntryContainer) {
+					return getElements(parentElement);
+				}
 				return new Object[0];
+			}
+		});
+		treeViewer.setComparer(new IElementComparer() {
+
+			@Override
+			public int hashCode(Object element) {
+
+				return System.identityHashCode(element);
+			}
+
+			@Override
+			public boolean equals(Object a, Object b) {
+
+				return a == b;
 			}
 		});
 		treeViewer.getTree();
 		treeViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		treeViewer.addSelectionChangedListener(event -> updateTableButtons());
+		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+
+				Object firstElement = treeViewer.getStructuredSelection().getFirstElement();
+				if(firstElement instanceof IProcessEntry) {
+					IProcessEntry entry = (IProcessEntry)firstElement;
+					if(modifyProcessEntry(treeViewer.getControl().getShell(), entry, getContext(entry, processingSupport), true)) {
+						updateProcessMethod();
+					}
+				}
+			}
+		});
 		listUI = treeViewer;
 	}
 
@@ -543,9 +594,9 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				if(processMethod != null) {
 					Map<ProcessSupplierContext, String> contextList = new LinkedHashMap<>();
 					Object element = listUI.getStructuredSelection().getFirstElement();
-					IProcessEntry selectedEntry = null;
-					if(element instanceof IProcessEntry) {
-						selectedEntry = (IProcessEntry)element;
+					ProcessEntry selectedEntry = null;
+					if(element instanceof ProcessEntry) {
+						selectedEntry = (ProcessEntry)element;
 						String id = selectedEntry.getProcessorId();
 						IProcessSupplier<?> supplier = processingSupport.getSupplier(id);
 						if(supplier instanceof ProcessSupplierContext) {
@@ -557,26 +608,17 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 					if(map != null) {
 						for(Entry<ProcessSupplierContext, IProcessEntry> entry : map.entrySet()) {
 							ProcessSupplierContext supplierContext = entry.getKey();
-							ProcessEntry newEntry = new ProcessEntry(entry.getValue());
-							boolean edit = modifyProcessEntry(getShell(), newEntry, supplierContext, false);
+							IProcessEntry editedEntry = entry.getValue();
+							boolean edit = modifyProcessEntry(getShell(), editedEntry, supplierContext, false);
 							if(!edit) {
 								continue;
 							}
+							ProcessEntry newEntry;
 							if(supplierContext == processingSupport) {
 								// add to global context
-								processMethod.addProcessEntry(newEntry);
+								processMethod.addProcessEntry(newEntry = new ProcessEntry(editedEntry, processMethod));
 							} else {
-								// must add to subcontext!
-								SubProcessEntry subEntry;
-								if(selectedEntry instanceof SubProcessEntry) {
-									subEntry = (SubProcessEntry)selectedEntry;
-								} else {
-									subEntry = new SubProcessEntry(selectedEntry);
-									List<IProcessEntry> entries = processMethod.getEntries();
-									entries.set(entries.indexOf(selectedEntry), subEntry);
-								}
-								newEntry.setParent(subEntry);
-								subEntry.getSubEntries().add(newEntry);
+								selectedEntry.addProcessEntry(newEntry = new ProcessEntry(editedEntry, selectedEntry));
 							}
 							updateProcessMethod();
 							select(Collections.singletonList(newEntry));
@@ -591,7 +633,14 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	public void loadMethodFile(IProcessMethod method) {
 
 		if(method != null) {
-			method.forEach(processMethod::addProcessEntry);
+			method.forEach(new Consumer<IProcessEntry>() {
+
+				@Override
+				public void accept(IProcessEntry entry) {
+
+					processMethod.addProcessEntry(new ProcessEntry(entry, processMethod));
+				}
+			});
 			updateProcessMethod();
 			select(method);
 		}
@@ -619,20 +668,21 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(processMethod != null) {
-					Iterator<?> selection = listUI.getStructuredSelection().iterator();
-					List<IProcessEntry> entries = processMethod.getEntries();
-					while(selection.hasNext()) {
-						Object object = selection.next();
+				Iterator<?> selection = listUI.getStructuredSelection().iterator();
+				while(selection.hasNext()) {
+					Object object = selection.next();
+					ListProcessEntryContainer container = getContainer(object);
+					if(container != null) {
+						List<IProcessEntry> entries = container.getEntries();
 						int index = entries.indexOf(object);
 						if(index > -1) {
 							IProcessEntry processEntry = entries.get(index);
-							IProcessEntry processEntryCopy = new ProcessEntry(processEntry);
+							IProcessEntry processEntryCopy = new ProcessEntry(processEntry, container);
 							entries.add(index, processEntryCopy);
 						}
 					}
-					updateProcessMethod();
 				}
+				updateProcessMethod();
 			}
 		});
 		//
@@ -649,17 +699,15 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(processMethod != null) {
-					if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Process Method(s)", "Would you like to delete the selected processor(s)?")) {
-						for(Object object : listUI.getStructuredSelection().toArray()) {
-							if(object instanceof IProcessEntry) {
-								IProcessEntry processEntry = (IProcessEntry)object;
-								processMethod.removeProcessEntry(processEntry);
-							}
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Process Method(s)", "Would you like to delete the selected processor(s)?")) {
+					for(Object object : listUI.getStructuredSelection().toArray()) {
+						ListProcessEntryContainer container = getContainer(object);
+						if(container != null) {
+							container.removeProcessEntry((IProcessEntry)object);
 						}
-						updateProcessMethod();
-						select(Collections.emptyList());
 					}
+					updateProcessMethod();
+					select(Collections.emptyList());
 				}
 			}
 		});
@@ -676,20 +724,21 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(processMethod != null) {
-					IStructuredSelection selection = listUI.getStructuredSelection();
-					List<IProcessEntry> entries = processMethod.getEntries();
-					Iterator<?> iterator = selection.iterator();
-					while(iterator.hasNext()) {
-						Object object = iterator.next();
+				IStructuredSelection selection = listUI.getStructuredSelection();
+				Iterator<?> iterator = selection.iterator();
+				while(iterator.hasNext()) {
+					Object object = iterator.next();
+					ListProcessEntryContainer container = getContainer(object);
+					if(container != null) {
+						List<IProcessEntry> entries = container.getEntries();
 						int index = entries.indexOf(object);
 						if(index > 0) {
 							Collections.swap(entries, index, index - 1);
 						}
 					}
-					updateProcessMethod();
-					listUI.setSelection(selection);
 				}
+				updateProcessMethod();
+				listUI.setSelection(selection);
 			}
 		});
 		//
@@ -706,20 +755,21 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(processMethod != null) {
-					IStructuredSelection selection = listUI.getStructuredSelection();
-					List<IProcessEntry> entries = processMethod.getEntries();
-					Iterator<?> iterator = selection.iterator();
-					while(iterator.hasNext()) {
-						Object object = iterator.next();
+				IStructuredSelection selection = listUI.getStructuredSelection();
+				Iterator<?> iterator = selection.iterator();
+				while(iterator.hasNext()) {
+					Object object = iterator.next();
+					ListProcessEntryContainer container = getContainer(object);
+					if(container != null) {
+						List<IProcessEntry> entries = container.getEntries();
 						int index = entries.indexOf(object);
 						if(index > -1 && index < entries.size() - 1) {
 							Collections.swap(entries, index, index + 1);
 						}
 					}
-					updateProcessMethod();
-					listUI.setSelection(selection);
 				}
+				updateProcessMethod();
+				listUI.setSelection(selection);
 			}
 		});
 		//
@@ -736,7 +786,14 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				executeModifySettings(toolBar.getShell());
+				if(processMethod != null) {
+					Object object = listUI.getStructuredSelection().getFirstElement();
+					if(object instanceof IProcessEntry) {
+						IProcessEntry processEntry = (IProcessEntry)object;
+						modifyProcessEntry(toolBar.getShell(), processEntry, getContext(processEntry, processingSupport), true);
+						updateProcessMethod();
+					}
+				}
 			}
 		});
 		//
@@ -768,20 +825,20 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		buttonAdd.setEnabled(processMethod != null);
 		//
 		IStructuredSelection selection = listUI.getStructuredSelection();
-		boolean enabled = processMethod != null && !selection.isEmpty();
+		boolean writeable = processMethod != null && !selection.isEmpty();
 		Iterator<?> iterator = selection.iterator();
-		while(iterator.hasNext() && enabled) {
+		while(iterator.hasNext() && writeable) {
 			Object object = iterator.next();
-			// we can only edit/delete direct process method items
-			if(processMethod.getEntries().indexOf(object) < 0) {
-				enabled = false;
+			ListProcessEntryContainer container = getContainer(object);
+			if(container == null) {
+				writeable = false;
 			}
 		}
-		buttonCopy.setEnabled(enabled);
-		buttonRemove.setEnabled(enabled);
-		buttonMoveUp.setEnabled(enabled);
-		buttonMoveDown.setEnabled(enabled);
-		buttonModifySettings.setEnabled(enabled);
+		buttonCopy.setEnabled(writeable);
+		buttonRemove.setEnabled(writeable);
+		buttonMoveUp.setEnabled(writeable);
+		buttonMoveDown.setEnabled(writeable);
+		buttonModifySettings.setEnabled(writeable);
 	}
 
 	@Override
@@ -797,6 +854,26 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		if(modificationHandler != null) {
 			modificationHandler.setDirty(dirty);
 		}
+	}
+
+	/**
+	 * 
+	 * @param object
+	 * @return the {@link ListProcessEntryContainer} for this object if available and not read-only, <code>null</code> otherwise
+	 */
+	private static final ListProcessEntryContainer getContainer(Object object) {
+
+		if(object instanceof IProcessEntry) {
+			IProcessEntry processEntry = (IProcessEntry)object;
+			ProcessEntryContainer parent = processEntry.getParent();
+			if(parent instanceof ListProcessEntryContainer) {
+				ListProcessEntryContainer container = (ListProcessEntryContainer)parent;
+				if(!container.isReadOnly()) {
+					return container;
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -852,17 +929,17 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		};
 	}
 
-	private void executeModifySettings(Shell shell) {
+	public static ProcessSupplierContext getContext(IProcessEntry entry, ProcessSupplierContext defaultContext) {
 
-		if(processMethod != null) {
-			Object object = listUI.getStructuredSelection().getFirstElement();
-			if(object instanceof IProcessEntry) {
-				IProcessEntry processEntry = (IProcessEntry)object;
-				// TODO... subentries
-				modifyProcessEntry(shell, processEntry, processingSupport, true);
-				updateProcessMethod();
+		ProcessEntryContainer container = entry.getParent();
+		if(container instanceof IProcessEntry) {
+			IProcessEntry parent = (IProcessEntry)container;
+			IProcessSupplier<?> supplier = getContext(parent, defaultContext).getSupplier(parent.getProcessorId());
+			if(supplier instanceof ProcessSupplierContext) {
+				return (ProcessSupplierContext)supplier;
 			}
 		}
+		return defaultContext;
 	}
 
 	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, ProcessSupplierContext supplierContext, boolean showHint) {

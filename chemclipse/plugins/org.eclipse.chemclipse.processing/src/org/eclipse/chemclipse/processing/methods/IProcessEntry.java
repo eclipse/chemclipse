@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - make unmodifiable except the Settings
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.methods;
 
@@ -19,19 +20,22 @@ public interface IProcessEntry {
 
 	String getProcessorId();
 
-	void setProcessorId(String processorId);
-
 	String getName();
-
-	void setName(String name);
 
 	String getDescription();
 
-	void setDescription(String description);
+	String getSettings();
 
-	String getJsonSettings();
+	/**
+	 * Set the settings for this entry
+	 * 
+	 * @param settings
+	 * @throws IllegalArgumentException
+	 *             if the entry is readonly
+	 */
+	void setSettings(String settings) throws IllegalArgumentException;
 
-	void setJsonSettings(String jsonSettings);
+	boolean isReadOnly();
 
 	ProcessEntryContainer getParent();
 

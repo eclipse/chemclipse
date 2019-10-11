@@ -37,7 +37,7 @@ public class MethodWriter_1001 extends AbstractMethodWriter {
 			writeString(dataOutputStream, processEntry.getProcessorId());
 			writeString(dataOutputStream, processEntry.getName());
 			writeString(dataOutputStream, processEntry.getDescription());
-			writeString(dataOutputStream, processEntry.getJsonSettings());
+			writeString(dataOutputStream, processEntry.getSettings());
 			// only for backward compat
 			dataOutputStream.writeInt(0);
 		}

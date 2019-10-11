@@ -35,18 +35,19 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
-import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class JobReader {
 
 	public BatchProcessJob read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
-		BatchProcessJob batchProcessJob = new BatchProcessJob();
+		ProcessMethod processMethod = new ProcessMethod();
+		BatchProcessJob batchProcessJob = new BatchProcessJob(processMethod);
 		try {
 			readHeader(file, batchProcessJob);
 			readChromatogramInputEntries(file, batchProcessJob, monitor);
-			readChromatogramProcessEntries(file, batchProcessJob, monitor);
+			readChromatogramProcessEntries(file, processMethod, monitor);
 		} catch(XMLStreamException e) {
 			throw new IOException(e);
 		}
@@ -142,9 +143,8 @@ public class JobReader {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void readChromatogramProcessEntries(File file, BatchProcessJob batchProcessJob, IProgressMonitor monitor) throws XMLStreamException, IOException {
+	private void readChromatogramProcessEntries(File file, ProcessMethod method, IProgressMonitor monitor) throws XMLStreamException, IOException {
 
-		IProcessEntry processEntry;
 		XMLEvent event;
 		Attribute attribute;
 		String attributeName;
@@ -190,12 +190,12 @@ public class JobReader {
 			/*
 			 * Create
 			 */
-			processEntry = new ProcessEntry();
+			ProcessEntry processEntry = new ProcessEntry(method);
 			processEntry.setProcessorId(id);
 			processEntry.setName(name);
 			processEntry.setDescription(description);
-			processEntry.setJsonSettings(jsonSettings);
-			batchProcessJob.getProcessMethod().addProcessEntry(processEntry);
+			processEntry.setSettings(jsonSettings);
+			method.addProcessEntry(processEntry);
 		}
 		/*
 		 * Close the streams.

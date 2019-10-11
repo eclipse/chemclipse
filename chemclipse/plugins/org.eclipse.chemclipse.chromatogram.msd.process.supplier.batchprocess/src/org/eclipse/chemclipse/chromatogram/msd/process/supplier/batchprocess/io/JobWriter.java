@@ -199,7 +199,7 @@ public class JobWriter {
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_ID, processEntry.getProcessorId()));
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_NAME, processEntry.getName()));
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_DESCRIPTION, processEntry.getDescription()));
-		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_JSON_SETTINGS, processEntry.getJsonSettings()));
+		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_JSON_SETTINGS, processEntry.getSettings()));
 		// not used, only for backward compat
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_SYMBOLIC_NAME, ""));
 		eventWriter.add(eventFactory.createAttribute(JobTags.PROCESSOR_CLASS_NAME, ""));

@@ -8,31 +8,31 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - remove empty settings in case of null
+ * Christoph Läubrich - refactoring to new object hierarchy
  *******************************************************************************/
 package org.eclipse.chemclipse.model.methods;
 
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 
-public class ProcessEntry implements IProcessEntry {
+public class ProcessEntry extends ListProcessEntryContainer implements IProcessEntry {
 
 	private String processorId = "";
 	private String name = "";
 	private String description = "";
 	private String jsonSettings = "";
-	private ProcessEntryContainer parent;
+	private final ProcessEntryContainer parent;
 
-	public ProcessEntry() {
+	public ProcessEntry(ProcessEntryContainer parent) {
+		this.parent = parent;
 	}
 
-	public ProcessEntry(IProcessEntry processEntry) {
-		if(processEntry != null) {
-			processorId = processEntry.getProcessorId();
-			name = processEntry.getName();
-			description = processEntry.getDescription();
-			jsonSettings = processEntry.getJsonSettings();
-		}
+	public ProcessEntry(IProcessEntry processEntry, ProcessEntryContainer newParent) {
+		processorId = processEntry.getProcessorId();
+		name = processEntry.getName();
+		description = processEntry.getDescription();
+		jsonSettings = processEntry.getSettings();
+		parent = newParent;
 	}
 
 	@Override
@@ -41,7 +41,6 @@ public class ProcessEntry implements IProcessEntry {
 		return processorId;
 	}
 
-	@Override
 	public void setProcessorId(String processorId) {
 
 		this.processorId = processorId;
@@ -53,7 +52,6 @@ public class ProcessEntry implements IProcessEntry {
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 
 		this.name = name;
@@ -65,14 +63,13 @@ public class ProcessEntry implements IProcessEntry {
 		return description;
 	}
 
-	@Override
 	public void setDescription(String description) {
 
 		this.description = description;
 	}
 
 	@Override
-	public String getJsonSettings() {
+	public String getSettings() {
 
 		if(jsonSettings == null) {
 			return "";
@@ -81,18 +78,27 @@ public class ProcessEntry implements IProcessEntry {
 	}
 
 	@Override
-	public void setJsonSettings(String jsonSettings) {
+	public void setSettings(String jsonSettings) {
 
 		this.jsonSettings = jsonSettings;
+	}
+
+	@Override
+	public ProcessEntryContainer getParent() {
+
+		return parent;
 	}
 
 	@Override
 	public int hashCode() {
 
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((processorId == null) ? 0 : processorId.hashCode());
+		int result = super.hashCode();
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((jsonSettings == null) ? 0 : jsonSettings.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((parent == null) ? 0 : System.identityHashCode(parent));
+		result = prime * result + ((processorId == null) ? 0 : processorId.hashCode());
 		return result;
 	}
 
@@ -102,18 +108,18 @@ public class ProcessEntry implements IProcessEntry {
 		if(this == obj) {
 			return true;
 		}
-		if(obj == null) {
+		if(!super.equals(obj)) {
 			return false;
 		}
 		if(getClass() != obj.getClass()) {
 			return false;
 		}
 		ProcessEntry other = (ProcessEntry)obj;
-		if(processorId == null) {
-			if(other.processorId != null) {
+		if(description == null) {
+			if(other.description != null) {
 				return false;
 			}
-		} else if(!processorId.equals(other.processorId)) {
+		} else if(!description.equals(other.description)) {
 			return false;
 		}
 		if(jsonSettings == null) {
@@ -123,23 +129,45 @@ public class ProcessEntry implements IProcessEntry {
 		} else if(!jsonSettings.equals(other.jsonSettings)) {
 			return false;
 		}
+		if(name == null) {
+			if(other.name != null) {
+				return false;
+			}
+		} else if(!name.equals(other.name)) {
+			return false;
+		}
+		if(parent == null) {
+			if(other.parent != null) {
+				return false;
+			}
+		} else if(parent != other.parent) {
+			return false;
+		}
+		if(processorId == null) {
+			if(other.processorId != null) {
+				return false;
+			}
+		} else if(!processorId.equals(other.processorId)) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
 
-		return "ProcessMethod [processorId=" + processorId + ", name=" + name + ", description=" + description + ", jsonSettings=" + jsonSettings + "]";
-	}
-
-	@Override
-	public ProcessEntryContainer getParent() {
-
-		return parent;
-	}
-
-	public void setParent(ProcessEntryContainer parent) {
-
-		this.parent = parent;
+		StringBuilder builder = new StringBuilder();
+		builder.append("ProcessEntry [processorId=");
+		builder.append(processorId);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", description=");
+		builder.append(description);
+		builder.append(", jsonSettings=");
+		builder.append(jsonSettings);
+		builder.append(", parent=");
+		builder.append(parent);
+		builder.append("]");
+		return builder.toString();
 	}
 }
