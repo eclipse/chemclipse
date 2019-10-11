@@ -75,40 +75,4 @@ public class ListProcessEntryContainer implements ProcessEntryContainer {
 
 		this.readOnly = readOnly;
 	}
-
-	@Override
-	public int hashCode() {
-
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((entries == null) ? 0 : entries.hashCode());
-		result = prime * result + (readOnly ? 1231 : 1237);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-
-		if(this == obj) {
-			return true;
-		}
-		if(obj == null) {
-			return false;
-		}
-		if(getClass() != obj.getClass()) {
-			return false;
-		}
-		ListProcessEntryContainer other = (ListProcessEntryContainer)obj;
-		if(entries == null) {
-			if(other.entries != null) {
-				return false;
-			}
-		} else if(!entries.equals(other.entries)) {
-			return false;
-		}
-		if(readOnly != other.readOnly) {
-			return false;
-		}
-		return true;
-	}
 }

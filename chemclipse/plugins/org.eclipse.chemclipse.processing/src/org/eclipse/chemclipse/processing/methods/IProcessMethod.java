@@ -46,4 +46,48 @@ public interface IProcessMethod extends ProcessEntryContainer {
 	 * @return the human readable description of this method
 	 */
 	String getDescription();
+
+	/**
+	 * a method marked as final is one that is approved or otherwise locked for further modifications and will stay constant over time
+	 * 
+	 * @return <code>true</code> if this is a final method or <code>false</code> otherwise
+	 */
+	boolean isFinal();
+
+	/**
+	 * Compares that this process methods content equals the other process method, the default implementation compares {@link #getName()}, {@link #getCategory()}, {@link #getDescription()}, {@link #getOperator()} and all contained {@link IProcessEntry}s, {@link #isFinal()}
+	 * this method is different to {@link #equals(Object)} that it does compares for user visible properties to be equal in contrast to objects identity and it allows to compare different instance type, this also means that it is not required that
+	 * Object1.contentEquals(Object2} == Object2.contentEquals(Object1}
+	 * 
+	 * @param other
+	 * @return
+	 */
+	default boolean contentEquals(IProcessMethod other) {
+
+		if(other == null) {
+			return false;
+		}
+		if(other == this) {
+			return true;
+		}
+		if(isFinal() != other.isFinal()) {
+			return false;
+		}
+		if(!getName().equals(other.getName())) {
+			return false;
+		}
+		if(!getCategory().equals(other.getCategory())) {
+			return false;
+		}
+		if(!getDescription().equals(other.getDescription())) {
+			return false;
+		}
+		if(!getOperator().equals(other.getOperator())) {
+			return false;
+		}
+		if(getNumberOfEntries() != other.getNumberOfEntries()) {
+			return false;
+		}
+		return ProcessEntryContainer.super.contentEquals(other);
+	}
 }

@@ -120,6 +120,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	protected boolean showSettingsOnAdd;
 	private final ProcessSupplierContext processingSupport;
 	private final DataType[] dataTypes;
+	private Button buttonFinalize;
 
 	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, DataType[] dataTypes) {
 		super(parent, style);
@@ -389,8 +390,34 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		textOperator = createOperatorSection(composite);
 		textDescription = createDescriptionSection(composite);
 		textCategory = createCategorySection(composite);
+		buttonFinalize = createFinalize(composite);
 		//
 		return composite;
+	}
+
+	private Button createFinalize(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("Finalized:");
+		Button button = new Button(parent, SWT.CHECK);
+		button.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(MessageDialog.openConfirm(parent.getShell(), "Finalize Process Method", "Finalize a method prevents further modifications to this method, are you sure?")) {
+					updateProcessMethod();
+				} else {
+					button.setSelection(false);
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+		return button;
 	}
 
 	private void createTable(Composite parent) {
@@ -699,7 +726,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Process Method(s)", "Would you like to delete the selected processor(s)?")) {
+				if(MessageDialog.openQuestion(toolBar.getShell(), "Delete Process Method(s)", "Would you like to delete the selected processor(s)?")) {
 					for(Object object : listUI.getStructuredSelection().toArray()) {
 						ListProcessEntryContainer container = getContainer(object);
 						if(container != null) {
@@ -807,6 +834,15 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			textDescription.setText(processMethod.getDescription());
 			textCategory.setText(processMethod.getCategory());
 			textName.setText(processMethod.getName());
+			boolean readOnly = buttonFinalize.getSelection();
+			if(readOnly) {
+				processMethod.setReadOnly(readOnly);
+				textOperator.setEnabled(false);
+				textDescription.setEnabled(false);
+				textCategory.setEnabled(false);
+				textName.setEnabled(false);
+				buttonFinalize.setEnabled(false);
+			}
 		} else {
 			textOperator.setText("");
 			textDescription.setText("");
@@ -822,10 +858,10 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	private void updateTableButtons() {
 
-		buttonAdd.setEnabled(processMethod != null);
+		buttonAdd.setEnabled(processMethod != null && !processMethod.isFinal());
 		//
 		IStructuredSelection selection = listUI.getStructuredSelection();
-		boolean writeable = processMethod != null && !selection.isEmpty();
+		boolean writeable = processMethod != null && !processMethod.isFinal() && !selection.isEmpty();
 		Iterator<?> iterator = selection.iterator();
 		while(iterator.hasNext() && writeable) {
 			Object object = iterator.next();

@@ -47,4 +47,57 @@ public interface IProcessEntry {
 		}
 		return new ProcessEntryProcessorPreferences<>(supplier, entry);
 	}
+
+	/**
+	 * Compares this entry content to the other entries content, the default implementation compares {@link #getName()}, {@link #getDescription()}, {@link #getSettings()}, {@link #isReadOnly()} {@link #getProcessorId()},
+	 * this method is different to {@link #equals(Object)} that it does compares for user visible properties to be equal in contrast to objects identity and it allows to compare differnt instance type, this also means that it is not required that
+	 * Object1.contentEquals(Object2} == Object2.contentEquals(Object1}
+	 * 
+	 * @param other
+	 * @return
+	 */
+	default boolean contentEquals(IProcessEntry other) {
+
+		if(other == null) {
+			return false;
+		}
+		if(other == this) {
+			return true;
+		}
+		if(isReadOnly() != other.isReadOnly()) {
+			return false;
+		}
+		if(!getName().equals(other.getName())) {
+			return false;
+		}
+		if(!getDescription().equals(other.getDescription())) {
+			return false;
+		}
+		String settings = getSettings();
+		if(settings == null) {
+			settings = "";
+		}
+		String otherSettings = other.getSettings();
+		if(otherSettings == null) {
+			otherSettings = "";
+		}
+		if(!otherSettings.equals(settings)) {
+			return false;
+		}
+		if(!getProcessorId().equals(other.getProcessorId())) {
+			return false;
+		}
+		if(this instanceof ProcessEntryContainer) {
+			ProcessEntryContainer container = (ProcessEntryContainer)this;
+			if(other instanceof ProcessEntryContainer) {
+				container.contentEquals((ProcessEntryContainer)other);
+			} else {
+				return container.getNumberOfEntries() == 0;
+			}
+		} else if(other instanceof ProcessEntryContainer) {
+			ProcessEntryContainer container = (ProcessEntryContainer)other;
+			return container.getNumberOfEntries() == 0;
+		}
+		return true;
+	}
 }

@@ -78,10 +78,15 @@ public class ProcessMethodEditor implements IModificationHandler {
 
 		if(processMethodFile != null) {
 			IProcessMethod oldMethod = currentProcessMethod;
-			ProcessMethod newMethod = new ProcessMethod(extendedMethodUI.getProcessMethod());
+			IProcessMethod editedMethod = extendedMethodUI.getProcessMethod();
+			ProcessMethod newMethod = new ProcessMethod(editedMethod);
 			newMethod.setSourceFile(processMethodFile);
 			// copy the UUID from the old method to keep the file consistent
 			newMethod.setUUID(oldMethod.getUUID());
+			// copy the readOnlyFlag
+			if(editedMethod.isFinal()) {
+				newMethod.setReadOnly(editedMethod.isFinal());
+			}
 			IProcessingInfo<?> info = MethodConverter.convert(processMethodFile, newMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
 			if(info.hasErrorMessages()) {
 				ProcessingInfoViewSupport.updateProcessingInfo(info);
@@ -115,6 +120,6 @@ public class ProcessMethodEditor implements IModificationHandler {
 	@Override
 	public void setDirty(boolean dirty) {
 
-		dirtyable.setDirty(!extendedMethodUI.getProcessMethod().equals(currentProcessMethod));
+		dirtyable.setDirty(!extendedMethodUI.getProcessMethod().contentEquals(currentProcessMethod));
 	}
 }

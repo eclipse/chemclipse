@@ -24,7 +24,6 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	private String name;
 	private String category;
 	private File sourceFile;
-	private boolean readonly = false;
 
 	public ProcessMethod() {
 	}
@@ -114,17 +113,6 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	}
 
 	@Override
-	public boolean isReadOnly() {
-
-		return readonly;
-	}
-
-	public void setReadonly(boolean readonly) {
-
-		this.readonly = readonly;
-	}
-
-	@Override
 	public String getUUID() {
 
 		return UUID;
@@ -136,78 +124,17 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	}
 
 	@Override
-	public int hashCode() {
+	public boolean isFinal() {
 
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((UUID == null) ? 0 : UUID.hashCode());
-		result = prime * result + ((category == null) ? 0 : category.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((operator == null) ? 0 : operator.hashCode());
-		result = prime * result + (readonly ? 1231 : 1237);
-		result = prime * result + ((sourceFile == null) ? 0 : sourceFile.hashCode());
-		return result;
+		return isReadOnly();
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public void setReadOnly(boolean readOnly) {
 
-		if(this == obj) {
-			return true;
+		if(isFinal() && !readOnly) {
+			throw new IllegalStateException("This process method is finalized");
 		}
-		if(!super.equals(obj)) {
-			return false;
-		}
-		if(getClass() != obj.getClass()) {
-			return false;
-		}
-		ProcessMethod other = (ProcessMethod)obj;
-		if(UUID == null) {
-			if(other.UUID != null) {
-				return false;
-			}
-		} else if(!UUID.equals(other.UUID)) {
-			return false;
-		}
-		if(category == null) {
-			if(other.category != null) {
-				return false;
-			}
-		} else if(!category.equals(other.category)) {
-			return false;
-		}
-		if(description == null) {
-			if(other.description != null) {
-				return false;
-			}
-		} else if(!description.equals(other.description)) {
-			return false;
-		}
-		if(name == null) {
-			if(other.name != null) {
-				return false;
-			}
-		} else if(!name.equals(other.name)) {
-			return false;
-		}
-		if(operator == null) {
-			if(other.operator != null) {
-				return false;
-			}
-		} else if(!operator.equals(other.operator)) {
-			return false;
-		}
-		if(readonly != other.readonly) {
-			return false;
-		}
-		if(sourceFile == null) {
-			if(other.sourceFile != null) {
-				return false;
-			}
-		} else if(!sourceFile.equals(other.sourceFile)) {
-			return false;
-		}
-		return true;
+		super.setReadOnly(readOnly);
 	}
 }
