@@ -66,7 +66,6 @@ import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -496,20 +495,6 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 					return getElements(parentElement);
 				}
 				return new Object[0];
-			}
-		});
-		treeViewer.setComparer(new IElementComparer() {
-
-			@Override
-			public int hashCode(Object element) {
-
-				return System.identityHashCode(element);
-			}
-
-			@Override
-			public boolean equals(Object a, Object b) {
-
-				return a == b;
 			}
 		});
 		treeViewer.getTree();

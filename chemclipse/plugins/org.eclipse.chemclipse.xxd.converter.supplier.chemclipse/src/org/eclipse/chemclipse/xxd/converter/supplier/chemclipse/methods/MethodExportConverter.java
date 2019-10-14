@@ -14,29 +14,29 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.methods;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 
-import org.eclipse.chemclipse.converter.methods.AbstractMethodExportConverter;
+import org.eclipse.chemclipse.converter.core.AbstractExportConverter;
 import org.eclipse.chemclipse.converter.methods.IMethodExportConverter;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.IMethodWriter;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodWriter_1001;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MethodExportConverter extends AbstractMethodExportConverter<File> implements IMethodExportConverter<File> {
+public class MethodExportConverter extends AbstractExportConverter implements IMethodExportConverter {
+
+	private static final IMethodWriter WRITER = new MethodWriter_1001();
 
 	@Override
-	public IProcessingInfo<File> convert(File file, IProcessMethod processMethod, IProgressMonitor monitor) {
+	public void convert(File file, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {
 
-		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
-		try {
-			IMethodWriter writer = new MethodWriter_1001();
-			writer.convert(file, processMethod, monitor);
-			processingInfo.setProcessingResult(file);
-		} catch(IOException e) {
-			processingInfo.addErrorMessage("Method Converter (*.ocm)", "Something has gone wrong to write the file: " + file, e);
-		}
-		return processingInfo;
+		WRITER.convert(file, processMethod, messages, monitor);
+	}
+
+	@Override
+	public void convert(OutputStream stream, String nameHint, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {
+
+		WRITER.convert(stream, nameHint, processMethod, messages, monitor);
 	}
 }

@@ -8,13 +8,17 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - javadoc
+ * Christoph Läubrich - stream support
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -24,9 +28,21 @@ public interface IMethodReader {
 	 * try to convert the given file
 	 * 
 	 * @param file
+	 * @param consumer
 	 * @param monitor
 	 * @return <code>null</code> if this reader is not valid for the given file
 	 * @throws IOException
 	 */
-	IProcessMethod convert(File file, IProgressMonitor monitor) throws IOException;
+	default IProcessMethod convert(File file, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
+
+		try (FileInputStream stream = new FileInputStream(file)) {
+			IProcessMethod method = convert(stream, file.getName(), consumer, monitor);
+			if(method instanceof ProcessMethod) {
+				((ProcessMethod)method).setSourceFile(file);
+			}
+			return method;
+		}
+	}
+
+	IProcessMethod convert(InputStream stream, String nameHint, MessageConsumer consumer, IProgressMonitor monitor) throws IOException;
 }

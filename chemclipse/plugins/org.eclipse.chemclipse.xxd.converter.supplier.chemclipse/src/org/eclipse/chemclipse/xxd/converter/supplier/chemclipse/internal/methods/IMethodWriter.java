@@ -13,12 +13,22 @@
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMethodWriter {
 
-	void convert(File file, IProcessMethod processMethod, IProgressMonitor monitor) throws IOException;
+	default void convert(File file, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {
+
+		try (FileOutputStream stream = new FileOutputStream(file)) {
+			convert(stream, file.getName(), processMethod, messages, monitor);
+		}
+	}
+
+	void convert(OutputStream stream, String nameHint, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException;
 }

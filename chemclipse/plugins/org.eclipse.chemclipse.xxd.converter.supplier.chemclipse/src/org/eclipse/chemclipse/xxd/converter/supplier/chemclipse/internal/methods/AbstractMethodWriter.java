@@ -17,9 +17,11 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
@@ -27,14 +29,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractMethodWriter implements IMethodWriter {
 
-	private String version;
+	private final String version;
 
 	public AbstractMethodWriter(String version) {
 		this.version = version;
 	}
 
 	@Override
-	public void convert(File file, IProcessMethod processMethod, IProgressMonitor monitor) throws IOException {
+	public void convert(File file, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {
 
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(fileOutputStream));
@@ -90,5 +92,11 @@ public abstract class AbstractMethodWriter implements IMethodWriter {
 
 		dataOutputStream.writeInt(value.length()); // Value Length
 		dataOutputStream.writeChars(value); // Value
+	}
+
+	@Override
+	public void convert(OutputStream stream, String nameHint, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {
+
+		messages.addErrorMessage(getClass().getName(), "Writing to stream is not supported by this converter");
 	}
 }

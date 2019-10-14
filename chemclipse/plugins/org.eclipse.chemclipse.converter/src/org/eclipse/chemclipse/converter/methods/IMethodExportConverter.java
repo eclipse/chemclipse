@@ -9,22 +9,28 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - Stream support
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import org.eclipse.chemclipse.converter.core.IExportConverter;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public interface IMethodExportConverter<R> extends IExportConverter {
+public interface IMethodExportConverter extends IExportConverter {
 
-	IProcessingInfo<R> convert(File file, IProcessMethod processMethod, IProgressMonitor monitor);
+	default void convert(File file, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {
+
+		try (FileOutputStream stream = new FileOutputStream(file)) {
+			convert(stream, file.getName(), processMethod, messages, monitor);
+		}
+	}
 
 	/**
 	 * writes the given method to the {@link OutputStream}
@@ -32,14 +38,8 @@ public interface IMethodExportConverter<R> extends IExportConverter {
 	 * @param stream
 	 * @param nameHint
 	 * @param monitor
-	 * @return a {@link IProcessingInfo} containing the result of the conversion process
 	 * @throws IOException
 	 *             in case of an IOError while reading streams
 	 */
-	default IProcessingInfo<R> convert(OutputStream stream, String nameHint, IProcessMethod processMethod, IProgressMonitor monitor) throws IOException {
-
-		ProcessingInfo<R> processingInfo = new ProcessingInfo<>();
-		processingInfo.addErrorMessage("Can't write " + nameHint, "This Converter does currentyl not supports the new stream API");
-		return processingInfo;
-	}
+	void convert(OutputStream stream, String nameHint, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException;
 }

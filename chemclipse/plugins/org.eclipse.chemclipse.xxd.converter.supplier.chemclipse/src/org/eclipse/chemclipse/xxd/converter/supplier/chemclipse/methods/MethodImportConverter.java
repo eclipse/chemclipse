@@ -8,14 +8,16 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - improve log output
+ * Christoph Läubrich - add stream support
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.methods;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
-import org.eclipse.chemclipse.converter.methods.AbstractMethodImportConverter;
+import org.eclipse.chemclipse.converter.core.AbstractImportConverter;
+import org.eclipse.chemclipse.converter.methods.IMethodImportConverter;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
@@ -25,28 +27,41 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
-public class MethodImportConverter extends AbstractMethodImportConverter<IProcessMethod> {
+public class MethodImportConverter extends AbstractImportConverter implements IMethodImportConverter {
 
 	private static IMethodReader[] READER = new IMethodReader[]{new MethodReader_1001(), new MethodReader_1000()};
 
 	@Override
-	public IProcessingInfo<IProcessMethod> convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IProcessMethod> convert(File file, IProgressMonitor monitor) throws IOException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, READER.length * 100);
-		try {
-			for(IMethodReader reader : READER) {
-				IProcessMethod processMethod = reader.convert(file, subMonitor.split(100));
-				if(processMethod != null) {
-					return new ProcessingInfo<IProcessMethod>(processMethod);
-				}
+		for(IMethodReader reader : READER) {
+			ProcessingInfo<IProcessMethod> info = new ProcessingInfo<IProcessMethod>();
+			IProcessMethod processMethod = reader.convert(file, info, subMonitor.split(100));
+			if(processMethod != null) {
+				info.setProcessingResult(processMethod);
+				return info;
 			}
-		} catch(IOException e) {
-			ProcessingInfo<IProcessMethod> info = new ProcessingInfo<>();
-			info.addErrorMessage("Method Converter (*.ocm)", "Something has gone wrong to read the file: " + file, e);
-			return info;
 		}
 		ProcessingInfo<IProcessMethod> info = new ProcessingInfo<>();
-		info.addErrorMessage("Method Converter (*.ocm)", "No avaiable converter could read: " + file);
+		info.addErrorMessage("Method Converter (*.ocm)", "No avaiable format could read: " + file);
+		return info;
+	}
+
+	@Override
+	public IProcessingInfo<IProcessMethod> readFrom(InputStream stream, String nameHint, IProgressMonitor monitor) throws IOException {
+
+		SubMonitor subMonitor = SubMonitor.convert(monitor, READER.length * 100);
+		for(IMethodReader reader : READER) {
+			ProcessingInfo<IProcessMethod> info = new ProcessingInfo<IProcessMethod>();
+			IProcessMethod processMethod = reader.convert(stream, nameHint, info, subMonitor.split(100));
+			if(processMethod != null) {
+				info.setProcessingResult(processMethod);
+				return info;
+			}
+		}
+		ProcessingInfo<IProcessMethod> info = new ProcessingInfo<>();
+		info.addErrorMessage("Method Converter (*.ocm)", "No avaiable format could read: " + nameHint);
 		return info;
 	}
 }

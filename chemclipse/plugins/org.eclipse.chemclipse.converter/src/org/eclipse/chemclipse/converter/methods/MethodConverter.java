@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,15 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - Stream support
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +27,7 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.Adapters;
@@ -30,9 +36,14 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SubMonitor;
 
 public class MethodConverter {
 
+	private static final String NAME_IMPORT = "Method Import Converter";
+	private static final String NAME_EXPORT = "Method Export Converter";
+	// 5MB should be enough for all cases and don't hurt much...
+	private static final int STREAM_BUFFER_SIZE = 1024 * 1024 * 5;
 	/*
 	 * Keep in sync with:
 	 * org.eclipse.chemclipse.xxd.converter.supplier.chemclipse
@@ -65,7 +76,7 @@ public class MethodConverter {
 	private MethodConverter() {
 	}
 
-	public static IProcessingInfo convert(final File file, IProgressMonitor monitor) {
+	public static IProcessingInfo<IProcessMethod> convert(final File file, IProgressMonitor monitor) {
 
 		MethodConverterSupport converterSupport = getMethodConverterSupport();
 		for(ISupplier supplier : converterSupport.getSupplier()) {
@@ -80,36 +91,88 @@ public class MethodConverter {
 		return getNoImportConverterAvailableProcessingInfo(file);
 	}
 
-	public static IProcessingInfo convert(final File file, final String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IProcessMethod> convert(final File file, final String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IProcessMethod> processingInfo;
 		IMethodImportConverter importConverter = getMethodImportConverter(converterId);
 		if(importConverter != null) {
-			processingInfo = importConverter.convert(file, monitor);
+			try {
+				processingInfo = importConverter.convert(file, monitor);
+			} catch(IOException e) {
+				ProcessingInfo<IProcessMethod> info = new ProcessingInfo<>();
+				info.addErrorMessage(NAME_IMPORT, "can't read file " + file, e);
+				return info;
+			}
 		} else {
 			processingInfo = getNoImportConverterAvailableProcessingInfo(file);
 		}
 		return processingInfo;
 	}
 
-	public static IProcessingInfo convert(File file, IProcessMethod processMethod, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IProcessMethod> load(InputStream stream, String nameHint, IProgressMonitor monitor) throws IOException {
 
-		IProcessingInfo processingInfo = null;
+		if(!stream.markSupported()) {
+			stream = new BufferedInputStream(stream, STREAM_BUFFER_SIZE);
+		}
 		MethodConverterSupport converterSupport = getMethodConverterSupport();
-		exitloop:
+		List<ISupplier> list = converterSupport.getSupplier();
+		SubMonitor subMonitor = SubMonitor.convert(monitor, list.size() * 100);
+		IProcessingInfo<IProcessMethod> errors = getNoImportConverterAvailableProcessingInfo(nameHint);
+		for(ISupplier supplier : list) {
+			IMethodImportConverter converter = getMethodImportConverter(supplier.getId());
+			if(converter == null) {
+				continue;
+			}
+			IProcessingInfo<IProcessMethod> info = converter.readFrom(stream, nameHint, subMonitor.split(100));
+			if(info == null) {
+				continue;
+			}
+			if(info.hasErrorMessages() || info.getProcessingResult() == null) {
+				errors.addMessages(info);
+				continue;
+			}
+			return info;
+		}
+		//
+		return errors;
+	}
+
+	public static void store(OutputStream stream, String nameHint, IProcessMethod processMethod, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
+
+		store(stream, nameHint, processMethod, DEFAULT_METHOD_CONVERTER_ID, consumer, monitor);
+	}
+
+	public static void store(OutputStream stream, String nameHint, IProcessMethod processMethod, String converterId, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
+
+		MethodConverterSupport converterSupport = getMethodConverterSupport();
 		for(ISupplier supplier : converterSupport.getSupplier()) {
 			if(supplier.isExportable() && supplier.getId().equals(converterId)) {
 				IMethodExportConverter exportConverter = getMethodExportConverter(converterId);
-				processingInfo = exportConverter.convert(file, processMethod, monitor);
-				break exitloop;
+				exportConverter.convert(stream, nameHint, processMethod, consumer, monitor);
+				return;
 			}
 		}
-		//
-		if(processingInfo == null) {
-			processingInfo = getNoExportConverterAvailableProcessingInfo(file);
+		consumer.addMessages(getNoExportConverterAvailableProcessingInfo(nameHint));
+	}
+
+	public static IProcessingInfo<Void> convert(File file, IProcessMethod processMethod, String converterId, IProgressMonitor monitor) {
+
+		MethodConverterSupport converterSupport = getMethodConverterSupport();
+		for(ISupplier supplier : converterSupport.getSupplier()) {
+			if(supplier.isExportable() && supplier.getId().equals(converterId)) {
+				IProcessingInfo<Void> processingInfo = new ProcessingInfo<>();
+				IMethodExportConverter exportConverter = getMethodExportConverter(converterId);
+				try {
+					exportConverter.convert(file, processMethod, processingInfo, monitor);
+				} catch(IOException e) {
+					ProcessingInfo<Void> info = new ProcessingInfo<>();
+					info.addErrorMessage(NAME_EXPORT, "can't write file " + file, e);
+					return info;
+				}
+				return processingInfo;
+			}
 		}
-		//
-		return processingInfo;
+		return getNoExportConverterAvailableProcessingInfo(file);
 	}
 
 	private static IMethodImportConverter getMethodImportConverter(final String converterId) {
@@ -179,17 +242,27 @@ public class MethodConverter {
 		return converterSupport;
 	}
 
-	private static IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
+	private static <T> IProcessingInfo<T> getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addErrorMessage("Method Import Converter", "There is no suitable converter available to load the method from the file: " + file.getAbsolutePath());
+		return getNoImportConverterAvailableProcessingInfo("the file: " + file.getAbsolutePath());
+	}
+
+	private static <T> IProcessingInfo<T> getNoImportConverterAvailableProcessingInfo(String hint) {
+
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
+		processingInfo.addErrorMessage(NAME_IMPORT, "There is no suitable converter available to load the method from " + hint);
 		return processingInfo;
 	}
 
-	private static IProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
+	private static <T> IProcessingInfo<T> getNoExportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addErrorMessage("Method Export Converter", "There is no suitable converter available to write the method to the file: " + file.getAbsolutePath());
+		return getNoExportConverterAvailableProcessingInfo("the file: " + file.getAbsolutePath());
+	}
+
+	private static <T> IProcessingInfo<T> getNoExportConverterAvailableProcessingInfo(String nameHint) {
+
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
+		processingInfo.addErrorMessage(NAME_EXPORT, "There is no suitable converter available to write the method to " + nameHint);
 		return processingInfo;
 	}
 
