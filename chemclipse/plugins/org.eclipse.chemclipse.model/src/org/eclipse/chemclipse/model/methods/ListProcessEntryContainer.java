@@ -26,6 +26,8 @@ public class ListProcessEntryContainer implements ProcessEntryContainer {
 	private final List<IProcessEntry> entries = new ArrayList<>();
 	private final List<IProcessEntry> view = Collections.unmodifiableList(entries);
 	private boolean readOnly;
+	private String description;
+	private String name;
 
 	@Override
 	public Iterator<IProcessEntry> iterator() {
@@ -37,6 +39,34 @@ public class ListProcessEntryContainer implements ProcessEntryContainer {
 	public int getNumberOfEntries() {
 
 		return entries.size();
+	}
+
+	@Override
+	public String getDescription() {
+
+		if(description == null) {
+			return "";
+		}
+		return description;
+	}
+
+	public void setDescription(String description) {
+
+		this.description = description;
+	}
+
+	@Override
+	public String getName() {
+
+		if(name == null) {
+			return "";
+		}
+		return name;
+	}
+
+	public void setName(String name) throws IllegalStateException {
+
+		this.name = name;
 	}
 
 	/**

@@ -27,4 +27,8 @@ public interface TableConfig {
 	 * @return a set of columns available for this table config
 	 */
 	Set<String> getColumns();
+
+	int getColumWidth(String column);
+
+	void setColumWidth(String column, int width);
 }

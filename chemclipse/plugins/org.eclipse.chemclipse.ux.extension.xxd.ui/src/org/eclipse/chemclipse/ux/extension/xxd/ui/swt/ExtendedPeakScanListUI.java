@@ -899,7 +899,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 
 		return new PeakScanListUIConfig() {
 
-			TableConfigSupport tableConfig = new TableConfigSupport(peakScanListUI);
+			TableConfigSupport tableConfig = new TableConfigSupport(peakScanListUI::getTableViewerColumns);
 
 			@Override
 			public void setToolbarVisible(boolean visible) {
@@ -961,6 +961,18 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			public Set<String> getColumns() {
 
 				return tableConfig.getColumns();
+			}
+
+			@Override
+			public int getColumWidth(String column) {
+
+				return tableConfig.getColumWidth(column);
+			}
+
+			@Override
+			public void setColumWidth(String column, int width) {
+
+				tableConfig.setColumWidth(column, width);
 			}
 		};
 	}

@@ -29,8 +29,6 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	public static final Set<DataCategory> NMR = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(DataCategory.FID, DataCategory.NMR)));
 	private String UUID = java.util.UUID.randomUUID().toString();
 	private String operator;
-	private String description;
-	private String name;
 	private String category;
 	private File sourceFile;
 	private Set<DataCategory> catgories;
@@ -56,9 +54,9 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	public ProcessMethod(IProcessMethod other) {
 		if(other != null) {
 			this.operator = other.getOperator();
-			this.description = other.getDescription();
+			setDescription(other.getDescription());
 			this.category = other.getCategory();
-			this.name = other.getName();
+			setName(other.getName());
 			other.forEach(otherEntry -> getEntries().add(new ProcessEntry(otherEntry, this)));
 			if(other instanceof ProcessMethod) {
 				this.sourceFile = ((ProcessMethod)other).sourceFile;
@@ -83,22 +81,9 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	}
 
 	@Override
-	public String getDescription() {
-
-		if(description == null) {
-			return "";
-		}
-		return description;
-	}
-
-	public void setDescription(String description) {
-
-		this.description = description;
-	}
-
-	@Override
 	public String getName() {
 
+		String name = super.getName();
 		if(name == null || name.isEmpty()) {
 			if(sourceFile != null) {
 				return sourceFile.getName();
@@ -106,11 +91,6 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 			return "";
 		}
 		return name;
-	}
-
-	public void setName(String name) throws IllegalStateException {
-
-		this.name = name;
 	}
 
 	@Override

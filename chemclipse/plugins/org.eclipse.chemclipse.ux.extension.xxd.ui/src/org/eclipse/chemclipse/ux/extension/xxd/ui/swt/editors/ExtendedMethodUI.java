@@ -47,6 +47,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.MethodListLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
@@ -71,6 +72,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -120,6 +122,8 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private final ProcessSupplierContext processingSupport;
 	private final DataType[] dataTypes;
 	private Button buttonFinalize;
+	private ProcessEntryContainer postActions;
+	private TreeViewerColumn[] columns = new TreeViewerColumn[MethodListLabelProvider.TITLES.length];
 
 	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, DataType[] dataTypes) {
 		super(parent, style);
@@ -130,7 +134,12 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	public void setProcessMethod(IProcessMethod processMethod) {
 
-		// we work on a copy here
+		setInputs(processMethod, null);
+	}
+
+	public void setInputs(IProcessMethod processMethod, ProcessEntryContainer postActions) {
+
+		this.postActions = postActions;
 		this.processMethod = new ProcessMethod(processMethod);
 		updateProcessMethod();
 	}
@@ -423,7 +432,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 		TreeViewer treeViewer = createTreeTable(parent, false);
 		for(int i = 0; i < MethodListLabelProvider.TITLES.length; i++) {
-			createColumn(treeViewer, MethodListLabelProvider.TITLES[i], MethodListLabelProvider.BOUNDS[i], null);
+			columns[i] = createColumn(treeViewer, MethodListLabelProvider.TITLES[i], MethodListLabelProvider.BOUNDS[i], null);
 		}
 		treeViewer.setLabelProvider(new MethodListLabelProvider(processingSupport));
 		treeViewer.setContentProvider(new ITreeContentProvider() {
@@ -459,6 +468,9 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				if(inputElement instanceof ProcessEntryContainer) {
 					ProcessEntryContainer container = (ProcessEntryContainer)inputElement;
 					return entryList(container, false);
+				}
+				if(inputElement instanceof Object[]) {
+					return (Object[])inputElement;
 				}
 				return new Object[0];
 			}
@@ -834,9 +846,19 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			textCategory.setText("");
 			textName.setText("");
 		}
-		//
-		listUI.setInput(processMethod);
+		boolean expand = false;
+		if(postActions == null) {
+			listUI.setInput(processMethod);
+		} else {
+			listUI.setInput(new Object[]{processMethod, postActions});
+			expand = true;
+		}
 		listUI.refresh();
+		if(listUI instanceof TreeViewer) {
+			if(expand) {
+				((TreeViewer)listUI).expandToLevel(1);
+			}
+		}
 		updateTableButtons();
 		setDirty(true);
 	}
@@ -902,6 +924,8 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 		return new MethodUIConfig() {
 
+			TableConfigSupport support = new TableConfigSupport(Arrays.asList(columns));
+
 			@Override
 			public void setToolbarVisible(boolean visible) {
 
@@ -917,6 +941,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void setVisibleColumns(Set<String> visibleColumns) {
 
+				support.setVisibleColumns(visibleColumns);
 			}
 
 			@Override
@@ -946,6 +971,18 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			public void applySettings() {
 
 				ExtendedMethodUI.this.applySettings();
+			}
+
+			@Override
+			public int getColumWidth(String column) {
+
+				return support.getColumWidth(column);
+			}
+
+			@Override
+			public void setColumWidth(String column, int width) {
+
+				support.setColumWidth(column, width);
 			}
 		};
 	}

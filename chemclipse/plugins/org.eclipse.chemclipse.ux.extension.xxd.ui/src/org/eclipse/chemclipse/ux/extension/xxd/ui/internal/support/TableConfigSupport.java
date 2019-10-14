@@ -11,43 +11,63 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.TableConfig;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.jface.viewers.ViewerColumn;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TreeColumn;
 
 public class TableConfigSupport implements TableConfig {
 
-	private ExtendedTableViewer extendedTableViewer;
+	private Supplier<Collection<? extends ViewerColumn>> columns;
 
-	public TableConfigSupport(ExtendedTableViewer extendedTableViewer) {
-		this.extendedTableViewer = extendedTableViewer;
+	public TableConfigSupport(Collection<? extends ViewerColumn> columns) {
+		this((Supplier<Collection<? extends ViewerColumn>>)() -> columns);
+	}
+
+	public TableConfigSupport(Supplier<Collection<? extends ViewerColumn>> columns) {
+		this.columns = columns;
 	}
 
 	@Override
 	public void setVisibleColumns(Set<String> visibleColumns) {
 
-		List<TableViewerColumn> columns = extendedTableViewer.getTableViewerColumns();
-		for(TableViewerColumn column : columns) {
-			TableColumn tableColumn = column.getColumn();
-			if(visibleColumns.contains(tableColumn.getText())) {
-				Object oldWidth = tableColumn.getData("OLD_WITH");
-				if(oldWidth instanceof Number) {
-					tableColumn.setWidth(((Number)oldWidth).intValue());
-				}
-				Object oldResizable = tableColumn.getData("OLD_RESIZABLE");
-				if(oldResizable instanceof Boolean) {
-					tableColumn.setResizable(((Boolean)oldResizable).booleanValue());
-				}
+		for(ViewerColumn column : columns.get()) {
+			Item item = getItem(column);
+			if(visibleColumns.contains(item.getText())) {
+				restoreItem(item);
 			} else {
-				tableColumn.setData("OLD_WITH", tableColumn.getWidth());
-				tableColumn.setData("OLD_RESIZABLE", tableColumn.getResizable());
-				tableColumn.setWidth(0);
-				tableColumn.setResizable(false);
+				hideItem(item);
+			}
+		}
+	}
+
+	private void restoreItem(Item item) {
+
+		Object oldWidth = item.getData("OLD_WIDTH");
+		Object oldResizable = item.getData("OLD_RESIZABLE");
+		if(item instanceof TreeColumn) {
+			TreeColumn column = (TreeColumn)item;
+			if(oldWidth instanceof Number) {
+				column.setWidth(((Number)oldWidth).intValue());
+			}
+			if(oldResizable instanceof Boolean) {
+				column.setResizable(((Boolean)oldResizable).booleanValue());
+			}
+		} else if(item instanceof TableColumn) {
+			TableColumn column = (TableColumn)item;
+			if(oldWidth instanceof Number) {
+				column.setWidth(((Number)oldWidth).intValue());
+			}
+			if(oldResizable instanceof Boolean) {
+				column.setResizable(((Boolean)oldResizable).booleanValue());
 			}
 		}
 	}
@@ -56,10 +76,72 @@ public class TableConfigSupport implements TableConfig {
 	public Set<String> getColumns() {
 
 		LinkedHashSet<String> set = new LinkedHashSet<>();
-		List<TableViewerColumn> columns = extendedTableViewer.getTableViewerColumns();
-		for(TableViewerColumn column : columns) {
-			set.add(column.getColumn().getText());
+		for(ViewerColumn column : columns.get()) {
+			Item item = getItem(column);
+			if(item != null) {
+				set.add(item.getText());
+			}
 		}
 		return set;
+	}
+
+	private void hideItem(Item item) {
+
+		if(item instanceof TreeColumn) {
+			TreeColumn column = (TreeColumn)item;
+			item.setData("OLD_WIDTH", column.getWidth());
+			item.setData("OLD_RESIZABLE", column.getResizable());
+			column.setWidth(0);
+			column.setResizable(false);
+		} else if(item instanceof TableColumn) {
+			TableColumn column = (TableColumn)item;
+			item.setData("OLD_WIDTH", column.getWidth());
+			item.setData("OLD_RESIZABLE", column.getResizable());
+			column.setWidth(0);
+			column.setResizable(false);
+		}
+	}
+
+	private Item getItem(ViewerColumn column) {
+
+		if(column instanceof TreeViewerColumn) {
+			return ((TreeViewerColumn)column).getColumn();
+		} else if(column instanceof TableViewerColumn) {
+			return ((TableViewerColumn)column).getColumn();
+		}
+		return null;
+	}
+
+	@Override
+	public int getColumWidth(String columnName) {
+
+		for(ViewerColumn column : columns.get()) {
+			Item item = getItem(column);
+			if(item != null && item.getText().equals(columnName)) {
+				if(item instanceof TreeColumn) {
+					return ((TreeColumn)item).getWidth();
+				} else if(item instanceof TableColumn) {
+					return ((TableColumn)item).getWidth();
+				}
+			}
+		}
+		return -1;
+	}
+
+	@Override
+	public void setColumWidth(String columnName, int width) {
+
+		for(ViewerColumn column : columns.get()) {
+			Item item = getItem(column);
+			if(item != null && item.getText().equals(columnName)) {
+				if(item instanceof TreeColumn) {
+					((TreeColumn)item).setWidth(width);
+					return;
+				} else if(item instanceof TableColumn) {
+					((TableColumn)item).setWidth(width);
+					return;
+				}
+			}
+		}
 	}
 }

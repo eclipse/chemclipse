@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
@@ -62,6 +64,10 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 				} else if(status.isOK()) {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_OK, IApplicationImage.SIZE_16x16);
 				}
+			} else if(element instanceof IProcessMethod) {
+				return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16);
+			} else if(element instanceof ProcessEntryContainer) {
+				return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16);
 			}
 		}
 		return null;
@@ -88,13 +94,14 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
+		if(columnIndex == 0) {
+			return "";
+		}
 		if(element instanceof IProcessEntry) {
 			IProcessEntry entry = (IProcessEntry)element;
 			ProcessSupplierContext supplierContext = IProcessEntry.getContext(entry, processTypeSupport);
 			IProcessSupplier<?> supplier = supplierContext.getSupplier(entry.getProcessorId());
 			switch(columnIndex) {
-				case 0:
-					return "";
 				case 1:
 					return entry.getName();
 				case 2:
@@ -130,6 +137,16 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 					return entry.getProcessorId();
 				default:
 					break;
+			}
+		} else if(element instanceof ProcessEntryContainer) {
+			ProcessEntryContainer method = (ProcessEntryContainer)element;
+			switch(columnIndex) {
+				case 1:
+					return method.getName();
+				case 2:
+					return method.getDescription();
+				default:
+					return "";
 			}
 		}
 		return "n/a";

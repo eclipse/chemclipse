@@ -25,6 +25,23 @@ import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
  */
 public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 
+	/**
+	 * 
+	 * @return an informative name describing the container
+	 */
+	default String getName() {
+
+		return getClass().getSimpleName();
+	}
+
+	/**
+	 * return an informative description of this container
+	 */
+	default String getDescription() {
+
+		return "";
+	}
+
 	int getNumberOfEntries();
 
 	/**

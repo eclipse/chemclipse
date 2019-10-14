@@ -23,8 +23,6 @@ import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 public class ProcessEntry extends ListProcessEntryContainer implements IProcessEntry {
 
 	private String processorId = "";
-	private String name = "";
-	private String description = "";
 	private String jsonSettings = "";
 	private final ProcessEntryContainer parent;
 	private final EnumSet<DataCategory> categories = EnumSet.noneOf(DataCategory.class);
@@ -35,8 +33,8 @@ public class ProcessEntry extends ListProcessEntryContainer implements IProcessE
 
 	public ProcessEntry(IProcessEntry processEntry, ProcessEntryContainer newParent) {
 		processorId = processEntry.getProcessorId();
-		name = processEntry.getName();
-		description = processEntry.getDescription();
+		setName(processEntry.getName());
+		setDescription(processEntry.getDescription());
 		jsonSettings = processEntry.getSettings();
 		parent = newParent;
 		categories.addAll(processEntry.getDataCategories());
@@ -58,28 +56,6 @@ public class ProcessEntry extends ListProcessEntryContainer implements IProcessE
 	public void setProcessorId(String processorId) {
 
 		this.processorId = processorId;
-	}
-
-	@Override
-	public String getName() {
-
-		return name;
-	}
-
-	public void setName(String name) {
-
-		this.name = name;
-	}
-
-	@Override
-	public String getDescription() {
-
-		return description;
-	}
-
-	public void setDescription(String description) {
-
-		this.description = description;
 	}
 
 	@Override
@@ -110,9 +86,9 @@ public class ProcessEntry extends ListProcessEntryContainer implements IProcessE
 		builder.append("ProcessEntry [processorId=");
 		builder.append(processorId);
 		builder.append(", name=");
-		builder.append(name);
+		builder.append(getName());
 		builder.append(", description=");
-		builder.append(description);
+		builder.append(getDescription());
 		builder.append(", jsonSettings=");
 		builder.append(jsonSettings);
 		builder.append(", parent=");
