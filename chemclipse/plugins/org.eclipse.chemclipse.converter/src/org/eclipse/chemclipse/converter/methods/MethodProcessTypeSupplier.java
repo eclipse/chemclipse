@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
@@ -26,16 +25,10 @@ import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(service = {IProcessTypeSupplier.class})
 public class MethodProcessTypeSupplier implements IProcessTypeSupplier {
-
-	private final AtomicReference<ProcessSupplierContext> supplierContext = new AtomicReference<>();
 
 	@Override
 	public String getCategory() {
@@ -54,23 +47,12 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier {
 		return list;
 	}
 
-	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
-	public void setProcessSupplierContext(ProcessSupplierContext supplierContext) {
-
-		this.supplierContext.set(supplierContext);
-	}
-
-	public void unsetProcessSupplierContext(ProcessSupplierContext supplierContext) {
-
-		this.supplierContext.compareAndSet(supplierContext, null);
-	}
-
 	private static final class MethodProcessSupplier extends AbstractProcessSupplier<Void> implements ProcessEntryContainer {
 
 		private final IProcessMethod method;
 
 		public MethodProcessSupplier(IProcessMethod method, MethodProcessTypeSupplier parent) {
-			super("ProcessMethod." + method.getUUID(), method.getName(), method.getDescription(), null, parent, getDataTypes(method, parent.supplierContext.get()));
+			super("ProcessMethod." + method.getUUID(), method.getName(), method.getDescription(), null, parent, getDataTypes(method));
 			this.method = method;
 		}
 
@@ -87,18 +69,14 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier {
 		}
 	}
 
-	private static DataCategory[] getDataTypes(IProcessMethod method, ProcessSupplierContext context) {
+	private static DataCategory[] getDataTypes(IProcessMethod method) {
 
-		if(context == null) {
-			// we don't know
+		if(method.getNumberOfEntries() == 0) {
 			return DataCategory.values();
 		}
 		Set<DataCategory> categories = new HashSet<>();
 		for(IProcessEntry entry : method) {
-			IProcessSupplier<?> supplier = context.getSupplier(entry.getProcessorId());
-			if(supplier != null) {
-				categories.addAll(supplier.getSupportedDataTypes());
-			}
+			categories.addAll(entry.getDataCategories());
 		}
 		return categories.toArray(new DataCategory[0]);
 	}

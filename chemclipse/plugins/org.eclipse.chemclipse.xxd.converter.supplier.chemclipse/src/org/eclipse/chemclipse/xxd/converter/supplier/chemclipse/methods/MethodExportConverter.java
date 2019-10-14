@@ -21,12 +21,12 @@ import org.eclipse.chemclipse.converter.methods.IMethodExportConverter;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.IMethodWriter;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodWriter_1001;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodFormat_0003;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MethodExportConverter extends AbstractExportConverter implements IMethodExportConverter {
 
-	private static final IMethodWriter WRITER = new MethodWriter_1001();
+	private static final IMethodWriter WRITER = new MethodFormat_0003();
 
 	@Override
 	public void convert(File file, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {

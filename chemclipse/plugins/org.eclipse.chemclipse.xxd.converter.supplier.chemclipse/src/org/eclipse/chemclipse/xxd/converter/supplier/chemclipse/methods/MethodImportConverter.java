@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.IMethodReader;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodFormat_0003;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodReader_1000;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodReader_1001;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,7 +30,7 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class MethodImportConverter extends AbstractImportConverter implements IMethodImportConverter {
 
-	private static IMethodReader[] READER = new IMethodReader[]{new MethodReader_1001(), new MethodReader_1000()};
+	private static final IMethodReader[] READER = new IMethodReader[]{new MethodFormat_0003(), new MethodReader_1001(), new MethodReader_1000()};
 
 	@Override
 	public IProcessingInfo<IProcessMethod> convert(File file, IProgressMonitor monitor) throws IOException {

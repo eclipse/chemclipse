@@ -15,7 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.zip.DeflaterInputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
@@ -43,12 +44,12 @@ public abstract class GenericStreamMethodFormat implements IMethodWriter, IMetho
 			}
 		}
 		// magic header matches, we can now read the payload
-		return deserialize(new DeflaterInputStream(stream), consumer, monitor);
+		return deserialize(new GZIPInputStream(stream), consumer, monitor);
 	}
 
 	protected abstract IProcessMethod deserialize(InputStream stream, MessageConsumer consumer, IProgressMonitor monitor) throws IOException;
 
-	protected abstract IProcessMethod serialize(OutputStream stream, MessageConsumer consumer, IProgressMonitor monitor) throws IOException;
+	protected abstract void serialize(OutputStream stream, IProcessMethod processMethod, MessageConsumer consumer, IProgressMonitor monitor) throws IOException;
 
 	@Override
 	public void convert(OutputStream stream, String nameHint, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {
@@ -56,6 +57,11 @@ public abstract class GenericStreamMethodFormat implements IMethodWriter, IMetho
 		// write the identifier
 		stream.write(identifier);
 		// and now the payload
-		serialize(stream, messages, monitor);
+		GZIPOutputStream outputStream = new GZIPOutputStream(stream);
+		serialize(outputStream, processMethod, messages, monitor);
+		outputStream.finish();
+		outputStream.flush();
+		stream.flush();
+		// we don't close here so it is possible to write multiple items to a stream (if desired)
 	}
 }

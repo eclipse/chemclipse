@@ -17,6 +17,8 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 
@@ -29,7 +31,7 @@ public class MethodReader_1001 extends AbstractMethodReader {
 	@Override
 	protected IProcessMethod deserialize(DataInputStream dataInputStream, File file) throws IOException {
 
-		ProcessMethod processMethod = new ProcessMethod();
+		ProcessMethod processMethod = new ProcessMethod(ProcessMethod.CHROMATOGRAPHY);
 		processMethod.setSourceFile(file);
 		processMethod.setUUID(readString(dataInputStream));
 		processMethod.setName(readString(dataInputStream));
@@ -46,8 +48,16 @@ public class MethodReader_1001 extends AbstractMethodReader {
 			//
 			int dataTypes = dataInputStream.readInt();
 			for(int j = 0; j < dataTypes; j++) {
-				// back compat
-				readString(dataInputStream);
+				String dataTypeString = readString(dataInputStream);
+				try {
+					DataCategory category = DataType.valueOf(dataTypeString).toDataCategory();
+					if(category == DataCategory.AUTO_DETECT) {
+						continue;
+					}
+					processEntry.addDataCategory(category);
+				} catch(NullPointerException | IllegalArgumentException e) {
+					continue;
+				}
 			}
 			processMethod.addProcessEntry(processEntry);
 		}

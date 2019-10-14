@@ -12,19 +12,44 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.methods;
 
+import java.util.Set;
+
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 
 public interface IProcessEntry {
 
+	/**
+	 * 
+	 * @return the {@link IProcessSupplier} id this {@link IProcessEntry} referees to
+	 */
 	String getProcessorId();
 
+	/**
+	 * 
+	 * @return the name of this {@link IProcessEntry}, most likely the name of the {@link IProcessSupplier}
+	 */
 	String getName();
 
+	/**
+	 * 
+	 * @return the description of this {@link IProcessEntry}, most likely the description of the {@link IProcessSupplier}
+	 */
 	String getDescription();
 
+	/**
+	 * 
+	 * @return the current settings of the {@link IProcessEntry} might be <code>null</code>
+	 */
 	String getSettings();
+
+	/**
+	 * 
+	 * @return the {@link DataCategory}s this {@link IProcessEntry} applies to, most likely equals to the {@link DataCategory}s of the {@link IProcessSupplier}
+	 */
+	Set<DataCategory> getDataCategories();
 
 	/**
 	 * Set the settings for this entry
@@ -87,10 +112,10 @@ public interface IProcessEntry {
 		if(!getProcessorId().equals(other.getProcessorId())) {
 			return false;
 		}
-		if(this instanceof ProcessEntryContainer) {
+		if(other instanceof ProcessEntryContainer) {
 			ProcessEntryContainer container = (ProcessEntryContainer)this;
 			if(other instanceof ProcessEntryContainer) {
-				container.contentEquals((ProcessEntryContainer)other);
+				return container.contentEquals((ProcessEntryContainer)other);
 			} else {
 				return container.getNumberOfEntries() == 0;
 			}

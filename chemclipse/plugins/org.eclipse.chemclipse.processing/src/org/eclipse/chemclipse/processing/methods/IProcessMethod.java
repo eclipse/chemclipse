@@ -12,6 +12,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.methods;
 
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.chemclipse.processing.DataCategory;
+
 public interface IProcessMethod extends ProcessEntryContainer {
 
 	/**
@@ -55,14 +60,45 @@ public interface IProcessMethod extends ProcessEntryContainer {
 	boolean isFinal();
 
 	/**
-	 * Compares that this process methods content equals the other process method, the default implementation compares {@link #getName()}, {@link #getCategory()}, {@link #getDescription()}, {@link #getOperator()} and all contained {@link IProcessEntry}s, {@link #isFinal()}
+	 * a method might be defined in the context of valid types e.g. for Chromatography (MSD, WSD, CSD) or NMR (FID, NMR)
+	 * 
+	 * @return the {@link DataCategory}s that are valid for this methods context
+	 */
+	Set<DataCategory> getDataCategories();
+
+	/**
+	 * Each {@link IProcessMethod} can carry a set of metadata pairs to store user metadata
+	 * 
+	 * @return a map of key/value pairs of the metadata
+	 */
+	Map<String, String> getMetaData();
+
+	@Override
+	default boolean contentEquals(ProcessEntryContainer other) {
+
+		if(other instanceof IProcessMethod) {
+			return contentEquals((IProcessMethod)other, true);
+		}
+		return ProcessEntryContainer.super.contentEquals(other);
+	}
+
+	/**
+	 * Compares that this process methods content equals the other process method, the default implementation compares
+	 * {@link #getName()},
+	 * {@link #getCategory()},
+	 * {@link #getDescription()},
+	 * {@link #getOperator()},
+	 * {@link #isFinal()}
+	 * and all contained {@link IProcessEntry}s
 	 * this method is different to {@link #equals(Object)} that it does compares for user visible properties to be equal in contrast to objects identity and it allows to compare different instance type, this also means that it is not required that
-	 * Object1.contentEquals(Object2} == Object2.contentEquals(Object1}
+	 * Object1.contentEquals(Object2} == Object2.contentEquals(Object1},
+	 * 
+	 * {@link #getDataCategories()} are not compared because that does not contribute to the content but is only a hint
 	 * 
 	 * @param other
 	 * @return
 	 */
-	default boolean contentEquals(IProcessMethod other) {
+	default boolean contentEquals(IProcessMethod other, boolean includeMetadata) {
 
 		if(other == null) {
 			return false;
@@ -86,6 +122,9 @@ public interface IProcessMethod extends ProcessEntryContainer {
 			return false;
 		}
 		if(getNumberOfEntries() != other.getNumberOfEntries()) {
+			return false;
+		}
+		if(includeMetadata && !getMetaData().equals(other.getMetaData())) {
 			return false;
 		}
 		return ProcessEntryContainer.super.contentEquals(other);

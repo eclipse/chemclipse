@@ -12,8 +12,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.methods;
 
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
-import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 
 public class ProcessEntry extends ListProcessEntryContainer implements IProcessEntry {
@@ -23,6 +27,7 @@ public class ProcessEntry extends ListProcessEntryContainer implements IProcessE
 	private String description = "";
 	private String jsonSettings = "";
 	private final ProcessEntryContainer parent;
+	private final EnumSet<DataCategory> categories = EnumSet.noneOf(DataCategory.class);
 
 	public ProcessEntry(ProcessEntryContainer parent) {
 		this.parent = parent;
@@ -34,6 +39,14 @@ public class ProcessEntry extends ListProcessEntryContainer implements IProcessE
 		description = processEntry.getDescription();
 		jsonSettings = processEntry.getSettings();
 		parent = newParent;
+		categories.addAll(processEntry.getDataCategories());
+		setReadOnly(processEntry.isReadOnly());
+		if(processEntry instanceof ProcessEntryContainer) {
+			ProcessEntryContainer container = (ProcessEntryContainer)processEntry;
+			for(IProcessEntry entry : container) {
+				addProcessEntry(new ProcessEntry(entry, this));
+			}
+		}
 	}
 
 	@Override
@@ -109,15 +122,18 @@ public class ProcessEntry extends ListProcessEntryContainer implements IProcessE
 	}
 
 	@Override
-	public boolean isReadOnly() {
+	public Set<DataCategory> getDataCategories() {
 
-		ProcessEntryContainer container = getParent();
-		if(container instanceof IProcessMethod) {
-			return ((IProcessMethod)container).isFinal();
-		}
-		if(container instanceof ListProcessEntryContainer) {
-			return ((ListProcessEntryContainer)container).isReadOnly();
-		}
-		return super.isReadOnly();
+		return Collections.unmodifiableSet(categories);
+	}
+
+	public void addDataCategory(DataCategory category) {
+
+		categories.add(category);
+	}
+
+	public void removeDataCategory(DataCategory category) {
+
+		categories.remove(category);
 	}
 }

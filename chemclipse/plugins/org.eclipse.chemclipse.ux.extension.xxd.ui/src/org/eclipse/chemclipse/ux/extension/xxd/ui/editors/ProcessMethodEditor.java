@@ -108,6 +108,9 @@ public class ProcessMethodEditor implements IModificationHandler {
 			Map<String, Object> map = (Map<String, Object>)object;
 			processMethodFile = new File((String)map.get(EditorSupport.MAP_FILE));
 			currentProcessMethod = Adapters.adapt(processMethodFile, IProcessMethod.class);
+			if(currentProcessMethod == null) {
+				throw new RuntimeException("can't read file " + processMethodFile);
+			}
 		} else {
 			currentProcessMethod = null;
 			processMethodFile = null;

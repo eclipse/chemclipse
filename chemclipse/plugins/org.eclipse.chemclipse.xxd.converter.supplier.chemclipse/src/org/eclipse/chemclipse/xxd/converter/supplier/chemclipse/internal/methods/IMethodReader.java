@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public interface IMethodReader {
 	 */
 	default IProcessMethod convert(File file, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
 
-		try (FileInputStream stream = new FileInputStream(file)) {
+		try (InputStream stream = new BufferedInputStream(new FileInputStream(file))) {
 			IProcessMethod method = convert(stream, file.getName(), consumer, monitor);
 			if(method instanceof ProcessMethod) {
 				((ProcessMethod)method).setSourceFile(file);

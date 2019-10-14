@@ -27,6 +27,7 @@ public interface IMethodWriter {
 
 		try (FileOutputStream stream = new FileOutputStream(file)) {
 			convert(stream, file.getName(), processMethod, messages, monitor);
+			stream.flush();
 		}
 	}
 

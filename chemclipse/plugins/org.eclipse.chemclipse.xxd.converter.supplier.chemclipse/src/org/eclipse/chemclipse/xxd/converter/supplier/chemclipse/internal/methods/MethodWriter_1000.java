@@ -14,7 +14,10 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.method
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Set;
 
+import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -38,8 +41,12 @@ public class MethodWriter_1000 extends AbstractMethodWriter {
 			writeString(dataOutputStream, processEntry.getName());
 			writeString(dataOutputStream, processEntry.getDescription());
 			writeString(dataOutputStream, processEntry.getSettings());
+			Set<DataCategory> supportedDataTypes = processEntry.getDataCategories();
+			dataOutputStream.writeInt(supportedDataTypes.size());
+			for(DataCategory category : supportedDataTypes) {
+				writeString(dataOutputStream, DataType.fromDataCategory(category).toString());
+			}
 			// obsolete, just write for backward compat
-			dataOutputStream.writeInt(0);
 			writeString(dataOutputStream, "");
 			writeString(dataOutputStream, "");
 		}

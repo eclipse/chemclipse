@@ -13,19 +13,39 @@
 package org.eclipse.chemclipse.model.methods;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 
 public class ProcessMethod extends ListProcessEntryContainer implements IProcessMethod {
 
+	public static final Set<DataCategory> CHROMATOGRAPHY = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(DataCategory.MSD, DataCategory.CSD, DataCategory.WSD)));
+	public static final Set<DataCategory> NMR = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(DataCategory.FID, DataCategory.NMR)));
 	private String UUID = java.util.UUID.randomUUID().toString();
 	private String operator;
 	private String description;
 	private String name;
 	private String category;
 	private File sourceFile;
+	private Set<DataCategory> catgories;
+	private final Map<String, String> metadata = new LinkedHashMap<>();
 
+	/**
+	 * @deprecated specify explicitly the desired categories
+	 */
+	@Deprecated
 	public ProcessMethod() {
+		this(CHROMATOGRAPHY);
+	}
+
+	public ProcessMethod(Set<DataCategory> categories) {
+		this.catgories = Collections.unmodifiableSet(categories);
 	}
 
 	/**
@@ -40,6 +60,11 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 			this.category = other.getCategory();
 			this.name = other.getName();
 			other.forEach(otherEntry -> getEntries().add(new ProcessEntry(otherEntry, this)));
+			if(other instanceof ProcessMethod) {
+				this.sourceFile = ((ProcessMethod)other).sourceFile;
+			}
+			metadata.putAll(other.getMetaData());
+			setReadOnly(other.isFinal());
 		}
 	}
 
@@ -130,11 +155,17 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	}
 
 	@Override
-	public void setReadOnly(boolean readOnly) {
+	public Set<DataCategory> getDataCategories() {
 
-		if(isFinal() && !readOnly) {
-			throw new IllegalStateException("This process method is finalized");
+		return catgories;
+	}
+
+	@Override
+	public Map<String, String> getMetaData() {
+
+		if(isFinal()) {
+			return Collections.unmodifiableMap(metadata);
 		}
-		super.setReadOnly(readOnly);
+		return metadata;
 	}
 }
