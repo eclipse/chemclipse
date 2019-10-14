@@ -65,7 +65,7 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 	static <X> void applyProcessors(ProcessEntryContainer processMethod, ProcessExecutionContext context, BiConsumer<IProcessSupplier<X>, X> consumer) {
 
 		for(IProcessEntry processEntry : processMethod) {
-			ProcessorPreferences<X> preferences = IProcessEntry.getProcessEntryPreferences(processEntry, context);
+			ProcessorPreferences<X> preferences = processEntry.getPreferences(context);
 			if(preferences == null) {
 				context.addWarnMessage(processEntry.getName(), "processor not found, will be skipped");
 				continue;

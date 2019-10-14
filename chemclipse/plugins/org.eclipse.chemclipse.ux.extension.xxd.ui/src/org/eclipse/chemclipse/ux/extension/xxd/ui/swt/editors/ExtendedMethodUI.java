@@ -508,7 +508,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				Object firstElement = treeViewer.getStructuredSelection().getFirstElement();
 				if(firstElement instanceof IProcessEntry) {
 					IProcessEntry entry = (IProcessEntry)firstElement;
-					if(modifyProcessEntry(treeViewer.getControl().getShell(), entry, getContext(entry, processingSupport), true)) {
+					if(modifyProcessEntry(treeViewer.getControl().getShell(), entry, IProcessEntry.getContext(entry, processingSupport), true)) {
 						updateProcessMethod();
 					}
 				}
@@ -802,7 +802,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 					Object object = listUI.getStructuredSelection().getFirstElement();
 					if(object instanceof IProcessEntry) {
 						IProcessEntry processEntry = (IProcessEntry)object;
-						modifyProcessEntry(toolBar.getShell(), processEntry, getContext(processEntry, processingSupport), true);
+						modifyProcessEntry(toolBar.getShell(), processEntry, IProcessEntry.getContext(processEntry, processingSupport), true);
 						updateProcessMethod();
 					}
 				}
@@ -950,22 +950,9 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		};
 	}
 
-	public static ProcessSupplierContext getContext(IProcessEntry entry, ProcessSupplierContext defaultContext) {
-
-		ProcessEntryContainer container = entry.getParent();
-		if(container instanceof IProcessEntry) {
-			IProcessEntry parent = (IProcessEntry)container;
-			IProcessSupplier<?> supplier = getContext(parent, defaultContext).getSupplier(parent.getProcessorId());
-			if(supplier instanceof ProcessSupplierContext) {
-				return (ProcessSupplierContext)supplier;
-			}
-		}
-		return defaultContext;
-	}
-
 	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, ProcessSupplierContext supplierContext, boolean showHint) {
 
-		ProcessorPreferences<?> preferences = IProcessEntry.getProcessEntryPreferences(processEntry, supplierContext);
+		ProcessorPreferences<?> preferences = processEntry.getPreferences(supplierContext);
 		if(preferences == null) {
 			// handle like cancel
 			return false;

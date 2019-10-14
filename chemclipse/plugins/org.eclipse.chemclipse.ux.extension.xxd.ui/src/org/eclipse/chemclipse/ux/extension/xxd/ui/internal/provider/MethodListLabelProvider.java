@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.graphics.Image;
@@ -91,7 +90,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 
 		if(element instanceof IProcessEntry) {
 			IProcessEntry entry = (IProcessEntry)element;
-			ProcessSupplierContext supplierContext = ExtendedMethodUI.getContext(entry, processTypeSupport);
+			ProcessSupplierContext supplierContext = IProcessEntry.getContext(entry, processTypeSupport);
 			IProcessSupplier<?> supplier = supplierContext.getSupplier(entry.getProcessorId());
 			switch(columnIndex) {
 				case 0:
@@ -111,7 +110,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 						if(supplier.getSettingsParser().getInputValues().isEmpty()) {
 							return "not configurable";
 						} else {
-							ProcessorPreferences<Object> preferences = IProcessEntry.getProcessEntryPreferences(entry, supplierContext);
+							ProcessorPreferences<Object> preferences = entry.getPreferences(supplierContext);
 							if(preferences.isUseSystemDefaults()) {
 								return "system defaults";
 							} else {
@@ -147,7 +146,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		if(processEntry == null) {
 			return ValidationStatus.error("Entry is null");
 		}
-		ProcessorPreferences<?> preferences = IProcessEntry.getProcessEntryPreferences(processEntry, ExtendedMethodUI.getContext(processEntry, processTypeSupport));
+		ProcessorPreferences<?> preferences = processEntry.getPreferences(IProcessEntry.getContext(processEntry, processTypeSupport));
 		if(preferences == null) {
 			return ValidationStatus.error("Processor " + processEntry.getName() + " not avaiable");
 		}

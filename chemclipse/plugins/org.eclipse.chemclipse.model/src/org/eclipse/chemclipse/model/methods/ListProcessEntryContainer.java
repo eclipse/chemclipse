@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.methods;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 
 public class ListProcessEntryContainer implements ProcessEntryContainer {
 
@@ -35,6 +37,38 @@ public class ListProcessEntryContainer implements ProcessEntryContainer {
 	public int getNumberOfEntries() {
 
 		return entries.size();
+	}
+
+	/**
+	 * 
+	 * @return an empty entry, already added to this container
+	 */
+	public ProcessEntry createEntry() {
+
+		return createEntry(null, null);
+	}
+
+	/**
+	 * 
+	 * @return a new entry initialized with the , already added to this container
+	 */
+	public <T> ProcessEntry createEntry(IProcessSupplier<T> supplier, T settings) {
+
+		ProcessEntry entry = new ProcessEntry(this);
+		if(supplier != null) {
+			entry.setProcessorId(supplier.getId());
+			entry.setName(supplier.getName());
+			entry.setDescription(supplier.getDescription());
+			if(settings != null) {
+				try {
+					entry.setSettings(entry.getPreferences(supplier).getSerialization().toString(settings));
+				} catch(IOException e) {
+					throw new RuntimeException("creation of setings failed", e);
+				}
+			}
+		}
+		addProcessEntry(entry);
+		return entry;
 	}
 
 	public List<IProcessEntry> getEntries() {

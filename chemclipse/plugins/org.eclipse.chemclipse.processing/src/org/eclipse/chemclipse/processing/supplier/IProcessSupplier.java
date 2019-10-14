@@ -75,4 +75,17 @@ public interface IProcessSupplier<SettingType> {
 
 		return getId().equals(id);
 	}
+
+	/**
+	 * 
+	 * @return the context that belongs to this supplier, this could either be the supplier itself or the corresponding {@link IProcessTypeSupplier}
+	 */
+	default ProcessSupplierContext getContext() {
+
+		if(this instanceof ProcessSupplierContext) {
+			return (ProcessSupplierContext)this;
+		} else {
+			return getTypeSupplier();
+		}
+	}
 }

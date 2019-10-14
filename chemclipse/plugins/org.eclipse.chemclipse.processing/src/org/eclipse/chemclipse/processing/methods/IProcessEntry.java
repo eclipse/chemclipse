@@ -64,13 +64,17 @@ public interface IProcessEntry {
 
 	ProcessEntryContainer getParent();
 
-	public static <T> ProcessorPreferences<T> getProcessEntryPreferences(IProcessEntry entry, ProcessSupplierContext context) {
+	default <T> ProcessorPreferences<T> getPreferences(ProcessSupplierContext context) {
 
-		IProcessSupplier<T> supplier = context.getSupplier(entry.getProcessorId());
+		return getPreferences(context.getSupplier(getProcessorId()));
+	}
+
+	default <T> ProcessorPreferences<T> getPreferences(IProcessSupplier<T> supplier) {
+
 		if(supplier == null) {
 			return null;
 		}
-		return new ProcessEntryProcessorPreferences<>(supplier, entry);
+		return new ProcessEntryProcessorPreferences<>(supplier, this);
 	}
 
 	/**
@@ -124,5 +128,18 @@ public interface IProcessEntry {
 			return container.getNumberOfEntries() == 0;
 		}
 		return true;
+	}
+
+	public static ProcessSupplierContext getContext(IProcessEntry entry, ProcessSupplierContext defaultContext) {
+
+		ProcessEntryContainer container = entry.getParent();
+		if(container instanceof IProcessEntry) {
+			IProcessEntry parent = (IProcessEntry)container;
+			IProcessSupplier<?> supplier = getContext(parent, defaultContext).getSupplier(parent.getProcessorId());
+			if(supplier instanceof ProcessSupplierContext) {
+				return (ProcessSupplierContext)supplier;
+			}
+		}
+		return defaultContext;
 	}
 }
