@@ -59,7 +59,7 @@ public class MethodReader_1001 extends AbstractMethodReader {
 					continue;
 				}
 			}
-			processMethod.addProcessEntry(processEntry);
+			processMethod.getEntries().add(processEntry);
 		}
 		return processMethod;
 	}

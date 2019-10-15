@@ -20,36 +20,37 @@ import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 
-public class ProcessEntry extends ListProcessEntryContainer implements IProcessEntry {
+public final class ProcessEntry extends ListProcessEntryContainer implements IProcessEntry {
 
-	private String processorId = "";
-	private String jsonSettings = "";
+	private String processorId;
+	private String jsonSettings;
 	private final ProcessEntryContainer parent;
 	private final EnumSet<DataCategory> categories = EnumSet.noneOf(DataCategory.class);
 
 	public ProcessEntry(ProcessEntryContainer parent) {
-		this.parent = parent;
+		this(null, parent);
 	}
 
-	public ProcessEntry(IProcessEntry processEntry, ProcessEntryContainer newParent) {
-		processorId = processEntry.getProcessorId();
-		setName(processEntry.getName());
-		setDescription(processEntry.getDescription());
-		jsonSettings = processEntry.getSettings();
+	public ProcessEntry(IProcessEntry other, ProcessEntryContainer newParent) {
+		super(other);
 		parent = newParent;
-		categories.addAll(processEntry.getDataCategories());
-		setReadOnly(processEntry.isReadOnly());
-		if(processEntry instanceof ProcessEntryContainer) {
-			ProcessEntryContainer container = (ProcessEntryContainer)processEntry;
-			for(IProcessEntry entry : container) {
-				addProcessEntry(new ProcessEntry(entry, this));
-			}
+		if(other != null) {
+			processorId = other.getProcessorId();
+			setName(other.getName());
+			setDescription(other.getDescription());
+			jsonSettings = other.getSettings();
+			categories.addAll(other.getDataCategories());
+			// read-only must be set at the end!
+			setReadOnly(other.isReadOnly());
 		}
 	}
 
 	@Override
 	public String getProcessorId() {
 
+		if(processorId == null) {
+			return "-not set-";
+		}
 		return processorId;
 	}
 

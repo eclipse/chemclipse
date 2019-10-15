@@ -123,7 +123,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private final DataType[] dataTypes;
 	private Button buttonFinalize;
 	private ProcessEntryContainer postActions;
-	private TreeViewerColumn[] columns = new TreeViewerColumn[MethodListLabelProvider.TITLES.length];
+	private final TreeViewerColumn[] columns = new TreeViewerColumn[MethodListLabelProvider.TITLES.length];
 
 	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, DataType[] dataTypes) {
 		super(parent, style);
@@ -637,12 +637,13 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 							if(!edit) {
 								continue;
 							}
-							ProcessEntry newEntry;
+							IProcessEntry newEntry;
 							if(supplierContext == processingSupport) {
 								// add to global context
-								processMethod.addProcessEntry(newEntry = new ProcessEntry(editedEntry, processMethod));
+								newEntry = processMethod.addProcessEntry(editedEntry);
 							} else {
-								selectedEntry.addProcessEntry(newEntry = new ProcessEntry(editedEntry, selectedEntry));
+								// add to local context
+								newEntry = selectedEntry.addProcessEntry(editedEntry);
 							}
 							updateProcessMethod();
 							select(Collections.singletonList(newEntry));
@@ -657,16 +658,12 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	public void loadMethodFile(IProcessMethod method) {
 
 		if(method != null) {
-			method.forEach(new Consumer<IProcessEntry>() {
-
-				@Override
-				public void accept(IProcessEntry entry) {
-
-					processMethod.addProcessEntry(new ProcessEntry(entry, processMethod));
-				}
+			List<IProcessEntry> copied = new ArrayList<>();
+			method.forEach(entry -> {
+				copied.add(processMethod.addProcessEntry(entry));
 			});
 			updateProcessMethod();
-			select(method);
+			select(copied);
 		}
 	}
 

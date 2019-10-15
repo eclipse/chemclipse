@@ -123,6 +123,6 @@ public class ProcessMethodEditor implements IModificationHandler {
 	@Override
 	public void setDirty(boolean dirty) {
 
-		dirtyable.setDirty(!extendedMethodUI.getProcessMethod().contentEquals(currentProcessMethod));
+		dirtyable.setDirty(!extendedMethodUI.getProcessMethod().contentEquals(currentProcessMethod, true));
 	}
 }

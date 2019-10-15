@@ -29,6 +29,16 @@ public class ListProcessEntryContainer implements ProcessEntryContainer {
 	private String description;
 	private String name;
 
+	public ListProcessEntryContainer() {
+		this(null);
+	}
+
+	public ListProcessEntryContainer(ProcessEntryContainer other) {
+		if(other != null) {
+			other.forEach(this::addProcessEntry);
+		}
+	}
+
 	@Override
 	public Iterator<IProcessEntry> iterator() {
 
@@ -97,7 +107,7 @@ public class ListProcessEntryContainer implements ProcessEntryContainer {
 				}
 			}
 		}
-		addProcessEntry(entry);
+		getEntries().add(entry);
 		return entry;
 	}
 
@@ -109,25 +119,22 @@ public class ListProcessEntryContainer implements ProcessEntryContainer {
 		return entries;
 	}
 
-	public void addProcessEntry(IProcessEntry processEntry) {
+	/**
+	 * Adds/imports the given entry to this container, the entry is copied and this container becomes the new parent, if that is not desired, {@link #getEntries()}.add(...) can be used, but care must be taken to not confuse parent references
+	 * 
+	 * @param processEntry
+	 * @return
+	 */
+	public IProcessEntry addProcessEntry(IProcessEntry processEntry) {
 
-		getEntries().add(processEntry);
+		ProcessEntry newEntry = new ProcessEntry(processEntry, this);
+		getEntries().add(newEntry);
+		return newEntry;
 	}
 
 	public void removeProcessEntry(IProcessEntry processEntry) {
 
 		getEntries().remove(processEntry);
-	}
-
-	public void replaceProcessEntry(IProcessEntry oldEntry, IProcessEntry newEntry) {
-
-		List<IProcessEntry> list = getEntries();
-		int indexOf = list.indexOf(oldEntry);
-		if(indexOf > -1) {
-			list.set(indexOf, newEntry);
-		} else {
-			list.add(newEntry);
-		}
 	}
 
 	public boolean isReadOnly() {

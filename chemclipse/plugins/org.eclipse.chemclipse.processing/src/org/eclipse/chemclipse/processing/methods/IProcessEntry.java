@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 
-public interface IProcessEntry {
+public interface IProcessEntry extends ProcessEntryContainer {
 
 	/**
 	 * 
@@ -31,12 +31,14 @@ public interface IProcessEntry {
 	 * 
 	 * @return the name of this {@link IProcessEntry}, most likely the name of the {@link IProcessSupplier}
 	 */
+	@Override
 	String getName();
 
 	/**
 	 * 
 	 * @return the description of this {@link IProcessEntry}, most likely the description of the {@link IProcessSupplier}
 	 */
+	@Override
 	String getDescription();
 
 	/**
@@ -116,18 +118,7 @@ public interface IProcessEntry {
 		if(!getProcessorId().equals(other.getProcessorId())) {
 			return false;
 		}
-		if(other instanceof ProcessEntryContainer) {
-			ProcessEntryContainer container = (ProcessEntryContainer)this;
-			if(other instanceof ProcessEntryContainer) {
-				return container.contentEquals((ProcessEntryContainer)other);
-			} else {
-				return container.getNumberOfEntries() == 0;
-			}
-		} else if(other instanceof ProcessEntryContainer) {
-			ProcessEntryContainer container = (ProcessEntryContainer)other;
-			return container.getNumberOfEntries() == 0;
-		}
-		return true;
+		return entriesEquals(other);
 	}
 
 	public static ProcessSupplierContext getContext(IProcessEntry entry, ProcessSupplierContext defaultContext) {

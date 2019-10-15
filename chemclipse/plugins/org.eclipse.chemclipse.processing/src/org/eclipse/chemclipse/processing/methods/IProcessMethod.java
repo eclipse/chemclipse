@@ -30,6 +30,7 @@ public interface IProcessMethod extends ProcessEntryContainer {
 	 * 
 	 * @return the human readable label/name
 	 */
+	@Override
 	String getName();
 
 	/**
@@ -50,6 +51,7 @@ public interface IProcessMethod extends ProcessEntryContainer {
 	 * 
 	 * @return the human readable description of this method
 	 */
+	@Override
 	String getDescription();
 
 	/**
@@ -72,15 +74,6 @@ public interface IProcessMethod extends ProcessEntryContainer {
 	 * @return a map of key/value pairs of the metadata
 	 */
 	Map<String, String> getMetaData();
-
-	@Override
-	default boolean contentEquals(ProcessEntryContainer other) {
-
-		if(other instanceof IProcessMethod) {
-			return contentEquals((IProcessMethod)other, true);
-		}
-		return ProcessEntryContainer.super.contentEquals(other);
-	}
 
 	/**
 	 * Compares that this process methods content equals the other process method, the default implementation compares
@@ -127,6 +120,6 @@ public interface IProcessMethod extends ProcessEntryContainer {
 		if(includeMetadata && !getMetaData().equals(other.getMetaData())) {
 			return false;
 		}
-		return ProcessEntryContainer.super.contentEquals(other);
+		return entriesEquals(other);
 	}
 }

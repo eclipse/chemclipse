@@ -29,10 +29,7 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 	 * 
 	 * @return an informative name describing the container
 	 */
-	default String getName() {
-
-		return getClass().getSimpleName();
-	}
+	String getName();
 
 	/**
 	 * return an informative description of this container
@@ -58,7 +55,7 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 	 * @param other
 	 * @return
 	 */
-	default boolean contentEquals(ProcessEntryContainer other) {
+	default boolean entriesEquals(ProcessEntryContainer other) {
 
 		Iterator<IProcessEntry> thisEntries = iterator();
 		if(other == null) {

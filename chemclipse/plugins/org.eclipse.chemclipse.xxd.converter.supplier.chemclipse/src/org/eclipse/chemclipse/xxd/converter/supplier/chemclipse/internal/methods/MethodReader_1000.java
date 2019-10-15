@@ -60,7 +60,7 @@ public class MethodReader_1000 extends AbstractMethodReader {
 			// read but ignore for backward compat
 			readString(dataInputStream);
 			readString(dataInputStream);
-			processMethod.addProcessEntry(processEntry);
+			processMethod.getEntries().add(processEntry);
 		}
 		return processMethod;
 	}

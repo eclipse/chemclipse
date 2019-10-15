@@ -42,7 +42,7 @@ public class JobReader {
 
 	public BatchProcessJob read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
-		ProcessMethod processMethod = new ProcessMethod();
+		ProcessMethod processMethod = new ProcessMethod(ProcessMethod.CHROMATOGRAPHY);
 		BatchProcessJob batchProcessJob = new BatchProcessJob(processMethod);
 		try {
 			readHeader(file, batchProcessJob);
@@ -195,7 +195,7 @@ public class JobReader {
 			processEntry.setName(name);
 			processEntry.setDescription(description);
 			processEntry.setSettings(jsonSettings);
-			method.addProcessEntry(processEntry);
+			method.getEntries().add(processEntry);
 		}
 		/*
 		 * Close the streams.

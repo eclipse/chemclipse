@@ -59,7 +59,7 @@ public class MethodFormat_0003 extends ObjectStreamMethodFormat {
 		processMethod.setCategory(readString(stream));
 		processMethod.setOperator(readString(stream));
 		readMap(stream, ObjectStreamMethodFormat::readString, ObjectStreamMethodFormat::readString, processMethod.getMetaData()::put);
-		readItems(stream, processEntryDeserialization(processMethod), processMethod::addProcessEntry);
+		readItems(stream, processEntryDeserialization(processMethod), processMethod.getEntries()::add);
 		processMethod.setReadOnly(stream.readBoolean());
 		return processMethod;
 	}
@@ -74,7 +74,7 @@ public class MethodFormat_0003 extends ObjectStreamMethodFormat {
 		// write child entries if there are any...
 		ProcessEntryContainer container;
 		if(entry instanceof ProcessEntryContainer) {
-			container = (ProcessEntryContainer)entry;
+			container = entry;
 		} else {
 			container = null;
 		}
@@ -91,7 +91,7 @@ public class MethodFormat_0003 extends ObjectStreamMethodFormat {
 			processEntry.setDescription(readString(stream));
 			processEntry.setSettings(readString(stream));
 			readItems(stream, enumDeserialization(DataCategory.class, DataCategory.AUTO_DETECT), processEntry::addDataCategory);
-			readItems(stream, processEntryDeserialization(processEntry), processEntry::addProcessEntry);
+			readItems(stream, processEntryDeserialization(processEntry), processEntry.getEntries()::add);
 			processEntry.setReadOnly(stream.readBoolean());
 			return processEntry;
 		};

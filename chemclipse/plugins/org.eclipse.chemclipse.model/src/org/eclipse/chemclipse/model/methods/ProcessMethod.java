@@ -52,6 +52,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	 * @param other
 	 */
 	public ProcessMethod(IProcessMethod other) {
+		super(other);
 		if(other != null) {
 			this.operator = other.getOperator();
 			setDescription(other.getDescription());
@@ -62,6 +63,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 				this.sourceFile = ((ProcessMethod)other).sourceFile;
 			}
 			metadata.putAll(other.getMetaData());
+			// read-only must be set at the end!
 			setReadOnly(other.isFinal());
 		}
 	}
