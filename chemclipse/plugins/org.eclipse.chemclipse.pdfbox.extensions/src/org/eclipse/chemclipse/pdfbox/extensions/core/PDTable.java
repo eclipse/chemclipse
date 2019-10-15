@@ -57,6 +57,7 @@ public class PDTable {
 
 	/**
 	 * Get the data row start index - 0 based.
+	 * Inclusive
 	 * 
 	 * @return int
 	 */
@@ -67,6 +68,7 @@ public class PDTable {
 
 	/**
 	 * Data row start index - 0 based.
+	 * Inclusive
 	 * 
 	 * @param startIndex
 	 */
@@ -77,6 +79,7 @@ public class PDTable {
 
 	/**
 	 * Get the data row stop index - 0 based.
+	 * Exclusive
 	 * 
 	 * @return int
 	 */
@@ -87,8 +90,9 @@ public class PDTable {
 
 	/**
 	 * Data row stop index - 0 based.
+	 * Exclusive
 	 * 
-	 * @param startIndex
+	 * @param stopIndex
 	 */
 	public void setStopIndex(int stopIndex) {
 
