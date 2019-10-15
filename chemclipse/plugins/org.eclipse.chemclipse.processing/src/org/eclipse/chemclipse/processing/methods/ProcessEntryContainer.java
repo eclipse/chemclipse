@@ -90,11 +90,19 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 				entryContext.setContextObject(IProcessSupplier.class, supplier);
 				entryContext.setContextObject(ProcessorPreferences.class, preferences);
 				entryContext.setContextObject(IProcessEntry.class, processEntry);
-				consumer.andThen((t, u) -> {
-					u.setContextObject(IProcessSupplier.class, null);
-					u.setContextObject(ProcessorPreferences.class, null);
-					u.setContextObject(IProcessEntry.class, null);
-				}).accept(preferences, entryContext);
+				try {
+					if(processEntry.getNumberOfEntries() == 0) {
+						consumer.accept(preferences, entryContext);
+					} else {
+						entryContext.setWorkRemaining(2);
+						consumer.accept(preferences, entryContext.split());
+						applyProcessEntries(processEntry, entryContext.split(), consumer);
+					}
+				} finally {
+					entryContext.setContextObject(IProcessSupplier.class, null);
+					entryContext.setContextObject(ProcessorPreferences.class, null);
+					entryContext.setContextObject(IProcessEntry.class, null);
+				}
 			} catch(RuntimeException e) {
 				context.addErrorMessage(processEntry.getName(), "internal error", e);
 			}
