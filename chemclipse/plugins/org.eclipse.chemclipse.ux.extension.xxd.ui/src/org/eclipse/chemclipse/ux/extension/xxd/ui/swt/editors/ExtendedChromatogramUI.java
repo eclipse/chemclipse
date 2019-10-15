@@ -986,7 +986,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-				IChromatogramSelectionProcessSupplier.applyProcessMethod(chromatogramSelection, processMethod, ProcessExecutionContext.create(processTypeSupport, processingInfo, monitor));
+				IChromatogramSelectionProcessSupplier.applyProcessEntries(chromatogramSelection, processMethod, new ProcessExecutionContext(monitor, processingInfo, processTypeSupport));
 				chromatogramSelection.update(false);
 				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, processingInfo.hasErrorMessages());
 			}

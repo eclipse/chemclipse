@@ -85,18 +85,18 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	//
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramEditor.class);
 	//
-	private DataType dataType;
-	private MPart part;
-	private MDirtyable dirtyable;
+	private final DataType dataType;
+	private final MPart part;
+	private final MDirtyable dirtyable;
 	//
-	private IEventBroker eventBroker;
+	private final IEventBroker eventBroker;
 	//
 	private File chromatogramFile = null;
 	private ExtendedChromatogramUI extendedChromatogramUI;
 	//
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private Shell shell;
-	private ObjectChangedListener<Object> updateMenuListener = new ObjectChangedListener<Object>() {
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private final Shell shell;
+	private final ObjectChangedListener<Object> updateMenuListener = new ObjectChangedListener<Object>() {
 
 		@Override
 		public void objectChanged(ChangeType type, Object newObject, Object oldObject) {
@@ -306,7 +306,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 						IProcessMethod processMethod = Adapters.adapt(file, IProcessMethod.class);
 						if(processMethod != null) {
 							ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
-							IChromatogramSelectionProcessSupplier.applyProcessMethod(chromatogramSelection, processMethod, ProcessExecutionContext.create(processTypeSupport, new ProcessingInfo<>(), monitor));
+							IChromatogramSelectionProcessSupplier.applyProcessEntries(chromatogramSelection, processMethod, new ProcessExecutionContext(monitor, new ProcessingInfo<>(), processTypeSupport));
 						}
 					}
 				});

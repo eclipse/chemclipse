@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.methods;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.function.BiConsumer;
 
@@ -76,19 +75,26 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 		return true;
 	}
 
-	static <X> void applyProcessors(ProcessEntryContainer processMethod, ProcessExecutionContext context, BiConsumer<IProcessSupplier<X>, X> consumer) {
+	static <X> void applyProcessEntries(ProcessEntryContainer container, ProcessExecutionContext context, BiConsumer<ProcessorPreferences<X>, ProcessExecutionContext> consumer) {
 
-		for(IProcessEntry processEntry : processMethod) {
+		context.setWorkRemaining(container.getNumberOfEntries());
+		for(IProcessEntry processEntry : container) {
 			ProcessorPreferences<X> preferences = processEntry.getPreferences(context);
 			if(preferences == null) {
 				context.addWarnMessage(processEntry.getName(), "processor not found, will be skipped");
 				continue;
 			}
 			try {
-				X settings = preferences.getSettings();
-				consumer.accept(preferences.getSupplier(), settings);
-			} catch(IOException e) {
-				context.addWarnMessage(processEntry.getName(), "the settings can't be read, will be skipped", e);
+				IProcessSupplier<X> supplier = preferences.getSupplier();
+				ProcessExecutionContext entryContext = context.split(supplier.getContext());
+				entryContext.setContextObject(IProcessSupplier.class, supplier);
+				entryContext.setContextObject(ProcessorPreferences.class, preferences);
+				entryContext.setContextObject(IProcessEntry.class, processEntry);
+				consumer.andThen((t, u) -> {
+					u.setContextObject(IProcessSupplier.class, null);
+					u.setContextObject(ProcessorPreferences.class, null);
+					u.setContextObject(IProcessEntry.class, null);
+				}).accept(preferences, entryContext);
 			} catch(RuntimeException e) {
 				context.addErrorMessage(processEntry.getName(), "internal error", e);
 			}

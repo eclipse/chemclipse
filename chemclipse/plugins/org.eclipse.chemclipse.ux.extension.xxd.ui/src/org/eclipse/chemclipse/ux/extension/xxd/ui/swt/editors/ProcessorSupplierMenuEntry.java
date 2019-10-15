@@ -38,7 +38,7 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 	private final IProcessSupplier<T> processorSupplier;
 	private final Supplier<IChromatogramSelection<?, ?>> supplier;
 	private final BiConsumer<IRunnableWithProgress, Shell> executionConsumer;
-	private ProcessSupplierContext context;
+	private final ProcessSupplierContext context;
 
 	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessSupplier<T> processorSupplier, ProcessSupplierContext context) {
 		this.supplier = chromatogramSupplier;
@@ -78,7 +78,7 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 						DefaultProcessingResult<Object> msgs = new DefaultProcessingResult<>();
-						IChromatogramSelectionProcessSupplier.applyProcessor(chromatogramSelection, processorSupplier, settings, ProcessExecutionContext.create(context, msgs, monitor));
+						IChromatogramSelectionProcessSupplier.applyProcessor(chromatogramSelection, processorSupplier, settings, new ProcessExecutionContext(monitor, msgs, context));
 						updateResult(shell, msgs);
 					}
 				}, shell);
