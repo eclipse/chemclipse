@@ -36,6 +36,7 @@ public class ProcessExecutionContext implements ProcessSupplierContext, MessageC
 	private ProcessExecutionContext(IProgressMonitor monitor, MessageConsumer rootConsumer, ProcessSupplierContext rootContext, ProcessExecutionContext parent) {
 		this.consumer = rootConsumer;
 		this.context = rootContext;
+		this.parent = parent;
 		subMonitor = SubMonitor.convert(monitor, WORK_UNIT);
 	}
 
