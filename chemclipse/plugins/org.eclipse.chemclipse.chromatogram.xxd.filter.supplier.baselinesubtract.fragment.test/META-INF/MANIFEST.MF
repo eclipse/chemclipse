@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Test
-Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.fragment.test
-Bundle-Version: 0.8.0.qualifier
-Bundle-Vendor: OpenChrom
-Fragment-Host: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract;bundle-version="0.8.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
