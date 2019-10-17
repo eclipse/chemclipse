@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,11 +17,18 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+/**
+ * A chromatogram calculator is used for example to calculate retention indices (RI) for
+ * scans and/or peaks. It extends the chromatographic data. We first thought
+ * to put this functionality under the category of filters. But people hesitate to use it,
+ * cause filtering normally means to remove things. That's why an own category has been created.
+ *
+ */
 public interface IChromatogramCalculator {
 
 	/**
-	 * Apply the filter in the given chromatogram selection and take care of the
-	 * filter settings.<br/>
+	 * Apply the calculator in the given chromatogram selection and take care of the
+	 * calculator settings.<br/>
 	 * Return an {@link IChromatogramCalculatorProcessingInfo} instance.<br/>
 	 * If there is no monitor instance, use a {@link NullProgressMonitor}.
 	 * 
@@ -34,7 +41,7 @@ public interface IChromatogramCalculator {
 	IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, IProgressMonitor monitor);
 
 	/**
-	 * Apply the filter in the given chromatogram selection.
+	 * Apply the calculator in the given chromatogram selection.
 	 * Return an {@link IProcessingInfo} instance.<br/>
 	 * If there is no monitor instance, use a {@link NullProgressMonitor}.
 	 * 
