@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class MeasurementResultsPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private ExtendedMeasurementResultUI extendedMeasurementResultUI;
+	private final ExtendedMeasurementResultUI extendedMeasurementResultUI;
 
 	@Inject
 	public MeasurementResultsPart(Composite parent, MPart part) {
@@ -56,7 +56,7 @@ public class MeasurementResultsPart extends AbstractDataUpdateSupport implements
 	@Override
 	public void updateObjects(List<Object> objects, String topic) {
 
-		Collection<IMeasurementResult> results = Collections.emptyList();
+		Collection<IMeasurementResult<?>> results = Collections.emptyList();
 		String infoLabel = "";
 		if(!isUnloadEvent(topic)) {
 			if(objects.size() == 1) {

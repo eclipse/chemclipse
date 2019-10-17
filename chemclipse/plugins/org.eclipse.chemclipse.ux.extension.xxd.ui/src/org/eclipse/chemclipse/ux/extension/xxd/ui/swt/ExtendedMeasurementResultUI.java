@@ -67,14 +67,14 @@ public class ExtendedMeasurementResultUI {
 	 * @param infoLabel
 	 *            the infolabel to show must not be <code>null</code>
 	 */
-	public void update(Collection<IMeasurementResult> results, String infoLabel) {
+	public void update(Collection<IMeasurementResult<?>> results, String infoLabel) {
 
 		if(!labelChromatogramInfo.isDisposed()) {
 			labelChromatogramInfo.setText(infoLabel);
 		}
 		comboMeasurementResults.setInput(results);
 		comboMeasurementResults.refresh();
-		IMeasurementResult element = (IMeasurementResult)comboMeasurementResults.getStructuredSelection().getFirstElement();
+		IMeasurementResult<?> element = (IMeasurementResult<?>)comboMeasurementResults.getStructuredSelection().getFirstElement();
 		if(element == null && results.size() == 1) {
 			element = results.iterator().next();
 			comboMeasurementResults.setSelection(new StructuredSelection(element));
@@ -205,8 +205,8 @@ public class ExtendedMeasurementResultUI {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IMeasurementResult) {
-					IMeasurementResult measurementResult = (IMeasurementResult)element;
+				if(element instanceof IMeasurementResult<?>) {
+					IMeasurementResult<?> measurementResult = (IMeasurementResult<?>)element;
 					return measurementResult.getName();
 				}
 				return super.getText(element);
@@ -222,8 +222,8 @@ public class ExtendedMeasurementResultUI {
 			public void selectionChanged(SelectionChangedEvent event) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof IMeasurementResult) {
-					updateMeasurementResult((IMeasurementResult)object);
+				if(object instanceof IMeasurementResult<?>) {
+					updateMeasurementResult((IMeasurementResult<?>)object);
 				} else {
 					updateMeasurementResult(null);
 				}
@@ -232,15 +232,14 @@ public class ExtendedMeasurementResultUI {
 		return comboViewer;
 	}
 
-	private void updateMeasurementResult(IMeasurementResult measurementResult) {
+	private void updateMeasurementResult(IMeasurementResult<?> measurementResult) {
 
 		updateLabel(measurementResult);
-		Object adaptable = measurementResult == null ? null : measurementResult.getResult();
-		contentProvider.setProxy(Adapters.adapt(adaptable, IStructuredContentProvider.class));
-		selectionChangedListener.setProxy(Adapters.adapt(adaptable, ISelectionChangedListener.class));
+		contentProvider.setProxy(adaptTo(measurementResult, IStructuredContentProvider.class));
+		selectionChangedListener.setProxy(adaptTo(measurementResult, ISelectionChangedListener.class));
 		resultTable.clearColumns();
-		resultTable.addColumns(Adapters.adapt(adaptable, ColumnDefinitionProvider.class));
-		ITableLabelProvider tableLabelProvider = Adapters.adapt(adaptable, ITableLabelProvider.class);
+		resultTable.addColumns(adaptTo(measurementResult, ColumnDefinitionProvider.class));
+		ITableLabelProvider tableLabelProvider = adaptTo(measurementResult, ITableLabelProvider.class);
 		labelProvider.setProxy(tableLabelProvider);
 		if(tableLabelProvider != null) {
 			resultTable.setLabelProvider(tableLabelProvider);
@@ -249,7 +248,20 @@ public class ExtendedMeasurementResultUI {
 		resultTable.refresh();
 	}
 
-	public void updateLabel(IMeasurementResult measurementResult) {
+	private static <T> T adaptTo(IMeasurementResult<?> measurementResult, Class<T> desiredType) {
+
+		if(measurementResult == null) {
+			return null;
+		}
+		T resultAdapted = Adapters.adapt(measurementResult, desiredType);
+		if(resultAdapted != null) {
+			return resultAdapted;
+		} else {
+			return Adapters.adapt(measurementResult.getResult(), desiredType);
+		}
+	}
+
+	public void updateLabel(IMeasurementResult<?> measurementResult) {
 
 		if(!labelMeasurementResultInfo.isDisposed()) {
 			if(measurementResult != null) {
