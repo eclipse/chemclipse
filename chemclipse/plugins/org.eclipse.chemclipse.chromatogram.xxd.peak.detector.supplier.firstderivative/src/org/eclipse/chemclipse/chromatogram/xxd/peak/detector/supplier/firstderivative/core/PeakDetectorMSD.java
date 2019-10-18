@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -66,7 +67,11 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 		if(!processingInfo.hasErrorMessages()) {
 			if(detectorSettings instanceof PeakDetectorSettingsMSD) {
 				PeakDetectorSettingsMSD peakDetectorSettings = (PeakDetectorSettingsMSD)detectorSettings;
-				detectPeaks(chromatogramSelection, peakDetectorSettings, monitor);
+				List<IChromatogramPeakMSD> peaks = detectPeaks(chromatogramSelection, peakDetectorSettings, monitor);
+				IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
+				for(IChromatogramPeakMSD peak : peaks) {
+					chromatogram.addPeak(peak);
+				}
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Peak Detector First Derivative", "Peaks have been detected successfully."));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsMSD.class);
@@ -92,22 +97,26 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	@Override
 	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		if(peakDetectorSettings == null)
+		if(peakDetectorSettings == null) {
 			peakDetectorSettings = PreferenceSupplier.getPeakDetectorSettingsMSD();
+		}
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);
 	}
 
 	/**
-	 * Detect the peaks in the selection and add them to the chromatogram.
+	 * Use this method if peaks shall be detected without adding them to the chromatogram.
+	 * Detect the peaks in the selection.
+	 * This method does not add the peaks to the chromatogram.
+	 * It needs to be handled separately.
 	 * 
 	 * @param chromatogramSelection
 	 * @throws ValueMustNotBeNullException
 	 */
-	private void detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
+	public List<IChromatogramPeakMSD> detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
 		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize(), new MarkedIons(IonMarkMode.EXCLUDE));
 		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
-		buildAndStorePeaks(rawPeaks, chromatogramSelection.getChromatogramMSD(), peakDetectorSettings);
+		return extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings);
 	}
 
 	/**
@@ -116,9 +125,12 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 * 
 	 * @param rawPeaks
 	 * @param chromatogram
+	 * @return List<IChromatogramPeakCSD>
 	 */
-	private void buildAndStorePeaks(List<IRawPeak> rawPeaks, IChromatogramMSD chromatogram, PeakDetectorSettingsMSD peakDetectorSettings) {
+	private List<IChromatogramPeakMSD> extractPeaks(List<IRawPeak> rawPeaks, IChromatogramMSD chromatogram, PeakDetectorSettingsMSD peakDetectorSettings) {
 
+		List<IChromatogramPeakMSD> peaks = new ArrayList<>();
+		//
 		IChromatogramPeakMSD peak = null;
 		IScanRange scanRange = null;
 		for(IRawPeak rawPeak : rawPeaks) {
@@ -144,11 +156,10 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 				 */
 				if(isValidPeak(peak, peakDetectorSettings)) {
 					/*
-					 * Add the detector description. Add the peak to the
-					 * chromatogram.
+					 * Add the detector description.
 					 */
 					peak.setDetectorDescription(DETECTOR_DESCRIPTION);
-					chromatogram.addPeak(peak);
+					peaks.add(peak);
 				}
 			} catch(IllegalArgumentException e) {
 				logger.warn(e);
@@ -156,6 +167,8 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 				logger.warn(e);
 			}
 		}
+		//
+		return peaks;
 	}
 
 	/**

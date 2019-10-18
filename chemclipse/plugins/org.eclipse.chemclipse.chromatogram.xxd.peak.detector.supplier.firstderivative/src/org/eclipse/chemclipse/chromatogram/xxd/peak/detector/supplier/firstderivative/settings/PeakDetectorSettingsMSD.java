@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.Threshold;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
+import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;

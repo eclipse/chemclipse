@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 
 import java.io.File;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.Threshold;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;

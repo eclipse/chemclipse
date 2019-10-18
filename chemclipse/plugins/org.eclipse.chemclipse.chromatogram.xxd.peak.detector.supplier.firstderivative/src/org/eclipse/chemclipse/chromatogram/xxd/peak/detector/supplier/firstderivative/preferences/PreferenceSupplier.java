@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.Threshold;
+import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;

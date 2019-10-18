@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.Threshold;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
+import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.Threshold;
+import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.Activator;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
