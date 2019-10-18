@@ -46,7 +46,7 @@ import org.eclipse.swt.widgets.ToolItem;
 public class SettingsPreferencesEditPage extends WizardPage {
 
 	private TreeViewer treeViewer;
-	private Supplier<Collection<ProcessorPreferences<?>>> preferenceSupplier;
+	private final Supplier<Collection<ProcessorPreferences<?>>> preferenceSupplier;
 
 	public SettingsPreferencesEditPage(Supplier<Collection<ProcessorPreferences<?>>> preferenceSupplier) {
 		super(SettingsPreferencesEditPage.class.getName());
@@ -73,7 +73,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 					if(element instanceof TreeNode) {
 						element = ((TreeNode)element).getValue();
 					}
-					ProcessorPreferences<Object> entry = getEntry(element);
+					ProcessorPreferences<?> entry = getEntry(element);
 					if(entry != null) {
 						return entry.getSupplier().getName();
 					}
@@ -90,7 +90,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 				@Override
 				public String getText(Object element) {
 
-					ProcessorPreferences<Object> preferences = getEntry(element);
+					ProcessorPreferences<?> preferences = getEntry(element);
 					if(preferences != null) {
 						if(preferences.getDialogBehaviour() == DialogBehavior.SHOW) {
 							return "yes";
@@ -238,7 +238,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 		Map<String, TreeNode> categories = new TreeMap<>();
 		for(ProcessorPreferences<?> entry : preferenceSupplier.get()) {
 			IProcessTypeSupplier supplier = entry.getSupplier().getTypeSupplier();
-			TreeNode processorNode = new TreeNode(entry.getSupplier());
+			TreeNode processorNode = new TreeNode(entry);
 			String category = supplier.getCategory();
 			TreeNode categoryNode = categories.get(category);
 			if(categoryNode == null) {
