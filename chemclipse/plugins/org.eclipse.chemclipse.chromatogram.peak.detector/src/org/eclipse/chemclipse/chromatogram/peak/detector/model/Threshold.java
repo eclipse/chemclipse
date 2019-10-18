@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.model;
 
-public enum Threshold implements IThreshold {
+public enum Threshold {
 	OFF(1), LOW(2), MEDIUM(3), HIGH(4);
 
 	private int threshold;
