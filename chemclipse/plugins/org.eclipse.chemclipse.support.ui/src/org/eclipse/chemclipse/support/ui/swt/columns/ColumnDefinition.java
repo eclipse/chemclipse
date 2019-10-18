@@ -15,6 +15,8 @@ import java.util.Comparator;
 import java.util.function.Function;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.EditingSupport;
 
 /**
  * 
@@ -40,4 +42,13 @@ public interface ColumnDefinition<DataType, ColumnType> extends Function<DataTyp
 	String getTitle();
 
 	int getWidth();
+
+	/**
+	 * 
+	 * @return the desired {@link EditingSupport} for this column or <code>null</code> if editing is not available
+	 */
+	default EditingSupport getEditingSupport(ColumnViewer columnViewer) {
+
+		return null;
+	}
 }

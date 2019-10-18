@@ -53,4 +53,18 @@ public class AnalysisSegment implements IAnalysisSegment {
 
 		return stopScan;
 	}
+
+	public void setStartScan(int startScan) {
+
+		if(startScan > 0) {
+			this.startScan = startScan;
+		}
+	}
+
+	public void setStopScan(int stopScan) {
+
+		if(stopScan >= startScan) {
+			this.stopScan = stopScan;
+		}
+	}
 }

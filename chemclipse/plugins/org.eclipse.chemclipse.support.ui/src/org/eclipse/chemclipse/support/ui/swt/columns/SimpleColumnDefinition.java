@@ -15,6 +15,8 @@ import java.util.Comparator;
 import java.util.function.Function;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.EditingSupport;
 
 public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefinition<DataType, ColumnType> {
 
@@ -23,6 +25,7 @@ public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefin
 	private ColumnLabelProvider labelProvider;
 	private Comparator<ColumnType> comparator;
 	private Function<DataType, ColumnType> mapper;
+	private Function<ColumnViewer, EditingSupport> editingSupportSupplier;
 
 	public SimpleColumnDefinition(String title, int width, ColumnLabelProvider labelProvider) {
 		this(title, width, labelProvider, null, null);
@@ -68,5 +71,20 @@ public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefin
 	public int getWidth() {
 
 		return width;
+	}
+
+	@Override
+	public EditingSupport getEditingSupport(ColumnViewer columnViewer) {
+
+		if(editingSupportSupplier != null) {
+			return editingSupportSupplier.apply(columnViewer);
+		}
+		return ColumnDefinition.super.getEditingSupport(columnViewer);
+	}
+
+	public SimpleColumnDefinition<DataType, ColumnType> withEditingSupport(Function<ColumnViewer, EditingSupport> editingSupportSupplier) {
+
+		this.editingSupportSupplier = editingSupportSupplier;
+		return this;
 	}
 }

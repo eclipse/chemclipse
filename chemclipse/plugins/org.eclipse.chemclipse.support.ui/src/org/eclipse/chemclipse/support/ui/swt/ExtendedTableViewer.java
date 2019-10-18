@@ -36,6 +36,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -479,6 +480,10 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		ColumnLabelProvider labelProvider = definition.getLabelProvider();
 		if(labelProvider != null) {
 			viewerColumn.setLabelProvider(labelProvider);
+		}
+		EditingSupport editingSupport = definition.getEditingSupport(this);
+		if(editEnabled && editingSupport != null) {
+			viewerColumn.setEditingSupport(editingSupport);
 		}
 		tableViewerColumns.add(viewerColumn);
 		Comparator<C> comparator = definition.getComparator();
