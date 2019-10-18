@@ -340,6 +340,7 @@ public class ProcessingWizardPage extends WizardPage {
 			processEntry.setProcessorId(processorSupplier.getId());
 			processEntry.setName(processorSupplier.getName());
 			processEntry.setDescription(processorSupplier.getDescription());
+			processorSupplier.getSupportedDataTypes().forEach(processEntry::addDataCategory);
 			setMessage(processorSupplier.getDescription());
 		} else {
 			processEntry = null;
