@@ -10,6 +10,7 @@ Import-Package: org.osgi.framework;version="1.3.0"
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.peak.detector.core,
  org.eclipse.chemclipse.chromatogram.peak.detector.exceptions,
+ org.eclipse.chemclipse.chromatogram.peak.detector.model,
  org.eclipse.chemclipse.chromatogram.peak.detector.settings,
  org.eclipse.chemclipse.chromatogram.peak.detector.support
 Require-Bundle: org.eclipse.chemclipse.numeric;bundle-version="0.8.0",
