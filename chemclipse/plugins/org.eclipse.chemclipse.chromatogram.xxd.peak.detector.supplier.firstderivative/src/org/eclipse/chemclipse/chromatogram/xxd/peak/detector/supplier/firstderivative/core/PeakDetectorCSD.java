@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.core.IPeakDetectorCSD;
@@ -64,7 +65,11 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 		if(!processingInfo.hasErrorMessages()) {
 			if(detectorSettings instanceof PeakDetectorSettingsCSD) {
 				PeakDetectorSettingsCSD peakDetectorSettings = (PeakDetectorSettingsCSD)detectorSettings;
-				detectPeaks(chromatogramSelection, peakDetectorSettings, monitor);
+				List<IChromatogramPeakCSD> peaks = detectPeaks(chromatogramSelection, peakDetectorSettings, monitor);
+				IChromatogramCSD chromatogram = chromatogramSelection.getChromatogram();
+				for(IChromatogramPeakCSD peak : peaks) {
+					chromatogram.addPeak(peak);
+				}
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Peak Detector First Derivative", "Peaks have been detected successfully."));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsCSD.class);
@@ -81,16 +86,19 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 	}
 
 	/**
-	 * Detect the peaks in the selection and add them to the chromatogram.
+	 * Use this method if peaks shall be detected without adding them to the chromatogram.
+	 * Detect the peaks in the selection.
+	 * This method does not add the peaks to the chromatogram.
+	 * It needs to be handled separately.
 	 * 
 	 * @param chromatogramSelection
 	 * @throws ValueMustNotBeNullException
 	 */
-	private void detectPeaks(IChromatogramSelectionCSD chromatogramSelection, PeakDetectorSettingsCSD peakDetectorSettings, IProgressMonitor monitor) {
+	public List<IChromatogramPeakCSD> detectPeaks(IChromatogramSelectionCSD chromatogramSelection, PeakDetectorSettingsCSD peakDetectorSettings, IProgressMonitor monitor) {
 
 		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize());
 		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
-		buildAndStorePeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings);
+		return extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings);
 	}
 
 	/**
@@ -99,10 +107,12 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 	 * 
 	 * @param rawPeaks
 	 * @param chromatogram
+	 * @return List<IChromatogramPeakCSD>
 	 */
-	private void buildAndStorePeaks(List<IRawPeak> rawPeaks, IChromatogramCSD chromatogram, PeakDetectorSettingsCSD peakDetectorSettings) {
+	private List<IChromatogramPeakCSD> extractPeaks(List<IRawPeak> rawPeaks, IChromatogramCSD chromatogram, PeakDetectorSettingsCSD peakDetectorSettings) {
 
-		IChromatogramPeakCSD peak = null;
+		List<IChromatogramPeakCSD> peaks = new ArrayList<>();
+		//
 		IScanRange scanRange = null;
 		for(IRawPeak rawPeak : rawPeaks) {
 			/*
@@ -115,14 +125,13 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 				 * false: BV or VB
 				 * true: VV
 				 */
-				peak = PeakBuilderCSD.createPeak(chromatogram, scanRange, peakDetectorSettings.isIncludeBackground());
+				IChromatogramPeakCSD peak = PeakBuilderCSD.createPeak(chromatogram, scanRange, peakDetectorSettings.isIncludeBackground());
 				if(isValidPeak(peak, peakDetectorSettings)) {
 					/*
-					 * Add the detector description. Add the peak to the
-					 * chromatogram.
+					 * Add the detector description.
 					 */
 					peak.setDetectorDescription(DETECTOR_DESCRIPTION);
-					chromatogram.addPeak(peak);
+					peaks.add(peak);
 				}
 			} catch(IllegalArgumentException e) {
 				logger.warn(e);
@@ -130,6 +139,8 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 				logger.warn(e);
 			}
 		}
+		//
+		return peaks;
 	}
 
 	/**
