@@ -47,6 +47,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
@@ -986,8 +987,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-				IChromatogramSelectionProcessSupplier.applyProcessEntries(chromatogramSelection, processMethod, new ProcessExecutionContext(monitor, processingInfo, processTypeSupport));
-				chromatogramSelection.update(false);
+				IChromatogramSelection selection = getChromatogramSelection();
+				ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processingInfo, processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(selection));
+				selection.update(false);
 				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, processingInfo.hasErrorMessages());
 			}
 		});

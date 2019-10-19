@@ -12,9 +12,10 @@
 package org.eclipse.chemclipse.processing.methods;
 
 import java.util.Iterator;
-import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 
@@ -75,37 +76,53 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 		return true;
 	}
 
-	static <X> void applyProcessEntries(ProcessEntryContainer container, ProcessExecutionContext context, BiConsumer<ProcessorPreferences<X>, ProcessExecutionContext> consumer) {
+	static <X, T> T applyProcessEntries(ProcessEntryContainer container, ProcessExecutionContext context, ProcessExecutionConsumer<T> consumer) {
+
+		return applyProcessEntries(container, context, new BiFunction<IProcessEntry, IProcessSupplier<X>, ProcessorPreferences<X>>() {
+
+			@Override
+			public ProcessorPreferences<X> apply(IProcessEntry processEntry, IProcessSupplier<X> processSupplier) {
+
+				return processEntry.getPreferences(processSupplier);
+			}
+		}, consumer);
+	}
+
+	static <X, T> T applyProcessEntries(ProcessEntryContainer container, ProcessExecutionContext context, BiFunction<IProcessEntry, IProcessSupplier<X>, ProcessorPreferences<X>> preferenceSupplier, ProcessExecutionConsumer<T> consumer) {
 
 		context.setWorkRemaining(container.getNumberOfEntries());
 		for(IProcessEntry processEntry : container) {
-			ProcessorPreferences<X> preferences = processEntry.getPreferences(context);
-			if(preferences == null) {
+			IProcessSupplier<X> processor = context.getSupplier(processEntry.getProcessorId());
+			if(processor == null) {
 				context.addWarnMessage(processEntry.getName(), "processor not found, will be skipped");
 				continue;
 			}
 			try {
-				IProcessSupplier<X> supplier = preferences.getSupplier();
-				ProcessExecutionContext entryContext = context.split(supplier.getContext());
-				entryContext.setContextObject(IProcessSupplier.class, supplier);
-				entryContext.setContextObject(ProcessorPreferences.class, preferences);
-				entryContext.setContextObject(IProcessEntry.class, processEntry);
+				ProcessorPreferences<X> processorPreferences = preferenceSupplier.apply(processEntry, processor);
+				context.setContextObject(IProcessEntry.class, processEntry);
+				context.setContextObject(IProcessSupplier.class, processor);
+				context.setContextObject(ProcessExecutionConsumer.class, consumer);
+				context.setContextObject(ProcessorPreferences.class, processorPreferences);
+				ProcessExecutionContext entryContext = context.split(processor.getContext());
 				try {
-					if(processEntry.getNumberOfEntries() == 0) {
-						consumer.accept(preferences, entryContext);
-					} else {
+					if(processEntry.getNumberOfEntries() > 0) {
 						entryContext.setWorkRemaining(2);
-						consumer.accept(preferences, entryContext.split());
-						applyProcessEntries(processEntry, entryContext.split(), consumer);
+						IProcessSupplier.applyProcessor(processorPreferences, consumer, entryContext.split());
+						applyProcessEntries(processEntry, entryContext.split(), preferenceSupplier, consumer);
+					} else {
+						IProcessSupplier.applyProcessor(processorPreferences, consumer, entryContext);
 					}
 				} finally {
-					entryContext.setContextObject(IProcessSupplier.class, null);
-					entryContext.setContextObject(ProcessorPreferences.class, null);
-					entryContext.setContextObject(IProcessEntry.class, null);
+					context.setContextObject(IProcessSupplier.class, null);
+					context.setContextObject(IProcessEntry.class, null);
+					context.setContextObject(ProcessExecutionConsumer.class, null);
+					context.setContextObject(ProcessorPreferences.class, null);
 				}
 			} catch(RuntimeException e) {
 				context.addErrorMessage(processEntry.getName(), "internal error", e);
 			}
 		}
+		// return the final result
+		return consumer.getResult();
 	}
 }

@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.CancellationException;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
@@ -24,6 +23,7 @@ import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -71,20 +71,20 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 		IChromatogramSelection<?, ?> chromatogramSelection = supplier.get();
 		if(chromatogramSelection != null) {
 			try {
-				T settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processorSupplier));
+				ProcessorPreferences<T> settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processorSupplier));
+				if(settings == null) {
+					return;
+				}
 				executionConsumer.accept(new IRunnableWithProgress() {
 
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 						DefaultProcessingResult<Object> msgs = new DefaultProcessingResult<>();
-						IChromatogramSelectionProcessSupplier.applyProcessor(chromatogramSelection, processorSupplier, settings, new ProcessExecutionContext(monitor, msgs, context));
+						IProcessSupplier.applyProcessor(settings, IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection), new ProcessExecutionContext(monitor, msgs, context));
 						updateResult(shell, msgs);
 					}
 				}, shell);
-			} catch(CancellationException e) {
-				// user has canceled so cancel the action as well
-				return;
 			} catch(IOException e) {
 				DefaultProcessingResult<Object> result = new DefaultProcessingResult<>();
 				result.addErrorMessage(processorSupplier.getName(), "can't process settings", e);

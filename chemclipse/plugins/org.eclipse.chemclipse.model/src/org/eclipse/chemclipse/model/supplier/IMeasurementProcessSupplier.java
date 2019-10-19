@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.supplier;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
-import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 
 public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplier<ConfigType> {
 
@@ -39,28 +39,34 @@ public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplie
 	 */
 	Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, ConfigType processSettings, ProcessExecutionContext context);
 
-	static <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessSupplier<X> supplier, X processSettings, ProcessExecutionContext context) {
+	static ProcessExecutionConsumer<Collection<? extends IMeasurement>> createConsumer(Collection<? extends IMeasurement> measurements) {
 
-		if(supplier instanceof IMeasurementProcessSupplier<?>) {
-			IMeasurementProcessSupplier<X> measurementProcessSupplier = (IMeasurementProcessSupplier<X>)supplier;
-			return measurementProcessSupplier.applyProcessor(measurements, processSettings, context);
-		} else if(supplier instanceof ProcessEntryContainer) {
-			ProcessEntryContainer container = (ProcessEntryContainer)supplier;
-			return applyProcessEntries(measurements, container, context);
-		}
-		return measurements;
-	}
+		return new ProcessExecutionConsumer<Collection<? extends IMeasurement>>() {
 
-	static <X> Collection<? extends IMeasurement> applyProcessEntries(Collection<? extends IMeasurement> measurements, ProcessEntryContainer processMethod, ProcessExecutionContext context) {
+			AtomicReference<Collection<? extends IMeasurement>> result = new AtomicReference<Collection<? extends IMeasurement>>(measurements);
 
-		AtomicReference<Collection<? extends IMeasurement>> result = new AtomicReference<Collection<? extends IMeasurement>>(measurements);
-		ProcessEntryContainer.applyProcessEntries(processMethod, context, (preferences, subContext) -> {
-			try {
-				result.set(applyProcessor(result.get(), preferences.getSupplier(), preferences.getSettings(), subContext));
-			} catch(IOException e) {
-				subContext.addWarnMessage(preferences.getSupplier().getName(), "reading settings failed, processor will be skipped", e);
+			@Override
+			public <X> void execute(ProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
+
+				IProcessSupplier<X> supplier = preferences.getSupplier();
+				if(supplier instanceof IMeasurementProcessSupplier<?>) {
+					IMeasurementProcessSupplier<X> measurementProcessSupplier = (IMeasurementProcessSupplier<X>)supplier;
+					result.set(measurementProcessSupplier.applyProcessor(result.get(), preferences.getSettings(), context));
+				}
 			}
-		});
-		return result.get();
+
+			@Override
+			public Collection<? extends IMeasurement> getResult() {
+
+				return result.get();
+			}
+
+			@Override
+			public <X> boolean canExecute(ProcessorPreferences<X> preferences) {
+
+				IProcessSupplier<X> supplier = preferences.getSupplier();
+				return supplier instanceof IMeasurementProcessSupplier<?>;
+			}
+		};
 	}
 }

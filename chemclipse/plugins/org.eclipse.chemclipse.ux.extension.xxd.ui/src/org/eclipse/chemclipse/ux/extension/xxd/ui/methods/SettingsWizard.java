@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
@@ -125,27 +124,25 @@ public class SettingsWizard extends Wizard {
 	 * 
 	 * @param shell
 	 * @param processorSupplier
-	 * @return
+	 * @return the preferences to use or <code>null</code> if user canceled the wizzard
 	 * @throws IOException
 	 *             if reading the settings failed
-	 * @throws CancellationException
-	 *             if user canceled the wizard
 	 */
-	public static <T> T getSettings(Shell shell, ProcessorPreferences<T> preferences) throws IOException, CancellationException {
+	public static <T> ProcessorPreferences<T> getSettings(Shell shell, ProcessorPreferences<T> preferences) throws IOException {
 
 		IProcessSupplier<T> processSupplier = preferences.getSupplier();
 		Class<T> settingsClass = processSupplier.getSettingsClass();
 		if(settingsClass == null) {
-			return null;
+			return preferences;
 		} else {
 			if(preferences.getDialogBehaviour() == DialogBehavior.SHOW) {
 				if(!processSupplier.getSettingsParser().getInputValues().isEmpty()) {
 					if(!openEditPreferencesWizard(shell, preferences)) {
-						throw new CancellationException("user has canceled the wizard");
+						return null;
 					}
 				}
 			}
-			return preferences.getSettings();
+			return preferences;
 		}
 	}
 

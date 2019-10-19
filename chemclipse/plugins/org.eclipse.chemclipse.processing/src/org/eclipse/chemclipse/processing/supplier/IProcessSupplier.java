@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.processing.supplier;
 import java.util.Set;
 
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 
 public interface IProcessSupplier<SettingType> {
@@ -87,5 +88,58 @@ public interface IProcessSupplier<SettingType> {
 		} else {
 			return getTypeSupplier();
 		}
+	}
+
+	public static <X, T> T applyProcessor(ProcessorPreferences<X> processorPreferences, ProcessExecutionConsumer<T> consumer, ProcessExecutionContext context) {
+
+		IProcessSupplier<X> supplier = processorPreferences.getSupplier();
+		try {
+			context.setContextObject(IProcessSupplier.class, supplier);
+			context.setContextObject(ProcessorPreferences.class, processorPreferences);
+			context.setContextObject(ProcessExecutionConsumer.class, consumer);
+			int numberOfCalls = 0;
+			boolean canDirectExecute = consumer.canExecute(processorPreferences);
+			ProcessEntryContainer container = null;
+			ProcessExecutionConsumer<?> supplierExecutionConsumer = null;
+			if(canDirectExecute) {
+				numberOfCalls++;
+			}
+			if(supplier instanceof ProcessEntryContainer) {
+				container = (ProcessEntryContainer)supplier;
+				numberOfCalls++;
+			}
+			if(supplier instanceof ProcessExecutionConsumer) {
+				ProcessExecutionConsumer<?> processExecutionConsumer = (ProcessExecutionConsumer<?>)supplier;
+				if(processExecutionConsumer.canExecute(processorPreferences)) {
+					numberOfCalls++;
+					supplierExecutionConsumer = processExecutionConsumer;
+				}
+			}
+			boolean mustSplit = numberOfCalls > 1;
+			if(mustSplit) {
+				context.setWorkRemaining(numberOfCalls);
+			}
+			if(canDirectExecute) {
+				consumer.execute(processorPreferences, mustSplit ? context.split() : context);
+			}
+			if(container != null) {
+				// ProcessEntry Containers are always executed as is, with the default Entry Preferences
+				ProcessEntryContainer.applyProcessEntries(container, mustSplit ? context.split() : context, consumer);
+			}
+			if(supplierExecutionConsumer != null) {
+				// execution consumers might behave different, they get full control of further execution flow
+				supplierExecutionConsumer.execute(processorPreferences, mustSplit ? context.split() : context);
+			}
+		} catch(InterruptedException e) {
+			Thread.currentThread().interrupt();
+			return null;
+		} catch(Exception e) {
+			context.addErrorMessage(supplier.getName(), "execution throws an error, processor is skipped", e);
+		} finally {
+			context.setContextObject(IProcessSupplier.class, null);
+			context.setContextObject(ProcessorPreferences.class, null);
+			context.setContextObject(ProcessExecutionConsumer.class, null);
+		}
+		return consumer.getResult();
 	}
 }

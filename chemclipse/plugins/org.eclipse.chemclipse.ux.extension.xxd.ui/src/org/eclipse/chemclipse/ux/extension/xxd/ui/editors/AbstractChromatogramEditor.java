@@ -42,6 +42,7 @@ import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.UserManagement;
@@ -306,7 +307,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 						IProcessMethod processMethod = Adapters.adapt(file, IProcessMethod.class);
 						if(processMethod != null) {
 							ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
-							IChromatogramSelectionProcessSupplier.applyProcessEntries(chromatogramSelection, processMethod, new ProcessExecutionContext(monitor, new ProcessingInfo<>(), processTypeSupport));
+							ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, new ProcessingInfo<>(), processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
 						}
 					}
 				});

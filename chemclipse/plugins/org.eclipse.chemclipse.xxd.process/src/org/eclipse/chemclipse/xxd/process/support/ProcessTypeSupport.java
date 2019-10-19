@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
@@ -126,7 +127,7 @@ public class ProcessTypeSupport implements ProcessSupplierContext {
 	public <T> IProcessingInfo<T> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessMethod processMethod, IProgressMonitor monitor) {
 
 		ProcessingInfo<T> processingInfo = new ProcessingInfo<>();
-		IChromatogramSelectionProcessSupplier.applyProcessEntries(chromatogramSelection, processMethod, new ProcessExecutionContext(monitor, processingInfo, this));
+		ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processingInfo, this), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
 		return processingInfo;
 	}
 
@@ -137,7 +138,7 @@ public class ProcessTypeSupport implements ProcessSupplierContext {
 		ProcessExecutionContext executionContext = new ProcessExecutionContext(monitor, processingInfo, this);
 		executionContext.setWorkRemaining(chromatogramSelections.size());
 		for(IChromatogramSelection<?, ?> selection : chromatogramSelections) {
-			IChromatogramSelectionProcessSupplier.applyProcessEntries(selection, processMethod, executionContext.split());
+			ProcessEntryContainer.applyProcessEntries(processMethod, executionContext.split(), IChromatogramSelectionProcessSupplier.createConsumer(selection));
 		}
 		return processingInfo;
 	}
@@ -145,6 +146,6 @@ public class ProcessTypeSupport implements ProcessSupplierContext {
 	@Deprecated
 	public <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, MessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-		return IMeasurementProcessSupplier.applyProcessEntries(measurements, processMethod, new ProcessExecutionContext(monitor, messageConsumer, this));
+		return ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, messageConsumer, this), IMeasurementProcessSupplier.createConsumer(measurements));
 	}
 }

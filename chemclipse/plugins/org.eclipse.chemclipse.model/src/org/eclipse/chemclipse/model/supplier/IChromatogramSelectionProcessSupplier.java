@@ -11,20 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.supplier;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 
 public interface IChromatogramSelectionProcessSupplier<SettingType> extends IProcessSupplier<SettingType> {
 
 	/**
-	 * Apply this processor to the given chromatogram selection
+	 * Apply this processor to the given {@link IChromatogramSelection}
 	 * 
 	 * @param chromatogramSelection
 	 *            the {@link IChromatogramSelection} to process
@@ -36,33 +36,43 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 	 */
 	IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, SettingType processSettings, ProcessExecutionContext context);
 
-	static <T> IChromatogramSelection<?, ?> applyProcessor(IChromatogramSelection<?, ?> chromatogramSelection, IProcessSupplier<T> supplier, T processSettings, ProcessExecutionContext context) {
+	static ProcessExecutionConsumer<IChromatogramSelection<?, ?>> createConsumer(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		if(supplier instanceof IChromatogramSelectionProcessSupplier<?>) {
-			IChromatogramSelectionProcessSupplier<T> chromatogramSelectionProcessSupplier = (IChromatogramSelectionProcessSupplier<T>)supplier;
-			return chromatogramSelectionProcessSupplier.apply(chromatogramSelection, processSettings, context);
-		} else if(supplier instanceof IMeasurementProcessSupplier<?>) {
-			IMeasurementProcessSupplier<T> measurementProcessSupplier = (IMeasurementProcessSupplier<T>)supplier;
-			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-			measurementProcessSupplier.applyProcessor(Collections.singleton(chromatogram), processSettings, context);
-		} else if(supplier instanceof ProcessEntryContainer) {
-			ProcessEntryContainer container = (ProcessEntryContainer)supplier;
-			return applyProcessEntries(chromatogramSelection, container, context);
-		}
-		return chromatogramSelection;
-	}
+		return new ProcessExecutionConsumer<IChromatogramSelection<?, ?>>() {
 
-	static <X> IChromatogramSelection<?, ?> applyProcessEntries(IChromatogramSelection<?, ?> chromatogramSelection, ProcessEntryContainer processMethod, ProcessExecutionContext context) {
+			AtomicReference<IChromatogramSelection<?, ?>> result = new AtomicReference<IChromatogramSelection<?, ?>>(chromatogramSelection);
 
-		context.setWorkRemaining(processMethod.getNumberOfEntries());
-		AtomicReference<IChromatogramSelection<?, ?>> result = new AtomicReference<IChromatogramSelection<?, ?>>(chromatogramSelection);
-		ProcessEntryContainer.applyProcessEntries(processMethod, context, (preferences, subContext) -> {
-			try {
-				result.set(applyProcessor(result.get(), preferences.getSupplier(), preferences.getSettings(), subContext));
-			} catch(IOException e) {
-				subContext.addWarnMessage(preferences.getSupplier().getName(), "reading settings failed, processor will be skipped", e);
+			@Override
+			public <X> void execute(ProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
+
+				IProcessSupplier<X> supplier = preferences.getSupplier();
+				if(supplier instanceof IChromatogramSelectionProcessSupplier<?>) {
+					IChromatogramSelectionProcessSupplier<X> chromatogramSelectionProcessSupplier = (IChromatogramSelectionProcessSupplier<X>)supplier;
+					updateResult(chromatogramSelectionProcessSupplier.apply(getResult(), preferences.getSettings(), context));
+				} else if(supplier instanceof IMeasurementProcessSupplier<?>) {
+					IMeasurementProcessSupplier<X> measurementProcessSupplier = (IMeasurementProcessSupplier<X>)supplier;
+					IChromatogram<?> chromatogram = getResult().getChromatogram();
+					measurementProcessSupplier.applyProcessor(Collections.singleton(chromatogram), preferences.getSettings(), context);
+				}
 			}
-		});
-		return result.get();
+
+			@Override
+			public <X> boolean canExecute(ProcessorPreferences<X> preferences) {
+
+				IProcessSupplier<X> supplier = preferences.getSupplier();
+				return (supplier instanceof IChromatogramSelectionProcessSupplier<?>) || (supplier instanceof IMeasurementProcessSupplier<?>);
+			}
+
+			private void updateResult(IChromatogramSelection<?, ?> newSelection) {
+
+				result.set(newSelection);
+			}
+
+			@Override
+			public IChromatogramSelection<?, ?> getResult() {
+
+				return result.get();
+			}
+		};
 	}
 }
