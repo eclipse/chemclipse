@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyMetadata;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 
 /**
@@ -95,7 +96,10 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 								defaultInstance = createDefaultInstance();
 							}
 							if(defaultInstance != null) {
-								defaultValue = property.getGetter().getValue(defaultInstance);
+								AnnotatedMethod getter = property.getGetter();
+								if(getter != null) {
+									defaultValue = getter.getValue(defaultInstance);
+								}
 							}
 						}
 						inputValue.setDefaultValue((defaultValue == null) ? "" : defaultValue);
