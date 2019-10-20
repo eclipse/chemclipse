@@ -34,7 +34,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	private boolean isDontAskAgain;
 	private boolean isUseSystemDefaults;
 	private String jsonSettings;
-	private ProcessorPreferences<T> preferences;
+	private final ProcessorPreferences<T> preferences;
 
 	public SettingsPreferencesPage(ProcessorPreferences<T> preferences) {
 		super(SettingsPreferencesPage.class.getName());
@@ -44,7 +44,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		boolean requiresUserSettings = preferences.getSupplier().getSettingsParser().requiresUserSettings();
+		boolean requiresUserSettings = preferences.requiresUserSettings();
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));

@@ -58,7 +58,7 @@ public interface IProcessSupplier<SettingType> {
 	 * 
 	 * @return the settingsparser for this supplier
 	 */
-	SettingsParser getSettingsParser();
+	SettingsParser<SettingType> getSettingsParser();
 
 	/**
 	 * 

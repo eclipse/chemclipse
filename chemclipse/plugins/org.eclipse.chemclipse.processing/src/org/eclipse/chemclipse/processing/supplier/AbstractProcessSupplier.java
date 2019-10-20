@@ -29,7 +29,7 @@ public abstract class AbstractProcessSupplier<SettingsClass> implements IProcess
 	private final Class<SettingsClass> settingsClass;
 	private final Set<DataCategory> dataTypes;
 	private final IProcessTypeSupplier parent;
-	private SettingsClassParser classParser;
+	private SettingsClassParser<SettingsClass> classParser;
 
 	public AbstractProcessSupplier(String id, String name, String description, Class<SettingsClass> settingsClass, IProcessTypeSupplier parent, DataCategory... dataTypes) {
 		this.id = id;
@@ -80,18 +80,23 @@ public abstract class AbstractProcessSupplier<SettingsClass> implements IProcess
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj)
+		if(this == obj) {
 			return true;
-		if(obj == null)
+		}
+		if(obj == null) {
 			return false;
-		if(getClass() != obj.getClass())
+		}
+		if(getClass() != obj.getClass()) {
 			return false;
+		}
 		AbstractProcessSupplier<?> other = (AbstractProcessSupplier<?>)obj;
 		if(id == null) {
-			if(other.id != null)
+			if(other.id != null) {
 				return false;
-		} else if(!id.equals(other.id))
+			}
+		} else if(!id.equals(other.id)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -114,10 +119,10 @@ public abstract class AbstractProcessSupplier<SettingsClass> implements IProcess
 	}
 
 	@Override
-	public SettingsParser getSettingsParser() {
+	public SettingsParser<SettingsClass> getSettingsParser() {
 
 		if(classParser == null) {
-			classParser = new SettingsClassParser(getSettingsClass());
+			classParser = new SettingsClassParser<>(getSettingsClass(), this);
 		}
 		return classParser;
 	}

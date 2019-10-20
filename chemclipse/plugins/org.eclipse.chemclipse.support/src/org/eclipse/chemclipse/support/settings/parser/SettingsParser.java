@@ -15,11 +15,11 @@ import java.util.List;
 
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 
-public interface SettingsParser {
+public interface SettingsParser<T> {
 
 	SystemSettingsStrategy getSystemSettingsStrategy();
 
 	List<InputValue> getInputValues();
 
-	boolean requiresUserSettings();
+	T createDefaultInstance();
 }

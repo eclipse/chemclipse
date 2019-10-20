@@ -94,18 +94,7 @@ public interface ProcessorPreferences<SettingType> {
 	default SettingType getSystemSettings() throws IOException {
 
 		IProcessSupplier<SettingType> supplier = getSupplier();
-		SystemSettingsStrategy strategy = supplier.getSettingsParser().getSystemSettingsStrategy();
-		if(strategy == SystemSettingsStrategy.NEW_INSTANCE) {
-			Class<SettingType> settingsClass = supplier.getSettingsClass();
-			if(settingsClass != null) {
-				try {
-					return settingsClass.newInstance();
-				} catch(InstantiationException | IllegalAccessException e) {
-					throw new IOException("can't create settings instance: " + e.getMessage(), e);
-				}
-			}
-		}
-		return null;
+		return supplier.getSettingsParser().createDefaultInstance();
 	}
 
 	default SettingType getSettings() throws IOException {
@@ -115,6 +104,13 @@ public interface ProcessorPreferences<SettingType> {
 		} else {
 			return getUserSettings();
 		}
+	}
+
+	default boolean requiresUserSettings() {
+
+		IProcessSupplier<SettingType> supplier = getSupplier();
+		SystemSettingsStrategy strategy = supplier.getSettingsParser().getSystemSettingsStrategy();
+		return strategy == SystemSettingsStrategy.NONE || strategy == SystemSettingsStrategy.DYNAMIC;
 	}
 
 	/**

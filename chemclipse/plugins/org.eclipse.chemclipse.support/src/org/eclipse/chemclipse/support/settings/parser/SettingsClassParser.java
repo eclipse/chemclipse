@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.support.settings.parser;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -41,16 +42,18 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
  * parses {@link InputValue}s from class files
  *
  */
-public class SettingsClassParser implements SettingsParser {
+public class SettingsClassParser<SettingType> implements SettingsParser<SettingType> {
 
-	private Class<?> settingclass;
+	private final Class<SettingType> settingclass;
 	private List<InputValue> inputValues;
+	private final Object defaultConstructorArgument;
 
-	public SettingsClassParser(Class<?> settingclass) {
+	public SettingsClassParser(Class<SettingType> settingclass, Object defaultConstructorArgument) {
 		this.settingclass = settingclass;
+		this.defaultConstructorArgument = defaultConstructorArgument;
 	}
 
-	public Class<?> getSettingclass() {
+	public Class<SettingType> getSettingClass() {
 
 		return settingclass;
 	}
@@ -66,7 +69,7 @@ public class SettingsClassParser implements SettingsParser {
 
 		if(inputValues == null) {
 			inputValues = new ArrayList<>();
-			Class<?> clazz = getSettingclass();
+			Class<?> clazz = getSettingClass();
 			SystemSettingsStrategy settingsStrategy = null;
 			Object defaultInstance = null;
 			if(clazz != null) {
@@ -89,16 +92,9 @@ public class SettingsClassParser implements SettingsParser {
 						if(defaultValue == null) {
 							if(settingsStrategy == null) {
 								settingsStrategy = getSystemSettingsStrategy();
+								defaultInstance = createDefaultInstance();
 							}
-							if(settingsStrategy == SystemSettingsStrategy.NEW_INSTANCE) {
-								if(defaultInstance == null) {
-									try {
-										defaultInstance = clazz.newInstance();
-									} catch(InstantiationException
-											| IllegalAccessException e) {
-										throw new RuntimeException("settingscalss " + clazz + " is annotated with SystemSettingsStrategy.NEW_INSTANCE but can't be instantiated as such!", e);
-									}
-								}
+							if(defaultInstance != null) {
 								defaultValue = property.getGetter().getValue(defaultInstance);
 							}
 						}
@@ -140,7 +136,7 @@ public class SettingsClassParser implements SettingsParser {
 	@Override
 	public SystemSettingsStrategy getSystemSettingsStrategy() {
 
-		Class<?> clazz = getSettingclass();
+		Class<?> clazz = getSettingClass();
 		if(clazz == null) {
 			return SystemSettingsStrategy.NULL;
 		}
@@ -166,9 +162,33 @@ public class SettingsClassParser implements SettingsParser {
 	}
 
 	@Override
-	public boolean requiresUserSettings() {
+	public SettingType createDefaultInstance() {
 
 		SystemSettingsStrategy strategy = getSystemSettingsStrategy();
-		return strategy == SystemSettingsStrategy.NONE || strategy == SystemSettingsStrategy.DYNAMIC;
+		if(strategy == SystemSettingsStrategy.NEW_INSTANCE) {
+			Class<SettingType> settingsClass = getSettingClass();
+			if(settingsClass != null) {
+				try {
+					if(defaultConstructorArgument != null) {
+						Constructor<?>[] constructors = settingsClass.getConstructors();
+						for(Constructor<?> constructor : constructors) {
+							if(constructor.getParameterCount() == 1) {
+								Class<?> parameter = constructor.getParameterTypes()[0];
+								if(parameter.isInstance(defaultConstructorArgument)) {
+									return settingsClass.cast(constructor.newInstance(defaultConstructorArgument));
+								}
+							}
+						}
+					}
+					// try default constructor instead
+					return settingsClass.newInstance();
+				} catch(InstantiationException | IllegalAccessException
+						| IllegalArgumentException
+						| InvocationTargetException e) {
+					throw new RuntimeException("can't create settings instance: " + e.getMessage(), e);
+				}
+			}
+		}
+		return null;
 	}
 }
