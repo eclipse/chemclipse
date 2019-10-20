@@ -103,6 +103,14 @@ public class JSONSerialization implements SettingsSerialization {
 	}
 
 	@Override
+	public void updateFromString(Object object, String content) throws IOException {
+
+		if(object != null) {
+			createMapper().readerForUpdating(object).readValue(content);
+		}
+	}
+
+	@Override
 	public String toString(Object settingsObject) throws IOException {
 
 		ObjectMapper mapper = new ObjectMapper();

@@ -52,5 +52,14 @@ public interface SettingsSerialization {
 	 */
 	<Settings> Settings fromString(Class<Settings> settingsClass, String content) throws IOException;
 
+	/**
+	 * Reads the settings from string and updates the given object with the values
+	 * 
+	 * @param settingsObject
+	 * @param content
+	 * @throws IOException
+	 */
+	void updateFromString(Object settingsObject, String content) throws IOException;
+
 	String toString(Object settingsObject) throws IOException;
 }

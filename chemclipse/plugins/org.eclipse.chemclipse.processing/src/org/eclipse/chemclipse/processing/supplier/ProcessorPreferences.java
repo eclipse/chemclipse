@@ -88,7 +88,13 @@ public interface ProcessorPreferences<SettingType> {
 		if(serializedString == null || settingsClass == null) {
 			return null;
 		}
-		return getSerialization().fromString(settingsClass, serializedString);
+		SettingType defaultInstance = getSupplier().getSettingsParser().createDefaultInstance();
+		if(defaultInstance == null) {
+			return getSerialization().fromString(settingsClass, serializedString);
+		} else {
+			getSerialization().updateFromString(defaultInstance, serializedString);
+			return defaultInstance;
+		}
 	}
 
 	default SettingType getSystemSettings() throws IOException {
