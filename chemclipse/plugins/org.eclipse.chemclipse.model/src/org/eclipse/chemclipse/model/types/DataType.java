@@ -62,4 +62,13 @@ public enum DataType {
 				return DataCategory.AUTO_DETECT;
 		}
 	}
+
+	public static DataCategory[] convert(DataType[] dataTypes) {
+
+		DataCategory[] categories = new DataCategory[dataTypes.length];
+		for(int i = 0; i < categories.length; i++) {
+			categories[i] = dataTypes[i].toDataCategory();
+		}
+		return categories;
+	}
 }

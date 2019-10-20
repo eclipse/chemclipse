@@ -15,7 +15,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 import java.util.Collections;
 import java.util.Map;
 
-import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
@@ -44,15 +44,15 @@ public class ProcessingWizard extends Wizard {
 	}
 
 	@Deprecated
-	public static IProcessEntry open(Shell shell, ProcessTypeSupport processingSupport, DataType[] datatypes) {
+	public static IProcessEntry open(Shell shell, ProcessTypeSupport processingSupport, DataCategory[] dataCategories) {
 
-		return open(shell, Collections.singletonMap(processingSupport, "global"), datatypes).get(processingSupport);
+		return open(shell, Collections.singletonMap(processingSupport, "global"), dataCategories).get(processingSupport);
 	}
 
-	public static Map<ProcessSupplierContext, IProcessEntry> open(Shell shell, Map<ProcessSupplierContext, String> contexts, DataType[] datatypes) {
+	public static Map<ProcessSupplierContext, IProcessEntry> open(Shell shell, Map<ProcessSupplierContext, String> contexts, DataCategory[] dataCategories) {
 
 		ProcessingWizard wizard = new ProcessingWizard();
-		ProcessingWizardPage wizardPage = new ProcessingWizardPage(contexts, datatypes);
+		ProcessingWizardPage wizardPage = new ProcessingWizardPage(contexts, dataCategories);
 		wizard.addPage(wizardPage);
 		WizardDialog wizardDialog = new WizardDialog(shell, wizard);
 		wizardDialog.setMinimumPageSize(ProcessingWizard.DEFAULT_WIDTH, ProcessingWizard.DEFAULT_HEIGHT);

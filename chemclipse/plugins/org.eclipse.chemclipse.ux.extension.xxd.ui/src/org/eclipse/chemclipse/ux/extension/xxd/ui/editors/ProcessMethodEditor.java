@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
-import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
@@ -115,7 +115,7 @@ public class ProcessMethodEditor implements IModificationHandler {
 			currentProcessMethod = null;
 			processMethodFile = null;
 		}
-		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, new ProcessTypeSupport(), new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD});
+		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, new ProcessTypeSupport(), new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD});
 		extendedMethodUI.setModificationHandler(this);
 		extendedMethodUI.setProcessMethod(currentProcessMethod);
 	}

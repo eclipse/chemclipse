@@ -36,7 +36,7 @@ import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.ListProcessEntryContainer;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
-import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -120,15 +120,15 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private Composite buttons;
 	protected boolean showSettingsOnAdd;
 	private final ProcessSupplierContext processingSupport;
-	private final DataType[] dataTypes;
 	private Button buttonFinalize;
 	private ProcessEntryContainer postActions;
 	private final TreeViewerColumn[] columns = new TreeViewerColumn[MethodListLabelProvider.TITLES.length];
+	private DataCategory[] dataCategories;
 
-	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, DataType[] dataTypes) {
+	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, DataCategory[] dataCategories) {
 		super(parent, style);
 		this.processingSupport = processingSupport;
-		this.dataTypes = dataTypes;
+		this.dataCategories = dataCategories;
 		createControl();
 	}
 
@@ -628,7 +628,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 						}
 					}
 					contextList.put(processingSupport, processMethod.getName());
-					Map<ProcessSupplierContext, IProcessEntry> map = ProcessingWizard.open(getShell(), contextList, dataTypes);
+					Map<ProcessSupplierContext, IProcessEntry> map = ProcessingWizard.open(getShell(), contextList, dataCategories);
 					if(map != null) {
 						for(Entry<ProcessSupplierContext, IProcessEntry> entry : map.entrySet()) {
 							ProcessSupplierContext supplierContext = entry.getKey();

@@ -58,7 +58,7 @@ public class BatchJobUI {
 		listUI.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		listUI.getConfig().setToolbarVisible(false);
 		// right part with methods
-		extendedMethodUI = new ExtendedMethodUI(composite, SWT.NONE, processingSupport, dataTypes);
+		extendedMethodUI = new ExtendedMethodUI(composite, SWT.NONE, processingSupport, DataType.convert(dataTypes));
 		extendedMethodUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		extendedMethodUI.setModificationHandler(this::setEditorDirty);
 		extendedMethodUI.getConfig().setToolbarVisible(false);

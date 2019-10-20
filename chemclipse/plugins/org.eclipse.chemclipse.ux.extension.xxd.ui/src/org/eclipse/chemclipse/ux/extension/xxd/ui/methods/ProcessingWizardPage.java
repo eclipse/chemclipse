@@ -24,7 +24,6 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -62,13 +61,13 @@ public class ProcessingWizardPage extends WizardPage {
 	private final Set<DataCategory> selectedDataTypes = new HashSet<>();
 	private final List<Button> dataTypeSelections = new ArrayList<>();
 	private ProcessEntry processEntry;
-	private final DataType[] dataTypes;
 	private ProcessSupplierContext processContext;
+	private DataCategory[] dataCategories;
 
-	protected ProcessingWizardPage(Map<ProcessSupplierContext, String> contexts, DataType[] dataTypes) {
+	protected ProcessingWizardPage(Map<ProcessSupplierContext, String> contexts, DataCategory[] dataCategories) {
 		super("ProcessingWizardPage");
 		this.processSupplierContextMap = contexts;
-		this.dataTypes = dataTypes;
+		this.dataCategories = dataCategories;
 		processContext = contexts.entrySet().iterator().next().getKey();
 		setTitle("Process Entry");
 		setDescription("Select a chromatogram filter, integrator, identifier ... .");
@@ -80,22 +79,25 @@ public class ProcessingWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		//
-		if(dataTypes.length > 1) {
+		if(dataCategories.length > 1) {
 			createLabel(composite, "Select the desired data types");
-			for(DataType dataType : dataTypes) {
+			for(DataCategory dataType : dataCategories) {
 				Button button;
 				switch(dataType) {
 					case CSD:
-						button = createDataTypeCheckbox(composite, DataType.CSD, "CSD (FID, PPD, ...)", "Select the csd processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_CSD);
+						button = createDataTypeCheckbox(composite, DataCategory.CSD, "CSD (FID, PPD, ...)", "Select the csd processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_CSD);
 						break;
 					case MSD:
-						button = createDataTypeCheckbox(composite, DataType.MSD, "MSD (Quadrupole, IonTrap, ...)", "Select the msd processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD);
+						button = createDataTypeCheckbox(composite, DataCategory.MSD, "MSD (Quadrupole, IonTrap, ...)", "Select the msd processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD);
 						break;
 					case WSD:
-						button = createDataTypeCheckbox(composite, DataType.WSD, "WSD (UV/Vis, DAD, ...)", "Select the wsd processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD);
+						button = createDataTypeCheckbox(composite, DataCategory.WSD, "WSD (UV/Vis, DAD, ...)", "Select the wsd processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD);
 						break;
 					case NMR:
-						button = createDataTypeCheckbox(composite, DataType.NMR, "NMR (FID, Spectrum, ...)", "Select the NMR processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_NMR);
+						button = createDataTypeCheckbox(composite, DataCategory.NMR, "NMR (Spectrum)", "Select the NMR processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_NMR);
+						break;
+					case FID:
+						button = createDataTypeCheckbox(composite, DataCategory.FID, "NMR (FID Raw Data)", "Select the NMR processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_NMR);
 						break;
 					default:
 						continue;
@@ -156,7 +158,7 @@ public class ProcessingWizardPage extends WizardPage {
 		});
 	}
 
-	private static Button createDataTypeCheckbox(Composite parent, DataType dataType, String text, String tooltip, String preferenceKey) {
+	private static Button createDataTypeCheckbox(Composite parent, DataCategory dataType, String text, String tooltip, String preferenceKey) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		Button button = new Button(parent, SWT.CHECK);
@@ -202,13 +204,13 @@ public class ProcessingWizardPage extends WizardPage {
 			return;
 		}
 		selectedDataTypes.clear();
-		if(dataTypes.length == 1) {
-			selectedDataTypes.add(dataTypes[0].toDataCategory());
+		if(dataCategories.length == 1) {
+			selectedDataTypes.add(dataCategories[0]);
 		} else {
 			for(Button button : dataTypeSelections) {
 				button.setEnabled(true);
 				if(button.getSelection()) {
-					selectedDataTypes.add(((DataType)button.getData()).toDataCategory());
+					selectedDataTypes.add(((DataCategory)button.getData()));
 				}
 			}
 		}
