@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
@@ -123,11 +124,19 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private Button buttonFinalize;
 	private ProcessEntryContainer postActions;
 	private final TreeViewerColumn[] columns = new TreeViewerColumn[MethodListLabelProvider.TITLES.length];
-	private DataCategory[] dataCategories;
+	private final DataCategory[] dataCategories;
+	private final BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
+	private final boolean readonly;
 
 	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, DataCategory[] dataCategories) {
+		this(parent, style, processingSupport, (entry, context) -> entry.getPreferences(context), dataCategories);
+	}
+
+	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier, DataCategory[] dataCategories) {
 		super(parent, style);
+		this.readonly = (style & SWT.READ_ONLY) != 0;
 		this.processingSupport = processingSupport;
+		this.preferencesSupplier = preferencesSupplier;
 		this.dataCategories = dataCategories;
 		createControl();
 	}
@@ -434,7 +443,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		for(int i = 0; i < MethodListLabelProvider.TITLES.length; i++) {
 			columns[i] = createColumn(treeViewer, MethodListLabelProvider.TITLES[i], MethodListLabelProvider.BOUNDS[i], null);
 		}
-		treeViewer.setLabelProvider(new MethodListLabelProvider(processingSupport));
+		treeViewer.setLabelProvider(new MethodListLabelProvider(processingSupport, preferencesSupplier));
 		treeViewer.setContentProvider(new ITreeContentProvider() {
 
 			@Override
@@ -517,6 +526,9 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
 
+				if(preferencesSupplier == null) {
+					return;
+				}
 				Object firstElement = treeViewer.getStructuredSelection().getFirstElement();
 				if(firstElement instanceof IProcessEntry) {
 					IProcessEntry entry = (IProcessEntry)firstElement;
@@ -862,7 +874,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	private void updateTableButtons() {
 
-		buttonAdd.setEnabled(processMethod != null && !processMethod.isFinal());
+		buttonAdd.setEnabled(processMethod != null && !processMethod.isFinal() && !readonly);
 		//
 		IStructuredSelection selection = listUI.getStructuredSelection();
 		boolean writeable = processMethod != null && !processMethod.isFinal() && !selection.isEmpty();
@@ -874,11 +886,11 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				writeable = false;
 			}
 		}
-		buttonCopy.setEnabled(writeable);
-		buttonRemove.setEnabled(writeable);
-		buttonMoveUp.setEnabled(writeable);
-		buttonMoveDown.setEnabled(writeable);
-		buttonModifySettings.setEnabled(writeable);
+		buttonCopy.setEnabled(writeable && !readonly);
+		buttonRemove.setEnabled(writeable && !readonly);
+		buttonMoveUp.setEnabled(writeable && !readonly);
+		buttonMoveDown.setEnabled(writeable && !readonly);
+		buttonModifySettings.setEnabled(writeable && preferencesSupplier != null);
 	}
 
 	@Override
@@ -986,7 +998,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, ProcessSupplierContext supplierContext, boolean showHint) {
 
-		ProcessorPreferences<?> preferences = processEntry.getPreferences(supplierContext);
+		ProcessorPreferences<?> preferences = preferencesSupplier.apply(processEntry, supplierContext);
 		if(preferences == null) {
 			// handle like cancel
 			return false;

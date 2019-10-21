@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
@@ -86,9 +87,11 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	}
 
 	private final ProcessSupplierContext processTypeSupport;
+	private BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
 
-	public MethodListLabelProvider(ProcessSupplierContext processTypeSupport) {
+	public MethodListLabelProvider(ProcessSupplierContext processTypeSupport, BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier) {
 		this.processTypeSupport = processTypeSupport;
+		this.preferencesSupplier = preferencesSupplier;
 	}
 
 	@Override
@@ -114,12 +117,12 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 					break;
 				case 4:
 					if(supplier != null) {
-						if(supplier.getSettingsParser().getInputValues().isEmpty()) {
+						if(supplier.getSettingsParser().getInputValues().isEmpty() || preferencesSupplier == null) {
 							return "not configurable";
 						} else {
-							ProcessorPreferences<Object> preferences = entry.getPreferences(supplierContext);
+							ProcessorPreferences<?> preferences = preferencesSupplier.apply(entry, supplierContext);
 							if(preferences.isUseSystemDefaults()) {
-								return "system defaults";
+								return "defaults";
 							} else {
 								String text = preferences.getUserSettingsAsString();
 								if(text.startsWith("{")) {

@@ -96,7 +96,7 @@ public class JSONSerialization implements SettingsSerialization {
 	@Override
 	public void updateFromString(Object object, String content) throws IOException {
 
-		if(object != null) {
+		if(object != null && content != null && !content.isEmpty()) {
 			createMapper().readerForUpdating(object).readValue(content);
 		}
 	}

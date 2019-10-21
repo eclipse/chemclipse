@@ -27,7 +27,7 @@ public class MethodListUI extends ExtendedTableViewer {
 	public MethodListUI(Composite parent, int style, ProcessTypeSupport processTypeSupport) {
 		super(parent, style | SWT.FULL_SELECTION);
 		createColumns(titles, bounds);
-		setLabelProvider(new MethodListLabelProvider(processTypeSupport));
+		setLabelProvider(new MethodListLabelProvider(processTypeSupport, (t, u) -> t.getPreferences(u)));
 		setContentProvider(new ListContentProvider());
 	}
 

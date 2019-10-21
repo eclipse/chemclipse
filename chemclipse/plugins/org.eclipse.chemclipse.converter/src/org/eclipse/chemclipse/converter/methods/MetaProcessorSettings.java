@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.model.methods.ListProcessEntryContainer;
@@ -30,6 +31,8 @@ public class MetaProcessorSettings {
 
 	@JsonProperty(value = "Settings", defaultValue = "")
 	private Map<String, String> settingsMap;
+	@JsonProperty(value = "Defaults", defaultValue = "")
+	private Map<String, Boolean> useDefaultMap;
 	@JsonIgnore
 	private final IProcessMethod method;
 
@@ -37,9 +40,20 @@ public class MetaProcessorSettings {
 		this.method = processSupplier.getMethod();
 	}
 
-	public Map<String, String> getSettingsMap() {
+	private Map<String, String> getSettingsMap() {
 
+		if(settingsMap == null) {
+			settingsMap = new HashMap<>();
+		}
 		return settingsMap;
+	}
+
+	private Map<String, Boolean> getUseDefaultMap() {
+
+		if(useDefaultMap == null) {
+			useDefaultMap = new HashMap<>();
+		}
+		return useDefaultMap;
 	}
 
 	/**
@@ -52,9 +66,11 @@ public class MetaProcessorSettings {
 		return method;
 	}
 
-	public <T> ProcessorPreferences<T> getProcessorPreferences(IProcessEntry entry, IProcessSupplier<T> supplier) {
+	public <T> ProcessorPreferences<T> getProcessorPreferences(IProcessEntry entry, ProcessorPreferences<T> delegate) {
 
-		ProcessorPreferences<T> delegate = entry.getPreferences(supplier);
+		if(delegate == null) {
+			return null;
+		}
 		String entryId = getId(entry);
 		return new ProcessorPreferences<T>() {
 
@@ -74,38 +90,41 @@ public class MetaProcessorSettings {
 			public void setUserSettings(String settings) {
 
 				if(settings == null || settings.isEmpty()) {
-					settingsMap.remove(entryId);
+					getSettingsMap().remove(entryId);
 				} else {
-					settingsMap.put(entryId, settings);
+					getSettingsMap().put(entryId, settings);
 				}
 			}
 
 			@Override
 			public boolean isUseSystemDefaults() {
 
-				return delegate.isUseSystemDefaults();
+				return getUseDefaultMap().getOrDefault(entryId, delegate.isUseSystemDefaults());
 			}
 
 			@Override
 			public void setUseSystemDefaults(boolean useSystemDefaults) {
 
+				getUseDefaultMap().put(entryId, useSystemDefaults);
 			}
 
 			@Override
 			public void reset() {
 
+				getSettingsMap().remove(entryId);
+				getUseDefaultMap().remove(entryId);
 			}
 
 			@Override
 			public IProcessSupplier<T> getSupplier() {
 
-				return supplier;
+				return delegate.getSupplier();
 			}
 
 			@Override
 			public String getUserSettingsAsString() {
 
-				return settingsMap.getOrDefault(entryId, delegate.getUserSettingsAsString());
+				return getSettingsMap().getOrDefault(entryId, delegate.getUserSettingsAsString());
 			}
 		};
 	}

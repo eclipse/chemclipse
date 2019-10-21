@@ -16,5 +16,15 @@
             id="org.eclipse.chemclipse.converter.ui.sequenceReportExtractorCategory"
             name="Sequence/Report Extractor">
       </category>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.chemclipse.converter.methods.MetaProcessorSettings"
+            class="org.eclipse.chemclipse.converter.ui.adapters.MetaProcessorSettingsAdapterFactory">
+         <adapter
+               type="org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider">
+         </adapter>
+      </factory>
    </extension>     
 </plugin>
