@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +40,7 @@ import org.eclipse.swt.widgets.Listener;
 
 public class SettingsUI<T> extends Composite {
 
-	private SettingsUIControl control;
+	private final SettingsUIControl control;
 
 	public SettingsUI(Composite parent, ProcessorPreferences<T> preferences) throws IOException {
 		super(parent, SWT.NONE);
@@ -67,7 +69,7 @@ public class SettingsUI<T> extends Composite {
 				settings = preferences.getSystemSettings();
 				if(settings == null) {
 					// last resort, create a new instance instead
-					settings = preferences.getSupplier().getSettingsClass().newInstance();
+					settings = preferences.getSupplier().getSettingsParser().createDefaultInstance();
 				}
 			}
 			@SuppressWarnings("unchecked")
@@ -75,8 +77,7 @@ public class SettingsUI<T> extends Composite {
 			if(uiProvider != null) {
 				return uiProvider;
 			}
-		} catch(InstantiationException | IllegalAccessException
-				| IOException e) {
+		} catch(IOException e) {
 			// can't use it then ... must use default provider
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, "SettingsUI", "can't get user-settings for processor " + preferences.getSupplier().getId() + " with settingsclass " + preferences.getSupplier().getSettingsClass(), e));
 		}
@@ -94,15 +95,15 @@ public class SettingsUI<T> extends Composite {
 
 	private final static class SettingsUIControlImplementation<T> implements SettingsUIControl {
 
-		private List<WidgetItem> widgetItems = new ArrayList<>();
-		private List<Label> labels = new ArrayList<>();
-		private ProcessorPreferences<T> preferences;
-		private Composite parent;
+		private final List<WidgetItem> widgetItems = new ArrayList<>();
+		private final List<Label> labels = new ArrayList<>();
+		private final ProcessorPreferences<T> preferences;
+		private final Composite container;
 
 		public SettingsUIControlImplementation(Composite parent, ProcessorPreferences<T> preferences) throws IOException {
-			this.parent = parent;
+			container = createContainer(parent);
 			this.preferences = preferences;
-			parent.setLayout(new GridLayout(2, false));
+			container.setLayout(new GridLayout(2, false));
 			Map<InputValue, Object> valuesMap = preferences.getSerialization().fromString(preferences.getSupplier().getSettingsParser().getInputValues(), preferences.getUserSettingsAsString());
 			if(valuesMap != null) {
 				for(Entry<InputValue, ?> entry : valuesMap.entrySet()) {
@@ -110,9 +111,9 @@ public class SettingsUI<T> extends Composite {
 				}
 			}
 			if(widgetItems.size() > 0) {
-				createOptionWidgets(parent);
+				createOptionWidgets(container);
 			} else {
-				createNoOptionsMessage(parent);
+				createNoOptionsMessage(container);
 			}
 		}
 
@@ -133,7 +134,10 @@ public class SettingsUI<T> extends Composite {
 				Label label = new Label(parent, SWT.NONE);
 				label.setText(widgetItem.getInputValue().getName());
 				label.setToolTipText(widgetItem.getInputValue().getDescription());
-				label.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+				GridData data = new GridData(SWT.LEFT, SWT.TOP, false, false);
+				data.verticalIndent = 5;
+				data.horizontalIndent = 5;
+				label.setLayoutData(data);
 				labels.add(label);
 				widgetItem.initializeControl(parent);
 			}
@@ -180,9 +184,15 @@ public class SettingsUI<T> extends Composite {
 				control.addListener(SWT.MouseDoubleClick, listener);
 			}
 			Event event = new Event();
-			event.display = parent.getShell().getDisplay();
-			event.widget = parent;
+			event.display = container.getShell().getDisplay();
+			event.widget = container;
 			listener.handleEvent(event);
+		}
+
+		@Override
+		public Control getControl() {
+
+			return container;
 		}
 	}
 }

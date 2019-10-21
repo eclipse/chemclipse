@@ -47,7 +47,6 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		boolean requiresUserSettings = preferences.requiresUserSettings();
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout());
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		Button buttonDefault = new Button(composite, SWT.RADIO);
 		buttonDefault.setText("Use System Options");
 		if(requiresUserSettings) {
@@ -64,7 +63,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		} catch(IOException e1) {
 			throw new RuntimeException("reading settings failed", e1);
 		}
-		settingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+		settingsUI.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		Listener validationListener = new Listener() {
 
 			@Override
@@ -113,7 +112,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 			isDontAskAgain = false;
 		} else {
 			Button buttonDontAskAgain = new Button(composite, SWT.CHECK);
-			buttonDontAskAgain.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, true));
+			buttonDontAskAgain.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false));
 			buttonDontAskAgain.setText("Remeber my decision and don't ask again");
 			buttonDontAskAgain.addSelectionListener(new SelectionListener() {
 

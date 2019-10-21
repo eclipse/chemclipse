@@ -16,6 +16,7 @@ import java.io.IOException;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Listener;
 
 public interface SettingsUIProvider<SettingType> {
@@ -31,5 +32,7 @@ public interface SettingsUIProvider<SettingType> {
 		String getSettings() throws IOException;
 
 		void addChangeListener(Listener listener);
+
+		Control getControl();
 	}
 }
