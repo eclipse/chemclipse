@@ -71,7 +71,6 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 		if(inputValues == null) {
 			inputValues = new ArrayList<>();
 			Class<?> clazz = getSettingClass();
-			SystemSettingsStrategy settingsStrategy = null;
 			Object defaultInstance = null;
 			if(clazz != null) {
 				ObjectMapper objectMapper = new ObjectMapper();
@@ -91,8 +90,7 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 						inputValue.setDescription((propertyMetadata.getDescription() == null) ? "" : propertyMetadata.getDescription());
 						Object defaultValue = propertyMetadata.getDefaultValue();
 						if(defaultValue == null) {
-							if(settingsStrategy == null) {
-								settingsStrategy = getSystemSettingsStrategy();
+							if(defaultInstance == null) {
 								defaultInstance = createDefaultInstance();
 							}
 							if(defaultInstance != null) {
@@ -168,29 +166,25 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 	@Override
 	public SettingType createDefaultInstance() {
 
-		SystemSettingsStrategy strategy = getSystemSettingsStrategy();
-		if(strategy == SystemSettingsStrategy.NEW_INSTANCE) {
-			Class<SettingType> settingsClass = getSettingClass();
-			if(settingsClass != null) {
-				try {
-					if(defaultConstructorArgument != null) {
-						Constructor<?>[] constructors = settingsClass.getConstructors();
-						for(Constructor<?> constructor : constructors) {
-							if(constructor.getParameterCount() == 1) {
-								Class<?> parameter = constructor.getParameterTypes()[0];
-								if(parameter.isInstance(defaultConstructorArgument)) {
-									return settingsClass.cast(constructor.newInstance(defaultConstructorArgument));
-								}
+		Class<SettingType> settingsClass = getSettingClass();
+		if(settingsClass != null) {
+			try {
+				if(defaultConstructorArgument != null) {
+					Constructor<?>[] constructors = settingsClass.getConstructors();
+					for(Constructor<?> constructor : constructors) {
+						if(constructor.getParameterCount() == 1) {
+							Class<?> parameter = constructor.getParameterTypes()[0];
+							if(parameter.isInstance(defaultConstructorArgument)) {
+								return settingsClass.cast(constructor.newInstance(defaultConstructorArgument));
 							}
 						}
 					}
-					// try default constructor instead
-					return settingsClass.newInstance();
-				} catch(InstantiationException | IllegalAccessException
-						| IllegalArgumentException
-						| InvocationTargetException e) {
-					throw new RuntimeException("can't create settings instance: " + e.getMessage(), e);
 				}
+				// try default constructor instead
+				return settingsClass.newInstance();
+			} catch(InstantiationException | IllegalAccessException
+					| IllegalArgumentException | InvocationTargetException e) {
+				throw new RuntimeException("can't create settings instance: " + e.getMessage(), e);
 			}
 		}
 		return null;

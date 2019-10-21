@@ -43,16 +43,6 @@ public interface SettingsSerialization {
 	Map<InputValue, Object> fromString(Collection<? extends InputValue> inputValues, String content) throws IOException;
 
 	/**
-	 * Reads settings from string an constructs an instance initialized with the values
-	 * 
-	 * @param settingsClass
-	 * @param content
-	 * @return
-	 * @throws IOException
-	 */
-	<Settings> Settings fromString(Class<Settings> settingsClass, String content) throws IOException;
-
-	/**
 	 * Reads the settings from string and updates the given object with the values
 	 * 
 	 * @param settingsObject

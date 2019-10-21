@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.processing.supplier;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
+import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
 import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 
@@ -89,18 +90,18 @@ public interface ProcessorPreferences<SettingType> {
 			return null;
 		}
 		SettingType defaultInstance = getSupplier().getSettingsParser().createDefaultInstance();
-		if(defaultInstance == null) {
-			return getSerialization().fromString(settingsClass, serializedString);
-		} else {
-			getSerialization().updateFromString(defaultInstance, serializedString);
-			return defaultInstance;
-		}
+		getSerialization().updateFromString(defaultInstance, serializedString);
+		return defaultInstance;
 	}
 
 	default SettingType getSystemSettings() throws IOException {
 
 		IProcessSupplier<SettingType> supplier = getSupplier();
-		return supplier.getSettingsParser().createDefaultInstance();
+		SettingsParser<SettingType> settingsParser = supplier.getSettingsParser();
+		if(settingsParser.getSystemSettingsStrategy() == SystemSettingsStrategy.NEW_INSTANCE) {
+			return settingsParser.createDefaultInstance();
+		}
+		return null;
 	}
 
 	default SettingType getSettings() throws IOException {
