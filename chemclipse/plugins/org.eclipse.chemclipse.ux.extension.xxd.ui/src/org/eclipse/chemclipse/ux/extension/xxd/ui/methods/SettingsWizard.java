@@ -37,11 +37,11 @@ import org.osgi.service.prefs.Preferences;
 public class SettingsWizard extends Wizard {
 
 	public static final int DEFAULT_WIDTH = 500;
-	public static final int DEFAULT_HEIGHT = 400;
+	public static final int DEFAULT_HEIGHT = 600;
 
 	private SettingsWizard(String title) {
 		setWindowTitle(title);
-		setNeedsProgressMonitor(true);
+		setNeedsProgressMonitor(false);
 	}
 
 	@Override
