@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
 /**
  * Contains utility methods to construct standard SWT items in a uniform way
@@ -77,6 +78,28 @@ public class ControlBuilder {
 	}
 
 	/**
+	 * Creates a label suitable for a labelcontainer
+	 * 
+	 * @param label
+	 * @param container
+	 * @return
+	 */
+	public static Label label(String label, Composite container) {
+
+		return label(label, null, container);
+	}
+
+	public static Label label(String label, String tooltip, Composite container) {
+
+		Label labelComponent = new Label(container, SWT.NONE);
+		labelComponent.setText(label);
+		if(tooltip != null) {
+			labelComponent.setToolTipText(tooltip);
+		}
+		return labelComponent;
+	}
+
+	/**
 	 * Fills the control on the horizontal axis
 	 * 
 	 * @param control
@@ -106,6 +129,41 @@ public class ControlBuilder {
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		return control;
+	}
+
+	/**
+	 * Creates a container, that is meant to hold labels and components in a two columns grid layout, in contrast to {@link #createContainer(Composite)} and its variants, this add spacings around components
+	 * 
+	 * @param parent
+	 * @return
+	 */
+	public static Composite createLabelContainer(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout(2, false);
+		layout.horizontalSpacing = 10;
+		composite.setLayout(layout);
+		return fill(composite);
+	}
+
+	/**
+	 * Sets the horizontal span of the given control
+	 * 
+	 * @param control
+	 * @param cols
+	 * @return
+	 */
+	public static <T extends Control> T span(T control, int cols) {
+
+		gridData(control).horizontalSpan = cols;
+		return control;
+	}
+
+	public static Control createSeperator(Composite parent) {
+
+		Label separator = new Label(parent, SWT.HORIZONTAL | SWT.SEPARATOR);
+		separator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return separator;
 	}
 
 	/**
