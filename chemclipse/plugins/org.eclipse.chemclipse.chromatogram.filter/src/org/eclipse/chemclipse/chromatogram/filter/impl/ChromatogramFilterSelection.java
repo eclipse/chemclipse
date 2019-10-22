@@ -34,9 +34,19 @@ public class ChromatogramFilterSelection extends AbstractChromatogramFilter impl
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramFilterSettings instanceof FilterSettingsSelection) {
 				FilterSettingsSelection filterSettings = (FilterSettingsSelection)chromatogramFilterSettings;
-				int startRetentionTime = (int)(filterSettings.getStartRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
-				int stopRetentionTime = (int)(filterSettings.getStopRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
-				chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime);
+				double startRT = filterSettings.getStartRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR;
+				double stopRT = filterSettings.getStopRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR;
+				if(Double.isInfinite(startRT)) {
+					startRT = chromatogramSelection.getChromatogram().getStartRetentionTime() * Math.signum(startRT);
+				} else if(filterSettings.isStartRelative()) {
+					startRT = chromatogramSelection.getStartRetentionTime() + startRT;
+				}
+				if(Double.isInfinite(stopRT)) {
+					stopRT = chromatogramSelection.getChromatogram().getStopRetentionTime() * Math.signum(startRT);
+				} else if(filterSettings.isStopRelative()) {
+					stopRT = chromatogramSelection.getStopRetentionTime() + stopRT;
+				}
+				chromatogramSelection.setRangeRetentionTime((int)startRT, (int)stopRT);
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Chromatogram Selection applied"));
 			}
 		}
