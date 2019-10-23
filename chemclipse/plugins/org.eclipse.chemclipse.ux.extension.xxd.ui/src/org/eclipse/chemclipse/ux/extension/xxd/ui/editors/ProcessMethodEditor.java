@@ -103,6 +103,7 @@ public class ProcessMethodEditor implements IModificationHandler {
 
 		currentProcessMethod = null;
 		Object object = part.getObject();
+		DataCategory[] categories = null;
 		if(object instanceof Map) {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> map = (Map<String, Object>)object;
@@ -111,11 +112,16 @@ public class ProcessMethodEditor implements IModificationHandler {
 			if(currentProcessMethod == null) {
 				throw new RuntimeException("can't read file " + processMethodFile);
 			}
+			categories = currentProcessMethod.getDataCategories().toArray(new DataCategory[]{});
 		} else {
 			currentProcessMethod = null;
 			processMethodFile = null;
 		}
-		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, new ProcessTypeSupport(), new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD});
+		if(categories == null || categories.length == 0) {
+			// for backward compatibility
+			categories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD};
+		}
+		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, new ProcessTypeSupport(), categories);
 		extendedMethodUI.setModificationHandler(this);
 		extendedMethodUI.setProcessMethod(currentProcessMethod);
 	}

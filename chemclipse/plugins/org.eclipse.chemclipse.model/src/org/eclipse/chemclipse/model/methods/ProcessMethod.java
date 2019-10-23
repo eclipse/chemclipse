@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -31,7 +32,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	private String operator;
 	private String category;
 	private File sourceFile;
-	private Set<DataCategory> catgories;
+	private final Set<DataCategory> catgories;
 	private final Map<String, String> metadata = new LinkedHashMap<>();
 
 	/**
@@ -62,8 +63,11 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 				this.sourceFile = ((ProcessMethod)other).sourceFile;
 			}
 			metadata.putAll(other.getMetaData());
+			this.catgories = Collections.unmodifiableSet(new HashSet<>(other.getDataCategories()));
 			// read-only must be set at the end!
 			setReadOnly(other.isFinal());
+		} else {
+			this.catgories = Collections.emptySet();
 		}
 	}
 
