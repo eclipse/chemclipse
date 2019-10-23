@@ -17,4 +17,14 @@
             name="Baseline Subtract">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filters enables to remove the subtract another chromatogram."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.ui.core.ChromatogramFilter"
+            filterName="Chromatogram Subtract Filter (UI)"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.ui.settings.FilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.chromatogramsubtract">
+      </ChromatogramFilterSupplier>
+   </extension>   
 </plugin>
