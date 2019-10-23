@@ -513,7 +513,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 					}
 				}
 				if(parentElement instanceof ProcessEntryContainer) {
-					return getElements(parentElement);
+					return entryList((ProcessEntryContainer)parentElement, false);
 				}
 				return new Object[0];
 			}

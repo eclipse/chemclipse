@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
-public abstract class AbstractMeasurementResult implements IMeasurementResult {
+public abstract class AbstractMeasurementResult<T> implements IMeasurementResult<T> {
 
 	private String name = "";
 	private String identifier = "";
 	private String description = "";
-	private Object result = null;
+	private final T result;
 
-	public AbstractMeasurementResult(String name, String identifier, String description, Object result) {
+	public AbstractMeasurementResult(String name, String identifier, String description, T result) {
 		this.name = name;
 		this.identifier = identifier;
 		this.description = description;
@@ -44,7 +44,7 @@ public abstract class AbstractMeasurementResult implements IMeasurementResult {
 	}
 
 	@Override
-	public Object getResult() {
+	public T getResult() {
 
 		return result;
 	}
@@ -67,18 +67,23 @@ public abstract class AbstractMeasurementResult implements IMeasurementResult {
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj)
+		if(this == obj) {
 			return true;
-		if(obj == null)
+		}
+		if(obj == null) {
 			return false;
-		if(getClass() != obj.getClass())
+		}
+		if(getClass() != obj.getClass()) {
 			return false;
-		AbstractMeasurementResult other = (AbstractMeasurementResult)obj;
+		}
+		AbstractMeasurementResult<?> other = (AbstractMeasurementResult<?>)obj;
 		if(identifier == null) {
-			if(other.identifier != null)
+			if(other.identifier != null) {
 				return false;
-		} else if(!identifier.equals(other.identifier))
+			}
+		} else if(!identifier.equals(other.identifier)) {
 			return false;
+		}
 		return true;
 	}
 }
