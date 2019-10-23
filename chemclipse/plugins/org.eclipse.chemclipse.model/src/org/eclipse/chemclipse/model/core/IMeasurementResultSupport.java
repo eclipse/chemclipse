@@ -22,7 +22,7 @@ public interface IMeasurementResultSupport {
 	 * 
 	 * @param chromatogramResult
 	 */
-	void addMeasurementResult(IMeasurementResult chromatogramResult);
+	void addMeasurementResult(IMeasurementResult<?> chromatogramResult);
 
 	/**
 	 * Returns the result stored by the given identifier.
@@ -30,12 +30,12 @@ public interface IMeasurementResultSupport {
 	 * @param identifier
 	 * @return {@link IMeasurementResult}
 	 */
-	IMeasurementResult getMeasurementResult(String identifier);
+	IMeasurementResult<?> getMeasurementResult(String identifier);
 
-	default <T extends IMeasurementResult> T getMeasurementResult(Class<T> type) {
+	default <T extends IMeasurementResult<?>> T getMeasurementResult(Class<T> type) {
 
-		Collection<IMeasurementResult> measurementResults = getMeasurementResults();
-		for(IMeasurementResult result : measurementResults) {
+		Collection<IMeasurementResult<?>> measurementResults = getMeasurementResults();
+		for(IMeasurementResult<?> result : measurementResults) {
 			if(type.isInstance(result)) {
 				return type.cast(result);
 			}
@@ -60,5 +60,5 @@ public interface IMeasurementResultSupport {
 	 * 
 	 * @return Collection
 	 */
-	Collection<IMeasurementResult> getMeasurementResults();
+	Collection<IMeasurementResult<?>> getMeasurementResults();
 }

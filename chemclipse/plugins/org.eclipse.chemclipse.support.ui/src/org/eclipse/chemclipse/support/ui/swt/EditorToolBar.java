@@ -13,6 +13,8 @@
 package org.eclipse.chemclipse.support.ui.swt;
 
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.gridData;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.maximize;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -164,7 +166,8 @@ public class EditorToolBar {
 				Composite composite = createContainer(parent);
 				ComboViewer viewer = new ComboViewer(composite, readOnly ? SWT.READ_ONLY : SWT.NONE);
 				viewer.setContentProvider(ArrayContentProvider.getInstance());
-				ControlBuilder.fill(viewer.getControl());
+				GridData data = gridData(maximize(viewer.getControl()));
+				data.verticalAlignment = SWT.CENTER;
 				consumer.accept(viewer);
 				return composite;
 			}
@@ -311,9 +314,9 @@ public class EditorToolBar {
 
 	private static final class ConfigSection {
 
-		private List<PreferencePageContainer> preferencePages = new ArrayList<>();
+		private final List<PreferencePageContainer> preferencePages = new ArrayList<>();
 		private EditorToolBar configChild;
-		private EditorToolBar editorToolBar;
+		private final EditorToolBar editorToolBar;
 		private IAction configAction;
 
 		public ConfigSection(EditorToolBar editorToolBar) {

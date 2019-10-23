@@ -122,7 +122,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	protected boolean showSettingsOnAdd;
 	private final ProcessSupplierContext processingSupport;
 	private Button buttonFinalize;
-	private ProcessEntryContainer postActions;
+	private Collection<ProcessEntryContainer> postActions;
 	private final TreeViewerColumn[] columns = new TreeViewerColumn[MethodListLabelProvider.TITLES.length];
 	private final DataCategory[] dataCategories;
 	private final BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
@@ -143,10 +143,10 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 	public void setProcessMethod(IProcessMethod processMethod) {
 
-		setInputs(processMethod, null);
+		setInputs(processMethod, Collections.emptyList());
 	}
 
-	public void setInputs(IProcessMethod processMethod, ProcessEntryContainer postActions) {
+	public void setInputs(IProcessMethod processMethod, Collection<ProcessEntryContainer> postActions) {
 
 		this.postActions = postActions;
 		this.processMethod = new ProcessMethod(processMethod);
@@ -513,7 +513,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 					}
 				}
 				if(parentElement instanceof ProcessEntryContainer) {
-					return getElements(parentElement);
+					return entryList((ProcessEntryContainer)parentElement, false);
 				}
 				return new Object[0];
 			}
@@ -856,10 +856,13 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			textName.setText("");
 		}
 		boolean expand = false;
-		if(postActions == null) {
+		if(postActions == null || postActions.isEmpty()) {
 			listUI.setInput(processMethod);
 		} else {
-			listUI.setInput(new Object[]{processMethod, postActions});
+			ArrayList<Object> list = new ArrayList<>();
+			list.add(processMethod);
+			list.addAll(postActions);
+			listUI.setInput(list.toArray());
 			expand = true;
 		}
 		listUI.refresh();

@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.processing.supplier;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -50,10 +51,23 @@ public class ProcessExecutionContext implements ProcessSupplierContext, MessageC
 		return parent;
 	}
 
+	public <T> ProcessExecutionContext getParent(Class<T> clazz, Predicate<T> predicate) {
+
+		if(parent != null) {
+			T contextObject = parent.getContextObject(clazz);
+			if(predicate.test(contextObject)) {
+				return parent;
+			} else {
+				return parent.getParent(clazz, predicate);
+			}
+		}
+		return parent;
+	}
+
 	@Override
 	public void addMessage(String description, String message, Throwable t, MessageType type) {
 
-		consumer.addMessage(description, message, type);
+		consumer.addMessage(description, message, t, type);
 	}
 
 	@Override

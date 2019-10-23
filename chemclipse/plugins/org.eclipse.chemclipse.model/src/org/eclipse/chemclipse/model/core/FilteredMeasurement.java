@@ -47,7 +47,7 @@ import org.osgi.framework.ServiceReference;
 public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> implements IMeasurement, Filtered<FilteredType, ConfigType> {
 
 	private static final long serialVersionUID = 2L;
-	private FilteredType measurement;
+	private final FilteredType measurement;
 	private String dataName;
 	private String detailedInfo;
 	private Double sampleWeight;
@@ -60,8 +60,8 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	private String miscInfo;
 	private Date date;
 	private String operator;
-	private Map<String, IMeasurementResult> measurementResults = new HashMap<>(1);
-	private Map<String, String> headerMap = new HashMap<>(1);
+	private final Map<String, IMeasurementResult<?>> measurementResults = new HashMap<>(1);
+	private final Map<String, String> headerMap = new HashMap<>(1);
 	private transient FilterContext<FilteredType, ConfigType> context;
 
 	public FilteredMeasurement(FilterContext<FilteredType, ConfigType> context) {
@@ -78,7 +78,7 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	}
 
 	@Override
-	public void addMeasurementResult(IMeasurementResult measurementResult) {
+	public void addMeasurementResult(IMeasurementResult<?> measurementResult) {
 
 		if(measurementResult != null) {
 			measurementResults.put(measurementResult.getIdentifier(), measurementResult);
@@ -122,9 +122,9 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	}
 
 	@Override
-	public IMeasurementResult getMeasurementResult(String identifier) {
+	public IMeasurementResult<?> getMeasurementResult(String identifier) {
 
-		IMeasurementResult result = measurementResults.get(identifier);
+		IMeasurementResult<?> result = measurementResults.get(identifier);
 		if(result != null) {
 			return result;
 		}
@@ -158,7 +158,7 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	@Override
 	public void deleteMeasurementResult(String identifier) {
 
-		IMeasurementResult remove = measurementResults.remove(identifier);
+		IMeasurementResult<?> remove = measurementResults.remove(identifier);
 		if(remove == null) {
 			throw new UnsupportedOperationException();
 		}
@@ -204,9 +204,9 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	}
 
 	@Override
-	public Collection<IMeasurementResult> getMeasurementResults() {
+	public Collection<IMeasurementResult<?>> getMeasurementResults() {
 
-		ArrayList<IMeasurementResult> list = new ArrayList<>();
+		ArrayList<IMeasurementResult<?>> list = new ArrayList<>();
 		list.addAll(measurementResults.values());
 		list.addAll(measurement.getMeasurementResults());
 		return Collections.unmodifiableCollection(list);

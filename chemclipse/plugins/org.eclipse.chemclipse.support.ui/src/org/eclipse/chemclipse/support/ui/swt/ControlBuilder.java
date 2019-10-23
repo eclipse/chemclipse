@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
 /**
  * Contains utility methods to construct standard SWT items in a uniform way
@@ -29,18 +30,30 @@ import org.eclipse.swt.widgets.Control;
  */
 public class ControlBuilder {
 
+	/**
+	 * Create a "container-composite", that is one with a gridlayout that does not add additional spaces and is filled horizontal
+	 * 
+	 * @return
+	 */
 	public static Composite createContainer(Composite parent) {
 
 		return createContainer(parent, 1);
 	}
 
+	/**
+	 * Create a "container-composite", that is one with a gridlayout that does not add additional spaces and is filled horizontal
+	 * 
+	 * @param parent
+	 * @param columns
+	 * @return
+	 */
 	public static Composite createContainer(Composite parent, int columns) {
 
 		return createContainer(parent, columns, false);
 	}
 
 	/**
-	 * Create a "container-composite", that is one with a gridlayout that does not add additional spaces
+	 * Create a "container-composite", that is one with a gridlayout that does not add additional spaces and is filled horizontal
 	 * 
 	 * @param parent
 	 * @param columns
@@ -50,6 +63,7 @@ public class ControlBuilder {
 	public static Composite createContainer(Composite parent, int columns, boolean equal) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 		GridLayout layout = new GridLayout(columns, equal);
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
@@ -63,20 +77,120 @@ public class ControlBuilder {
 		return fill(composite);
 	}
 
+	/**
+	 * Creates a label suitable for a labelcontainer
+	 * 
+	 * @param label
+	 * @param container
+	 * @return
+	 */
+	public static Label label(String label, Composite container) {
+
+		return label(label, null, container);
+	}
+
+	public static Label label(String label, String tooltip, Composite container) {
+
+		Label labelComponent = new Label(container, SWT.NONE);
+		labelComponent.setText(label);
+		if(tooltip != null) {
+			labelComponent.setToolTipText(tooltip);
+		}
+		return labelComponent;
+	}
+
+	/**
+	 * Fills the control on the horizontal axis
+	 * 
+	 * @param control
+	 * @return
+	 */
 	public static <T extends Control> T fill(T control) {
 
-		if(control.getParent().getLayout() instanceof GridLayout) {
-			Object layoutData = control.getLayoutData();
-			GridData gridData;
-			if(layoutData instanceof GridData) {
-				gridData = (GridData)layoutData;
-			} else {
-				gridData = new GridData(SWT.FILL, SWT.CENTER, true, true);
-				control.setLayoutData(gridData);
-			}
-			gridData.grabExcessHorizontalSpace = true;
+		if(isGridLayouted(control)) {
+			GridData data = gridData(control);
+			data.horizontalAlignment = SWT.FILL;
+			data.grabExcessHorizontalSpace = true;
 		}
 		return control;
+	}
+
+	/**
+	 * Maximize the control in the vertical and horizontal axis
+	 * 
+	 * @param control
+	 * @return
+	 */
+	public static <T extends Control> T maximize(T control) {
+
+		GridData gridData = gridData(control);
+		gridData.horizontalAlignment = SWT.FILL;
+		gridData.verticalAlignment = SWT.FILL;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		return control;
+	}
+
+	/**
+	 * Creates a container, that is meant to hold labels and components in a two columns grid layout, in contrast to {@link #createContainer(Composite)} and its variants, this add spacings around components
+	 * 
+	 * @param parent
+	 * @return
+	 */
+	public static Composite createLabelContainer(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout(2, false);
+		layout.horizontalSpacing = 10;
+		composite.setLayout(layout);
+		return fill(composite);
+	}
+
+	/**
+	 * Sets the horizontal span of the given control
+	 * 
+	 * @param control
+	 * @param cols
+	 * @return
+	 */
+	public static <T extends Control> T span(T control, int cols) {
+
+		gridData(control).horizontalSpan = cols;
+		return control;
+	}
+
+	public static Control createSeperator(Composite parent) {
+
+		Label separator = new Label(parent, SWT.HORIZONTAL | SWT.SEPARATOR);
+		separator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return separator;
+	}
+
+	/**
+	 * Checks if a control is inside a grid-layout and thus can have {@link GridData} layout data
+	 * 
+	 * @param control
+	 * @return
+	 */
+	public static <T extends Control> boolean isGridLayouted(T control) {
+
+		return control.getParent().getLayout() instanceof GridLayout;
+	}
+
+	public static GridData gridData(Control control) {
+
+		Object layoutData = control.getLayoutData();
+		if(layoutData instanceof GridData) {
+			return (GridData)layoutData;
+		} else {
+			GridData gridData = new GridData();
+			if(isGridLayouted(control)) {
+				// only set it if the parent is valid....
+				control.setLayoutData(gridData);
+			}
+			// ... but always return it so caller can still set values on it, even though they are ignored
+			return gridData;
+		}
 	}
 
 	public static TreeViewer createTreeTable(Composite parent, boolean enableTooltips) {

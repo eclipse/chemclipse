@@ -30,6 +30,7 @@ public abstract class AbstractProcessSupplier<SettingsClass> implements IProcess
 	private final Set<DataCategory> dataTypes;
 	private final IProcessTypeSupplier parent;
 	private SettingsClassParser<SettingsClass> classParser;
+	private String category;
 
 	public AbstractProcessSupplier(String id, String name, String description, Class<SettingsClass> settingsClass, IProcessTypeSupplier parent, DataCategory... dataTypes) {
 		this.id = id;
@@ -42,6 +43,20 @@ public abstract class AbstractProcessSupplier<SettingsClass> implements IProcess
 		} else {
 			this.dataTypes = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(dataTypes)));
 		}
+	}
+
+	@Override
+	public String getCategory() {
+
+		if(category != null) {
+			return category;
+		}
+		return IProcessSupplier.super.getCategory();
+	}
+
+	public void setCategory(String category) {
+
+		this.category = category;
 	}
 
 	@Override
