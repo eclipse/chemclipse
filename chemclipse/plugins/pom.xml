@@ -77,7 +77,6 @@
 <module>org.eclipse.chemclipse.chromatogram.msd.identifier</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax</module>
-<module>org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.fragment.test</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.ui</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea</module>
 <module>org.eclipse.chemclipse.chromatogram.msd.peak.detector.fragment.test</module>
@@ -216,7 +215,6 @@
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv.ui</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.csv</module>
-<module>org.eclipse.chemclipse.msd.converter.supplier.excel.fragment.test</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.excel.ui</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.excel</module>
 <module>org.eclipse.chemclipse.msd.converter.supplier.massbank.fragment.test</module>
@@ -305,7 +303,6 @@
 <module>org.eclipse.chemclipse.xxd.converter.supplier.chemclipse</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.gson.ui</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.gson</module>
-<module>org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.fragment.test</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.ui</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.jcampdx</module>
 <module>org.eclipse.chemclipse.xxd.converter.supplier.zip.ui</module>

@@ -17,8 +17,7 @@
 	</prerequisites>
 	<properties>
 		<!-- versions for plugins to use -->
-		<tycho.version>1.4.0</tycho.version>
-		<tycho-extras.version>1.4.0</tycho-extras.version>
+		<tycho.version>1.5.0</tycho.version>
 		<pmd.version>3.12.0</pmd.version>
 		<checkstyle.version>3.1.0</checkstyle.version>
 		<maven-install-plugin.version>2.5.2</maven-install-plugin.version>
