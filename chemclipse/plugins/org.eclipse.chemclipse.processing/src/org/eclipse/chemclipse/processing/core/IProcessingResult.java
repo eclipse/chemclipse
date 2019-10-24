@@ -25,9 +25,12 @@ public interface IProcessingResult<T> extends MessageConsumer, MessageProvider {
 	}
 
 	@Override
-	default void addMessage(String description, String message, Throwable t, MessageType type) {
+	default void addMessage(String description, String message, String detail, Throwable t, MessageType type) {
 
 		ProcessingMessage msg = new ProcessingMessage(type, description, message);
+		if(detail != null) {
+			msg.setDetails(detail);
+		}
 		msg.setException(t);
 		addMessage(msg);
 	}

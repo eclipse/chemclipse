@@ -20,6 +20,7 @@ public abstract class AbstractProcessingMessage implements IProcessingMessage {
 	private String description = "Description was null.";
 	private String message = "Message was null.";
 	private String proposedSolution = "";
+	private String details;
 
 	public AbstractProcessingMessage(MessageType messageType, String description, String message) {
 		this(messageType, description, message, "");
@@ -115,5 +116,16 @@ public abstract class AbstractProcessingMessage implements IProcessingMessage {
 		builder.append("proposedSolution=" + proposedSolution);
 		builder.append("]");
 		return builder.toString();
+	}
+
+	@Override
+	public String getDetails() {
+
+		return details;
+	}
+
+	public void setDetails(String details) {
+
+		this.details = details;
 	}
 }

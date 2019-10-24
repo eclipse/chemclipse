@@ -54,7 +54,12 @@ public interface MessageConsumer {
 		addMessage(description, message, null, type);
 	}
 
-	void addMessage(final String description, final String message, Throwable t, final MessageType type);
+	default void addMessage(final String description, final String message, Throwable t, final MessageType type) {
+
+		addMessage(description, message, null, t, type);
+	}
+
+	void addMessage(final String description, final String message, String details, Throwable t, final MessageType type);
 
 	default void addMessages(MessageProvider messageProvider) {
 

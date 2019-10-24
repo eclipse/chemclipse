@@ -65,9 +65,9 @@ public class ProcessExecutionContext implements ProcessSupplierContext, MessageC
 	}
 
 	@Override
-	public void addMessage(String description, String message, Throwable t, MessageType type) {
+	public void addMessage(String description, String message, String details, Throwable t, MessageType type) {
 
-		consumer.addMessage(description, message, t, type);
+		consumer.addMessage(description, message, details, t, type);
 	}
 
 	@Override
