@@ -71,4 +71,13 @@ public enum DataType {
 		}
 		return categories;
 	}
+
+	public static DataType[] convert(DataCategory[] categories) {
+
+		DataType[] dataTypes = new DataType[categories.length];
+		for(int i = 0; i < categories.length; i++) {
+			dataTypes[i] = fromDataCategory(categories[i]);
+		}
+		return dataTypes;
+	}
 }

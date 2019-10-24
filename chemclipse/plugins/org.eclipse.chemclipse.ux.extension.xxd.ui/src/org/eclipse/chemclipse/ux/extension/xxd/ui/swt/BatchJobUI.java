@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -48,25 +49,30 @@ public class BatchJobUI {
 	private ExtendedMethodUI extendedMethodUI;
 	private Composite composite;
 
+	@Deprecated
 	public BatchJobUI(Composite parent, ProcessTypeSupport processingSupport, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataType[] dataTypes, IRunnableWithProgress executionRunnable) {
+		this(parent, processingSupport, preferenceStore, userlocationPrefrenceKey, DataType.convert(dataTypes), executionRunnable);
+	}
+
+	public BatchJobUI(Composite parent, ProcessTypeSupport processingSupport, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataCategory[] dataCategories, IRunnableWithProgress executionRunnable) {
 		composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, true));
 		ToolBar toolBar = new ToolBar(composite, SWT.FLAT);
 		initToolbar(toolBar, executionRunnable);
 		// left part with files
-		listUI = createDataList(composite, preferenceStore, userlocationPrefrenceKey, dataTypes);
+		listUI = createDataList(composite, preferenceStore, userlocationPrefrenceKey, dataCategories);
 		listUI.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		listUI.getConfig().setToolbarVisible(false);
 		// right part with methods
-		extendedMethodUI = new ExtendedMethodUI(composite, SWT.NONE, processingSupport, DataType.convert(dataTypes));
+		extendedMethodUI = new ExtendedMethodUI(composite, SWT.NONE, processingSupport, dataCategories);
 		extendedMethodUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		extendedMethodUI.setModificationHandler(this::setEditorDirty);
 		extendedMethodUI.getConfig().setToolbarVisible(false);
 	}
 
-	protected DataListUI createDataList(Composite parent, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataType[] dataTypes) {
+	protected DataListUI createDataList(Composite parent, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataCategory[] dataCategories) {
 
-		return new DataListUI(parent, this::setEditorDirty, preferenceStore, userlocationPrefrenceKey, dataTypes);
+		return new DataListUI(parent, this::setEditorDirty, preferenceStore, userlocationPrefrenceKey, DataType.convert(dataCategories));
 	}
 
 	private void initToolbar(ToolBar toolBar, IRunnableWithProgress executionRunnable) {
