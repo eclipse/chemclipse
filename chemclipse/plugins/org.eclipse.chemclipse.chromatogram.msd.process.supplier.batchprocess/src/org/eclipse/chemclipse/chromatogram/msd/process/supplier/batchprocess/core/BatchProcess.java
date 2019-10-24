@@ -35,6 +35,11 @@ public class BatchProcess {
 	private final ChromatogramTypeSupport chromatogramTypeSupport;
 	private final ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 
+	@Deprecated
+	public BatchProcess() {
+		this(new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD});
+	}
+
 	public BatchProcess(DataType[] dataTypes) {
 		chromatogramTypeSupport = new ChromatogramTypeSupport(dataTypes);
 	}
