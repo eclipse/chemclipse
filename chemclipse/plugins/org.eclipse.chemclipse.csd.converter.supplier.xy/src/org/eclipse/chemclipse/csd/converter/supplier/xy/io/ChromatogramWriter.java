@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,16 +32,18 @@ public class ChromatogramWriter extends AbstractChromatogramCSDWriter {
 		String delimiterFormat = PreferenceSupplier.getDelimiterFormat();
 		String retentionTimeFormat = PreferenceSupplier.getRetentionTimeFormat();
 		//
-		PrintWriter printWriter = new PrintWriter(file);
-		/*
-		 * Write each scan to the file.
-		 */
-		for(IScan scan : chromatogram.getScans()) {
-			int retentionTime = scan.getRetentionTime();
-			String x = (retentionTimeFormat.equals(PreferenceSupplier.MINUTES)) ? Double.toString(retentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR) : Integer.toString(retentionTime);
-			printWriter.println(x + delimiterFormat + scan.getTotalSignal());
+		try (PrintWriter printWriter = new PrintWriter(file)) {
+			/*
+			 * Write each scan to the file.
+			 */
+			for(IScan scan : chromatogram.getScans()) {
+				int retentionTime = scan.getRetentionTime();
+				String x = (retentionTimeFormat.equals(PreferenceSupplier.MINUTES)) ? Double.toString(retentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR) : Integer.toString(retentionTime);
+				printWriter.println(x + delimiterFormat + scan.getTotalSignal());
+			}
+			//
+			printWriter.flush();
+			printWriter.close();
 		}
-		printWriter.flush();
-		printWriter.close();
 	}
 }
