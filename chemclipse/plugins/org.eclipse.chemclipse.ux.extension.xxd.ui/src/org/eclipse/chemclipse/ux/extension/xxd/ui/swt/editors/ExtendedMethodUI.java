@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.autoComplete;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createColumn;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createTreeTable;
 
@@ -58,10 +59,8 @@ import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExp
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ContentProposal;
-import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
-import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -308,7 +307,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				}
 			}
 		});
-		ContentProposalAdapter adapter = new ContentProposalAdapter(text, new TextContentAdapter(), new IContentProposalProvider() {
+		autoComplete(text, new IContentProposalProvider() {
 
 			private String[] knownCategories;
 
@@ -341,10 +340,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				}
 				return knownCategories;
 			}
-		}, null, null);
-		adapter.setPropagateKeys(true);
-		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
-		//
+		});
 		return text;
 	}
 

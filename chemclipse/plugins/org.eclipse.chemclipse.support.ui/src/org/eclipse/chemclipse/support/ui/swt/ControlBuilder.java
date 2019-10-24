@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
+import org.eclipse.jface.fieldassist.ComboContentAdapter;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.IContentProposalProvider;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -20,9 +24,11 @@ import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * Contains utility methods to construct standard SWT items in a uniform way
@@ -144,6 +150,22 @@ public class ControlBuilder {
 		layout.horizontalSpacing = 10;
 		composite.setLayout(layout);
 		return fill(composite);
+	}
+
+	public static ContentProposalAdapter autoComplete(Text text, IContentProposalProvider proposalProvider) {
+
+		ContentProposalAdapter adapter = new ContentProposalAdapter(text, new TextContentAdapter(), proposalProvider, null, null);
+		adapter.setPropagateKeys(true);
+		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		return adapter;
+	}
+
+	public static ContentProposalAdapter autoComplete(Combo combo, IContentProposalProvider proposalProvider) {
+
+		ContentProposalAdapter adapter = new ContentProposalAdapter(combo, new ComboContentAdapter(), proposalProvider, null, null);
+		adapter.setPropagateKeys(true);
+		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		return adapter;
 	}
 
 	/**

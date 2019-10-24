@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.autoComplete;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -107,7 +109,7 @@ public class ExtendedTargetsUI {
 	private Button buttonAddTarget;
 	private Button buttonDeleteTarget;
 	private TargetsListUI targetListUI;
-	private TargetListUtil targetListUtil;
+	private final TargetListUtil targetListUtil;
 	private TargetValidator targetValidator;
 	private ControlDecoration targetControlDecoration;
 	/*
@@ -116,10 +118,10 @@ public class ExtendedTargetsUI {
 	 * IChromatogram
 	 */
 	private Object object;
-	private Map<String, Object> map;
+	private final Map<String, Object> map;
 	//
 	private boolean showChromatogramTargets = false;
-	private ListSupport listSupport = new ListSupport();
+	private final ListSupport listSupport = new ListSupport();
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent) {
@@ -459,9 +461,7 @@ public class ExtendedTargetsUI {
 				return list.toArray(new IContentProposal[0]);
 			}
 		};
-		ContentProposalAdapter adapter = new ContentProposalAdapter(combo, new ComboContentAdapter(), proposalProvider, null, null);
-		adapter.setPropagateKeys(true);
-		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		autoComplete(combo, proposalProvider);
 	}
 
 	private Button createButtonAdd(Composite parent) {
