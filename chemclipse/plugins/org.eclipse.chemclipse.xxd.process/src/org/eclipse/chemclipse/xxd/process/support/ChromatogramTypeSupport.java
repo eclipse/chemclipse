@@ -43,7 +43,6 @@ public class ChromatogramTypeSupport {
 	private List<ISupplierFileIdentifier> supplierEditorSupportList = new ArrayList<>();
 
 	public ChromatogramTypeSupport() {
-
 		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.MSD));
 		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.CSD));
 		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.WSD));
@@ -132,11 +131,11 @@ public class ChromatogramTypeSupport {
 	public boolean isSupplierFile(ISupplierFileIdentifier supplierFileIdentifier, File file) {
 
 		if(file.isDirectory()) {
-			if(supplierFileIdentifier.isSupplierFileDirectory(file)) {
+			if(supplierFileIdentifier.isSupplierFileDirectory(file) && supplierFileIdentifier.isMatchMagicNumber(file)) {
 				return true;
 			}
 		} else {
-			if(supplierFileIdentifier.isSupplierFile(file)) {
+			if(supplierFileIdentifier.isSupplierFile(file) && supplierFileIdentifier.isMatchMagicNumber(file)) {
 				return true;
 			}
 		}
