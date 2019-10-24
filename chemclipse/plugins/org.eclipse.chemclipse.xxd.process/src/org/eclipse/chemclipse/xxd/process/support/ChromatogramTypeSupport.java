@@ -40,12 +40,17 @@ public class ChromatogramTypeSupport {
 	private static final Logger logger = Logger.getLogger(ChromatogramTypeSupport.class);
 	private static final String DESCRIPTION = "Chromatogram Type Support";
 	//
-	private List<ISupplierFileIdentifier> supplierEditorSupportList = new ArrayList<>();
+	private final List<ISupplierFileIdentifier> supplierEditorSupportList = new ArrayList<>();
 
+	@Deprecated
 	public ChromatogramTypeSupport() {
-		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.MSD));
-		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.CSD));
-		supplierEditorSupportList.add(new SupplierFileIdentifier(DataType.WSD));
+		this(new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD});
+	}
+
+	public ChromatogramTypeSupport(DataType[] dataTypes) {
+		for(DataType dataType : dataTypes) {
+			supplierEditorSupportList.add(new SupplierFileIdentifier(dataType));
+		}
 	}
 
 	public IProcessingInfo<IChromatogramSelection<?, ?>> getChromatogramSelection(String pathChromatogram, IProgressMonitor monitor) {
@@ -56,7 +61,7 @@ public class ChromatogramTypeSupport {
 		if(dataType != null) {
 			IChromatogramSelection<? extends IChromatogramPeak, ?> chromatogramSelection = null;
 			boolean fireUpdate = false;
-			//
+			// TODO chemclipse/#97
 			switch(dataType) {
 				case MSD_NOMINAL:
 				case MSD_TANDEM:

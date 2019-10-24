@@ -52,6 +52,7 @@ import org.eclipse.ui.part.EditorPart;
 
 public class BatchJobEditor extends EditorPart implements IRunnableWithProgress {
 
+	private static final DataType[] DATA_TYPES = new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD};
 	private static final Logger logger = Logger.getLogger(BatchJobEditor.class);
 	//
 	private BatchJobUI batchJobUI;
@@ -144,7 +145,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	public void createPartControl(Composite parent) {
 
 		parent.setLayout(new FillLayout());
-		batchJobUI = new BatchJobUI(parent, new ProcessTypeSupport(), Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_IMPORT_RECORDS, new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD}, this);
+		batchJobUI = new BatchJobUI(parent, new ProcessTypeSupport(), Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_IMPORT_RECORDS, DATA_TYPES, this);
 		batchJobUI.setModificationHandler(this::updateDirtyStatus);
 		if(currentJob != null) {
 			List<IChromatogramInputEntry> chromatogramInputEntries = currentJob.getChromatogramInputEntries();
@@ -177,7 +178,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		BatchProcess batchProcess = new BatchProcess();
+		BatchProcess batchProcess = new BatchProcess(DATA_TYPES);
 		IProcessingInfo<?> processingInfo = batchProcess.execute(getBatchProcessJob(), monitor);
 		ProcessingInfoViewSupport.updateProcessingInfo(processingInfo);
 	}

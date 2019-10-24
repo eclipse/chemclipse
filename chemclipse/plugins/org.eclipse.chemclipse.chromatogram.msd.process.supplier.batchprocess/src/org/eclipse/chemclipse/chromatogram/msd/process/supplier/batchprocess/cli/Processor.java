@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.mod
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.app.cli.AbstractCommandLineProcessor;
 import org.eclipse.chemclipse.rcp.app.cli.ICommandLineProcessor;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -44,7 +45,7 @@ public class Processor extends AbstractCommandLineProcessor implements ICommandL
 			logger.info("Read batch process");
 			BatchProcessJob batchProcessJob = reader.read(file, monitor);
 			logger.info("Execute batch process");
-			BatchProcess bp = new BatchProcess();
+			BatchProcess bp = new BatchProcess(new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD});
 			bp.execute(batchProcessJob, monitor);
 		} catch(FileNotFoundException e) {
 			logger.warn(e);

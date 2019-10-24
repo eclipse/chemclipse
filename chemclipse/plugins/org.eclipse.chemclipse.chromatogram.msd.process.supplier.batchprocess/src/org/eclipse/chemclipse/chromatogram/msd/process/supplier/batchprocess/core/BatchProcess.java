@@ -16,10 +16,14 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.mod
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.xxd.process.support.ChromatogramTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -28,13 +32,16 @@ public class BatchProcess {
 
 	private static final Logger logger = Logger.getLogger(BatchProcess.class);
 	private static final String DESCRIPTION = "Batch Processor";
-	private ChromatogramTypeSupport chromatogramTypeSupport = new ChromatogramTypeSupport();
-	private ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
+	private final ChromatogramTypeSupport chromatogramTypeSupport;
+	private final ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo execute(BatchProcessJob batchProcessJob, IProgressMonitor monitor) {
+	public BatchProcess(DataType[] dataTypes) {
+		chromatogramTypeSupport = new ChromatogramTypeSupport(dataTypes);
+	}
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+	public IProcessingInfo<?> execute(BatchProcessJob batchProcessJob, IProgressMonitor monitor) {
+
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		/*
 		 * The batch process jobs must not be null.
 		 */
@@ -47,8 +54,9 @@ public class BatchProcess {
 				IProcessingInfo<IChromatogramSelection<?, ?>> processingInfoX = chromatogramTypeSupport.getChromatogramSelection(pathChromatogram, monitor);
 				if(!processingInfoX.hasErrorMessages()) {
 					try {
-						IChromatogramSelection chromatogramSelection = processingInfoX.getProcessingResult(IChromatogramSelection.class);
-						IProcessingInfo processorResult = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+						IChromatogramSelection<?, ?> chromatogramSelection = processingInfoX.getProcessingResult();
+						ProcessingInfo<?> processorResult = new ProcessingInfo<>();
+						ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processorResult, processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
 						if(processorResult.hasErrorMessages()) {
 							processingInfo.addErrorMessage(DESCRIPTION, "Processing: " + pathChromatogram + " failed");
 						} else {
