@@ -14,24 +14,26 @@ package org.eclipse.chemclipse.support.ui.swt.columns;
 import java.util.Comparator;
 import java.util.function.Function;
 
-import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.swt.SWT;
 
 public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefinition<DataType, ColumnType> {
 
 	private String title;
 	private int width;
-	private ColumnLabelProvider labelProvider;
+	private CellLabelProvider labelProvider;
 	private Comparator<ColumnType> comparator;
 	private Function<DataType, ColumnType> mapper;
 	private Function<ColumnViewer, EditingSupport> editingSupportSupplier;
+	private int style = SWT.LEFT;
 
-	public SimpleColumnDefinition(String title, int width, ColumnLabelProvider labelProvider) {
+	public SimpleColumnDefinition(String title, int width, CellLabelProvider labelProvider) {
 		this(title, width, labelProvider, null, null);
 	}
 
-	public SimpleColumnDefinition(String title, int width, ColumnLabelProvider labelProvider, Comparator<ColumnType> comparator, Function<DataType, ColumnType> mapper) {
+	public SimpleColumnDefinition(String title, int width, CellLabelProvider labelProvider, Comparator<ColumnType> comparator, Function<DataType, ColumnType> mapper) {
 		this.title = title;
 		this.width = width;
 		this.labelProvider = labelProvider;
@@ -50,7 +52,7 @@ public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefin
 	}
 
 	@Override
-	public ColumnLabelProvider getLabelProvider() {
+	public CellLabelProvider getLabelProvider() {
 
 		return labelProvider;
 	}
@@ -85,6 +87,18 @@ public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefin
 	public SimpleColumnDefinition<DataType, ColumnType> withEditingSupport(Function<ColumnViewer, EditingSupport> editingSupportSupplier) {
 
 		this.editingSupportSupplier = editingSupportSupplier;
+		return this;
+	}
+
+	@Override
+	public int getStyle() {
+
+		return style;
+	}
+
+	public SimpleColumnDefinition<DataType, ColumnType> withStyle(int style) {
+
+		this.style = style;
 		return this;
 	}
 }

@@ -11,12 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
+import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
 import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -28,6 +32,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 /**
@@ -248,5 +253,54 @@ public class ControlBuilder {
 			column.setLabelProvider(labelProvider);
 		}
 		return column;
+	}
+
+	public static TreeViewerColumn createColumn(TreeViewer treeViewer, ColumnDefinition<?, ?> definition) {
+
+		return createColumn(treeViewer, definition, false);
+	}
+
+	public static TreeViewerColumn createColumn(TreeViewer treeViewer, ColumnDefinition<?, ?> definition, boolean editEnabled) {
+
+		TreeViewerColumn column = new TreeViewerColumn(treeViewer, definition.getStyle());
+		column.getColumn().setText(definition.getTitle());
+		column.getColumn().setWidth(definition.getWidth());
+		CellLabelProvider labelProvider = definition.getLabelProvider();
+		if(labelProvider != null) {
+			column.setLabelProvider(labelProvider);
+		}
+		if(editEnabled) {
+			EditingSupport editingSupport = definition.getEditingSupport(treeViewer);
+			if(editingSupport != null) {
+				column.setEditingSupport(editingSupport);
+			}
+		}
+		return column;
+	}
+
+	public static TableViewerColumn createColumn(TableViewer viewer, ColumnDefinition<?, ?> definition) {
+
+		return createColumn(viewer, definition, false);
+	}
+
+	public static TableViewerColumn createColumn(TableViewer viewer, ColumnDefinition<?, ?> definition, boolean editEnabled) {
+
+		final TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, definition.getStyle());
+		final TableColumn tableColumn = tableViewerColumn.getColumn();
+		tableColumn.setText(definition.getTitle());
+		tableColumn.setWidth(definition.getWidth());
+		tableColumn.setResizable(true);
+		tableColumn.setMoveable(false);
+		CellLabelProvider labelProvider = definition.getLabelProvider();
+		if(labelProvider != null) {
+			tableViewerColumn.setLabelProvider(labelProvider);
+		}
+		if(editEnabled) {
+			EditingSupport editingSupport = definition.getEditingSupport(viewer);
+			if(editingSupport != null) {
+				tableViewerColumn.setEditingSupport(editingSupport);
+			}
+		}
+		return tableViewerColumn;
 	}
 }

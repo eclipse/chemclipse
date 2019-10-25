@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createColumn;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,8 +37,6 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -66,12 +66,12 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	private static final String MENU_TEXT = "Table PopUp Menu";
 	//
 	private ITableSettings tableSettings;
-	private List<TableViewerColumn> tableViewerColumns;
-	private Map<String, Set<ITableMenuEntry>> categoryMenuEntriesMap;
-	private Map<String, ITableMenuEntry> menuEntryMap;
-	private Map<String, MenuManager> menuManagerMap;
-	private Set<KeyListener> userDefinedKeyListeners;
-	private List<IColumnMoveListener> columnMoveListeners;
+	private final List<TableViewerColumn> tableViewerColumns;
+	private final Map<String, Set<ITableMenuEntry>> categoryMenuEntriesMap;
+	private final Map<String, ITableMenuEntry> menuEntryMap;
+	private final Map<String, MenuManager> menuManagerMap;
+	private final Set<KeyListener> userDefinedKeyListeners;
+	private final List<IColumnMoveListener> columnMoveListeners;
 	private boolean editEnabled;
 
 	public ExtendedTableViewer(Composite parent) {
@@ -476,19 +476,20 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	@Override
 	public <D, C> TableViewerColumn addColumn(ColumnDefinition<D, C> definition) {
 
-		TableViewerColumn viewerColumn = createTableColumn(definition.getTitle(), definition.getWidth());
-		ColumnLabelProvider labelProvider = definition.getLabelProvider();
-		if(labelProvider != null) {
-			viewerColumn.setLabelProvider(labelProvider);
-		}
-		EditingSupport editingSupport = definition.getEditingSupport(this);
-		if(editEnabled && editingSupport != null) {
-			viewerColumn.setEditingSupport(editingSupport);
-		}
-		tableViewerColumns.add(viewerColumn);
+		TableViewerColumn tableViewerColumn = createColumn(this, definition, editEnabled);
+		tableViewerColumn.getColumn().setMoveable(true);
+		tableViewerColumn.getColumn().addListener(SWT.Move, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				fireColumnMoved();
+			}
+		});
+		tableViewerColumns.add(tableViewerColumn);
 		Comparator<C> comparator = definition.getComparator();
 		if(comparator != null) {
-			TableColumn tableColumn = viewerColumn.getColumn();
+			TableColumn tableColumn = tableViewerColumn.getColumn();
 			tableColumn.addSelectionListener(new SelectionListener() {
 
 				@Override
@@ -550,7 +551,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		}
 		getTable().setHeaderVisible(true);
 		getTable().setLinesVisible(true);
-		return viewerColumn;
+		return tableViewerColumn;
 	}
 
 	private TableViewerColumn createTableColumn(String title, int width) {

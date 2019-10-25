@@ -14,9 +14,11 @@ package org.eclipse.chemclipse.support.ui.swt.columns;
 import java.util.Comparator;
 import java.util.function.Function;
 
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.swt.SWT;
 
 /**
  * 
@@ -31,7 +33,7 @@ public interface ColumnDefinition<DataType, ColumnType> extends Function<DataTyp
 	 * 
 	 * @return the {@link ColumnLabelProvider} to use for this column or <code>null</code> if no special {@link ColumnLabelProvider} is desired
 	 */
-	ColumnLabelProvider getLabelProvider();
+	CellLabelProvider getLabelProvider();
 
 	/**
 	 * 
@@ -50,5 +52,10 @@ public interface ColumnDefinition<DataType, ColumnType> extends Function<DataTyp
 	default EditingSupport getEditingSupport(ColumnViewer columnViewer) {
 
 		return null;
+	}
+
+	default int getStyle() {
+
+		return SWT.LEFT;
 	}
 }
