@@ -107,6 +107,11 @@ public class ExtendedMeasurementResultUI {
 		createButtonToggleMeasurementResultToolbarInfo(composite);
 	}
 
+	public ComboViewer getComboMeasurementResults() {
+
+		return comboMeasurementResults;
+	}
+
 	private Composite createToolbarChromatogramInfo(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);

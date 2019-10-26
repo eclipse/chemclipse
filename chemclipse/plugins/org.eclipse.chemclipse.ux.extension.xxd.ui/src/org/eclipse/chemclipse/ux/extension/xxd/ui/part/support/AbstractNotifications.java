@@ -63,7 +63,7 @@ public abstract class AbstractNotifications<T> {
 			selectedObject = new SoftReference<T>(selection);
 		}
 		for(ObjectChangedListener<? super T> listener : listeners) {
-			listener.objectChanged(ChangeType.CHANGED, selection, object);
+			listener.objectChanged(ChangeType.SELECTED, selection, object);
 		}
 	}
 

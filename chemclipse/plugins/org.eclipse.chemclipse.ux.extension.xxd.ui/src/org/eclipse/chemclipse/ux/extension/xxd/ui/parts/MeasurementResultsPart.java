@@ -24,20 +24,45 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.MeasurementResultNotification;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedMeasurementResultUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 
 public class MeasurementResultsPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
 	private final ExtendedMeasurementResultUI extendedMeasurementResultUI;
+	@Inject
+	private MeasurementResultNotification notification;
 
 	@Inject
 	public MeasurementResultsPart(Composite parent, MPart part) {
 		super(part);
 		extendedMeasurementResultUI = new ExtendedMeasurementResultUI(parent);
+		ComboViewer comboViewer = extendedMeasurementResultUI.getComboMeasurementResults();
+		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				ISelection selection = event.getSelection();
+				if(selection instanceof IStructuredSelection) {
+					Object element = ((IStructuredSelection)selection).getFirstElement();
+					if(element instanceof IMeasurementResult<?>) {
+						notification.select((IMeasurementResult<?>)element);
+						return;
+					}
+				}
+				notification.select(null);
+			}
+		});
 	}
 
 	@Focus
@@ -69,6 +94,7 @@ public class MeasurementResultsPart extends AbstractDataUpdateSupport implements
 				}
 			}
 		}
+		notification.select(null);
 		extendedMeasurementResultUI.update(results, infoLabel);
 	}
 

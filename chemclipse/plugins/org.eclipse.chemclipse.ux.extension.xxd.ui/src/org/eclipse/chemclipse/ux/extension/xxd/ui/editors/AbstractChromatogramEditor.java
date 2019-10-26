@@ -17,6 +17,8 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -29,6 +31,7 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -51,10 +54,12 @@ import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.MeasurementResultNotification;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ObjectChangedListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ProcessMethodNotifications;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -76,7 +81,9 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swtchart.ICustomPaintListener;
 
 @SuppressWarnings("rawtypes")
 public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSupport implements IChromatogramEditor, IDataUpdateSupport {
@@ -108,6 +115,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 			}
 		}
 	};
+	private final ObjectChangedListener<IMeasurementResult<?>> updateMeasurementResult = new MeasurementResultListener();
 
 	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessorFactory filterFactory, Shell shell) {
 		super(part);
@@ -163,15 +171,17 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	}
 
 	@PostConstruct
-	private void postConstruct(ProcessMethodNotifications notification) {
+	private void postConstruct(ProcessMethodNotifications methodNotification, MeasurementResultNotification measurementNotification) {
 
-		notification.addObjectChangedListener(updateMenuListener);
+		methodNotification.addObjectChangedListener(updateMenuListener);
+		measurementNotification.addObjectChangedListener(updateMeasurementResult);
 	}
 
 	@PreDestroy
-	private void preDestroy(ProcessMethodNotifications notifications, PartSupport partSupport) {
+	private void preDestroy(ProcessMethodNotifications notifications, MeasurementResultNotification measurementNotification, PartSupport partSupport) {
 
 		notifications.removeObjectChangedListener(updateMenuListener);
+		measurementNotification.removeObjectChangedListener(updateMeasurementResult);
 		if(eventBroker != null) {
 			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -419,5 +429,56 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	private void createChromatogramPage(Composite parent) {
 
 		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.BORDER, eventBroker);
+	}
+
+	private final class MeasurementResultListener implements ObjectChangedListener<IMeasurementResult<?>>, Observer {
+
+		private ICustomPaintListener oldPaintListener;
+		private Observable oldObserver;
+
+		@Override
+		public void objectChanged(ChangeType type, IMeasurementResult<?> newObject, IMeasurementResult<?> oldObject) {
+
+			if(type == ChangeType.SELECTED) {
+				boolean mustRedraw = false;
+				if(oldPaintListener != null) {
+					extendedChromatogramUI.getChromatogramChart().getBaseChart().getPlotArea().removeCustomPaintListener(oldPaintListener);
+					mustRedraw = true;
+					oldPaintListener = null;
+				}
+				if(oldObserver != null) {
+					oldObserver.deleteObserver(this);
+					oldObserver = null;
+				}
+				ICustomPaintListener paintListener = Adapters.adapt(newObject, ICustomPaintListener.class);
+				if(paintListener != null) {
+					oldPaintListener = paintListener;
+					extendedChromatogramUI.getChromatogramChart().getBaseChart().getPlotArea().addCustomPaintListener(paintListener);
+					mustRedraw = true;
+				}
+				Observable observable = Adapters.adapt(newObject, Observable.class);
+				if(observable != null) {
+					oldObserver = observable;
+					observable.addObserver(this);
+				}
+				if(mustRedraw) {
+					Display.getDefault().asyncExec(this::redraw);
+				}
+			}
+		}
+
+		@Override
+		public void update(Observable o, Object arg) {
+
+			Display.getDefault().asyncExec(this::redraw);
+		}
+
+		private void redraw() {
+
+			ChromatogramChart chart = extendedChromatogramUI.getChromatogramChart();
+			if(!chart.isDisposed()) {
+				chart.redraw();
+			}
+		}
 	}
 }
