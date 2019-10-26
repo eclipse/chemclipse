@@ -28,6 +28,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -53,6 +54,7 @@ public class ExtendedMeasurementResultUI {
 	private ProxySelectionChangedListener selectionChangedListener;
 	private ProxyTableLabelProvider labelProvider;
 	private ProxyStructuredContentProvider contentProvider;
+	private IMeasurementResult<?> lastResult;
 
 	@Inject
 	public ExtendedMeasurementResultUI(Composite parent) {
@@ -72,14 +74,21 @@ public class ExtendedMeasurementResultUI {
 		if(!labelChromatogramInfo.isDisposed()) {
 			labelChromatogramInfo.setText(infoLabel);
 		}
+		IStructuredSelection selection = comboMeasurementResults.getStructuredSelection();
 		comboMeasurementResults.setInput(results);
 		comboMeasurementResults.refresh();
-		IMeasurementResult<?> element = (IMeasurementResult<?>)comboMeasurementResults.getStructuredSelection().getFirstElement();
-		if(element == null && results.size() == 1) {
-			element = results.iterator().next();
-			comboMeasurementResults.setSelection(new StructuredSelection(element));
+		IMeasurementResult<?> selectedElement = (IMeasurementResult<?>)selection.getFirstElement();
+		if(!results.contains(selectedElement)) {
+			selectedElement = null;
 		}
-		updateMeasurementResult(element);
+		if(selectedElement == null && results.size() == 1) {
+			selectedElement = results.iterator().next();
+		}
+		if(selectedElement == null) {
+			comboMeasurementResults.setSelection(StructuredSelection.EMPTY);
+		} else {
+			comboMeasurementResults.setSelection(new StructuredSelection(selectedElement));
+		}
 	}
 
 	private void initialize(Composite parent) {
@@ -226,6 +235,7 @@ public class ExtendedMeasurementResultUI {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
+				System.out.println("ExtendedMeasurementResultUI.createResultCombo(...).new ISelectionChangedListener() {...}.selectionChanged()");
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof IMeasurementResult<?>) {
 					updateMeasurementResult((IMeasurementResult<?>)object);
@@ -239,17 +249,21 @@ public class ExtendedMeasurementResultUI {
 
 	private void updateMeasurementResult(IMeasurementResult<?> measurementResult) {
 
+		System.out.println("ExtendedMeasurementResultUI.updateMeasurementResult()");
 		updateLabel(measurementResult);
-		contentProvider.setProxy(adaptTo(measurementResult, IStructuredContentProvider.class));
-		selectionChangedListener.setProxy(adaptTo(measurementResult, ISelectionChangedListener.class));
-		resultTable.clearColumns();
-		resultTable.addColumns(adaptTo(measurementResult, ColumnDefinitionProvider.class));
-		ITableLabelProvider tableLabelProvider = adaptTo(measurementResult, ITableLabelProvider.class);
-		labelProvider.setProxy(tableLabelProvider);
-		if(tableLabelProvider != null) {
-			resultTable.setLabelProvider(tableLabelProvider);
+		if(lastResult != measurementResult) {
+			contentProvider.setProxy(adaptTo(measurementResult, IStructuredContentProvider.class));
+			selectionChangedListener.setProxy(adaptTo(measurementResult, ISelectionChangedListener.class));
+			resultTable.clearColumns();
+			resultTable.addColumns(adaptTo(measurementResult, ColumnDefinitionProvider.class));
+			ITableLabelProvider tableLabelProvider = adaptTo(measurementResult, ITableLabelProvider.class);
+			labelProvider.setProxy(tableLabelProvider);
+			if(tableLabelProvider != null) {
+				resultTable.setLabelProvider(tableLabelProvider);
+			}
+			resultTable.setInput(measurementResult);
 		}
-		resultTable.setInput(measurementResult);
+		this.lastResult = measurementResult;
 		resultTable.refresh();
 	}
 
