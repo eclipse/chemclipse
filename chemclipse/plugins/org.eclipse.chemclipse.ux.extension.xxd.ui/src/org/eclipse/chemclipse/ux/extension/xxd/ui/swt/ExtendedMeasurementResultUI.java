@@ -235,7 +235,6 @@ public class ExtendedMeasurementResultUI {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
-				System.out.println("ExtendedMeasurementResultUI.createResultCombo(...).new ISelectionChangedListener() {...}.selectionChanged()");
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof IMeasurementResult<?>) {
 					updateMeasurementResult((IMeasurementResult<?>)object);
@@ -249,7 +248,6 @@ public class ExtendedMeasurementResultUI {
 
 	private void updateMeasurementResult(IMeasurementResult<?> measurementResult) {
 
-		System.out.println("ExtendedMeasurementResultUI.updateMeasurementResult()");
 		updateLabel(measurementResult);
 		if(lastResult != measurementResult) {
 			contentProvider.setProxy(adaptTo(measurementResult, IStructuredContentProvider.class));
