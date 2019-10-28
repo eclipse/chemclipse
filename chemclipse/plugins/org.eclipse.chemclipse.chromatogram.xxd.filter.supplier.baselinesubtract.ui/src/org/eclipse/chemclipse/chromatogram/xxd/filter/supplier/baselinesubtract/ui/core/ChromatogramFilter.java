@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramReferenceDialog;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramEditorDialog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -74,16 +74,16 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 
 	private void subtractChromatogram(Shell shell, IChromatogramSelection chromatogramSelectionMaster) {
 
-		ChromatogramReferenceDialog dialog = new ChromatogramReferenceDialog(shell);
+		IChromatogram chromatogramMaster = chromatogramSelectionMaster.getChromatogram();
+		ChromatogramEditorDialog dialog = new ChromatogramEditorDialog(shell, chromatogramMaster);
+		//
 		if(IDialogConstants.OK_ID == dialog.open()) {
 			IChromatogramSelection<?, ?> chromatogramSelectionSubtract = dialog.getChromatogramSelection();
 			if(chromatogramSelectionSubtract != null) {
 				/*
 				 * Check that both chromatograms are not the same
 				 */
-				IChromatogram chromatogramMaster = chromatogramSelectionMaster.getChromatogram();
 				IChromatogram chromatogramSubtract = chromatogramSelectionSubtract.getChromatogram();
-				//
 				if(chromatogramMaster != chromatogramSubtract) {
 					int startRetentionTime = chromatogramSelectionMaster.getStartRetentionTime();
 					int stopRetentionTime = chromatogramSelectionMaster.getStopRetentionTime();

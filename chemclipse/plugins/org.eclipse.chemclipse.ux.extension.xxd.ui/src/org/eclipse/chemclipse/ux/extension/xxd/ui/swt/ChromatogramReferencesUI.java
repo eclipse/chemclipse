@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramReferenceDialog;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramEditorDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.TargetTransferDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -250,7 +250,7 @@ public class ChromatogramReferencesUI {
 			public void runWithEvent(Event event) {
 
 				ToolItem item = (ToolItem)event.widget;
-				ChromatogramReferenceDialog dialog = new ChromatogramReferenceDialog(item.getParent().getShell());
+				ChromatogramEditorDialog dialog = new ChromatogramEditorDialog(item.getParent().getShell());
 				if(IDialogConstants.OK_ID == dialog.open()) {
 					IChromatogramSelection<?, ?> chromatogramSelection = dialog.getChromatogramSelection();
 					if(chromatogramSelection != null) {
