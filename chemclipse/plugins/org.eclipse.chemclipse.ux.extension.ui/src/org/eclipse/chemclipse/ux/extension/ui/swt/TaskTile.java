@@ -52,7 +52,7 @@ public class TaskTile extends Composite {
 	private final TileDefinition definition;
 	private final Consumer<TileDefinition> definitionConsumer;
 	private final Color[] colors;
-	private Function<TileDefinition, Integer> styleFunction;
+	private final Function<TileDefinition, Integer> styleFunction;
 
 	TaskTile(Composite parent, TileDefinition definition, Consumer<TileDefinition> definitionConsumer, Function<TileDefinition, Integer> styleFunction, Color[] colors) {
 		super(parent, SWT.NONE);
@@ -111,6 +111,7 @@ public class TaskTile extends Composite {
 		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 		composite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
 		composite.setLayout(new GridLayout(2, true));
+		addControlListener(composite);
 		addControlListener(this);
 		labelImage = addLabelImage(composite);
 		textSection = addTextSection(composite);
