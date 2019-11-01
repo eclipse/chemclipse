@@ -48,7 +48,7 @@ public class TaskTileContainer {
 			}
 		}
 	};
-	private Color[] colors;
+	private final Color[] colors;
 
 	public TaskTileContainer(Composite parent, int columns, Supplier<IEclipseContext> contextSupplier) {
 		this(parent, columns, contextSupplier, new Color[]{DEFAULT_COLOR_ACTIVE, DEFAULT_COLOR_INACTIVE, DEFAULT_COLOR_TEXT});
@@ -110,6 +110,13 @@ public class TaskTileContainer {
 			return ((Boolean)invoke).booleanValue();
 		}
 		return true;
+	}
+
+	public void update() {
+
+		for(TaskTile taskTile : tiles) {
+			taskTile.updateFromDefinition();
+		}
 	}
 
 	public void removeTaskTile(TaskTile tile) {
