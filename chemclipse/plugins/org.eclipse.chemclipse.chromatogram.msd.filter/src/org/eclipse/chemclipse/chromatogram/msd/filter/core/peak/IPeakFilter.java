@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,18 +8,18 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add default implementations
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.peak;
 
+import java.util.Collections;
 import java.util.List;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakFilter {
 
@@ -31,7 +31,10 @@ public interface IPeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo applyFilter(IPeakMSD peak, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
+	default IProcessingInfo applyFilter(IPeakMSD peak, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
+
+		return applyFilter(Collections.singletonList(peak), peakFilterSettings, monitor);
+	}
 
 	/**
 	 * Applies the filter to the selected peak.
@@ -40,7 +43,10 @@ public interface IPeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo applyFilter(IPeakMSD peak, IProgressMonitor monitor);
+	default IProcessingInfo applyFilter(IPeakMSD peak, IProgressMonitor monitor) {
+
+		return applyFilter(peak, null, monitor);
+	}
 
 	/**
 	 * Applies the filter to the selected peaks using the settings.
@@ -59,7 +65,10 @@ public interface IPeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo applyFilter(List<IPeakMSD> peaks, IProgressMonitor monitor);
+	default IProcessingInfo applyFilter(List<IPeakMSD> peaks, IProgressMonitor monitor) {
+
+		return applyFilter(peaks, null, monitor);
+	}
 
 	/**
 	 * Applies the filter to the selected peaks in the chromatogram selection using the settings.
@@ -69,7 +78,10 @@ public interface IPeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
+	default IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
+
+		return applyFilter(Collections.unmodifiableList(chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection)), peakFilterSettings, monitor);
+	}
 
 	/**
 	 * Applies the filter to the selected peaks in the chromatogram selection.
@@ -78,7 +90,10 @@ public interface IPeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor);
+	default IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+
+		return applyFilter(chromatogramSelection, null, monitor);
+	}
 
 	/**
 	 * Validates the peak and the settings.
