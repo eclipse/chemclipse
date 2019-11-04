@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createColumn;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createTreeTable;
+
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -20,7 +23,7 @@ import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.core.runtime.Adapters;
@@ -32,6 +35,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -41,7 +45,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TreeColumn;
 
 public class ExtendedMeasurementResultUI {
 
@@ -50,7 +54,7 @@ public class ExtendedMeasurementResultUI {
 	private Composite toolbarChromatogramInfo;
 	private Composite toolbarMeasurementResultInfo;
 	private ComboViewer comboMeasurementResults;
-	private ExtendedTableViewer resultTable;
+	private TreeViewer resultTable;
 	private ProxySelectionChangedListener selectionChangedListener;
 	private ProxyTableLabelProvider labelProvider;
 	private ProxyStructuredContentProvider contentProvider;
@@ -149,18 +153,17 @@ public class ExtendedMeasurementResultUI {
 		return composite;
 	}
 
-	private ExtendedTableViewer createResultSection(Composite parent) {
+	private TreeViewer createResultSection(Composite parent) {
 
-		ExtendedTableViewer tableViewer = new ExtendedTableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		Table table = tableViewer.getTable();
-		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		TreeViewer treeTable = createTreeTable(parent, true);
+		treeTable.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		contentProvider = new ProxyStructuredContentProvider();
-		tableViewer.setContentProvider(contentProvider);
+		treeTable.setContentProvider(contentProvider);
 		labelProvider = new ProxyTableLabelProvider();
-		tableViewer.setLabelProvider(labelProvider);
+		treeTable.setLabelProvider(labelProvider);
 		selectionChangedListener = new ProxySelectionChangedListener();
-		tableViewer.addSelectionChangedListener(selectionChangedListener);
-		return tableViewer;
+		treeTable.addSelectionChangedListener(selectionChangedListener);
+		return treeTable;
 	}
 
 	private Button createButtonToggleChromatogramToolbarInfo(Composite parent) {
@@ -252,8 +255,16 @@ public class ExtendedMeasurementResultUI {
 		if(lastResult != measurementResult) {
 			contentProvider.setProxy(adaptTo(measurementResult, IStructuredContentProvider.class));
 			selectionChangedListener.setProxy(adaptTo(measurementResult, ISelectionChangedListener.class));
-			resultTable.clearColumns();
-			resultTable.addColumns(adaptTo(measurementResult, ColumnDefinitionProvider.class));
+			TreeColumn[] columns = resultTable.getTree().getColumns();
+			for(TreeColumn column : columns) {
+				column.dispose();
+			}
+			ColumnDefinitionProvider columnDefinitionProvider = adaptTo(measurementResult, ColumnDefinitionProvider.class);
+			if(columnDefinitionProvider != null) {
+				for(ColumnDefinition<?, ?> definition : columnDefinitionProvider.getColumnDefinitions()) {
+					createColumn(resultTable, definition);
+				}
+			}
 			ITableLabelProvider tableLabelProvider = adaptTo(measurementResult, ITableLabelProvider.class);
 			labelProvider.setProxy(tableLabelProvider);
 			if(tableLabelProvider != null) {

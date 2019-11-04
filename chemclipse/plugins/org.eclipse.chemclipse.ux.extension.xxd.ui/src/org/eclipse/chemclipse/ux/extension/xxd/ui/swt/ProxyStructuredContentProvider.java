@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 /**
@@ -20,7 +21,7 @@ import org.eclipse.jface.viewers.Viewer;
  * @author Christoph Läubrich
  *
  */
-public class ProxyStructuredContentProvider implements IStructuredContentProvider {
+public class ProxyStructuredContentProvider implements ITreeContentProvider {
 
 	private IStructuredContentProvider proxy;
 	private Viewer viewer;
@@ -54,5 +55,32 @@ public class ProxyStructuredContentProvider implements IStructuredContentProvide
 		if(proxy != null && viewer != null && newInput != null) {
 			proxy.inputChanged(viewer, null, newInput);
 		}
+	}
+
+	@Override
+	public Object[] getChildren(Object parentElement) {
+
+		if(proxy instanceof ITreeContentProvider) {
+			return ((ITreeContentProvider)proxy).getChildren(parentElement);
+		}
+		return new Object[0];
+	}
+
+	@Override
+	public Object getParent(Object element) {
+
+		if(proxy instanceof ITreeContentProvider) {
+			return ((ITreeContentProvider)proxy).getParent(element);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean hasChildren(Object element) {
+
+		if(proxy instanceof ITreeContentProvider) {
+			return ((ITreeContentProvider)proxy).hasChildren(element);
+		}
+		return false;
 	}
 }
