@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.internal;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
@@ -27,12 +29,25 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 public class OSGiProcessSupplierContext implements ProcessSupplierContext {
 
 	private final ConcurrentMap<String, IProcessSupplier<?>> supplierMap = new ConcurrentHashMap<>();
+	private final Set<IProcessTypeSupplier> typeSupplierSet = new ConcurrentSkipListSet<>();
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> IProcessSupplier<T> getSupplier(String id) {
 
-		return (IProcessSupplier<T>)supplierMap.get(id);
+		// fast path first
+		IProcessSupplier<T> mappedSupplier = (IProcessSupplier<T>)supplierMap.get(id);
+		if(mappedSupplier != null) {
+			return mappedSupplier;
+		}
+		// second try, ask the ProcessTypeSupplier if they has alternative ids
+		for(IProcessTypeSupplier typeSupplier : typeSupplierSet) {
+			IProcessSupplier<T> supplier = typeSupplier.getSupplier(id);
+			if(supplier != null) {
+				return supplier;
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -44,6 +59,7 @@ public class OSGiProcessSupplierContext implements ProcessSupplierContext {
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 	public void addProcessTypeSupplier(IProcessTypeSupplier typeSupplier) {
 
+		typeSupplierSet.add(typeSupplier);
 		for(IProcessSupplier<?> supplier : typeSupplier.getProcessorSuppliers()) {
 			IProcessSupplier<?> old = supplierMap.putIfAbsent(supplier.getId(), supplier);
 			if(old != null) {
@@ -54,6 +70,7 @@ public class OSGiProcessSupplierContext implements ProcessSupplierContext {
 
 	public void removeProcessTypeSupplier(IProcessTypeSupplier typeSupplier) {
 
+		typeSupplierSet.remove(typeSupplier);
 		for(IProcessSupplier<?> supplier : typeSupplier.getProcessorSuppliers()) {
 			supplierMap.remove(supplier.getId());
 		}
