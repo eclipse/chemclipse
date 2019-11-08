@@ -27,7 +27,7 @@ public interface IProcessTypeSupplier extends ProcessSupplierContext {
 	default <T> IProcessSupplier<T> getSupplier(String id) {
 
 		for(IProcessSupplier<?> supplier : getProcessorSuppliers()) {
-			if(supplier.getId().equals(id)) {
+			if(supplier.matchesId(id)) {
 				return (IProcessSupplier<T>)supplier;
 			}
 		}
