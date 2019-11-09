@@ -24,8 +24,6 @@ import org.eclipse.core.runtime.Status;
 
 public interface IPeakFilter {
 
-	public static final String CATEGORY = "Peak Filter";
-
 	/**
 	 * Applies the filter to the selected peaks using the settings.
 	 * 

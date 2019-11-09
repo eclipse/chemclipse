@@ -34,7 +34,7 @@ public class PeakFilterProcessSupplier implements IProcessTypeSupplier {
 	@Override
 	public String getCategory() {
 
-		return IPeakFilter.CATEGORY;
+		return org.eclipse.chemclipse.model.filter.IPeakFilter.CATEGORY;
 	}
 
 	@Override

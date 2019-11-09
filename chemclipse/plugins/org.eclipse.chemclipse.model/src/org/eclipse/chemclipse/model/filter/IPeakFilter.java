@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.filter;
 
+import java.util.Collection;
+
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.processing.core.IProcessingResult;
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.processing.filter.FilterList;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -27,19 +29,26 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface IPeakFilter<ConfigType> extends Filter<ConfigType> {
 
+	public static final String CATEGORY = "Peak Filter";
+
 	/**
-	 * Filters the given Collection of {@link IPeak}s with this filter, the collection must be modifiable so the filter can either remove an item from the list or filter the item individually
+	 * Filters the given Collection of {@link IPeak}s with this filter and returns the result.
+	 * The resulting Collection could either be the same or a new collection, might have more or less items
 	 * 
 	 * @param filterItems
 	 * @param configuration
 	 *            the configuration to apply or <code>null</code> if no special configuration is desired
+	 * @param resultTransformer
+	 *            the transformer to invoke for producing the desired output result, filter might use this to produce results and then take some more actions with it or even produce alternative results or in msot cases simply return the result as is
+	 * @param messageConsumer
+	 *            Filters are meant to not throwing checked exceptions nor return no result if something goes wrong but report problems to the {@link MessageConsumer} this allows the upstream caller to decide what to do
 	 * @param monitor
 	 *            a {@link IProgressMonitor} to report progress of the filtering or <code>null</code> if no progress is desired
-	 * @return a {@link IProcessingResult} that describes the outcome of the filtering, the result will be {@link Boolean#TRUE} if any item in the list was filter or {@link Boolean#FALSE} if no item was filtered or there was an error. The messages of the {@link IProcessingResult} may contain further information
+	 * @return the result of the processing or <code>null</code> if processing was canceled
 	 * @throws IllegalArgumentException
-	 *             if any of the given {@link IPeak} are incompatible with this filter ({@link #acceptsIPeak(IPeak)} returns <code>false</code> for them)
+	 *             if the given {@link IPeak}s are incompatible with this filter ({@link #acceptsIPeaks(IPeak)} returns <code>false</code>)
 	 */
-	IProcessingResult<Boolean> filterIPeaks(FilterList<IPeak> filterItems, ConfigType configuration, IProgressMonitor monitor) throws IllegalArgumentException;
+	<X extends IPeak> void filterIPeaks(Collection<X> filterItems, ConfigType configuration, CRUDListener<? super X> listener, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link IPeak} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}
@@ -48,22 +57,22 @@ public interface IPeakFilter<ConfigType> extends Filter<ConfigType> {
 	 *            the {@link IPeak} to check
 	 * @return <code>true</code> if this {@link IPeak} can be applied, <code>false</code> otherwise
 	 */
-	boolean acceptsIPeak(IPeak item);
+	boolean acceptsIPeaks(Collection<? extends IPeak> items);
 
 	/**
-	 * Creates a new configuration that is specially suited for the given {@link IPeak} type
+	 * Creates a new configuration that is specially suited for the given {@link IPeak} types
 	 * 
 	 * @param item
-	 * @return
+	 * @return a new configuration for this items or the default config if items is empty or no suitable configuration can be created
+	 * @throws IllegalArgumentException
+	 *             if the given {@link IPeak}s are incompatible with this filter ({@link #acceptsIPeaks(IPeak)} returns <code>false</code>)
 	 */
-	default ConfigType createConfiguration(IPeak item) {
+	default ConfigType createConfiguration(Collection<? extends IPeak> items) throws IllegalArgumentException {
 
-		return createNewConfiguration();
-	}
-
-	@Override
-	default Class<ConfigType> getConfigClass() {
-
-		return null;
+		if(acceptsIPeaks(items)) {
+			return createNewConfiguration();
+		} else {
+			throw new IllegalArgumentException("incompatible items in collection");
+		}
 	}
 }
