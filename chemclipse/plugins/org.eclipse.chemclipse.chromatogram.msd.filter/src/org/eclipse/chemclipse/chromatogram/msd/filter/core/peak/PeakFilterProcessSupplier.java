@@ -34,7 +34,7 @@ public class PeakFilterProcessSupplier implements IProcessTypeSupplier {
 	@Override
 	public String getCategory() {
 
-		return "Peak Filter";
+		return IPeakFilter.CATEGORY;
 	}
 
 	@Override

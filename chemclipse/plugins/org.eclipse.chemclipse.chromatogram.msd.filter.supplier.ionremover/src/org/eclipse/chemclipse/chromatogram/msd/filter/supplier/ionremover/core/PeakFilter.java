@@ -8,10 +8,10 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.IPeakFilterResult;
@@ -21,11 +21,8 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.AbstractPeakFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.PeakFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -40,82 +37,25 @@ public class PeakFilter extends AbstractPeakFilter {
 	private static final String DESCRIPTION = "Ion Remover Peak Filter";
 
 	@Override
-	public IProcessingInfo applyFilter(List<IPeakMSD> peaks, IPeakFilterSettings filterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IPeakFilterResult> applyFilter(List<IPeakMSD> peaks, IPeakFilterSettings filterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(peaks, filterSettings);
-		if(!processingInfo.hasErrorMessages()) {
-			if(filterSettings instanceof PeakFilterSettings) {
-				PeakFilterSettings peakFilterSettings = (PeakFilterSettings)filterSettings;
-				IonSettingUtil settingIon = new IonSettingUtil();
-				IMarkedIons ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(peakFilterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
-				for(IPeakMSD peak : peaks) {
-					peak.getTargets().clear();
-					IPeakMassSpectrum peakMassSpectrum = peak.getPeakModel().getPeakMassSpectrum();
-					peakMassSpectrum.removeIons(ionsToRemove);
-				}
-				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been optimized successfully."));
-				IPeakFilterResult peakFilterResult = new PeakFilterResult(ResultStatus.OK, "The ion remover filter has been applied successfully.");
-				processingInfo.setProcessingResult(peakFilterResult);
-			}
+		IProcessingInfo<IPeakFilterResult> processingInfo = new ProcessingInfo<>();
+		PeakFilterSettings peakFilterSettings;
+		if(filterSettings instanceof PeakFilterSettings) {
+			peakFilterSettings = (PeakFilterSettings)filterSettings;
+		} else {
+			peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
 		}
+		IonSettingUtil settingIon = new IonSettingUtil();
+		IMarkedIons ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(peakFilterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
+		for(IPeakMSD peak : peaks) {
+			peak.getTargets().clear();
+			IPeakMassSpectrum peakMassSpectrum = peak.getPeakModel().getPeakMassSpectrum();
+			peakMassSpectrum.removeIons(ionsToRemove);
+		}
+		processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been optimized successfully."));
+		IPeakFilterResult peakFilterResult = new PeakFilterResult(ResultStatus.OK, "The ion remover filter has been applied successfully.");
+		processingInfo.setProcessingResult(peakFilterResult);
 		return processingInfo;
-	}
-
-	// ----------------------------------------------------CONVENIENT METHODS
-	@Override
-	public IProcessingInfo applyFilter(IPeakMSD peak, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
-
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
-		peaks.add(peak);
-		return applyFilter(peaks, peakFilterSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo applyFilter(IPeakMSD peak, IProgressMonitor monitor) {
-
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
-		peaks.add(peak);
-		PeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
-		return applyFilter(peaks, peakFilterSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo applyFilter(List<IPeakMSD> peaks, IProgressMonitor monitor) {
-
-		IPeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
-		return applyFilter(peaks, peakFilterSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor) {
-
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(validate(chromatogramSelection, peakFilterSettings));
-		if(processingInfo.hasErrorMessages()) {
-			return processingInfo;
-		}
-		/*
-		 * Get the peaks of the selection.
-		 */
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
-		List<IChromatogramPeakMSD> peakList = chromatogram.getPeaks(chromatogramSelection);
-		/*
-		 * Create a list. This could be implemented in a better way.
-		 */
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
-		for(IChromatogramPeakMSD peak : peakList) {
-			peaks.add(peak);
-		}
-		/*
-		 * Apply the filter.
-		 */
-		return applyFilter(peaks, peakFilterSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
-
-		PeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
-		return applyFilter(chromatogramSelection, peakFilterSettings, monitor);
 	}
 }
