@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,14 +8,15 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - change to ComboSettingsProperty(MassSpectrumComparatorDynamicSettingProperty.class)
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparatorDynamicSettingProperty;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.ComboSettingsProperty;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
-import org.eclipse.chemclipse.support.settings.DynamicSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.MultiFileSettingProperty;
@@ -46,7 +47,7 @@ public class MassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifi
 	@JsonProperty(value = "Add Unknown m/z List Target", defaultValue = "true")
 	private boolean addUnknownMzListTarget = true;
 	@JsonProperty(value = "Alternate Identifier Id", defaultValue = "")
-	@DynamicSettingsProperty(dynamicSettingPropertyClass = MassSpectrumComparatorDynamicSettingProperty.class)
+	@ComboSettingsProperty(MassSpectrumComparatorDynamicSettingProperty.class)
 	private String alternateIdentifierId = "";
 
 	@Override

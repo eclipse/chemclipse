@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,10 +8,13 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add support for getting suppliers
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.NoMassSpectrumComparatorAvailableException;
@@ -26,7 +29,7 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.NoMassSpect
  */
 public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSupport {
 
-	private List<IMassSpectrumComparisonSupplier> suppliers;
+	private final List<IMassSpectrumComparisonSupplier> suppliers;
 
 	public MassSpectrumComparatorSupport() {
 		suppliers = new ArrayList<IMassSpectrumComparisonSupplier>();
@@ -88,6 +91,12 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 	}
 
 	@Override
+	public Collection<IMassSpectrumComparisonSupplier> getSuppliers() {
+
+		return Collections.unmodifiableCollection(suppliers);
+	}
+
+	@Override
 	public List<String> getAvailableComparatorIds() throws NoMassSpectrumComparatorAvailableException {
 
 		/*
@@ -101,6 +110,7 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 		return availableComparators;
 	}
 
+	@Override
 	public String[] getComparatorNames() throws NoMassSpectrumComparatorAvailableException {
 
 		/*

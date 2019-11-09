@@ -16,17 +16,22 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.support.settings.ComboSettingsProperty.ComboSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.settings.validation.InputValidator;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.provider.AdapterLabelProvider;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,7 +51,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class WidgetItem {
 
-	private InputValue inputValue;
+	private final InputValue inputValue;
 	private InputValidator inputValidator;
 	private ControlDecoration controlDecoration;
 	private Control control;
@@ -148,9 +153,10 @@ public class WidgetItem {
 				Button button = (Button)control;
 				return button.getSelection();
 			} else if(control instanceof Combo) {
-				/*
-				 * Combo
-				 */
+				ComboSupplier<?> comboSupplier = inputValue.getComboSupplier();
+				if(comboSupplier != null) {
+					return getValueAsString(comboSupplier);
+				}
 				Combo combo = (Combo)control;
 				if(rawType.isEnum()) {
 					return combo.getText().trim();
@@ -160,11 +166,25 @@ public class WidgetItem {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
+	private <T> String getValueAsString(ComboSupplier<T> comboSupplier) {
+
+		try {
+			return comboSupplier.asString((T)currentSelection);
+		} catch(ClassCastException cce) {
+			return null;
+		}
+	}
+
 	@SuppressWarnings("rawtypes")
 	private Control createControl(Composite parent) {
 
 		Class<?> rawType = inputValue.getRawType();
 		if(rawType != null) {
+			if(inputValue.getComboSupplier() != null) {
+				ComboViewer viewer = createGenericCombo(parent, inputValue.getComboSupplier());
+				return viewer.getControl();
+			}
 			if(rawType == int.class || rawType == Integer.class) {
 				return createTextWidgetNormal(parent);
 			} else if(rawType == float.class || rawType == Float.class) {
@@ -185,7 +205,7 @@ public class WidgetItem {
 				for(int i = 0; i < enums.length; i++) {
 					input.add(enums[i].toString());
 				}
-				return createComboViewerWidget(parent, input);
+				return createEnumComboViewerWidget(parent, input);
 			} else if(rawType == File.class) {
 				return createFileWidget(parent);
 			} else {
@@ -195,6 +215,37 @@ public class WidgetItem {
 			}
 		}
 		return null;
+	}
+
+	private ComboViewer createGenericCombo(Composite parent, ComboSupplier<?> comboSupplier) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AdapterLabelProvider());
+		combo.setToolTipText(inputValue.getDescription());
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
+		comboViewer.setInput(comboSupplier.items());
+		if(currentSelection instanceof String) {
+			Object currentValue = comboSupplier.fromString((String)currentSelection);
+			if(currentValue != null) {
+				comboViewer.setSelection(new StructuredSelection(currentValue));
+			} else {
+				comboViewer.setSelection(StructuredSelection.EMPTY);
+			}
+			currentSelection = currentValue;
+		}
+		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				currentSelection = comboViewer.getStructuredSelection().getFirstElement();
+			}
+		});
+		return comboViewer;
 	}
 
 	private Control createFileWidget(Composite parent) {
@@ -302,7 +353,7 @@ public class WidgetItem {
 		return button;
 	}
 
-	private Control createComboViewerWidget(Composite parent, List<String> input) {
+	private Control createEnumComboViewerWidget(Composite parent, List<String> input) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		//

@@ -15,13 +15,23 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotation;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @JacksonAnnotation
-public @interface DynamicSettingsProperty {
+public @interface ComboSettingsProperty {
 
-	Class<? extends IDynamicSettingProperty> dynamicSettingPropertyClass();
+	Class<? extends ComboSupplier<?>> value();
+
+	public static interface ComboSupplier<T> {
+
+		Collection<T> items();
+
+		T fromString(String string);
+
+		String asString(T item);
+	}
 }

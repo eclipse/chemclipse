@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.eclipse.chemclipse.support.settings.ComboSettingsProperty;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
@@ -126,6 +127,13 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 								inputValue.setMultiLine(settingsProperty.isMultiLine());
 							} else if(annotation instanceof FileSettingProperty) {
 								inputValue.setFileSettingProperty((FileSettingProperty)annotation);
+							} else if(annotation instanceof ComboSettingsProperty) {
+								try {
+									inputValue.setComboSupplier(((ComboSettingsProperty)annotation).value().newInstance());
+								} catch(InstantiationException
+										| IllegalAccessException e) {
+									throw new RuntimeException("can't create specified ComboSupplier", e);
+								}
 							}
 						}
 					}

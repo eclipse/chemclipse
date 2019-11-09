@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.support.settings.ComboSettingsProperty.ComboSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.core.databinding.validation.IValidator;
 
@@ -26,10 +27,11 @@ public class InputValue {
 	private String name = "";
 	private String description = "";
 	private Object defaultValue;
-	private String regularExpression = null;
+	private final String regularExpression = null;
 	private boolean isMultiLine = false;
 	private FileSettingProperty fileSettingProperty;
-	private List<IValidator> validators = new ArrayList<>();
+	private final List<IValidator> validators = new ArrayList<>();
+	private ComboSupplier<?> comboSupplier;
 
 	public boolean hasRegexConstraint() {
 
@@ -107,5 +109,15 @@ public class InputValue {
 	public Collection<IValidator> getValidators() {
 
 		return Collections.unmodifiableCollection(validators);
+	}
+
+	public void setComboSupplier(ComboSupplier<?> comboSupplier) {
+
+		this.comboSupplier = comboSupplier;
+	}
+
+	public ComboSupplier<?> getComboSupplier() {
+
+		return comboSupplier;
 	}
 }

@@ -10,4 +10,14 @@
             name="MS Comparison">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparisonSupplier"
+            class="org.eclipse.chemclipse.chromatogram.msd.comparison.ui.adapters.IMassSpectrumComparisonSupplierAdapterFactory">
+         <adapter
+               type="org.eclipse.jface.viewers.ILabelProvider">
+         </adapter>
+      </factory>
+   </extension>
 </plugin>
