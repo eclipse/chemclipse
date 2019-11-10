@@ -16,6 +16,8 @@ import java.util.Set;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 public interface IProcessSupplier<SettingType> {
 
@@ -141,5 +143,27 @@ public interface IProcessSupplier<SettingType> {
 			context.setContextObject(ProcessExecutionConsumer.class, null);
 		}
 		return consumer.getResult();
+	}
+
+	/**
+	 * Check if this {@link IProcessSupplier} can currently be used. A supplier might be incapable of being executed (e.g. improper system configuration) or temporary unavailable (e.g. disconnected from underlying device)
+	 * 
+	 * @return a {@link IStatus} describing the current state, the default implementation always returns {@link Status#OK_STATUS}
+	 */
+	default IStatus validate() {
+
+		return Status.OK_STATUS;
+	}
+
+	/**
+	 * Check if the given settings are valid for this {@link IProcessTypeSupplier}
+	 * 
+	 * @param settings
+	 *            the settings to check
+	 * @return a {@link IStatus} describing the outcome of the settingscheck, the default implementation always returns the result of {@link #validate()}
+	 */
+	default IStatus validate(SettingType settings) {
+
+		return validate();
 	}
 }
