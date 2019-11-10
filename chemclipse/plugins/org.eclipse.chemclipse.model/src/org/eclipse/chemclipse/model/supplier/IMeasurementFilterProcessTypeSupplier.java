@@ -59,10 +59,10 @@ public class IMeasurementFilterProcessTypeSupplier implements IProcessTypeSuppli
 
 	private static final class MeasurementFilterProcessSupplier<SettingsClass> extends AbstractProcessSupplier<SettingsClass> implements IMeasurementProcessSupplier<SettingsClass> {
 
-		private IMeasurementFilter<SettingsClass> filter;
+		private final IMeasurementFilter<SettingsClass> filter;
 
 		public MeasurementFilterProcessSupplier(IMeasurementFilter<SettingsClass> filter, IProcessTypeSupplier parent) {
-			super("MeasurementFilter." + filter.getID(), filter.getName(), filter.getDescription(), filter.getConfigClass(), parent, filter.getDataCategories());
+			super("MeasurementFilter:" + filter.getID(), filter.getName(), filter.getDescription(), filter.getConfigClass(), parent, filter.getDataCategories());
 			this.filter = filter;
 		}
 

@@ -61,7 +61,7 @@ public class IPeakFilterProcessTypeSupplier implements IProcessTypeSupplier {
 		private final IPeakFilter<ConfigType> filter;
 
 		PeakFilterProcessSupplier(IPeakFilter<ConfigType> filter, IProcessTypeSupplier parent) {
-			super("PeakFilter." + filter.getID(), filter.getName(), filter.getDescription(), filter.getConfigClass(), parent, filter.getDataCategories());
+			super("PeakFilter:" + filter.getID(), filter.getName(), filter.getDescription(), filter.getConfigClass(), parent, filter.getDataCategories());
 			this.filter = filter;
 		}
 

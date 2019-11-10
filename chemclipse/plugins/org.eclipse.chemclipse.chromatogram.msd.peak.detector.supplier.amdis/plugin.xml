@@ -4,10 +4,10 @@
    <extension
          point="org.eclipse.chemclipse.chromatogram.msd.peak.detector.peakDetectorSupplier">
       <PeakDetector
-            description="This extension point implements the AMDIS peak detector."
+            description="This is the base AMDIS Peak Deconvolution"
             id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis"
             peakDetector="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core.PeakDetector"
-            peakDetectorName="AMDIS Peak Detector">
+            peakDetectorName="AMDIS Peak Deconvolution">
       </PeakDetector>
    </extension>
    <extension

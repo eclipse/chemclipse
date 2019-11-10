@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.processing.internal;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
@@ -29,7 +28,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 public class OSGiProcessSupplierContext implements ProcessSupplierContext {
 
 	private final ConcurrentMap<String, IProcessSupplier<?>> supplierMap = new ConcurrentHashMap<>();
-	private final Set<IProcessTypeSupplier> typeSupplierSet = new ConcurrentSkipListSet<>();
+	private final Set<IProcessTypeSupplier> typeSupplierSet = new ConcurrentHashMap<IProcessTypeSupplier, Boolean>().keySet(Boolean.TRUE);
 
 	@SuppressWarnings("unchecked")
 	@Override
