@@ -323,7 +323,9 @@ public class ExtendedInternalStandardsUI {
 		textConcentration = new Text(parent, SWT.BORDER);
 		textConcentration.setText("");
 		textConcentration.setToolTipText("Concentration, e.g. 10 mg/L");
-		textConcentration.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.minimumWidth = 80;
+		textConcentration.setLayoutData(gridData);
 		//
 		concentrationValidator = new ConcentrationValidator();
 		concentrationControlDecoration = new ControlDecoration(textConcentration, SWT.LEFT | SWT.TOP);
@@ -342,7 +344,9 @@ public class ExtendedInternalStandardsUI {
 		textResponseFactor = new Text(parent, SWT.BORDER);
 		textResponseFactor.setText("1.0");
 		textResponseFactor.setToolTipText("Response Factor");
-		textResponseFactor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.minimumWidth = 50;
+		textResponseFactor.setLayoutData(gridData);
 		//
 		responseFactorValidator = new ResponseFactorValidator();
 		responseFactorControlDecoration = new ControlDecoration(textResponseFactor, SWT.LEFT | SWT.TOP);
