@@ -28,7 +28,7 @@ public interface [ItemType]Filter<ConfigType> extends Filter<ConfigType> {
 	 * @throws IllegalArgumentException
 	 *             if the given {@link [ItemType]}s are incompatible with this filter ({@link #accepts[ItemType]s([ItemType])} returns <code>false</code>)
 	 */
-	<X extends [ItemType]> void filter[ItemType]s(Collection<X> filterItems, ConfigType configuration, CRUDListener<? super X> listener, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
+	<X extends [ItemType]> void filter[ItemType]s(CRUDListener<X> listener, ConfigType configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link [ItemType]} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}

@@ -48,7 +48,7 @@ public interface IPeakFilter<ConfigType> extends Filter<ConfigType> {
 	 * @throws IllegalArgumentException
 	 *             if the given {@link IPeak}s are incompatible with this filter ({@link #acceptsIPeaks(IPeak)} returns <code>false</code>)
 	 */
-	<X extends IPeak> void filterIPeaks(Collection<X> filterItems, ConfigType configuration, CRUDListener<? super X> listener, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
+	<X extends IPeak> void filterIPeaks(CRUDListener<X> listener, ConfigType configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link IPeak} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}

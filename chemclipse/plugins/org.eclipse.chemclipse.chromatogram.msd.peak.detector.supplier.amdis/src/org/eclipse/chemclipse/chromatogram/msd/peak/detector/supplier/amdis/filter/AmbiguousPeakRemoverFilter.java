@@ -61,22 +61,23 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(Collection<X> filterItems, AmbiguousPeakRemoverFilterSettings configuration, CRUDListener<? super X> listener, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X> listener, AmbiguousPeakRemoverFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
+		List<X> peaks = new ArrayList<>(listener.read());
 		if(configuration == null) {
 			configuration = createNewConfiguration();
 		}
 		Comparator<X> compareFunction;
 		if(configuration.getMethod() == SelectionMethod.AREA) {
 			compareFunction = new AreaComparator<>();
-			for(X peak : filterItems) {
+			for(X peak : peaks) {
 				if(!(peak instanceof IPeakMSD)) {
 					throw new IllegalArgumentException("invalid peak type");
 				}
 			}
 		} else {
 			compareFunction = new SNRComparator<>();
-			for(X peak : filterItems) {
+			for(X peak : peaks) {
 				if(!(peak instanceof IChromatogramPeakMSD)) {
 					messageConsumer.addWarnMessage(getName(), "SNR compare method is only avaiable for Chromatogram Peaks, skip processing");
 					return;
@@ -86,7 +87,7 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 				}
 			}
 		}
-		filterDuplicatePeaks(new ArrayList<>(filterItems), configuration, listener, compareFunction, monitor);
+		filterDuplicatePeaks(peaks, configuration, listener, compareFunction, monitor);
 	}
 
 	@Override
@@ -128,7 +129,6 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 		List<X> candidatePeakSet = new ArrayList<>();
 		IMassSpectrumComparator comparator = MassSpectrumComparator.getMassSpectrumComparator(settings.getComparatorID());
 		for(X peak : peaks) {
-			listener.read(peak);
 			if(lastPeak != null) {
 				double deltaSeconds = getRTDelta(peak, lastPeak) / 1000d;
 				double deltaMinutes = deltaSeconds / 60d;

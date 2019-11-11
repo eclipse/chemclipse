@@ -77,14 +77,20 @@ public class IPeakFilterProcessTypeSupplier implements IProcessTypeSupplier {
 			C chromatogram = chromatogramSelection.getChromatogram();
 			List<P> peaks = chromatogram.getPeaks(chromatogramSelection);
 			if(filter.acceptsIPeaks(peaks)) {
-				filter.filterIPeaks(peaks, processSettings, new CRUDListener<P>() {
+				filter.filterIPeaks(new CRUDListener<P>() {
 
 					@Override
 					public void delete(P item) {
 
 						chromatogram.removePeak(item);
 					}
-				}, context, context.getProgressMonitor());
+
+					@Override
+					public Collection<P> read() {
+
+						return peaks;
+					}
+				}, processSettings, context, context.getProgressMonitor());
 			}
 		}
 	}

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.filter;
 
+import java.util.Collection;
+
 public interface CRUDListener<T> {
 
 	/**
@@ -25,13 +27,11 @@ public interface CRUDListener<T> {
 	}
 
 	/**
-	 * called when the given item is processed
+	 * reads the current Collection of items
 	 * 
 	 * @param item
 	 */
-	default void read(T item) {
-
-	}
+	Collection<T> read();
 
 	/**
 	 * called whenever an item is updated
