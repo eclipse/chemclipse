@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpec
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.filter.AmbiguousPeakRemoverFilterSettings.SelectionMethod;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -61,7 +62,7 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X> listener, AmbiguousPeakRemoverFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, AmbiguousPeakRemoverFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		List<X> peaks = new ArrayList<>(listener.read());
 		if(configuration == null) {
@@ -113,7 +114,7 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 		return IPeakFilter.super.createConfiguration(items);
 	}
 
-	private static <X extends IPeak> void filterDuplicatePeaks(List<X> peaks, AmbiguousPeakRemoverFilterSettings settings, CRUDListener<? super X> listener, Comparator<X> compareFunction, IProgressMonitor monitor) {
+	private static <X extends IPeak> void filterDuplicatePeaks(List<X> peaks, AmbiguousPeakRemoverFilterSettings settings, CRUDListener<? super X, ?> listener, Comparator<X> compareFunction, IProgressMonitor monitor) {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, NAME, peaks.size());
 		// We first order all peaks by retention time
@@ -212,7 +213,7 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 		return peakGroups;
 	}
 
-	private static <T extends IPeak> void deletePeaks(List<PeakGroup<T>> list, CRUDListener<? super T> listener, Comparator<T> compareFunction) {
+	private static <T extends IPeak> void deletePeaks(List<PeakGroup<T>> list, CRUDListener<? super T, ?> listener, Comparator<T> compareFunction) {
 
 		for(PeakGroup<T> peakGroup : list) {
 			T maxPeak = peakGroup.getMaxPeak(compareFunction);

@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
@@ -77,12 +78,13 @@ public class IPeakFilterProcessTypeSupplier implements IProcessTypeSupplier {
 			C chromatogram = chromatogramSelection.getChromatogram();
 			List<P> peaks = chromatogram.getPeaks(chromatogramSelection);
 			if(filter.acceptsIPeaks(peaks)) {
-				filter.filterIPeaks(new CRUDListener<P>() {
+				filter.filterIPeaks(new CRUDListener<P, IPeakModel>() {
 
 					@Override
-					public void delete(P item) {
+					public boolean delete(P item) {
 
 						chromatogram.removePeak(item);
+						return peaks.remove(item);
 					}
 
 					@Override
