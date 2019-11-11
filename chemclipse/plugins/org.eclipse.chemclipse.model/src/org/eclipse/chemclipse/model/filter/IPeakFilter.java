@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.model.filter;
 import java.util.Collection;
 
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
@@ -48,7 +49,7 @@ public interface IPeakFilter<ConfigType> extends Filter<ConfigType> {
 	 * @throws IllegalArgumentException
 	 *             if the given {@link IPeak}s are incompatible with this filter ({@link #acceptsIPeaks(IPeak)} returns <code>false</code>)
 	 */
-	<X extends IPeak> void filterIPeaks(CRUDListener<X> listener, ConfigType configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
+	<X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, ConfigType configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link IPeak} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}

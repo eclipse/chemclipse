@@ -8,12 +8,13 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - use IRetentionTimeRange instead of ChromatogramSelection
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.support.IRetentionTimeRange;
 
 public interface IChromatogramPeaks<T extends IPeak> {
 
@@ -49,6 +50,11 @@ public interface IChromatogramPeaks<T extends IPeak> {
 	 * 
 	 * @return List<T>
 	 */
-	@SuppressWarnings("rawtypes")
-	List<T> getPeaks(IChromatogramSelection chromatogramSelection);
+	default List<T> getPeaks(IRetentionTimeRange range) {
+
+		if(range == null) {
+			return getPeaks();
+		}
+		return getPeaks(range.getStartRetentionTime(), range.getStopRetentionTime());
+	}
 }

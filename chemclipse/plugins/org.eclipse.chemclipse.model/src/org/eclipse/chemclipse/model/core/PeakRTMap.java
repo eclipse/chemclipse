@@ -20,8 +20,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.TreeMap;
 
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-
 /**
  * A specialized Map-Like-Datastructure that retains peaks indexed by there maximum signal retention time,
  * 
@@ -34,7 +32,7 @@ public final class PeakRTMap<T extends IPeak> implements Serializable, IChromato
 	private static final long serialVersionUID = 6339698016420166069L;
 	//
 	private int peakcount;
-	private TreeMap<Integer, Collection<T>> internalMap = new TreeMap<>();
+	private final TreeMap<Integer, Collection<T>> internalMap = new TreeMap<>();
 
 	@Override
 	public void addPeak(T peak) {
@@ -136,16 +134,6 @@ public final class PeakRTMap<T extends IPeak> implements Serializable, IChromato
 		// because of the datastructure we can't use removeAll, but removing one peak at a time is quite efficient anyways
 		for(T peak : peaksToDelete) {
 			removePeak(peak);
-		}
-	}
-
-	@Override
-	public List<T> getPeaks(@SuppressWarnings("rawtypes") IChromatogramSelection chromatogramSelection) {
-
-		if(chromatogramSelection != null) {
-			return getPeaks(chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
-		} else {
-			return getPeaks();
 		}
 	}
 }
