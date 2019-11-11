@@ -12,15 +12,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.selection;
 
-import java.io.Serializable;
-
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.support.IRetentionTimeRange;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.numeric.core.Point;
 
-public interface IChromatogramSelection<P extends IPeak, C extends IChromatogram<P>> extends IChromatogramUpdateListener, Serializable {
+public interface IChromatogramSelection<P extends IPeak, C extends IChromatogram<P>> extends IChromatogramUpdateListener, IRetentionTimeRange {
 
 	/**
 	 * Returns the stored chromatogram.
@@ -52,6 +51,7 @@ public interface IChromatogramSelection<P extends IPeak, C extends IChromatogram
 	 *
 	 * @return int
 	 */
+	@Override
 	int getStartRetentionTime();
 
 	/**
@@ -67,6 +67,7 @@ public interface IChromatogramSelection<P extends IPeak, C extends IChromatogram
 	 *
 	 * @return int
 	 */
+	@Override
 	int getStopRetentionTime();
 
 	/**
