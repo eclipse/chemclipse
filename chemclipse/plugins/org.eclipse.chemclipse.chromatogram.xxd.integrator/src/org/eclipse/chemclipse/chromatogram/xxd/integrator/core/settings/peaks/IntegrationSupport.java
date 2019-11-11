@@ -17,10 +17,10 @@ import java.util.List;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.support.IRetentionTimeRange;
+import org.eclipse.chemclipse.model.support.RetentionTimeRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.internal.core.settings.IRetentionTimeRange;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.internal.core.settings.RetentionTimeRange;
 
 public class IntegrationSupport implements IIntegrationSupport {
 

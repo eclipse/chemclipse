@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.internal.core.settings.IRetentionTimeRange;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.internal.core.settings.RetentionTimeRange;
+import org.eclipse.chemclipse.model.support.IRetentionTimeRange;
+import org.eclipse.chemclipse.model.support.RetentionTimeRange;
 
 public class AreaSupport implements IAreaSupport {
 

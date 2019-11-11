@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.integrator.internal.core.settings;
+package org.eclipse.chemclipse.model.support;
 
 /**
  * @author eselmeister
