@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,16 +73,16 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 * the chromatogram.<br/> It is important e.g. for the GUI to known when it
 	 * has to update itself.
 	 */
-	private List<IChromatogramUpdateListener> updateSupport;
+	private final List<IChromatogramUpdateListener> updateSupport;
 	/*
 	 * The version management handles the temporary files and revision names.
 	 */
-	private IVersionManagement versionManagement;
+	private final IVersionManagement versionManagement;
 	/*
 	 * EditHistory stores all information about the edit operations processed on
 	 * the chromatogram.
 	 */
-	private IEditHistory editHistory;
+	private final IEditHistory editHistory;
 	/*
 	 * The baseline model.
 	 */
@@ -95,7 +94,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	/*
 	 * Some vendors store several chromatograms in one file.
 	 */
-	private List<IChromatogram<?>> referencedChromatograms;
+	private final List<IChromatogram<?>> referencedChromatograms;
 	/*
 	 * Integration entries.
 	 */
@@ -103,21 +102,20 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	private List<IIntegrationEntry> chromatogramIntegrationEntries;
 	private List<IIntegrationEntry> backgroundIntegrationEntries;
 	//
-	private IMethod method;
+	private final IMethod method;
 	private ISeparationColumnIndices separationColumnIndices;
 	/*
 	 * This set contains all the peaks of the chromatogram.
 	 * Specific chromatogram implementations might define
 	 * specific peak types, which must extend from IPeak.
 	 */
-	private PeakRTMap<T> peaks = new PeakRTMap<T>();
-	private Set<IIdentificationTarget> identificationTargets = new HashSet<>();
+	private final PeakRTMap<T> peaks = new PeakRTMap<T>();
+	private final Set<IIdentificationTarget> identificationTargets = new HashSet<>();
 
 	/**
 	 * Constructs a normal chromatogram.
 	 * Several initialization will be performed.
 	 */
-	@SuppressWarnings("rawtypes")
 	public AbstractChromatogram() {
 		updateSupport = new ArrayList<IChromatogramUpdateListener>(5);
 		versionManagement = new VersionManagement();
@@ -1026,19 +1024,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	public List<T> getPeaks() {
 
 		return peaks.getPeaks();
-	}
-
-	// TODO JUnit
-	@SuppressWarnings("rawtypes")
-	@Override
-	public List<T> getPeaks(IChromatogramSelection chromatogramSelection) {
-
-		if(chromatogramSelection != null) {
-			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			return getPeaks(startRetentionTime, stopRetentionTime);
-		}
-		return Collections.emptyList();
 	}
 
 	@Override
