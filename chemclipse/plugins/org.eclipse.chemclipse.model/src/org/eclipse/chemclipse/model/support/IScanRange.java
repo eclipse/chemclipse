@@ -38,5 +38,27 @@ public interface IScanRange {
 	 * 
 	 * @return int
 	 */
-	int getWidth();
+	default int getWidth() {
+
+		return getStopScan() - getStartScan() + 1;
+	}
+
+	/**
+	 * Compares this objects content to the other objects content, the default implementation compares {@link #getStartScan()}, {@link #getStopScan()}
+	 * this method is different to {@link #equals(Object)} that it does compares for user visible properties to be equal in contrast to objects identity and it allows to compare different instance type, this also means that it is not required that
+	 * Object1.contentEquals(Object2} == Object2.contentEquals(Object1}
+	 * 
+	 * @param other
+	 * @return
+	 */
+	default boolean contentEquals(IScanRange other) {
+
+		if(other == null) {
+			return false;
+		}
+		if(this == other) {
+			return true;
+		}
+		return getStopScan() == other.getStopScan() && getStartScan() == other.getStartScan();
+	}
 }
