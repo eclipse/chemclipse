@@ -28,6 +28,9 @@ public class MassSpectrumComparatorDynamicSettingProperty implements ComboSuppli
 	@Override
 	public IMassSpectrumComparisonSupplier fromString(String string) {
 
+		if(string == null) {
+			return null;
+		}
 		try {
 			return MassSpectrumComparator.getMassSpectrumComparatorSupport().getMassSpectrumComparisonSupplier(string);
 		} catch(NoMassSpectrumComparatorAvailableException e) {
@@ -38,6 +41,9 @@ public class MassSpectrumComparatorDynamicSettingProperty implements ComboSuppli
 	@Override
 	public String asString(IMassSpectrumComparisonSupplier item) {
 
+		if(item == null) {
+			return "";
+		}
 		return item.getId();
 	}
 }

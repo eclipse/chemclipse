@@ -16,7 +16,9 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences.DialogBehavior;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -86,6 +88,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 				try {
 					jsonSettings = settingsUI.getControl().getSettings();
 				} catch(Exception e) {
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, getClass().getName(), "Error while fetching settings", e));
 					setErrorMessage(e.toString());
 					setPageComplete(false);
 				}
