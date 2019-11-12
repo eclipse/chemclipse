@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add validationmethod/getter
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.internal.identifier;
 
@@ -46,9 +47,9 @@ public class FileIdentifier {
 	public static final String IDENTIFIER = "File Identifier";
 	private static final Logger logger = Logger.getLogger(FileIdentifier.class);
 	//
-	private TargetCombinedComparator targetCombinedComparator;
-	private TargetBuilder targetBuilder;
-	private DatabasesCache databasesCache;
+	private final TargetCombinedComparator targetCombinedComparator;
+	private final TargetBuilder targetBuilder;
+	private final DatabasesCache databasesCache;
 
 	public FileIdentifier() {
 		//
@@ -103,7 +104,7 @@ public class FileIdentifier {
 	 * @return {@link IPeakIdentificationResults}
 	 * @throws FileNotFoundException
 	 */
-	public IPeakIdentificationResults runPeakIdentification(List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
+	public IPeakIdentificationResults runPeakIdentification(List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo<?> processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
 		/*
 		 * The alternate identifier is used, when another plugin tries to use this file identification process.
@@ -148,19 +149,30 @@ public class FileIdentifier {
 	public IMassSpectra getMassSpectra(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
 
 		IMassSpectra massSpectra = new MassSpectra();
-		if(identificationTarget != null) {
+		if(isValid(identificationTarget)) {
 			/*
 			 * Extract the target library information.
 			 * Old *.ocb version don't store the identifier id.
 			 * Hence, try to get mass spectrum anyhow.
 			 */
-			String identifier = identificationTarget.getIdentifier();
-			if(identifier.equals(IDENTIFIER) || identifier.equals("")) {
-				massSpectra.addMassSpectra(databasesCache.getDatabaseMassSpectra(identificationTarget, monitor));
-			}
+			massSpectra.addMassSpectra(databasesCache.getDatabaseMassSpectra(identificationTarget, monitor));
 		}
 		//
 		return massSpectra;
+	}
+
+	public boolean isValid(IIdentificationTarget identificationTarget) {
+
+		if(identificationTarget != null) {
+			String id = identificationTarget.getIdentifier();
+			return IDENTIFIER.equals(id) || "".equals(id);
+		}
+		return false;
+	}
+
+	public DatabasesCache getDatabasesCache() {
+
+		return databasesCache;
 	}
 
 	private void compareMassSpectraAgainstDatabase(IMassSpectra massSpectra, MassSpectrumIdentifierSettings fileIdentifierSettings, String identifier, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
@@ -194,7 +206,7 @@ public class FileIdentifier {
 					//
 					IScanMSD reference = references.get(index);
 					IProcessingInfo<IComparisonResult> infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
-					IComparisonResult comparisonResult = infoCompare.getProcessingResult(IComparisonResult.class);
+					IComparisonResult comparisonResult = infoCompare.getProcessingResult();
 					applyPenaltyOnDemand(unknown, reference, comparisonResult, fileIdentifierSettings);
 					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
 						/*
@@ -254,7 +266,7 @@ public class FileIdentifier {
 					monitor.subTask("Compare " + countUnknown);
 					IScanMSD reference = references.get(index);
 					IProcessingInfo<IComparisonResult> infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
-					IComparisonResult comparisonResult = infoCompare.getProcessingResult(IComparisonResult.class);
+					IComparisonResult comparisonResult = infoCompare.getProcessingResult();
 					applyPenaltyOnDemand(unknown, reference, comparisonResult, fileIdentifierSettings);
 					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
 						/*

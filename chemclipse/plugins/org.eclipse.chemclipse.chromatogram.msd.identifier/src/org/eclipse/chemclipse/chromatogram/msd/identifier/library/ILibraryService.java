@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - add methods to query if progress is desired or a target is valid
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.library;
 
@@ -20,4 +21,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public interface ILibraryService {
 
 	IProcessingInfo<IMassSpectra> identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor);
+
+	boolean accepts(IIdentificationTarget identificationTarget);
+
+	boolean requireProgressMonitor();
 }

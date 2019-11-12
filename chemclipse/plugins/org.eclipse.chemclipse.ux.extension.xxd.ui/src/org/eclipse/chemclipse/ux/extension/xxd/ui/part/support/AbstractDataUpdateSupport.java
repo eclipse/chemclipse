@@ -29,11 +29,11 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 
 	private static final Logger logger = Logger.getLogger(AbstractDataUpdateSupport.class);
 	//
-	private List<Object> objects = new ArrayList<Object>();
+	private final List<Object> objects = new ArrayList<Object>();
 	private String topic = "";
 	//
-	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-	private List<EventHandler> registeredEventHandler;
+	private final IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+	private final List<EventHandler> registeredEventHandler;
 
 	public AbstractDataUpdateSupport(MPart part) {
 		this(part, false);
@@ -85,7 +85,7 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 	}
 
 	@PreDestroy
-	private void preDestroy() {
+	protected void preDestroy() {
 
 		if(eventBroker != null) {
 			for(EventHandler eventHandler : registeredEventHandler) {

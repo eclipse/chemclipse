@@ -10,6 +10,7 @@
  * Dr. Lorenz Gerber - initial API and implementation
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - add method to check if target is valid
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.identifier;
 
@@ -65,12 +66,12 @@ public class BasePeakIdentifier {
 	private static final ArrayList<Integer> pHydroxyPhenylBaseMZs = new ArrayList<>();
 	private static final ArrayList<Integer> carbohydrateBaseMZs = new ArrayList<>();
 	//
-	private TargetBuilder targetBuilder;
+	private final TargetBuilder targetBuilder;
 	// These one's are run when initializing the class
 	private static final IMassSpectra references = getStandardsMassSpectra();
 	private static final IScanMSD syringyl = getSyringyl();
 	//
-	private String massSpectraFiles;
+	private final String massSpectraFiles;
 	static {
 		Integer[] syringyl = {149, 154, 167, 181, 182, 192, 194, 208, 210};
 		Integer[] guaiacyl = {109, 123, 136, 137, 138, 140, 150, 151, 152, 162, 164, 168, 178};
@@ -137,13 +138,13 @@ public class BasePeakIdentifier {
 			if(containsMoreThanOneBasePeakIdentification(peakTargets)) {
 				IIdentificationTarget peakTargetToRemove = null;
 				exitloop:
-					for(IIdentificationTarget peakTarget : peakTargets) {
-						ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
-						if(libraryInformation.getName().equals(NOTFOUND)) {
-							peakTargetToRemove = peakTarget;
-							break exitloop;
-						}
+				for(IIdentificationTarget peakTarget : peakTargets) {
+					ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
+					if(libraryInformation.getName().equals(NOTFOUND)) {
+						peakTargetToRemove = peakTarget;
+						break exitloop;
 					}
+				}
 				//
 				if(peakTargetToRemove != null) {
 					peak.getTargets().remove(peakTargetToRemove);
@@ -185,13 +186,13 @@ public class BasePeakIdentifier {
 			if(containsMoreThanOneBasePeakIdentificationMassSpectrum(scan.getTargets())) {
 				IIdentificationTarget targetToRemove = null;
 				exitloop:
-					for(IIdentificationTarget target : scan.getTargets()) {
-						ILibraryInformation libraryInformation = target.getLibraryInformation();
-						if(libraryInformation.getName().equals(NOTFOUND)) {
-							targetToRemove = target;
-							break exitloop;
-						}
+				for(IIdentificationTarget target : scan.getTargets()) {
+					ILibraryInformation libraryInformation = target.getLibraryInformation();
+					if(libraryInformation.getName().equals(NOTFOUND)) {
+						targetToRemove = target;
+						break exitloop;
 					}
+				}
 				//
 				if(targetToRemove != null) {
 					scan.getTargets().remove(targetToRemove);
@@ -253,6 +254,14 @@ public class BasePeakIdentifier {
 		return massSpectra;
 	}
 
+	public boolean isValid(IIdentificationTarget identificationTarget) {
+
+		if(identificationTarget != null) {
+			return identificationTarget.getIdentifier().equals(IDENTIFIER);
+		}
+		return false;
+	}
+
 	private static IScanMSD getSyringyl() {
 
 		IScanMSD massSpectrum = null;
@@ -271,7 +280,7 @@ public class BasePeakIdentifier {
 
 		File file = new File(PathResolver.getAbsolutePath(PathResolver.REFERENCES));
 		IProcessingInfo<IMassSpectra> processingInfo = DatabaseConverter.convert(file, new NullProgressMonitor());
-		IMassSpectra massSpectra = processingInfo.getProcessingResult(IMassSpectra.class);
+		IMassSpectra massSpectra = processingInfo.getProcessingResult();
 		return massSpectra;
 	}
 
