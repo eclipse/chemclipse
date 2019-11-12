@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - use dedicated NISTIdentificationTarget for improved performance
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support;
 
@@ -44,7 +45,6 @@ import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationResult;
 import org.eclipse.chemclipse.model.implementation.IdentificationResults;
-import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compounds;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompound;
@@ -81,7 +81,7 @@ public class Identifier {
 	private static final String LIBRARY = "NIST";
 	private static final String COMPOUND_IN_LIB_FACTOR = "InLib Factor: ";
 	//
-	private TargetCombinedComparator targetCombinedComparator;
+	private final TargetCombinedComparator targetCombinedComparator;
 	//
 	/*
 	 * Mass Spectrum/Peak Identifier
@@ -90,7 +90,6 @@ public class Identifier {
 	private static final String BACKUP_CONTROL_EXTENSION = ".openchrom.bak";
 
 	public Identifier() {
-
 		targetCombinedComparator = new TargetCombinedComparator(SortOrder.DESC);
 	}
 
@@ -171,7 +170,7 @@ public class Identifier {
 	 * @return IPeakIdentificationResults
 	 * @throws FileNotFoundException
 	 */
-	public IPeakIdentificationResults runPeakIdentification(List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
+	public IPeakIdentificationResults runPeakIdentification(List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo<?> processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		/*
@@ -587,7 +586,7 @@ public class Identifier {
 	/**
 	 * Assign the compounds to the peaks.
 	 */
-	private IPeakIdentificationResults assignPeakCompounds(ICompounds compounds, List<? extends IPeakMSD> peaks, IPeakIdentificationResults identificationResults, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo, IProgressMonitor monitor) {
+	private IPeakIdentificationResults assignPeakCompounds(ICompounds compounds, List<? extends IPeakMSD> peaks, IPeakIdentificationResults identificationResults, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo<?> processingInfo, IProgressMonitor monitor) {
 
 		monitor.subTask("Assign the identified peaks.");
 		/*
@@ -606,7 +605,7 @@ public class Identifier {
 	 * @param peakIdentifierSettings
 	 * @return {@link INistPeakIdentificationResults}
 	 */
-	public IPeakIdentificationResults getPeakIdentificationResults(ICompounds compounds, List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo processingInfo) {
+	public IPeakIdentificationResults getPeakIdentificationResults(ICompounds compounds, List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo<?> processingInfo) {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		IPeakIdentificationResult identificationResult;
@@ -717,7 +716,7 @@ public class Identifier {
 		 */
 		comparisonResult = new PeakComparisonResult(hit.getMF(), hit.getRMF(), 0.0f, 0.0f, hit.getProb());
 		try {
-			identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
+			identificationEntry = new NISTIdentificationTarget(libraryInformation, comparisonResult);
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
 		}
@@ -794,7 +793,6 @@ public class Identifier {
 			 */
 			IHit hit = compound.getHit(index);
 			IIdentificationTarget identificationEntry = getMassSpectrumIdentificationEntry(hit, compound);
-			identificationEntry.setIdentifier(IConstants.NIST_IDENTIFIER);
 			if(massSpectrumIdentifierSettings.getStoreTargets()) {
 				massSpectrumTargets.add(identificationEntry);
 			}
@@ -837,7 +835,7 @@ public class Identifier {
 		 */
 		comparisonResult = new ComparisonResult(hit.getMF(), hit.getRMF(), 0.0f, 0.0f, hit.getProb());
 		try {
-			identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
+			identificationEntry = new NISTIdentificationTarget(libraryInformation, comparisonResult);
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
 		}
