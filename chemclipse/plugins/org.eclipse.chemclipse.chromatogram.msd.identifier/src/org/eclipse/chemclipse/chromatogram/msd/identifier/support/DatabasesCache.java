@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - add method to check if database is loaded
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.support;
 
@@ -47,11 +48,10 @@ public class DatabasesCache {
 	private static Map<String, Map<String, IScanMSD>> allDatabaseNames = null;
 	private static Map<String, Map<String, IScanMSD>> allDatabaseCasNumbers = null;
 	//
-	private IonAbundanceComparator ionAbundanceComparator;
-	private List<String> massSpectraFiles;
+	private final IonAbundanceComparator ionAbundanceComparator;
+	private final List<String> massSpectraFiles;
 
 	public DatabasesCache(List<String> massSpectraFiles) {
-
 		/*
 		 * Initialize the static maps once.
 		 */
@@ -179,6 +179,11 @@ public class DatabasesCache {
 		return massSpectra;
 	}
 
+	public boolean isLoaded() {
+
+		return massSpectraDatabases != null;
+	}
+
 	private Map<String, Map<String, IScanMSD>> getDatabaseNamesMap(IProgressMonitor monitor) throws FileNotFoundException {
 
 		getDatabases(massSpectraFiles, monitor);
@@ -194,7 +199,7 @@ public class DatabasesCache {
 	private void loadMassSpectraFromFile(File file, IProgressMonitor monitor) throws TypeCastException {
 
 		IProcessingInfo<IMassSpectra> processingInfo = DatabaseConverter.convert(file, monitor);
-		IMassSpectra massSpectraDatabase = processingInfo.getProcessingResult(IMassSpectra.class);
+		IMassSpectra massSpectraDatabase = processingInfo.getProcessingResult();
 		/*
 		 * Add the database to databases.
 		 */

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,11 +8,15 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - execute updates in own eventqueue
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -29,12 +33,13 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ComparisonScanChartPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private ExtendedComparisonScanUI extendedComparisonScanUI;
+	private final ExtendedComparisonScanUI extendedComparisonScanUI;
 	//
 	private static final int NUMBER_PROPERTIES_1 = 1;
 	private static final int NUMBER_PROPERTIES_2 = 2;
 	private static final int TARGET_MASS_SPECTRUM_UNKNOWN = 0;
 	private static final int TARGET_ENTRY = 1;
+	private final ExecutorService eventExecutor = Executors.newSingleThreadExecutor();
 
 	@Inject
 	public ComparisonScanChartPart(Composite parent, MPart part) {
@@ -48,6 +53,13 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 		/*
 		 * Don't update to not load the reference twice.
 		 */
+	}
+
+	@PreDestroy
+	@Override
+	protected void preDestroy() {
+
+		eventExecutor.shutdownNow();
 	}
 
 	@Override
@@ -67,28 +79,35 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 	@Override
 	public void updateObjects(List<Object> objects, String topic) {
 
-		if(objects.size() == NUMBER_PROPERTIES_1) {
-			/*
-			 * MSD (Scan1, Scan2)
-			 */
-			if(isUnloadEvent(topic)) {
-				extendedComparisonScanUI.update(null);
-			} else {
-				Object object = objects.get(0);
-				if(object instanceof IScanMSD) {
-					extendedComparisonScanUI.update((IScanMSD)object);
-				} else if(object instanceof IPeakMSD) {
-					extendedComparisonScanUI.update(((IPeakMSD)object).getExtractedMassSpectrum());
+		eventExecutor.execute(new Runnable() {
+
+			@Override
+			public void run() {
+
+				if(objects.size() == NUMBER_PROPERTIES_1) {
+					/*
+					 * MSD (Scan1, Scan2)
+					 */
+					if(isUnloadEvent(topic)) {
+						extendedComparisonScanUI.update(null);
+					} else {
+						Object object = objects.get(0);
+						if(object instanceof IScanMSD) {
+							extendedComparisonScanUI.update((IScanMSD)object);
+						} else if(object instanceof IPeakMSD) {
+							extendedComparisonScanUI.update(((IPeakMSD)object).getExtractedMassSpectrum());
+						}
+					}
+				} else if(objects.size() == NUMBER_PROPERTIES_2) {
+					/*
+					 * MSD + TARGET
+					 */
+					IScanMSD unknownMassSpectrum = (IScanMSD)objects.get(TARGET_MASS_SPECTRUM_UNKNOWN);
+					IIdentificationTarget identificationTarget = (IIdentificationTarget)objects.get(TARGET_ENTRY);
+					extendedComparisonScanUI.update(unknownMassSpectrum, identificationTarget);
 				}
 			}
-		} else if(objects.size() == NUMBER_PROPERTIES_2) {
-			/*
-			 * MSD + TARGET
-			 */
-			IScanMSD unknownMassSpectrum = (IScanMSD)objects.get(TARGET_MASS_SPECTRUM_UNKNOWN);
-			IIdentificationTarget identificationTarget = (IIdentificationTarget)objects.get(TARGET_ENTRY);
-			extendedComparisonScanUI.update(unknownMassSpectrum, identificationTarget);
-		}
+		});
 	}
 
 	private boolean isUnloadEvent(String topic) {

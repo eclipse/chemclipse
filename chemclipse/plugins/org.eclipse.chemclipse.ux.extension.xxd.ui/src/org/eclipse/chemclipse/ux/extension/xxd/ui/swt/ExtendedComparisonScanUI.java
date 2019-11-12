@@ -37,8 +37,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.LibraryServ
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -55,6 +55,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
@@ -96,10 +97,10 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 	private boolean displayMirrored = true;
 	private boolean displayShifted = false;
 	//
-	private ScanDataSupport scanDataSupport = new ScanDataSupport();
+	private final ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private Composite toolbarMain;
 	private Composite toolbarInfo;
-	private int style;
+	private final int style;
 	private Composite comparisonInfo;
 
 	@Inject
@@ -111,7 +112,7 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 	@Focus
 	public void setFocus() {
 
-		updateChart();
+		Display.getDefault().asyncExec(this::updateChart);
 	}
 
 	public void update(IScanMSD scanMSD) {
@@ -129,7 +130,7 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 					logger.warn(e);
 				}
 			}
-			updateChart();
+			Display.getDefault().asyncExec(this::updateChart);
 		} else if(displayOption.equals(OPTION_UPDATE_SCAN_2)) {
 			scan2Optimized = null;
 			if(scanMSD == null) {
@@ -143,7 +144,7 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 					logger.warn(e);
 				}
 			}
-			updateChart();
+			Display.getDefault().asyncExec(this::updateChart);
 		}
 	}
 
@@ -164,14 +165,20 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 				} else {
 					//
 					LibraryServiceRunnable runnable = new LibraryServiceRunnable(identificationTarget);
-					ProgressMonitorDialog monitor = new ProgressMonitorDialog(scanChartUI.getShell());
-					monitor.run(true, true, runnable);
-					IScanMSD referenceMassSpectrum = runnable.getLibraryMassSpectrum();
-					if(referenceMassSpectrum != null) {
-						scan2 = referenceMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+					if(runnable.mustRun()) {
+						if(runnable.requireProgressMonitor()) {
+							ProgressMonitorDialog monitor = new ProgressMonitorDialog(scanChartUI.getShell());
+							monitor.run(Display.getCurrent() != null, true, runnable);
+						} else {
+							runnable.run(new NullProgressMonitor());
+						}
+						IScanMSD referenceMassSpectrum = runnable.getLibraryMassSpectrum();
+						if(referenceMassSpectrum != null) {
+							scan2 = referenceMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+						}
 					}
 				}
-				updateChart();
+				Display.getDefault().asyncExec(this::updateChart);
 			} catch(InvocationTargetException e) {
 				logger.warn(e);
 			} catch(InterruptedException e) {

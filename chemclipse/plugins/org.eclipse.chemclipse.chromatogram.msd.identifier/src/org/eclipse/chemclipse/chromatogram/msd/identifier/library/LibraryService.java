@@ -125,7 +125,7 @@ public class LibraryService {
 	 * Returns a {@link ILibraryService} instance given by the
 	 * identifierId or null, if none is available.
 	 */
-	private static ILibraryService getLibraryService(final String identifierId) {
+	public static ILibraryService getLibraryService(final String identifierId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(identifierId);

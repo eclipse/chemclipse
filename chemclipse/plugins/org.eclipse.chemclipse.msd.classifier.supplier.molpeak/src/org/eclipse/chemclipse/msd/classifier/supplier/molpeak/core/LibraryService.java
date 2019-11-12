@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Lorenz Gerber - initial API and implementation
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API / generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core;
 
@@ -24,16 +25,16 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class LibraryService extends AbstractLibraryService implements ILibraryService {
 
-	private BasePeakIdentifier basePeakIdentifier;
+	private final BasePeakIdentifier basePeakIdentifier;
 
 	public LibraryService() {
 		basePeakIdentifier = new BasePeakIdentifier();
 	}
 
 	@Override
-	public IProcessingInfo identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectra> identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
 		try {
 			monitor.subTask("Base Peak Identifier - get reference mass spectrum");
 			validateIdentificationTarget(identificationTarget);
@@ -44,5 +45,17 @@ public class LibraryService extends AbstractLibraryService implements ILibrarySe
 		}
 		//
 		return processingInfo;
+	}
+
+	@Override
+	public boolean accepts(IIdentificationTarget identificationTarget) {
+
+		return basePeakIdentifier.isValid(identificationTarget);
+	}
+
+	@Override
+	public boolean requireProgressMonitor() {
+
+		return false;
 	}
 }

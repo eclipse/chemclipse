@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - add method to check if target is valid
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl;
 
@@ -41,11 +42,10 @@ public class AlkaneIdentifier {
 	public static final String IDENTIFIER = "Alkane Identifier";
 	//
 	private static final String MASS_SPECTRUM_COMPARATOR_ID = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
-	private String massSpectraFiles;
-	private DatabasesCache databasesCache;
+	private final String massSpectraFiles;
+	private final DatabasesCache databasesCache;
 
 	public AlkaneIdentifier() {
-
 		//
 		FileListUtil fileListUtil = new FileListUtil();
 		massSpectraFiles = getDatabase();
@@ -107,16 +107,24 @@ public class AlkaneIdentifier {
 	public IMassSpectra getMassSpectra(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
 
 		IMassSpectra massSpectra = new MassSpectra();
-		if(identificationTarget != null) {
-			/*
-			 * Extract the target library information.
-			 */
-			if(identificationTarget.getIdentifier().equals(IDENTIFIER)) {
-				massSpectra.addMassSpectra(databasesCache.getDatabaseMassSpectra(identificationTarget, monitor));
-			}
+		if(isValid(identificationTarget)) {
+			massSpectra.addMassSpectra(databasesCache.getDatabaseMassSpectra(identificationTarget, monitor));
 		}
 		//
 		return massSpectra;
+	}
+
+	public DatabasesCache getDatabasesCache() {
+
+		return databasesCache;
+	}
+
+	public boolean isValid(IIdentificationTarget identificationTarget) {
+
+		if(identificationTarget != null) {
+			return identificationTarget.getIdentifier().equals(IDENTIFIER);
+		}
+		return false;
 	}
 
 	private void setIdentifierSettings(IIdentifierSettingsMSD identifierSettings) {
