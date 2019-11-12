@@ -53,14 +53,14 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IChemCl
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/plate-pcr.gif";
 	public static final String TOOLTIP = "PCR Editor";
 	//
-	private MPart part;
-	private MDirtyable dirtyable;
+	private final MPart part;
+	private final MDirtyable dirtyable;
 	//
 	private File plateFile;
 	private IPlate plate = null;
 	private ExtendedPCRPlateUI extendedPCRPlateUI;
 	//
-	private Shell shell;
+	private final Shell shell;
 
 	@Inject
 	public PlateEditorPCR(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
@@ -95,9 +95,11 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IChemCl
 		updatePlate();
 	}
 
+	@Override
 	@PreDestroy
-	private void preDestroy() {
+	protected void preDestroy() {
 
+		super.preDestroy();
 		unloadPlate();
 		EModelService modelService = ModelSupportAddon.getModelService();
 		if(modelService != null) {

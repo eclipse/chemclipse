@@ -54,14 +54,14 @@ public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implem
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/database.gif";
 	public static final String TOOLTIP = "Quantitation Editor";
 	//
-	private MPart part;
-	private MDirtyable dirtyable;
+	private final MPart part;
+	private final MDirtyable dirtyable;
 	//
 	private File quantitationDatabaseFile;
 	private IQuantitationDatabase quantitationDatabase;
 	private ExtendedQuantCompoundListUI extendedQuantCompoundListUI;
 	//
-	private Shell shell;
+	private final Shell shell;
 
 	@Inject
 	public QuantitationDatabaseEditor(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
@@ -96,9 +96,11 @@ public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implem
 		//
 	}
 
+	@Override
 	@PreDestroy
-	private void preDestroy() {
+	protected void preDestroy() {
 
+		super.preDestroy();
 		EModelService modelService = ModelSupportAddon.getModelService();
 		if(modelService != null) {
 			MApplication application = ModelSupportAddon.getApplication();

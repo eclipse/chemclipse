@@ -55,8 +55,8 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/sequenceListDefault.gif";
 	public static final String TOOLTIP = "Sequence Editor";
 	//
-	private MPart part;
-	private MDirtyable dirtyable;
+	private final MPart part;
+	private final MDirtyable dirtyable;
 	//
 	private File sequenceFile;
 	private ExtendedSequenceListUI extendedSequenceListUI;
@@ -93,9 +93,11 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 		//
 	}
 
+	@Override
 	@PreDestroy
-	private void preDestroy() {
+	protected void preDestroy() {
 
+		super.preDestroy();
 		EModelService modelService = ModelSupportAddon.getModelService();
 		if(modelService != null) {
 			MApplication application = ModelSupportAddon.getApplication();

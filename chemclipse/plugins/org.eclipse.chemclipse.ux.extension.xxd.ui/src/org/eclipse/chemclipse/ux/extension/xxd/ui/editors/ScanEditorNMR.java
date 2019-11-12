@@ -84,20 +84,20 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR";
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/scan-nmr.gif";
 	public static final String TOOLTIP = "NMR Editor";
-	private ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(2));
+	private final ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(2));
 	//
-	private MPart part;
-	private MDirtyable dirtyable;
+	private final MPart part;
+	private final MDirtyable dirtyable;
 	//
-	private IEventBroker eventBroker;
+	private final IEventBroker eventBroker;
 	//
 	private ExtendedNMRScanUI extendedNMRScanUI;
 	//
-	private Shell shell;
+	private final Shell shell;
 	private DataNMRSelection selection;
 	private NMRMeasurementsUI measurementsUI;
-	private ProcessorFactory filterFactory;
-	private PartSupport partSupport;
+	private final ProcessorFactory filterFactory;
+	private final PartSupport partSupport;
 	private ExtendedMeasurementResultUI extendedMeasurementResultUI;
 
 	@Inject
@@ -145,9 +145,11 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 		//
 	}
 
+	@Override
 	@PreDestroy
-	private void preDestroy() {
+	protected void preDestroy() {
 
+		super.preDestroy();
 		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_NMR_UNLOAD_SELECTION, null);
 	}
 
@@ -307,8 +309,8 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 
 	private final class UpdatingObserver<FilteredType, ConfigType> implements Observer {
 
-		private FilterContext<FilteredType, ConfigType> context;
-		private IComplexSignalMeasurement<?> currentMeasurement;
+		private final FilterContext<FilteredType, ConfigType> context;
+		private final IComplexSignalMeasurement<?> currentMeasurement;
 
 		public UpdatingObserver(FilterContext<FilteredType, ConfigType> context, IComplexSignalMeasurement<?> currentMeasurement) {
 			this.context = context;
