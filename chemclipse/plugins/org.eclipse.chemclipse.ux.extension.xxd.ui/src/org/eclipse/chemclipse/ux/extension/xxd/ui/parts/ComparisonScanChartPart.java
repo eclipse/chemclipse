@@ -79,35 +79,28 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 	@Override
 	public void updateObjects(List<Object> objects, String topic) {
 
-		eventExecutor.execute(new Runnable() {
-
-			@Override
-			public void run() {
-
-				if(objects.size() == NUMBER_PROPERTIES_1) {
-					/*
-					 * MSD (Scan1, Scan2)
-					 */
-					if(isUnloadEvent(topic)) {
-						extendedComparisonScanUI.update(null);
-					} else {
-						Object object = objects.get(0);
-						if(object instanceof IScanMSD) {
-							extendedComparisonScanUI.update((IScanMSD)object);
-						} else if(object instanceof IPeakMSD) {
-							extendedComparisonScanUI.update(((IPeakMSD)object).getExtractedMassSpectrum());
-						}
-					}
-				} else if(objects.size() == NUMBER_PROPERTIES_2) {
-					/*
-					 * MSD + TARGET
-					 */
-					IScanMSD unknownMassSpectrum = (IScanMSD)objects.get(TARGET_MASS_SPECTRUM_UNKNOWN);
-					IIdentificationTarget identificationTarget = (IIdentificationTarget)objects.get(TARGET_ENTRY);
-					extendedComparisonScanUI.update(unknownMassSpectrum, identificationTarget);
+		if(objects.size() == NUMBER_PROPERTIES_1) {
+			/*
+			 * MSD (Scan1, Scan2)
+			 */
+			if(isUnloadEvent(topic)) {
+				extendedComparisonScanUI.update(null);
+			} else {
+				Object object = objects.get(0);
+				if(object instanceof IScanMSD) {
+					extendedComparisonScanUI.update((IScanMSD)object);
+				} else if(object instanceof IPeakMSD) {
+					extendedComparisonScanUI.update(((IPeakMSD)object).getExtractedMassSpectrum());
 				}
 			}
-		});
+		} else if(objects.size() == NUMBER_PROPERTIES_2) {
+			/*
+			 * MSD + TARGET
+			 */
+			IScanMSD unknownMassSpectrum = (IScanMSD)objects.get(TARGET_MASS_SPECTRUM_UNKNOWN);
+			IIdentificationTarget identificationTarget = (IIdentificationTarget)objects.get(TARGET_ENTRY);
+			extendedComparisonScanUI.update(unknownMassSpectrum, identificationTarget, eventExecutor);
+		}
 	}
 
 	private boolean isUnloadEvent(String topic) {
