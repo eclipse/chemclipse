@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
+import java.util.Collection;
+
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
@@ -42,7 +44,10 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	}
 
 	public AbstractRegularLibraryMassSpectrum() {
-		libraryInformation = new LibraryInformation();
+	}
+
+	public AbstractRegularLibraryMassSpectrum(Collection<? extends IIon> ions) {
+		super(ions);
 	}
 
 	/*
@@ -53,14 +58,15 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	@Override
 	public ILibraryInformation getLibraryInformation() {
 
+		if(libraryInformation == null) {
+			libraryInformation = new LibraryInformation();
+		}
 		return libraryInformation;
 	}
 
 	@Override
 	public void setLibraryInformation(ILibraryInformation libraryInformation) {
 
-		if(libraryInformation != null) {
-			this.libraryInformation = libraryInformation;
-		}
+		this.libraryInformation = libraryInformation;
 	}
 }

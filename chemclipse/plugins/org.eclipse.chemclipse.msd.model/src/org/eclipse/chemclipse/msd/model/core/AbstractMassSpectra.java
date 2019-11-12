@@ -24,17 +24,21 @@ import org.eclipse.chemclipse.model.updates.IUpdateListener;
  */
 public abstract class AbstractMassSpectra implements IMassSpectra {
 
-	private List<IScanMSD> massSpectra;
+	private final List<IScanMSD> massSpectra;
 	private String converterId = "";
 	private String name = "";
-	private List<IUpdateListener> updateListeners;
+	private final List<IUpdateListener> updateListeners;
+
+	public AbstractMassSpectra(List<IScanMSD> massSpectra) {
+		this.massSpectra = massSpectra;
+		updateListeners = new ArrayList<IUpdateListener>();
+	}
 
 	/**
 	 * Initialize mass spectra and create a new internal mass spectra list.
 	 */
 	public AbstractMassSpectra() {
-		massSpectra = new ArrayList<IScanMSD>();
-		updateListeners = new ArrayList<IUpdateListener>();
+		this(new ArrayList<>());
 	}
 
 	@Override
