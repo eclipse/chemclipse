@@ -14,6 +14,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.EnumSet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -37,7 +41,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.LibraryServ
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
-import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -148,45 +151,69 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 		}
 	}
 
-	public void update(IScanMSD unknownMassSpectrum, IIdentificationTarget identificationTarget) {
+	public Future<Void> update(IScanMSD unknownMassSpectrum, IIdentificationTarget identificationTarget, ExecutorService executor) {
 
 		if(displayOption.equals(OPTION_LIBRARY_SEARCH)) {
-			//
-			scan1 = null;
-			scan2 = null;
+			scan1 = copyScan(unknownMassSpectrum);
 			scan1Optimized = null;
 			scan2Optimized = null;
-			buttonOptimizedScan.setEnabled(true);
-			try {
-				scan1 = unknownMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
-				IScanMSD adaptedTarget = Adapters.adapt(identificationTarget, IScanMSD.class);
-				if(adaptedTarget != null) {
-					scan2 = adaptedTarget.makeDeepCopy().normalize();
-				} else {
-					//
-					LibraryServiceRunnable runnable = new LibraryServiceRunnable(identificationTarget);
-					if(runnable.mustRun()) {
-						if(runnable.requireProgressMonitor()) {
-							ProgressMonitorDialog monitor = new ProgressMonitorDialog(scanChartUI.getShell());
-							monitor.run(Display.getCurrent() != null, true, runnable);
-						} else {
-							runnable.run(new NullProgressMonitor());
+			LibraryServiceRunnable runnable = new LibraryServiceRunnable(identificationTarget, new Consumer<IScanMSD>() {
+
+				@Override
+				public void accept(IScanMSD referenceMassSpectrum) {
+
+					scan2 = copyScan(referenceMassSpectrum);
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							buttonOptimizedScan.setEnabled(true);
+							updateChart();
 						}
-						IScanMSD referenceMassSpectrum = runnable.getLibraryMassSpectrum();
-						if(referenceMassSpectrum != null) {
-							scan2 = referenceMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
-						}
-					}
+					});
 				}
-				Display.getDefault().asyncExec(this::updateChart);
-			} catch(InvocationTargetException e) {
-				logger.warn(e);
-			} catch(InterruptedException e) {
-				Thread.currentThread().interrupt();
-				return;
-			} catch(CloneNotSupportedException e) {
-				logger.warn(e);
+			});
+			if(runnable.requireProgressMonitor()) {
+				return executor.submit(() -> {
+					AtomicReference<Exception> exception = new AtomicReference<>();
+					Display.getDefault().syncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							ProgressMonitorDialog monitor = new ProgressMonitorDialog(scanChartUI.getShell());
+							try {
+								monitor.run(Display.getCurrent() != null, true, runnable);
+							} catch(InvocationTargetException e) {
+								exception.set(e);
+							} catch(InterruptedException e) {
+								Thread.currentThread().interrupt();
+							}
+						}
+					});
+					Exception thrown = exception.get();
+					if(thrown != null) {
+						throw thrown;
+					}
+					return null;
+				});
+			} else {
+				return executor.submit(() -> {
+					runnable.run(new NullProgressMonitor());
+					return null;
+				});
 			}
+		}
+		return executor.submit(() -> null);
+	}
+
+	private static IScanMSD copyScan(IScanMSD scan) {
+
+		try {
+			return scan.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+		} catch(CloneNotSupportedException e) {
+			return null;
 		}
 	}
 
