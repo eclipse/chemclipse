@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - add Null-Check
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.library;
 
@@ -40,7 +41,6 @@ public class LibraryService {
 	 * This class should have only static methods.
 	 */
 	private LibraryService() {
-
 	}
 
 	public static IProcessingInfo<IMassSpectra> identify(IIdentificationTarget identificationTarget, String identifierId, IProgressMonitor monitor) {
@@ -57,7 +57,7 @@ public class LibraryService {
 
 	public static IProcessingInfo<IMassSpectra> identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
 
-		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo();
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
 		ILibraryServiceSupport libraryServiceSupport = getLibraryServiceSupport();
 		try {
 			/*
@@ -66,23 +66,22 @@ public class LibraryService {
 			List<String> availableIdentifierIds = libraryServiceSupport.getAvailableIdentifierIds();
 			IMassSpectra massSpectra = null;
 			exitloop:
-				for(String identifierId : availableIdentifierIds) {
+			for(String identifierId : availableIdentifierIds) {
+				/*
+				 * Test all available library services.
+				 */
+				ILibraryService libraryService = getLibraryService(identifierId);
+				if(libraryService != null) {
 					/*
-					 * Test all available library services.
+					 * It's a match if at least one mass spectrum is returned.
 					 */
-					ILibraryService libraryService = getLibraryService(identifierId);
-					if(libraryService != null) {
-
-						/*
-						 * It's a match if at least one mass spectrum is returned.
-						 */
-						processingInfo = libraryService.identify(identificationTarget, monitor);
-						massSpectra = processingInfo.getProcessingResult();
-						if(massSpectra.size() > 0) {
-							break exitloop;
-						}
+					processingInfo = libraryService.identify(identificationTarget, monitor);
+					massSpectra = processingInfo.getProcessingResult();
+					if(massSpectra != null && massSpectra.size() > 0) {
+						break exitloop;
 					}
 				}
+			}
 			/*
 			 * Post check.
 			 */
