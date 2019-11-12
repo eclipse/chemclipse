@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
+import java.util.Collection;
+
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 
@@ -46,6 +48,10 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 		super();
 		massSpectrometer = 1; // MS1
 		massSpectrumType = 0; // 0 = Centroid, 1 = Profile
+	}
+
+	public AbstractRegularMassSpectrum(Collection<? extends IIon> ions) {
+		super(ions);
 	}
 
 	/**
