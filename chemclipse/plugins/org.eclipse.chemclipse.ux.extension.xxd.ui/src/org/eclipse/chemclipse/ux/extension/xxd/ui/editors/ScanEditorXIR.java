@@ -52,17 +52,17 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IScanEdi
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/scan-xir.gif";
 	public static final String TOOLTIP = "FTIR/NIR/MIR Editor";
 	//
-	private MPart part;
-	private MDirtyable dirtyable;
+	private final MPart part;
+	private final MDirtyable dirtyable;
 	//
-	private IEventBroker eventBroker;
+	private final IEventBroker eventBroker;
 	//
 	private File scanFile;
 	private ExtendedXIRScanUI extendedScanXIREditorUI;
 	//
 	private IScanXIR scanXIR = null;
 	//
-	private Shell shell;
+	private final Shell shell;
 
 	@Inject
 	public ScanEditorXIR(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
@@ -99,9 +99,11 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IScanEdi
 		//
 	}
 
+	@Override
 	@PreDestroy
-	private void preDestroy() {
+	protected void preDestroy() {
 
+		super.preDestroy();
 		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XIR_UNLOAD_SELECTION, null);
 		//
 		EModelService modelService = ModelSupportAddon.getModelService();
