@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+@SuppressWarnings("rawtypes")
 public class MassSpectrumExportConverter_DB_4_ITest extends MassSpectrumExportConverterTestCase {
 
 	@Override
@@ -62,7 +63,7 @@ public class MassSpectrumExportConverter_DB_4_ITest extends MassSpectrumExportCo
 		exportConverter.convert(exportFile, ms, true, new NullProgressMonitor());
 		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		try {
-			massSpectra = (IMassSpectra)processingInfo.getProcessingResult(IMassSpectra.class);
+			massSpectra = (IMassSpectra)processingInfo.getProcessingResult();
 		} catch(TypeCastException e) {
 			assertTrue("TypeCastException", false);
 		}

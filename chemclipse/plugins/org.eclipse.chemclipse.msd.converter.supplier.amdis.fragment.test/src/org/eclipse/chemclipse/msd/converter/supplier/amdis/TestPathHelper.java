@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,6 +30,7 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_DB_2 = "testData/files/import/msl/DB2.msl";
 	public static final String TESTFILE_IMPORT_DB_3 = "testData/files/import/msl/DB3.msl";
 	public static final String TESTFILE_IMPORT_GOLMDB_TEST_MSL = "testData/files/import/msl/GolmDB-Test.MSL";
+	public static final String TESTFILE_IMPORT_ENCODING_MSL = "testData/files/import/msl/Encoding.msl";
 	/*
 	 * IMPORT MSP
 	 */

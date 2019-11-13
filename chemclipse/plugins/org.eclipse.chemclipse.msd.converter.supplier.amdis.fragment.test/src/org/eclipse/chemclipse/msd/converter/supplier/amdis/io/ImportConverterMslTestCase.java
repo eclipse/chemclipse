@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
+@SuppressWarnings("rawtypes")
 public class ImportConverterMslTestCase extends TestCase {
 
 	protected File importFile;
@@ -34,7 +35,7 @@ public class ImportConverterMslTestCase extends TestCase {
 		super.setUp();
 		importConverter = new MSLDatabaseImportConverter();
 		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
-		massSpectra = (IMassSpectra)processingInfo.getProcessingResult(IMassSpectra.class);
+		massSpectra = (IMassSpectra)processingInfo.getProcessingResult();
 	}
 
 	@Override
