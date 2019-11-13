@@ -148,7 +148,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private static final String TITLE_X_AXIS_SCANS = "Scans (approx.)";
 	private static final String LABEL_SCAN_NUMBER = "Scan Number";
 	//
-	private static final String SERIES_ID_CHROMATOGRAM = "Chromatogram";
+	public static final String SERIES_ID_CHROMATOGRAM = "Chromatogram";
 	private static final String SERIES_ID_BASELINE = "Baseline";
 	private static final String SERIES_ID_PEAKS_NORMAL_ACTIVE = "Peak(s) [Active]";
 	private static final String SERIES_ID_PEAKS_NORMAL_INACTIVE = "Peak(s) [Inactive]";
