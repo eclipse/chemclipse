@@ -62,8 +62,9 @@ public class ELUImportConverter_1_ITest extends TestCase {
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		preferences.putBoolean(PreferenceSupplier.P_EXCLUDE_UNCERTAIN_IONS, false);
 		try {
+			@SuppressWarnings("unchecked")
 			IProcessingInfo<IPeaks> processingInfo = reader.read(file, new NullProgressMonitor());
-			List<IPeak> peaks = processingInfo.getProcessingResult(IPeaks.class).getPeaks();
+			List<IPeak> peaks = processingInfo.getProcessingResult().getPeaks();
 			IPeakMSD peak1 = (IPeakMSD)peaks.get(0);
 			//
 			assertEquals(14, peak1.getPeakModel().getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN));

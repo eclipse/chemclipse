@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
+@SuppressWarnings("rawtypes")
 public class MSPImportConverter_1_ITest extends TestCase {
 
 	private IMassSpectra massSpectra;
@@ -38,7 +39,7 @@ public class MSPImportConverter_1_ITest extends TestCase {
 		File importFile = new File(PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_LIB_1_MSP));
 		IDatabaseImportConverter importConverter = new MSPDatabaseImportConverter();
 		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
-		massSpectra = (IMassSpectra)processingInfo.getProcessingResult(IMassSpectra.class);
+		massSpectra = (IMassSpectra)processingInfo.getProcessingResult();
 	}
 
 	@Override

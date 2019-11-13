@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ChromatogramPeakExportConverter extends AbstractChromatogramExportConverter implements IChromatogramExportConverter {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramPeakExportConverter.class);

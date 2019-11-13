@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,6 +51,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+@SuppressWarnings("rawtypes")
 public class ELUReader implements IPeakReader {
 
 	/*
@@ -64,14 +66,16 @@ public class ELUReader implements IPeakReader {
 	private static final Pattern peakPattern = Pattern.compile("(NUM PEAKS)(.*)", Pattern.DOTALL | Pattern.MULTILINE);
 	private static final Pattern ionPattern = Pattern.compile("\\((\\d+),(\\d+) ?(\\w[\\d.]*)?\\)");
 	//
+	private static final String CHARSET_US = "US-ASCII";
 	private static final String NEW_LINE = "\n";
 	private static final String CARRIAGE_RETURN = "\r";
 
 	@Override
 	public IProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
+		Charset charset = Charset.forName(CHARSET_US);
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		String content = FileUtils.readFileToString(file);
+		String content = FileUtils.readFileToString(file, charset);
 		int numberOfHits = getNumberOfHits(content);
 		if(numberOfHits <= 0) {
 			processingInfo.addErrorMessage("AMDIS ELU Parser", "There seems to be no peak in the file.");
@@ -211,6 +215,7 @@ public class ELUReader implements IPeakReader {
 	 * @param scanInterval
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings("unchecked")
 	private void extractAmdisPeaks(String content, int scanInterval, IProcessingInfo processingInfo) {
 
 		if(scanInterval <= 0) {

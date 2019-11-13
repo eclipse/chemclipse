@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
+@SuppressWarnings("rawtypes")
 public class ELUReader_2_ITest extends TestCase {
 
 	private ELUReader reader;
@@ -50,7 +51,7 @@ public class ELUReader_2_ITest extends TestCase {
 	public void testRead_1() {
 
 		try {
-			IPeaks peaks = (IPeaks)processingInfo.getProcessingResult(IPeaks.class);
+			IPeaks peaks = (IPeaks)processingInfo.getProcessingResult();
 			assertEquals(1132, peaks.size());
 		} catch(TypeCastException e) {
 			assertTrue(false);

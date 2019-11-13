@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -31,9 +31,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * If the mass spectrum is a type of IRegularLibraryMassSpectrum, than getLibraryInformation().getName() will be used,
  * otherwise massSpectrum.getIdentifier().
  * 
- * @author chemclipse
- * 
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MSPPeakExportConverter extends AbstractPeakExportConverter {
 
 	private static final Logger logger = Logger.getLogger(MSPPeakExportConverter.class);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,23 +43,26 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MSLReader extends AbstractMassSpectraReader implements IMassSpectraReader {
 
 	private static final Logger logger = Logger.getLogger(MSLReader.class);
+	//
 	private static final String CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl";
 	/**
 	 * Pre-compile all patterns to be a little bit faster.
 	 */
-	private static final Pattern namePattern = Pattern.compile("(NAME:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern commentsPattern = Pattern.compile("(COMMENT:|COMMENTS:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern casNumberPattern = Pattern.compile("(CAS(NO|#)?:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern databaseNamePattern = Pattern.compile("(DB(NO|#)?:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern referenceIdentifierPattern = Pattern.compile("(REFID:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern smilesPattern = Pattern.compile("(SMILES:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern relativeRetentionTimePattern = Pattern.compile("(RRT:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern retentionIndexPattern = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern dataPattern = Pattern.compile("(.*)(Num Peaks:)(\\s*)(\\d*)(.*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-	private static final Pattern ionPattern = Pattern.compile("([+]?\\d+\\.?\\d*)(\\s+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)"); // "(\\d+)(\\s+)(\\d+)" or "(\\d+)(\\s+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)"
+	private static final Pattern NAME = Pattern.compile("(NAME:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern COMMENTS = Pattern.compile("(COMMENT:|COMMENTS:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CAS = Pattern.compile("(CAS(NO|#)?:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern DB_NAME = Pattern.compile("(DB(NO|#)?:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern REFERENCE_IDENTIFIER = Pattern.compile("(REFID:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern SMILES = Pattern.compile("(SMILES:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern RETENTION_TIME = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern RELATIVE_RETENTION_TIME = Pattern.compile("(RRT:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern RETENTION_INDEX = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern DATA = Pattern.compile("(.*)(Num Peaks:)(\\s*)(\\d*)(.*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+	private static final Pattern IONS = Pattern.compile("([+]?\\d+\\.?\\d*)(\\s+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)"); // "(\\d+)(\\s+)(\\d+)" or "(\\d+)(\\s+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)"
 	//
+	private static final String CHARSET_US = "US-ASCII";
 	private static final String RETENTION_INDICES_DELIMITER = ", ";
+	private static final String LINE_DELIMITER = "\r\n";
 
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -79,39 +81,35 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	 */
 	private List<String> getMassSpectraData(File file) throws IOException {
 
-		Charset charSet = Charset.forName("US-ASCII");
-		BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-		InputStreamReader inputStreamReader = new InputStreamReader(bufferedInputStream, charSet);
-		BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+		Charset charset = Charset.forName(CHARSET_US);
 		List<String> massSpectraData = new ArrayList<String>();
-		StringBuilder builder = new StringBuilder();
-		String line;
-		while((line = bufferedReader.readLine()) != null) {
-			/*
-			 * The mass spectra are divided by empty lines. If the builder has
-			 * at least 1 char, then add a new potential mass spectrum to the
-			 * mass spectra data list. Don't forget to build a new
-			 * StringBuilder. In all other cases append the found lines to the
-			 * StringBuilder.
-			 */
-			if(line.length() == 0) {
-				addMassSpectrumData(builder, massSpectraData);
-				builder = new StringBuilder();
-			} else {
-				builder.append(line);
-				builder.append("\r\n");
+		//
+		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))) {
+			StringBuilder builder = new StringBuilder();
+			String line;
+			while((line = bufferedReader.readLine()) != null) {
+				/*
+				 * The mass spectra are divided by empty lines. If the builder has
+				 * at least 1 char, then add a new potential mass spectrum to the
+				 * mass spectra data list. Don't forget to build a new
+				 * StringBuilder. In all other cases append the found lines to the
+				 * StringBuilder.
+				 */
+				if(line.length() == 0) {
+					addMassSpectrumData(builder, massSpectraData);
+					builder = new StringBuilder();
+				} else {
+					builder.append(line);
+					builder.append(LINE_DELIMITER);
+				}
 			}
+			/*
+			 * Don't forget to add the last mass spectrum.
+			 */
+			addMassSpectrumData(builder, massSpectraData);
+			bufferedReader.close();
 		}
-		/*
-		 * Don't forget to add the last mass spectrum.
-		 */
-		addMassSpectrumData(builder, massSpectraData);
-		/*
-		 * Close the streams.
-		 */
-		bufferedReader.close();
-		inputStreamReader.close();
-		bufferedInputStream.close();
+		//
 		return massSpectraData;
 	}
 
@@ -165,24 +163,24 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 		 * Extract name and reference identifier.
 		 * Additionally, add the reference identifier if it is stored as a pattern.
 		 */
-		String name = extractContentAsString(massSpectrumData, namePattern, 2);
+		String name = extractContentAsString(massSpectrumData, NAME, 2);
 		extractNameAndReferenceIdentifier(massSpectrum, name, referenceIdentifierMarker, referenceIdentifierPrefix);
-		String referenceIdentifier = extractContentAsString(massSpectrumData, referenceIdentifierPattern, 2) + massSpectrum.getLibraryInformation().getReferenceIdentifier();
+		String referenceIdentifier = extractContentAsString(massSpectrumData, REFERENCE_IDENTIFIER, 2) + massSpectrum.getLibraryInformation().getReferenceIdentifier();
 		massSpectrum.getLibraryInformation().setReferenceIdentifier(referenceIdentifier);
 		//
-		String comments = extractContentAsString(massSpectrumData, commentsPattern, 2);
+		String comments = extractContentAsString(massSpectrumData, COMMENTS, 2);
 		massSpectrum.getLibraryInformation().setComments(comments);
-		String casNumber = extractContentAsString(massSpectrumData, casNumberPattern, 3);
+		String casNumber = extractContentAsString(massSpectrumData, CAS, 3);
 		massSpectrum.getLibraryInformation().setCasNumber(casNumber);
-		String database = extractContentAsString(massSpectrumData, databaseNamePattern, 3);
+		String database = extractContentAsString(massSpectrumData, DB_NAME, 3);
 		massSpectrum.getLibraryInformation().setDatabase(database);
-		String smiles = extractContentAsString(massSpectrumData, smilesPattern, 2);
+		String smiles = extractContentAsString(massSpectrumData, SMILES, 2);
 		massSpectrum.getLibraryInformation().setSmiles(smiles);
-		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern, 2);
+		int retentionTime = extractContentAsInt(massSpectrumData, RETENTION_TIME, 2);
 		massSpectrum.setRetentionTime(retentionTime);
-		int relativeRetentionTime = extractContentAsInt(massSpectrumData, relativeRetentionTimePattern, 2);
+		int relativeRetentionTime = extractContentAsInt(massSpectrumData, RELATIVE_RETENTION_TIME, 2);
 		massSpectrum.setRelativeRetentionTime(relativeRetentionTime);
-		String retentionIndices = extractContentAsString(massSpectrumData, retentionIndexPattern, 2);
+		String retentionIndices = extractContentAsString(massSpectrumData, RETENTION_INDEX, 2);
 		extractRetentionIndices(massSpectrum, retentionIndices, RETENTION_INDICES_DELIMITER);
 		/*
 		 * Extracts all ions and stored them.
@@ -207,7 +205,7 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	private void extractIons(IVendorLibraryMassSpectrum massSpectrum, String massSpectrumData) {
 
 		String ionData = "";
-		Matcher data = dataPattern.matcher(massSpectrumData);
+		Matcher data = DATA.matcher(massSpectrumData);
 		data.find();
 		if(data.matches()) {
 			ionData = data.group(5);
@@ -216,7 +214,7 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 		IIon amdisIon = null;
 		double ion;
 		float abundance;
-		Matcher ions = ionPattern.matcher(ionData);
+		Matcher ions = IONS.matcher(ionData);
 		while(ions.find()) {
 			try {
 				/*
@@ -253,7 +251,7 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 		if(matcher.find()) {
 			content = matcher.group(group).trim();
 		}
-		return content;
+		return content.replace("\0", " ");
 	}
 
 	/**
