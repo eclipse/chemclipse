@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - use the more generic {@link IRetentionTimeRange} instead of Chromatogram selection
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.xic;
 
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.support.IRetentionTimeRange;
 
 public interface IExtractedIonSignalExtractor {
 
@@ -53,18 +54,12 @@ public interface IExtractedIonSignalExtractor {
 
 	/**
 	 * Returns an {@link IExtractedIonSignals} object in the range of the given
-	 * chromatogram selection.<br/>
-	 * It means, that the object covers only the retention time range
-	 * (respectively scan range) given in the chromatogram selection.<br/>
-	 * The stored chromatogram in the chromatogram selection must be the same a
-	 * the called one, otherwise an empty object will be returned.<br/>
-	 * Why such a restriction? If another chromatogram was used and the
-	 * retention time is wider, it would cause a out of bounds exception.
+	 * IRetentionTimeRange
 	 * 
 	 * @param chromatogramSelection
 	 * @return {@link IExtractedIonSignals}
 	 */
-	IExtractedIonSignals getExtractedIonSignals(IChromatogramSelectionMSD chromatogramSelection);
+	IExtractedIonSignals getExtractedIonSignals(IRetentionTimeRange range);
 
 	/**
 	 * Calculates the extracted ion signals object in the range of the given

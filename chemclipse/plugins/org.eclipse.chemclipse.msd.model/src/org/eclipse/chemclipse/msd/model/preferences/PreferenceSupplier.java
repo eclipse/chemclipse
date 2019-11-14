@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - use ScanMSD in favor of CombinedMassSpectrum
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.preferences;
 
@@ -17,12 +18,11 @@ import java.util.Map;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.Activator;
-import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.implementation.CombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
+import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -135,9 +135,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static IScanMSD getMassSpectrum(String value) {
 
-		ICombinedMassSpectrum scanMSD = null;
-		if(value != null && !"".equals(value)) {
-			scanMSD = new CombinedMassSpectrum();
+		if(value != null && !value.isEmpty()) {
+			ScanMSD scanMSD = new ScanMSD();
 			String[] ions = value.split(DELIMITER_IONS);
 			for(String ion : ions) {
 				String[] fragment = ion.split(DELIMITER_ION_ABUNDANCE);
@@ -157,8 +156,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 					}
 				}
 			}
+			return scanMSD;
 		}
-		return scanMSD;
+		return null;
 	}
 
 	private static IScanMSD getSubtractMassSpectrum() {

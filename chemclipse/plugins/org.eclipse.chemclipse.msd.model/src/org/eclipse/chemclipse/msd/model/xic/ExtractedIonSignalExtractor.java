@@ -8,17 +8,18 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - use the more generic {@link IRetentionTimeRange} instead of Chromatogram selection
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.xic;
 
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.support.IRetentionTimeRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 
 public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor {
 
-	private IChromatogramMSD chromatogram;
+	private final IChromatogramMSD chromatogram;
 
 	/**
 	 * All values will be extracted from IChromatogram.
@@ -50,9 +51,9 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 	}
 
 	@Override
-	public IExtractedIonSignals getExtractedIonSignals(IChromatogramSelectionMSD chromatogramSelection) {
+	public IExtractedIonSignals getExtractedIonSignals(IRetentionTimeRange chromatogramSelection) {
 
-		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() != chromatogram) {
+		if(chromatogramSelection == null) {
 			return new ExtractedIonSignals(0, chromatogram);
 		}
 		/*
