@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - update to reflect changes in {@link INoiseCalculator} API
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core;
 
@@ -32,16 +33,19 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	private static final long serialVersionUID = -7048942996283330150L;
 	//
 	private INoiseCalculator noiseCalculator;
-	private Map<Double, IBaselineModel> baselineModels;
+	private final Map<Double, IBaselineModel> baselineModels;
+	private int segmentWidth;
 
 	public AbstractChromatogramWSD() {
 		baselineModels = new HashMap<>();
+		updateNoiseCalculator();
+	}
+
+	private void updateNoiseCalculator() {
+
 		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
 		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
-		if(noiseCalculator != null) {
-			int segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
-			noiseCalculator.setChromatogram(this, segmentWidth);
-		}
+		segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
 	}
 
 	@Override
@@ -57,16 +61,14 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	@Override
 	public void recalculateTheNoiseFactor() {
 
-		if(noiseCalculator != null) {
-			noiseCalculator.recalculate();
-		}
+		updateNoiseCalculator();
 	}
 
 	@Override
 	public float getSignalToNoiseRatio(float abundance) {
 
 		if(noiseCalculator != null) {
-			return noiseCalculator.getSignalToNoiseRatio(abundance);
+			return noiseCalculator.getSignalToNoiseRatio(this, segmentWidth, abundance);
 		}
 		return 0;
 	}

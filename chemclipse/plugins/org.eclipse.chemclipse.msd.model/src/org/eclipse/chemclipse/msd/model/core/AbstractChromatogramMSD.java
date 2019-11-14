@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
+ * Christoph Läubrich - adjust to new {@link INoiseCalculator} API
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -63,44 +64,48 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	//
 	public static int DEFAULT_SEGMENT_WIDTH = 10;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramMSD.class);
-	private IIonTransitionSettings ionTransitionSettings;
+	private final IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
 	private ImmutableZeroIon immutableZeroIon;
+	private int noiseSegmentWidth;
 
 	public AbstractChromatogramMSD() {
 		ionTransitionSettings = new IonTransitionSettings();
-		int segmentWidth = DEFAULT_SEGMENT_WIDTH;
 		try {
 			immutableZeroIon = new ImmutableZeroIon();
 		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
 			logger.error(e.getLocalizedMessage(), e);
 		}
+		loadNoiseCalculator();
+	}
+
+	private void loadNoiseCalculator() {
+
 		if(PreferenceSupplier.isAvailable()) {
-			segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
+			noiseSegmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
 			String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
 			noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
 			if(noiseCalculator == null) {
 				noiseCalculator = new DefaultNoiseCalculator();
 			}
 		} else {
+			noiseSegmentWidth = DEFAULT_SEGMENT_WIDTH;
 			noiseCalculator = new DefaultNoiseCalculator();
 		}
-		noiseCalculator.setChromatogram(this, segmentWidth);
 	}
 
 	@Override
 	public void recalculateTheNoiseFactor() {
 
-		if(noiseCalculator != null) {
-			noiseCalculator.recalculate();
-		}
+		// this effectively resets the calculator
+		loadNoiseCalculator();
 	}
 
 	@Override
 	public float getSignalToNoiseRatio(float abundance) {
 
 		if(noiseCalculator != null) {
-			return noiseCalculator.getSignalToNoiseRatio(abundance);
+			return noiseCalculator.getSignalToNoiseRatio(this, noiseSegmentWidth, abundance);
 		}
 		return 0;
 	}

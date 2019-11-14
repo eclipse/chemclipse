@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,12 +8,16 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.core;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.AbstractNoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -26,9 +30,6 @@ import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.support.IAnalysisSupport;
 import org.eclipse.chemclipse.model.support.SegmentValidator;
 import org.eclipse.chemclipse.model.support.SegmentWidth;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.AbstractNoiseCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 
 /*
@@ -37,38 +38,18 @@ import org.eclipse.chemclipse.numeric.statistics.Calculations;
 public class NoiseCalculator extends AbstractNoiseCalculator implements INoiseCalculator {
 
 	private static final Logger logger = Logger.getLogger(NoiseCalculator.class);
-	private IChromatogram chromatogram;
+	private IChromatogram<?> chromatogram;
 	private int segmentWidth;
-	private boolean recalculate = false;
 	private float noiseValue = 0.0f;
 
 	@Override
-	public void setChromatogram(IChromatogram chromatogram, int segmentWidth) {
+	public float getSignalToNoiseRatio(IChromatogram<?> chromatogram, int segmentWidth, float intensity) {
 
-		this.chromatogram = chromatogram;
-		this.segmentWidth = segmentWidth;
-		recalculate = true;
-	}
-
-	@Override
-	public void recalculate() {
-
-		recalculate = true;
-	}
-
-	@Override
-	public float getSignalToNoiseRatio(float intensity) {
-
-		/*
-		 * Recalculate the noise value if neccessary.
-		 */
-		if(recalculate && chromatogram != null) {
-			noiseValue = calculateNoiseFactorByDyson(chromatogram);
-			recalculate = false;
+		if(chromatogram != this.chromatogram || segmentWidth != this.segmentWidth) {
+			noiseValue = calculateNoiseFactorByDyson(chromatogram, segmentWidth);
+			this.chromatogram = chromatogram;
+			this.segmentWidth = segmentWidth;
 		}
-		/*
-		 * Make the calculation.
-		 */
 		if(noiseValue != 0) {
 			return intensity / noiseValue;
 		} else {
@@ -81,42 +62,44 @@ public class NoiseCalculator extends AbstractNoiseCalculator implements INoiseCa
 	 * 
 	 * @param IChromatogram
 	 */
-	private float calculateNoiseFactorByDyson(IChromatogram chromatogram) {
+	private static float calculateNoiseFactorByDyson(IChromatogram<?> chromatogram, int segmentWidth) {
 
 		float noiseValue = 0.0f;
-		SegmentValidator segmentValidator = new SegmentValidator();
-		//
-		try {
-			IAnalysisSupport analysisSupport;
-			List<IAnalysisSegment> segments;
-			ITotalScanSignals signals = new TotalScanSignals(chromatogram);
-			/*
-			 * User selected segment width.
-			 */
-			analysisSupport = new AnalysisSupport(chromatogram.getNumberOfScans(), segmentWidth);
-			segments = analysisSupport.getAnalysisSegments();
-			noiseValue = performNoiseFactorCalculation(segments, segmentValidator, signals);
-			/*
-			 * If the noise value is 0, try the lowest segment width.
-			 */
-			if(noiseValue == 0) {
-				analysisSupport = new AnalysisSupport(chromatogram.getNumberOfScans(), SegmentWidth.WIDTH_5.getWidth());
+		if(chromatogram != null) {
+			SegmentValidator segmentValidator = new SegmentValidator();
+			//
+			try {
+				IAnalysisSupport analysisSupport;
+				List<IAnalysisSegment> segments;
+				ITotalScanSignals signals = new TotalScanSignals(chromatogram);
+				/*
+				 * User selected segment width.
+				 */
+				analysisSupport = new AnalysisSupport(chromatogram.getNumberOfScans(), segmentWidth);
 				segments = analysisSupport.getAnalysisSegments();
 				noiseValue = performNoiseFactorCalculation(segments, segmentValidator, signals);
+				/*
+				 * If the noise value is 0, try the lowest segment width.
+				 */
+				if(noiseValue == 0) {
+					analysisSupport = new AnalysisSupport(chromatogram.getNumberOfScans(), SegmentWidth.WIDTH_5.getWidth());
+					segments = analysisSupport.getAnalysisSegments();
+					noiseValue = performNoiseFactorCalculation(segments, segmentValidator, signals);
+				}
+			} catch(AnalysisSupportException e) {
+				noiseValue = 0.0f;
+				logger.warn(e);
+			} catch(ChromatogramIsNullException e) {
+				noiseValue = 0.0f;
+				logger.warn(e);
 			}
-		} catch(AnalysisSupportException e) {
-			noiseValue = 0.0f;
-			logger.warn(e);
-		} catch(ChromatogramIsNullException e) {
-			noiseValue = 0.0f;
-			logger.warn(e);
-		}
-		/*
-		 * If there is no noise segment at all, take the min signal.
-		 * It's not the best solution, but 0 is no option.
-		 */
-		if(noiseValue == 0) {
-			noiseValue = chromatogram.getMinSignal();
+			/*
+			 * If there is no noise segment at all, take the min signal.
+			 * It's not the best solution, but 0 is no option.
+			 */
+			if(noiseValue == 0) {
+				noiseValue = chromatogram.getMinSignal();
+			}
 		}
 		return noiseValue;
 	}
@@ -128,7 +111,7 @@ public class NoiseCalculator extends AbstractNoiseCalculator implements INoiseCa
 	 * @param segments
 	 * @return float
 	 */
-	private float performNoiseFactorCalculation(List<IAnalysisSegment> segments, SegmentValidator segmentValidator, ITotalScanSignals signals) {
+	private static float performNoiseFactorCalculation(List<IAnalysisSegment> segments, SegmentValidator segmentValidator, ITotalScanSignals signals) {
 
 		double noiseValue = 0.0d;
 		List<Double> deltaNoiseHeights = new ArrayList<Double>();
@@ -157,7 +140,7 @@ public class NoiseCalculator extends AbstractNoiseCalculator implements INoiseCa
 		return (float)medianNoiseHeight;
 	}
 
-	private double getDeltaNoiseHeight(IAnalysisSegment segment, SegmentValidator segmentValidator, ITotalScanSignals signals) throws SegmentNotAcceptedException {
+	private static double getDeltaNoiseHeight(IAnalysisSegment segment, SegmentValidator segmentValidator, ITotalScanSignals signals) throws SegmentNotAcceptedException {
 
 		/*
 		 * Check that there is at least a width of 1.

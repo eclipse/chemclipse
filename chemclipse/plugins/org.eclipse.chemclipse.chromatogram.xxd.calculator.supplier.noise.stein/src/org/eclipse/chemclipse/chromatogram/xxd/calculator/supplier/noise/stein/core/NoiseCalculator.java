@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.core;
 
@@ -43,39 +44,19 @@ import org.eclipse.chemclipse.numeric.statistics.Calculations;
 public class NoiseCalculator extends AbstractNoiseCalculator implements INoiseCalculator {
 
 	private static final Logger logger = Logger.getLogger(NoiseCalculator.class);
-	private IChromatogram chromatogram;
+	private IChromatogram<?> chromatogram;
 	private int segmentWidth;
-	private boolean recalculate = false;
 	private float noiseFactor = 0.0f;
 
 	@Override
-	public void setChromatogram(IChromatogram chromatogram, int segmentWidth) {
+	public float getSignalToNoiseRatio(IChromatogram<?> chromatogram, int segmentWidth, float intensity) {
 
-		this.chromatogram = chromatogram;
-		this.segmentWidth = segmentWidth;
-		recalculate = true;
-	}
-
-	@Override
-	public void recalculate() {
-
-		recalculate = true;
-	}
-
-	@Override
-	public float getSignalToNoiseRatio(float intensity) {
-
-		/*
-		 * Recalculate the noise factor if neccessary.
-		 */
-		if(recalculate && chromatogram != null) {
-			noiseFactor = calculateNoiseFactorByStein(chromatogram);
-			recalculate = false;
+		if(this.chromatogram != chromatogram || this.segmentWidth != segmentWidth) {
+			noiseFactor = calculateNoiseFactorByStein(chromatogram, segmentWidth);
+			this.chromatogram = chromatogram;
+			this.segmentWidth = segmentWidth;
 		}
-		/*
-		 * Make the calculation.
-		 */
-		if(noiseFactor != 0) {
+		if(noiseFactor > 0) {
 			return (float)(Math.sqrt(intensity) * noiseFactor);
 		} else {
 			return 0;
@@ -87,35 +68,37 @@ public class NoiseCalculator extends AbstractNoiseCalculator implements INoiseCa
 	 * 
 	 * @param IChromatogram
 	 */
-	private float calculateNoiseFactorByStein(IChromatogram chromatogram) {
+	private static float calculateNoiseFactorByStein(IChromatogram<?> chromatogram, int segmentWidth) {
 
 		float noiseValue = 0.0f;
-		try {
-			IAnalysisSupport analysisSupport = new AnalysisSupport(chromatogram.getNumberOfScans(), segmentWidth);
-			List<IAnalysisSegment> segments = analysisSupport.getAnalysisSegments();
-			//
-			if(chromatogram instanceof IChromatogramMSD) {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				IExtractedIonSignalExtractor extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogramMSD);
-				IExtractedIonSignals signals = extractedIonSignalExtractor.getExtractedIonSignals();
-				noiseValue = performNoiseFactorCalculationByStein(segments, signals);
-			} else {
-				ITotalScanSignals signals = new TotalScanSignals(chromatogram);
-				noiseValue = performNoiseFactorCalculationByStein(segments, signals);
+		if(chromatogram != null) {
+			try {
+				IAnalysisSupport analysisSupport = new AnalysisSupport(chromatogram.getNumberOfScans(), segmentWidth);
+				List<IAnalysisSegment> segments = analysisSupport.getAnalysisSegments();
+				//
+				if(chromatogram instanceof IChromatogramMSD) {
+					IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+					IExtractedIonSignalExtractor extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogramMSD);
+					IExtractedIonSignals signals = extractedIonSignalExtractor.getExtractedIonSignals();
+					noiseValue = performNoiseFactorCalculationByStein(segments, signals);
+				} else {
+					ITotalScanSignals signals = new TotalScanSignals(chromatogram);
+					noiseValue = performNoiseFactorCalculationByStein(segments, signals);
+				}
+			} catch(AnalysisSupportException e) {
+				noiseValue = 0.0f;
+				logger.warn(e);
+			} catch(ChromatogramIsNullException e) {
+				noiseValue = 0.0f;
+				logger.warn(e);
 			}
-		} catch(AnalysisSupportException e) {
-			noiseValue = 0.0f;
-			logger.warn(e);
-		} catch(ChromatogramIsNullException e) {
-			noiseValue = 0.0f;
-			logger.warn(e);
-		}
-		/*
-		 * If there is no noise segment at all, take the min signal.
-		 * It's not the best solution, but 0 is no option.
-		 */
-		if(noiseValue == 0) {
-			noiseValue = chromatogram.getMinSignal();
+			/*
+			 * If there is no noise segment at all, take the min signal.
+			 * It's not the best solution, but 0 is no option.
+			 */
+			if(noiseValue == 0) {
+				noiseValue = chromatogram.getMinSignal();
+			}
 		}
 		return noiseValue;
 	}
@@ -128,7 +111,7 @@ public class NoiseCalculator extends AbstractNoiseCalculator implements INoiseCa
 	 * @param segments
 	 * @return float
 	 */
-	private float performNoiseFactorCalculationByStein(List<IAnalysisSegment> segments, Object signals) {
+	private static float performNoiseFactorCalculationByStein(List<IAnalysisSegment> segments, Object signals) {
 
 		List<Double> noiseFactors = getNoiseFactors(segments, signals);
 		double medianNoiseFactor = Calculations.getMedian(noiseFactors);
@@ -142,7 +125,7 @@ public class NoiseCalculator extends AbstractNoiseCalculator implements INoiseCa
 	 * @param signals
 	 * @return List
 	 */
-	private List<Double> getNoiseFactors(List<IAnalysisSegment> segments, Object signals) {
+	private static List<Double> getNoiseFactors(List<IAnalysisSegment> segments, Object signals) {
 
 		List<Double> noiseFactors = new ArrayList<Double>();
 		int startIon;
@@ -206,7 +189,7 @@ public class NoiseCalculator extends AbstractNoiseCalculator implements INoiseCa
 	 * @return double
 	 * @throws SegmentNotAcceptedException
 	 */
-	private double getMedianFromMeanByStein(IAnalysisSegment segment, SegmentValidator segmentValidator, int ion, IExtractedIonSignals signals) throws SegmentNotAcceptedException {
+	private static double getMedianFromMeanByStein(IAnalysisSegment segment, SegmentValidator segmentValidator, int ion, IExtractedIonSignals signals) throws SegmentNotAcceptedException {
 
 		IExtractedIonSignal signal;
 		double[] values = new double[segment.getSegmentWidth()];
@@ -246,7 +229,7 @@ public class NoiseCalculator extends AbstractNoiseCalculator implements INoiseCa
 	 * @return double
 	 * @throws SegmentNotAcceptedException
 	 */
-	private double getMedianFromMeanByStein(IAnalysisSegment segment, SegmentValidator segmentValidator, ITotalScanSignals signals) throws SegmentNotAcceptedException {
+	private static double getMedianFromMeanByStein(IAnalysisSegment segment, SegmentValidator segmentValidator, ITotalScanSignals signals) throws SegmentNotAcceptedException {
 
 		double[] values = new double[segment.getSegmentWidth()];
 		int counter = 0;
@@ -268,7 +251,7 @@ public class NoiseCalculator extends AbstractNoiseCalculator implements INoiseCa
 	 * @return
 	 * @throws SegmentNotAcceptedException
 	 */
-	private double calculateNoiseFactorValue(SegmentValidator segmentValidator, double[] values) throws SegmentNotAcceptedException {
+	private static double calculateNoiseFactorValue(SegmentValidator segmentValidator, double[] values) throws SegmentNotAcceptedException {
 
 		/*
 		 * Check if the segment is accepted.<br/> If yes, than calculate its
