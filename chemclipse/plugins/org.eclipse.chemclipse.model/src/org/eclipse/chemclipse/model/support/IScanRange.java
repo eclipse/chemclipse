@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add contains method
  *******************************************************************************/
 package org.eclipse.chemclipse.model.support;
 
@@ -40,7 +41,12 @@ public interface IScanRange {
 	 */
 	default int getWidth() {
 
-		return getStopScan() - getStartScan() + 1;
+		int stopScan = getStopScan();
+		int startScan = getStartScan();
+		if(startScan == stopScan) {
+			return 0;
+		}
+		return stopScan - startScan + 1;
 	}
 
 	/**
@@ -60,5 +66,10 @@ public interface IScanRange {
 			return true;
 		}
 		return getStopScan() == other.getStopScan() && getStartScan() == other.getStartScan();
+	}
+
+	default boolean containsScan(int scan) {
+
+		return scan >= getStartScan() && scan <= getStopScan();
 	}
 }
