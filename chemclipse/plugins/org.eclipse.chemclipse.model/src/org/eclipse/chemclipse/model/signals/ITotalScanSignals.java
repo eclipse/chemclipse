@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add method to get values in a given range
  *******************************************************************************/
 package org.eclipse.chemclipse.model.signals;
 
@@ -15,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 
 public interface ITotalScanSignals extends Iterable<Integer> {
@@ -237,6 +239,23 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 		int i = 0;
 		for(ITotalScanSignal signal : getTotalScanSignalList()) {
 			values[i++] = signal.getTotalSignal();
+		}
+		return values;
+	}
+
+	/**
+	 * 
+	 * @param range
+	 * @return all values in the given range as array
+	 */
+	default float[] getValues(IScanRange range) {
+
+		float[] values = new float[range.getWidth()];
+		int counter = 0;
+		for(int scan = range.getStartScan(); scan <= range.getStopScan(); scan++) {
+			ITotalScanSignal signal = getTotalScanSignal(scan);
+			values[counter] = signal.getTotalSignal();
+			counter++;
 		}
 		return values;
 	}

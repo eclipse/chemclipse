@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Chrsitoph Läubrich - don't use exceptions as return values
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.noise;
 
@@ -16,7 +17,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
-import org.eclipse.chemclipse.model.exceptions.SegmentNotAcceptedException;
 import org.eclipse.chemclipse.model.support.AnalysisSupport;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.support.ScanRange;
@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class Calculator {
 
 	private static final Logger logger = Logger.getLogger(Calculator.class);
-	private CalculatorSupport calculatorSupport;
+	private final CalculatorSupport calculatorSupport;
 
 	public Calculator() {
 		/*
@@ -117,8 +117,7 @@ public class Calculator {
 			/*
 			 * TIC
 			 */
-			try {
-				calculateMedianFromMean(analysisSegment, extractedIonSignals);
+			if(calculateMedianFromMean(analysisSegment, extractedIonSignals)) {
 				accepted++;
 				/*
 				 * If no exception will be thrown, the segment is accepted. The
@@ -131,7 +130,7 @@ public class Calculator {
 				ICombinedMassSpectrum noiseMassSpectrum = calculatorSupport.getNoiseMassSpectrum(combinedMassSpectrumCalculator, ionsToPreserve, monitor);
 				INoiseSegment noiseSegment = new NoiseSegment(analysisSegment, noiseMassSpectrum);
 				noiseSegments.add(noiseSegment);
-			} catch(SegmentNotAcceptedException e) {
+			} else {
 				rejected++;
 			}
 		}
@@ -141,10 +140,10 @@ public class Calculator {
 	/*
 	 * Calculates the median from mean.
 	 */
-	private void calculateMedianFromMean(IAnalysisSegment analysisSegment, IExtractedIonSignals extractedIonSignals) throws SegmentNotAcceptedException {
+	private boolean calculateMedianFromMean(IAnalysisSegment analysisSegment, IExtractedIonSignals extractedIonSignals) {
 
 		IExtractedIonSignal signal;
-		int size = analysisSegment.getSegmentWidth();
+		int size = analysisSegment.getWidth();
 		if(size > 0) {
 			double[] values = new double[size];
 			int counter = 0;
@@ -166,15 +165,9 @@ public class Calculator {
 			 * median.<br/> If no, than throw an exception.
 			 */
 			double mean = Calculations.getMean(values);
-			if(!calculatorSupport.acceptSegment(values, mean)) {
-				/*
-				 * The calling method has now the chance to not add the value to its
-				 * calculation.
-				 */
-				throw new SegmentNotAcceptedException();
-			}
+			return calculatorSupport.acceptSegment(values, mean);
 		} else {
-			throw new SegmentNotAcceptedException();
+			return false;
 		}
 	}
 	// --------------------------------------------private Methods

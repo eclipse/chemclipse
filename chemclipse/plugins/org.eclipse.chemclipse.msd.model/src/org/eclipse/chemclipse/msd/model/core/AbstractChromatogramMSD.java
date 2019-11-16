@@ -19,14 +19,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.Preference
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
+import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.implementation.DefaultNoiseCalculator;
 import org.eclipse.chemclipse.msd.model.implementation.ImmutableZeroIon;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -67,7 +68,6 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	private final IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
 	private ImmutableZeroIon immutableZeroIon;
-	private int noiseSegmentWidth;
 
 	public AbstractChromatogramMSD() {
 		ionTransitionSettings = new IonTransitionSettings();
@@ -81,17 +81,8 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 
 	private void loadNoiseCalculator() {
 
-		if(PreferenceSupplier.isAvailable()) {
-			noiseSegmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
-			String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
-			noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
-			if(noiseCalculator == null) {
-				noiseCalculator = new DefaultNoiseCalculator();
-			}
-		} else {
-			noiseSegmentWidth = DEFAULT_SEGMENT_WIDTH;
-			noiseCalculator = new DefaultNoiseCalculator();
-		}
+		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
+		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
 	}
 
 	@Override
@@ -105,7 +96,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	public float getSignalToNoiseRatio(float abundance) {
 
 		if(noiseCalculator != null) {
-			return noiseCalculator.getSignalToNoiseRatio(this, noiseSegmentWidth, abundance);
+			return noiseCalculator.getSignalToNoiseRatio(this, abundance);
 		}
 		return 0;
 	}
@@ -295,5 +286,15 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public <ResultType extends IMeasurementResult<?>> ResultType getMeasurementResult(Class<ResultType> type) {
+
+		ResultType result = super.getMeasurementResult(type);
+		if(result == null && type == ChromatogramSegmentation.class) {
+			return type.cast(new ChromatogramSegmentation(this, PreferenceSupplier.getDefaultSegmentWidth()));
+		}
+		return result;
 	}
 }

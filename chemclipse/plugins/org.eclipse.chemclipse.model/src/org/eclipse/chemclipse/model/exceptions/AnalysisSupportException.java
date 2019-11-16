@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,10 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - change checked to runtime exception
  *******************************************************************************/
 package org.eclipse.chemclipse.model.exceptions;
 
-public class AnalysisSupportException extends Exception {
+public class AnalysisSupportException extends IllegalArgumentException {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or

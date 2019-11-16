@@ -13,10 +13,11 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.core;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.TestPathHelper;
+import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;
+import org.eclipse.chemclipse.model.support.SegmentWidth;
 
 public class NoiseCalculator_1_ITest extends ChromatogramReaderTestCase {
 
-	private static final int SEGMENT_WIDTH = 13;
 	private NoiseCalculator noiseCalculator;
 
 	@Override
@@ -39,9 +40,10 @@ public class NoiseCalculator_1_ITest extends ChromatogramReaderTestCase {
 		 * The loading time of the chromatogram takes a while.
 		 * That's why several tests are made here.
 		 */
-		assertEquals(0.0f, noiseCalculator.getSignalToNoiseRatio(chromatogram, SEGMENT_WIDTH, 0));
-		assertEquals(0.4935501963f, noiseCalculator.getSignalToNoiseRatio(chromatogram, SEGMENT_WIDTH, 2200));
-		assertEquals(1.0f, noiseCalculator.getSignalToNoiseRatio(chromatogram, SEGMENT_WIDTH, 4457.5f));
-		assertEquals(17.9472798654f, noiseCalculator.getSignalToNoiseRatio(chromatogram, SEGMENT_WIDTH, 80000));
+		chromatogram.addMeasurementResult(new ChromatogramSegmentation(chromatogram, SegmentWidth.WIDTH_13));
+		assertEquals(0.0f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 0));
+		assertEquals(0.4935501963f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 2200));
+		assertEquals(1.0f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 4457.5f));
+		assertEquals(17.9472798654f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 80000));
 	}
 }

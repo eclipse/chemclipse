@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add method to get all ion values as array
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.xic;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
@@ -170,4 +172,40 @@ public interface IExtractedIonSignals {
 	 * @return {@link IExtractedIonSignals}
 	 */
 	IExtractedIonSignals makeDeepCopyWithoutSignals();
+
+	/**
+	 * Calculates the median from mean using the extracted ion signals.
+	 * 
+	 * @param segment
+	 * @param ion
+	 * @param signals
+	 * @return double
+	 */
+	default float[] getValues(IScanRange range, int ion) {
+
+		float[] values = new float[range.getWidth()];
+		int counter = 0;
+		for(int scan = range.getStartScan(); scan <= range.getStopScan(); scan++) {
+			try {
+				IExtractedIonSignal signal = getExtractedIonSignal(scan);
+				/*
+				 * If the ion represents the TIC than use the total signal,
+				 * otherwise get the abundance of the given ion.
+				 */
+				if(ion == IIon.TIC_ION) {
+					values[counter] = signal.getTotalSignal();
+				} else {
+					values[counter] = signal.getAbundance(ion);
+				}
+			} catch(NoExtractedIonSignalStoredException e) {
+				values[counter] = 0;
+			} finally {
+				/*
+				 * Increment counters position.
+				 */
+				counter++;
+			}
+		}
+		return values;
+	}
 }

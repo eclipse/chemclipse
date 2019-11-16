@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add method for float values
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.statistics;
 
@@ -387,6 +388,15 @@ public class Calculations {
 			deviationFromMean[i] = Math.sqrt(Math.pow((values[i] - mean), 2));
 		}
 		return getMedian(deviationFromMean);
+	}
+
+	public static double getMedianDeviationFromMedian(float[] values) {
+
+		double[] doubles = new double[values.length];
+		for(int i = 0; i < doubles.length; i++) {
+			doubles[i] = values[i];
+		}
+		return getMedianDeviationFromMedian(doubles);
 	}
 
 	/**

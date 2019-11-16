@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Dr. Alexander Kerner - implementation
+ * Christoph Läubrich - add method getDefaultSegmentWidth that return the raw enum instead
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences;
 
@@ -93,5 +94,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		SegmentWidth segmentWidth = SegmentWidth.valueOf(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
 		return segmentWidth.getWidth();
+	}
+
+	public static SegmentWidth getDefaultSegmentWidth() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		SegmentWidth segmentWidth = SegmentWidth.valueOf(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
+		return segmentWidth;
 	}
 }

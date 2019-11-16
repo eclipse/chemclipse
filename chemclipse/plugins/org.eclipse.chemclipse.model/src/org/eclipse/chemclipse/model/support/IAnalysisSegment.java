@@ -35,7 +35,7 @@ public interface IAnalysisSegment extends IScanRange {
 	 * 
 	 * @return the child segments for this segment
 	 */
-	default Collection<IAnalysisSegment> getChildSegments() {
+	default Collection<? extends IAnalysisSegment> getChildSegments() {
 
 		return Collections.emptyList();
 	}

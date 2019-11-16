@@ -12,7 +12,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.support.NoiseSegment;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface INoiseCalculator {
 
@@ -25,5 +29,7 @@ public interface INoiseCalculator {
 	 * @param intensity
 	 * @return
 	 */
-	float getSignalToNoiseRatio(IChromatogram<?> chromatogram, int segmentWidth, float intensity);
+	float getSignalToNoiseRatio(IChromatogram<?> chromatogram, float intensity);
+
+	List<NoiseSegment> getNoiseSegments(IChromatogram<?> chromatogram, IProgressMonitor monitor);
 }

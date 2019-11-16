@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,12 +8,15 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add static method, generalize function calls
  *******************************************************************************/
 package org.eclipse.chemclipse.model.support;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 
 /**
@@ -43,7 +46,7 @@ public class AnalysisSupport implements IAnalysisSupport {
 		 * Starts at scan position 1.
 		 */
 		if(segmentWidth >= 3 && numberOfScans >= segmentWidth) {
-			initializeAnalysisSegments(numberOfScans, 1, segmentWidth);
+			analysisSegments = initializeAnalysisSegments(numberOfScans, 1, segmentWidth, AnalysisSegment::new);
 		} else {
 			throw new AnalysisSupportException("The segmentWidth must be >= 3 and the number of scans must be >= segmentWidth.");
 		}
@@ -70,7 +73,7 @@ public class AnalysisSupport implements IAnalysisSupport {
 		 * Starts at scan position scanRange.getStartScan().
 		 */
 		if(segmentWidth >= 3 && scanRange.getWidth() >= segmentWidth) {
-			initializeAnalysisSegments(scanRange.getWidth(), scanRange.getStartScan(), segmentWidth);
+			analysisSegments = initializeAnalysisSegments(scanRange.getWidth(), scanRange.getStartScan(), segmentWidth, AnalysisSegment::new);
 		} else {
 			throw new AnalysisSupportException("The segmentWidth must be >= 3 and the number of scans must be >= segmentWidth.");
 		}
@@ -91,11 +94,10 @@ public class AnalysisSupport implements IAnalysisSupport {
 
 	// ----------------------------------------IAnalysisSupport
 	// ----------------------------------------private methods
-	private void initializeAnalysisSegments(int numberOfScans, int startScan, int segmentWidth) {
+	private static <X extends IAnalysisSegment> List<X> initializeAnalysisSegments(int numberOfScans, int startScan, int segmentWidth, BiFunction<Integer, Integer, X> constructor) {
 
 		assert numberOfScans > 0 : "The number of scans must be > 0";
 		assert segmentWidth > 0 : "The segment width must be > 0";
-		AnalysisSegment segment;
 		boolean addLastSegment = false;
 		/*
 		 * Calculate the number of scans in the last segment and afterwards the
@@ -111,19 +113,39 @@ public class AnalysisSupport implements IAnalysisSupport {
 		 */
 		numberOfScans -= lastSegmentWidth;
 		int segmentParts = numberOfScans / segmentWidth;
-		analysisSegments = new ArrayList<IAnalysisSegment>();
+		List<X> analysisSegments = new ArrayList<X>();
 		for(int i = 1; i <= segmentParts; i++) {
-			segment = new AnalysisSegment(startScan, segmentWidth);
-			analysisSegments.add(segment);
+			analysisSegments.add(constructor.apply(startScan, segmentWidth));
 			startScan += segmentWidth;
 		}
 		/*
 		 * Add the last segment to the segment list if there exists one.
 		 */
 		if(addLastSegment) {
-			segment = new AnalysisSegment(startScan, lastSegmentWidth);
-			analysisSegments.add(segment);
+			analysisSegments.add(constructor.apply(startScan, lastSegmentWidth));
+		}
+		return analysisSegments;
+	}
+
+	// ----------------------------------------private methods
+	public static List<ChromatogramSegment> getChromatogramSegments(IChromatogram<?> chromatogram, SegmentWidth segmentWidth) {
+
+		return initializeAnalysisSegments(chromatogram.getNumberOfScans(), 1, segmentWidth.getWidth(), (startScan, segmentWidth1) -> new ChromatogramAnalysisSegment(chromatogram, startScan, segmentWidth1));
+	}
+
+	private static final class ChromatogramAnalysisSegment extends AnalysisSegment implements ChromatogramSegment {
+
+		private final IChromatogram<?> chromatogram;
+
+		public ChromatogramAnalysisSegment(IChromatogram<?> chromatogram, int startScan, int segmentWidth) {
+			super(startScan, segmentWidth);
+			this.chromatogram = chromatogram;
+		}
+
+		@Override
+		public IChromatogram<?> getChromatogram() {
+
+			return chromatogram;
 		}
 	}
-	// ----------------------------------------private methods
 }

@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add method to get combined spectrum
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.noise;
 
@@ -16,6 +17,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
+import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.model.support.SegmentValidator;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
@@ -36,7 +38,7 @@ public class CalculatorSupport {
 
 	private static final Logger logger = Logger.getLogger(CalculatorSupport.class);
 	private static final float NORMALIZATION_FACTOR = 1000.0f;
-	private SegmentValidator segmentValidator;
+	private final SegmentValidator segmentValidator;
 
 	public CalculatorSupport() {
 		segmentValidator = new SegmentValidator();
@@ -77,6 +79,43 @@ public class CalculatorSupport {
 			}
 		}
 		return combinedMassSpectrumCalculator;
+	}
+
+	public static ICombinedMassSpectrum getCombinedMassSpectrum(IExtractedIonSignals extractedIonSignals, IScanRange range) {
+
+		ICombinedMassSpectrumCalculator combinedMassSpectrumCalculator = new CombinedMassSpectrumCalculator();
+		for(int scan = range.getStartScan(); scan <= range.getStopScan(); scan++) {
+			try {
+				IExtractedIonSignal extractedIonSignal = extractedIonSignals.getExtractedIonSignal(scan);
+				/*
+				 * Add the abundance for each ion in the signal to summed signal.
+				 */
+				for(int ion = extractedIonSignal.getStartIon(); ion <= extractedIonSignal.getStopIon(); ion++) {
+					combinedMassSpectrumCalculator.addIon(ion, extractedIonSignal.getAbundance(ion));
+				}
+			} catch(NoExtractedIonSignalStoredException e) {
+			}
+		}
+		combinedMassSpectrumCalculator.normalize(NORMALIZATION_FACTOR);
+		float abundance;
+		ICombinedMassSpectrum noiseMassSpectrum = new CombinedMassSpectrum();
+		IIon noiseIon;
+		Map<Integer, Double> ions = combinedMassSpectrumCalculator.getValues();
+		for(Integer ion : ions.keySet()) {
+			/*
+			 * Check the abundance.
+			 */
+			abundance = ions.get(ion).floatValue();
+			if(abundance > IIon.ZERO_INTENSITY) {
+				try {
+					noiseIon = new Ion(ion, abundance);
+					noiseMassSpectrum.addIon(noiseIon);
+				} catch(AbundanceLimitExceededException e) {
+				} catch(IonLimitExceededException e) {
+				}
+			}
+		}
+		return noiseMassSpectrum;
 	}
 
 	/*

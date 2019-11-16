@@ -24,7 +24,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.Preference
 import org.eclipse.chemclipse.model.baseline.BaselineModel;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 
@@ -34,7 +36,6 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	//
 	private INoiseCalculator noiseCalculator;
 	private final Map<Double, IBaselineModel> baselineModels;
-	private int segmentWidth;
 
 	public AbstractChromatogramWSD() {
 		baselineModels = new HashMap<>();
@@ -45,7 +46,6 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 
 		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
 		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
-		segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	public float getSignalToNoiseRatio(float abundance) {
 
 		if(noiseCalculator != null) {
-			return noiseCalculator.getSignalToNoiseRatio(this, segmentWidth, abundance);
+			return noiseCalculator.getSignalToNoiseRatio(this, abundance);
 		}
 		return 0;
 	}
@@ -131,5 +131,15 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	public boolean containsBaseline(double wavelength) {
 
 		return baselineModels.containsValue(wavelength);
+	}
+
+	@Override
+	public <ResultType extends IMeasurementResult<?>> ResultType getMeasurementResult(Class<ResultType> type) {
+
+		ResultType result = super.getMeasurementResult(type);
+		if(result == null && type == ChromatogramSegmentation.class) {
+			return type.cast(new ChromatogramSegmentation(this, PreferenceSupplier.getDefaultSegmentWidth()));
+		}
+		return result;
 	}
 }

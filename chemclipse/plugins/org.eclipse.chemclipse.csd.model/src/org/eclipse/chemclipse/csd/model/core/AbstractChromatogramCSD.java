@@ -17,7 +17,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalcul
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public abstract class AbstractChromatogramCSD extends AbstractChromatogram<IChromatogramPeakCSD> implements IChromatogramCSD {
@@ -25,7 +27,6 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram<IChro
 	private static final long serialVersionUID = -1514838958855146167L;
 	//
 	private INoiseCalculator noiseCalculator;
-	private int segmentWidth;
 
 	public AbstractChromatogramCSD() {
 		updateNoiseCalculator();
@@ -35,7 +36,6 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram<IChro
 
 		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
 		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
-		segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram<IChro
 	public float getSignalToNoiseRatio(float abundance) {
 
 		if(noiseCalculator != null) {
-			return noiseCalculator.getSignalToNoiseRatio(this, segmentWidth, abundance);
+			return noiseCalculator.getSignalToNoiseRatio(this, abundance);
 		}
 		return 0;
 	}
@@ -86,5 +86,15 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram<IChro
 			integratedArea += peak.getIntegratedArea();
 		}
 		return integratedArea;
+	}
+
+	@Override
+	public <ResultType extends IMeasurementResult<?>> ResultType getMeasurementResult(Class<ResultType> type) {
+
+		ResultType result = super.getMeasurementResult(type);
+		if(result == null && type == ChromatogramSegmentation.class) {
+			return type.cast(new ChromatogramSegmentation(this, PreferenceSupplier.getDefaultSegmentWidth()));
+		}
+		return result;
 	}
 }
