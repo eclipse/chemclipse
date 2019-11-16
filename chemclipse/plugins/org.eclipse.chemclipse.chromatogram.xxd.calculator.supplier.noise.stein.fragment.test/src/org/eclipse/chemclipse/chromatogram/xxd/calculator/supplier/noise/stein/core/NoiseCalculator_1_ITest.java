@@ -13,6 +13,8 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.core;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.TestPathHelper;
+import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;
+import org.eclipse.chemclipse.model.support.SegmentWidth;
 
 public class NoiseCalculator_1_ITest extends ChromatogramReaderTestCase {
 
@@ -34,6 +36,7 @@ public class NoiseCalculator_1_ITest extends ChromatogramReaderTestCase {
 
 	public void testReader_1() {
 
-		assertEquals(236, noiseCalculator.getSignalToNoiseRatio(chromatogram, 9, 500));
+		chromatogram.addMeasurementResult(new ChromatogramSegmentation(chromatogram, SegmentWidth.WIDTH_9));
+		assertEquals(236, noiseCalculator.getSignalToNoiseRatio(chromatogram, 500));
 	}
 }
