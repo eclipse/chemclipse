@@ -16,4 +16,14 @@
             name="S/N Calculator Settings">
       </page>      
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculatorSupplier"
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.ui.adapters.INoiseCalculatorSupplierAdapterFactory">
+         <adapter
+               type="org.eclipse.jface.viewers.ILabelProvider">
+         </adapter>
+      </factory>
+   </extension>
 </plugin>

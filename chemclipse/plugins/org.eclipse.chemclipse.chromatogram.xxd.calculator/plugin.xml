@@ -9,4 +9,14 @@
             class="org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.classifier.chromatogramClassifierSupplier">
+      <ChromatogramClassifierSupplier
+            classifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseChromatogramClassifier"
+            classifierName="Set Noise Settings"
+            classifierSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.NoiseChromatogramClassifierSettings"
+            description="Sets the Noise calculation settings for this Chromatogram used in S/N and peak-detection algorithms"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.ChromatogramClassifierSupplier">
+      </ChromatogramClassifierSupplier>
+   </extension>
 </plugin>

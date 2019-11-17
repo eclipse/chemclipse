@@ -33,7 +33,7 @@ public class ChromatogramClassifierProcessTypeSupport implements IProcessTypeSup
 	@Override
 	public String getCategory() {
 
-		return "Classifier";
+		return "Chromatogram Classifier";
 	}
 
 	@Override

@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.results;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
+import org.eclipse.chemclipse.model.support.IScanRange;
 
 public abstract class AnalysisSegmentMeasurementResult<T extends IAnalysisSegment> implements IMeasurementResult<List<T>> {
 
@@ -28,5 +30,27 @@ public abstract class AnalysisSegmentMeasurementResult<T extends IAnalysisSegmen
 	public String getDescription() {
 
 		return "";
+	}
+
+	/**
+	 * the list of segments from this result in the given range
+	 * 
+	 * @param range
+	 * @param includeBorders
+	 * @return
+	 */
+	public List<T> getSegments(IScanRange range, boolean includeBorders) {
+
+		List<T> list = new ArrayList<>();
+		for(T item : getResult()) {
+			if(item.containsScan(range.getStartScan())) {
+				if(item.containsScan(range.getStopScan()) || includeBorders) {
+					list.add(item);
+				}
+			} else if(item.containsScan(range.getStopScan()) && includeBorders) {
+				list.add(item);
+			}
+		}
+		return list;
 	}
 }

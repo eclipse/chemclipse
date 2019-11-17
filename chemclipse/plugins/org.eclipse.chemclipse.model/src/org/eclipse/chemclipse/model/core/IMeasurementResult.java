@@ -38,4 +38,13 @@ public interface IMeasurementResult<ResultType> {
 	 * @return Object
 	 */
 	ResultType getResult();
+
+	/**
+	 * 
+	 * @return true if this item is currently visible or not (for exanple in an UI)
+	 */
+	default boolean isVisible() {
+
+		return true;
+	}
 }

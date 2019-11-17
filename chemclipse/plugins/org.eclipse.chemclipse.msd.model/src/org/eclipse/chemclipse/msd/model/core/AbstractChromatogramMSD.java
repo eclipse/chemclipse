@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;
+import org.eclipse.chemclipse.model.results.NoiseSegmentMeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
@@ -81,7 +82,13 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 
 	private void loadNoiseCalculator() {
 
-		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
+		String noiseCalculatorId;
+		NoiseSegmentMeasurementResult noiseResult = getMeasurementResult(NoiseSegmentMeasurementResult.class);
+		if(noiseResult != null) {
+			noiseCalculatorId = noiseResult.getNoiseCalculatorId();
+		} else {
+			noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
+		}
 		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
 	}
 
@@ -296,5 +303,14 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 			return type.cast(new ChromatogramSegmentation(this, PreferenceSupplier.getDefaultSegmentWidth()));
 		}
 		return result;
+	}
+
+	@Override
+	public void addMeasurementResult(IMeasurementResult<?> chromatogramResult) {
+
+		super.addMeasurementResult(chromatogramResult);
+		if(chromatogramResult instanceof NoiseSegmentMeasurementResult) {
+			recalculateTheNoiseFactor();
+		}
 	}
 }

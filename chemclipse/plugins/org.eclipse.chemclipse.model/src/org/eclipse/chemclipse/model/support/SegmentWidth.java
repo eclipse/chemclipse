@@ -43,4 +43,18 @@ public enum SegmentWidth {
 		}
 		return elements;
 	}
+
+	public static SegmentWidth getLower(SegmentWidth segmentWidth) {
+
+		SegmentWidth lower = null;
+		for(SegmentWidth w : SegmentWidth.values()) {
+			int current = w.getWidth();
+			if(current < segmentWidth.getWidth()) {
+				if(lower == null || current > lower.getWidth()) {
+					lower = w;
+				}
+			}
+		}
+		return lower;
+	}
 }

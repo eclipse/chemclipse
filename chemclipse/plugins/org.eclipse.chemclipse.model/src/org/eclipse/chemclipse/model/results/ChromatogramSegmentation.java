@@ -22,8 +22,10 @@ import org.eclipse.chemclipse.model.support.SegmentWidth;
 public class ChromatogramSegmentation extends AnalysisSegmentMeasurementResult<ChromatogramSegment> {
 
 	private final List<ChromatogramSegment> segments;
+	private final SegmentWidth width;
 
 	public ChromatogramSegmentation(IChromatogram<?> chromatogram, SegmentWidth width) {
+		this.width = width;
 		segments = Collections.unmodifiableList(AnalysisSupport.getChromatogramSegments(chromatogram, width));
 	}
 
@@ -37,5 +39,16 @@ public class ChromatogramSegmentation extends AnalysisSegmentMeasurementResult<C
 	public List<ChromatogramSegment> getResult() {
 
 		return segments;
+	}
+
+	public SegmentWidth getWidth() {
+
+		return width;
+	}
+
+	@Override
+	public boolean isVisible() {
+
+		return false;
 	}
 }

@@ -15,6 +15,12 @@ public interface IProcessSettings {
 
 	/**
 	 * Use this method to set specific system settings.
+	 * 
+	 * @deprecated this method will be removed soon
 	 */
-	void setSystemSettings();
+	@Deprecated
+	default void setSystemSettings() {
+
+		throw new UnsupportedOperationException();
+	}
 }

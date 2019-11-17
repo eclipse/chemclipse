@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;
+import org.eclipse.chemclipse.model.results.NoiseSegmentMeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 
@@ -44,7 +45,13 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 
 	private void updateNoiseCalculator() {
 
-		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
+		String noiseCalculatorId;
+		NoiseSegmentMeasurementResult noiseResult = getMeasurementResult(NoiseSegmentMeasurementResult.class);
+		if(noiseResult != null) {
+			noiseCalculatorId = noiseResult.getNoiseCalculatorId();
+		} else {
+			noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
+		}
 		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
 	}
 
@@ -141,5 +148,14 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 			return type.cast(new ChromatogramSegmentation(this, PreferenceSupplier.getDefaultSegmentWidth()));
 		}
 		return result;
+	}
+
+	@Override
+	public void addMeasurementResult(IMeasurementResult<?> chromatogramResult) {
+
+		super.addMeasurementResult(chromatogramResult);
+		if(chromatogramResult instanceof NoiseSegmentMeasurementResult) {
+			recalculateTheNoiseFactor();
+		}
 	}
 }

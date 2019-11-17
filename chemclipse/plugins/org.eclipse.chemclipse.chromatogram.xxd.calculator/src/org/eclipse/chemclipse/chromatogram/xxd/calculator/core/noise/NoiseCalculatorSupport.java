@@ -12,13 +12,15 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.exceptions.NoNoiseCalculatorAvailableException;
 
 public class NoiseCalculatorSupport implements INoiseCalculatorSupport {
 
-	private List<INoiseCalculatorSupplier> suppliers;
+	private final List<INoiseCalculatorSupplier> suppliers;
 
 	public NoiseCalculatorSupport() {
 		suppliers = new ArrayList<INoiseCalculatorSupplier>();
@@ -116,4 +118,10 @@ public class NoiseCalculatorSupport implements INoiseCalculatorSupport {
 		}
 	}
 	// -------------------------------------private methods
+
+	@Override
+	public Collection<INoiseCalculatorSupplier> getCalculatorSupplier() {
+
+		return Collections.unmodifiableCollection(suppliers);
+	}
 }

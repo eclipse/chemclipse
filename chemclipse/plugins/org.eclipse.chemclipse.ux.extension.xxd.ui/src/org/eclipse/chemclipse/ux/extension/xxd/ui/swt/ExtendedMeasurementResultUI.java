@@ -36,6 +36,8 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -215,6 +217,17 @@ public class ExtendedMeasurementResultUI {
 	private ComboViewer createResultCombo(Composite parent) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.PUSH);
+		comboViewer.addFilter(new ViewerFilter() {
+
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+
+				if(element instanceof IMeasurementResult<?>) {
+					return ((IMeasurementResult<?>)element).isVisible();
+				}
+				return true;
+			}
+		});
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {

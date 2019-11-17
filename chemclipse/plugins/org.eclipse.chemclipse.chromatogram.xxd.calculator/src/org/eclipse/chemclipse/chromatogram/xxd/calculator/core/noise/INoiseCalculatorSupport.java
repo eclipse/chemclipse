@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.exceptions.NoNoiseCalculatorAvailableException;
@@ -54,4 +55,6 @@ public interface INoiseCalculatorSupport {
 	 * @throws NoNoiseCalculatorAvailableException
 	 */
 	String[] getCalculatorNames() throws NoNoiseCalculatorAvailableException;
+
+	Collection<INoiseCalculatorSupplier> getCalculatorSupplier();
 }
