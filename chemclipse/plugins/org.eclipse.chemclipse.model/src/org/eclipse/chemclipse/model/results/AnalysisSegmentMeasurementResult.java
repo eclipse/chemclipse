@@ -68,7 +68,6 @@ public abstract class AnalysisSegmentMeasurementResult<T extends IAnalysisSegmen
 
 		if(this.selection != selection) {
 			this.selection = selection;
-			setChanged();
 			notifyListener();
 		}
 	}
@@ -81,6 +80,6 @@ public abstract class AnalysisSegmentMeasurementResult<T extends IAnalysisSegmen
 	public void notifyListener() {
 
 		setChanged();
-		notifyListener();
+		notifyObservers();
 	}
 }

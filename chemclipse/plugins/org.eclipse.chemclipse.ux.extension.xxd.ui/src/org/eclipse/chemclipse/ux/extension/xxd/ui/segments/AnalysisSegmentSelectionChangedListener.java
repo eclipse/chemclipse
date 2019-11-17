@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeNode;
 
 public class AnalysisSegmentSelectionChangedListener<X> implements ISelectionChangedListener {
 
@@ -35,6 +36,9 @@ public class AnalysisSegmentSelectionChangedListener<X> implements ISelectionCha
 		ISelection selection = event.getSelection();
 		if(selection instanceof IStructuredSelection) {
 			Object element = ((IStructuredSelection)selection).getFirstElement();
+			if(element instanceof TreeNode) {
+				element = ((TreeNode)element).getValue();
+			}
 			if(type.isInstance(element)) {
 				selectionConsumer.accept(type.cast(element));
 				return;
