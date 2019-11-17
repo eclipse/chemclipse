@@ -9,11 +9,13 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - simplyfy API
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 
+import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -23,9 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * The classification data is stored in the chromatogram, but the data is transient and only
  * intended to be used for live inspection of the chromatogram.
  */
-public interface IChromatogramClassifier<R> {
+public interface IChromatogramClassifier {
 
-	IProcessingInfo<R> applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor);
-
-	IProcessingInfo<R> applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor);
 }

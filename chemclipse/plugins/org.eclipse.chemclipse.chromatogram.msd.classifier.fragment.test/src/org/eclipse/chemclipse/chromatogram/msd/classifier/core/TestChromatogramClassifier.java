@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -28,16 +28,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class TestChromatogramClassifier extends AbstractChromatogramClassifier {
 
 	@Override
-	public IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
-
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Classifier", "The chromatogram selection or the settings are invalid.");
-		processingInfo.addMessage(processingMessage);
-		return processingInfo;
-	}
-
-	@Override
-	public IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Classifier", "The chromatogram selection or the settings are invalid.");

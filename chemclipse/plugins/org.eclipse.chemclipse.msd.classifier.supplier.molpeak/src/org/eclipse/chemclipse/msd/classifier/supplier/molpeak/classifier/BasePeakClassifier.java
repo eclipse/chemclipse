@@ -9,23 +9,23 @@
  * Contributors:
  * Dr. Lorenz Gerber - initial API and implementation
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - Adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.classifier;
 
-import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.identifier.BasePeakIdentifier;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.ILigninRatios;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.LigninRatios;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 
 public class BasePeakClassifier {
 
-	public ILigninRatios calculateLigninRatios(IChromatogramSelectionMSD chromatogramSelection) {
+	public static ILigninRatios calculateLigninRatios(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		ILigninRatios ligninRatios = new LigninRatios();
 		//
@@ -34,9 +34,8 @@ public class BasePeakClassifier {
 		double counterL = 0;
 		double counterC = 0;
 		//
-		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogramMSD();
-		List<IChromatogramPeakMSD> peaks = chromatogramMSD.getPeaks();
-		for(IChromatogramPeakMSD peak : peaks) {
+		IChromatogram<?> chromatogramMSD = chromatogramSelection.getChromatogram();
+		for(IPeak peak : chromatogramMSD.getPeaks()) {
 			for(IIdentificationTarget peakTarget : peak.getTargets()) {
 				String name = peakTarget.getLibraryInformation().getName();
 				if(name.equals(BasePeakIdentifier.SYRINGYL)) {

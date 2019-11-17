@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,12 +8,14 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 
+import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -48,28 +50,19 @@ public class ChromatogramClassifier {
 	private ChromatogramClassifier() {
 	}
 
-	public static IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, String classifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, String classifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
 		IChromatogramClassifier chromatogramClassifier = getChromatogramClassifier(classifierId);
 		if(chromatogramClassifier != null) {
-			processingInfo = chromatogramClassifier.applyClassifier(chromatogramSelection, chromatogramClassifierSettings, monitor);
+			return chromatogramClassifier.applyClassifier(chromatogramSelection, chromatogramClassifierSettings, monitor);
 		} else {
-			processingInfo = getNoClassifierAvailableProcessingInfo();
+			return getNoClassifierAvailableProcessingInfo();
 		}
-		return processingInfo;
 	}
 
-	public static IProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, String classifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, String classifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IChromatogramClassifier chromatogramClassifier = getChromatogramClassifier(classifierId);
-		if(chromatogramClassifier != null) {
-			processingInfo = chromatogramClassifier.applyClassifier(chromatogramSelection, monitor);
-		} else {
-			processingInfo = getNoClassifierAvailableProcessingInfo();
-		}
-		return processingInfo;
+		return applyClassifier(chromatogramSelection, null, classifierId, monitor);
 	}
 
 	public static IChromatogramClassifierSupport getChromatogramClassifierSupport() {
@@ -145,9 +138,9 @@ public class ChromatogramClassifier {
 	}
 
 	// --------------------------------------------private methods
-	private static IProcessingInfo getNoClassifierAvailableProcessingInfo() {
+	private static IProcessingInfo<IChromatogramClassifierResult> getNoClassifierAvailableProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IChromatogramClassifierResult> processingInfo = new ProcessingInfo();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Chromatogram Classifier", NO_CHROMATOGRAM_CLASSIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - change to static access, tune method signatures
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.internal.core.support;
 
@@ -20,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.exception
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.ClassifierSettings;
+import org.eclipse.chemclipse.model.support.IRetentionTimeRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -28,19 +30,23 @@ public class Calculator {
 
 	public IWncIons calculateIonPercentages(IChromatogramSelectionMSD chromatogramSelection, ClassifierSettings classifierSettings) throws ClassifierException {
 
+		return calculateIonPercentages(chromatogramSelection.getChromatogram(), chromatogramSelection, classifierSettings);
+	}
+
+	public static IWncIons calculateIonPercentages(IChromatogramMSD chromatogram, IRetentionTimeRange range, ClassifierSettings classifierSettings) throws ClassifierException {
+
 		IWncIons wncIons = classifierSettings.getWNCIons();
-		Map<Integer, Double> ionAbundanceValues = extractIonValues(chromatogramSelection);
+		Map<Integer, Double> ionAbundanceValues = extractIonValues(chromatogram, range);
 		double factorMax = calculateFactorMax(ionAbundanceValues);
 		double factorSum = calculateFactorSum(ionAbundanceValues);
 		IWncIons wncIonsEdited = calculateAndSetIntensityValues(ionAbundanceValues, wncIons, factorMax, factorSum);
 		return wncIonsEdited;
 	}
 
-	private Map<Integer, Double> extractIonValues(IChromatogramSelectionMSD chromatogramSelection) {
+	private static Map<Integer, Double> extractIonValues(IChromatogramMSD chromatogram, IRetentionTimeRange range) {
 
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
-		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
-		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
+		int startScan = chromatogram.getScanNumber(range.getStartRetentionTime());
+		int stopScan = chromatogram.getScanNumber(range.getStopRetentionTime());
 		Map<Integer, Double> ionAbundanceValues = new HashMap<Integer, Double>();
 		double signal;
 		/*
@@ -65,7 +71,7 @@ public class Calculator {
 		return ionAbundanceValues;
 	}
 
-	private double calculateFactorMax(Map<Integer, Double> ionAbundanceValues) throws ClassifierException {
+	private static double calculateFactorMax(Map<Integer, Double> ionAbundanceValues) throws ClassifierException {
 
 		double maxAbundance = Collections.max(ionAbundanceValues.values());
 		if(maxAbundance == 0) {
@@ -74,7 +80,7 @@ public class Calculator {
 		return 100.0d / maxAbundance;
 	}
 
-	private double calculateFactorSum(Map<Integer, Double> ionAbundanceValues) throws ClassifierException {
+	private static double calculateFactorSum(Map<Integer, Double> ionAbundanceValues) throws ClassifierException {
 
 		/*
 		 * Get the sum of all signals.
@@ -89,7 +95,7 @@ public class Calculator {
 		return 100.0d / sumAbundance;
 	}
 
-	private IWncIons calculateAndSetIntensityValues(Map<Integer, Double> ionAbundanceValues, IWncIons wncIons, double factorMax, double factorSum) {
+	private static IWncIons calculateAndSetIntensityValues(Map<Integer, Double> ionAbundanceValues, IWncIons wncIons, double factorMax, double factorSum) {
 
 		double percentageMaxIntensity;
 		double percentageSumIntensity;

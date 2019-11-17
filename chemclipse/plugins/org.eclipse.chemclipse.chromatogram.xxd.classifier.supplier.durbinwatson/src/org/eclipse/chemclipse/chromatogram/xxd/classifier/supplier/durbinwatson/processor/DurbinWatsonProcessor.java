@@ -20,24 +20,23 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.set
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class DurbinWatsonProcessor {
 
 	private static final Logger logger = Logger.getLogger(DurbinWatsonProcessor.class);
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void run(IChromatogramSelectionMSD chromatogramSelection, ClassifierSettings classifierSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+	public void run(IChromatogramSelection<?, ?> chromatogramSelection, ClassifierSettings classifierSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
 		try {
 			/*
 			 * Extract the TIC signals.
 			 */
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			TotalScanSignalExtractor signalExtractor = new TotalScanSignalExtractor(chromatogram);
 			ITotalScanSignals totalScanSignals = signalExtractor.getTotalScanSignals(chromatogramSelection, false);
 			double[] valuesOriginal = getScanSignalsAsArray(totalScanSignals);

@@ -28,7 +28,7 @@ public class WncClassifier_1_ITest extends ChromatogramTestCase {
 		super.setUp();
 		Classifier wncClassifier = new Classifier();
 		IChromatogramSelectionMSD chromatogramSelection = getChromatogramSelection();
-		IProcessingInfo<IChromatogramClassifierResult> processingInfo = wncClassifier.applyClassifier(chromatogramSelection, new NullProgressMonitor());
+		IProcessingInfo<IChromatogramClassifierResult> processingInfo = wncClassifier.applyClassifier(chromatogramSelection, null, new NullProgressMonitor());
 		result = processingInfo.getProcessingResult();
 	}
 

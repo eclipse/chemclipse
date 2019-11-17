@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogram
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -57,21 +56,16 @@ public class ChromatogramClassifierProcessTypeSupport implements IProcessTypeSup
 
 		@SuppressWarnings("unchecked")
 		public ChromatogramClassifierProcessorSupplier(IChromatogramClassifierSupplier supplier, IProcessTypeSupplier parent) {
-			super(supplier.getId(), supplier.getClassifierName(), supplier.getDescription(), (Class<IChromatogramClassifierSettings>)supplier.getSettingsClass(), parent, DataType.MSD);
+			super(supplier.getId(), supplier.getClassifierName(), supplier.getDescription(), (Class<IChromatogramClassifierSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD);
 		}
 
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-				if(processSettings instanceof IChromatogramClassifierSettings) {
-					messageConsumer.addMessages(ChromatogramClassifier.applyClassifier(chromatogramSelectionMSD, processSettings, getId(), monitor));
-				} else {
-					messageConsumer.addMessages(ChromatogramClassifier.applyClassifier(chromatogramSelectionMSD, getId(), monitor));
-				}
+			if(processSettings instanceof IChromatogramClassifierSettings) {
+				messageConsumer.addMessages(ChromatogramClassifier.applyClassifier(chromatogramSelection, processSettings, getId(), monitor));
 			} else {
-				messageConsumer.addWarnMessage(getName(), "This processor only supports MSD chromatogram, skipp processing");
+				messageConsumer.addMessages(ChromatogramClassifier.applyClassifier(chromatogramSelection, getId(), monitor));
 			}
 			return chromatogramSelection;
 		}
