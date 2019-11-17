@@ -16,7 +16,7 @@ package org.eclipse.chemclipse.model.support;
 import java.util.Collection;
 import java.util.Collections;
 
-public interface IAnalysisSegment extends IScanRange {
+public interface IAnalysisSegment extends IScanRange, IRetentionTimeRange {
 
 	/**
 	 * Returns the width of the analysis segment in scan units.

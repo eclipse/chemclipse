@@ -48,4 +48,10 @@ public class NoiseSegmentMeasurementResult extends AnalysisSegmentMeasurementRes
 
 		return noiseCalculatorId;
 	}
+
+	@Override
+	public Class<NoiseSegment> getType() {
+
+		return NoiseSegment.class;
+	}
 }

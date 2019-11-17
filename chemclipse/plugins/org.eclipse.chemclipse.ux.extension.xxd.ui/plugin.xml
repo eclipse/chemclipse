@@ -236,6 +236,25 @@
             description="This action applies the selected method on the chromatogram."
             label="Method Editor Action">
       </ChromatogramEditorActionSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.chemclipse.model.results.AnalysisSegmentMeasurementResult"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.adapters.AnalysisSegmentMeasurementResultAdapterFactory">
+         <adapter
+               type="org.eclipse.jface.viewers.IStructuredContentProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider">
+         </adapter>
+         <adapter
+               type="org.eclipse.jface.viewers.ISelectionChangedListener">
+         </adapter>
+         <adapter
+               type="org.eclipse.swtchart.ICustomPaintListener">
+         </adapter>
+      </factory>
    </extension>   
 
 </plugin>

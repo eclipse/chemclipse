@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 
 /**
@@ -46,7 +47,7 @@ public class AnalysisSupport implements IAnalysisSupport {
 		 * Starts at scan position 1.
 		 */
 		if(segmentWidth >= 3 && numberOfScans >= segmentWidth) {
-			analysisSegments = initializeAnalysisSegments(numberOfScans, 1, segmentWidth, AnalysisSegment::new);
+			analysisSegments = initializeAnalysisSegments(numberOfScans, 1, segmentWidth, SimpleSegment::new);
 		} else {
 			throw new AnalysisSupportException("The segmentWidth must be >= 3 and the number of scans must be >= segmentWidth.");
 		}
@@ -73,7 +74,7 @@ public class AnalysisSupport implements IAnalysisSupport {
 		 * Starts at scan position scanRange.getStartScan().
 		 */
 		if(segmentWidth >= 3 && scanRange.getWidth() >= segmentWidth) {
-			analysisSegments = initializeAnalysisSegments(scanRange.getWidth(), scanRange.getStartScan(), segmentWidth, AnalysisSegment::new);
+			analysisSegments = initializeAnalysisSegments(scanRange.getWidth(), scanRange.getStartScan(), segmentWidth, SimpleSegment::new);
 		} else {
 			throw new AnalysisSupportException("The segmentWidth must be >= 3 and the number of scans must be >= segmentWidth.");
 		}
@@ -146,6 +147,45 @@ public class AnalysisSupport implements IAnalysisSupport {
 		public IChromatogram<?> getChromatogram() {
 
 			return chromatogram;
+		}
+
+		@Override
+		public int getStartRetentionTime() {
+
+			IScan scan = chromatogram.getScan(getStartScan());
+			if(scan == null) {
+				return -1;
+			}
+			return scan.getRetentionTime();
+		}
+
+		@Override
+		public int getStopRetentionTime() {
+
+			IScan scan = chromatogram.getScan(getStopScan());
+			if(scan == null) {
+				return -1;
+			}
+			return scan.getRetentionTime();
+		}
+	}
+
+	private static final class SimpleSegment extends AnalysisSegment {
+
+		public SimpleSegment(int startScan, int segmentWidth) {
+			super(startScan, segmentWidth);
+		}
+
+		@Override
+		public int getStartRetentionTime() {
+
+			return -1;
+		}
+
+		@Override
+		public int getStopRetentionTime() {
+
+			return -1;
 		}
 	}
 }

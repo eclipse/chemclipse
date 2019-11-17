@@ -51,4 +51,10 @@ public class ChromatogramSegmentation extends AnalysisSegmentMeasurementResult<C
 
 		return false;
 	}
+
+	@Override
+	public Class<ChromatogramSegment> getType() {
+
+		return ChromatogramSegment.class;
+	}
 }

@@ -93,8 +93,8 @@ public class NoiseCalculator implements INoiseCalculator {
 
 	private void addValue(List<Double> noiseFactors, NoiseSegment noiseSegment) {
 
-		double nf = noiseSegment.getNoiseFactor();
-		if(Double.isFinite(nf)) {
+		if(noiseSegment.hasNoise()) {
+			double nf = noiseSegment.getNoiseFactor();
 			noiseFactors.add(nf);
 		}
 	}
@@ -251,6 +251,18 @@ public class NoiseCalculator implements INoiseCalculator {
 		public IScan getScan() {
 
 			return combinedMassSpectrum;
+		}
+
+		@Override
+		public int getStartRetentionTime() {
+
+			return baseSegment.getStartRetentionTime();
+		}
+
+		@Override
+		public int getStopRetentionTime() {
+
+			return baseSegment.getStopRetentionTime();
 		}
 	}
 

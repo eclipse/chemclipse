@@ -40,7 +40,20 @@ public class CalculatorSupport_4_Test extends TestCase {
 
 		super.setUp();
 		calculatorSupport = new CalculatorSupport();
-		analysisSegment = new AnalysisSegment(1, 3);
+		analysisSegment = new AnalysisSegment(1, 3) {
+
+			@Override
+			public int getStartRetentionTime() {
+
+				return 0;
+			}
+
+			@Override
+			public int getStopRetentionTime() {
+
+				return 0;
+			}
+		};
 		extractedIonSignals = new ExtractedIonSignals(1, 3);
 		/*
 		 * Scan #1

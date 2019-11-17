@@ -19,7 +19,7 @@ package org.eclipse.chemclipse.model.support;
  * 
  * @author eselmeister
  */
-public class AnalysisSegment implements IAnalysisSegment {
+public abstract class AnalysisSegment implements IAnalysisSegment {
 
 	private int startScan = 0;
 	private int stopScan = 0;
@@ -28,17 +28,6 @@ public class AnalysisSegment implements IAnalysisSegment {
 		if(startScan > 0 && segmentWidth > 0) {
 			this.startScan = startScan;
 			this.stopScan = startScan + segmentWidth - 1;
-		}
-	}
-
-	@Override
-	public int getSegmentWidth() {
-
-		int delta = stopScan - startScan;
-		if(delta == 0) {
-			return 0;
-		} else {
-			return ++delta;
 		}
 	}
 
@@ -58,6 +47,8 @@ public class AnalysisSegment implements IAnalysisSegment {
 
 		if(startScan > 0) {
 			this.startScan = startScan;
+		} else {
+			throw new IllegalArgumentException("start scan must be > 0");
 		}
 	}
 
@@ -65,6 +56,8 @@ public class AnalysisSegment implements IAnalysisSegment {
 
 		if(stopScan >= startScan) {
 			this.stopScan = stopScan;
+		} else {
+			throw new IllegalArgumentException("stop scan must be >= start scan");
 		}
 	}
 }

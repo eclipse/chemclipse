@@ -15,12 +15,12 @@ package org.eclipse.chemclipse.model.support;
 public interface IRetentionTimeRange {
 
 	/**
-	 * @return the start retention time in milliseconds
+	 * @return the start retention time in milliseconds or -1 if the start is unknown
 	 */
 	int getStartRetentionTime();
 
 	/**
-	 * @return the stop retention time in milliseconds
+	 * @return the stop retention time in milliseconds or -1 if the stop is unknown
 	 */
 	int getStopRetentionTime();
 

@@ -63,7 +63,9 @@ public class NoiseCalculator implements INoiseCalculator {
 			List<NoiseSegment> noiseSegments = getNoiseSegments(chromatogram, null);
 			List<Double> deltaNoiseHeights = new ArrayList<Double>();
 			for(NoiseSegment noiseSegment : noiseSegments) {
-				deltaNoiseHeights.add(noiseSegment.getNoiseFactor());
+				if(noiseSegment.hasNoise()) {
+					deltaNoiseHeights.add(noiseSegment.getNoiseFactor());
+				}
 			}
 			/*
 			 * Calculate the mean value of the standard deviations.
@@ -137,7 +139,7 @@ public class NoiseCalculator implements INoiseCalculator {
 					 */
 					Double deltaNoiseHeight = getDeltaNoiseHeight(segment, validator, signals);
 					if(deltaNoiseHeight != null) {
-						result.add(new NormanDysonNoiseSegment(segment, noiseValue));
+						result.add(new NormanDysonNoiseSegment(segment, deltaNoiseHeight));
 					}
 				}
 				return result;
@@ -178,6 +180,18 @@ public class NoiseCalculator implements INoiseCalculator {
 		public Collection<? extends IAnalysisSegment> getChildSegments() {
 
 			return Collections.singleton(baseSegment);
+		}
+
+		@Override
+		public int getStartRetentionTime() {
+
+			return baseSegment.getStartRetentionTime();
+		}
+
+		@Override
+		public int getStopRetentionTime() {
+
+			return baseSegment.getStopRetentionTime();
 		}
 	}
 }

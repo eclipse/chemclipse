@@ -28,7 +28,20 @@ public class NoiseSegment_1_Test extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		analysisSegment = new AnalysisSegment(20, 200);
+		analysisSegment = new AnalysisSegment(20, 200) {
+
+			@Override
+			public int getStartRetentionTime() {
+
+				return 0;
+			}
+
+			@Override
+			public int getStopRetentionTime() {
+
+				return 0;
+			}
+		};
 		noiseMassSpectrum = new CombinedMassSpectrum();
 		noiseSegment = new NoiseSegment(analysisSegment, noiseMassSpectrum);
 	}

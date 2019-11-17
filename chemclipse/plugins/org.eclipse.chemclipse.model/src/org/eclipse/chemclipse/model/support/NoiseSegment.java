@@ -25,10 +25,20 @@ public interface NoiseSegment extends IAnalysisSegment {
 
 	/**
 	 * 
-	 * @return the scan that makes up this noise segment or <code>null</code> if no scan is avaiable
+	 * @return the scan that makes up this noise segment or <code>null</code> if no scan is available
 	 */
 	default IScan getScan() {
 
 		return null;
+	}
+
+	/**
+	 * 
+	 * @return <code>true</code> if this is noise directly detected, or
+	 *         <code>false</code> if noise is only detected on the subcomponents and {@link #getChildSegments()} should be examined for actual values
+	 */
+	default boolean hasNoise() {
+
+		return Double.isFinite(getNoiseFactor());
 	}
 }

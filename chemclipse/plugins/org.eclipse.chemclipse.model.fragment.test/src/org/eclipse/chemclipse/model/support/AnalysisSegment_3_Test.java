@@ -11,22 +11,32 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.support;
 
-import org.eclipse.chemclipse.model.support.AnalysisSegment;
-import org.eclipse.chemclipse.model.support.IAnalysisSegment;
-
 import junit.framework.TestCase;
 
 public class AnalysisSegment_3_Test extends TestCase {
 
 	private IAnalysisSegment segment;
-	private int startScan = -5;
-	private int segmentWidth = -5;
+	private final int startScan = -5;
+	private final int segmentWidth = -5;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		segment = new AnalysisSegment(startScan, segmentWidth);
+		segment = new AnalysisSegment(startScan, segmentWidth) {
+
+			@Override
+			public int getStartRetentionTime() {
+
+				return 0;
+			}
+
+			@Override
+			public int getStopRetentionTime() {
+
+				return 0;
+			}
+		};
 	}
 
 	@Override
