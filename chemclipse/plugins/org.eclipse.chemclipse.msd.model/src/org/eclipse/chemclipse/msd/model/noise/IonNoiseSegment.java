@@ -9,7 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.model.xic;
+package org.eclipse.chemclipse.msd.model.noise;
 
 import org.eclipse.chemclipse.model.support.NoiseSegment;
 

@@ -16,7 +16,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
-import org.eclipse.chemclipse.model.support.NoiseSegment;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentColorScheme.AnalysisSegmentColors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentColorScheme.Type;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
@@ -63,11 +62,6 @@ public class AnalysisSegmentPaintListener<X extends IAnalysisSegment> implements
 				boolean alternate = false;
 				gc.setForeground(colors.get(Type.LINE));
 				for(X segment : segmentSupplier.get()) {
-					if(segment instanceof NoiseSegment) {
-						if(!((NoiseSegment)segment).hasNoise()) {
-							continue;
-						}
-					}
 					int x1 = xAxis.getPixelCoordinate(segment.getStartRetentionTime());
 					int x2 = xAxis.getPixelCoordinate(segment.getStopRetentionTime()) - x1;
 					boolean isSelected = selectionCheck.test(segment);

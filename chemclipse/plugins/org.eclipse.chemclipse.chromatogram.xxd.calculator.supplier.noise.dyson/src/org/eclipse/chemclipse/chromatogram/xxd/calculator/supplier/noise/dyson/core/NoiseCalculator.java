@@ -63,9 +63,7 @@ public class NoiseCalculator implements INoiseCalculator {
 			List<NoiseSegment> noiseSegments = getNoiseSegments(chromatogram, null);
 			List<Double> deltaNoiseHeights = new ArrayList<Double>();
 			for(NoiseSegment noiseSegment : noiseSegments) {
-				if(noiseSegment.hasNoise()) {
-					deltaNoiseHeights.add(noiseSegment.getNoiseFactor());
-				}
+				deltaNoiseHeights.add(noiseSegment.getNoiseFactor());
 			}
 			/*
 			 * Calculate the mean value of the standard deviations.

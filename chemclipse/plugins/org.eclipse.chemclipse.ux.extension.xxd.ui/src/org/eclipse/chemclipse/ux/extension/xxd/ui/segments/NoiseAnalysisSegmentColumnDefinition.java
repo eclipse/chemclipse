@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.segments;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.support.NoiseSegment;
-import org.eclipse.chemclipse.msd.model.xic.IonNoiseSegment;
+import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.noise.IonNoiseSegment;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
 import org.eclipse.chemclipse.support.ui.swt.columns.SimpleColumnDefinition;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -39,12 +39,11 @@ public class NoiseAnalysisSegmentColumnDefinition extends AnalysisSegmentColumnD
 					element = ((TreeNode)element).getValue();
 				}
 				if(element instanceof IonNoiseSegment) {
-					return String.valueOf((int)((IonNoiseSegment)element).getIon());
-				}
-				if(element instanceof NoiseSegment) {
-					if(((NoiseSegment)element).hasNoise()) {
+					double ion = ((IonNoiseSegment)element).getIon();
+					if(ion == IIon.TIC_ION) {
 						return "TIC";
 					}
+					return String.valueOf((int)ion);
 				}
 				return "-";
 			}

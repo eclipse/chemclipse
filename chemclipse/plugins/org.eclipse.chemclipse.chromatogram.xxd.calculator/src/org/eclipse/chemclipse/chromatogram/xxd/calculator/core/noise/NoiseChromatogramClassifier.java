@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.NoiseChromatogramClassifierSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;
 import org.eclipse.chemclipse.model.results.NoiseSegmentMeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -71,6 +73,11 @@ public class NoiseChromatogramClassifier extends AbstractChromatogramClassifier 
 				subMonitor.setWorkRemaining(100);
 			} else {
 				NoiseSegmentMeasurementResult result = new NoiseSegmentMeasurementResult(Collections.unmodifiableList(noiseSegments), segmentation, settings.getNoiseCalculatorId());
+				for(IMeasurementResult<?> oldresult : new ArrayList<>(chromatogram.getMeasurementResults())) {
+					if(oldresult instanceof NoiseSegmentMeasurementResult) {
+						chromatogram.deleteMeasurementResult(oldresult.getIdentifier());
+					}
+				}
 				chromatogram.addMeasurementResult(result);
 				return result;
 			}
