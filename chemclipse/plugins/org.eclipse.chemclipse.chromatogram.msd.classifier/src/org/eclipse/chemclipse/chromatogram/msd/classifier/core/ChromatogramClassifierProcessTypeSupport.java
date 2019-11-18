@@ -43,7 +43,10 @@ public class ChromatogramClassifierProcessTypeSupport implements IProcessTypeSup
 			List<IProcessSupplier<?>> list = new ArrayList<>();
 			for(String processorId : support.getAvailableClassifierIds()) {
 				IChromatogramClassifierSupplier supplier = support.getClassifierSupplier(processorId);
-				list.add(new ChromatogramClassifierProcessorSupplier(supplier, ChromatogramClassifier.getChromatogramClassifier(processorId), this));
+				IChromatogramClassifier classifier = ChromatogramClassifier.getChromatogramClassifier(processorId);
+				if(classifier != null && supplier != null) {
+					list.add(new ChromatogramClassifierProcessorSupplier(supplier, classifier, this));
+				}
 			}
 			return list;
 		} catch(NoChromatogramClassifierSupplierAvailableException e) {
