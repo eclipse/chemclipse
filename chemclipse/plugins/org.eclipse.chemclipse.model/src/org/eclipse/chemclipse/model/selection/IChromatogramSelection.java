@@ -16,10 +16,11 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.support.IRetentionTimeRange;
+import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.numeric.core.Point;
 
-public interface IChromatogramSelection<P extends IPeak, C extends IChromatogram<P>> extends IChromatogramUpdateListener, IRetentionTimeRange {
+public interface IChromatogramSelection<P extends IPeak, C extends IChromatogram<P>> extends IChromatogramUpdateListener, IRetentionTimeRange, IScanRange {
 
 	/**
 	 * Returns the stored chromatogram.
@@ -195,4 +196,26 @@ public interface IChromatogramSelection<P extends IPeak, C extends IChromatogram
 	Point getOffset();
 
 	void resetOffset();
+
+	@Override
+	default int getStartScan() {
+
+		int scanNumber = getChromatogram().getScanNumber(getStartRetentionTime());
+		if(scanNumber > 0) {
+			return scanNumber;
+		} else {
+			return -1;
+		}
+	}
+
+	@Override
+	default int getStopScan() {
+
+		int scanNumber = getChromatogram().getScanNumber(getStopRetentionTime());
+		if(scanNumber > 0) {
+			return scanNumber;
+		} else {
+			return -1;
+		}
+	}
 }

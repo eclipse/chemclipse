@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetec
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseChromatogramClassifier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlope;
@@ -36,6 +37,7 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
 import org.eclipse.chemclipse.model.support.IScanRange;
+import org.eclipse.chemclipse.model.support.NoiseSegment;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -53,6 +55,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMSD {
 
@@ -66,13 +69,20 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 		IProcessingInfo processingInfo = validate(chromatogramSelection, detectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
 			if(detectorSettings instanceof PeakDetectorSettingsMSD) {
+				SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 				PeakDetectorSettingsMSD peakDetectorSettings = (PeakDetectorSettingsMSD)detectorSettings;
-				List<IChromatogramPeakMSD> peaks = detectPeaks(chromatogramSelection, peakDetectorSettings, monitor);
 				IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
+				List<NoiseSegment> noiseSegments;
+				if(peakDetectorSettings.isUseNoiseSegments()) {
+					noiseSegments = NoiseChromatogramClassifier.getNoiseSegments(chromatogram, chromatogramSelection, false, subMonitor.split(10));
+				} else {
+					noiseSegments = null;
+				}
+				List<IChromatogramPeakMSD> peaks = detectPeaks(chromatogramSelection, peakDetectorSettings, noiseSegments, subMonitor.split(90));
 				for(IChromatogramPeakMSD peak : peaks) {
 					chromatogram.addPeak(peak);
 				}
-				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Peak Detector First Derivative", "Peaks have been detected successfully."));
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Peak Detector First Derivative", peaks.size() + " peak(s) have been detected."));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsMSD.class);
 			}
@@ -114,6 +124,14 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 */
 	public List<IChromatogramPeakMSD> detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
+		return detectPeaks(chromatogramSelection, peakDetectorSettings, null, monitor);
+	}
+
+	public List<IChromatogramPeakMSD> detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, List<NoiseSegment> noiseSegments, IProgressMonitor monitor) {
+
+		if(noiseSegments != null) {
+			// TODO use noise segments to optimize detection
+		}
 		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize(), new MarkedIons(IonMarkMode.EXCLUDE));
 		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
 		return extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings);

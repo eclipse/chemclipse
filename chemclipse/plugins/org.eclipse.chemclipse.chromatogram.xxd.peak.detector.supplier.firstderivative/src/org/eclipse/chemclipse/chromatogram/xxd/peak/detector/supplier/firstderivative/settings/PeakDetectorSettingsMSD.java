@@ -43,11 +43,9 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
 	@EnumSelectionSettingProperty
 	private WindowSize windowSize = WindowSize.WIDTH_5;
-	// @JsonProperty(value = "Ion Filter Mode", defaultValue = "EXCLUDE")
-	// @EnumSelectionRadioButtonsSettingProperty
-	// private FilterMode filterMode = FilterMode.EXCLUDE;
-	// @JsonProperty(value = "Filter Ions", defaultValue = "")
-	// private String filterIonsString;
+	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
+	@JsonPropertyDescription(value = "Whether to use Nois-Segments to decide where peaks should be detected, this can improve the sensitivity of the algorithm")
+	private boolean useNoiseSegments = false;
 
 	public boolean isIncludeBackground() {
 
@@ -125,5 +123,15 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 			}
 		}
 		return ionNumbers;
+	}
+
+	public boolean isUseNoiseSegments() {
+
+		return useNoiseSegments;
+	}
+
+	public void setUseNoiseSegments(boolean useNoiseSegments) {
+
+		this.useNoiseSegments = useNoiseSegments;
 	}
 }
