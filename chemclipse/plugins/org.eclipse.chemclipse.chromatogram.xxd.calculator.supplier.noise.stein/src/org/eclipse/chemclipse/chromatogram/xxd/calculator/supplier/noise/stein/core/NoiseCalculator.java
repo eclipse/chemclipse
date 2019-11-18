@@ -179,10 +179,10 @@ public class NoiseCalculator implements IonNoiseCalculator {
 				if(factor != null) {
 					IScan scan;
 					if(ion == IIon.TIC_ION) {
-						scan = CalculatorSupport.getCombinedMassSpectrum(signals, segment);
+						scan = CalculatorSupport.getCombinedMassSpectrum(signals, segment).normalize();
 					} else {
 						try {
-							scan = new ScanMSD(Collections.singleton(new Ion(ion)));
+							scan = new ScanMSD(Collections.singleton(new Ion(ion))).normalize();
 						} catch(IonLimitExceededException e) {
 							scan = null;
 						}

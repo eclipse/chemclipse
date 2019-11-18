@@ -13,6 +13,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.segments;
 
 import java.util.function.Consumer;
 
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,6 +42,10 @@ public class AnalysisSegmentSelectionChangedListener<X> implements ISelectionCha
 			Object element = ((IStructuredSelection)selection).getFirstElement();
 			if(element instanceof TreeNode) {
 				element = ((TreeNode)element).getValue();
+			}
+			IScan scan = Adapters.adapt(element, IScan.class);
+			if(scan != null) {
+				Activator.getDefault().getEventBroker().send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
 			}
 			if(type.isInstance(element)) {
 				selectionConsumer.accept(type.cast(element));
