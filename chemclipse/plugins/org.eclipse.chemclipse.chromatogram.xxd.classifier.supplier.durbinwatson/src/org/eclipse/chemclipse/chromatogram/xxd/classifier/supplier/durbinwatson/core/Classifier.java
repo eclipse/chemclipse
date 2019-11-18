@@ -25,10 +25,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class Classifier extends AbstractChromatogramClassifier {
+
+	public Classifier() {
+		super(DataType.MSD, DataType.WSD, DataType.CSD);
+	}
 
 	@Override
 	public IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {

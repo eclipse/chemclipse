@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogram
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.classifier.BasePeakClassifier;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.ILigninRatios;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences.PreferenceSupplier;
@@ -31,6 +32,10 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class Classifier extends AbstractChromatogramClassifier {
+
+	public Classifier() {
+		super(DataType.MSD);
+	}
 
 	@Override
 	public IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {

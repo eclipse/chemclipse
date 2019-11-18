@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.NoiseSegment;
 import org.eclipse.chemclipse.model.support.SegmentWidth;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -37,6 +38,10 @@ import org.eclipse.core.runtime.SubMonitor;
 public class NoiseChromatogramClassifier extends AbstractChromatogramClassifier {
 
 	private static final String NAME = "Set Noise Settings";
+
+	public NoiseChromatogramClassifier() {
+		super(DataType.MSD, DataType.WSD, DataType.CSD);
+	}
 
 	@Override
 	public IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {

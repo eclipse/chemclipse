@@ -16,12 +16,23 @@ package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
 public abstract class AbstractChromatogramClassifier implements IChromatogramClassifier {
 
 	private static final String CLASSIFIER = "Classifier";
+	private final DataType[] dataTypes;
+
+	@Deprecated
+	public AbstractChromatogramClassifier() {
+		this(DataType.MSD);
+	}
+
+	protected AbstractChromatogramClassifier(DataType... dataTypes) {
+		this.dataTypes = dataTypes;
+	}
 
 	public IProcessingInfo<IChromatogramClassifierResult> validate(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings) {
 
@@ -38,5 +49,11 @@ public abstract class AbstractChromatogramClassifier implements IChromatogramCla
 		if(chromatogramSelection.getChromatogram() == null) {
 			processingInfo.addErrorMessage(CLASSIFIER, "The chromatogram must not be null.");
 		}
+	}
+
+	@Override
+	public DataType[] getDataTypes() {
+
+		return dataTypes.clone();
 	}
 }

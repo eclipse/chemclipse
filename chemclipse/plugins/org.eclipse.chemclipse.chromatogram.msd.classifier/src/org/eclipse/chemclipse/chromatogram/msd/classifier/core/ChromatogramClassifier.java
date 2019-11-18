@@ -100,7 +100,7 @@ public class ChromatogramClassifier {
 	 * Returns a {@link IChromatogramClassifier} instance given by the classifierId or
 	 * null, if none is available.
 	 */
-	private static IChromatogramClassifier getChromatogramClassifier(final String classifierId) {
+	public static IChromatogramClassifier getChromatogramClassifier(final String classifierId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(classifierId);

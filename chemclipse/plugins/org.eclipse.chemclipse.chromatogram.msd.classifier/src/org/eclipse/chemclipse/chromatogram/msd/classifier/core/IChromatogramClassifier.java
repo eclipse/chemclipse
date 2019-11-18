@@ -16,6 +16,7 @@ package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -28,4 +29,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public interface IChromatogramClassifier {
 
 	IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor);
+
+	DataType[] getDataTypes();
 }

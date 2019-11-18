@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.NoChromatog
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -44,7 +43,7 @@ public class ChromatogramClassifierProcessTypeSupport implements IProcessTypeSup
 			List<IProcessSupplier<?>> list = new ArrayList<>();
 			for(String processorId : support.getAvailableClassifierIds()) {
 				IChromatogramClassifierSupplier supplier = support.getClassifierSupplier(processorId);
-				list.add(new ChromatogramClassifierProcessorSupplier(supplier, this));
+				list.add(new ChromatogramClassifierProcessorSupplier(supplier, ChromatogramClassifier.getChromatogramClassifier(processorId), this));
 			}
 			return list;
 		} catch(NoChromatogramClassifierSupplierAvailableException e) {
@@ -54,19 +53,18 @@ public class ChromatogramClassifierProcessTypeSupport implements IProcessTypeSup
 
 	private static final class ChromatogramClassifierProcessorSupplier extends ChromatogramSelectionProcessorSupplier<IChromatogramClassifierSettings> {
 
+		private final IChromatogramClassifier classifier;
+
 		@SuppressWarnings("unchecked")
-		public ChromatogramClassifierProcessorSupplier(IChromatogramClassifierSupplier supplier, IProcessTypeSupplier parent) {
-			super(supplier.getId(), supplier.getClassifierName(), supplier.getDescription(), (Class<IChromatogramClassifierSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD);
+		public ChromatogramClassifierProcessorSupplier(IChromatogramClassifierSupplier supplier, IChromatogramClassifier classifier, IProcessTypeSupplier parent) {
+			super(supplier.getId(), supplier.getClassifierName(), supplier.getDescription(), (Class<IChromatogramClassifierSettings>)supplier.getSettingsClass(), parent, classifier.getDataTypes());
+			this.classifier = classifier;
 		}
 
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(processSettings instanceof IChromatogramClassifierSettings) {
-				messageConsumer.addMessages(ChromatogramClassifier.applyClassifier(chromatogramSelection, processSettings, getId(), monitor));
-			} else {
-				messageConsumer.addMessages(ChromatogramClassifier.applyClassifier(chromatogramSelection, getId(), monitor));
-			}
+			classifier.applyClassifier(chromatogramSelection, processSettings, monitor);
 			return chromatogramSelection;
 		}
 	}

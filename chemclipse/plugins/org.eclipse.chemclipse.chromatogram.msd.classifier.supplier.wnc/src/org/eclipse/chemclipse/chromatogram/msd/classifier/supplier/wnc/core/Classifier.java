@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -37,6 +38,10 @@ import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class Classifier extends AbstractChromatogramClassifier {
+
+	public Classifier() {
+		super(DataType.MSD);
+	}
 
 	@Override
 	public IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
