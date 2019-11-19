@@ -11,8 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.maximize;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -45,13 +49,17 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.filter.FilterContext;
 import org.eclipse.chemclipse.processing.filter.Filtered;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DynamicSettingsUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedMeasurementResultUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.NMRMeasurementsUI;
@@ -64,6 +72,7 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -99,11 +108,13 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 	private final ProcessorFactory filterFactory;
 	private final PartSupport partSupport;
 	private ExtendedMeasurementResultUI extendedMeasurementResultUI;
+	private ProcessSupplierContext processSupplierContext;
 
 	@Inject
-	public ScanEditorNMR(Composite parent, IEventBroker eventBroker, MPart part, MDirtyable dirtyable, Shell shell, ProcessorFactory filterFactory, PartSupport partSupport) {
+	public ScanEditorNMR(Composite parent, IEventBroker eventBroker, MPart part, MDirtyable dirtyable, Shell shell, ProcessorFactory filterFactory, PartSupport partSupport, ProcessSupplierContext context) {
 		super(part);
 		this.partSupport = partSupport;
+		this.processSupplierContext = context;
 		parent.addDisposeListener(new DisposeListener() {
 
 			@Override
@@ -270,12 +281,10 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 
 	private void createEditorPages(Composite parent) {
 
-		createScanPage(parent);
-	}
-
-	private void createScanPage(Composite parent) {
-
-		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);
+		Composite container = createContainer(parent);
+		createToolbar(container);
+		SashForm sashForm = new SashForm(container, SWT.HORIZONTAL);
+		maximize(sashForm);
 		Composite left = new Composite(sashForm, SWT.NONE);
 		left.setLayout(new FillLayout());
 		Composite right = new Composite(sashForm, SWT.NONE);
@@ -284,7 +293,7 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 		extendedNMRScanUI = new ExtendedNMRScanUI(left);
 		Composite composite = new Composite(right, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
-		measurementsUI = new NMRMeasurementsUI(composite, filterFactory);
+		measurementsUI = new NMRMeasurementsUI(composite, filterFactory, processSupplierContext);
 		TreeViewer treeViewer = measurementsUI.getTreeViewer();
 		treeViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		DynamicSettingsUI settingsUI = new DynamicSettingsUI(composite, new GridData(SWT.FILL, SWT.FILL, true, false));
@@ -305,6 +314,23 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 			}
 		});
 		// extendedMeasurementResultUI = new ExtendedMeasurementResultUI(composite);
+	}
+
+	private EditorToolBar createToolbar(Composite container) {
+
+		EditorToolBar toolBar = new EditorToolBar(container);
+		toolBar.addPreferencePages(() -> {
+			List<IPreferencePage> list = new ArrayList<>();
+			list.add(new PreferencePageProcessors(processSupplierContext));
+			return list;
+		}, this::updateSetting);
+		toolBar.enableToolbarTextButton(Activator.getDefault().getPreferenceStore(), getClass().getSimpleName() + ".showToolBarText");
+		return toolBar;
+	}
+
+	private void updateSetting() {
+
+		// TODO nothing to do at the moment
 	}
 
 	private final class UpdatingObserver<FilteredType, ConfigType> implements Observer {
@@ -335,7 +361,6 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 							try {
 								DefaultProcessingResult<Object> result = new DefaultProcessingResult<>();
 								ConfigType config = context.getFilterConfig();
-								System.out.println("Filter with config " + config);
 								Collection<? extends IMeasurement> filterIMeasurements = measurementFilter.filterIMeasurements(Collections.singleton(currentMeasurement), config, Function.identity(), result, null);
 								if(!filterIMeasurements.isEmpty() && !result.hasErrorMessages()) {
 									for(IMeasurement measurement : filterIMeasurements) {

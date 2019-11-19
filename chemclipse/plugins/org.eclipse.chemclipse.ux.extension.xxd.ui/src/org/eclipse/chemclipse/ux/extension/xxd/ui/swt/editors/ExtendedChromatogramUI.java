@@ -69,13 +69,13 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceInitializer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramAxes;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
@@ -127,7 +127,6 @@ import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
-import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
@@ -201,6 +200,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	//
 	private final IEventBroker eventBroker;
 	private MethodSupportUI methodSupportUI;
+	private DataType lastMenuDataType;
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
 		this(parent, style, eventBroker, Activator.getDefault().getPreferenceStore());
@@ -533,65 +533,32 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 					datatype = DataType.CSD;
 				}
 			}
-			/*
-			 * Clean the Menu
-			 */
-			IChartSettings chartSettings = chromatogramChart.getChartSettings();
-			for(IChartMenuEntry cachedEntry : cachedMenuEntries) {
-				chartSettings.removeMenuEntry(cachedEntry);
+			if(datatype != lastMenuDataType) {
+				/*
+				 * Clean the Menu
+				 */
+				IChartSettings chartSettings = chromatogramChart.getChartSettings();
+				for(IChartMenuEntry cachedEntry : cachedMenuEntries) {
+					chartSettings.removeMenuEntry(cachedEntry);
+				}
+				cachedMenuEntries.clear();
+				/*
+				 * Dynamic Menu Items
+				 */
+				List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(EnumSet.of(datatype.toDataCategory())));
+				Collections.sort(suplierList, new CategoryNameComparator());
+				for(IProcessSupplier<?> supplier : suplierList) {
+					IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> getChromatogramSelection(), this::processChromatogram, supplier, processTypeSupport);
+					cachedMenuEntries.add(cachedEntry);
+					chartSettings.addMenuEntry(cachedEntry);
+				}
+				/*
+				 * Apply the menu items.
+				 */
+				chromatogramChart.applySettings(chartSettings);
+				lastMenuDataType = datatype;
 			}
-			cachedMenuEntries.clear();
-			/*
-			 * Dynamic Menu Items
-			 */
-			List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(EnumSet.of(datatype.toDataCategory())));
-			Collections.sort(suplierList, new CategoryNameComparator());
-			for(IProcessSupplier<?> supplier : suplierList) {
-				IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> getChromatogramSelection(), this::processChromatogram, supplier, processTypeSupport);
-				cachedMenuEntries.add(cachedEntry);
-				chartSettings.addMenuEntry(cachedEntry);
-			}
-			/*
-			 * Manage Item
-			 */
-			IChartMenuEntry cachedEntry = createProcessSettingsMenuEntry();
-			cachedMenuEntries.add(cachedEntry);
-			chartSettings.addMenuEntry(cachedEntry);
-			/*
-			 * Apply the menu items.
-			 */
-			chromatogramChart.applySettings(chartSettings);
 		}
-	}
-
-	private IChartMenuEntry createProcessSettingsMenuEntry() {
-
-		return new IChartMenuEntry() {
-
-			@Override
-			public String getName() {
-
-				return "Manage Process Settings";
-			}
-
-			@Override
-			public String getCategory() {
-
-				return "Settings";
-			}
-
-			@Override
-			public void execute(Shell shell, ScrollableChart scrollableChart) {
-
-				SettingsWizard.openManagePreferencesWizard(shell, () -> SettingsWizard.getAllPreferences(processTypeSupport));
-			}
-
-			@Override
-			public boolean isEnabled(ScrollableChart scrollableChart) {
-
-				return !SettingsWizard.getAllPreferences(processTypeSupport).isEmpty();
-			}
-		};
 	}
 
 	private void updateChromatogram() {
@@ -937,6 +904,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			@Override
 			public Collection<? extends IPreferencePage> get() {
 
+				IPreferencePage processorsPage = new PreferencePageProcessors(processTypeSupport);
 				IPreferencePage preferencePageChromatogram = new PreferencePageChromatogram();
 				preferencePageChromatogram.setTitle("Chromatogram Settings");
 				IPreferencePage preferencePageChromatogramAxes = new PreferencePageChromatogramAxes();
@@ -947,7 +915,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				preferencePageChromatogramScans.setTitle("Chromatogram Scans");
 				IPreferencePage preferencePageSWT = new PreferencePageSWT();
 				preferencePageSWT.setTitle("Settings (SWT)");
-				return Arrays.asList(preferencePageChromatogram, preferencePageChromatogramAxes, preferencePageChromatogramPeaks, preferencePageChromatogramScans, preferencePageSWT);
+				return Arrays.asList(processorsPage, preferencePageChromatogram, preferencePageChromatogramAxes, preferencePageChromatogramPeaks, preferencePageChromatogramScans, preferencePageSWT);
 			}
 		}, this::applySettings);
 		return editorToolBar;

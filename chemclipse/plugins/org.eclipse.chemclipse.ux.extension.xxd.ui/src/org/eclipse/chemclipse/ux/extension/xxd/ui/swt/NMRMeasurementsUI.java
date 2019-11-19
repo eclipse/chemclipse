@@ -37,10 +37,10 @@ import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection.ChangeType;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.filter.Filtered;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.actions.IMeasurementFilterAction;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -72,11 +72,11 @@ public class NMRMeasurementsUI implements Observer {
 	private TreeViewer treeViewer;
 	private DataNMRSelection selection;
 	private ProcessorFactory filterFactory;
-	private ProcessTypeSupport processTypeSupport;
+	private ProcessSupplierContext processSupplierContext;
 
-	public NMRMeasurementsUI(Composite parent, ProcessorFactory filterFactory) {
+	public NMRMeasurementsUI(Composite parent, ProcessorFactory filterFactory, ProcessSupplierContext processSupplierContext) {
 		this.filterFactory = filterFactory;
-		processTypeSupport = new ProcessTypeSupport();
+		this.processSupplierContext = processSupplierContext;
 		treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
 		treeViewer.setUseHashlookup(true);
 		treeViewer.getTree().setLinesVisible(true);
@@ -217,7 +217,7 @@ public class NMRMeasurementsUI implements Observer {
 					}
 				};
 				for(IMeasurementFilter<?> filter : filters) {
-					IAction action = new IMeasurementFilterAction(filter, measurements, consumer, processTypeSupport);
+					IAction action = new IMeasurementFilterAction(filter, measurements, consumer, processSupplierContext);
 					mgr.add(action);
 				}
 			}

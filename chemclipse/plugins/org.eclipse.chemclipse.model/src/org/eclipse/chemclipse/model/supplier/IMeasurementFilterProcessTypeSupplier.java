@@ -57,12 +57,17 @@ public class IMeasurementFilterProcessTypeSupplier implements IProcessTypeSuppli
 		processorFactory = factory;
 	}
 
+	public static String getID(IMeasurementFilter<?> filter) {
+
+		return "MeasurementFilter:" + filter.getID();
+	}
+
 	private static final class MeasurementFilterProcessSupplier<SettingsClass> extends AbstractProcessSupplier<SettingsClass> implements IMeasurementProcessSupplier<SettingsClass> {
 
 		private final IMeasurementFilter<SettingsClass> filter;
 
 		public MeasurementFilterProcessSupplier(IMeasurementFilter<SettingsClass> filter, IProcessTypeSupplier parent) {
-			super("MeasurementFilter:" + filter.getID(), filter.getName(), filter.getDescription(), filter.getConfigClass(), parent, filter.getDataCategories());
+			super(getID(filter), filter.getName(), filter.getDescription(), filter.getConfigClass(), parent, filter.getDataCategories());
 			this.filter = filter;
 		}
 

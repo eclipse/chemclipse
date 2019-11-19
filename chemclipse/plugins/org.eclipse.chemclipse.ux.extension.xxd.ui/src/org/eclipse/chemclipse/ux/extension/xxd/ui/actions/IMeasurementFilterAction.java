@@ -19,11 +19,13 @@ import java.util.function.Function;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.filter.IMeasurementFilter;
+import org.eclipse.chemclipse.model.supplier.IMeasurementFilterProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Shell;
 
@@ -36,10 +38,10 @@ import org.eclipse.swt.widgets.Shell;
 public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementFilter<?>, Collection<? extends IMeasurement>> {
 
 	private Collection<? extends IMeasurement> measurements;
-	private ProcessTypeSupport processTypeSupport;
+	private ProcessSupplierContext processTypeSupport;
 	private Object settings;
 
-	public IMeasurementFilterAction(IMeasurementFilter<?> filter, Collection<? extends IMeasurement> measurements, Consumer<Collection<? extends IMeasurement>> resultConsumer, ProcessTypeSupport processTypeSupport) {
+	public IMeasurementFilterAction(IMeasurementFilter<?> filter, Collection<? extends IMeasurement> measurements, Consumer<Collection<? extends IMeasurement>> resultConsumer, ProcessSupplierContext processTypeSupport) {
 		super(filter, resultConsumer);
 		this.measurements = measurements;
 		this.processTypeSupport = processTypeSupport;
@@ -50,10 +52,17 @@ public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementF
 	public void executeAction(Shell shell) {
 
 		if(processTypeSupport != null) {
-			IProcessSupplier<?> processSupplier = processTypeSupport.getSupplier(filter.getID());
+			IProcessSupplier<?> processSupplier = processTypeSupport.getSupplier(IMeasurementFilterProcessTypeSupplier.getID(filter));
 			if(processSupplier != null) {
 				try {
-					settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier));
+					ProcessorPreferences<?> preferences = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier));
+					if(preferences == null) {
+						// user canceled
+						return;
+					}
+					if(!preferences.isUseSystemDefaults()) {
+						settings = preferences.getSettings();
+					}
 				} catch(IOException e) {
 					ProcessingInfoViewSupport.updateProcessingInfoError(filter.getName(), "Can't process settings", e);
 				} catch(CancellationException e) {
