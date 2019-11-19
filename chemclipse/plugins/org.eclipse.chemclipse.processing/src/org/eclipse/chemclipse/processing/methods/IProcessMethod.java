@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.methods;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,6 +61,15 @@ public interface IProcessMethod extends ProcessEntryContainer {
 	 * @return <code>true</code> if this is a final method or <code>false</code> otherwise
 	 */
 	boolean isFinal();
+
+	/**
+	 * 
+	 * @return the underlying sourcefile or <code>null</code> if this file is not file-based
+	 */
+	default File getSourceFile() {
+
+		return null;
+	}
 
 	/**
 	 * a method might be defined in the context of valid types e.g. for Chromatography (MSD, WSD, CSD) or NMR (FID, NMR)

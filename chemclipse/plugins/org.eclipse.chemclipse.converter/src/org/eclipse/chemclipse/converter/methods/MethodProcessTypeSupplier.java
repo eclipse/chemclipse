@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -64,12 +65,46 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 
 		List<IProcessSupplier<?>> list = new ArrayList<>();
 		Collection<IProcessMethod> userMethods = MethodConverter.getUserMethods();
+		Set<String> ids = new HashSet<>();
 		for(IProcessMethod processMethod : userMethods) {
-			list.add(new UserMethodProcessSupplier(processMethod, this));
+			UserMethodProcessSupplier supplier = new UserMethodProcessSupplier(processMethod, this);
+			if(ids.contains(supplier.getId())) {
+				continue;
+			}
+			list.add(supplier);
+			ids.add(supplier.getId());
 		}
 		Collection<Collection<IProcessSupplier<?>>> values = bundleTracker.getTracked().values();
 		values.forEach(list::addAll);
 		return list;
+	}
+
+	@Override
+	public <T> IProcessSupplier<T> getSupplier(String id) {
+
+		IProcessSupplier<T> supplier = IProcessTypeSupplier.super.getSupplier(id);
+		if(supplier == null) {
+			String[] split = id.split(":", 2);
+			if(split.length == 2) {
+				String baseId = split[0];
+				for(IProcessSupplier<?> s : getProcessorSuppliers()) {
+					if(s.getId().startsWith(baseId)) {
+						return supplier;
+					}
+				}
+			}
+		}
+		return supplier;
+	}
+
+	public static String getID(IProcessMethod method) {
+
+		String baseId = "ProcessMethod." + method.getUUID();
+		File sourceFile = method.getSourceFile();
+		if(sourceFile != null) {
+			return baseId + ":" + sourceFile.getName();
+		}
+		return baseId;
 	}
 
 	private static final class UserMethodProcessSupplier extends AbstractProcessSupplier<Void> implements ProcessEntryContainer, ProcessExecutor {
@@ -77,7 +112,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 		private final IProcessMethod method;
 
 		public UserMethodProcessSupplier(IProcessMethod method, MethodProcessTypeSupplier parent) {
-			super("ProcessMethod." + method.getUUID(), method.getName(), method.getDescription(), null, parent, getDataTypes(method));
+			super(getID(method), method.getName(), method.getDescription(), null, parent, getDataTypes(method));
 			this.method = method;
 		}
 
