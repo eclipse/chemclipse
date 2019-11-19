@@ -113,12 +113,10 @@ public interface IProcessSupplier<SettingType> {
 
 		IProcessSupplier<X> supplier = processorPreferences.getSupplier();
 		try {
-			context.setContextObject(IProcessSupplier.class, supplier);
-			context.setContextObject(ProcessorPreferences.class, processorPreferences);
-			context.setContextObject(ProcessExecutionConsumer.class, consumer);
 			int numberOfCalls = 0;
 			boolean canDirectExecute = consumer.canExecute(processorPreferences);
 			ProcessExecutor supplierExecutionConsumer = null;
+			ExecutionResultTransformer<X> transformer = null;
 			if(canDirectExecute) {
 				numberOfCalls++;
 			}
@@ -126,10 +124,20 @@ public interface IProcessSupplier<SettingType> {
 				supplierExecutionConsumer = (ProcessExecutor)supplier;
 				numberOfCalls++;
 			}
+			if(supplier instanceof ExecutionResultTransformer<?>) {
+				transformer = (ExecutionResultTransformer<X>)supplier;
+				numberOfCalls++;
+			}
 			boolean mustSplit = numberOfCalls > 1;
 			if(mustSplit) {
 				context.setWorkRemaining(numberOfCalls);
 			}
+			context.setContextObject(IProcessSupplier.class, supplier);
+			context.setContextObject(ProcessorPreferences.class, processorPreferences);
+			if(transformer != null) {
+				consumer = transformer.transform(consumer, processorPreferences, mustSplit ? context.split() : context);
+			}
+			context.setContextObject(ProcessExecutionConsumer.class, consumer);
 			if(canDirectExecute) {
 				consumer.execute(processorPreferences, mustSplit ? context.split() : context);
 			}

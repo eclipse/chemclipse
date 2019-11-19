@@ -106,9 +106,31 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 				ProcessExecutionContext entryContext = context.split(processor.getContext());
 				try {
 					if(processEntry.getNumberOfEntries() > 0) {
-						entryContext.setWorkRemaining(2);
-						IProcessSupplier.applyProcessor(processorPreferences, consumer, entryContext.split());
-						applyProcessEntries(processEntry, entryContext.split(), preferenceSupplier, consumer);
+						ProcessExecutionConsumer<T> subProcessExecutionConsumer = new ProcessExecutionConsumer<T>() {
+
+							@Override
+							public <XX> void execute(ProcessorPreferences<XX> preferences, ProcessExecutionContext context) throws Exception {
+
+								ProcessExecutionContext ctx2;
+								if(consumer.canExecute(processorPreferences)) {
+									context.setWorkRemaining(2);
+									ProcessExecutionContext ctx1 = context.split();
+									ctx1.setContextObject(ProcessExecutionConsumer.class, consumer);
+									consumer.execute(preferences, ctx1);
+									ctx2 = context.split();
+								} else {
+									ctx2 = context;
+								}
+								applyProcessEntries(processEntry, ctx2, preferenceSupplier, consumer);
+							}
+
+							@Override
+							public <XX> boolean canExecute(ProcessorPreferences<XX> preferences) {
+
+								return true;
+							}
+						};
+						IProcessSupplier.applyProcessor(processorPreferences, subProcessExecutionConsumer, entryContext);
 					} else {
 						IProcessSupplier.applyProcessor(processorPreferences, consumer, entryContext);
 					}

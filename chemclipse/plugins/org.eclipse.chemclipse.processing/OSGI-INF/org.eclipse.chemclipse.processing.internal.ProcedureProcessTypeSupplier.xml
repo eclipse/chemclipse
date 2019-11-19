@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.chemclipse.processing.internal.ProcedureProcessTypeSupplier">
+   <service>
+      <provide interface="org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier"/>
+   </service>
+   <reference bind="addProcedure" cardinality="0..n" interface="org.eclipse.chemclipse.processing.procedures.Procedure" name="Procedure" policy="dynamic" unbind="removeProcedure"/>
+   <reference bind="setProcessSupplierContext" cardinality="1..1" interface="org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext" name="ProcessSupplierContext" policy="static"/>
+   <implementation class="org.eclipse.chemclipse.processing.internal.ProcedureProcessTypeSupplier"/>
+</scr:component>
