@@ -12,14 +12,32 @@
 package org.eclipse.chemclipse.processing.supplier;
 
 import java.util.Set;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 
 public interface IProcessSupplier<SettingType> {
+
+	enum SupplierType {
+		/**
+		 * The default type specifies no special behavior
+		 */
+		DEFAULT,
+		/**
+		 * A supplier might be interactive, that means that it requires some kind of user interaction to take place
+		 */
+		INTERACTIVE,
+		/**
+		 * A supplier that is structural contributes to the flow of execution but normally does not offer any mean in the context of execute a single step
+		 */
+		STRUCTURAL;
+	}
 
 	/**
 	 * 
@@ -134,15 +152,27 @@ public interface IProcessSupplier<SettingType> {
 			}
 		} catch(InterruptedException e) {
 			Thread.currentThread().interrupt();
-			return null;
+			throw new OperationCanceledException("interrupted");
 		} catch(Exception e) {
-			context.addErrorMessage(supplier.getName(), "execution throws an error, processor is skipped", e);
+			Throwable cause = e;
+			if(e instanceof ExecutionException) {
+				cause = e.getCause();
+			}
+			if(e instanceof OperationCanceledException || e instanceof CancellationException) {
+				throw new OperationCanceledException(e.getMessage());
+			}
+			context.addErrorMessage(supplier.getName(), "execution throws an error, processor is skipped", cause);
 		} finally {
 			context.setContextObject(IProcessSupplier.class, null);
 			context.setContextObject(ProcessorPreferences.class, null);
 			context.setContextObject(ProcessExecutionConsumer.class, null);
 		}
 		return consumer.getResult();
+	}
+
+	default SupplierType getType() {
+
+		return SupplierType.DEFAULT;
 	}
 
 	/**
