@@ -16,9 +16,7 @@ package org.eclipse.chemclipse.processing.supplier;
  * 
  *
  */
-public interface ProcessExecutionConsumer<T> {
-
-	<X> void execute(ProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception;
+public interface ProcessExecutionConsumer<T> extends ProcessExecutor {
 
 	/**
 	 * a consumer might be used to execute several times and thus the result might vary over time until a final result is produced
@@ -33,7 +31,7 @@ public interface ProcessExecutionConsumer<T> {
 	/**
 	 * test if this Consumer can possibly execute the given {@link ProcessorPreferences}, this method works on a best guess basis,
 	 * the general contract is that if this method return <code>false</code> it is guaranteed that execute will be a noop or throw an exception,
-	 * but if the method return <code>true</code> it is not guranteed that execute will succeed
+	 * but if the method return <code>true</code> it is not guaranteed that execute will succeed
 	 * 
 	 * @param preferences
 	 * @return <code>false</code> if this consumer can't consume this, or <code>true</code> if it might be possible
@@ -41,5 +39,16 @@ public interface ProcessExecutionConsumer<T> {
 	default <X> boolean canExecute(ProcessorPreferences<X> preferences) {
 
 		return true;
+	}
+
+	/**
+	 * creates a a new instance of this consumer with the given initial result
+	 * 
+	 * @param initialResult
+	 * @return a new instance or <code>null</code> if it can't be created from the given result object
+	 */
+	default ProcessExecutionConsumer<T> withResult(Object initialResult) {
+
+		return null;
 	}
 }

@@ -30,6 +30,10 @@ import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutor;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -68,7 +72,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 		return list;
 	}
 
-	private static final class UserMethodProcessSupplier extends AbstractProcessSupplier<Void> implements ProcessEntryContainer {
+	private static final class UserMethodProcessSupplier extends AbstractProcessSupplier<Void> implements ProcessEntryContainer, ProcessExecutor {
 
 		private final IProcessMethod method;
 
@@ -87,6 +91,13 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 		public int getNumberOfEntries() {
 
 			return method.getNumberOfEntries();
+		}
+
+		@Override
+		public <X> void execute(ProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
+
+			ProcessExecutionConsumer<?> consumer = context.getContextObject(ProcessExecutionConsumer.class);
+			ProcessEntryContainer.applyProcessEntries(method, context, consumer);
 		}
 	}
 

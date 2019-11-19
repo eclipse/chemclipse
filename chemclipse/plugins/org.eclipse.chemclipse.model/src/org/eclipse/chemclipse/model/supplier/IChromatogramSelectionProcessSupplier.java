@@ -73,6 +73,15 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 
 				return result.get();
 			}
+
+			@Override
+			public ProcessExecutionConsumer<IChromatogramSelection<?, ?>> withResult(Object initialResult) {
+
+				if(initialResult instanceof IChromatogramSelection<?, ?>) {
+					return IChromatogramSelectionProcessSupplier.createConsumer((IChromatogramSelection<?, ?>)initialResult);
+				}
+				return null;
+			}
 		};
 	}
 }

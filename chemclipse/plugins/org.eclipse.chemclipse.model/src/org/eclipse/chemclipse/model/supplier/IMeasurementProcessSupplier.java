@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.supplier;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
@@ -66,6 +68,28 @@ public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplie
 
 				IProcessSupplier<X> supplier = preferences.getSupplier();
 				return supplier instanceof IMeasurementProcessSupplier<?>;
+			}
+
+			@Override
+			public ProcessExecutionConsumer<Collection<? extends IMeasurement>> withResult(Object initialResult) {
+
+				if(initialResult instanceof IMeasurement) {
+					return IMeasurementProcessSupplier.createConsumer(Collections.singleton((IMeasurement)initialResult));
+				}
+				if(initialResult instanceof Iterable<?>) {
+					Iterable<?> iterable = (Iterable<?>)initialResult;
+					ArrayList<IMeasurement> list = new ArrayList<>();
+					for(Object object : iterable) {
+						if(object instanceof IMeasurement) {
+							list.add((IMeasurement)object);
+						} else {
+							// invalid object
+							return null;
+						}
+					}
+					return IMeasurementProcessSupplier.createConsumer(list);
+				}
+				return null;
 			}
 		};
 	}

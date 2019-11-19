@@ -16,7 +16,6 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import org.eclipse.chemclipse.processing.DataCategory;
-import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -119,21 +118,13 @@ public interface IProcessSupplier<SettingType> {
 			context.setContextObject(ProcessExecutionConsumer.class, consumer);
 			int numberOfCalls = 0;
 			boolean canDirectExecute = consumer.canExecute(processorPreferences);
-			ProcessEntryContainer container = null;
-			ProcessExecutionConsumer<?> supplierExecutionConsumer = null;
+			ProcessExecutor supplierExecutionConsumer = null;
 			if(canDirectExecute) {
 				numberOfCalls++;
 			}
-			if(supplier instanceof ProcessEntryContainer) {
-				container = (ProcessEntryContainer)supplier;
+			if(supplier instanceof ProcessExecutor) {
+				supplierExecutionConsumer = (ProcessExecutor)supplier;
 				numberOfCalls++;
-			}
-			if(supplier instanceof ProcessExecutionConsumer) {
-				ProcessExecutionConsumer<?> processExecutionConsumer = (ProcessExecutionConsumer<?>)supplier;
-				if(processExecutionConsumer.canExecute(processorPreferences)) {
-					numberOfCalls++;
-					supplierExecutionConsumer = processExecutionConsumer;
-				}
 			}
 			boolean mustSplit = numberOfCalls > 1;
 			if(mustSplit) {
@@ -141,10 +132,6 @@ public interface IProcessSupplier<SettingType> {
 			}
 			if(canDirectExecute) {
 				consumer.execute(processorPreferences, mustSplit ? context.split() : context);
-			}
-			if(container != null) {
-				// ProcessEntry Containers are always executed as is, with the default Entry Preferences
-				ProcessEntryContainer.applyProcessEntries(container, mustSplit ? context.split() : context, consumer);
 			}
 			if(supplierExecutionConsumer != null) {
 				// execution consumers might behave different, they get full control of further execution flow
