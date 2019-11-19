@@ -132,4 +132,10 @@
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_XQZuAAywEeisZuYp3s9MTg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
     </elements>
   </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_VwT2QArbEeqMVtWeZukEuw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menuseparator.new">
+    <elements xsi:type="menu:DirectMenuItem" xmi:id="_bwM8IArbEeqMVtWeZukEuw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.directmenuitem.createnewprocessingmethod" label="New Processing Method" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/method.gif" tooltip="Creates a new method that can be used to execute processing steps" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.handlers.CreateProcessMethodHandler"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_U1HpQArvEeqMVtWeZukEuw" featurename="snippets" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="basic:InputPart" xmi:id="_ZuiPQArvEeqMVtWeZukEuw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.processMethodEditor" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor" label="Untitled" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/method.gif" tooltip="Process Method Editor"/>
+  </fragments>
 </fragment:ModelFragments>

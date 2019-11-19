@@ -5,6 +5,24 @@ Bundle-SymbolicName: org.eclipse.chemclipse.ux.extension.xxd.ui;singleton:=true
 Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.ux.extension.xxd.ui.Activator
 Bundle-Vendor: ChemClipse
+Export-Package: org.eclipse.chemclipse.ux.extension.xxd.ui.actions,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.calibration,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.charts,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.custom,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.editors,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.fieldeditors,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.handlers,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.methods,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.model,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.part.support,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.parts,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.preferences,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.support,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.swt,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.wizards
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.e4.core.di;bundle-version="1.2.0",
@@ -65,27 +83,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.xxd.process.ui;bundle-version="0.8.0",
  org.eclipse.chemclipse.xxd.model;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Bundle-ActivationPolicy: lazy
-Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
- org.osgi.service.event;version="[1.0.0,2.0.0)"
-Export-Package: org.eclipse.chemclipse.ux.extension.xxd.ui.actions,
- org.eclipse.chemclipse.ux.extension.xxd.ui.calibration,
- org.eclipse.chemclipse.ux.extension.xxd.ui.charts,
- org.eclipse.chemclipse.ux.extension.xxd.ui.custom,
- org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs,
- org.eclipse.chemclipse.ux.extension.xxd.ui.editors,
- org.eclipse.chemclipse.ux.extension.xxd.ui.fieldeditors,
- org.eclipse.chemclipse.ux.extension.xxd.ui.handlers,
- org.eclipse.chemclipse.ux.extension.xxd.ui.methods,
- org.eclipse.chemclipse.ux.extension.xxd.ui.model,
- org.eclipse.chemclipse.ux.extension.xxd.ui.part.support,
- org.eclipse.chemclipse.ux.extension.xxd.ui.parts,
- org.eclipse.chemclipse.ux.extension.xxd.ui.preferences,
- org.eclipse.chemclipse.ux.extension.xxd.ui.support,
- org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts,
- org.eclipse.chemclipse.ux.extension.xxd.ui.swt,
- org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors,
- org.eclipse.chemclipse.ux.extension.xxd.ui.wizards
 Service-Component: OSGI-INF/deleteAllIdentificationsHandlerMSD.xml,
  OSGI-INF/deleteAllIdentificationsHandlerCSD.xml,
  OSGI-INF/deleteAllIdentificationsHandlerWSD.xml,
@@ -103,4 +100,9 @@ Service-Component: OSGI-INF/deleteAllIdentificationsHandlerMSD.xml,
  OSGI-INF/deleteAllQuantitationsHandlerWSD.xml,
  OSGI-INF/deleteNonQuantifiedPeaksHandlerMSD.xml,
  OSGI-INF/deleteNonQuantifiedPeaksHandlerCSD.xml,
- OSGI-INF/deleteNonQuantifiedPeaksHandlerWSD.xml 
+ OSGI-INF/deleteNonQuantifiedPeaksHandlerWSD.xml
+Bundle-ActivationPolicy: lazy
+Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
+ javax.inject;version="1.0.0",
+ org.eclipse.chemclipse.rcp.app.ui.handlers,
+ org.osgi.service.event;version="[1.0.0,2.0.0)"

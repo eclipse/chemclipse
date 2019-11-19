@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,12 +8,15 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - E4/support snippet launching
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
@@ -26,10 +29,11 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
+import org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD;
@@ -41,7 +45,9 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
 public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierEditorSupport {
 
@@ -53,9 +59,17 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	private String tooltip = "";
 	private String topicUpdateRawfile = "";
 	private String topicUpdateOverview = "";
+	private String snippetId;
+	private final Supplier<IEclipseContext> contextSupplier;
 
+	@Deprecated
 	public SupplierEditorSupport(DataType dataType) {
+		this(dataType, org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon::getEclipseContext);
+	}
+
+	public SupplierEditorSupport(DataType dataType, Supplier<IEclipseContext> contextSupplier) {
 		super(getSupplier(dataType));
+		this.contextSupplier = contextSupplier;
 		initialize(dataType);
 	}
 
@@ -102,6 +116,14 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 
 	private void initialize(DataType dataType) {
 
+		type = "";
+		elementId = "";
+		contributionURI = "";
+		iconURI = "";
+		tooltip = "";
+		topicUpdateRawfile = "";
+		topicUpdateOverview = "";
+		snippetId = "";
 		switch(dataType) {
 			case MSD_NOMINAL:
 			case MSD_TANDEM:
@@ -171,10 +193,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case MTH:
 				type = TYPE_MTH;
-				elementId = ProcessMethodEditor.ID;
-				contributionURI = ProcessMethodEditor.CONTRIBUTION_URI;
-				iconURI = ProcessMethodEditor.ICON_URI;
-				tooltip = ProcessMethodEditor.TOOLTIP;
+				snippetId = ProcessMethodEditor.SNIPPET_ID;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_METHOD_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_METHOD_UPDATE_OVERVIEW;
 				break;
@@ -188,13 +207,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				topicUpdateOverview = IChemClipseEvents.TOPIC_QUANTIATION_DATABASE_UPDATE_OVERVIEW;
 				break;
 			default:
-				type = "";
-				elementId = "";
-				contributionURI = "";
-				iconURI = "";
-				tooltip = "";
-				topicUpdateRawfile = "";
-				topicUpdateOverview = "";
+				break;
 		}
 	}
 
@@ -214,7 +227,20 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	public boolean openEditor(final File file, boolean batch) {
 
 		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
-			openEditor(file, null, elementId, contributionURI, iconURI, tooltip, batch);
+			if(!snippetId.isEmpty()) {
+				OpenSnippetHandler.openSnippet(snippetId, contextSupplier.get(), new BiFunction<IEclipseContext, MPart, Runnable>() {
+
+					@Override
+					public Runnable apply(IEclipseContext context, MPart part) {
+
+						part.setLabel(file.getName());
+						context.set(File.class, file);
+						return null;
+					}
+				});
+			} else {
+				openEditor(file, null, elementId, contributionURI, iconURI, tooltip, batch);
+			}
 			return true;
 		} else {
 			return false;
@@ -224,14 +250,26 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	@Override
 	public void openEditor(IMeasurement measurement) {
 
-		openEditor(null, measurement, elementId, contributionURI, iconURI, tooltip);
+		if(!snippetId.isEmpty()) {
+			OpenSnippetHandler.openSnippet(snippetId, contextSupplier.get(), new BiFunction<IEclipseContext, MPart, Runnable>() {
+
+				@Override
+				public Runnable apply(IEclipseContext context, MPart part) {
+
+					context.set(IMeasurement.class, measurement);
+					return null;
+				}
+			});
+		} else {
+			openEditor(null, measurement, elementId, contributionURI, iconURI, tooltip);
+		}
 	}
 
 	@Override
 	public void openOverview(final File file) {
 
 		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
-			IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+			IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 			eventBroker.send(topicUpdateRawfile, file);
 		}
 	}
@@ -239,7 +277,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	@Override
 	public void openOverview(IMeasurementInfo measurementInfo) {
 
-		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 		eventBroker.send(topicUpdateOverview, measurementInfo);
 	}
 }

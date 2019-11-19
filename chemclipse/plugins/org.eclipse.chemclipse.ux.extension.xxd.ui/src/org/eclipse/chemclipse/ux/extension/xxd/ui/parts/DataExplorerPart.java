@@ -23,10 +23,11 @@ import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ProjectExplorerSupportFactory;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageFileExplorer;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -43,9 +44,11 @@ import org.eclipse.swt.widgets.Shell;
 public class DataExplorerPart {
 
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private DataExplorerUI dataExplorerUI;
+	private final DataExplorerUI dataExplorerUI;
 	@Inject
 	private IEventBroker broker;
+	@Inject
+	private IEclipseContext context;
 	//
 
 	@Inject
@@ -61,7 +64,7 @@ public class DataExplorerPart {
 		 * MSD
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_MSD)) {
-			editorSupportList.add(new EditorSupportFactory(DataType.MSD).getInstanceEditorSupport());
+			editorSupportList.add(new SupplierEditorSupport(DataType.MSD, () -> context));
 		}
 		/*
 		 * MSD Library
@@ -79,25 +82,25 @@ public class DataExplorerPart {
 		 * CSD
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_CSD)) {
-			editorSupportList.add(new EditorSupportFactory(DataType.CSD).getInstanceEditorSupport());
+			editorSupportList.add(new SupplierEditorSupport(DataType.CSD, () -> context));
 		}
 		/*
 		 * WSD
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_WSD)) {
-			editorSupportList.add(new EditorSupportFactory(DataType.WSD).getInstanceEditorSupport());
+			editorSupportList.add(new SupplierEditorSupport(DataType.WSD, () -> context));
 		}
 		/*
 		 * XIR
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_XIR)) {
-			editorSupportList.add(new EditorSupportFactory(DataType.XIR).getInstanceEditorSupport());
+			editorSupportList.add(new SupplierEditorSupport(DataType.XIR, () -> context));
 		}
 		/*
 		 * NMR
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_NMR)) {
-			editorSupportList.add(new EditorSupportFactory(DataType.NMR).getInstanceEditorSupport());
+			editorSupportList.add(new SupplierEditorSupport(DataType.NMR, () -> context));
 		}
 		/*
 		 * CAL
@@ -109,25 +112,25 @@ public class DataExplorerPart {
 		 * PCR
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_PCR)) {
-			editorSupportList.add(new EditorSupportFactory(DataType.PCR).getInstanceEditorSupport());
+			editorSupportList.add(new SupplierEditorSupport(DataType.PCR, () -> context));
 		}
 		/*
 		 * SEQ
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_SEQUENCE)) {
-			editorSupportList.add(new EditorSupportFactory(DataType.SEQ).getInstanceEditorSupport());
+			editorSupportList.add(new SupplierEditorSupport(DataType.SEQ, () -> context));
 		}
 		/*
 		 * MTH
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_METHOD)) {
-			editorSupportList.add(new EditorSupportFactory(DataType.MTH).getInstanceEditorSupport());
+			editorSupportList.add(new SupplierEditorSupport(DataType.MTH, () -> context));
 		}
 		/*
 		 * QDB
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_QUANT_DB)) {
-			editorSupportList.add(new EditorSupportFactory(DataType.QDB).getInstanceEditorSupport());
+			editorSupportList.add(new SupplierEditorSupport(DataType.QDB, () -> context));
 		}
 		//
 		dataExplorerUI.setSupplierFileIdentifier(editorSupportList);
