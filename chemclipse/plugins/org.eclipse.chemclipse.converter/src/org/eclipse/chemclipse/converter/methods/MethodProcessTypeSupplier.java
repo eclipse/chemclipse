@@ -69,6 +69,10 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 		for(IProcessMethod processMethod : userMethods) {
 			UserMethodProcessSupplier supplier = new UserMethodProcessSupplier(processMethod, this);
 			if(ids.contains(supplier.getId())) {
+				LogService log = logService.get();
+				if(log != null) {
+					log.log(LogService.LOG_WARNING, "Duplicate id for method " + processMethod.getName() + " (id: " + supplier.getId() + ")");
+				}
 				continue;
 			}
 			list.add(supplier);
