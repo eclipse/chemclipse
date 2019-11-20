@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -39,17 +38,18 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -196,11 +196,11 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	//
 	private boolean suspendUpdate = false;
 	private final IPreferenceStore preferenceStore;
-	private final ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
+	private final ProcessSupplierContext processTypeSupport = new ProcessTypeSupport();
 	//
 	private final IEventBroker eventBroker;
 	private MethodSupportUI methodSupportUI;
-	private DataType lastMenuDataType;
+	private DataCategory lastMenuDataType;
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
 		this(parent, style, eventBroker, Activator.getDefault().getPreferenceStore());
@@ -522,15 +522,15 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			/*
 			 * Type
 			 */
-			DataType datatype = DataType.AUTO_DETECT;
+			DataCategory datatype = DataCategory.AUTO_DETECT;
 			if(chromatogramSelection != null) {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				if(chromatogram instanceof IChromatogramMSD) {
-					datatype = DataType.MSD;
+					datatype = DataCategory.MSD;
 				} else if(chromatogram instanceof IChromatogramWSD) {
-					datatype = DataType.WSD;
+					datatype = DataCategory.WSD;
 				} else if(chromatogram instanceof IChromatogramCSD) {
-					datatype = DataType.CSD;
+					datatype = DataCategory.CSD;
 				}
 			}
 			if(datatype != lastMenuDataType) {
@@ -545,10 +545,10 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				/*
 				 * Dynamic Menu Items
 				 */
-				List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(EnumSet.of(datatype.toDataCategory())));
+				List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(ProcessSupplierContext.createDataCategoryPredicate(datatype)));
 				Collections.sort(suplierList, new CategoryNameComparator());
 				for(IProcessSupplier<?> supplier : suplierList) {
-					IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> getChromatogramSelection(), this::processChromatogram, supplier, processTypeSupport);
+					IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> IChromatogramSelectionProcessSupplier.createConsumer(getChromatogramSelection()), this::processChromatogram, supplier, processTypeSupport);
 					cachedMenuEntries.add(cachedEntry);
 					chartSettings.addMenuEntry(cachedEntry);
 				}

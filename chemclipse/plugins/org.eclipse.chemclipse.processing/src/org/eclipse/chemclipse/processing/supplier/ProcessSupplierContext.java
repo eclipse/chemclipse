@@ -64,4 +64,17 @@ public interface ProcessSupplierContext {
 			}
 		};
 	}
+
+	static Predicate<IProcessSupplier<?>> createDataCategoryPredicate(DataCategory... categories) {
+
+		return supplier -> {
+			Set<DataCategory> supportedDataTypes = supplier.getSupportedDataTypes();
+			for(DataCategory dataCategory : categories) {
+				if(supportedDataTypes.contains(dataCategory)) {
+					return true;
+				}
+			}
+			return false;
+		};
+	}
 }

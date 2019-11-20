@@ -38,6 +38,9 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 
 	static ProcessExecutionConsumer<IChromatogramSelection<?, ?>> createConsumer(IChromatogramSelection<?, ?> chromatogramSelection) {
 
+		if(chromatogramSelection == null) {
+			return null;
+		}
 		return new ProcessExecutionConsumer<IChromatogramSelection<?, ?>>() {
 
 			AtomicReference<IChromatogramSelection<?, ?>> result = new AtomicReference<IChromatogramSelection<?, ?>>(chromatogramSelection);

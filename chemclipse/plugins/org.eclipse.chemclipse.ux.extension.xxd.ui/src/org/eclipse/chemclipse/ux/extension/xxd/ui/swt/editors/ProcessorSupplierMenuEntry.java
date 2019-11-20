@@ -16,11 +16,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
@@ -36,12 +35,12 @@ import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implements IChartMenuEntry {
 
 	private final IProcessSupplier<T> processorSupplier;
-	private final Supplier<IChromatogramSelection<?, ?>> supplier;
+	private final Supplier<ProcessExecutionConsumer<?>> supplier;
 	private final BiConsumer<IRunnableWithProgress, Shell> executionConsumer;
 	private final ProcessSupplierContext context;
 
-	public ProcessorSupplierMenuEntry(Supplier<IChromatogramSelection<?, ?>> chromatogramSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessSupplier<T> processorSupplier, ProcessSupplierContext context) {
-		this.supplier = chromatogramSupplier;
+	public ProcessorSupplierMenuEntry(Supplier<ProcessExecutionConsumer<?>> executionSupplier, BiConsumer<IRunnableWithProgress, Shell> executionConsumer, IProcessSupplier<T> processorSupplier, ProcessSupplierContext context) {
+		this.supplier = executionSupplier;
 		this.executionConsumer = executionConsumer;
 		this.processorSupplier = processorSupplier;
 		this.context = context;
@@ -68,8 +67,8 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 	@Override
 	public void execute(Shell shell, ScrollableChart scrollableChart) {
 
-		IChromatogramSelection<?, ?> chromatogramSelection = supplier.get();
-		if(chromatogramSelection != null) {
+		ProcessExecutionConsumer<?> consumer = supplier.get();
+		if(consumer != null) {
 			try {
 				ProcessorPreferences<T> settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processorSupplier));
 				if(settings == null) {
@@ -81,7 +80,7 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 						DefaultProcessingResult<Object> msgs = new DefaultProcessingResult<>();
-						IProcessSupplier.applyProcessor(settings, IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection), new ProcessExecutionContext(monitor, msgs, context));
+						IProcessSupplier.applyProcessor(settings, consumer, new ProcessExecutionContext(monitor, msgs, context));
 						updateResult(shell, msgs);
 					}
 				}, shell);
