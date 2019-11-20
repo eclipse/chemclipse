@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.model.results;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 
@@ -41,21 +42,24 @@ public abstract class AnalysisSegmentMeasurementResult<T extends IAnalysisSegmen
 	 * the list of segments from this result in the given range
 	 * 
 	 * @param range
+	 *            the range for which segments should be fetched
 	 * @param includeBorders
-	 * @return
+	 *            if <code>true</code> segments that only partially match are included in the result (e.g. a segment starts outside the range but ends inside it)
+	 * @return a possible empty list of segments that are available for the given range ordered by the start scan
 	 */
 	public List<T> getSegments(IScanRange range, boolean includeBorders) {
 
 		List<T> list = new ArrayList<>();
-		for(T item : getResult()) {
-			if(item.containsScan(range.getStartScan())) {
-				if(item.containsScan(range.getStopScan()) || includeBorders) {
-					list.add(item);
+		for(T segment : getResult()) {
+			if(range.containsScan(segment.getStartScan())) {
+				if(includeBorders || segment.getStopScan() <= range.getStopScan()) {
+					list.add(segment);
 				}
-			} else if(item.containsScan(range.getStopScan()) && includeBorders) {
-				list.add(item);
+			} else if(includeBorders && range.containsScan(segment.getStopScan())) {
+				list.add(segment);
 			}
 		}
+		Collections.sort(list, (o1, o2) -> o1.getStartScan() - o2.getStartScan());
 		return list;
 	}
 
