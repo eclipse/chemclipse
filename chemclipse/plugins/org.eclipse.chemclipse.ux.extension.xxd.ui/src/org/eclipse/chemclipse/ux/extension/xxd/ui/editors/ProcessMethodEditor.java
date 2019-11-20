@@ -51,16 +51,14 @@ public class ProcessMethodEditor implements IModificationHandler {
 	@Inject
 	private MPart part;
 	//
-	@Inject
-	@Optional
 	private File processMethodFile;
 	private ExtendedMethodUI extendedMethodUI;
 	@Inject
 	private ProcessMethodNotifications notifications;
 	@Inject
 	private PartSupport partsupport;
-	@Inject
-	@Optional
+	// @Inject
+	// @Optional
 	private IProcessMethod currentProcessMethod;
 	@Inject
 	private ProcessSupplierContext processSupplierContext;
@@ -100,7 +98,7 @@ public class ProcessMethodEditor implements IModificationHandler {
 				currentProcessMethod = newMethod;
 				notifications.updated(newMethod, oldMethod);
 				processMethodFile = saveFile;
-				part.setLabel(processMethodFile.getName());
+				part.setLabel(processMethodFile.getName() + " " + currentProcessMethod.getDataCategories());
 			}
 		}
 	}
@@ -132,18 +130,19 @@ public class ProcessMethodEditor implements IModificationHandler {
 	}
 
 	@PostConstruct
-	public void initialize(Composite parent) {
+	public void initialize(Composite parent, @Optional IProcessMethod processMethod, @Optional File editorInput) {
 
-		if(processMethodFile == null && currentProcessMethod == null) {
+		if(processMethod == null && editorInput == null) {
 			throw new IllegalStateException("no method file and no processmethod specified for part");
 		}
-		if(processMethodFile != null && currentProcessMethod == null) {
-			currentProcessMethod = Adapters.adapt(processMethodFile, IProcessMethod.class);
+		if(editorInput != null) {
+			currentProcessMethod = Adapters.adapt(editorInput, IProcessMethod.class);
+			processMethodFile = editorInput;
 			if(currentProcessMethod == null) {
 				throw new RuntimeException("can't read file " + processMethodFile);
 			}
 		} else {
-			part.setDirty(true);
+			currentProcessMethod = processMethod;
 		}
 		DataCategory[] categories = currentProcessMethod.getDataCategories().toArray(new DataCategory[]{});
 		if(categories == null || categories.length == 0) {
@@ -152,13 +151,13 @@ public class ProcessMethodEditor implements IModificationHandler {
 		}
 		part.setLabel(part.getLabel() + " " + Arrays.asList(categories));
 		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, processSupplierContext, categories);
-		extendedMethodUI.setProcessMethod(currentProcessMethod);
 		extendedMethodUI.setModificationHandler(this);
+		extendedMethodUI.setProcessMethod(currentProcessMethod);
 	}
 
 	@Override
 	public void setDirty(boolean dirty) {
 
-		part.setDirty(processMethodFile == null || extendedMethodUI.getProcessMethod().contentEquals(currentProcessMethod, true));
+		part.setDirty(processMethodFile == null || !extendedMethodUI.getProcessMethod().contentEquals(currentProcessMethod, true));
 	}
 }
