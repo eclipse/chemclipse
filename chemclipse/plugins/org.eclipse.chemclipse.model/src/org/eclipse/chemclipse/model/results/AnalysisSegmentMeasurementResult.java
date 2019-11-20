@@ -48,11 +48,11 @@ public abstract class AnalysisSegmentMeasurementResult<T extends IAnalysisSegmen
 
 		List<T> list = new ArrayList<>();
 		for(T item : getResult()) {
-			if(item.containsScan(range.getStartScan())) {
-				if(item.containsScan(range.getStopScan()) || includeBorders) {
+			if(range.getStartScan() < item.getStartScan()) {
+				if(range.getStopScan() > item.getStopScan() || includeBorders) {
 					list.add(item);
 				}
-			} else if(item.containsScan(range.getStopScan()) && includeBorders) {
+			} else if(range.getStopScan() > item.getStopScan() && includeBorders) {
 				list.add(item);
 			}
 		}
