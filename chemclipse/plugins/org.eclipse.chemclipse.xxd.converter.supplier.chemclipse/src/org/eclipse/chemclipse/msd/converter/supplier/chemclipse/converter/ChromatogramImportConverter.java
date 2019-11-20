@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
-import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
@@ -26,17 +25,17 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
-public class ChromatogramImportConverter extends AbstractChromatogramImportConverter implements IChromatogramImportConverter {
+public class ChromatogramImportConverter extends AbstractChromatogramImportConverter<IChromatogramMSD> {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramImportConverter.class);
 
 	@Override
-	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramMSD> convert(File file, IProgressMonitor monitor) {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Convert file " + file.getName(), 100);
 		try {
 			subMonitor.subTask("Validate");
-			IProcessingInfo processingInfo = super.validate(file);
+			IProcessingInfo<IChromatogramMSD> processingInfo = super.validate(file);
 			if(!processingInfo.hasErrorMessages()) {
 				/*
 				 * Read the chromatogram.

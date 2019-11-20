@@ -51,12 +51,12 @@ import org.eclipse.swt.widgets.ToolItem;
 public class ChromatogramReferencesUI {
 
 	private Action buttonPrevious;
-	private ComboContainer comboChromatograms;
+	private final ComboContainer comboChromatograms;
 	private Action buttonNext;
 	private Action buttonAdd;
 	private Action buttonRemove;
 	private Action buttonTargetTransfer;
-	private EditorToolBar toolBar;
+	private final EditorToolBar toolBar;
 
 	public ChromatogramReferencesUI(EditorToolBar editorToolBar, Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
 		comboChromatograms = new ComboContainer(chromatogramReferencesListener.andThen(t -> updateButtons()));
@@ -140,19 +140,7 @@ public class ChromatogramReferencesUI {
 				comboChromatograms.setSelection(StructuredSelection.EMPTY);
 				comboChromatograms.setInput(Collections.emptyList());
 			} else {
-				List<IChromatogramSelection<?, ?>> chromatogramMasterAndReferences = new ArrayList<>();
-				chromatogramMasterAndReferences.add(chromatogramSelection);
-				List<IChromatogram<?>> referencedChromatograms = chromatogramSelection.getChromatogram().getReferencedChromatograms();
-				for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
-					if(referencedChromatogram instanceof IChromatogramCSD) {
-						chromatogramMasterAndReferences.add(new ChromatogramSelectionCSD((IChromatogramCSD)referencedChromatogram));
-					} else if(referencedChromatogram instanceof IChromatogramMSD) {
-						chromatogramMasterAndReferences.add(new ChromatogramSelectionMSD((IChromatogramMSD)referencedChromatogram));
-					} else if(referencedChromatogram instanceof IChromatogramWSD) {
-						chromatogramMasterAndReferences.add(new ChromatogramSelectionWSD((IChromatogramWSD)referencedChromatogram));
-					}
-				}
-				comboChromatograms.setInput(chromatogramMasterAndReferences);
+				update();
 				comboChromatograms.setSelection(new StructuredSelection(chromatogramSelection));
 			}
 			updateButtons();
@@ -385,5 +373,24 @@ public class ChromatogramReferencesUI {
 				}
 			}
 		}
+	}
+
+	public void update() {
+
+		List<IChromatogramSelection<?, ?>> chromatogramMasterAndReferences = new ArrayList<>();
+		if(comboChromatograms.master != null) {
+			chromatogramMasterAndReferences.add(comboChromatograms.master);
+			List<IChromatogram<?>> referencedChromatograms = comboChromatograms.master.getChromatogram().getReferencedChromatograms();
+			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+				if(referencedChromatogram instanceof IChromatogramCSD) {
+					chromatogramMasterAndReferences.add(new ChromatogramSelectionCSD((IChromatogramCSD)referencedChromatogram));
+				} else if(referencedChromatogram instanceof IChromatogramMSD) {
+					chromatogramMasterAndReferences.add(new ChromatogramSelectionMSD((IChromatogramMSD)referencedChromatogram));
+				} else if(referencedChromatogram instanceof IChromatogramWSD) {
+					chromatogramMasterAndReferences.add(new ChromatogramSelectionWSD((IChromatogramWSD)referencedChromatogram));
+				}
+			}
+		}
+		comboChromatograms.setInput(chromatogramMasterAndReferences);
 	}
 }

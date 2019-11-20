@@ -94,7 +94,11 @@ public class ProcessingInfoViewSupport {
 					}
 					// focus the view if requested, this will open the feedback view if required
 					if(focusProcessingInfoView) {
-						ModelSupportAddon.focusPart(ProcessingInfoPart.ID);
+						try {
+							ModelSupportAddon.focusPart(ProcessingInfoPart.ID);
+						} catch(IllegalStateException e) {
+							// ignore then...
+						}
 					}
 				}
 			});

@@ -222,6 +222,10 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		if(file != null) {
 			return file.getName();
 		} else {
+			String dataName = getDataName();
+			if(dataName != null && !dataName.isEmpty()) {
+				return dataName;
+			}
 			return DEFAULT_CHROMATOGRAM_NAME;
 		}
 	}

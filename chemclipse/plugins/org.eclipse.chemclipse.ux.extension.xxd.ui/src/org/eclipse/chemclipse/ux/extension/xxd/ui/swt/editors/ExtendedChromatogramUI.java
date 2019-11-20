@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -48,6 +49,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier.SupplierType;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
@@ -487,6 +489,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			monitor.run(true, true, runnable);
 			updateChromatogram();
 			updateSelection();
+			chromatogramReferencesUI.update();
 			fireUpdate(shell.getDisplay());
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
@@ -545,7 +548,14 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				/*
 				 * Dynamic Menu Items
 				 */
-				List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(ProcessSupplierContext.createDataCategoryPredicate(datatype)));
+				List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(ProcessSupplierContext.createDataCategoryPredicate(datatype).and(new Predicate<IProcessSupplier>() {
+
+					@Override
+					public boolean test(IProcessSupplier supplier) {
+
+						return supplier.getType() != SupplierType.STRUCTURAL;
+					}
+				})));
 				Collections.sort(suplierList, new CategoryNameComparator());
 				for(IProcessSupplier<?> supplier : suplierList) {
 					IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> IChromatogramSelectionProcessSupplier.createConsumer(getChromatogramSelection()), this::processChromatogram, supplier, processTypeSupport);

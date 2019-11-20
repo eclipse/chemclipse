@@ -19,7 +19,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.numeric;bundle-version="0.8.0",
  org.eclipse.chemclipse.wsd.converter;bundle-version="0.8.0",
  org.eclipse.chemclipse.wsd.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.xxd.model;bundle-version="0.8.0"
+ org.eclipse.chemclipse.xxd.model;bundle-version="0.8.0",
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter,
@@ -29,3 +30,5 @@ Export-Package: org.eclipse.chemclipse.csd.converter.supplier.chemclipse.convert
  org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter,
  org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences,
  org.eclipse.chemclipse.xxd.converter.supplier.io.exception
+Import-Package: org.osgi.service.component.annotations;version="1.2.0"
+Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ChromatogramProcedure.xml

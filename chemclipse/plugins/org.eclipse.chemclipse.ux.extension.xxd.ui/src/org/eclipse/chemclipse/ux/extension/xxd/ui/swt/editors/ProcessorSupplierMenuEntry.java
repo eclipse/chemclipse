@@ -19,6 +19,7 @@ import java.util.function.Supplier;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier.SupplierType;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
@@ -55,7 +56,11 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 	@Override
 	public String getName() {
 
-		return processorSupplier.getName();
+		String name = processorSupplier.getName();
+		if(processorSupplier.getType() == SupplierType.INTERACTIVE) {
+			return name + " ...";
+		}
+		return name;
 	}
 
 	@Override

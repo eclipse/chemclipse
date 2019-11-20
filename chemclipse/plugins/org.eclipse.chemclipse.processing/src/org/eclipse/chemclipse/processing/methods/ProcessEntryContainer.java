@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.processing.methods;
 import java.util.Iterator;
 import java.util.function.BiFunction;
 
+import org.eclipse.chemclipse.processing.methods.SubProcessExecutionConsumer.SubProcess;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
@@ -106,31 +107,14 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 				ProcessExecutionContext entryContext = context.split(processor.getContext());
 				try {
 					if(processEntry.getNumberOfEntries() > 0) {
-						ProcessExecutionConsumer<T> subProcessExecutionConsumer = new ProcessExecutionConsumer<T>() {
+						IProcessSupplier.applyProcessor(processorPreferences, new SubProcessExecutionConsumer<T>(consumer, new SubProcess<T>() {
 
 							@Override
-							public <XX> void execute(ProcessorPreferences<XX> preferences, ProcessExecutionContext context) throws Exception {
+							public <SubX> void execute(ProcessorPreferences<SubX> preferences, ProcessExecutionConsumer<T> parent, ProcessExecutionContext subcontext) {
 
-								ProcessExecutionContext ctx2;
-								if(consumer.canExecute(processorPreferences)) {
-									context.setWorkRemaining(2);
-									ProcessExecutionContext ctx1 = context.split();
-									ctx1.setContextObject(ProcessExecutionConsumer.class, consumer);
-									consumer.execute(preferences, ctx1);
-									ctx2 = context.split();
-								} else {
-									ctx2 = context;
-								}
-								applyProcessEntries(processEntry, ctx2, preferenceSupplier, consumer);
+								applyProcessEntries(processEntry, subcontext, preferenceSupplier, parent);
 							}
-
-							@Override
-							public <XX> boolean canExecute(ProcessorPreferences<XX> preferences) {
-
-								return true;
-							}
-						};
-						IProcessSupplier.applyProcessor(processorPreferences, subProcessExecutionConsumer, entryContext);
+						}), entryContext);
 					} else {
 						IProcessSupplier.applyProcessor(processorPreferences, consumer, entryContext);
 					}

@@ -26,4 +26,10 @@ public class ProcessingInfo<T> extends AbstractProcessingInfo<T> implements IPro
 		super();
 		setProcessingResult(initialResult);
 	}
+
+	@Override
+	public String toString() {
+
+		return "Result: " + getProcessingResult() + ", Messages: " + getMessages();
+	}
 }
