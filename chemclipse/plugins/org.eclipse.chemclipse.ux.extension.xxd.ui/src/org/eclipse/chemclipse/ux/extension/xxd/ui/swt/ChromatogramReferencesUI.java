@@ -121,6 +121,10 @@ public class ChromatogramReferencesUI {
 							if(index == 0) {
 								return "Master Chromatogram " + type;
 							} else {
+								String dataName = selection.getChromatogram().getDataName();
+								if(dataName != null && !dataName.isEmpty()) {
+									return dataName + " " + type;
+								}
 								return "Referenced Chromatogram (" + index + ") " + type;
 							}
 						}
@@ -379,16 +383,22 @@ public class ChromatogramReferencesUI {
 
 		List<IChromatogramSelection<?, ?>> chromatogramMasterAndReferences = new ArrayList<>();
 		if(comboChromatograms.master != null) {
-			chromatogramMasterAndReferences.add(comboChromatograms.master);
-			List<IChromatogram<?>> referencedChromatograms = comboChromatograms.master.getChromatogram().getReferencedChromatograms();
+			IChromatogramSelection<?, ?> masterSelection = comboChromatograms.master;
+			chromatogramMasterAndReferences.add(masterSelection);
+			List<IChromatogram<?>> referencedChromatograms = masterSelection.getChromatogram().getReferencedChromatograms();
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+				IChromatogramSelection<?, ?> referenceSelection;
 				if(referencedChromatogram instanceof IChromatogramCSD) {
-					chromatogramMasterAndReferences.add(new ChromatogramSelectionCSD((IChromatogramCSD)referencedChromatogram));
+					referenceSelection = new ChromatogramSelectionCSD((IChromatogramCSD)referencedChromatogram);
 				} else if(referencedChromatogram instanceof IChromatogramMSD) {
-					chromatogramMasterAndReferences.add(new ChromatogramSelectionMSD((IChromatogramMSD)referencedChromatogram));
+					referenceSelection = new ChromatogramSelectionMSD((IChromatogramMSD)referencedChromatogram);
 				} else if(referencedChromatogram instanceof IChromatogramWSD) {
-					chromatogramMasterAndReferences.add(new ChromatogramSelectionWSD((IChromatogramWSD)referencedChromatogram));
+					referenceSelection = new ChromatogramSelectionWSD((IChromatogramWSD)referencedChromatogram);
+				} else {
+					continue;
 				}
+				chromatogramMasterAndReferences.add(referenceSelection);
+				referenceSelection.setRangeRetentionTime(masterSelection.getStartRetentionTime(), masterSelection.getStopRetentionTime());
 			}
 		}
 		comboChromatograms.setInput(chromatogramMasterAndReferences);

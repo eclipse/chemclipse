@@ -61,18 +61,14 @@ public class ChromatogramDataSupport {
 
 	public static String getChromatogramType(IChromatogram<?> chromatogram) {
 
-		String type;
 		if(chromatogram instanceof IChromatogramMSD) {
-			type = "[MSD]";
+			return "[MSD]";
 		} else if(chromatogram instanceof IChromatogramCSD) {
-			type = "[CSD]";
+			return "[CSD]";
 		} else if(chromatogram instanceof IChromatogramWSD) {
-			type = "[WSD]";
-		} else {
-			type = "";
+			return "[WSD]";
 		}
-		//
-		return type;
+		return "";
 	}
 
 	/**
