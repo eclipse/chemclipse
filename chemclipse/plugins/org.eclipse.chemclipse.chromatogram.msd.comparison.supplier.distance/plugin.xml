@@ -25,17 +25,5 @@
             highResolutionMS="false">
       </ComparisonSupplier>   
    </extension>   
-   <extension
-         point="org.eclipse.chemclipse.chromatogram.msd.comparison.massSpectrumComparisonSupplier">
-      <ComparisonSupplier
-            comparatorName="Cosine Unit"
-            description="This comparator calculates the similarity between two mass spectra with the Cosine Unit value (0 or 1)."
-            id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.cosineunit"
-            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.CosineUnitMassSpectrumComparator"
-            nominalMS="true"
-            tandemMS="false"
-            highResolutionMS="false">
-      </ComparisonSupplier>   
-   </extension>
 
 </plugin>
