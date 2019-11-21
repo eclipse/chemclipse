@@ -63,8 +63,8 @@ public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator
 		double unknown[] = new double[size];
 		double reference[] = new double[size];
 		for(int i = unknownSignal.getStartIon(), j = 0; i <= unknownSignal.getStopIon(); i++, j++) {
-			unknown[j] = unknownSignal.getAbundance(i);
-			reference[j] = referenceSignal.getAbundance(i);
+			unknown[j] = getVectorValue(unknownSignal, i);
+			reference[j] = getVectorValue(referenceSignal, i);
 		}
 		/*
 		 * Calculate the cosine phi.
@@ -79,6 +79,11 @@ public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator
 			match = 0.0f;
 		}
 		return match;
+	}
+
+	protected double getVectorValue(IExtractedIonSignal signal, int i) {
+
+		return signal.getAbundance(i);
 	}
 
 	public float calculateCosinePhiDirect(IExtractedIonSignal unknownSignal, IExtractedIonSignal referenceSignal) {
