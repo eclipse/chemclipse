@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -79,5 +80,17 @@ public interface IPeaks<T extends IPeak> {
 	default int size() {
 
 		return getPeaks().size();
+	}
+
+	static <X extends IPeak> IPeaks<X> singelton(X peak) {
+
+		return new IPeaks<X>() {
+
+			@Override
+			public List<X> getPeaks() {
+
+				return Collections.singletonList(peak);
+			}
+		};
 	}
 }

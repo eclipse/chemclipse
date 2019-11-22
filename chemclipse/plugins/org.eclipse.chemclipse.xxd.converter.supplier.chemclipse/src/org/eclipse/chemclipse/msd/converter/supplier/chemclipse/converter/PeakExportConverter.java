@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter;
 
@@ -15,18 +16,11 @@ import java.io.File;
 
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakExportConverter;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakExportConverter extends AbstractPeakExportConverter {
-
-	@Override
-	public IProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) {
-
-		return getErrorMessage();
-	}
 
 	@Override
 	public IProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {

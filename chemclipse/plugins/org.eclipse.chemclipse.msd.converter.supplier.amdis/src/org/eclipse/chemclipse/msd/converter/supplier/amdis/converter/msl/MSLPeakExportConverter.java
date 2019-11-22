@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl;
 
@@ -37,39 +38,6 @@ public class MSLPeakExportConverter extends AbstractPeakExportConverter {
 
 	private static final Logger logger = Logger.getLogger(MSLPeakExportConverter.class);
 	private static final String DESCRIPTION = "AMDIS MSL Peak Export";
-
-	@Override
-	public IProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) {
-
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		/*
-		 * Checks that file and mass spectrum are not null.
-		 */
-		file = SpecificationValidatorMSL.validateSpecification(file);
-		IProcessingInfo processingInfoValidate = validate(file, peak);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
-			try {
-				/*
-				 * Convert the mass spectrum.
-				 */
-				PeakWriterMSL peakWriter = new PeakWriterMSL();
-				peakWriter.write(file, peak, append, monitor);
-				processingInfo.setProcessingResult(file);
-			} catch(FileNotFoundException e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "The file couldn't be found: " + file.getAbsolutePath());
-			} catch(FileIsNotWriteableException e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "The file is not writeable: " + file.getAbsolutePath());
-			} catch(IOException e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "Something has gone completely wrong: " + file.getAbsolutePath());
-			}
-		}
-		return processingInfo;
-	}
 
 	@Override
 	public IProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {

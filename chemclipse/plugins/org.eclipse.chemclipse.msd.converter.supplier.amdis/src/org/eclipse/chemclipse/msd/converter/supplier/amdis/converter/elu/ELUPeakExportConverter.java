@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - Adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.elu;
 
@@ -15,19 +16,12 @@ import java.io.File;
 
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakExportConverter;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 @SuppressWarnings({"rawtypes"})
 public class ELUPeakExportConverter extends AbstractPeakExportConverter {
-
-	@Override
-	public IProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) {
-
-		return getNoSupportMessage();
-	}
 
 	@Override
 	public IProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {

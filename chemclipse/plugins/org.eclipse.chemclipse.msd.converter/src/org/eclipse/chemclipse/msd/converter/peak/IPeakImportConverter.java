@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,12 +8,14 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.peak;
 
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IImportConverter;
+import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -26,5 +28,5 @@ public interface IPeakImportConverter extends IImportConverter {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	IProcessingInfo convert(File file, IProgressMonitor monitor);
+	IProcessingInfo<IPeaks<?>> convert(File file, IProgressMonitor monitor);
 }
