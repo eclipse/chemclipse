@@ -35,7 +35,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 public class TestSupport {
 
 	public TestSupport() {
-
 	}
 
 	public static void putScanDataToMap(String name, String groupName, int[] retentionTimes, float[] totalSignal, Map<IDataInputEntry, Collection<IScan>> map) {
@@ -43,7 +42,7 @@ public class TestSupport {
 		map.put(createDataInputEntry(name, groupName), createScans(retentionTimes, totalSignal));
 	}
 
-	public static void putPeakDataToMap(String name, String groupName, int[] retentionTimes, double[] integrationArea, Map<IDataInputEntry, IPeaks> map) {
+	public static void putPeakDataToMap(String name, String groupName, int[] retentionTimes, double[] integrationArea, Map<IDataInputEntry, IPeaks<?>> map) {
 
 		map.put(createDataInputEntry(name, groupName), cretePeaks(retentionTimes, integrationArea));
 	}
@@ -88,8 +87,7 @@ public class TestSupport {
 		for(double sampleData[] : data) {
 			final int iFinal = i;
 			IntStream.range(0, variables.length).forEach(variable -> //
-	    samplesOutput.getSampleList().get(iFinal).getSampleData()
-		    .add(new PeakSampleData(sampleData[variable], null)));
+			samplesOutput.getSampleList().get(iFinal).getSampleData().add(new PeakSampleData(sampleData[variable], null)));
 			i++;
 		}
 		return samplesOutput;

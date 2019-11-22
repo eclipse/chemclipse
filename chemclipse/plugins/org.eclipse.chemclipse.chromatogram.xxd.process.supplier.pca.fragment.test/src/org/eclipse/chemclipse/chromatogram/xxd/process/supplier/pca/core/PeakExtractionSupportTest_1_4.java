@@ -33,7 +33,7 @@ public class PeakExtractionSupportTest_1_4 {
 	public void setUp() {
 
 		PeakExtractionSupport peakExtractionSupport = new PeakExtractionSupport(1);
-		Map<IDataInputEntry, IPeaks> dataInput = new LinkedHashMap<>();
+		Map<IDataInputEntry, IPeaks<?>> dataInput = new LinkedHashMap<>();
 		TestSupport.putPeakDataToMap("Sample1", "Group1", new int[]{1, 2}, new double[]{3.2, 3.4}, dataInput);
 		TestSupport.putPeakDataToMap("Sample2", "Group2", new int[]{1, 2}, new double[]{7, 10}, dataInput);
 		TestSupport.putPeakDataToMap("Sample3", null, new int[]{1, 2, 3}, new double[]{2, 3, 4}, dataInput);
