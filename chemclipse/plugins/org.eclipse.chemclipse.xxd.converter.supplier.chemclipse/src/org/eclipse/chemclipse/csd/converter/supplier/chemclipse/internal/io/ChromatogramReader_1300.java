@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to API Changes
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io;
 
@@ -91,6 +92,7 @@ import org.eclipse.core.runtime.SubMonitor;
 public class ChromatogramReader_1300 extends AbstractChromatogramReader implements IChromatogramCSDZipReader {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReader_1300.class);
+	private static final String CLASSIFIER_DELIMITER = " ";
 
 	@Override
 	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -382,7 +384,10 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		peak.setModelDescription(modelDescription);
 		peak.setPeakType(peakType);
 		peak.setSuggestedNumberOfComponents(suggestedNumberOfComponents);
-		peak.setClassifier(classifier);
+		String[] classifiers = classifier.split(CLASSIFIER_DELIMITER);
+		for(String c : classifiers) {
+			peak.addClassifier(c);
+		}
 		//
 		List<IIntegrationEntry> integrationEntries = readIntegrationEntries(dataInputStream);
 		peak.setIntegratedArea(integrationEntries, integratorDescription);

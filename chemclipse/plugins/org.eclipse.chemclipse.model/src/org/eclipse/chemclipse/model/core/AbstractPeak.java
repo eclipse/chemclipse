@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust API
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,8 +30,6 @@ import org.eclipse.chemclipse.model.support.IntegrationConstraints;
 
 public abstract class AbstractPeak implements IPeak {
 
-	private static final String CLASSIFIER_DELIMITER = " ";
-	//
 	private String modelDescription = "";
 	private PeakType peakType = PeakType.DEFAULT;
 	private int suggestedNumberOfComponents = 0; // 0 is the default
@@ -38,11 +38,11 @@ public abstract class AbstractPeak implements IPeak {
 	private String quantifierDescription = "";
 	private boolean activeForAnalysis = true;
 	private List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
-	private IIntegrationConstraints integrationConstraints = new IntegrationConstraints();
-	private Set<IQuantitationEntry> quantitationEntries = new HashSet<IQuantitationEntry>();
-	private List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
-	private List<String> quantitationReferences = new ArrayList<String>(); // Used to quantify against certain ISTDs or ESTDs
-	private String classifier = "";
+	private final IIntegrationConstraints integrationConstraints = new IntegrationConstraints();
+	private final Set<IQuantitationEntry> quantitationEntries = new HashSet<IQuantitationEntry>();
+	private final List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
+	private final List<String> quantitationReferences = new ArrayList<String>(); // Used to quantify against certain ISTDs or ESTDs
+	private final Set<String> classifier = new LinkedHashSet<>();
 
 	@Override
 	public String getModelDescription() {
@@ -318,30 +318,26 @@ public abstract class AbstractPeak implements IPeak {
 	}
 
 	@Override
-	public String getClassifier() {
+	public Set<IIdentificationTarget> getTargets() {
 
-		return classifier;
+		return getPeakModel().getPeakMaximum().getTargets();
 	}
 
 	@Override
-	public void setClassifier(String classifier) {
+	public Collection<String> getClassifier() {
 
-		this.classifier = classifier;
+		return Collections.unmodifiableCollection(classifier);
 	}
 
 	@Override
 	public void addClassifier(String classifier) {
 
-		if(classifier != null && !"".equals(classifier)) {
-			if(!this.classifier.contains(classifier)) {
-				this.classifier = this.classifier + CLASSIFIER_DELIMITER + classifier;
-			}
-		}
+		this.classifier.add(classifier);
 	}
 
 	@Override
-	public Set<IIdentificationTarget> getTargets() {
+	public void removeClassifier(String classifier) {
 
-		return getPeakModel().getPeakMaximum().getTargets();
+		this.classifier.remove(classifier);
 	}
 }

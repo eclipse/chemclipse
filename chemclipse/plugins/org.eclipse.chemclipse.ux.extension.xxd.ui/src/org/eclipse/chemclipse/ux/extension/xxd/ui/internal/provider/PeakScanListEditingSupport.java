@@ -21,8 +21,8 @@ import org.eclipse.jface.viewers.TextCellEditor;
 public class PeakScanListEditingSupport extends EditingSupport {
 
 	private CellEditor cellEditor;
-	private ExtendedTableViewer tableViewer;
-	private String column;
+	private final ExtendedTableViewer tableViewer;
+	private final String column;
 
 	public PeakScanListEditingSupport(ExtendedTableViewer tableViewer, String column) {
 		super(tableViewer);
@@ -74,9 +74,6 @@ public class PeakScanListEditingSupport extends EditingSupport {
 			switch(column) {
 				case PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS:
 					peak.setActiveForAnalysis((boolean)value);
-					break;
-				case PeakScanListLabelProvider.CLASSIFIER:
-					peak.setClassifier((String)value);
 					break;
 			}
 			tableViewer.refresh();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to API Changes
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io;
 
@@ -77,6 +78,7 @@ import org.eclipse.core.runtime.SubMonitor;
  */
 public class PeakReader_1300 extends AbstractZipReader implements IPeakReader {
 
+	private static final String CLASSIFIER_DELIMITER = " ";
 	private static final Logger logger = Logger.getLogger(PeakReader_1300.class);
 
 	@Override
@@ -155,7 +157,10 @@ public class PeakReader_1300 extends AbstractZipReader implements IPeakReader {
 		peak.setModelDescription(modelDescription);
 		peak.setPeakType(peakType);
 		peak.setSuggestedNumberOfComponents(suggestedNumberOfComponents);
-		peak.setClassifier(classifier);
+		String[] classifiers = classifier.split(CLASSIFIER_DELIMITER);
+		for(String c : classifiers) {
+			peak.addClassifier(c);
+		}
 		//
 		List<IIntegrationEntry> integrationEntries = readIntegrationEntries(dataInputStream);
 		peak.setIntegratedArea(integrationEntries, integratorDescription);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,8 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
+
+import java.util.Collection;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -23,7 +26,7 @@ public class PeakScanListFilter extends ViewerFilter {
 
 	private String searchText;
 	private boolean caseSensitive;
-	private LibraryInformationSupport libraryInformationSupport = new LibraryInformationSupport();
+	private final LibraryInformationSupport libraryInformationSupport = new LibraryInformationSupport();
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
 
@@ -82,20 +85,19 @@ public class PeakScanListFilter extends ViewerFilter {
 
 		boolean isMatch = false;
 		//
-		String classifier = peak.getClassifier();
+		Collection<String> classifier = peak.getClassifier();
 		String detectorDescription = peak.getDetectorDescription();
 		String modelDescription = peak.getModelDescription();
 		String quantifierDescription = peak.getQuantifierDescription();
 		//
 		if(!caseSensitive) {
 			searchText = searchText.toLowerCase();
-			classifier = classifier.toLowerCase();
 			detectorDescription = detectorDescription.toLowerCase();
 			modelDescription = modelDescription.toLowerCase();
 			quantifierDescription = quantifierDescription.toLowerCase();
 		}
 		//
-		if(!isMatch && matchText(classifier, searchText)) {
+		if(!isMatch && matchText(classifier, searchText, caseSensitive)) {
 			isMatch = true;
 		}
 		//
@@ -114,7 +116,20 @@ public class PeakScanListFilter extends ViewerFilter {
 		return isMatch;
 	}
 
-	private boolean matchText(String text, String searchText) {
+	private static boolean matchText(Collection<String> classifier, String searchText, boolean caseSensitive) {
+
+		for(String c : classifier) {
+			if(!caseSensitive) {
+				c = c.toLowerCase();
+			}
+			if(matchText(c, searchText)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean matchText(String text, String searchText) {
 
 		return text.matches(searchText);
 	}

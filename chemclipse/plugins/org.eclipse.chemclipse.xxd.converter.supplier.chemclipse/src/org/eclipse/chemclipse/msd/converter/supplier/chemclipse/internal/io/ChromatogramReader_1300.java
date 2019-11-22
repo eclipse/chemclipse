@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to API Changes
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io;
 
@@ -106,6 +107,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  */
 public class ChromatogramReader_1300 extends AbstractChromatogramReader implements IChromatogramMSDZipReader {
 
+	private static final String CLASSIFIER_DELIMITER = " ";
 	private static final Logger logger = Logger.getLogger(ChromatogramReader_1300.class);
 
 	@Override
@@ -440,7 +442,10 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		peak.setModelDescription(modelDescription);
 		peak.setPeakType(peakType);
 		peak.setSuggestedNumberOfComponents(suggestedNumberOfComponents);
-		peak.setClassifier(classifier);
+		String[] classifiers = classifier.split(CLASSIFIER_DELIMITER);
+		for(String c : classifiers) {
+			peak.addClassifier(c);
+		}
 		//
 		List<IIntegrationEntry> integrationEntries = readIntegrationEntries(dataInputStream);
 		peak.setIntegratedArea(integrationEntries, integratorDescription);

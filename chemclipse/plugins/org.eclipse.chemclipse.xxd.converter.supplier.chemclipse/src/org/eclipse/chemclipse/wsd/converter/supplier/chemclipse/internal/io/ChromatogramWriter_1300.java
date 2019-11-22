@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to API Changes
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io;
 
@@ -17,6 +18,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,6 +63,8 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implements IChromatogramWSDZipWriter {
 
+	private static final String CLASSIFIER_DELIMITER = " ";
+
 	@Override
 	public void writeChromatogram(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
@@ -82,7 +86,6 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.close();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void writeChromatogram(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
@@ -343,7 +346,8 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		writeString(dataOutputStream, peak.getModelDescription()); // Model Description
 		writeString(dataOutputStream, peak.getPeakType().toString()); // Peak Type
 		dataOutputStream.writeInt(peak.getSuggestedNumberOfComponents()); // Suggest Number Of Components
-		writeString(dataOutputStream, peak.getClassifier());
+		// TODO in newer formats we should store them in a more generic way, but for backward compatibility we can't do much here atm
+		writeString(dataOutputStream, joinString(peak.getClassifier()));
 		//
 		dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStartRetentionTime())); // Start Background Abundance
 		dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStopRetentionTime())); // Stop Background Abundance
@@ -416,6 +420,20 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		 * Internal Standards
 		 */
 		writeIntenalStandards(dataOutputStream, peak.getInternalStandards());
+	}
+
+	private String joinString(Collection<String> classifier) {
+
+		StringBuilder sb = new StringBuilder();
+		if(classifier != null) {
+			for(String c : classifier) {
+				if(sb.length() > 0) {
+					sb.append(CLASSIFIER_DELIMITER);
+				}
+				sb.append(c);
+			}
+		}
+		return sb.toString();
 	}
 
 	private void writeIntegrationEntries(DataOutputStream dataOutputStream, List<? extends IIntegrationEntry> integrationEntries) throws IOException {

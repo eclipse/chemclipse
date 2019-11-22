@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,8 +8,12 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
+
+import java.util.Collection;
+import java.util.Collections;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
@@ -28,7 +32,7 @@ import org.eclipse.jface.viewers.Viewer;
 public class PeakScanListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
 	private double chromatogramPeakArea = 0.0d;
-	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
+	private final TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 
 	public void setChromatogramPeakArea(double chromatogramPeakArea) {
 
@@ -44,15 +48,15 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 		Object object2 = null;
 		//
 		if(e1 instanceof IPeak) {
-			object1 = (IPeak)e1;
+			object1 = e1;
 		} else if(e1 instanceof IScan) {
-			object1 = (IScan)e1;
+			object1 = e1;
 		}
 		//
 		if(e2 instanceof IPeak) {
-			object2 = (IPeak)e2;
+			object2 = e2;
 		} else if(e2 instanceof IScan) {
-			object2 = (IScan)e2;
+			object2 = e2;
 		}
 		//
 		if(object1 != null && object2 != null) {
@@ -168,7 +172,7 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 				sortOrder = Integer.compare(getInternalStandards(object2), getInternalStandards(object1));
 				break;
 			case 18:
-				sortOrder = getClassifier(object2).compareTo(getClassifier(object1));
+				sortOrder = getClassifier(object2).size() - (getClassifier(object1)).size();
 				break;
 		}
 		//
@@ -301,12 +305,12 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 		}
 	}
 
-	private String getClassifier(Object object) {
+	private Collection<String> getClassifier(Object object) {
 
 		if(object instanceof IPeak) {
 			return ((IPeak)object).getClassifier();
 		} else {
-			return "";
+			return Collections.emptyList();
 		}
 	}
 

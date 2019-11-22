@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - API adjustments
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.core;
 
@@ -52,7 +53,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		IProcessingInfo peakIdentificationProcessingInfo;
 		IProcessingMessage processingMessage;
 		File peakInputFile;
-		IPeaks peakImports;
+		IPeaks<?> peakImports;
 		List<IPeakMSD> peaks = new ArrayList<>();
 		IPeakIdentificationBatchProcessReport batchProcessReport = new PeakIdentificationBatchProcessReport();
 		/*

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -47,7 +48,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String SCAN = "SCAN";
 	//
 	private double chromatogramPeakArea = 0.0d;
-	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
+	private final TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 	//
 	public static final String[] TITLES = { //
 			ACTIVE_FOR_ANALYSIS, //
@@ -267,7 +268,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = (peak.getInternalStandards().size() > 0) ? "ISTD" : "";
 				break;
 			case 18:
-				text = peak.getClassifier();
+				text = peak.getClassifier().toString();
 				break;
 		}
 		//

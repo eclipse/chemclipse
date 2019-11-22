@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 20189 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to API Changes
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.internal.report;
 
@@ -29,7 +30,7 @@ public class PeakReport {
 	private PeakReport() {
 	}
 
-	public static void writeResults(IPeaks peaks, PrintWriter printWriter, String integrator, String identifier) {
+	public static void writeResults(IPeaks<?> peaks, PrintWriter printWriter, String integrator, String identifier) {
 
 		if(peaks == null || printWriter == null) {
 			return;
@@ -104,7 +105,7 @@ public class PeakReport {
 			 * Get the hits.
 			 */
 			if(peakTarget instanceof IIdentificationTarget) {
-				IIdentificationTarget peakIdentificationEntry = (IIdentificationTarget)peakTarget;
+				IIdentificationTarget peakIdentificationEntry = peakTarget;
 				IComparisonResult comparisonResult = peakIdentificationEntry.getComparisonResult();
 				ILibraryInformation libraryInformation = peakIdentificationEntry.getLibraryInformation();
 				/*

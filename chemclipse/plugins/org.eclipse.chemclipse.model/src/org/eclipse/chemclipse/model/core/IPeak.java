@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - add the PeakPostion interface
+ * Christoph Läubrich - add the PeakPostion interface, extract Classifiable interface
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -19,9 +19,8 @@ import java.util.List;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
-import org.eclipse.core.runtime.IAdaptable;
 
-public interface IPeak extends ITargetSupplier, IAdaptable, PeakPosition {
+public interface IPeak extends ITargetSupplier, PeakPosition, Classifiable {
 
 	/**
 	 * This comparator compares peaks based on the RT at the maximum of the intensity of the peak model
@@ -65,6 +64,7 @@ public interface IPeak extends ITargetSupplier, IAdaptable, PeakPosition {
 	 * 
 	 * @return PeakType
 	 */
+	@Override
 	PeakType getPeakType();
 
 	/**
@@ -243,18 +243,6 @@ public interface IPeak extends ITargetSupplier, IAdaptable, PeakPosition {
 	void addQuantitationReferences(List<String> quantitationReferences);
 
 	void removeQuantitationReference(String quantitationReference);
-
-	String getClassifier();
-
-	void setClassifier(String classifier);
-
-	void addClassifier(String classifier);
-
-	@Override
-	default <T> T getAdapter(Class<T> adapter) {
-
-		return null;
-	}
 
 	@Override
 	default int getPeakEnd() {

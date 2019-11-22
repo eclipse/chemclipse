@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.support.IRetentionTimeRange;
@@ -56,5 +57,17 @@ public interface IChromatogramPeaks<T extends IPeak> {
 			return getPeaks();
 		}
 		return getPeaks(range.getStartRetentionTime(), range.getStopRetentionTime());
+	}
+
+	default IPeaks<T> toPeakList() {
+
+		return new IPeaks<T>() {
+
+			@Override
+			public List<T> getPeaks() {
+
+				return Collections.unmodifiableList(getPeaks());
+			}
+		};
 	}
 }

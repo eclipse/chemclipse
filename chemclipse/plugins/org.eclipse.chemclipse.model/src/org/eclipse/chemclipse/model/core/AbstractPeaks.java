@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,58 +8,51 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractPeaks implements IPeaks {
+public abstract class AbstractPeaks<T extends IPeak> implements IPeaks<T> {
 
-	private List<IPeak> peaks;
+	private final List<T> peaks;
 
 	/**
 	 * Initialize mass spectra and create a new internal mass spectra list.
 	 */
-	public AbstractPeaks() {
-		peaks = new ArrayList<IPeak>();
+	public AbstractPeaks(Class<T> type) {
+		peaks = Collections.checkedList(new ArrayList<>(), type);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void addPeak(IPeak peak) {
+	public boolean addPeak(IPeak peak) {
 
 		if(peak != null) {
-			peaks.add(peak);
+			try {
+				return peaks.add((T)peak);
+			} catch(ClassCastException e) {
+				// can't be added then
+			}
 		}
+		return false;
 	}
 
 	@Override
-	public void removePeak(IPeak peak) {
+	public boolean removePeak(IPeak peak) {
 
 		if(peak != null) {
-			peaks.remove(peak);
+			return peaks.remove(peak);
 		}
+		return false;
 	}
 
 	@Override
-	public IPeak getPeak(int i) {
-
-		IPeak peak = null;
-		if(i > 0 && i <= peaks.size()) {
-			peak = peaks.get(--i);
-		}
-		return peak;
-	}
-
-	@Override
-	public List<IPeak> getPeaks() {
+	public List<T> getPeaks() {
 
 		return peaks;
-	}
-
-	@Override
-	public int size() {
-
-		return peaks.size();
 	}
 }
