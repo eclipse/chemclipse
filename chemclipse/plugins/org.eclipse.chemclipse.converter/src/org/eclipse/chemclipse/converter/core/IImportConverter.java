@@ -28,7 +28,10 @@ public interface IImportConverter {
 	 * @param chromatogram
 	 * @return {@link IProcessingInfo}
 	 */
-	<T> IProcessingInfo<T> validate(File file);
+	default <T> IProcessingInfo<T> validate(File file) {
+
+		return new ProcessingInfo<>();
+	}
 
 	default <T> IProcessingInfo<T> validate(String nameHint, InputStream stream) throws IOException {
 
