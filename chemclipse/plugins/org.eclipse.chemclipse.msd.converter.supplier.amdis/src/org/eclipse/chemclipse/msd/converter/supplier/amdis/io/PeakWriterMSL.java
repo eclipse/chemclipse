@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakWriterMSL extends AbstractWriter {
 
-	public void write(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
+	public void write(File file, IPeaks<?> peaks, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		FileWriter fileWriter = new FileWriter(file, append);
 		for(IPeak peak : peaks.getPeaks()) {
