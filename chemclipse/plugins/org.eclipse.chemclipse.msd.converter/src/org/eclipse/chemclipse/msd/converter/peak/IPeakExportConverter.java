@@ -31,5 +31,5 @@ public interface IPeakExportConverter extends IExportConverter {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	IProcessingInfo<?> convert(File file, IPeaks<IPeakMSD> peaks, boolean append, IProgressMonitor monitor);
+	IProcessingInfo<?> convert(File file, IPeaks<? extends IPeakMSD> peaks, boolean append, IProgressMonitor monitor);
 }

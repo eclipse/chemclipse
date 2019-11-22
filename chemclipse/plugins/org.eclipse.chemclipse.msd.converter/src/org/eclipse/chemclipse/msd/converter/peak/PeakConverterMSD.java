@@ -162,7 +162,7 @@ public class PeakConverterMSD {
 		return instance;
 	}
 
-	private static IPeakExportConverter getPeakExportConverter(final String converterId) {
+	public static IPeakExportConverter getPeakExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);

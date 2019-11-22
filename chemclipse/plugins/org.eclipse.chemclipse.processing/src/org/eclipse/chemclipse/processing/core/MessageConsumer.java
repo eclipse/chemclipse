@@ -63,8 +63,10 @@ public interface MessageConsumer {
 
 	default void addMessages(MessageProvider messageProvider) {
 
-		for(IProcessingMessage message : messageProvider.getMessages()) {
-			addMessage(message.getDescription(), message.getMessage(), message.getException(), message.getMessageType());
+		if(messageProvider != null) {
+			for(IProcessingMessage message : messageProvider.getMessages()) {
+				addMessage(message.getDescription(), message.getMessage(), message.getException(), message.getMessageType());
+			}
 		}
 	}
 }
