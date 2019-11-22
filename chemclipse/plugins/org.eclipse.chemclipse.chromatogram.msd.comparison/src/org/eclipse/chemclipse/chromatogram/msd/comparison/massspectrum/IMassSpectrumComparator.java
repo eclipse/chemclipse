@@ -29,8 +29,8 @@ public interface IMassSpectrumComparator {
 	 * If something has gone wrong, null will be returned.<br/>
 	 * The mass spectra will be left as they are.
 	 *
-	 * @param unknown
-	 * @param reference
+	 * @param unknown the first {@link IScanMSD scan} to compare
+	 * @param reference the second {@link IScanMSD scan} to compare
 	 * @return {@link IProcessingInfo}
 	 */
 	IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference);
