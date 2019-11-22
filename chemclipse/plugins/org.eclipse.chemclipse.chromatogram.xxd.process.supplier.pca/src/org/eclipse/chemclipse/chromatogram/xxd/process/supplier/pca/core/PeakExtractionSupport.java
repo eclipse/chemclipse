@@ -36,10 +36,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakExtractionSupport {
 
-	private int retentionTimeWindow;
+	private final int retentionTimeWindow;
 
 	public PeakExtractionSupport(int retentionTimeWindow) {
-
 		this.retentionTimeWindow = retentionTimeWindow;
 	}
 
@@ -54,14 +53,14 @@ public class PeakExtractionSupport {
 		return new ArrayList<>(rententionTimes);
 	}
 
-	private Map<String, SortedMap<Integer, IPeak>> exctractPcaPeakMap(Map<String, IPeaks> peakMap, int retentionTimeWindow) {
+	private Map<String, SortedMap<Integer, IPeak>> exctractPcaPeakMap(Map<String, IPeaks<?>> peakMap, int retentionTimeWindow) {
 
 		Map<String, TreeMap<Integer, IPeak>> pcaPeakRetentionTime = new LinkedHashMap<>();
 		Map<String, SortedMap<Integer, IPeak>> pcaPeakCondenseRetentionTime = new LinkedHashMap<>();
 		int totalCountPeak = 0;
-		for(Map.Entry<String, IPeaks> peakEnry : peakMap.entrySet()) {
+		for(Map.Entry<String, IPeaks<?>> peakEnry : peakMap.entrySet()) {
 			String name = peakEnry.getKey();
-			IPeaks peaks = peakEnry.getValue();
+			IPeaks<?> peaks = peakEnry.getValue();
 			TreeMap<Integer, IPeak> peakTree = new TreeMap<>();
 			for(IPeak peak : peaks.getPeaks()) {
 				int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
@@ -112,10 +111,10 @@ public class PeakExtractionSupport {
 		return pcaPeakCondenseRetentionTime;
 	}
 
-	public Samples extractPeakData(Map<IDataInputEntry, IPeaks> peaks, IProgressMonitor monitor) {
+	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, IProgressMonitor monitor) {
 
 		Samples samples = new Samples(peaks.keySet());
-		Map<String, IPeaks> peakMap = new LinkedHashMap<>();
+		Map<String, IPeaks<?>> peakMap = new LinkedHashMap<>();
 		peaks.forEach((dataInputEntry, peaksInput) -> {
 			peakMap.put(dataInputEntry.getName(), peaksInput);
 		});
@@ -173,7 +172,7 @@ public class PeakExtractionSupport {
 				int retentionTime = it.next().getRetentionTime();
 				IPeak peak = extractPeak.get(retentionTime);
 				if(peak != null) {
-		    PeakSampleData sampleData = new PeakSampleData(peak.getIntegratedArea(), peak);
+					PeakSampleData sampleData = new PeakSampleData(peak.getIntegratedArea(), peak);
 					sampleData.setPeak(peak);
 					sample.getSampleData().add(sampleData);
 				} else {
