@@ -17,11 +17,9 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
@@ -70,15 +68,7 @@ public class PeakConverterMSDProcessTypeSupplier implements IProcessTypeSupplier
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				IChromatogramMSD msd = (IChromatogramMSD)chromatogram;
-				List<IChromatogramPeakMSD> peaks = msd.getPeaks(chromatogramSelection);
-				IProcessingInfo<?> info = converter.convert(processSettings.getExportFileName(supplier.getFileExtension(), chromatogram), new IPeaks<IChromatogramPeakMSD>() {
-
-					@Override
-					public List<IChromatogramPeakMSD> getPeaks() {
-
-						return peaks;
-					}
-				}, false, context.getProgressMonitor());
+				IProcessingInfo<?> info = converter.convert(processSettings.getExportFileName(supplier.getFileExtension(), chromatogram), msd.toPeaks(msd.getName(), chromatogramSelection), false, context.getProgressMonitor());
 				context.addMessages(info);
 			} else {
 				context.addWarnMessage(getName(), "Can only export MSD Data, skipping...");

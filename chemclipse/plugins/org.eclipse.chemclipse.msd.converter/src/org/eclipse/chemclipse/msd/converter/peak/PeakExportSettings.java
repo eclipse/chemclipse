@@ -16,10 +16,13 @@ import java.io.File;
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramExportSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
+import org.eclipse.chemclipse.support.settings.SystemSettings;
+import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@SystemSettings(SystemSettingsStrategy.NONE)
 public class PeakExportSettings {
 
 	public static final String VARIABLE_CHROMATOGRAM_NAME = "{chromatogram_name}";

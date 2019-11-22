@@ -59,14 +59,38 @@ public interface IChromatogramPeaks<T extends IPeak> {
 		return getPeaks(range.getStartRetentionTime(), range.getStopRetentionTime());
 	}
 
-	default IPeaks<T> toPeakList() {
+	default IPeaks<T> toPeaks(String name) {
 
 		return new IPeaks<T>() {
 
 			@Override
+			public String getName() {
+
+				return name;
+			}
+
+			@Override
 			public List<T> getPeaks() {
 
-				return Collections.unmodifiableList(getPeaks());
+				return Collections.unmodifiableList(IChromatogramPeaks.this.getPeaks());
+			}
+		};
+	}
+
+	default IPeaks<T> toPeaks(String name, IRetentionTimeRange range) {
+
+		return new IPeaks<T>() {
+
+			@Override
+			public String getName() {
+
+				return name;
+			}
+
+			@Override
+			public List<T> getPeaks() {
+
+				return Collections.unmodifiableList(IChromatogramPeaks.this.getPeaks(range));
 			}
 		};
 	}
