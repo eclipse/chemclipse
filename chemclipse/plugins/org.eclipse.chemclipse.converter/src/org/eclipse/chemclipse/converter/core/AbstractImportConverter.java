@@ -32,7 +32,6 @@ public abstract class AbstractImportConverter implements IImportConverter {
 	 * @param file
 	 * @return {@link IProcessingInfo}
 	 */
-	@Override
 	public <T> IProcessingInfo<T> validate(File file) {
 
 		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();

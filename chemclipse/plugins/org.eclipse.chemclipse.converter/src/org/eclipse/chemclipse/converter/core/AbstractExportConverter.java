@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
 public abstract class AbstractExportConverter implements IExportConverter {
 
-	@Override
 	public IProcessingInfo<File> validate(File file) {
 
 		/*

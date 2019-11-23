@@ -15,4 +15,17 @@
             isImportable="false">
       </ChromatogramSupplier>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.peakSupplier">
+      <PeakSupplier
+            description="Import/Export Peaks as jsonz"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.gson.core.JsonPeakConverter"
+            fileExtension=".jsonz"
+            filterName="Compressed JSON (*.jsonz)"
+            id="org.eclipse.chemclipse.xxd.converter.supplier.gson.PeakSupplier"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.gson.core.JsonPeakConverter"
+            isExportable="true"
+            isImportable="true">
+      </PeakSupplier>
+   </extension>
 </plugin>

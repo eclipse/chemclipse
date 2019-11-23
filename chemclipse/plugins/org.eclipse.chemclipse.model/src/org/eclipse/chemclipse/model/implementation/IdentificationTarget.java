@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add delegate contructor
  *******************************************************************************/
 package org.eclipse.chemclipse.model.implementation;
 
@@ -25,6 +26,13 @@ public class IdentificationTarget extends AbstractIdentificationTarget implement
 	private static final long serialVersionUID = 4894831489940672007L;
 
 	public IdentificationTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
+		this(libraryInformation, comparisonResult, null);
+	}
+
+	public IdentificationTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult, String identifier) throws ReferenceMustNotBeNullException {
 		super(libraryInformation, comparisonResult);
+		if(identifier != null) {
+			setIdentifier(identifier);
+		}
 	}
 }

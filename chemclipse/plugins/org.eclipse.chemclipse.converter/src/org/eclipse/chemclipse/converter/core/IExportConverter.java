@@ -12,17 +12,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.core;
 
-import java.io.File;
-
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-
 public interface IExportConverter {
-
-	/**
-	 * This method validates whether the file is writable.<br/>
-	 *
-	 * @param file
-	 * @return {@link IProcessingInfo}
-	 */
-	IProcessingInfo<File> validate(File file);
 }

@@ -106,10 +106,6 @@ public class ScanConverterNMR {
 		try {
 			IScanExportConverter exportConverter = getScanExportConverter(converterId);
 			if(exportConverter != null) {
-				IProcessingInfo<File> validate = exportConverter.validate(file);
-				if(validate.hasErrorMessages()) {
-					return validate;
-				}
 				ProcessingInfo<Void> result = new ProcessingInfo<>();
 				exportConverter.convert(file, measurement, result, monitor);
 				return result;
