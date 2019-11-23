@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -8,13 +8,16 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - extend classifiable
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
 import java.io.Serializable;
 import java.util.Set;
 
-public interface ILibraryInformation extends Serializable {
+import org.eclipse.chemclipse.model.core.Classifiable;
+
+public interface ILibraryInformation extends Serializable, Classifiable {
 
 	/**
 	 * Returns the name of the library mass spectrum.
@@ -172,8 +175,6 @@ public interface ILibraryInformation extends Serializable {
 	void setContributor(String contributor);
 
 	String getHit();
-
-	String getClassification();
 
 	int getRetentionTime();
 

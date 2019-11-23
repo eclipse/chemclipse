@@ -16,7 +16,6 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.msd.converter.chromatogram,
- org.eclipse.chemclipse.msd.converter.core,
  org.eclipse.chemclipse.msd.converter.database,
  org.eclipse.chemclipse.msd.converter.exceptions,
  org.eclipse.chemclipse.msd.converter.io,

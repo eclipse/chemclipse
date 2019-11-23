@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -9,10 +9,13 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Dr. Alexander Kerner - implementation
+ * Christoph Läubrich - implement the methods for classifiable
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public abstract class AbstractLibraryInformation implements ILibraryInformation {
@@ -23,7 +26,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private static final long serialVersionUID = -7091140092667283293L;
 	//
 	private String name = "";
-	private Set<String> synonyms;
+	private final Set<String> synonyms = new LinkedHashSet<>();
 	private String casNumber = "";
 	private String comments = "";
 	private String referenceIdentifier = "";
@@ -35,12 +38,12 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private String database = "";
 	private String contributor = "";
 	private String hit;
-	private String classification;
+	private final Set<String> classification = new LinkedHashSet<>();
 	private int retentionTime = 0;
 	private float retentionIndex = 0.0f;
 
 	public AbstractLibraryInformation() {
-		synonyms = new HashSet<String>();
+		this(null);
 	}
 
 	/**
@@ -49,12 +52,9 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	 * @param libraryInformation
 	 */
 	public AbstractLibraryInformation(ILibraryInformation libraryInformation) {
-		this();
 		if(libraryInformation != null) {
 			name = libraryInformation.getName();
-			for(String synonym : libraryInformation.getSynonyms()) {
-				synonyms.add(synonym);
-			}
+			synonyms.addAll(libraryInformation.getSynonyms());
 			casNumber = libraryInformation.getCasNumber();
 			comments = libraryInformation.getComments();
 			referenceIdentifier = libraryInformation.getReferenceIdentifier();
@@ -66,7 +66,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 			database = libraryInformation.getDatabase();
 			contributor = libraryInformation.getContributor();
 			hit = libraryInformation.getHit();
-			classification = libraryInformation.getClassification();
+			classification.addAll(libraryInformation.getClassifier());
 			retentionTime = libraryInformation.getRetentionTime();
 			retentionIndex = libraryInformation.getRetentionIndex();
 		}
@@ -95,8 +95,9 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	@Override
 	public void setSynonyms(Set<String> synonyms) {
 
+		this.synonyms.clear();
 		if(synonyms != null) {
-			this.synonyms = synonyms;
+			this.synonyms.addAll(synonyms);
 		}
 	}
 
@@ -250,14 +251,21 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	}
 
 	@Override
-	public String getClassification() {
+	public Collection<String> getClassifier() {
 
-		return classification;
+		return Collections.unmodifiableCollection(classification);
 	}
 
-	public void setClassification(String classification) {
+	@Override
+	public void addClassifier(String classifier) {
 
-		this.classification = classification;
+		classification.add(classifier);
+	}
+
+	@Override
+	public void removeClassifier(String classifier) {
+
+		classification.remove(classifier);
 	}
 
 	@Override
