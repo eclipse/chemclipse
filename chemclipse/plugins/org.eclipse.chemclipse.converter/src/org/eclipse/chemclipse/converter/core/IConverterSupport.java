@@ -181,7 +181,19 @@ public interface IConverterSupport {
 	 * @return List<String>
 	 * @throws NoConverterAvailableException
 	 */
-	List<String> getAvailableConverterIds(File file) throws NoConverterAvailableException;
+	@Deprecated
+	default List<String> getAvailableConverterIds(File file) throws NoConverterAvailableException {
+
+		List<ISupplier> suppliers = Converter.getSupplierForFile(file, getSupplier());
+		if(suppliers.isEmpty()) {
+			throw new NoConverterAvailableException();
+		}
+		ArrayList<String> list = new ArrayList<>();
+		for(ISupplier supplier : suppliers) {
+			list.add(supplier.getId());
+		}
+		return list;
+	}
 
 	/**
 	 * Returns the list of all available suppliers

@@ -17,14 +17,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.converter.core.AbstractConverterSupport;
+import org.eclipse.chemclipse.converter.core.Converter;
 import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 
 public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
-	private List<ISupplier> suppliers;
-	private Map<String, String> regularExpressions;
+	private final List<ISupplier> suppliers;
+	private final Map<String, String> regularExpressions;
 
 	public AbstractSupplierFileIdentifier(List<ISupplier> suppliers) {
 		this.suppliers = suppliers;
@@ -53,6 +53,7 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 
 	public boolean isValidSupplier(File file, ISupplier supplier) {
 
+		// FIXME what is the difference to org.eclipse.chemclipse.converter.core.Converter.getSupplierForFile(File, Iterable<? extends ISupplier>) method, can we join the codes?
 		String extension = file.toString().toLowerCase();
 		String supplierExtension = supplier.getFileExtension().toLowerCase();
 		boolean hasExtension = supplierExtension != null && !supplierExtension.isEmpty();
@@ -63,7 +64,7 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 				 */
 				String extensionMatcher = regularExpressions.get(supplierExtension);
 				if(extensionMatcher == null) {
-					extensionMatcher = AbstractConverterSupport.getExtensionMatcher(supplierExtension);
+					extensionMatcher = Converter.getExtensionMatcher(supplierExtension);
 					regularExpressions.put(supplierExtension, extensionMatcher);
 				}
 				/*
