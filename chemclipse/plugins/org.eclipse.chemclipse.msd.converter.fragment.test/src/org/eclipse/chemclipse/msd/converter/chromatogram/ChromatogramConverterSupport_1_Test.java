@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,11 +8,13 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - Adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.chromatogram;
 
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+
 import junit.framework.TestCase;
 
 /**
@@ -30,7 +32,7 @@ public class ChromatogramConverterSupport_1_Test extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		support = new ChromatogramConverterSupport();
+		support = new ChromatogramConverterSupport(null);
 	}
 
 	@Override

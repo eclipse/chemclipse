@@ -9,11 +9,13 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - Adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.converter.chromatogram;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverter;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -24,7 +26,7 @@ public class ChromatogramConverterWSD extends AbstractChromatogramConverter<IChr
 	private static IChromatogramConverter<IChromatogramPeakWSD, IChromatogramWSD> instance = null;
 
 	public ChromatogramConverterWSD() {
-		super("org.eclipse.chemclipse.wsd.converter.chromatogramSupplier", IChromatogramWSD.class);
+		super("org.eclipse.chemclipse.wsd.converter.chromatogramSupplier", IChromatogramWSD.class, DataCategory.WSD);
 	}
 
 	public static IChromatogramConverter<IChromatogramPeakWSD, IChromatogramWSD> getInstance() {

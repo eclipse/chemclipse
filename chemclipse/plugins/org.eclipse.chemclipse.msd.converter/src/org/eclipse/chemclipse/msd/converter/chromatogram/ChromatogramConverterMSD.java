@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - Adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.chromatogram;
 
@@ -36,6 +37,7 @@ import org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -46,7 +48,7 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 	private static IChromatogramConverter<IChromatogramPeakMSD, IChromatogramMSD> instance = null;
 
 	public ChromatogramConverterMSD() {
-		super("org.eclipse.chemclipse.msd.converter.chromatogramSupplier", IChromatogramMSD.class);
+		super("org.eclipse.chemclipse.msd.converter.chromatogramSupplier", IChromatogramMSD.class, DataCategory.MSD);
 	}
 
 	public static IChromatogramConverter<IChromatogramPeakMSD, IChromatogramMSD> getInstance() {

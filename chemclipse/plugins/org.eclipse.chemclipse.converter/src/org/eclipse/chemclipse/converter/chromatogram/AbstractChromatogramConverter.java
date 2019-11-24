@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
- * Christoph Läubrich - improve log output
+ * Christoph Läubrich - improve log output, adjust to new api
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.chromatogram;
 
@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -41,11 +42,13 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	private static final String DESCRIPTION_EXPORT = "Chromatogram Export Converter";
 	//
 	private String extensionPoint = "";
-	private Class<T> type;
+	private final Class<T> type;
+	private final DataCategory dataCategory;
 
-	public AbstractChromatogramConverter(String extensionPoint, Class<T> type) {
+	public AbstractChromatogramConverter(String extensionPoint, Class<T> type, DataCategory dataCategory) {
 		this.extensionPoint = extensionPoint;
 		this.type = type;
+		this.dataCategory = dataCategory;
 	}
 
 	/**
@@ -60,7 +63,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	@Override
 	public IChromatogramConverterSupport getChromatogramConverterSupport() {
 
-		ChromatogramConverterSupport chromatogramConverterSupport = new ChromatogramConverterSupport();
+		ChromatogramConverterSupport chromatogramConverterSupport = new ChromatogramConverterSupport(dataCategory);
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] extensions = registry.getConfigurationElementsFor(extensionPoint);
 		for(IConfigurationElement element : extensions) {

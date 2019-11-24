@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics, Logging
+ * Christoph Läubrich - Adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.converter.core;
 
@@ -22,6 +23,7 @@ import org.eclipse.chemclipse.converter.scan.IScanConverterSupport;
 import org.eclipse.chemclipse.converter.scan.ScanConverterSupport;
 import org.eclipse.chemclipse.converter.scan.ScanSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
@@ -163,7 +165,7 @@ public class ScanConverterXIR {
 	public static IScanConverterSupport getScanConverterSupport() {
 
 		ScanSupplier supplier;
-		ScanConverterSupport converterSupport = new ScanConverterSupport();
+		ScanConverterSupport converterSupport = new ScanConverterSupport(DataCategory.XIR);
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] extensions = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		for(IConfigurationElement element : extensions) {
