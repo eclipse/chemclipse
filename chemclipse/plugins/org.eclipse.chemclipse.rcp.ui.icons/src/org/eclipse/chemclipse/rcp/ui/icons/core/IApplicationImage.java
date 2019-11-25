@@ -289,6 +289,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHART_LEGEND_MARKER = "chartLegendMarker.gif";
 	String IMAGE_CHART_RANGE_SELECTOR = "chartRangeSelector.gif";
 	String IMAGE_SEQUENCE_LIST = "sequenceListDefault.gif";
+	String IMAGE_SEQUENCE_ADD = "sequenceAdd.gif";
 	/*
 	 * PICTOGRAM and Data Analysis Perspective
 	 */
