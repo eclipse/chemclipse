@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.msd.converter.core;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.IConverterSupportSetter;
-import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 
 public class AbstractConverterSupport_5_Test extends AbstractConverterTestCase {
 

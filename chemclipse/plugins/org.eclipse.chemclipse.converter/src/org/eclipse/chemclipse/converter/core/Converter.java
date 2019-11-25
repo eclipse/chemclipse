@@ -20,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.support.util.FileUtil;
 
 public class Converter {
@@ -80,7 +81,7 @@ public class Converter {
 	 */
 	public static String getExtensionMatcher(String supplierExtension) {
 
-		String extensionMatcher = supplierExtension.replaceAll(IConverterSupport.WILDCARD_NUMBER, "[0-9]");
+		String extensionMatcher = supplierExtension.replaceAll(ISupplier.WILDCARD_NUMBER, "[0-9]");
 		return extensionMatcher.replace(".", ".*\\.");
 	}
 
@@ -103,7 +104,7 @@ public class Converter {
 				if(fileName.endsWith(directoryExtension) || fileName.endsWith(directoryExtension.toLowerCase()) || fileName.endsWith(directoryExtension.toUpperCase())) {
 					availableConverters.add(supplier);
 				} else {
-					if(directoryExtension.contains(IConverterSupport.WILDCARD_NUMBER)) {
+					if(directoryExtension.contains(ISupplier.WILDCARD_NUMBER)) {
 						//
 						if(directoryExtension.startsWith(".")) {
 							directoryExtension = directoryExtension.substring(1, directoryExtension.length());
@@ -135,7 +136,7 @@ public class Converter {
 					if(fileExtension == null || fileExtension.equals("")) {
 						continue;
 					} else {
-						if(fileExtension.contains(IConverterSupport.WILDCARD_NUMBER)) {
+						if(fileExtension.contains(ISupplier.WILDCARD_NUMBER)) {
 							/*
 							 * Get the matcher.
 							 */

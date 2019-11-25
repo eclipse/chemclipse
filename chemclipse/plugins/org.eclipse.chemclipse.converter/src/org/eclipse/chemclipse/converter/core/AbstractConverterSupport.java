@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.support.FileExtensionCompiler;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 
 public abstract class AbstractConverterSupport implements IConverterSupportSetter {
 

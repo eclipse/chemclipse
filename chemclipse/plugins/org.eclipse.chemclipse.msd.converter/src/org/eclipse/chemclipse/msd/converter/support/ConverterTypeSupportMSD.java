@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.support;
 
-import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 
 // TODO merge with Converter Plug-in

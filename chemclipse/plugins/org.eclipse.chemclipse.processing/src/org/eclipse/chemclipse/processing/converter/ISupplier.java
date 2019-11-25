@@ -9,11 +9,16 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.converter.core;
+package org.eclipse.chemclipse.processing.converter;
 
 import java.io.File;
 
 public interface ISupplier {
+
+	/*
+	 * E.g. ".r##" as a wildcard for ".r00" and ".r01"
+	 */
+	String WILDCARD_NUMBER = "#";
 
 	/**
 	 * The id of the extension point: e.g.

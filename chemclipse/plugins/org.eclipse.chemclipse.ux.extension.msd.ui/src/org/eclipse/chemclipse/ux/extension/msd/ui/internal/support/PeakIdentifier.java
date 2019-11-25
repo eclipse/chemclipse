@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.internal.support;
 import java.io.File;
 import java.util.List;
 
-import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 
 public class PeakIdentifier {
 

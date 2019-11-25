@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
-import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 
 public interface IMethodSupplier extends ISupplier {
 }

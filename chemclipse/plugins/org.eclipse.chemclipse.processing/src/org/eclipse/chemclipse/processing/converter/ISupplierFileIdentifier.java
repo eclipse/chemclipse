@@ -9,11 +9,11 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.process.files;
+package org.eclipse.chemclipse.processing.converter;
 
 import java.io.File;
 
-public interface ISupplierFileIdentifier {
+public interface ISupplierFileIdentifier extends SupplierContext {
 
 	String TYPE_MSD = "MSD";
 	String TYPE_CSD = "CSD";

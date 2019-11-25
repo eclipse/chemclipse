@@ -23,9 +23,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataI
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
-import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 
 public class PeakFilesInputPageWizard extends DataInputPageWizard {
 

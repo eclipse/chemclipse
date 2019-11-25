@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.converter.quantitation;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 
 public class QuantDBSupplier implements IQuantDBSupplierSetter {
 

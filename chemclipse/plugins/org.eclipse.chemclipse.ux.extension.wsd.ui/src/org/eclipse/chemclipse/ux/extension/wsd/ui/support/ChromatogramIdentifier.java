@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.wsd.ui.support;
 
+import org.eclipse.chemclipse.processing.converter.AbstractSupplierFileIdentifier;
+import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-import org.eclipse.chemclipse.xxd.process.files.AbstractSupplierFileIdentifier;
-import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 
 public class ChromatogramIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 

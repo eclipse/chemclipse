@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.scan;
 
-import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 
 public interface IScanSupplier extends ISupplier {
 }

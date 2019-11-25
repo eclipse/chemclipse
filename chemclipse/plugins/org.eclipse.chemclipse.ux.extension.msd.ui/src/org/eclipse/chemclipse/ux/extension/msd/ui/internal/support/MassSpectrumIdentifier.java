@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.internal.support;
 import java.io.File;
 import java.util.List;
 
-import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.support.util.FileUtil;
 
 public class MassSpectrumIdentifier {

@@ -19,6 +19,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+
 public class SupplierFileIdentifierCache implements Function<File, Collection<ISupplierFileIdentifier>> {
 
 	private ISupplierFileIdentifier[] fileIdentifiers = new ISupplierFileIdentifier[0];

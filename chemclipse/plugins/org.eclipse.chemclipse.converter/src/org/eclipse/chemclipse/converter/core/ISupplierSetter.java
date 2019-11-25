@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.core;
 
+import org.eclipse.chemclipse.processing.converter.ISupplier;
+
 public interface ISupplierSetter extends ISupplier {
 
 	/**

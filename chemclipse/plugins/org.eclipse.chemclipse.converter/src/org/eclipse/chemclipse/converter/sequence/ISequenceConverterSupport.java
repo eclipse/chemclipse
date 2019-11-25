@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.converter.sequence;
 import java.io.File;
 import java.util.List;
 
-import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 
 public interface ISequenceConverterSupport {
 

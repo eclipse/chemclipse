@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.support;
 
-import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 
 // TODO merge with Converter Plug-in
 public class ConverterTypeSupportCSD {

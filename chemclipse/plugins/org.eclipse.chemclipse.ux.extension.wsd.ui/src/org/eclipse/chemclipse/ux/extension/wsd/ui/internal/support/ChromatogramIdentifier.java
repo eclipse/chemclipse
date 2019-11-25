@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.ux.extension.wsd.ui.internal.support;
 import java.io.File;
 import java.util.List;
 
-import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 
 public class ChromatogramIdentifier {

@@ -22,17 +22,13 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.converter.support.FileExtensionCompiler;
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 
 public interface IConverterSupport {
 
 	public static final Predicate<ISupplier> EXPORT_SUPPLIER = supplier -> supplier.isExportable();
 	public static final Predicate<ISupplier> IMPORT_SUPPLIER = supplier -> supplier.isImportable();
 	public static final Predicate<ISupplier> ALL_SUPPLIER = supplier -> true;
-	/*
-	 * E.g. ".r##" as a wildcard for ".r00" and ".r01"
-	 */
-	String WILDCARD_NUMBER = "#";
-
 	/**
 	 * Returns the filter extension which are actually registered at the
 	 * chromatogram converter extension point.<br/>

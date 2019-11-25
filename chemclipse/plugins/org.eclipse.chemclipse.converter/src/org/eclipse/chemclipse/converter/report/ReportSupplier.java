@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.report;
 
-import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 
 public class ReportSupplier implements IReportSupplierSetter {
 

@@ -6,6 +6,7 @@ Bundle-Version: 0.8.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.chemclipse.processing;version="1.0.0",
+ org.eclipse.chemclipse.processing.converter;version="1.0.0",
  org.eclipse.chemclipse.processing.core,
  org.eclipse.chemclipse.processing.core.exceptions,
  org.eclipse.chemclipse.processing.detector;version="1.0.0",
@@ -21,5 +22,6 @@ Import-Package: org.eclipse.chemclipse.support.settings,
  org.osgi.service.prefs;version="1.1.1"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiFilterFactory.xml,
  OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiProcessSupplierContext.xml,
- OSGI-INF/org.eclipse.chemclipse.processing.internal.ProcedureProcessTypeSupplier.xml
+ OSGI-INF/org.eclipse.chemclipse.processing.internal.ProcedureProcessTypeSupplier.xml,
+ OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiSupplierFileEditorSupport.xml
 Bundle-ActivationPolicy: lazy

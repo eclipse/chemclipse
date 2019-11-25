@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.support;
 
+import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
-import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
 
 public class DatabaseSupport {
 

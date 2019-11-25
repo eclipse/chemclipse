@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.function.Function;
 
-import org.eclipse.chemclipse.xxd.process.files.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 
 public class DataExplorerContentProvider extends LazyFileExplorerContentProvider {
 

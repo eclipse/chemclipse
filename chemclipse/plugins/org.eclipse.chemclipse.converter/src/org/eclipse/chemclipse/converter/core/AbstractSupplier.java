@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.converter.core;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.processing.converter.ISupplier;
+
 public abstract class AbstractSupplier implements ISupplierSetter {
 
 	private String id = "";

@@ -15,9 +15,9 @@ package org.eclipse.chemclipse.converter.sequence;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.model.reports.ISequence;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;

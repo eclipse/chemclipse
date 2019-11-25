@@ -10,16 +10,13 @@
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - Fix invalid string check, support supplier without file extension
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.process.files;
+package org.eclipse.chemclipse.processing.converter;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.eclipse.chemclipse.converter.core.Converter;
-import org.eclipse.chemclipse.converter.core.IConverterSupport;
-import org.eclipse.chemclipse.converter.core.ISupplier;
 
 public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
@@ -40,7 +37,7 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 		/*
 		 * Check each supplier.
 		 */
-		for(ISupplier supplier : suppliers) {
+		for(ISupplier supplier : getSupplier()) {
 			if(isValidSupplier(file, supplier)) {
 				return true;
 			}
@@ -58,13 +55,13 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 		String supplierExtension = supplier.getFileExtension().toLowerCase();
 		boolean hasExtension = supplierExtension != null && !supplierExtension.isEmpty();
 		if(hasExtension) {
-			if(supplierExtension.contains(IConverterSupport.WILDCARD_NUMBER)) {
+			if(supplierExtension.contains(ISupplier.WILDCARD_NUMBER)) {
 				/*
 				 * Get the matcher.
 				 */
 				String extensionMatcher = regularExpressions.get(supplierExtension);
 				if(extensionMatcher == null) {
-					extensionMatcher = Converter.getExtensionMatcher(supplierExtension);
+					extensionMatcher = getExtensionMatcher(supplierExtension);
 					regularExpressions.put(supplierExtension, extensionMatcher);
 				}
 				/*
@@ -84,7 +81,7 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 					 * Try to find a supplier which is capable
 					 * to read the data.
 					 */
-					for(ISupplier specificSupplier : suppliers) {
+					for(ISupplier specificSupplier : getSupplier()) {
 						if(extension.endsWith(specificSupplier.getFileExtension())) {
 							if(specificSupplier.isImportable()) {
 								return true;
@@ -97,6 +94,12 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 			return supplier.isImportable();
 		}
 		return false;
+	}
+
+	@Override
+	public Collection<ISupplier> getSupplier() {
+
+		return suppliers;
 	}
 
 	@Override
@@ -113,10 +116,10 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 		/*
 		 * Check each supplier.
 		 */
-		for(ISupplier supplier : suppliers) {
+		for(ISupplier supplier : getSupplier()) {
 			directoryExtension = supplier.getDirectoryExtension();
 			if(!"".equals(directoryExtension)) {
-				if(directoryExtension.contains(IConverterSupport.WILDCARD_NUMBER)) {
+				if(directoryExtension.contains(ISupplier.WILDCARD_NUMBER)) {
 					/*
 					 * (0_[a-zA-Z][0-9]+)#([1-9]+)#1SLin
 					 */
@@ -168,11 +171,17 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 	@Override
 	public boolean isMatchMagicNumber(File file) {
 
-		for(ISupplier supplier : suppliers) {
+		for(ISupplier supplier : getSupplier()) {
 			if(supplier.isMatchMagicNumber(file)) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	private static String getExtensionMatcher(String supplierExtension) {
+
+		String extensionMatcher = supplierExtension.replaceAll(ISupplier.WILDCARD_NUMBER, "[0-9]");
+		return extensionMatcher.replace(".", ".*\\.");
 	}
 }
