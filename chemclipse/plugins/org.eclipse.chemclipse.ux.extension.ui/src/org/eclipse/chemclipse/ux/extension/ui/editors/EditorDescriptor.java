@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.editors;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+
 public interface EditorDescriptor {
 
 	/**
@@ -18,4 +20,13 @@ public interface EditorDescriptor {
 	 * @return the ID of the editors
 	 */
 	String getEditorId();
+
+	/**
+	 * 
+	 * @return the {@link ImageDescriptor} for this editor or <code>null</code> if the default should be used
+	 */
+	default ImageDescriptor getImageDescriptor() {
+
+		return null;
+	}
 }

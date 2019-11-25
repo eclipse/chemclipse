@@ -21,6 +21,8 @@ import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
@@ -70,11 +72,26 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 			if(file.getName().equals("") || file.getParent() == null) {
 				descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DRIVE, IApplicationImage.SIZE_16x16);
 			} else {
-				Collection<ISupplierFileIdentifier> identifier = supplierFunction.apply(file).keySet();
-				for(ISupplierFileIdentifier fileIdentifier : identifier) {
-					descriptor = getImageDescriptor(fileIdentifier, file);
-					if(descriptor != null) {
-						break;
+				Map<ISupplierFileIdentifier, Collection<ISupplier>> map = supplierFunction.apply(file);
+				for(Collection<ISupplier> suppliers : map.values()) {
+					for(ISupplier supplier : suppliers) {
+						EditorDescriptor editorDescriptor = Adapters.adapt(supplier, EditorDescriptor.class);
+						if(editorDescriptor != null) {
+							ImageDescriptor imageDescriptor = editorDescriptor.getImageDescriptor();
+							if(imageDescriptor != null) {
+								descriptor = imageDescriptor;
+								break;
+							}
+						}
+					}
+				}
+				if(descriptor == null) {
+					Collection<ISupplierFileIdentifier> identifier = map.keySet();
+					for(ISupplierFileIdentifier fileIdentifier : identifier) {
+						descriptor = getImageDescriptor(fileIdentifier, file);
+						if(descriptor != null) {
+							break;
+						}
 					}
 				}
 				if(descriptor == null) {
