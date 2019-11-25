@@ -32,9 +32,9 @@ public class AMDISParser {
 	private static final int WATCH_WINDOW = Integer.parseInt(System.getProperty("chemclipse.amdis.watch.window", "1"));
 	private static final int WAIT_MS = 100;
 	private static final int CHECK_WINDOW_SIZE = (int)(TimeUnit.SECONDS.toMillis(WATCH_WINDOW) / WAIT_MS);
-	private File eluFile;
-	private File finFile;
-	private File resFile;
+	private final File eluFile;
+	private final File finFile;
+	private final File resFile;
 
 	public AMDISParser(File fileChromatogram) {
 		eluFile = getFile(fileChromatogram, "ELU");
@@ -53,7 +53,7 @@ public class AMDISParser {
 			if(!waitForFileComplete(eluFile, WAIT_TIMEOUT_COMPLETE, TimeUnit.MINUTES, subMonitor.split(10, SubMonitor.SUPPRESS_NONE))) {
 				throw new InterruptedException("AMDIS does not finished writing file within the time bounds");
 			}
-			IProcessingInfo<IPeaks> peaksResult = PeakConverterMSD.convert(eluFile, PeakProcessorSupport.PEAK_CONVERTER_ID, subMonitor.split(70));
+			IProcessingInfo<IPeaks<?>> peaksResult = PeakConverterMSD.convert(eluFile, PeakProcessorSupport.PEAK_CONVERTER_ID, subMonitor.split(70));
 			if(peaksResult == null) {
 				result.addErrorMessage(AmdisIdentifier.IDENTIFIER, "PeakParser returned no result");
 				return result;

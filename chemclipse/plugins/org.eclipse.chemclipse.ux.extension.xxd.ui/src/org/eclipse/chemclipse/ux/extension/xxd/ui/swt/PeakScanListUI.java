@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -31,15 +32,13 @@ import org.eclipse.swt.widgets.Composite;
 @SuppressWarnings("rawtypes")
 public class PeakScanListUI extends ExtendedTableViewer {
 
-	private String[] titles = PeakScanListLabelProvider.TITLES;
-	private int[] bounds = PeakScanListLabelProvider.BOUNDS;
-	private PeakScanListLabelProvider labelProvider = new PeakScanListLabelProvider();
-	private PeakScanListTableComparator tableComparator = new PeakScanListTableComparator();
-	private PeakScanListFilter listFilter = new PeakScanListFilter();
-	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
+	private final String[] titles = PeakScanListLabelProvider.TITLES;
+	private final int[] bounds = PeakScanListLabelProvider.BOUNDS;
+	private final PeakScanListLabelProvider labelProvider = new PeakScanListLabelProvider();
+	private final PeakScanListTableComparator tableComparator = new PeakScanListTableComparator();
+	private final PeakScanListFilter listFilter = new PeakScanListFilter();
 
 	public PeakScanListUI(Composite parent, int style) {
-
 		super(parent, style);
 		createColumns();
 	}
@@ -55,17 +54,24 @@ public class PeakScanListUI extends ExtendedTableViewer {
 			List<Object> input = new ArrayList<>();
 			//
 			if(showPeaks) {
-				input.addAll(chromatogramDataSupport.getPeaks(chromatogramSelection, showPeaksInRange));
+				input.addAll(ChromatogramDataSupport.getPeaks(chromatogramSelection, showPeaksInRange));
 			}
 			//
 			if(showScans) {
-				input.addAll(chromatogramDataSupport.getIdentifiedScans(chromatogramSelection, showScansInRange));
+				input.addAll(ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection, showScansInRange));
 			}
 			//
 			super.setInput(input);
 		} else {
 			clear();
 		}
+	}
+
+	public void setInput(IPeaks<?> peaks) {
+
+		labelProvider.setChromatogramPeakArea(0);
+		tableComparator.setChromatogramPeakArea(0);
+		super.setInput(peaks.getPeaks());
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {

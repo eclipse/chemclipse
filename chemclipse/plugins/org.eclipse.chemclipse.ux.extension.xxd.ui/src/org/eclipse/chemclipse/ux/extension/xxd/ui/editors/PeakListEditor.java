@@ -1,0 +1,67 @@
+/*******************************************************************************
+ * Copyright (c) 2019 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Christoph Läubrich - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
+
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+
+import javax.annotation.PostConstruct;
+
+import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUI;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+
+public class PeakListEditor {
+
+	@PostConstruct
+	public void construct(Composite parent, ISupplier supplier, File file) {
+
+		PeakScanListUI scanListUI = new PeakScanListUI(parent, SWT.NONE);
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(parent.getShell());
+		try {
+			dialog.run(true, true, new IRunnableWithProgress() {
+
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+					IProcessingInfo<IPeaks<?>> convert = PeakConverterMSD.convert(file, supplier.getId(), monitor);
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							IPeaks<?> result = convert.getProcessingResult();
+							if(convert.hasErrorMessages() || result == null) {
+								ProcessingInfoViewSupport.updateProcessingInfo(convert);
+							} else {
+								scanListUI.setInput(result);
+							}
+						}
+					});
+				}
+			});
+		} catch(InvocationTargetException e) {
+			ProcessingInfoViewSupport.updateProcessingInfoError("PeakListEditor", "Open file " + file.getAbsolutePath() + " failed", e);
+		} catch(InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+	}
+}

@@ -24,6 +24,7 @@ import com.google.gson.stream.JsonWriter;
 public final class JsonPeak extends PeakMSD {
 
 	private static final String KEY_PEAK_AREA = "area";
+	private static final String KEY_PEAK_ACTIVE = "active";
 	private static final String KEY_PEAK_START = "start";
 	private static final String KEY_PEAK_END = "stop";
 	private static final String KEY_PEAK_MAX = "max";
@@ -74,6 +75,8 @@ public final class JsonPeak extends PeakMSD {
 	public static void writePeak(JsonWriter writer, IPeakMSD peak) throws IOException {
 
 		writer.beginObject();
+		writer.name(KEY_PEAK_ACTIVE);
+		writer.value(peak.isActiveForAnalysis());
 		writer.name(KEY_PEAK_AREA);
 		writer.value(peak.getIntegratedArea());
 		writer.name(KEY_PEAK_START);
@@ -107,6 +110,7 @@ public final class JsonPeak extends PeakMSD {
 		for(JsonElement s : json.get(KEY_PEAK_CLASSIFIER).getAsJsonArray()) {
 			peakMSD.addClassifier(s.getAsString());
 		}
+		peakMSD.setActiveForAnalysis(json.get(KEY_PEAK_ACTIVE).getAsBoolean());
 		JsonIdentificationTarget.readTargets(json.get(KEY_PEAK_TARGETS).getAsJsonArray(), peakMSD.getTargets()::add);
 		return peakMSD;
 	}

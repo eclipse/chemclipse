@@ -77,6 +77,7 @@ public class GenericSupplierEditorSupport implements ISupplierFileEditorSupport 
 
 					part.setLabel(file.getName());
 					context.set(File.class, file);
+					context.set(ISupplier.class, supplier);
 					return null;
 				}
 			});

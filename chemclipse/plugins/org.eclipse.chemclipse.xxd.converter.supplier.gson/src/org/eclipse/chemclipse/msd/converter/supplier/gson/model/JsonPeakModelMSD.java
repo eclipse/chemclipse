@@ -49,7 +49,12 @@ public class JsonPeakModelMSD extends PeakModelMSD {
 	public static IPeakModelMSD readPeakModel(JsonElement jsonElement) throws IOException {
 
 		JsonObject object = jsonElement.getAsJsonObject();
-		return new JsonPeakModelMSD(JsonMassspectrum.readMassspectrum(object.get(KEY_PEAK_MODEL_MASS_SPECTRUM)), readIntensities(object.get(KEY_PEAK_MODEL_INTENSITIES).getAsJsonArray()));
+		IPeakIntensityValues intensities = readIntensities(object.get(KEY_PEAK_MODEL_INTENSITIES).getAsJsonArray());
+		try {
+			return new JsonPeakModelMSD(JsonMassspectrum.readMassspectrum(object.get(KEY_PEAK_MODEL_MASS_SPECTRUM)), intensities);
+		} catch(IllegalArgumentException e) {
+			throw new IOException("can't read peaks from file", e);
+		}
 	}
 
 	private static void writeIntensities(JsonWriter json, IPeakModelMSD peakModel) throws IOException {
@@ -66,12 +71,13 @@ public class JsonPeakModelMSD extends PeakModelMSD {
 
 	private static IPeakIntensityValues readIntensities(JsonArray json) {
 
-		PeakIntensityValues intensityValues = new PeakIntensityValues();
+		PeakIntensityValues intensityValues = new PeakIntensityValues(Float.MAX_VALUE);
 		for(int i = 0; i < json.size(); i += 2) {
 			int rt = json.get(i).getAsInt();
 			float abundance = json.get(i + 1).getAsFloat();
 			intensityValues.addIntensityValue(rt, abundance);
 		}
+		intensityValues.normalize();
 		return intensityValues;
 	}
 }

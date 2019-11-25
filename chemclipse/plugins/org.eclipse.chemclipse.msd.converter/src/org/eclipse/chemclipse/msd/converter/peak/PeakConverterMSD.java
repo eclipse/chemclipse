@@ -55,19 +55,17 @@ public class PeakConverterMSD {
 	private PeakConverterMSD() {
 	}
 
-	public static IProcessingInfo convert(File file, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IPeaks<?>> convert(File file, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
 		IPeakImportConverter importConverter = getPeakImportConverter(converterId);
 		if(importConverter != null) {
-			processingInfo = importConverter.convert(file, monitor);
+			return importConverter.convert(file, monitor);
 		} else {
-			processingInfo = getNoImportConverterAvailableProcessingInfo(file);
+			return getNoImportConverterAvailableProcessingInfo(file);
 		}
-		return processingInfo;
 	}
 
 	public static IProcessingInfo convert(File file, IProgressMonitor monitor) {
@@ -236,9 +234,9 @@ public class PeakConverterMSD {
 		return processingInfo;
 	}
 
-	private static IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
+	private static <T> IProcessingInfo<T> getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "Peak Import Converter", "There is no suitable converter available to load the peaks from the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

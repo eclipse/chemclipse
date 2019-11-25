@@ -137,5 +137,6 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_U1HpQArvEeqMVtWeZukEuw" featurename="snippets" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="basic:InputPart" xmi:id="_ZuiPQArvEeqMVtWeZukEuw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.processMethodEditor" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor" label="Untitled" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/method.gif" tooltip="Process Method Editor"/>
+    <elements xsi:type="basic:InputPart" xmi:id="_bimaQA-XEeq1N8Jqs-XMOg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.inputpart.peaklisteditor" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PeakListEditor" label="Untitled" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peaks.gif" tooltip="Peaklist Editor"/>
   </fragments>
 </fragment:ModelFragments>

@@ -24,5 +24,15 @@
             name="Converter MSD">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.chemclipse.msd.converter.peak.IPeakSupplier"
+            class="org.eclipse.chemclipse.msd.converter.ui.adapter.PeakSupplierAdapterFactory">
+         <adapter
+               type="org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor">
+         </adapter>
+      </factory>
+   </extension>
 
 </plugin>

@@ -40,7 +40,7 @@ public class PeakProcessorSupport {
 
 	public void extractEluFileAndSetPeaks(IChromatogramSelectionMSD chromatogramSelection, File file, PeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<IPeaks> processingInfo = PeakConverterMSD.convert(file, PEAK_CONVERTER_ID, monitor);
+		IProcessingInfo<IPeaks<?>> processingInfo = PeakConverterMSD.convert(file, PEAK_CONVERTER_ID, monitor);
 		IPeaks peaks = processingInfo.getProcessingResult();
 		insertPeaks(chromatogramSelection, peaks.getPeaks(), peakDetectorSettings, monitor);
 	}

@@ -261,7 +261,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 					double peakAreaPercent = (100.0d / chromatogramPeakArea) * peak.getIntegratedArea();
 					text = decimalFormat.format(peakAreaPercent);
 				} else {
-					text = decimalFormat.format(0.0d);
+					text = "-";
 				}
 				break;
 			case 17:

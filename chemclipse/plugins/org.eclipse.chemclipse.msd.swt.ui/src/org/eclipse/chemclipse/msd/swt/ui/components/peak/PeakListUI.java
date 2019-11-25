@@ -61,7 +61,7 @@ public class PeakListUI {
 	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 	//
-	private DecimalFormat decimalFormat;
+	private final DecimalFormat decimalFormat;
 	//
 	private ExtendedTableViewer tableViewer;
 	private Label labelSelectedPeak;
@@ -69,10 +69,10 @@ public class PeakListUI {
 	//
 	private PeakListTableComparator peakListTableComparator;
 	private static final String PEAK_IS_ACTIVE_FOR_ANALYSIS = "Active for Analysis";
-	private String[] titles = {PEAK_IS_ACTIVE_FOR_ANALYSIS, "RT (min)", "RI", "Area", "Start RT", "Stop RT", "Width", "Scan# at Peak Maximum", "S/N", "Leading", "Tailing", "Model Description", "Suggested Components", "Name"};
-	private int bounds[] = {30, 100, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	private final String[] titles = {PEAK_IS_ACTIVE_FOR_ANALYSIS, "RT (min)", "RI", "Area", "Start RT", "Stop RT", "Width", "Scan# at Peak Maximum", "S/N", "Leading", "Tailing", "Model Description", "Suggested Components", "Name"};
+	private final int bounds[] = {30, 100, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 	//
-	private TargetExtendedComparator targetExtendedComparator;
+	private final TargetExtendedComparator targetExtendedComparator;
 
 	public PeakListUI(Composite parent, int style) {
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
@@ -91,7 +91,7 @@ public class PeakListUI {
 		tableViewer.getControl().setFocus();
 	}
 
-	public void update(IPeaks peaks, boolean forceReload) {
+	public void update(IPeaks<?> peaks, boolean forceReload) {
 
 		if(peaks != null) {
 			if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
