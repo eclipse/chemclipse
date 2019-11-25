@@ -15,8 +15,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
@@ -54,8 +56,8 @@ public class DataExplorerTreeUI {
 		}
 	}
 
-	private TreeViewer treeViewer;
-	private DataExplorerTreeRoot root;
+	private final TreeViewer treeViewer;
+	private final DataExplorerTreeRoot root;
 
 	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot root) {
 		this(parent, root, Collections.emptyList());
@@ -72,13 +74,13 @@ public class DataExplorerTreeUI {
 		return cache;
 	}
 
-	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot root, Function<File, Collection<ISupplierFileIdentifier>> supplierFunction) {
+	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot root, Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
 		this.root = root;
 		treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.VIRTUAL);
 		treeViewer.setUseHashlookup(true);
 		treeViewer.setExpandPreCheckFilters(true);
-		treeViewer.setContentProvider(new DataExplorerContentProvider(supplierFunction));
-		treeViewer.setLabelProvider(new DataExplorerLabelProvider(supplierFunction));
+		treeViewer.setContentProvider(new DataExplorerContentProvider(identifier));
+		treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
 		switch(root) {
 			case DRIVES:
 				treeViewer.setInput(File.listRoots());

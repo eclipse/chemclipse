@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -37,13 +38,16 @@ public abstract class AbstractOpenHandler {
 		InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), getPreferenceKey(), getDataType());
 		inputWizardSettings.setTitle("Open " + dataType + " Files");
 		inputWizardSettings.setDescription("You can select one or more files to be opened.");
-		Map<File, Collection<ISupplierFileIdentifier>> selected = InputEntriesWizard.openWizard(shell, inputWizardSettings);
-		for(Entry<File, Collection<ISupplierFileIdentifier>> entry : selected.entrySet()) {
+		Map<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> selected = InputEntriesWizard.openWizard(shell, inputWizardSettings);
+		for(Entry<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> entry : selected.entrySet()) {
 			File file = entry.getKey();
-			for(ISupplierFileIdentifier supplier : entry.getValue()) {
-				if(supplier instanceof ISupplierFileEditorSupport) {
-					if(((ISupplierFileEditorSupport)supplier).openEditor(file)) {
-						break;
+			for(Entry<ISupplierFileIdentifier, Collection<ISupplier>> supplier : entry.getValue().entrySet()) {
+				ISupplierFileIdentifier identifier = supplier.getKey();
+				if(identifier instanceof ISupplierFileEditorSupport) {
+					for(ISupplier converter : supplier.getValue()) {
+						if(((ISupplierFileEditorSupport)identifier).openEditor(file, converter)) {
+							break;
+						}
 					}
 				}
 			}

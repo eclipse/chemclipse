@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.samplequant;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
@@ -21,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.Activator;
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizardPage;
@@ -36,7 +34,7 @@ public class WizardSampleQuant extends AbstractFileWizard {
 	public static final int PREFERRED_WIDTH = 350;
 	public static final int PREFERRED_HEIGHT = 500;
 	//
-	private ISampleQuantWizardElements wizardElements = new SampleQuantWizardElements();
+	private final ISampleQuantWizardElements wizardElements = new SampleQuantWizardElements();
 	//
 	private InputEntriesWizardPage pageInputEntries;
 	private PageReportDataSelection pageReportDataSelection;
@@ -72,9 +70,8 @@ public class WizardSampleQuant extends AbstractFileWizard {
 		//
 		if(page == pageInputEntries) {
 			wizardElements.clearSelectedChromatograms();
-			Map<File, Collection<ISupplierFileIdentifier>> items = pageInputEntries.getSelectedItems();
 			ChromatogramWizardElements elements = new ChromatogramWizardElements();
-			for(File file : items.keySet()) {
+			for(File file : pageInputEntries.getSelectedItems().keySet()) {
 				elements.addSelectedChromatogram(file.getAbsolutePath());
 			}
 			wizardElements.addElements(elements);

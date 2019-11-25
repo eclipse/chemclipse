@@ -14,8 +14,10 @@ package org.eclipse.chemclipse.ux.extension.ui.swt;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -51,10 +53,10 @@ public class MultiDataExplorerTreeUI {
 
 	private static final DataExplorerTreeRoot[] DEFAULT_ROOTS = {DataExplorerTreeRoot.DRIVES, DataExplorerTreeRoot.HOME, DataExplorerTreeRoot.USER_LOCATION};
 	private static final String TAB_KEY_SUFFIX = "selectedTab";
-	private TabFolder tabFolder;
-	private DataExplorerTreeUI[] treeUIs;
-	private IPreferenceStore preferenceStore;
-	private SupplierFileIdentifierCache identifierCache;
+	private final TabFolder tabFolder;
+	private final DataExplorerTreeUI[] treeUIs;
+	private final IPreferenceStore preferenceStore;
+	private final SupplierFileIdentifierCache identifierCache;
 
 	public MultiDataExplorerTreeUI(Composite parent, IPreferenceStore preferenceStore) {
 		this(parent, new SupplierFileIdentifierCache(LazyFileExplorerContentProvider.MAX_CACHE_SIZE), preferenceStore);
@@ -74,7 +76,7 @@ public class MultiDataExplorerTreeUI {
 		}
 	}
 
-	protected Function<File, Collection<ISupplierFileIdentifier>> getIdentifierSupplier() {
+	protected Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> getIdentifierSupplier() {
 
 		return identifierCache;
 	}

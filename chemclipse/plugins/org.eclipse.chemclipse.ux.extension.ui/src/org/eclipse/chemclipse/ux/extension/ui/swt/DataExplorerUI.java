@@ -14,10 +14,15 @@ package org.eclipse.chemclipse.ux.extension.ui.swt;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -43,7 +48,7 @@ import org.eclipse.swt.widgets.Menu;
 
 public class DataExplorerUI extends MultiDataExplorerTreeUI {
 
-	private IEventBroker eventBroker;
+	private final IEventBroker eventBroker;
 
 	public DataExplorerUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
 		super(parent, preferenceStore);
@@ -83,29 +88,56 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 			public void menuAboutToShow(IMenuManager mgr) {
 
 				Object[] selection = treeViewer.getStructuredSelection().toArray();
-				Set<ISupplierFileEditorSupport> suppliers = new LinkedHashSet<>();
+				Map<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> converterSupplier = new HashMap<>();
+				Set<ISupplier> supplierSet = new TreeSet<>(new Comparator<ISupplier>() {
+
+					@Override
+					public int compare(ISupplier o1, ISupplier o2) {
+
+						return o1.getId().compareTo(o2.getId());
+					}
+				});
 				for(Object object : selection) {
 					if(object instanceof File) {
 						File file = (File)object;
-						for(ISupplierFileIdentifier supplier : getIdentifierSupplier().apply(file)) {
-							if(supplier instanceof ISupplierFileEditorSupport) {
-								suppliers.add((ISupplierFileEditorSupport)supplier);
-							}
+						Map<ISupplierFileIdentifier, Collection<ISupplier>> map = getIdentifierSupplier().apply(file);
+						converterSupplier.put(file, map);
+						for(Collection<ISupplier> s : map.values()) {
+							supplierSet.addAll(s);
 						}
 					}
 				}
-				for(ISupplierFileEditorSupport activeFileSupplier : suppliers) {
-					contextMenu.add(new Action("Open as: " + activeFileSupplier.getType()) {
+				for(ISupplier activeFileSupplier : supplierSet) {
+					contextMenu.add(new Action("Open as: " + activeFileSupplier.getFilterName()) {
 
 						@Override
 						public void run() {
 
+							outer:
 							for(Object object : selection) {
 								if(object instanceof File) {
-									openEditorWithSupplier((File)object, activeFileSupplier);
+									File file = (File)object;
+									Map<ISupplierFileIdentifier, Collection<ISupplier>> map = converterSupplier.get(file);
+									for(Entry<ISupplierFileIdentifier, Collection<ISupplier>> entry : map.entrySet()) {
+										ISupplierFileIdentifier identifier = entry.getKey();
+										if(identifier instanceof ISupplierFileEditorSupport) {
+											for(ISupplier supplier : entry.getValue()) {
+												if(activeFileSupplier.getId().equals(supplier.getId())) {
+													openEditorWithSupplier(file, (ISupplierFileEditorSupport)identifier, supplier);
+													continue outer;
+												}
+											}
+										}
+									}
 								}
 							}
 						}
+
+						@Override
+						public String getToolTipText() {
+
+							return activeFileSupplier.getDescription();
+						};
 					});
 				}
 				if(selection.length == 1 && selection[0] instanceof File && ((File)selection[0]).isDirectory()) {
@@ -190,7 +222,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 			if(file.isDirectory()) {
 				contentProvider.refresh(file);
 			}
-			Collection<ISupplierFileIdentifier> identifiers = getIdentifierSupplier().apply(file);
+			Collection<ISupplierFileIdentifier> identifiers = getIdentifierSupplier().apply(file).keySet();
 			for(ISupplierFileIdentifier identifier : identifiers) {
 				if(identifier instanceof ISupplierFileEditorSupport) {
 					ISupplierFileEditorSupport fileEditorSupport = (ISupplierFileEditorSupport)identifier;
@@ -209,22 +241,25 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 		boolean success = false;
 		if(file != null) {
 			boolean openFirstDataMatchOnly = PreferenceSupplier.isOpenFirstDataMatchOnly();
-			Collection<ISupplierFileIdentifier> identifiers = getIdentifierSupplier().apply(file);
-			for(ISupplierFileIdentifier identifier : identifiers) {
+			Map<ISupplierFileIdentifier, Collection<ISupplier>> identifiers = getIdentifierSupplier().apply(file);
+			for(Entry<ISupplierFileIdentifier, Collection<ISupplier>> entry : identifiers.entrySet()) {
+				ISupplierFileIdentifier identifier = entry.getKey();
 				if(identifier instanceof ISupplierFileEditorSupport) {
-					success = success | openEditorWithSupplier(file, (ISupplierFileEditorSupport)identifier);
-				}
-				if(success && openFirstDataMatchOnly) {
-					break;
+					for(ISupplier converter : entry.getValue()) {
+						success = success | openEditorWithSupplier(file, (ISupplierFileEditorSupport)identifier, converter);
+						if(success && openFirstDataMatchOnly) {
+							break;
+						}
+					}
 				}
 			}
 		}
 		return success;
 	}
 
-	public boolean openEditorWithSupplier(File file, ISupplierFileEditorSupport identifier) {
+	private boolean openEditorWithSupplier(File file, ISupplierFileEditorSupport identifier, ISupplier converter) {
 
 		saveLastDirectoryPath();
-		return identifier.openEditor(file);
+		return identifier.openEditor(file, converter);
 	}
 }

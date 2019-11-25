@@ -14,16 +14,18 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 
 public class DataExplorerContentProvider extends LazyFileExplorerContentProvider {
 
-	private Function<File, Collection<ISupplierFileIdentifier>> supplierFunction;
+	private final Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> supplierFunction;
 
-	public DataExplorerContentProvider(Function<File, Collection<ISupplierFileIdentifier>> supplierFunction) {
-		this.supplierFunction = supplierFunction;
+	public DataExplorerContentProvider(Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
+		this.supplierFunction = identifier;
 	}
 
 	@Override

@@ -14,8 +14,10 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -31,10 +33,10 @@ import org.eclipse.ui.navigator.IDescriptionProvider;
 public class DataExplorerLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
 
 	ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
-	private Function<File, Collection<ISupplierFileIdentifier>> supplierFunction;
+	private final Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> supplierFunction;
 
-	public DataExplorerLabelProvider(Function<File, Collection<ISupplierFileIdentifier>> supplierFunction) {
-		this.supplierFunction = supplierFunction;
+	public DataExplorerLabelProvider(Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
+		this.supplierFunction = identifier;
 	}
 
 	@Override
@@ -68,7 +70,7 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 			if(file.getName().equals("") || file.getParent() == null) {
 				descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DRIVE, IApplicationImage.SIZE_16x16);
 			} else {
-				Collection<ISupplierFileIdentifier> identifier = supplierFunction.apply(file);
+				Collection<ISupplierFileIdentifier> identifier = supplierFunction.apply(file).keySet();
 				for(ISupplierFileIdentifier fileIdentifier : identifier) {
 					descriptor = getImageDescriptor(fileIdentifier, file);
 					if(descriptor != null) {

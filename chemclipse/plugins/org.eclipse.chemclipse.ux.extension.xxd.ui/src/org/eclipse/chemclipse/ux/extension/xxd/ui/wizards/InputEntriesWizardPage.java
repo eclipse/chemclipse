@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
@@ -41,7 +42,7 @@ public class InputEntriesWizardPage extends WizardPage {
 			treeSelection = treeUI.getRoot();
 			selectedItems.clear();
 			for(File file : files) {
-				Collection<ISupplierFileIdentifier> identifier = getIdentifierSupplier().apply(file);
+				Map<ISupplierFileIdentifier, Collection<ISupplier>> identifier = getIdentifierSupplier().apply(file);
 				if(!identifier.isEmpty()) {
 					selectedItems.put(file, identifier);
 				}
@@ -60,9 +61,9 @@ public class InputEntriesWizardPage extends WizardPage {
 		}
 	}
 
-	private InputWizardSettings inputWizardSettings;
+	private final InputWizardSettings inputWizardSettings;
 	private DataExplorerTreeRoot treeSelection = DataExplorerTreeRoot.NONE;
-	private Map<File, Collection<ISupplierFileIdentifier>> selectedItems = new HashMap<>();
+	private final Map<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> selectedItems = new HashMap<>();
 	private MultiDataExplorerTreeUI explorerTreeUI;
 
 	public InputEntriesWizardPage(InputWizardSettings inputWizardSettings) {
@@ -86,7 +87,7 @@ public class InputEntriesWizardPage extends WizardPage {
 		}
 	}
 
-	public Map<File, Collection<ISupplierFileIdentifier>> getSelectedItems() {
+	public Map<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> getSelectedItems() {
 
 		return selectedItems;
 	}

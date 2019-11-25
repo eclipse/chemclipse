@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -23,7 +24,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class InputEntriesWizard extends Wizard {
 
-	private InputWizardSettings inputWizardSettings;
+	private final InputWizardSettings inputWizardSettings;
 	private InputEntriesWizardPage inputEntriesPage;
 
 	private InputEntriesWizard(InputWizardSettings inputWizardSettings) {
@@ -52,7 +53,7 @@ public class InputEntriesWizard extends Wizard {
 	 * @param inputWizardSettings
 	 * @return a mapping between selected files and responsible {@link ISupplierFileIdentifier} or an empty map if user canceled the wizard
 	 */
-	public static Map<File, Collection<ISupplierFileIdentifier>> openWizard(Shell shell, InputWizardSettings inputWizardSettings) {
+	public static Map<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> openWizard(Shell shell, InputWizardSettings inputWizardSettings) {
 
 		InputEntriesWizard inputWizard = new InputEntriesWizard(inputWizardSettings);
 		WizardDialog wizardDialog = new WizardDialog(shell, inputWizard);

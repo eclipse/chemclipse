@@ -15,15 +15,18 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ProjectExplorerSupportFactory;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.GenericSupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageFileExplorer;
@@ -44,15 +47,18 @@ import org.eclipse.swt.widgets.Shell;
 public class DataExplorerPart {
 
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private final DataExplorerUI dataExplorerUI;
+	private DataExplorerUI dataExplorerUI;
 	@Inject
 	private IEventBroker broker;
 	@Inject
 	private IEclipseContext context;
+	@Inject
+	ISupplierFileIdentifier gloabalIdentifier;
 	//
 
-	@Inject
-	public DataExplorerPart(Composite parent) {
+	@PostConstruct
+	public void init(Composite parent) {
+
 		dataExplorerUI = new DataExplorerUI(parent, broker, preferenceStore);
 		setSupplierFileEditorSupport();
 	}
@@ -133,6 +139,7 @@ public class DataExplorerPart {
 			editorSupportList.add(new SupplierEditorSupport(DataType.QDB, () -> context));
 		}
 		//
+		editorSupportList.add(new GenericSupplierEditorSupport(gloabalIdentifier, () -> context));
 		dataExplorerUI.setSupplierFileIdentifier(editorSupportList);
 		dataExplorerUI.expandLastDirectoryPath();
 	}
