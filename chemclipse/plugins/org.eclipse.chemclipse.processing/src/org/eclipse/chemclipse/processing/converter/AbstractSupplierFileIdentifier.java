@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.processing.converter;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,6 +42,26 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public Collection<ISupplier> getSupplier(File file) {
+
+		List<ISupplier> list = new ArrayList<>();
+		if(file.isFile()) {
+			for(ISupplier supplier : getSupplier()) {
+				if(isValidFileSupplier(file, supplier) && isMatchMagicNumber(file)) {
+					list.add(supplier);
+				}
+			}
+		} else if(file.isDirectory()) {
+			for(ISupplier supplier : getSupplier()) {
+				if(isValidDirectorySupplier(file, supplier) && isMatchMagicNumber(file)) {
+					list.add(supplier);
+				}
+			}
+		}
+		return list;
 	}
 
 	protected static boolean isValidFileSupplier(File file, ISupplier supplier) {

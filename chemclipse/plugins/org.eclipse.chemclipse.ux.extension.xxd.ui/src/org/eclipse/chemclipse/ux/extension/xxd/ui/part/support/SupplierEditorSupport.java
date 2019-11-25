@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -45,6 +46,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -239,6 +241,26 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public boolean openEditor(File file, ISupplier supplier) {
+
+		EditorDescriptor descriptor = Adapters.adapt(supplier, EditorDescriptor.class);
+		if(descriptor != null) {
+			OpenSnippetHandler.openSnippet(descriptor.getEditorId(), contextSupplier.get(), new BiFunction<IEclipseContext, MPart, Runnable>() {
+
+				@Override
+				public Runnable apply(IEclipseContext context, MPart part) {
+
+					part.setLabel(file.getName());
+					context.set(File.class, file);
+					return null;
+				}
+			});
+			return true;
+		}
+		return openEditor(file, false);
 	}
 
 	@Override

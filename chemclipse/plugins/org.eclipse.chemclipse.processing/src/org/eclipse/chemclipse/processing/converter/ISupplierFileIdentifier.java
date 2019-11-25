@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.processing.converter;
 
 import java.io.File;
+import java.util.Collection;
 
 public interface ISupplierFileIdentifier extends SupplierContext {
 
@@ -48,11 +49,22 @@ public interface ISupplierFileIdentifier extends SupplierContext {
 	boolean isSupplierFile(File file);
 
 	/**
+	 * Get all matching suppliers for the given file the list might be ambiguous, then the only way might be to try out each supplier to convert the file
+	 * 
+	 * @param file
+	 * @return
+	 */
+	Collection<ISupplier> getSupplier(File file);
+
+	/**
 	 * Try to match the magic number of the file format.
 	 * If true, it's pretty likely that the format can be imported.
 	 * 
 	 * @param file
 	 * @return true
 	 */
-	boolean isMatchMagicNumber(File file);
+	default boolean isMatchMagicNumber(File file) {
+
+		return true;
+	}
 }

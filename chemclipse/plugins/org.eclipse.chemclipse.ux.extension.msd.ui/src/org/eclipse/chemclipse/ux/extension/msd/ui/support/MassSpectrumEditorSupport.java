@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.support;
 import java.io.File;
 
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumEditor;
@@ -66,5 +67,11 @@ public class MassSpectrumEditorSupport extends AbstractSupplierFileEditorSupport
 			IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 			eventBroker.send(IChemClipseEvents.TOPIC_FILE_MSD_UPDATE_SELECTION, file);
 		}
+	}
+
+	@Override
+	public boolean openEditor(File file, ISupplier supplier) {
+
+		return openEditor(file);
 	}
 }

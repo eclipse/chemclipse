@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
@@ -39,6 +40,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 @SuppressWarnings({"restriction"})
 public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 
+	@Deprecated
 	default boolean openEditor(final File file) {
 
 		return openEditor(file, false);
@@ -46,6 +48,8 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 
 	@Deprecated
 	boolean openEditor(final File file, boolean batch);
+
+	boolean openEditor(File file, ISupplier supplier);
 
 	default void openOverview(final File file) {
 

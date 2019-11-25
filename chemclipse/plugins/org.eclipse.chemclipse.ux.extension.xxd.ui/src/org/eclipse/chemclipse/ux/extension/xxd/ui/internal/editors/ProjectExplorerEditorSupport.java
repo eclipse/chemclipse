@@ -132,4 +132,10 @@ public class ProjectExplorerEditorSupport extends AbstractSupplierFileEditorSupp
 	public void openOverview(IMeasurementInfo measurementInfo) {
 
 	}
+
+	@Override
+	public boolean openEditor(File file, ISupplier supplier) {
+
+		return openEditor(file);
+	}
 }
