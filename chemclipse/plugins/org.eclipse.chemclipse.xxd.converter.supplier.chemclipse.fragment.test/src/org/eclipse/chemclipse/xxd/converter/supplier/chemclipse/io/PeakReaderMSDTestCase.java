@@ -34,7 +34,7 @@ public class PeakReaderMSDTestCase extends TestCase {
 
 		super.setUp();
 		fileImport = new File(this.pathImport);
-		IProcessingInfo<IPeaks> processingInfo = PeakConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		IProcessingInfo<IPeaks<?>> processingInfo = PeakConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		try {
 			peaks = processingInfo.getProcessingResult(IPeaks.class);
 		} catch(TypeCastException e) {
