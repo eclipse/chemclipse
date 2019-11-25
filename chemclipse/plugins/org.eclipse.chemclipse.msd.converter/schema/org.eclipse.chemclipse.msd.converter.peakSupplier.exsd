@@ -131,6 +131,16 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="importMagicNumberMatcher" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.chemclipse.converter.core.IMagicNumberMatcher"/>
+               </appInfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

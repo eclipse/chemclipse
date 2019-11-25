@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.Converter;
+import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
@@ -220,6 +221,7 @@ public class PeakConverterMSD {
 				supplier.setFilterName(element.getAttribute(Converter.FILTER_NAME));
 				supplier.setExportable(Boolean.valueOf(element.getAttribute(Converter.IS_EXPORTABLE)));
 				supplier.setImportable(Boolean.valueOf(element.getAttribute(Converter.IS_IMPORTABLE)));
+				supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
 				peakConverterSupport.add(supplier);
 			}
 		}
@@ -240,5 +242,16 @@ public class PeakConverterMSD {
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "Peak Import Converter", "There is no suitable converter available to load the peaks from the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
+	}
+
+	private static IMagicNumberMatcher getMagicNumberMatcher(IConfigurationElement element) {
+
+		IMagicNumberMatcher magicNumberMatcher;
+		try {
+			magicNumberMatcher = (IMagicNumberMatcher)element.createExecutableExtension(Converter.IMPORT_MAGIC_NUMBER_MATCHER);
+		} catch(Exception e) {
+			magicNumberMatcher = null;
+		}
+		return magicNumberMatcher;
 	}
 }

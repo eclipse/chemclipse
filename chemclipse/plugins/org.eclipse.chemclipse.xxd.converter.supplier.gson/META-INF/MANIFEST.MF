@@ -21,3 +21,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.msd.converter.supplier.gson.core,
  org.eclipse.chemclipse.msd.converter.supplier.gson.io
+Import-Package: org.apache.commons.io

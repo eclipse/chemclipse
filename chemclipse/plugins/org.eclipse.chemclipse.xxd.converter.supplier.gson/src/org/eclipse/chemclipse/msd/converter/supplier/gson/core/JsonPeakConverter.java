@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.io.IOUtils;
+import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.IPeakExportConverter;
 import org.eclipse.chemclipse.msd.converter.peak.IPeakImportConverter;
@@ -35,8 +37,9 @@ import com.google.gson.stream.JsonWriter;
  * Read/writes {@link IPeaks} in JSON-Format
  *
  */
-public class JsonPeakConverter implements IPeakExportConverter, IPeakImportConverter {
+public class JsonPeakConverter implements IPeakExportConverter, IPeakImportConverter, IMagicNumberMatcher {
 
+	private static final int READ_AHEAD = 500;
 	private static final String WRITER_ID_V1 = JsonPeakConverter.class.getName() + "#v1";
 	private static final String KEY_NAME = "name";
 	private static final String KEY_PEAKS = "peaks";
@@ -143,5 +146,22 @@ public class JsonPeakConverter implements IPeakExportConverter, IPeakImportConve
 			json.endArray();
 			json.endObject();
 		}
+	}
+
+	@Override
+	public boolean checkFileFormat(File file) {
+
+		try {
+			try (InputStream in = new FileInputStream(file)) {
+				InputStreamReader reader = new InputStreamReader(new GZIPInputStream(in), StandardCharsets.UTF_8);
+				char[] buffer = new char[READ_AHEAD];
+				int read = IOUtils.read(reader, buffer);
+				String string = new String(buffer, 0, read);
+				return string.contains('"' + WRITER_ID_V1 + '"');
+			}
+		} catch(IOException e) {
+			// can't read it then
+		}
+		return false;
 	}
 }
