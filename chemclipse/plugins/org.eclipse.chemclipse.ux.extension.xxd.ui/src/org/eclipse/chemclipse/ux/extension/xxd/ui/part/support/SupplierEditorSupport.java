@@ -218,12 +218,6 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	}
 
 	@Override
-	public boolean openEditor(File file) {
-
-		return openEditor(file, false);
-	}
-
-	@Override
 	public boolean openEditor(final File file, boolean batch) {
 
 		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {

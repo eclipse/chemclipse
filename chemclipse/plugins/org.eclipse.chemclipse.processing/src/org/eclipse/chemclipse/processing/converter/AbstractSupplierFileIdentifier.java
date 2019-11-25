@@ -14,41 +14,36 @@ package org.eclipse.chemclipse.processing.converter;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
 	private final List<ISupplier> suppliers;
-	private final Map<String, String> regularExpressions;
 
 	public AbstractSupplierFileIdentifier(List<ISupplier> suppliers) {
 		this.suppliers = suppliers;
-		regularExpressions = new HashMap<>();
 	}
 
 	@Override
 	public boolean isSupplierFile(File file) {
 
-		if(file.isDirectory()) {
-			return false;
-		}
-		/*
-		 * Check each supplier.
-		 */
-		for(ISupplier supplier : getSupplier()) {
-			if(isValidSupplier(file, supplier)) {
-				return true;
+		if(file.isFile()) {
+			for(ISupplier supplier : getSupplier()) {
+				if(isValidFileSupplier(file, supplier)) {
+					return true;
+				}
+			}
+		} else if(file.isDirectory()) {
+			for(ISupplier supplier : getSupplier()) {
+				if(isValidDirectorySupplier(file, supplier)) {
+					return true;
+				}
 			}
 		}
-		/*
-		 * If no converter was found, return false.
-		 */
 		return false;
 	}
 
-	public boolean isValidSupplier(File file, ISupplier supplier) {
+	protected static boolean isValidFileSupplier(File file, ISupplier supplier) {
 
 		// FIXME what is the difference to org.eclipse.chemclipse.converter.core.Converter.getSupplierForFile(File, Iterable<? extends ISupplier>) method, can we join the codes?
 		String extension = file.toString().toLowerCase();
@@ -59,11 +54,7 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 				/*
 				 * Get the matcher.
 				 */
-				String extensionMatcher = regularExpressions.get(supplierExtension);
-				if(extensionMatcher == null) {
-					extensionMatcher = getExtensionMatcher(supplierExtension);
-					regularExpressions.put(supplierExtension, extensionMatcher);
-				}
+				String extensionMatcher = getExtensionMatcher(supplierExtension);
 				/*
 				 * E.g. *.r## is a matcher for *.r01, *.r02 ...
 				 */
@@ -76,22 +67,36 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 				 */
 				if(supplier.isImportable()) {
 					return true;
-				} else {
-					/*
-					 * Try to find a supplier which is capable
-					 * to read the data.
-					 */
-					for(ISupplier specificSupplier : getSupplier()) {
-						if(extension.endsWith(specificSupplier.getFileExtension())) {
-							if(specificSupplier.isImportable()) {
-								return true;
-							}
-						}
-					}
 				}
 			}
 		} else {
 			return supplier.isImportable();
+		}
+		return false;
+	}
+
+	protected static boolean isValidDirectorySupplier(File file, ISupplier supplier) {
+
+		String directory = file.toString().toUpperCase();
+		String directoryExtension = supplier.getDirectoryExtension();
+		if(!"".equals(directoryExtension)) {
+			if(directoryExtension.contains(ISupplier.WILDCARD_NUMBER)) {
+				/*
+				 * (0_[a-zA-Z][0-9]+)#([1-9]+)#1SLin
+				 */
+				if(directoryExtension.startsWith(".")) {
+					directoryExtension = directoryExtension.substring(1, directoryExtension.length());
+				}
+				String[] directoryParts = directoryExtension.split("#");
+				return isDirectoryPatternMatch(file, directoryParts, 0);
+			} else {
+				directoryExtension = directoryExtension.toUpperCase();
+				if(directoryExtension != "" && directory.endsWith(directoryExtension)) {
+					if(supplier.isImportable()) {
+						return true;
+					}
+				}
+			}
 		}
 		return false;
 	}
@@ -102,49 +107,12 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 		return suppliers;
 	}
 
-	@Override
 	public boolean isSupplierFileDirectory(File file) {
 
-		String directory = file.toString().toUpperCase();
-		String directoryExtension;
-		/*
-		 * All directories are stored in upper cases.
-		 */
-		if(!file.isDirectory()) {
-			return false;
-		}
-		/*
-		 * Check each supplier.
-		 */
-		for(ISupplier supplier : getSupplier()) {
-			directoryExtension = supplier.getDirectoryExtension();
-			if(!"".equals(directoryExtension)) {
-				if(directoryExtension.contains(ISupplier.WILDCARD_NUMBER)) {
-					/*
-					 * (0_[a-zA-Z][0-9]+)#([1-9]+)#1SLin
-					 */
-					if(directoryExtension.startsWith(".")) {
-						directoryExtension = directoryExtension.substring(1, directoryExtension.length());
-					}
-					String[] directoryParts = directoryExtension.split("#");
-					return isDirectoryPatternMatch(file, directoryParts, 0);
-				} else {
-					directoryExtension = directoryExtension.toUpperCase();
-					if(directoryExtension != "" && directory.endsWith(directoryExtension)) {
-						if(supplier.isImportable()) {
-							return true;
-						}
-					}
-				}
-			}
-		}
-		/*
-		 * If no converter was found, return false.
-		 */
-		return false;
+		return isSupplierFileDirectory(file);
 	}
 
-	private boolean isDirectoryPatternMatch(File file, String[] directoryParts, int index) {
+	private static boolean isDirectoryPatternMatch(File file, String[] directoryParts, int index) {
 
 		if(file.isDirectory()) {
 			if(index < directoryParts.length) {

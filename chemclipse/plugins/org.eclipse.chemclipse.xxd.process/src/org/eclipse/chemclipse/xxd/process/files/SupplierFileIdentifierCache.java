@@ -51,20 +51,10 @@ public class SupplierFileIdentifierCache implements Function<File, Collection<IS
 		Collection<ISupplierFileIdentifier> list = supplierCache.get(file);
 		if(list == null) {
 			list = new ArrayList<>(1);
-			if(file.isDirectory()) {
-				for(ISupplierFileIdentifier supplierFileIdentifier : fileIdentifiers) {
-					if(supplierFileIdentifier.isSupplierFileDirectory(file)) {
-						if(supplierFileIdentifier.isMatchMagicNumber(file)) {
-							list.add(supplierFileIdentifier);
-						}
-					}
-				}
-			} else if(file.isFile()) {
-				for(ISupplierFileIdentifier supplierFileIdentifier : fileIdentifiers) {
-					if(supplierFileIdentifier.isSupplierFile(file)) {
-						if(supplierFileIdentifier.isMatchMagicNumber(file)) {
-							list.add(supplierFileIdentifier);
-						}
+			for(ISupplierFileIdentifier supplierFileIdentifier : fileIdentifiers) {
+				if(supplierFileIdentifier.isSupplierFile(file)) {
+					if(supplierFileIdentifier.isMatchMagicNumber(file)) {
+						list.add(supplierFileIdentifier);
 					}
 				}
 			}

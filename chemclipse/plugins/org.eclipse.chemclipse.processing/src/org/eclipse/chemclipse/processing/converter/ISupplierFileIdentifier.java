@@ -48,14 +48,6 @@ public interface ISupplierFileIdentifier extends SupplierContext {
 	boolean isSupplierFile(File file);
 
 	/**
-	 * Check whether the file is a supplied file type directory or not.
-	 * 
-	 * @param file
-	 * @return boolean
-	 */
-	boolean isSupplierFileDirectory(File file);
-
-	/**
 	 * Try to match the magic number of the file format.
 	 * If true, it's pretty likely that the format can be imported.
 	 * 

@@ -44,8 +44,8 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 	private static final String EDITOR_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.editors.chromatogramEditor3x";
 	//
 	private ChromatogramEditor chromatogramEditor;
-	private MPart part = PartSupport.get3xEditorPart(EDITOR_ID);
-	private MDirtyable dirtyable = new MDirtyable() {
+	private final MPart part = PartSupport.get3xEditorPart(EDITOR_ID);
+	private final MDirtyable dirtyable = new MDirtyable() {
 
 		private boolean value = false;
 
@@ -163,14 +163,8 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 
 		boolean isMatch = false;
 		if(supplierFileIdentifier != null && file != null && file.exists()) {
-			if(file.isDirectory()) {
-				if(supplierFileIdentifier.isSupplierFileDirectory(file) && supplierFileIdentifier.isMatchMagicNumber(file)) {
-					isMatch = true;
-				}
-			} else {
-				if(supplierFileIdentifier.isSupplierFile(file) && supplierFileIdentifier.isMatchMagicNumber(file)) {
-					isMatch = true;
-				}
+			if(supplierFileIdentifier.isSupplierFile(file) && supplierFileIdentifier.isMatchMagicNumber(file)) {
+				isMatch = true;
 			}
 		}
 		return isMatch;

@@ -39,11 +39,17 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 @SuppressWarnings({"restriction"})
 public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 
-	boolean openEditor(final File file);
+	default boolean openEditor(final File file) {
 
+		return openEditor(file, false);
+	}
+
+	@Deprecated
 	boolean openEditor(final File file, boolean batch);
 
-	void openOverview(final File file);
+	default void openOverview(final File file) {
+
+	}
 
 	default void openEditor(File file, Object object, String elementId, String contributionURI, String iconURI, String tooltip) {
 
@@ -51,6 +57,7 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 	}
 
 	@SuppressWarnings("rawtypes")
+	@Deprecated
 	default void openEditor(File file, Object object, String elementId, String contributionURI, String iconURI, String tooltip, boolean batch) {
 
 		EModelService modelService = ModelSupportAddon.getModelService();

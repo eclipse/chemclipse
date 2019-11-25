@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.chemclipse.processing.internal.OSGiSupplierFileIdentifier">
+   <service>
+      <provide interface="org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier"/>
+   </service>
+   <reference bind="addSupplierContext" cardinality="0..n" interface="org.eclipse.chemclipse.processing.converter.SupplierContext" name="SupplierContext" policy="dynamic" unbind="removeSupplierContext"/>
+   <implementation class="org.eclipse.chemclipse.processing.internal.OSGiSupplierFileIdentifier"/>
+</scr:component>

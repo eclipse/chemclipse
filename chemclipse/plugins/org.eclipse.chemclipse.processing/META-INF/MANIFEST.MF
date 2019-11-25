@@ -23,5 +23,5 @@ Import-Package: org.eclipse.chemclipse.support.settings,
 Service-Component: OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiFilterFactory.xml,
  OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiProcessSupplierContext.xml,
  OSGI-INF/org.eclipse.chemclipse.processing.internal.ProcedureProcessTypeSupplier.xml,
- OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiSupplierFileEditorSupport.xml
+ OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiSupplierFileIdentifier.xml
 Bundle-ActivationPolicy: lazy
