@@ -26,4 +26,5 @@ Export-Package: org.eclipse.chemclipse.msd.converter.chromatogram,
 Import-Package: com.fasterxml.jackson.annotation;version="2.9.2",
  org.osgi.service.component.annotations;version="1.2.0"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSDProcessTypeSupplier.xml,
- OSGI-INF/org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSDProcessTypeSupplier.xml
+ OSGI-INF/org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSDProcessTypeSupplier.xml,
+ OSGI-INF/org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSDSupplierContext.xml
