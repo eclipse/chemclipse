@@ -9,20 +9,15 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.logging;bundle-version="0.8.0",
  org.eclipse.chemclipse.processing;bundle-version="0.8.0",
  org.eclipse.chemclipse.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.support;bundle-version="0.8.0",
- com.fasterxml.jackson.core.jackson-databind;bundle-version="2.7.1",
- com.fasterxml.jackson.core.jackson-core;bundle-version="2.7.1",
- com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.7.1"
+ org.eclipse.chemclipse.converter
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.xxd.process.comparators,
  org.eclipse.chemclipse.xxd.process.files,
  org.eclipse.chemclipse.xxd.process.support
 Import-Package: org.eclipse.chemclipse.converter.chromatogram,
- org.eclipse.chemclipse.converter.core,
  org.eclipse.chemclipse.converter.methods,
  org.eclipse.chemclipse.converter.quantitation,
- org.eclipse.chemclipse.converter.scan,
  org.eclipse.chemclipse.converter.sequence,
  org.eclipse.chemclipse.csd.converter.chromatogram,
  org.eclipse.chemclipse.csd.model.core,
@@ -30,11 +25,9 @@ Import-Package: org.eclipse.chemclipse.converter.chromatogram,
  org.eclipse.chemclipse.msd.converter.chromatogram,
  org.eclipse.chemclipse.msd.model.core,
  org.eclipse.chemclipse.msd.model.core.selection,
- org.eclipse.chemclipse.msd.model.core.support,
- org.eclipse.chemclipse.nmr.converter.core;version="0.8.0.qualifier",
+ org.eclipse.chemclipse.nmr.converter.core,
  org.eclipse.chemclipse.pcr.converter.core,
  org.eclipse.chemclipse.wsd.converter.chromatogram,
  org.eclipse.chemclipse.wsd.model.core,
  org.eclipse.chemclipse.wsd.model.core.selection,
- org.eclipse.chemclipse.xir.converter.core,
- org.eclipse.core.databinding.validation
+ org.eclipse.chemclipse.xir.converter.core

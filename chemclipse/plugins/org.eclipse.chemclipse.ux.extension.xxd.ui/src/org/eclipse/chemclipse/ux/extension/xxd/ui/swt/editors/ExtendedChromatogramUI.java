@@ -79,6 +79,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
@@ -116,6 +117,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.IAxis.Position;
@@ -436,7 +438,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_BACKGROUND);
 		//
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-		addSelectedPeakData(lineSeriesDataList);
+		addSelectedPeakData(lineSeriesDataList, getTargetSettings());
 		addLineSeriesData(lineSeriesDataList);
 		adjustChromatogramSelectionRange();
 	}
@@ -581,8 +583,17 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		//
 		if(chromatogramSelection != null) {
 			addjustChromatogramChart();
-			addChromatogramSeriesData();
+			addChromatogramSeriesData(getTargetSettings());
 			adjustChromatogramSelectionRange();
+		}
+	}
+
+	private TargetDisplaySettings getTargetSettings() {
+
+		if(chromatogramSelection != null) {
+			return TargetDisplaySettings.getSettings(chromatogramSelection.getChromatogram().getFile(), preferenceStore);
+		} else {
+			return TargetDisplaySettings.getSettings(null, preferenceStore);
 		}
 	}
 
@@ -647,14 +658,14 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		chromatogramChart.applySettings(chartSettings);
 	}
 
-	private void addChromatogramSeriesData() {
+	private void addChromatogramSeriesData(TargetDisplaySettings settings) {
 
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 		//
 		addChromatogramData(lineSeriesDataList);
-		addPeakData(lineSeriesDataList);
-		addIdentifiedScansData(lineSeriesDataList);
-		addSelectedPeakData(lineSeriesDataList);
+		addPeakData(lineSeriesDataList, settings);
+		addIdentifiedScansData(lineSeriesDataList, settings);
+		addSelectedPeakData(lineSeriesDataList, settings);
 		addSelectedScanData(lineSeriesDataList);
 		addSelectedIdentifiedScanData(lineSeriesDataList);
 		addBaselineData(lineSeriesDataList);
@@ -672,7 +683,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		lineSeriesDataList.add(lineSeriesData);
 	}
 
-	private void addPeakData(List<ILineSeriesData> lineSeriesDataList) {
+	private void addPeakData(List<ILineSeriesData> lineSeriesDataList, TargetDisplaySettings settings) {
 
 		if(chromatogramSelection != null) {
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
@@ -704,14 +715,14 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				}
 			}
 			//
-			addPeaks(lineSeriesDataList, peaksActiveNormal, symbolTypeActiveNormal, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL_ACTIVE);
-			addPeaks(lineSeriesDataList, peaksInactiveNormal, symbolTypeInactiveNormal, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_NORMAL_INACTIVE);
-			addPeaks(lineSeriesDataList, peaksActiveISTD, symbolTypeActiveIstd, symbolSize, Colors.RED, SERIES_ID_PEAKS_ISTD_ACTIVE);
-			addPeaks(lineSeriesDataList, peaksInactiveISTD, symbolTypeInactiveIstd, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_ISTD_INACTIVE);
+			addPeaks(lineSeriesDataList, peaksActiveNormal, symbolTypeActiveNormal, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL_ACTIVE, settings);
+			addPeaks(lineSeriesDataList, peaksInactiveNormal, symbolTypeInactiveNormal, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_NORMAL_INACTIVE, settings);
+			addPeaks(lineSeriesDataList, peaksActiveISTD, symbolTypeActiveIstd, symbolSize, Colors.RED, SERIES_ID_PEAKS_ISTD_ACTIVE, settings);
+			addPeaks(lineSeriesDataList, peaksInactiveISTD, symbolTypeInactiveIstd, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_ISTD_INACTIVE, settings);
 		}
 	}
 
-	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
+	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, TargetDisplaySettings displaySettings) {
 
 		if(peaks.size() > 0) {
 			//
@@ -728,18 +739,17 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			 * Add the labels.
 			 */
 			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
-			boolean showChromatogramPeakLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS);
-			if(showChromatogramPeakLabels) {
+			if(displaySettings.showPeakLabels()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
 				int indexSeries = lineSeriesDataList.size() - 1;
-				IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, peaks, null);
+				IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, peaks, IdentificationLabelMarker.getPeakFont(chromatogramChart.getBaseChart().getDisplay()), displaySettings);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
 		}
 	}
 
-	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList) {
+	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList, TargetDisplaySettings displaySettings) {
 
 		if(chromatogramSelection != null) {
 			String seriesId = SERIES_ID_IDENTIFIED_SCANS;
@@ -751,11 +761,10 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			 * Add the labels.
 			 */
 			removeIdentificationLabelMarker(scanLabelMarkerMap, seriesId);
-			boolean showChromatogramScanLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS);
-			if(showChromatogramScanLabels) {
+			if(displaySettings.showScanLables()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
 				int indexSeries = lineSeriesDataList.size() - 1;
-				IdentificationLabelMarker scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, null, scans);
+				IdentificationLabelMarker scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, scans, IdentificationLabelMarker.getScanFont(chromatogramChart.getBaseChart().getDisplay()), displaySettings);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}
@@ -792,7 +801,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		}
 	}
 
-	private void addSelectedPeakData(List<ILineSeriesData> lineSeriesDataList) {
+	private void addSelectedPeakData(List<ILineSeriesData> lineSeriesDataList, TargetDisplaySettings settings) {
 
 		IPeak peak = chromatogramSelection.getSelectedPeak();
 		if(peak != null) {
@@ -811,7 +820,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			 */
 			List<IPeak> peaks = new ArrayList<>();
 			peaks.add(peak);
-			addPeaks(lineSeriesDataList, peaks, symbolTypePeakMarker, symbolSize, colorPeak, SERIES_ID_SELECTED_PEAK_MARKER);
+			addPeaks(lineSeriesDataList, peaks, symbolTypePeakMarker, symbolSize, colorPeak, SERIES_ID_SELECTED_PEAK_MARKER, settings);
 			/*
 			 * Peak
 			 */
@@ -900,6 +909,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private EditorToolBar createToolbarMain(Composite parent) {
 
 		EditorToolBar editorToolBar = new EditorToolBar(parent);
+		// editorToolBar.addAction(createLabelsAction());
 		editorToolBar.addAction(createToggleToolbarAction("Info", "Toggle the info toolbar.", IApplicationImage.IMAGE_INFO, TOOLBAR_INFO));
 		editorToolBar.createCombo(this::initComboViewerSeparationColumn, true, 150);
 		chromatogramReferencesUI = new ChromatogramReferencesUI(editorToolBar, this::setChromatogramSelectionInternal);
@@ -1139,6 +1149,18 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		});
 		//
 		return button;
+	}
+
+	private IAction createLabelsAction() {
+
+		return new Action("Manage Labels", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImage.SIZE_16x16)) {
+
+			@Override
+			public void runWithEvent(Event event) {
+
+				// new TargetsListUI(parent, style)
+			}
+		};
 	}
 
 	private IAction createToggleToolbarAction(String name, String tooltip, String image, String toolbar) {

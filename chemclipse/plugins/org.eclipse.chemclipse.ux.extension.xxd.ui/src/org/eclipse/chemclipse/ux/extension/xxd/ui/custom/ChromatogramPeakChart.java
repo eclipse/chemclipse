@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -49,14 +50,14 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 	private static final String SERIES_ID_PEAKS_SELECTED_SHAPE = "Peaks Selected Shape";
 	private static final String SERIES_ID_PEAKS_SELECTED_BACKGROUND = "Peaks Selected Background";
 	//
-	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
-	private PeakChartSupport peakChartSupport = new PeakChartSupport();
-	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
+	private final PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
+	private final PeakChartSupport peakChartSupport = new PeakChartSupport();
+	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	//
-	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<>();
-	private Set<String> selectedPeakIds = new HashSet<>();
+	private final Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<>();
+	private final Set<String> selectedPeakIds = new HashSet<>();
 	//
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ChromatogramPeakChart() {
 		super();
@@ -149,11 +150,11 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 			 */
 			if(addLabelMarker) {
 				removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
-				boolean showChromatogramPeakLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS);
-				if(showChromatogramPeakLabels) {
-					IPlotArea plotArea = (IPlotArea)getBaseChart().getPlotArea();
+				TargetDisplaySettings settings = TargetDisplaySettings.getSettings(null, preferenceStore);
+				if(settings.showPeakLabels()) {
+					IPlotArea plotArea = getBaseChart().getPlotArea();
 					int indexSeries = lineSeriesDataList.size() - 1;
-					IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(getBaseChart(), indexSeries, peaks, null);
+					IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(getBaseChart(), indexSeries, peaks, IdentificationLabelMarker.getPeakFont(getDisplay()), settings);
 					plotArea.addCustomPaintListener(peakLabelMarker);
 					peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 				}
@@ -205,7 +206,7 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 
 	private void removeIdentificationLabelMarker(Map<String, IdentificationLabelMarker> markerMap, String seriesId) {
 
-		IPlotArea plotArea = (IPlotArea)getBaseChart().getPlotArea();
+		IPlotArea plotArea = getBaseChart().getPlotArea();
 		IdentificationLabelMarker labelMarker = markerMap.get(seriesId);
 		/*
 		 * Remove the label marker.

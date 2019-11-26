@@ -68,6 +68,8 @@ import java.math.BigDecimal;
  */
 public interface AcquisitionParameter {
 
+	int MIN_DIGITS = 10;
+
 	/**
 	 * [sw]
 	 * 
@@ -142,7 +144,7 @@ public interface AcquisitionParameter {
 	default BigDecimal toPPM(BigDecimal hz) {
 
 		BigDecimal cf = getCarrierFrequency();
-		return hz.divide(cf, Math.max(hz.scale(), cf.scale()), BigDecimal.ROUND_HALF_EVEN);
+		return hz.divide(cf, Math.max(MIN_DIGITS, Math.max(hz.scale(), cf.scale())), BigDecimal.ROUND_HALF_EVEN);
 	}
 
 	public static void print(AcquisitionParameter acquisitionParameter) {
