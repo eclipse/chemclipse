@@ -248,7 +248,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 					for(ISupplier converter : entry.getValue()) {
 						success = success | openEditorWithSupplier(file, (ISupplierFileEditorSupport)identifier, converter);
 						if(success && openFirstDataMatchOnly) {
-							break;
+							return true;
 						}
 					}
 				}

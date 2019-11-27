@@ -11,55 +11,70 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
 
-import java.io.File;
+import java.util.function.Function;
 
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public interface TargetDisplaySettings {
 
+	public static final TargetExtendedComparator COMPARATOR = new TargetExtendedComparator(SortOrder.DESC);
+
 	enum LibraryField {
-		NAME, CAS, CLASSIFICATION, FORMULA, SYNONYMS;
+		NAME("Name", libraryExtractor(ILibraryInformation::getName)), //
+		CAS("CAS", libraryExtractor(ILibraryInformation::getCasNumber)), //
+		CLASSIFICATION("Classifications", libraryExtractor(ILibraryInformation::getClassifier).andThen(elements -> elements != null ? String.join("; ", elements) : null)), //
+		FORMULA("Formula", libraryExtractor(ILibraryInformation::getFormula)), //
+		SYNONYMS("Synonyms", libraryExtractor(ILibraryInformation::getSynonyms).andThen(elements -> elements != null ? String.join("; ", elements) : null));
+
+		private final Function<IIdentificationTarget, String> transformer;
+		private final String label;
+
+		private LibraryField(String label, Function<IIdentificationTarget, String> transformer) {
+			this.label = label;
+			this.transformer = transformer;
+		}
+
+		/**
+		 * 
+		 * @return a transformer that can transform the given target into an ordinary String
+		 */
+		public Function<IIdentificationTarget, String> stringTransformer() {
+
+			return transformer;
+		}
+
+		@Override
+		public String toString() {
+
+			return label;
+		}
+
+		private static <T> Function<IIdentificationTarget, T> libraryExtractor(Function<ILibraryInformation, T> extractor) {
+
+			return target -> {
+				ILibraryInformation information = target.getLibraryInformation();
+				if(information == null) {
+					return null;
+				}
+				return extractor.apply(information);
+			};
+		}
 	}
 
-	boolean showPeakLabels();
+	boolean isShowPeakLabels();
 
-	boolean showScanLables();
+	boolean isShowScanLables();
+
+	void setShowPeakLabels(boolean showPeakLabels);
+
+	void setShowScanLables(boolean showScanLables);
 
 	LibraryField getField();
 
-	static TargetDisplaySettings getSettings(File file, IPreferenceStore preferenceStore) {
-
-		boolean showChromatogramPeakLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS);
-		boolean showChromatogramScanLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS);
-		return new TargetDisplaySettings() {
-
-			@Override
-			public boolean showPeakLabels() {
-
-				return showChromatogramPeakLabels;
-			}
-
-			@Override
-			public boolean showScanLables() {
-
-				return showChromatogramScanLabels;
-			}
-
-			@Override
-			public LibraryField getField() {
-
-				return LibraryField.NAME;
-			}
-
-			@Override
-			public boolean isVisible(IIdentificationTarget target) {
-
-				return true;
-			}
-		};
-	}
+	void setField(LibraryField libraryField);
 
 	boolean isVisible(IIdentificationTarget target);
 }

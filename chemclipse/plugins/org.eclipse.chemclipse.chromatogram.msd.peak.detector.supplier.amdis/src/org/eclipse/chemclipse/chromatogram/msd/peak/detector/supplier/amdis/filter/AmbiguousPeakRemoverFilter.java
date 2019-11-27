@@ -232,7 +232,7 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 	private static int getRTDelta(IPeak p1, IPeak p2) {
 
 		int rt1 = Adapters.adapt(p1, IPeakMSD.class).getExtractedMassSpectrum().getRetentionTime();
-		int rt2 = Adapters.adapt(p1, IPeakMSD.class).getExtractedMassSpectrum().getRetentionTime();
+		int rt2 = Adapters.adapt(p2, IPeakMSD.class).getExtractedMassSpectrum().getRetentionTime();
 		return rt1 - rt2;
 	}
 

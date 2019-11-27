@@ -498,7 +498,8 @@ public class ExtendedTargetsUI {
 
 	private TargetsListUI createTargetTable(Composite parent) {
 
-		TargetsListUI listUI = new TargetsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		TargetsListUI listUI = new TargetsListUI(parent, SWT.BORDER);
+		listUI.setEditingSupport();
 		Table table = listUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		listUI.getControl().addMouseListener(new MouseAdapter() {

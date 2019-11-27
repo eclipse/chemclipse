@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - fix loading of images with different size
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.ui.icons.core;
 
@@ -25,19 +26,20 @@ import org.osgi.framework.Bundle;
 
 public abstract class AbstractApplicationImage implements IApplicationImage {
 
-	private Bundle bundle;
+	private final Bundle bundle;
 
 	public AbstractApplicationImage(Bundle bundle) {
-		this.bundle = bundle; // Activator.getContext().getBundle()
+		this.bundle = bundle;
 	}
 
 	@Override
 	public Image getImage(String fileName, String size) {
 
-		Image image = JFaceResources.getImageRegistry().get(fileName);
+		String path = getPath(fileName, size);
+		Image image = JFaceResources.getImageRegistry().get(path);
 		if(image == null) {
-			addIconImageDescriptor(fileName, size);
-			image = JFaceResources.getImageRegistry().get(fileName);
+			addIconImageDescriptor(path);
+			return JFaceResources.getImageRegistry().get(path);
 		}
 		return image;
 	}
@@ -45,11 +47,10 @@ public abstract class AbstractApplicationImage implements IApplicationImage {
 	@Override
 	public ImageDescriptor getImageDescriptor(String fileName, String size) {
 
-		ImageDescriptor imageDescriptor = null;
-		imageDescriptor = JFaceResources.getImageRegistry().getDescriptor(fileName);
+		String key = getPath(fileName, size);
+		ImageDescriptor imageDescriptor = JFaceResources.getImageRegistry().getDescriptor(key);
 		if(imageDescriptor == null) {
-			addIconImageDescriptor(fileName, size);
-			imageDescriptor = JFaceResources.getImageRegistry().getDescriptor(fileName);
+			return addIconImageDescriptor(key);
 		}
 		return imageDescriptor;
 	}
@@ -58,7 +59,7 @@ public abstract class AbstractApplicationImage implements IApplicationImage {
 	public InputStream getImageAsInputStream(String fileName, String size) throws IOException {
 
 		InputStream inputStream = null;
-		URL url = FileLocator.find(bundle, new Path(ICON_PATH + size + "/" + fileName), null);
+		URL url = FileLocator.find(bundle, new Path(getPath(fileName, size)), null);
 		inputStream = url.openConnection().getInputStream();
 		return inputStream;
 	}
@@ -71,17 +72,22 @@ public abstract class AbstractApplicationImage implements IApplicationImage {
 	 * @param size
 	 * @return boolean
 	 */
-	private boolean addIconImageDescriptor(String fileName, String size) {
+	private ImageDescriptor addIconImageDescriptor(String path) {
 
 		try {
-			URL fileLocation = FileLocator.find(bundle, new Path(ICON_PATH + size + "/" + fileName), null);
+			URL fileLocation = FileLocator.find(bundle, new Path(path), null);
 			ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(fileLocation);
-			JFaceResources.getImageRegistry().put(fileName, imageDescriptor);
+			JFaceResources.getImageRegistry().put(path, imageDescriptor);
+			return imageDescriptor;
 		} catch(MissingResourceException e) {
-			return false;
+			return null;
 		} catch(IllegalArgumentException e) {
-			return false;
+			return null;
 		}
-		return true;
+	}
+
+	private static String getPath(String fileName, String size) {
+
+		return ICON_PATH + size + "/" + fileName;
 	}
 }

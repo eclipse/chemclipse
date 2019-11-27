@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - Adjust API
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.custom;
 
@@ -29,6 +30,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.PreferenceStoreTargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
@@ -150,8 +152,8 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 			 */
 			if(addLabelMarker) {
 				removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
-				TargetDisplaySettings settings = TargetDisplaySettings.getSettings(null, preferenceStore);
-				if(settings.showPeakLabels()) {
+				TargetDisplaySettings settings = PreferenceStoreTargetDisplaySettings.getSettings(preferenceStore);
+				if(settings.isShowPeakLabels()) {
 					IPlotArea plotArea = getBaseChart().getPlotArea();
 					int indexSeries = lineSeriesDataList.size() - 1;
 					IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(getBaseChart(), indexSeries, peaks, IdentificationLabelMarker.getPeakFont(getDisplay()), settings);

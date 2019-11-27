@@ -8,18 +8,16 @@
  * 
  * Contributors:
  * Philip Wenig - initial API and implementation
+ * Christoph Läubrich - make configurable by TargetDisplaySettings
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -36,7 +34,6 @@ import org.eclipse.swtchart.extensions.marker.LabelMarker;
 public class IdentificationLabelMarker extends LabelMarker {
 
 	private final Font font = DisplayUtils.getDisplay().getSystemFont();
-	private static final TargetExtendedComparator COMPARATOR = new TargetExtendedComparator(SortOrder.DESC);
 
 	/**
 	 * Peak or Scan can be null. If null, it won't be processed.
@@ -49,49 +46,17 @@ public class IdentificationLabelMarker extends LabelMarker {
 	public IdentificationLabelMarker(BaseChart baseChart, int indexSeries, List<? extends ITargetSupplier> identifications, Font font, TargetDisplaySettings settings) {
 		super(baseChart);
 		List<String> labels = new ArrayList<String>();
+		Function<IIdentificationTarget, String> transformer = settings.getField().stringTransformer();
 		for(ITargetSupplier identification : identifications) {
-			String label = "";
-			IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(identification.getTargets(), COMPARATOR);
+			IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(identification.getTargets(), TargetDisplaySettings.COMPARATOR);
 			if(target != null && settings.isVisible(target)) {
-				ILibraryInformation libraryInformation = target.getLibraryInformation();
-				if(libraryInformation != null) {
-					switch(settings.getField()) {
-						case CAS:
-							label = libraryInformation.getCasNumber();
-							break;
-						case CLASSIFICATION:
-							label = joinStrings(libraryInformation.getClassifier());
-							break;
-						case NAME:
-							label = libraryInformation.getName();
-							break;
-						case FORMULA:
-							label = libraryInformation.getFormula();
-							break;
-						case SYNONYMS:
-							label = joinStrings(libraryInformation.getSynonyms());
-							break;
-						default:
-							break;
-					}
-					label = libraryInformation.getName();
-				}
+				String label = transformer.apply(target);
+				labels.add(label);
+			} else {
+				labels.add(null);
 			}
-			labels.add(label);
 		}
 		setLabels(labels, indexSeries, SWT.VERTICAL);
-	}
-
-	private String joinStrings(Collection<String> classifier) {
-
-		StringBuilder builder = new StringBuilder();
-		for(String c : classifier) {
-			if(builder.length() > 0) {
-				builder.append("; ");
-			}
-			builder.append(c);
-		}
-		return builder.toString();
 	}
 
 	@Override
