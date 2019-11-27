@@ -62,6 +62,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SAMPLE_QC_QUALIFIER = "sample-qc-qualifier.gif";
 	//
 	String IMAGE_PREFERENCES = "preferences.gif";
+	String IMAGE_SETTINGS_PULL = "settings_pull.png";
+	String IMAGE_SETTINGS_PUSH = "settings_push.png";
 	String IMAGE_DRIVE = "drive.gif";
 	String IMAGE_CHROMATOGRAM_ZERO_SET = "chromatogramZeorSet.gif";
 	String IMAGE_FOLDER_OPENED = "folder_opened.gif";
