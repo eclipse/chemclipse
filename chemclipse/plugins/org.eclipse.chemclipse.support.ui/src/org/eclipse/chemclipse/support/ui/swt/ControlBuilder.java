@@ -132,6 +132,11 @@ public class ControlBuilder {
 		return label(label, null, container);
 	}
 
+	public static Label separator(Composite container) {
+
+		return fill(new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL));
+	}
+
 	public static Label label(String label, String tooltip, Composite container) {
 
 		Label labelComponent = new Label(container, SWT.NONE);

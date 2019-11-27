@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -23,18 +25,25 @@ import org.osgi.service.prefs.Preferences;
 
 public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 
+	private static final String KEY_SYSTEM_SETTINGS = "useSystemSettings";
 	private static IEclipsePreferences preferences;
 	private final Preferences node;
 	private final TargetDisplaySettings systemSettings;
+	private TargetDisplaySettings userSettings;
 
 	private WorkspaceTargetDisplaySettings(Preferences node, TargetDisplaySettings systemSettings) {
 		this.node = node;
 		this.systemSettings = systemSettings;
 	}
 
-	public boolean useSystemSettings() {
+	public boolean isUseSystemSettings() {
 
-		return systemSettings != null && node.getBoolean("useSystemSettings", true);
+		return systemSettings != null && node.getBoolean(KEY_SYSTEM_SETTINGS, true);
+	}
+
+	public void setUseSystemSettings(boolean useSystemSettings) {
+
+		node.putBoolean(KEY_SYSTEM_SETTINGS, useSystemSettings);
 	}
 
 	public TargetDisplaySettings getSystemSettings() {
@@ -42,10 +51,21 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		return systemSettings;
 	}
 
+	public TargetDisplaySettings getUserSettings() {
+
+		if(systemSettings == null) {
+			return this;
+		}
+		if(userSettings == null) {
+			userSettings = new WorkspaceTargetDisplaySettings(node, null);
+		}
+		return userSettings;
+	}
+
 	@Override
 	public boolean isShowPeakLabels() {
 
-		if(useSystemSettings()) {
+		if(isUseSystemSettings()) {
 			return systemSettings.isShowPeakLabels();
 		}
 		return node.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS, PreferenceConstants.DEF_SHOW_CHROMATOGRAM_PEAK_LABELS);
@@ -54,7 +74,7 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 	@Override
 	public boolean isShowScanLables() {
 
-		if(useSystemSettings()) {
+		if(isUseSystemSettings()) {
 			return systemSettings.isShowScanLables();
 		}
 		return node.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS, PreferenceConstants.DEF_SHOW_CHROMATOGRAM_SCAN_LABELS);
@@ -63,7 +83,7 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 	@Override
 	public LibraryField getField() {
 
-		if(useSystemSettings()) {
+		if(isUseSystemSettings()) {
 			return systemSettings.getField();
 		}
 		String string = node.get(PreferenceConstants.P_TARGET_LABEL_FIELD, null);
@@ -76,7 +96,7 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 	@Override
 	public boolean isVisible(IIdentificationTarget target) {
 
-		if(useSystemSettings()) {
+		if(isUseSystemSettings()) {
 			return systemSettings.isVisible(target);
 		}
 		String id = getID(target, getField());
@@ -86,14 +106,14 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		return true;
 	}
 
-	private String getID(IIdentificationTarget target, LibraryField field) {
+	public static String getID(IIdentificationTarget target, LibraryField field) {
 
 		if(target != null) {
 			StringBuilder sb = new StringBuilder("IdentificationTarget.");
 			sb.append(field.name());
 			sb.append(".");
 			sb.append(field.stringTransformer().apply(target));
-			return sb.toString();
+			return sb.toString().trim();
 		}
 		return null;
 	}
@@ -142,5 +162,25 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 			preferences = InstanceScope.INSTANCE.getNode(TargetDisplaySettings.class.getName());
 		}
 		return preferences;
+	}
+
+	public void updateVisible(Map<String, Boolean> visibleMap) {
+
+		for(Entry<String, Boolean> entry : visibleMap.entrySet()) {
+			if(entry.getValue()) {
+				node.remove(entry.getKey());
+			} else {
+				node.putBoolean(entry.getKey(), false);
+			}
+		}
+	}
+
+	public void flush() {
+
+		try {
+			node.flush();
+		} catch(BackingStoreException e) {
+			// best effort, can't flush then...
+		}
 	}
 }

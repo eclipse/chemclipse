@@ -1168,8 +1168,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			@Override
 			public void runWithEvent(Event event) {
 
-				TargetDisplaySettings newSettings = TargetDisplaySettingsWizard.openWizard(chromatogramChart.getShell(), chromatogramSelection.getChromatogram().getPeaks(), getTargetSettings());
-				if(newSettings != null) {
+				if(TargetDisplaySettingsWizard.openWizard(chromatogramChart.getShell(), chromatogramSelection.getChromatogram().getPeaks(), getTargetSettings())) {
 					updateChromatogram();
 				}
 			}
