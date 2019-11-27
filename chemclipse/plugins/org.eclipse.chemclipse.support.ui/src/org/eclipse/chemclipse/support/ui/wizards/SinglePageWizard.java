@@ -21,9 +21,13 @@ import org.eclipse.jface.wizard.WizardPage;
 public class SinglePageWizard extends Wizard {
 
 	public SinglePageWizard(String title, WizardPage page) {
+		this(title, false, page);
+	}
+
+	public SinglePageWizard(String title, boolean needsProgressMonitor, WizardPage page) {
 		addPage(page);
 		setWindowTitle(title);
-		setNeedsProgressMonitor(false);
+		setNeedsProgressMonitor(needsProgressMonitor);
 	}
 
 	@Override

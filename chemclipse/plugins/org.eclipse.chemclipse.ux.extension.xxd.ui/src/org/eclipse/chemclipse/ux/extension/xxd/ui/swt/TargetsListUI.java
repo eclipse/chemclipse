@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - make more generic useable
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -21,19 +22,28 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsEditi
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class TargetsListUI extends ExtendedTableViewer {
 
 	private static final String[] TITLES = TargetsLabelProvider.TITLES;
 	private static final int[] BOUNDS = TargetsLabelProvider.BOUNDS;
-	private TargetsLabelProvider labelProvider = new TargetsLabelProvider();
-	private TargetsComparator targetsTableComparator = new TargetsComparator();
-	private TargetListFilter targetListFilter = new TargetListFilter();
+	private final TargetsLabelProvider labelProvider = new TargetsLabelProvider();
+	private final TargetsComparator targetsTableComparator = new TargetsComparator();
+	private final TargetListFilter targetListFilter = new TargetListFilter();
 
 	public TargetsListUI(Composite parent, int style) {
-		super(parent, style);
-		createColumns();
+		this(parent, TITLES, style);
+	}
+
+	public TargetsListUI(Composite parent, String[] alternativeTitles, int style) {
+		super(parent, style | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		createColumns(alternativeTitles, BOUNDS);
+		setLabelProvider(labelProvider);
+		setContentProvider(new ListContentProvider());
+		setComparator(targetsTableComparator);
+		setFilters(new ViewerFilter[]{targetListFilter});
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
@@ -59,17 +69,7 @@ public class TargetsListUI extends ExtendedTableViewer {
 		targetsTableComparator.setColumn(column);
 	}
 
-	private void createColumns() {
-
-		createColumns(TITLES, BOUNDS);
-		setLabelProvider(labelProvider);
-		setContentProvider(new ListContentProvider());
-		setComparator(targetsTableComparator);
-		setFilters(new ViewerFilter[]{targetListFilter});
-		setEditingSupport();
-	}
-
-	private void setEditingSupport() {
+	public void setEditingSupport() {
 
 		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
 		for(int i = 0; i < tableViewerColumns.size(); i++) {

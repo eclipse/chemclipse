@@ -28,6 +28,7 @@ import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -61,6 +62,37 @@ public class ControlBuilder {
 	public static Composite createContainer(Composite parent, int columns) {
 
 		return createContainer(parent, columns, false);
+	}
+
+	/**
+	 * Creates a checkbox with the given text and initial selection
+	 * 
+	 * @param composite
+	 * @param text
+	 * @param initialSelection
+	 * @return
+	 */
+	public static Button checkbox(Composite composite, String text, boolean initialSelection) {
+
+		Button button = new Button(composite, SWT.CHECK);
+		button.setText(text);
+		button.setSelection(initialSelection);
+		return button;
+	}
+
+	public static Button radiobutton(Composite composite, String text, boolean initialSelection) {
+
+		Button button = new Button(composite, SWT.RADIO);
+		button.setText(text);
+		button.setSelection(initialSelection);
+		return button;
+	}
+
+	public static Composite indentedContainer(Composite parent, int indentation) {
+
+		Composite container = createContainer(parent);
+		gridData(container).horizontalIndent = indentation;
+		return container;
 	}
 
 	/**
@@ -98,6 +130,11 @@ public class ControlBuilder {
 	public static Label label(String label, Composite container) {
 
 		return label(label, null, container);
+	}
+
+	public static Label separator(Composite container) {
+
+		return fill(new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL));
 	}
 
 	public static Label label(String label, String tooltip, Composite container) {

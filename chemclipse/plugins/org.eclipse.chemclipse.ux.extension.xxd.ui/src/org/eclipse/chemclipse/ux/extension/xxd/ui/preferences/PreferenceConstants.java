@@ -368,6 +368,7 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE = "chromatogramPeaksInactiveIstdMarkerType";
 	public static final String DEF_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE = PlotSymbolType.DIAMOND.toString();
 	public static final String P_SHOW_CHROMATOGRAM_SCAN_LABELS = "showChromatogramScanLabels";
+	public static final String P_TARGET_LABEL_FIELD = "targetLabelField";
 	public static final boolean DEF_SHOW_CHROMATOGRAM_SCAN_LABELS = true;
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = "chromatogramScanLabelSymbolSize";
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "chromatogramScanLabelFontName";
