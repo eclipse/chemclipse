@@ -17,7 +17,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
@@ -113,6 +117,11 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 			sb.append(field.name());
 			sb.append(".");
 			sb.append(field.stringTransformer().apply(target));
+			ILibraryInformation information = target.getLibraryInformation();
+			if(information != null) {
+				sb.append("@");
+				sb.append(information.getRetentionTime());
+			}
 			return sb.toString().trim();
 		}
 		return null;
@@ -142,16 +151,19 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		if(file == null) {
 			node = getStorage().node("TargetDisplaySettingsWizard");
 		} else {
+			String path;
 			try {
-				node = getStorage().node(file.getCanonicalPath());
+				path = file.getCanonicalPath();
 			} catch(IOException e) {
-				node = getStorage().node(file.getAbsolutePath());
+				path = file.getAbsolutePath();
 			}
+			node = getStorage().node(path.replace('/', '_').replace('.', '_'));
+			node.put("FilePath", path);
 		}
 		try {
 			node.sync();
 		} catch(BackingStoreException e) {
-			// can't sync then...
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, WorkspaceTargetDisplaySettings.class.getName(), "Sync WorkspaceTargetDisplaySettings failed!", e));
 		}
 		return new WorkspaceTargetDisplaySettings(node, systemSettings);
 	}
@@ -180,7 +192,7 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		try {
 			node.flush();
 		} catch(BackingStoreException e) {
-			// best effort, can't flush then...
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, WorkspaceTargetDisplaySettings.class.getName(), "Flush WorkspaceTargetDisplaySettings failed!", e));
 		}
 	}
 }

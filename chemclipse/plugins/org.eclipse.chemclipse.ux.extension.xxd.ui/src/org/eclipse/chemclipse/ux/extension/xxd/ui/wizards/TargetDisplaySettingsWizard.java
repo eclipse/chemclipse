@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.checkbox;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createLabelContainer;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.gridData;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.indentedContainer;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.label;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.maximize;
@@ -31,6 +33,7 @@ import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.swt.ControlBuilder;
 import org.eclipse.chemclipse.support.ui.wizards.SinglePageWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsLabelProvider;
@@ -42,6 +45,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ControlContribution;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -53,18 +60,28 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.ToolBar;
 
 public class TargetDisplaySettingsWizard {
 
@@ -86,6 +103,7 @@ public class TargetDisplaySettingsWizard {
 				currentSettings.setUseSystemSettings(false);
 				page.userSettings.copyTo(currentSettings.getUserSettings());
 			}
+			currentSettings.flush();
 			return true;
 		} else {
 			return false;
@@ -115,7 +133,6 @@ public class TargetDisplaySettingsWizard {
 			if(other instanceof WorkspaceTargetDisplaySettings) {
 				WorkspaceTargetDisplaySettings workspaceSettings = (WorkspaceTargetDisplaySettings)other;
 				workspaceSettings.updateVisible(visibleMap);
-				workspaceSettings.flush();
 			}
 		}
 
@@ -174,6 +191,7 @@ public class TargetDisplaySettingsWizard {
 		final WizardTargetDisplaySettings systemSettings;
 		final WizardTargetDisplaySettings userSettings;
 		private final Collection<? extends ITargetSupplier> identifications;
+		private TargetsListUI listUI;
 
 		protected TargetDisplaySettingsPage(Collection<? extends ITargetSupplier> identifications, WorkspaceTargetDisplaySettings settings) {
 			super(TargetDisplaySettingsPage.class.getName());
@@ -201,7 +219,8 @@ public class TargetDisplaySettingsWizard {
 			BaseTargetSettingEditor userEditor = new BaseTargetSettingEditor(userContainer, userSettings);
 			String[] alternativeTitles = TargetsLabelProvider.TITLES.clone();
 			alternativeTitles[0] = "";
-			TargetsListUI listUI = new TargetsListUI(userContainer, alternativeTitles, SWT.NONE);
+			ToolBar toolbar = createToolbar(userContainer);
+			listUI = new TargetsListUI(userContainer, alternativeTitles, SWT.NONE);
 			maximize(listUI.getControl());
 			TableViewerColumn column = listUI.getTableViewerColumns().get(0);
 			column.setLabelProvider(new ColumnLabelProvider() {
@@ -309,6 +328,8 @@ public class TargetDisplaySettingsWizard {
 					systemEditor.setEnabled(useSystemSettings);
 					userEditor.setEnabled(!useSystemSettings);
 					comboListener.selectionChanged(null);
+					toolbar.setEnabled(!useSystemSettings);
+					listUI.getControl().setEnabled(!useSystemSettings);
 				}
 
 				@Override
@@ -320,6 +341,115 @@ public class TargetDisplaySettingsWizard {
 			userButton.addSelectionListener(buttonListener);
 			buttonListener.widgetSelected(null);
 			setControl(composite);
+		}
+
+		private ToolBar createToolbar(Composite parent) {
+
+			ToolBarManager manager = new ToolBarManager();
+			manager.add(new Action("Enable All", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16)) {
+
+				@Override
+				public void run() {
+
+					for(TableItem item : listUI.getTable().getItems()) {
+						Object data = item.getData();
+						if(data instanceof IIdentificationTarget) {
+							IIdentificationTarget target = (IIdentificationTarget)data;
+							userSettings.setVisible(target, true);
+							listUI.refresh(target);
+						}
+					}
+				}
+			});
+			manager.add(new Action("Disable All", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16)) {
+
+				@Override
+				public void run() {
+
+					for(TableItem item : listUI.getTable().getItems()) {
+						Object data = item.getData();
+						if(data instanceof IIdentificationTarget) {
+							IIdentificationTarget target = (IIdentificationTarget)data;
+							userSettings.setVisible(target, false);
+							listUI.refresh(target);
+						}
+					}
+				}
+			});
+			manager.add(new Separator());
+			manager.add(new ControlContribution("searchbar") {
+
+				@Override
+				protected Control createControl(Composite parent) {
+
+					Composite container = createContainer(parent, 3);
+					Label search = new Label(container, SWT.NONE);
+					search.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+					Text text = ControlBuilder.fill(new Text(container, SWT.NONE));
+					gridData(text).horizontalIndent = 3;
+					Label clear = new Label(container, SWT.NONE);
+					clear.setEnabled(false);
+					clear.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+					clear.addMouseListener(new MouseListener() {
+
+						@Override
+						public void mouseUp(MouseEvent e) {
+
+							text.setText("");
+							updateFilter("");
+							clear.setEnabled(false);
+						}
+
+						@Override
+						public void mouseDown(MouseEvent e) {
+
+						}
+
+						@Override
+						public void mouseDoubleClick(MouseEvent e) {
+
+						}
+					});
+					text.addModifyListener(new ModifyListener() {
+
+						@Override
+						public void modifyText(ModifyEvent e) {
+
+							String filterText = text.getText();
+							updateFilter(filterText);
+							clear.setEnabled(!filterText.isEmpty());
+						}
+					});
+					gridData(clear).horizontalIndent = 1;
+					return container;
+				}
+
+				@Override
+				protected int computeWidth(Control control) {
+
+					return Math.max(super.computeWidth(control), DEFAULT_WIDTH - 50);
+				}
+			});
+			return manager.createControl(parent);
+		}
+
+		private void updateFilter(String text) {
+
+			listUI.setFilters(new ViewerFilter() {
+
+				@Override
+				public boolean select(Viewer viewer, Object parentElement, Object element) {
+
+					if(text != null && !text.isEmpty()) {
+						if(element instanceof IIdentificationTarget) {
+							IIdentificationTarget target = (IIdentificationTarget)element;
+							String label = userSettings.getField().stringTransformer().apply(target);
+							return label != null && label.toLowerCase().contains(text.toLowerCase());
+						}
+					}
+					return true;
+				}
+			});
 		}
 	}
 
