@@ -78,6 +78,8 @@ import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
+import org.eclipse.swtchart.extensions.core.IMouseSupport;
 import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
@@ -104,11 +106,11 @@ public class ExtendedPeakDetectorUI {
 	//
 	private Map<String, String> detectionTypeDescriptions;
 	//
-	private static final char KEY_BASELINE = BaseChart.KEY_CODE_d;
-	private static final char KEY_BB = BaseChart.KEY_CODE_b;
-	private static final char KEY_VV = BaseChart.KEY_CODE_v;
-	private static final char KEY_BV = BaseChart.KEY_CODE_n;
-	private static final char KEY_VB = BaseChart.KEY_CODE_c;
+	private static final char KEY_BASELINE = IKeyboardSupport.KEY_CODE_LC_D;
+	private static final char KEY_BB = IKeyboardSupport.KEY_CODE_LC_B;
+	private static final char KEY_VV = IKeyboardSupport.KEY_CODE_LC_V;
+	private static final char KEY_BV = IKeyboardSupport.KEY_CODE_LC_N;
+	private static final char KEY_VB = IKeyboardSupport.KEY_CODE_LC_C;
 	/*
 	 * Detection Box
 	 */
@@ -169,7 +171,7 @@ public class ExtendedPeakDetectorUI {
 		@Override
 		public int getEvent() {
 
-			return BaseChart.EVENT_KEY_DOWN;
+			return IKeyboardSupport.EVENT_KEY_DOWN;
 		}
 
 		@Override
@@ -196,13 +198,13 @@ public class ExtendedPeakDetectorUI {
 		@Override
 		public int getEvent() {
 
-			return BaseChart.EVENT_MOUSE_DOWN;
+			return IMouseSupport.EVENT_MOUSE_DOWN;
 		}
 
 		@Override
 		public int getButton() {
 
-			return BaseChart.BUTTON_LEFT;
+			return IMouseSupport.MOUSE_BUTTON_LEFT;
 		}
 
 		@Override
@@ -223,7 +225,7 @@ public class ExtendedPeakDetectorUI {
 		@Override
 		public int getEvent() {
 
-			return BaseChart.EVENT_MOUSE_MOVE;
+			return IMouseSupport.EVENT_MOUSE_MOVE;
 		}
 
 		@Override
@@ -244,13 +246,13 @@ public class ExtendedPeakDetectorUI {
 		@Override
 		public int getEvent() {
 
-			return BaseChart.EVENT_MOUSE_UP;
+			return IMouseSupport.EVENT_MOUSE_UP;
 		}
 
 		@Override
 		public int getButton() {
 
-			return BaseChart.BUTTON_LEFT;
+			return IMouseSupport.MOUSE_BUTTON_LEFT;
 		}
 
 		@Override
@@ -271,13 +273,13 @@ public class ExtendedPeakDetectorUI {
 		@Override
 		public int getEvent() {
 
-			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+			return IMouseSupport.EVENT_MOUSE_DOUBLE_CLICK;
 		}
 
 		@Override
 		public int getButton() {
 
-			return BaseChart.BUTTON_LEFT;
+			return IMouseSupport.MOUSE_BUTTON_LEFT;
 		}
 
 		@Override
@@ -759,7 +761,7 @@ public class ExtendedPeakDetectorUI {
 				setCursorDefault();
 			}
 		} else if(detectionType.startsWith(DETECTION_TYPE_BOX)) {
-			if(event.button == BaseChart.BUTTON_LEFT) {
+			if(event.button == IMouseSupport.MOUSE_BUTTON_LEFT) {
 				setCursor(SWT.CURSOR_CROSS);
 				if(!detectionBox.equals(DETECTION_BOX_NONE)) {
 					int delta = getDeltaMove(event.x);

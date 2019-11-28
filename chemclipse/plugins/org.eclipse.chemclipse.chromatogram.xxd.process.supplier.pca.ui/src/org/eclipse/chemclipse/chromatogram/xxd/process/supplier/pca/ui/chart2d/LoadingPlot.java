@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,6 +30,7 @@ import org.eclipse.swtchart.ISeries;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ICustomSelectionHandler;
+import org.eclipse.swtchart.extensions.core.IMouseSupport;
 import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 import org.eclipse.swtchart.extensions.events.MouseDownEvent;
@@ -52,13 +53,13 @@ public class LoadingPlot extends PCA2DPlot {
 		@Override
 		public int getButton() {
 
-			return BaseChart.BUTTON_LEFT;
+			return IMouseSupport.MOUSE_BUTTON_LEFT;
 		}
 
 		@Override
 		public int getEvent() {
 
-			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+			return IMouseSupport.EVENT_MOUSE_DOUBLE_CLICK;
 		}
 
 		@Override
@@ -88,13 +89,13 @@ public class LoadingPlot extends PCA2DPlot {
 		@Override
 		public int getButton() {
 
-			return BaseChart.BUTTON_LEFT;
+			return IMouseSupport.MOUSE_BUTTON_LEFT;
 		}
 
 		@Override
 		public int getEvent() {
 
-			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+			return IMouseSupport.EVENT_MOUSE_DOUBLE_CLICK;
 		}
 
 		@Override
@@ -122,7 +123,6 @@ public class LoadingPlot extends PCA2DPlot {
 	private SelectionManagerVariable selectionManagerVariable;
 
 	public LoadingPlot(Composite parent, SelectionManagerVariable selectionManagerVariable) {
-
 		super(parent, "Loading Plot");
 		this.selectionManagerVariable = selectionManagerVariable;
 		IChartSettings chartSettings = getChartSettings();

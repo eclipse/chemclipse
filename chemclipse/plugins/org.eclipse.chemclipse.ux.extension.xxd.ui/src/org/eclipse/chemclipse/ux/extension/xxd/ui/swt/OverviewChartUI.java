@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,14 +19,15 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swtchart.IAxis.Position;
+import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.core.IMouseSupport;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
-import org.eclipse.swtchart.IAxis.Position;
-import org.eclipse.swtchart.LineStyle;
 
 public class OverviewChartUI extends LineChart {
 
@@ -71,13 +72,13 @@ public class OverviewChartUI extends LineChart {
 			@Override
 			public int getEvent() {
 
-				return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+				return IMouseSupport.EVENT_MOUSE_DOUBLE_CLICK;
 			}
 
 			@Override
 			public int getButton() {
 
-				return BaseChart.BUTTON_LEFT;
+				return IMouseSupport.MOUSE_BUTTON_LEFT;
 			}
 		});
 		//

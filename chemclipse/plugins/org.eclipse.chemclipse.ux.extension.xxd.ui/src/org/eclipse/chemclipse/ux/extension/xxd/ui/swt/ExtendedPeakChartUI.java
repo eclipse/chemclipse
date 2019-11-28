@@ -55,6 +55,8 @@ import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
+import org.eclipse.swtchart.extensions.core.IMouseSupport;
 import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 
@@ -69,8 +71,8 @@ public class ExtendedPeakChartUI {
 	//
 	private Map<String, String> detectionTypeDescriptions;
 	//
-	private static final char KEY_TANGENT = BaseChart.KEY_CODE_t;
-	private static final char KEY_PERPENDICULAR = BaseChart.KEY_CODE_p;
+	private static final char KEY_TANGENT = IKeyboardSupport.KEY_CODE_LC_T;
+	private static final char KEY_PERPENDICULAR = IKeyboardSupport.KEY_CODE_LC_P;
 	//
 	private Composite toolbarInfo;
 	private Label labelPeak;
@@ -103,7 +105,7 @@ public class ExtendedPeakChartUI {
 		@Override
 		public int getEvent() {
 
-			return BaseChart.EVENT_KEY_DOWN;
+			return IKeyboardSupport.EVENT_KEY_DOWN;
 		}
 
 		@Override
@@ -130,13 +132,13 @@ public class ExtendedPeakChartUI {
 		@Override
 		public int getEvent() {
 
-			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+			return IMouseSupport.EVENT_MOUSE_DOUBLE_CLICK;
 		}
 
 		@Override
 		public int getButton() {
 
-			return BaseChart.BUTTON_LEFT;
+			return IMouseSupport.MOUSE_BUTTON_LEFT;
 		}
 
 		@Override

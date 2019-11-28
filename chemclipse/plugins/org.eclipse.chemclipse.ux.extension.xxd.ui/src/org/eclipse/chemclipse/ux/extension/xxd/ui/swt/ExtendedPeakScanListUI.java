@@ -83,7 +83,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 
 @SuppressWarnings("rawtypes")
 public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConfig> {
@@ -395,7 +395,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 					 * DEL
 					 */
 					deletePeaksOrIdentifications(shell);
-				} else if(e.keyCode == BaseChart.KEY_CODE_i && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
+				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_I && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
 					if((e.stateMask & SWT.ALT) == SWT.ALT) {
 						/*
 						 * CTRL + ALT + i
@@ -407,7 +407,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 						 */
 						setPeaksActiveForAnalysis(true);
 					}
-				} else if(e.keyCode == BaseChart.KEY_CODE_s && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
+				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_S && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
 					/*
 					 * CTRL + s
 					 */

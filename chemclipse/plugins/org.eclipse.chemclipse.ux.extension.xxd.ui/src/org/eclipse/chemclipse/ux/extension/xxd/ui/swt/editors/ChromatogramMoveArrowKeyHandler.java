@@ -21,6 +21,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 
@@ -38,7 +39,7 @@ public class ChromatogramMoveArrowKeyHandler extends AbstractHandledEventProcess
 	@Override
 	public int getEvent() {
 
-		return BaseChart.EVENT_KEY_UP;
+		return IKeyboardSupport.EVENT_KEY_UP;
 	}
 
 	@Override
