@@ -11,11 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
+import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider;
 import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -33,6 +38,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
@@ -120,6 +126,19 @@ public class ControlBuilder {
 		return fill(composite);
 	}
 
+	public static <T extends Composite> T spacing(T control, int margins) {
+
+		Layout layout = control.getLayout();
+		if(layout instanceof GridLayout) {
+			GridLayout gridLayout = (GridLayout)layout;
+			gridLayout.marginBottom = margins;
+			gridLayout.marginLeft = margins;
+			gridLayout.marginTop = margins;
+			gridLayout.marginRight = margins;
+		}
+		return control;
+	}
+
 	/**
 	 * Creates a label suitable for a labelcontainer
 	 * 
@@ -144,6 +163,7 @@ public class ControlBuilder {
 		if(tooltip != null) {
 			labelComponent.setToolTipText(tooltip);
 		}
+		gridData(labelComponent).verticalAlignment = SWT.TOP;
 		return labelComponent;
 	}
 
@@ -257,6 +277,18 @@ public class ControlBuilder {
 		}
 	}
 
+	public static TableViewer createTable(Composite parent, boolean enableTooltips) {
+
+		TableViewer viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
+		viewer.getTable().setLinesVisible(true);
+		viewer.getTable().setHeaderVisible(true);
+		viewer.setContentProvider(ArrayContentProvider.getInstance());
+		if(enableTooltips) {
+			ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE);
+		}
+		return viewer;
+	}
+
 	public static TreeViewer createTreeTable(Composite parent, boolean enableTooltips) {
 
 		TreeViewer treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
@@ -313,6 +345,15 @@ public class ControlBuilder {
 			}
 		}
 		return column;
+	}
+
+	public static List<TableViewerColumn> createColumns(TableViewer viewer, ColumnDefinitionProvider provider, boolean editEnabled) {
+
+		ArrayList<TableViewerColumn> list = new ArrayList<>();
+		for(ColumnDefinition<?, ?> definition : provider.getColumnDefinitions()) {
+			list.add(createColumn(viewer, definition, editEnabled));
+		}
+		return list;
 	}
 
 	public static TableViewerColumn createColumn(TableViewer viewer, ColumnDefinition<?, ?> definition) {

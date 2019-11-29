@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.function.Function;
 
 import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.SWT;
@@ -28,6 +29,18 @@ public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefin
 	private Function<DataType, ColumnType> mapper;
 	private Function<ColumnViewer, EditingSupport> editingSupportSupplier;
 	private int style = SWT.LEFT;
+
+	public SimpleColumnDefinition(String title, int width, Function<DataType, String> extractor) {
+		this(title, width, new ColumnLabelProvider() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public String getText(Object element) {
+
+				return extractor.apply((DataType)element);
+			}
+		}, null, null);
+	}
 
 	public SimpleColumnDefinition(String title, int width, CellLabelProvider labelProvider) {
 		this(title, width, labelProvider, null, null);

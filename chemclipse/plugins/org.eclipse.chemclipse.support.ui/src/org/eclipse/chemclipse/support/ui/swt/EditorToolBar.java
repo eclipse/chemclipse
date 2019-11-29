@@ -67,6 +67,10 @@ public class EditorToolBar {
 	private boolean showText = true;
 
 	public EditorToolBar(Composite parent) {
+		this(parent, SWT.RIGHT);
+	}
+
+	public EditorToolBar(Composite parent, int align) {
 		this.parent = null;
 		actionContributions = new ArrayList<>();
 		ToolBarManager toolbarManagerSWT = new ToolBarManager(SWT.FLAT | SWT.WRAP);
@@ -74,7 +78,7 @@ public class EditorToolBar {
 		toolbarManagerSWT.add(mainGroup);
 		config = new ConfigSection(this);
 		ToolBar toolBar = toolbarManagerSWT.createControl(parent);
-		toolBar.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false));
+		toolBar.setLayoutData(new GridData(align, SWT.CENTER, true, false));
 		toolBarManager = toolbarManagerSWT;
 	}
 
