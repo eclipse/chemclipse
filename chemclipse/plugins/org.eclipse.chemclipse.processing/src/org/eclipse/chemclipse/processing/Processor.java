@@ -63,7 +63,11 @@ public interface Processor<ConfigType> {
 	default ConfigType createNewConfiguration() {
 
 		try {
-			return getConfigClass().newInstance();
+			Class<ConfigType> configClass = getConfigClass();
+			if(configClass == null) {
+				return null;
+			}
+			return configClass.newInstance();
 		} catch(InstantiationException | IllegalAccessException e) {
 			throw new UnsupportedOperationException("can't create default config class and the filter does not overrides createNewConfiguration");
 		}

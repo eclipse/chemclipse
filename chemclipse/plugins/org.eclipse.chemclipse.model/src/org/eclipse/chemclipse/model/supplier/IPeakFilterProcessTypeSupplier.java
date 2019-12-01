@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.model.supplier;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -76,7 +78,7 @@ public class IPeakFilterProcessTypeSupplier implements IProcessTypeSupplier {
 		private <P extends IPeak, C extends IChromatogram<P>> void doFilter(IChromatogramSelection<P, C> chromatogramSelection, ConfigType processSettings, ProcessExecutionContext context) {
 
 			C chromatogram = chromatogramSelection.getChromatogram();
-			List<P> peaks = chromatogram.getPeaks(chromatogramSelection);
+			List<P> peaks = new CopyOnWriteArrayList<P>(chromatogram.getPeaks(chromatogramSelection));
 			if(filter.acceptsIPeaks(peaks)) {
 				filter.filterIPeaks(new CRUDListener<P, IPeakModel>() {
 
@@ -90,7 +92,7 @@ public class IPeakFilterProcessTypeSupplier implements IProcessTypeSupplier {
 					@Override
 					public Collection<P> read() {
 
-						return peaks;
+						return Collections.unmodifiableCollection(peaks);
 					}
 				}, processSettings, context, context.getProgressMonitor());
 			}

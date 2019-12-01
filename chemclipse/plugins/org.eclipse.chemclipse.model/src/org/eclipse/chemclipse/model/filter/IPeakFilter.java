@@ -15,6 +15,7 @@ import java.util.Collection;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
@@ -75,5 +76,14 @@ public interface IPeakFilter<ConfigType> extends Filter<ConfigType> {
 		} else {
 			throw new IllegalArgumentException("incompatible items in collection");
 		}
+	}
+
+	/**
+	 * The default implementation returns all datacategories, implementors might override if the can only work on a certain subcategory
+	 */
+	@Override
+	default DataCategory[] getDataCategories() {
+
+		return new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD};
 	}
 }
