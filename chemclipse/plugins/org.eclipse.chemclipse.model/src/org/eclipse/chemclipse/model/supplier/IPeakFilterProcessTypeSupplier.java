@@ -59,12 +59,17 @@ public class IPeakFilterProcessTypeSupplier implements IProcessTypeSupplier {
 		return list;
 	}
 
+	public static String getID(IPeakFilter<?> filter) {
+
+		return "PeakFilter:" + filter.getID();
+	}
+
 	public class PeakFilterProcessSupplier<ConfigType> extends AbstractProcessSupplier<ConfigType> implements IChromatogramSelectionProcessSupplier<ConfigType> {
 
 		private final IPeakFilter<ConfigType> filter;
 
 		PeakFilterProcessSupplier(IPeakFilter<ConfigType> filter, IProcessTypeSupplier parent) {
-			super("PeakFilter:" + filter.getID(), filter.getName(), filter.getDescription(), filter.getConfigClass(), parent, filter.getDataCategories());
+			super(getID(filter), filter.getName(), filter.getDescription(), filter.getConfigClass(), parent, filter.getDataCategories());
 			this.filter = filter;
 		}
 
