@@ -17,9 +17,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.targets.ITarget;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public interface IIdentificationTarget extends ITarget {
+
+	public static final TargetExtendedComparator DEFAULT_COMPARATOR = new TargetExtendedComparator(SortOrder.DESC);
+
+	static IIdentificationTarget getBestIdentificationTarget(Set<IIdentificationTarget> targets) {
+
+		return getBestIdentificationTarget(targets, DEFAULT_COMPARATOR);
+	}
 
 	/**
 	 * Returns the best matching identification target or
