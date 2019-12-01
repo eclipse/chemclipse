@@ -45,4 +45,5 @@ Export-Package: org.eclipse.chemclipse.xxd.model.preferences,
  org.eclipse.chemclipse.xxd.model.quantitation
 Import-Package: org.osgi.service.component.annotations;version="1.2.0"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.RemoveAllPeaksFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DisableClassifiedPeaksFilter.xml
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DisableClassifiedPeaksFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.MinimumNumberOfIonsFilter.xml
