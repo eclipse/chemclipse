@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - make the default for addUnknownMzListTarget to false
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences;
 
@@ -60,7 +61,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final float MAX_MIN_REVERSE_MATCH_FACTOR = 100.0f;
 	//
 	public static final String P_ADD_UNKNOWN_MZ_LIST_TARGET = "addUnknownMzListTarget";
-	public static final Boolean DEF_ADD_UNKNOWN_MZ_LIST_TARGET = true;
+	public static final Boolean DEF_ADD_UNKNOWN_MZ_LIST_TARGET = false;
 	/*
 	 * RI / RT penalty calculation.
 	 */

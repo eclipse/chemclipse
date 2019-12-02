@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - add validationmethod/getter
+ * Christoph Läubrich - add validationmethod/getter, optimize progressmonitor usage and retrival of mass spectrum comparator
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.internal.identifier;
 
@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
@@ -41,6 +42,8 @@ import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.SubMonitor;
 
 public class FileIdentifier {
 
@@ -60,6 +63,7 @@ public class FileIdentifier {
 
 	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, MassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Running mass spectra identification", 100);
 		IMassSpectra massSpectra = new MassSpectra();
 		massSpectra.addMassSpectra(massSpectraList);
 		/*
@@ -76,16 +80,17 @@ public class FileIdentifier {
 		 * Try to identify the mass spectra.
 		 */
 		FileListUtil fileListUtil = new FileListUtil();
-		Map<String, IMassSpectra> databases = databasesCache.getDatabases(fileListUtil.getFiles(fileIdentifierSettings.getMassSpectraFiles()), monitor);
+		Map<String, IMassSpectra> databases = databasesCache.getDatabases(fileListUtil.getFiles(fileIdentifierSettings.getMassSpectraFiles()), subMonitor.split(10));
+		subMonitor.setWorkRemaining(databases.size() * 100);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
-			compareMassSpectraAgainstDatabase(massSpectra, fileIdentifierSettings, identifier, database, monitor);
+			compareMassSpectraAgainstDatabase(massSpectra, fileIdentifierSettings, identifier, database, subMonitor.split(100));
 		}
 		/*
 		 * Add m/z list on demand if no match was found.
 		 */
-		for(IScanMSD unknown : massSpectra.getList()) {
-			if(unknown.getTargets().size() == 0) {
-				if(fileIdentifierSettings.isAddUnknownMzListTarget()) {
+		if(fileIdentifierSettings.isAddUnknownMzListTarget()) {
+			for(IScanMSD unknown : massSpectra.getList()) {
+				if(unknown.getTargets().size() == 0) {
 					targetBuilder.setMassSpectrumTargetUnknown(unknown, identifier);
 				}
 			}
@@ -128,9 +133,9 @@ public class FileIdentifier {
 		/*
 		 * Assign a m/z list on demand if no match has been found.
 		 */
-		for(IPeakMSD peakMSD : peaks) {
-			if(peakMSD.getTargets().size() == 0) {
-				if(peakIdentifierSettings.isAddUnknownMzListTarget()) {
+		if(peakIdentifierSettings.isAddUnknownMzListTarget()) {
+			for(IPeakMSD peakMSD : peaks) {
+				if(peakMSD.getTargets().size() == 0) {
 					targetBuilder.setPeakTargetUnknown(peakMSD, identifier);
 				}
 			}
@@ -182,30 +187,21 @@ public class FileIdentifier {
 		 */
 		String databaseName = database.getKey();
 		List<IScanMSD> references = database.getValue().getList();
-		//
-		boolean usePreOptimization = fileIdentifierSettings.isUsePreOptimization();
-		double thresholdPreOptimization = fileIdentifierSettings.getThresholdPreOptimization();
-		//
-		int countUnknown = 1;
-		for(IScanMSD unknown : massSpectra.getList()) {
-			/*
-			 * Cancel the operation on demand.
-			 */
-			if(monitor.isCanceled()) {
-				return;
-			}
-			//
+		List<IScanMSD> unknownList = massSpectra.getList();
+		SubMonitor subMonitor = SubMonitor.convert(monitor, unknownList.size());
+		IMassSpectrumComparator spectrumComparator = MassSpectrumComparator.getMassSpectrumComparator(fileIdentifierSettings.getMassSpectrumComparatorId());
+		for(IScanMSD unknown : unknownList) {
 			List<IIdentificationTarget> massSpectrumTargets = new ArrayList<>();
-			for(int index = 0; index < references.size(); index++) {
+			for(IScanMSD reference : references) {
+				if(subMonitor.isCanceled()) {
+					throw new OperationCanceledException();
+				}
 				try {
 					/*
 					 * Compare the unknown against each library spectrum.
 					 * Update the monitor only for each unknown mass spectrum.
 					 */
-					monitor.subTask("Compare " + countUnknown);
-					//
-					IScanMSD reference = references.get(index);
-					IProcessingInfo<IComparisonResult> infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
+					IProcessingInfo<IComparisonResult> infoCompare = spectrumComparator.compare(unknown, reference);
 					IComparisonResult comparisonResult = infoCompare.getProcessingResult();
 					applyPenaltyOnDemand(unknown, reference, comparisonResult, fileIdentifierSettings);
 					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
@@ -218,7 +214,6 @@ public class FileIdentifier {
 				} catch(TypeCastException e1) {
 					logger.warn(e1);
 				}
-				//
 			}
 			/*
 			 * Assign targets only.
@@ -231,8 +226,7 @@ public class FileIdentifier {
 					unknown.getTargets().add(massSpectrumTargets.get(i));
 				}
 			}
-			//
-			countUnknown++;
+			subMonitor.worked(1);
 		}
 	}
 
