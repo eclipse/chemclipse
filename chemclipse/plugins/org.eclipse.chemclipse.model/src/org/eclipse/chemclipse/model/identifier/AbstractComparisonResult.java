@@ -26,21 +26,18 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	private float reverseMatchFactorDirect;
 	private float probability;
 	private float penalty;
-	private String advise = "";
+	private String advise;
 
 	public AbstractComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect) {
+		this(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, MAX_ALLOWED_PROBABILITY);
+	}
+
+	public AbstractComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect, float probability) {
+		this.probability = probability;
 		this.matchFactor = matchFactor;
 		this.reverseMatchFactor = reverseMatchFactor;
 		this.matchFactorDirect = matchFactorDirect;
 		this.reverseMatchFactorDirect = reverseMatchFactorDirect;
-		determineAdvise();
-	}
-
-	public AbstractComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect, float probability) {
-		this(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
-		if(probability >= MIN_ALLOWED_PROBABILITY && probability <= MAX_ALLOWED_PROBABILITY) {
-			this.probability = probability;
-		}
 	}
 
 	public AbstractComparisonResult(IComparisonResult comparisonResult) {
@@ -96,15 +93,15 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	}
 
 	@Override
-	public float getMatchFactor() {
+	public final float getMatchFactor() {
 
-		return getAdjustedValue(matchFactor, penalty);
+		return getAdjustedValue(getMatchFactorNotAdjusted(), penalty);
 	}
 
 	@Override
-	public float getMatchFactorDirect() {
+	public final float getMatchFactorDirect() {
 
-		return getAdjustedValue(matchFactorDirect, penalty);
+		return getAdjustedValue(getMatchFactorDirectNotAdjusted(), penalty);
 	}
 
 	@Override
@@ -120,15 +117,15 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	}
 
 	@Override
-	public float getReverseMatchFactor() {
+	public final float getReverseMatchFactor() {
 
-		return getAdjustedValue(reverseMatchFactor, penalty);
+		return getAdjustedValue(getReverseMatchFactorNotAdjusted(), penalty);
 	}
 
 	@Override
-	public float getReverseMatchFactorDirect() {
+	public final float getReverseMatchFactorDirect() {
 
-		return getAdjustedValue(reverseMatchFactorDirect, penalty);
+		return getAdjustedValue(getReverseMatchFactorDirectNotAdjusted(), penalty);
 	}
 
 	@Override
@@ -164,22 +161,31 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public String getAdvise() {
 
+		if(advise == null) {
+			if(getMatchFactor() >= MAX_LIMIT_MATCH_FACTOR && getReverseMatchFactor() <= MIN_LIMIT_REVERSE_MATCH_FACTOR) {
+				advise = ADVISE_INCOMPLETE;
+			} else if(getMatchFactor() <= MIN_LIMIT_MATCH_FACTOR && getReverseMatchFactor() >= MAX_LIMIT_REVERSE_MATCH_FACTOR) {
+				advise = ADVISE_IMPURITIES;
+			} else {
+				advise = "";
+			}
+		}
 		return advise;
 	}
 
 	@Override
 	public float getRating() {
 
-		float rating = (matchFactor + reverseMatchFactor) / 2.0f;
+		float rating = (getMatchFactorNotAdjusted() + getReverseMatchFactorNotAdjusted()) / 2.0f;
 		/*
 		 * Shall the probability be used too?
 		 */
-		if(matchFactorDirect > 0.0f) {
-			rating = (rating + matchFactorDirect) / 2.0f;
+		if(getMatchFactorDirectNotAdjusted() > 0.0f) {
+			rating = (rating + getMatchFactorDirectNotAdjusted()) / 2.0f;
 		}
 		//
-		if(reverseMatchFactorDirect > 0.0f) {
-			rating = (rating + reverseMatchFactorDirect) / 2.0f;
+		if(getReverseMatchFactorDirectNotAdjusted() > 0.0f) {
+			rating = (rating + getReverseMatchFactorDirectNotAdjusted()) / 2.0f;
 		}
 		//
 		return rating;
@@ -192,34 +198,6 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 			return 0;
 		}
 		return result;
-	}
-
-	/**
-	 * Determines the advise.
-	 */
-	private void determineAdvise() {
-
-		if(getMatchFactor() >= MAX_LIMIT_MATCH_FACTOR && getReverseMatchFactor() <= MIN_LIMIT_REVERSE_MATCH_FACTOR) {
-			advise = ADVISE_INCOMPLETE;
-		} else if(getMatchFactor() <= MIN_LIMIT_MATCH_FACTOR && getReverseMatchFactor() >= MAX_LIMIT_REVERSE_MATCH_FACTOR) {
-			advise = ADVISE_IMPURITIES;
-		}
-	}
-
-	@Override
-	public boolean equals(Object other) {
-
-		if(other == null) {
-			return false;
-		}
-		if(this == other) {
-			return true;
-		}
-		if(this.getClass() != other.getClass()) {
-			return false;
-		}
-		IComparisonResult otherResult = (IComparisonResult)other;
-		return getMatchFactor() == otherResult.getMatchFactor() && getReverseMatchFactor() == otherResult.getReverseMatchFactor() && getProbability() == otherResult.getProbability();
 	}
 
 	@Override
@@ -241,15 +219,23 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 		return result;
 	}
 
-	@Override
-	public int hashCode() {
+	protected void setMatchFactor(float matchFactor) {
 
-		return 7 * Float.valueOf(getMatchFactor()).hashCode() + 11 * Float.valueOf(getReverseMatchFactor()).hashCode() + 13 * Float.valueOf(probability).hashCode();
+		this.matchFactor = matchFactor;
 	}
 
-	@Override
-	public String toString() {
+	protected void setMatchFactorDirect(float matchFactorDirect) {
 
-		return "AbstractComparisonResult [isMatch=" + isMatch + ", matchFactor=" + matchFactor + ", matchFactorDirect=" + matchFactorDirect + ", reverseMatchFactor=" + reverseMatchFactor + ", reverseMatchFactorDirect=" + reverseMatchFactorDirect + ", probability=" + probability + ", penalty=" + penalty + ", advise=" + advise + "]";
+		this.matchFactorDirect = matchFactorDirect;
+	}
+
+	protected void setReverseMatchFactor(float reverseMatchFactor) {
+
+		this.reverseMatchFactor = reverseMatchFactor;
+	}
+
+	protected void setReverseMatchFactorDirect(float reverseMatchFactorDirect) {
+
+		this.reverseMatchFactorDirect = reverseMatchFactorDirect;
 	}
 }
