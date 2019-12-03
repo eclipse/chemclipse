@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - don't extract ion signal more than once
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator;
 
@@ -29,19 +30,21 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 public class EuclideanMassSpectrumComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
 
 	@Override
-	public IProcessingInfo compare(IScanMSD unknown, IScanMSD reference) {
+	public IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference) {
 
-		IProcessingInfo processingInfo = super.validate(unknown, reference);
+		IProcessingInfo<IComparisonResult> processingInfo = super.validate(unknown, reference);
 		if(!processingInfo.hasErrorMessages()) {
 			/*
 			 * Get the match and reverse match factor.
 			 * Internally it's normalized to 1, but a percentage value is used by the MS methods.
 			 */
 			DistanceMeasure distanceMeasure = new EuclideanDistance();
-			float matchFactor = (1 - calculateMatch(unknown.getExtractedIonSignal(), reference.getExtractedIonSignal(), distanceMeasure)) * 100;
-			float reverseMatchFactor = (1 - calculateMatch(reference.getExtractedIonSignal(), unknown.getExtractedIonSignal(), distanceMeasure)) * 100;
-			float matchFactorDirect = (1 - calculateMatchDirect(unknown.getExtractedIonSignal(), reference.getExtractedIonSignal(), distanceMeasure)) * 100;
-			float reverseMatchFactorDirect = (1 - calculateMatchDirect(reference.getExtractedIonSignal(), unknown.getExtractedIonSignal(), distanceMeasure)) * 100;
+			IExtractedIonSignal unknownSignal = unknown.getExtractedIonSignal();
+			IExtractedIonSignal referenceSignal = reference.getExtractedIonSignal();
+			float matchFactor = (1 - calculateMatch(unknownSignal, referenceSignal, distanceMeasure)) * 100;
+			float reverseMatchFactor = (1 - calculateMatch(referenceSignal, unknownSignal, distanceMeasure)) * 100;
+			float matchFactorDirect = (1 - calculateMatchDirect(unknownSignal, referenceSignal, distanceMeasure)) * 100;
+			float reverseMatchFactorDirect = (1 - calculateMatchDirect(referenceSignal, unknownSignal, distanceMeasure)) * 100;
 			//
 			IComparisonResult massSpectrumComparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 			processingInfo.setProcessingResult(massSpectrumComparisonResult);

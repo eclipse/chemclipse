@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - don't extract ion signal more than once
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator;
 
@@ -28,18 +29,20 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
 
 	@Override
-	public IProcessingInfo compare(IScanMSD unknown, IScanMSD reference) {
+	public IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference) {
 
-		IProcessingInfo processingInfo = super.validate(unknown, reference);
+		IProcessingInfo<IComparisonResult> processingInfo = super.validate(unknown, reference);
 		if(!processingInfo.hasErrorMessages()) {
 			/*
 			 * Get the match and reverse match factor.
 			 * Internally it's normalized to 1, but a percentage value is used by the MS methods.
 			 */
-			float matchFactor = calculateCosinePhi(unknown.getExtractedIonSignal(), reference.getExtractedIonSignal()) * 100;
-			float reverseMatchFactor = calculateCosinePhi(reference.getExtractedIonSignal(), unknown.getExtractedIonSignal()) * 100;
-			float matchFactorDirect = calculateCosinePhiDirect(unknown.getExtractedIonSignal(), reference.getExtractedIonSignal()) * 100;
-			float reverseMatchFactorDirect = calculateCosinePhiDirect(reference.getExtractedIonSignal(), unknown.getExtractedIonSignal()) * 100;
+			IExtractedIonSignal unknownSignal = unknown.getExtractedIonSignal();
+			IExtractedIonSignal referenceSignal = reference.getExtractedIonSignal();
+			float matchFactor = calculateCosinePhi(unknownSignal, referenceSignal) * 100;
+			float reverseMatchFactor = calculateCosinePhi(referenceSignal, unknownSignal) * 100;
+			float matchFactorDirect = calculateCosinePhiDirect(unknownSignal, referenceSignal) * 100;
+			float reverseMatchFactorDirect = calculateCosinePhiDirect(referenceSignal, unknownSignal) * 100;
 			//
 			IComparisonResult massSpectrumComparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 			processingInfo.setProcessingResult(massSpectrumComparisonResult);
