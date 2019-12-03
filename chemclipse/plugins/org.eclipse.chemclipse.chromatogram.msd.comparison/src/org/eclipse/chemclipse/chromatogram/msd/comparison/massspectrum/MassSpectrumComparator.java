@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.comparison.comparator.DefaultMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.ComparisonException;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.NoMassSpectrumComparatorAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.internal.massspectrum.ComparatorCache;
@@ -82,7 +81,6 @@ public class MassSpectrumComparator {
 	 * This class has only static methods.
 	 */
 	private MassSpectrumComparator() {
-
 	}
 
 	/**
@@ -95,6 +93,9 @@ public class MassSpectrumComparator {
 	 */
 	public static IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference, String comparatorId, boolean usePreOptimization, double thresholdPreOptimization) {
 
+		if(comparatorId == null || comparatorId.isEmpty()) {
+			comparatorId = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.cosine";
+		}
 		return compare(unknown, reference, getMassSpectrumComparator(comparatorId), usePreOptimization, thresholdPreOptimization);
 	}
 
@@ -115,9 +116,8 @@ public class MassSpectrumComparator {
 			if(massSpectrumComparator != null) {
 				processingInfo = massSpectrumComparator.compare(unknown, reference);
 			} else {
-				massSpectrumComparator = new DefaultMassSpectrumComparator();
-				processingInfo = massSpectrumComparator.compare(unknown, reference);
-				processingInfo.addInfoMessage("MassSpectrum Comparator", "The requested comparator was not available. Instead the default comparator has been used.");
+				processingInfo = new ProcessingInfo<>();
+				processingInfo.addErrorMessage("MassSpectrum Comparator", "MassSpectrum comparator can't be null!");
 			}
 		} else {
 			processingInfo = processingInfoComparisonSkip;
