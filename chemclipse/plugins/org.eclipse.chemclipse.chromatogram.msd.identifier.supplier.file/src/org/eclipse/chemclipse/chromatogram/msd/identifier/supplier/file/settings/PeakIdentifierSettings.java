@@ -12,11 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparatorDynamicSettingProperty;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.identifier.GeneratedIdentifierSettings;
-import org.eclipse.chemclipse.support.settings.ComboSettingsProperty;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
@@ -49,7 +47,6 @@ public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD im
 	@JsonProperty(value = "Add Unknown m/z List Target", defaultValue = "true")
 	private boolean addUnknownMzListTarget = true;
 	@JsonProperty(value = "Alternate Identifier Id", defaultValue = "")
-	@ComboSettingsProperty(MassSpectrumComparatorDynamicSettingProperty.class)
 	private String alternateIdentifierId = "";
 
 	@Override

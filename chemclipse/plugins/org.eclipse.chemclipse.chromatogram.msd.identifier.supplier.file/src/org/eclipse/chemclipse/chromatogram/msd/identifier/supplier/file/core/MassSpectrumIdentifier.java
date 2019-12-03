@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - fix generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core;
 
@@ -29,9 +30,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 
 	@Override
-	public IProcessingInfo identify(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
 		if(identifierSettings instanceof MassSpectrumIdentifierSettings) {
 			try {
 				MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = (MassSpectrumIdentifierSettings)identifierSettings;
@@ -49,7 +50,7 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 	}
 
 	@Override
-	public IProcessingInfo identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectra> identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) {
 
 		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
 		massSpectra.add(massSpectrum);
@@ -57,7 +58,7 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 	}
 
 	@Override
-	public IProcessingInfo identify(IScanMSD massSpectrum, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectra> identify(IScanMSD massSpectrum, IProgressMonitor monitor) {
 
 		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
 		massSpectra.add(massSpectrum);
@@ -66,7 +67,7 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 	}
 
 	@Override
-	public IProcessingInfo identify(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
 
 		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
 		return identify(massSpectra, massSpectrumIdentifierSettings, monitor);
