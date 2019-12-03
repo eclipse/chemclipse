@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,15 +8,19 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - extend IIdentifierSettingsMSD
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
-public interface IFileIdentifierSettings {
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
+
+public interface IFileIdentifierSettings extends IIdentifierSettingsMSD {
 
 	String getMassSpectraFiles();
 
 	void setMassSpectraFiles(String massSpectraFiles);
 
+	@Override
 	String getMassSpectrumComparatorId();
 
 	boolean isUsePreOptimization();

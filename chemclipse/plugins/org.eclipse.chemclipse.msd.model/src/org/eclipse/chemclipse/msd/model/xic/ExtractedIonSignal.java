@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - optimize getAbundance(ion)
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.xic;
 
@@ -139,9 +140,11 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	@Override
 	public float getAbundance(int ion) {
 
-		if(isValidIon(ion)) {
+		if(abundanceValues != null) {
 			int position = ion - startIon;
-			return abundanceValues[position];
+			if(position >= 0 && position < abundanceValues.length) {
+				return abundanceValues[position];
+			}
 		}
 		return 0;
 	}

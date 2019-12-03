@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -9,13 +9,16 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
+ * Christoph Läubrich - add comparator static field
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 public interface IComparisonResult extends Serializable, Comparable<IComparisonResult> {
 
+	static Comparator<IComparisonResult> MATCH_FACTOR_COMPARATOR = (o1, o2) -> Float.compare(o1.getMatchFactor(), o2.getMatchFactor());
 	float FACTOR_BEST_MATCH = 100.0f;
 	float FACTOR_NO_MATCH = 0.0f;
 	//

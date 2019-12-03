@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - don't extract ion signal more than once, use lazy result
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator;
 
@@ -19,8 +20,8 @@ import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.AbstractMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
-import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.LazyComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -28,20 +29,22 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
 
 	@Override
-	public IProcessingInfo compare(IScanMSD unknown, IScanMSD reference) {
+	public IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference) {
 
-		IProcessingInfo processingInfo = super.validate(unknown, reference);
+		IProcessingInfo<IComparisonResult> processingInfo = super.validate(unknown, reference);
 		if(!processingInfo.hasErrorMessages()) {
 			/*
 			 * Get the match and reverse match factor.
 			 * Internally it's normalized to 1, but a percentage value is used by the MS methods.
 			 */
-			float matchFactor = calculateCosinePhi(unknown.getExtractedIonSignal(), reference.getExtractedIonSignal()) * 100;
-			float reverseMatchFactor = calculateCosinePhi(reference.getExtractedIonSignal(), unknown.getExtractedIonSignal()) * 100;
-			float matchFactorDirect = calculateCosinePhiDirect(unknown.getExtractedIonSignal(), reference.getExtractedIonSignal()) * 100;
-			float reverseMatchFactorDirect = calculateCosinePhiDirect(reference.getExtractedIonSignal(), unknown.getExtractedIonSignal()) * 100;
-			//
-			IComparisonResult massSpectrumComparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
+			IExtractedIonSignal unknownSignal = unknown.getExtractedIonSignal();
+			IExtractedIonSignal referenceSignal = reference.getExtractedIonSignal();
+			IComparisonResult massSpectrumComparisonResult = new LazyComparisonResult( //
+					() -> calculateCosinePhi(unknownSignal, referenceSignal), //
+					() -> calculateCosinePhi(referenceSignal, unknownSignal), //
+					() -> calculateCosinePhiDirect(unknownSignal, referenceSignal), //
+					() -> calculateCosinePhiDirect(referenceSignal, unknownSignal) //
+			);
 			processingInfo.setProcessingResult(massSpectrumComparisonResult);
 		}
 		return processingInfo;
@@ -57,7 +60,7 @@ public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator
 	 * @param distanceMeasure
 	 * @return float
 	 */
-	public float calculateCosinePhi(IExtractedIonSignal unknownSignal, IExtractedIonSignal referenceSignal) {
+	public double calculateCosinePhi(IExtractedIonSignal unknownSignal, IExtractedIonSignal referenceSignal) {
 
 		int size = unknownSignal.getNumberOfIonValues();
 		double unknown[] = new double[size];
@@ -72,13 +75,11 @@ public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator
 		ArrayRealVector unknownVector = new ArrayRealVector(unknown);
 		ArrayRealVector referenceVector = new ArrayRealVector(reference);
 		//
-		float match;
 		try {
-			match = (float)unknownVector.cosine(referenceVector);
+			return unknownVector.cosine(referenceVector) * 100;
 		} catch(MathArithmeticException | DimensionMismatchException e) {
-			match = 0.0f;
+			return 0;
 		}
-		return match;
 	}
 
 	protected double getVectorValue(IExtractedIonSignal signal, int i) {
@@ -86,7 +87,7 @@ public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator
 		return signal.getAbundance(i);
 	}
 
-	public float calculateCosinePhiDirect(IExtractedIonSignal unknownSignal, IExtractedIonSignal referenceSignal) {
+	public double calculateCosinePhiDirect(IExtractedIonSignal unknownSignal, IExtractedIonSignal referenceSignal) {
 
 		List<Integer> ionList = new ArrayList<Integer>();
 		int startIon = unknownSignal.getStartIon();
@@ -110,13 +111,10 @@ public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator
 		 */
 		ArrayRealVector unknownVector = new ArrayRealVector(unknown);
 		ArrayRealVector referenceVector = new ArrayRealVector(reference);
-		//
-		float match;
 		try {
-			match = (float)unknownVector.cosine(referenceVector);
+			return unknownVector.cosine(referenceVector) * 100;
 		} catch(MathArithmeticException | DimensionMismatchException e) {
-			match = 0.0f;
+			return 0;
 		}
-		return match;
 	}
 };

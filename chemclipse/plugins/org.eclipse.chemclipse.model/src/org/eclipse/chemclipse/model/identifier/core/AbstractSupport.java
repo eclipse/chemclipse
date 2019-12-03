@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,17 +9,20 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Jan Holy - implementation
+ * Christoph Läubrich - add getsuppliers
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
 
 public abstract class AbstractSupport<S extends ISupplier> implements ISupport {
 
-	private List<S> suppliers;
+	private final List<S> suppliers;
 
 	public AbstractSupport() {
 		suppliers = new ArrayList<>();
@@ -118,5 +121,10 @@ public abstract class AbstractSupport<S extends ISupplier> implements ISupport {
 		} else {
 			return identifierSupplier;
 		}
+	}
+
+	public Collection<S> getSuppliers() {
+
+		return Collections.unmodifiableList(suppliers);
 	}
 }
