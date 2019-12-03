@@ -36,7 +36,7 @@ public class TargetBuilder {
 	private static final Logger logger = Logger.getLogger(TargetBuilder.class);
 	private static final String UNKNOWN = "???";
 	private static final float MAX_FACTOR = 100.0f;
-	private IonAbundanceComparator ionAbundanceComparator;
+	private final IonAbundanceComparator ionAbundanceComparator;
 
 	public TargetBuilder() {
 		ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
@@ -99,10 +99,11 @@ public class TargetBuilder {
 		initializeLibraryInformation(libraryInformation, reference);
 		libraryInformation.setDatabase(database);
 		//
-		IIdentificationTarget identificationEntry = null;
+		IdentificationTarget identificationEntry = null;
 		try {
 			identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 			identificationEntry.setIdentifier(identifier);
+			identificationEntry.setLibraryScan(reference);
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
 		}
@@ -130,11 +131,19 @@ public class TargetBuilder {
 			/*
 			 * Reference
 			 */
-			libraryInformation.setName(libraryInformationReference.getName());
 			libraryInformation.setCasNumber(libraryInformationReference.getCasNumber());
+			libraryInformation.setComments(libraryInformationReference.getComments());
+			libraryInformation.setContributor(libraryInformationReference.getContributor());
+			libraryInformation.setDatabase(libraryInformationReference.getDatabase());
+			libraryInformation.setFormula(libraryInformationReference.getFormula());
+			libraryInformation.setInChI(libraryInformationReference.getInChI());
 			libraryInformation.setMiscellaneous(libraryInformationReference.getComments());
-			libraryInformation.setSmiles(libraryInformationReference.getSmiles());
+			libraryInformation.setMolWeight(libraryInformationReference.getMolWeight());
+			libraryInformation.setName(libraryInformationReference.getName());
 			libraryInformation.setReferenceIdentifier(libraryInformationReference.getReferenceIdentifier());
+			libraryInformation.setSmiles(libraryInformationReference.getSmiles());
+			libraryInformation.setSynonyms(libraryInformationReference.getSynonyms());
+			libraryInformationReference.getClassifier().forEach(libraryInformation::addClassifier);
 		} else {
 			/*
 			 * Unknown
