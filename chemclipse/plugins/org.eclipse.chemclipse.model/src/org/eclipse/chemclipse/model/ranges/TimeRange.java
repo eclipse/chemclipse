@@ -92,6 +92,12 @@ public class TimeRange {
 		updateCenter();
 	}
 
+	public void update(int start, int center, int stop) {
+
+		update(start, stop);
+		updateCenter(center);
+	}
+
 	/**
 	 * Updates the start time.
 	 * The start time must be <= stop time, otherwise no update is performed.

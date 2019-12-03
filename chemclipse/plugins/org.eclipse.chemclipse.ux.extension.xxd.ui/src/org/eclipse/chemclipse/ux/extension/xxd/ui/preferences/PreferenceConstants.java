@@ -313,6 +313,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_PROPAGATE_TARGET_ON_UPDATE = false;
 	public static final String P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "targetTemplateLibraryImportFolder";
 	public static final String DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "";
+	public static final String P_TIME_RANGE_TEMPLATE_FOLDER = "timeRangeTemplateFolder";
+	public static final String DEF_TIME_RANGE_TEMPLATE_FOLDER = "";
 	/*
 	 * Chromatogram
 	 */
