@@ -188,7 +188,7 @@ public class TimeRangesUI extends Composite {
 			/*
 			 * Sort
 			 */
-			List<String> keys = new ArrayList<>(timeRanges.listKeys());
+			List<String> keys = new ArrayList<>(timeRanges.keySet());
 			Collections.sort(keys);
 			//
 			Combo combo = comboViewer.getCombo();
