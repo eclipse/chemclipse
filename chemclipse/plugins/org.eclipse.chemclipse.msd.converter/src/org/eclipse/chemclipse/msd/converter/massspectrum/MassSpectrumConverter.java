@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics, Logging
+ * Christoph Läubrich - fix generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.massspectrum;
 
@@ -56,7 +57,6 @@ public class MassSpectrumConverter {
 	 * This class has only static methods.
 	 */
 	private MassSpectrumConverter() {
-
 	}
 
 	/**
@@ -67,19 +67,14 @@ public class MassSpectrumConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static <T> IProcessingInfo<T> convert(File file, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectra> convert(File file, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
-		/*
-		 * Do not use a safe runnable here.
-		 */
-		IMassSpectrumImportConverter<T> importConverter = getMassSpectrumImportConverter(converterId);
+		IMassSpectrumImportConverter importConverter = getMassSpectrumImportConverter(converterId);
 		if(importConverter != null) {
-			processingInfo = importConverter.convert(file, monitor);
+			return importConverter.convert(file, monitor);
 		} else {
-			processingInfo = getNoImportConverterAvailableProcessingInfo(file);
+			return getNoImportConverterAvailableProcessingInfo(file);
 		}
-		return processingInfo;
 	}
 
 	/**
@@ -89,10 +84,9 @@ public class MassSpectrumConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static <T> IProcessingInfo<T> convert(File file, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectra> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo = getMassSpectra(file, monitor);
-		return processingInfo;
+		return getMassSpectra(file, monitor);
 	}
 
 	/**
@@ -102,9 +96,9 @@ public class MassSpectrumConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	private static <T> IProcessingInfo<T> getMassSpectra(final File file, IProgressMonitor monitor) {
+	private static IProcessingInfo<IMassSpectra> getMassSpectra(final File file, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo = new ProcessingInfo();
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
 		MassSpectrumConverterSupport converterSupport = getMassSpectrumConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
@@ -113,7 +107,7 @@ public class MassSpectrumConverter {
 				 * Do not use a safe runnable here, because a IMassSpectra
 				 * object must be returned or null.
 				 */
-				IMassSpectrumImportConverter<T> importConverter = getMassSpectrumImportConverter(converterId);
+				IMassSpectrumImportConverter importConverter = getMassSpectrumImportConverter(converterId);
 				if(importConverter != null) {
 					/*
 					 * Why should the method not declare the exceptions that
@@ -208,14 +202,14 @@ public class MassSpectrumConverter {
 	 * @param converterId
 	 * @return IMassSpectrumImportConverter
 	 */
-	private static <T> IMassSpectrumImportConverter<T> getMassSpectrumImportConverter(final String converterId) {
+	private static IMassSpectrumImportConverter getMassSpectrumImportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IMassSpectrumImportConverter<T> instance = null;
+		IMassSpectrumImportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IMassSpectrumImportConverter<T>)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
+				instance = (IMassSpectrumImportConverter)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.error(e.getLocalizedMessage(), e);
 			}

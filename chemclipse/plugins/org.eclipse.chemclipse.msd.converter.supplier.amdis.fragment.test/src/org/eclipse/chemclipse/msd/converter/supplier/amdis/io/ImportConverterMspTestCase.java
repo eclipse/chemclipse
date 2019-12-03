@@ -26,7 +26,7 @@ public class ImportConverterMspTestCase extends TestCase {
 
 	protected File importFile;
 	protected IMassSpectra massSpectra;
-	protected IDatabaseImportConverter<IMassSpectra> importConverter;
+	protected IDatabaseImportConverter importConverter;
 
 	@Override
 	protected void setUp() throws Exception {

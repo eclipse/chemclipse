@@ -9,16 +9,18 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - fix generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.database;
 
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IImportConverter;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public interface IDatabaseImportConverter<T> extends IImportConverter {
+public interface IDatabaseImportConverter extends IImportConverter {
 
-	IProcessingInfo<T> convert(File file, IProgressMonitor monitor);
+	IProcessingInfo<IMassSpectra> convert(File file, IProgressMonitor monitor);
 }

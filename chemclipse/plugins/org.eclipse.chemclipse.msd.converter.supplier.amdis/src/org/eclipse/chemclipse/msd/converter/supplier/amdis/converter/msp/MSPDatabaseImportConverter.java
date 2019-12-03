@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MSPDatabaseImportConverter extends AbstractDatabaseImportConverter<IMassSpectra> {
+public class MSPDatabaseImportConverter extends AbstractDatabaseImportConverter {
 
 	private static final Logger logger = Logger.getLogger(MSPDatabaseImportConverter.class);
 	private static final String DESCRIPTION = "AMDIS MSP Database Import";

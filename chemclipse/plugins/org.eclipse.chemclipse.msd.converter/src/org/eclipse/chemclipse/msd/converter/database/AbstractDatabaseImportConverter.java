@@ -14,5 +14,5 @@ package org.eclipse.chemclipse.msd.converter.database;
 
 import org.eclipse.chemclipse.converter.core.AbstractImportConverter;
 
-public abstract class AbstractDatabaseImportConverter<T> extends AbstractImportConverter implements IDatabaseImportConverter<T> {
+public abstract class AbstractDatabaseImportConverter extends AbstractImportConverter implements IDatabaseImportConverter {
 }

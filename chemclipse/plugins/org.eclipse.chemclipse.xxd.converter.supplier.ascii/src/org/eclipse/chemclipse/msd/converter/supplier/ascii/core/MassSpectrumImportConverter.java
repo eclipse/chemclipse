@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add generic
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.ascii.core;
 
@@ -32,9 +33,9 @@ public class MassSpectrumImportConverter extends AbstractMassSpectrumImportConve
 	private static final String DESCRIPTION = "ASCII MS";
 
 	@Override
-	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectra> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(file);
+		IProcessingInfo<IMassSpectra> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
 			try {
 				file = SpecificationValidator.validateSpecification(file, "ascii");

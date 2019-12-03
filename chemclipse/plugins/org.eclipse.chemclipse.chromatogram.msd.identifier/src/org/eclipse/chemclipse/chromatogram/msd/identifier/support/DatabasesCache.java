@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
- * Christoph Läubrich - add method to check if database is loaded
+ * Christoph Läubrich - add method to check if database is loaded, add error feedback
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.support;
 
@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
+import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -200,6 +201,10 @@ public class DatabasesCache {
 
 		IProcessingInfo<IMassSpectra> processingInfo = DatabaseConverter.convert(file, monitor);
 		IMassSpectra massSpectraDatabase = processingInfo.getProcessingResult();
+		if(massSpectraDatabase == null) {
+			massSpectraDatabase = new MassSpectra();
+			logger.error("Loading MassSpectraFromFile " + file + " failed (" + processingInfo.getMessages() + ")");
+		}
 		/*
 		 * Add the database to databases.
 		 */

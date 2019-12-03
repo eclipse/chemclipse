@@ -33,7 +33,7 @@ public class MassSpectrumExportConverterTestCase extends TestCase {
 	protected IDatabaseExportConverter exportConverter;
 	protected File importFile;
 	protected IMassSpectra massSpectra;
-	protected IDatabaseImportConverter<IMassSpectra> importConverter;
+	protected IDatabaseImportConverter importConverter;
 
 	@Override
 	protected void setUp() throws Exception {

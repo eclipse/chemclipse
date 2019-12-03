@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,16 +9,18 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - fix generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.massspectrum;
 
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IImportConverter;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public interface IMassSpectrumImportConverter<T> extends IImportConverter {
+public interface IMassSpectrumImportConverter extends IImportConverter {
 
 	/**
 	 * Reads the mass spectra from the given file.
@@ -27,5 +29,5 @@ public interface IMassSpectrumImportConverter<T> extends IImportConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<T> convert(File file, IProgressMonitor monitor);
+	IProcessingInfo<IMassSpectra> convert(File file, IProgressMonitor monitor);
 }

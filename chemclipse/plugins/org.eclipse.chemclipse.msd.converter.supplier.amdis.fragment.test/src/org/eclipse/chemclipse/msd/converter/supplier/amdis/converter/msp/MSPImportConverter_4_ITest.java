@@ -35,7 +35,7 @@ public class MSPImportConverter_4_ITest extends TestCase {
 
 		super.setUp();
 		File importFile = new File(PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_LIB_4_MSP));
-		IDatabaseImportConverter<IMassSpectra> importConverter = new MSPDatabaseImportConverter();
+		IDatabaseImportConverter importConverter = new MSPDatabaseImportConverter();
 		IProcessingInfo<IMassSpectra> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		massSpectra = processingInfo.getProcessingResult();
 	}

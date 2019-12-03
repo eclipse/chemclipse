@@ -123,7 +123,9 @@ public class FileIdentifier {
 		 * Load the mass spectra database only if the raw file or its content has changed.
 		 */
 		FileListUtil fileListUtil = new FileListUtil();
-		Map<String, IMassSpectra> databases = databasesCache.getDatabases(fileListUtil.getFiles(peakIdentifierSettings.getMassSpectraFiles()), subMonitor.split(10));
+		String massSpectraFiles = peakIdentifierSettings.getMassSpectraFiles();
+		List<String> files = fileListUtil.getFiles(massSpectraFiles);
+		Map<String, IMassSpectra> databases = databasesCache.getDatabases(files, subMonitor.split(10));
 		subMonitor.setWorkRemaining(databases.size() * 100);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
 			comparePeaksAgainstDatabase(peaks, database.getValue().getList(), peakIdentifierSettings, identifier, database.getKey(), subMonitor.split(100));
@@ -272,10 +274,10 @@ public class FileIdentifier {
 		 * Define the number of items where no more splitting occurs
 		 */
 		private static final int THRESHOLD = 400;
-		private IScanMSD unknown;
-		private List<? extends IScanMSD> references;
-		private IFileIdentifierSettings settings;
-		private IMassSpectrumComparator spectrumComparator;
+		private final IScanMSD unknown;
+		private final List<? extends IScanMSD> references;
+		private final IFileIdentifierSettings settings;
+		private final IMassSpectrumComparator spectrumComparator;
 
 		public FindMatchingSpectras(IScanMSD unknown, List<? extends IScanMSD> references, IFileIdentifierSettings settings, IMassSpectrumComparator spectrumComparator) {
 			this.unknown = unknown;

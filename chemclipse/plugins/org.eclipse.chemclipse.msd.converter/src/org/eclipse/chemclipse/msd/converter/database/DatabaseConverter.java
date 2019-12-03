@@ -56,7 +56,6 @@ public class DatabaseConverter {
 	 * This class has only static methods.
 	 */
 	private DatabaseConverter() {
-
 	}
 
 	/**
@@ -67,13 +66,13 @@ public class DatabaseConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static <T> IProcessingInfo<T> convert(File file, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectra> convert(File file, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
+		IProcessingInfo<IMassSpectra> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
-		IDatabaseImportConverter<T> importConverter = getDatabaseImportConverter(converterId);
+		IDatabaseImportConverter importConverter = getDatabaseImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
@@ -89,10 +88,9 @@ public class DatabaseConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static <T> IProcessingInfo<T> convert(File file, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectra> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo = getMassSpectra(file, monitor);
-		return processingInfo;
+		return getMassSpectra(file, monitor);
 	}
 
 	/**
@@ -102,9 +100,9 @@ public class DatabaseConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	private static <T> IProcessingInfo<T> getMassSpectra(final File file, IProgressMonitor monitor) {
+	private static IProcessingInfo<IMassSpectra> getMassSpectra(final File file, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo = new ProcessingInfo();
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
 		DatabaseConverterSupport converterSupport = getDatabaseConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
@@ -113,7 +111,7 @@ public class DatabaseConverter {
 				 * Do not use a safe runnable here, because a IMassSpectra
 				 * object must be returned or null.
 				 */
-				IDatabaseImportConverter<T> importConverter = getDatabaseImportConverter(converterId);
+				IDatabaseImportConverter importConverter = getDatabaseImportConverter(converterId);
 				if(importConverter != null) {
 					/*
 					 * Why should the method not declare the exceptions that
@@ -208,15 +206,14 @@ public class DatabaseConverter {
 	 * @param converterId
 	 * @return IDatabaseImportConverter
 	 */
-	@SuppressWarnings("unchecked")
-	private static <T> IDatabaseImportConverter<T> getDatabaseImportConverter(final String converterId) {
+	private static IDatabaseImportConverter getDatabaseImportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IDatabaseImportConverter<T> instance = null;
+		IDatabaseImportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IDatabaseImportConverter<T>)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
+				instance = (IDatabaseImportConverter)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.error(e.getLocalizedMessage(), e);
 			}

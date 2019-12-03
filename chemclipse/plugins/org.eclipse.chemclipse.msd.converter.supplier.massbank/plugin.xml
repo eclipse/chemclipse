@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.chemclipse.msd.converter.massSpectrumSupplier">
       <MassSpectrumSupplier
-            description="Reads an writes MassBank mass spectra."
+            description="Reads MassBank mass spectra."
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.massbank.converter.MassBankExportConverter"
             fileExtension=".txt"
             filterName="MassBank Mass Spectrum (*.txt)"
@@ -14,6 +14,31 @@
             isExportable="false"
             isImportable="true">
       </MassSpectrumSupplier>
+      <MassSpectrumSupplier
+            description="Reads MassBank mass spectra."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.massbank.converter.MassBankExportConverter"
+            fileExtension=".zip"
+            filterName="Compressed MassBank Mass Spectrum (*.zip)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.massbank"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.massbank.converter.MassBankImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.massbank.converter.MagicNumberMatcher"
+            isExportable="false"
+            isImportable="true">
+      </MassSpectrumSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.databaseSupplier">
+      <DatabaseSupplier
+            description="Reads MassBank mass spectra"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.massbank.converter.MassBankExportConverter"
+            fileExtension=".zip"
+            filterName="Compressed MassBank Mass Spectrum (*.zip)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.massbank.DatabaseSupplier1"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.massbank.converter.MassBankImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.massbank.converter.MagicNumberMatcher"
+            isExportable="false"
+            isImportable="true">
+      </DatabaseSupplier>
    </extension>
 
 </plugin>

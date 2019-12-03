@@ -27,6 +27,7 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	private static final long serialVersionUID = -3521383640386911035L;
 	//
 	private ILibraryInformation libraryInformation;
+	private String precursorType;
 
 	/**
 	 * Creates a new instance of {@code AbstractRegularLibraryMassSpectrum} by creating a
@@ -48,6 +49,17 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 
 	public AbstractRegularLibraryMassSpectrum(Collection<? extends IIon> ions) {
 		super(ions);
+	}
+
+	@Override
+	public String getPrecursorType() {
+
+		return precursorType;
+	}
+
+	public void setPrecursorType(String precursorType) {
+
+		this.precursorType = precursorType;
 	}
 
 	/*

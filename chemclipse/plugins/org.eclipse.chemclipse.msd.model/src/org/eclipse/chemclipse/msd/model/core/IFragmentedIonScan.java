@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Alexander Kerner - initial API and implementation
+ * Christoph Läubrich - add precursor type
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -36,4 +37,9 @@ public interface IFragmentedIonScan extends IScanMSD {
 	 * @return {@code this}
 	 */
 	IFragmentedIonScan setPrecursorIon(double precursorIon);
+
+	default String getPrecursorType() {
+
+		return null;
+	}
 }

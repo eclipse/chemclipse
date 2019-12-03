@@ -11,28 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.massbank.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
-import org.eclipse.chemclipse.logging.core.Logger;
 
-public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectrum implements IVendorLibraryMassSpectrum {
-
-	private Map<String, String> infoMap;
+public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectrum {
 
 	public VendorLibraryMassSpectrum() {
-		infoMap = new HashMap<String, String>();
-	}
-
-	@Override
-	public Map<String, String> getInfoMap() {
-
-		return infoMap;
 	}
 
 	/**
@@ -45,9 +33,9 @@ public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectru
 	// -------------------------------------------IAmdisMassSpectrum
 	// -------------------------------IMassSpectrumCloneable
 	@Override
-	public IVendorLibraryMassSpectrum makeDeepCopy() throws CloneNotSupportedException {
+	public VendorLibraryMassSpectrum makeDeepCopy() throws CloneNotSupportedException {
 
-		IVendorLibraryMassSpectrum massSpectrum = (IVendorLibraryMassSpectrum)super.clone();
+		VendorLibraryMassSpectrum massSpectrum = (VendorLibraryMassSpectrum)super.clone();
 		IIon massbankIon;
 		/*
 		 * The instance variables have been copied by super.clone();.<br/> The
