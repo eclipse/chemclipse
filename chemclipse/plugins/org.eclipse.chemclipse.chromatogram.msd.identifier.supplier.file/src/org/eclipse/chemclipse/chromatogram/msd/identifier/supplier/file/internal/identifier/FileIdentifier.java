@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RecursiveTask;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
@@ -189,7 +190,7 @@ public class FileIdentifier {
 			if(subMonitor.isCanceled()) {
 				throw new OperationCanceledException();
 			}
-			Map<IComparisonResult, IScanMSD> results = findMatches(unknown, references, fileIdentifierSettings, spectrumComparator);
+			Map<IComparisonResult, IScanMSD> results = new FindMatchingSpectras(unknown, references, fileIdentifierSettings, spectrumComparator).invoke();
 			if(results.size() > 0) {
 				matched++;
 				List<IComparisonResult> resultList = new ArrayList<>(results.keySet());
@@ -206,22 +207,6 @@ public class FileIdentifier {
 		return matched;
 	}
 
-	private static Map<IComparisonResult, IScanMSD> findMatches(IScanMSD unknown, List<? extends IScanMSD> references, IFileIdentifierSettings settings, IMassSpectrumComparator spectrumComparator) {
-
-		Map<IComparisonResult, IScanMSD> results = new IdentityHashMap<>();
-		float minMF = settings.getMinMatchFactor();
-		float minRMF = settings.getMinReverseMatchFactor();
-		for(IScanMSD reference : references) {
-			IProcessingInfo<IComparisonResult> infoCompare = spectrumComparator.compare(unknown, reference);
-			IComparisonResult comparisonResult = infoCompare.getProcessingResult();
-			applyPenaltyOnDemand(unknown, reference, comparisonResult, settings);
-			if(isValidTarget(comparisonResult, minMF, minRMF)) {
-				results.put(comparisonResult, reference);
-			}
-		}
-		return results;
-	}
-
 	public static int comparePeaksAgainstDatabase(List<? extends IPeakMSD> unknownList, List<IScanMSD> references, PeakIdentifierSettings fileIdentifierSettings, String identifier, String databaseName, IProgressMonitor monitor) {
 
 		int matched = 0;
@@ -232,7 +217,7 @@ public class FileIdentifier {
 				throw new OperationCanceledException();
 			}
 			IScanMSD unknown = peakMSD.getPeakModel().getPeakMassSpectrum();
-			Map<IComparisonResult, IScanMSD> matches = findMatches(unknown, references, fileIdentifierSettings, massSpectrumComparator);
+			Map<IComparisonResult, IScanMSD> matches = new FindMatchingSpectras(unknown, references, fileIdentifierSettings, massSpectrumComparator).invoke();
 			if(matches.size() > 0) {
 				matched++;
 				List<IComparisonResult> resultList = new ArrayList<>(matches.keySet());
@@ -278,5 +263,58 @@ public class FileIdentifier {
 			return true;
 		}
 		return false;
+	}
+
+	private static final class FindMatchingSpectras extends RecursiveTask<Map<IComparisonResult, IScanMSD>> {
+
+		private static final long serialVersionUID = 1L;
+		/**
+		 * Define the number of items where no more splitting occurs
+		 */
+		private static final int THRESHOLD = 400;
+		private IScanMSD unknown;
+		private List<? extends IScanMSD> references;
+		private IFileIdentifierSettings settings;
+		private IMassSpectrumComparator spectrumComparator;
+
+		public FindMatchingSpectras(IScanMSD unknown, List<? extends IScanMSD> references, IFileIdentifierSettings settings, IMassSpectrumComparator spectrumComparator) {
+			this.unknown = unknown;
+			this.references = references;
+			this.settings = settings;
+			this.spectrumComparator = spectrumComparator;
+		}
+
+		@Override
+		protected Map<IComparisonResult, IScanMSD> compute() {
+
+			int size = references.size();
+			if(size > THRESHOLD) {
+				int half = size / 2;
+				FindMatchingSpectras forkPart = new FindMatchingSpectras(unknown, references.subList(0, half), settings, spectrumComparator);
+				forkPart.fork();
+				FindMatchingSpectras directPart = new FindMatchingSpectras(unknown, references.subList(half, size), settings, spectrumComparator);
+				Map<IComparisonResult, IScanMSD> map = directPart.compute();
+				map.putAll(forkPart.join());
+				return map;
+			} else {
+				return findMatchingReferences();
+			}
+		}
+
+		private Map<IComparisonResult, IScanMSD> findMatchingReferences() {
+
+			Map<IComparisonResult, IScanMSD> results = new IdentityHashMap<>();
+			float minMF = settings.getMinMatchFactor();
+			float minRMF = settings.getMinReverseMatchFactor();
+			for(IScanMSD reference : references) {
+				IProcessingInfo<IComparisonResult> infoCompare = spectrumComparator.compare(unknown, reference);
+				IComparisonResult comparisonResult = infoCompare.getProcessingResult();
+				applyPenaltyOnDemand(unknown, reference, comparisonResult, settings);
+				if(isValidTarget(comparisonResult, minMF, minRMF)) {
+					results.put(comparisonResult, reference);
+				}
+			}
+			return results;
+		}
 	}
 }
