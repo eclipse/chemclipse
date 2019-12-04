@@ -157,6 +157,14 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		return processMethod;
 	}
 
+	public String getMethodName() {
+
+		if(!textName.isDisposed()) {
+			return textName.getText();
+		}
+		return "";
+	}
+
 	public void setModificationHandler(IModificationHandler modificationHandler) {
 
 		this.modificationHandler = modificationHandler;
@@ -176,6 +184,11 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		//
 		PartSupport.setCompositeVisibility(toolbarHeader, false);
 		updateTableButtons();
+	}
+
+	public void setHeaderToolbarVisible(boolean visible) {
+
+		PartSupport.setCompositeVisibility(toolbarHeader, visible);
 	}
 
 	public Composite getToolbarMain() {

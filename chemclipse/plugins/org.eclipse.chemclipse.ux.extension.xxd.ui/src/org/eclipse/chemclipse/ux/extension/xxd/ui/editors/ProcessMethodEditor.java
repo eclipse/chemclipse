@@ -111,7 +111,12 @@ public class ProcessMethodEditor implements IModificationHandler {
 		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 		fileDialog.setOverwrite(true);
 		fileDialog.setText("Save Process Method as");
-		fileDialog.setFileName(MethodConverter.DEFAULT_METHOD_FILE_NAME);
+		String methodName = extendedMethodUI.getMethodName();
+		if(methodName.isEmpty()) {
+			fileDialog.setFileName(MethodConverter.DEFAULT_METHOD_FILE_NAME);
+		} else {
+			fileDialog.setFileName(methodName + "." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION);
+		}
 		fileDialog.setFilterExtensions(MethodConverter.DEFAULT_METHOD_FILE_EXTENSIONS);
 		fileDialog.setFilterNames(MethodConverter.DEFAULT_METHOD_FILE_NAMES);
 		File userDirectory = MethodConverter.getUserMethodDirectory();
@@ -153,6 +158,7 @@ public class ProcessMethodEditor implements IModificationHandler {
 		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, processSupplierContext, categories);
 		extendedMethodUI.setModificationHandler(this);
 		extendedMethodUI.setProcessMethod(currentProcessMethod);
+		extendedMethodUI.setHeaderToolbarVisible(processMethodFile == null);
 	}
 
 	@Override

@@ -528,6 +528,11 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	public void updateMenu() {
 
+		updateMenu(false);
+	}
+
+	public void updateMenu(boolean force) {
+
 		if(processTypeSupport != null) {
 			/*
 			 * Type
@@ -543,7 +548,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 					datatype = DataCategory.CSD;
 				}
 			}
-			if(datatype != lastMenuDataType) {
+			if(force || datatype != lastMenuDataType) {
 				/*
 				 * Clean the Menu
 				 */
