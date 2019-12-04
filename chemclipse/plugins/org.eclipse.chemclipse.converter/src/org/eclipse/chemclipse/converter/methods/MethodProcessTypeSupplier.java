@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -142,12 +143,24 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 
 	public static DataCategory[] getDataTypes(IProcessMethod method) {
 
-		if(method.getNumberOfEntries() == 0) {
-			return DataCategory.values();
+		Set<DataCategory> categories = method.getDataCategories();
+		if(categories.isEmpty()) {
+			// for backward compatibility
+			categories = EnumSet.of(DataCategory.CSD, DataCategory.MSD, DataCategory.WSD);
 		}
-		Set<DataCategory> categories = new HashSet<>();
+		if(method.getNumberOfEntries() == 0) {
+			// when there are no entries, we return the categories of the method even though this will be a noop when executed
+			return categories.toArray(new DataCategory[0]);
+		}
+		// now we search if maybe only entries of a given type are in this method, e.g. it is possible to create a processmethod
+		// with MSD+WSD type, but only add processors that are valid for WSD, then we want to return only WSD...
+		Set<DataCategory> entryCategories = new HashSet<>();
 		for(IProcessEntry entry : method) {
-			categories.addAll(entry.getDataCategories());
+			for(DataCategory entryDataCategory : entry.getDataCategories()) {
+				if(categories.contains(entryDataCategory)) {
+					entryCategories.add(entryDataCategory);
+				}
+			}
 		}
 		return categories.toArray(new DataCategory[0]);
 	}
