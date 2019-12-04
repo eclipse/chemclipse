@@ -42,4 +42,9 @@ public interface IFragmentedIonScan extends IScanMSD {
 
 		return null;
 	}
+
+	default double getPrecursorBasePeak() {
+
+		return Double.NaN;
+	}
 }

@@ -137,7 +137,7 @@ public class TargetBuilder {
 			libraryInformation.setDatabase(libraryInformationReference.getDatabase());
 			libraryInformation.setFormula(libraryInformationReference.getFormula());
 			libraryInformation.setInChI(libraryInformationReference.getInChI());
-			libraryInformation.setMiscellaneous(libraryInformationReference.getComments());
+			libraryInformation.setMiscellaneous(libraryInformationReference.getMiscellaneous());
 			libraryInformation.setMolWeight(libraryInformationReference.getMolWeight());
 			libraryInformation.setName(libraryInformationReference.getName());
 			libraryInformation.setReferenceIdentifier(libraryInformationReference.getReferenceIdentifier());

@@ -69,7 +69,7 @@ public class FileIdentifier {
 		 */
 		String identifier = IDENTIFIER;
 		String alternateIdentifierId = fileIdentifierSettings.getAlternateIdentifierId();
-		if(!alternateIdentifierId.equals("")) {
+		if(alternateIdentifierId != null && !alternateIdentifierId.isEmpty()) {
 			identifier = alternateIdentifierId;
 		}
 		/*
@@ -79,7 +79,7 @@ public class FileIdentifier {
 		Map<String, IMassSpectra> databases = databasesCache.getDatabases(fileListUtil.getFiles(fileIdentifierSettings.getMassSpectraFiles()), subMonitor.split(10));
 		subMonitor.setWorkRemaining(databases.size() * 100);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
-			compareMassSpectraAgainstDatabase(massSpectra.getList(), database.getValue().getList(), fileIdentifierSettings, identifier, database.getKey(), subMonitor.split(100));
+			compareMassSpectraAgainstDatabase(massSpectra.getList(), database.getValue().getList(), fileIdentifierSettings, identifier, database.getKey(), subMonitor.split(100, SubMonitor.SUPPRESS_NONE));
 		}
 		/*
 		 * Add m/z list on demand if no match was found.
@@ -212,12 +212,15 @@ public class FileIdentifier {
 	public static int comparePeaksAgainstDatabase(List<? extends IPeakMSD> unknownList, List<IScanMSD> references, PeakIdentifierSettings fileIdentifierSettings, String identifier, String databaseName, IProgressMonitor monitor) {
 
 		int matched = 0;
-		SubMonitor subMonitor = SubMonitor.convert(monitor, unknownList.size());
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Comparing against database " + databaseName + " with " + references.size() + " massspectra", unknownList.size());
 		IMassSpectrumComparator massSpectrumComparator = fileIdentifierSettings.getMassSpectrumComparator();
+		int count = 1;
+		int total = unknownList.size();
 		for(IPeakMSD peakMSD : unknownList) {
 			if(subMonitor.isCanceled()) {
 				throw new OperationCanceledException();
 			}
+			subMonitor.subTask("Reference " + count + "/" + total + " (matches found: " + matched + ")");
 			IScanMSD unknown = peakMSD.getPeakModel().getPeakMassSpectrum();
 			Map<IComparisonResult, IScanMSD> matches = new FindMatchingSpectras(unknown, references, fileIdentifierSettings, massSpectrumComparator).invoke();
 			if(matches.size() > 0) {
@@ -231,6 +234,7 @@ public class FileIdentifier {
 					unknown.getTargets().add(massSpectrumTarget);
 				}
 			}
+			count++;
 			subMonitor.worked(1);
 		}
 		return matched;

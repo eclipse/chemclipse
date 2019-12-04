@@ -37,21 +37,23 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassBankReader extends AbstractMassSpectraReader implements IMassSpectraReader {
 
-	private static final String PEAK_LIST_MARKER = "PK$PEAK";
-	private static final String PEAK_MARKER_AMOUNT = "PK$NUM_PEAK";
-	private static final String PEAK_MARKER_STOP = "//";
-	private static final String DELIMITER_MZ = " ";
+	private static final String TAG_DELIMITER = ":";
+	private static final String SUB_TAG_DELIMITER = " ";
 	//
-	private static final String DELIMITER_DESCRIPTION_DATA = ": ";
 	private static final String COMMENT = "COMMENT";
-	private static final String NAME = "CH$NAME";
-	private static final String COMPOUND_CLASS = "CH$COMPOUND_CLASS";
-	private static final String FORMULA = "CH$FORMULA";
-	private static final String EXACT_MASS = "CH$EXACT_MASS";
-	private static final String SMILES = "CH$SMILES";
-	private static final String INCHI = "CH$IUPAC";
+	private static final String LICENSE = "LICENSE";
+	private static final String COPYRIGHT = "COPYRIGHT";
+	private static final String AUTHORS = "AUTHORS";
+	private static final String CHEMICAL_NAME = "CH$NAME";
+	private static final String CHEMICAL_LINK = "CH$LINK";
+	private static final String CHEMICAL_COMPOUND_CLASS = "CH$COMPOUND_CLASS";
+	private static final String PEAK_LIST_MARKER = "PK$PEAK";
+	private static final String CHEMICAL_FORMULA = "CH$FORMULA";
+	private static final String CHEMICAL_EXACT_MASS = "CH$EXACT_MASS";
+	private static final String CHEMICAL_SMILES = "CH$SMILES";
+	private static final String CHEMICAL_INCHI = "CH$IUPAC";
 	private static final String MASS_SPECTROMETRY = "AC$MASS_SPECTROMETRY";
-	private static final String FOCUSED_ION = "MS$FOCUSED_ION";
+	private static final String MASSSPECTRUM_FOCUSED_ION = "MS$FOCUSED_ION";
 	private static final Logger logger = Logger.getLogger(MassBankReader.class);
 
 	@Override
@@ -105,31 +107,53 @@ public class MassBankReader extends AbstractMassSpectraReader implements IMassSp
 					continue;
 				}
 			}
-			String[] values = line.split(DELIMITER_DESCRIPTION_DATA, 2);
+			String[] values = line.split(TAG_DELIMITER, 2);
 			if(values.length == 2) {
 				String key = values[0].trim();
 				String value = values[1].trim();
 				switch(key) {
-					case COMMENT:
-						libraryInformation.setComments(value);
+					case COPYRIGHT:
+						addMisc(libraryInformation, "copyright: " + value);
 						break;
-					case FORMULA:
+					case LICENSE:
+						addMisc(libraryInformation, "license: " + value);
+						break;
+					case COMMENT:
+						addComment(libraryInformation, value);
+						break;
+					case CHEMICAL_FORMULA:
 						libraryInformation.setFormula(value);
 						break;
-					case SMILES:
+					case CHEMICAL_SMILES:
 						libraryInformation.setSmiles(value);
 						break;
-					case NAME:
+					case CHEMICAL_NAME:
 						libraryInformation.setName(value);
 						break;
-					case INCHI:
+					case CHEMICAL_INCHI:
 						libraryInformation.setInChI(value);
 						break;
 					case MASS_SPECTROMETRY:
 						parseMassSpectrometrySubTag(value.trim(), massSpectrum);
 						break;
-					case FOCUSED_ION:
+					case CHEMICAL_LINK:
+						parseLinkSubTag(value, massSpectrum);
+						break;
+					case MASSSPECTRUM_FOCUSED_ION:
 						parseFocusedIonSubTag(value.trim(), massSpectrum);
+						break;
+					case CHEMICAL_COMPOUND_CLASS:
+						libraryInformation.addClassifier(value);
+						break;
+					case AUTHORS:
+						libraryInformation.setContributor(value);
+						break;
+					case CHEMICAL_EXACT_MASS:
+						try {
+							libraryInformation.setMolWeight(Double.parseDouble(value));
+						} catch(NumberFormatException e) {
+							// ignore then...
+						}
 						break;
 					default:
 						break;
@@ -140,12 +164,32 @@ public class MassBankReader extends AbstractMassSpectraReader implements IMassSp
 		return massSpectrum;
 	}
 
+	private static void addMisc(ILibraryInformation libraryInformation, String value) {
+
+		String miscellaneous = libraryInformation.getMiscellaneous();
+		if(miscellaneous != null && !miscellaneous.isEmpty()) {
+			libraryInformation.setMiscellaneous(miscellaneous + ", " + value);
+		} else {
+			libraryInformation.setMiscellaneous(value);
+		}
+	}
+
+	private static void addComment(ILibraryInformation libraryInformation, String value) {
+
+		String comments = libraryInformation.getComments();
+		if(comments != null && comments.length() > 0) {
+			libraryInformation.setComments(comments + ", " + value);
+		} else {
+			libraryInformation.setComments(value);
+		}
+	}
+
 	private static String parsePeakList(BufferedReader bufferedReader, VendorLibraryMassSpectrum massSpectrum) throws IOException {
 
 		String line;
 		while((line = bufferedReader.readLine()) != null) {
 			if(line.startsWith("  ")) {
-				String[] values = line.trim().split(DELIMITER_MZ);
+				String[] values = line.trim().split(" ");
 				if(values.length == 3) {
 					/*
 					 * Parse the m/z and abundance.
@@ -167,9 +211,23 @@ public class MassBankReader extends AbstractMassSpectraReader implements IMassSp
 		return line;
 	}
 
+	private static void parseLinkSubTag(String subtag, VendorLibraryMassSpectrum massSpectrum) {
+
+		String[] split = subtag.split(SUB_TAG_DELIMITER, 2);
+		if(split.length == 2) {
+			String tag = split[0].trim();
+			String value = split[1].trim();
+			if("CAS".equals(tag)) {
+				massSpectrum.getLibraryInformation().setCasNumber(value);
+			} else if("INCHIKEY".equals(tag)) {
+				massSpectrum.getLibraryInformation().setInChI(value);
+			}
+		}
+	}
+
 	private static void parseFocusedIonSubTag(String subtag, VendorLibraryMassSpectrum massSpectrum) {
 
-		String[] split = subtag.split(" ", 2);
+		String[] split = subtag.split(SUB_TAG_DELIMITER, 2);
 		if(split.length == 2) {
 			String tag = split[0].trim();
 			String value = split[1].trim();
@@ -181,13 +239,19 @@ public class MassBankReader extends AbstractMassSpectraReader implements IMassSp
 				}
 			} else if("PRECURSOR_TYPE".equals(tag)) {
 				massSpectrum.setPrecursorType(value);
+			} else if("BASE_PEAK".equals(tag)) {
+				try {
+					massSpectrum.setPrecursorBasepeak(Double.parseDouble(value));
+				} catch(RuntimeException e) {
+					// can't use then...
+				}
 			}
 		}
 	}
 
 	private static void parseMassSpectrometrySubTag(String subtag, VendorLibraryMassSpectrum massSpectrum) {
 
-		String[] split = subtag.split(" ", 2);
+		String[] split = subtag.split(SUB_TAG_DELIMITER, 2);
 		if(split.length == 2) {
 			String tag = split[0].trim();
 			String value = split[1].trim();

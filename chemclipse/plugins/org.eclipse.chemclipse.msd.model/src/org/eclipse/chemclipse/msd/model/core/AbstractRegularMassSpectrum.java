@@ -38,6 +38,7 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	private short massSpectrometer;
 	private short massSpectrumType;
 	private double precursorIon;
+	private double precursorBasepeak = Double.NaN;
 
 	/**
 	 * By default:
@@ -148,5 +149,16 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 
 		this.precursorIon = precursorIon;
 		return this;
+	}
+
+	@Override
+	public double getPrecursorBasePeak() {
+
+		return precursorBasepeak;
+	}
+
+	public void setPrecursorBasepeak(double precursorBasepeak) {
+
+		this.precursorBasepeak = precursorBasepeak;
 	}
 }
