@@ -39,13 +39,11 @@ public class MassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifi
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_NUMBER_OF_TARGETS, maxValue = PreferenceSupplier.MAX_NUMBER_OF_TARGETS)
 	private int numberOfTargets = 15;
 	@JsonProperty(value = "Min Match Factor", defaultValue = "80.0")
-	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MIN_MATCH_FACTOR, maxValue = PreferenceSupplier.MAX_MIN_MATCH_FACTOR)
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
 	private float minMatchFactor = 80.0f;
 	@JsonProperty(value = "Min Reverse Match Factor", defaultValue = "80.0")
-	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MIN_REVERSE_MATCH_FACTOR, maxValue = PreferenceSupplier.MAX_MIN_REVERSE_MATCH_FACTOR)
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
 	private float minReverseMatchFactor = 80.0f;
-	@JsonProperty(value = "Add Unknown m/z List Target", defaultValue = "true")
-	private boolean addUnknownMzListTarget = true;
 	@JsonProperty(value = "Alternate Identifier Id", defaultValue = "")
 	@ComboSettingsProperty(MassSpectrumComparatorDynamicSettingProperty.class)
 	private String alternateIdentifierId = "";
@@ -120,18 +118,6 @@ public class MassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifi
 	public void setMinReverseMatchFactor(float minReverseMatchFactor) {
 
 		this.minReverseMatchFactor = minReverseMatchFactor;
-	}
-
-	@Override
-	public boolean isAddUnknownMzListTarget() {
-
-		return addUnknownMzListTarget;
-	}
-
-	@Override
-	public void setAddUnknownMzListTarget(boolean addUnknownMzListTarget) {
-
-		this.addUnknownMzListTarget = addUnknownMzListTarget;
 	}
 
 	@Override

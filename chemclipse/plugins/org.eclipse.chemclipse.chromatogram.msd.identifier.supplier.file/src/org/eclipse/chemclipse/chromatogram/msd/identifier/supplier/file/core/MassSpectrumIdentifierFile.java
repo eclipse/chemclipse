@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
+public class MassSpectrumIdentifierFile extends AbstractMassSpectrumIdentifier {
 
 	@Override
 	public IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {

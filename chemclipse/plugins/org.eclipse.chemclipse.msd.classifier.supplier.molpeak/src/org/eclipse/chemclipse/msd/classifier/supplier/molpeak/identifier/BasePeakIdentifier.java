@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifierFile;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifierFile;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings;
@@ -130,7 +130,7 @@ public class BasePeakIdentifier {
 		PeakIdentifierSettings peakIdentifierSettings = new PeakIdentifierSettings();
 		setIdentifierSettings(peakIdentifierSettings);
 		setFileIdentifierSettings(peakIdentifierSettings);
-		PeakIdentifier peakIdentifier = new PeakIdentifier();
+		PeakIdentifierFile peakIdentifier = new PeakIdentifierFile();
 		peakIdentifier.identify(peaksNotFound, peakIdentifierSettings, monitor);
 		//
 		for(IPeakMSD peak : peaksNotFound) {
@@ -179,7 +179,7 @@ public class BasePeakIdentifier {
 		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = new MassSpectrumIdentifierSettings();
 		setIdentifierSettings(massSpectrumIdentifierSettings);
 		setFileIdentifierSettings(massSpectrumIdentifierSettings);
-		MassSpectrumIdentifier massSpectrumIdentifier = new MassSpectrumIdentifier();
+		MassSpectrumIdentifierFile massSpectrumIdentifier = new MassSpectrumIdentifierFile();
 		massSpectrumIdentifier.identify(scansNotFound, massSpectrumIdentifierSettings, monitor);
 		//
 		for(IScanMSD scan : scansNotFound) {
@@ -332,7 +332,6 @@ public class BasePeakIdentifier {
 		fileIdentifierSettings.setNumberOfTargets(10);
 		fileIdentifierSettings.setMinMatchFactor(70.0f);
 		fileIdentifierSettings.setMinReverseMatchFactor(70.0f);
-		fileIdentifierSettings.setAddUnknownMzListTarget(false);
 		fileIdentifierSettings.setAlternateIdentifierId(IDENTIFIER);
 	}
 

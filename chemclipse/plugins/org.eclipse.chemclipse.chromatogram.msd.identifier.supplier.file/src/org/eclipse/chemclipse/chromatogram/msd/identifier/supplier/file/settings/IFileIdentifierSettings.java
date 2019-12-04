@@ -44,10 +44,6 @@ public interface IFileIdentifierSettings extends IIdentifierSettingsMSD {
 
 	void setMinReverseMatchFactor(float minReverseMatchFactor);
 
-	boolean isAddUnknownMzListTarget();
-
-	void setAddUnknownMzListTarget(boolean addUnknownMzListTarget);
-
 	String getAlternateIdentifierId();
 
 	void setAlternateIdentifierId(String alternateIdentifierId);

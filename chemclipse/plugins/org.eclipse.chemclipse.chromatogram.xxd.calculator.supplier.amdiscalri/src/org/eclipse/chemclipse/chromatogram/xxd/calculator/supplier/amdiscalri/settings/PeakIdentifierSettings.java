@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2019 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,8 +27,7 @@ public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD im
 	private float minMatchFactor = 80.0f;
 	@JsonProperty(value = "Min Reverse Match Factor", defaultValue = "80.0")
 	private float minReverseMatchFactor = 80.0f;
-	@JsonProperty(value = "Add Unknown m/z List Target", defaultValue = "true")
-	private boolean addUnknownMzListTarget = true;
+	//
 	private String alternateIdentifierId = ""; // Don't modify. The value will be set by the plugin.
 
 	@Override
@@ -101,18 +100,6 @@ public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD im
 	public void setMinReverseMatchFactor(float minReverseMatchFactor) {
 
 		this.minReverseMatchFactor = minReverseMatchFactor;
-	}
-
-	@Override
-	public boolean isAddUnknownMzListTarget() {
-
-		return addUnknownMzListTarget;
-	}
-
-	@Override
-	public void setAddUnknownMzListTarget(boolean addUnknownMzListTarget) {
-
-		this.addUnknownMzListTarget = addUnknownMzListTarget;
 	}
 
 	@Override

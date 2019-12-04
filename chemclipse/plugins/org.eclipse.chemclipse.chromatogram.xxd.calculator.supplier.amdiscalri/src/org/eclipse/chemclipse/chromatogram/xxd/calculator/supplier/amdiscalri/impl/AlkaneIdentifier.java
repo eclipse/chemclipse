@@ -18,8 +18,8 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifierFile;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifierFile;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings;
@@ -78,7 +78,7 @@ public class AlkaneIdentifier {
 		/*
 		 * Run the file identifier.
 		 */
-		PeakIdentifier peakIdentifier = new PeakIdentifier();
+		PeakIdentifierFile peakIdentifier = new PeakIdentifierFile();
 		return peakIdentifier.identify(peaks, peakIdentifierSettings, monitor);
 	}
 
@@ -93,7 +93,7 @@ public class AlkaneIdentifier {
 		/*
 		 * Run the file identifier.
 		 */
-		MassSpectrumIdentifier peakIdentifier = new MassSpectrumIdentifier();
+		MassSpectrumIdentifierFile peakIdentifier = new MassSpectrumIdentifierFile();
 		return peakIdentifier.identify(massSpectraList, massSpectrumIdentifierSettings, monitor);
 	}
 
@@ -145,7 +145,6 @@ public class AlkaneIdentifier {
 		fileIdentifierSettings.setNumberOfTargets(PreferenceSupplier.getNumberOfTargets());
 		fileIdentifierSettings.setMinMatchFactor(PreferenceSupplier.getMinMatchFactor());
 		fileIdentifierSettings.setMinReverseMatchFactor(PreferenceSupplier.getMinReverseMatchFactor());
-		fileIdentifierSettings.setAddUnknownMzListTarget(PreferenceSupplier.isAddUnknownMzList());
 		fileIdentifierSettings.setAlternateIdentifierId(IDENTIFIER);
 	}
 }

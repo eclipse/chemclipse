@@ -51,6 +51,7 @@ import org.eclipse.core.runtime.SubMonitor;
 public class FileIdentifier {
 
 	public static final String IDENTIFIER = "File Identifier";
+	//
 	private static final Comparator<IComparisonResult> RESULT_COMPARATOR = Collections.reverseOrder(IComparisonResult.MATCH_FACTOR_COMPARATOR);
 	private static final TargetBuilder TARGETBUILDER = new TargetBuilder();
 	private final DatabasesCache databasesCache;
@@ -83,16 +84,6 @@ public class FileIdentifier {
 		subMonitor.setWorkRemaining(databases.size() * 100);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
 			compareMassSpectraAgainstDatabase(massSpectra.getList(), database.getValue().getList(), fileIdentifierSettings, identifier, database.getKey(), subMonitor.split(100, SubMonitor.SUPPRESS_NONE));
-		}
-		/*
-		 * Add m/z list on demand if no match was found.
-		 */
-		if(fileIdentifierSettings.isAddUnknownMzListTarget()) {
-			for(IScanMSD unknown : massSpectra.getList()) {
-				if(unknown.getTargets().size() == 0) {
-					TARGETBUILDER.setMassSpectrumTargetUnknown(unknown, identifier);
-				}
-			}
 		}
 		//
 		return massSpectra;
@@ -132,16 +123,6 @@ public class FileIdentifier {
 		subMonitor.setWorkRemaining(databases.size() * 100);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
 			comparePeaksAgainstDatabase(peaks, database.getValue().getList(), peakIdentifierSettings, identifier, database.getKey(), subMonitor.split(100, SubMonitor.SUPPRESS_NONE));
-		}
-		/*
-		 * Assign a m/z list on demand if no match has been found.
-		 */
-		if(peakIdentifierSettings.isAddUnknownMzListTarget()) {
-			for(IPeakMSD peakMSD : peaks) {
-				if(peakMSD.getTargets().size() == 0) {
-					TARGETBUILDER.setPeakTargetUnknown(peakMSD, identifier);
-				}
-			}
 		}
 		//
 		return identificationResults;

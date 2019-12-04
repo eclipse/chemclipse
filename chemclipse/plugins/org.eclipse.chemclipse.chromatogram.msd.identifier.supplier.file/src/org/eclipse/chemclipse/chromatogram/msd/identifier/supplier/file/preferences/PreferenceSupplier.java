@@ -19,7 +19,9 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumUnknownSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakUnknownSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -32,6 +34,9 @@ import org.osgi.service.prefs.BackingStoreException;
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
+	//
+	public static final float MIN_FACTOR = 0.0f;
+	public static final float MAX_FACTOR = 100.0f;
 	//
 	public static final String P_MASS_SPECTRA_FILES = "massSpectraFiles";
 	public static final String DEF_MASS_SPECTRA_FILES = "";
@@ -49,19 +54,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int DEF_NUMBER_OF_TARGETS = 3;
 	public static final int MIN_NUMBER_OF_TARGETS = 1;
 	public static final int MAX_NUMBER_OF_TARGETS = 100;
-	//
+	/*
+	 * File
+	 */
 	public static final String P_MIN_MATCH_FACTOR = "minMatchFactor";
 	public static final float DEF_MIN_MATCH_FACTOR = 80.0f;
-	public static final float MIN_MIN_MATCH_FACTOR = 0.0f;
-	public static final float MAX_MIN_MATCH_FACTOR = 100.0f;
-	//
 	public static final String P_MIN_REVERSE_MATCH_FACTOR = "minReverseMatchFactor";
 	public static final float DEF_MIN_REVERSE_MATCH_FACTOR = 80.0f;
-	public static final float MIN_MIN_REVERSE_MATCH_FACTOR = 0.0f;
-	public static final float MAX_MIN_REVERSE_MATCH_FACTOR = 100.0f;
-	//
-	public static final String P_ADD_UNKNOWN_MZ_LIST_TARGET = "addUnknownMzListTarget";
-	public static final Boolean DEF_ADD_UNKNOWN_MZ_LIST_TARGET = false;
+	/*
+	 * Unknown
+	 */
+	public static final String P_MIN_MATCH_FACTOR_UNKNOWN = "minMatchFactorUnknown";
+	public static final float DEF_MIN_MATCH_FACTOR_UNKNOWN = 80.0f;
+	public static final String P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN = "minReverseMatchFactorUnknown";
+	public static final float DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN = 80.0f;
 	/*
 	 * RI / RT penalty calculation.
 	 */
@@ -117,7 +123,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
 		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
 		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
-		defaultValues.put(P_ADD_UNKNOWN_MZ_LIST_TARGET, Boolean.toString(DEF_ADD_UNKNOWN_MZ_LIST_TARGET));
+		defaultValues.put(P_MIN_MATCH_FACTOR_UNKNOWN, Float.toString(DEF_MIN_MATCH_FACTOR_UNKNOWN));
+		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN));
 		defaultValues.put(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION);
 		defaultValues.put(P_PENALTY_CALCULATION_LEVEL_FACTOR, Float.toString(IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
 		defaultValues.put(P_MAX_PENALTY, Float.toString(IComparisonResult.DEF_MAX_PENALTY));
@@ -144,7 +151,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
-		settings.setAddUnknownMzListTarget(preferences.getBoolean(P_ADD_UNKNOWN_MZ_LIST_TARGET, DEF_ADD_UNKNOWN_MZ_LIST_TARGET));
 		//
 		settings.setPenaltyCalculation(preferences.get(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION));
 		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
@@ -166,13 +172,34 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
-		settings.setAddUnknownMzListTarget(preferences.getBoolean(P_ADD_UNKNOWN_MZ_LIST_TARGET, DEF_ADD_UNKNOWN_MZ_LIST_TARGET));
 		//
 		settings.setPenaltyCalculation(preferences.get(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION));
 		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
 		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, IComparisonResult.DEF_MAX_PENALTY));
 		settings.setRetentionTimeWindow(preferences.getInt(P_RETENTION_TIME_WINDOW, DEF_RETENTION_TIME_WINDOW));
 		settings.setRetentionIndexWindow(preferences.getFloat(P_RETENTION_INDEX_WINDOW, DEF_RETENTION_INDEX_WINDOW));
+		//
+		return settings;
+	}
+
+	public static PeakUnknownSettings getPeakUnknownSettings() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		PeakUnknownSettings settings = new PeakUnknownSettings();
+		settings.setMassSpectrumComparatorId("");
+		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR_UNKNOWN, DEF_MIN_MATCH_FACTOR_UNKNOWN));
+		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN, DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN));
+		//
+		return settings;
+	}
+
+	public static MassSpectrumUnknownSettings getMassSpectrumUnknownSettings() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		MassSpectrumUnknownSettings settings = new MassSpectrumUnknownSettings();
+		settings.setMassSpectrumComparatorId("");
+		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR_UNKNOWN, DEF_MIN_MATCH_FACTOR_UNKNOWN));
+		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN, DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN));
 		//
 		return settings;
 	}
