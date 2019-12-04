@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
+import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 
 public interface IFileIdentifierSettings extends IIdentifierSettingsMSD {
@@ -50,4 +51,6 @@ public interface IFileIdentifierSettings extends IIdentifierSettingsMSD {
 	String getAlternateIdentifierId();
 
 	void setAlternateIdentifierId(String alternateIdentifierId);
+
+	IMassSpectrumComparator getMassSpectrumComparator();
 }

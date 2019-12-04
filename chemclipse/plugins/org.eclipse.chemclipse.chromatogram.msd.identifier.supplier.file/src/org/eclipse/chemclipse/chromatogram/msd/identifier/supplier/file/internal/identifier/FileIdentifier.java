@@ -13,13 +13,16 @@
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.internal.identifier;
 
 import java.io.FileNotFoundException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.RecursiveTask;
+import java.util.function.Function;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
@@ -39,6 +42,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -47,7 +51,6 @@ import org.eclipse.core.runtime.SubMonitor;
 public class FileIdentifier {
 
 	public static final String IDENTIFIER = "File Identifier";
-	//
 	private static final Comparator<IComparisonResult> RESULT_COMPARATOR = Collections.reverseOrder(IComparisonResult.MATCH_FACTOR_COMPARATOR);
 	private static final TargetBuilder TARGETBUILDER = new TargetBuilder();
 	private final DatabasesCache databasesCache;
@@ -107,7 +110,7 @@ public class FileIdentifier {
 	 */
 	public IPeakIdentificationResults runPeakIdentification(List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo<?> processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Running mass spectra identification", 100);
 		/*
 		 * The alternate identifier is used, when another plugin tries to use this file identification process.
 		 * The LibraryService uses the identifier to get a mass spectrum of a given target.
@@ -116,7 +119,7 @@ public class FileIdentifier {
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		String identifier = IDENTIFIER;
 		String alternateIdentifierId = peakIdentifierSettings.getAlternateIdentifierId();
-		if(!alternateIdentifierId.equals("")) {
+		if(alternateIdentifierId != null && !alternateIdentifierId.isEmpty()) {
 			identifier = alternateIdentifierId;
 		}
 		/*
@@ -128,7 +131,7 @@ public class FileIdentifier {
 		Map<String, IMassSpectra> databases = databasesCache.getDatabases(files, subMonitor.split(10));
 		subMonitor.setWorkRemaining(databases.size() * 100);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
-			comparePeaksAgainstDatabase(peaks, database.getValue().getList(), peakIdentifierSettings, identifier, database.getKey(), subMonitor.split(100));
+			comparePeaksAgainstDatabase(peaks, database.getValue().getList(), peakIdentifierSettings, identifier, database.getKey(), subMonitor.split(100, SubMonitor.SUPPRESS_NONE));
 		}
 		/*
 		 * Assign a m/z list on demand if no match has been found.
@@ -182,46 +185,28 @@ public class FileIdentifier {
 
 	public static int compareMassSpectraAgainstDatabase(List<? extends IScanMSD> unknownList, List<? extends IScanMSD> references, MassSpectrumIdentifierSettings fileIdentifierSettings, String identifier, String databaseName, IProgressMonitor monitor) {
 
-		int matched = 0;
-		/*
-		 * Run the identification.
-		 */
-		SubMonitor subMonitor = SubMonitor.convert(monitor, unknownList.size());
-		IMassSpectrumComparator spectrumComparator = fileIdentifierSettings.getMassSpectrumComparator();
-		for(IScanMSD unknown : unknownList) {
-			if(subMonitor.isCanceled()) {
-				throw new OperationCanceledException();
-			}
-			Map<IComparisonResult, IScanMSD> results = new FindMatchingSpectras(unknown, references, fileIdentifierSettings, spectrumComparator).invoke();
-			if(results.size() > 0) {
-				matched++;
-				List<IComparisonResult> resultList = new ArrayList<>(results.keySet());
-				Collections.sort(resultList, RESULT_COMPARATOR);
-				int size = Math.min(fileIdentifierSettings.getNumberOfTargets(), results.size());
-				for(int i = 0; i < size; i++) {
-					IComparisonResult comparisonResult = resultList.get(i);
-					IIdentificationTarget massSpectrumTarget = TARGETBUILDER.getMassSpectrumTarget(results.get(comparisonResult), comparisonResult, identifier, databaseName);
-					unknown.getTargets().add(massSpectrumTarget);
-				}
-			}
-			subMonitor.worked(1);
-		}
-		return matched;
+		return compareAgainstDatabase(unknownList, scan -> scan, references, fileIdentifierSettings, identifier, databaseName, monitor);
 	}
 
 	public static int comparePeaksAgainstDatabase(List<? extends IPeakMSD> unknownList, List<IScanMSD> references, PeakIdentifierSettings fileIdentifierSettings, String identifier, String databaseName, IProgressMonitor monitor) {
 
+		return compareAgainstDatabase(unknownList, peak -> peak.getPeakModel().getPeakMassSpectrum(), references, fileIdentifierSettings, identifier, databaseName, monitor);
+	}
+
+	private static <T> int compareAgainstDatabase(Collection<T> unknownList, Function<T, IScanMSD> extractor, List<? extends IScanMSD> references, IFileIdentifierSettings fileIdentifierSettings, String identifier, String databaseName, IProgressMonitor monitor) {
+
 		int matched = 0;
+		long start = System.currentTimeMillis();
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Comparing against database " + databaseName + " with " + references.size() + " massspectra", unknownList.size());
 		IMassSpectrumComparator massSpectrumComparator = fileIdentifierSettings.getMassSpectrumComparator();
 		int count = 1;
 		int total = unknownList.size();
-		for(IPeakMSD peakMSD : unknownList) {
+		for(T item : unknownList) {
 			if(subMonitor.isCanceled()) {
 				throw new OperationCanceledException();
 			}
 			subMonitor.subTask("Reference " + count + "/" + total + " (matches found: " + matched + ")");
-			IScanMSD unknown = peakMSD.getPeakModel().getPeakMassSpectrum();
+			IScanMSD unknown = extractor.apply(item);
 			Map<IComparisonResult, IScanMSD> matches = new FindMatchingSpectras(unknown, references, fileIdentifierSettings, massSpectrumComparator).invoke();
 			if(matches.size() > 0) {
 				matched++;
@@ -236,6 +221,13 @@ public class FileIdentifier {
 			}
 			count++;
 			subMonitor.worked(1);
+		}
+		if(UserManagement.isDevMode()) {
+			long end = System.currentTimeMillis();
+			NumberFormat integerFormat = NumberFormat.getIntegerInstance();
+			NumberFormat timeFormat = NumberFormat.getNumberInstance();
+			timeFormat.setMaximumFractionDigits(2);
+			System.out.println("#PERF# Identifaction of " + integerFormat.format(unknownList.size()) + " unknown items against database " + databaseName + " with " + integerFormat.format(references.size()) + " massspectra took " + timeFormat.format((end - start) / 1000d) + " seconds and yields " + matched + " matches");
 		}
 		return matched;
 	}
