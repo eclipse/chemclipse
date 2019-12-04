@@ -19,9 +19,12 @@ public class TimeRangeSupport {
 			for(TimeRange timeRangeSource : timeRangesSource.values()) {
 				String identifier = timeRangeSource.getIdentifier();
 				TimeRange timeRangeSink = timeRangesSink.get(identifier);
-				if(timeRangeSink != null) {
-					timeRangeSink.update(timeRangeSource.getStart(), timeRangeSource.getCenter(), timeRangeSource.getStop());
+				if(timeRangeSink == null) {
+					timeRangeSink = new TimeRange(identifier, 0, 0);
+					timeRangesSink.add(timeRangeSink);
 				}
+				//
+				timeRangeSink.update(timeRangeSource.getStart(), timeRangeSource.getCenter(), timeRangeSource.getStop());
 			}
 		}
 	}

@@ -19,10 +19,16 @@ import java.util.List;
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TimeRangeInputValidator;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -34,6 +40,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -44,6 +51,8 @@ public class TimeRangesUI extends Composite {
 	private Text textStart;
 	private Text textCenter;
 	private Text textStop;
+	private Button buttonAdd;
+	private Button buttonDelete;
 	/*
 	 * TimeRanges is the object, that contains a map of ranges.
 	 * TimeRange is the currently selected time range.
@@ -81,7 +90,7 @@ public class TimeRangesUI extends Composite {
 
 	private void createControl() {
 
-		GridLayout gridLayout = new GridLayout(4, true);
+		GridLayout gridLayout = new GridLayout(6, false);
 		gridLayout.marginWidth = 0;
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
@@ -91,6 +100,8 @@ public class TimeRangesUI extends Composite {
 		textStart = createText(this, TimeRange.Marker.START);
 		textCenter = createText(this, TimeRange.Marker.CENTER);
 		textStop = createText(this, TimeRange.Marker.STOP);
+		buttonAdd = createButtonAdd(this);
+		buttonDelete = createButtonDelete(this);
 	}
 
 	private ComboViewer createComboViewer(Composite composite) {
@@ -103,8 +114,9 @@ public class TimeRangesUI extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof String) {
-					return element.toString();
+				if(element instanceof TimeRange) {
+					TimeRange timeRange = (TimeRange)element;
+					return timeRange.getIdentifier();
 				}
 				return null;
 			}
@@ -120,9 +132,9 @@ public class TimeRangesUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof String) {
-					String identifier = (String)object;
-					updateTimeRange(identifier);
+				if(object instanceof TimeRange) {
+					TimeRange timeRange = (TimeRange)object;
+					updateTimeRange(timeRange);
 				}
 			}
 		});
@@ -180,38 +192,81 @@ public class TimeRangesUI extends Composite {
 		return text;
 	}
 
+	private Button createButtonAdd(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Add a new time range.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(timeRanges != null) {
+					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Time Range", "Create a new time range.", "C10 | 10.2 | 10.4 | 10.6", new TimeRangeInputValidator(timeRanges.keySet()));
+					if(IDialogConstants.OK_ID == dialog.open()) {
+						String item = dialog.getValue();
+						TimeRange timeRange = timeRanges.extractTimeRange(item);
+						if(timeRange != null) {
+							timeRanges.add(timeRange);
+							updateInput();
+							comboViewer.getCombo().setText(timeRange.getIdentifier());
+							updateTimeRange(timeRange);
+						}
+					}
+				}
+			}
+		});
+		return button;
+	}
+
+	private Button createButtonDelete(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Delete the selected time range.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Time Range", "Would you like to delete the selected time range?")) {
+					Object object = comboViewer.getStructuredSelection().getFirstElement();
+					if(object instanceof TimeRange) {
+						timeRanges.remove((TimeRange)object);
+						updateInput();
+					}
+				}
+			}
+		});
+		return button;
+	}
+
 	private void updateInput() {
 
-		String identifier = "";
-		//
+		timeRange = null;
 		if(timeRanges != null) {
 			/*
 			 * Sort
 			 */
-			List<String> keys = new ArrayList<>(timeRanges.keySet());
-			Collections.sort(keys);
+			buttonAdd.setEnabled(true);
+			List<TimeRange> ranges = new ArrayList<>(timeRanges.values());
+			Collections.sort(ranges, new TimeRangeComparator());
 			//
 			Combo combo = comboViewer.getCombo();
 			int selectionIndex = combo.getSelectionIndex();
-			comboViewer.setInput(keys);
+			comboViewer.setInput(ranges);
 			//
 			if(combo.getItemCount() > 0) {
 				int index = (selectionIndex >= 0 && selectionIndex < combo.getItemCount()) ? selectionIndex : 0;
 				combo.select(index);
-				identifier = keys.get(index);
+				timeRange = ranges.get(index);
 			}
 		} else {
+			buttonAdd.setEnabled(false);
 			comboViewer.setInput(null);
-		}
-		//
-		updateTimeRange(identifier);
-	}
-
-	private void updateTimeRange(String identifier) {
-
-		timeRange = null;
-		if(timeRanges != null) {
-			timeRange = timeRanges.get(identifier);
 		}
 		//
 		updateTimeRange(timeRange);
@@ -238,6 +293,7 @@ public class TimeRangesUI extends Composite {
 		textStart.setEnabled(enabled);
 		textCenter.setEnabled(enabled);
 		textStop.setEnabled(enabled);
+		buttonDelete.setEnabled(enabled);
 	}
 
 	private String getRetentionTimeMinutes(int milliseconds) {

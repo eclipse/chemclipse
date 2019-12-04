@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.identifier.ITargetTemplate;
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -146,7 +145,7 @@ public class TimeRangesFieldEditor extends FieldEditor {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Time Range", "You can create a new time range here.", "C10 | 10.2 | 10.4 | 10.6", new TimeRangeInputValidator(timeRanges.keySet()));
+				InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Time Range", "Create a new time range.", "C10 | 10.2 | 10.4 | 10.6", new TimeRangeInputValidator(timeRanges.keySet()));
 				if(IDialogConstants.OK_ID == dialog.open()) {
 					String item = dialog.getValue();
 					TimeRange timeRange = timeRanges.extractTimeRange(item);
@@ -165,19 +164,19 @@ public class TimeRangesFieldEditor extends FieldEditor {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Edit");
-		button.setToolTipText("Edit the selected target template.");
+		button.setToolTipText("Edit the selected time range.");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)timeRangesListUI.getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof ITargetTemplate) {
+				if(object instanceof TimeRange) {
 					Set<String> keySetEdit = new HashSet<>();
 					keySetEdit.addAll(timeRanges.keySet());
 					TimeRange timeRange = (TimeRange)object;
 					keySetEdit.remove(timeRange.getIdentifier());
-					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Time Range", "Edit the time Range.", timeRanges.extractTimeRange(timeRange), new TimeRangeInputValidator(keySetEdit));
+					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Time Range", "Edit the selected time range.", timeRanges.extractTimeRange(timeRange), new TimeRangeInputValidator(keySetEdit));
 					if(IDialogConstants.OK_ID == dialog.open()) {
 						String item = dialog.getValue();
 						TimeRange timeRangeNew = timeRanges.extractTimeRange(item);
