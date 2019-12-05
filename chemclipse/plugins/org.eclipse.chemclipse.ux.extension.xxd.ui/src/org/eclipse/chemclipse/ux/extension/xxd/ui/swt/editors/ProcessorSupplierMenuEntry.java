@@ -56,7 +56,7 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 	@Override
 	public String getName() {
 
-		String name = processorSupplier.getName();
+		String name = processorSupplier.getName().replace("&", "&&");
 		if(processorSupplier.getType() == SupplierType.INTERACTIVE) {
 			return name + " ...";
 		}
