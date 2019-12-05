@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.converter.methods;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.logging.support.Settings;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
@@ -54,6 +57,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 
 	private BundleTracker<Collection<IProcessSupplier<?>>> bundleTracker;
 	private final AtomicReference<LogService> logService = new AtomicReference<>();
+	private final List<IProcessSupplier<?>> systemMethods = new ArrayList<>();
 
 	@Override
 	public String getCategory() {
@@ -81,9 +85,11 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 		}
 		Collection<Collection<IProcessSupplier<?>>> values = bundleTracker.getTracked().values();
 		values.forEach(list::addAll);
+		list.addAll(systemMethods);
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> IProcessSupplier<T> getSupplier(String id) {
 
@@ -94,7 +100,13 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 				String baseId = split[0];
 				for(IProcessSupplier<?> s : getProcessorSuppliers()) {
 					if(s.getId().startsWith(baseId)) {
-						return supplier;
+						if(supplier == null) {
+							// choose this supplier for now but check if there are more...
+							supplier = (IProcessSupplier<T>)s;
+						} else {
+							// Ambiguous id, to be safe we return null here instead of doing something nasty...
+							return null;
+						}
 					}
 				}
 			}
@@ -102,14 +114,22 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 		return supplier;
 	}
 
-	public static String getID(IProcessMethod method) {
+	private static String getUserMethodID(IProcessMethod method) {
 
-		String baseId = "ProcessMethod." + method.getUUID();
 		File sourceFile = method.getSourceFile();
 		if(sourceFile != null) {
-			return baseId + ":" + sourceFile.getName();
+			return getID(method, "user:" + sourceFile.getName());
 		}
-		return baseId;
+		return getID(method, "user");
+	}
+
+	private static String getID(IProcessMethod method, String qualifier) {
+
+		String id = "ProcessMethod." + method.getUUID();
+		if(qualifier != null) {
+			return id + ":" + qualifier;
+		}
+		return id;
 	}
 
 	private static final class UserMethodProcessSupplier extends AbstractProcessSupplier<Void> implements ProcessEntryContainer, ProcessExecutor {
@@ -117,7 +137,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 		private final IProcessMethod method;
 
 		public UserMethodProcessSupplier(IProcessMethod method, MethodProcessTypeSupplier parent) {
-			super(getID(method), method.getName(), method.getDescription(), null, parent, getDataTypes(method));
+			super(getUserMethodID(method), method.getName(), method.getDescription(), null, parent, getDataTypes(method));
 			this.method = method;
 		}
 
@@ -170,6 +190,30 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 
 		bundleTracker = new BundleTracker<>(bundleContext, Bundle.ACTIVE, this);
 		bundleTracker.open();
+		File systemMethodFolder = Settings.getSystemMethodDirectory();
+		if(systemMethodFolder.isDirectory()) {
+			File[] listFiles = systemMethodFolder.listFiles();
+			if(listFiles != null) {
+				for(File file : listFiles) {
+					if(file.isFile()) {
+						try {
+							try (InputStream inputStream = new FileInputStream(file)) {
+								IProcessingInfo<IProcessMethod> load = MethodConverter.load(inputStream, file.getAbsolutePath(), null);
+								IProcessMethod result = load.getProcessingResult();
+								if(result != null) {
+									systemMethods.add(new MetaProcessorProcessSupplier(getID(result, "system:" + file.getName()), result, this));
+								}
+							}
+						} catch(IOException e) {
+							LogService log = logService.get();
+							if(log != null) {
+								log.log(LogService.LOG_ERROR, "loading of method from system path " + file.getAbsolutePath() + " failed", e);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Deactivate
@@ -198,10 +242,12 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 			while(entries.hasMoreElements()) {
 				URL url = entries.nextElement();
 				try {
-					IProcessingInfo<IProcessMethod> load = MethodConverter.load(url.openStream(), url.getPath(), null);
-					IProcessMethod result = load.getProcessingResult();
-					if(result != null) {
-						list.add(new MetaProcessorProcessSupplier(bundle.getSymbolicName(), result, this));
+					try (InputStream inputStream = url.openStream()) {
+						IProcessingInfo<IProcessMethod> load = MethodConverter.load(inputStream, url.getPath(), null);
+						IProcessMethod result = load.getProcessingResult();
+						if(result != null) {
+							list.add(new MetaProcessorProcessSupplier(getID(result, "bundle:" + bundle.getSymbolicName()), result, this));
+						}
 					}
 				} catch(IOException e) {
 					LogService log = logService.get();

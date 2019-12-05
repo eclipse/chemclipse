@@ -16,8 +16,8 @@ final class MetaProcessorProcessSupplier extends AbstractProcessSupplier<MetaPro
 
 	private final IProcessMethod method;
 
-	MetaProcessorProcessSupplier(String bundle, IProcessMethod method, MethodProcessTypeSupplier parent) {
-		super(bundle + "." + method.getUUID(), method.getName(), method.getDescription(), method.isFinal() ? null : MetaProcessorSettings.class, parent, MethodProcessTypeSupplier.getDataTypes(method));
+	MetaProcessorProcessSupplier(String id, IProcessMethod method, MethodProcessTypeSupplier parent) {
+		super(id, method.getName(), method.getDescription(), method.isFinal() ? null : MetaProcessorSettings.class, parent, MethodProcessTypeSupplier.getDataTypes(method));
 		this.method = method;
 	}
 

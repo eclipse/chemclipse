@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add system method folder
  *******************************************************************************/
 package org.eclipse.chemclipse.logging.support;
 
@@ -64,6 +65,15 @@ public class Settings {
 		}
 		//
 		return fileWorkspaceFolder;
+	}
+
+	/**
+	 * 
+	 * @return the system methods folder
+	 */
+	public static final File getSystemMethodDirectory() {
+
+		return new File(Settings.getSettingsDirectory(), "methods");
 	}
 
 	/**
@@ -205,11 +215,12 @@ public class Settings {
 		/*
 		 * Print in the console.
 		 */
-		System.out.println("-----------------------------------------");
+		System.out.println("----------------------------------------------------------------------------------");
 		System.out.println("Product Initializiation: " + Settings.class.getName());
-		System.out.println("Workspace Path: " + fileWorkspaceFolder);
-		System.out.println("Settings Path: " + fileSettingsFolder);
-		System.out.println("-----------------------------------------");
+		System.out.println("Workspace Path:          " + getWorkspaceDirectory());
+		System.out.println("Settings Path:           " + getSettingsDirectory());
+		System.out.println("System Method Path:      " + getSystemMethodDirectory());
+		System.out.println("----------------------------------------------------------------------------------");
 	}
 
 	/**

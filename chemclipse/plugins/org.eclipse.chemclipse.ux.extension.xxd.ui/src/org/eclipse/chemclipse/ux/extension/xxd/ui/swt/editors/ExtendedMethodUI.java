@@ -126,6 +126,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private final DataCategory[] dataCategories;
 	private final BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
 	private final boolean readonly;
+	private String[] knownCategories;
 
 	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, DataCategory[] dataCategories) {
 		this(parent, style, processingSupport, (entry, context) -> entry.getPreferences(context), dataCategories);
@@ -322,8 +323,6 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		});
 		autoComplete(text, new IContentProposalProvider() {
 
-			private String[] knownCategories;
-
 			@Override
 			public IContentProposal[] getProposals(String contents, int position) {
 
@@ -343,12 +342,17 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 				if(knownCategories == null) {
 					Set<String> categories = new TreeSet<>();
-					for(IProcessMethod method : MethodConverter.getUserMethods()) {
-						String category = method.getCategory();
-						if(category != null && !category.isEmpty()) {
-							categories.add(category);
+					processingSupport.visitSupplier(new Consumer<IProcessSupplier<?>>() {
+
+						@Override
+						public void accept(IProcessSupplier<?> supplier) {
+
+							String category = supplier.getCategory();
+							if(category != null && !category.isEmpty()) {
+								categories.add(category);
+							}
 						}
-					}
+					});
 					knownCategories = categories.toArray(new String[0]);
 				}
 				return knownCategories;
