@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
+import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
@@ -46,6 +47,9 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
 	@JsonPropertyDescription(value = "Whether to use Nois-Segments to decide where peaks should be detected, this can improve the sensitivity of the algorithm")
 	private boolean useNoiseSegments = false;
+	private FilterMode filterMode;
+	@JsonProperty(value = "m/z values to filter", defaultValue = "")
+	private String filterIonsString;
 
 	public boolean isIncludeBackground() {
 
@@ -87,30 +91,30 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 		this.windowSize = windowSize;
 	}
 
-	// public FilterMode getFilterMode() {
-	//
-	// return filterMode;
-	// }
-	//
-	// public void setFilterMode(FilterMode filterMode) {
-	//
-	// this.filterMode = filterMode;
-	// }
-	//
-	// public String getFilterIonsString() {
-	//
-	// return filterIonsString;
-	// }
-	//
-	// public void setFilterIonsString(String filterIonsString) {
-	//
-	// this.filterIonsString = filterIonsString;
-	// }
-	//
-	// public Collection<Number> getFilterIon() {
-	//
-	// return parseIons(filterIonsString);
-	// }
+	public FilterMode getFilterMode() {
+
+		return filterMode;
+	}
+
+	public void setFilterMode(FilterMode filterMode) {
+
+		this.filterMode = filterMode;
+	}
+
+	public String getFilterIonsString() {
+
+		return filterIonsString;
+	}
+
+	public void setFilterIonsString(String filterIonsString) {
+
+		this.filterIonsString = filterIonsString;
+	}
+
+	public Collection<Number> getFilterIon() {
+
+		return parseIons(filterIonsString);
+	}
 	static Collection<Number> parseIons(String filterIonsString) {
 
 		List<Number> ionNumbers = new ArrayList<>();

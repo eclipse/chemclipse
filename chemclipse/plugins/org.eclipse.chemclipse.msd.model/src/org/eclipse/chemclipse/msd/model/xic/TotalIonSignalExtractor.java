@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - fix m/z filtering
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.xic;
 
@@ -124,27 +125,14 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		 */
 		ITotalScanSignal totalIonSignal;
 		ITotalScanSignals signals = new TotalScanSignals(startScan, stopScan, chromatogram);
-		/*
-		 * Should some ions be excluded?
-		 */
-		boolean exclude = false;
-		if(excludedIons != null) {
-			exclude = true;
-		}
+		
 		/*
 		 * Add the selected scans.
 		 */
 		IVendorMassSpectrum ms;
 		for(int scan = startScan; scan <= stopScan; scan++) {
 			ms = chromatogram.getSupplierScan(scan);
-			/*
-			 * Get the excluded version if necessary.
-			 */
-			if(exclude) {
-				totalIonSignal = new TotalScanSignal(ms.getRetentionTime(), ms.getRetentionIndex(), ms.getTotalSignal(excludedIons));
-			} else {
-				totalIonSignal = new TotalScanSignal(ms.getRetentionTime(), ms.getRetentionIndex(), ms.getTotalSignal());
-			}
+			totalIonSignal = new TotalScanSignal(ms.getRetentionTime(), ms.getRetentionIndex(), ms.getTotalSignal(excludedIons));
 			signals.add(totalIonSignal);
 		}
 		return signals;
@@ -163,13 +151,6 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		ITotalScanSignal totalIonSignal;
 		ITotalScanSignals signals = new TotalScanSignals(chromatogram.getNumberOfScans(), chromatogram);
 		/*
-		 * Should some ions be excluded?
-		 */
-		boolean exclude = false;
-		if(excludedIons != null) {
-			exclude = true;
-		}
-		/*
 		 * Get each scan signal.
 		 */
 		for(IScan scan : chromatogram.getScans()) {
@@ -178,11 +159,7 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 				/*
 				 * Get the excluded version if necessary.
 				 */
-				if(exclude) {
-					totalIonSignal = new TotalScanSignal(ms.getRetentionTime(), ms.getRetentionIndex(), ms.getTotalSignal(excludedIons));
-				} else {
-					totalIonSignal = new TotalScanSignal(ms.getRetentionTime(), ms.getRetentionIndex(), ms.getTotalSignal());
-				}
+				totalIonSignal = new TotalScanSignal(ms.getRetentionTime(), ms.getRetentionIndex(), ms.getTotalSignal(excludedIons));
 				signals.add(totalIonSignal);
 			}
 		}
