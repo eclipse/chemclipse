@@ -76,5 +76,10 @@ public interface TargetDisplaySettings {
 
 	void setField(LibraryField libraryField);
 
-	boolean isVisible(IIdentificationTarget target);
+	boolean isVisible(TargetReference reference);
+
+	default boolean isVisible(TargetReference reference, IIdentificationTarget target) {
+
+		return isVisible(reference) && reference.getTargets().contains(target);
+	}
 }

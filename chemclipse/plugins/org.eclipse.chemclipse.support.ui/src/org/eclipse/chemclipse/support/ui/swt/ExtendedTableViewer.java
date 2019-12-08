@@ -37,6 +37,7 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -90,6 +91,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		applySettings(tableSettings);
 		editEnabled = true;
 		registerMenuListener();
+		setContentProvider(ArrayContentProvider.getInstance());
 	}
 
 	@Override

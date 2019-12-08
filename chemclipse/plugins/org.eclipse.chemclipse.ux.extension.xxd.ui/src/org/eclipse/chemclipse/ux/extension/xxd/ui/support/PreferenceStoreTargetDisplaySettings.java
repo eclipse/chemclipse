@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
 
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -56,7 +55,7 @@ public class PreferenceStoreTargetDisplaySettings implements TargetDisplaySettin
 	}
 
 	@Override
-	public boolean isVisible(IIdentificationTarget target) {
+	public boolean isVisible(TargetReference reference) {
 
 		return true;
 	}

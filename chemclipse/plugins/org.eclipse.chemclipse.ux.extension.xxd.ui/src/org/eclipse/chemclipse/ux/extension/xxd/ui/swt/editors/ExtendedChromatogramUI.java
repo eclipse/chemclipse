@@ -20,10 +20,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -81,6 +83,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.PreferenceStoreTargetDisplaySettings;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ScanTargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.WorkspaceTargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
@@ -757,7 +760,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			if(displaySettings.isShowPeakLabels()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
 				int indexSeries = lineSeriesDataList.size() - 1;
-				IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, peaks, IdentificationLabelMarker.getPeakFont(chromatogramChart.getBaseChart().getDisplay()), displaySettings);
+				IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, ScanTargetReference.getReferences(peaks, peak -> peak.getPeakModel().getPeakMaximum()), IdentificationLabelMarker.getPeakFont(chromatogramChart.getBaseChart().getDisplay()), displaySettings);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -779,7 +782,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			if(displaySettings.isShowScanLables()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
 				int indexSeries = lineSeriesDataList.size() - 1;
-				IdentificationLabelMarker scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, scans, IdentificationLabelMarker.getScanFont(chromatogramChart.getBaseChart().getDisplay()), displaySettings);
+				IdentificationLabelMarker scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, ScanTargetReference.getReferences(scans, Function.identity()), IdentificationLabelMarker.getScanFont(chromatogramChart.getBaseChart().getDisplay()), displaySettings);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}
@@ -1173,8 +1176,21 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			@Override
 			public void runWithEvent(Event event) {
 
-				if(TargetDisplaySettingsWizard.openWizard(chromatogramChart.getShell(), chromatogramSelection.getChromatogram().getPeaks(), getTargetSettings())) {
-					updateChromatogram();
+				if(chromatogramSelection != null) {
+					List<ScanTargetReference> identifications = new ArrayList<>();
+					identifications.addAll(ScanTargetReference.getReferences(chromatogramSelection.getChromatogram().getPeaks(), peak -> peak.getPeakModel().getPeakMaximum()));
+					identifications.addAll(ScanTargetReference.getReferences(ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram()), Function.identity()));
+					Collections.sort(identifications, new Comparator<ScanTargetReference>() {
+
+						@Override
+						public int compare(ScanTargetReference o1, ScanTargetReference o2) {
+
+							return o1.getScan().getRetentionTime() - o2.getScan().getRetentionTime();
+						}
+					});
+					if(TargetDisplaySettingsWizard.openWizard(chromatogramChart.getShell(), identifications, "RT", getTargetSettings())) {
+						updateChromatogram();
+					}
 				}
 			}
 		};

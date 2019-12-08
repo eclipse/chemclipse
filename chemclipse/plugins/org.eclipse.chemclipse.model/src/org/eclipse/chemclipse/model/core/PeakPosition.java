@@ -39,7 +39,7 @@ public interface PeakPosition {
 
 	/**
 	 * 
-	 * @return the type of the peak or {@link PeakType#DEFAULT} if unkown
+	 * @return the type of the peak or {@link PeakType#DEFAULT} if unknown
 	 */
 	PeakType getPeakType();
 }
