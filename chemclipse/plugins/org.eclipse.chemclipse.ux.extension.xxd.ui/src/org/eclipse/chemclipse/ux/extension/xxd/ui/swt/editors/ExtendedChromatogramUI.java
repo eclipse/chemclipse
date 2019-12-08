@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -73,6 +73,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.PreviewLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceInitializer;
@@ -85,6 +86,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.PreferenceStoreTargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ScanTargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.WorkspaceTargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
@@ -94,6 +96,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramReferencesUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeatmapUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarConfig;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizard;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizardListener;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
@@ -760,7 +763,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			if(displaySettings.isShowPeakLabels()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
 				int indexSeries = lineSeriesDataList.size() - 1;
-				IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, ScanTargetReference.getReferences(peaks, peak -> peak.getPeakModel().getPeakMaximum()), IdentificationLabelMarker.getPeakFont(chromatogramChart.getBaseChart().getDisplay()), displaySettings);
+				IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, ScanTargetReference.getPeakReferences(peaks), IdentificationLabelMarker.getPeakFont(chromatogramChart.getBaseChart().getDisplay()), displaySettings);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -782,7 +785,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			if(displaySettings.isShowScanLables()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
 				int indexSeries = lineSeriesDataList.size() - 1;
-				IdentificationLabelMarker scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, ScanTargetReference.getReferences(scans, Function.identity()), IdentificationLabelMarker.getScanFont(chromatogramChart.getBaseChart().getDisplay()), displaySettings);
+				IdentificationLabelMarker scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, ScanTargetReference.getScanReferences(scans), IdentificationLabelMarker.getScanFont(chromatogramChart.getBaseChart().getDisplay()), displaySettings);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}
@@ -1178,8 +1181,8 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 				if(chromatogramSelection != null) {
 					List<ScanTargetReference> identifications = new ArrayList<>();
-					identifications.addAll(ScanTargetReference.getReferences(chromatogramSelection.getChromatogram().getPeaks(), peak -> peak.getPeakModel().getPeakMaximum()));
-					identifications.addAll(ScanTargetReference.getReferences(ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram()), Function.identity()));
+					identifications.addAll(ScanTargetReference.getPeakReferences(chromatogramSelection.getChromatogram().getPeaks()));
+					identifications.addAll(ScanTargetReference.getScanReferences(ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram())));
 					Collections.sort(identifications, new Comparator<ScanTargetReference>() {
 
 						@Override
@@ -1188,7 +1191,87 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 							return o1.getScan().getRetentionTime() - o2.getScan().getRetentionTime();
 						}
 					});
-					if(TargetDisplaySettingsWizard.openWizard(chromatogramChart.getShell(), identifications, "RT", getTargetSettings())) {
+					PreviewLabelMarker previewMarker = new PreviewLabelMarker(identifications);
+					ChromatogramChart chart = getChromatogramChart();
+					chart.getBaseChart().getPlotArea().addCustomPaintListener(previewMarker);
+					TargetDisplaySettingsWizardListener listener = new TargetDisplaySettingsWizardListener() {
+
+						boolean previewDisabled = true;
+
+						@Override
+						public String getIDLabel() {
+
+							return "RT";
+						}
+
+						@Override
+						public void setPreviewSettings(TargetDisplaySettings previewSettings, Predicate<TargetReference> activeFilter) {
+
+							if(previewSettings == null && previewDisabled) {
+								return;
+							}
+							Predicate<TargetReference> settingsFilter = createFilter(previewSettings);
+							previewDisabled = previewSettings == null;
+							for(IdentificationLabelMarker marker : scanLabelMarkerMap.values()) {
+								marker.setVisible(previewDisabled);
+							}
+							for(IdentificationLabelMarker marker : peakLabelMarkerMap.values()) {
+								marker.setVisible(previewDisabled);
+							}
+							previewMarker.setSettings(previewSettings, settingsFilter, activeFilter);
+							if(previewDisabled) {
+								chart.setRange(IExtendedChart.X_AXIS, chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
+							} else {
+								double minRT = Double.NaN;
+								double maxRT = Double.NaN;
+								for(ScanTargetReference scanTargetReference : identifications) {
+									if(settingsFilter.test(scanTargetReference) && (activeFilter == null || activeFilter.test(scanTargetReference))) {
+										double rt = scanTargetReference.getScan().getX();
+										if(Double.isNaN(minRT) || rt < minRT) {
+											minRT = rt;
+										}
+										if(Double.isNaN(maxRT) || rt > maxRT) {
+											maxRT = rt;
+										}
+									}
+								}
+								int absStart = chromatogramSelection.getChromatogram().getStartRetentionTime();
+								if(Double.isNaN(minRT)) {
+									minRT = absStart;
+								}
+								int absStop = chromatogramSelection.getChromatogram().getStopRetentionTime();
+								if(Double.isNaN(maxRT)) {
+									maxRT = absStop;
+								}
+								long windowOffset = TimeUnit.MINUTES.toMillis(1);
+								chart.setRange(IExtendedChart.X_AXIS, Math.max(minRT - windowOffset, absStart), Math.min(absStop, maxRT + windowOffset));
+							}
+							chart.redraw();
+						}
+
+						private Predicate<TargetReference> createFilter(TargetDisplaySettings settings) {
+
+							return new Predicate<TargetReference>() {
+
+								@Override
+								public boolean test(TargetReference reference) {
+
+									if(settings != null) {
+										if(ScanTargetReference.TYPE_PEAK.equals(reference.getType())) {
+											return settings.isShowPeakLabels();
+										} else if(ScanTargetReference.TYPE_SCAN.equals(reference.getType())) {
+											return settings.isShowScanLables();
+										}
+									}
+									return true;
+								}
+							};
+						}
+					};
+					boolean settingsChanged = TargetDisplaySettingsWizard.openWizard(chromatogramChart.getShell(), identifications, listener, getTargetSettings());
+					chart.getBaseChart().getPlotArea().removeCustomPaintListener(previewMarker);
+					listener.setPreviewSettings(null, null);
+					if(settingsChanged) {
 						updateChromatogram();
 					}
 				}

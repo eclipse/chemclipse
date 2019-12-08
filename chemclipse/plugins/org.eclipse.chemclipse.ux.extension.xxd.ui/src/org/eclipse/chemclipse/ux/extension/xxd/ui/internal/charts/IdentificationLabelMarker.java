@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -26,14 +25,15 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetReference;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.marker.LabelMarker;
 
 public class IdentificationLabelMarker extends LabelMarker {
 
-	private final Font font = DisplayUtils.getDisplay().getSystemFont();
+	private final Font font;
+	private boolean visible = true;
 
 	/**
 	 * Peak or Scan can be null. If null, it won't be processed.
@@ -45,6 +45,7 @@ public class IdentificationLabelMarker extends LabelMarker {
 	 */
 	public IdentificationLabelMarker(BaseChart baseChart, int indexSeries, List<? extends TargetReference> identifications, Font font, TargetDisplaySettings settings) {
 		super(baseChart);
+		this.font = font;
 		List<String> labels = new ArrayList<String>();
 		Function<IIdentificationTarget, String> transformer = settings.getField().stringTransformer();
 		for(TargetReference identification : identifications) {
@@ -63,27 +64,39 @@ public class IdentificationLabelMarker extends LabelMarker {
 	@Override
 	public void paintControl(PaintEvent e) {
 
-		Font currentFont = e.gc.getFont();
-		e.gc.setFont(font);
-		super.paintControl(e);
-		e.gc.setFont(currentFont);
+		if(visible) {
+			Font currentFont = e.gc.getFont();
+			e.gc.setFont(font);
+			super.paintControl(e);
+			e.gc.setFont(currentFont);
+		}
 	}
 
-	public static Font getPeakFont(Display display) {
+	public static Font getPeakFont(Device device) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME);
 		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
 		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
-		return Fonts.getCachedFont(display, name, height, style);
+		return Fonts.getCachedFont(device, name, height, style);
 	}
 
-	public static Font getScanFont(Display display) {
+	public static Font getScanFont(Device device) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME);
 		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE);
 		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);
-		return Fonts.getCachedFont(display, name, height, style);
+		return Fonts.getCachedFont(device, name, height, style);
+	}
+
+	public boolean isVisible() {
+
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+
+		this.visible = visible;
 	}
 }

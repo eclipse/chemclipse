@@ -21,20 +21,25 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 
 public class ScanTargetReference implements TargetReference {
 
+	public static final String TYPE_SCAN = "Scan";
+	public static final String TYPE_PEAK = "Peak";
 	private static final NumberFormat FORMAT = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
 	private final IScan scan;
 	private final String name;
 	private final String id;
+	private final String type;
 
-	public ScanTargetReference(IScan scan) {
+	public ScanTargetReference(IScan scan, String type) {
 		this.scan = scan;
+		this.type = type;
 		name = FORMAT.format(TimeUnit.MILLISECONDS.toMinutes(scan.getRetentionTime()));
-		id = String.valueOf(scan.getRetentionTime());
+		id = type + "." + String.valueOf(scan.getRetentionTime());
 	}
 
 	@Override
@@ -50,18 +55,34 @@ public class ScanTargetReference implements TargetReference {
 	}
 
 	@Override
+	public String getType() {
+
+		return type;
+	}
+
+	@Override
 	public String getID() {
 
 		return id;
 	}
 
-	public static <T> List<ScanTargetReference> getReferences(List<T> items, Function<T, IScan> conversionFunction) {
+	public static List<ScanTargetReference> getScanReferences(List<? extends IScan> items) {
+
+		return getReferences(items, TYPE_SCAN, scan -> scan);
+	}
+
+	public static List<ScanTargetReference> getPeakReferences(List<? extends IPeak> items) {
+
+		return getReferences(items, TYPE_PEAK, peak -> peak.getPeakModel().getPeakMaximum());
+	}
+
+	public static <T> List<ScanTargetReference> getReferences(List<T> items, String type, Function<T, IScan> conversionFunction) {
 
 		List<ScanTargetReference> list = new ArrayList<>();
 		for(T item : items) {
 			IScan scan = conversionFunction.apply(item);
 			if(scan != null) {
-				list.add(new ScanTargetReference(scan));
+				list.add(new ScanTargetReference(scan, type));
 			}
 		}
 		return list;

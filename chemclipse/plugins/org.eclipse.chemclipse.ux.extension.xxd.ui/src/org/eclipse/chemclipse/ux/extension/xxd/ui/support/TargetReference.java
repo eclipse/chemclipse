@@ -30,6 +30,12 @@ public interface TargetReference extends ITargetSupplier {
 
 	/**
 	 * 
+	 * @return the type that was identified for example peak/scan/...
+	 */
+	String getType();
+
+	/**
+	 * 
 	 * @return the best matching target from this reference
 	 */
 	default IIdentificationTarget getBestTarget() {

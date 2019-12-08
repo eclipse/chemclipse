@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.widgets.Display;
 
 public class Fonts {
 
@@ -32,7 +32,7 @@ public class Fonts {
 	 * @param style
 	 * @return
 	 */
-	public static Font getCachedFont(Display display, String name, int height, int style) {
+	public static Font getCachedFont(Device display, String name, int height, int style) {
 
 		String fontId = name + height + style;
 		if(!fonts.containsKey(fontId)) {

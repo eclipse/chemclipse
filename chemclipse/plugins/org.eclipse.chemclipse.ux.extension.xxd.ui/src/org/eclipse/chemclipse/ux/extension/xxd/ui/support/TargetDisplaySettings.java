@@ -80,6 +80,9 @@ public interface TargetDisplaySettings {
 
 	default boolean isVisible(TargetReference reference, IIdentificationTarget target) {
 
+		if(target == null) {
+			return false;
+		}
 		return isVisible(reference) && reference.getTargets().contains(target);
 	}
 }
