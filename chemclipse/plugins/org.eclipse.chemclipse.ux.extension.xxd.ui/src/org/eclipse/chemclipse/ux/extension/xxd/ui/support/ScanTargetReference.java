@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -86,6 +87,28 @@ public class ScanTargetReference implements TargetReference {
 			}
 		}
 		return list;
+	}
+
+	public static Predicate<TargetReference> createVisibleFilter(TargetDisplaySettings settings) {
+
+		if(settings == null) {
+			return always -> true;
+		}
+		return new Predicate<TargetReference>() {
+
+			@Override
+			public boolean test(TargetReference reference) {
+
+				if(settings != null) {
+					if(TYPE_PEAK.equals(reference.getType())) {
+						return settings.isShowPeakLabels();
+					} else if(TYPE_SCAN.equals(reference.getType())) {
+						return settings.isShowScanLables();
+					}
+				}
+				return true;
+			}
+		}.and(settings::isVisible);
 	}
 
 	public IScan getScan() {

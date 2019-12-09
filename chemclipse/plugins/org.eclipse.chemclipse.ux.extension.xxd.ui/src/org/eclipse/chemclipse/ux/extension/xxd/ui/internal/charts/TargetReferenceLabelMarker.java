@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -40,21 +42,29 @@ import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.ISeries;
 
-public class PreviewLabelMarker implements ICustomPaintListener {
+public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
-	private TargetDisplaySettings settings;
-	private final List<ScanTargetReference> identifications;
-	private Predicate<TargetReference> settingsFilter;
-	private Predicate<TargetReference> activeFilter;
+	private final List<TargetLabel> identifications = new ArrayList<>();
+	private boolean visible = true;
+	private final boolean showReferenceId;
 
-	public PreviewLabelMarker(List<ScanTargetReference> identifications) {
-		this.identifications = identifications;
+	public TargetReferenceLabelMarker() {
+		this(false);
+	}
+
+	public TargetReferenceLabelMarker(boolean showReferenceId) {
+		this.showReferenceId = showReferenceId;
+	}
+
+	public TargetReferenceLabelMarker(Collection<? extends ScanTargetReference> references, TargetDisplaySettings settings) {
+		this.showReferenceId = false;
+		setData(references, settings);
 	}
 
 	@Override
 	public void paintControl(PaintEvent event) {
 
-		if(settings != null) {
+		if(visible && !identifications.isEmpty()) {
 			Widget widget = event.widget;
 			if(widget instanceof IPlotArea) {
 				Chart chart = ((IPlotArea)widget).getChart();
@@ -67,9 +77,18 @@ public class PreviewLabelMarker implements ICustomPaintListener {
 		}
 	}
 
+	public boolean isVisible() {
+
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+
+		this.visible = visible;
+	}
+
 	private void paintLabels(GC gc, IAxis xAxis, IAxis yAxis) {
 
-		Function<IIdentificationTarget, String> transformer = settings.getField().stringTransformer();
 		Transform transform = new Transform(gc.getDevice());
 		Font peakFont = null;
 		Font scanFont = null;
@@ -79,47 +98,37 @@ public class PreviewLabelMarker implements ICustomPaintListener {
 			Color inactiveColor = gc.getDevice().getSystemColor(SWT.COLOR_GRAY);
 			Color idColor = gc.getDevice().getSystemColor(SWT.COLOR_DARK_GRAY);
 			gc.setTransform(transform);
-			for(ScanTargetReference reference : identifications) {
-				if(settings.isVisible(reference) && settingsFilter.test(reference)) {
-					IIdentificationTarget target = reference.getBestTarget();
-					if(settings.isVisible(reference, target)) {
-						String label = transformer.apply(target);
-						if(label == null || label.isEmpty()) {
-							continue;
-						}
-						if(ScanTargetReference.TYPE_PEAK.equals(reference.getType())) {
-							if(peakFont == null) {
-								peakFont = createPeakFont(gc.getDevice());
-							}
-							gc.setFont(peakFont);
-						} else if(ScanTargetReference.TYPE_SCAN.equals(reference.getType())) {
-							if(scanFont == null) {
-								scanFont = createScanFont(gc.getDevice());
-							}
-							gc.setFont(scanFont);
-						} else {
-							gc.setFont(oldFont);
-						}
-						IScan scan = reference.getScan();
-						float x = xAxis.getPixelCoordinate(scan.getX());
-						float y = yAxis.getPixelCoordinate(scan.getY());
-						Point labelSize = gc.textExtent(label);
-						transform.identity();
-						transform.translate(x - labelSize.y / 2, y - 15);
-						transform.rotate(-90);
-						gc.setTransform(transform);
-						boolean isActive = activeFilter == null || activeFilter.test(reference);
-						if(isActive) {
-							gc.setForeground(activeColor);
-						} else {
-							gc.setForeground(inactiveColor);
-						}
-						gc.drawText(label, 0, 0, true);
-						if(isActive) {
-							gc.setForeground(idColor);
-							gc.drawText(reference.getName(), labelSize.x + labelSize.y / 2, 0, true);
-						}
+			for(TargetLabel reference : identifications) {
+				if(reference.isPeakLabel) {
+					if(peakFont == null) {
+						peakFont = createPeakFont(gc.getDevice());
 					}
+					gc.setFont(peakFont);
+				} else if(reference.isScanLabel) {
+					if(scanFont == null) {
+						scanFont = createScanFont(gc.getDevice());
+					}
+					gc.setFont(scanFont);
+				} else {
+					gc.setFont(oldFont);
+				}
+				String label = reference.label;
+				float x = xAxis.getPixelCoordinate(reference.x);
+				float y = yAxis.getPixelCoordinate(reference.y);
+				Point labelSize = gc.textExtent(label);
+				transform.identity();
+				transform.translate(x - labelSize.y / 2, y - 15);
+				transform.rotate(-90);
+				gc.setTransform(transform);
+				if(reference.isActive) {
+					gc.setForeground(activeColor);
+				} else {
+					gc.setForeground(inactiveColor);
+				}
+				gc.drawText(label, 0, 0, true);
+				if(reference.id != null && reference.isActive) {
+					gc.setForeground(idColor);
+					gc.drawText(reference.id, labelSize.x + labelSize.y / 2, 0, true);
 				}
 			}
 		} finally {
@@ -135,11 +144,57 @@ public class PreviewLabelMarker implements ICustomPaintListener {
 		}
 	}
 
-	public void setSettings(TargetDisplaySettings settings, Predicate<TargetReference> settingsFilter, Predicate<TargetReference> activeFilter) {
+	public Predicate<TargetReference> setData(Collection<? extends ScanTargetReference> identifications, TargetDisplaySettings settings) {
 
-		this.settings = settings;
-		this.settingsFilter = settingsFilter;
-		this.activeFilter = activeFilter;
+		return setData(identifications, settings, always -> true);
+	}
+
+	public Predicate<TargetReference> setData(Collection<? extends ScanTargetReference> input, TargetDisplaySettings settings, Predicate<TargetReference> activeFilter) {
+
+		identifications.clear();
+		Predicate<TargetReference> createVisibleFilter = ScanTargetReference.createVisibleFilter(settings);
+		if(settings != null) {
+			Function<IIdentificationTarget, String> stringTransformer = settings.getField().stringTransformer();
+			for(ScanTargetReference reference : input) {
+				if(createVisibleFilter.test(reference)) {
+					IIdentificationTarget target = reference.getBestTarget();
+					if(settings.isVisible(reference, target)) {
+						String label = stringTransformer.apply(target);
+						if(label == null || label.isEmpty()) {
+							continue;
+						}
+						boolean isPeakLabel = ScanTargetReference.TYPE_PEAK.equals(reference.getType());
+						boolean isScanLabel = ScanTargetReference.TYPE_SCAN.equals(reference.getType());
+						boolean isActive = activeFilter == null || activeFilter.test(reference);
+						IScan scan = reference.getScan();
+						TargetLabel targetLabel = new TargetLabel(label, showReferenceId ? reference.getName() : null, isPeakLabel, isScanLabel, isActive, scan.getX(), scan.getY());
+						identifications.add(targetLabel);
+					}
+				}
+			}
+		}
+		return createVisibleFilter;
+	}
+
+	private static final class TargetLabel {
+
+		private final boolean isPeakLabel;
+		private final boolean isScanLabel;
+		private final String label;
+		private final String id;
+		private final boolean isActive;
+		private final double x;
+		private final double y;
+
+		public TargetLabel(String label, String id, boolean isPeakLabel, boolean isScanLabel, boolean isActive, double x, double y) {
+			this.label = label;
+			this.id = id;
+			this.isPeakLabel = isPeakLabel;
+			this.isScanLabel = isScanLabel;
+			this.isActive = isActive;
+			this.x = x;
+			this.y = y;
+		}
 	}
 
 	public static Font createPeakFont(Device device) {

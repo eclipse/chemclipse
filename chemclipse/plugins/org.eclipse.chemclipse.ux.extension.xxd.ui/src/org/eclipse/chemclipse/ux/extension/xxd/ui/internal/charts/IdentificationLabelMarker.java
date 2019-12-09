@@ -30,6 +30,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.marker.LabelMarker;
 
+@Deprecated
 public class IdentificationLabelMarker extends LabelMarker {
 
 	private final Font font;
