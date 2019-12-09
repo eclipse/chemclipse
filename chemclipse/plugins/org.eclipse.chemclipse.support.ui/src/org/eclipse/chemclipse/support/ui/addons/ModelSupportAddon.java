@@ -173,4 +173,9 @@ public class ModelSupportAddon {
 
 		getInstance().partSupport.focusPart(partId);
 	}
+
+	public static PartSupport getPartSupport() {
+
+		return getInstance().partSupport;
+	}
 }
