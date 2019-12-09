@@ -74,6 +74,11 @@ public class DisplayUtils {
 
 	public static Shell getShell() {
 
+		if(Display.getCurrent() == null) {
+			logger.error("Try to access shell outside of UI-Thread!");
+			Thread.dumpStack();
+			return null;
+		}
 		Shell shell = null;
 		//
 		Display display = getDisplay();
