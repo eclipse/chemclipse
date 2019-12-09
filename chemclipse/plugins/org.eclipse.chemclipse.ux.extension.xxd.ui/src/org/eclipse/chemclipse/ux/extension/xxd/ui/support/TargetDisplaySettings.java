@@ -55,6 +55,9 @@ public interface TargetDisplaySettings {
 		private static <T> Function<IIdentificationTarget, T> libraryExtractor(Function<ILibraryInformation, T> extractor) {
 
 			return target -> {
+				if(target == null) {
+					return null;
+				}
 				ILibraryInformation information = target.getLibraryInformation();
 				if(information == null) {
 					return null;
