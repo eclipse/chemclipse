@@ -583,7 +583,13 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 					@Override
 					public boolean test(IProcessSupplier supplier) {
 
-						return supplier.getType() != SupplierType.STRUCTURAL && !(supplier.getTypeSupplier() instanceof EditorProcessTypeSupplier);
+						if(supplier.getType() == SupplierType.STRUCTURAL) {
+							return false;
+						}
+						if(supplier.getTypeSupplier() instanceof EditorProcessTypeSupplier) {
+							return false;
+						}
+						return true;
 					}
 				})));
 				Collections.sort(suplierList, new CategoryNameComparator());
