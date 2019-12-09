@@ -47,6 +47,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -116,13 +117,20 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		}
 	};
 	private final ObjectChangedListener<IMeasurementResult<?>> updateMeasurementResult = new MeasurementResultListener();
+	private final ProcessSupplierContext processSupplierContext;
 
+	@Deprecated
 	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessorFactory filterFactory, Shell shell) {
+		this(dataType, parent, part, dirtyable, new ProcessTypeSupport(), shell);
+	}
+
+	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessSupplierContext processSupplierContext, Shell shell) {
 		super(part);
 		//
 		this.dataType = dataType;
 		this.part = part;
 		this.dirtyable = dirtyable;
+		this.processSupplierContext = processSupplierContext;
 		this.eventBroker = Activator.getDefault().getEventBroker();
 		this.shell = shell;
 		//
@@ -316,8 +324,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 						IProcessMethod processMethod = Adapters.adapt(file, IProcessMethod.class);
 						if(processMethod != null) {
-							ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
-							ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, new ProcessingInfo<>(), processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
+							ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, new ProcessingInfo<>(), processSupplierContext), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
 						}
 					}
 				});
@@ -428,7 +435,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 	private void createChromatogramPage(Composite parent) {
 
-		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.BORDER, eventBroker);
+		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.BORDER, eventBroker, processSupplierContext);
 	}
 
 	private final class MeasurementResultListener implements ObjectChangedListener<IMeasurementResult<?>>, Observer {

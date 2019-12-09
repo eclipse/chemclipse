@@ -72,6 +72,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.PreviewLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
@@ -210,19 +211,30 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	//
 	private boolean suspendUpdate = false;
 	private final IPreferenceStore preferenceStore;
-	private final ProcessSupplierContext processTypeSupport = new ProcessTypeSupport();
+	private final ProcessSupplierContext processTypeSupport;
 	//
 	private final IEventBroker eventBroker;
 	private MethodSupportUI methodSupportUI;
 	private DataCategory lastMenuDataType;
 	private WorkspaceTargetDisplaySettings targetDisplaySettings;
 
+	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
 		this(parent, style, eventBroker, Activator.getDefault().getPreferenceStore());
 	}
 
+	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext) {
+		this(parent, style, eventBroker, supplierContext, Activator.getDefault().getPreferenceStore());
+	}
+
+	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, IPreferenceStore store) {
+		this(parent, style, eventBroker, new ProcessTypeSupport(), store);
+	}
+
+	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext, IPreferenceStore store) {
 		this.eventBroker = eventBroker;
+		processTypeSupport = supplierContext;
 		preferenceStore = store;
 		chartSupport = new ChartSupport(store);
 		initialize(parent, style);
@@ -571,7 +583,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 					@Override
 					public boolean test(IProcessSupplier supplier) {
 
-						return supplier.getType() != SupplierType.STRUCTURAL;
+						return supplier.getType() != SupplierType.STRUCTURAL && !(supplier.getTypeSupplier() instanceof EditorProcessTypeSupplier);
 					}
 				})));
 				Collections.sort(suplierList, new CategoryNameComparator());
@@ -994,7 +1006,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			@Override
 			public void execute(IProcessMethod processMethod, IProgressMonitor monitor) {
 
-				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 				IChromatogramSelection selection = getChromatogramSelection();
 				ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processingInfo, processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(selection));

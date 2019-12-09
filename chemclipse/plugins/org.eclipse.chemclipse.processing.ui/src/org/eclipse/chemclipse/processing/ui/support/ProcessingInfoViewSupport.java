@@ -173,37 +173,7 @@ public class ProcessingInfoViewSupport {
 	@Deprecated
 	public static void updateProcessingInfo(final Display display, final MessageProvider processingInfo, final boolean focusProcessingInfoView) {
 
-		if(processingInfo == null) {
-			return;
-		}
-		IEclipseContext serviceContext = EclipseContextFactory.getServiceContext(Activator.getDefault().getBundle().getBundleContext());
-		DynamicProcessingInfoUpdateNotifier notifier = ContextInjectionFactory.make(DynamicProcessingInfoUpdateNotifier.class, serviceContext);
-		notifier.update(processingInfo);
-		// show popup if error occurred
-		if(processingInfo != null && processingInfo.hasErrorMessages()) {
-			display.asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					Shell shell = DisplayUtils.getShell();
-					if(shell != null) {
-						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
-						messageBox.setText(TITLE);
-						messageBox.setMessage(MESSAGE);
-						messageBox.open();
-					}
-					// focus the view if requested, this will open the feedback view if required
-					if(focusProcessingInfoView) {
-						try {
-							ModelSupportAddon.focusPart(ProcessingInfoPart.ID);
-						} catch(IllegalStateException e) {
-							// ignore then...
-						}
-					}
-				}
-			});
-		}
+		INSTANCE.update(processingInfo, focusProcessingInfoView);
 	}
 
 	private static void logError(String description, String message, Throwable e) {

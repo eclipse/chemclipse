@@ -63,6 +63,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	private String topicUpdateOverview = "";
 	private String snippetId;
 	private final Supplier<IEclipseContext> contextSupplier;
+	private final DataType dataType;
 
 	@Deprecated
 	public SupplierEditorSupport(DataType dataType) {
@@ -71,6 +72,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 
 	public SupplierEditorSupport(DataType dataType, Supplier<IEclipseContext> contextSupplier) {
 		super(getSupplier(dataType));
+		this.dataType = dataType;
 		this.contextSupplier = contextSupplier;
 		initialize(dataType);
 	}
@@ -255,6 +257,8 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 
 					part.setLabel(file.getName());
 					context.set(File.class, file);
+					context.set(DataType.class, dataType);
+					context.set(ISupplier.class, supplier);
 					return null;
 				}
 			});
@@ -266,18 +270,24 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	@Override
 	public void openEditor(IMeasurement measurement) {
 
-		if(!snippetId.isEmpty()) {
+		if(snippetId.isEmpty()) {
+			// for backward compatibility we must set the file to null here
+			openEditor(null, measurement, elementId, contributionURI, iconURI, tooltip);
+		} else {
 			OpenSnippetHandler.openSnippet(snippetId, contextSupplier.get(), new BiFunction<IEclipseContext, MPart, Runnable>() {
 
 				@Override
 				public Runnable apply(IEclipseContext context, MPart part) {
 
 					context.set(IMeasurement.class, measurement);
+					context.set(DataType.class, dataType);
+					File file = measurement.getFile();
+					if(file != null) {
+						context.set(File.class, file);
+					}
 					return null;
 				}
 			});
-		} else {
-			openEditor(null, measurement, elementId, contributionURI, iconURI, tooltip);
 		}
 	}
 

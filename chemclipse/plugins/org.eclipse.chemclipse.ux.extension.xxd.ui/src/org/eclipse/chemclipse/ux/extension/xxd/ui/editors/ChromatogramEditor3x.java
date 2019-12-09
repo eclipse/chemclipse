@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -68,7 +69,7 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		parent.setLayout(new FillLayout());
 		DataType dataType = getDataType();
 		if(dataType != null) {
-			chromatogramEditor = new ChromatogramEditor(dataType, parent, part, dirtyable, DisplayUtils.getShell(), null);
+			chromatogramEditor = new ChromatogramEditor(dataType, parent, part, dirtyable, DisplayUtils.getShell(), new ProcessTypeSupport());
 		} else {
 			Label label = new Label(parent, SWT.NONE);
 			label.setText("Sorry, the chromatogram couldn't be displayed.");

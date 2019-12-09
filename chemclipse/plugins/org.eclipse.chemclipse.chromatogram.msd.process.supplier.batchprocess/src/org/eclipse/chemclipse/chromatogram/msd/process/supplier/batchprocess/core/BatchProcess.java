@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.xxd.process.support.ChromatogramTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -33,14 +34,15 @@ public class BatchProcess {
 	private static final Logger logger = Logger.getLogger(BatchProcess.class);
 	private static final String DESCRIPTION = "Batch Processor";
 	private final ChromatogramTypeSupport chromatogramTypeSupport;
-	private final ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
+	private final ProcessSupplierContext processSupplierContext;
 
 	@Deprecated
 	public BatchProcess() {
-		this(new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD});
+		this(new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD}, new ProcessTypeSupport());
 	}
 
-	public BatchProcess(DataType[] dataTypes) {
+	public BatchProcess(DataType[] dataTypes, ProcessSupplierContext processSupplierContext) {
+		this.processSupplierContext = processSupplierContext;
 		chromatogramTypeSupport = new ChromatogramTypeSupport(dataTypes);
 	}
 
@@ -61,7 +63,7 @@ public class BatchProcess {
 					try {
 						IChromatogramSelection<?, ?> chromatogramSelection = processingInfoX.getProcessingResult();
 						ProcessingInfo<?> processorResult = new ProcessingInfo<>();
-						ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processorResult, processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
+						ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processorResult, processSupplierContext), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
 						if(processorResult.hasErrorMessages()) {
 							processingInfo.addErrorMessage(DESCRIPTION, "Processing: " + pathChromatogram + " failed");
 						} else {
