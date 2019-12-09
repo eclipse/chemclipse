@@ -81,7 +81,7 @@ public class ScanTargetReference implements TargetReference {
 		List<ScanTargetReference> list = new ArrayList<>();
 		for(T item : items) {
 			IScan scan = conversionFunction.apply(item);
-			if(scan != null) {
+			if(scan != null && !scan.getTargets().isEmpty()) {
 				list.add(new ScanTargetReference(scan, type));
 			}
 		}
