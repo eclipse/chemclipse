@@ -374,7 +374,7 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 											IComplexSignalMeasurement<?> signalMeasurement = (IComplexSignalMeasurement<?>)measurement;
 											if(measurement instanceof Filtered<?, ?>) {
 												Filtered<?, ?> filtered = (Filtered<?, ?>)measurement;
-												if(filtered.getFilterContext().getFilteredObject() == currentMeasurement) {
+												if(filtered.getFilterContext().getFilteredObject() == originalMeasurement) {
 													copySignals(signalMeasurement, currentMeasurement);
 												}
 											}
