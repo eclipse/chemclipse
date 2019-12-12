@@ -94,6 +94,13 @@ public class ControlBuilder {
 		return button;
 	}
 
+	public static Text textfield(Composite composite, String initialText) {
+
+		Text text = new Text(composite, SWT.NONE);
+		text.setText(initialText);
+		return fill(text);
+	}
+
 	public static Composite indentedContainer(Composite parent, int indentation) {
 
 		Composite container = createContainer(parent);

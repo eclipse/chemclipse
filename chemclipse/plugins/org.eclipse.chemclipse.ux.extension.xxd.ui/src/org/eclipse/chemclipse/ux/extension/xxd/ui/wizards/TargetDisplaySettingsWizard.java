@@ -59,8 +59,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -405,33 +403,8 @@ public class TargetDisplaySettingsWizard {
 				protected Control createControl(Composite parent) {
 
 					Composite container = createContainer(parent, 3);
-					Label search = new Label(container, SWT.NONE);
-					search.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
-					Text text = ControlBuilder.fill(new Text(container, SWT.NONE));
+					Text text = ControlBuilder.fill(new Text(container, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH));
 					gridData(text).horizontalIndent = 3;
-					Label clear = new Label(container, SWT.NONE);
-					clear.setEnabled(false);
-					clear.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
-					clear.addMouseListener(new MouseListener() {
-
-						@Override
-						public void mouseUp(MouseEvent e) {
-
-							text.setText("");
-							updateFilter(null);
-							clear.setEnabled(false);
-						}
-
-						@Override
-						public void mouseDown(MouseEvent e) {
-
-						}
-
-						@Override
-						public void mouseDoubleClick(MouseEvent e) {
-
-						}
-					});
 					text.addModifyListener(new ModifyListener() {
 
 						@Override
@@ -439,10 +412,8 @@ public class TargetDisplaySettingsWizard {
 
 							String filterText = text.getText();
 							updateFilter(filterText);
-							clear.setEnabled(!filterText.isEmpty());
 						}
 					});
-					gridData(clear).horizontalIndent = 1;
 					return container;
 				}
 
