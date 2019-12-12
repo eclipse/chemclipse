@@ -48,7 +48,7 @@ public class CosineMassSpectrumComparator_3_Test extends MassSpectrumSetTestCase
 
 	public void test2() {
 
-		assertEquals(69.117676f, result.getMatchFactor());
+		assertEquals(69.11768f, result.getMatchFactor());
 	}
 
 	public void test3() {
