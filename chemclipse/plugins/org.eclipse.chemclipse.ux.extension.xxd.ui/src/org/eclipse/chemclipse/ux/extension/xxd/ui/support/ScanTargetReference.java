@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -39,7 +38,7 @@ public class ScanTargetReference implements TargetReference {
 	public ScanTargetReference(IScan scan, String type) {
 		this.scan = scan;
 		this.type = type;
-		name = FORMAT.format(TimeUnit.MILLISECONDS.toMinutes(scan.getRetentionTime()));
+		name = FORMAT.format(scan.getRetentionTime() / (1000d * 60d));
 		id = type + "." + String.valueOf(scan.getRetentionTime());
 	}
 
