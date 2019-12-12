@@ -74,7 +74,7 @@ import org.eclipse.swt.widgets.ToolBar;
 
 public class TargetDisplaySettingsWizard {
 
-	public static final int DEFAULT_WIDTH = 500;
+	public static final int DEFAULT_WIDTH = 800;
 	public static final int DEFAULT_HEIGHT = 600;
 
 	public static boolean openWizard(Shell shell, Collection<? extends TargetReference> identifications, TargetDisplaySettingsWizardListener listener, WorkspaceTargetDisplaySettings currentSettings) {
@@ -291,7 +291,7 @@ public class TargetDisplaySettingsWizard {
 		private TableViewer createTargetTable(Composite parent) {
 
 			TableViewer tableViewer = createTable(parent, false);
-			createColumn(tableViewer, new SimpleColumnDefinition<>("", 20, new ColumnLabelProvider() {
+			createColumn(tableViewer, new SimpleColumnDefinition<>("", 18, new ColumnLabelProvider() {
 
 				@Override
 				public String getText(Object element) {
@@ -312,7 +312,7 @@ public class TargetDisplaySettingsWizard {
 					}
 					return super.getImage(element);
 				}
-			})).setEditingSupport(new EditingSupport(tableViewer) {
+			}).minWidth(18).resizable(false)).setEditingSupport(new EditingSupport(tableViewer) {
 
 				CheckboxCellEditor cellEditor = new CheckboxCellEditor(tableViewer.getTable());
 

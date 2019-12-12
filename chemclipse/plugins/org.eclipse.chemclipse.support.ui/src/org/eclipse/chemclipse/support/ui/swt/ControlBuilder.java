@@ -20,9 +20,11 @@ import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -286,7 +288,9 @@ public class ControlBuilder {
 
 	public static TableViewer createTable(Composite parent, boolean enableTooltips) {
 
-		TableViewer viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
+		Composite layoutContainer = maximize(new Composite(parent, SWT.NONE));
+		layoutContainer.setLayout(new TableColumnLayout());
+		TableViewer viewer = new TableViewer(layoutContainer, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
 		viewer.getTable().setLinesVisible(true);
 		viewer.getTable().setHeaderVisible(true);
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
@@ -373,8 +377,10 @@ public class ControlBuilder {
 		final TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, definition.getStyle());
 		final TableColumn tableColumn = tableViewerColumn.getColumn();
 		tableColumn.setText(definition.getTitle());
-		tableColumn.setWidth(definition.getWidth());
-		tableColumn.setResizable(true);
+		int width = definition.getWidth();
+		boolean resizable = definition.isResizable();
+		tableColumn.setWidth(width);
+		tableColumn.setResizable(resizable);
 		tableColumn.setMoveable(false);
 		CellLabelProvider labelProvider = definition.getLabelProvider();
 		if(labelProvider != null) {
@@ -385,6 +391,10 @@ public class ControlBuilder {
 			if(editingSupport != null) {
 				tableViewerColumn.setEditingSupport(editingSupport);
 			}
+		}
+		Layout layout = viewer.getControl().getParent().getLayout();
+		if(layout instanceof TableColumnLayout) {
+			((TableColumnLayout)layout).setColumnData(tableColumn, new ColumnWeightData(definition.getWidth(), definition.getMinWidth(), resizable));
 		}
 		return tableViewerColumn;
 	}

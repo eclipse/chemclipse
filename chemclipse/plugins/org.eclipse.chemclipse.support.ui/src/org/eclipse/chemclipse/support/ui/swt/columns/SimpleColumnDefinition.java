@@ -29,6 +29,8 @@ public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefin
 	private Function<DataType, ColumnType> mapper;
 	private Function<ColumnViewer, EditingSupport> editingSupportSupplier;
 	private int style = SWT.LEFT;
+	private boolean resizable = true;
+	private int minWidth = -1;
 
 	public SimpleColumnDefinition(String title, int width, Function<DataType, String> extractor) {
 		this(title, width, new ColumnLabelProvider() {
@@ -112,6 +114,33 @@ public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefin
 	public SimpleColumnDefinition<DataType, ColumnType> withStyle(int style) {
 
 		this.style = style;
+		return this;
+	}
+
+	@Override
+	public boolean isResizable() {
+
+		return resizable;
+	}
+
+	public SimpleColumnDefinition<DataType, ColumnType> resizable(boolean resizable) {
+
+		this.resizable = resizable;
+		return this;
+	}
+
+	@Override
+	public int getMinWidth() {
+
+		if(minWidth >= 0) {
+			return minWidth;
+		}
+		return ColumnDefinition.super.getMinWidth();
+	}
+
+	public SimpleColumnDefinition<DataType, ColumnType> minWidth(int minWidth) {
+
+		this.minWidth = minWidth;
 		return this;
 	}
 }
