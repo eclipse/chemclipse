@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
@@ -502,37 +503,45 @@ public class Identifier {
 	private ICompounds runNistApplication(final IExtendedRuntimeSupport runtimeSupport, final long maxProcessTime, final IProgressMonitor monitor) throws IOException {
 
 		monitor.subTask("Start the NIST-DB application.");
-		Process child = runtimeSupport.executeRunCommand();
+		runtimeSupport.executeRunCommand();
 		try {
 			monitor.subTask("Waiting for the result file ... this could take a while.");
 			// long actualProcessTime = 0;
 			long start = System.currentTimeMillis();
 			long max = start + maxProcessTime;
-			File file = new File(runtimeSupport.getNistSupport().getSrcreadyFile());
-			/*
-			 * Wait for the file to be created.
-			 */
-			while(!file.exists() && child.isAlive()) {
-				try {
-					Thread.sleep(100);
-				} catch(InterruptedException e) {
-					Thread.currentThread().interrupt();
-					throw new OperationCanceledException("interrupted");
-				}
-				/*
-				 * If the user has canceled the operation, break the loop.
-				 */
-				if(monitor.isCanceled() || System.currentTimeMillis() > max) {
-					runtimeSupport.executeKillCommand();
-					throw new OperationCanceledException();
-				}
-			}
+			waitForFile(new File(runtimeSupport.getNistSupport().getSrcreadyFile()), monitor, max);
 			logger.info("Process time to get NIST results (ms): " + (System.currentTimeMillis() - start));
 			NistResultFileParser nistResultFileParser = new NistResultFileParser();
 			File results = new File(runtimeSupport.getNistSupport().getSrcresltFile());
+			waitForFile(results, monitor, max);
 			return nistResultFileParser.getCompounds(results);
 		} finally {
 			runtimeSupport.executeKillCommand();
+		}
+	}
+
+	private void waitForFile(final File file, final IProgressMonitor monitor, long max) throws IOException {
+
+		try {
+			// wait for the file to appear
+			while(!file.exists()) {
+				Thread.sleep(100);
+				if(monitor.isCanceled() || System.currentTimeMillis() > max) {
+					throw new OperationCanceledException();
+				}
+			}
+			// wait until filesize does not change anymore...
+			long fs;
+			do {
+				fs = file.length();
+				TimeUnit.SECONDS.sleep(1);
+				if(monitor.isCanceled() || System.currentTimeMillis() > max) {
+					throw new OperationCanceledException();
+				}
+			} while(fs != file.length());
+		} catch(InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new OperationCanceledException("interrupted");
 		}
 	}
 
