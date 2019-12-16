@@ -14,9 +14,6 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 import java.io.File;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.TestPathHelper;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.IExtendedRuntimeSupport;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.LinuxWineSupport;
 
 import junit.framework.TestCase;
 
@@ -34,7 +31,7 @@ public class LinuxWineSupport_DRIVE_1_ITest extends TestCase {
 		nistApplication = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_WINE_DRIVE_NIST_APPLICATION);
 		testfileNistApplication = new File(nistApplication);
 		nistApplicationPath = testfileNistApplication.getParent();
-		runtimeSupport = new LinuxWineSupport(nistApplication, INistSupport.PARAMETER);
+		runtimeSupport = new LinuxWineSupport(testfileNistApplication.getParentFile(), INistSupport.PARAMETER);
 	}
 
 	@Override

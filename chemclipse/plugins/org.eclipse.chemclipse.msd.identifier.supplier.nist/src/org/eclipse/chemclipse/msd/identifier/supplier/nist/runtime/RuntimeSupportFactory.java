@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,9 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - using a path instead of a string
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
@@ -24,16 +26,16 @@ public class RuntimeSupportFactory {
 	 * @throws FileNotFoundException
 	 * @return {@link IExtendedRuntimeSupport}
 	 */
-	public static IExtendedRuntimeSupport getRuntimeSupport(String application) throws FileNotFoundException {
+	public static IExtendedRuntimeSupport getRuntimeSupport(File applicationFolder) throws FileNotFoundException {
 
 		IExtendedRuntimeSupport runtimeSupport;
 		String parameter = INistSupport.PARAMETER;
 		if(OperatingSystemUtils.isWindows()) {
-			runtimeSupport = new WindowsSupport(application, parameter);
+			runtimeSupport = new WindowsSupport(applicationFolder, parameter);
 		} else if(OperatingSystemUtils.isMac()) {
-			runtimeSupport = new MacWineSupport(application, parameter);
+			runtimeSupport = new MacWineSupport(applicationFolder, parameter);
 		} else {
-			runtimeSupport = new LinuxWineSupport(application, parameter);
+			runtimeSupport = new LinuxWineSupport(applicationFolder, parameter);
 		}
 		return runtimeSupport;
 	}

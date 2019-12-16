@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,23 +8,19 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - remove nist application configuration from config
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
-import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD implements INistSettings {
 
-	@JsonProperty(value = "Path nistms$.exe", defaultValue = "nistms$.exe")
-	@JsonPropertyDescription(value = "The path of the NIST executable.")
-	@StringSettingsProperty
-	private String nistApplication = "";
 	@JsonProperty(value = "Number of Targets", defaultValue = "3")
 	@JsonPropertyDescription(value = "The number of iterations to targets to store.")
 	@IntSettingsProperty
@@ -38,21 +34,6 @@ public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD im
 	private int timeoutInMinutes = 20;
 
 	public PeakIdentifierSettings() {
-		nistApplication = "";
-	}
-
-	@Override
-	public String getNistApplication() {
-
-		return nistApplication;
-	}
-
-	@Override
-	public void setNistApplication(String nistApplication) {
-
-		if(nistApplication != null) {
-			this.nistApplication = nistApplication;
-		}
 	}
 
 	@Override

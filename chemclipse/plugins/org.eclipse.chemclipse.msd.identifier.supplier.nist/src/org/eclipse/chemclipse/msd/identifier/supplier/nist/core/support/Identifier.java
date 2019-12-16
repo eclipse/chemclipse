@@ -70,6 +70,7 @@ import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 public class Identifier {
 
@@ -104,60 +105,64 @@ public class Identifier {
 	 */
 	public IMassSpectra runMassSpectrumIdentification(List<IScanMSD> massSpectrumList, MassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
+		IMassSpectra massSpectra = new MassSpectra();
 		IIdentificationResults identificationResults = new IdentificationResults();
 		/*
 		 * Get the OS NIST support. Use Wine in a non MS-Windows system.
 		 */
-		String nistApplication = massSpectrumIdentifierSettings.getNistApplication();
-		IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistApplication);
-		setNumberOfTargetsToReport(runtimeSupport, massSpectrumIdentifierSettings.getNumberOfTargets(), monitor);
-		/*
-		 * Get the mass spectra and label them.
-		 */
-		Map<String, String> identifierTable = setMassSpectrumIdentifier(massSpectrumList);
-		/*
-		 * Remove unnecessary files. Afterwards, prepare the peaks and analyze
-		 * them using the NIST application.
-		 */
-		logger.info("Backup control files.");
-		backupControlFiles(runtimeSupport);
-		logger.info("Clean files.");
-		cleanFiles(runtimeSupport, monitor);
-		IMassSpectra massSpectra = new MassSpectra();
-		//
-		try {
+		File nistFolder = PreferenceSupplier.getNistInstallationFolder();
+		IStatus status = PreferenceSupplier.validateLocation(nistFolder);
+		if(status.isOK()) {
+			IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistFolder);
+			setNumberOfTargetsToReport(runtimeSupport, massSpectrumIdentifierSettings.getNumberOfTargets(), monitor);
 			/*
-			 * At least 1 mass spectrum is needed.
+			 * Get the mass spectra and label them.
 			 */
-			logger.info("Get the mass spectra.");
-			massSpectra = getMassSpectra(massSpectrumList);
-			if(massSpectra.size() > 0) {
-				int numberOfUnknownEntriesToProcess = massSpectra.size();
-				logger.info("Process: " + numberOfUnknownEntriesToProcess);
-				runtimeSupport.getNistSupport().setNumberOfUnknownEntriesToProcess(numberOfUnknownEntriesToProcess);
-				logger.info("Prepare");
-				prepareFiles(runtimeSupport, massSpectra, monitor);
-				long maxProcessTime = (long)(massSpectrumIdentifierSettings.getTimeoutInMinutes() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
-				logger.info("Max Process time: " + maxProcessTime);
-				logger.info("Run Identification");
-				ICompounds compounds = runNistApplication(runtimeSupport, maxProcessTime, monitor);
-				logger.info("Assign Compounds");
-				identificationResults = assignMassSpectrumCompounds(compounds.getCompounds(), massSpectrumList, identificationResults, massSpectrumIdentifierSettings, identifierTable, monitor);
+			Map<String, String> identifierTable = setMassSpectrumIdentifier(massSpectrumList);
+			/*
+			 * Remove unnecessary files. Afterwards, prepare the peaks and analyze
+			 * them using the NIST application.
+			 */
+			logger.info("Backup control files.");
+			backupControlFiles(runtimeSupport);
+			logger.info("Clean files.");
+			cleanFiles(runtimeSupport, monitor);
+			//
+			try {
+				/*
+				 * At least 1 mass spectrum is needed.
+				 */
+				logger.info("Get the mass spectra.");
+				massSpectra = getMassSpectra(massSpectrumList);
+				if(massSpectra.size() > 0) {
+					int numberOfUnknownEntriesToProcess = massSpectra.size();
+					logger.info("Process: " + numberOfUnknownEntriesToProcess);
+					runtimeSupport.getNistSupport().setNumberOfUnknownEntriesToProcess(numberOfUnknownEntriesToProcess);
+					logger.info("Prepare");
+					prepareFiles(runtimeSupport, massSpectra, monitor);
+					long maxProcessTime = (long)(massSpectrumIdentifierSettings.getTimeoutInMinutes() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+					logger.info("Max Process time: " + maxProcessTime);
+					logger.info("Run Identification");
+					ICompounds compounds = runNistApplication(runtimeSupport, maxProcessTime, monitor);
+					logger.info("Assign Compounds");
+					identificationResults = assignMassSpectrumCompounds(compounds.getCompounds(), massSpectrumList, identificationResults, massSpectrumIdentifierSettings, identifierTable, monitor);
+				}
+			} catch(FileIsNotWriteableException e) {
+				logger.warn(e);
+			} catch(IOException e) {
+				logger.warn(e);
+			} catch(NoConverterAvailableException e) {
+				logger.warn(e);
 			}
-		} catch(FileIsNotWriteableException e) {
-			logger.warn(e);
-		} catch(IOException e) {
-			logger.warn(e);
-		} catch(NoConverterAvailableException e) {
-			logger.warn(e);
+			/*
+			 * Clean temporary files finally to not pollute the workspace for other applications.
+			 */
+			resetMassSpectrumIdentifier(massSpectrumList, identifierTable);
+			cleanFiles(runtimeSupport, monitor);
+			restoreControlFiles(runtimeSupport);
+			//
+		} else {
 		}
-		/*
-		 * Clean temporary files finally to not pollute the workspace for other applications.
-		 */
-		resetMassSpectrumIdentifier(massSpectrumList, identifierTable);
-		cleanFiles(runtimeSupport, monitor);
-		restoreControlFiles(runtimeSupport);
-		//
 		return massSpectra;
 	}
 
@@ -176,50 +181,53 @@ public class Identifier {
 		/*
 		 * Get the OS NIST support. Use Wine in a non MS-Windows system.
 		 */
-		String nistApplication = peakIdentifierSettings.getNistApplication();
-		IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistApplication);
-		setNumberOfTargetsToReport(runtimeSupport, peakIdentifierSettings.getNumberOfTargets(), monitor);
-		/*
-		 * Get the mass spectra and label them.
-		 */
-		Map<String, String> identifierTable = setPeakIdentifier(peaks);
-		/*
-		 * Remove unnecessary files. Afterwards, prepare the peaks and analyze
-		 * them using the NIST application.
-		 */
-		backupControlFiles(runtimeSupport);
-		cleanFiles(runtimeSupport, monitor);
-		//
-		try {
+		File nistFolder = PreferenceSupplier.getNistInstallationFolder();
+		IStatus status = PreferenceSupplier.validateLocation(nistFolder);
+		if(status.isOK()) {
+			IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistFolder);
+			setNumberOfTargetsToReport(runtimeSupport, peakIdentifierSettings.getNumberOfTargets(), monitor);
 			/*
-			 * At least 1 mass spectrum is needed.
+			 * Get the mass spectra and label them.
 			 */
-			IMassSpectra massSpectra = getMassSpectraFromPeakList(peaks);
-			if(massSpectra.size() > 0) {
-				int numberOfUnknownEntriesToProcess = massSpectra.size();
-				runtimeSupport.getNistSupport().setNumberOfUnknownEntriesToProcess(numberOfUnknownEntriesToProcess);
-				prepareFiles(runtimeSupport, massSpectra, monitor);
-				long maxProcessTime = (long)(peakIdentifierSettings.getTimeoutInMinutes() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
-				ICompounds compounds = runNistApplication(runtimeSupport, maxProcessTime, monitor);
-				identificationResults = assignPeakCompounds(compounds, peaks, identificationResults, peakIdentifierSettings, identifierTable, processingInfo, monitor);
+			Map<String, String> identifierTable = setPeakIdentifier(peaks);
+			/*
+			 * Remove unnecessary files. Afterwards, prepare the peaks and analyze
+			 * them using the NIST application.
+			 */
+			backupControlFiles(runtimeSupport);
+			cleanFiles(runtimeSupport, monitor);
+			//
+			try {
+				/*
+				 * At least 1 mass spectrum is needed.
+				 */
+				IMassSpectra massSpectra = getMassSpectraFromPeakList(peaks);
+				if(massSpectra.size() > 0) {
+					int numberOfUnknownEntriesToProcess = massSpectra.size();
+					runtimeSupport.getNistSupport().setNumberOfUnknownEntriesToProcess(numberOfUnknownEntriesToProcess);
+					prepareFiles(runtimeSupport, massSpectra, monitor);
+					long maxProcessTime = (long)(peakIdentifierSettings.getTimeoutInMinutes() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+					ICompounds compounds = runNistApplication(runtimeSupport, maxProcessTime, monitor);
+					identificationResults = assignPeakCompounds(compounds, peaks, identificationResults, peakIdentifierSettings, identifierTable, processingInfo, monitor);
+				}
+			} catch(FileIsNotWriteableException e) {
+				logger.warn(e);
+				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused by a file is not writeable exception.");
+			} catch(IOException e) {
+				logger.warn(e);
+				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused by a IO exception.");
+			} catch(NoConverterAvailableException e) {
+				logger.warn(e);
+				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused the converter to write the mass spectrum was not available.");
 			}
-		} catch(FileIsNotWriteableException e) {
-			logger.warn(e);
-			processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused by a file is not writeable exception.");
-		} catch(IOException e) {
-			logger.warn(e);
-			processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused by a IO exception.");
-		} catch(NoConverterAvailableException e) {
-			logger.warn(e);
-			processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused the converter to write the mass spectrum was not available.");
+			/*
+			 * Clean temporary files finally to not pollute the workspace for other applications.
+			 */
+			resetPeakIdentifier(peaks, identifierTable);
+			cleanFiles(runtimeSupport, monitor);
+			restoreControlFiles(runtimeSupport);
+			//
 		}
-		/*
-		 * Clean temporary files finally to not pollute the workspace for other applications.
-		 */
-		resetPeakIdentifier(peaks, identifierTable);
-		cleanFiles(runtimeSupport, monitor);
-		restoreControlFiles(runtimeSupport);
-		//
 		return identificationResults;
 	}
 
@@ -234,28 +242,31 @@ public class Identifier {
 		/*
 		 * Get the OS NIST support. Use Wine in a non MS-Windows system.
 		 */
-		String nistApplication = nistSettings.getNistApplication();
-		IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistApplication);
-		File file = new File(runtimeSupport.getApplicationPath() + File.separator + PreferenceSupplier.MSP_EXPORT_FILE_NAME);
-		/*
-		 * Get the mass spectra and label them.
-		 */
-		List<IScanMSD> massSpectrumList = getMassSpectra(massSpectra);
-		Map<String, String> identifierTable = setMassSpectrumIdentifier(massSpectrumList);
-		/*
-		 * Remove unnecessary files. Afterwards, prepare the peaks/mass spectra and analyze
-		 * them using the NIST GUI application.
-		 */
-		backupControlFiles(runtimeSupport);
-		cleanFiles(runtimeSupport, monitor);
-		prepareMSPFile(file, massSpectra, monitor);
-		openNistApplication(runtimeSupport, monitor);
-		/*
-		 * Clean temporary files finally to not pollute the workspace for other applications.
-		 */
-		resetMassSpectrumIdentifier(massSpectrumList, identifierTable);
-		cleanFiles(runtimeSupport, monitor);
-		restoreControlFiles(runtimeSupport);
+		File nistFolder = PreferenceSupplier.getNistInstallationFolder();
+		IStatus status = PreferenceSupplier.validateLocation(nistFolder);
+		if(status.isOK()) {
+			IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistFolder);
+			File file = new File(runtimeSupport.getApplicationPath() + File.separator + PreferenceSupplier.MSP_EXPORT_FILE_NAME);
+			/*
+			 * Get the mass spectra and label them.
+			 */
+			List<IScanMSD> massSpectrumList = getMassSpectra(massSpectra);
+			Map<String, String> identifierTable = setMassSpectrumIdentifier(massSpectrumList);
+			/*
+			 * Remove unnecessary files. Afterwards, prepare the peaks/mass spectra and analyze
+			 * them using the NIST GUI application.
+			 */
+			backupControlFiles(runtimeSupport);
+			cleanFiles(runtimeSupport, monitor);
+			prepareMSPFile(file, massSpectra, monitor);
+			openNistApplication(runtimeSupport, monitor);
+			/*
+			 * Clean temporary files finally to not pollute the workspace for other applications.
+			 */
+			resetMassSpectrumIdentifier(massSpectrumList, identifierTable);
+			cleanFiles(runtimeSupport, monitor);
+			restoreControlFiles(runtimeSupport);
+		}
 	}
 
 	private Map<String, String> setMassSpectrumIdentifier(List<IScanMSD> massSpectrumList) {
