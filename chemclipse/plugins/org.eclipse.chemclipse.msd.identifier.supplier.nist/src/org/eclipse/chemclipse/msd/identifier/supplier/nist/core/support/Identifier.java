@@ -46,7 +46,6 @@ import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationResult;
 import org.eclipse.chemclipse.model.implementation.IdentificationResults;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compounds;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompound;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompounds;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.IHit;
@@ -71,6 +70,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 
 public class Identifier {
 
@@ -105,8 +105,8 @@ public class Identifier {
 	 */
 	public IMassSpectra runMassSpectrumIdentification(List<IScanMSD> massSpectrumList, MassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
-		IMassSpectra massSpectra = new MassSpectra();
 		IIdentificationResults identificationResults = new IdentificationResults();
+		IMassSpectra massSpectra = new MassSpectra();
 		/*
 		 * Get the OS NIST support. Use Wine in a non MS-Windows system.
 		 */
@@ -155,13 +155,13 @@ public class Identifier {
 				logger.warn(e);
 			}
 			/*
-			 * Clean temporary files finally to not pollute the workspace for other applications.
+			 * Clean temporary files finally to not pollute the workspace for other
+			 * applications.
 			 */
 			resetMassSpectrumIdentifier(massSpectrumList, identifierTable);
 			cleanFiles(runtimeSupport, monitor);
 			restoreControlFiles(runtimeSupport);
 			//
-		} else {
 		}
 		return massSpectra;
 	}
@@ -221,7 +221,8 @@ public class Identifier {
 				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused the converter to write the mass spectrum was not available.");
 			}
 			/*
-			 * Clean temporary files finally to not pollute the workspace for other applications.
+			 * Clean temporary files finally to not pollute the workspace for other
+			 * applications.
 			 */
 			resetPeakIdentifier(peaks, identifierTable);
 			cleanFiles(runtimeSupport, monitor);
@@ -253,15 +254,16 @@ public class Identifier {
 			List<IScanMSD> massSpectrumList = getMassSpectra(massSpectra);
 			Map<String, String> identifierTable = setMassSpectrumIdentifier(massSpectrumList);
 			/*
-			 * Remove unnecessary files. Afterwards, prepare the peaks/mass spectra and analyze
-			 * them using the NIST GUI application.
+			 * Remove unnecessary files. Afterwards, prepare the peaks/mass spectra
+			 * and analyze them using the NIST GUI application.
 			 */
 			backupControlFiles(runtimeSupport);
 			cleanFiles(runtimeSupport, monitor);
 			prepareMSPFile(file, massSpectra, monitor);
 			openNistApplication(runtimeSupport, monitor);
 			/*
-			 * Clean temporary files finally to not pollute the workspace for other applications.
+			 * Clean temporary files finally to not pollute the workspace for other
+			 * applications.
 			 */
 			resetMassSpectrumIdentifier(massSpectrumList, identifierTable);
 			cleanFiles(runtimeSupport, monitor);
@@ -495,93 +497,43 @@ public class Identifier {
 	 *
 	 * @param runtimeSupport
 	 * @param monitor
+	 * @throws IOException
 	 */
-	private ICompounds runNistApplication(final IExtendedRuntimeSupport runtimeSupport, final long maxProcessTime, final IProgressMonitor monitor) {
+	private ICompounds runNistApplication(final IExtendedRuntimeSupport runtimeSupport, final long maxProcessTime, final IProgressMonitor monitor) throws IOException {
 
-		ICompounds compounds = new Compounds();
 		monitor.subTask("Start the NIST-DB application.");
+		Process child = runtimeSupport.executeRunCommand();
 		try {
-			Process child = runtimeSupport.executeRunCommand();
+			monitor.subTask("Waiting for the result file ... this could take a while.");
+			// long actualProcessTime = 0;
+			long start = System.currentTimeMillis();
+			long max = start + maxProcessTime;
+			File file = new File(runtimeSupport.getNistSupport().getSrcreadyFile());
 			/*
-			 * Sleep 2s, otherwise the process return is may be too fast.
+			 * Wait for the file to be created.
 			 */
-			try {
-				Thread.sleep(runtimeSupport.getSleepMillisecondsBeforeExecuteRunCommand());
-			} catch(InterruptedException e) {
-			}
-			/*
-			 * If there was no failure, start the thread to wait for the ready
-			 * message.
-			 */
-			if(child.exitValue() == 0) {
-				monitor.subTask("Waiting for the result file ... this could take a while.");
-				Thread t = new Thread() {
-
-					@Override
-					public void run() {
-
-						super.run();
-						long actualProcessTime = 0;
-						File file = new File(runtimeSupport.getNistSupport().getSrcreadyFile());
-						/*
-						 * Wait for the file to be created.
-						 */
-						while(!file.exists()) {
-							try {
-								/*
-								 * Sleep 100ms.
-								 */
-								Thread.sleep(100);
-								actualProcessTime += 100;
-								/*
-								 * If the user has canceled the operation, break
-								 * the loop.
-								 */
-								if(monitor.isCanceled() || actualProcessTime > maxProcessTime) {
-									break;
-								}
-							} catch(InterruptedException e) {
-								logger.warn(e);
-							}
-						}
-						logger.info("Process time to get NIST results (ms): " + actualProcessTime);
-						/*
-						 * Kill the nist process
-						 */
-						try {
-							runtimeSupport.executeKillCommand();
-						} catch(IOException e) {
-							logger.warn(e);
-						}
-					}
-				};
-				t.start();
-				t.join();
+			while(!file.exists() && child.isAlive()) {
+				try {
+					Thread.sleep(100);
+				} catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
+					throw new OperationCanceledException("interrupted");
+				}
 				/*
-				 * If the user has canceled the operation, don't evaluate the
-				 * result file.
+				 * If the user has canceled the operation, break the loop.
 				 */
-				if(!monitor.isCanceled()) {
-					NistResultFileParser nistResultFileParser = new NistResultFileParser();
-					File results = new File(runtimeSupport.getNistSupport().getSrcresltFile());
-					compounds = nistResultFileParser.getCompounds(results);
+				if(monitor.isCanceled() || System.currentTimeMillis() > max) {
+					runtimeSupport.executeKillCommand();
+					throw new OperationCanceledException();
 				}
 			}
-		} catch(IOException e) {
-			logger.warn(e);
-		} catch(InterruptedException e) {
-			logger.warn(e);
+			logger.info("Process time to get NIST results (ms): " + (System.currentTimeMillis() - start));
+			NistResultFileParser nistResultFileParser = new NistResultFileParser();
+			File results = new File(runtimeSupport.getNistSupport().getSrcresltFile());
+			return nistResultFileParser.getCompounds(results);
 		} finally {
-			try {
-				/*
-				 * Try to kill the NIST process if an error has occurred.
-				 */
-				runtimeSupport.executeKillCommand();
-			} catch(IOException e) {
-				logger.warn(e);
-			}
+			runtimeSupport.executeKillCommand();
 		}
-		return compounds;
 	}
 
 	private void openNistApplication(final IExtendedRuntimeSupport runtimeSupport, final IProgressMonitor monitor) {
@@ -601,8 +553,7 @@ public class Identifier {
 
 		monitor.subTask("Assign the identified peaks.");
 		/*
-		 * Add the identification result (all hits for one peak) to the
-		 * results.
+		 * Add the identification result (all hits for one peak) to the results.
 		 */
 		identificationResults = getPeakIdentificationResults(compounds, peaks, peakIdentifierSettings, identifierTable, processingInfo);
 		return identificationResults;
@@ -628,8 +579,8 @@ public class Identifier {
 		//
 		for(ICompound compound : compounds.getCompounds()) {
 			/*
-			 * Each compound has a specific identifier.
-			 * If a peak couldn't be identified, no result will be set.
+			 * Each compound has a specific identifier. If a peak couldn't be
+			 * identified, no result will be set.
 			 */
 			String identifier = compound.getIdentfier();
 			IPeakMSD peak = getPeakByIdentifier(peaks, identifier);
