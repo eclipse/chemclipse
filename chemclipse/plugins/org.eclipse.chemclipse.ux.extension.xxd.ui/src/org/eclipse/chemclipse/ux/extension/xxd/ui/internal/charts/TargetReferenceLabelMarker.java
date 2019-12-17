@@ -44,6 +44,7 @@ import org.eclipse.swtchart.ISeries;
 
 public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
+	private static final int NO_ALPHA = 255;
 	private final List<TargetLabel> identifications = new ArrayList<>();
 	private boolean visible = true;
 	private final boolean showReferenceId;
@@ -93,6 +94,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		Font peakFont = null;
 		Font scanFont = null;
 		Font oldFont = gc.getFont();
+		gc.setAlpha(NO_ALPHA);
 		try {
 			Color activeColor = gc.getDevice().getSystemColor(SWT.COLOR_BLACK);
 			Color inactiveColor = gc.getDevice().getSystemColor(SWT.COLOR_GRAY);
