@@ -8,9 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - using a global configuration for the nist path + add support for validate the path
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,21 +21,14 @@ import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.MassSpectrum
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	/*
-	 * NIST Path
-	 */
-	private static final String WINDOWS_NIST = "C:\\Programs\\NIST\\MSSEARCH\\nistms$.exe";
-	private static final String WINE_NIST_LINUX = "drive_c/Programs/NIST/MSSEARCH/nistms$.exe";
-	private static final String WINE_NIST_MAC = "drive_c/NIST/MSSEARCH/nistms$.exe";
-	/*
-	 * 
-	 */
 	public static final int MIN_NUMBER_OF_TARGETS = 1;
 	public static final int MAX_NUMBER_OF_TARGETS = 100;
 	public static final String MSP_EXPORT_FILE_NAME = "openchrom-unknown.msp";
@@ -41,7 +36,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * Preferences
 	 */
 	public static final String P_NIST_APPLICATION = "nistApplication";
-	public static final String DEF_NIST_APPLICATION_WINDOWS = WINDOWS_NIST;
 	public static final String P_NUMBER_OF_TARGETS = "numberOfTargets";
 	public static final int DEF_NUMBER_OF_TARGETS = 3;
 	public static final String P_STORE_TARGETS = "storeTargets";
@@ -83,18 +77,82 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
+	/**
+	 * This fetches the <b>FOLDER</b> where the NIST application is stored (e.g. c:\NIST\MSSEARCH)
+	 * 
+	 * @return the path where the NIST application is stored or <code>null</code> if no such folder is currently stored or exits
+	 */
+	public static File getNistInstallationFolder() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		String path = preferences.get(P_NIST_APPLICATION, "");
+		if(!path.isEmpty()) {
+			File filePath = new File(path);
+			if(filePath.isFile()) {
+				filePath.getParentFile();
+			}
+			if(filePath.isDirectory()) {
+				File subfolder = new File(filePath, "MSSEARCH");
+				if(subfolder.isDirectory()) {
+					return subfolder;
+				}
+				return filePath;
+			}
+		}
+		return null;
+	}
+
+	public static IStatus validateLocation(File location) {
+
+		if(location == null) {
+			return error("No Program-Location configured");
+		}
+		if(!location.isDirectory()) {
+			return error("Location " + location.getAbsolutePath() + " does not exits or is not a directory");
+		}
+		File file = getNistExecutable(location);
+		if(!file.isFile()) {
+			return error("Can't find nistms.exe at path " + location.getAbsolutePath() + " or it can't be accessed");
+		}
+		File[] libraries = getLibraries(location);
+		if(libraries.length == 0) {
+			return error("Can't find any libraries at path " + location.getAbsolutePath());
+		}
+		return Status.OK_STATUS;
+	}
+
+	public static File[] getLibraries(File location) {
+
+		if(location.isDirectory()) {
+			File[] files = location.listFiles(File::isDirectory);
+			if(files != null) {
+				return files;
+			}
+		}
+		return new File[0];
+	}
+
+	public static File getNistExecutable(File location) {
+
+		File file = new File(location, "nistms.exe");
+		if(!file.exists()) {
+			File subfolder = new File(location, "MSSEARCH");
+			if(subfolder.isDirectory()) {
+				return getNistExecutable(subfolder);
+			}
+		}
+		return file;
+	}
+
+	private static final IStatus error(String message) {
+
+		return new Status(IStatus.ERROR, Activator.getContext().getBundle().getSymbolicName(), message);
+	}
+
 	@Override
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		/*
-		 * Windows or Wine
-		 */
-		if(OperatingSystemUtils.isWindows()) {
-			defaultValues.put(P_NIST_APPLICATION, DEF_NIST_APPLICATION_WINDOWS);
-		} else {
-			defaultValues.put(P_NIST_APPLICATION, getDefaultNistApplicationOther());
-		}
 		defaultValues.put(P_MAC_WINE_BINARY, DEF_MAC_WINE_BINARY);
 		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
 		defaultValues.put(P_STORE_TARGETS, Boolean.toString(DEF_STORE_TARGETS));
@@ -129,11 +187,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		PeakIdentifierSettings peakIdentifierSettings = new PeakIdentifierSettings();
-		if(OperatingSystemUtils.isWindows()) {
-			peakIdentifierSettings.setNistApplication(preferences.get(P_NIST_APPLICATION, DEF_NIST_APPLICATION_WINDOWS));
-		} else {
-			peakIdentifierSettings.setNistApplication(preferences.get(P_NIST_APPLICATION, getDefaultNistApplicationOther()));
-		}
 		peakIdentifierSettings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
 		peakIdentifierSettings.setStoreTargets(preferences.getBoolean(P_STORE_TARGETS, DEF_STORE_TARGETS));
 		peakIdentifierSettings.setTimeoutInMinutes(preferences.getInt(P_TIMEOUT_IN_MINUTES, DEF_TIMEOUT_IN_MINUTES));
@@ -144,37 +197,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = new MassSpectrumIdentifierSettings();
-		if(OperatingSystemUtils.isWindows()) {
-			massSpectrumIdentifierSettings.setNistApplication(preferences.get(P_NIST_APPLICATION, DEF_NIST_APPLICATION_WINDOWS));
-		} else {
-			massSpectrumIdentifierSettings.setNistApplication(preferences.get(P_NIST_APPLICATION, getDefaultNistApplicationOther()));
-		}
 		massSpectrumIdentifierSettings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
 		massSpectrumIdentifierSettings.setStoreTargets(preferences.getBoolean(P_STORE_TARGETS, DEF_STORE_TARGETS));
 		massSpectrumIdentifierSettings.setTimeoutInMinutes(preferences.getInt(P_TIMEOUT_IN_MINUTES, DEF_TIMEOUT_IN_MINUTES));
 		return massSpectrumIdentifierSettings;
-	}
-
-	/**
-	 * Returns the default application path using wine.
-	 * 
-	 * @return String
-	 */
-	public static String getDefaultNistApplicationOther() {
-
-		String applicationPath;
-		if(OperatingSystemUtils.isMac()) {
-			/*
-			 * Using Wine (http://code.google.com/p/aardwolfclientpackage/downloads/detail?name=Wine_1.2.2.dmg&can=2&q=)
-			 */
-			applicationPath = System.getProperty("user.home") + "/Wine Files/" + WINE_NIST_MAC;
-		} else {
-			/*
-			 * Linux ...
-			 */
-			applicationPath = System.getProperty("user.home") + "/.wine/" + WINE_NIST_LINUX;
-		}
-		return applicationPath;
 	}
 
 	public static String getMacWineBinary() {
@@ -211,17 +237,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR);
-	}
-
-	/**
-	 * Returns the path of the nist application.
-	 * 
-	 * @return String
-	 */
-	public static String getNistApplication() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_NIST_APPLICATION, DEF_NIST_APPLICATION_WINDOWS);
 	}
 
 	/**

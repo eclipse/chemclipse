@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - remove nist application settings
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.settings;
 
@@ -16,24 +17,6 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.settings;
  * 
  */
 public interface INistSettings {
-
-	/**
-	 * Returns the NIST path: C:\Programs\NIST\MSSEARCH\NISTMS$.EXE (Windows)
-	 * /home/eselmeister/.wine/dosdevices/c:/Programme/NIST/MSSEARCH/nistms$.exe
-	 * (Linux)
-	 * /home/eselmeister/.wine/drive_c/Programme/NIST/MSSEARCH/nistms$.exe
-	 * (Linux)
-	 * 
-	 * @return
-	 */
-	String getNistApplication();
-
-	/**
-	 * Set the NIST application path.
-	 * 
-	 * @param nistPath
-	 */
-	void setNistApplication(String nistPath);
 
 	/**
 	 * Set number of targets.

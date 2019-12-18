@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class DataExplorerPart {
 
-	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	public static final String TAG_MSD_DATA = "DataType.MSD";
 	private DataExplorerUI dataExplorerUI;
 	@Inject
 	private IEventBroker broker;
@@ -55,90 +56,101 @@ public class DataExplorerPart {
 	@Inject
 	ISupplierFileIdentifier gloabalIdentifier;
 	//
+	private List<String> tags;
 
 	@PostConstruct
-	public void init(Composite parent) {
+	public void init(Composite parent, MPart part) {
 
-		dataExplorerUI = new DataExplorerUI(parent, broker, preferenceStore);
+		dataExplorerUI = new DataExplorerUI(parent, broker, getPreferenceStore());
+		tags = part.getTags();
 		setSupplierFileEditorSupport();
 	}
 
 	public void setSupplierFileEditorSupport() {
 
+		// TODO support filtering in the UI instead of preferences!
 		List<ISupplierFileEditorSupport> editorSupportList = new ArrayList<ISupplierFileEditorSupport>();
-		/*
-		 * MSD
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_MSD)) {
-			editorSupportList.add(new SupplierEditorSupport(DataType.MSD, () -> context));
+		if(tags.isEmpty()) {
+			IPreferenceStore preferenceStore = getPreferenceStore();
+			/*
+			 * MSD
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_MSD)) {
+				editorSupportList.add(new SupplierEditorSupport(DataType.MSD, () -> context));
+			}
+			/*
+			 * MSD Library
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_LIBRARY_MSD)) {
+				editorSupportList.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport.getInstanceEditorSupport());
+			}
+			/*
+			 * MSD Scan
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_MSD)) {
+				editorSupportList.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.MassSpectrumSupport.getInstanceEditorSupport());
+			}
+			/*
+			 * CSD
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_CSD)) {
+				editorSupportList.add(new SupplierEditorSupport(DataType.CSD, () -> context));
+			}
+			/*
+			 * WSD
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_WSD)) {
+				editorSupportList.add(new SupplierEditorSupport(DataType.WSD, () -> context));
+			}
+			/*
+			 * XIR
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_XIR)) {
+				editorSupportList.add(new SupplierEditorSupport(DataType.XIR, () -> context));
+			}
+			/*
+			 * NMR
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_NMR)) {
+				editorSupportList.add(new SupplierEditorSupport(DataType.NMR, () -> context));
+			}
+			/*
+			 * CAL
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_CAL)) {
+				editorSupportList.add(new ProjectExplorerSupportFactory(DataType.CAL).getInstanceEditorSupport());
+			}
+			/*
+			 * PCR
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_PCR)) {
+				editorSupportList.add(new SupplierEditorSupport(DataType.PCR, () -> context));
+			}
+			/*
+			 * SEQ
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_SEQUENCE)) {
+				editorSupportList.add(new SupplierEditorSupport(DataType.SEQ, () -> context));
+			}
+			/*
+			 * MTH
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_METHOD)) {
+				editorSupportList.add(new SupplierEditorSupport(DataType.MTH, () -> context));
+			}
+			/*
+			 * QDB
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_QUANT_DB)) {
+				editorSupportList.add(new SupplierEditorSupport(DataType.QDB, () -> context));
+			}
+		} else {
+			for(String tag : tags) {
+				if(TAG_MSD_DATA.equals(tag)) {
+					editorSupportList.add(new SupplierEditorSupport(DataType.MSD, () -> context));
+				}
+			}
 		}
-		/*
-		 * MSD Library
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_LIBRARY_MSD)) {
-			editorSupportList.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport.getInstanceEditorSupport());
-		}
-		/*
-		 * MSD Scan
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_MSD)) {
-			editorSupportList.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.MassSpectrumSupport.getInstanceEditorSupport());
-		}
-		/*
-		 * CSD
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_CSD)) {
-			editorSupportList.add(new SupplierEditorSupport(DataType.CSD, () -> context));
-		}
-		/*
-		 * WSD
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_WSD)) {
-			editorSupportList.add(new SupplierEditorSupport(DataType.WSD, () -> context));
-		}
-		/*
-		 * XIR
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_XIR)) {
-			editorSupportList.add(new SupplierEditorSupport(DataType.XIR, () -> context));
-		}
-		/*
-		 * NMR
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_NMR)) {
-			editorSupportList.add(new SupplierEditorSupport(DataType.NMR, () -> context));
-		}
-		/*
-		 * CAL
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_CAL)) {
-			editorSupportList.add(new ProjectExplorerSupportFactory(DataType.CAL).getInstanceEditorSupport());
-		}
-		/*
-		 * PCR
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_PCR)) {
-			editorSupportList.add(new SupplierEditorSupport(DataType.PCR, () -> context));
-		}
-		/*
-		 * SEQ
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_SEQUENCE)) {
-			editorSupportList.add(new SupplierEditorSupport(DataType.SEQ, () -> context));
-		}
-		/*
-		 * MTH
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_METHOD)) {
-			editorSupportList.add(new SupplierEditorSupport(DataType.MTH, () -> context));
-		}
-		/*
-		 * QDB
-		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_QUANT_DB)) {
-			editorSupportList.add(new SupplierEditorSupport(DataType.QDB, () -> context));
-		}
-		//
 		editorSupportList.add(new GenericSupplierEditorSupport(gloabalIdentifier, () -> context));
 		dataExplorerUI.setSupplierFileIdentifier(editorSupportList);
 		dataExplorerUI.expandLastDirectoryPath();
@@ -175,5 +187,15 @@ public class DataExplorerPart {
 			DataExplorerPart explorer = (DataExplorerPart)part.getObject();
 			explorer.dataExplorerUI.expandLastDirectoryPath();
 		}
+	}
+
+	public static IPreferenceStore getPreferenceStore() {
+
+		return Activator.getDefault().getPreferenceStore();
+	}
+
+	public static File getUserLocation() {
+
+		return new File(getPreferenceStore().getString(org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants.P_USER_LOCATION_PATH));
 	}
 }

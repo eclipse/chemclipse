@@ -37,6 +37,11 @@ import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.xxd.process.Activator;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+/**
+ * @deprecated either use the {@link ProcessSupplierContext} OSGI-Service or the E4ProcessSupplierContext if context injection is desired
+ *
+ */
+@Deprecated
 public class ProcessTypeSupport implements ProcessSupplierContext {
 
 	private final List<IProcessTypeSupplier> localProcessSupplier = new ArrayList<>();
@@ -114,7 +119,6 @@ public class ProcessTypeSupport implements ProcessSupplierContext {
 
 	/**
 	 * Adds the given {@link IProcessTypeSupplier} to this
-	 * {@link ProcessTypeSupport} this allows for adding non standard supplier
 	 * 
 	 * @param processTypeSupplier
 	 */

@@ -55,6 +55,9 @@ public interface TargetDisplaySettings {
 		private static <T> Function<IIdentificationTarget, T> libraryExtractor(Function<ILibraryInformation, T> extractor) {
 
 			return target -> {
+				if(target == null) {
+					return null;
+				}
 				ILibraryInformation information = target.getLibraryInformation();
 				if(information == null) {
 					return null;
@@ -76,5 +79,13 @@ public interface TargetDisplaySettings {
 
 	void setField(LibraryField libraryField);
 
-	boolean isVisible(IIdentificationTarget target);
+	boolean isVisible(TargetReference reference);
+
+	default boolean isVisible(TargetReference reference, IIdentificationTarget target) {
+
+		if(target == null) {
+			return false;
+		}
+		return isVisible(reference) && reference.getTargets().contains(target);
+	}
 }

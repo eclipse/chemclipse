@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.io.File;
 import java.io.Serializable;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -22,6 +23,15 @@ public interface IMeasurement extends IMeasurementInfo, IMeasurementResultSuppor
 	 */
 	@Override
 	default <T> T getAdapter(Class<T> adapter) {
+
+		return null;
+	}
+
+	/**
+	 * 
+	 * @return the file this measurement was loaded from or <code>null</code> if no file could be determined
+	 */
+	default File getFile() {
 
 		return null;
 	}

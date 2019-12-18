@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.io.File;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.baseline.IChromatogramBaseline;
@@ -206,4 +207,10 @@ public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatog
 	ISeparationColumnIndices getSeparationColumnIndices();
 
 	void setSeparationColumnIndices(ISeparationColumnIndices separationColumnIndices);
+
+	@Override
+	default File getFile() {
+
+		return null;
+	}
 }

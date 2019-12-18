@@ -74,6 +74,11 @@ public class DisplayUtils {
 
 	public static Shell getShell() {
 
+		if(Display.getCurrent() == null) {
+			logger.error("Try to access shell outside of UI-Thread!");
+			Thread.dumpStack();
+			return null;
+		}
 		Shell shell = null;
 		//
 		Display display = getDisplay();
@@ -86,6 +91,19 @@ public class DisplayUtils {
 		}
 		//
 		if(shell == null) {
+			if(display != null) {
+				Shell[] shells = display.getShells();
+				for(Shell s : shells) {
+					if(s.isDisposed() || !s.isVisible()) {
+						continue;
+					}
+					Object ignoreDialog = s.getData("org.eclipse.e4.ui.ignoreDialog");
+					if(ignoreDialog instanceof Boolean && (Boolean)ignoreDialog) {
+						continue;
+					}
+					return s;
+				}
+			}
 			logger.error("Shell is null!");
 		}
 		//

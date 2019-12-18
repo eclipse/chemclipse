@@ -55,6 +55,7 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 @Component(service = {IProcessTypeSupplier.class})
 public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTrackerCustomizer<Collection<IProcessSupplier<?>>> {
 
+	private static final String PROCESSORS_ENTRY_PATH = "/OSGI-INF/processors/";
 	private BundleTracker<Collection<IProcessSupplier<?>>> bundleTracker;
 	private final AtomicReference<LogService> logService = new AtomicReference<>();
 	private final List<IProcessSupplier<?>> systemMethods = new ArrayList<>();
@@ -237,16 +238,18 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 	public Collection<IProcessSupplier<?>> addingBundle(Bundle bundle, BundleEvent event) {
 
 		List<IProcessSupplier<?>> list = new ArrayList<>();
-		Enumeration<URL> entries = bundle.findEntries("OSGI-INF/processors", "*." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION, true);
+		Enumeration<URL> entries = bundle.findEntries(PROCESSORS_ENTRY_PATH, "*." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION, true);
 		if(entries != null) {
 			while(entries.hasMoreElements()) {
 				URL url = entries.nextElement();
 				try {
 					try (InputStream inputStream = url.openStream()) {
-						IProcessingInfo<IProcessMethod> load = MethodConverter.load(inputStream, url.getPath(), null);
+						String path = url.getPath().replace(PROCESSORS_ENTRY_PATH, "").replace("." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION, "");
+						String externalForm = url.toExternalForm();
+						IProcessingInfo<IProcessMethod> load = MethodConverter.load(inputStream, externalForm, null);
 						IProcessMethod result = load.getProcessingResult();
 						if(result != null) {
-							list.add(new MetaProcessorProcessSupplier(getID(result, "bundle:" + bundle.getSymbolicName()), result, this));
+							list.add(new MetaProcessorProcessSupplier(getID(result, "bundle:" + bundle.getSymbolicName() + ":" + path), result, this));
 						}
 					}
 				} catch(IOException e) {

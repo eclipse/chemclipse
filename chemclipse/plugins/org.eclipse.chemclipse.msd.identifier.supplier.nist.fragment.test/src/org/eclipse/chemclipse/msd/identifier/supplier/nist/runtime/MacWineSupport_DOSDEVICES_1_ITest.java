@@ -14,9 +14,6 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 import java.io.File;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.TestPathHelper;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.IExtendedRuntimeSupport;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.MacWineSupport;
 
 import junit.framework.TestCase;
 
@@ -34,7 +31,7 @@ public class MacWineSupport_DOSDEVICES_1_ITest extends TestCase {
 		nistApplication = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_WINE_DOSDEVICES_NIST_APPLICATION);
 		testfileNistApplication = new File(nistApplication);
 		nistApplicationPath = testfileNistApplication.getParent();
-		runtimeSupport = new MacWineSupport(nistApplication, INistSupport.PARAMETER);
+		runtimeSupport = new MacWineSupport(testfileNistApplication.getParentFile(), INistSupport.PARAMETER);
 	}
 
 	@Override

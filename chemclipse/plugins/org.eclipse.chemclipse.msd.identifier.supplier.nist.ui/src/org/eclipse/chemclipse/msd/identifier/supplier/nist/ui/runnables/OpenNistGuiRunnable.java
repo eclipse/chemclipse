@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,18 +8,17 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - using a path instead of a string
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.runnables;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.IExtendedRuntimeSupport;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.RuntimeSupportFactory;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -36,21 +35,13 @@ public class OpenNistGuiRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask(DESCRIPTION, IProgressMonitor.UNKNOWN);
-			/*
-			 * Try to open the NIST-DB in GUI mode.
-			 */
-			try {
-				PeakIdentifierSettings peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
-				String nistApplication = peakIdentifierSettings.getNistApplication();
-				IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistApplication);
-				try {
-					runtimeSupport.executeOpenCommand();
-				} catch(IOException e) {
-					logger.warn(e);
-				}
-			} catch(FileNotFoundException e) {
-				logger.warn(e);
+			File folder = PreferenceSupplier.getNistInstallationFolder();
+			if(PreferenceSupplier.validateLocation(folder).isOK()) {
+				IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(folder);
+				runtimeSupport.executeOpenCommand();
 			}
+		} catch(Exception e) {
+			logger.error(e);
 		} finally {
 			monitor.done();
 		}

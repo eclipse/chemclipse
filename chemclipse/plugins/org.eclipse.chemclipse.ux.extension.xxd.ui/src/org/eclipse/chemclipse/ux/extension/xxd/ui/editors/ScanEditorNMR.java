@@ -306,11 +306,15 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 				IComplexSignalMeasurement<?> measurement = measurementsUI.getSelection();
 				if(measurement instanceof Filtered) {
 					FilterContext<?, ?> context = ((Filtered<?, ?>)measurement).getFilterContext();
-					settingsUI.setActiveContext(context, new UpdatingObserver(context, measurement));
-					composite.layout();
-				} else {
-					settingsUI.setActiveContext(null, null);
-				}
+					Object filteredObject = context.getFilteredObject();
+					if (filteredObject instanceof IComplexSignalMeasurement<?>) {
+						IComplexSignalMeasurement<?> original = (IComplexSignalMeasurement<?>) filteredObject;
+						settingsUI.setActiveContext(context, new UpdatingObserver(context, measurement, original));
+						composite.layout();
+						return;
+					}
+				} 
+				settingsUI.setActiveContext(null, null);
 			}
 		});
 		// extendedMeasurementResultUI = new ExtendedMeasurementResultUI(composite);
@@ -337,10 +341,12 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 
 		private final FilterContext<FilteredType, ConfigType> context;
 		private final IComplexSignalMeasurement<?> currentMeasurement;
+		private IComplexSignalMeasurement<?> originalMeasurement;
 
-		public UpdatingObserver(FilterContext<FilteredType, ConfigType> context, IComplexSignalMeasurement<?> currentMeasurement) {
+		public UpdatingObserver(FilterContext<FilteredType, ConfigType> context, IComplexSignalMeasurement<?> currentMeasurement, IComplexSignalMeasurement<?> originalMeasurement) {
 			this.context = context;
 			this.currentMeasurement = currentMeasurement;
+			this.originalMeasurement = originalMeasurement;
 		}
 
 		@Override
@@ -361,14 +367,14 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 							try {
 								DefaultProcessingResult<Object> result = new DefaultProcessingResult<>();
 								ConfigType config = context.getFilterConfig();
-								Collection<? extends IMeasurement> filterIMeasurements = measurementFilter.filterIMeasurements(Collections.singleton(currentMeasurement), config, Function.identity(), result, null);
+								Collection<? extends IMeasurement> filterIMeasurements = measurementFilter.filterIMeasurements(Collections.singleton(originalMeasurement), config, Function.identity(), result, null);
 								if(!filterIMeasurements.isEmpty() && !result.hasErrorMessages()) {
 									for(IMeasurement measurement : filterIMeasurements) {
 										if(measurement instanceof IComplexSignalMeasurement<?>) {
 											IComplexSignalMeasurement<?> signalMeasurement = (IComplexSignalMeasurement<?>)measurement;
 											if(measurement instanceof Filtered<?, ?>) {
 												Filtered<?, ?> filtered = (Filtered<?, ?>)measurement;
-												if(filtered.getFilterContext().getFilteredObject() == currentMeasurement) {
+												if(filtered.getFilterContext().getFilteredObject() == originalMeasurement) {
 													copySignals(signalMeasurement, currentMeasurement);
 												}
 											}

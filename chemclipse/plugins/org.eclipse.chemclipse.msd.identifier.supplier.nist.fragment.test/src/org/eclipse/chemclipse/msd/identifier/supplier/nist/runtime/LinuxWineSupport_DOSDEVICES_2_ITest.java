@@ -11,12 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.TestPathHelper;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.IExtendedRuntimeSupport;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.LinuxWineSupport;
 
 import junit.framework.TestCase;
 
@@ -40,7 +38,7 @@ public class LinuxWineSupport_DOSDEVICES_2_ITest extends TestCase {
 
 		String nistApp = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_WINE_DOSDEVICES_NIST_APPLICATION);
 		try {
-			runtimeSupport = new LinuxWineSupport(nistApp, INistSupport.PARAMETER);
+			runtimeSupport = new LinuxWineSupport(new File(nistApp).getParentFile(), INistSupport.PARAMETER);
 			assertNotNull(runtimeSupport);
 		} catch(FileNotFoundException e) {
 			assertTrue("A file not found exception should not occur here.", false);
@@ -51,7 +49,7 @@ public class LinuxWineSupport_DOSDEVICES_2_ITest extends TestCase {
 
 		String nistApp = "";
 		try {
-			runtimeSupport = new LinuxWineSupport(nistApp, INistSupport.PARAMETER);
+			runtimeSupport = new LinuxWineSupport(new File(nistApp).getParentFile(), INistSupport.PARAMETER);
 			assertNull(runtimeSupport);
 		} catch(FileNotFoundException e) {
 			assertTrue("A file not found exception should not occur here.", true);
@@ -60,9 +58,8 @@ public class LinuxWineSupport_DOSDEVICES_2_ITest extends TestCase {
 
 	public void testConstruct_3() {
 
-		String nistApp = null;
 		try {
-			runtimeSupport = new LinuxWineSupport(nistApp, INistSupport.PARAMETER);
+			runtimeSupport = new LinuxWineSupport(null, INistSupport.PARAMETER);
 			assertNull(runtimeSupport);
 		} catch(FileNotFoundException e) {
 			assertTrue("A file not found exception should not occur here.", true);

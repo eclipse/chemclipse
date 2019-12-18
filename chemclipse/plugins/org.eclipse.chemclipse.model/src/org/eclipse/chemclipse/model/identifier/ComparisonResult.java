@@ -56,4 +56,22 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 
 		return new ComparisonResult(FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH).setMatch(true);
 	}
+
+	@Override
+	public String toString() {
+
+		StringBuilder builder = new StringBuilder();
+		builder.append("ComparisonResult [MF=");
+		builder.append(getMatchFactor());
+		builder.append(", MFD=");
+		builder.append(getMatchFactorDirect());
+		builder.append(", RMF=");
+		builder.append(getReverseMatchFactor());
+		builder.append(", RMFD=");
+		builder.append(getReverseMatchFactorDirect());
+		builder.append(", probability=");
+		builder.append(getProbability());
+		builder.append("]");
+		return builder.toString();
+	}
 }

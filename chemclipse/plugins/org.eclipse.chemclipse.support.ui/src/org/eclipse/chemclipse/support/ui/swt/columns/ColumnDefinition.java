@@ -58,4 +58,14 @@ public interface ColumnDefinition<DataType, ColumnType> extends Function<DataTyp
 
 		return SWT.LEFT;
 	}
+
+	default boolean isResizable() {
+
+		return true;
+	}
+
+	default int getMinWidth() {
+
+		return getWidth() / 2;
+	}
 }

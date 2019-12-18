@@ -98,16 +98,12 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 	}
 
 	@Override
-	public boolean isVisible(IIdentificationTarget target) {
+	public boolean isVisible(TargetReference reference) {
 
 		if(isUseSystemSettings()) {
-			return systemSettings.isVisible(target);
+			return systemSettings.isVisible(reference);
 		}
-		String id = getID(target, getField());
-		if(id != null) {
-			return node.getBoolean(id, true);
-		}
-		return true;
+		return node.getBoolean(reference.getID(), true);
 	}
 
 	public static String getID(IIdentificationTarget target, LibraryField field) {

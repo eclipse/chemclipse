@@ -35,10 +35,12 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.E4ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.BatchJobUI;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.layout.FillLayout;
@@ -59,6 +61,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	private File file;
 	private boolean isDirty = false;
 	private BatchProcessJob currentJob;
+	private E4ProcessSupplierContext supplierContext;
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
@@ -142,10 +145,12 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void createPartControl(Composite parent) {
 
 		parent.setLayout(new FillLayout());
-		batchJobUI = new BatchJobUI(parent, new ProcessTypeSupport(), Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_IMPORT_RECORDS, DATA_TYPES, this);
+		supplierContext = ContextInjectionFactory.make(E4ProcessSupplierContext.class, ModelSupportAddon.getEclipseContext());
+		batchJobUI = new BatchJobUI(parent, supplierContext, Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_IMPORT_RECORDS, DATA_TYPES, this);
 		batchJobUI.setModificationHandler(this::updateDirtyStatus);
 		if(currentJob != null) {
 			List<IChromatogramInputEntry> chromatogramInputEntries = currentJob.getChromatogramInputEntries();
@@ -178,7 +183,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		BatchProcess batchProcess = new BatchProcess(DATA_TYPES);
+		BatchProcess batchProcess = new BatchProcess(DATA_TYPES, supplierContext);
 		IProcessingInfo<?> processingInfo = batchProcess.execute(getBatchProcessJob(), monitor);
 		ProcessingInfoViewSupport.updateProcessingInfo(processingInfo);
 	}

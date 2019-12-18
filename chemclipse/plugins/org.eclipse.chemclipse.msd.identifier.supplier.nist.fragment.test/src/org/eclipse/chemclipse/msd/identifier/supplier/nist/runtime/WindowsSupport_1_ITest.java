@@ -15,9 +15,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.TestPathHelper;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.IExtendedRuntimeSupport;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.WindowsSupport;
 
 import junit.framework.TestCase;
 
@@ -35,7 +32,7 @@ public class WindowsSupport_1_ITest extends TestCase {
 		nistApplication = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_WINDOWS_NIST_APPLICATION);
 		testfileNistApplication = new File(nistApplication);
 		nistApplicationPath = testfileNistApplication.getParent();
-		runtimeSupport = new WindowsSupport(nistApplication, INistSupport.PARAMETER);
+		runtimeSupport = new WindowsSupport(testfileNistApplication.getParentFile(), INistSupport.PARAMETER);
 	}
 
 	@Override

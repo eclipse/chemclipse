@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,9 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - using a path instead of a string
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
@@ -18,10 +20,10 @@ import org.eclipse.chemclipse.support.runtime.AbstractMacWineSupport;
 
 public class MacWineSupport extends AbstractMacWineSupport implements IExtendedRuntimeSupport {
 
-	private INistSupport nistSupport;
+	private final INistSupport nistSupport;
 
-	public MacWineSupport(String application, String parameter) throws FileNotFoundException {
-		super(application, parameter, PreferenceSupplier.getMacWineBinary());
+	public MacWineSupport(File applicationFolder, String parameter) throws FileNotFoundException {
+		super(PreferenceSupplier.getNistExecutable(applicationFolder).getAbsolutePath(), parameter, PreferenceSupplier.getMacWineBinary());
 		nistSupport = new NistSupport(this);
 	}
 

@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.processing.supplier.NodeProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences.DialogBehavior;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -84,7 +83,7 @@ public class SettingsWizard extends Wizard {
 	}
 
 	/**
-	 * Opens a wizard to edit the preferences stored inside the given {@link ProcessTypeSupport}
+	 * Opens a wizard to edit the preferences for the given collection of processor preferences
 	 * 
 	 * @param shell
 	 * @param processTypeSupport
@@ -160,7 +159,7 @@ public class SettingsWizard extends Wizard {
 
 	/**
 	 * 
-	 * @return all active preferences for this {@link ProcessTypeSupport}
+	 * @return all active preferences for this {@link ProcessSupplierContext}
 	 */
 	public static Collection<ProcessorPreferences<?>> getAllPreferences(ProcessSupplierContext context) {
 

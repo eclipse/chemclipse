@@ -20,9 +20,13 @@ import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -79,10 +83,17 @@ public class ExtendedSequenceListUI {
 	//
 	private String initialDataPath = "";
 	private ISequence<? extends ISequenceRecord> sequence;
-	private ChromatogramTypeSupportUI chromatogramTypeSupport = new ChromatogramTypeSupportUI();
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private final ChromatogramTypeSupportUI chromatogramTypeSupport = new ChromatogramTypeSupportUI();
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private final ProcessSupplierContext processSupplierContext;
 
+	@Deprecated
 	public ExtendedSequenceListUI(Composite parent) {
+		this(parent, new ProcessTypeSupport());
+	}
+
+	public ExtendedSequenceListUI(Composite parent, ProcessSupplierContext processSupplierContext) {
+		this.processSupplierContext = processSupplierContext;
 		initialize(parent);
 	}
 
@@ -167,7 +178,6 @@ public class ExtendedSequenceListUI {
 
 				IProcessingInfo<IChromatogramSelection<?, ?>> processingInfo = new ProcessingInfo<>();
 				//
-				ProcessTypeSupport processTypeSupport = new ProcessTypeSupport();
 				TableItem[] tableItems = sequenceListUI.getTable().getItems();
 				//
 				for(TableItem tableItem : tableItems) {
@@ -182,7 +192,8 @@ public class ExtendedSequenceListUI {
 						if(!processingInfoChromatogram.hasErrorMessages()) {
 							IChromatogramSelection<?, ?> chromatogramSelection = processingInfoChromatogram.getProcessingResult();
 							addSequenceRecordInformation(sequenceRecord, chromatogramSelection.getChromatogram());
-							IProcessingInfo<IChromatogramSelection<?, ?>> processorInfo = processTypeSupport.applyProcessor(chromatogramSelection, processMethod, monitor);
+							ProcessingInfo<?> processorInfo = new ProcessingInfo<>();
+							ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processorInfo, processSupplierContext), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
 							if(processorInfo.hasErrorMessages()) {
 								processingInfo.addMessages(processorInfo);
 							} else {

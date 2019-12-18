@@ -20,11 +20,11 @@ import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -45,16 +45,16 @@ import org.eclipse.swt.widgets.ToolItem;
 public class BatchJobUI {
 
 	private IModificationHandler modificationHandler;
-	private DataListUI listUI;
-	private ExtendedMethodUI extendedMethodUI;
-	private Composite composite;
+	private final DataListUI listUI;
+	private final ExtendedMethodUI extendedMethodUI;
+	private final Composite composite;
 
 	@Deprecated
-	public BatchJobUI(Composite parent, ProcessTypeSupport processingSupport, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataType[] dataTypes, IRunnableWithProgress executionRunnable) {
+	public BatchJobUI(Composite parent, ProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataType[] dataTypes, IRunnableWithProgress executionRunnable) {
 		this(parent, processingSupport, preferenceStore, userlocationPrefrenceKey, DataType.convert(dataTypes), executionRunnable);
 	}
 
-	public BatchJobUI(Composite parent, ProcessTypeSupport processingSupport, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataCategory[] dataCategories, IRunnableWithProgress executionRunnable) {
+	public BatchJobUI(Composite parent, ProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataCategory[] dataCategories, IRunnableWithProgress executionRunnable) {
 		composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, true));
 		ToolBar toolBar = new ToolBar(composite, SWT.FLAT);
