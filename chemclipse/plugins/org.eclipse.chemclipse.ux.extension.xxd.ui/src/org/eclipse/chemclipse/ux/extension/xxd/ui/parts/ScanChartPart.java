@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - improve user feedback for unsaved changes
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
@@ -23,24 +24,58 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSup
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanChartUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
 public class ScanChartPart extends EnhancedUpdateSupport implements IUpdateSupport {
 
+	private static final String KEY_LABEL = ScanChartPart.class.getName() + ".label";
 	private ExtendedScanChartUI extendedScanChartUI;
+	private final IEventBroker eventBroker;
 
 	@Inject
 	public ScanChartPart(Composite parent, MPart part, IEventBroker eventBroker) {
 		super(parent, Activator.getDefault().getDataUpdateSupport(), IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, part);
+		this.eventBroker = eventBroker;
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 
-		extendedScanChartUI = new ExtendedScanChartUI(parent, Activator.getDefault().getEventBroker());
+		// as only EditorParts have a visual dirtyflag we emulate the "dirty" state here for our part
+		extendedScanChartUI = new ExtendedScanChartUI(parent, eventBroker, new MDirtyable() {
+
+			private boolean dirty;
+
+			@Override
+			public void setDirty(boolean value) {
+
+				if(this.dirty != value) {
+					MPart part = getPart();
+					if(value) {
+						String label = part.getLabel();
+						part.getTransientData().put(KEY_LABEL, label);
+						part.setLabel("*" + label);
+					} else {
+						String label = (String)part.getTransientData().get(KEY_LABEL);
+						if(label != null) {
+							part.setLabel(label);
+						}
+					}
+					this.dirty = value;
+				}
+			}
+
+			@Override
+			public boolean isDirty() {
+
+				return dirty;
+			}
+		});
 	}
 
+	@Override
 	public void updateSelection(List<Object> objects, String topic) {
 
 		/*

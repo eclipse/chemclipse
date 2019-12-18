@@ -24,6 +24,7 @@
    <extension
          point="org.eclipse.chemclipse.chromatogram.msd.filter.massSpectrumFilterSupplier">
       <MassSpectrumFilterSupplier
+            config="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.MassSpectrumFilterSettings"
             description="This filter applies the Subtract filter to a list of mass spectra."
             filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.core.MassSpectrumFilter"
             filterName="Subtract Filter"
