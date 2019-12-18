@@ -8,16 +8,18 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - add support for configuration
+ * Christoph Läubrich - add support for configuration, improve user feedback for unsaved changes
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
+
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.fill;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.gridData;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.IMassSpectrumFilterSupport;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.MassSpectrumFilter;
@@ -53,7 +55,7 @@ import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -68,6 +70,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -84,7 +87,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 	private static final Logger logger = Logger.getLogger(ScanChartPart.class);
 	//
-	private IEventBroker eventBroker; // Could be null
+	private final IEventBroker eventBroker; // Could be null
 	//
 	private Composite toolbarInfo;
 	private Composite toolbarIdentify;
@@ -117,21 +120,23 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	//
 	private int masterRetentionTime;
 	//
-	private boolean isScanPinned = false;
 	private List<String> scanFilterIds;
 	private String[] scanFilterNames;
 	private List<String> scanIdentifierIds;
 	private String[] scanIdentifierNames;
 	//
-	private ScanDataSupport scanDataSupport = new ScanDataSupport();
+	private final ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private EditorUpdateSupport editorUpdateSupport;
 	private Composite toolbarMain;
 	private Composite toolbarInfoLabel;
+	private final MDirtyable dirtyable;
+	private IScan pendingUpdate;
+	private CLabel infoLabelMain;
 
 	private class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 
-		private IScanMSD scanMSD;
-		private String identifierId;
+		private final IScanMSD scanMSD;
+		private final String identifierId;
 
 		public MassSpectrumIdentifierRunnable(IScanMSD scanMSD, String identifierId) {
 			this.scanMSD = scanMSD;
@@ -150,65 +155,86 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		}
 	}
 
-	@Inject
 	public ExtendedScanChartUI(Composite parent, IEventBroker eventBroker) {
+		this(parent, eventBroker, new MDirtyable() {
+
+			private boolean value;
+
+			@Override
+			public void setDirty(boolean value) {
+
+				this.value = value;
+			}
+
+			@Override
+			public boolean isDirty() {
+
+				return value;
+			}
+		});
+	}
+
+	public ExtendedScanChartUI(Composite parent, IEventBroker eventBroker, MDirtyable dirtyable) {
 		this.eventBroker = eventBroker;
+		this.dirtyable = dirtyable;
 		initializeSettings();
 		initialize(parent);
 	}
 
-	@Focus
-	public void setFocus() {
-
-		updateScan();
-	}
-
 	public void update(IScan scan) {
 
-		enableReferenceScanWidgets();
-		if(!isScanPinned) {
-			this.scan = scan;
-			updateMasterRetentionTime();
-			updateScan();
+		boolean enabled = setScan(scan);
+		enableReferenceScanWidgets(enabled);
+	}
+
+	private boolean setScan(IScan newScan) {
+
+		boolean pinned = buttonPinScan.getSelection();
+		boolean dirty = dirtyable.isDirty();
+		infoLabelMain.setText("");
+		if(pinned || dirty) {
+			if(this.scan != newScan) {
+				if(pinned) {
+					infoLabelMain.setText("Scan is pinned");
+					infoLabelMain.setToolTipText("There are pending updates but the scan is currently pinned, unpin it to see the current selected scan");
+				} else if(dirty) {
+					infoLabelMain.setText("Scan contains unsaved changes");
+					infoLabelMain.setToolTipText("There are pending updates but the scan contains unsaved changes, save or reset them to show current selected scan");
+				}
+				this.pendingUpdate = newScan;
+			}
+			enableReferenceScanWidgets(false);
+			return false;
 		}
-	}
-
-	private void updateMasterRetentionTime() {
-
-		/*
-		 * This is normally true.
-		 * When going through the scans of all open editors
-		 * at the specific master retention time, the update is
-		 * deactivated by the previous, next chromatogram scan action.
-		 * It needs to be enabled after the action is performed to get
-		 * updates if a scan is selected.
-		 */
-		if(scan != null && !toolbarReferences.isVisible()) {
-			setMasterRetentionTime();
+		if(this.scan != newScan) {
+			this.scan = newScan;
 		}
-	}
-
-	private void setMasterRetentionTime() {
-
-		masterRetentionTime = scan.getRetentionTime();
-		textReferenceScanRetentionTime.setText(scanDataSupport.getRetentionTime(scan));
-	}
-
-	private void updateScan() {
-
-		enableReferenceScanWidgets();
-		if(!isScanPinned) {
-			setScanInfo();
-			setComboReferenceItems(true);
-		}
-	}
-
-	private void setScanInfo() {
-
+		enableReferenceScanWidgets(true);
 		labelScan.setText(scanDataSupport.getScanLabel(scan));
 		enableIdentifierSettings(scan);
 		setDetectorSignalType(scan);
 		scanChartUI.setInput(scan);
+		setComboReferenceItems(true);
+		setMasterRetentionTime();
+		return true;
+	}
+
+	private void setMasterRetentionTime() {
+
+		if(scan != null) {
+			masterRetentionTime = scan.getRetentionTime();
+		}
+		textReferenceScanRetentionTime.setText(scanDataSupport.getRetentionTime(scan));
+		textReferenceScanRetentionTime.setText("");
+	}
+
+	private void updateScan() {
+
+		if(pendingUpdate != null && setScan(pendingUpdate)) {
+			pendingUpdate = null;
+		} else {
+			setScan(scan);
+		}
 	}
 
 	private void initializeSettings() {
@@ -220,13 +246,13 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 	private void initialize(Composite parent) {
 
-		parent.setLayout(new GridLayout(1, true));
+		Composite container = createContainer(parent);
 		//
-		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
-		toolbarIdentify = createToolbarIdentify(parent);
-		toolbarReferences = createToolbarReferences(parent);
-		createScanChart(parent);
+		createToolbarMain(container);
+		toolbarInfo = createToolbarInfo(container);
+		toolbarIdentify = createToolbarIdentify(container);
+		toolbarReferences = createToolbarReferences(container);
+		createScanChart(container);
 		//
 		enableToolbarButtons(false);
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
@@ -260,15 +286,16 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 	private void createToolbarMain(Composite parent) {
 
-		toolbarMain = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
-		toolbarMain.setLayoutData(gridData);
-		toolbarMain.setLayout(new GridLayout(10, false));
+		toolbarMain = fill(new Composite(parent, SWT.NONE));
+		toolbarMain.setLayout(new GridLayout(11, false));
+		infoLabelMain = fill(new CLabel(toolbarMain, SWT.NONE));
+		infoLabelMain.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_RED));
 		//
 		createButtonToggleToolbarInfo(toolbarMain);
 		comboDataType = createDataType(toolbarMain);
+		gridData(comboDataType).widthHint = 200;
 		comboSignalType = createSignalType(toolbarMain);
+		gridData(comboSignalType).widthHint = 200;
 		createButtonToggleToolbarIdentify(toolbarMain);
 		createButtonToggleToolbarReferences(toolbarMain);
 		createToggleChartLegendButton(toolbarMain);
@@ -286,14 +313,12 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		composite.setLayout(new GridLayout(6, false));
 		//
 		buttonPinScan = createPinButton(composite);
+		updatePinButtonImage();
 		buttonSubstractScan = createSubstractScanButton(composite);
 		comboScanFilter = createScanFilterCombo(composite);
 		buttonScanFilter = createScanFilterButton(composite);
 		comboScanIdentifier = createScanIdentifierCombo(composite);
 		buttonScanIdentifier = createScanIdentifierButton(composite);
-		//
-		setPinButtonText();
-		//
 		return composite;
 	}
 
@@ -411,20 +436,28 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 	private Button createPinButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
+		Button button = new Button(parent, SWT.TOGGLE);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PIN_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
 		button.setToolTipText("Pin the scan.");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				isScanPinned = isScanPinned ? false : true;
-				setPinButtonText();
-				enableReferenceScanWidgets();
+				updatePinButtonImage();
+				updateScan();
 			}
 		});
 		return button;
+	}
+
+	private void updatePinButtonImage() {
+
+		if(buttonPinScan.getSelection()) {
+			buttonPinScan.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_UNPIN_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+		} else {
+			buttonPinScan.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PIN_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+		}
 	}
 
 	private Button createSubstractScanButton(Composite parent) {
@@ -503,8 +536,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 						 * Clear all identification results and
 						 * then run apply the filter.
 						 */
-						isScanPinned = true;
-						setPinButtonText();
+						dirtyable.setDirty(true);
 						//
 						optimizedScan.getTargets().clear();
 						MassSpectrumFilter.applyFilter(optimizedScan, filterId, new NullProgressMonitor());
@@ -574,23 +606,12 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		return button;
 	}
 
-	private void setPinButtonText() {
-
-		buttonPinScan.setText("");
-		if(isScanPinned) {
-			buttonPinScan.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_UNPIN_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
-		} else {
-			buttonPinScan.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PIN_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
-		}
-	}
-
 	private Combo createDataType(Composite parent) {
 
 		Combo combo = new Combo(parent, SWT.READ_ONLY);
 		combo.setToolTipText("Data Type (MS, MS/MS, FID, DAD, ...)");
 		combo.setItems(ScanDataSupport.DATA_TYPES_DEFAULT);
 		combo.select(0);
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -610,7 +631,6 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		combo.setToolTipText("Signal Type (Centroid: Bar Series, Profile: Line Series)");
 		combo.setItems(ScanDataSupport.SIGNAL_TYPES_DEFAULT);
 		combo.select(0);
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -725,7 +745,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	private void createResetButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Reset the scan chart.");
+		button.setToolTipText("Reset the scan");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -733,7 +753,10 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				reset();
+				dirtyable.setDirty(false);
+				buttonPinScan.setSelection(false);
+				updatePinButtonImage();
+				updateScan();
 			}
 		});
 	}
@@ -763,7 +786,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
 					try {
-						applySettings();
+						updateScan();
 					} catch(Exception e1) {
 						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
 					}
@@ -793,6 +816,8 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
 				}
+				dirtyable.setDirty(false);
+				updateScan();
 			}
 		});
 		return button;
@@ -820,16 +845,6 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			}
 		});
 		return button;
-	}
-
-	private void reset() {
-
-		updateScan();
-	}
-
-	private void applySettings() {
-
-		updateScan();
 	}
 
 	private Composite createToolbarInfo(Composite parent) {
@@ -940,9 +955,8 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		combo.select(index);
 	}
 
-	private void enableReferenceScanWidgets() {
+	private void enableReferenceScanWidgets(boolean enabled) {
 
-		boolean enabled = !isScanPinned;
 		buttonPreviousReferenceScan.setEnabled(enabled);
 		textReferenceScanRetentionTime.setEnabled(enabled);
 		buttonSetMasterRetentionTime.setEnabled(enabled);
@@ -1025,7 +1039,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		/*
 		 * Enable/disable the widgets.
 		 */
-		enableReferenceScanWidgets();
+		updateScan();
 		/*
 		 * Fire an update.
 		 */
