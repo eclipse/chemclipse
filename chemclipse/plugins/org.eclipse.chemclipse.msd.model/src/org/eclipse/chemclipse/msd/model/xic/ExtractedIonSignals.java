@@ -148,9 +148,9 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 				extractedIonSignal.setAbundance(ion, abundance, removePreviousAbundance);
 			}
 		} catch(ChromatogramIsNullException e) {
-			logger.warn(e);
+			logger.error(e.getLocalizedMessage(), e);
 		} catch(NoExtractedIonSignalStoredException e) {
-			logger.warn(e);
+			logger.debug(e.getLocalizedMessage());
 		}
 	}
 
@@ -167,7 +167,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 		 * The requested scan is outside of this range.
 		 */
 		if(scan < startScan || scan > stopScan) {
-			throw new NoExtractedIonSignalStoredException("The requested scan: " + scan + " is not available.");
+			throw new NoExtractedIonSignalStoredException("The requested scan: " + scan + " is not available. [startScan=" + startScan + ", stopScan=" + stopScan);
 		}
 		/*
 		 * Correct the offset.
@@ -332,7 +332,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 				totalIonSignal = new TotalScanSignal(retentionTime, retentionIndex, signal);
 				totalIonSignals.add(totalIonSignal);
 			} catch(NoExtractedIonSignalStoredException e) {
-				logger.warn(e);
+				logger.debug(e.getLocalizedMessage(), e);
 			}
 		}
 		return totalIonSignals;

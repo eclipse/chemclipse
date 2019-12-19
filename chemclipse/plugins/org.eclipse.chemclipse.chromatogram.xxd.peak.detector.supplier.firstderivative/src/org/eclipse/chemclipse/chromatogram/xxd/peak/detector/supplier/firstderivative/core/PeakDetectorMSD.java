@@ -44,7 +44,6 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
 import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
@@ -133,7 +132,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 		if(noiseSegments != null) {
 			// TODO use noise segments to optimize detection
 		}
-		IMarkedIons ions = FirstDerivativePeakDetector.buildFilterIons(peakDetectorSettings);
+		IMarkedIons ions = PeakDetectorSettingsMSD.getFilterIons(peakDetectorSettings);
 		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize(), ions);
 		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
 		return extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings, ions);
@@ -182,7 +181,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 					peaks.add(peak);
 				}
 			} catch(Exception e) {
-				logger.warn(e.getLocalizedMessage(),e);
+				logger.debug(e.getLocalizedMessage());
 			}
 		}
 		//

@@ -256,7 +256,7 @@ public abstract class AbstractPeakIntensityValues implements IPeakIntensityValue
 		if(entry != null) {
 			return entry.getValue().getLinearEquation();
 		} else {
-			throw new PeakException("The inflection point equation could not be calculated.");
+			throw new PeakException("The inflection point equation could not be calculated. [values=" + values + ", totalSignal: " + totalSignal);
 		}
 	}
 	// ------------------------------private methods

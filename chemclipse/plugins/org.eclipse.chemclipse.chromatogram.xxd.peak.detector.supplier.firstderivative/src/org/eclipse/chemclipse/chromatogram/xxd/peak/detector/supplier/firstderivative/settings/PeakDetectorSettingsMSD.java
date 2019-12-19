@@ -147,7 +147,7 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 			try {
 				ionNumbers.add(new BigDecimal(s));
 			} catch(NumberFormatException e) {
-				logger.debug("Failed to parse valid input from " + s);
+				// invalid or empty string
 			}
 		}
 		return ionNumbers;
